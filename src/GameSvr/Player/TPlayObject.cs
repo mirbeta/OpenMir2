@@ -201,7 +201,7 @@ namespace GameSvr.Player
 
         public void SendAddItem(TUserItem UserItem)
         {
-            GoodItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            StdItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (Item == null)
             {
                 return;
@@ -404,7 +404,7 @@ namespace GameSvr.Player
         /// </summary>
         private void ProcessSpiritSuite()
         {
-            GoodItem StdItem;
+            StdItem StdItem;
             TUserItem UseItem;
             if (!M2Share.g_Config.boSpiritMutiny || !m_bopirit)
             {
@@ -1136,7 +1136,7 @@ namespace GameSvr.Player
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
-                    GoodItem Item = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
+                    StdItem Item = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
                     if (Item != null)
                     {
                         TClientItem ClientItem = new TClientItem();
@@ -1179,7 +1179,7 @@ namespace GameSvr.Player
             }
         }
 
-        private bool UseStdmodeFunItem(GoodItem StdItem)
+        private bool UseStdmodeFunItem(StdItem StdItem)
         {
             var result = false;
             if (M2Share.g_FunctionNPC != null)
@@ -1741,7 +1741,7 @@ namespace GameSvr.Player
 
         private void SendSaveItemList(int nBaseObject)
         {
-            GoodItem Item;
+            StdItem Item;
             TClientItem ClientItem = null;
             TUserItem UserItem;
             string sSendMsg = string.Empty;
@@ -1789,7 +1789,7 @@ namespace GameSvr.Player
 
         public void SendDelItems(TUserItem UserItem)
         {
-            GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            StdItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
                 TClientItem ClientItem = new TClientItem();
@@ -1810,7 +1810,7 @@ namespace GameSvr.Player
 
         public void SendUpdateItem(TUserItem UserItem)
         {
-            GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            StdItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
                 TClientItem ClientItem = new TClientItem();
@@ -2130,7 +2130,7 @@ namespace GameSvr.Player
         {
             int result;
             var n14 = 0;
-            GoodItem StdItem;
+            StdItem StdItem;
             for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
             {
                 if (nWhere == -1 || !(i == nWhere) && !(i == 1) && !(i == 2))
@@ -2150,7 +2150,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool EatItems(GoodItem StdItem, TUserItem Useritem)
+        private bool EatItems(StdItem StdItem, TUserItem Useritem)
         {
             var result = false;
             if (m_PEnvir.Flag.boNODRUG)
@@ -2268,7 +2268,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ReadBook(GoodItem StdItem)
+        private bool ReadBook(StdItem StdItem)
         {
             TUserMagic UserMagic;
             TPlayObject PlayObject;
@@ -2470,7 +2470,7 @@ namespace GameSvr.Player
         {
             if (m_DealCreat != null)
             {
-                GoodItem pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                StdItem pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (pStdItem != null)
                 {
                     TClientItem ClientItem = new TClientItem();
@@ -2497,7 +2497,7 @@ namespace GameSvr.Player
             SendDefMessage(Grobal2.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
-                GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                StdItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
                     var ClientItem = new TClientItem();
@@ -3243,7 +3243,7 @@ namespace GameSvr.Player
             return false;
         }
 
-        private bool CheckItemsNeed(GoodItem StdItem)
+        private bool CheckItemsNeed(StdItem StdItem)
         {
             var result = true;
             var castle = M2Share.CastleManager.IsCastleMember(this);

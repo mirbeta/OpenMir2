@@ -193,7 +193,7 @@ namespace GameSvr.Actor
         {
             TUserItem UseItems;
             TPlayObject PlayObject;
-            GoodItem StdItem;
+            StdItem StdItem;
             if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
             {
                 UseItems = new TUserItem(m_UseItems[Grobal2.U_WEAPON]);

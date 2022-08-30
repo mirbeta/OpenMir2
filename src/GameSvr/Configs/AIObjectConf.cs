@@ -30,7 +30,7 @@ namespace GameSvr.Configs
             TUserItem UserItem;
             TMagic Magic;
             TUserMagic UserMagic;
-            GoodItem StdItem;
+            StdItem StdItem;
             playObject.m_boNoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
             playObject.m_boNoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
             playObject.m_nDropUseItemRate = ReadInteger("Info", "DropUseItemRate", 100);// 掉装备机率

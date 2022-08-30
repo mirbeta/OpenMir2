@@ -15,7 +15,7 @@ namespace GameSvr.RobotPlay
             int nWhere;
             int nPercent;
             int nValue;
-            GoodItem StdItem;
+            StdItem StdItem;
             TUserItem UserItem;
             bool boRecalcAbilitys;
             bool boFind = false;

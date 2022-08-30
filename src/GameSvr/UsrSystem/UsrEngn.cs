@@ -81,7 +81,7 @@ namespace GameSvr.UsrSystem
         private int nProcessHumanLoopTime;
         private readonly ArrayList OldMagicList;
         public IList<NormNpc> QuestNPCList;
-        public IList<GoodItem> StdItemList;
+        public IList<StdItem> StdItemList;
         public long m_dwAILogonTick;//处理假人间隔
         private readonly IList<RoBotLogon> m_UserLogonList;//假人列表
         private readonly Thread _userEngineThread;
@@ -107,7 +107,7 @@ namespace GameSvr.UsrSystem
             nProcessHumanLoopTime = 0;
             nMerchantPosition = 0;
             nNpcPosition = 0;
-            StdItemList = new List<GoodItem>();
+            StdItemList = new List<StdItem>();
             MonsterList = new List<TMonInfo>();
             m_MonGenList = new List<MonGenInfo>();
             m_MonFreeList = new ArrayList();
@@ -1209,9 +1209,9 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public GoodItem GetStdItem(int nItemIdx)
+        public StdItem GetStdItem(int nItemIdx)
         {
-            GoodItem result = null;
+            StdItem result = null;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
@@ -1221,10 +1221,10 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        public GoodItem GetStdItem(string sItemName)
+        public StdItem GetStdItem(string sItemName)
         {
-            GoodItem result = null;
-            GoodItem StdItem = null;
+            StdItem result = null;
+            StdItem StdItem = null;
             if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
@@ -2601,7 +2601,7 @@ namespace GameSvr.UsrSystem
 
         public int GetStdItemIdx(string sItemName)
         {
-            GoodItem StdItem;
+            StdItem StdItem;
             var result = -1;
             if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)

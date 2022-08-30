@@ -22,7 +22,7 @@ namespace GameSvr.Command.Commands
             var sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
             var nCount = @Params.Length > 2 ? int.Parse(@Params[2]) : 0; //数量
             int nItemCount;
-            GoodItem StdItem;
+            StdItem StdItem;
             TUserItem UserItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName))
             {
