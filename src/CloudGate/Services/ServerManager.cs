@@ -201,7 +201,6 @@ namespace CloudGate.Services
         private class MessageThreadConsume
         {
             private readonly ManualResetEvent _resetEvent;
-            private Task _messageThreads;
             private readonly string _threadId;
             private SessionManager Session => SessionManager.Instance;
             private readonly CancellationTokenSource _cts = new CancellationTokenSource();
@@ -222,7 +221,7 @@ namespace CloudGate.Services
 
             public void Start()
             {
-                _messageThreads = Task.Factory.StartNew(async () =>
+                Task.Factory.StartNew(async () =>
                 {
                     ThreadState = MessageThreadState.Runing;
                     LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已启动.");
@@ -243,7 +242,6 @@ namespace CloudGate.Services
                 ThreadState = MessageThreadState.Stop;
                 _resetEvent.Reset();//暂停
                 _cts.CancelAfter(3000);//延时3秒取消消费，防止消息丢失
-                _messageThreads.Dispose();
                 LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已停止.");
             }
         }

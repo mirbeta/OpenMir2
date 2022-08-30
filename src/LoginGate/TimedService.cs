@@ -10,16 +10,14 @@ namespace LoginGate
     public class TimedService : BackgroundService
     {
         private int _processDelayTick = 0;
-        private readonly MirLog _logQueue;
-        private readonly ServerManager _serverManager;
+        private readonly MirLog _logger;
         private readonly SessionManager _sessionManager;
         private readonly ClientManager _clientManager;
 
-        public TimedService(MirLog mirLog, ClientManager clientManager, ServerManager serverManager, SessionManager sessionManager)
+        public TimedService(MirLog logger, ClientManager clientManager, SessionManager sessionManager)
         {
-            _logQueue = mirLog;
+            _logger = logger;
             _clientManager = clientManager;
-            _serverManager = serverManager;
             _sessionManager = sessionManager;
         }
 

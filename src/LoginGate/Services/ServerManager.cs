@@ -22,7 +22,6 @@ namespace LoginGate.Services
         /// 客户端登陆封包
         /// </summary>
         private readonly Channel<TMessageData> _messageQueue;
-        private Task _messageTask;
 
         public ServerManager(MirLog logger, IServiceProvider serviceProvider, SessionManager sessionManager, ConfigManager configManager)
         {
@@ -56,7 +55,6 @@ namespace LoginGate.Services
                 }
                 _serverServices[i].Stop();
             }
-            _messageTask.Dispose();
         }
 
         public int ReceiveQueueCount()
@@ -78,7 +76,7 @@ namespace LoginGate.Services
         /// </summary>
         public void ProcessLoginMessage(CancellationToken stoppingToken)
         {
-            _messageTask = Task.Run(async () =>
+            Task.Factory.StartNew(async () =>
             {
                 while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {

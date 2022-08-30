@@ -1,6 +1,7 @@
 using SelGate.Conf;
 using SelGate.Services;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
 
@@ -23,16 +24,10 @@ namespace SelGate
             _configManager = configManager;
         }
 
-        public async Task Start()
+        public void Start(CancellationToken stoppingToken)
         {
-            var gTasks = new Task[2];
-            var consumerTask1 = Task.Factory.StartNew(_serverService.ProcessReviceMessage);
-            gTasks[0] = consumerTask1;
-
-            var consumerTask2 = Task.Factory.StartNew(_sessionManager.ProcessSendMessage);
-            gTasks[1] = consumerTask2;
-
-            await Task.WhenAll(gTasks);
+            _serverService.ProcessReviceMessage(stoppingToken);
+            _sessionManager.ProcessSendMessage(stoppingToken);
         }
 
         public void StartService()
