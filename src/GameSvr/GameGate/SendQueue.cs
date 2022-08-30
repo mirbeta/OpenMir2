@@ -33,20 +33,20 @@ namespace GameSvr.GameGate
         /// </summary>
         public void ProcessSendQueue(CancellationTokenSource cancellation)
         {
-           Task.Factory.StartNew(async () =>
-            {
-                while (await _sendQueue.Reader.WaitToReadAsync(cancellation.Token))
-                {
-                    while (_sendQueue.Reader.TryRead(out var buffer))
-                    {
-                        if (_sendSocket.Connected)
-                        {
-                            //todo 此处异步发送效率比同步效率要低很多,不知道为什么,暂时先保持同步发送
-                            _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                        }
-                    }
-                }
-            });
+            Task.Factory.StartNew(async () =>
+             {
+                 while (await _sendQueue.Reader.WaitToReadAsync(cancellation.Token))
+                 {
+                     while (_sendQueue.Reader.TryRead(out var buffer))
+                     {
+                         if (_sendSocket.Connected)
+                         {
+                             //todo 此处异步发送效率比同步效率要低很多,不知道为什么,暂时先保持同步发送
+                             _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                         }
+                     }
+                 }
+             });
         }
     }
 }

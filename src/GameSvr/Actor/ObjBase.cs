@@ -31,6 +31,6 @@ namespace GameSvr.Actor
 
     public enum Job
     {
-        
+
     }
 }

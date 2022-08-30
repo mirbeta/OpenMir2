@@ -1,7 +1,7 @@
 ﻿using GameSvr.Npc;
 using GameSvr.Player;
 
-namespace GameSvr.ScriptSystem
+namespace GameSvr.Script
 {
     public class ScriptEngine
     {

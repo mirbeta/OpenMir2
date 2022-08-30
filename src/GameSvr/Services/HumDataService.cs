@@ -36,7 +36,7 @@ namespace GameSvr.Services
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
                 try
                 {
-                    if (ReceivedMap.TryGetValue(queryId,out respPack))
+                    if (ReceivedMap.TryGetValue(queryId, out respPack))
                     {
                         if (respPack == null)
                         {

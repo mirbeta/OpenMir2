@@ -1,6 +1,6 @@
-﻿namespace GameSvr.ScriptSystem
+﻿namespace GameSvr.Script
 {
-    public  class ScriptDef
+    public class ScriptDef
     {
         public const string sMAN = "MAN";
         public const string sSUNRAISE = "SUNRAISE";
@@ -972,7 +972,7 @@
         public const string sHIREARCHERNOW = "@hirearchernow";
         public const string sHIREGUARDNOW = "@hireguardnow";
         public const string sHIREGUARDOK = "@hireguardok";
-        
+
         /// <summary>
         /// 人物下线触发
         /// </summary>

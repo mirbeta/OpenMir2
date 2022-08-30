@@ -19,7 +19,7 @@ namespace GameSvr.Castle
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
-                if (string.Compare( _castleList[i].m_sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(_castleList[i].m_sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return _castleList[i];
                 }

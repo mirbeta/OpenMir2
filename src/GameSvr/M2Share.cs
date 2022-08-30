@@ -11,6 +11,7 @@ using GameSvr.Maps;
 using GameSvr.Notices;
 using GameSvr.Npc;
 using GameSvr.Robots;
+using GameSvr.Script;
 using GameSvr.Services;
 using GameSvr.UsrSystem;
 using System.Collections;
@@ -61,7 +62,7 @@ namespace GameSvr
         public static MirLog LogSystem = null;
         public static RandomNumber RandomNumber = null;
         public static DBService DataServer = null;
-        public static ScriptSystem.ScriptSystem ScriptSystem = null;
+        public static ScriptSystem ScriptSystem = null;
         public static GateManager GateManager = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
@@ -512,7 +513,7 @@ namespace GameSvr
         public const int MONSTER_ARCHERGUARD = 112;
         public const int MONSTER_ELFMONSTER = 113;
         public const int MONSTER_ELFWARRIOR = 114;
-        
+
         public const string sMarket_Def = "Market_Def";
         public const string sNpc_def = "Npc_def";
 

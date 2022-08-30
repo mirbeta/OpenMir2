@@ -1,6 +1,6 @@
 using GameSvr.Npc;
 
-namespace GameSvr.ScriptSystem
+namespace GameSvr.Script
 {
     public class TScript
     {

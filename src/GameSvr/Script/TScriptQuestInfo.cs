@@ -1,4 +1,4 @@
-namespace GameSvr.ScriptSystem
+namespace GameSvr.Script
 {
     public struct TScriptQuestInfo
     {

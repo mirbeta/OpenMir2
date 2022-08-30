@@ -10,6 +10,7 @@ using GameSvr.Magic;
 using GameSvr.Maps;
 using GameSvr.Notices;
 using GameSvr.Robots;
+using GameSvr.Script;
 using GameSvr.Services;
 using GameSvr.Snaps;
 using GameSvr.UsrSystem;
@@ -27,9 +28,9 @@ namespace GameSvr
     {
         public GameApp(ILogger<ServerBase> logger) : base(logger)
         {
-            
+
         }
-        
+
         public void Initialize()
         {
             int nCode;
@@ -258,7 +259,7 @@ namespace GameSvr
             M2Share.LoadConfig();
             M2Share.DataServer = new DBService();
             M2Share.ObjectManager = new ObjectManager();
-            M2Share.ScriptSystem = new ScriptSystem.ScriptSystem();
+            M2Share.ScriptSystem = new ScriptSystem();
             M2Share.GateManager = GateManager.Instance;
             M2Share.g_FindPath = new TFindPath();
             M2Share.CommandSystem = new CommandManager();

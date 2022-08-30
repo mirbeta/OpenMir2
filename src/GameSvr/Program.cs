@@ -29,13 +29,13 @@ namespace GameSvr
             Ability.Looks = 100;
 
             var abstr = EDcode.EncodeBuffer(Ability);
-  
+
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
-            
+
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
@@ -63,7 +63,7 @@ namespace GameSvr
             await ProcessLoopAsync();
             Stop();
         }
-        
+
         static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
