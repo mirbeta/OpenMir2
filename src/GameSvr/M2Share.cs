@@ -63,7 +63,7 @@ namespace GameSvr
         public static RandomNumber RandomNumber = null;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static GateManager GateManager = null;
+        public static GameGateManager GateManager = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
         public static MapManager MapManager = null;

@@ -228,9 +228,9 @@ namespace GameSvr.Script
             sCmd = sCmd.ToUpper();
             switch (sCmd)
             {
-                case ScriptDef.sCHECK:
+                case ScriptCommandConst.sCHECK:
                     {
-                        nCMDCode = ScriptDef.nCHECK;
+                        nCMDCode = ScriptCommandConst.nCHECK;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -242,9 +242,9 @@ namespace GameSvr.Script
                         }
                         goto L001;
                     }
-                case ScriptDef.sCHECKOPEN:
+                case ScriptCommandConst.sCHECKOPEN:
                     {
-                        nCMDCode = ScriptDef.nCHECKOPEN;
+                        nCMDCode = ScriptCommandConst.nCHECKOPEN;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -256,9 +256,9 @@ namespace GameSvr.Script
                         }
                         goto L001;
                     }
-                case ScriptDef.sCHECKUNIT:
+                case ScriptCommandConst.sCHECKUNIT:
                     {
-                        nCMDCode = ScriptDef.nCHECKUNIT;
+                        nCMDCode = ScriptCommandConst.nCHECKUNIT;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -270,479 +270,479 @@ namespace GameSvr.Script
                         }
                         goto L001;
                     }
-                case ScriptDef.sCHECKPKPOINT:
-                    nCMDCode = ScriptDef.nCHECKPKPOINT;
+                case ScriptCommandConst.sCHECKPKPOINT:
+                    nCMDCode = ScriptCommandConst.nCHECKPKPOINT;
                     goto L001;
-                case ScriptDef.sCHECKGOLD:
-                    nCMDCode = ScriptDef.nCHECKGOLD;
+                case ScriptCommandConst.sCHECKGOLD:
+                    nCMDCode = ScriptCommandConst.nCHECKGOLD;
                     goto L001;
-                case ScriptDef.sCHECKLEVEL:
-                    nCMDCode = ScriptDef.nCHECKLEVEL;
+                case ScriptCommandConst.sCHECKLEVEL:
+                    nCMDCode = ScriptCommandConst.nCHECKLEVEL;
                     goto L001;
-                case ScriptDef.sCHECKJOB:
-                    nCMDCode = ScriptDef.nCHECKJOB;
+                case ScriptCommandConst.sCHECKJOB:
+                    nCMDCode = ScriptCommandConst.nCHECKJOB;
                     goto L001;
-                case ScriptDef.sRANDOM:
-                    nCMDCode = ScriptDef.nRANDOM;
+                case ScriptCommandConst.sRANDOM:
+                    nCMDCode = ScriptCommandConst.nRANDOM;
                     goto L001;
-                case ScriptDef.sCHECKITEM:
-                    nCMDCode = ScriptDef.nCHECKITEM;
+                case ScriptCommandConst.sCHECKITEM:
+                    nCMDCode = ScriptCommandConst.nCHECKITEM;
                     goto L001;
-                case ScriptDef.sGENDER:
-                    nCMDCode = ScriptDef.nGENDER;
+                case ScriptCommandConst.sGENDER:
+                    nCMDCode = ScriptCommandConst.nGENDER;
                     goto L001;
-                case ScriptDef.sCHECKBAGGAGE:
-                    nCMDCode = ScriptDef.nCHECKBAGGAGE;
+                case ScriptCommandConst.sCHECKBAGGAGE:
+                    nCMDCode = ScriptCommandConst.nCHECKBAGGAGE;
                     goto L001;
-                case ScriptDef.sCHECKNAMELIST:
-                    nCMDCode = ScriptDef.nCHECKNAMELIST;
+                case ScriptCommandConst.sCHECKNAMELIST:
+                    nCMDCode = ScriptCommandConst.nCHECKNAMELIST;
                     goto L001;
-                case ScriptDef.sSC_HASGUILD:
-                    nCMDCode = ScriptDef.nSC_HASGUILD;
+                case ScriptCommandConst.sSC_HASGUILD:
+                    nCMDCode = ScriptCommandConst.nSC_HASGUILD;
                     goto L001;
-                case ScriptDef.sSC_ISGUILDMASTER:
-                    nCMDCode = ScriptDef.nSC_ISGUILDMASTER;
+                case ScriptCommandConst.sSC_ISGUILDMASTER:
+                    nCMDCode = ScriptCommandConst.nSC_ISGUILDMASTER;
                     goto L001;
-                case ScriptDef.sSC_CHECKCASTLEMASTER:
-                    nCMDCode = ScriptDef.nSC_CHECKCASTLEMASTER;
+                case ScriptCommandConst.sSC_CHECKCASTLEMASTER:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKCASTLEMASTER;
                     goto L001;
-                case ScriptDef.sSC_ISNEWHUMAN:
-                    nCMDCode = ScriptDef.nSC_ISNEWHUMAN;
+                case ScriptCommandConst.sSC_ISNEWHUMAN:
+                    nCMDCode = ScriptCommandConst.nSC_ISNEWHUMAN;
                     goto L001;
-                case ScriptDef.sSC_CHECKMEMBERTYPE:
-                    nCMDCode = ScriptDef.nSC_CHECKMEMBERTYPE;
+                case ScriptCommandConst.sSC_CHECKMEMBERTYPE:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKMEMBERTYPE;
                     goto L001;
-                case ScriptDef.sSC_CHECKMEMBERLEVEL:
-                    nCMDCode = ScriptDef.nSC_CHECKMEMBERLEVEL;
+                case ScriptCommandConst.sSC_CHECKMEMBERLEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKMEMBERLEVEL;
                     goto L001;
-                case ScriptDef.sSC_CHECKGAMEGOLD:
-                    nCMDCode = ScriptDef.nSC_CHECKGAMEGOLD;
+                case ScriptCommandConst.sSC_CHECKGAMEGOLD:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKGAMEGOLD;
                     goto L001;
-                case ScriptDef.sSC_CHECKGAMEPOINT:
-                    nCMDCode = ScriptDef.nSC_CHECKGAMEPOINT;
+                case ScriptCommandConst.sSC_CHECKGAMEPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKGAMEPOINT;
                     goto L001;
-                case ScriptDef.sSC_CHECKNAMELISTPOSITION:
-                    nCMDCode = ScriptDef.nSC_CHECKNAMELISTPOSITION;
+                case ScriptCommandConst.sSC_CHECKNAMELISTPOSITION:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKNAMELISTPOSITION;
                     goto L001;
-                case ScriptDef.sSC_CHECKGUILDLIST:
-                    nCMDCode = ScriptDef.nSC_CHECKGUILDLIST;
+                case ScriptCommandConst.sSC_CHECKGUILDLIST:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKGUILDLIST;
                     goto L001;
-                case ScriptDef.sSC_CHECKRENEWLEVEL:
-                    nCMDCode = ScriptDef.nSC_CHECKRENEWLEVEL;
+                case ScriptCommandConst.sSC_CHECKRENEWLEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKRENEWLEVEL;
                     goto L001;
-                case ScriptDef.sSC_CHECKSLAVELEVEL:
-                    nCMDCode = ScriptDef.nSC_CHECKSLAVELEVEL;
+                case ScriptCommandConst.sSC_CHECKSLAVELEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKSLAVELEVEL;
                     goto L001;
-                case ScriptDef.sSC_CHECKSLAVENAME:
-                    nCMDCode = ScriptDef.nSC_CHECKSLAVENAME;
+                case ScriptCommandConst.sSC_CHECKSLAVENAME:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKSLAVENAME;
                     goto L001;
-                case ScriptDef.sSC_CHECKCREDITPOINT:
-                    nCMDCode = ScriptDef.nSC_CHECKCREDITPOINT;
+                case ScriptCommandConst.sSC_CHECKCREDITPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKCREDITPOINT;
                     goto L001;
-                case ScriptDef.sSC_CHECKOFGUILD:
-                    nCMDCode = ScriptDef.nSC_CHECKOFGUILD;
+                case ScriptCommandConst.sSC_CHECKOFGUILD:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKOFGUILD;
                     goto L001;
-                case ScriptDef.sSC_CHECKPAYMENT:
-                    nCMDCode = ScriptDef.nSC_CHECKPAYMENT;
+                case ScriptCommandConst.sSC_CHECKPAYMENT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKPAYMENT;
                     goto L001;
-                case ScriptDef.sSC_CHECKUSEITEM:
-                    nCMDCode = ScriptDef.nSC_CHECKUSEITEM;
+                case ScriptCommandConst.sSC_CHECKUSEITEM:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKUSEITEM;
                     goto L001;
-                case ScriptDef.sSC_CHECKBAGSIZE:
-                    nCMDCode = ScriptDef.nSC_CHECKBAGSIZE;
+                case ScriptCommandConst.sSC_CHECKBAGSIZE:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKBAGSIZE;
                     goto L001;
-                case ScriptDef.sSC_CHECKLISTCOUNT:
-                    nCMDCode = ScriptDef.nSC_CHECKLISTCOUNT;
+                case ScriptCommandConst.sSC_CHECKLISTCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKLISTCOUNT;
                     goto L001;
-                case ScriptDef.sSC_CHECKDC:
-                    nCMDCode = ScriptDef.nSC_CHECKDC;
+                case ScriptCommandConst.sSC_CHECKDC:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKDC;
                     goto L001;
-                case ScriptDef.sSC_CHECKMC:
-                    nCMDCode = ScriptDef.nSC_CHECKMC;
+                case ScriptCommandConst.sSC_CHECKMC:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKMC;
                     goto L001;
-                case ScriptDef.sSC_CHECKSC:
-                    nCMDCode = ScriptDef.nSC_CHECKSC;
+                case ScriptCommandConst.sSC_CHECKSC:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKSC;
                     goto L001;
-                case ScriptDef.sSC_CHECKHP:
-                    nCMDCode = ScriptDef.nSC_CHECKHP;
+                case ScriptCommandConst.sSC_CHECKHP:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKHP;
                     goto L001;
-                case ScriptDef.sSC_CHECKMP:
-                    nCMDCode = ScriptDef.nSC_CHECKMP;
+                case ScriptCommandConst.sSC_CHECKMP:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKMP;
                     goto L001;
-                case ScriptDef.sSC_CHECKITEMTYPE:
-                    nCMDCode = ScriptDef.nSC_CHECKITEMTYPE;
+                case ScriptCommandConst.sSC_CHECKITEMTYPE:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKITEMTYPE;
                     goto L001;
-                case ScriptDef.sSC_CHECKEXP:
-                    nCMDCode = ScriptDef.nSC_CHECKEXP;
+                case ScriptCommandConst.sSC_CHECKEXP:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKEXP;
                     goto L001;
-                case ScriptDef.sSC_CHECKCASTLEGOLD:
-                    nCMDCode = ScriptDef.nSC_CHECKCASTLEGOLD;
+                case ScriptCommandConst.sSC_CHECKCASTLEGOLD:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKCASTLEGOLD;
                     goto L001;
-                case ScriptDef.sSC_PASSWORDERRORCOUNT:
-                    nCMDCode = ScriptDef.nSC_PASSWORDERRORCOUNT;
+                case ScriptCommandConst.sSC_PASSWORDERRORCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_PASSWORDERRORCOUNT;
                     goto L001;
-                case ScriptDef.sSC_ISLOCKPASSWORD:
-                    nCMDCode = ScriptDef.nSC_ISLOCKPASSWORD;
+                case ScriptCommandConst.sSC_ISLOCKPASSWORD:
+                    nCMDCode = ScriptCommandConst.nSC_ISLOCKPASSWORD;
                     goto L001;
-                case ScriptDef.sSC_ISLOCKSTORAGE:
-                    nCMDCode = ScriptDef.nSC_ISLOCKSTORAGE;
+                case ScriptCommandConst.sSC_ISLOCKSTORAGE:
+                    nCMDCode = ScriptCommandConst.nSC_ISLOCKSTORAGE;
                     goto L001;
-                case ScriptDef.sSC_CHECKBUILDPOINT:
-                    nCMDCode = ScriptDef.nSC_CHECKBUILDPOINT;
+                case ScriptCommandConst.sSC_CHECKBUILDPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKBUILDPOINT;
                     goto L001;
-                case ScriptDef.sSC_CHECKAURAEPOINT:
-                    nCMDCode = ScriptDef.nSC_CHECKAURAEPOINT;
+                case ScriptCommandConst.sSC_CHECKAURAEPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKAURAEPOINT;
                     goto L001;
-                case ScriptDef.sSC_CHECKSTABILITYPOINT:
-                    nCMDCode = ScriptDef.nSC_CHECKSTABILITYPOINT;
+                case ScriptCommandConst.sSC_CHECKSTABILITYPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKSTABILITYPOINT;
                     goto L001;
-                case ScriptDef.sSC_CHECKFLOURISHPOINT:
-                    nCMDCode = ScriptDef.nSC_CHECKFLOURISHPOINT;
+                case ScriptCommandConst.sSC_CHECKFLOURISHPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKFLOURISHPOINT;
                     goto L001;
-                case ScriptDef.sSC_CHECKCONTRIBUTION:
-                    nCMDCode = ScriptDef.nSC_CHECKCONTRIBUTION;
+                case ScriptCommandConst.sSC_CHECKCONTRIBUTION:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKCONTRIBUTION;
                     goto L001;
-                case ScriptDef.sSC_CHECKRANGEMONCOUNT:
-                    nCMDCode = ScriptDef.nSC_CHECKRANGEMONCOUNT;
+                case ScriptCommandConst.sSC_CHECKRANGEMONCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKRANGEMONCOUNT;
                     goto L001;
-                case ScriptDef.sSC_CHECKITEMADDVALUE:
-                    nCMDCode = ScriptDef.nSC_CHECKITEMADDVALUE;
+                case ScriptCommandConst.sSC_CHECKITEMADDVALUE:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKITEMADDVALUE;
                     goto L001;
-                case ScriptDef.sSC_CHECKINMAPRANGE:
-                    nCMDCode = ScriptDef.nSC_CHECKINMAPRANGE;
+                case ScriptCommandConst.sSC_CHECKINMAPRANGE:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKINMAPRANGE;
                     goto L001;
-                case ScriptDef.sSC_CASTLECHANGEDAY:
-                    nCMDCode = ScriptDef.nSC_CASTLECHANGEDAY;
+                case ScriptCommandConst.sSC_CASTLECHANGEDAY:
+                    nCMDCode = ScriptCommandConst.nSC_CASTLECHANGEDAY;
                     goto L001;
-                case ScriptDef.sSC_CASTLEWARDAY:
-                    nCMDCode = ScriptDef.nSC_CASTLEWARDAY;
+                case ScriptCommandConst.sSC_CASTLEWARDAY:
+                    nCMDCode = ScriptCommandConst.nSC_CASTLEWARDAY;
                     goto L001;
-                case ScriptDef.sSC_ONLINELONGMIN:
-                    nCMDCode = ScriptDef.nSC_ONLINELONGMIN;
+                case ScriptCommandConst.sSC_ONLINELONGMIN:
+                    nCMDCode = ScriptCommandConst.nSC_ONLINELONGMIN;
                     goto L001;
-                case ScriptDef.sSC_CHECKGUILDCHIEFITEMCOUNT:
-                    nCMDCode = ScriptDef.nSC_CHECKGUILDCHIEFITEMCOUNT;
+                case ScriptCommandConst.sSC_CHECKGUILDCHIEFITEMCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKGUILDCHIEFITEMCOUNT;
                     goto L001;
-                case ScriptDef.sSC_CHECKNAMEDATELIST:
-                    nCMDCode = ScriptDef.nSC_CHECKNAMEDATELIST;
+                case ScriptCommandConst.sSC_CHECKNAMEDATELIST:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKNAMEDATELIST;
                     goto L001;
-                case ScriptDef.sSC_CHECKMAPHUMANCOUNT:
-                    nCMDCode = ScriptDef.nSC_CHECKMAPHUMANCOUNT;
+                case ScriptCommandConst.sSC_CHECKMAPHUMANCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKMAPHUMANCOUNT;
                     goto L001;
-                case ScriptDef.sSC_CHECKMAPMONCOUNT:
-                    nCMDCode = ScriptDef.nSC_CHECKMAPMONCOUNT;
+                case ScriptCommandConst.sSC_CHECKMAPMONCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKMAPMONCOUNT;
                     goto L001;
-                case ScriptDef.sSC_CHECKVAR:
-                    nCMDCode = ScriptDef.nSC_CHECKVAR;
+                case ScriptCommandConst.sSC_CHECKVAR:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKVAR;
                     goto L001;
-                case ScriptDef.sSC_CHECKSERVERNAME:
-                    nCMDCode = ScriptDef.nSC_CHECKSERVERNAME;
+                case ScriptCommandConst.sSC_CHECKSERVERNAME:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKSERVERNAME;
                     goto L001;
-                case ScriptDef.sSC_ISATTACKGUILD:
-                    nCMDCode = ScriptDef.nSC_ISATTACKGUILD;
+                case ScriptCommandConst.sSC_ISATTACKGUILD:
+                    nCMDCode = ScriptCommandConst.nSC_ISATTACKGUILD;
                     goto L001;
-                case ScriptDef.sSC_ISDEFENSEGUILD:
-                    nCMDCode = ScriptDef.nSC_ISDEFENSEGUILD;
+                case ScriptCommandConst.sSC_ISDEFENSEGUILD:
+                    nCMDCode = ScriptCommandConst.nSC_ISDEFENSEGUILD;
                     goto L001;
-                case ScriptDef.sSC_ISATTACKALLYGUILD:
-                    nCMDCode = ScriptDef.nSC_ISATTACKALLYGUILD;
+                case ScriptCommandConst.sSC_ISATTACKALLYGUILD:
+                    nCMDCode = ScriptCommandConst.nSC_ISATTACKALLYGUILD;
                     goto L001;
-                case ScriptDef.sSC_ISDEFENSEALLYGUILD:
-                    nCMDCode = ScriptDef.nSC_ISDEFENSEALLYGUILD;
+                case ScriptCommandConst.sSC_ISDEFENSEALLYGUILD:
+                    nCMDCode = ScriptCommandConst.nSC_ISDEFENSEALLYGUILD;
                     goto L001;
-                case ScriptDef.sSC_ISCASTLEGUILD:
-                    nCMDCode = ScriptDef.nSC_ISCASTLEGUILD;
+                case ScriptCommandConst.sSC_ISCASTLEGUILD:
+                    nCMDCode = ScriptCommandConst.nSC_ISCASTLEGUILD;
                     goto L001;
-                case ScriptDef.sSC_CHECKCASTLEDOOR:
-                    nCMDCode = ScriptDef.nSC_CHECKCASTLEDOOR;
+                case ScriptCommandConst.sSC_CHECKCASTLEDOOR:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKCASTLEDOOR;
                     goto L001;
-                case ScriptDef.sSC_ISSYSOP:
-                    nCMDCode = ScriptDef.nSC_ISSYSOP;
+                case ScriptCommandConst.sSC_ISSYSOP:
+                    nCMDCode = ScriptCommandConst.nSC_ISSYSOP;
                     goto L001;
-                case ScriptDef.sSC_ISADMIN:
-                    nCMDCode = ScriptDef.nSC_ISADMIN;
+                case ScriptCommandConst.sSC_ISADMIN:
+                    nCMDCode = ScriptCommandConst.nSC_ISADMIN;
                     goto L001;
-                case ScriptDef.sSC_CHECKGROUPCOUNT:
-                    nCMDCode = ScriptDef.nSC_CHECKGROUPCOUNT;
+                case ScriptCommandConst.sSC_CHECKGROUPCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKGROUPCOUNT;
                     goto L001;
-                case ScriptDef.sCHECKACCOUNTLIST:
-                    nCMDCode = ScriptDef.nCHECKACCOUNTLIST;
+                case ScriptCommandConst.sCHECKACCOUNTLIST:
+                    nCMDCode = ScriptCommandConst.nCHECKACCOUNTLIST;
                     goto L001;
-                case ScriptDef.sCHECKIPLIST:
-                    nCMDCode = ScriptDef.nCHECKIPLIST;
+                case ScriptCommandConst.sCHECKIPLIST:
+                    nCMDCode = ScriptCommandConst.nCHECKIPLIST;
                     goto L001;
-                case ScriptDef.sCHECKBBCOUNT:
-                    nCMDCode = ScriptDef.nCHECKBBCOUNT;
+                case ScriptCommandConst.sCHECKBBCOUNT:
+                    nCMDCode = ScriptCommandConst.nCHECKBBCOUNT;
                     goto L001;
             }
 
-            if (sCmd == ScriptDef.sCHECKCREDITPOINT)
+            if (sCmd == ScriptCommandConst.sCHECKCREDITPOINT)
             {
-                nCMDCode = ScriptDef.nCHECKCREDITPOINT;
+                nCMDCode = ScriptCommandConst.nCHECKCREDITPOINT;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sDAYTIME)
+            if (sCmd == ScriptCommandConst.sDAYTIME)
             {
-                nCMDCode = ScriptDef.nDAYTIME;
+                nCMDCode = ScriptCommandConst.nDAYTIME;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCHECKITEMW)
+            if (sCmd == ScriptCommandConst.sCHECKITEMW)
             {
-                nCMDCode = ScriptDef.nCHECKITEMW;
+                nCMDCode = ScriptCommandConst.nCHECKITEMW;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sISTAKEITEM)
+            if (sCmd == ScriptCommandConst.sISTAKEITEM)
             {
-                nCMDCode = ScriptDef.nISTAKEITEM;
+                nCMDCode = ScriptCommandConst.nISTAKEITEM;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCHECKDURA)
+            if (sCmd == ScriptCommandConst.sCHECKDURA)
             {
-                nCMDCode = ScriptDef.nCHECKDURA;
+                nCMDCode = ScriptCommandConst.nCHECKDURA;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCHECKDURAEVA)
+            if (sCmd == ScriptCommandConst.sCHECKDURAEVA)
             {
-                nCMDCode = ScriptDef.nCHECKDURAEVA;
+                nCMDCode = ScriptCommandConst.nCHECKDURAEVA;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sDAYOFWEEK)
+            if (sCmd == ScriptCommandConst.sDAYOFWEEK)
             {
-                nCMDCode = ScriptDef.nDAYOFWEEK;
+                nCMDCode = ScriptCommandConst.nDAYOFWEEK;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sHOUR)
+            if (sCmd == ScriptCommandConst.sHOUR)
             {
-                nCMDCode = ScriptDef.nHOUR;
+                nCMDCode = ScriptCommandConst.nHOUR;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sMIN)
+            if (sCmd == ScriptCommandConst.sMIN)
             {
-                nCMDCode = ScriptDef.nMIN;
+                nCMDCode = ScriptCommandConst.nMIN;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCHECKLUCKYPOINT)
+            if (sCmd == ScriptCommandConst.sCHECKLUCKYPOINT)
             {
-                nCMDCode = ScriptDef.nCHECKLUCKYPOINT;
+                nCMDCode = ScriptCommandConst.nCHECKLUCKYPOINT;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCHECKMONMAP)
+            if (sCmd == ScriptCommandConst.sCHECKMONMAP)
             {
-                nCMDCode = ScriptDef.nCHECKMONMAP;
+                nCMDCode = ScriptCommandConst.nCHECKMONMAP;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCHECKMONAREA)
+            if (sCmd == ScriptCommandConst.sCHECKMONAREA)
             {
-                nCMDCode = ScriptDef.nCHECKMONAREA;
+                nCMDCode = ScriptCommandConst.nCHECKMONAREA;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCHECKHUM)
+            if (sCmd == ScriptCommandConst.sCHECKHUM)
             {
-                nCMDCode = ScriptDef.nCHECKHUM;
+                nCMDCode = ScriptCommandConst.nCHECKHUM;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sEQUAL)
+            if (sCmd == ScriptCommandConst.sEQUAL)
             {
-                nCMDCode = ScriptDef.nEQUAL;
+                nCMDCode = ScriptCommandConst.nEQUAL;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sLARGE)
+            if (sCmd == ScriptCommandConst.sLARGE)
             {
-                nCMDCode = ScriptDef.nLARGE;
+                nCMDCode = ScriptCommandConst.nLARGE;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSMALL)
+            if (sCmd == ScriptCommandConst.sSMALL)
             {
-                nCMDCode = ScriptDef.nSMALL;
+                nCMDCode = ScriptCommandConst.nSMALL;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKPOSEDIR)
+            if (sCmd == ScriptCommandConst.sSC_CHECKPOSEDIR)
             {
-                nCMDCode = ScriptDef.nSC_CHECKPOSEDIR;
+                nCMDCode = ScriptCommandConst.nSC_CHECKPOSEDIR;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKPOSELEVEL)
+            if (sCmd == ScriptCommandConst.sSC_CHECKPOSELEVEL)
             {
-                nCMDCode = ScriptDef.nSC_CHECKPOSELEVEL;
+                nCMDCode = ScriptCommandConst.nSC_CHECKPOSELEVEL;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKPOSEGENDER)
+            if (sCmd == ScriptCommandConst.sSC_CHECKPOSEGENDER)
             {
-                nCMDCode = ScriptDef.nSC_CHECKPOSEGENDER;
+                nCMDCode = ScriptCommandConst.nSC_CHECKPOSEGENDER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKLEVELEX)
+            if (sCmd == ScriptCommandConst.sSC_CHECKLEVELEX)
             {
-                nCMDCode = ScriptDef.nSC_CHECKLEVELEX;
+                nCMDCode = ScriptCommandConst.nSC_CHECKLEVELEX;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKBONUSPOINT)
+            if (sCmd == ScriptCommandConst.sSC_CHECKBONUSPOINT)
             {
-                nCMDCode = ScriptDef.nSC_CHECKBONUSPOINT;
+                nCMDCode = ScriptCommandConst.nSC_CHECKBONUSPOINT;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKMARRY)
+            if (sCmd == ScriptCommandConst.sSC_CHECKMARRY)
             {
-                nCMDCode = ScriptDef.nSC_CHECKMARRY;
+                nCMDCode = ScriptCommandConst.nSC_CHECKMARRY;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKPOSEMARRY)
+            if (sCmd == ScriptCommandConst.sSC_CHECKPOSEMARRY)
             {
-                nCMDCode = ScriptDef.nSC_CHECKPOSEMARRY;
+                nCMDCode = ScriptCommandConst.nSC_CHECKPOSEMARRY;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKMARRYCOUNT)
+            if (sCmd == ScriptCommandConst.sSC_CHECKMARRYCOUNT)
             {
-                nCMDCode = ScriptDef.nSC_CHECKMARRYCOUNT;
+                nCMDCode = ScriptCommandConst.nSC_CHECKMARRYCOUNT;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKMASTER)
+            if (sCmd == ScriptCommandConst.sSC_CHECKMASTER)
             {
-                nCMDCode = ScriptDef.nSC_CHECKMASTER;
+                nCMDCode = ScriptCommandConst.nSC_CHECKMASTER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_HAVEMASTER)
+            if (sCmd == ScriptCommandConst.sSC_HAVEMASTER)
             {
-                nCMDCode = ScriptDef.nSC_HAVEMASTER;
+                nCMDCode = ScriptCommandConst.nSC_HAVEMASTER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKPOSEMASTER)
+            if (sCmd == ScriptCommandConst.sSC_CHECKPOSEMASTER)
             {
-                nCMDCode = ScriptDef.nSC_CHECKPOSEMASTER;
+                nCMDCode = ScriptCommandConst.nSC_CHECKPOSEMASTER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_POSEHAVEMASTER)
+            if (sCmd == ScriptCommandConst.sSC_POSEHAVEMASTER)
             {
-                nCMDCode = ScriptDef.nSC_POSEHAVEMASTER;
+                nCMDCode = ScriptCommandConst.nSC_POSEHAVEMASTER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKISMASTER)
+            if (sCmd == ScriptCommandConst.sSC_CHECKISMASTER)
             {
-                nCMDCode = ScriptDef.nSC_CHECKISMASTER;
+                nCMDCode = ScriptCommandConst.nSC_CHECKISMASTER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKPOSEISMASTER)
+            if (sCmd == ScriptCommandConst.sSC_CHECKPOSEISMASTER)
             {
-                nCMDCode = ScriptDef.nSC_CHECKPOSEISMASTER;
+                nCMDCode = ScriptCommandConst.nSC_CHECKPOSEISMASTER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKNAMEIPLIST)
+            if (sCmd == ScriptCommandConst.sSC_CHECKNAMEIPLIST)
             {
-                nCMDCode = ScriptDef.nSC_CHECKNAMEIPLIST;
+                nCMDCode = ScriptCommandConst.nSC_CHECKNAMEIPLIST;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKACCOUNTIPLIST)
+            if (sCmd == ScriptCommandConst.sSC_CHECKACCOUNTIPLIST)
             {
-                nCMDCode = ScriptDef.nSC_CHECKACCOUNTIPLIST;
+                nCMDCode = ScriptCommandConst.nSC_CHECKACCOUNTIPLIST;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKSLAVECOUNT)
+            if (sCmd == ScriptCommandConst.sSC_CHECKSLAVECOUNT)
             {
-                nCMDCode = ScriptDef.nSC_CHECKSLAVECOUNT;
+                nCMDCode = ScriptCommandConst.nSC_CHECKSLAVECOUNT;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKPOS)
+            if (sCmd == ScriptCommandConst.sSC_CHECKPOS)
             {
-                nCMDCode = ScriptDef.nSC_CHECKPOS;
+                nCMDCode = ScriptCommandConst.nSC_CHECKPOS;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKMAP)
+            if (sCmd == ScriptCommandConst.sSC_CHECKMAP)
             {
-                nCMDCode = ScriptDef.nSC_CHECKMAP;
+                nCMDCode = ScriptCommandConst.nSC_CHECKMAP;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_REVIVESLAVE)
+            if (sCmd == ScriptCommandConst.sSC_REVIVESLAVE)
             {
-                nCMDCode = ScriptDef.nSC_REVIVESLAVE;
+                nCMDCode = ScriptCommandConst.nSC_REVIVESLAVE;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKMAGICLVL)
+            if (sCmd == ScriptCommandConst.sSC_CHECKMAGICLVL)
             {
-                nCMDCode = ScriptDef.nSC_CHECKMAGICLVL;
+                nCMDCode = ScriptCommandConst.nSC_CHECKMAGICLVL;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKGROUPCLASS)
+            if (sCmd == ScriptCommandConst.sSC_CHECKGROUPCLASS)
             {
-                nCMDCode = ScriptDef.nSC_CHECKGROUPCLASS;
+                nCMDCode = ScriptCommandConst.nSC_CHECKGROUPCLASS;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_ISGROUPMASTER)
+            if (sCmd == ScriptCommandConst.sSC_ISGROUPMASTER)
             {
-                nCMDCode = ScriptDef.nSC_ISGROUPMASTER;
+                nCMDCode = ScriptCommandConst.nSC_ISGROUPMASTER;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sCheckDiemon)
+            if (sCmd == ScriptCommandConst.sCheckDiemon)
             {
-                nCMDCode = ScriptDef.nCheckDiemon;
+                nCMDCode = ScriptCommandConst.nCheckDiemon;
                 goto L001;
             }
-            if (sCmd == ScriptDef.scheckkillplaymon)
+            if (sCmd == ScriptCommandConst.scheckkillplaymon)
             {
-                nCMDCode = ScriptDef.ncheckkillplaymon;
+                nCMDCode = ScriptCommandConst.ncheckkillplaymon;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKRANDOMNO)
+            if (sCmd == ScriptCommandConst.sSC_CHECKRANDOMNO)
             {
-                nCMDCode = ScriptDef.nSC_CHECKRANDOMNO;
+                nCMDCode = ScriptCommandConst.nSC_CHECKRANDOMNO;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_CHECKISONMAP)
+            if (sCmd == ScriptCommandConst.sSC_CHECKISONMAP)
             {
-                nCMDCode = ScriptDef.nSC_CHECKISONMAP;
+                nCMDCode = ScriptCommandConst.nSC_CHECKISONMAP;
                 goto L001;
             }
             // 检测是否安全区
-            if (sCmd == ScriptDef.sSC_CHECKINSAFEZONE)
+            if (sCmd == ScriptCommandConst.sSC_CHECKINSAFEZONE)
             {
-                nCMDCode = ScriptDef.nSC_CHECKINSAFEZONE;
+                nCMDCode = ScriptCommandConst.nSC_CHECKINSAFEZONE;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_KILLBYHUM)
+            if (sCmd == ScriptCommandConst.sSC_KILLBYHUM)
             {
-                nCMDCode = ScriptDef.nSC_KILLBYHUM;
+                nCMDCode = ScriptCommandConst.nSC_KILLBYHUM;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_KILLBYMON)
+            if (sCmd == ScriptCommandConst.sSC_KILLBYMON)
             {
-                nCMDCode = ScriptDef.nSC_KILLBYMON;
+                nCMDCode = ScriptCommandConst.nSC_KILLBYMON;
                 goto L001;
             }
             // 增加挂机
-            if (sCmd == ScriptDef.sSC_OffLine)
+            if (sCmd == ScriptCommandConst.sSC_OffLine)
             {
-                nCMDCode = ScriptDef.nSC_OffLine;
+                nCMDCode = ScriptCommandConst.nSC_OffLine;
                 goto L001;
             }
             // 增加脚本特修所有装备命令
-            if (sCmd == ScriptDef.sSC_REPAIRALL)
+            if (sCmd == ScriptCommandConst.sSC_REPAIRALL)
             {
-                nCMDCode = ScriptDef.nSC_REPAIRALL;
+                nCMDCode = ScriptCommandConst.nSC_REPAIRALL;
                 goto L001;
             }
             // 刷新包裹物品命令
-            if (sCmd == ScriptDef.sSC_QUERYBAGITEMS)
+            if (sCmd == ScriptCommandConst.sSC_QUERYBAGITEMS)
             {
-                nCMDCode = ScriptDef.nSC_QUERYBAGITEMS;
+                nCMDCode = ScriptCommandConst.nSC_QUERYBAGITEMS;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_SETRANDOMNO)
+            if (sCmd == ScriptCommandConst.sSC_SETRANDOMNO)
             {
-                nCMDCode = ScriptDef.nSC_SETRANDOMNO;
+                nCMDCode = ScriptCommandConst.nSC_SETRANDOMNO;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSC_DELAYGOTO || sCmd == "DELAYCALL")
+            if (sCmd == ScriptCommandConst.sSC_DELAYGOTO || sCmd == "DELAYCALL")
             {
-                nCMDCode = ScriptDef.nSC_DELAYGOTO;
+                nCMDCode = ScriptCommandConst.nSC_DELAYGOTO;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSCHECKDEATHPLAYMON)
+            if (sCmd == ScriptCommandConst.sSCHECKDEATHPLAYMON)
             {
-                nCMDCode = ScriptDef.nSCHECKDEATHPLAYMON;
+                nCMDCode = ScriptCommandConst.nSCHECKDEATHPLAYMON;
                 goto L001;
             }
-            if (sCmd == ScriptDef.sSCHECKKILLMOBNAME)
+            if (sCmd == ScriptCommandConst.sSCHECKKILLMOBNAME)
             {
-                nCMDCode = ScriptDef.nSCHECKDEATHPLAYMON;
+                nCMDCode = ScriptCommandConst.nSCHECKDEATHPLAYMON;
                 goto L001;
             }
         // ------------------------------
@@ -831,9 +831,9 @@ namespace GameSvr.Script
             nCMDCode = 0;
             switch (sCmd)
             {
-                case ScriptDef.sSET:
+                case ScriptCommandConst.sSET:
                     {
-                        nCMDCode = ScriptDef.nSET;
+                        nCMDCode = ScriptCommandConst.nSET;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -845,9 +845,9 @@ namespace GameSvr.Script
                         }
                         break;
                     }
-                case ScriptDef.sRESET:
+                case ScriptCommandConst.sRESET:
                     {
-                        nCMDCode = ScriptDef.nRESET;
+                        nCMDCode = ScriptCommandConst.nRESET;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -859,9 +859,9 @@ namespace GameSvr.Script
                         }
                         break;
                     }
-                case ScriptDef.sSETOPEN:
+                case ScriptCommandConst.sSETOPEN:
                     {
-                        nCMDCode = ScriptDef.nSETOPEN;
+                        nCMDCode = ScriptCommandConst.nSETOPEN;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -873,9 +873,9 @@ namespace GameSvr.Script
                         }
                         break;
                     }
-                case ScriptDef.sSETUNIT:
+                case ScriptCommandConst.sSETUNIT:
                     {
-                        nCMDCode = ScriptDef.nSETUNIT;
+                        nCMDCode = ScriptCommandConst.nSETUNIT;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -887,9 +887,9 @@ namespace GameSvr.Script
                         }
                         break;
                     }
-                case ScriptDef.sRESETUNIT:
+                case ScriptCommandConst.sRESETUNIT:
                     {
-                        nCMDCode = ScriptDef.nRESETUNIT;
+                        nCMDCode = ScriptCommandConst.nRESETUNIT;
                         HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
@@ -902,463 +902,463 @@ namespace GameSvr.Script
 
                         break;
                     }
-                case ScriptDef.sTAKE:
-                    nCMDCode = ScriptDef.nTAKE;
+                case ScriptCommandConst.sTAKE:
+                    nCMDCode = ScriptCommandConst.nTAKE;
                     goto L001;
-                case ScriptDef.sSC_GIVE:
-                    nCMDCode = ScriptDef.nSC_GIVE;
+                case ScriptCommandConst.sSC_GIVE:
+                    nCMDCode = ScriptCommandConst.nSC_GIVE;
                     goto L001;
-                case ScriptDef.sCLOSE:
-                    nCMDCode = ScriptDef.nCLOSE;
+                case ScriptCommandConst.sCLOSE:
+                    nCMDCode = ScriptCommandConst.nCLOSE;
                     goto L001;
-                case ScriptDef.sBREAK:
-                    nCMDCode = ScriptDef.nBREAK;
+                case ScriptCommandConst.sBREAK:
+                    nCMDCode = ScriptCommandConst.nBREAK;
                     goto L001;
-                case ScriptDef.sGOTO:
-                    nCMDCode = ScriptDef.nGOTO;
+                case ScriptCommandConst.sGOTO:
+                    nCMDCode = ScriptCommandConst.nGOTO;
                     goto L001;
-                case ScriptDef.sADDNAMELIST:
-                    nCMDCode = ScriptDef.nADDNAMELIST;
+                case ScriptCommandConst.sADDNAMELIST:
+                    nCMDCode = ScriptCommandConst.nADDNAMELIST;
                     goto L001;
-                case ScriptDef.sDELNAMELIST:
-                    nCMDCode = ScriptDef.nDELNAMELIST;
+                case ScriptCommandConst.sDELNAMELIST:
+                    nCMDCode = ScriptCommandConst.nDELNAMELIST;
                     goto L001;
-                case ScriptDef.sADDGUILDLIST:
-                    nCMDCode = ScriptDef.nADDGUILDLIST;
+                case ScriptCommandConst.sADDGUILDLIST:
+                    nCMDCode = ScriptCommandConst.nADDGUILDLIST;
                     goto L001;
-                case ScriptDef.sDELGUILDLIST:
-                    nCMDCode = ScriptDef.nDELGUILDLIST;
+                case ScriptCommandConst.sDELGUILDLIST:
+                    nCMDCode = ScriptCommandConst.nDELGUILDLIST;
                     goto L001;
-                case ScriptDef.sSC_LINEMSG:
-                    nCMDCode = ScriptDef.nSC_LINEMSG;
+                case ScriptCommandConst.sSC_LINEMSG:
+                    nCMDCode = ScriptCommandConst.nSC_LINEMSG;
                     goto L001;
-                case ScriptDef.sADDACCOUNTLIST:
-                    nCMDCode = ScriptDef.nADDACCOUNTLIST;
+                case ScriptCommandConst.sADDACCOUNTLIST:
+                    nCMDCode = ScriptCommandConst.nADDACCOUNTLIST;
                     goto L001;
-                case ScriptDef.sDELACCOUNTLIST:
-                    nCMDCode = ScriptDef.nDELACCOUNTLIST;
+                case ScriptCommandConst.sDELACCOUNTLIST:
+                    nCMDCode = ScriptCommandConst.nDELACCOUNTLIST;
                     goto L001;
-                case ScriptDef.sADDIPLIST:
-                    nCMDCode = ScriptDef.nADDIPLIST;
+                case ScriptCommandConst.sADDIPLIST:
+                    nCMDCode = ScriptCommandConst.nADDIPLIST;
                     goto L001;
-                case ScriptDef.sDELIPLIST:
-                    nCMDCode = ScriptDef.nDELIPLIST;
+                case ScriptCommandConst.sDELIPLIST:
+                    nCMDCode = ScriptCommandConst.nDELIPLIST;
                     goto L001;
-                case ScriptDef.sSENDMSG:
-                    nCMDCode = ScriptDef.nSENDMSG;
+                case ScriptCommandConst.sSENDMSG:
+                    nCMDCode = ScriptCommandConst.nSENDMSG;
                     goto L001;
-                case ScriptDef.sCHANGEMODE:
-                    nCMDCode = ScriptDef.nCHANGEMODE;
-                    nCMDCode = ScriptDef.nSC_CHANGEMODE;
+                case ScriptCommandConst.sCHANGEMODE:
+                    nCMDCode = ScriptCommandConst.nCHANGEMODE;
+                    nCMDCode = ScriptCommandConst.nSC_CHANGEMODE;
                     goto L001;
-                case ScriptDef.sPKPOINT:
-                    nCMDCode = ScriptDef.nPKPOINT;
+                case ScriptCommandConst.sPKPOINT:
+                    nCMDCode = ScriptCommandConst.nPKPOINT;
                     goto L001;
-                case ScriptDef.sCHANGEXP:
-                    nCMDCode = ScriptDef.nCHANGEXP;
+                case ScriptCommandConst.sCHANGEXP:
+                    nCMDCode = ScriptCommandConst.nCHANGEXP;
                     goto L001;
-                case ScriptDef.sSC_RECALLMOB:
-                    nCMDCode = ScriptDef.nSC_RECALLMOB;
+                case ScriptCommandConst.sSC_RECALLMOB:
+                    nCMDCode = ScriptCommandConst.nSC_RECALLMOB;
                     goto L001;
-                case ScriptDef.sTAKEW:
-                    nCMDCode = ScriptDef.nTAKEW;
+                case ScriptCommandConst.sTAKEW:
+                    nCMDCode = ScriptCommandConst.nTAKEW;
                     goto L001;
-                case ScriptDef.sTIMERECALL:
-                    nCMDCode = ScriptDef.nTIMERECALL;
+                case ScriptCommandConst.sTIMERECALL:
+                    nCMDCode = ScriptCommandConst.nTIMERECALL;
                     goto L001;
-                case ScriptDef.sSC_PARAM1:
-                    nCMDCode = ScriptDef.nSC_PARAM1;
+                case ScriptCommandConst.sSC_PARAM1:
+                    nCMDCode = ScriptCommandConst.nSC_PARAM1;
                     goto L001;
-                case ScriptDef.sSC_PARAM2:
-                    nCMDCode = ScriptDef.nSC_PARAM2;
+                case ScriptCommandConst.sSC_PARAM2:
+                    nCMDCode = ScriptCommandConst.nSC_PARAM2;
                     goto L001;
-                case ScriptDef.sSC_PARAM3:
-                    nCMDCode = ScriptDef.nSC_PARAM3;
+                case ScriptCommandConst.sSC_PARAM3:
+                    nCMDCode = ScriptCommandConst.nSC_PARAM3;
                     goto L001;
-                case ScriptDef.sSC_PARAM4:
-                    nCMDCode = ScriptDef.nSC_PARAM4;
+                case ScriptCommandConst.sSC_PARAM4:
+                    nCMDCode = ScriptCommandConst.nSC_PARAM4;
                     goto L001;
-                case ScriptDef.sSC_EXEACTION:
-                    nCMDCode = ScriptDef.nSC_EXEACTION;
+                case ScriptCommandConst.sSC_EXEACTION:
+                    nCMDCode = ScriptCommandConst.nSC_EXEACTION;
                     goto L001;
-                case ScriptDef.sMAPMOVE:
-                    nCMDCode = ScriptDef.nMAPMOVE;
+                case ScriptCommandConst.sMAPMOVE:
+                    nCMDCode = ScriptCommandConst.nMAPMOVE;
                     goto L001;
-                case ScriptDef.sMAP:
-                    nCMDCode = ScriptDef.nMAP;
+                case ScriptCommandConst.sMAP:
+                    nCMDCode = ScriptCommandConst.nMAP;
                     goto L001;
-                case ScriptDef.sTAKECHECKITEM:
-                    nCMDCode = ScriptDef.nTAKECHECKITEM;
+                case ScriptCommandConst.sTAKECHECKITEM:
+                    nCMDCode = ScriptCommandConst.nTAKECHECKITEM;
                     goto L001;
-                case ScriptDef.sMONGEN:
-                    nCMDCode = ScriptDef.nMONGEN;
+                case ScriptCommandConst.sMONGEN:
+                    nCMDCode = ScriptCommandConst.nMONGEN;
                     goto L001;
-                case ScriptDef.sMONCLEAR:
-                    nCMDCode = ScriptDef.nMONCLEAR;
+                case ScriptCommandConst.sMONCLEAR:
+                    nCMDCode = ScriptCommandConst.nMONCLEAR;
                     goto L001;
-                case ScriptDef.sMOV:
-                    nCMDCode = ScriptDef.nMOV;
+                case ScriptCommandConst.sMOV:
+                    nCMDCode = ScriptCommandConst.nMOV;
                     goto L001;
-                case ScriptDef.sINC:
-                    nCMDCode = ScriptDef.nINC;
+                case ScriptCommandConst.sINC:
+                    nCMDCode = ScriptCommandConst.nINC;
                     goto L001;
-                case ScriptDef.sDEC:
-                    nCMDCode = ScriptDef.nDEC;
+                case ScriptCommandConst.sDEC:
+                    nCMDCode = ScriptCommandConst.nDEC;
                     goto L001;
-                case ScriptDef.sSUM:
-                    nCMDCode = ScriptDef.nSUM;
+                case ScriptCommandConst.sSUM:
+                    nCMDCode = ScriptCommandConst.nSUM;
                     goto L001;
                 //变量运算
                 //除法
-                case ScriptDef.sSC_DIV:
-                    nCMDCode = ScriptDef.nSC_DIV;
+                case ScriptCommandConst.sSC_DIV:
+                    nCMDCode = ScriptCommandConst.nSC_DIV;
                     goto L001;
                 //除法
-                case ScriptDef.sSC_MUL:
-                    nCMDCode = ScriptDef.nSC_MUL;
+                case ScriptCommandConst.sSC_MUL:
+                    nCMDCode = ScriptCommandConst.nSC_MUL;
                     goto L001;
                 //除法
-                case ScriptDef.sSC_PERCENT:
-                    nCMDCode = ScriptDef.nSC_PERCENT;
+                case ScriptCommandConst.sSC_PERCENT:
+                    nCMDCode = ScriptCommandConst.nSC_PERCENT;
                     goto L001;
-                case ScriptDef.sTHROWITEM:
-                case ScriptDef.sDROPITEMMAP:
-                    nCMDCode = ScriptDef.nTHROWITEM;
+                case ScriptCommandConst.sTHROWITEM:
+                case ScriptCommandConst.sDROPITEMMAP:
+                    nCMDCode = ScriptCommandConst.nTHROWITEM;
                     goto L001;
-                case ScriptDef.sBREAKTIMERECALL:
-                    nCMDCode = ScriptDef.nBREAKTIMERECALL;
+                case ScriptCommandConst.sBREAKTIMERECALL:
+                    nCMDCode = ScriptCommandConst.nBREAKTIMERECALL;
                     goto L001;
-                case ScriptDef.sMOVR:
-                    nCMDCode = ScriptDef.nMOVR;
+                case ScriptCommandConst.sMOVR:
+                    nCMDCode = ScriptCommandConst.nMOVR;
                     goto L001;
-                case ScriptDef.sEXCHANGEMAP:
-                    nCMDCode = ScriptDef.nEXCHANGEMAP;
+                case ScriptCommandConst.sEXCHANGEMAP:
+                    nCMDCode = ScriptCommandConst.nEXCHANGEMAP;
                     goto L001;
-                case ScriptDef.sRECALLMAP:
-                    nCMDCode = ScriptDef.nRECALLMAP;
+                case ScriptCommandConst.sRECALLMAP:
+                    nCMDCode = ScriptCommandConst.nRECALLMAP;
                     goto L001;
-                case ScriptDef.sADDBATCH:
-                    nCMDCode = ScriptDef.nADDBATCH;
+                case ScriptCommandConst.sADDBATCH:
+                    nCMDCode = ScriptCommandConst.nADDBATCH;
                     goto L001;
-                case ScriptDef.sBATCHDELAY:
-                    nCMDCode = ScriptDef.nBATCHDELAY;
+                case ScriptCommandConst.sBATCHDELAY:
+                    nCMDCode = ScriptCommandConst.nBATCHDELAY;
                     goto L001;
-                case ScriptDef.sBATCHMOVE:
-                    nCMDCode = ScriptDef.nBATCHMOVE;
+                case ScriptCommandConst.sBATCHMOVE:
+                    nCMDCode = ScriptCommandConst.nBATCHMOVE;
                     goto L001;
-                case ScriptDef.sPLAYDICE:
-                    nCMDCode = ScriptDef.nPLAYDICE;
+                case ScriptCommandConst.sPLAYDICE:
+                    nCMDCode = ScriptCommandConst.nPLAYDICE;
                     goto L001;
-                case ScriptDef.sGOQUEST:
-                    nCMDCode = ScriptDef.nGOQUEST;
+                case ScriptCommandConst.sGOQUEST:
+                    nCMDCode = ScriptCommandConst.nGOQUEST;
                     goto L001;
-                case ScriptDef.sENDQUEST:
-                    nCMDCode = ScriptDef.nENDQUEST;
+                case ScriptCommandConst.sENDQUEST:
+                    nCMDCode = ScriptCommandConst.nENDQUEST;
                     goto L001;
-                case ScriptDef.sSC_HAIRCOLOR:
-                    nCMDCode = ScriptDef.nSC_HAIRCOLOR;
+                case ScriptCommandConst.sSC_HAIRCOLOR:
+                    nCMDCode = ScriptCommandConst.nSC_HAIRCOLOR;
                     goto L001;
-                case ScriptDef.sSC_WEARCOLOR:
-                    nCMDCode = ScriptDef.nSC_WEARCOLOR;
+                case ScriptCommandConst.sSC_WEARCOLOR:
+                    nCMDCode = ScriptCommandConst.nSC_WEARCOLOR;
                     goto L001;
-                case ScriptDef.sSC_HAIRSTYLE:
-                    nCMDCode = ScriptDef.nSC_HAIRSTYLE;
+                case ScriptCommandConst.sSC_HAIRSTYLE:
+                    nCMDCode = ScriptCommandConst.nSC_HAIRSTYLE;
                     goto L001;
-                case ScriptDef.sSC_MONRECALL:
-                    nCMDCode = ScriptDef.nSC_MONRECALL;
+                case ScriptCommandConst.sSC_MONRECALL:
+                    nCMDCode = ScriptCommandConst.nSC_MONRECALL;
                     goto L001;
-                case ScriptDef.sSC_HORSECALL:
-                    nCMDCode = ScriptDef.nSC_HORSECALL;
+                case ScriptCommandConst.sSC_HORSECALL:
+                    nCMDCode = ScriptCommandConst.nSC_HORSECALL;
                     goto L001;
-                case ScriptDef.sSC_HAIRRNDCOL:
-                    nCMDCode = ScriptDef.nSC_HAIRRNDCOL;
+                case ScriptCommandConst.sSC_HAIRRNDCOL:
+                    nCMDCode = ScriptCommandConst.nSC_HAIRRNDCOL;
                     goto L001;
-                case ScriptDef.sSC_KILLHORSE:
-                    nCMDCode = ScriptDef.nSC_KILLHORSE;
+                case ScriptCommandConst.sSC_KILLHORSE:
+                    nCMDCode = ScriptCommandConst.nSC_KILLHORSE;
                     goto L001;
-                case ScriptDef.sSC_RANDSETDAILYQUEST:
-                    nCMDCode = ScriptDef.nSC_RANDSETDAILYQUEST;
+                case ScriptCommandConst.sSC_RANDSETDAILYQUEST:
+                    nCMDCode = ScriptCommandConst.nSC_RANDSETDAILYQUEST;
                     goto L001;
-                case ScriptDef.sSC_CHANGELEVEL:
-                    nCMDCode = ScriptDef.nSC_CHANGELEVEL;
+                case ScriptCommandConst.sSC_CHANGELEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_CHANGELEVEL;
                     goto L001;
-                case ScriptDef.sSC_MARRY:
-                    nCMDCode = ScriptDef.nSC_MARRY;
+                case ScriptCommandConst.sSC_MARRY:
+                    nCMDCode = ScriptCommandConst.nSC_MARRY;
                     goto L001;
-                case ScriptDef.sSC_UNMARRY:
-                    nCMDCode = ScriptDef.nSC_UNMARRY;
+                case ScriptCommandConst.sSC_UNMARRY:
+                    nCMDCode = ScriptCommandConst.nSC_UNMARRY;
                     goto L001;
-                case ScriptDef.sSC_GETMARRY:
-                    nCMDCode = ScriptDef.nSC_GETMARRY;
+                case ScriptCommandConst.sSC_GETMARRY:
+                    nCMDCode = ScriptCommandConst.nSC_GETMARRY;
                     goto L001;
-                case ScriptDef.sSC_GETMASTER:
-                    nCMDCode = ScriptDef.nSC_GETMASTER;
+                case ScriptCommandConst.sSC_GETMASTER:
+                    nCMDCode = ScriptCommandConst.nSC_GETMASTER;
                     goto L001;
-                case ScriptDef.sSC_CLEARSKILL:
-                    nCMDCode = ScriptDef.nSC_CLEARSKILL;
+                case ScriptCommandConst.sSC_CLEARSKILL:
+                    nCMDCode = ScriptCommandConst.nSC_CLEARSKILL;
                     goto L001;
-                case ScriptDef.sSC_DELNOJOBSKILL:
-                    nCMDCode = ScriptDef.nSC_DELNOJOBSKILL;
+                case ScriptCommandConst.sSC_DELNOJOBSKILL:
+                    nCMDCode = ScriptCommandConst.nSC_DELNOJOBSKILL;
                     goto L001;
-                case ScriptDef.sSC_DELSKILL:
-                    nCMDCode = ScriptDef.nSC_DELSKILL;
+                case ScriptCommandConst.sSC_DELSKILL:
+                    nCMDCode = ScriptCommandConst.nSC_DELSKILL;
                     goto L001;
-                case ScriptDef.sSC_ADDSKILL:
-                    nCMDCode = ScriptDef.nSC_ADDSKILL;
+                case ScriptCommandConst.sSC_ADDSKILL:
+                    nCMDCode = ScriptCommandConst.nSC_ADDSKILL;
                     goto L001;
-                case ScriptDef.sSC_SKILLLEVEL:
-                    nCMDCode = ScriptDef.nSC_SKILLLEVEL;
+                case ScriptCommandConst.sSC_SKILLLEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_SKILLLEVEL;
                     goto L001;
-                case ScriptDef.sSC_CHANGEPKPOINT:
-                    nCMDCode = ScriptDef.nSC_CHANGEPKPOINT;
+                case ScriptCommandConst.sSC_CHANGEPKPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CHANGEPKPOINT;
                     goto L001;
-                case ScriptDef.sSC_CHANGEEXP:
-                    nCMDCode = ScriptDef.nSC_CHANGEEXP;
+                case ScriptCommandConst.sSC_CHANGEEXP:
+                    nCMDCode = ScriptCommandConst.nSC_CHANGEEXP;
                     goto L001;
-                case ScriptDef.sSC_CHANGEJOB:
-                    nCMDCode = ScriptDef.nSC_CHANGEJOB;
+                case ScriptCommandConst.sSC_CHANGEJOB:
+                    nCMDCode = ScriptCommandConst.nSC_CHANGEJOB;
                     goto L001;
-                case ScriptDef.sSC_MISSION:
-                    nCMDCode = ScriptDef.nSC_MISSION;
+                case ScriptCommandConst.sSC_MISSION:
+                    nCMDCode = ScriptCommandConst.nSC_MISSION;
                     goto L001;
-                case ScriptDef.sSC_MOBPLACE:
-                    nCMDCode = ScriptDef.nSC_MOBPLACE;
+                case ScriptCommandConst.sSC_MOBPLACE:
+                    nCMDCode = ScriptCommandConst.nSC_MOBPLACE;
                     goto L001;
-                case ScriptDef.sSC_SETMEMBERTYPE:
-                    nCMDCode = ScriptDef.nSC_SETMEMBERTYPE;
+                case ScriptCommandConst.sSC_SETMEMBERTYPE:
+                    nCMDCode = ScriptCommandConst.nSC_SETMEMBERTYPE;
                     goto L001;
-                case ScriptDef.sSC_SETMEMBERLEVEL:
-                    nCMDCode = ScriptDef.nSC_SETMEMBERLEVEL;
+                case ScriptCommandConst.sSC_SETMEMBERLEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_SETMEMBERLEVEL;
                     goto L001;
-                case ScriptDef.sSC_GAMEGOLD:
-                    nCMDCode = ScriptDef.nSC_GAMEGOLD;
+                case ScriptCommandConst.sSC_GAMEGOLD:
+                    nCMDCode = ScriptCommandConst.nSC_GAMEGOLD;
                     goto L001;
-                case ScriptDef.sSC_GAMEPOINT:
-                    nCMDCode = ScriptDef.nSC_GAMEPOINT;
+                case ScriptCommandConst.sSC_GAMEPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_GAMEPOINT;
                     goto L001;
-                case ScriptDef.sSC_PKZONE:
-                    nCMDCode = ScriptDef.nSC_PKZONE;
+                case ScriptCommandConst.sSC_PKZONE:
+                    nCMDCode = ScriptCommandConst.nSC_PKZONE;
                     goto L001;
-                case ScriptDef.sSC_RESTBONUSPOINT:
-                    nCMDCode = ScriptDef.nSC_RESTBONUSPOINT;
+                case ScriptCommandConst.sSC_RESTBONUSPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_RESTBONUSPOINT;
                     goto L001;
-                case ScriptDef.sSC_TAKECASTLEGOLD:
-                    nCMDCode = ScriptDef.nSC_TAKECASTLEGOLD;
+                case ScriptCommandConst.sSC_TAKECASTLEGOLD:
+                    nCMDCode = ScriptCommandConst.nSC_TAKECASTLEGOLD;
                     goto L001;
-                case ScriptDef.sSC_HUMANHP:
-                    nCMDCode = ScriptDef.nSC_HUMANHP;
+                case ScriptCommandConst.sSC_HUMANHP:
+                    nCMDCode = ScriptCommandConst.nSC_HUMANHP;
                     goto L001;
-                case ScriptDef.sSC_HUMANMP:
-                    nCMDCode = ScriptDef.nSC_HUMANMP;
+                case ScriptCommandConst.sSC_HUMANMP:
+                    nCMDCode = ScriptCommandConst.nSC_HUMANMP;
                     goto L001;
-                case ScriptDef.sSC_BUILDPOINT:
-                    nCMDCode = ScriptDef.nSC_BUILDPOINT;
+                case ScriptCommandConst.sSC_BUILDPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_BUILDPOINT;
                     goto L001;
-                case ScriptDef.sSC_AURAEPOINT:
-                    nCMDCode = ScriptDef.nSC_AURAEPOINT;
+                case ScriptCommandConst.sSC_AURAEPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_AURAEPOINT;
                     goto L001;
-                case ScriptDef.sSC_STABILITYPOINT:
-                    nCMDCode = ScriptDef.nSC_STABILITYPOINT;
+                case ScriptCommandConst.sSC_STABILITYPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_STABILITYPOINT;
                     goto L001;
-                case ScriptDef.sSC_FLOURISHPOINT:
-                    nCMDCode = ScriptDef.nSC_FLOURISHPOINT;
+                case ScriptCommandConst.sSC_FLOURISHPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_FLOURISHPOINT;
                     goto L001;
-                case ScriptDef.sSC_OPENMAGICBOX:
-                    nCMDCode = ScriptDef.nSC_OPENMAGICBOX;
+                case ScriptCommandConst.sSC_OPENMAGICBOX:
+                    nCMDCode = ScriptCommandConst.nSC_OPENMAGICBOX;
                     goto L001;
-                case ScriptDef.sSC_SETRANKLEVELNAME:
-                    nCMDCode = ScriptDef.nSC_SETRANKLEVELNAME;
+                case ScriptCommandConst.sSC_SETRANKLEVELNAME:
+                    nCMDCode = ScriptCommandConst.nSC_SETRANKLEVELNAME;
                     goto L001;
-                case ScriptDef.sSC_GMEXECUTE:
-                    nCMDCode = ScriptDef.nSC_GMEXECUTE;
+                case ScriptCommandConst.sSC_GMEXECUTE:
+                    nCMDCode = ScriptCommandConst.nSC_GMEXECUTE;
                     goto L001;
-                case ScriptDef.sSC_GUILDCHIEFITEMCOUNT:
-                    nCMDCode = ScriptDef.nSC_GUILDCHIEFITEMCOUNT;
+                case ScriptCommandConst.sSC_GUILDCHIEFITEMCOUNT:
+                    nCMDCode = ScriptCommandConst.nSC_GUILDCHIEFITEMCOUNT;
                     goto L001;
-                case ScriptDef.sSC_ADDNAMEDATELIST:
-                    nCMDCode = ScriptDef.nSC_ADDNAMEDATELIST;
+                case ScriptCommandConst.sSC_ADDNAMEDATELIST:
+                    nCMDCode = ScriptCommandConst.nSC_ADDNAMEDATELIST;
                     goto L001;
-                case ScriptDef.sSC_DELNAMEDATELIST:
-                    nCMDCode = ScriptDef.nSC_DELNAMEDATELIST;
+                case ScriptCommandConst.sSC_DELNAMEDATELIST:
+                    nCMDCode = ScriptCommandConst.nSC_DELNAMEDATELIST;
                     goto L001;
-                case ScriptDef.sSC_MOBFIREBURN:
-                    nCMDCode = ScriptDef.nSC_MOBFIREBURN;
+                case ScriptCommandConst.sSC_MOBFIREBURN:
+                    nCMDCode = ScriptCommandConst.nSC_MOBFIREBURN;
                     goto L001;
-                case ScriptDef.sSC_MESSAGEBOX:
-                    nCMDCode = ScriptDef.nSC_MESSAGEBOX;
+                case ScriptCommandConst.sSC_MESSAGEBOX:
+                    nCMDCode = ScriptCommandConst.nSC_MESSAGEBOX;
                     goto L001;
-                case ScriptDef.sSC_SETSCRIPTFLAG:
-                    nCMDCode = ScriptDef.nSC_SETSCRIPTFLAG;
+                case ScriptCommandConst.sSC_SETSCRIPTFLAG:
+                    nCMDCode = ScriptCommandConst.nSC_SETSCRIPTFLAG;
                     goto L001;
-                case ScriptDef.sSC_SETAUTOGETEXP:
-                    nCMDCode = ScriptDef.nSC_SETAUTOGETEXP;
+                case ScriptCommandConst.sSC_SETAUTOGETEXP:
+                    nCMDCode = ScriptCommandConst.nSC_SETAUTOGETEXP;
                     goto L001;
-                case ScriptDef.sSC_VAR:
-                    nCMDCode = ScriptDef.nSC_VAR;
+                case ScriptCommandConst.sSC_VAR:
+                    nCMDCode = ScriptCommandConst.nSC_VAR;
                     goto L001;
-                case ScriptDef.sSC_LOADVAR:
-                    nCMDCode = ScriptDef.nSC_LOADVAR;
+                case ScriptCommandConst.sSC_LOADVAR:
+                    nCMDCode = ScriptCommandConst.nSC_LOADVAR;
                     goto L001;
-                case ScriptDef.sSC_SAVEVAR:
-                    nCMDCode = ScriptDef.nSC_SAVEVAR;
+                case ScriptCommandConst.sSC_SAVEVAR:
+                    nCMDCode = ScriptCommandConst.nSC_SAVEVAR;
                     goto L001;
-                case ScriptDef.sSC_CALCVAR:
-                    nCMDCode = ScriptDef.nSC_CALCVAR;
+                case ScriptCommandConst.sSC_CALCVAR:
+                    nCMDCode = ScriptCommandConst.nSC_CALCVAR;
                     goto L001;
-                case ScriptDef.sSC_AUTOADDGAMEGOLD:
-                    nCMDCode = ScriptDef.nSC_AUTOADDGAMEGOLD;
+                case ScriptCommandConst.sSC_AUTOADDGAMEGOLD:
+                    nCMDCode = ScriptCommandConst.nSC_AUTOADDGAMEGOLD;
                     goto L001;
-                case ScriptDef.sSC_AUTOSUBGAMEGOLD:
-                    nCMDCode = ScriptDef.nSC_AUTOSUBGAMEGOLD;
+                case ScriptCommandConst.sSC_AUTOSUBGAMEGOLD:
+                    nCMDCode = ScriptCommandConst.nSC_AUTOSUBGAMEGOLD;
                     goto L001;
-                case ScriptDef.sSC_RECALLGROUPMEMBERS:
-                    nCMDCode = ScriptDef.nSC_RECALLGROUPMEMBERS;
+                case ScriptCommandConst.sSC_RECALLGROUPMEMBERS:
+                    nCMDCode = ScriptCommandConst.nSC_RECALLGROUPMEMBERS;
                     goto L001;
-                case ScriptDef.sSC_CLEARNAMELIST:
-                    nCMDCode = ScriptDef.nSC_CLEARNAMELIST;
+                case ScriptCommandConst.sSC_CLEARNAMELIST:
+                    nCMDCode = ScriptCommandConst.nSC_CLEARNAMELIST;
                     goto L001;
-                case ScriptDef.sSC_CHANGENAMECOLOR:
-                    nCMDCode = ScriptDef.nSC_CHANGENAMECOLOR;
+                case ScriptCommandConst.sSC_CHANGENAMECOLOR:
+                    nCMDCode = ScriptCommandConst.nSC_CHANGENAMECOLOR;
                     goto L001;
-                case ScriptDef.sSC_CLEARPASSWORD:
-                    nCMDCode = ScriptDef.nSC_CLEARPASSWORD;
+                case ScriptCommandConst.sSC_CLEARPASSWORD:
+                    nCMDCode = ScriptCommandConst.nSC_CLEARPASSWORD;
                     goto L001;
-                case ScriptDef.sSC_RENEWLEVEL:
-                    nCMDCode = ScriptDef.nSC_RENEWLEVEL;
+                case ScriptCommandConst.sSC_RENEWLEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_RENEWLEVEL;
                     goto L001;
-                case ScriptDef.sSC_KILLMONEXPRATE:
-                    nCMDCode = ScriptDef.nSC_KILLMONEXPRATE;
+                case ScriptCommandConst.sSC_KILLMONEXPRATE:
+                    nCMDCode = ScriptCommandConst.nSC_KILLMONEXPRATE;
                     goto L001;
-                case ScriptDef.sSC_POWERRATE:
-                    nCMDCode = ScriptDef.nSC_POWERRATE;
+                case ScriptCommandConst.sSC_POWERRATE:
+                    nCMDCode = ScriptCommandConst.nSC_POWERRATE;
                     goto L001;
-                case ScriptDef.sSC_CHANGEPERMISSION:
-                    nCMDCode = ScriptDef.nSC_CHANGEPERMISSION;
+                case ScriptCommandConst.sSC_CHANGEPERMISSION:
+                    nCMDCode = ScriptCommandConst.nSC_CHANGEPERMISSION;
                     goto L001;
-                case ScriptDef.sSC_KILL:
-                    nCMDCode = ScriptDef.nSC_KILL;
+                case ScriptCommandConst.sSC_KILL:
+                    nCMDCode = ScriptCommandConst.nSC_KILL;
                     goto L001;
-                case ScriptDef.sSC_KICK:
-                    nCMDCode = ScriptDef.nSC_KICK;
+                case ScriptCommandConst.sSC_KICK:
+                    nCMDCode = ScriptCommandConst.nSC_KICK;
                     goto L001;
-                case ScriptDef.sSC_BONUSPOINT:
-                    nCMDCode = ScriptDef.nSC_BONUSPOINT;
+                case ScriptCommandConst.sSC_BONUSPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_BONUSPOINT;
                     goto L001;
-                case ScriptDef.sSC_RESTRENEWLEVEL:
-                    nCMDCode = ScriptDef.nSC_RESTRENEWLEVEL;
+                case ScriptCommandConst.sSC_RESTRENEWLEVEL:
+                    nCMDCode = ScriptCommandConst.nSC_RESTRENEWLEVEL;
                     goto L001;
-                case ScriptDef.sSC_DELMARRY:
-                    nCMDCode = ScriptDef.nSC_DELMARRY;
+                case ScriptCommandConst.sSC_DELMARRY:
+                    nCMDCode = ScriptCommandConst.nSC_DELMARRY;
                     goto L001;
-                case ScriptDef.sSC_DELMASTER:
-                    nCMDCode = ScriptDef.nSC_DELMASTER;
+                case ScriptCommandConst.sSC_DELMASTER:
+                    nCMDCode = ScriptCommandConst.nSC_DELMASTER;
                     goto L001;
-                case ScriptDef.sSC_MASTER:
-                    nCMDCode = ScriptDef.nSC_MASTER;
+                case ScriptCommandConst.sSC_MASTER:
+                    nCMDCode = ScriptCommandConst.nSC_MASTER;
                     goto L001;
-                case ScriptDef.sSC_UNMASTER:
-                    nCMDCode = ScriptDef.nSC_UNMASTER;
+                case ScriptCommandConst.sSC_UNMASTER:
+                    nCMDCode = ScriptCommandConst.nSC_UNMASTER;
                     goto L001;
-                case ScriptDef.sSC_CREDITPOINT:
-                    nCMDCode = ScriptDef.nSC_CREDITPOINT;
+                case ScriptCommandConst.sSC_CREDITPOINT:
+                    nCMDCode = ScriptCommandConst.nSC_CREDITPOINT;
                     goto L001;
-                case ScriptDef.sSC_CLEARNEEDITEMS:
-                    nCMDCode = ScriptDef.nSC_CLEARNEEDITEMS;
+                case ScriptCommandConst.sSC_CLEARNEEDITEMS:
+                    nCMDCode = ScriptCommandConst.nSC_CLEARNEEDITEMS;
                     goto L001;
-                case ScriptDef.sSC_CLEARMAKEITEMS:
-                    nCMDCode = ScriptDef.nSC_CLEARMAEKITEMS;
+                case ScriptCommandConst.sSC_CLEARMAKEITEMS:
+                    nCMDCode = ScriptCommandConst.nSC_CLEARMAEKITEMS;
                     goto L001;
-                case ScriptDef.sSC_SETSENDMSGFLAG:
-                    nCMDCode = ScriptDef.nSC_SETSENDMSGFLAG;
+                case ScriptCommandConst.sSC_SETSENDMSGFLAG:
+                    nCMDCode = ScriptCommandConst.nSC_SETSENDMSGFLAG;
                     goto L001;
-                case ScriptDef.sSC_UPGRADEITEMS:
-                    nCMDCode = ScriptDef.nSC_UPGRADEITEMS;
+                case ScriptCommandConst.sSC_UPGRADEITEMS:
+                    nCMDCode = ScriptCommandConst.nSC_UPGRADEITEMS;
                     goto L001;
-                case ScriptDef.sSC_UPGRADEITEMSEX:
-                    nCMDCode = ScriptDef.nSC_UPGRADEITEMSEX;
+                case ScriptCommandConst.sSC_UPGRADEITEMSEX:
+                    nCMDCode = ScriptCommandConst.nSC_UPGRADEITEMSEX;
                     goto L001;
-                case ScriptDef.sSC_MONGENEX:
-                    nCMDCode = ScriptDef.nSC_MONGENEX;
+                case ScriptCommandConst.sSC_MONGENEX:
+                    nCMDCode = ScriptCommandConst.nSC_MONGENEX;
                     goto L001;
-                case ScriptDef.sSC_CLEARMAPMON:
-                    nCMDCode = ScriptDef.nSC_CLEARMAPMON;
+                case ScriptCommandConst.sSC_CLEARMAPMON:
+                    nCMDCode = ScriptCommandConst.nSC_CLEARMAPMON;
                     goto L001;
-                case ScriptDef.sSC_SETMAPMODE:
-                    nCMDCode = ScriptDef.nSC_SETMAPMODE;
+                case ScriptCommandConst.sSC_SETMAPMODE:
+                    nCMDCode = ScriptCommandConst.nSC_SETMAPMODE;
                     goto L001;
-                case ScriptDef.sSC_KILLSLAVE:
-                    nCMDCode = ScriptDef.nSC_KILLSLAVE;
+                case ScriptCommandConst.sSC_KILLSLAVE:
+                    nCMDCode = ScriptCommandConst.nSC_KILLSLAVE;
                     goto L001;
-                case ScriptDef.sSC_CHANGEGENDER:
-                    nCMDCode = ScriptDef.nSC_CHANGEGENDER;
+                case ScriptCommandConst.sSC_CHANGEGENDER:
+                    nCMDCode = ScriptCommandConst.nSC_CHANGEGENDER;
                     goto L001;
-                case ScriptDef.sSC_MAPTING:
-                    nCMDCode = ScriptDef.nSC_MAPTING;
+                case ScriptCommandConst.sSC_MAPTING:
+                    nCMDCode = ScriptCommandConst.nSC_MAPTING;
                     goto L001;
-                case ScriptDef.sSC_GUILDRECALL:
-                    nCMDCode = ScriptDef.nSC_GUILDRECALL;
+                case ScriptCommandConst.sSC_GUILDRECALL:
+                    nCMDCode = ScriptCommandConst.nSC_GUILDRECALL;
                     goto L001;
-                case ScriptDef.sSC_GROUPRECALL:
-                    nCMDCode = ScriptDef.nSC_GROUPRECALL;
+                case ScriptCommandConst.sSC_GROUPRECALL:
+                    nCMDCode = ScriptCommandConst.nSC_GROUPRECALL;
                     goto L001;
-                case ScriptDef.sSC_GROUPADDLIST:
-                    nCMDCode = ScriptDef.nSC_GROUPADDLIST;
+                case ScriptCommandConst.sSC_GROUPADDLIST:
+                    nCMDCode = ScriptCommandConst.nSC_GROUPADDLIST;
                     goto L001;
-                case ScriptDef.sSC_CLEARLIST:
-                    nCMDCode = ScriptDef.nSC_CLEARLIST;
+                case ScriptCommandConst.sSC_CLEARLIST:
+                    nCMDCode = ScriptCommandConst.nSC_CLEARLIST;
                     goto L001;
-                case ScriptDef.sSC_GROUPMOVEMAP:
-                    nCMDCode = ScriptDef.nSC_GROUPMOVEMAP;
+                case ScriptCommandConst.sSC_GROUPMOVEMAP:
+                    nCMDCode = ScriptCommandConst.nSC_GROUPMOVEMAP;
                     goto L001;
-                case ScriptDef.sSC_SAVESLAVES:
-                    nCMDCode = ScriptDef.nSC_SAVESLAVES;
+                case ScriptCommandConst.sSC_SAVESLAVES:
+                    nCMDCode = ScriptCommandConst.nSC_SAVESLAVES;
                     goto L001;
-                case ScriptDef.sCHECKUSERDATE:
-                    nCMDCode = ScriptDef.nCHECKUSERDATE;
+                case ScriptCommandConst.sCHECKUSERDATE:
+                    nCMDCode = ScriptCommandConst.nCHECKUSERDATE;
                     goto L001;
-                case ScriptDef.sADDUSERDATE:
-                    nCMDCode = ScriptDef.nADDUSERDATE;
+                case ScriptCommandConst.sADDUSERDATE:
+                    nCMDCode = ScriptCommandConst.nADDUSERDATE;
                     goto L001;
-                case ScriptDef.sCheckDiemon:
-                    nCMDCode = ScriptDef.nCheckDiemon;
+                case ScriptCommandConst.sCheckDiemon:
+                    nCMDCode = ScriptCommandConst.nCheckDiemon;
                     goto L001;
-                case ScriptDef.scheckkillplaymon:
-                    nCMDCode = ScriptDef.ncheckkillplaymon;
+                case ScriptCommandConst.scheckkillplaymon:
+                    nCMDCode = ScriptCommandConst.ncheckkillplaymon;
                     goto L001;
-                case ScriptDef.sSC_CHECKRANDOMNO:
-                    nCMDCode = ScriptDef.nSC_CHECKRANDOMNO;
+                case ScriptCommandConst.sSC_CHECKRANDOMNO:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKRANDOMNO;
                     goto L001;
-                case ScriptDef.sSC_CHECKISONMAP:
-                    nCMDCode = ScriptDef.nSC_CHECKISONMAP;
+                case ScriptCommandConst.sSC_CHECKISONMAP:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKISONMAP;
                     goto L001;
                 // 检测是否安全区
-                case ScriptDef.sSC_CHECKINSAFEZONE:
-                    nCMDCode = ScriptDef.nSC_CHECKINSAFEZONE;
+                case ScriptCommandConst.sSC_CHECKINSAFEZONE:
+                    nCMDCode = ScriptCommandConst.nSC_CHECKINSAFEZONE;
                     goto L001;
-                case ScriptDef.sSC_KILLBYHUM:
-                    nCMDCode = ScriptDef.nSC_KILLBYHUM;
+                case ScriptCommandConst.sSC_KILLBYHUM:
+                    nCMDCode = ScriptCommandConst.nSC_KILLBYHUM;
                     goto L001;
-                case ScriptDef.sSC_KILLBYMON:
-                    nCMDCode = ScriptDef.nSC_KILLBYMON;
+                case ScriptCommandConst.sSC_KILLBYMON:
+                    nCMDCode = ScriptCommandConst.nSC_KILLBYMON;
                     goto L001;
-                case ScriptDef.sSC_ISHIGH:
-                    nCMDCode = ScriptDef.nSC_ISHIGH;
+                case ScriptCommandConst.sSC_ISHIGH:
+                    nCMDCode = ScriptCommandConst.nSC_ISHIGH;
                     goto L001;
-                case ScriptDef.sOPENYBDEAL:
-                    nCMDCode = ScriptDef.nOPENYBDEAL;
+                case ScriptCommandConst.sOPENYBDEAL:
+                    nCMDCode = ScriptCommandConst.nOPENYBDEAL;
                     goto L001;
-                case ScriptDef.sQUERYYBSELL:
-                    nCMDCode = ScriptDef.nQUERYYBSELL;
+                case ScriptCommandConst.sQUERYYBSELL:
+                    nCMDCode = ScriptCommandConst.nQUERYYBSELL;
                     goto L001;
-                case ScriptDef.sQUERYYBDEAL:
-                    nCMDCode = ScriptDef.nQUERYYBDEAL;
+                case ScriptCommandConst.sQUERYYBDEAL:
+                    nCMDCode = ScriptCommandConst.nQUERYYBDEAL;
                     goto L001;
-                case ScriptDef.sDELAYGOTO:
-                case ScriptDef.sDELAYCALL:
-                    nCMDCode = ScriptDef.nDELAYGOTO;
+                case ScriptCommandConst.sDELAYGOTO:
+                case ScriptCommandConst.sDELAYCALL:
+                    nCMDCode = ScriptCommandConst.nDELAYGOTO;
                     goto L001;
-                case ScriptDef.sCLEARDELAYGOTO:
-                    nCMDCode = ScriptDef.nCLEARDELAYGOTO;
+                case ScriptCommandConst.sCLEARDELAYGOTO:
+                    nCMDCode = ScriptCommandConst.nCLEARDELAYGOTO;
                     goto L001;
             }
         L001:
@@ -1592,72 +1592,72 @@ namespace GameSvr.Script
                                 while (sScript != "")
                                 {
                                     sScript = HUtil32.GetValidStr3(sScript, ref s30, new[] { " ", ",", "\t" });
-                                    if (s30.Equals(ScriptDef.sBUY, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boBuy = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sSELL, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sSELL, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boSell = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boMakeDrug = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sPRICES, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sPRICES, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boPrices = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sSTORAGE, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sSTORAGE, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boStorage = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sGETBACK, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sGETBACK, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boGetback = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boUpgradenow = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boGetBackupgnow = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boRepair = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boS_repair = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boSendmsg = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boUseItemName = true;
                                         continue;
                                     }
-                                    if (s30.Equals(ScriptDef.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(ScriptCommandConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boOffLineMsg = true;
                                         continue;
                                     }
-                                    if (String.Compare(s30, (ScriptDef.sybdeal), StringComparison.OrdinalIgnoreCase) == 0)
+                                    if (String.Compare(s30, (ScriptCommandConst.sybdeal), StringComparison.OrdinalIgnoreCase) == 0)
                                     {
                                         ((Merchant)(NPC)).m_boYBDeal = true;
                                         continue;
@@ -1954,269 +1954,269 @@ namespace GameSvr.Script
         {
             switch (sLabel)
             {
-                case ScriptDef.SPLAYOFFLINE:
-                    NPC.FGotoLable[ScriptDef.NPLAYOFFLINE] = nIdx;
+                case ScriptCommandConst.SPLAYOFFLINE:
+                    NPC.FGotoLable[ScriptCommandConst.NPLAYOFFLINE] = nIdx;
                     break;
-                case ScriptDef.SMARRYERROR:
-                    NPC.FGotoLable[ScriptDef.NMARRYERROR] = nIdx;
+                case ScriptCommandConst.SMARRYERROR:
+                    NPC.FGotoLable[ScriptCommandConst.NMARRYERROR] = nIdx;
                     break;
-                case ScriptDef.SMASTERERROR:
-                    NPC.FGotoLable[ScriptDef.NMASTERERROR] = nIdx;
+                case ScriptCommandConst.SMASTERERROR:
+                    NPC.FGotoLable[ScriptCommandConst.NMASTERERROR] = nIdx;
                     break;
-                case ScriptDef.SMARRYCHECKDIR:
-                    NPC.FGotoLable[ScriptDef.NMARRYCHECKDIR] = nIdx;
+                case ScriptCommandConst.SMARRYCHECKDIR:
+                    NPC.FGotoLable[ScriptCommandConst.NMARRYCHECKDIR] = nIdx;
                     break;
-                case ScriptDef.SHUMANTYPEERR:
-                    NPC.FGotoLable[ScriptDef.NHUMANTYPEERR] = nIdx;
+                case ScriptCommandConst.SHUMANTYPEERR:
+                    NPC.FGotoLable[ScriptCommandConst.NHUMANTYPEERR] = nIdx;
                     break;
-                case ScriptDef.SSTARTMARRY:
-                    NPC.FGotoLable[ScriptDef.NSTARTMARRY] = nIdx;
+                case ScriptCommandConst.SSTARTMARRY:
+                    NPC.FGotoLable[ScriptCommandConst.NSTARTMARRY] = nIdx;
                     break;
-                case ScriptDef.SMARRYSEXERR:
-                    NPC.FGotoLable[ScriptDef.NMARRYSEXERR] = nIdx;
+                case ScriptCommandConst.SMARRYSEXERR:
+                    NPC.FGotoLable[ScriptCommandConst.NMARRYSEXERR] = nIdx;
                     break;
-                case ScriptDef.SMARRYDIRERR:
-                    NPC.FGotoLable[ScriptDef.NMARRYDIRERR] = nIdx;
+                case ScriptCommandConst.SMARRYDIRERR:
+                    NPC.FGotoLable[ScriptCommandConst.NMARRYDIRERR] = nIdx;
                     break;
-                case ScriptDef.SWATEMARRY:
-                    NPC.FGotoLable[ScriptDef.NWATEMARRY] = nIdx;
+                case ScriptCommandConst.SWATEMARRY:
+                    NPC.FGotoLable[ScriptCommandConst.NWATEMARRY] = nIdx;
                     break;
-                case ScriptDef.SREVMARRY:
-                    NPC.FGotoLable[ScriptDef.NREVMARRY] = nIdx;
+                case ScriptCommandConst.SREVMARRY:
+                    NPC.FGotoLable[ScriptCommandConst.NREVMARRY] = nIdx;
                     break;
-                case ScriptDef.SENDMARRY:
-                    NPC.FGotoLable[ScriptDef.NENDMARRY] = nIdx;
+                case ScriptCommandConst.SENDMARRY:
+                    NPC.FGotoLable[ScriptCommandConst.NENDMARRY] = nIdx;
                     break;
-                case ScriptDef.SENDMARRYFAIL:
-                    NPC.FGotoLable[ScriptDef.NENDMARRYFAIL] = nIdx;
+                case ScriptCommandConst.SENDMARRYFAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NENDMARRYFAIL] = nIdx;
                     break;
-                case ScriptDef.SMASTERCHECKDIR:
-                    NPC.FGotoLable[ScriptDef.NMASTERCHECKDIR] = nIdx;
+                case ScriptCommandConst.SMASTERCHECKDIR:
+                    NPC.FGotoLable[ScriptCommandConst.NMASTERCHECKDIR] = nIdx;
                     break;
-                case ScriptDef.SSTARTGETMASTER:
-                    NPC.FGotoLable[ScriptDef.NSTARTGETMASTER] = nIdx;
+                case ScriptCommandConst.SSTARTGETMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NSTARTGETMASTER] = nIdx;
                     break;
-                case ScriptDef.SMASTERDIRERR:
-                    NPC.FGotoLable[ScriptDef.NMASTERDIRERR] = nIdx;
+                case ScriptCommandConst.SMASTERDIRERR:
+                    NPC.FGotoLable[ScriptCommandConst.NMASTERDIRERR] = nIdx;
                     break;
-                case ScriptDef.SWATEMASTER:
-                    NPC.FGotoLable[ScriptDef.NWATEMASTER] = nIdx;
+                case ScriptCommandConst.SWATEMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NWATEMASTER] = nIdx;
                     break;
-                case ScriptDef.SREVMASTER:
-                    NPC.FGotoLable[ScriptDef.NREVMASTER] = nIdx;
+                case ScriptCommandConst.SREVMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NREVMASTER] = nIdx;
                     break;
-                case ScriptDef.SENDMASTER:
-                    NPC.FGotoLable[ScriptDef.NENDMASTER] = nIdx;
+                case ScriptCommandConst.SENDMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NENDMASTER] = nIdx;
                     break;
-                case ScriptDef.SSTARTMASTER:
-                    NPC.FGotoLable[ScriptDef.NSTARTMASTER] = nIdx;
+                case ScriptCommandConst.SSTARTMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NSTARTMASTER] = nIdx;
                     break;
-                case ScriptDef.SENDMASTERFAIL:
-                    NPC.FGotoLable[ScriptDef.NENDMASTERFAIL] = nIdx;
+                case ScriptCommandConst.SENDMASTERFAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NENDMASTERFAIL] = nIdx;
                     break;
-                case ScriptDef.SEXEMARRYFAIL:
-                    NPC.FGotoLable[ScriptDef.NEXEMARRYFAIL] = nIdx;
+                case ScriptCommandConst.SEXEMARRYFAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NEXEMARRYFAIL] = nIdx;
                     break;
-                case ScriptDef.SUNMARRYCHECKDIR:
-                    NPC.FGotoLable[ScriptDef.NUNMARRYCHECKDIR] = nIdx;
+                case ScriptCommandConst.SUNMARRYCHECKDIR:
+                    NPC.FGotoLable[ScriptCommandConst.NUNMARRYCHECKDIR] = nIdx;
                     break;
-                case ScriptDef.SUNMARRYTYPEERR:
-                    NPC.FGotoLable[ScriptDef.NUNMARRYTYPEERR] = nIdx;
+                case ScriptCommandConst.SUNMARRYTYPEERR:
+                    NPC.FGotoLable[ScriptCommandConst.NUNMARRYTYPEERR] = nIdx;
                     break;
-                case ScriptDef.SSTARTUNMARRY:
-                    NPC.FGotoLable[ScriptDef.NSTARTUNMARRY] = nIdx;
+                case ScriptCommandConst.SSTARTUNMARRY:
+                    NPC.FGotoLable[ScriptCommandConst.NSTARTUNMARRY] = nIdx;
                     break;
-                case ScriptDef.SUNMARRYEND:
-                    NPC.FGotoLable[ScriptDef.NUNMARRYEND] = nIdx;
+                case ScriptCommandConst.SUNMARRYEND:
+                    NPC.FGotoLable[ScriptCommandConst.NUNMARRYEND] = nIdx;
                     break;
-                case ScriptDef.SWATEUNMARRY:
-                    NPC.FGotoLable[ScriptDef.NWATEUNMARRY] = nIdx;
+                case ScriptCommandConst.SWATEUNMARRY:
+                    NPC.FGotoLable[ScriptCommandConst.NWATEUNMARRY] = nIdx;
                     break;
-                case ScriptDef.SEXEMASTERFAIL:
-                    NPC.FGotoLable[ScriptDef.NEXEMASTERFAIL] = nIdx;
+                case ScriptCommandConst.SEXEMASTERFAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NEXEMASTERFAIL] = nIdx;
                     break;
-                case ScriptDef.SUNMASTERCHECKDIR:
-                    NPC.FGotoLable[ScriptDef.NUNMASTERCHECKDIR] = nIdx;
+                case ScriptCommandConst.SUNMASTERCHECKDIR:
+                    NPC.FGotoLable[ScriptCommandConst.NUNMASTERCHECKDIR] = nIdx;
                     break;
-                case ScriptDef.SUNMASTERTYPEERR:
-                    NPC.FGotoLable[ScriptDef.NUNMASTERTYPEERR] = nIdx;
+                case ScriptCommandConst.SUNMASTERTYPEERR:
+                    NPC.FGotoLable[ScriptCommandConst.NUNMASTERTYPEERR] = nIdx;
                     break;
-                case ScriptDef.SUNISMASTER:
-                    NPC.FGotoLable[ScriptDef.NUNISMASTER] = nIdx;
+                case ScriptCommandConst.SUNISMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NUNISMASTER] = nIdx;
                     break;
-                case ScriptDef.SUNMASTERERROR:
-                    NPC.FGotoLable[ScriptDef.NUNMASTERERROR] = nIdx;
+                case ScriptCommandConst.SUNMASTERERROR:
+                    NPC.FGotoLable[ScriptCommandConst.NUNMASTERERROR] = nIdx;
                     break;
-                case ScriptDef.SSTARTUNMASTER:
-                    NPC.FGotoLable[ScriptDef.NSTARTUNMASTER] = nIdx;
+                case ScriptCommandConst.SSTARTUNMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NSTARTUNMASTER] = nIdx;
                     break;
-                case ScriptDef.SWATEUNMASTER:
-                    NPC.FGotoLable[ScriptDef.NWATEUNMASTER] = nIdx;
+                case ScriptCommandConst.SWATEUNMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NWATEUNMASTER] = nIdx;
                     break;
-                case ScriptDef.SUNMASTEREND:
-                    NPC.FGotoLable[ScriptDef.NUNMASTEREND] = nIdx;
+                case ScriptCommandConst.SUNMASTEREND:
+                    NPC.FGotoLable[ScriptCommandConst.NUNMASTEREND] = nIdx;
                     break;
-                case ScriptDef.SREVUNMASTER:
-                    NPC.FGotoLable[ScriptDef.NREVUNMASTER] = nIdx;
+                case ScriptCommandConst.SREVUNMASTER:
+                    NPC.FGotoLable[ScriptCommandConst.NREVUNMASTER] = nIdx;
                     break;
-                case ScriptDef.SSUPREQUEST_OK:
-                    NPC.FGotoLable[ScriptDef.NSUPREQUEST_OK] = nIdx;
+                case ScriptCommandConst.SSUPREQUEST_OK:
+                    NPC.FGotoLable[ScriptCommandConst.NSUPREQUEST_OK] = nIdx;
                     break;
-                case ScriptDef.SMEMBER:
-                    NPC.FGotoLable[ScriptDef.NMEMBER] = nIdx;
+                case ScriptCommandConst.SMEMBER:
+                    NPC.FGotoLable[ScriptCommandConst.NMEMBER] = nIdx;
                     break;
-                case ScriptDef.SPLAYRECONNECTION:
-                    NPC.FGotoLable[ScriptDef.NPLAYRECONNECTION] = nIdx;
+                case ScriptCommandConst.SPLAYRECONNECTION:
+                    NPC.FGotoLable[ScriptCommandConst.NPLAYRECONNECTION] = nIdx;
                     break;
-                case ScriptDef.SLOGIN:
-                    NPC.FGotoLable[ScriptDef.NLOGIN] = nIdx;
+                case ScriptCommandConst.SLOGIN:
+                    NPC.FGotoLable[ScriptCommandConst.NLOGIN] = nIdx;
                     break;
-                case ScriptDef.SPLAYDIE:
-                    NPC.FGotoLable[ScriptDef.NPLAYDIE] = nIdx;
+                case ScriptCommandConst.SPLAYDIE:
+                    NPC.FGotoLable[ScriptCommandConst.NPLAYDIE] = nIdx;
                     break;
-                case ScriptDef.SKILLPLAY:
-                    NPC.FGotoLable[ScriptDef.NKILLPLAY] = nIdx;
+                case ScriptCommandConst.SKILLPLAY:
+                    NPC.FGotoLable[ScriptCommandConst.NKILLPLAY] = nIdx;
                     break;
-                case ScriptDef.SPLAYLEVELUP:
-                    NPC.FGotoLable[ScriptDef.NPLAYLEVELUP] = nIdx;
+                case ScriptCommandConst.SPLAYLEVELUP:
+                    NPC.FGotoLable[ScriptCommandConst.NPLAYLEVELUP] = nIdx;
                     break;
-                case ScriptDef.SKILLMONSTER:
-                    NPC.FGotoLable[ScriptDef.NKILLMONSTER] = nIdx;
+                case ScriptCommandConst.SKILLMONSTER:
+                    NPC.FGotoLable[ScriptCommandConst.NKILLMONSTER] = nIdx;
                     break;
-                case ScriptDef.SCREATEECTYPE_IN:
-                    NPC.FGotoLable[ScriptDef.NCREATEECTYPE_IN] = nIdx;
+                case ScriptCommandConst.SCREATEECTYPE_IN:
+                    NPC.FGotoLable[ScriptCommandConst.NCREATEECTYPE_IN] = nIdx;
                     break;
-                case ScriptDef.SCREATEECTYPE_OK:
-                    NPC.FGotoLable[ScriptDef.NCREATEECTYPE_OK] = nIdx;
+                case ScriptCommandConst.SCREATEECTYPE_OK:
+                    NPC.FGotoLable[ScriptCommandConst.NCREATEECTYPE_OK] = nIdx;
                     break;
-                case ScriptDef.SCREATEECTYPE_FAIL:
-                    NPC.FGotoLable[ScriptDef.NCREATEECTYPE_FAIL] = nIdx;
+                case ScriptCommandConst.SCREATEECTYPE_FAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NCREATEECTYPE_FAIL] = nIdx;
                     break;
-                case ScriptDef.SRESUME:
-                    NPC.FGotoLable[ScriptDef.NRESUME] = nIdx;
+                case ScriptCommandConst.SRESUME:
+                    NPC.FGotoLable[ScriptCommandConst.NRESUME] = nIdx;
                     break;
-                case ScriptDef.SGETLARGESSGOLD_OK:
-                    NPC.FGotoLable[ScriptDef.NGETLARGESSGOLD_OK] = nIdx;
+                case ScriptCommandConst.SGETLARGESSGOLD_OK:
+                    NPC.FGotoLable[ScriptCommandConst.NGETLARGESSGOLD_OK] = nIdx;
                     break;
-                case ScriptDef.SGETLARGESSGOLD_FAIL:
-                    NPC.FGotoLable[ScriptDef.NGETLARGESSGOLD_FAIL] = nIdx;
+                case ScriptCommandConst.SGETLARGESSGOLD_FAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NGETLARGESSGOLD_FAIL] = nIdx;
                     break;
-                case ScriptDef.SGETLARGESSGOLD_ERROR:
-                    NPC.FGotoLable[ScriptDef.NGETLARGESSGOLD_ERROR] = nIdx;
+                case ScriptCommandConst.SGETLARGESSGOLD_ERROR:
+                    NPC.FGotoLable[ScriptCommandConst.NGETLARGESSGOLD_ERROR] = nIdx;
                     break;
-                case ScriptDef.SMASTERISPRENTICE:
-                    NPC.FGotoLable[ScriptDef.NMASTERISPRENTICE] = nIdx;
+                case ScriptCommandConst.SMASTERISPRENTICE:
+                    NPC.FGotoLable[ScriptCommandConst.NMASTERISPRENTICE] = nIdx;
                     break;
-                case ScriptDef.SMASTERISFULL:
-                    NPC.FGotoLable[ScriptDef.NMASTERISFULL] = nIdx;
+                case ScriptCommandConst.SMASTERISFULL:
+                    NPC.FGotoLable[ScriptCommandConst.NMASTERISFULL] = nIdx;
                     break;
-                case ScriptDef.SGROUPCREATE:
-                    NPC.FGotoLable[ScriptDef.NGROUPCREATE] = nIdx;
+                case ScriptCommandConst.SGROUPCREATE:
+                    NPC.FGotoLable[ScriptCommandConst.NGROUPCREATE] = nIdx;
                     break;
-                case ScriptDef.SSTARTGROUP:
-                    NPC.FGotoLable[ScriptDef.NSTARTGROUP] = nIdx;
+                case ScriptCommandConst.SSTARTGROUP:
+                    NPC.FGotoLable[ScriptCommandConst.NSTARTGROUP] = nIdx;
                     break;
-                case ScriptDef.SJOINGROUP:
-                    NPC.FGotoLable[ScriptDef.NJOINGROUP] = nIdx;
+                case ScriptCommandConst.SJOINGROUP:
+                    NPC.FGotoLable[ScriptCommandConst.NJOINGROUP] = nIdx;
                     break;
-                case ScriptDef.SSPEEDCLOSE:
-                    NPC.FGotoLable[ScriptDef.NSPEEDCLOSE] = nIdx;
+                case ScriptCommandConst.SSPEEDCLOSE:
+                    NPC.FGotoLable[ScriptCommandConst.NSPEEDCLOSE] = nIdx;
                     break;
-                case ScriptDef.SUPGRADENOW_OK:
-                    NPC.FGotoLable[ScriptDef.NUPGRADENOW_OK] = nIdx;
+                case ScriptCommandConst.SUPGRADENOW_OK:
+                    NPC.FGotoLable[ScriptCommandConst.NUPGRADENOW_OK] = nIdx;
                     break;
-                case ScriptDef.SUPGRADENOW_ING:
-                    NPC.FGotoLable[ScriptDef.NUPGRADENOW_ING] = nIdx;
+                case ScriptCommandConst.SUPGRADENOW_ING:
+                    NPC.FGotoLable[ScriptCommandConst.NUPGRADENOW_ING] = nIdx;
                     break;
-                case ScriptDef.SUPGRADENOW_FAIL:
-                    NPC.FGotoLable[ScriptDef.NUPGRADENOW_FAIL] = nIdx;
+                case ScriptCommandConst.SUPGRADENOW_FAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NUPGRADENOW_FAIL] = nIdx;
                     break;
-                case ScriptDef.SGETBACKUPGNOW_OK:
-                    NPC.FGotoLable[ScriptDef.NGETBACKUPGNOW_OK] = nIdx;
+                case ScriptCommandConst.SGETBACKUPGNOW_OK:
+                    NPC.FGotoLable[ScriptCommandConst.NGETBACKUPGNOW_OK] = nIdx;
                     break;
-                case ScriptDef.SGETBACKUPGNOW_ING:
-                    NPC.FGotoLable[ScriptDef.NGETBACKUPGNOW_ING] = nIdx;
+                case ScriptCommandConst.SGETBACKUPGNOW_ING:
+                    NPC.FGotoLable[ScriptCommandConst.NGETBACKUPGNOW_ING] = nIdx;
                     break;
-                case ScriptDef.SGETBACKUPGNOW_FAIL:
-                    NPC.FGotoLable[ScriptDef.NGETBACKUPGNOW_FAIL] = nIdx;
+                case ScriptCommandConst.SGETBACKUPGNOW_FAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NGETBACKUPGNOW_FAIL] = nIdx;
                     break;
-                case ScriptDef.SGETBACKUPGNOW_BAGFULL:
-                    NPC.FGotoLable[ScriptDef.NGETBACKUPGNOW_BAGFULL] = nIdx;
+                case ScriptCommandConst.SGETBACKUPGNOW_BAGFULL:
+                    NPC.FGotoLable[ScriptCommandConst.NGETBACKUPGNOW_BAGFULL] = nIdx;
                     break;
-                case ScriptDef.STAKEONITEMS:
-                    NPC.FGotoLable[ScriptDef.NTAKEONITEMS] = nIdx;
+                case ScriptCommandConst.STAKEONITEMS:
+                    NPC.FGotoLable[ScriptCommandConst.NTAKEONITEMS] = nIdx;
                     break;
-                case ScriptDef.STAKEOFFITEMS:
-                    NPC.FGotoLable[ScriptDef.NTAKEOFFITEMS] = nIdx;
+                case ScriptCommandConst.STAKEOFFITEMS:
+                    NPC.FGotoLable[ScriptCommandConst.NTAKEOFFITEMS] = nIdx;
                     break;
-                case ScriptDef.SPLAYREVIVE:
-                    NPC.FGotoLable[ScriptDef.NPLAYREVIVE] = nIdx;
+                case ScriptCommandConst.SPLAYREVIVE:
+                    NPC.FGotoLable[ScriptCommandConst.NPLAYREVIVE] = nIdx;
                     break;
-                case ScriptDef.SMOVEABILITY_OK:
-                    NPC.FGotoLable[ScriptDef.NMOVEABILITY_OK] = nIdx;
+                case ScriptCommandConst.SMOVEABILITY_OK:
+                    NPC.FGotoLable[ScriptCommandConst.NMOVEABILITY_OK] = nIdx;
                     break;
-                case ScriptDef.SMOVEABILITY_FAIL:
-                    NPC.FGotoLable[ScriptDef.NMOVEABILITY_FAIL] = nIdx;
+                case ScriptCommandConst.SMOVEABILITY_FAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NMOVEABILITY_FAIL] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEALL:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEALL] = nIdx;
+                case ScriptCommandConst.SASSEMBLEALL:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEALL] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEWEAPON:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEWEAPON] = nIdx;
+                case ScriptCommandConst.SASSEMBLEWEAPON:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEWEAPON] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEDRESS:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEDRESS] = nIdx;
+                case ScriptCommandConst.SASSEMBLEDRESS:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEDRESS] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEHELMET:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEHELMET] = nIdx;
+                case ScriptCommandConst.SASSEMBLEHELMET:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEHELMET] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLENECKLACE:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLENECKLACE] = nIdx;
+                case ScriptCommandConst.SASSEMBLENECKLACE:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLENECKLACE] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLERING:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLERING] = nIdx;
+                case ScriptCommandConst.SASSEMBLERING:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLERING] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEARMRING:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEARMRING] = nIdx;
+                case ScriptCommandConst.SASSEMBLEARMRING:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEARMRING] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEBELT:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEBELT] = nIdx;
+                case ScriptCommandConst.SASSEMBLEBELT:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEBELT] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEBOOT:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEBOOT] = nIdx;
+                case ScriptCommandConst.SASSEMBLEBOOT:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEBOOT] = nIdx;
                     break;
-                case ScriptDef.SASSEMBLEFAIL:
-                    NPC.FGotoLable[ScriptDef.NASSEMBLEFAIL] = nIdx;
+                case ScriptCommandConst.SASSEMBLEFAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NASSEMBLEFAIL] = nIdx;
                     break;
-                case ScriptDef.SCREATEHEROFAILEX:
-                    NPC.FGotoLable[ScriptDef.NCREATEHEROFAILEX] = nIdx;// 创建英雄失败  By John 2012.08.04
+                case ScriptCommandConst.SCREATEHEROFAILEX:
+                    NPC.FGotoLable[ScriptCommandConst.NCREATEHEROFAILEX] = nIdx;// 创建英雄失败  By John 2012.08.04
                     break;
-                case ScriptDef.SLOGOUTHEROFIRST:
-                    NPC.FGotoLable[ScriptDef.NLOGOUTHEROFIRST] = nIdx;// 请将英雄设置下线  By John 2012.08.04
+                case ScriptCommandConst.SLOGOUTHEROFIRST:
+                    NPC.FGotoLable[ScriptCommandConst.NLOGOUTHEROFIRST] = nIdx;// 请将英雄设置下线  By John 2012.08.04
                     break;
-                case ScriptDef.SNOTHAVEHERO:
-                    NPC.FGotoLable[ScriptDef.NNOTHAVEHERO] = nIdx;// 没有英雄   By John 2012.08.04
+                case ScriptCommandConst.SNOTHAVEHERO:
+                    NPC.FGotoLable[ScriptCommandConst.NNOTHAVEHERO] = nIdx;// 没有英雄   By John 2012.08.04
                     break;
-                case ScriptDef.SHERONAMEFILTER:
-                    NPC.FGotoLable[ScriptDef.NHERONAMEFILTER] = nIdx;// 英雄名字中包含禁用字符   By John 2012.08.04
+                case ScriptCommandConst.SHERONAMEFILTER:
+                    NPC.FGotoLable[ScriptCommandConst.NHERONAMEFILTER] = nIdx;// 英雄名字中包含禁用字符   By John 2012.08.04
                     break;
-                case ScriptDef.SHAVEHERO:
-                    NPC.FGotoLable[ScriptDef.NHAVEHERO] = nIdx;// 有英雄    By John 2012.08.04
+                case ScriptCommandConst.SHAVEHERO:
+                    NPC.FGotoLable[ScriptCommandConst.NHAVEHERO] = nIdx;// 有英雄    By John 2012.08.04
                     break;
-                case ScriptDef.SCREATEHEROOK:
-                    NPC.FGotoLable[ScriptDef.NCREATEHEROOK] = nIdx;// 创建英雄OK   By John 2012.08.04
+                case ScriptCommandConst.SCREATEHEROOK:
+                    NPC.FGotoLable[ScriptCommandConst.NCREATEHEROOK] = nIdx;// 创建英雄OK   By John 2012.08.04
                     break;
-                case ScriptDef.SHERONAMEEXISTS:
-                    NPC.FGotoLable[ScriptDef.NHERONAMEEXISTS] = nIdx;// 英雄名字已经存在  By John 2012.08.04
+                case ScriptCommandConst.SHERONAMEEXISTS:
+                    NPC.FGotoLable[ScriptCommandConst.NHERONAMEEXISTS] = nIdx;// 英雄名字已经存在  By John 2012.08.04
                     break;
-                case ScriptDef.SDELETEHEROOK:
-                    NPC.FGotoLable[ScriptDef.NDELETEHEROOK] = nIdx;// 删除英雄成功    By John 2012.08.04
+                case ScriptCommandConst.SDELETEHEROOK:
+                    NPC.FGotoLable[ScriptCommandConst.NDELETEHEROOK] = nIdx;// 删除英雄成功    By John 2012.08.04
                     break;
-                case ScriptDef.SDELETEHEROFAIL:
-                    NPC.FGotoLable[ScriptDef.NDELETEHEROFAIL] = nIdx;// 删除英雄失败    By John 2012.08.04
+                case ScriptCommandConst.SDELETEHEROFAIL:
+                    NPC.FGotoLable[ScriptCommandConst.NDELETEHEROFAIL] = nIdx;// 删除英雄失败    By John 2012.08.04
                     break;
-                case ScriptDef.SHEROOVERCHRCOUNT:
-                    NPC.FGotoLable[ScriptDef.NHEROOVERCHRCOUNT] = nIdx;// 你的帐号角色过多   By John 2012.08.04
+                case ScriptCommandConst.SHEROOVERCHRCOUNT:
+                    NPC.FGotoLable[ScriptCommandConst.NHEROOVERCHRCOUNT] = nIdx;// 你的帐号角色过多   By John 2012.08.04
                     break;
                 default:
                     //if (NPC.m_btNPCRaceServer == DataConst.NPC_RC_FUNMERCHANT)
@@ -2417,7 +2417,7 @@ namespace GameSvr.Script
                             if (!boAddResetLabel)
                             {
                                 boAddResetLabel = true;
-                                sMsg = ScriptDef.RESETLABEL + sMsg;
+                                sMsg = ScriptCommandConst.RESETLABEL + sMsg;
                             }
                             continue;
                         }
@@ -2476,740 +2476,740 @@ namespace GameSvr.Script
         {
             var s14 = string.Empty;
             var sLabel2 = sLabel.ToUpper();
-            if (sLabel2 == ScriptDef.sVAR_SERVERNAME)
+            if (sLabel2 == ScriptCommandConst.sVAR_SERVERNAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_SERVERNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_SERVERNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_SERVERIP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_SERVERIP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_SERVERIP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_SERVERIP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_WEBSITE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_WEBSITE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_WEBSITE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_WEBSITE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BBSSITE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BBSSITE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BBSSITE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BBSSITE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CLIENTDOWNLOAD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CLIENTDOWNLOAD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CLIENTDOWNLOAD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CLIENTDOWNLOAD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_QQ)
+            else if (sLabel2 == ScriptCommandConst.sVAR_QQ)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_QQ);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_QQ);
             }
-            else if (sLabel2 == ScriptDef.sVAR_PHONE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_PHONE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_PHONE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_PHONE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT0)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT0)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT0);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT0);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT1)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT1)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT1);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT1);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT2)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT2)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT2);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT2);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT3)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT3)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT3);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT3);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT4)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT4)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT4);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT4);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT5)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT5)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT5);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT5);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT6)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT6)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT6);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT6);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT7)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT7)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT7);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT7);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT8)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT8)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT8);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT8);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BANKACCOUNT9)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BANKACCOUNT9)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BANKACCOUNT9);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BANKACCOUNT9);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GAMEGOLDNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GAMEGOLDNAME)
             {
                 //sMsg = sMsg.Replace("<" + sLabel + ">", Grobal2.sSTRING_GAMEGOLD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GAMEPOINTNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GAMEPOINTNAME)
             {
                 // sMsg = sMsg.Replace("<" + sLabel + ">", Grobal2.sSTRING_GAMEPOINT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_USERCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_USERCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_USERCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_USERCOUNT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_DATETIME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_DATETIME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_DATETIME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_DATETIME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_USERNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_USERNAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_USERNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_USERNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_FBMAPNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_FBMAPNAME)
             { //副本
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_FBMAPNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_FBMAPNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_FBMAP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_FBMAP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_FBMAP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_FBMAP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_ACCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_ACCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_ACCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_ACCOUNT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_ASSEMBLEITEMNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_ASSEMBLEITEMNAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_ASSEMBLEITEMNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_ASSEMBLEITEMNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAPNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAPNAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAPNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAPNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUILDNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUILDNAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUILDNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUILDNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_RANKNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_RANKNAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_RANKNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_RANKNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_LEVEL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_LEVEL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_LEVEL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_LEVEL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_HP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_HP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_HP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_HP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXHP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXHP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXHP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXHP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXMP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXMP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXMP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXMP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_AC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_AC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_AC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_AC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXAC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXAC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXAC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXAC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXMAC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXMAC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXMAC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXMAC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_DC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_DC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_DC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_DC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXDC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXDC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXDC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXDC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXMC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXMC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXMC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXMC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_SC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_SC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_SC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_SC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXSC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXSC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXSC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXSC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_EXP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_EXP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_EXP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_EXP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXEXP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXEXP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXEXP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXEXP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_PKPOINT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_PKPOINT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_PKPOINT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_PKPOINT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CREDITPOINT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CREDITPOINT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CREDITPOINT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CREDITPOINT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GOLDCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GOLDCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GOLDCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GOLDCOUNT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GAMEGOLD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GAMEGOLD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GAMEGOLD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GAMEGOLD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GAMEPOINT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GAMEPOINT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GAMEPOINT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GAMEPOINT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_LOGINTIME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_LOGINTIME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_LOGINTIME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_LOGINTIME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_LOGINLONG)
+            else if (sLabel2 == ScriptCommandConst.sVAR_LOGINLONG)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_LOGINLONG);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_LOGINLONG);
             }
-            else if (sLabel2 == ScriptDef.sVAR_DRESS)
+            else if (sLabel2 == ScriptCommandConst.sVAR_DRESS)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_DRESS);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_DRESS);
             }
-            else if (sLabel2 == ScriptDef.sVAR_WEAPON)
+            else if (sLabel2 == ScriptCommandConst.sVAR_WEAPON)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_WEAPON);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_WEAPON);
             }
-            else if (sLabel2 == ScriptDef.sVAR_RIGHTHAND)
+            else if (sLabel2 == ScriptCommandConst.sVAR_RIGHTHAND)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_RIGHTHAND);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_RIGHTHAND);
             }
-            else if (sLabel2 == ScriptDef.sVAR_HELMET)
+            else if (sLabel2 == ScriptCommandConst.sVAR_HELMET)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_HELMET);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_HELMET);
             }
-            else if (sLabel2 == ScriptDef.sVAR_NECKLACE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_NECKLACE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_NECKLACE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_NECKLACE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_RING_R)
+            else if (sLabel2 == ScriptCommandConst.sVAR_RING_R)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_RING_R);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_RING_R);
             }
-            else if (sLabel2 == ScriptDef.sVAR_RING_L)
+            else if (sLabel2 == ScriptCommandConst.sVAR_RING_L)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_RING_L);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_RING_L);
             }
-            else if (sLabel2 == ScriptDef.sVAR_ARMRING_R)
+            else if (sLabel2 == ScriptCommandConst.sVAR_ARMRING_R)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_ARMRING_R);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_ARMRING_R);
             }
-            else if (sLabel2 == ScriptDef.sVAR_ARMRING_L)
+            else if (sLabel2 == ScriptCommandConst.sVAR_ARMRING_L)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_ARMRING_L);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_ARMRING_L);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BUJUK)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BUJUK)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BUJUK);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BUJUK);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BELT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BELT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BELT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BELT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BOOTS)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BOOTS)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BOOTS);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BOOTS);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CHARM)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CHARM)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CHARM);
-            }
-            //=======================================没有用到的==============================
-            else if (sLabel2 == ScriptDef.sVAR_HOUSE)
-            {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_HOUSE);
-            }
-            else if (sLabel2 == ScriptDef.sVAR_CIMELIA)
-            {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CIMELIA);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CHARM);
             }
             //=======================================没有用到的==============================
-            else if (sLabel2 == ScriptDef.sVAR_IPADDR)
+            else if (sLabel2 == ScriptCommandConst.sVAR_HOUSE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_IPADDR);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_HOUSE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_IPLOCAL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CIMELIA)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_IPLOCAL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CIMELIA);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUILDBUILDPOINT)
+            //=======================================没有用到的==============================
+            else if (sLabel2 == ScriptCommandConst.sVAR_IPADDR)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUILDBUILDPOINT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_IPADDR);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUILDAURAEPOINT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_IPLOCAL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUILDAURAEPOINT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_IPLOCAL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUILDSTABILITYPOINT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUILDBUILDPOINT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUILDSTABILITYPOINT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUILDBUILDPOINT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUILDFLOURISHPOINT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUILDAURAEPOINT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUILDFLOURISHPOINT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUILDAURAEPOINT);
+            }
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUILDSTABILITYPOINT)
+            {
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUILDSTABILITYPOINT);
+            }
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUILDFLOURISHPOINT)
+            {
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUILDFLOURISHPOINT);
             }
             //=================================没用用到的====================================
-            else if (sLabel2 == ScriptDef.sVAR_GUILDMONEYCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUILDMONEYCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUILDMONEYCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUILDMONEYCOUNT);
             }
             //=================================没用用到的结束====================================
-            else if (sLabel2 == ScriptDef.sVAR_REQUESTCASTLEWARITEM)
+            else if (sLabel2 == ScriptCommandConst.sVAR_REQUESTCASTLEWARITEM)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_REQUESTCASTLEWARITEM);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_REQUESTCASTLEWARITEM);
             }
-            else if (sLabel2 == ScriptDef.sVAR_REQUESTCASTLEWARDAY)
+            else if (sLabel2 == ScriptCommandConst.sVAR_REQUESTCASTLEWARDAY)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_REQUESTCASTLEWARDAY);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_REQUESTCASTLEWARDAY);
             }
-            else if (sLabel2 == ScriptDef.sVAR_REQUESTBUILDGUILDITEM)
+            else if (sLabel2 == ScriptCommandConst.sVAR_REQUESTBUILDGUILDITEM)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_REQUESTBUILDGUILDITEM);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_REQUESTBUILDGUILDITEM);
             }
-            else if (sLabel2 == ScriptDef.sVAR_OWNERGUILD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_OWNERGUILD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_OWNERGUILD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_OWNERGUILD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CASTLENAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CASTLENAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CASTLENAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CASTLENAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_LORD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_LORD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_LORD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_LORD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUILDWARFEE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUILDWARFEE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUILDWARFEE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUILDWARFEE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BUILDGUILDFEE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BUILDGUILDFEE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BUILDGUILDFEE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BUILDGUILDFEE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CASTLEWARDATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CASTLEWARDATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CASTLEWARDATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CASTLEWARDATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_LISTOFWAR)
+            else if (sLabel2 == ScriptCommandConst.sVAR_LISTOFWAR)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_LISTOFWAR);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_LISTOFWAR);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CASTLECHANGEDATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CASTLECHANGEDATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CASTLECHANGEDATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CASTLECHANGEDATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CASTLEWARLASTDATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CASTLEWARLASTDATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CASTLEWARLASTDATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CASTLEWARLASTDATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CASTLEGETDAYS)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CASTLEGETDAYS)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CASTLEGETDAYS);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CASTLEGETDAYS);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_DATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_DATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_DATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_DATE);
             }
             //===================================没用用到的======================================
-            else if (sLabel2 == ScriptDef.sVAR_CMD_PRVMSG)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_PRVMSG)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_PRVMSG);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_PRVMSG);
             }
             //===================================没用用到的结束======================================
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ALLOWMSG)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ALLOWMSG)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ALLOWMSG);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ALLOWMSG);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_LETSHOUT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_LETSHOUT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_LETSHOUT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_LETSHOUT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_LETTRADE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_LETTRADE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_LETTRADE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_LETTRADE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_LETGuild)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_LETGuild)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_LETGuild);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_LETGuild);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ENDGUILD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ENDGUILD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ENDGUILD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ENDGUILD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_BANGUILDCHAT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_BANGUILDCHAT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_BANGUILDCHAT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_BANGUILDCHAT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_AUTHALLY)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_AUTHALLY)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_AUTHALLY);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_AUTHALLY);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_AUTH)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_AUTH)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_AUTH);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_AUTH);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_AUTHCANCEL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_AUTHCANCEL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_AUTHCANCEL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_AUTHCANCEL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_USERMOVE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_USERMOVE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_USERMOVE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_USERMOVE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_SEARCHING)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_SEARCHING)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_SEARCHING);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_SEARCHING);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ALLOWGROUPCALL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ALLOWGROUPCALL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ALLOWGROUPCALL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ALLOWGROUPCALL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_GROUPRECALLL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_GROUPRECALLL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_GROUPRECALLL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_GROUPRECALLL);
             }
             #region 没有使用的
             //===========================================没有使用的========================================
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ALLOWGUILDRECALL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ALLOWGUILDRECALL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ALLOWGUILDRECALL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ALLOWGUILDRECALL);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_ALLOWGUILDRECALL, SctiptDef.sVAR_CMD_ALLOWGUILDRECALL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_GUILDRECALLL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_GUILDRECALLL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_GUILDRECALLL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_GUILDRECALLL);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_GUILDRECALLL, SctiptDef.sVAR_CMD_GUILDRECALLL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_DEAR)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_DEAR)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_DEAR);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_DEAR);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_DEAR, SctiptDef.sVAR_CMD_DEAR);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ALLOWDEARRCALL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ALLOWDEARRCALL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ALLOWDEARRCALL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ALLOWDEARRCALL);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_ALLOWDEARRCALL, SctiptDef.sVAR_CMD_ALLOWDEARRCALL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_DEARRECALL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_DEARRECALL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_DEARRECALL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_DEARRECALL);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_DEARRECALL, SctiptDef.sVAR_CMD_DEARRECALL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_MASTER)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_MASTER)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_MASTER);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_MASTER);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_MASTER, SctiptDef.sVAR_CMD_MASTER);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ALLOWMASTERRECALL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ALLOWMASTERRECALL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ALLOWMASTERRECALL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ALLOWMASTERRECALL);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_ALLOWMASTERRECALL, SctiptDef.sVAR_CMD_ALLOWMASTERRECALL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_MASTERECALL)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_MASTERECALL)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_MASTERECALL);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_MASTERECALL);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_MASTERECALL, SctiptDef.sVAR_CMD_MASTERECALL);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_TAKEONHORSE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_TAKEONHORSE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_TAKEONHORSE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_TAKEONHORSE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_TAKEONHORSE, SctiptDef.sVAR_CMD_TAKEONHORSE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_TAKEOFHORSE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_TAKEOFHORSE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_TAKEOFHORSE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_TAKEOFHORSE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_TAKEOFHORSE, SctiptDef.sVAR_CMD_TAKEOFHORSE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ALLSYSMSG)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ALLSYSMSG)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ALLSYSMSG);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ALLSYSMSG);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_ALLSYSMSG, SctiptDef.sVAR_CMD_ALLSYSMSG);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_MEMBERFUNCTION)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_MEMBERFUNCTION)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_MEMBERFUNCTION);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_MEMBERFUNCTION);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_MEMBERFUNCTION, SctiptDef.sVAR_CMD_MEMBERFUNCTION);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_MEMBERFUNCTIONEX)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_MEMBERFUNCTIONEX)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_MEMBERFUNCTIONEX);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_MEMBERFUNCTIONEX);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_MEMBERFUNCTIONEX, SctiptDef.sVAR_CMD_MEMBERFUNCTIONEX);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CASTLEGOLD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CASTLEGOLD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CASTLEGOLD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CASTLEGOLD);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CASTLEGOLD, SctiptDef.sVAR_CASTLEGOLD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_TODAYINCOME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_TODAYINCOME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_TODAYINCOME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_TODAYINCOME);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_TODAYINCOME, SctiptDef.sVAR_TODAYINCOME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CASTLEDOORSTATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CASTLEDOORSTATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CASTLEDOORSTATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CASTLEDOORSTATE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CASTLEDOORSTATE, SctiptDef.sVAR_CASTLEDOORSTATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_REPAIRDOORGOLD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_REPAIRDOORGOLD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_REPAIRDOORGOLD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_REPAIRDOORGOLD);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_REPAIRDOORGOLD, SctiptDef.sVAR_REPAIRDOORGOLD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_REPAIRWALLGOLD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_REPAIRWALLGOLD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_REPAIRWALLGOLD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_REPAIRWALLGOLD);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_REPAIRWALLGOLD, SctiptDef.sVAR_REPAIRWALLGOLD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUARDFEE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUARDFEE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUARDFEE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUARDFEE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_GUARDFEE, SctiptDef.sVAR_GUARDFEE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_ARCHERFEE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_ARCHERFEE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_ARCHERFEE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_ARCHERFEE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_ARCHERFEE, SctiptDef.sVAR_ARCHERFEE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GUARDRULE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GUARDRULE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GUARDRULE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GUARDRULE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_GUARDRULE, SctiptDef.sVAR_GUARDRULE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_STORAGE2STATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_STORAGE2STATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_STORAGE2STATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_STORAGE2STATE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_STORAGE2STATE, SctiptDef.sVAR_STORAGE2STATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_STORAGE3STATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_STORAGE3STATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_STORAGE3STATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_STORAGE3STATE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_STORAGE3STATE, SctiptDef.sVAR_STORAGE3STATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_STORAGE4STATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_STORAGE4STATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_STORAGE4STATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_STORAGE4STATE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_STORAGE4STATE, SctiptDef.sVAR_STORAGE4STATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_STORAGE5STATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_STORAGE5STATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_STORAGE5STATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_STORAGE5STATE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_STORAGE5STATE, SctiptDef.sVAR_STORAGE5STATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_SELFNAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_SELFNAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_SELFNAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_SELFNAME);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_SELFNAME, SctiptDef.sVAR_SELFNAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_POSENAME)
+            else if (sLabel2 == ScriptCommandConst.sVAR_POSENAME)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_POSENAME);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_POSENAME);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_POSENAME, SctiptDef.sVAR_POSENAME);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GAMEDIAMOND)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GAMEDIAMOND)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GAMEDIAMOND);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GAMEDIAMOND);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_GAMEDIAMOND, SctiptDef.sVAR_GAMEDIAMOND);
             }
-            else if (sLabel2 == ScriptDef.sVAR_GAMEGIRD)
+            else if (sLabel2 == ScriptCommandConst.sVAR_GAMEGIRD)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_GAMEGIRD);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_GAMEGIRD);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_GAMEGIRD, SctiptDef.sVAR_GAMEGIRD);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_ALLOWFIREND)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_ALLOWFIREND)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_ALLOWFIREND);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_ALLOWFIREND);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_ALLOWFIREND, SctiptDef.sVAR_CMD_ALLOWFIREND);
             }
-            else if (sLabel2 == ScriptDef.sVAR_EFFIGYSTATE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_EFFIGYSTATE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_EFFIGYSTATE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_EFFIGYSTATE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_EFFIGYSTATE, SctiptDef.sVAR_EFFIGYSTATE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_EFFIGYOFFSET)
+            else if (sLabel2 == ScriptCommandConst.sVAR_EFFIGYOFFSET)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_EFFIGYOFFSET);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_EFFIGYOFFSET);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_EFFIGYOFFSET, SctiptDef.sVAR_EFFIGYOFFSET);
             }
-            else if (sLabel2 == ScriptDef.sVAR_YEAR)
+            else if (sLabel2 == ScriptCommandConst.sVAR_YEAR)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_YEAR);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_YEAR);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_YEAR, SctiptDef.sVAR_YEAR);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MONTH)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MONTH)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MONTH);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MONTH);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_MONTH, SctiptDef.sVAR_MONTH);
             }
-            else if (sLabel2 == ScriptDef.sVAR_DAY)
+            else if (sLabel2 == ScriptCommandConst.sVAR_DAY)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_DAY);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_DAY);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_DAY, SctiptDef.sVAR_DAY);
             }
-            else if (sLabel2 == ScriptDef.sVAR_HOUR)
+            else if (sLabel2 == ScriptCommandConst.sVAR_HOUR)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_HOUR);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_HOUR);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_HOUR, SctiptDef.sVAR_HOUR);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MINUTE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MINUTE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MINUTE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MINUTE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_MINUTE, SctiptDef.sVAR_MINUTE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_SEC)
+            else if (sLabel2 == ScriptCommandConst.sVAR_SEC)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_SEC);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_SEC);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_SEC, SctiptDef.sVAR_SEC);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAP)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAP)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAP);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAP);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_MAP, SctiptDef.sVAR_MAP);
             }
-            else if (sLabel2 == ScriptDef.sVAR_X)
+            else if (sLabel2 == ScriptCommandConst.sVAR_X)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_X);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_X);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_X, SctiptDef.sVAR_X);
             }
-            else if (sLabel2 == ScriptDef.sVAR_Y)
+            else if (sLabel2 == ScriptCommandConst.sVAR_Y)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_Y);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_Y);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_Y, SctiptDef.sVAR_Y);
             }
-            else if (sLabel2 == ScriptDef.sVAR_UNMASTER_FORCE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_UNMASTER_FORCE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_UNMASTER_FORCE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_UNMASTER_FORCE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_UNMASTER_FORCE, SctiptDef.sVAR_UNMASTER_FORCE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_USERGOLDCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_USERGOLDCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_USERGOLDCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_USERGOLDCOUNT);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_USERGOLDCOUNT, SctiptDef.sVAR_USERGOLDCOUNT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_MAXGOLDCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_MAXGOLDCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_MAXGOLDCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_MAXGOLDCOUNT);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_MAXGOLDCOUNT, SctiptDef.sVAR_MAXGOLDCOUNT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_STORAGEGOLDCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_STORAGEGOLDCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_STORAGEGOLDCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_STORAGEGOLDCOUNT);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_STORAGEGOLDCOUNT, SctiptDef.sVAR_STORAGEGOLDCOUNT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_BINDGOLDCOUNT)
+            else if (sLabel2 == ScriptCommandConst.sVAR_BINDGOLDCOUNT)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_BINDGOLDCOUNT);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_BINDGOLDCOUNT);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_BINDGOLDCOUNT, SctiptDef.sVAR_BINDGOLDCOUNT);
             }
-            else if (sLabel2 == ScriptDef.sVAR_UPGRADEWEAPONFEE)
+            else if (sLabel2 == ScriptCommandConst.sVAR_UPGRADEWEAPONFEE)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_UPGRADEWEAPONFEE);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_UPGRADEWEAPONFEE);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_UPGRADEWEAPONFEE, SctiptDef.sVAR_UPGRADEWEAPONFEE);
             }
-            else if (sLabel2 == ScriptDef.sVAR_USERWEAPON)
+            else if (sLabel2 == ScriptCommandConst.sVAR_USERWEAPON)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_USERWEAPON);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_USERWEAPON);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_USERWEAPON, SctiptDef.sVAR_USERWEAPON);
             }
-            else if (sLabel2 == ScriptDef.sVAR_CMD_STARTQUEST)
+            else if (sLabel2 == ScriptCommandConst.sVAR_CMD_STARTQUEST)
             {
-                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptDef.tVAR_CMD_STARTQUEST);
+                sMsg = sMsg.Replace("<" + sLabel + ">", ScriptCommandConst.tVAR_CMD_STARTQUEST);
                 //SctiptDef.g_GrobalManage.Add(SctiptDef.nVAR_CMD_STARTQUEST, SctiptDef.sVAR_CMD_STARTQUEST);
             }
             //===========================================没有使用的========================================
             #endregion
-            else if (HUtil32.CompareLStr(sLabel2, ScriptDef.sVAR_TEAM, ScriptDef.sVAR_TEAM.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptCommandConst.sVAR_TEAM, ScriptCommandConst.sVAR_TEAM.Length))
             {
-                s14 = sLabel2.Substring(ScriptDef.sVAR_TEAM.Length + 1 - 1, 1);
+                s14 = sLabel2.Substring(ScriptCommandConst.sVAR_TEAM.Length + 1 - 1, 1);
                 if (s14 != "")
                 {
-                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptDef.tVAR_TEAM, s14));
+                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptCommandConst.tVAR_TEAM, s14));
                 }
                 else
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptDef.sVAR_HUMAN, ScriptDef.sVAR_HUMAN.Length))
-            {
-                HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
-                if (s14 != "")
-                {
-                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptDef.tVAR_HUMAN, s14));
-                }
-                else
-                {
-                    sMsg = sMsg.Replace("<" + sLabel + ">", "????");
-                }
-            }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptDef.sVAR_GUILD, ScriptDef.sVAR_GUILD.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptCommandConst.sVAR_HUMAN, ScriptCommandConst.sVAR_HUMAN.Length))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")
                 {
-                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptDef.tVAR_GUILD, s14));
+                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptCommandConst.tVAR_HUMAN, s14));
                 }
                 else
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptDef.sVAR_GLOBAL, ScriptDef.sVAR_GLOBAL.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptCommandConst.sVAR_GUILD, ScriptCommandConst.sVAR_GUILD.Length))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")
                 {
-                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptDef.tVAR_GLOBAL, s14));
+                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptCommandConst.tVAR_GUILD, s14));
                 }
                 else
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptDef.sVAR_STR, ScriptDef.sVAR_STR.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptCommandConst.sVAR_GLOBAL, ScriptCommandConst.sVAR_GLOBAL.Length))
+            {
+                HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
+                if (s14 != "")
+                {
+                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptCommandConst.tVAR_GLOBAL, s14));
+                }
+                else
+                {
+                    sMsg = sMsg.Replace("<" + sLabel + ">", "????");
+                }
+            }
+            else if (HUtil32.CompareLStr(sLabel2, ScriptCommandConst.sVAR_STR, ScriptCommandConst.sVAR_STR.Length))
             {
                 //'欢迎使用个人银行储蓄，目前完全免费，请多利用。\ \<您的个人银行存款有/@-1>：<$46><｜/@-2><$125/G18>\ \<您的包裹里以携带有/AUTOCOLOR=249>：<$GOLDCOUNT><｜/@-2><$GOLDCOUNTX>\ \ \<存入金币/@@InPutInteger1>      <取出金币/@@InPutInteger2>      <返 回/@Main>'
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")
                 {
-                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptDef.tVAR_STR, s14));
+                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptCommandConst.tVAR_STR, s14));
                 }
                 else
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptDef.sVAR_MISSIONARITHMOMETER, ScriptDef.sVAR_MISSIONARITHMOMETER.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptCommandConst.sVAR_MISSIONARITHMOMETER, ScriptCommandConst.sVAR_MISSIONARITHMOMETER.Length))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")
                 {
-                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptDef.tVAR_MISSIONARITHMOMETER, s14));
+                    sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptCommandConst.tVAR_MISSIONARITHMOMETER, s14));
                 }
                 else
                 {

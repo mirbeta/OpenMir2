@@ -73,31 +73,31 @@ namespace GameSvr.Npc
                     {
                         return;
                     }
-                    if (string.Compare(sLabel, ScriptDef.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(sLabel, ScriptCommandConst.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestBuildGuild(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptDef.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptCommandConst.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestGuildWar(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptDef.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptCommandConst.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         DoNate(PlayObject);
                     }
-                    else if (HUtil32.CompareLStr(sLabel, ScriptDef.sREQUESTCASTLEWAR, ScriptDef.sREQUESTCASTLEWAR.Length))
+                    else if (HUtil32.CompareLStr(sLabel, ScriptCommandConst.sREQUESTCASTLEWAR, ScriptCommandConst.sREQUESTCASTLEWAR.Length))
                     {
-                        ReQuestCastleWar(PlayObject, sLabel.Substring(ScriptDef.sREQUESTCASTLEWAR.Length, sLabel.Length - ScriptDef.sREQUESTCASTLEWAR.Length));
+                        ReQuestCastleWar(PlayObject, sLabel.Substring(ScriptCommandConst.sREQUESTCASTLEWAR.Length, sLabel.Length - ScriptCommandConst.sREQUESTCASTLEWAR.Length));
                     }
-                    else if (string.Compare(sLabel, ScriptDef.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptCommandConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                     }
-                    else if (string.Compare(sLabel, ScriptDef.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptCommandConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (PlayObject.m_sScriptGoBackLable == "")
                         {
-                            PlayObject.m_sScriptGoBackLable = ScriptDef.sMAIN;
+                            PlayObject.m_sScriptGoBackLable = ScriptCommandConst.sMAIN;
                         }
                         this.GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
                     }

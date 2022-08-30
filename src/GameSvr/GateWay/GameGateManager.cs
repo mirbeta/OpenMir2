@@ -13,31 +13,31 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace GameSvr.GameGate
 {
-    public class GateManager
+    public class GameGateManager
     {
-        private static readonly GateManager instance = new GateManager();
-        public static GateManager Instance => instance;
+        private static readonly GameGateManager instance = new GameGateManager();
+        public static GameGateManager Instance => instance;
         private readonly SocketServer _gateSocket = null;
         private readonly object m_RunSocketSection = null;
         private readonly Channel<ReceiveData> _receiveQueue;
-        private readonly ConcurrentDictionary<int, GateService> _gateService;
+        private readonly ConcurrentDictionary<int, GameGate> _gameGates;
 
-        private GateManager()
+        private GameGateManager()
         {
-            m_RunSocketSection = new object();
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
-            _gateService = new ConcurrentDictionary<int, GateService>();
-            _gateSocket = new SocketServer(10, 1024);
+            _gameGates = new ConcurrentDictionary<int, GameGate>();
+            _gateSocket = new SocketServer(10, 512);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;
             _gateSocket.OnClientError += GateSocketClientError;
-            _gateSocket.Init();
+            m_RunSocketSection = new object();
         }
 
         public void Start(CancellationToken stoppingToken)
         {
+            _gateSocket.Init();
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
             StartMessageThread(stoppingToken);
             M2Share.MainOutMessage($"游戏网关[{M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
@@ -65,12 +65,12 @@ namespace GameSvr.GameGate
             const string sKickGate = "服务器未就绪: {0}";
             if (M2Share.boStartReady)
             {
-                if (_gateService.Count > 20)
+                if (_gameGates.Count > 20)
                 {
                     e.Socket.Close();
                     return;
                 }
-                var gateInfo = new TGateInfo();
+                var gateInfo = new GameGateInfo();
                 gateInfo.nSendMsgCount = 0;
                 gateInfo.nSendRemainCount = 0;
                 gateInfo.dwSendTick = HUtil32.GetTickCount();
@@ -79,14 +79,14 @@ namespace GameSvr.GameGate
                 gateInfo.boUsed = true;
                 gateInfo.SocketId = e.ConnectionId;
                 gateInfo.Socket = e.Socket;
-                gateInfo.UserList = new List<TGateUserInfo>();
+                gateInfo.UserList = new List<GameGateUserInfo>();
                 gateInfo.nUserCount = 0;
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
                 M2Share.MainOutMessage(string.Format(sGateOpen, e.EndPoint));
-                _gateService.TryAdd(e.SocHandle, new GateService(e.SocHandle, gateInfo));
-                _gateService[e.SocHandle].StartQueueService();
+                _gameGates.TryAdd(e.SocHandle, new GameGate(e.SocHandle, gateInfo));
+                _gameGates[e.SocHandle].StartGateQueue();
             }
             else
             {
@@ -97,9 +97,9 @@ namespace GameSvr.GameGate
 
         public void CloseUser(int gateIdx, int nSocket)
         {
-            if (_gateService.ContainsKey(gateIdx))
+            if (_gameGates.ContainsKey(gateIdx))
             {
-                _gateService[gateIdx].CloseUser(nSocket);
+                _gameGates[gateIdx].CloseUser(nSocket);
             }
             else
             {
@@ -113,10 +113,10 @@ namespace GameSvr.GameGate
             const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线!!!";
             try
             {
-                var keys = _gateService.Keys.ToList();
-                for (int i = 0; i < _gateService.Count; i++)
+                var keys = _gameGates.Keys.ToList();
+                for (int i = 0; i < _gameGates.Count; i++)
                 {
-                    var gateInfo = _gateService[keys[i]].GateInfo;
+                    var gateInfo = _gameGates[keys[i]].GateInfo;
                     if (gateInfo.boUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
                         HUtil32.EnterCriticalSection(m_RunSocketSection);
@@ -170,10 +170,10 @@ namespace GameSvr.GameGate
 
         public void CloseAllGate()
         {
-            var keys = _gateService.Keys.ToList();
-            for (int i = 0; i < _gateService.Count; i++)
+            var keys = _gameGates.Keys.ToList();
+            for (int i = 0; i < _gameGates.Count; i++)
             {
-                _gateService[keys[i]].GateInfo.Socket.Close();
+                _gameGates[keys[i]].GateInfo.Socket.Close();
             }
         }
 
@@ -191,12 +191,12 @@ namespace GameSvr.GameGate
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
-                if (_gateService[e.SocHandle] == null)
+                if (_gameGates[e.SocHandle] == null)
                 {
                     Debug.WriteLine("非法请求");
                     return;
                 }
-                var gateInfo = _gateService[e.SocHandle].GateInfo;
+                var gateInfo = _gameGates[e.SocHandle].GateInfo;
                 if (gateInfo.Socket == null)
                 {
                     Debug.WriteLine("Scoket为空，无需关闭");
@@ -204,7 +204,7 @@ namespace GameSvr.GameGate
                 }
                 if (gateInfo.SocketId.Equals(e.ConnectionId))
                 {
-                    IList<TGateUserInfo> userList = gateInfo.UserList;
+                    IList<GameGateUserInfo> userList = gateInfo.UserList;
                     for (var i = 0; i < userList.Count; i++)
                     {
                         var gateUser = userList[i];
@@ -225,9 +225,9 @@ namespace GameSvr.GameGate
                     gateInfo.boUsed = false;
                     gateInfo.Socket = null;
                     M2Share.ErrorMessage(string.Format(sGateClose, e.EndPoint.Address, e.EndPoint.Port));
-                    if (_gateService.Remove(e.SocHandle, out var gateService))
+                    if (_gameGates.Remove(e.SocHandle, out var gameGate))
                     {
-                        gateService.Stop();
+                        gameGate.Stop();
                     }
                     else
                     {
@@ -262,11 +262,11 @@ namespace GameSvr.GameGate
         /// </summary>
         public void SetGateUserList(int nGateIdx, int nSocket, TPlayObject PlayObject)
         {
-            if (!_gateService.ContainsKey(nGateIdx))
+            if (!_gameGates.ContainsKey(nGateIdx))
             {
                 return;
             }
-            var gameGate = _gateService[nGateIdx];
+            var gameGate = _gameGates[nGateIdx];
             gameGate.SetGateUserList(nSocket, PlayObject);
         }
 
@@ -275,9 +275,9 @@ namespace GameSvr.GameGate
             var dwRunTick = HUtil32.GetTickCount();
             if (M2Share.boStartReady)
             {
-                if (_gateService.Count > 0)
+                if (_gameGates.Count > 0)
                 {
-                    var gateServiceList = _gateService.Values.ToList();
+                    var gateServiceList = _gameGates.Values.ToList();
                     foreach (var gateService in gateServiceList)
                     {
                         var gateInfo = gateService.GateInfo;
@@ -360,9 +360,9 @@ namespace GameSvr.GameGate
         public bool AddGateBuffer(int gateIdx, byte[] buffer)
         {
             var result = false;
-            if (_gateService.ContainsKey(gateIdx))
+            if (_gameGates.ContainsKey(gateIdx))
             {
-                _gateService[gateIdx].HandleSendBuffer(buffer);
+                _gameGates[gateIdx].HandleSendBuffer(buffer);
                 result = true;
             }
             return result;
@@ -418,12 +418,12 @@ namespace GameSvr.GameGate
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)
         {
-            if (_gateService.ContainsKey(e.SocHandle))
+            if (_gameGates.ContainsKey(e.SocHandle))
             {
                 var nMsgLen = e.BytesReceived;
                 var data = new byte[e.BytesReceived];
                 Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
-                _gateService[e.SocHandle].HandleReceiveBuffer(nMsgLen, data);
+                _gameGates[e.SocHandle].HandleReceiveBuffer(nMsgLen, data);
             }
             else
             {

@@ -43,7 +43,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKACCOUNTIPLIST);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKACCOUNTIPLIST);
             }
             return result;
         }
@@ -54,7 +54,7 @@ namespace GameSvr.Npc
             var nSize = QuestConditionInfo.nParam1;
             if ((nSize <= 0) || (nSize > Grobal2.MAXBAGITEM))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKBAGSIZE);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKBAGSIZE);
                 return result;
             }
             if (PlayObject.m_ItemList.Count + nSize <= Grobal2.MAXBAGITEM)
@@ -142,7 +142,7 @@ namespace GameSvr.Npc
             var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKHP);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKHP);
                 return result;
             }
             switch (cMethodMin)
@@ -217,7 +217,7 @@ namespace GameSvr.Npc
             var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKMP);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKMP);
                 return result;
             }
             switch (cMethodMin)
@@ -294,7 +294,7 @@ namespace GameSvr.Npc
             var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKDC);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKDC);
                 return result;
             }
             switch (cMethodMin)
@@ -369,7 +369,7 @@ namespace GameSvr.Npc
             var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKMC);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKMC);
                 return result;
             }
             switch (cMethodMin)
@@ -444,7 +444,7 @@ namespace GameSvr.Npc
             var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKSC);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKSC);
                 return result;
             }
             switch (cMethodMin)
@@ -483,7 +483,7 @@ namespace GameSvr.Npc
             var dwExp = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
             if (dwExp == 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKEXP);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKEXP);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -523,7 +523,7 @@ namespace GameSvr.Npc
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKFLOURISHPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKFLOURISHPOINT);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -568,7 +568,7 @@ namespace GameSvr.Npc
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKFLOURISHPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKFLOURISHPOINT);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -613,7 +613,7 @@ namespace GameSvr.Npc
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKAURAEPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKAURAEPOINT);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -658,7 +658,7 @@ namespace GameSvr.Npc
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKBUILDPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKBUILDPOINT);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -703,7 +703,7 @@ namespace GameSvr.Npc
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKSTABILITYPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKSTABILITYPOINT);
                 return result;
             }
             if (PlayObject.m_MyGuild == null)
@@ -748,7 +748,7 @@ namespace GameSvr.Npc
             var nGameGold = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKGAMEGOLD);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKGAMEGOLD);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -788,7 +788,7 @@ namespace GameSvr.Npc
             var nGamePoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKGAMEPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKGAMEPOINT);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -832,7 +832,7 @@ namespace GameSvr.Npc
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKGROUPCOUNT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKGROUPCOUNT);
                 return false;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -871,7 +871,7 @@ namespace GameSvr.Npc
             var result = false;
             if (QuestConditionInfo.sParam1 == "")
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_ISHIGH);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_ISHIGH);
                 return false;
             }
             var cMode = QuestConditionInfo.sParam1[0];
@@ -893,7 +893,7 @@ namespace GameSvr.Npc
                     result = M2Share.g_HighSCHuman == PlayObject;
                     break;
                 default:
-                    ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_ISHIGH);
+                    ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_ISHIGH);
                     break;
             }
             return result;
@@ -912,7 +912,7 @@ namespace GameSvr.Npc
             var nRange = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((sMapName == "") || (nX < 0) || (nY < 0) || (nRange < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKINMAPRANGE);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKINMAPRANGE);
                 return false;
             }
             if (string.Compare(PlayObject.m_sMapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0)
@@ -930,7 +930,7 @@ namespace GameSvr.Npc
         {
             if (this.m_Castle == null)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_ISATTACKGUILD);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_ISATTACKGUILD);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -946,7 +946,7 @@ namespace GameSvr.Npc
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if ((nDay < 0) || (this.m_Castle == null))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CASTLECHANGEDAY);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CASTLECHANGEDAY);
                 return result;
             }
             var nChangeDay = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_ChangeDate);
@@ -987,7 +987,7 @@ namespace GameSvr.Npc
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if ((nDay < 0) || (this.m_Castle == null))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CASTLEWARDAY);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CASTLEWARDAY);
                 return false;
             }
             var nWarDay = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_WarDate);
@@ -1041,7 +1041,7 @@ namespace GameSvr.Npc
             }
             if ((nDay < 0) || (this.m_Castle == null) || (nDoorStatus < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKCASTLEDOOR);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKCASTLEDOOR);
                 return result;
             }
             var CastleDoor = (CastleDoor)this.m_Castle.m_MainDoor.BaseObject;
@@ -1073,7 +1073,7 @@ namespace GameSvr.Npc
         {
             if (this.m_Castle == null)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_ISATTACKALLYGUILD);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_ISATTACKALLYGUILD);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -1087,7 +1087,7 @@ namespace GameSvr.Npc
         {
             if (this.m_Castle == null)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_ISDEFENSEALLYGUILD);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_ISDEFENSEALLYGUILD);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -1101,7 +1101,7 @@ namespace GameSvr.Npc
         {
             if (this.m_Castle == null)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_ISDEFENSEGUILD);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_ISDEFENSEGUILD);
                 return false;
             }
             if (PlayObject.m_MyGuild == null)
@@ -1144,7 +1144,7 @@ namespace GameSvr.Npc
             var nAddValue = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
             if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.Length) || (nAddValue < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKITEMADDVALUE);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKITEMADDVALUE);
                 return result;
             }
             var UserItem = PlayObject.m_UseItems[nWhere];
@@ -1195,7 +1195,7 @@ namespace GameSvr.Npc
             var nType = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.Length))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKITEMTYPE);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKITEMTYPE);
                 return result;
             }
             var UserItem = PlayObject.m_UseItems[nWhere];
@@ -1217,7 +1217,7 @@ namespace GameSvr.Npc
             var nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKLEVELEX);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKLEVELEX);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -1277,12 +1277,12 @@ namespace GameSvr.Npc
             }
             else
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKNAMELISTPOSITION);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKNAMELISTPOSITION);
             }
             var nPostion = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nPostion < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKNAMELISTPOSITION);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKNAMELISTPOSITION);
                 return result;
             }
             if (nNamePostion >= nPostion)
@@ -1303,7 +1303,7 @@ namespace GameSvr.Npc
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKMARRYCOUNT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKMARRYCOUNT);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -1348,7 +1348,7 @@ namespace GameSvr.Npc
             var nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKMEMBERLEVEL);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKMEMBERLEVEL);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -1388,7 +1388,7 @@ namespace GameSvr.Npc
             var nType = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nType < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKMEMBERTYPE);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKMEMBERTYPE);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -1454,7 +1454,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKNAMEIPLIST);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKNAMEIPLIST);
             }
             return result;
         }
@@ -1538,7 +1538,7 @@ namespace GameSvr.Npc
             var nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKPOSELEVEL);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKPOSELEVEL);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -1615,7 +1615,7 @@ namespace GameSvr.Npc
             int nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKSLAVECOUNT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKSLAVECOUNT);
                 return result;
             }
             char cMethod = QuestConditionInfo.sParam1[0];
@@ -1734,21 +1734,21 @@ namespace GameSvr.Npc
             int nCount = 0;
             int nJob = -1;
             TPlayObject PlayObjectEx;
-            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sWarrior, ScriptDef.sWarrior.Length))
+            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptCommandConst.sWarrior, ScriptCommandConst.sWarrior.Length))
             {
                 nJob = M2Share.jWarr;
             }
-            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sWizard, ScriptDef.sWizard.Length))
+            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptCommandConst.sWizard, ScriptCommandConst.sWizard.Length))
             {
                 nJob = M2Share.jWizard;
             }
-            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sTaos, ScriptDef.sTaos.Length))
+            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptCommandConst.sTaos, ScriptCommandConst.sTaos.Length))
             {
                 nJob = M2Share.jTaos;
             }
             if (nJob < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHANGEJOB);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHANGEJOB);
                 return result;
             }
             if (PlayObject.m_GroupOwner != null)
@@ -1806,7 +1806,7 @@ namespace GameSvr.Npc
             Envirnoment Envir = M2Share.MapManager.FindMap(sMapName);
             if ((Envir == null) || (nX < 0) || (nY < 0) || (nRange < 0) || (nCount < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKRANGEMONCOUNT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKRANGEMONCOUNT);
                 return result;
             }
             IList<TBaseObject> MonList = new List<TBaseObject>();
@@ -1856,7 +1856,7 @@ namespace GameSvr.Npc
             int nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKLEVELEX);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKLEVELEX);
                 return result;
             }
             char cMethod = QuestConditionInfo.sParam1[0];
@@ -1897,7 +1897,7 @@ namespace GameSvr.Npc
             int nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKLEVELEX);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKLEVELEX);
                 return result;
             }
             var nSlaveLevel = -1;
@@ -1950,7 +1950,7 @@ namespace GameSvr.Npc
             int nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
             if ((nWhere < 0) || (nWhere > PlayObject.m_UseItems.Length))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKUSEITEM);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKUSEITEM);
                 return result;
             }
             if (PlayObject.m_UseItems[nWhere].wIndex > 0)
@@ -1973,14 +1973,14 @@ namespace GameSvr.Npc
             var sVarValue = QuestConditionInfo.sParam4;
             if ((sType == "") || (sVarName == "") || (sMethod == ""))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKVAR);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKVAR);
                 return result;
             }
             var cMethod = sMethod[0];
             var DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKVAR);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKVAR);
                 return result;
             }
             if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
@@ -2023,7 +2023,7 @@ namespace GameSvr.Npc
             }
             if (!boFoundVar)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKVAR);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKVAR);
             }
             return result;
         }
@@ -2053,7 +2053,7 @@ namespace GameSvr.Npc
             var nGold = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if ((nGold < 0) || (this.m_Castle == null))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKCASTLEGOLD);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKCASTLEGOLD);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -2093,7 +2093,7 @@ namespace GameSvr.Npc
             var nContribution = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nContribution < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKCONTRIBUTION);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKCONTRIBUTION);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -2133,7 +2133,7 @@ namespace GameSvr.Npc
             var nCreditPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nCreditPoint < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKCREDITPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKCREDITPOINT);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -2172,7 +2172,7 @@ namespace GameSvr.Npc
             var result = false;
             if (QuestConditionInfo.sParam1 == "")
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKOFGUILD);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKOFGUILD);
                 return result;
             }
             if (PlayObject.m_MyGuild != null)
@@ -2191,7 +2191,7 @@ namespace GameSvr.Npc
             var nOnlineMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nOnlineMin < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_ONLINELONGMIN);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_ONLINELONGMIN);
                 return result;
             }
             var nOnlineTime = (HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000;
@@ -2232,7 +2232,7 @@ namespace GameSvr.Npc
             var nErrorCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nErrorCount < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_PASSWORDERRORCOUNT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_PASSWORDERRORCOUNT);
                 return result;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -2282,7 +2282,7 @@ namespace GameSvr.Npc
             var nPayMent = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
             if (nPayMent < 1)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKPAYMENT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKPAYMENT);
                 return result;
             }
             if (PlayObject.m_nPayMent == nPayMent)
@@ -2299,7 +2299,7 @@ namespace GameSvr.Npc
             var sSlaveName = QuestConditionInfo.sParam1;
             if (sSlaveName == "")
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKSLAVENAME);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKSLAVENAME);
                 return result;
             }
             for (var i = 0; i < PlayObject.m_SlaveList.Count; i++)
@@ -2332,7 +2332,7 @@ namespace GameSvr.Npc
             var cMethod = QuestConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKNAMEDATELIST);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKNAMEDATELIST);
                 return result;
             }
             sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestConditionInfo.sParam1;
@@ -2470,7 +2470,7 @@ namespace GameSvr.Npc
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
             if (nCount < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKMAPHUMANCOUNT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKMAPHUMANCOUNT);
                 return result;
             }
             var nHumanCount = M2Share.UserEngine.GetMapHuman(QuestConditionInfo.sParam1);
@@ -2512,7 +2512,7 @@ namespace GameSvr.Npc
             var Envir = M2Share.MapManager.FindMap(QuestConditionInfo.sParam1);
             if ((nCount < 0) || (Envir == null))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKMAPMONCOUNT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptCommandConst.sSC_CHECKMAPMONCOUNT);
                 return result;
             }
             var nMonCount = M2Share.UserEngine.GetMapMonster(Envir, null);

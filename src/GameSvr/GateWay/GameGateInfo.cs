@@ -2,7 +2,7 @@ using System.Net.Sockets;
 
 namespace GameSvr.GameGate
 {
-    public class TGateInfo
+    public class GameGateInfo
     {
         /// <summary>
         /// 网关是否已启用
@@ -13,7 +13,7 @@ namespace GameSvr.GameGate
         /// <summary>
         /// 玩家列表
         /// </summary>
-        public IList<TGateUserInfo> UserList;
+        public IList<GameGateUserInfo> UserList;
         /// <summary>
         /// 在线人数
         /// </summary>
