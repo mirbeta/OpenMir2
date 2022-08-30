@@ -765,7 +765,7 @@ namespace GameSvr
             return result;
         }
 
-        public static bool CheckUserItems(int nIdx, GoodItem StdItem)
+        public static bool CheckUserItems(int nIdx, StdItem StdItem)
         {
             var result = false;
             switch (nIdx)

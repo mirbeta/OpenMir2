@@ -48,7 +48,7 @@ namespace GameSvr.Magic
         /// <returns></returns>
         public static bool CheckAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
-            GoodItem amuletStdItem = null;
+            StdItem amuletStdItem = null;
             var result = false;
             Idx = 0;
             if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)

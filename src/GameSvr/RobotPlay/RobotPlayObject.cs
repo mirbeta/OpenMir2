@@ -642,7 +642,7 @@ namespace GameSvr.RobotPlay
         {
             bool result = false;
             TUserItem UserItem = null;
-            GoodItem StdItem;
+            StdItem StdItem;
             MapItem MapItem = m_PEnvir.GetItem(nX, nY);
             if (MapItem == null)
             {
@@ -1598,7 +1598,7 @@ namespace GameSvr.RobotPlay
             return CheckUserItemType(nItemType, nCount) || GetUserItemList(nItemType, nCount) >= 0;
         }
 
-        private bool CheckItemType(int nItemType, GoodItem StdItem)
+        private bool CheckItemType(int nItemType, StdItem StdItem)
         {
             bool result = false;
             switch (nItemType)
@@ -1638,7 +1638,7 @@ namespace GameSvr.RobotPlay
             if (m_UseItems[Grobal2.U_ARMRINGL] != null && m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0 &&
                 Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount)
             {
-                GoodItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
+                StdItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (StdItem != null)
                 {
                     result = CheckItemType(nItemType, StdItem);
@@ -1653,7 +1653,7 @@ namespace GameSvr.RobotPlay
         {
             int result = -1;
             TUserItem UserItem;
-            GoodItem StdItem;
+            StdItem StdItem;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -1675,7 +1675,7 @@ namespace GameSvr.RobotPlay
         {
             TUserItem UserItem;
             TUserItem AddUserItem;
-            GoodItem StdItem;
+            StdItem StdItem;
             bool result = false;
             if (nIndex >= 0 && nIndex < m_ItemList.Count)
             {
@@ -4266,7 +4266,7 @@ namespace GameSvr.RobotPlay
         {
             bool result = false;
             TUserItem UserItem;
-            GoodItem AmuletStdItem;
+            StdItem AmuletStdItem;
             try
             {
                 result = false;

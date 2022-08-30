@@ -888,7 +888,7 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            StdItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
                 if (StdItem.StdMode == 40)
@@ -1653,7 +1653,7 @@ namespace GameSvr.Actor
 
         private void ItemDamageRevivalRing()
         {
-            GoodItem pSItem;
+            StdItem pSItem;
             ushort nDura;
             ushort tDura;
             TPlayObject PlayObject;
@@ -2359,7 +2359,7 @@ namespace GameSvr.Actor
         {
             ushort result = 0;
             TUserItem UserItem;
-            GoodItem StdItem;
+            StdItem StdItem;
             for (int i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -3340,7 +3340,7 @@ namespace GameSvr.Actor
         public int GetFeature(TBaseObject BaseObject)
         {
             int result;
-            GoodItem StdItem;
+            StdItem StdItem;
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 byte nDress = 0;
@@ -4568,7 +4568,7 @@ namespace GameSvr.Actor
             int nDura;
             int nOldDura;
             TPlayObject PlayObject;
-            GoodItem StdItem;
+            StdItem StdItem;
             bool bo19;
             if (nDamage <= 0)
             {

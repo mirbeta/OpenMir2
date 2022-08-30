@@ -21,7 +21,7 @@ namespace GameSvr.DataStores
         {
             int result = -1;
             int Idx;
-            GoodItem Item;
+            StdItem Item;
             const string sSQLString = "SELECT * FROM TBL_StdItems";
             try
             {
@@ -40,7 +40,7 @@ namespace GameSvr.DataStores
                 {
                     while (dr.Read())
                     {
-                        Item = new GoodItem();
+                        Item = new StdItem();
                         Idx = dr.GetInt32("Idx");// 序号
                         Item.Name = dr.GetString("Name");// 名称
                         Item.StdMode = (byte)dr.GetInt32("StdMode");// 分类号

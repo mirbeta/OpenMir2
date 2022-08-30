@@ -2028,7 +2028,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                GoodItem StdItem;
+                StdItem StdItem;
                 for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
                 {
                     if (m_UseItems[i] == null)

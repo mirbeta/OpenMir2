@@ -22,7 +22,7 @@ namespace GameSvr.Command.Commands
             var nMineCount = @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
             var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
             TUserItem UserItem = null;
-            GoodItem StdItem;
+            StdItem StdItem;
             if (PlayObject.m_btPermission < this.GameCommand.nPermissionMin)
             {
                 PlayObject.SysMsg(GameCommandConst.g_sGameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);

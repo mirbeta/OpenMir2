@@ -4,7 +4,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Items
 {
-    public class GoodItem
+    public class StdItem
     {
         public GoodType ItemType = 0;
         public string Name;

@@ -34,7 +34,7 @@ namespace GameSvr.Player
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 TUserItem UserItem = m_ItemList[i];
-                GoodItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                StdItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (Item != null)
                 {
                     TClientItem ClientItem = new TClientItem();
@@ -92,7 +92,7 @@ namespace GameSvr.Player
                 TUserItem UserItem = PlayObject.m_UseItems[i];
                 if (UserItem.wIndex > 0)
                 {
-                    GoodItem StdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[i].wIndex);
+                    StdItem StdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[i].wIndex);
                     if (StdItem == null)
                     {
                         continue;
@@ -260,7 +260,7 @@ namespace GameSvr.Player
         private bool ClientDropItem(string sItemName, int nItemIdx)
         {
             TUserItem UserItem;
-            GoodItem StdItem;
+            StdItem StdItem;
             string sUserItemName;
             var result = false;
             if (!m_boClientFlag)
@@ -403,8 +403,8 @@ namespace GameSvr.Player
             var n18 = 0;
             TUserItem UserItem = null;
             TUserItem TakeOffItem = null;
-            GoodItem StdItem = null;
-            GoodItem StdItem20 = null;
+            StdItem StdItem = null;
+            StdItem StdItem20 = null;
             TStdItem StdItem58 = null;
             string sUserItemName;
             for (var i = 0; i < m_ItemList.Count; i++)
@@ -511,7 +511,7 @@ namespace GameSvr.Player
         private void ClientTakeOffItems(byte btWhere, int nItemIdx, string sItemName)
         {
             var n10 = 0;
-            GoodItem StdItem = null;
+            StdItem StdItem = null;
             TUserItem UserItem = null;
             string sUserItemName;
             if (!m_boDealing && btWhere < 13)
@@ -634,7 +634,7 @@ namespace GameSvr.Player
         {
             var boEatOK = false;
             TUserItem UserItem = null;
-            GoodItem StdItem = null;
+            StdItem StdItem = null;
             TUserItem UserItem34 = null;
             if (m_boCanUseItem)
             {
@@ -1105,7 +1105,7 @@ namespace GameSvr.Player
         {
             bool bo11;
             TUserItem UserItem;
-            GoodItem StdItem;
+            StdItem StdItem;
             TPlayObject PlayObject;
             m_boDealOK = true;
             if (m_DealCreat == null)
@@ -1639,7 +1639,7 @@ namespace GameSvr.Player
 
         private void ClientStorageItem(int ObjectId, int nItemIdx, string sMsg)
         {
-            GoodItem StdItem;
+            StdItem StdItem;
             var bo19 = false;
             TUserItem UserItem = null;
             string sUserItemName;
@@ -1691,7 +1691,7 @@ namespace GameSvr.Player
 
         private void ClientTakeBackStorageItem(int NPC, int nItemIdx, string sMsg)
         {
-            GoodItem StdItem;
+            StdItem StdItem;
             string sUserItemName;
             var bo19 = false;
             TUserItem UserItem = null;
