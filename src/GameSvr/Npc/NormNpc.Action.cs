@@ -535,7 +535,7 @@ namespace GameSvr.Npc
 
         private void ActionOfChangeExp(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int dwInt;
+            long dwInt;
             var nExp = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nExp < 0)
             {
@@ -546,7 +546,7 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (nExp >= 0)
+                    if (nExp > 0)
                     {
                         PlayObject.m_Abil.Exp = nExp;
                         dwInt = nExp;
@@ -565,9 +565,9 @@ namespace GameSvr.Npc
                 case '+':
                     if (PlayObject.m_Abil.Exp >= nExp)
                     {
-                        if (PlayObject.m_Abil.Exp - nExp > int.MaxValue - PlayObject.m_Abil.Exp)
+                        if (PlayObject.m_Abil.Exp - nExp > long.MaxValue - PlayObject.m_Abil.Exp)
                         {
-                            dwInt = int.MaxValue - PlayObject.m_Abil.Exp;
+                            dwInt = long.MaxValue - PlayObject.m_Abil.Exp;
                         }
                         else
                         {
@@ -587,7 +587,7 @@ namespace GameSvr.Npc
                     }
                     PlayObject.m_Abil.Exp += dwInt;
                     // PlayObject.GetExp(dwInt);
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WINEXP, 0, dwInt, 0, 0, "");
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WINEXP, 0, (int)dwInt, 0, 0, "");
                     break;
             }
         }
@@ -1677,7 +1677,7 @@ namespace GameSvr.Npc
         {
             string sUserItemName;
             bool boIsHasItem = false;
-            for (var i = PlayObject.m_UseItems.GetLowerBound(0); i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
             {
                 if (PlayObject.m_UseItems[i].wIndex <= 0)
                 {
@@ -2069,7 +2069,7 @@ namespace GameSvr.Npc
                     PlayObject.m_StorageItemList.RemoveAt(i);
                 }
             }
-            for (var i = PlayObject.m_UseItems.GetLowerBound(0); i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
             {
                 UserItem = PlayObject.m_UseItems[i];
                 if (UserItem.MakeIndex != nMakeIndex)

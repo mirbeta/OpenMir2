@@ -1031,7 +1031,7 @@ namespace GameSvr.Actor
             m_Abil.MaxExp = GetLevelExp(m_Abil.Level);
             RecalcLevelAbilitys();
             RecalcAbilitys();
-            SendMsg(this, Grobal2.RM_LEVELUP, 0, m_Abil.Exp, 0, 0, "");
+            SendMsg(this, Grobal2.RM_LEVELUP, 0, (int)m_Abil.Exp, 0, 0, "");
             if (M2Share.g_FunctionNPC != null)
             {
                 M2Share.g_FunctionNPC.GotoLable(this as TPlayObject, "@LevelUp", false);
@@ -1657,7 +1657,7 @@ namespace GameSvr.Actor
             ushort nDura;
             ushort tDura;
             TPlayObject PlayObject;
-            for (int i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+            for (int i = 0; i <= m_UseItems.GetUpperBound(0); i++)
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
@@ -4633,7 +4633,7 @@ namespace GameSvr.Actor
                     SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, m_UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
                 }
             }
-            for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
             {
                 if ((m_UseItems[i] != null) && (m_UseItems[i].wIndex > 0) && (M2Share.RandomNumber.Random(8) == 0))
                 {
@@ -5165,7 +5165,7 @@ namespace GameSvr.Actor
         {
             TUserItem result = null;
             nCount = 0;
-            for (int i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+            for (int i = 0; i <= m_UseItems.GetUpperBound(0); i++)
             {
                 if (m_UseItems[i] == null)
                 {

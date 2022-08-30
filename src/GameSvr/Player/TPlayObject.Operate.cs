@@ -70,7 +70,7 @@ namespace GameSvr.Player
             M2Share.MainOutMessage(format("OK:{0}", m_nClientFlagMode));
         }
 
-        private void ClientQueryUserState(int charId, int nX, int nY)
+        private void ClientQueryUserInformation(int charId, int nX, int nY)
         {
             TClientItem ClientItem = null;
             var PlayObject = (TPlayObject)M2Share.ObjectManager.Get(charId);
@@ -87,7 +87,7 @@ namespace GameSvr.Player
                 UserState.GuildName = PlayObject.m_MyGuild.sGuildName;
             }
             UserState.GuildRankName = PlayObject.m_sGuildRankName;
-            for (var i = PlayObject.m_UseItems.GetLowerBound(0); i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
             {
                 TUserItem UserItem = PlayObject.m_UseItems[i];
                 if (UserItem.wIndex > 0)
@@ -277,12 +277,12 @@ namespace GameSvr.Player
             if (M2Share.g_Config.boInSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
-                return result;
+                return false;
             }
             if (!m_boCanDrop || m_PEnvir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropItemMsg);
-                return result;
+                return false;
             }
             if (sItemName.IndexOf(' ') > 0)
             {
@@ -405,7 +405,7 @@ namespace GameSvr.Player
             TUserItem TakeOffItem = null;
             StdItem StdItem = null;
             StdItem StdItem20 = null;
-            TStdItem StdItem58 = null;
+            TClientStdItem StdItem58 = null;
             string sUserItemName;
             for (var i = 0; i < m_ItemList.Count; i++)
             {

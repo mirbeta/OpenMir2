@@ -783,7 +783,7 @@ namespace GameSvr.Player
                 // 检查人物身上的物品是否符合使用规则
                 if (M2Share.g_Config.boCheckUserItemPlace)
                 {
-                    for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+                    for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
                     {
                         if (m_UseItems[i] == null || m_UseItems[i].wIndex <= 0) continue;
                         var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);

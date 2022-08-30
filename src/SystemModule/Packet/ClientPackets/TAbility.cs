@@ -7,84 +7,77 @@ namespace SystemModule.Packet.ClientPackets
     public class TAbility : Packets
     {
         [ProtoMember(1)]
-        public byte Level;
+        public ushort Level;
         [ProtoMember(2)]
-        public byte reserved1;
+        public int AC;
         [ProtoMember(3)]
-        public ushort AC;
+        public int MAC;
         [ProtoMember(4)]
-        public ushort MAC;
+        public int DC;
         [ProtoMember(5)]
-        public ushort DC;
+        public int MC;
         [ProtoMember(6)]
-        public ushort MC;
-        [ProtoMember(7)]
-        public ushort SC;
+        public int SC;
         /// <summary>
         /// 生命值
         /// </summary>
-        [ProtoMember(8)]
+        [ProtoMember(7)]
         public ushort HP;
         /// <summary>
         /// 魔法值
         /// </summary>
-        [ProtoMember(9)]
+        [ProtoMember(8)]
         public ushort MP;
-        [ProtoMember(10)]
+        [ProtoMember(9)]
         public ushort MaxHP;
-        [ProtoMember(11)]
+        [ProtoMember(10)]
         public ushort MaxMP;
-        [ProtoMember(12)]
-        public byte ExpCount;
-        [ProtoMember(13)]
-        public byte ExpMaxCount;
         /// <summary>
         /// 当前经验
         /// </summary>
-        [ProtoMember(14)]
-        public int Exp;
+        [ProtoMember(11)]
+        public long Exp;
         /// <summary>
         /// 最大经验
         /// </summary>
-        [ProtoMember(15)]
-        public int MaxExp;
+        [ProtoMember(12)]
+        public long MaxExp;
         /// <summary>
         /// 背包重
         /// </summary>
-        [ProtoMember(16)]
+        [ProtoMember(13)]
         public ushort Weight;
         /// <summary>
         /// 背包最大重量
         /// </summary>
-        [ProtoMember(17)]
+        [ProtoMember(14)]
         public ushort MaxWeight;
         /// <summary>
         /// 当前负重
         /// </summary>
-        [ProtoMember(18)]
-        public byte WearWeight;
+        [ProtoMember(15)]
+        public short WearWeight;
         /// <summary>
         /// 最大负重
         /// </summary>
-        [ProtoMember(19)]
-        public byte MaxWearWeight;
+        [ProtoMember(16)]
+        public short MaxWearWeight;
         /// <summary>
         /// 腕力
         /// </summary>
-        [ProtoMember(20)]
-        public byte HandWeight;
+        [ProtoMember(17)]
+        public short HandWeight;
         /// <summary>
         /// 最大腕力
         /// </summary>
-        [ProtoMember(21)]
-        public byte MaxHandWeight;
+        [ProtoMember(18)]
+        public short MaxHandWeight;
 
         public TAbility() { }
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Level = reader.ReadByte();
-            reserved1 = reader.ReadByte();
             AC = reader.ReadUInt16();
             MAC = reader.ReadUInt16();
             DC = reader.ReadUInt16();
@@ -94,8 +87,6 @@ namespace SystemModule.Packet.ClientPackets
             MP = reader.ReadUInt16();
             MaxHP = reader.ReadUInt16();
             MaxMP = reader.ReadUInt16();
-            ExpCount = reader.ReadByte();
-            ExpMaxCount = reader.ReadByte();
             Exp = reader.ReadInt32();
             MaxExp = reader.ReadInt32();
             Weight = reader.ReadUInt16();
@@ -109,7 +100,6 @@ namespace SystemModule.Packet.ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(Level);
-            writer.Write(reserved1);
             writer.Write(AC);
             writer.Write(MAC);
             writer.Write(DC);
@@ -119,8 +109,6 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(MP);
             writer.Write(MaxHP);
             writer.Write(MaxMP);
-            writer.Write(ExpCount);
-            writer.Write(ExpMaxCount);
             writer.Write(Exp);
             writer.Write(MaxExp);
             writer.Write(Weight);
@@ -129,9 +117,6 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(MaxWearWeight);
             writer.Write(HandWeight);
             writer.Write(MaxHandWeight);
-            
-            writer.Write((byte)0);
-            writer.Write((byte)0);
         }
     }
 }

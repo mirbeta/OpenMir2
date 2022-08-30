@@ -1029,7 +1029,7 @@ namespace BotSvr
             return result;
         }
 
-        public static int GetTakeOnPosition(TStdItem smode, TClientItem[] UseItems, bool bPos)
+        public static int GetTakeOnPosition(TClientStdItem smode, TClientItem[] UseItems, bool bPos)
         {
             int result = -1;
             switch (smode.StdMode)
@@ -1115,7 +1115,7 @@ namespace BotSvr
             return result;
         }
 
-        public static int GetTakeOnPosition(TStdItem smode, TClientItem[] UseItems)
+        public static int GetTakeOnPosition(TClientStdItem smode, TClientItem[] UseItems)
         {
             return GetTakeOnPosition(smode, UseItems, false);
         }

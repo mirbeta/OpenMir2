@@ -205,7 +205,7 @@ namespace SystemModule.Common
                 File.Create(FileName).Close();
                 return;
             }
-            var rd = new StreamReader(File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.UTF8);
+            var rd = new StreamReader(File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.GetEncoding("GB2312"));
             var isCurSecComment = false;
             Dictionary<string, string> curSec = null;
         Label_02A6:
@@ -318,7 +318,7 @@ namespace SystemModule.Common
             {
                 fi.IsReadOnly = false;
             }
-            var sw = new StreamWriter(File.Open(FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.UTF8);
+            var sw = new StreamWriter(File.Open(FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite),  Encoding.GetEncoding("GB2312"));
             foreach (KeyValuePair<string, Dictionary<string, string>> pair in iniCahce)
             {
                 sw.WriteLine("[" + pair.Key + "]");

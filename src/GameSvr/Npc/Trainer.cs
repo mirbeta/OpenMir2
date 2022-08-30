@@ -20,7 +20,7 @@ namespace GameSvr.Npc
             n570 = 0;
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             var result = false;
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)

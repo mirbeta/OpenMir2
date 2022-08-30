@@ -20,7 +20,7 @@ namespace GameSvr.Monster.Monsters
             m_btRaceServer = 80;
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             return base.Operate(ProcessMsg);
         }

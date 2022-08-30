@@ -5,14 +5,14 @@ namespace SystemModule.Packet.ClientPackets
 {
     public class TClientItem : Packets
     {
-        public TStdItem Item;
+        public TClientStdItem Item;
         public int MakeIndex;
         public ushort Dura;
         public ushort DuraMax;
 
         public TClientItem()
         {
-            Item = new TStdItem();
+            Item = new TClientStdItem();
         }
 
         protected override void ReadPacket(BinaryReader reader)

@@ -1144,8 +1144,6 @@ namespace GameSvr.Actor
         /// <param name="ItemOfCreat"></param>
         protected virtual void ScatterBagItems(TBaseObject ItemOfCreat)
         {
-            TUserItem UserItem;
-            StdItem StdItem;
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
@@ -1156,8 +1154,8 @@ namespace GameSvr.Actor
                 }
                 for (var i = m_ItemList.Count - 1; i >= 0; i--)
                 {
-                    UserItem = m_ItemList[i];
-                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                    var UserItem = m_ItemList[i];
+                    var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     var boCanNotDrop = false;
                     if (StdItem != null)
                     {
@@ -1322,7 +1320,7 @@ namespace GameSvr.Actor
             bool result = false;
             if (BaseObject == null)
             {
-                return result;
+                return false;
             }
             if (m_btRaceServer >= Grobal2.RC_ANIMAL)
             {
@@ -1345,13 +1343,11 @@ namespace GameSvr.Actor
                 }
                 if (BaseObject.m_Master == this)
                 {
-                    result = true;
-                    return result;
+                    return true;
                 }
                 if (BaseObject.m_Master != null)
                 {
-                    result = IsProperFriend_IsFriend(BaseObject.m_Master);
-                    return result;
+                    return IsProperFriend_IsFriend(BaseObject.m_Master);
                 }
             }
             else
@@ -1361,7 +1357,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public virtual bool Operate(TProcessMessage ProcessMsg)
+        protected virtual bool Operate(TProcessMessage ProcessMsg)
         {
             int nDamage;
             int nTargetX;
@@ -1562,7 +1558,6 @@ namespace GameSvr.Actor
         /// </summary>
         public virtual void RecalcAbilitys()
         {
-            StdItem StdItem;
             bool[] boRecallSuite = new bool[4] { false, false, false, false };
             bool[] boMoXieSuite = new bool[3] { false, false, false };
             bool[] boSpirit = new bool[4] { false, false, false, false };
@@ -1646,7 +1641,7 @@ namespace GameSvr.Actor
             bool boOldHideMode = m_boHideMode;
             m_dwPKDieLostExp = 0;
             m_nPKDieLostLevel = 0;
-            for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
             {
                 if (m_UseItems[i] == null)
                 {
@@ -1656,7 +1651,7 @@ namespace GameSvr.Actor
                 {
                     continue;
                 }
-                StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
+                var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
                 if (StdItem == null)
                 {
                     continue;

@@ -45,9 +45,12 @@ namespace GameSvr.Items
             return result;
         }
 
-        public void GetStandardItem(ref TStdItem stdItem)
+        public void GetStandardItem(ref TClientStdItem stdItem)
         {
-            stdItem = new TStdItem();
+            if (stdItem == null)
+            {
+                stdItem = new TClientStdItem();
+            }
             stdItem.Name = M2Share.FilterShowName(Name);
             stdItem.StdMode = StdMode;
             stdItem.Shape = Shape;
@@ -63,7 +66,7 @@ namespace GameSvr.Items
             stdItem.Price = Price;
         }
 
-        public void GetItemAddValue(TUserItem userItem, ref TStdItem stdItem)
+        public void GetItemAddValue(TUserItem userItem, ref TClientStdItem stdItem)
         {
             switch (ItemType)
             {
