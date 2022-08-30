@@ -8,7 +8,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("GameGold", "调整指定玩家游戏币", M2Share.g_sGameCommandGameGoldHelpMsg, 10)]
+    [GameCommand("GameGold", "调整指定玩家游戏币", GameCommandConst.g_sGameCommandGameGoldHelpMsg, 10)]
     public class GameGoldCommand : BaseCommond
     {
         [DefaultCommand]
@@ -34,7 +34,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[0])
@@ -53,12 +53,12 @@ namespace GameSvr.Command.Commands
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
+                M2Share.AddGameDataLog(string.Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
                     m_PlayObject.m_sCharName, M2Share.g_Config.sGameGoldName, nGold, sCtr[1], PlayObject.m_sCharName));
             }
             PlayObject.GameGoldChanged();
-            m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGoldHumanMsg, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGoldGMMsg, sHumanName, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandGameGoldHumanMsg, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandGameGoldGMMsg, sHumanName, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

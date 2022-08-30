@@ -8,7 +8,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 在当前XY坐标创建NPC
     /// </summary>
-    [GameCommand("MobNpc", "在当前XY坐标创建NPC", M2Share.g_sGameCommandMobNpcHelpMsg, 10)]
+    [GameCommand("MobNpc", "在当前XY坐标创建NPC", GameCommandConst.g_sGameCommandMobNpcHelpMsg, 10)]
     public class MobNpcCommand : BaseCommond
     {
         [DefaultCommand]

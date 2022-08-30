@@ -1,3 +1,4 @@
+using GameSvr.Command;
 using GameSvr.Items;
 using MySql.Data.MySqlClient;
 using System.Data;
@@ -115,7 +116,7 @@ namespace GameSvr.DataStores
                     }
                 }
                 M2Share.g_boGameLogGold = M2Share.GetGameLogItemNameList(Grobal2.sSTRING_GOLDNAME) == 1;
-                M2Share.g_boGameLogHumanDie = M2Share.GetGameLogItemNameList(M2Share.g_sHumanDieEvent) == 1;
+                M2Share.g_boGameLogHumanDie = M2Share.GetGameLogItemNameList(GameCommandConst.g_sHumanDieEvent) == 1;
                 M2Share.g_boGameLogGameGold = M2Share.GetGameLogItemNameList(M2Share.g_Config.sGameGoldName) == 1;
                 M2Share.g_boGameLogGamePoint = M2Share.GetGameLogItemNameList(M2Share.g_Config.sGamePointName) == 1;
             }

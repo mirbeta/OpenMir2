@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
             Human = M2Share.UserEngine.GetPlayObject(sGuildChief);
             if (Human == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.GuildManager.MemberOfGuild(sGuildChief) == null)

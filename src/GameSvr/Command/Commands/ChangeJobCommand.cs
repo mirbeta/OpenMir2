@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家职业
     /// </summary>
-    [GameCommand("ChangeJob", "调整指定玩家职业", M2Share.g_sGameCommandChangeJobHelpMsg, 10)]
+    [GameCommand("ChangeJob", "调整指定玩家职业", GameCommandConst.g_sGameCommandChangeJobHelpMsg, 10)]
     public class ChangeJobCommand : BaseCommond
     {
         [DefaultCommand]
@@ -40,12 +40,12 @@ namespace GameSvr.Command.Commands
                     m_PlayObject.m_btJob = 2;
                 }
                 m_PlayObject.HasLevelUp(1);
-                m_PlayObject.SysMsg(M2Share.g_sGameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+                m_PlayObject.SysMsg(GameCommandConst.g_sGameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

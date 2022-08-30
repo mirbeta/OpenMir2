@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 剔除指定玩家下线
     /// </summary>
-    [GameCommand("KickHuman", "剔除指定玩家下线", M2Share.g_sGameCommandHumanLocalHelpMsg, 10)]
+    [GameCommand("KickHuman", "剔除指定玩家下线", GameCommandConst.g_sGameCommandHumanLocalHelpMsg, 10)]
     public class KickHumanCommand : BaseCommond
     {
         [DefaultCommand]
@@ -31,7 +31,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

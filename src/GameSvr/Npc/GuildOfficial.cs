@@ -1,4 +1,5 @@
 ﻿using GameSvr.Player;
+using GameSvr.ScriptSystem;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
@@ -72,31 +73,31 @@ namespace GameSvr.Npc
                     {
                         return;
                     }
-                    if (string.Compare(sLabel, M2Share.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(sLabel, ScriptDef.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestBuildGuild(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, M2Share.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptDef.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestGuildWar(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, M2Share.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptDef.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         DoNate(PlayObject);
                     }
-                    else if (HUtil32.CompareLStr(sLabel, M2Share.sREQUESTCASTLEWAR, M2Share.sREQUESTCASTLEWAR.Length))
+                    else if (HUtil32.CompareLStr(sLabel, ScriptDef.sREQUESTCASTLEWAR, ScriptDef.sREQUESTCASTLEWAR.Length))
                     {
-                        ReQuestCastleWar(PlayObject, sLabel.Substring(M2Share.sREQUESTCASTLEWAR.Length, sLabel.Length - M2Share.sREQUESTCASTLEWAR.Length));
+                        ReQuestCastleWar(PlayObject, sLabel.Substring(ScriptDef.sREQUESTCASTLEWAR.Length, sLabel.Length - ScriptDef.sREQUESTCASTLEWAR.Length));
                     }
-                    else if (string.Compare(sLabel, M2Share.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptDef.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                     }
-                    else if (string.Compare(sLabel, M2Share.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptDef.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (PlayObject.m_sScriptGoBackLable == "")
                         {
-                            PlayObject.m_sScriptGoBackLable = M2Share.sMAIN;
+                            PlayObject.m_sScriptGoBackLable = ScriptDef.sMAIN;
                         }
                         this.GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
                     }

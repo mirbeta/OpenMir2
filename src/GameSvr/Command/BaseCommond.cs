@@ -38,7 +38,7 @@ namespace GameSvr.Command
 #endif
                 if (playObject.m_btPermission < this.GameCommand.nPermissionMin)// 检查用户是否有权限来调用命令。
                 {
-                    return M2Share.g_sGameCommandPermissionTooLow;
+                    return GameCommandConst.g_sGameCommandPermissionTooLow;
                 }
             }
             switch (MethodParameterCount)

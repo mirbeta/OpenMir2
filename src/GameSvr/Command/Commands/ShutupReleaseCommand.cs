@@ -4,7 +4,7 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ShutupRelease", "恢复禁言", M2Share.g_sGameCommandShutupReleaseHelpMsg, 10)]
+    [GameCommand("ShutupRelease", "恢复禁言", GameCommandConst.g_sGameCommandShutupReleaseHelpMsg, 10)]
     public class ShutupReleaseCommand : BaseCommond
     {
         [DefaultCommand]

@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)
     /// 要求权限默认等级：10
     /// </summary>
-    [GameCommand("Make", desc: "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", help: M2Share.g_sGamecommandMakeHelpMsg, minUserLevel: 10)]
+    [GameCommand("Make", desc: "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", help: GameCommandConst.g_sGamecommandMakeHelpMsg, minUserLevel: 10)]
     public class MakeItemCommond : BaseCommond
     {
         [DefaultCommand]
@@ -30,17 +30,17 @@ namespace GameSvr.Command.Commands
             {
                 if (!M2Share.CanMakeItem(sItemName))
                 {
-                    PlayObject.SysMsg(M2Share.g_sGamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(GameCommandConst.g_sGamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (M2Share.CastleManager.InCastleWarArea(PlayObject) != null) // 攻城区域，禁止使用此功能
                 {
-                    PlayObject.SysMsg(M2Share.g_sGamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(GameCommandConst.g_sGamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!PlayObject.InSafeZone())
                 {
-                    PlayObject.SysMsg(M2Share.g_sGamecommandMakeInSafeZoneRange, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(GameCommandConst.g_sGamecommandMakeInSafeZoneRange, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 nCount = 1;
@@ -87,7 +87,7 @@ namespace GameSvr.Command.Commands
                 else
                 {
                     UserItem = null;
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGamecommandMakeItemNameNotFound, sItemName), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(GameCommandConst.g_sGamecommandMakeItemNameNotFound, sItemName), MsgColor.Red, MsgType.Hint);
                     break;
                 }
             }
