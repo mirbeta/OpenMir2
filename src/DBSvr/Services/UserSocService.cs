@@ -873,7 +873,7 @@ namespace DBSvr.Services
             var result = string.Empty;
             TRouteInfo routeInfo;
             nPort = 0;
-            for (var i = DBShare.RouteInfo.GetLowerBound(0); i <= DBShare.RouteInfo.GetUpperBound(0); i++)
+            for (var i = 0; i < DBShare.RouteInfo.Length; i++)
             {
                 routeInfo = DBShare.RouteInfo[i];
                 if (routeInfo == null)

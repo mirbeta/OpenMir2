@@ -96,7 +96,7 @@ namespace BotSvr
             }
             if (cu.Item.StdMode <= 3)
             {
-                for (var i = 0; i <= 5; i++)
+                for (var i = 0; i < 5; i++)
                 {
                     if (MShare.g_ItemArr[i] == null || MShare.g_ItemArr[i].Item.Name == "")
                     {
@@ -247,7 +247,7 @@ namespace BotSvr
                 }
                 if (MShare.g_ItemArr[i].Item.Name != "")
                 {
-                    for (var k = 6; k <= 45; k++)
+                    for (var k = 6; k < 45; k++)
                     {
                         if (MShare.g_ItemArr[k].Item.Name == "")
                         {
@@ -336,7 +336,7 @@ namespace BotSvr
 
         public static void AddYbDealItem(TClientItem ci)
         {
-            for (var i = 0; i <= 10 - 2; i++)
+            for (var i = 0; i < 8; i++)
             {
                 if (MShare.g_YbDealItems[i].Item.Name == "")
                 {
@@ -1142,7 +1142,7 @@ namespace BotSvr
         public static bool ChangeItemCount(int mindex, short Count, short MsgNum, string iname)
         {
             bool result = false;
-            //for (i = MShare.g_TIItems.GetLowerBound(0); i <= MShare.g_TIItems.GetUpperBound(0); i++)
+            //for (i = MShare.g_TIItems.GetLowerBound(0); i <= MShare.g_TIItems..Length(0); i++)
             //{
             //    if ((MShare.g_TIItems[i].Item.Item.Name == iname) && (MShare.g_TIItems[i].Item.Item.Overlap > 0) && (MShare.g_TIItems[i].Item.MakeIndex == mindex))
             //    {
@@ -1150,7 +1150,7 @@ namespace BotSvr
             //        result = true;
             //    }
             //}
-            //for (i = MShare.g_spItems.GetLowerBound(0); i <= MShare.g_spItems.GetUpperBound(0); i++)
+            //for (i = MShare.g_spItems.GetLowerBound(0); i <= MShare.g_spItems..Length(0); i++)
             //{
             //    if ((MShare.g_spItems[i].Item.Item.Name == iname) && (MShare.g_spItems[i].Item.Item.Overlap > 0) && (MShare.g_spItems[i].Item.MakeIndex == mindex))
             //    {

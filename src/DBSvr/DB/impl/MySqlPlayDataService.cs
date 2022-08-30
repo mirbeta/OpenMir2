@@ -609,7 +609,7 @@ namespace DBSvr.DB.impl
                         sTmp = HUtil32.GetValidStr3(sTmp, ref str, new[] { "/" });
                         HumanRCD.Data.wStatusTimeArr[i] = Convert.ToUInt16(str);
                         i++;
-                        if (i > HumanRCD.Data.wStatusTimeArr.GetUpperBound(0))
+                        if (i > HumanRCD.Data.wStatusTimeArr.Length)
                         {
                             break;
                         }
@@ -901,7 +901,7 @@ namespace DBSvr.DB.impl
                 strSql.AppendLine("(@FLD_PLAYERID,@FLD_CHARNAME, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
                 strSql.AppendLine("@FLD_VALUE6, @FLD_VALUE7, @FLD_VALUE8, @FLD_VALUE9, @FLD_VALUE10, @FLD_VALUE11, @FLD_VALUE12, @FLD_VALUE13)");
 
-                for (var i = 0; i <= hd.BagItems.GetUpperBound(0); i++)
+                for (var i = 0; i < hd.BagItems.Length; i++)
                 {
                     if ((hd.BagItems[i].wIndex > 0) && (hd.BagItems[i].MakeIndex > 0))
                     {
@@ -940,7 +940,7 @@ namespace DBSvr.DB.impl
                     }
                 }
 
-                for (var i = 0; i <= hd.HumItems.GetUpperBound(0); i++)
+                for (var i = 0; i < hd.HumItems.Length; i++)
                 {
                     if ((hd.HumItems[i].wIndex > 0) && (hd.HumItems[i].MakeIndex > 0))
                     {
@@ -1014,7 +1014,7 @@ namespace DBSvr.DB.impl
                 strSql.AppendLine("(@FLD_PLAYERID, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
                 strSql.AppendLine("@FLD_VALUE6, @FLD_VALUE7, @FLD_VALUE8, @FLD_VALUE9, @FLD_VALUE10, @FLD_VALUE11, @FLD_VALUE12, @FLD_VALUE13)");
 
-                for (var i = 0; i <= hd.StorageItems.GetUpperBound(0); i++)
+                for (var i = 0; i < hd.StorageItems.Length; i++)
                 {
                     if (hd.StorageItems[i] == null)
                     {
@@ -1074,7 +1074,7 @@ namespace DBSvr.DB.impl
                 command.ExecuteNonQuery();
                 var hd = HumanRCD.Data;
                 const string sStrSql = "INSERT INTO TBL_CHARACTER_MAGIC(FLD_PLAYERID, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES (@FLD_PLAYERID, @FLD_MAGICID, @FLD_LEVEL, @FLD_USEKEY, @FLD_CURRTRAIN)";
-                for (var i = 0; i < HumanRCD.Data.Magic.GetUpperBound(0); i++)
+                for (var i = 0; i < HumanRCD.Data.Magic.Length; i++)
                 {
                     if (HumanRCD.Data.Magic[i].wMagIdx > 0)
                     {

@@ -161,9 +161,9 @@ namespace BotSvr.Maps
                 return null;
             }
             var result = new TPathMapCell[m_MapHeader.wHeight, m_MapHeader.wWidth];
-            for (var Y = 0; Y <= (m_MapHeader.wHeight - 1); Y++)
+            for (var Y = 0; Y < (m_MapHeader.wHeight - 1); Y++)
             {
-                for (var X = 0; X <= (m_MapHeader.wWidth - 1); X++)
+                for (var X = 0; X < (m_MapHeader.wWidth - 1); X++)
                 {
                     result[Y, X].Distance = -1;
                 }

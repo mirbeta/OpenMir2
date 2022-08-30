@@ -87,7 +87,7 @@ namespace GameSvr.Player
                 UserState.GuildName = PlayObject.m_MyGuild.sGuildName;
             }
             UserState.GuildRankName = PlayObject.m_sGuildRankName;
-            for (var i = 0; i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= PlayObject.m_UseItems.Length; i++)
             {
                 TUserItem UserItem = PlayObject.m_UseItems[i];
                 if (UserItem.wIndex > 0)

@@ -1866,42 +1866,42 @@ namespace GameSvr.ScriptSystem
         /// </summary>
         private void InitializeLabel(NormNpc NPC, TQuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<TQuestActionInfo> PlayDiceList, List<TQuestActionInfo> GotoList, List<TQuestActionInfo> DelayGotoList)
         {
-            for (var i = NPC.FGotoLable.GetLowerBound(0); i <= NPC.FGotoLable.GetUpperBound(0); i++)
+            for (var i = 0; i < NPC.FGotoLable.Length; i++)
             {
                 NPC.FGotoLable[i] = -1;
             }
             //if (NPC.m_btNPCRaceServer == DataConst.NPC_RC_FUNMERCHANT)
             //{
             //    TFunMerchant FunMerchant = (TFunMerchant)NPC;
-            //    for (int i = FunMerchant.FStdModeFunc.GetLowerBound(0); i <= FunMerchant.FStdModeFunc.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FStdModeFunc.GetLowerBound(0); i <= FunMerchant.FStdModeFunc.Length; i++)
             //    {
             //        FunMerchant.FStdModeFunc[i] = -1;
             //    }
-            //    for (int i = FunMerchant.FPlayLevelUp.GetLowerBound(0); i <= FunMerchant.FPlayLevelUp.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FPlayLevelUp.GetLowerBound(0); i <= FunMerchant.FPlayLevelUp.Length; i++)
             //    {
             //        FunMerchant.FPlayLevelUp[i] = -1;
             //    }
-            //    for (int i = FunMerchant.FUserCmd.GetLowerBound(0); i <= FunMerchant.FUserCmd.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FUserCmd.GetLowerBound(0); i <= FunMerchant.FUserCmd.Length; i++)
             //    {
             //        FunMerchant.FUserCmd[i] = -1;
             //    }
-            //    for (int i = FunMerchant.FClearMission.GetLowerBound(0); i <= FunMerchant.FClearMission.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FClearMission.GetLowerBound(0); i <= FunMerchant.FClearMission.Length; i++)
             //    {
             //        FunMerchant.FClearMission[i] = -1;
             //    }
-            //    for (int i = FunMerchant.FMagSelfFunc.GetLowerBound(0); i <= FunMerchant.FMagSelfFunc.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FMagSelfFunc.GetLowerBound(0); i <= FunMerchant.FMagSelfFunc.Length; i++)
             //    {
             //        FunMerchant.FMagSelfFunc[i] = -1;
             //    }
-            //    for (int i = FunMerchant.FMagTagFunc.GetLowerBound(0); i <= FunMerchant.FMagTagFunc.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FMagTagFunc.GetLowerBound(0); i <= FunMerchant.FMagTagFunc.Length; i++)
             //    {
             //        FunMerchant.FMagTagFunc[i] = -1;
             //    }
-            //    for (int i = FunMerchant.FMagTagFuncEx.GetLowerBound(0); i <= FunMerchant.FMagTagFuncEx.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FMagTagFuncEx.GetLowerBound(0); i <= FunMerchant.FMagTagFuncEx.Length; i++)
             //    {
             //        FunMerchant.FMagTagFuncEx[i] = -1;
             //    }
-            //    for (int i = FunMerchant.FMagMonFunc.GetLowerBound(0); i <= FunMerchant.FMagMonFunc.GetUpperBound(0); i++)
+            //    for (int i = FunMerchant.FMagMonFunc.GetLowerBound(0); i <= FunMerchant.FMagMonFunc.Length; i++)
             //    {
             //        FunMerchant.FMagMonFunc[i] = -1;
             //    }
@@ -2228,7 +2228,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SSTDMODEFUNC.Length + 1 - 1, SctiptDef.SSTDMODEFUNC.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FStdModeFunc.GetLowerBound(0) && nIndex <= FunMerchant.FStdModeFunc.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FStdModeFunc.GetLowerBound(0) && nIndex <= FunMerchant.FStdModeFunc.Length)
                     //        {
                     //            FunMerchant.FStdModeFunc[nIndex] = nIdx;
                     //        }
@@ -2237,7 +2237,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SPLAYLEVELUPEX.Length + 1 - 1, SctiptDef.SPLAYLEVELUPEX.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FPlayLevelUp.GetLowerBound(0) && nIndex <= FunMerchant.FPlayLevelUp.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FPlayLevelUp.GetLowerBound(0) && nIndex <= FunMerchant.FPlayLevelUp.Length)
                     //        {
                     //            FunMerchant.FPlayLevelUp[nIndex] = nIdx;
                     //        }
@@ -2246,7 +2246,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SUSERCMD.Length + 1 - 1, SctiptDef.SUSERCMD.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FUserCmd.GetLowerBound(0) && nIndex <= FunMerchant.FUserCmd.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FUserCmd.GetLowerBound(0) && nIndex <= FunMerchant.FUserCmd.Length)
                     //        {
                     //            FunMerchant.FUserCmd[nIndex] = nIdx;
                     //        }
@@ -2255,7 +2255,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SCLEARMISSION.Length + 1 - 1, SctiptDef.SCLEARMISSION.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FClearMission.GetLowerBound(0) && nIndex <= FunMerchant.FClearMission.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FClearMission.GetLowerBound(0) && nIndex <= FunMerchant.FClearMission.Length)
                     //        {
                     //            FunMerchant.FClearMission[nIndex] = nIdx;
                     //        }
@@ -2264,7 +2264,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SMAGSELFFUNC.Length + 1 - 1, SctiptDef.SMAGSELFFUNC.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FMagSelfFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagSelfFunc.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FMagSelfFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagSelfFunc.Length)
                     //        {
                     //            FunMerchant.FMagSelfFunc[nIndex] = nIdx;
                     //        }
@@ -2273,7 +2273,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SMAGTAGFUNC.Length + 1 - 1, SctiptDef.SMAGTAGFUNC.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FMagTagFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFunc.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FMagTagFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFunc.Length)
                     //        {
                     //            FunMerchant.FMagTagFunc[nIndex] = nIdx;
                     //        }
@@ -2282,7 +2282,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SMAGTAGFUNCEX.Length + 1 - 1, SctiptDef.SMAGTAGFUNCEX.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FMagTagFuncEx.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFuncEx.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FMagTagFuncEx.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFuncEx.Length)
                     //        {
                     //            FunMerchant.FMagTagFuncEx[nIndex] = nIdx;
                     //        }
@@ -2291,7 +2291,7 @@ namespace GameSvr.ScriptSystem
                     //    {
                     //        sIdx = sLabel.Substring(SctiptDef.SMAGMONFUNC.Length + 1 - 1, SctiptDef.SMAGMONFUNC.Length);
                     //        nIndex = Convert.ToInt32(sIdx);
-                    //        if (nIndex >= FunMerchant.FMagMonFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagMonFunc.GetUpperBound(0))
+                    //        if (nIndex >= FunMerchant.FMagMonFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagMonFunc.Length)
                     //        {
                     //            FunMerchant.FMagMonFunc[nIndex] = nIdx;
                     //        }

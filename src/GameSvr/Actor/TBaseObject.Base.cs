@@ -441,7 +441,7 @@ namespace GameSvr.Actor
                         if (M2Share.g_Config.boMasterDieMutiny && (m_Master.m_LastHiter != null) && (M2Share.RandomNumber.Random(M2Share.g_Config.nMasterDieMutinyRate) == 0))
                         {
                             m_Master = null;
-                            m_btSlaveExpLevel = (byte)M2Share.g_Config.SlaveColor.GetUpperBound(0);
+                            m_btSlaveExpLevel = (byte)M2Share.g_Config.SlaveColor.Length;
                             RecalcAbilitys();
                             m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) * M2Share.g_Config.nMasterDieMutinyPower, HUtil32.HiWord(m_WAbil.DC) * M2Share.g_Config.nMasterDieMutinyPower);
                             m_nWalkSpeed = m_nWalkSpeed / M2Share.g_Config.nMasterDieMutinySpeed;
@@ -579,7 +579,7 @@ namespace GameSvr.Actor
             {
                 bool boChg = false;
                 bool boNeedRecalc = false;
-                for (var i = m_dwStatusArrTick.GetLowerBound(0); i <= m_dwStatusArrTick.GetUpperBound(0); i++)
+                for (var i = 0; i <= m_dwStatusArrTick.Length; i++)
                 {
                     if ((m_wStatusTimeArr[i] > 0) && (m_wStatusTimeArr[i] < 60000))
                     {
@@ -611,7 +611,7 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                for (var i = m_wStatusArrValue.GetLowerBound(0); i <= m_wStatusArrValue.GetUpperBound(0); i++)
+                for (var i = 0; i < m_wStatusArrValue.Length; i++)
                 {
                     if (m_wStatusArrValue[i] > 0)
                     {
@@ -1641,7 +1641,7 @@ namespace GameSvr.Actor
             bool boOldHideMode = m_boHideMode;
             m_dwPKDieLostExp = 0;
             m_nPKDieLostLevel = 0;
-            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] == null)
                 {

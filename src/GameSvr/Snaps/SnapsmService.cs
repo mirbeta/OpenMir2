@@ -37,7 +37,7 @@ namespace GameSvr.Snaps
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)
         {
-            for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
+            for (var i = 0; i < m_SrvArray.Length; i++)
             {
                 var serverMsgInfo = m_SrvArray[i];
                 if (serverMsgInfo == null)
@@ -114,7 +114,7 @@ namespace GameSvr.Snaps
         public void SendServerSocket(string msgstr)
         {
             TServerMsgInfo ServerMsgInfo;
-            for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
+            for (var i = 0; i < m_SrvArray.Length; i++)
             {
                 ServerMsgInfo = m_SrvArray[i];
                 if (ServerMsgInfo == null)
@@ -131,7 +131,7 @@ namespace GameSvr.Snaps
         private void MsgServerClientConnect(object sender, AsyncUserToken e)
         {
             TServerMsgInfo ServerMsgInfo;
-            for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
+            for (var i = 0; i < m_SrvArray.Length; i++)
             {
                 ServerMsgInfo = m_SrvArray[i];
                 if (ServerMsgInfo == null)
@@ -150,7 +150,7 @@ namespace GameSvr.Snaps
         private void MsgServerClientDisconnect(object sender, AsyncUserToken e)
         {
             TServerMsgInfo ServerMsgInfo;
-            for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
+            for (var i = 0; i < m_SrvArray.Length; i++)
             {
                 ServerMsgInfo = m_SrvArray[i];
                 if (ServerMsgInfo == null)
@@ -190,13 +190,12 @@ namespace GameSvr.Snaps
 
         public void Run()
         {
-            TServerMsgInfo ps;
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::Run";
             try
             {
-                for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
+                for (var i = 0; i < m_SrvArray.Length; i++)
                 {
-                    ps = m_SrvArray[i];
+                    var ps = m_SrvArray[i];
                     if (ps == null)
                     {
                         continue;

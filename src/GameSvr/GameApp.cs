@@ -362,7 +362,7 @@ namespace GameSvr
                         }
                         M2Share.ServerTableList[nRouteIdx].nGateCount = nGateIdx;
                         nRouteIdx++;
-                        if (nRouteIdx > M2Share.ServerTableList.GetUpperBound(0))
+                        if (nRouteIdx > M2Share.ServerTableList.Length)
                         {
                             break;
                         }

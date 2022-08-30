@@ -117,7 +117,7 @@ namespace BotSvr.Scenes.Scene
             string Str = EDcode.DeCodeString(body);
             int select = 0;
             int nChrCount = 0;
-            for (var i = 0; i <= 1; i++)
+            for (var i = 0; i < 1; i++)
             {
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref sjob, HUtil32.Backslash);

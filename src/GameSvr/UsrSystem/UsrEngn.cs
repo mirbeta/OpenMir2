@@ -2183,7 +2183,7 @@ namespace GameSvr.UsrSystem
             BagItems = HumanRcd.Data.BagItems;
             if (BagItems != null)
             {
-                for (var i = BagItems.GetLowerBound(0); i <= BagItems.GetUpperBound(0); i++)
+                for (var i = 0; i < BagItems.Length; i++)
                 {
                     if (BagItems[i] == null)
                     {
@@ -2199,7 +2199,7 @@ namespace GameSvr.UsrSystem
             HumMagic = HumanRcd.Data.Magic;
             if (HumMagic != null)
             {
-                for (var i = HumMagic.GetLowerBound(0); i <= HumMagic.GetUpperBound(0); i++)
+                for (var i = 0; i < HumMagic.Length; i++)
                 {
                     if (HumMagic[i] == null)
                     {
@@ -2221,7 +2221,7 @@ namespace GameSvr.UsrSystem
             StorageItems = HumanRcd.Data.StorageItems;
             if (StorageItems != null)
             {
-                for (var i = StorageItems.GetLowerBound(0); i <= StorageItems.GetUpperBound(0); i++)
+                for (var i = 0; i < StorageItems.Length; i++)
                 {
                     if (StorageItems[i] == null)
                     {

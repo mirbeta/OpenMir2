@@ -118,7 +118,7 @@ namespace CloudGate.Conf
             GateConfig.SyncClientSpeed = ReadBool("Switch", "SyncClientSpeed", GateConfig.SyncClientSpeed);
             GateConfig.PunishIntervalRate = ReadFloat("Switch", "PunishIntervalRate", GateConfig.PunishIntervalRate);
             GateConfig.GateCount = ReadInteger("CloudGate", "Count", GateConfig.GateCount);
-            for (var i = 0; i <= GateConfig.GateCount; i++)
+            for (var i = 0; i < GateConfig.GateCount; i++)
             {
                 GameGateList[i].ServerAdress = ReadString("CloudGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
                 GameGateList[i].ServerPort = ReadInteger("CloudGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
@@ -126,7 +126,7 @@ namespace CloudGate.Conf
                 GameGateList[i].GatePort = ReadInteger("CloudGate", "GatePort" + (i + 1), GameGateList[i].GatePort);
             }
             //魔法间隔控制
-            for (var i = 0; i <= TableDef.MaigicDelayTimeList.GetUpperBound(0); i++)
+            for (var i = 0; i < TableDef.MaigicDelayTimeList.Length; i++)
             {
                 if (!string.IsNullOrEmpty(TableDef.MaigicNameList[i]))
                 {
@@ -152,7 +152,7 @@ namespace CloudGate.Conf
         private void SaveConfig()
         {
             WriteInteger("CloudGate", "Count", GateConfig.GateCount);
-            for (var i = 0; i <= GateConfig.GateCount; i++)
+            for (var i = 0; i < GateConfig.GateCount; i++)
             {
                 WriteString("CloudGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
                 WriteInteger("CloudGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
@@ -239,7 +239,7 @@ namespace CloudGate.Conf
             WriteBool("Switch", "SyncClientSpeed", GateConfig.SyncClientSpeed);
             WriteInteger("Switch", "PunishIntervalRate", GateConfig.PunishIntervalRate);
             //魔法间隔控制
-            for (var i = 0; i <= TableDef.MaigicDelayTimeList.GetUpperBound(0); i++)
+            for (var i = 0; i < TableDef.MaigicDelayTimeList.Length; i++)
             {
                 if (!string.IsNullOrEmpty(TableDef.MaigicNameList[i]))
                 {

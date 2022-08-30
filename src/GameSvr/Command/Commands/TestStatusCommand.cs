@@ -21,7 +21,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
 
-            //if ((!(nType >= Grobal2.ushort.GetLowerBound(0) && nType<= Grobal2.ushort.GetUpperBound(0))) || (nTime < 0))
+            //if ((!(nType >= Grobal2.ushort.GetLowerBound(0) && nType<= Grobal2.ushort..Length)) || (nTime < 0))
             //{
             //    this.SysMsg("命令格式: @" + sCmd + " 类型(0..11) 时长", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;

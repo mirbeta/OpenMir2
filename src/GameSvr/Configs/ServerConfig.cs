@@ -331,7 +331,7 @@ namespace GameSvr.Configs
                 WriteInteger("Setup", "MonUpLvRate", M2Share.g_Config.nMonUpLvRate);
             }
             M2Share.g_Config.nMonUpLvRate = ReadInteger("Setup", "MonUpLvRate", M2Share.g_Config.nMonUpLvRate);
-            for (var i = M2Share.g_Config.MonUpLvNeedKillCount.GetLowerBound(0); i <= M2Share.g_Config.MonUpLvNeedKillCount.GetUpperBound(0); i++)
+            for (var i = 0; i < M2Share.g_Config.MonUpLvNeedKillCount.Length; i++)
             {
                 if (ReadInteger("Setup", "MonUpLvNeedKillCount" + i, -1) < 0)
                 {
@@ -339,7 +339,7 @@ namespace GameSvr.Configs
                 }
                 M2Share.g_Config.MonUpLvNeedKillCount[i] = ReadInteger("Setup", "MonUpLvNeedKillCount" + i, M2Share.g_Config.MonUpLvNeedKillCount[i]);
             }
-            for (var i = M2Share.g_Config.SlaveColor.GetLowerBound(0); i <= M2Share.g_Config.SlaveColor.GetUpperBound(0); i++)
+            for (var i = 0; i < M2Share.g_Config.SlaveColor.Length; i++)
             {
                 if (ReadInteger("Setup", "SlaveColor" + i, -1) < 0)
                 {
@@ -450,7 +450,7 @@ namespace GameSvr.Configs
                 WriteInteger("Setup", "StartPointSize", M2Share.g_Config.nStartPointSize);
             M2Share.g_Config.nStartPointSize =
                 ReadInteger("Setup", "StartPointSize", M2Share.g_Config.nStartPointSize);
-            for (var i = M2Share.g_Config.ReNewNameColor.GetLowerBound(0); i <= M2Share.g_Config.ReNewNameColor.GetUpperBound(0); i++)
+            for (var i = 0; i < M2Share.g_Config.ReNewNameColor.Length; i++)
             {
                 if (ReadInteger("Setup", "ReNewNameColor" + i, -1) < 0)
                 {
@@ -876,7 +876,7 @@ namespace GameSvr.Configs
                 WriteInteger("Setup", "SkeletonCount", M2Share.g_Config.nSkeletonCount);
             }
             M2Share.g_Config.nSkeletonCount = ReadInteger("Setup", "SkeletonCount", M2Share.g_Config.nSkeletonCount);
-            for (var i = M2Share.g_Config.SkeletonArray.GetLowerBound(0); i <= M2Share.g_Config.SkeletonArray.GetUpperBound(0); i++)
+            for (var i = 0; i < M2Share.g_Config.SkeletonArray.Length; i++)
             {
                 if (ReadInteger("Setup", "SkeletonHumLevel" + i, -1) < 0)
                 {
@@ -904,7 +904,7 @@ namespace GameSvr.Configs
                 WriteInteger("Setup", "DragonCount", M2Share.g_Config.nDragonCount);
             }
             M2Share.g_Config.nDragonCount = ReadInteger("Setup", "DragonCount", M2Share.g_Config.nDragonCount);
-            for (var i = M2Share.g_Config.DragonArray.GetLowerBound(0); i <= M2Share.g_Config.DragonArray.GetUpperBound(0); i++)
+            for (var i = 0; i < M2Share.g_Config.DragonArray.Length; i++)
             {
                 if (ReadInteger("Setup", "DragonHumLevel" + i, -1) < 0)
                 {

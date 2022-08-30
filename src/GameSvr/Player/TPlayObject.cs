@@ -411,7 +411,7 @@ namespace GameSvr.Player
                 return;
             }
             m_bopirit = false;
-            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.Length; i++)
             {
                 UseItem = m_UseItems[i];
                 if (UseItem == null)
@@ -1132,7 +1132,7 @@ namespace GameSvr.Player
         internal void SendUseitems()
         {
             string sSendMsg = string.Empty;
-            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
@@ -2131,7 +2131,7 @@ namespace GameSvr.Player
             int result;
             var n14 = 0;
             StdItem StdItem;
-            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.Length; i++)
             {
                 if (nWhere == -1 || !(i == nWhere) && !(i == 1) && !(i == 2))
                 {
@@ -2751,7 +2751,7 @@ namespace GameSvr.Player
                     break;
                 }
             }
-            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] == CheckItem)
                 {
@@ -2905,7 +2905,7 @@ namespace GameSvr.Player
             }
             for (var i = 0; i < this.m_StorageItemList.Count; i++)
             {
-                if (i >= StorageItems.GetUpperBound(0))
+                if (i >= StorageItems.Length)
                 {
                     break;
                 }
