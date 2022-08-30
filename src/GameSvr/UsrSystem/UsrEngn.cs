@@ -33,8 +33,8 @@ namespace GameSvr.UsrSystem
         private readonly IList<TGoldChangeInfo> m_ChangeHumanDBGoldList;
         private readonly IList<TSwitchDataInfo> m_ChangeServerList;
         private int m_dwProcessLoadPlayTick;
-        private readonly ArrayList m_ListOfGateIdx;
-        private readonly ArrayList m_ListOfSocket;
+        private readonly IList<int> m_ListOfGateIdx;
+        private readonly IList<int> m_ListOfSocket;
         /// <summary>
         /// 从DB读取人物数据
         /// </summary>
@@ -83,7 +83,7 @@ namespace GameSvr.UsrSystem
         public IList<NormNpc> QuestNPCList;
         public IList<GoodItem> StdItemList;
         public long m_dwAILogonTick;//处理假人间隔
-        public IList<TAILogon> m_UserLogonList;//假人列表
+        private readonly IList<RoBotLogon> m_UserLogonList;//假人列表
         private readonly Thread _userEngineThread;
         private readonly Thread _processAiThread;
 
@@ -122,11 +122,11 @@ namespace GameSvr.UsrSystem
             dwProcessNpcTimeMin = 0;
             dwProcessNpcTimeMax = 0;
             m_NewHumanList = new List<TPlayObject>();
-            m_ListOfGateIdx = new ArrayList();
-            m_ListOfSocket = new ArrayList();
+            m_ListOfGateIdx = new List<int>();
+            m_ListOfSocket = new List<int>();
             OldMagicList = new ArrayList();
             m_OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
-            m_UserLogonList = new List<TAILogon>();
+            m_UserLogonList = new List<RoBotLogon>();
             _userEngineThread = new Thread(PrcocessData) { IsBackground = true };
             _processAiThread = new Thread(ProcessAiPlayObjectData) { IsBackground = true };
             m_AiPlayObjectList = new List<TPlayObject>();
@@ -298,7 +298,6 @@ namespace GameSvr.UsrSystem
                 {
                     SwitchDataInfo = null;
                 }
-                Envirnoment Envir = null;
                 if (SwitchDataInfo == null)
                 {
                     GetHumData(PlayObject, ref UserOpenInfo.HumanRcd);
@@ -329,7 +328,7 @@ namespace GameSvr.UsrSystem
                             PlayObject.m_boNewHuman = true;
                         }
                     }
-                    Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
+                    Envirnoment Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
                     if (Envir != null)
                     {
                         PlayObject.m_sMapFileName = Envir.MSMapFileName;
@@ -456,7 +455,7 @@ namespace GameSvr.UsrSystem
                     PlayObject.m_WAbil = SwitchDataInfo.Abil;
                     LoadSwitchData(SwitchDataInfo, ref PlayObject);
                     DelSwitchData(SwitchDataInfo);
-                    Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
+                    Envirnoment Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
                     if (Envir != null)
                     {
                         M2Share.MainOutMessage(string.Format(sChangeServerFail3,
@@ -563,11 +562,11 @@ namespace GameSvr.UsrSystem
                         m_LoadPlayList.Clear();
                         for (var i = 0; i < m_ChangeHumanDBGoldList.Count; i++)
                         {
-                            var GoldChangeInfo = m_ChangeHumanDBGoldList[i];
-                            PlayObject = GetPlayObject(GoldChangeInfo.sGameMasterName);
+                            var goldChangeInfo = m_ChangeHumanDBGoldList[i];
+                            PlayObject = GetPlayObject(goldChangeInfo.sGameMasterName);
                             if (PlayObject != null)
-                                PlayObject.GoldChange(GoldChangeInfo.sGetGoldUser, GoldChangeInfo.nGold);
-                            GoldChangeInfo = null;
+                                PlayObject.GoldChange(goldChangeInfo.sGetGoldUser, goldChangeInfo.nGold);
+                            goldChangeInfo = null;
                         }
                         m_ChangeHumanDBGoldList.Clear();
                     }
@@ -603,8 +602,8 @@ namespace GameSvr.UsrSystem
                     m_dwAILogonTick = HUtil32.GetTickCount();
                     if (m_UserLogonList.Count > 0)
                     {
-                        var AI = m_UserLogonList[0];
-                        RegenAIObject(AI);
+                        var roBot = m_UserLogonList[0];
+                        RegenAIObject(roBot);
                         m_UserLogonList.RemoveAt(0);
                     }
                 }
@@ -2726,18 +2725,18 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public void AddAILogon(TAILogon AI)
+        public void AddAILogon(RoBotLogon AI)
         {
             m_UserLogonList.Add(AI);
         }
 
-        private bool RegenAIObject(TAILogon AI)
+        private bool RegenAIObject(RoBotLogon AI)
         {
             var PlayObject = AddAIPlayObject(AI);
             if (PlayObject != null)
             {
                 PlayObject.m_sHomeMap = GetHomeInfo(ref PlayObject.m_nHomeX, ref PlayObject.m_nHomeY);
-                PlayObject.m_sUserID = "假人";
+                PlayObject.m_sUserID = "假人" + AI.sCharName;
                 PlayObject.Start(TPathType.t_Dynamic);
                 m_AiPlayObjectList.Add(PlayObject);
                 return true;
@@ -2745,112 +2744,107 @@ namespace GameSvr.UsrSystem
             return false;
         }
 
-        private RobotPlayObject AddAIPlayObject(TAILogon AI)
+        private RobotPlayObject AddAIPlayObject(RoBotLogon AI)
         {
             int n1C;
             int n20;
             int n24;
             object p28;
-            RobotPlayObject result = null;
-            var Map = M2Share.MapManager.FindMap(AI.sMapName);
-            if (Map == null)
+            var envirnoment = M2Share.MapManager.FindMap(AI.sMapName);
+            if (envirnoment == null)
             {
-                return result;
+                return null;
             }
             RobotPlayObject Cert = new RobotPlayObject();
-            if (Cert != null)
+            Cert.m_PEnvir = envirnoment;
+            Cert.m_sMapName = AI.sMapName;
+            Cert.m_nCurrX = AI.nX;
+            Cert.m_nCurrY = AI.nY;
+            Cert.Direction = (byte)(new System.Random(8)).Next();
+            Cert.m_sCharName = AI.sCharName;
+            Cert.m_WAbil = Cert.m_Abil;
+            if ((new System.Random(100)).Next() < Cert.m_btCoolEye)
             {
-                Cert.m_PEnvir = Map;
-                Cert.m_sMapName = AI.sMapName;
-                Cert.m_nCurrX = AI.nX;
-                Cert.m_nCurrY = AI.nY;
-                Cert.Direction = (byte)(new System.Random(8)).Next();
-                Cert.m_sCharName = AI.sCharName;
-                Cert.m_WAbil = Cert.m_Abil;
-                if ((new System.Random(100)).Next() < Cert.m_btCoolEye)
+                Cert.m_boCoolEye = true;
+            }
+            //Cert.m_sIPaddr = GetIPAddr;// Mac问题
+            //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
+            Cert.m_sConfigFileName = AI.sConfigFileName;
+            Cert.m_sHeroConfigFileName = AI.sHeroConfigFileName;
+            Cert.m_sFilePath = AI.sFilePath;
+            Cert.m_sConfigListFileName = AI.sConfigListFileName;
+            Cert.m_sHeroConfigListFileName = AI.sHeroConfigListFileName;
+            // 英雄配置列表目录
+            Cert.Initialize();
+            Cert.RecalcLevelAbilitys();
+            Cert.RecalcAbilitys();
+            Cert.m_WAbil.HP = Cert.m_WAbil.MaxHP;
+            Cert.m_WAbil.MP = Cert.m_WAbil.MaxMP;
+            if (Cert.m_boAddtoMapSuccess)
+            {
+                p28 = null;
+                if (Cert.m_PEnvir.WWidth < 50)
                 {
-                    Cert.m_boCoolEye = true;
+                    n20 = 2;
                 }
-                //Cert.m_sIPaddr = GetIPAddr;// Mac问题
-                //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
-                Cert.m_sConfigFileName = AI.sConfigFileName;
-                Cert.m_sHeroConfigFileName = AI.sHeroConfigFileName;
-                Cert.m_sFilePath = AI.sFilePath;
-                Cert.m_sConfigListFileName = AI.sConfigListFileName;
-                Cert.m_sHeroConfigListFileName = AI.sHeroConfigListFileName;
-                // 英雄配置列表目录
-                Cert.Initialize();
-                Cert.RecalcLevelAbilitys();
-                Cert.RecalcAbilitys();
-                Cert.m_WAbil.HP = Cert.m_WAbil.MaxHP;
-                Cert.m_WAbil.MP = Cert.m_WAbil.MaxMP;
-                if (Cert.m_boAddtoMapSuccess)
+                else
                 {
-                    p28 = null;
-                    if (Cert.m_PEnvir.WWidth < 50)
+                    n20 = 3;
+                }
+                if ((Cert.m_PEnvir.WHeight < 250))
+                {
+                    if ((Cert.m_PEnvir.WHeight < 30))
                     {
-                        n20 = 2;
+                        n24 = 2;
                     }
                     else
                     {
-                        n20 = 3;
+                        n24 = 20;
                     }
-                    if ((Cert.m_PEnvir.WHeight < 250))
+                }
+                else
+                {
+                    n24 = 50;
+                }
+                n1C = 0;
+                while (true)
+                {
+                    if (!Cert.m_PEnvir.CanWalk(Cert.m_nCurrX, Cert.m_nCurrY, false))
                     {
-                        if ((Cert.m_PEnvir.WHeight < 30))
+                        if ((Cert.m_PEnvir.WWidth - n24 - 1) > Cert.m_nCurrX)
                         {
-                            n24 = 2;
+                            Cert.m_nCurrX += (short)n20;
                         }
                         else
                         {
-                            n24 = 20;
-                        }
-                    }
-                    else
-                    {
-                        n24 = 50;
-                    }
-                    n1C = 0;
-                    while (true)
-                    {
-                        if (!Cert.m_PEnvir.CanWalk(Cert.m_nCurrX, Cert.m_nCurrY, false))
-                        {
-                            if ((Cert.m_PEnvir.WWidth - n24 - 1) > Cert.m_nCurrX)
+                            Cert.m_nCurrX = (byte)((new System.Random(Cert.m_PEnvir.WWidth / 2)).Next() + n24);
+                            if (Cert.m_PEnvir.WHeight - n24 - 1 > Cert.m_nCurrY)
                             {
-                                Cert.m_nCurrX += (short)n20;
+                                Cert.m_nCurrY += (short)n20;
                             }
                             else
                             {
-                                Cert.m_nCurrX = (byte)((new System.Random(Cert.m_PEnvir.WWidth / 2)).Next() + n24);
-                                if (Cert.m_PEnvir.WHeight - n24 - 1 > Cert.m_nCurrY)
-                                {
-                                    Cert.m_nCurrY += (short)n20;
-                                }
-                                else
-                                {
-                                    Cert.m_nCurrY = (byte)((new System.Random(Cert.m_PEnvir.WHeight / 2)).Next() + n24);
-                                }
+                                Cert.m_nCurrY = (byte)((new System.Random(Cert.m_PEnvir.WHeight / 2)).Next() + n24);
                             }
                         }
-                        else
-                        {
-                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.OS_MOVINGOBJECT, Cert);
-                            break;
-                        }
-                        n1C++;
-                        if (n1C >= 31)
-                        {
-                            break;
-                        }
                     }
-                    if (p28 == null)
+                    else
                     {
-                        Cert = null;
+                        p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.OS_MOVINGOBJECT, Cert);
+                        break;
+                    }
+                    n1C++;
+                    if (n1C >= 31)
+                    {
+                        break;
                     }
                 }
+                if (p28 == null)
+                {
+                    Cert = null;
+                }
             }
-            result = Cert;
-            return result;
+            return Cert;
         }
 
         public void SendQuestMsg(string sQuestName)
@@ -2881,11 +2875,9 @@ namespace GameSvr.UsrSystem
 
         private void ClearMerchantData()
         {
-            Merchant Merchant;
             for (var i = 0; i < m_MerchantList.Count; i++)
             {
-                Merchant = m_MerchantList[i];
-                Merchant.ClearData();
+                m_MerchantList[i].ClearData();
             }
         }
 

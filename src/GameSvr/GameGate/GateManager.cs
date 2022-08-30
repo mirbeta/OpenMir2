@@ -20,7 +20,6 @@ namespace GameSvr.GameGate
         private readonly SocketServer _gateSocket = null;
         private readonly object m_RunSocketSection = null;
         private readonly Channel<ReceiveData> _receiveQueue;
-        private Task _startMessageQueueTask;
         private readonly ConcurrentDictionary<int, GateService> _gateService;
 
         private GateManager()
@@ -37,15 +36,15 @@ namespace GameSvr.GameGate
             _gateSocket.Init();
         }
 
-        public void Start()
+        public void Start(CancellationToken stoppingToken)
         {
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
+            StartMessageThread(stoppingToken);
             M2Share.MainOutMessage($"游戏网关[{ M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
         }
 
         public void Stop()
         {
-            _startMessageQueueTask.Dispose();
             _gateSocket.Shutdown();
         }
 
@@ -267,8 +266,8 @@ namespace GameSvr.GameGate
             {
                 return;
             }
-            var dataService = _gateService[nGateIdx];
-            dataService?.SetGateUserList(nSocket, PlayObject);
+            var gameGate = _gateService[nGateIdx];
+            gameGate.SetGateUserList(nSocket, PlayObject);
         }
 
         public void Run()
@@ -385,15 +384,15 @@ namespace GameSvr.GameGate
         /// <summary>
         /// 处理GameGate发过来的消息
         /// </summary>
-        public void StartMessageQueue(CancellationToken cancellation)
+        private void StartMessageThread(CancellationToken cancellation)
         {
-            _startMessageQueueTask = Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(async () =>
             {
                 while (await _receiveQueue.Reader.WaitToReadAsync(cancellation))
                 {
                     while (_receiveQueue.Reader.TryRead(out var message))
                     {
-                       // ExecGateBuffers(message.Packet, message.Data);
+                        // ExecGateBuffers(message.Packet, message.Data);
                     }
                 }
             }, cancellation);

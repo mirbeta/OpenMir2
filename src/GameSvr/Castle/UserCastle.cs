@@ -337,7 +337,6 @@ namespace GameSvr.Castle
 
         public void Run()
         {
-            string s20;
             const string sWarStartMsg = "[{0} 攻城战已经开始]";
             const string sWarStopTimeMsg = "[{0} 攻城战离结束还有{1}分钟]";
             const string sExceptionMsg = "[Exception] TUserCastle::Run";
@@ -386,7 +385,7 @@ namespace GameSvr.Castle
                             StartWallconquestWar();
                             SaveAttackSabukWall();
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
-                            s20 = string.Format(sWarStartMsg, m_sName);
+                            var s20 = string.Format(sWarStartMsg, m_sName);
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
@@ -418,7 +417,7 @@ namespace GameSvr.Castle
                         if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             m_boShowOverMsg = true;
-                            s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
+                            var s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);

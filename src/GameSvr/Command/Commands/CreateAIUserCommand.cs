@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
                 short nX = 0;
                 short nY = 0;
                 var sMapName = M2Share.UserEngine.GetHomeInfo(ref nX, ref nY);
-                M2Share.UserEngine.AddAILogon(new TAILogon()
+                M2Share.UserEngine.AddAILogon(new RoBotLogon()
                 {
                     sCharName = "玩家" + RandomNumber.GetInstance().Random() + "号",
                     sConfigFileName = "",

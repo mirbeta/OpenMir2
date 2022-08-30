@@ -13,6 +13,7 @@ using GameSvr.Robots;
 using GameSvr.Services;
 using GameSvr.Snaps;
 using GameSvr.UsrSystem;
+using Microsoft.Extensions.Logging;
 using System.Collections;
 using System.Collections.Concurrent;
 using SystemModule;
@@ -24,6 +25,11 @@ namespace GameSvr
 {
     public class GameApp : ServerBase
     {
+        protected GameApp(ILogger<ServerBase> logger) : base(logger)
+        {
+            
+        }
+        
         public void Initialize()
         {
             int nCode;
@@ -34,57 +40,57 @@ namespace GameSvr
             M2Share.LoadDenyAccountList();
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
-            M2Share.MainOutMessage("正在加载物品数据库...");
+            _logger.LogInformation("正在加载物品数据库...");
             nCode = M2Share.CommonDB.LoadItemsDB();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("物品数据库加载失败!!!" + "Code: " + nCode);
+                _logger.LogInformation("物品数据库加载失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
-            M2Share.MainOutMessage("正在加载数据图文件...");
+            _logger.LogInformation($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
+            _logger.LogInformation("正在加载数据图文件...");
             nCode = Maps.Maps.LoadMinMap();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("小地图数据加载失败!!!" + "Code: " + nCode);
+                _logger.LogInformation("小地图数据加载失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage("小地图数据加载成功...");
-            M2Share.MainOutMessage("正在加载地图数据...");
+            _logger.LogInformation("小地图数据加载成功...");
+            _logger.LogInformation("正在加载地图数据...");
             nCode = Maps.Maps.LoadMapInfo();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("地图数据加载失败!!!" + "Code: " + nCode);
+                _logger.LogInformation("地图数据加载失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage($"地图数据加载成功({M2Share.MapManager.Maps.Count})...");
-            M2Share.MainOutMessage("正在加载怪物数据库...");
+            _logger.LogInformation($"地图数据加载成功({M2Share.MapManager.Maps.Count})...");
+            _logger.LogInformation("正在加载怪物数据库...");
             nCode = M2Share.CommonDB.LoadMonsterDB();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("加载怪物数据库失败!!!" + "Code: " + nCode);
+                _logger.LogInformation("加载怪物数据库失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
-            M2Share.MainOutMessage("正在加载技能数据库...");
+            _logger.LogInformation($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
+            _logger.LogInformation("正在加载技能数据库...");
             nCode = M2Share.CommonDB.LoadMagicDB();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("加载技能数据库失败!!!" + "Code: " + nCode);
+                _logger.LogInformation("加载技能数据库失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
-            M2Share.MainOutMessage("正在加载怪物刷新配置信息...");
+            _logger.LogInformation($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
+            _logger.LogInformation("正在加载怪物刷新配置信息...");
             nCode = M2Share.LocalDB.LoadMonGen();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
+                _logger.LogInformation("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage($"加载怪物刷新配置信息成功({M2Share.UserEngine.m_MonGenList.Count})...");
-            M2Share.MainOutMessage("正加载怪物说话配置信息...");
+            _logger.LogInformation($"加载怪物刷新配置信息成功({M2Share.UserEngine.m_MonGenList.Count})...");
+            _logger.LogInformation("正加载怪物说话配置信息...");
             M2Share.LoadMonSayMsg();
-            M2Share.MainOutMessage($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
+            _logger.LogInformation($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
             M2Share.LoadDisableTakeOffList();
             M2Share.LoadMonDropLimitList();
             M2Share.LoadDisableMakeItem();
@@ -98,59 +104,59 @@ namespace GameSvr
             M2Share.LoadItemBindCharName();
             M2Share.LoadUnMasterList();
             M2Share.LoadUnForceMasterList();
-            M2Share.MainOutMessage("正在加载捆装物品信息...");
+            _logger.LogInformation("正在加载捆装物品信息...");
             nCode = M2Share.LocalDB.LoadUnbindList();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("加载捆装物品信息失败!!!" + "Code: " + nCode);
+                _logger.LogInformation("加载捆装物品信息失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage("加载捆装物品信息成功...");
-            M2Share.MainOutMessage("加载物品寄售系统...");
+            _logger.LogInformation("加载捆装物品信息成功...");
+            _logger.LogInformation("加载物品寄售系统...");
             M2Share.CommonDB.LoadSellOffItemList();
-            M2Share.MainOutMessage("正在加载任务地图信息...");
+            _logger.LogInformation("正在加载任务地图信息...");
             nCode = M2Share.LocalDB.LoadMapQuest();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("加载任务地图信息失败!!!");
+                _logger.LogInformation("加载任务地图信息失败!!!");
                 return;
             }
-            M2Share.MainOutMessage("加载任务地图信息成功...");
-            M2Share.MainOutMessage("正在加载任务说明信息...");
+            _logger.LogInformation("加载任务地图信息成功...");
+            _logger.LogInformation("正在加载任务说明信息...");
             nCode = M2Share.LocalDB.LoadQuestDiary();
             if (nCode < 0)
             {
-                M2Share.MainOutMessage("加载任务说明信息失败!!!");
+                _logger.LogInformation("加载任务说明信息失败!!!");
                 return;
             }
-            M2Share.MainOutMessage("加载任务说明信息成功...");
+            _logger.LogInformation("加载任务说明信息成功...");
             if (LoadAbuseInformation(".\\!abuse.txt"))
             {
-                M2Share.MainOutMessage("加载文字过滤信息成功...");
+                _logger.LogInformation("加载文字过滤信息成功...");
             }
-            M2Share.MainOutMessage("正在加载公告提示信息...");
+            _logger.LogInformation("正在加载公告提示信息...");
             if (!M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
             {
-                M2Share.MainOutMessage("加载公告提示信息失败!!!");
+                _logger.LogInformation("加载公告提示信息失败!!!");
             }
-            M2Share.MainOutMessage("加载公告提示信息成功...");
+            _logger.LogInformation("加载公告提示信息成功...");
             M2Share.LocalDB.LoadAdminList();
-            M2Share.MainOutMessage("管理员列表加载成功...");
+            _logger.LogInformation("管理员列表加载成功...");
             M2Share.GuildManager.LoadGuildInfo();
-            M2Share.MainOutMessage("行会列表加载成功...");
+            _logger.LogInformation("行会列表加载成功...");
             M2Share.CastleManager.LoadCastleList();
-            M2Share.MainOutMessage("城堡列表加载成功...");
+            _logger.LogInformation("城堡列表加载成功...");
             M2Share.CastleManager.Initialize();
-            M2Share.MainOutMessage("城堡城初始完成...");
+            _logger.LogInformation("城堡城初始完成...");
             if (M2Share.nServerIndex == 0)
             {
                 SnapsmService.Instance.StartSnapsServer();
-                M2Share.MainOutMessage("当前服务器运行主节点模式...");
+                _logger.LogInformation("当前服务器运行主节点模式...");
             }
             else
             {
                 SnapsmClient.Instance.ConnectMsgServer();
-                M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
+                _logger.LogInformation($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
             }
         }
 
@@ -159,39 +165,38 @@ namespace GameSvr
             try
             {
                 IdSrvClient.Instance.Initialize();
-                M2Share.MainOutMessage("登录服务器连接初始化完成...");
+                _logger.LogInformation("登录服务器连接初始化完成...");
                 M2Share.MapManager.LoadMapDoor();
-                M2Share.MainOutMessage("地图环境加载成功...");
+                _logger.LogInformation("地图环境加载成功...");
                 MakeStoneMines();
-                M2Share.MainOutMessage("矿物数据初始成功...");
+                _logger.LogInformation("矿物数据初始成功...");
                 M2Share.LocalDB.LoadMerchant();
-                M2Share.MainOutMessage("交易NPC列表加载成功...");
+                _logger.LogInformation("交易NPC列表加载成功...");
                 if (!M2Share.g_Config.boVentureServer)
                 {
                     M2Share.LocalDB.LoadGuardList();
-                    M2Share.MainOutMessage("守卫列表加载成功...");
+                    _logger.LogInformation("守卫列表加载成功...");
                 }
                 M2Share.LocalDB.LoadNpcs();
-                M2Share.MainOutMessage("管理NPC列表加载成功...");
+                _logger.LogInformation("管理NPC列表加载成功...");
                 M2Share.LocalDB.LoadMakeItem();
-                M2Share.MainOutMessage("炼制物品信息加载成功...");
+                _logger.LogInformation("炼制物品信息加载成功...");
                 M2Share.LocalDB.LoadStartPoint();
-                M2Share.MainOutMessage("回城点配置加载成功...");
-                M2Share.MainOutMessage("正在初始安全区光圈...");
+                _logger.LogInformation("回城点配置加载成功...");
+                _logger.LogInformation("正在初始安全区光圈...");
                 M2Share.MapManager.MakeSafePkZone();
-                M2Share.MainOutMessage("安全区光圈初始化成功...");
+                _logger.LogInformation("安全区光圈初始化成功...");
                 M2Share.FrontEngine.Start();
-                M2Share.MainOutMessage("人物数据引擎启动成功...");
+                _logger.LogInformation("人物数据引擎启动成功...");
                 M2Share.UserEngine.Initialize();
-                M2Share.MainOutMessage("游戏处理引擎初始化成功...");
-                M2Share.MainOutMessage(M2Share.g_sVersion);
-                M2Share.MainOutMessage(M2Share.g_sUpDateTime);
+                _logger.LogInformation("游戏处理引擎初始化成功...");
+                _logger.LogInformation(M2Share.g_sVersion);
+                _logger.LogInformation(M2Share.g_sUpDateTime);
                 M2Share.boStartReady = true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw new Exception(ex.Message);
+                _logger.LogError(ex.Source);
             }
         }
 
@@ -367,7 +372,7 @@ namespace GameSvr
         }
 
         /// <summary>
-        /// 加载文字过滤配置
+        /// 读取文字过滤配置
         /// </summary>
         /// <param name="FileName"></param>
         /// <returns></returns>
@@ -397,16 +402,6 @@ namespace GameSvr
                 result = true;
             }
             return result;
-        }
-
-        private void StatisticTime()
-        {
-            var sc = new System.Text.StringBuilder();
-            //sc.AppendLine($"({M2Share.UserEngine.MonsterCount}) {M2Share.UserEngine.OnlinePlayObject} / {M2Share.UserEngine.PlayObjectCount}  [{M2Share.UserEngine.LoadPlayCount}/{M2Share.UserEngine.m_PlayObjectFreeList.Count}]");
-            //sc.AppendLine("Run:{0}/{1} Soc:{2}/{3} Usr:{4}/{5}",M2Share.nRunTimeMin, M2Share.nRunTimeMax, M2Share.g_nSockCountMin, M2Share.g_nSockCountMax,M2Share. g_nUsrTimeMin, M2Share.g_nUsrTimeMax);
-            sc.AppendLine(
-                $"Hum:{M2Share.g_nHumCountMin}/{M2Share.g_nHumCountMax} UsrRot:{M2Share.dwUsrRotCountMin}/{M2Share.dwUsrRotCountMax} Merch:{M2Share.UserEngine.dwProcessMerchantTimeMin}/{M2Share.UserEngine.dwProcessMerchantTimeMax} Npc:{M2Share.UserEngine.dwProcessNpcTimeMin}/{M2Share.UserEngine.dwProcessNpcTimeMax} ({M2Share.g_nProcessHumanLoopTime})");
-            //sc.AppendLine("MonG:{0}/{1}/{2} MonP:{3}/{4}/{5} ObjRun:{6}/{7}", M2Share.g_nMonGenTime, M2Share.g_nMonGenTimeMin, M2Share.g_nMonGenTimeMax, M2Share.g_nMonProcTime, M2Share.g_nMonProcTimeMin, M2Share.g_nMonProcTimeMax, M2Share.g_nBaseObjTimeMin, M2Share.g_nBaseObjTimeMax);
         }
     }
 }

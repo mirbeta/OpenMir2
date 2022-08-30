@@ -1743,7 +1743,7 @@ namespace GameSvr.Player
             GoodItem Item;
             TClientItem ClientItem = null;
             TUserItem UserItem;
-            string sSendMsg = String.Empty;
+            string sSendMsg = string.Empty;
             for (var i = 0; i < m_StorageItemList.Count; i++)
             {
                 UserItem = m_StorageItemList[i];
@@ -1831,7 +1831,6 @@ namespace GameSvr.Player
         private bool CheckTakeOnItems(int nWhere, ref TStdItem StdItem)
         {
             var result = false;
-            TUserCastle Castle;
             if (StdItem.StdMode == 10 && Gender != PlayGender.Man)
             {
                 SysMsg(M2Share.sWearNotOfWoMan, MsgColor.Red, MsgType.Hint);
@@ -1858,7 +1857,6 @@ namespace GameSvr.Player
                     return false;
                 }
             }
-            Castle = M2Share.CastleManager.IsCastleMember(this);
             switch (StdItem.Need)
             {
                 case 0:
@@ -2067,7 +2065,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 7:
-                    if (m_MyGuild != null && Castle != null)
+                    if (m_MyGuild != null && M2Share.CastleManager.IsCastleMember(this) != null)
                     {
                         result = true;
                     }
@@ -2077,7 +2075,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 70:
-                    if (m_MyGuild != null && Castle != null && m_nGuildRankNo == 1)
+                    if (m_MyGuild != null && M2Share.CastleManager.IsCastleMember(this) != null && m_nGuildRankNo == 1)
                     {
                         if (m_Abil.Level >= StdItem.NeedLevel)
                         {
@@ -2540,7 +2538,7 @@ namespace GameSvr.Player
             var result = M2Share.RandomNumber.Random(M2Share.g_Config.nStoneGeneralDuraRate) + M2Share.g_Config.nStoneMinDura;
             if (M2Share.RandomNumber.Random(M2Share.g_Config.nStoneAddDuraRate) == 0)
             {
-                result = result + M2Share.RandomNumber.Random(M2Share.g_Config.nStoneAddDuraMax);
+                result += M2Share.RandomNumber.Random(M2Share.g_Config.nStoneAddDuraMax);
             }
             return (ushort)result;
         }
@@ -2550,7 +2548,7 @@ namespace GameSvr.Player
         /// </summary>
         private void MakeMine()
         {
-            TUserItem UserItem;
+            TUserItem UserItem = null;
             if (m_ItemList.Count >= Grobal2.MAXBAGITEM)
             {
                 return;
@@ -2703,9 +2701,12 @@ namespace GameSvr.Player
             }
         }
 
+        /// <summary>
+        /// 检查任务物品
+        /// </summary>
+        /// <returns></returns>
         public TUserItem QuestCheckItem(string sItemName, ref int nCount, ref int nParam, ref int nDura)
         {
-            TUserItem UserItem;
             string s1C;
             TUserItem result = null;
             nParam = 0;
@@ -2713,7 +2714,7 @@ namespace GameSvr.Player
             nCount = 0;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
+                var UserItem = m_ItemList[i];
                 s1C = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
                 if (string.Compare(s1C, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -3191,7 +3192,7 @@ namespace GameSvr.Player
             m_CanJmpScriptLableList.Clear();
             const string start = "<";
             const string end = ">";
-            var sCmdStr = string.Empty;
+            var rg = new Regex("(?<=(" + start + "))[.\\s\\S]*?(?=(" + end + "))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
             while (true)
             {
                 if (string.IsNullOrEmpty(sMsg))
@@ -3201,13 +3202,12 @@ namespace GameSvr.Player
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
                 if (!string.IsNullOrEmpty(sText))
                 {
-                    var rg = new Regex("(?<=(" + start + "))[.\\s\\S]*?(?=(" + end + "))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
                     var match = rg.Matches(sText);
                     if (match.Count > 0)
                     {
                         foreach (Match item in match)
                         {
-                            sCmdStr = item.Value;
+                            var sCmdStr = item.Value;
                             var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, HUtil32.Backslash);
                             if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
                             {
@@ -3219,6 +3219,11 @@ namespace GameSvr.Player
             }
         }
 
+        /// <summary>
+        /// 脚本标签是否可以跳转
+        /// </summary>
+        /// <param name="sLabel"></param>
+        /// <returns></returns>
         public bool LableIsCanJmp(string sLabel)
         {
             if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
@@ -3301,7 +3306,7 @@ namespace GameSvr.Player
                 LoadList.LoadFromFile(sUnMarryFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    if (LoadList[i].CompareTo(this.m_sCharName) == 0)
+                    if (string.Compare(LoadList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         LoadList.RemoveAt(i);
                         boIsfound = true;
@@ -3365,7 +3370,7 @@ namespace GameSvr.Player
             TPlayObject Human;
             for (var i = 0; i < M2Share.g_UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
             {
-                if (String.Compare(M2Share.g_UnForceMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.g_UnForceMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     M2Share.g_UnForceMasterList.RemoveAt(i);
                     M2Share.SaveUnForceMasterList();
@@ -3425,7 +3430,7 @@ namespace GameSvr.Player
                         boIsfound = false;
                         for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
                         {
-                            if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 boIsfound = true;
                                 break;
@@ -3603,7 +3608,7 @@ namespace GameSvr.Player
         {
             if (ProcessMsg.wParam == 0)
             {
-                ProcessUserLineMsg('@' + M2Share.g_GameCommand.UNLOCK.sCmd);
+                ProcessUserLineMsg("@" + M2Share.g_GameCommand.UNLOCK.sCmd);
                 return;
             }
             string sData = ProcessMsg.sMsg;
@@ -3627,7 +3632,7 @@ namespace GameSvr.Player
             if (m_boReConfigPwd)
             {
                 m_boReConfigPwd = false;
-                if (String.Compare(m_sTempPwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(m_sTempPwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_sStoragePwd = sData;
                     m_boPasswordLocked = true;
@@ -3643,7 +3648,7 @@ namespace GameSvr.Player
             }
             if (m_boUnLockPwd || m_boUnLockStoragePwd)
             {
-                if (String.Compare(m_sStoragePwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(m_sStoragePwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_boPasswordLocked = false;
                     if (m_boUnLockPwd)
