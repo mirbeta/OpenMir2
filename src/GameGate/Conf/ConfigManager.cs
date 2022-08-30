@@ -33,10 +33,12 @@ namespace GameGate.Conf
         public void LoadConfig()
         {
             GateConfig.UseCloudGate = ReadBool("Cloud", "UseCloudGate", GateConfig.UseCloudGate);
-            GateConfig.CloudAddr = ReadString("Cloud", "CloudAddr", GateConfig.CloudAddr);
-            GateConfig.CloudPort = ReadInteger("Cloud", "CloudPort", GateConfig.CloudPort);
-            GateConfig.LicenseCode = ReadString("Cloud", "LicenseCode", GateConfig.LicenseCode);
-
+            if (GateConfig.UseCloudGate)
+            {
+                GateConfig.CloudAddr = ReadString("Cloud", "CloudAddr", GateConfig.CloudAddr);
+                GateConfig.CloudPort = ReadInteger("Cloud", "CloudPort", GateConfig.CloudPort);
+                GateConfig.LicenseCode = ReadString("Cloud", "LicenseCode", GateConfig.LicenseCode);
+            }
             GateConfig.MessageThread = ReadInteger("Integer", "MessageThread", GateConfig.MessageThread);
             if (GateConfig.MessageThread > 4)
             {

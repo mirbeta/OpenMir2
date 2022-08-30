@@ -1,19 +1,22 @@
+using GameGate.Conf;
 using GameGate.Services;
+using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace GameGate
 {
     public class ServerApp
     {
         private static MirLog LogQueue => MirLog.Instance;
+        private readonly CloudClient _cloudClient;
         private static ClientManager ClientManager => ClientManager.Instance;
         private static SessionManager SessionManager => SessionManager.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
+        private static ConfigManager ConfigManager => ConfigManager.Instance;
 
-        public ServerApp()
+        public ServerApp(CloudClient cloudClient)
         {
-
+            _cloudClient = cloudClient;
         }
 
         public void StartService(CancellationToken stoppingToken)
@@ -26,6 +29,21 @@ namespace GameGate
             GateShare.Initialization();
             ClientManager.Initialization();
             ServerManager.Start(stoppingToken);
+            if (ConfigManager.GateConfig.UseCloudGate)
+            {
+                if (string.IsNullOrEmpty(ConfigManager.GateConfig.CloudAddr) || ConfigManager.GateConfig.CloudPort<=0)
+                {
+                    LogQueue.Enqueue("智能防外挂云网关服务地址配置错误.请检查配置文件是否配置正确.", 0);
+                    return;
+                }
+                if (string.IsNullOrEmpty(ConfigManager.GateConfig.LicenseCode))
+                { 
+                    LogQueue.Enqueue("智能防外挂云网关授权码为空或配置错误,请检查配置文件是否配置正确.", 0);
+                    return;
+                }
+                var cloudEndpoint = new IPEndPoint(IPAddress.Parse(ConfigManager.GateConfig.CloudAddr), ConfigManager.GateConfig.CloudPort);
+                _cloudClient.Start(cloudEndpoint);
+            }
             ServerManager.StartProcessMessage(stoppingToken);
             SessionManager.ProcessSendMessage(stoppingToken);
         }
