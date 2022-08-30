@@ -7,7 +7,6 @@ namespace GameSvr.GameGate
     {
         private readonly Channel<byte[]> _sendQueue = null;
         private readonly Socket _sendSocket;
-        private Task _processSendQueueTask; 
 
         public SendQueue(Socket socket)
         {
@@ -28,18 +27,13 @@ namespace GameSvr.GameGate
             _sendQueue.Writer.TryWrite(buffer);
         }
 
-        public void Stop()
-        {
-            _processSendQueueTask.Dispose();
-        }
-
         /// <summary>
         /// 处理队列数据并发送到GameGate
         /// GameSvr -> GameGate
         /// </summary>
         public void ProcessSendQueue(CancellationTokenSource cancellation)
         {
-            _processSendQueueTask = Task.Factory.StartNew(async () =>
+           Task.Factory.StartNew(async () =>
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(cancellation.Token))
                 {

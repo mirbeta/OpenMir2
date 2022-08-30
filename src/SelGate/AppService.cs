@@ -15,10 +15,11 @@ namespace SelGate
             _serverApp = serverApp;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => _logQueue.LogDebug($"GameGate is stopping."));
-            await _serverApp.Start();
+            _serverApp.Start(stoppingToken);
+            return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

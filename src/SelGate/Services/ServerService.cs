@@ -1,6 +1,7 @@
 using SelGate.Conf;
 using SelGate.Package;
 using System;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
@@ -52,16 +53,19 @@ namespace SelGate.Services
         /// <summary>
         /// 处理客户端发过来的消息
         /// </summary>
-        public async Task ProcessReviceMessage()
+        public void ProcessReviceMessage(CancellationToken stoppingToken)
         {
-            while (await _sendQueue.Reader.WaitToReadAsync())
+            Task.Factory.StartNew(async () =>
             {
-                while (_sendQueue.Reader.TryRead(out var message))
+                while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    var clientSession = _sessionManager.GetSession(message.SessionId);
-                    clientSession?.HandleUserPacket(message);
+                    while (_sendQueue.Reader.TryRead(out var message))
+                    {
+                        var clientSession = _sessionManager.GetSession(message.SessionId);
+                        clientSession?.HandleUserPacket(message);
+                    }
                 }
-            }
+            }, stoppingToken);
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)

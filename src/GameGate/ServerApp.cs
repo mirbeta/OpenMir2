@@ -25,7 +25,6 @@ namespace GameGate
             LogQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
             LogQueue.Enqueue("网站:http://www.gameofmir.com", 0);
             LogQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
-            LogQueue.Enqueue("智能反外挂程序已启动...", 0);
             GateShare.Initialization();
             ClientManager.Initialization();
             ServerManager.Start(stoppingToken);
@@ -43,6 +42,7 @@ namespace GameGate
                 }
                 var cloudEndpoint = new IPEndPoint(IPAddress.Parse(ConfigManager.GateConfig.CloudAddr), ConfigManager.GateConfig.CloudPort);
                 _cloudClient.Start(cloudEndpoint);
+                LogQueue.Enqueue("智能反外挂程序已启动...", 0);
             }
             ServerManager.StartProcessMessage(stoppingToken);
             SessionManager.ProcessSendMessage(stoppingToken);

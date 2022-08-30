@@ -37,7 +37,6 @@ namespace GameSvr.GameGate
         public void Stop()
         {
             _cancellation.CancelAfter(3000);
-            _sendQueue.Stop();
         }
 
         /// <summary>
