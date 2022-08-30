@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SystemModule;
 using SystemModule.Data;
 
@@ -6,20 +7,21 @@ namespace GameSvr
 {
     public class AppService : BackgroundService
     {
+        private readonly ILogger<AppService> _logger;
         private readonly GameApp _mirApp;
         private readonly TimeSpan DelayTime = TimeSpan.FromMilliseconds(10);
 
-        public AppService(GameApp serverApp)
+        public AppService(GameApp serverApp, ILogger<AppService> logger)
         {
             _mirApp = serverApp;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             if (M2Share.boStartReady)
             {
-                M2Share.GateManager.Start();
-                M2Share.GateManager.StartMessageQueue(stoppingToken);
+                M2Share.GateManager.Start(stoppingToken);
             }
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -30,9 +32,9 @@ namespace GameSvr
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            M2Share.MainOutMessage("正在读取配置信息...");
+            _logger.LogInformation("正在读取配置信息...");
             _mirApp.InitializeServer();
-            M2Share.MainOutMessage("读取配置信息完成...");
+            _logger.LogInformation("读取配置信息完成...");
             _mirApp.Initialize();
             _mirApp.StartEngine();
             _mirApp.StartService();
@@ -43,12 +45,12 @@ namespace GameSvr
         {
             if (M2Share.UserEngine.PlayObjectCount > 0)
             {
-                Console.WriteLine("开始玩家数据保存");
+                _logger.LogDebug("开始玩家数据保存");
                 foreach (var item in M2Share.UserEngine.PlayObjects)
                 {
                     M2Share.UserEngine.SaveHumanRcd(item);
                 }
-                Console.WriteLine("玩家数据保存完毕.");
+                _logger.LogDebug("玩家数据保存完毕.");
             }
 
             //如果有多机负载转移在线玩家到新服务器
@@ -70,7 +72,7 @@ namespace GameSvr
                             {
                                 var closeStr = $"服务器关闭倒计时 [{shutdownSeconds}].";
                                 playObject.SysMsg(closeStr, MsgColor.Red, MsgType.Notice);
-                                Console.WriteLine(closeStr);
+                                _logger.LogInformation(closeStr);
                                 shutdownSeconds--;
                             }
                             if (shutdownSeconds > 0)

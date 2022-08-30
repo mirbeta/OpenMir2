@@ -8,7 +8,7 @@ namespace GameSvr.Robots
     public class RobotObject : TPlayObject
     {
         public string m_sScriptFileName = string.Empty;
-        private IList<AutoRunInfo> m_AutoRunList = null;
+        private IList<AutoRunInfo> _autoRunList = null;
 
         private void AutoRun(AutoRunInfo AutoRunInfo)
         {
@@ -160,23 +160,23 @@ namespace GameSvr.Robots
 
         private void ClearScript()
         {
-            for (var i = 0; i < m_AutoRunList.Count; i++)
+            for (var i = 0; i < _autoRunList.Count; i++)
             {
-                m_AutoRunList[i] = null;
+                _autoRunList[i] = null;
             }
-            m_AutoRunList.Clear();
+            _autoRunList.Clear();
         }
 
         public RobotObject() : base()
         {
-            m_AutoRunList = new List<AutoRunInfo>();
+            _autoRunList = new List<AutoRunInfo>();
             this.m_boSuperMan = true;
         }
 
         ~RobotObject()
         {
             ClearScript();
-            m_AutoRunList = null;
+            _autoRunList = null;
         }
 
         public void LoadScript()
@@ -258,7 +258,7 @@ namespace GameSvr.Robots
                                 AutoRunInfo.sParam3 = sParam3;
                                 AutoRunInfo.sParam4 = sParam4;
                                 AutoRunInfo.nParam1 = HUtil32.Str_ToInt(sParam1, 1);
-                                m_AutoRunList.Add(AutoRunInfo);
+                                _autoRunList.Add(AutoRunInfo);
                             }
                         }
                     }
@@ -270,9 +270,9 @@ namespace GameSvr.Robots
         private void ProcessAutoRun()
         {
             AutoRunInfo AutoRunInfo;
-            for (var i = m_AutoRunList.Count - 1; i >= 0; i--)
+            for (var i = _autoRunList.Count - 1; i >= 0; i--)
             {
-                AutoRunInfo = m_AutoRunList[i];
+                AutoRunInfo = _autoRunList[i];
                 AutoRun(AutoRunInfo);
             }
         }
