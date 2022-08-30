@@ -5,7 +5,7 @@ using SystemModule.Data;
 
 namespace GameSvr.GameGate
 {
-    public class TGateUserInfo
+    public class GameGateUserInfo
     {
         /// <summary>
         /// 人物对象

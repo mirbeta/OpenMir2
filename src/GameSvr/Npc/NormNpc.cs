@@ -1633,7 +1633,7 @@ namespace GameSvr.Npc
                 HUtil32.GetValidStr3(sData, ref sLabel, new[] { '\r' });
                 if (PlayObject.m_sScriptCurrLable != sLabel)
                 {
-                    if (sLabel != ScriptDef.sBACK)
+                    if (sLabel != ScriptCommandConst.sBACK)
                     {
                         PlayObject.m_sScriptGoBackLable = PlayObject.m_sScriptCurrLable;
                         PlayObject.m_sScriptCurrLable = sLabel;

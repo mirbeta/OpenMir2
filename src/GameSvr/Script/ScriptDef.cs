@@ -1,6 +1,6 @@
 ﻿namespace GameSvr.Script
 {
-    public class ScriptDef
+    public class ScriptCommandConst
     {
         public const string sMAN = "MAN";
         public const string sSUNRAISE = "SUNRAISE";
