@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 监听指定玩家私聊信息
     /// </summary>
-    [GameCommand("ViewWhisper", "监听指定玩家私聊信息", M2Share.g_sGameCommandViewWhisperHelpMsg, 10)]
+    [GameCommand("ViewWhisper", "监听指定玩家私聊信息", GameCommandConst.g_sGameCommandViewWhisperHelpMsg, 10)]
     public class ViewWhisperCommand : BaseCommond
     {
         [DefaultCommand]
@@ -28,17 +28,17 @@ namespace GameSvr.Command.Commands
                 if (m_PlayObject.m_GetWhisperHuman == PlayObject)
                 {
                     m_PlayObject.m_GetWhisperHuman = null;
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandViewWhisperMsg1, sCharName), MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandViewWhisperMsg1, sCharName), MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
                     m_PlayObject.m_GetWhisperHuman = PlayObject;
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandViewWhisperMsg2, sCharName), MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandViewWhisperMsg2, sCharName), MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sCharName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sCharName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

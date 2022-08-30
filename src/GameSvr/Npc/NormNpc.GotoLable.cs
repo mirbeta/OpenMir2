@@ -402,20 +402,20 @@ namespace GameSvr.Npc
                 QuestConditionInfo = ConditionList[i];
                 switch (QuestConditionInfo.nCmdCode)
                 {
-                    case M2Share.nCHECKUSERDATE:
+                    case ScriptDef.nCHECKUSERDATE:
                         result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.m_sCharName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
                         break;
-                    case M2Share.nSC_CHECKRANDOMNO:
+                    case ScriptDef.nSC_CHECKRANDOMNO:
                         Console.WriteLine("TODO nSC_CHECKRANDOMNO...");
                         //result = GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject, sMsg);
                         break;
-                    case M2Share.nCheckDiemon:
+                    case ScriptDef.nCheckDiemon:
                         result = GotoLable_QuestCheckCondition_CheckDieMon(PlayObject, QuestConditionInfo.sParam1);
                         break;
-                    case M2Share.ncheckkillplaymon:
+                    case ScriptDef.ncheckkillplaymon:
                         result = GotoLable_QuestCheckCondition_CheckKillMon(PlayObject, QuestConditionInfo.sParam1);
                         break;
-                    case M2Share.nCHECK:
+                    case ScriptDef.nCHECK:
                         n14 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
                         n18 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestFalgStatus(n14);
@@ -434,14 +434,14 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nRANDOM:
+                    case ScriptDef.nRANDOM:
                         if (M2Share.RandomNumber.Random(QuestConditionInfo.nParam1) != 0)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nGENDER:
-                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
+                    case ScriptDef.nGENDER:
+                        if (String.Compare(QuestConditionInfo.sParam1, ScriptDef.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (PlayObject.Gender != PlayGender.Man)
                             {
@@ -456,29 +456,29 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nDAYTIME:
-                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
+                    case ScriptDef.nDAYTIME:
+                        if (String.Compare(QuestConditionInfo.sParam1, ScriptDef.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 0)
                             {
                                 result = false;
                             }
                         }
-                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, ScriptDef.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 1)
                             {
                                 result = false;
                             }
                         }
-                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, ScriptDef.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 2)
                             {
                                 result = false;
                             }
                         }
-                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, ScriptDef.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 3)
                             {
@@ -486,7 +486,7 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nCHECKOPEN:
+                    case ScriptDef.nCHECKOPEN:
                         n14 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
                         n18 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestUnitOpenStatus(n14);
@@ -505,7 +505,7 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nCHECKUNIT:
+                    case ScriptDef.nCHECKUNIT:
                         n14 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
                         n18 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestUnitStatus(n14);
@@ -524,28 +524,28 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nCHECKLEVEL:
+                    case ScriptDef.nCHECKLEVEL:
                         if (PlayObject.m_Abil.Level < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKJOB:
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sWarrior, M2Share.sWarrior.Length))
+                    case ScriptDef.nCHECKJOB:
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sWarrior, ScriptDef.sWarrior.Length))
                         {
                             if (PlayObject.m_btJob != M2Share.jWarr)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sWizard, M2Share.sWizard.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sWizard, ScriptDef.sWizard.Length))
                         {
                             if (PlayObject.m_btJob != M2Share.jWizard)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sTaos, M2Share.sTaos.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sTaos, ScriptDef.sTaos.Length))
                         {
                             if (PlayObject.m_btJob != M2Share.jTaos)
                             {
@@ -553,48 +553,48 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nCHECKBBCOUNT:
+                    case ScriptDef.nCHECKBBCOUNT:
                         if (PlayObject.m_SlaveList.Count < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKCREDITPOINT:
+                    case ScriptDef.nCHECKCREDITPOINT:
                         break;
-                    case M2Share.nCHECKITEM:
+                    case ScriptDef.nCHECKITEM:
                         UserItem = PlayObject.QuestCheckItem(QuestConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
                         if (n1C < QuestConditionInfo.nParam2)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKITEMW:
+                    case ScriptDef.nCHECKITEMW:
                         UserItem = GotoLable_CheckItemW(PlayObject, QuestConditionInfo.sParam1, QuestConditionInfo.nParam2);
                         if (UserItem == null)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKGOLD:
+                    case ScriptDef.nCHECKGOLD:
                         if (PlayObject.m_nGold < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nISTAKEITEM:
+                    case ScriptDef.nISTAKEITEM:
                         if (sC != QuestConditionInfo.sParam1)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKDURA:
+                    case ScriptDef.nCHECKDURA:
                         UserItem = PlayObject.QuestCheckItem(QuestConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
                         if (HUtil32.Round(nDura / 1000) < QuestConditionInfo.nParam2)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKDURAEVA:
+                    case ScriptDef.nCHECKDURAEVA:
                         UserItem = PlayObject.QuestCheckItem(QuestConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
                         if (n1C > 0)
                         {
@@ -608,50 +608,50 @@ namespace GameSvr.Npc
                             result = false;
                         }
                         break;
-                    case M2Share.nDAYOFWEEK:
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sSUN, M2Share.sSUN.Length))
+                    case ScriptDef.nDAYOFWEEK:
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sSUN, ScriptDef.sSUN.Length))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 1)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sMON, M2Share.sMON.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sMON, ScriptDef.sMON.Length))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 2)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sTUE, M2Share.sTUE.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sTUE, ScriptDef.sTUE.Length))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 3)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sWED, M2Share.sWED.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sWED, ScriptDef.sWED.Length))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 4)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sTHU, M2Share.sTHU.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sTHU, ScriptDef.sTHU.Length))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 5)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sFRI, M2Share.sFRI.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sFRI, ScriptDef.sFRI.Length))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 6)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, M2Share.sSAT, M2Share.sSAT.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptDef.sSAT, ScriptDef.sSAT.Length))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 7)
                             {
@@ -659,7 +659,7 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nHOUR:
+                    case ScriptDef.nHOUR:
                         if ((QuestConditionInfo.nParam1 != 0) && (QuestConditionInfo.nParam2 == 0))
                         {
                             QuestConditionInfo.nParam2 = QuestConditionInfo.nParam1;
@@ -673,7 +673,7 @@ namespace GameSvr.Npc
                             result = false;
                         }
                         break;
-                    case M2Share.nMIN:
+                    case ScriptDef.nMIN:
                         if ((QuestConditionInfo.nParam1 != 0) && (QuestConditionInfo.nParam2 == 0))
                         {
                             QuestConditionInfo.nParam2 = QuestConditionInfo.nParam1;
@@ -687,19 +687,19 @@ namespace GameSvr.Npc
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKPKPOINT:
+                    case ScriptDef.nCHECKPKPOINT:
                         if (PlayObject.PKLevel() < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKLUCKYPOINT:
+                    case ScriptDef.nCHECKLUCKYPOINT:
                         if (PlayObject.m_nBodyLuckLevel < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKMONMAP:
+                    case ScriptDef.nCHECKMONMAP:
                         Envir = M2Share.MapManager.FindMap(QuestConditionInfo.sParam1);
                         if (Envir != null)
                         {
@@ -709,15 +709,15 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nCHECKMONAREA:
+                    case ScriptDef.nCHECKMONAREA:
                         break;
-                    case M2Share.nCHECKHUM:
+                    case ScriptDef.nCHECKHUM:
                         if (M2Share.UserEngine.GetMapHuman(QuestConditionInfo.sParam1) < QuestConditionInfo.nParam2)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKBAGGAGE:
+                    case ScriptDef.nCHECKBAGGAGE:
                         if (PlayObject.IsEnoughBag())
                         {
                             if (QuestConditionInfo.sParam1 != "")
@@ -738,244 +738,244 @@ namespace GameSvr.Npc
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKNAMELIST:
+                    case ScriptDef.nCHECKNAMELIST:
                         if (!GotoLable_CheckStringList(PlayObject.m_sCharName, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKACCOUNTLIST:
+                    case ScriptDef.nCHECKACCOUNTLIST:
                         if (!GotoLable_CheckStringList(PlayObject.m_sUserID, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nCHECKIPLIST:
+                    case ScriptDef.nCHECKIPLIST:
                         if (!GotoLable_CheckStringList(PlayObject.m_sIPaddr, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nEQUAL:
+                    case ScriptDef.nEQUAL:
                         result = EqualData(PlayObject, QuestConditionInfo);
                         break;
-                    case M2Share.nLARGE:
+                    case ScriptDef.nLARGE:
                         result = LargeData(PlayObject, QuestConditionInfo);
                         break;
-                    case M2Share.nSMALL:
+                    case ScriptDef.nSMALL:
                         result = Smalldata(PlayObject, QuestConditionInfo);
                         break;
-                    case M2Share.nSC_ISSYSOP:
+                    case ScriptDef.nSC_ISSYSOP:
                         if (!(PlayObject.m_btPermission >= 4))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISADMIN:
+                    case ScriptDef.nSC_ISADMIN:
                         if (!(PlayObject.m_btPermission >= 6))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKGROUPCOUNT:
+                    case ScriptDef.nSC_CHECKGROUPCOUNT:
                         if (!ConditionOfCheckGroupCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPOSEDIR:
+                    case ScriptDef.nSC_CHECKPOSEDIR:
                         if (!ConditionOfCheckPoseDir(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPOSELEVEL:
+                    case ScriptDef.nSC_CHECKPOSELEVEL:
                         if (!ConditionOfCheckPoseLevel(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPOSEGENDER:
+                    case ScriptDef.nSC_CHECKPOSEGENDER:
                         if (!ConditionOfCheckPoseGender(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKLEVELEX:
+                    case ScriptDef.nSC_CHECKLEVELEX:
                         if (!ConditionOfCheckLevelEx(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKBONUSPOINT:
+                    case ScriptDef.nSC_CHECKBONUSPOINT:
                         if (!ConditionOfCheckBonusPoint(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMARRY:
+                    case ScriptDef.nSC_CHECKMARRY:
                         if (!ConditionOfCheckMarry(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPOSEMARRY:
+                    case ScriptDef.nSC_CHECKPOSEMARRY:
                         if (!ConditionOfCheckPoseMarry(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMARRYCOUNT:
+                    case ScriptDef.nSC_CHECKMARRYCOUNT:
                         if (!ConditionOfCheckMarryCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMASTER:
+                    case ScriptDef.nSC_CHECKMASTER:
                         if (!ConditionOfCheckMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_HAVEMASTER:
+                    case ScriptDef.nSC_HAVEMASTER:
                         if (!ConditionOfHaveMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPOSEMASTER:
+                    case ScriptDef.nSC_CHECKPOSEMASTER:
                         if (!ConditionOfCheckPoseMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_POSEHAVEMASTER:
+                    case ScriptDef.nSC_POSEHAVEMASTER:
                         if (!ConditionOfPoseHaveMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKISMASTER:
+                    case ScriptDef.nSC_CHECKISMASTER:
                         if (!ConditionOfCheckIsMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_HASGUILD:
+                    case ScriptDef.nSC_HASGUILD:
                         if (!ConditionOfCheckHaveGuild(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISGUILDMASTER:
+                    case ScriptDef.nSC_ISGUILDMASTER:
                         if (!ConditionOfCheckIsGuildMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKCASTLEMASTER:
+                    case ScriptDef.nSC_CHECKCASTLEMASTER:
                         if (!ConditionOfCheckIsCastleMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISCASTLEGUILD:
+                    case ScriptDef.nSC_ISCASTLEGUILD:
                         if (!ConditionOfCheckIsCastleaGuild(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISATTACKGUILD:
+                    case ScriptDef.nSC_ISATTACKGUILD:
                         if (!ConditionOfCheckIsAttackGuild(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISDEFENSEGUILD:
+                    case ScriptDef.nSC_ISDEFENSEGUILD:
                         if (!ConditionOfCheckIsDefenseGuild(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKCASTLEDOOR:
+                    case ScriptDef.nSC_CHECKCASTLEDOOR:
                         if (!ConditionOfCheckCastleDoorStatus(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISATTACKALLYGUILD:
+                    case ScriptDef.nSC_ISATTACKALLYGUILD:
                         if (!ConditionOfCheckIsAttackAllyGuild(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISDEFENSEALLYGUILD:
+                    case ScriptDef.nSC_ISDEFENSEALLYGUILD:
                         if (!ConditionOfCheckIsDefenseAllyGuild(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPOSEISMASTER:
+                    case ScriptDef.nSC_CHECKPOSEISMASTER:
                         if (!ConditionOfCheckPoseIsMaster(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKNAMEIPLIST:
+                    case ScriptDef.nSC_CHECKNAMEIPLIST:
                         if (!ConditionOfCheckNameIPList(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKACCOUNTIPLIST:
+                    case ScriptDef.nSC_CHECKACCOUNTIPLIST:
                         if (!ConditionOfCheckAccountIPList(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKSLAVECOUNT:
+                    case ScriptDef.nSC_CHECKSLAVECOUNT:
                         if (!ConditionOfCheckSlaveCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISNEWHUMAN:
+                    case ScriptDef.nSC_ISNEWHUMAN:
                         if (!PlayObject.m_boNewHuman)
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMEMBERTYPE:
+                    case ScriptDef.nSC_CHECKMEMBERTYPE:
                         if (!ConditionOfCheckMemberType(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMEMBERLEVEL:
+                    case ScriptDef.nSC_CHECKMEMBERLEVEL:
                         if (!ConditionOfCheckMemBerLevel(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKGAMEGOLD:
+                    case ScriptDef.nSC_CHECKGAMEGOLD:
                         if (!ConditionOfCheckGameGold(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKGAMEPOINT:
+                    case ScriptDef.nSC_CHECKGAMEPOINT:
                         if (!ConditionOfCheckGamePoint(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKNAMELISTPOSITION:
+                    case ScriptDef.nSC_CHECKNAMELISTPOSITION:
                         if (!ConditionOfCheckNameListPostion(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKGUILDLIST:
+                    case ScriptDef.nSC_CHECKGUILDLIST:
                         if (PlayObject.m_MyGuild != null)
                         {
                             if (!GotoLable_CheckStringList(PlayObject.m_MyGuild.sGuildName, m_sPath + QuestConditionInfo.sParam1))
@@ -988,283 +988,283 @@ namespace GameSvr.Npc
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKRENEWLEVEL:
+                    case ScriptDef.nSC_CHECKRENEWLEVEL:
                         if (!ConditionOfCheckReNewLevel(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKSLAVELEVEL:
+                    case ScriptDef.nSC_CHECKSLAVELEVEL:
                         if (!ConditionOfCheckSlaveLevel(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKSLAVENAME:
+                    case ScriptDef.nSC_CHECKSLAVENAME:
                         if (!ConditionOfCheckSlaveName(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKCREDITPOINT:
+                    case ScriptDef.nSC_CHECKCREDITPOINT:
                         if (!ConditionOfCheckCreditPoint(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKOFGUILD:
+                    case ScriptDef.nSC_CHECKOFGUILD:
                         if (!ConditionOfCheckOfGuild(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPAYMENT:
+                    case ScriptDef.nSC_CHECKPAYMENT:
                         if (!ConditionOfCheckPayMent(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKUSEITEM:
+                    case ScriptDef.nSC_CHECKUSEITEM:
                         if (!ConditionOfCheckUseItem(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKBAGSIZE:
+                    case ScriptDef.nSC_CHECKBAGSIZE:
                         if (!ConditionOfCheckBagSize(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKLISTCOUNT:
+                    case ScriptDef.nSC_CHECKLISTCOUNT:
                         if (!ConditionOfCheckListCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKDC:
+                    case ScriptDef.nSC_CHECKDC:
                         if (!ConditionOfCheckDC(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMC:
+                    case ScriptDef.nSC_CHECKMC:
                         if (!ConditionOfCheckMC(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKSC:
+                    case ScriptDef.nSC_CHECKSC:
                         if (!ConditionOfCheckSC(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKHP:
+                    case ScriptDef.nSC_CHECKHP:
                         if (!ConditionOfCheckHP(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMP:
+                    case ScriptDef.nSC_CHECKMP:
                         if (!ConditionOfCheckMP(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKITEMTYPE:
+                    case ScriptDef.nSC_CHECKITEMTYPE:
                         if (!ConditionOfCheckItemType(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKEXP:
+                    case ScriptDef.nSC_CHECKEXP:
                         if (!ConditionOfCheckExp(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKCASTLEGOLD:
+                    case ScriptDef.nSC_CHECKCASTLEGOLD:
                         if (!ConditionOfCheckCastleGold(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_PASSWORDERRORCOUNT:
+                    case ScriptDef.nSC_PASSWORDERRORCOUNT:
                         if (!ConditionOfCheckPasswordErrorCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISLOCKPASSWORD:
+                    case ScriptDef.nSC_ISLOCKPASSWORD:
                         if (!ConditionOfIsLockPassword(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISLOCKSTORAGE:
+                    case ScriptDef.nSC_ISLOCKSTORAGE:
                         if (!ConditionOfIsLockStorage(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKBUILDPOINT:
+                    case ScriptDef.nSC_CHECKBUILDPOINT:
                         if (!ConditionOfCheckGuildBuildPoint(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKAURAEPOINT:
+                    case ScriptDef.nSC_CHECKAURAEPOINT:
                         if (!ConditionOfCheckGuildAuraePoint(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKSTABILITYPOINT:
+                    case ScriptDef.nSC_CHECKSTABILITYPOINT:
                         if (!ConditionOfCheckStabilityPoint(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKFLOURISHPOINT:
+                    case ScriptDef.nSC_CHECKFLOURISHPOINT:
                         if (!ConditionOfCheckFlourishPoint(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKCONTRIBUTION:
+                    case ScriptDef.nSC_CHECKCONTRIBUTION:
                         if (!ConditionOfCheckContribution(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKRANGEMONCOUNT:
+                    case ScriptDef.nSC_CHECKRANGEMONCOUNT:
                         if (!ConditionOfCheckRangeMonCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKITEMADDVALUE:
+                    case ScriptDef.nSC_CHECKITEMADDVALUE:
                         if (!ConditionOfCheckItemAddValue(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKINMAPRANGE:
+                    case ScriptDef.nSC_CHECKINMAPRANGE:
                         if (!ConditionOfCheckInMapRange(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CASTLECHANGEDAY:
+                    case ScriptDef.nSC_CASTLECHANGEDAY:
                         if (!ConditionOfCheckCastleChageDay(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CASTLEWARDAY:
+                    case ScriptDef.nSC_CASTLEWARDAY:
                         if (!ConditionOfCheckCastleWarDay(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ONLINELONGMIN:
+                    case ScriptDef.nSC_ONLINELONGMIN:
                         if (!ConditionOfCheckOnlineLongMin(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKGUILDCHIEFITEMCOUNT:
+                    case ScriptDef.nSC_CHECKGUILDCHIEFITEMCOUNT:
                         if (!ConditionOfCheckChiefItemCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKNAMEDATELIST:
+                    case ScriptDef.nSC_CHECKNAMEDATELIST:
                         if (!ConditionOfCheckNameDateList(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMAPHUMANCOUNT:
+                    case ScriptDef.nSC_CHECKMAPHUMANCOUNT:
                         if (!ConditionOfCheckMapHumanCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMAPMONCOUNT:
+                    case ScriptDef.nSC_CHECKMAPMONCOUNT:
                         if (!ConditionOfCheckMapMonCount(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKVAR:
+                    case ScriptDef.nSC_CHECKVAR:
                         if (!ConditionOfCheckVar(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKSERVERNAME:
+                    case ScriptDef.nSC_CHECKSERVERNAME:
                         if (!ConditionOfCheckServerName(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKISONMAP:
+                    case ScriptDef.nSC_CHECKISONMAP:
                         if (!ConditionOfCheckIsOnMap(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_KILLBYHUM:
+                    case ScriptDef.nSC_KILLBYHUM:
                         if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.m_btRaceServer != Grobal2.RC_PLAYOBJECT))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_KILLBYMON:
+                    case ScriptDef.nSC_KILLBYMON:
                         if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKINSAFEZONE:
+                    case ScriptDef.nSC_CHECKINSAFEZONE:
                         if (!PlayObject.InSafeZone())
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMAP:
+                    case ScriptDef.nSC_CHECKMAP:
                         if (!ConditionOfCheckMap(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKPOS:
+                    case ScriptDef.nSC_CHECKPOS:
                         if (!ConditionOfCheckPos(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_REVIVESLAVE:
+                    case ScriptDef.nSC_REVIVESLAVE:
                         if (!ConditionOfReviveSlave(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKMAGICLVL:
+                    case ScriptDef.nSC_CHECKMAGICLVL:
                         if (!ConditionOfCheckMagicLvl(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_CHECKGROUPCLASS:
+                    case ScriptDef.nSC_CHECKGROUPCLASS:
                         if (!ConditionOfCheckGroupClass(PlayObject, QuestConditionInfo))
                         {
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISGROUPMASTER:
+                    case ScriptDef.nSC_ISGROUPMASTER:
                         if (PlayObject.m_GroupOwner != null)
                         {
                             if (PlayObject.m_GroupOwner != PlayObject)
@@ -1277,10 +1277,10 @@ namespace GameSvr.Npc
                             result = false;
                         }
                         break;
-                    case M2Share.nSC_ISHIGH:
+                    case ScriptDef.nSC_ISHIGH:
                         result = ConditionOfIsHigh(PlayObject, QuestConditionInfo);
                         break;
-                    case M2Share.nSCHECKDEATHPLAYMON:
+                    case ScriptDef.nSCHECKDEATHPLAYMON:
                         var s01 = string.Empty;
                         if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref s01))
                         {
@@ -1323,7 +1323,7 @@ namespace GameSvr.Npc
                 {
                     PlayObject.m_Script = Script;
                     PlayObject.m_NPC = this;
-                    GotoLable(PlayObject, M2Share.sMAIN, false);
+                    GotoLable(PlayObject, ScriptDef.sMAIN, false);
                     break;
                 }
             }
@@ -1734,97 +1734,97 @@ namespace GameSvr.Npc
                 QuestActionInfo = ActionList[i];
                 switch (QuestActionInfo.nCmdCode)
                 {
-                    case M2Share.nSET:
+                    case ScriptDef.nSET:
                         n28 = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 0);
                         n2C = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0);
                         PlayObject.SetQuestFlagStatus(n28, n2C);
                         break;
-                    case M2Share.nTAKE:
+                    case ScriptDef.nTAKE:
                         GotoLable_TakeItem(PlayObject, QuestActionInfo.sParam1, QuestActionInfo.nParam2, ref sC);
                         break;
-                    case M2Share.nSC_GIVE:
+                    case ScriptDef.nSC_GIVE:
                         ActionOfGiveItem(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nTAKEW:
+                    case ScriptDef.nTAKEW:
                         GotoLable_TakeWItem(PlayObject, QuestActionInfo.sParam1, QuestActionInfo.nParam2);
                         break;
-                    case M2Share.nCLOSE:
+                    case ScriptDef.nCLOSE:
                         PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                         break;
-                    case M2Share.nRESET:
+                    case ScriptDef.nRESET:
                         for (var k = 0; k < QuestActionInfo.nParam2; k++)
                         {
                             PlayObject.SetQuestFlagStatus(QuestActionInfo.nParam1 + k, 0);
                         }
                         break;
-                    case M2Share.nSETOPEN:
+                    case ScriptDef.nSETOPEN:
                         n28 = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 0);
                         n2C = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0);
                         PlayObject.SetQuestUnitOpenStatus(n28, n2C);
                         break;
-                    case M2Share.nSETUNIT:
+                    case ScriptDef.nSETUNIT:
                         n28 = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 0);
                         n2C = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0);
                         PlayObject.SetQuestUnitStatus(n28, n2C);
                         break;
-                    case M2Share.nRESETUNIT:
+                    case ScriptDef.nRESETUNIT:
                         for (var k = 0; k < QuestActionInfo.nParam2; k++)
                         {
                             PlayObject.SetQuestUnitStatus(QuestActionInfo.nParam1 + k, 0);
                         }
                         break;
-                    case M2Share.nBREAK:
+                    case ScriptDef.nBREAK:
                         result = false;
                         break;
-                    case M2Share.nTIMERECALL:
+                    case ScriptDef.nTIMERECALL:
                         PlayObject.m_boTimeRecall = true;
                         PlayObject.m_sMoveMap = PlayObject.m_sMapName;
                         PlayObject.m_nMoveX = PlayObject.m_nCurrX;
                         PlayObject.m_nMoveY = PlayObject.m_nCurrY;
                         PlayObject.m_dwTimeRecallTick = HUtil32.GetTickCount() + (QuestActionInfo.nParam1 * 60 * 1000);
                         break;
-                    case M2Share.nSC_PARAM1:
+                    case ScriptDef.nSC_PARAM1:
                         n34 = QuestActionInfo.nParam1;
                         s44 = QuestActionInfo.sParam1;
                         break;
-                    case M2Share.nSC_PARAM2:
+                    case ScriptDef.nSC_PARAM2:
                         n38 = QuestActionInfo.nParam1;
                         s48 = QuestActionInfo.sParam1;
                         break;
-                    case M2Share.nSC_PARAM3:
+                    case ScriptDef.nSC_PARAM3:
                         n3C = QuestActionInfo.nParam1;
                         s4C = QuestActionInfo.sParam1;
                         break;
-                    case M2Share.nSC_PARAM4:
+                    case ScriptDef.nSC_PARAM4:
                         n40 = QuestActionInfo.nParam1;
                         s50 = QuestActionInfo.sParam1;
                         break;
-                    case M2Share.nSC_EXEACTION:
+                    case ScriptDef.nSC_EXEACTION:
                         n40 = QuestActionInfo.nParam1;
                         s50 = QuestActionInfo.sParam1;
                         ExeAction(PlayObject, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam1, QuestActionInfo.nParam2, QuestActionInfo.nParam3);
                         break;
-                    case M2Share.nMAPMOVE:
+                    case ScriptDef.nMAPMOVE:
                         PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         PlayObject.SpaceMove(QuestActionInfo.sParam1, (short)QuestActionInfo.nParam2, (short)QuestActionInfo.nParam3, 0);
                         bo11 = true;
                         break;
-                    case M2Share.nMAP:
+                    case ScriptDef.nMAP:
                         PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         PlayObject.MapRandomMove(QuestActionInfo.sParam1, 0);
                         bo11 = true;
                         break;
-                    case M2Share.nTAKECHECKITEM:
+                    case ScriptDef.nTAKECHECKITEM:
                         if (UserItem != null)
                         {
                             PlayObject.QuestTakeCheckItem(UserItem);
                         }
                         else
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sTAKECHECKITEM);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ScriptDef.sTAKECHECKITEM);
                         }
                         break;
-                    case M2Share.nMONGEN:
+                    case ScriptDef.nMONGEN:
                         for (var k = 0; k < QuestActionInfo.nParam2; k++)
                         {
                             n20X = M2Share.RandomNumber.Random(QuestActionInfo.nParam3 * 2 + 1) + (n38 - QuestActionInfo.nParam3);
@@ -1832,7 +1832,7 @@ namespace GameSvr.Npc
                             M2Share.UserEngine.RegenMonsterByName(s44, (short)n20X, (short)n24Y, QuestActionInfo.sParam1);
                         }
                         break;
-                    case M2Share.nMONCLEAR:
+                    case ScriptDef.nMONCLEAR:
                         List58 = new List<TBaseObject>();
                         M2Share.UserEngine.GetMapMonster(M2Share.MapManager.FindMap(QuestActionInfo.sParam1), List58);
                         for (var k = 0; k < List58.Count; k++)
@@ -1842,31 +1842,31 @@ namespace GameSvr.Npc
                         }
                         //List58.Free;
                         break;
-                    case M2Share.nMOV:
+                    case ScriptDef.nMOV:
                         MovData(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nINC:
+                    case ScriptDef.nINC:
                         IncInteger(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nDEC:
+                    case ScriptDef.nDEC:
                         DecInteger(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSUM:
+                    case ScriptDef.nSUM:
                         SumData(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_DIV:
+                    case ScriptDef.nSC_DIV:
                         DivData(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MUL:
+                    case ScriptDef.nSC_MUL:
                         MulData(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_PERCENT:
+                    case ScriptDef.nSC_PERCENT:
                         PercentData(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nBREAKTIMERECALL:
+                    case ScriptDef.nBREAKTIMERECALL:
                         PlayObject.m_boTimeRecall = false;
                         break;
-                    case M2Share.nCHANGEMODE:
+                    case ScriptDef.nCHANGEMODE:
                         switch (QuestActionInfo.nParam1)
                         {
                             case 1:
@@ -1879,11 +1879,11 @@ namespace GameSvr.Npc
                                 M2Share.CommandSystem.ExecCmd("ChangeObMode", PlayObject);
                                 break;
                             default:
-                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sCHANGEMODE);
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ScriptDef.sCHANGEMODE);
                                 break;
                         }
                         break;
-                    case M2Share.nPKPOINT:
+                    case ScriptDef.nPKPOINT:
                         if (QuestActionInfo.nParam1 == 0)
                         {
                             PlayObject.m_nPkPoint = 0;
@@ -1915,22 +1915,22 @@ namespace GameSvr.Npc
                         }
                         PlayObject.RefNameColor();
                         break;
-                    case M2Share.nCHANGEXP:
+                    case ScriptDef.nCHANGEXP:
                         break;
-                    case M2Share.nSC_RECALLMOB:
+                    case ScriptDef.nSC_RECALLMOB:
                         ActionOfRecallmob(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nKICK:
+                    case ScriptDef.nKICK:
                         PlayObject.m_boReconnection = true;
                         PlayObject.m_boSoftClose = true;
                         break;
-                    case M2Share.nTHROWITEM://将指定物品刷新到指定地图坐标范围内
+                    case ScriptDef.nTHROWITEM://将指定物品刷新到指定地图坐标范围内
                         ActionOfTHROWITEM(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nMOVR:
+                    case ScriptDef.nMOVR:
                         MovrData(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nEXCHANGEMAP:
+                    case ScriptDef.nEXCHANGEMAP:
                         Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
@@ -1945,10 +1945,10 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sEXCHANGEMAP);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ScriptDef.sEXCHANGEMAP);
                         }
                         break;
-                    case M2Share.nRECALLMAP:
+                    case ScriptDef.nRECALLMAP:
                         Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
@@ -1967,10 +1967,10 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sRECALLMAP);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ScriptDef.sRECALLMAP);
                         }
                         break;
-                    case M2Share.nADDBATCH:
+                    case ScriptDef.nADDBATCH:
                         if (BatchParamsList == null)
                         {
                             BatchParamsList = new List<TScriptParams>();
@@ -1981,10 +1981,10 @@ namespace GameSvr.Npc
                             nParams = n18
                         });
                         break;
-                    case M2Share.nBATCHDELAY:
+                    case ScriptDef.nBATCHDELAY:
                         n18 = QuestActionInfo.nParam1 * 1000;
                         break;
-                    case M2Share.nBATCHMOVE:
+                    case ScriptDef.nBATCHMOVE:
                         var n20 = 0;
                         for (var k = 0; k < BatchParamsList.Count; k++)
                         {
@@ -1993,329 +1993,329 @@ namespace GameSvr.Npc
                             n20 += batchParam.nParams;
                         }
                         break;
-                    case M2Share.nPLAYDICE:
+                    case ScriptDef.nPLAYDICE:
                         PlayObject.m_sPlayDiceLabel = QuestActionInfo.sParam2;
                         PlayObject.SendMsg(this, Grobal2.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord(PlayObject.m_DyVal[0], PlayObject.m_DyVal[1]), HUtil32.MakeWord(PlayObject.m_DyVal[2], PlayObject.m_DyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord(PlayObject.m_DyVal[4], PlayObject.m_DyVal[5]), HUtil32.MakeWord(PlayObject.m_DyVal[6], PlayObject.m_DyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord(PlayObject.m_DyVal[8], PlayObject.m_DyVal[9]), 0), QuestActionInfo.sParam2);
                         bo11 = true;
                         break;
-                    case M2Share.nADDNAMELIST:
+                    case ScriptDef.nADDNAMELIST:
                         GotoLable_AddList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nDELNAMELIST:
+                    case ScriptDef.nDELNAMELIST:
                         GotoLable_DelList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nADDUSERDATE:
+                    case ScriptDef.nADDUSERDATE:
                         GotoLable_AddUseDateList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nDELUSERDATE:
+                    case ScriptDef.nDELUSERDATE:
                         GotoLable_DELUseDateList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nADDGUILDLIST:
+                    case ScriptDef.nADDGUILDLIST:
                         if (PlayObject.m_MyGuild != null)
                         {
                             GotoLable_AddList(PlayObject.m_MyGuild.sGuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
-                    case M2Share.nDELGUILDLIST:
+                    case ScriptDef.nDELGUILDLIST:
                         if (PlayObject.m_MyGuild != null)
                         {
                             GotoLable_DelList(PlayObject.m_MyGuild.sGuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
-                    case M2Share.nSC_LINEMSG:
-                    case M2Share.nSENDMSG:
+                    case ScriptDef.nSC_LINEMSG:
+                    case ScriptDef.nSENDMSG:
                         ActionOfLineMsg(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nADDACCOUNTLIST:
+                    case ScriptDef.nADDACCOUNTLIST:
                         GotoLable_AddList(PlayObject.m_sUserID, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nDELACCOUNTLIST:
+                    case ScriptDef.nDELACCOUNTLIST:
                         GotoLable_DelList(PlayObject.m_sUserID, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nADDIPLIST:
+                    case ScriptDef.nADDIPLIST:
                         GotoLable_AddList(PlayObject.m_sIPaddr, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nDELIPLIST:
+                    case ScriptDef.nDELIPLIST:
                         GotoLable_DelList(PlayObject.m_sIPaddr, m_sPath + QuestActionInfo.sParam1);
                         break;
-                    case M2Share.nGOQUEST:
+                    case ScriptDef.nGOQUEST:
                         GotoLable_GoToQuest(PlayObject, QuestActionInfo.nParam1);
                         break;
-                    case M2Share.nENDQUEST:
+                    case ScriptDef.nENDQUEST:
                         PlayObject.m_Script = null;
                         break;
-                    case M2Share.nGOTO:
+                    case ScriptDef.nGOTO:
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
                         {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
-                            M2Share.MainOutMessage("[脚本死循环] NPC:" + this.m_sCharName + " 位置:" + this.m_sMapName + '(' + this.m_nCurrX + ':' + this.m_nCurrY + ')' + " 命令:" + M2Share.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            M2Share.MainOutMessage("[脚本死循环] NPC:" + this.m_sCharName + " 位置:" + this.m_sMapName + '(' + this.m_nCurrX + ':' + this.m_nCurrY + ')' + " 命令:" + ScriptDef.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
                             return result;
                         }
                         break;
-                    case M2Share.nSC_HAIRCOLOR:
+                    case ScriptDef.nSC_HAIRCOLOR:
                         break;
-                    case M2Share.nSC_WEARCOLOR:
+                    case ScriptDef.nSC_WEARCOLOR:
                         break;
-                    case M2Share.nSC_HAIRSTYLE:
+                    case ScriptDef.nSC_HAIRSTYLE:
                         ActionOfChangeHairStyle(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MONRECALL:
+                    case ScriptDef.nSC_MONRECALL:
                         break;
-                    case M2Share.nSC_HORSECALL:
+                    case ScriptDef.nSC_HORSECALL:
                         break;
-                    case M2Share.nSC_HAIRRNDCOL:
+                    case ScriptDef.nSC_HAIRRNDCOL:
                         break;
-                    case M2Share.nSC_KILLHORSE:
+                    case ScriptDef.nSC_KILLHORSE:
                         break;
-                    case M2Share.nSC_RANDSETDAILYQUEST:
+                    case ScriptDef.nSC_RANDSETDAILYQUEST:
                         break;
-                    case M2Share.nSC_RECALLGROUPMEMBERS:
+                    case ScriptDef.nSC_RECALLGROUPMEMBERS:
                         ActionOfRecallGroupMembers(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CLEARNAMELIST:
+                    case ScriptDef.nSC_CLEARNAMELIST:
                         ActionOfClearNameList(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MAPTING:
+                    case ScriptDef.nSC_MAPTING:
                         ActionOfMapTing(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CHANGELEVEL:
+                    case ScriptDef.nSC_CHANGELEVEL:
                         ActionOfChangeLevel(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MARRY:
+                    case ScriptDef.nSC_MARRY:
                         ActionOfMarry(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MASTER:
+                    case ScriptDef.nSC_MASTER:
                         ActionOfMaster(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_UNMASTER:
+                    case ScriptDef.nSC_UNMASTER:
                         ActionOfUnMaster(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_UNMARRY:
+                    case ScriptDef.nSC_UNMARRY:
                         ActionOfUnMarry(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GETMARRY:
+                    case ScriptDef.nSC_GETMARRY:
                         ActionOfGetMarry(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GETMASTER:
+                    case ScriptDef.nSC_GETMASTER:
                         ActionOfGetMaster(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CLEARSKILL:
+                    case ScriptDef.nSC_CLEARSKILL:
                         ActionOfClearSkill(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_DELNOJOBSKILL:
+                    case ScriptDef.nSC_DELNOJOBSKILL:
                         ActionOfDelNoJobSkill(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_DELSKILL:
+                    case ScriptDef.nSC_DELSKILL:
                         ActionOfDelSkill(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_ADDSKILL:
+                    case ScriptDef.nSC_ADDSKILL:
                         ActionOfAddSkill(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SKILLLEVEL:
+                    case ScriptDef.nSC_SKILLLEVEL:
                         ActionOfSkillLevel(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CHANGEPKPOINT:
+                    case ScriptDef.nSC_CHANGEPKPOINT:
                         ActionOfChangePkPoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CHANGEEXP:
+                    case ScriptDef.nSC_CHANGEEXP:
                         ActionOfChangeExp(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CHANGEJOB:
+                    case ScriptDef.nSC_CHANGEJOB:
                         ActionOfChangeJob(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MISSION:
+                    case ScriptDef.nSC_MISSION:
                         ActionOfMission(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MOBPLACE:
+                    case ScriptDef.nSC_MOBPLACE:
                         ActionOfMobPlace(PlayObject, QuestActionInfo, n34, n38, n3C, n40);
                         break;
-                    case M2Share.nSC_SETMEMBERTYPE:
+                    case ScriptDef.nSC_SETMEMBERTYPE:
                         ActionOfSetMemberType(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SETMEMBERLEVEL:
+                    case ScriptDef.nSC_SETMEMBERLEVEL:
                         ActionOfSetMemberLevel(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GAMEGOLD:
+                    case ScriptDef.nSC_GAMEGOLD:
                         // nSC_SETMEMBERTYPE:   PlayObject.m_nMemberType:=Str_ToInt(QuestActionInfo.sParam1,0);
                         // nSC_SETMEMBERLEVEL:  PlayObject.m_nMemberType:=Str_ToInt(QuestActionInfo.sParam1,0);
                         ActionOfGameGold(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GAMEPOINT:
+                    case ScriptDef.nSC_GAMEPOINT:
                         ActionOfGamePoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_OffLine:
+                    case ScriptDef.nSC_OffLine:
                         ActionOfOffLine(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_AUTOADDGAMEGOLD: // 增加挂机
+                    case ScriptDef.nSC_AUTOADDGAMEGOLD: // 增加挂机
                         ActionOfAutoAddGameGold(PlayObject, QuestActionInfo, n34, n38);
                         break;
-                    case M2Share.nSC_AUTOSUBGAMEGOLD:
+                    case ScriptDef.nSC_AUTOSUBGAMEGOLD:
                         ActionOfAutoSubGameGold(PlayObject, QuestActionInfo, n34, n38);
                         break;
-                    case M2Share.nSC_CHANGENAMECOLOR:
+                    case ScriptDef.nSC_CHANGENAMECOLOR:
                         ActionOfChangeNameColor(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CLEARPASSWORD:
+                    case ScriptDef.nSC_CLEARPASSWORD:
                         ActionOfClearPassword(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_RENEWLEVEL:
+                    case ScriptDef.nSC_RENEWLEVEL:
                         ActionOfReNewLevel(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_KILLSLAVE:
+                    case ScriptDef.nSC_KILLSLAVE:
                         ActionOfKillSlave(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CHANGEGENDER:
+                    case ScriptDef.nSC_CHANGEGENDER:
                         ActionOfChangeGender(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_KILLMONEXPRATE:
+                    case ScriptDef.nSC_KILLMONEXPRATE:
                         ActionOfKillMonExpRate(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_POWERRATE:
+                    case ScriptDef.nSC_POWERRATE:
                         ActionOfPowerRate(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CHANGEMODE:
+                    case ScriptDef.nSC_CHANGEMODE:
                         ActionOfChangeMode(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CHANGEPERMISSION:
+                    case ScriptDef.nSC_CHANGEPERMISSION:
                         ActionOfChangePerMission(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_KILL:
+                    case ScriptDef.nSC_KILL:
                         ActionOfKill(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_KICK:
+                    case ScriptDef.nSC_KICK:
                         ActionOfKick(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_BONUSPOINT:
+                    case ScriptDef.nSC_BONUSPOINT:
                         ActionOfBonusPoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_RESTRENEWLEVEL:
+                    case ScriptDef.nSC_RESTRENEWLEVEL:
                         ActionOfRestReNewLevel(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_DELMARRY:
+                    case ScriptDef.nSC_DELMARRY:
                         ActionOfDelMarry(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_DELMASTER:
+                    case ScriptDef.nSC_DELMASTER:
                         ActionOfDelMaster(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CREDITPOINT:
+                    case ScriptDef.nSC_CREDITPOINT:
                         ActionOfChangeCreditPoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CLEARNEEDITEMS:
+                    case ScriptDef.nSC_CLEARNEEDITEMS:
                         ActionOfClearNeedItems(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CLEARMAEKITEMS:
+                    case ScriptDef.nSC_CLEARMAEKITEMS:
                         ActionOfClearMakeItems(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SETSENDMSGFLAG:
+                    case ScriptDef.nSC_SETSENDMSGFLAG:
                         PlayObject.m_boSendMsgFlag = true;
                         break;
-                    case M2Share.nSC_UPGRADEITEMS:
+                    case ScriptDef.nSC_UPGRADEITEMS:
                         ActionOfUpgradeItems(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_UPGRADEITEMSEX:
+                    case ScriptDef.nSC_UPGRADEITEMSEX:
                         ActionOfUpgradeItemsEx(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MONGENEX:
+                    case ScriptDef.nSC_MONGENEX:
                         ActionOfMonGenEx(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CLEARMAPMON:
+                    case ScriptDef.nSC_CLEARMAPMON:
                         ActionOfClearMapMon(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SETMAPMODE:
+                    case ScriptDef.nSC_SETMAPMODE:
                         ActionOfSetMapMode(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_PKZONE:
+                    case ScriptDef.nSC_PKZONE:
                         ActionOfPkZone(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_RESTBONUSPOINT:
+                    case ScriptDef.nSC_RESTBONUSPOINT:
                         ActionOfRestBonusPoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_TAKECASTLEGOLD:
+                    case ScriptDef.nSC_TAKECASTLEGOLD:
                         ActionOfTakeCastleGold(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_HUMANHP:
+                    case ScriptDef.nSC_HUMANHP:
                         ActionOfHumanHP(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_HUMANMP:
+                    case ScriptDef.nSC_HUMANMP:
                         ActionOfHumanMP(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_BUILDPOINT:
+                    case ScriptDef.nSC_BUILDPOINT:
                         ActionOfGuildBuildPoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_DELAYGOTO:
+                    case ScriptDef.nSC_DELAYGOTO:
                         ActionOfDelayCall(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_AURAEPOINT:
+                    case ScriptDef.nSC_AURAEPOINT:
                         ActionOfGuildAuraePoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_STABILITYPOINT:
+                    case ScriptDef.nSC_STABILITYPOINT:
                         ActionOfGuildstabilityPoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_FLOURISHPOINT:
+                    case ScriptDef.nSC_FLOURISHPOINT:
                         ActionOfGuildFlourishPoint(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_OPENMAGICBOX:
+                    case ScriptDef.nSC_OPENMAGICBOX:
                         ActionOfOpenMagicBox(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SETRANKLEVELNAME:
+                    case ScriptDef.nSC_SETRANKLEVELNAME:
                         ActionOfSetRankLevelName(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GMEXECUTE:
+                    case ScriptDef.nSC_GMEXECUTE:
                         ActionOfGmExecute(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GUILDCHIEFITEMCOUNT:
+                    case ScriptDef.nSC_GUILDCHIEFITEMCOUNT:
                         ActionOfGuildChiefItemCount(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_ADDNAMEDATELIST:
+                    case ScriptDef.nSC_ADDNAMEDATELIST:
                         ActionOfAddNameDateList(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_DELNAMEDATELIST:
+                    case ScriptDef.nSC_DELNAMEDATELIST:
                         ActionOfDelNameDateList(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MOBFIREBURN:
+                    case ScriptDef.nSC_MOBFIREBURN:
                         ActionOfMobFireBurn(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_MESSAGEBOX:
+                    case ScriptDef.nSC_MESSAGEBOX:
                         ActionOfMessageBox(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SETSCRIPTFLAG:
+                    case ScriptDef.nSC_SETSCRIPTFLAG:
                         ActionOfSetScriptFlag(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SETAUTOGETEXP:
+                    case ScriptDef.nSC_SETAUTOGETEXP:
                         ActionOfAutoGetExp(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_VAR:
+                    case ScriptDef.nSC_VAR:
                         ActionOfVar(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_LOADVAR:
+                    case ScriptDef.nSC_LOADVAR:
                         ActionOfLoadVar(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_SAVEVAR:
+                    case ScriptDef.nSC_SAVEVAR:
                         ActionOfSaveVar(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CALCVAR:
+                    case ScriptDef.nSC_CALCVAR:
                         ActionOfCalcVar(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GUILDRECALL:
+                    case ScriptDef.nSC_GUILDRECALL:
                         ActionOfGuildRecall(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GROUPADDLIST:
+                    case ScriptDef.nSC_GROUPADDLIST:
                         ActionOfGroupAddList(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_CLEARLIST:
+                    case ScriptDef.nSC_CLEARLIST:
                         ActionOfClearList(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GROUPRECALL:
+                    case ScriptDef.nSC_GROUPRECALL:
                         ActionOfGroupRecall(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_GROUPMOVEMAP:
+                    case ScriptDef.nSC_GROUPMOVEMAP:
                         ActionOfGroupMoveMap(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_REPAIRALL:
+                    case ScriptDef.nSC_REPAIRALL:
                         ActionOfRepairAllItem(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_QUERYBAGITEMS:// 刷新包裹
+                    case ScriptDef.nSC_QUERYBAGITEMS:// 刷新包裹
                         if ((HUtil32.GetTickCount() - PlayObject.m_dwQueryBagItemsTick) > M2Share.g_Config.dwQueryBagItemsTick)
                         {
                             PlayObject.m_dwQueryBagItemsTick = HUtil32.GetTickCount();
@@ -2326,7 +2326,7 @@ namespace GameSvr.Npc
                             PlayObject.SysMsg(M2Share.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                         }
                         break;
-                    case M2Share.nSC_SETRANDOMNO:
+                    case ScriptDef.nSC_SETRANDOMNO:
                         while (true)
                         {
                             n2C = M2Share.RandomNumber.Random(999999);
@@ -2337,16 +2337,16 @@ namespace GameSvr.Npc
                             }
                         }
                         break;
-                    case M2Share.nOPENYBDEAL:
+                    case ScriptDef.nOPENYBDEAL:
                         ActionOfOPENYBDEAL(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nQUERYYBSELL:
+                    case ScriptDef.nQUERYYBSELL:
                         ActionOfQUERYYBSELL(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nQUERYYBDEAL:
+                    case ScriptDef.nQUERYYBDEAL:
                         ActionOfQUERYYBDEAL(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nDELAYGOTO:
+                    case ScriptDef.nDELAYGOTO:
                         PlayObject.m_boTimeGoto = true;
                         var m_DelayGoto = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
                         if (m_DelayGoto == 0)
@@ -2366,7 +2366,7 @@ namespace GameSvr.Npc
                         PlayObject.m_sTimeGotoLable = QuestActionInfo.sParam2;
                         PlayObject.m_TimeGotoNPC = this;
                         break;
-                    case M2Share.nCLEARDELAYGOTO:
+                    case ScriptDef.nCLEARDELAYGOTO:
                         PlayObject.m_boTimeGoto = false;
                         PlayObject.m_sTimeGotoLable = "";
                         PlayObject.m_TimeGotoNPC = null;

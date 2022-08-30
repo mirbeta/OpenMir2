@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[0])
@@ -63,9 +63,9 @@ namespace GameSvr.Command.Commands
                     }
                     break;
             }
-            m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandCreditPointHumanMsg, nPoint, m_PlayObject.m_btCreditPoint),
+            m_PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandCreditPointHumanMsg, nPoint, m_PlayObject.m_btCreditPoint),
                 MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.m_btCreditPoint),
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.m_btCreditPoint),
                 MsgColor.Green, MsgType.Hint);
         }
     }

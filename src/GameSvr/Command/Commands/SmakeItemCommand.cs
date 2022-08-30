@@ -74,7 +74,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    PlayObject.SysMsg(M2Share.g_sGamecommandSuperMakeHelpMsg, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(GameCommandConst.g_sGamecommandSuperMakeHelpMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }

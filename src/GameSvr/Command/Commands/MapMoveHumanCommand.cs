@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 将指定地图所有玩家随机移动
     /// </summary>
-    [GameCommand("MapMoveHuman", "将指定地图所有玩家随机移动", M2Share.g_sGameCommandMapMoveHelpMsg, 10)]
+    [GameCommand("MapMoveHuman", "将指定地图所有玩家随机移动", GameCommandConst.g_sGameCommandMapMoveHelpMsg, 10)]
     public class MapMoveHumanCommand : BaseCommond
     {
         [DefaultCommand]
@@ -30,12 +30,12 @@ namespace GameSvr.Command.Commands
             var DenEnvir = M2Share.MapManager.FindMap(sDenMap);
             if (SrcEnvir == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (DenEnvir == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red, MsgType.Hint);
                 return;
             }
             HumanList = new List<TBaseObject>();

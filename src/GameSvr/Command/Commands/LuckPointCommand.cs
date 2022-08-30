@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 查看指定玩家幸运点
     /// </summary>
-    [GameCommand("LuckPoint", "查看指定玩家幸运点", M2Share.g_sGameCommandLuckPointHelpMsg, 10)]
+    [GameCommand("LuckPoint", "查看指定玩家幸运点", GameCommandConst.g_sGameCommandLuckPointHelpMsg, 10)]
     public class LuckPointCommand : BaseCommond
     {
         [DefaultCommand]
@@ -28,12 +28,12 @@ namespace GameSvr.Command.Commands
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sCtr == "")
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandLuckPointMsg, sHumanName, PlayObject.m_nBodyLuckLevel, PlayObject.m_dBodyLuck, PlayObject.m_nLuck), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandLuckPointMsg, sHumanName, PlayObject.m_nBodyLuckLevel, PlayObject.m_dBodyLuck, PlayObject.m_nLuck), MsgColor.Green, MsgType.Hint);
                 return;
             }
             var nPoint = HUtil32.Str_ToInt(sPoint, 0);

@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
             GoodItem StdItem;
             if (PlayObject.m_btPermission < this.GameCommand.nPermissionMin)
             {
-                PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.g_sGameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sMINEName == "" || sMINEName != "" && sMINEName[0] == '?' || nMineCount <= 0)

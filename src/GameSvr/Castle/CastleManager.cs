@@ -1,4 +1,5 @@
 ﻿using GameSvr.Actor;
+using GameSvr.Command;
 using GameSvr.Maps;
 using System.Collections;
 using SystemModule.Common;
@@ -132,7 +133,7 @@ namespace GameSvr.Castle
             for (var i = 0; i < _castleList.Count; i++)
             {
                 var castle = _castleList[i];
-                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg, castle.m_sName, castle.m_nTotalGold, castle.m_nTodayIncome));
+                List.Add(string.Format(GameCommandConst.g_sGameCommandSbkGoldShowMsg, castle.m_sName, castle.m_nTotalGold, castle.m_nTodayIncome));
             }
         }
 

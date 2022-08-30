@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 将指定人物禁言(支持权限分配)
     /// </summary>
-    [GameCommand("Shutup", "将指定人物禁言", M2Share.g_sGameCommandShutupHelpMsg, 10)]
+    [GameCommand("Shutup", "将指定人物禁言", GameCommandConst.g_sGameCommandShutupHelpMsg, 10)]
     public class ShutupCommand : BaseCommond
     {
         [DefaultCommand]
@@ -22,7 +22,7 @@ namespace GameSvr.Command.Commands
             if (sTime == "" || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.GameCommand.Name, M2Share.g_sGameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandParamUnKnow, this.GameCommand.Name, GameCommandConst.g_sGameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var dwTime = (uint)HUtil32.Str_ToInt(sTime, 5);
@@ -52,7 +52,7 @@ namespace GameSvr.Command.Commands
             {
                 HUtil32.LeaveCriticalSection(M2Share.g_DenySayMsgList);
             }
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
         }
     }
 }

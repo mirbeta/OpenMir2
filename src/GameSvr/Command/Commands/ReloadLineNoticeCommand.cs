@@ -14,11 +14,11 @@ namespace GameSvr.Command.Commands
         {
             if (M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
             {
-                PlayObject.SysMsg(M2Share.g_sGameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.g_sGameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(M2Share.g_sGameCommandReloadLineNoticeFailMsg, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.g_sGameCommandReloadLineNoticeFailMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Castle;
+using GameSvr.Command;
 using GameSvr.Event.Events;
 using GameSvr.Guild;
 using GameSvr.Items;
@@ -3761,7 +3762,7 @@ namespace GameSvr.Player
             }
             else
             {
-                SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                SysMsg(format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
 

@@ -22,23 +22,23 @@ namespace GameSvr.Command.Commands
                 sParam1 = @Params.Length > 0 ? @Params[0] : "";
                 if (string.IsNullOrEmpty(sParam1))
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.GameCommand.Name, M2Share.g_sGameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandParamUnKnow, this.GameCommand.Name, GameCommandConst.g_sGameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
             if (M2Share.nServerIndex != 0)
             {
-                PlayObject.SysMsg(M2Share.g_sGameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.g_sGameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = M2Share.GuildManager.FindGuild(sParam1);
             if (Guild == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
                 return;
             }
             Guild.LoadGuild();
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandReloadGuildSuccessMsg, sParam1), MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandReloadGuildSuccessMsg, sParam1), MsgColor.Red, MsgType.Hint);
             // UserEngine.SendServerGroupMsg(SS_207, nServerIndex, sParam1);
         }
     }
