@@ -25,7 +25,7 @@ namespace GameSvr
 {
     public class GameApp : ServerBase
     {
-        protected GameApp(ILogger<ServerBase> logger) : base(logger)
+        public GameApp(ILogger<ServerBase> logger) : base(logger)
         {
             
         }
