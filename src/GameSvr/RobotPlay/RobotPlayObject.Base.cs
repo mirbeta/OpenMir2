@@ -223,7 +223,7 @@ namespace GameSvr.RobotPlay
                                             }
                                         }
                                     }
-                                    for (nWhere = m_UseItems.GetLowerBound(0); nWhere <= m_UseItems.GetUpperBound(0); nWhere++)
+                                    for (nWhere = 0; nWhere <= m_UseItems.GetUpperBound(0); nWhere++)
                                     {
                                         if (m_UseItems[nWhere] != null && m_UseItems[nWhere].wIndex > 0)
                                         {

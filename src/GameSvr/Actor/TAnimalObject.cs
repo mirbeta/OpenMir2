@@ -114,7 +114,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
             {

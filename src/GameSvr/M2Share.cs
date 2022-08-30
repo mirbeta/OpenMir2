@@ -553,8 +553,8 @@ namespace GameSvr
             OStdItem.DC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.DC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.DC)));
             OStdItem.MC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MC)));
             OStdItem.SC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.SC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.SC)));
-            OStdItem.Need = StdItem.Need;
-            OStdItem.NeedLevel = StdItem.NeedLevel;
+            //OStdItem.Need = StdItem.Need;
+            //OStdItem.NeedLevel = StdItem.NeedLevel;
             OStdItem.Price = StdItem.Price;
         }
 

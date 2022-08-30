@@ -1325,7 +1325,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             bool result = false;
             TBaseObject AttackBaseObject;

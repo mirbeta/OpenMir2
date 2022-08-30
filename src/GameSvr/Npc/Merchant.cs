@@ -297,7 +297,7 @@ namespace GameSvr.Npc
         {
             TUserItem UserItem;
             StdItem StdItem;
-            TStdItem StdItem80 = null;
+            TClientStdItem StdItem80 = null;
             IList<TDeleteItem> DelItemList = null;
             int nDc;
             int nSc;
@@ -1041,7 +1041,7 @@ namespace GameSvr.Npc
             base.Run();
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             return base.Operate(ProcessMsg);
         }
@@ -1815,7 +1815,7 @@ namespace GameSvr.Npc
             PlayObject.m_boChangeItemNameFlag = false;
             var sWhere = sLabel.Substring(ScriptDef.sUSEITEMNAME.Length, sLabel.Length - ScriptDef.sUSEITEMNAME.Length);
             var btWhere = (byte)HUtil32.Str_ToInt(sWhere, -1);
-            if (btWhere >= PlayObject.m_UseItems.GetLowerBound(0) && btWhere <= PlayObject.m_UseItems.GetUpperBound(0))
+            if (btWhere >= 0 && btWhere <= PlayObject.m_UseItems.GetUpperBound(0))
             {
                 var UserItem = PlayObject.m_UseItems[btWhere];
                 if (UserItem.wIndex == 0)

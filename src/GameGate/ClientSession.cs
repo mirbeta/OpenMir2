@@ -120,6 +120,7 @@ namespace GameGate
                         {
                             LogQueue.Enqueue("客户端登陆消息处理失败，剔除链接", 1);
                             //KickUser("ip");
+                            Session.Socket.Close();
                         }
                         break;
                     }

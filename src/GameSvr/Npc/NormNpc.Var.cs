@@ -2226,12 +2226,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$EXP":
-                    nValue = PlayObject.m_Abil.Exp;
+                    nValue = (int)PlayObject.m_Abil.Exp;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXEXP":
-                    nValue = PlayObject.m_Abil.MaxExp;
+                    nValue = (int)PlayObject.m_Abil.MaxExp;
                     nDataType = 1;
                     result = true;
                     return result;

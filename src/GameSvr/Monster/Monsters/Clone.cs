@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             var result = false;
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK || ProcessMsg.wIdent == Grobal2.RM_SPELL)

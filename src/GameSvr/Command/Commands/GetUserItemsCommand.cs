@@ -46,7 +46,7 @@ namespace GameSvr.Command.Commands
             {
                 case 0:
                     nItemCount = 0;
-                    for (var i = m_PlayObject.m_UseItems.GetLowerBound(0); i <= m_PlayObject.m_UseItems.GetUpperBound(0); i++)
+                    for (var i = 0; i <= m_PlayObject.m_UseItems.GetUpperBound(0); i++)
                     {
                         if (m_PlayObject.m_ItemList.Count >= 46)
                         {

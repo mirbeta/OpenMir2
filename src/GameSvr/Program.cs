@@ -8,6 +8,8 @@ using Spectre.Console;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
+using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -21,7 +23,13 @@ namespace GameSvr
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-            
+
+            var Ability = new TClientStdItem();
+            Ability.Name = "哈哈哈";
+            Ability.Looks = 100;
+
+            var abstr = EDcode.EncodeBuffer(Ability);
+  
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()

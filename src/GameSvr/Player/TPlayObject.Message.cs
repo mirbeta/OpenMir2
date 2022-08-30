@@ -239,7 +239,7 @@ namespace GameSvr.Player
             }
             var boTakeItem = false;
             // 检查身上的装备有没不符合
-            for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
@@ -661,7 +661,7 @@ namespace GameSvr.Player
             base.Run();
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             TCharDesc CharDesc;
             int nObjCount;
@@ -692,7 +692,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_QUERYUSERSTATE:
-                    ClientQueryUserState(ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3);
+                    ClientQueryUserInformation(ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3);
                     break;
                 case Grobal2.CM_QUERYUSERSET:
                     ClientQueryUserSet(ProcessMsg);
@@ -1546,11 +1546,11 @@ namespace GameSvr.Player
                     SendSocket(m_DefMsg, EDcode.EncodeString(ProcessMsg.sMsg));
                     break;
                 case Grobal2.RM_WINEXP:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WINEXP, m_Abil.Exp, HUtil32.LoWord(ProcessMsg.nParam1), HUtil32.HiWord(ProcessMsg.nParam1), 0);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WINEXP, (int)m_Abil.Exp, HUtil32.LoWord(ProcessMsg.nParam1), HUtil32.HiWord(ProcessMsg.nParam1), 0);
                     SendSocket(m_DefMsg);
                     break;
                 case Grobal2.RM_LEVELUP:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, m_Abil.Exp, m_Abil.Level, 0, 0);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, (int)m_Abil.Exp, m_Abil.Level, 0, 0);
                     SendSocket(m_DefMsg);
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord(m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
@@ -2029,7 +2029,7 @@ namespace GameSvr.Player
                     return;
                 }
                 StdItem StdItem;
-                for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+                for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
                 {
                     if (m_UseItems[i] == null)
                     {
@@ -2054,7 +2054,7 @@ namespace GameSvr.Player
                     }
                 }
                 var nRate = PKLevel() > 2 ? M2Share.g_Config.nDieRedDropUseItemRate : M2Share.g_Config.nDieDropUseItemRate;
-                for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+                for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
                 {
                     if (M2Share.RandomNumber.Random(nRate) != 0)
                     {

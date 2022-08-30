@@ -66,7 +66,7 @@ namespace GameSvr.Npc
         private void ExeAction(TPlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3)
         {
             int nInt1;
-            int dwInt;
+            long dwInt;
             // ================================================
             // 更改人物当前经验值
             // EXEACTION CHANGEEXP 0 经验数  设置为指定经验值
@@ -88,9 +88,9 @@ namespace GameSvr.Npc
                     case 1:
                         if (PlayObject.m_Abil.Exp >= nParam3)
                         {
-                            if (PlayObject.m_Abil.Exp - nParam3 > int.MaxValue - PlayObject.m_Abil.Exp)
+                            if (PlayObject.m_Abil.Exp - nParam3 > long.MaxValue - PlayObject.m_Abil.Exp)
                             {
-                                dwInt = int.MaxValue - PlayObject.m_Abil.Exp;
+                                dwInt = long.MaxValue - PlayObject.m_Abil.Exp;
                             }
                             else
                             {
@@ -99,9 +99,9 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            if (nParam3 - PlayObject.m_Abil.Exp > int.MaxValue - nParam3)
+                            if (nParam3 - PlayObject.m_Abil.Exp > long.MaxValue - nParam3)
                             {
-                                dwInt = int.MaxValue - nParam3;
+                                dwInt = long.MaxValue - nParam3;
                             }
                             else
                             {
@@ -1575,7 +1575,7 @@ namespace GameSvr.Npc
             }
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             return base.Operate(ProcessMsg);
         }

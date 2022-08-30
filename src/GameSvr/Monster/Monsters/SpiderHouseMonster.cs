@@ -28,7 +28,7 @@ namespace GameSvr.Monster.Monsters
             }
         }
 
-        public override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(TProcessMessage ProcessMsg)
         {
             TBaseObject BB;
             short n08 = 0;

@@ -3,62 +3,43 @@ using System.IO;
 
 namespace SystemModule.Packet.ClientPackets
 {
-    public class TStdItem:Packets
+
+    public class TStdItem : Packets
     {
-        public string Name; // 酒捞袍 捞抚 (玫窍力老八)
-        public byte StdMode; //
-        public byte Shape; // 屈怕喊 捞抚 (枚八)
-        public byte Weight; // 公霸
-        public byte AniCount; // 1焊促 农搁 局聪皋捞记 登绰 酒捞袍 (促弗 侩档肺 腹捞 静烙)
-        public short SpecialPwr; // +捞搁 积拱傍拜+瓷仿, -捞搁 攫单靛傍拜+
-        //1~10 碍档
-        //-50~-1 攫单靛 瓷仿摹 氢惑
-        //-100~-51 攫单靛 瓷仿摹 皑家
-        public byte ItemDesc ; //$01 IDC_UNIDENTIFIED  (酒捞错萍颇捞 救 等 巴, 努扼捞攫飘俊辑父 荤侩凳)
-        //$02 IDC_UNABLETAKEOFF (颊俊辑 冻绢瘤瘤 臼澜, 固瘤荐 荤侩 啊瓷)
-        //$04 IDC_NEVERTAKEOFF  (颊俊辑 冻绢瘤瘤 臼澜, 固瘤荐 荤侩 阂啊瓷)
-        //$08 IDC_DIEANDBREAK   (馒侩酒捞袍俊辑 磷栏搁 柄瘤绰 加己)
-        //$10 IDC_NEVERLOSE     (馒侩酒捞袍俊辑 磷绢档 冻绢瘤瘤 臼澜)
-        public ushort Looks; // 弊覆 锅龋
-        public ushort DuraMax;
-        public ushort AC; // 规绢仿
-        public ushort MAC; // 付亲仿
-        public ushort DC; // 单固瘤
-        public ushort MC; // 贱荤狼 付过 颇况
-        public ushort SC; // 档荤狼 沥脚仿
-        public byte Need; // 0:Level, 1:DC, 2:MC, 3:SC
-        public byte NeedLevel; // 1..60 level value...
+        public string Name;
+        public byte StdMode;
+        public byte Shape;
+        public byte Weight;
+        public byte AniCount;
+        public short Source;
+        public byte Reserved;
         public byte NeedIdentify;
-        public int Price; // 啊拜
-        public int Stock; // 焊蜡樊
-        public byte AtkSpd; // 傍拜加档
-        public byte Agility; // 刮酶
-        public byte Accurate; // 沥犬
-        public byte MgAvoid; // 付过雀乔 -> 付过历亲(sonmg)
-        public byte Strong; // 碍档
-        public byte Undead; // 荤磊
-        public int HpAdd; // 眠啊HP
-        public int MpAdd; // 眠啊MP
-        public int ExpAdd; // 眠啊 版氰摹
-        public byte EffType1; // 瓤苞辆幅1
-        public byte EffRate1; // 瓤苞犬伏1
-        public byte EffValue1; // 瓤苞蔼1
-        public byte EffType2; // 瓤苞辆幅2
-        public byte EffRate2; // 瓤苞犬伏2
-        public byte EffValue2; // 瓤苞蔼2
-        public byte Slowdown; // 敌拳
-        public byte Tox; // 吝刀
-        public byte ToxAvoid; // 吝刀历亲
-        public byte UniqueItem; // 蜡聪农加己
-        // 蜡聪农 --- $01:力访/诀弊饭捞靛 救凳
-        // 蜡聪农 --- $02:荐府阂啊
-        // 蜡聪农 --- $04:滚府搁荤扼咙(啊规芒俊辑 冻备瘤 臼澜)
-        // 蜡聪农 --- $08:背券阂啊(12=4+8 : 背券阂啊,冻崩阂啊)
-        public byte OverlapItem; // 吝汗倾侩
-        public byte light; // 蝴阑郴绰 酒捞袍
-        public byte ItemType; // 酒捞袍狼 备盒
-        public ushort ItemSet; // 悸飘 酒捞袍 备盒
-        public string Reference; // 曼炼 巩磊凯
+        public ushort Looks;
+        public ushort DuraMax;
+        public int AC;
+        public int MAC;
+        public int DC;
+        public int MC;
+        public int SC;
+        public int Need;
+        public int NeedLevel;
+        public int Price;
+        public byte UniqueItem;
+        public byte Overlap;
+        public byte ItemType;
+        public short ItemSet;
+        public byte Binded;
+        public byte[] Reserve;
+        public byte[] AddOn;
+        public TEvaluation Eva;
+        public TStdItemExt SvrSet;
+
+        public TStdItem()
+        {
+            Reserve = new byte[9];
+            AddOn = new byte[10];
+        }
+
         protected override void ReadPacket(BinaryReader reader)
         {
             throw new NotImplementedException();
@@ -67,15 +48,16 @@ namespace SystemModule.Packet.ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             var nameBuff = HUtil32.StringToByteAry(Name, out int nameLen);
-            nameBuff[0] = (byte) nameLen;
-            Array.Resize(ref nameBuff, 15);
+            nameBuff[0] = (byte)nameLen;
+            Array.Resize(ref nameBuff, PacketConst.ItemNameLen);
             writer.Write(nameBuff);
             writer.Write(StdMode);
             writer.Write(Shape);
             writer.Write(Weight);
             writer.Write(AniCount);
-            writer.Write(SpecialPwr);
-            writer.Write(ItemDesc);
+            writer.Write(Source);
+            writer.Write(Reserved);
+            writer.Write(NeedIdentify);
             writer.Write(Looks);
             writer.Write(DuraMax);
             writer.Write(AC);
@@ -85,39 +67,120 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(SC);
             writer.Write(Need);
             writer.Write(NeedLevel);
-            writer.Write(NeedIdentify);
             writer.Write(Price);
-            writer.Write(Stock);
-            writer.Write(AtkSpd);
-            writer.Write(Agility);
-            writer.Write(Accurate);
-            writer.Write(MgAvoid);
-            writer.Write(Strong);
-            writer.Write(Undead);
-            writer.Write(HpAdd);
-            writer.Write(MpAdd);
-            writer.Write(ExpAdd);
-            writer.Write(EffType1);
-            writer.Write(EffRate1);
-            writer.Write(EffValue1);
-            writer.Write(EffType2);
-            writer.Write(EffRate2);
-            writer.Write(EffValue2);
-            writer.Write(Slowdown);
-            writer.Write(Tox);
-            writer.Write(ToxAvoid);
             writer.Write(UniqueItem);
-            writer.Write(OverlapItem);
-            writer.Write(light);
+            writer.Write(Overlap);
             writer.Write(ItemType);
             writer.Write(ItemSet);
-            var referenceBuff = HUtil32.StringToByteAry(Name, out nameLen);
-            referenceBuff[0] = (byte) nameLen;
-            Array.Resize(ref referenceBuff, 15);
-            writer.Write(referenceBuff);
+            writer.Write(Binded);
+            writer.Write(Reserve);
+            writer.Write(AddOn);
+            writer.Write(Eva.GetBuffer());
+            writer.Write(SvrSet.GetBuffer());
         }
     }
 
+    public class TEvaAbil : Packets
+    {
+        public byte btType;
+        public byte btValue;
+
+        public TEvaAbil()
+        {
+            btType = 0;
+            btValue = 0;
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(btType);
+            writer.Write(btValue);
+        }
+    }
+
+    public class TEvaluation : Packets
+    {
+        public byte EvaTimes;
+        public byte EvaTimesMax;
+        public byte AdvAbil;
+        public byte AdvAbilMax;
+        public byte Spirit;
+        public byte SpiritMax;
+        public TEvaAbil[] Abil;
+        public byte BaseMax;
+        public byte Quality;
+        public byte SpiritQ;
+        public byte SpSkill;
+
+        public TEvaluation()
+        {
+            Abil = new TEvaAbil[8];
+            for (int i = 0; i < Abil.Length; i++)
+            {
+                Abil[i] = new TEvaAbil();
+            }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(EvaTimes);
+            writer.Write(EvaTimesMax);
+            writer.Write(AdvAbil);
+            writer.Write(AdvAbilMax);
+            writer.Write(Spirit);
+            writer.Write(SpiritMax);
+            for (int i = 0; i < Abil.Length; i++)
+            {
+                writer.Write(Abil[i].GetBuffer());
+            }
+            writer.Write(BaseMax);
+            writer.Write(Quality);
+            writer.Write(SpiritQ);
+            writer.Write(SpSkill);
+        }
+    }
+    
+    public class TStdItemExt : Packets
+    {
+        public bool boHeroPickup;
+        public byte btRefSuiteCount;
+        public byte[] aSuiteWhere;
+        public byte[] aSuiteIndex;
+        public int nGetRate;
+        public int nBind;
+
+        public TStdItemExt()
+        {
+            aSuiteWhere = new byte[255];
+            aSuiteIndex = new byte[255];
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(boHeroPickup);
+            writer.Write(btRefSuiteCount);
+            writer.Write(aSuiteWhere);
+            writer.Write(aSuiteIndex);
+            writer.Write(nGetRate);
+            writer.Write(nBind);
+        }
+    } 
+    
     public class TOldStdItem : Packets
     {
         /// <summary>
@@ -213,7 +276,7 @@ namespace SystemModule.Packet.ClientPackets
         {
             var nameBuff = HUtil32.StringToByteAry(Name, out int nameLen);
             nameBuff[0] = (byte)nameLen;
-            Array.Resize(ref nameBuff, 15);
+            Array.Resize(ref nameBuff, PacketConst.ItemNameLen);
             writer.Write(nameBuff);
             writer.Write(StdMode);
             writer.Write(Shape);

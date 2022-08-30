@@ -20,7 +20,7 @@ namespace GameSvr.Command.Commands
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sExp = @Params.Length > 1 ? @Params[1] : "";
             var dwExp = 0;
-            var dwOExp = 0;
+            var dwOExp = 0L;
             if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
