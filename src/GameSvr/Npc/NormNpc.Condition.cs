@@ -1153,7 +1153,7 @@ namespace GameSvr.Npc
                 return result;
             }
             var nAddAllValue = 0;
-            for (var i = 0; i <= UserItem.btValue.Length; i++)
+            for (var i = 0; i < UserItem.btValue.Length; i++)
             {
                 nAddAllValue += UserItem.btValue[i];
             }

@@ -52,7 +52,7 @@ namespace GameSvr.Monster.Monsters
                 return;
             }
             SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
-            for (var i = 0; i <= 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 for (var k = 0; k <= 4; k++)
                 {

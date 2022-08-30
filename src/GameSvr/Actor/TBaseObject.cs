@@ -823,7 +823,7 @@ namespace GameSvr.Actor
             var n24 = 999;
             var n28 = 0;
             var n2C = 0;
-            for (var i = 0; i <= nRange; i++)
+            for (var i = 0; i < nRange; i++)
             {
                 for (var ii = -i; ii <= i; ii++)
                 {
@@ -1573,7 +1573,7 @@ namespace GameSvr.Actor
         {
             TBaseObject BaseObject;
             int tcount = 0;
-            for (int i = 0; i <= 12; i++)
+            for (int i = 0; i < 12; i++)
             {
                 BaseObject = m_PEnvir.GetMovingObject(sx, sy, true) as TBaseObject;
                 if (BaseObject != null)
@@ -1657,7 +1657,7 @@ namespace GameSvr.Actor
             ushort nDura;
             ushort tDura;
             TPlayObject PlayObject;
-            for (int i = 0; i <= m_UseItems.Length; i++)
+            for (int i = 0; i < m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
@@ -4633,7 +4633,7 @@ namespace GameSvr.Actor
                     SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, m_UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
                 }
             }
-            for (var i = 0; i <= m_UseItems.Length; i++)
+            for (var i = 0; i < m_UseItems.Length; i++)
             {
                 if ((m_UseItems[i] != null) && (m_UseItems[i].wIndex > 0) && (M2Share.RandomNumber.Random(8) == 0))
                 {
@@ -4822,7 +4822,7 @@ namespace GameSvr.Actor
             }
             if (!result)
             {
-                for (int i = 0; i <= nRange; i++)
+                for (int i = 0; i < nRange; i++)
                 {
                     for (int j = -i; j <= i; j++)
                     {
@@ -5165,7 +5165,7 @@ namespace GameSvr.Actor
         {
             TUserItem result = null;
             nCount = 0;
-            for (int i = 0; i <= m_UseItems.Length; i++)
+            for (int i = 0; i < m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] == null)
                 {

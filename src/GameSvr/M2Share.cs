@@ -923,7 +923,7 @@ namespace GameSvr
                 result = false;
                 return result;
             }
-            for (var i = 0; i <= sGuildName.Length - 1; i++)
+            for (var i = 0; i < sGuildName.Length - 1; i++)
             {
                 if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
                     || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
@@ -967,7 +967,7 @@ namespace GameSvr
             {
                 return sName;
             }
-            for (var i = 0; i <= sName.Length - 1; i++)
+            for (var i = 0; i < sName.Length - 1; i++)
             {
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {

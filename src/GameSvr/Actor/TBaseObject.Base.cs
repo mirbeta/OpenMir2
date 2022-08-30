@@ -579,7 +579,7 @@ namespace GameSvr.Actor
             {
                 bool boChg = false;
                 bool boNeedRecalc = false;
-                for (var i = 0; i <= m_dwStatusArrTick.Length; i++)
+                for (var i = 0; i < m_dwStatusArrTick.Length; i++)
                 {
                     if ((m_wStatusTimeArr[i] > 0) && (m_wStatusTimeArr[i] < 60000))
                     {
@@ -1641,7 +1641,7 @@ namespace GameSvr.Actor
             bool boOldHideMode = m_boHideMode;
             m_dwPKDieLostExp = 0;
             m_nPKDieLostLevel = 0;
-            for (var i = 0; i <= m_UseItems.Length; i++)
+            for (var i = 0; i < m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] == null)
                 {

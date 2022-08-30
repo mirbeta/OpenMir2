@@ -123,7 +123,7 @@ namespace GameSvr.Configs
                     //TempList.Free;
                 }
             }
-            for (var i = 0; i <= 9; i++)
+            for (var i = 0; i < 9; i++)
             {
                 sSayMsg = ReadString("MonSay", i.ToString(), "");
                 if (sSayMsg != "")

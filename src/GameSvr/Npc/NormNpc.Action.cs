@@ -1677,7 +1677,7 @@ namespace GameSvr.Npc
         {
             string sUserItemName;
             bool boIsHasItem = false;
-            for (var i = 0; i <= PlayObject.m_UseItems.Length; i++)
+            for (var i = 0; i < PlayObject.m_UseItems.Length; i++)
             {
                 if (PlayObject.m_UseItems[i].wIndex <= 0)
                 {
@@ -2069,7 +2069,7 @@ namespace GameSvr.Npc
                     PlayObject.m_StorageItemList.RemoveAt(i);
                 }
             }
-            for (var i = 0; i <= PlayObject.m_UseItems.Length; i++)
+            for (var i = 0; i < PlayObject.m_UseItems.Length; i++)
             {
                 UserItem = PlayObject.m_UseItems[i];
                 if (UserItem.MakeIndex != nMakeIndex)
@@ -3549,7 +3549,7 @@ namespace GameSvr.Npc
             result = false;
             n28 = 0;
             n2C = 0;
-            for (var i = 0; i <= nRange; i++)
+            for (var i = 0; i < nRange; i++)
             {
                 for (var j = -i; j <= i; j++)
                 {

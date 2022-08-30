@@ -1689,7 +1689,7 @@ namespace GameSvr.Npc
                     return;
                 }
             }
-            for (var i = 0; i <= PlayObject.m_UseItems.Length; i++)
+            for (var i = 0; i < PlayObject.m_UseItems.Length; i++)
             {
                 if (nItemCount <= 0)
                 {

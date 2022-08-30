@@ -259,7 +259,7 @@ namespace SystemModule
         {
             char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
             var result = "";
-            for (var i = 0; i <= 15; i++)
+            for (var i = 0; i < 15; i++)
             {
                 result = result + digits[(d[i] >> 4) & 0x0F] + digits[d[i] & 0x0F];
             }
