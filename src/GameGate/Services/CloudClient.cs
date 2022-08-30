@@ -57,18 +57,15 @@ namespace GameGate.Services
         /// </summary>
         private static MirLog LogQueue => MirLog.Instance;
 
-        public CloudClient(IPEndPoint endPoint, GameGateInfo gameGate)
+        public CloudClient()
         {
             _clientSocket = new ClientScoket();
-            _clientSocket.Host = gameGate.ServerAdress;
-            _clientSocket.Port = gameGate.ServerPort;
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
             _clientSocket.ReceivedDatagram += ClientSocketRead;
             _clientSocket.OnError += ClientSocketError;
             _receiveBytes = 0;
             _sendBytes = 0;
-            _gateEndPoint = endPoint;
         }
 
         public bool IsConnected => _clientSocket.IsConnected;
@@ -78,9 +75,9 @@ namespace GameGate.Services
             return $"{_clientSocket.Host}:{_clientSocket.Port}";
         }
 
-        public void Start()
+        public void Start(IPEndPoint endPoint)
         {
-            _clientSocket.Connect();
+            _clientSocket.Connect(endPoint);
         }
 
         public void ReConnected()
