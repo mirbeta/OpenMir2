@@ -1334,7 +1334,7 @@ namespace BotSvr
                 }
                 var n = 0;
                 var boUnBindAble = false;
-                for (var i = 0; i <= MShare.MAXBAGITEMCL - 1 - 6; i++)
+                for (var i = 0; i < MShare.MAXBAGITEMCL - 1 - 6; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name == "")
                     {
@@ -1455,7 +1455,7 @@ namespace BotSvr
                         }
                         if ((MShare.g_ItemArr[idx].Item.StdMode == 41) && new ArrayList(new int[] { 10, 30 }).Contains(MShare.g_ItemArr[idx].Item.Shape) && (MShare.g_BuildAcusesStep != 1))
                         {
-                            for (i = 0; i <= 7; i++)
+                            for (i = 0; i < 7; i++)
                             {
                                 if (MShare.g_BuildAcuses[i].Item.Item.Name == "")
                                 {
@@ -1553,7 +1553,7 @@ namespace BotSvr
                     }
                     if ((MShare.g_MovingItem.Item.Item.StdMode == 41) && new ArrayList(new int[] { 10, 30 }).Contains(MShare.g_MovingItem.Item.Item.Shape) && (MShare.g_BuildAcusesStep != 1))
                     {
-                        for (i = 0; i <= 7; i++)
+                        for (i = 0; i < 7; i++)
                         {
                             if (MShare.g_BuildAcuses[i].Item.Item.Name == "")
                             {
@@ -3629,7 +3629,7 @@ namespace BotSvr
                                     if (MShare.g_APMapPath != null)
                                     {
                                         MShare.g_APMapPath2 = new Point[MShare.g_APMapPath.Length + 1];
-                                        for (i = 0; i <= MShare.g_APMapPath.Length; i++)
+                                        for (i = 0; i < MShare.g_APMapPath.Length; i++)
                                         {
                                             MShare.g_APMapPath2[i] = MShare.g_APMapPath[i];
                                         }
@@ -4593,7 +4593,7 @@ namespace BotSvr
             {
                 var cu = EDcode.DecodeBuffer<TClientItem>(body);
                 ClFunc.UpdateItemBag(cu);
-                for (var i = 0; i <= MShare.g_UseItems.Length; i++)
+                for (var i = 0; i < MShare.g_UseItems.Length; i++)
                 {
                     if ((MShare.g_UseItems[i].Item.Name == cu.Item.Name) && (MShare.g_UseItems[i].MakeIndex == cu.MakeIndex))
                     {
@@ -4604,7 +4604,7 @@ namespace BotSvr
                 {
                     MShare.g_SellDlgItem = cu;
                 }
-                for (var i = 0; i <= 1; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     if ((MShare.g_TIItems[i].Item.MakeIndex == cu.MakeIndex) && (MShare.g_TIItems[i].Item.Item.Name != ""))
                     {
@@ -4616,7 +4616,7 @@ namespace BotSvr
                     }
                 }
                 MShare.AutoPutOntiBooks();
-                for (var i = 0; i <= 1; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     if ((MShare.g_spItems[i].Item.MakeIndex == cu.MakeIndex) && (MShare.g_spItems[i].Item.Item.Name != ""))
                     {
@@ -4632,14 +4632,14 @@ namespace BotSvr
             {
                 var cu = EDcode.DecodeBuffer<TClientItem>(body);
                 ClFunc.DelItemBag(cu.Item.Name, cu.MakeIndex);
-                for (var i = 0; i <= MShare.g_UseItems.Length; i++)
+                for (var i = 0; i < MShare.g_UseItems.Length; i++)
                 {
                     if ((MShare.g_UseItems[i].Item.Name == cu.Item.Name) && (MShare.g_UseItems[i].MakeIndex == cu.MakeIndex))
                     {
                         MShare.g_UseItems[i].Item.Name = "";
                     }
                 }
-                for (var i = 0; i <= 1; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     if (MShare.g_TIItems[i].Item.MakeIndex == cu.MakeIndex)
                     {
@@ -4650,7 +4650,7 @@ namespace BotSvr
                         }
                     }
                 }
-                for (var i = 0; i <= 1; i++)
+                for (var i = 0; i < 1; i++)
                 {
                     if (MShare.g_spItems[i].Item.MakeIndex == cu.MakeIndex)
                     {
@@ -4677,7 +4677,7 @@ namespace BotSvr
                     ClFunc.DelItemBag(iname, iindex);
                     if (wOnlyBag == 0)
                     {
-                        for (var i = 0; i <= MShare.g_UseItems.Length; i++)
+                        for (var i = 0; i < MShare.g_UseItems.Length; i++)
                         {
                             if ((MShare.g_UseItems[i].Item.Name == iname) && (MShare.g_UseItems[i].MakeIndex == iindex))
                             {
@@ -4686,7 +4686,7 @@ namespace BotSvr
                             }
                         }
                     }
-                    for (var i = 0; i <= 1; i++)
+                    for (var i = 0; i < 1; i++)
                     {
                         if (MShare.g_TIItems[i].Item.MakeIndex == cu.MakeIndex)
                         {
@@ -4697,7 +4697,7 @@ namespace BotSvr
                             }
                         }
                     }
-                    for (var i = 0; i <= 1; i++)
+                    for (var i = 0; i < 1; i++)
                     {
                         if (MShare.g_spItems[i].Item.MakeIndex == cu.MakeIndex)
                         {
@@ -4807,7 +4807,7 @@ namespace BotSvr
             {
                 if (!MShare.g_MySelf.m_StallMgr.OnSale)
                 {
-                    for (var i = 0; i <= 9; i++)
+                    for (var i = 0; i < 9; i++)
                     {
                         if (MShare.g_MySelf.m_StallMgr.mBlock.Items[i] == null)
                         {
@@ -4821,7 +4821,7 @@ namespace BotSvr
                 }
                 else
                 {
-                    for (var i = 0; i <= 9; i++)
+                    for (var i = 0; i < 9; i++)
                     {
                         if (MShare.g_MySelf.m_StallMgr.mBlock.Items[i] == null)
                         {
@@ -6469,7 +6469,7 @@ namespace BotSvr
                 var n14 = 0;
                 MShare.g_APLastPoint.X = -1;
                 var n10 = 999;
-                for (var i = 0; i <= MShare.g_APMapPath.Length; i++)
+                for (var i = 0; i < MShare.g_APMapPath.Length; i++)
                 {
                     var nC = Math.Abs(MShare.g_APMapPath[i].X - MShare.g_MySelf.m_nCurrX) + Math.Abs(MShare.g_APMapPath[i].X - MShare.g_MySelf.m_nCurrY);
                     if (nC < n10)
@@ -6556,7 +6556,7 @@ namespace BotSvr
         public int CheckMagPassThrough(int sx, int sy, int tx, int ty, int ndir)
         {
             var tCount = 0;
-            for (var i = 0; i <= 12; i++)
+            for (var i = 0; i < 12; i++)
             {
                 TActor Actor = g_PlayScene.FindActorXY(sx, sy);
                 if (Actor != null)

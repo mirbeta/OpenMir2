@@ -1377,7 +1377,7 @@ namespace GameSvr.RobotPlay
             TBaseObject BaseObject;
             short nCurrX = nX;
             short nCurrY = nY;
-            for (var i = 0; i <= nRange; i++)
+            for (var i = 0; i < nRange; i++)
             {
                 if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
@@ -1473,7 +1473,7 @@ namespace GameSvr.RobotPlay
                 m_Master.GetBackPosition(ref nX, ref nY);
                 if (!m_Master.m_PEnvir.CanWalk(nX, nY, true))
                 {
-                    for (var i = 0; i <= 7; i++)
+                    for (var i = 0; i < 7; i++)
                     {
                         if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, i, 1, ref nX, ref nY))
                         {
@@ -1494,7 +1494,7 @@ namespace GameSvr.RobotPlay
             m_Master.GetBackPosition(ref nCurrX, ref nCurrY);
             if (m_TargetCret == null && !m_Master.m_boSlaveRelax)
             {
-                for (var i = 0; i <= 2; i++)
+                for (var i = 0; i < 2; i++)
                 {
                     // 判断主人是否在英雄对面
                     if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.Direction, i, ref nX, ref nY))
@@ -1780,7 +1780,7 @@ namespace GameSvr.RobotPlay
             short nX = m_nCurrX;
             short nY = m_nCurrY;
             byte btDir = M2Share.GetNextDirection(nX, nY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
-            for (var i = 0; i <= nStep; i++)
+            for (var i = 0; i < nStep; i++)
             {
                 if (m_TargetCret.m_nCurrX == nX && m_TargetCret.m_nCurrY == nY)
                 {
@@ -1806,7 +1806,7 @@ namespace GameSvr.RobotPlay
             short nX = 0;
             short nY = 0;
             btDir = M2Share.GetNextDirection(nCurrX, nCurrY, BaseObject.m_nCurrX, BaseObject.m_nCurrY);
-            for (var i = 0; i <= nRange; i++)
+            for (var i = 0; i < nRange; i++)
             {
                 if (!m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, i, ref nX, ref nY))
                 {
@@ -1827,7 +1827,7 @@ namespace GameSvr.RobotPlay
             short nY = 0;
             bool result = false;
             btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, BaseObject.m_nCurrX, BaseObject.m_nCurrY);
-            for (var i = 0; i <= nRange; i++)
+            for (var i = 0; i < nRange; i++)
             {
                 if (!m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nX, ref nY))
                 {

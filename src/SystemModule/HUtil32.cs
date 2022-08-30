@@ -406,7 +406,7 @@ namespace SystemModule
         public static bool IsStringNumber(string str)
         {
             var result = true;
-            for (var i = 0; i <= str.Length - 1; i++)
+            for (var i = 0; i < str.Length - 1; i++)
             {
                 if ((byte)str[i] < (byte)'0' || (byte)str[i] > (byte)'9')
                 {
@@ -541,7 +541,7 @@ namespace SystemModule
                 }
                 else
                 {
-                    for (var i = 0; i <= srclen; i++)
+                    for (var i = 0; i < srclen; i++)
                     {
                         if (source[i - 1] == searchAfter)
                         {
@@ -566,7 +566,7 @@ namespace SystemModule
             if (src.Length < compn) return result;
             if (targ.Length < compn) return result;
             result = true;
-            for (var i = 0; i <= compn - 1; i++)
+            for (var i = 0; i < compn - 1; i++)
             {
                 if (char.ToUpper(src[i]) == char.ToUpper(targ[i])) continue;
                 result = false;
@@ -588,7 +588,7 @@ namespace SystemModule
         public static bool IsEnglishStr(string sEngStr)
         {
             var result = false;
-            for (var i = 0; i <= sEngStr.Length; i++)
+            for (var i = 0; i < sEngStr.Length; i++)
             {
                 result = IsEnglish(sEngStr[i]);
                 if (result) break;
@@ -612,7 +612,7 @@ namespace SystemModule
         public static int TagCount(string source, char tag)
         {
             var tcount = 0;
-            for (var i = 0; i <= source.Length - 1; i++)
+            for (var i = 0; i < source.Length - 1; i++)
                 if (source[i] == tag)
                     tcount++;
             return tcount;

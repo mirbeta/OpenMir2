@@ -411,7 +411,7 @@ namespace GameSvr.Player
                 return;
             }
             m_bopirit = false;
-            for (var i = 0; i <= m_UseItems.Length; i++)
+            for (var i = 0; i < m_UseItems.Length; i++)
             {
                 UseItem = m_UseItems[i];
                 if (UseItem == null)
@@ -1132,7 +1132,7 @@ namespace GameSvr.Player
         internal void SendUseitems()
         {
             string sSendMsg = string.Empty;
-            for (var i = 0; i <= m_UseItems.Length; i++)
+            for (var i = 0; i < m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
@@ -1196,7 +1196,7 @@ namespace GameSvr.Player
             var hi = HUtil32.HiByte(abil);
             lov = 0;
             hiv = 0;
-            for (var i = 0; i <= val; i++)
+            for (var i = 0; i < val; i++)
             {
                 if (lo + 1 < hi)
                 {
@@ -1551,7 +1551,7 @@ namespace GameSvr.Player
             var PoseCreate = GetPoseCreate();
             if (PoseCreate != null)
             {
-                for (var i = 0; i <= HUtil32._MAX(2, nMagicLevel + 1); i++)
+                for (var i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
                 {
                     PoseCreate = GetPoseCreate();
                     if (PoseCreate != null)
@@ -1593,7 +1593,7 @@ namespace GameSvr.Player
             else
             {
                 bo35 = false;
-                for (var i = 0; i <= HUtil32._MAX(2, nMagicLevel + 1); i++)
+                for (var i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
                 {
                     GetFrontPosition(ref nX, ref nY);
                     if (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, nX, nY, false) > 0)
@@ -2131,7 +2131,7 @@ namespace GameSvr.Player
             int result;
             var n14 = 0;
             StdItem StdItem;
-            for (var i = 0; i <= m_UseItems.Length; i++)
+            for (var i = 0; i < m_UseItems.Length; i++)
             {
                 if (nWhere == -1 || !(i == nWhere) && !(i == 1) && !(i == 2))
                 {
@@ -2751,7 +2751,7 @@ namespace GameSvr.Player
                     break;
                 }
             }
-            for (var i = 0; i <= m_UseItems.Length; i++)
+            for (var i = 0; i < m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] == CheckItem)
                 {

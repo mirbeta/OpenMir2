@@ -25,7 +25,7 @@ namespace GameSvr.Monster.Monsters
             TBaseObject BaseObject;
             int nC = M2Share.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref n10, ref n14);
-            for (var i = 0; i <= nC; i++)
+            for (var i = 0; i < nC; i++)
             {
                 if (m_SlaveObjectList.Count >= 30)
                 {
