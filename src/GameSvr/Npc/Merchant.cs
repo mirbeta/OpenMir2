@@ -1,6 +1,6 @@
 ﻿using GameSvr.Items;
 using GameSvr.Player;
-using GameSvr.ScriptSystem;
+using GameSvr.Script;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
@@ -424,7 +424,7 @@ namespace GameSvr.Npc
                 {
                     if (DuraList[j] > DuraList[j - 1])
                     {
-                       DuraList.Reverse();
+                        DuraList.Reverse();
                     }
                 }
             }

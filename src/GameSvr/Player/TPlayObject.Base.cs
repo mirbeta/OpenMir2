@@ -2,7 +2,7 @@
 using GameSvr.Event;
 using GameSvr.Magic;
 using GameSvr.Maps;
-using GameSvr.ScriptSystem;
+using GameSvr.Script;
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;

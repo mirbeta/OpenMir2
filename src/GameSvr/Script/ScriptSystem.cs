@@ -4,10 +4,12 @@ using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 
-namespace GameSvr.ScriptSystem
+namespace GameSvr.Script
 {
     public class ScriptSystem
     {
+        private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
+
         public int LoadNpcScript(NormNpc NPC, string sPatch, string sScritpName)
         {
             if (sPatch == "")
@@ -20,7 +22,6 @@ namespace GameSvr.ScriptSystem
         private bool LoadScriptFile_LoadCallScript(string sFileName, string sLabel, StringList List)
         {
             bool result = false;
-            string sLine;
             if (File.Exists(sFileName))
             {
                 var LoadStrList = new StringList();
@@ -29,7 +30,7 @@ namespace GameSvr.ScriptSystem
                 var bo1D = false;
                 for (var i = 0; i < LoadStrList.Count; i++)
                 {
-                    sLine = LoadStrList[i].Trim();
+                    string sLine = LoadStrList[i].Trim();
                     if (!string.IsNullOrEmpty(sLine))
                     {
                         if (!bo1D)
@@ -98,7 +99,6 @@ namespace GameSvr.ScriptSystem
             return sCallScriptFile;
         }
 
-        private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
 
         private void LoadCallScript(ref StringList LoadList, ref bool success)
         {
@@ -152,8 +152,6 @@ namespace GameSvr.ScriptSystem
             var s1C = string.Empty;
             var s20 = string.Empty;
             var s24 = string.Empty;
-            TDefineInfo DefineInfo;
-            StringList LoadStrList;
             for (var i = 0; i < LoadList.Count; i++)
             {
                 s14 = LoadList[i].Trim();
@@ -169,7 +167,7 @@ namespace GameSvr.ScriptSystem
                         s14 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" });
                         s14 = HUtil32.GetValidStr3(s14, ref s20, new[] { " ", "\t" });
                         s14 = HUtil32.GetValidStr3(s14, ref s24, new[] { " ", "\t" });
-                        DefineInfo = new TDefineInfo
+                        TDefineInfo DefineInfo = new TDefineInfo
                         {
                             sName = s20.ToUpper(),
                             sText = s24
@@ -183,7 +181,7 @@ namespace GameSvr.ScriptSystem
                         s28 = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Defines", s28);
                         if (File.Exists(s28))
                         {
-                            LoadStrList = new StringList();
+                            StringList LoadStrList = new StringList();
                             LoadStrList.LoadFromFile(s28);
                             result = LoadScriptFile_LoadDefineInfo(LoadStrList, List);
                         }

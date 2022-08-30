@@ -51,12 +51,12 @@ namespace GameSvr.Maps
         {
             Attribute = CellAttribute.LowWall
         };
-        
+
         public static MapCellinfo HighWall => new MapCellinfo
         {
             Attribute = CellAttribute.HighWall
         };
-        
+
         public bool Valid => Attribute == CellAttribute.Walk;
 
         public CellAttribute Attribute;

@@ -4,7 +4,7 @@ using GameSvr.Event.Events;
 using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Player;
-using GameSvr.ScriptSystem;
+using GameSvr.Script;
 using GameSvr.Services;
 using System.Collections;
 using SystemModule;

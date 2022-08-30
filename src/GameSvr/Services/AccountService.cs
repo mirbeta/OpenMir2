@@ -1,7 +1,6 @@
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -47,7 +46,7 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(M2Share.g_Config.UserIDSection);
             try
             {
-                var recvText=HUtil32.GetString(e.Buff, 0, e.BuffLen);
+                var recvText = HUtil32.GetString(e.Buff, 0, e.BuffLen);
                 M2Share.g_Config.sIDSocketRecvText += recvText;
             }
             finally

@@ -60,7 +60,7 @@ namespace GameSvr.Notices
             {
                 return;
             }
-            for (var i =0; i < NoticeList.Length; i++)
+            for (var i = 0; i < NoticeList.Length; i++)
             {
                 if (string.IsNullOrEmpty(NoticeList[i].sMsg))
                 {

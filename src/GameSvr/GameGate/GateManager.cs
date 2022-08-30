@@ -40,7 +40,7 @@ namespace GameSvr.GameGate
         {
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
             StartMessageThread(stoppingToken);
-            M2Share.MainOutMessage($"游戏网关[{ M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
+            M2Share.MainOutMessage($"游戏网关[{M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
         }
 
         public void Stop()

@@ -1,5 +1,5 @@
 using GameSvr.Player;
-using GameSvr.ScriptSystem;
+using GameSvr.Script;
 using SystemModule;
 using SystemModule.Data;
 

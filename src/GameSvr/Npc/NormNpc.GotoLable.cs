@@ -2,7 +2,7 @@ using GameSvr.Actor;
 using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Player;
-using GameSvr.ScriptSystem;
+using GameSvr.Script;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;

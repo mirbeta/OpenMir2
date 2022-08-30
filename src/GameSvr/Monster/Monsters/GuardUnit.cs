@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
     {
         public short m_nX550;
         public short m_nY554;
-        
+
         public override void Struck(TBaseObject hiter)
         {
             base.Struck(hiter);
