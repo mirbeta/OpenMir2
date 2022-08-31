@@ -13,7 +13,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 玩家列表
         /// </summary>
-        public IList<GameGateUserInfo> UserList;
+        public IList<GateUserInfo> UserList;
         /// <summary>
         /// 在线人数
         /// </summary>

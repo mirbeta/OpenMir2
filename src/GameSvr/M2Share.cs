@@ -115,7 +115,7 @@ namespace GameSvr
         public static RandomNumber RandomNumber = null;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static GameGateManager GateManager = null;
+        public static GameGateMgr GateManager = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
         public static MapManager MapManager = null;
@@ -249,7 +249,7 @@ namespace GameSvr
         public static object g_HighOnlineHuman = null;
         public static int g_dwSpiritMutinyTick = 0;
         public static GameSvrConfig g_Config = null;
-        public static int[] g_dwOldNeedExps = new int[Grobal2.MAXCHANGELEVEL];
+        public static int[] g_dwOldNeedExps = new int[Grobal2.MaxChangeLevel];
         public static TGameCommand g_GameCommand = new TGameCommand();
         public static string sClientSoftVersionError = "游戏版本错误!!!";
         public static string sDownLoadNewClientSoft = "请到网站上下载最新版本游戏客户端软件。";

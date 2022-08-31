@@ -318,7 +318,7 @@ namespace GameSvr.RobotPlay
             return base.IsProtectTarget(BaseObject);
         }
 
-        public override bool IsAttackTarget(TBaseObject BaseObject)
+        protected override bool IsAttackTarget(TBaseObject BaseObject)
         {
             return base.IsAttackTarget(BaseObject);
         }
@@ -509,7 +509,7 @@ namespace GameSvr.RobotPlay
                 nEndX = m_nCurrX + m_nViewRange;
                 nStartY = m_nCurrY - m_nViewRange;
                 nEndY = m_nCurrY + m_nViewRange;
-                long dwRunTick = HUtil32.GetTickCount();
+                var dwRunTick = HUtil32.GetTickCount();
                 for (n18 = nStartX; n18 <= nEndX; n18++)
                 {
                     for (n1C = nStartY; n1C <= nEndY; n1C++)
@@ -849,7 +849,6 @@ namespace GameSvr.RobotPlay
 
         public override void Struck(TBaseObject hiter)
         {
-            bool boDisableSayMsg;
             m_dwStruckTick = HUtil32.GetTickCount();
             if (hiter != null)
             {
@@ -895,7 +894,7 @@ namespace GameSvr.RobotPlay
                         {
                             m_boDisableSayMsg = false;
                         }
-                        boDisableSayMsg = m_boDisableSayMsg;
+                        var boDisableSayMsg = m_boDisableSayMsg;
                         //g_DenySayMsgList.Lock;
                         //if (g_DenySayMsgList.GetIndex(m_sCharName) >= 0)
                         //{

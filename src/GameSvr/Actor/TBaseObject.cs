@@ -1206,7 +1206,7 @@ namespace GameSvr.Actor
         private int GainSlaveUpKillCount()
         {
             int tCount;
-            if (m_btSlaveExpLevel < Grobal2.SLAVEMAXLEVEL - 2)
+            if (m_btSlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
             {
                 tCount = M2Share.g_Config.MonUpLvNeedKillCount[m_btSlaveExpLevel];
             }
@@ -2740,7 +2740,7 @@ namespace GameSvr.Actor
             }
             else
             {
-                if (BaseObject.m_btSlaveExpLevel <= Grobal2.SLAVEMAXLEVEL)
+                if (BaseObject.m_btSlaveExpLevel <= Grobal2.SlaveMaxLevel)
                 {
                     result = M2Share.g_Config.SlaveColor[BaseObject.m_btSlaveExpLevel];
                 }
@@ -2763,7 +2763,7 @@ namespace GameSvr.Actor
         public int GetLevelExp(int nLevel)
         {
             int result;
-            if (nLevel <= Grobal2.MAXLEVEL)
+            if (nLevel <= Grobal2.MaxLevel)
             {
                 result = M2Share.g_Config.dwNeedExps[nLevel];
             }
@@ -3501,9 +3501,6 @@ namespace GameSvr.Actor
 
         protected bool Walk(int nIdent)
         {
-            CellObject OSObject;
-            TGateObj GateObj = null;
-            TPlayObject PlayObject;
             const string sExceptionMsg = "[Exception] TBaseObject::Walk {0} {1} {2}:{3}";
             bool result = true;
             if (m_PEnvir == null)
@@ -3519,11 +3516,11 @@ namespace GameSvr.Actor
                 {
                     for (int i = 0; i < MapCellInfo.Count; i++)
                     {
-                        OSObject = MapCellInfo.ObjList[i];
+                        var OSObject = MapCellInfo.ObjList[i];
                         switch (OSObject.CellType)
                         {
                             case CellType.OS_GATEOBJECT:
-                                GateObj = (TGateObj)OSObject.CellObj;
+                                var GateObj = (TGateObj)OSObject.CellObj;
                                 if ((GateObj != null))
                                 {
                                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -3543,7 +3540,7 @@ namespace GameSvr.Actor
                                                 {
                                                     DisappearA();
                                                     m_bo316 = true;
-                                                    PlayObject = this as TPlayObject;
+                                                    var PlayObject = this as TPlayObject;
                                                     PlayObject.m_sSwitchMapName = GateObj.DEnvir.SMapName;
                                                     PlayObject.m_nSwitchMapX = GateObj.nDMapX;
                                                     PlayObject.m_nSwitchMapY = GateObj.nDMapY;
@@ -3563,16 +3560,16 @@ namespace GameSvr.Actor
                                 break;
                             case CellType.OS_EVENTOBJECT:
                                 {
-                                    MirEvent __Event = null;
+                                    MirEvent mapEvent = null;
                                     if (((MirEvent)OSObject.CellObj).OwnBaseObject != null)
                                     {
-                                        __Event = (MirEvent)OSObject.CellObj;
+                                        mapEvent = (MirEvent)OSObject.CellObj;
                                     }
-                                    if (__Event != null)
+                                    if (mapEvent != null)
                                     {
-                                        if (__Event.OwnBaseObject.IsProperTarget(this))
+                                        if (mapEvent.OwnBaseObject.IsProperTarget(this))
                                         {
-                                            SendMsg(__Event.OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, __Event.Damage, 0, 0, "");
+                                            SendMsg(mapEvent.OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0, "");
                                         }
                                     }
                                     break;
@@ -3605,10 +3602,6 @@ namespace GameSvr.Actor
         private bool EnterAnotherMap(Envirnoment Envir, int nDMapX, int nDMapY)
         {
             bool result = false;
-            Envirnoment OldEnvir;
-            int nOldX;
-            int nOldY;
-            TUserCastle Castle;
             const string sExceptionMsg7 = "[Exception] TBaseObject::EnterAnotherMap";
             try
             {
@@ -3634,7 +3627,7 @@ namespace GameSvr.Actor
                 {
                     return false;
                 }
-                Castle = M2Share.CastleManager.IsCastlePalaceEnvir(Envir);
+                var Castle = M2Share.CastleManager.IsCastlePalaceEnvir(Envir);
                 if ((Castle != null) && (m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                 {
                     if (!Castle.CheckInPalace(m_nCurrX, m_nCurrY, this))
@@ -3646,9 +3639,9 @@ namespace GameSvr.Actor
                 {
                     m_boOnHorse = false;
                 }
-                OldEnvir = m_PEnvir;
-                nOldX = m_nCurrX;
-                nOldY = m_nCurrY;
+                var OldEnvir = m_PEnvir;
+                int nOldX = m_nCurrX;
+                int nOldY = m_nCurrY;
                 DisappearA();
                 m_VisibleHumanList.Clear();
                 for (var i = 0; i < m_VisibleItems.Count; i++)
@@ -3901,15 +3894,14 @@ namespace GameSvr.Actor
         /// </summary>
         protected void ApplyMeatQuality()
         {
-            for (int i = 0; i < m_ItemList.Count; i++)
+            for (var i = 0; i < m_ItemList.Count; i++)
             {
-                var UserItem = m_ItemList[i];
-                var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                var StdItem = M2Share.UserEngine.GetStdItem(m_ItemList[i].wIndex);
                 if (StdItem != null)
                 {
                     if (StdItem.StdMode == 40)
                     {
-                        UserItem.Dura = m_nMeatQuality;
+                        m_ItemList[i].Dura = m_nMeatQuality;
                     }
                 }
             }
@@ -3918,22 +3910,20 @@ namespace GameSvr.Actor
         protected bool TakeBagItems(TBaseObject BaseObject)
         {
             bool result = false;
-            TUserItem UserItem;
-            TPlayObject PlayObject;
             while (true)
             {
                 if (BaseObject.m_ItemList.Count <= 0)
                 {
                     break;
                 }
-                UserItem = BaseObject.m_ItemList[0];
+                var UserItem = BaseObject.m_ItemList[0];
                 if (!AddItemToBag(UserItem))
                 {
                     break;
                 }
                 if (this is TPlayObject)
                 {
-                    PlayObject = this as TPlayObject;
+                    var PlayObject = this as TPlayObject;
                     PlayObject.SendAddItem(UserItem);
                     result = true;
                 }
@@ -4018,12 +4008,12 @@ namespace GameSvr.Actor
             }
         }
 
-        public bool IsGoodKilling(TBaseObject cert)
+        protected bool IsGoodKilling(TBaseObject cert)
         {
             return cert.m_boPKFlag;
         }
 
-        public bool IsAttackTarget_sub_4C88E4()
+        protected bool IsAttackTarget_sub_4C88E4()
         {
             return true;
         }
@@ -4033,12 +4023,12 @@ namespace GameSvr.Actor
         /// </summary>
         /// <param name="BaseObject"></param>
         /// <returns></returns>
-        public virtual bool IsAttackTarget(TBaseObject BaseObject)
+        protected virtual bool IsAttackTarget(TBaseObject BaseObject)
         {
             bool result = false;
             if ((BaseObject == null) || (BaseObject == this))
             {
-                return result;
+                return false;
             }
             if (m_btRaceServer >= Grobal2.RC_ANIMAL)
             {

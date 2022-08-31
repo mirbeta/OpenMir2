@@ -4,11 +4,8 @@ namespace SystemModule
 {
     public class Grobal2
     {
-        public const int VERSION_NUMBER = 20020522;
         public const int CLIENT_VERSION_NUMBER = 120040918;
-        public const int CM_POWERBLOCK = 0;
-        public const int MapNameLen = 16;
-        public const int ActorNameLen = 14;
+        
         public const byte DR_UP = 0;
         public const byte DR_UPRIGHT = 1;
         public const byte DR_RIGHT = 2;
@@ -17,58 +14,60 @@ namespace SystemModule
         public const byte DR_DOWNLEFT = 5;
         public const byte DR_LEFT = 6;
         public const byte DR_UPLEFT = 7;
+        
         /// <summary>
         /// 衣服
         /// </summary>
-        public const int U_DRESS = 0;
+        public const byte U_DRESS = 0;
         /// <summary>
         /// 武器
         /// </summary>
-        public const int U_WEAPON = 1;
+        public const byte U_WEAPON = 1;
         /// <summary>
         /// 右手
         /// </summary>
-        public const int U_RIGHTHAND = 2;
+        public const byte U_RIGHTHAND = 2;
         /// <summary>
         /// 项链
         /// </summary>
-        public const int U_NECKLACE = 3;
+        public const byte U_NECKLACE = 3;
         /// <summary>
         /// 头盔
         /// </summary>
-        public const int U_HELMET = 4;
+        public const byte U_HELMET = 4;
         /// <summary>
         /// 左手手镯,符
         /// </summary>
-        public const int U_ARMRINGL = 5;
+        public const byte U_ARMRINGL = 5;
         /// <summary>
         /// 右手手镯
         /// </summary>
-        public const int U_ARMRINGR = 6;
+        public const byte U_ARMRINGR = 6;
         /// <summary>
         /// 左戒指
         /// </summary>
-        public const int U_RINGL = 7;
+        public const byte U_RINGL = 7;
         /// <summary>
         /// 右戒指
         /// </summary>
-        public const int U_RINGR = 8;
+        public const byte U_RINGR = 8;
         /// <summary>
         /// 物品
         /// </summary>
-        public const int U_BUJUK = 9;
+        public const byte U_BUJUK = 9;
         /// <summary>
         /// 腰带
         /// </summary>
-        public const int U_BELT = 10;
+        public const byte U_BELT = 10;
         /// <summary>
         /// 鞋
         /// </summary>
-        public const int U_BOOTS = 11;
+        public const byte U_BOOTS = 11;
         /// <summary>
         /// 宝石
         /// </summary>
-        public const int U_CHARM = 12;
+        public const byte U_CHARM = 12;
+        
         public const int DEFBLOCKSIZE = 16;
         public const int BUFFERSIZE = 10000;
         public const int LOGICALMAPUNIT = 40;
@@ -99,54 +98,54 @@ namespace SystemModule
         /// <summary>
         /// 用户最大的物品
         /// </summary>
-        public const int USERITEMMAX = 46;
-        public const int MaxSkillLevel = 3;
+        public const byte USERITEMMAX = 46;
+        public const byte MaxSkillLevel = 3;
 
         /// <summary>
         /// 物品类型(物品属性读取)
         /// </summary>
-        public const int MAX_STATUS_ATTRIBUTE = 12;
+        public const byte MAX_STATUS_ATTRIBUTE = 12;
         /// <summary>
         /// 中毒类型 - 绿毒
         /// </summary>
-        public const int POISON_DECHEALTH = 0;
+        public const byte POISON_DECHEALTH = 0;
         /// <summary>
         /// 中毒类型 - 红毒
         /// </summary>
-        public const int POISON_DAMAGEARMOR = 1;
+        public const byte POISON_DAMAGEARMOR = 1;
         /// <summary>
         /// 中毒类型 - 不能使用技能
         /// </summary>
-        public const int POISON_LOCKSPELL = 2;
+        public const byte POISON_LOCKSPELL = 2;
         /// <summary>
         /// 中毒类型 - 禁止移动
         /// </summary>
-        public const int POISON_DONTMOVE = 4;
+        public const byte POISON_DONTMOVE = 4;
         /// <summary>
         /// 中毒类型 - 防麻
         /// </summary>
-        public const int POISON_STONE = 5;
+        public const byte POISON_STONE = 5;
         /// <summary>
         /// 不能跑动(中蛛网)
         /// </summary>
-        public const int STATE_LOCKRUN = 3;
-        public const int POISON_68 = 68;
+        public const byte STATE_LOCKRUN = 3;
+        public const byte POISON_68 = 68;
         /// <summary>
         /// 隐身
         /// </summary>
-        public const int STATE_TRANSPARENT = 8;
+        public const byte STATE_TRANSPARENT = 8;
         /// <summary>
         /// 神圣战甲术  防御力
         /// </summary>
-        public const int STATE_DEFENCEUP = 9;
+        public const byte STATE_DEFENCEUP = 9;
         /// <summary>
         /// 幽灵盾  魔御力
         /// </summary>
-        public const int STATE_MAGDEFENCEUP = 10;
+        public const byte STATE_MAGDEFENCEUP = 10;
         /// <summary>
         /// 魔法盾
         /// </summary>
-        public const int STATE_BUBBLEDEFENCEUP = 11;
+        public const byte STATE_BUBBLEDEFENCEUP = 11;
         /// <summary>
         /// 被石化
         /// </summary>
@@ -579,23 +578,15 @@ namespace SystemModule
         public const int DB_SAVEHUMANRCDEX = 102;
         public const int DBR_LOADHUMANRCD = 1100;
         public const int DBR_SAVEHUMANRCD = 1102;
-        public const int SG_FORMHANDLE = 32001;
-        public const int SG_STARTNOW = 32002;
-        public const int SG_STARTOK = 32003;
-        public const int SG_CHECKCODEADDR = 32004;
-        public const int SG_USERACCOUNT = 32005;
-        public const int SG_USERACCOUNTCHANGESTATUS = 32006;
-        public const int SG_USERACCOUNTNOTFOUND = 32007;
-        public const int GS_QUIT = 32101;
-        public const int GS_USERACCOUNT = 32102;
-        public const int GS_CHANGEACCOUNTINFO = 32103;
-        public const int WM_SENDPROCMSG = 32104;
+        
         public const uint RUNGATECODE = 0xAA55AA55 + 0x00450045;
-        public const int GM_OPEN = 1;
-        public const int GM_CLOSE = 2;
-        public const int GM_CHECKSERVER = 3;
-        public const int GM_CHECKCLIENT = 4;
-        public const int GM_DATA = 5;
+        
+        public const byte GM_OPEN = 1;
+        public const byte GM_CLOSE = 2;
+        public const byte GM_CHECKSERVER = 3;
+        public const byte GM_CHECKCLIENT = 4;
+        public const byte GM_DATA = 5;
+        
         public const int GM_SERVERUSERINDEX = 6;
         public const int GM_RECEIVE_OK = 7;
         public const int SM_RUNGATELOGOUT = 599;
@@ -615,62 +606,71 @@ namespace SystemModule
         public const int SM_PASSWORDSTATUS = 8002;
         public const int SM_NEEDPASSWORD = 8003;
         public const int SM_GETREGINFO = 8004;
-        public const int DATA_BUFSIZE = 1024;
-        public const int MAXMAGIC = 54;
+        public const byte MaxMagicCount = 54;
         public const string sSTRING_GOLDNAME = "金币";
-        public const short MAXLEVEL = short.MaxValue;
-        public const int MAXCHANGELEVEL = 1000;
-        public const int SLAVEMAXLEVEL = 50;
-        public const int LOG_GAMEGOLD = 1;
-        public const int LOG_GAMEPOINT = 2;
+        /// <summary>
+        /// 最高等级
+        /// </summary>
+        public const short MaxLevel = short.MaxValue;
+        /// <summary>
+        /// 最高经验等级
+        /// </summary>
+        public const ushort MaxChangeLevel = 1000;
+        /// <summary>
+        /// 属下最高等级
+        /// </summary>
+        public const ushort SlaveMaxLevel = 50;
+        public const ushort LOG_GAMEGOLD = 1;
+        public const ushort LOG_GAMEPOINT = 2;
         /// <summary>
         /// 玩家
         /// </summary>
-        public const int RC_PLAYOBJECT = 0;
+        public const byte RC_PLAYOBJECT = 0;
         /// <summary>
         /// 守卫
         /// </summary>
-        public const int RC_GUARD = 11;
+        public const byte RC_GUARD = 11;
         /// <summary>
         /// NPC
         /// </summary>
-        public const int RC_PEACENPC = 15;
+        public const byte RC_PEACENPC = 15;
         /// <summary>
         /// 怪物
         /// </summary>
-        public const int RC_ANIMAL = 50;
+        public const byte RC_ANIMAL = 50;
         /// <summary>
         /// 练功师
         /// </summary>
-        public const int RC_EXERCISE = 55;
+        public const byte RC_EXERCISE = 55;
         /// <summary>
         /// 人型怪物
         /// </summary>
-        public const int RC_PLAYCLONE = 60;
+        public const byte RC_PLAYCLONE = 60;
         /// <summary>
         /// 普通怪物
         /// </summary>
-        public const int RC_MONSTER = 80;
+        public const byte RC_MONSTER = 80;
         /// <summary>
         /// NPC
         /// </summary>
-        public const int RC_NPC = 10;
+        public const byte RC_NPC = 10;
         /// <summary>
         /// 守卫
         /// </summary>
-        public const int RC_ARCHERGUARD = 112;
+        public const byte RC_ARCHERGUARD = 112;
         /// <summary>
         /// 魔王岭弓箭手
         /// </summary>
-        public const int RC_135 = 135;
+        public const byte RC_135 = 135;
         /// <summary>
         /// 魔王岭弓箭手
         /// </summary>        
-        public const int RC_136 = 136;
+        public const byte RC_136 = 136;
         /// <summary>
         /// 任务怪物
         /// </summary>
-        public const int RC_153 = 153;
+        public const byte RC_153 = 153;
+        
         public const int RM_TURN = 10001;
         public const int RM_WALK = 10002;
         public const int RM_HORSERUN = 50003;
