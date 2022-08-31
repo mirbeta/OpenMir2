@@ -1290,15 +1290,14 @@ namespace GameSvr.Player
                                 {
                                     break;
                                 }
-                                var OSObject = MapCellInfo.ObjList[nIdx];
+                                var OSObject =  MapCellInfo.ObjList[nIdx];
                                 if (OSObject != null)
                                 {
                                     if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
-                                            Dispose(OSObject);
-                                            MapCellInfo.Remove(nIdx);
+                                            MapCellInfo.Remove(OSObject);
                                             if (MapCellInfo.Count > 0)
                                             {
                                                 continue;
@@ -1306,7 +1305,7 @@ namespace GameSvr.Player
                                             MapCellInfo.Dispose();
                                             break;
                                         }
-                                        BaseObject = (TBaseObject)OSObject.CellObj;
+                                        BaseObject = (TBaseObject)M2Share.ObjectManager.Get(OSObject.CellObjId);
                                         if (BaseObject != null && !BaseObject.m_boInvisible)
                                         {
                                             if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
@@ -1324,9 +1323,7 @@ namespace GameSvr.Player
                                         {
                                             if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
-                                                Dispose(OSObject.CellObj);
-                                                Dispose(OSObject);
-                                                MapCellInfo.Remove(nIdx);
+                                                MapCellInfo.Remove(OSObject);
                                                 if (MapCellInfo.Count > 0)
                                                 {
                                                     continue;
@@ -1334,7 +1331,7 @@ namespace GameSvr.Player
                                                 MapCellInfo.Dispose();
                                                 break;
                                             }
-                                            var MapItem = (MapItem)OSObject.CellObj;
+                                            var MapItem = (MapItem)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
                                             UpdateVisibleItem(n20, n1C, MapItem);
                                             if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                             {
@@ -1364,7 +1361,7 @@ namespace GameSvr.Player
                                         }
                                         if (OSObject.CellType == CellType.OS_EVENTOBJECT)
                                         {
-                                            MapEvent = (MirEvent)OSObject.CellObj;
+                                            MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
                                             if (MapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(n20, n1C, MapEvent);
@@ -1434,14 +1431,14 @@ namespace GameSvr.Player
                     var VisibleMapItem = m_VisibleItems[I];
                     if (VisibleMapItem.nVisibleFlag == 0)
                     {
-                        SendMsg(this, Grobal2.RM_ITEMHIDE, 0, VisibleMapItem.MapItem.Id, VisibleMapItem.nX, VisibleMapItem.nY, "");
+                        SendMsg(this, Grobal2.RM_ITEMHIDE, 0, VisibleMapItem.MapItem.ObjectId, VisibleMapItem.nX, VisibleMapItem.nY, "");
                         m_VisibleItems.RemoveAt(I);
                         Dispose(VisibleMapItem);
                         continue;
                     }
                     if (VisibleMapItem.nVisibleFlag == 2)
                     {
-                        SendMsg(this, Grobal2.RM_ITEMSHOW, VisibleMapItem.wLooks, VisibleMapItem.MapItem.Id, VisibleMapItem.nX, VisibleMapItem.nY, VisibleMapItem.sName);
+                        SendMsg(this, Grobal2.RM_ITEMSHOW, VisibleMapItem.wLooks, VisibleMapItem.MapItem.ObjectId, VisibleMapItem.nX, VisibleMapItem.nY, VisibleMapItem.sName);
                     }
                     I++;
                 }

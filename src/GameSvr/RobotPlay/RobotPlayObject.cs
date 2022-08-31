@@ -654,7 +654,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (this.IncGold(MapItem.Count))
                     {
-                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.Id, nX, nY, "");
+                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.ObjectId, nX, nY, "");
                         result = true;
                         GoldChanged();
                         SearchPickUpItem_SetHideItem(MapItem);
@@ -691,7 +691,7 @@ namespace GameSvr.RobotPlay
                             //}
                             if (AddItemToBag(UserItem))
                             {
-                                SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.Id, nX, nY, "");
+                                SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.ObjectId, nX, nY, "");
                                 this.SendAddItem(UserItem);
                                 m_WAbil.Weight = RecalcBagWeight();
                                 result = true;

@@ -475,7 +475,7 @@ namespace GameSvr.RobotPlay
             int n1C;
             int nIdx;
             MapCellinfo MapCellInfo;
-            CellObject OSObject;
+            CellObject OSObject = null;
             TBaseObject BaseObject;
             MapItem MapItem;
             MirEvent MapEvent;
@@ -519,7 +519,7 @@ namespace GameSvr.RobotPlay
                         if (mapCell && MapCellInfo.ObjList != null)
                         {
                             nIdx = 0;
-                            while (true)
+                            while (MapCellInfo.Count>0)
                             {
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
@@ -544,7 +544,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 catch
                                 {
-                                    MapCellInfo.Remove(nIdx);
+                                    MapCellInfo.Remove(OSObject);
                                     continue;
                                 }
                                 if (OSObject != null)
@@ -557,8 +557,7 @@ namespace GameSvr.RobotPlay
                                                 if (HUtil32.GetTickCount() - OSObject.dwAddTime >= 60000)
                                                 {
                                                     OSObject.boObjectDisPose = true;
-                                                    Dispose(OSObject);
-                                                    MapCellInfo.Remove(nIdx);
+                                                    MapCellInfo.Remove(OSObject);
                                                     if (MapCellInfo.Count <= 0)
                                                     {
                                                         MapCellInfo.Dispose();
@@ -566,7 +565,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                BaseObject = (TBaseObject)OSObject.CellObj;
+                                                BaseObject = (TBaseObject)M2Share.ObjectManager.Get(OSObject.CellObjId);;
                                                 if (BaseObject != null)
                                                 {
                                                     if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
@@ -583,16 +582,15 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (HUtil32.GetTickCount() - OSObject.dwAddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                                     {
-                                                        if ((MapItem)OSObject.CellObj != null)
+                                                        if (OSObject.CellObjId > 0)
                                                         {
-                                                            Dispose((MapItem)OSObject.CellObj);
+                                                            M2Share.CellObjectSystem.Dispose(OSObject.CellObjId);
                                                         }
                                                         if (OSObject != null)
                                                         {
                                                             OSObject.boObjectDisPose = true;
-                                                            Dispose(OSObject);
                                                         }
-                                                        MapCellInfo.Remove(nIdx);
+                                                        MapCellInfo.Remove(OSObject);
                                                         if (MapCellInfo.Count <= 0)
                                                         {
                                                             MapCellInfo.Dispose();
@@ -600,7 +598,7 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         continue;
                                                     }
-                                                    MapItem = (MapItem)OSObject.CellObj;
+                                                    MapItem = (MapItem)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
                                                     UpdateVisibleItem(n18, n1C, MapItem);
                                                     if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                                     {
@@ -632,9 +630,9 @@ namespace GameSvr.RobotPlay
                                             case CellType.OS_EVENTOBJECT:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (OSObject.CellObj != null)
+                                                    if (OSObject.CellObjId < 0)
                                                     {
-                                                        MapEvent = (MirEvent)OSObject.CellObj;
+                                                        MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
                                                         UpdateVisibleEvent(n18, n1C, MapEvent);
                                                     }
                                                 }

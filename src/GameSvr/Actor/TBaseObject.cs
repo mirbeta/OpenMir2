@@ -15,9 +15,8 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Actor
 {
-    public partial class TBaseObject
+    public partial class TBaseObject: EntityId
     {
-        public readonly int ObjectId;
         public string m_sMapName;
         public string m_sMapFileName;
         /// <summary>
@@ -565,12 +564,18 @@ namespace GameSvr.Actor
         public int m_dwLatestFireHitTick = 0;
         public int m_dwDoMotaeboTick = 0;
         public int m_dwLatestTwinHitTick = 0;
+        /// <summary>
+        /// 是否刷新在地图上信息
+        /// </summary>
         public bool m_boDenyRefStatus = false;
-        // 是否刷新在地图上信息；
+        /// <summary>
+        /// 是否增加地图计数
+        /// </summary>
         public bool m_boAddToMaped = false;
-        // 是否增加地图计数
+        /// <summary>
+        /// 是否从地图中删除计数
+        /// </summary>
         public bool m_boDelFormMaped = false;
-        // 是否从地图中删除计数
         public bool m_boAutoChangeColor = false;
         public int m_dwAutoChangeColorTick = 0;
         public int m_nAutoChangeIdx = 0;
@@ -668,11 +673,11 @@ namespace GameSvr.Actor
             m_nGoldMax = M2Share.g_Config.nHumanMaxGold;
             m_nCharStatus = 0;
             m_nCharStatusEx = 0;
-            m_wStatusTimeArr = new ushort[12];// FillChar(m_wStatusTimeArr, sizeof(grobal2.short), '\0');
-            m_BonusAbil = new TNakedAbility();// FillChar(m_BonusAbil, sizeof(TNakedAbility), '\0');
-            m_CurBonusAbil = new TNakedAbility();// FillChar(m_CurBonusAbil, sizeof(TNakedAbility), '\0');
-            m_wStatusArrValue = new ushort[6];// FillChar(m_wStatusArrValue, sizeof(m_wStatusArrValue), 0);
-            m_dwStatusArrTimeOutTick = new int[6];// FillChar(m_dwStatusArrTimeOutTick, sizeof(m_dwStatusArrTimeOutTick), '\0');
+            m_wStatusTimeArr = new ushort[12]; 
+            m_BonusAbil = new TNakedAbility(); 
+            m_CurBonusAbil = new TNakedAbility(); 
+            m_wStatusArrValue = new ushort[6];  
+            m_dwStatusArrTimeOutTick = new int[6];
             m_boAllowGroup = false;
             m_boAllowGuild = false;
             btB2 = 0;
@@ -698,7 +703,7 @@ namespace GameSvr.Actor
             m_nMoXieSuite = 0;
             m_nHongMoSuite = 0;
             m_db3B0 = 0;
-            m_AddAbil = new TAddAbility();//FillChar(m_AddAbil, sizeof(TAddAbility), '\0');
+            m_AddAbil = new TAddAbility();
             m_MsgList = new List<SendMessage>();
             m_VisibleHumanList = new List<TBaseObject>();
             m_VisibleActors = new List<TVisibleBaseObject>();
@@ -711,7 +716,6 @@ namespace GameSvr.Actor
             m_nDealGolds = 0;
             m_MagicList = new List<TUserMagic>();
             m_StorageItemList = new List<TUserItem>();
-            //FillChar(m_UseItems, sizeof(grobal2.TUserItem), 0);
             m_UseItems = new TUserItem[13];
             m_GroupOwner = null;
             m_Castle = null;
@@ -726,9 +730,9 @@ namespace GameSvr.Actor
             m_boAllowGroupReCall = false;
             m_BlockWhisperList = new List<string>();
             m_SlaveList = new List<TBaseObject>();
-            m_WAbil = new TAbility();// FillChar(m_WAbil, sizeof(TAbility), '\0');
-            m_QuestUnitOpen = new byte[128];//FillChar(m_QuestUnitOpen, sizeof(grobal2.byte), '\0');
-            m_QuestUnit = new byte[128];// FillChar(m_QuestUnit, sizeof(grobal2.byte), '\0');
+            m_WAbil = new TAbility();
+            m_QuestUnitOpen = new byte[128];
+            m_QuestUnit = new byte[128];
             m_QuestFlag = new byte[128];
             m_Abil = new TAbility
             {
@@ -921,7 +925,7 @@ namespace GameSvr.Actor
                 pr = (MapItem)m_PEnvir.AddToMap(dx, dy, CellType.OS_ITEMOBJECT, MapItem);
                 if (pr == MapItem)
                 {
-                    SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, dx, dy, MapItem.Name);
+                    SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, dx, dy, MapItem.Name);
                     if (boDieDrop)
                     {
                         logcap = "15";
@@ -1038,7 +1042,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public bool WalkTo(byte btDir, bool boFlag)
+        protected bool WalkTo(byte btDir, bool boFlag)
         {
             short nOX = 0;
             short nOY = 0;
@@ -1258,7 +1262,7 @@ namespace GameSvr.Actor
                     MapItem = MapItemA;
                 }
 
-                SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, nX, nY, MapItem.Name);
+                SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, nX, nY, MapItem.Name);
                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                 {
                     if (boFalg)
@@ -3163,12 +3167,12 @@ namespace GameSvr.Actor
                         MapCellInfo = tEnvir.GetMapCellInfo(x, y, ref mapCell);
                         if (mapCell && (MapCellInfo.ObjList != null))
                         {
-                            for (var j = 0; j < MapCellInfo.Count; j++)
+                            for (var i = 0; i < MapCellInfo.Count; i++)
                             {
-                                OSObject = MapCellInfo.ObjList[j];
+                                OSObject = MapCellInfo.ObjList[i];
                                 if ((OSObject != null) && (OSObject.CellType == CellType.OS_MOVINGOBJECT))
                                 {
-                                    BaseObject = OSObject.CellObj as TBaseObject;
+                                    BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);
                                     if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
                                     {
                                         rList.Add(BaseObject);
@@ -3223,7 +3227,7 @@ namespace GameSvr.Actor
                             {
                                 if (MapCellInfo.ObjList != null)
                                 {
-                                    for (var i = MapCellInfo.Count - 1; i >= 0; i--)
+                                    for (var i = 0; i < MapCellInfo.Count; i++)
                                     {
                                         OSObject = MapCellInfo.ObjList[i];
                                         if (OSObject != null)
@@ -3232,8 +3236,7 @@ namespace GameSvr.Actor
                                             {
                                                 if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                                 {
-                                                    OSObject = null;
-                                                    MapCellInfo.Remove(i);
+                                                    MapCellInfo.Remove(OSObject);
                                                     if (MapCellInfo.Count <= 0)
                                                     {
                                                         MapCellInfo.Dispose();
@@ -3244,7 +3247,7 @@ namespace GameSvr.Actor
                                                 {
                                                     try
                                                     {
-                                                        BaseObject = OSObject.CellObj as TBaseObject;
+                                                        BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);
                                                         if ((BaseObject != null) && !BaseObject.m_boGhost)
                                                         {
                                                             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -3264,7 +3267,7 @@ namespace GameSvr.Actor
                                                     }
                                                     catch (Exception e)
                                                     {
-                                                        MapCellInfo.Remove(i);
+                                                        MapCellInfo.Remove(OSObject);
                                                         if (MapCellInfo.Count <= 0)
                                                         {
                                                             MapCellInfo.Dispose();
@@ -3514,13 +3517,13 @@ namespace GameSvr.Actor
                 var MapCellInfo = m_PEnvir.GetMapCellInfo(m_nCurrX, m_nCurrY, ref mapCell);
                 if (mapCell && (MapCellInfo.ObjList != null))
                 {
-                    for (int i = 0; i < MapCellInfo.Count; i++)
+                    for (var i = 0; i < MapCellInfo.Count; i++)
                     {
                         var OSObject = MapCellInfo.ObjList[i];
                         switch (OSObject.CellType)
                         {
                             case CellType.OS_GATEOBJECT:
-                                var GateObj = (TGateObj)OSObject.CellObj;
+                                var GateObj = (TGateObj)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
                                 if ((GateObj != null))
                                 {
                                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -3561,9 +3564,10 @@ namespace GameSvr.Actor
                             case CellType.OS_EVENTOBJECT:
                                 {
                                     MirEvent mapEvent = null;
-                                    if (((MirEvent)OSObject.CellObj).OwnBaseObject != null)
+                                    var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
+                                    if (owinEvent.OwnBaseObject != null)
                                     {
-                                        mapEvent = (MirEvent)OSObject.CellObj;
+                                        mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
                                     }
                                     if (mapEvent != null)
                                     {
@@ -5032,12 +5036,12 @@ namespace GameSvr.Actor
                     MapCellInfo = m_PEnvir.GetMapCellInfo(i, j, ref mapCell);
                     if (mapCell && (MapCellInfo.ObjList != null))
                     {
-                        for (int k = 0; k < MapCellInfo.Count; k++)
+                        for (var k = 0; k < MapCellInfo.Count; k++)
                         {
                             OSObject = MapCellInfo.ObjList[k];
                             if ((OSObject != null) && (OSObject.CellType == CellType.OS_MOVINGOBJECT))
                             {
-                                BaseObject = OSObject.CellObj as TBaseObject;
+                                BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
                                 if ((BaseObject != null) && (!BaseObject.m_boGhost))
                                 {
                                     if (IsProperFriend(BaseObject))

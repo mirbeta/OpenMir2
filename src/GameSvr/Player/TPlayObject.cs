@@ -75,7 +75,7 @@ namespace GameSvr.Player
                 {
                     if (IncGold(mapItem.Count))
                     {
-                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
+                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, mapItem.ObjectId, m_nCurrX, m_nCurrY, "");
                         if (M2Share.g_boGameLogGold)
                         {
                             M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME
@@ -99,7 +99,7 @@ namespace GameSvr.Player
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem != null && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
                     {
-                        SendMsg(this, Grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
+                        SendMsg(this, Grobal2.RM_ITEMHIDE, 0, mapItem.ObjectId, m_nCurrX, m_nCurrY, "");
                         AddItemToBag(UserItem);
                         if (!M2Share.IsCheapStuff(StdItem.StdMode))
                         {
@@ -1113,7 +1113,7 @@ namespace GameSvr.Player
                             OSObject = MapCellInfo.ObjList[i];
                             if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                             {
-                                BaseObject = OSObject.CellObj as TBaseObject;
+                                BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
                                 if (BaseObject != null)
                                 {
                                     if (!BaseObject.m_boGhost && BaseObject == TargeTBaseObject)
