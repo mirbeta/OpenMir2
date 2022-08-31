@@ -41,15 +41,14 @@ namespace GameSvr.Magic
         /// <summary>
         /// 检查护身符
         /// </summary>
-        /// <param name="PlayObject"></param>
-        /// <param name="nCount"></param>
-        /// <param name="nType"></param>
-        /// <param name="Idx"></param>
         /// <returns></returns>
         public static bool CheckAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
+            if (PlayObject == null)
+            {
+                return false;
+            }
             StdItem amuletStdItem = null;
-            var result = false;
             Idx = 0;
             if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
             {
@@ -62,16 +61,14 @@ namespace GameSvr.Magic
                             if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_ARMRINGL;
-                                result = true;
-                                return result;
+                                return true;
                             }
                             break;
                         case 2:
                             if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_ARMRINGL;
-                                result = true;
-                                return result;
+                                return true;
                             }
                             break;
                     }
@@ -88,33 +85,31 @@ namespace GameSvr.Magic
                             if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_BUJUK;
-                                result = true;
-                                return result;
+                                return true;
                             }
                             break;
                         case 2:
                             if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_BUJUK;
-                                result = true;
-                                return result;
+                                return true;
                             }
                             break;
                     }
                 }
             }
-            return result;
+            return false;
         }
 
         /// <summary>
         /// 使用护身符
         /// </summary>
-        /// <param name="PlayObject"></param>
-        /// <param name="nCount"></param>
-        /// <param name="nType"></param>
-        /// <param name="Idx"></param>
         public static void UseAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
+            if (PlayObject == null)
+            {
+                return;
+            }
             var dura = (ushort)(nCount * 100);
             if (PlayObject.m_UseItems[Idx] != null && PlayObject.m_UseItems[Idx].Dura > dura)
             {

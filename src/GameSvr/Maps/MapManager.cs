@@ -12,15 +12,12 @@ namespace GameSvr.Maps
 
         public void MakeSafePkZone()
         {
-            SafeEvent SafeEvent;
-            TStartPoint StartPoint;
-            Envirnoment Envir;
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                StartPoint = M2Share.StartPointList[i];
+                var StartPoint = M2Share.StartPointList[i];
                 if (StartPoint != null && StartPoint.m_nType > 0)
                 {
-                    Envir = FindMap(StartPoint.m_sMapName);
+                    var Envir = FindMap(StartPoint.m_sMapName);
                     if (Envir != null)
                     {
                         int nMinX = StartPoint.m_nCurrX - StartPoint.m_nRange;
@@ -33,7 +30,7 @@ namespace GameSvr.Maps
                             {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
-                                    SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
+                                    var SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
                                     M2Share.EventManager.AddEvent(SafeEvent);
                                 }
                             }
@@ -183,6 +180,7 @@ namespace GameSvr.Maps
 
         public void ProcessMapDoor()
         {
+            
         }
 
         public void ReSetMinMap()

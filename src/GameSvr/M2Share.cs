@@ -52,7 +52,7 @@ namespace GameSvr
         /// <summary>
         /// 寻路
         /// </summary>
-        public static TFindPath g_FindPath;
+        public static FindPath g_FindPath;
         /// <summary>
         /// 游戏命令系统
         /// </summary>

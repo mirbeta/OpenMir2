@@ -489,7 +489,7 @@ namespace GameSvr.RobotPlay
             bool boFlag;
             TMapWalkXY[] WalkStep = null;
             bool result = false;
-            int nRange = HUtil32._MAX(new System.Random(3).Next(), 2);
+            int nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
             boFlag = m_btRaceServer == 108 || new ArrayList(new short[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             TMapWalkXY MapWalkXY;

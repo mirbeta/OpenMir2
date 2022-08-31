@@ -9,14 +9,14 @@ namespace SystemModule
         public const int CM_POWERBLOCK = 0;
         public const int MapNameLen = 16;
         public const int ActorNameLen = 14;
-        public const int DR_UP = 0;
-        public const int DR_UPRIGHT = 1;
-        public const int DR_RIGHT = 2;
-        public const int DR_DOWNRIGHT = 3;
-        public const int DR_DOWN = 4;
-        public const int DR_DOWNLEFT = 5;
-        public const int DR_LEFT = 6;
-        public const int DR_UPLEFT = 7;
+        public const byte DR_UP = 0;
+        public const byte DR_UPRIGHT = 1;
+        public const byte DR_RIGHT = 2;
+        public const byte DR_DOWNRIGHT = 3;
+        public const byte DR_DOWN = 4;
+        public const byte DR_DOWNLEFT = 5;
+        public const byte DR_LEFT = 6;
+        public const byte DR_UPLEFT = 7;
         /// <summary>
         /// 衣服
         /// </summary>

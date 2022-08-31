@@ -9,11 +9,10 @@ namespace GameSvr.Guild
 
         public bool AddGuild(string sGuildName, string sChief)
         {
-            GuildInfo Guild;
             var result = false;
             if (M2Share.CheckGuildName(sGuildName) && FindGuild(sGuildName) == null)
             {
-                Guild = new GuildInfo(sGuildName);
+                var Guild = new GuildInfo(sGuildName);
                 Guild.SetGuildInfo(sChief);
                 GuildList.Add(Guild);
                 SaveGuildList();
@@ -24,11 +23,10 @@ namespace GameSvr.Guild
 
         public bool DelGuild(string sGuildName)
         {
-            GuildInfo Guild;
             var result = false;
             for (var i = 0; i < GuildList.Count; i++)
             {
-                Guild = GuildList[i];
+                var Guild = GuildList[i];
                 if (string.Compare(Guild.sGuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (Guild.m_RankList.Count > 1)
@@ -61,30 +59,26 @@ namespace GameSvr.Guild
 
         public GuildInfo FindGuild(string sGuildName)
         {
-            GuildInfo result = null;
             for (var i = 0; i < GuildList.Count; i++)
             {
                 if (GuildList[i].sGuildName == sGuildName)
                 {
-                    result = GuildList[i];
-                    break;
+                    return GuildList[i];
                 }
             }
-            return result;
+            return null;
         }
 
         public void LoadGuildInfo()
         {
-            StringList LoadList;
             GuildInfo Guild;
-            string sGuildName;
             if (File.Exists(M2Share.g_Config.sGuildFile))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 LoadList.LoadFromFile(M2Share.g_Config.sGuildFile);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sGuildName = LoadList[i].Trim();
+                    var sGuildName = LoadList[i].Trim();
                     if (sGuildName != "")
                     {
                         Guild = new GuildInfo(sGuildName);
@@ -111,26 +105,23 @@ namespace GameSvr.Guild
 
         public GuildInfo MemberOfGuild(string sName)
         {
-            GuildInfo result = null;
             for (var i = 0; i < GuildList.Count; i++)
             {
                 if (GuildList[i].IsMember(sName))
                 {
-                    result = GuildList[i];
-                    break;
+                    return GuildList[i];
                 }
             }
-            return result;
+            return null;
         }
 
         private void SaveGuildList()
         {
-            StringList SaveList;
             if (M2Share.nServerIndex != 0)
             {
                 return;
             }
-            SaveList = new StringList();
+            var SaveList = new StringList();
             for (var i = 0; i < GuildList.Count; i++)
             {
                 SaveList.Add(GuildList[i].sGuildName);
@@ -148,16 +139,13 @@ namespace GameSvr.Guild
 
         public void Run()
         {
-            GuildInfo Guild;
-            bool boChanged;
-            TWarGuild WarGuild;
             for (var i = 0; i < GuildList.Count; i++)
             {
-                Guild = GuildList[i];
-                boChanged = false;
+                var Guild = GuildList[i];
+                var boChanged = false;
                 for (var j = Guild.GuildWarList.Count - 1; j >= 0; j--)
                 {
-                    WarGuild = Guild.GuildWarList[j];
+                    var WarGuild = Guild.GuildWarList[j];
                     if ((HUtil32.GetTickCount() - WarGuild.dwWarTick) > WarGuild.dwWarTime)
                     {
                         Guild.EndGuildWar(WarGuild.Guild);

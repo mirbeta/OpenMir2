@@ -2760,10 +2760,10 @@ namespace GameSvr.UsrSystem
             Cert.m_sMapName = AI.sMapName;
             Cert.m_nCurrX = AI.nX;
             Cert.m_nCurrY = AI.nY;
-            Cert.Direction = (byte)(new System.Random(8)).Next();
+            Cert.Direction = (byte)M2Share.RandomNumber.Random(8);
             Cert.m_sCharName = AI.sCharName;
             Cert.m_WAbil = Cert.m_Abil;
-            if ((new System.Random(100)).Next() < Cert.m_btCoolEye)
+            if (M2Share.RandomNumber.Random(100) < Cert.m_btCoolEye)
             {
                 Cert.m_boCoolEye = true;
             }
@@ -2817,14 +2817,14 @@ namespace GameSvr.UsrSystem
                         }
                         else
                         {
-                            Cert.m_nCurrX = (byte)((new System.Random(Cert.m_PEnvir.WWidth / 2)).Next() + n24);
+                            Cert.m_nCurrX = (byte)((M2Share.RandomNumber.Random(Cert.m_PEnvir.WWidth / 2)) + n24);
                             if (Cert.m_PEnvir.WHeight - n24 - 1 > Cert.m_nCurrY)
                             {
                                 Cert.m_nCurrY += (short)n20;
                             }
                             else
                             {
-                                Cert.m_nCurrY = (byte)((new System.Random(Cert.m_PEnvir.WHeight / 2)).Next() + n24);
+                                Cert.m_nCurrY = (byte)(M2Share.RandomNumber.Random(Cert.m_PEnvir.WHeight / 2) + n24);
                             }
                         }
                     }

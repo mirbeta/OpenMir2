@@ -141,11 +141,11 @@ namespace GameSvr.Magic
             short nAmuletIdx = 0;
             if (IsWarrSkill(UserMagic.wMagIdx))
             {
-                return result;
+                return false;
             }
             if ((Math.Abs(PlayObject.m_nCurrX - nTargetX) > M2Share.g_Config.nMagicAttackRage) || (Math.Abs(PlayObject.m_nCurrY - nTargetY) > M2Share.g_Config.nMagicAttackRage))
             {
-                return result;
+                return false;
             }
             PlayObject.SendRefMsg(Grobal2.RM_SPELL, UserMagic.MagicInfo.btEffect, nTargetX, nTargetY, UserMagic.MagicInfo.wMagicID, "");
             if (TargeTBaseObject != null && TargeTBaseObject.m_boDeath)
@@ -157,7 +157,7 @@ namespace GameSvr.Magic
             var boSpellFire = true;
             if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0 && UserMagic.MagicInfo.wMagicID > 40)
             {
-                return result;
+                return false;
             }
             switch (UserMagic.MagicInfo.wMagicID)
             {
