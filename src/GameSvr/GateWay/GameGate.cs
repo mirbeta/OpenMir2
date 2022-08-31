@@ -311,7 +311,7 @@ namespace GameSvr.GateWay
             return result;
         }
 
-        private void DoClientCertification(int GateIdx, GameGateUserInfo GateUser, int nSocket, string sMsg)
+        private void DoClientCertification(int GateIdx, GateUserInfo GateUser, int nSocket, string sMsg)
         {
             var sData = string.Empty;
             var sAccount = string.Empty;
@@ -377,7 +377,7 @@ namespace GameSvr.GateWay
 
         public void CloseUser(int nSocket)
         {
-            GameGateUserInfo GateUser;
+            GateUserInfo GateUser;
             if (GateInfo.UserList.Count > 0)
             {
                 HUtil32.EnterCriticalSections(_runSocketSection);
@@ -427,10 +427,10 @@ namespace GameSvr.GateWay
             }
         }
 
-        private int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GameGateUserInfo> UserList)
+        private int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GateUserInfo> UserList)
         {
             int result;
-            var GateUser = new GameGateUserInfo
+            var GateUser = new GateUserInfo
             {
                 sAccount = string.Empty,
                 sCharName = String.Empty,
@@ -503,7 +503,7 @@ namespace GameSvr.GateWay
                         Gate.nSendBlockCount = 0;
                         break;
                     case Grobal2.GM_DATA:
-                        GameGateUserInfo GateUser = null;
+                        GateUserInfo GateUser = null;
                         if (MsgHeader.ServerIndex >= 1)
                         {
                             nUserIdx = MsgHeader.ServerIndex - 1;

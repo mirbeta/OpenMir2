@@ -260,7 +260,7 @@ namespace GameSvr
             M2Share.DataServer = new DBService();
             M2Share.ObjectManager = new ObjectManager();
             M2Share.ScriptSystem = new ScriptSystem();
-            M2Share.GateManager = GameGateManager.Instance;
+            M2Share.GateManager = GameGateMgr.Instance;
             M2Share.g_FindPath = new FindPath();
             M2Share.CommandSystem = new CommandManager();
             M2Share.LogStringList = new ArrayList();

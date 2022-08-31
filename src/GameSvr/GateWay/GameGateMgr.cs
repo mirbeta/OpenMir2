@@ -13,16 +13,16 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace GameSvr.GateWay
 {
-    public class GameGateManager
+    public class GameGateMgr
     {
-        private static readonly GameGateManager instance = new GameGateManager();
-        public static GameGateManager Instance => instance;
+        private static readonly GameGateMgr instance = new GameGateMgr();
+        public static GameGateMgr Instance => instance;
         private readonly SocketServer _gateSocket = null;
         private readonly object m_RunSocketSection = null;
         private readonly Channel<ReceiveData> _receiveQueue;
         private readonly ConcurrentDictionary<int, GameGate> _gameGates;
 
-        private GameGateManager()
+        private GameGateMgr()
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
@@ -79,7 +79,7 @@ namespace GameSvr.GateWay
                 gateInfo.boUsed = true;
                 gateInfo.SocketId = e.ConnectionId;
                 gateInfo.Socket = e.Socket;
-                gateInfo.UserList = new List<GameGateUserInfo>();
+                gateInfo.UserList = new List<GateUserInfo>();
                 gateInfo.nUserCount = 0;
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
@@ -204,7 +204,7 @@ namespace GameSvr.GateWay
                 }
                 if (gateInfo.SocketId.Equals(e.ConnectionId))
                 {
-                    IList<GameGateUserInfo> userList = gateInfo.UserList;
+                    IList<GateUserInfo> userList = gateInfo.UserList;
                     for (var i = 0; i < userList.Count; i++)
                     {
                         var gateUser = userList[i];

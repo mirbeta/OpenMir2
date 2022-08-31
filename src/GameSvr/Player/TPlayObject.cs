@@ -2873,11 +2873,11 @@ namespace GameSvr.Player
             var HumMagic = HumanRcd.Data.Magic;
             if (HumMagic == null)
             {
-                HumMagic = new TMagicRcd[Grobal2.MAXMAGIC];
+                HumMagic = new TMagicRcd[Grobal2.MaxMagicCount];
             }
             for (var i = 0; i < m_MagicList.Count; i++)
             {
-                if (i >= Grobal2.MAXMAGIC)
+                if (i >= Grobal2.MaxMagicCount)
                 {
                     break;
                 }

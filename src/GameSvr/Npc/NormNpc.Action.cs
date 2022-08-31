@@ -648,7 +648,7 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (nLevel > 0 && nLevel <= Grobal2.MAXLEVEL)
+                    if (nLevel > 0 && nLevel <= Grobal2.MaxLevel)
                     {
                         PlayObject.m_Abil.Level = (byte)nLevel;
                         boChgOK = true;
@@ -656,13 +656,13 @@ namespace GameSvr.Npc
                     break;
                 case '-':
                     nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level - nLevel);
-                    nLv = HUtil32._MIN(Grobal2.MAXLEVEL, nLv);
+                    nLv = HUtil32._MIN(Grobal2.MaxLevel, nLv);
                     PlayObject.m_Abil.Level = (byte)nLv;
                     boChgOK = true;
                     break;
                 case '+':
                     nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level + nLevel);
-                    nLv = HUtil32._MIN(Grobal2.MAXLEVEL, nLv);
+                    nLv = HUtil32._MIN(Grobal2.MaxLevel, nLv);
                     PlayObject.m_Abil.Level = (byte)nLv;
                     boChgOK = true;
                     break;
