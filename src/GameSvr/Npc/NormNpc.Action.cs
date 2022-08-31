@@ -608,31 +608,27 @@ namespace GameSvr.Npc
 
         private void ActionOfChangeJob(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nJob = -1;
+            PlayJob nJob = PlayJob.None;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptCommandConst.sWarrior, ScriptCommandConst.sWarrior.Length))
             {
-                nJob = M2Share.jWarr;
+                nJob = PlayJob.Warr;
             }
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptCommandConst.sWizard, ScriptCommandConst.sWizard.Length))
             {
-                nJob = M2Share.jWizard;
+                nJob = PlayJob.Wizard;
             }
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptCommandConst.sTaos, ScriptCommandConst.sTaos.Length))
             {
-                nJob = M2Share.jTaos;
+                nJob = PlayJob.Taos;
             }
-            if (nJob < 0)
+            if (nJob == PlayJob.None)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptCommandConst.sSC_CHANGEJOB);
                 return;
             }
             if (PlayObject.m_btJob != nJob)
             {
-                PlayObject.m_btJob = (byte)nJob;
-                // 
-                // PlayObject.RecalcLevelAbilitys();
-                // PlayObject.RecalcAbilitys();
-                // 
+                PlayObject.m_btJob = nJob;
                 PlayObject.HasLevelUp(0);
             }
         }
@@ -762,11 +758,10 @@ namespace GameSvr.Npc
 
         private void ActionOfDelNoJobSkill(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserMagic UserMagic;
             for (var i = PlayObject.m_MagicList.Count - 1; i >= 0; i--)
             {
-                UserMagic = PlayObject.m_MagicList[i];
-                if (UserMagic.MagicInfo.btJob != PlayObject.m_btJob)
+                var UserMagic = PlayObject.m_MagicList[i];
+                if (UserMagic.MagicInfo.btJob != (byte)PlayObject.m_btJob)
                 {
                     PlayObject.SendDelMagic(UserMagic);
                     Dispose(UserMagic);

@@ -1837,10 +1837,10 @@ namespace GameSvr.RobotPlay
             bool result = false;
             switch (m_btJob)
             {
-                case 0:
+                case PlayJob.Warr:
                     result = true;
                     break;
-                case 1:
+                case PlayJob.Wizard:
                     for (var i = 0; i < m_MagicList.Count; i++)
                     {
                         UserMagic = m_MagicList[i];
@@ -1867,7 +1867,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case 2:
+                case PlayJob.Taos:
                     for (var i = 0; i < m_MagicList.Count; i++)
                     {
                         UserMagic = m_MagicList[i];
@@ -2191,14 +2191,12 @@ namespace GameSvr.RobotPlay
                 {
                     if (!m_boIsUseMagic && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 3 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 3))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-                    if ((M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_WAbil.MaxHP < 700 && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT && m_btJob == 2) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                    if ((M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_WAbil.MaxHP < 700 && 
+                        m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT && m_btJob == PlayJob.Taos) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
                     {
-                        // 道法22前是否物理攻击 20090210 大于1格时才走向目标
-                        result = true;
-                        return result;
+                        return true;
                     }
                 }
                 else
@@ -2834,7 +2832,7 @@ namespace GameSvr.RobotPlay
             short result = 0;
             switch (m_btJob)
             {
-                case 0:
+                case PlayJob.Warr:
                     if (AllowUseMagic(26) && HUtil32.GetTickCount() - m_dwLatestFireHitTick > 9000)// 烈火
                     {
                         m_boFireHitSkill = true;
@@ -3162,7 +3160,7 @@ namespace GameSvr.RobotPlay
                         return result;
                     }
                     break;
-                case 1: // 法师
+                case PlayJob.Wizard: // 法师
                     if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !m_boAbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
@@ -3841,7 +3839,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case 2:// 道士
+                case PlayJob.Taos:// 道士
                     if (m_SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - m_SkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && m_WAbil.MP > 20)
                     {
                         m_SkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低
@@ -4034,14 +4032,14 @@ namespace GameSvr.RobotPlay
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0) // 诅咒术
+                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[(byte)m_TargetCret.m_btJob + 6] == 0) // 诅咒术
                                 {
                                     result = 52;// 英雄诅咒术
                                     return result;
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0) // 诅咒术
+                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[(byte)m_TargetCret.m_btJob + 6] == 0) // 诅咒术
                                 {
                                     result = 52;
                                     return result;
@@ -4080,7 +4078,7 @@ namespace GameSvr.RobotPlay
                                     result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)// 诅咒术
+                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[(byte)m_TargetCret.m_btJob + 6] == 0)// 诅咒术
                                 {
                                     result = 52;
                                     return result;
@@ -4118,7 +4116,7 @@ namespace GameSvr.RobotPlay
                             result = 13;
                             return result;
                         }
-                        if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)// 诅咒术
+                        if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[(byte)m_TargetCret.m_btJob + 6] == 0)// 诅咒术
                         {
                             result = 52;
                             return result;

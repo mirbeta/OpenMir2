@@ -23,7 +23,7 @@ namespace GameSvr.RobotPlay
                         m_dwAutoAvoidTick = HUtil32.GetTickCount();
                         if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22) // 22级前道法不躲避
                         {
-                            if (m_btJob == 1)// 法放魔法后要躲
+                            if ((byte)m_btJob == 1)// 法放魔法后要躲
                             {
                                 if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
                                 {
@@ -36,17 +36,17 @@ namespace GameSvr.RobotPlay
                         {
                             switch (m_btJob)
                             {
-                                case 1:
+                                case PlayJob.Wizard:
                                     if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
                                     {
                                         result = true;
                                         return result;
                                     }
                                     break;
-                                case 2:
+                                case PlayJob.Taos:
                                     if (m_TargetCret != null)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪 20090108
+                                        if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪
                                         {
                                             if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                             {

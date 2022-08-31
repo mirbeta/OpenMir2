@@ -47,7 +47,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 人物的职业 (0:战士 1：法师 2:道士)
         /// </summary>
-        public byte m_btJob = 0;
+        public PlayJob m_btJob = 0;
         /// <summary>
         /// 人物金币数
         /// </summary>
@@ -620,7 +620,7 @@ namespace GameSvr.Actor
             m_btRaceServer = Grobal2.RC_ANIMAL;
             m_btRaceImg = 0;
             m_btHair = 0;
-            m_btJob = M2Share.jWarr;
+            m_btJob = PlayJob.Warr;
             m_nGold = 0;
             m_wAppr = 0;
             bo2B9 = true;
@@ -969,7 +969,7 @@ namespace GameSvr.Actor
             double nLevel = m_Abil.Level;
             switch (m_btJob)
             {
-                case M2Share.jTaos:
+                case PlayJob.Taos:
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP + M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
@@ -990,7 +990,7 @@ namespace GameSvr.Actor
                     n = HUtil32.Round(nLevel / 6);
                     m_Abil.MAC = HUtil32.MakeLong(n / 2, n + 1);
                     break;
-                case M2Share.jWizard:
+                case PlayJob.Wizard:
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWizardHP + M2Share.g_Config.nLevelValueOfWizardHPRate) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5 * nLevel));
@@ -1003,7 +1003,7 @@ namespace GameSvr.Actor
                     m_Abil.AC = 0;
                     m_Abil.MAC = 0;
                     break;
-                case M2Share.jWarr:
+                case PlayJob.Warr:
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP + M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
@@ -2381,20 +2381,20 @@ namespace GameSvr.Actor
             TNakedAbility BonusTick = null;
             switch (m_btJob)
             {
-                case M2Share.jWarr:
+                case PlayJob.Warr:
                     BonusTick = M2Share.g_Config.BonusAbilofWarr;
                     break;
-                case M2Share.jWizard:
+                case PlayJob.Wizard:
                     BonusTick = M2Share.g_Config.BonusAbilofWizard;
                     break;
-                case M2Share.jTaos:
+                case PlayJob.Taos:
                     BonusTick = M2Share.g_Config.BonusAbilofTaos;
                     break;
             }
             m_btHitPoint = (byte)(M2Share.DEFHIT + m_BonusAbil.Hit / BonusTick.Hit);
             switch (m_btJob)
             {
-                case M2Share.jTaos:
+                case PlayJob.Taos:
                     m_btSpeedPoint = (byte)(M2Share.DEFSPEED + m_BonusAbil.Speed / BonusTick.Speed + 3);
                     break;
                 default:
@@ -2565,13 +2565,13 @@ namespace GameSvr.Actor
             switch (nIndex)
             {
                 case 1:
-                    if (m_btJob != M2Share.jWizard)
+                    if (m_btJob != PlayJob.Wizard)
                     {
                         DelItemSkill_DeleteSkill(M2Share.g_Config.sFireBallSkill);
                     }
                     break;
                 case 2:
-                    if (m_btJob != M2Share.jTaos)
+                    if (m_btJob != PlayJob.Taos)
                     {
                         DelItemSkill_DeleteSkill(M2Share.g_Config.sHealSkill);
                     }
@@ -4578,13 +4578,13 @@ namespace GameSvr.Actor
             {
                 switch (m_LastHiter.m_btJob)
                 {
-                    case 0:
+                    case PlayJob.Warr:
                         nDamage = nDamage * M2Share.g_Config.nWarrMon / 10;
                         break;
-                    case 1:
+                    case PlayJob.Wizard:
                         nDamage = nDamage * M2Share.g_Config.nWizardMon / 10;
                         break;
-                    case 2:
+                    case PlayJob.Taos:
                         nDamage = nDamage * M2Share.g_Config.nTaosMon / 10;
                         break;
                 }

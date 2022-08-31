@@ -848,8 +848,8 @@ namespace GameSvr.RobotPlay
                                     break;
                             }
                             break;
-                        case 1:
-                        case 2:
+                        case PlayJob.Wizard:
+                        case PlayJob.Taos:
                             switch (nCode)
                             {
                                 case 1:

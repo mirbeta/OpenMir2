@@ -118,7 +118,7 @@ namespace GameSvr.RobotPlay
             int result = -1;
             switch (m_btJob)
             {
-                case 0: // 1=野蛮冲撞 2=无法攻击到目标需要移动 3=走位
+                case PlayJob.Warr: // 1=野蛮冲撞 2=无法攻击到目标需要移动 3=走位
                     if (DoThink_MotaeboPos(wMagicID))
                     {
                         result = 1;
@@ -169,7 +169,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case 1:
+                case PlayJob.Wizard:
                     if (wMagicID == 8 && DoThink_MagPushArround(wMagicID, wMagicID))
                     {
                         return result;
@@ -202,7 +202,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case 2:
+                case PlayJob.Taos:
                     if (wMagicID == 48 && DoThink_MagPushArround(wMagicID, wMagicID))
                     {
                         return result;

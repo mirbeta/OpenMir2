@@ -24,6 +24,14 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
+    public enum PlayJob : byte
+    {
+        Warr = 0,
+        Wizard = 1,
+        Taos = 2,
+        None = 3
+    }
+    
     public struct TItemBind
     {
         public int nMakeIdex;
@@ -480,9 +488,6 @@ namespace GameSvr
         public const int HAM_PKATTACK = 6;
         public const int DEFHIT = 5;
         public const int DEFSPEED = 15;
-        public const int jWarr = 0;
-        public const int jWizard = 1;
-        public const int jTaos = 2;
         public const int SIZEOFTHUMAN = 3588;
         public const int MONSTER_SANDMOB = 3;
         public const int MONSTER_ROCKMAN = 4;
