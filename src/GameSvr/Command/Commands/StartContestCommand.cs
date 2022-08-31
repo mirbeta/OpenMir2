@@ -15,9 +15,6 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void StartContest(TPlayObject PlayObject)
         {
-            IList<TBaseObject> List10;
-            IList<TPlayObject> List14;
-            IList<GuildInfo> guildList;
             TPlayObject m_PlayObject;
             TPlayObject PlayObjectA;
             bool bo19;
@@ -27,9 +24,9 @@ namespace GameSvr.Command.Commands
                 return;
             }
             PlayObject.SysMsg("开始行会争霸赛。", MsgColor.Red, MsgType.Hint);
-            List10 = new List<TBaseObject>();
-            List14 = new List<TPlayObject>();
-            guildList = new List<GuildInfo>();
+            IList<TBaseObject> List10 = new List<TBaseObject>();
+            IList<TPlayObject> List14 = new List<TPlayObject>();
+            IList<GuildInfo> guildList = new List<GuildInfo>();
             M2Share.UserEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, List10);
             for (var i = 0; i < List10.Count; i++)
             {

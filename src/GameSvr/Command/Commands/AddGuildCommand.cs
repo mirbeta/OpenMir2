@@ -17,8 +17,6 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            TPlayObject Human;
-            bool boAddState;
             var sGuildName = @Params.Length > 0 ? @Params[0] : "";
             var sGuildChief = @Params.Length > 1 ? @Params[1] : "";
             if (M2Share.nServerIndex != 0)
@@ -31,8 +29,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            boAddState = false;
-            Human = M2Share.UserEngine.GetPlayObject(sGuildChief);
+            var boAddState = false;
+            var Human = M2Share.UserEngine.GetPlayObject(sGuildChief);
             if (Human == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);

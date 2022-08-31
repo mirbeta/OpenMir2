@@ -20,21 +20,19 @@ namespace GameSvr.Command.Commands
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sSkillName = @Params.Length > 1 ? @Params[1] : "";
             var nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
-            TMagic Magic;
             TUserMagic UserMagic = null;
-            TPlayObject m_PlayObject;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Magic = M2Share.UserEngine.FindMagic(sSkillName);
+            var Magic = M2Share.UserEngine.FindMagic(sSkillName);
             if (Magic == null)
             {
 

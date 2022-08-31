@@ -84,7 +84,6 @@ namespace GameSvr.Castle
         // 城堡皇宫所在地图
         public TUserCastle IsCastlePalaceEnvir(Envirnoment Envir)
         {
-            TUserCastle Castle = null;
             for (var i = 0; i < _castleList.Count; i++)
             {
                 if (_castleList[i].m_MapPalace == Envir)
@@ -128,7 +127,7 @@ namespace GameSvr.Castle
             }
         }
 
-        public void GetCastleGoldInfo(ArrayList List)
+        public void GetCastleGoldInfo(IList<string> List)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {

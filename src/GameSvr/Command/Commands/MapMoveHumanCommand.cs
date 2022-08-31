@@ -19,7 +19,6 @@ namespace GameSvr.Command.Commands
             }
             var sSrcMap = @Params.Length > 0 ? @Params[0] : "";
             var sDenMap = @Params.Length > 1 ? @Params[1] : "";
-            IList<TBaseObject> HumanList;
             TPlayObject MoveHuman;
             if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
             {
@@ -38,7 +37,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            HumanList = new List<TBaseObject>();
+            IList<TBaseObject> HumanList = new List<TBaseObject>();
             M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.WWidth / 2, SrcEnvir.WHeight / 2, 1000, HumanList);
             for (var i = 0; i < HumanList.Count; i++)
             {

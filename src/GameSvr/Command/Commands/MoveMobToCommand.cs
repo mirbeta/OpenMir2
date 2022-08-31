@@ -25,9 +25,6 @@ namespace GameSvr.Command.Commands
             var nY = @Params[4] == null ? (short)0 : System.Convert.ToInt16(@Params[4]);
             var OnX = @Params[5] == null ? (short)0 : System.Convert.ToInt16(@Params[5]);
             var OnY = @Params[6] == null ? (short)0 : System.Convert.ToInt16(@Params[6]);
-            Envirnoment SrcEnvir;
-            Envirnoment DenEnvir;
-            IList<TBaseObject> MonList;
             TBaseObject MoveMon;
             if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')
             {
@@ -55,13 +52,13 @@ namespace GameSvr.Command.Commands
             {
                 OnY = 0;
             }
-            SrcEnvir = M2Share.MapManager.FindMap(OleMap);// 原地图
-            DenEnvir = M2Share.MapManager.FindMap(NewMap);// 新地图
+            var SrcEnvir = M2Share.MapManager.FindMap(OleMap);// 原地图
+            var DenEnvir = M2Share.MapManager.FindMap(NewMap);// 新地图
             if (SrcEnvir == null || DenEnvir == null)
             {
                 return;
             }
-            MonList = new List<TBaseObject>();
+            IList<TBaseObject> MonList = new List<TBaseObject>();
             if (!boMoveAll)// 指定名称的怪移动
             {
                 M2Share.UserEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 10, MonList);// 查指定XY范围内的怪

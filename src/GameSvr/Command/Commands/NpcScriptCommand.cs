@@ -13,10 +13,6 @@ namespace GameSvr.Command.Commands
         public void NpcScript(TPlayObject PlayObject)
         {
             var sScriptFileName = string.Empty;
-            Merchant Merchant;
-            NormNpc NormNpc;
-            StringList LoadList;
-            string sScriptLine;
             var nNPCType = -1;
             var BaseObject = PlayObject.GetPoseCreate();
             if (BaseObject != null)
@@ -45,17 +41,17 @@ namespace GameSvr.Command.Commands
             }
             if (nNPCType == 0)
             {
-                Merchant = (Merchant)BaseObject;
+                var Merchant = (Merchant)BaseObject;
                 sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + M2Share.sMarket_Def + Merchant.m_sScript + "-" + Merchant.m_sMapName + ".txt";
             }
             if (nNPCType == 1)
             {
-                NormNpc = (NormNpc)BaseObject;
+                var NormNpc = (NormNpc)BaseObject;
                 sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + M2Share.sNpc_def + NormNpc.m_sCharName + "-" + NormNpc.m_sMapName + ".txt";
             }
             if (File.Exists(sScriptFileName))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 try
                 {
                     LoadList.LoadFromFile(sScriptFileName);
@@ -66,7 +62,7 @@ namespace GameSvr.Command.Commands
                 }
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sScriptLine = LoadList[i].Trim();
+                    var sScriptLine = LoadList[i].Trim();
                     sScriptLine = HUtil32.ReplaceChar(sScriptLine, ' ', ',');
                     PlayObject.SysMsg(i + "," + sScriptLine, MsgColor.Blue, MsgType.Hint);
                 }

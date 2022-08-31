@@ -70,7 +70,7 @@ namespace GameSvr.Castle
             userCastle.m_RightWall.sName = ReadString("Defense", "RightWallName", "RightWall");
             userCastle.m_RightWall.nHP = Read<ushort>("Defense", "RightWallHP", (short)2000);
             userCastle.m_RightWall.BaseObject = null;
-            for (var i = 0; i < userCastle.m_Archer.Length; i++)
+            for (var i = 0; i < userCastle.Archer.Length; i++)
             {
                 var objUnit = new TObjUnit();
                 objUnit.nX = Read<short>("Defense", "Archer_" + i + 1 + "_X", (short)0);
@@ -78,7 +78,7 @@ namespace GameSvr.Castle
                 objUnit.sName = ReadString("Defense", "Archer_" + i + 1 + "_Name", "弓箭手");
                 objUnit.nHP = Read<ushort>("Defense", "Archer_" + i + 1 + "_HP", (short)2000);
                 objUnit.BaseObject = null;
-                userCastle.m_Archer[i] = objUnit;
+                userCastle.Archer[i] = objUnit;
             }
 
             for (var i = 0; i < userCastle.m_Guard.Length; i++)
@@ -149,9 +149,9 @@ namespace GameSvr.Castle
             if (userCastle.m_RightWall.BaseObject != null)
                 WriteInteger("Defense", "RightWallHP", userCastle.m_RightWall.BaseObject.m_WAbil.HP);
             TObjUnit objUnit;
-            for (var i = 0; i < userCastle.m_Archer.Length; i++)
+            for (var i = 0; i < userCastle.Archer.Length; i++)
             {
-                objUnit = userCastle.m_Archer[i];
+                objUnit = userCastle.Archer[i];
                 if (objUnit.nX != 0) WriteInteger("Defense", "Archer_" + (i + 1) + "_X", objUnit.nX);
                 if (objUnit.nY != 0) WriteInteger("Defense", "Archer_" + (i + 1) + "_Y", objUnit.nY);
                 if (objUnit.sName != "")

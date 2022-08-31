@@ -26,7 +26,6 @@ namespace GameSvr.Command.Commands
             var nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
             var nX = (short)HUtil32.Str_ToInt(sX, 0);
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
-            Envirnoment MEnvir;
             TBaseObject mon = null;
             nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
             nX = (short)HUtil32.Str_ToInt(sX, 0);
@@ -36,7 +35,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            MEnvir = M2Share.MapManager.FindMap(M2Share.g_sMissionMap);
+            var MEnvir = M2Share.MapManager.FindMap(M2Share.g_sMissionMap);
             if (!M2Share.g_boMission || MEnvir == null)
             {
                 PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);

@@ -16,8 +16,6 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sHumanName = @Params.Length > 0 ? Params[0] : "";
-            TUserItem UserItem;
-            IList<TDeleteItem> DelList = null;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -29,11 +27,12 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
+            IList<TDeleteItem> DelList = null;
             if (m_PlayObject.m_ItemList.Count > 0)
             {
                 for (var i = m_PlayObject.m_ItemList.Count - 1; i >= 0; i--)
                 {
-                    UserItem = m_PlayObject.m_ItemList[i];
+                    var UserItem = m_PlayObject.m_ItemList[i];
                     if (DelList == null)
                     {
                         DelList = new List<TDeleteItem>();

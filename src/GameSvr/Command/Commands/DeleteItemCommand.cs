@@ -21,7 +21,6 @@ namespace GameSvr.Command.Commands
             var sHumanName = @Params.Length > 0 ? @Params[0] : ""; //玩家名称
             var sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
             var nCount = @Params.Length > 2 ? int.Parse(@Params[2]) : 0; //数量
-            int nItemCount;
             StdItem StdItem;
             TUserItem UserItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName))
@@ -35,7 +34,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            nItemCount = 0;
+            var nItemCount = 0;
             for (var i = m_PlayObject.m_ItemList.Count - 1; i >= 0; i--)
             {
                 if (m_PlayObject.m_ItemList.Count <= 0)

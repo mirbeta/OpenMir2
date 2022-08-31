@@ -19,7 +19,6 @@ namespace GameSvr.Command.Commands
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var nHungerPoint = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : -1;
-            TPlayObject m_PlayObject;
             if (PlayObject.m_btPermission < 6)
             {
                 return;
@@ -29,7 +28,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 m_PlayObject.m_nHungerStatus = nHungerPoint;

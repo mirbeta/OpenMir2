@@ -22,7 +22,6 @@ namespace GameSvr.Command.Commands
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
             var sMonName = @Params.Length > 1 ? @Params[1] : "";
             var sItems = @Params.Length > 2 ? @Params[2] : "";
-            TBaseObject BaseObject;
             if (sMapName == "" || sMonName == "" || sItems == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -60,7 +59,7 @@ namespace GameSvr.Command.Commands
                             {
                                 for (var j = 0; j < MonList.Count; j++)
                                 {
-                                    BaseObject = MonList[j];
+                                    var BaseObject = MonList[j];
                                     if (BaseObject != null)
                                     {
                                         if (BaseObject.m_Master != null && BaseObject.m_btRaceServer != 135)// 除135怪外，其它宝宝不清除

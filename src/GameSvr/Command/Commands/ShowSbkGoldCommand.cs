@@ -1,6 +1,4 @@
-﻿using GameSvr.Castle;
-using GameSvr.Player;
-using System.Collections;
+﻿using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 
@@ -19,38 +17,34 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var sCASTLENAME = @Params.Length > 0 ? @Params[0] : "";
+            var sCastleName = @Params.Length > 0 ? @Params[0] : "";
             var sCtr = @Params.Length > 1 ? @Params[1] : "";
             var sGold = @Params.Length > 2 ? @Params[2] : "";
-            char Ctr;
-            int nGold;
-            TUserCastle Castle;
-            ArrayList List;
-            if (sCASTLENAME != "" && sCASTLENAME[0] == '?')
+            if (sCastleName != "" && sCastleName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandParamUnKnow, this.GameCommand.Name, ""), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (sCASTLENAME == "")
+            if (sCastleName == "")
             {
-                List = new ArrayList();
+                IList<string> List = new List<string>();
                 M2Share.CastleManager.GetCastleGoldInfo(List);
                 for (var i = 0; i < List.Count; i++)
                 {
-                    PlayObject.SysMsg(List[i] as string, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(List[i], MsgColor.Green, MsgType.Hint);
                 }
                 List = null;
                 return;
             }
-            Castle = M2Share.CastleManager.Find(sCASTLENAME);
+            var Castle = M2Share.CastleManager.Find(sCastleName);
             if (Castle == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Ctr = sCtr[1];
-            nGold = HUtil32.Str_ToInt(sGold, -1);
-            if (!new ArrayList(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
+            var Ctr = sCtr[1];
+            var nGold = HUtil32.Str_ToInt(sGold, -1);
+            if (!new List<char>(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandParamUnKnow, this.GameCommand.Name, GameCommandConst.g_sGameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
@@ -60,11 +54,9 @@ namespace GameSvr.Command.Commands
                 case '=':
                     Castle.m_nTotalGold = nGold;
                     break;
-
                 case '-':
                     Castle.m_nTotalGold -= 1;
                     break;
-
                 case '+':
                     Castle.m_nTotalGold += nGold;
                     break;

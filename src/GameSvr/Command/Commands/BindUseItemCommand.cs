@@ -19,11 +19,8 @@ namespace GameSvr.Command.Commands
             TUserItem UserItem = null;
             var nBind = -1;
             TItemBind ItemBind;
-            int nItemIdx;
-            int nMakeIdex;
             string sBindName;
             bool boFind;
-            bool boLight;
             var nItem = M2Share.GetUseItemIdx(sItem);
             if (String.Compare(sType, "帐号", StringComparison.Ordinal) == 0)
             {
@@ -41,7 +38,7 @@ namespace GameSvr.Command.Commands
             {
                 nBind = 3;
             }
-            boLight = sLight == "1";
+            var boLight = sLight == "1";
             if (nItem < 0 || nBind < 0 || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -59,8 +56,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandBindUseItemNoItemMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            nItemIdx = UserItem.wIndex;
-            nMakeIdex = UserItem.MakeIndex;
+            int nItemIdx = UserItem.wIndex;
+            var nMakeIdex = UserItem.MakeIndex;
             switch (nBind)
             {
                 case 0:

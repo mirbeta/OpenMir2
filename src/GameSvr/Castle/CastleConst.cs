@@ -3,10 +3,16 @@ using GameSvr.Guild;
 
 namespace GameSvr.Castle
 {
-    public class Castle
+    public class CastleConst
     {
-        public const int MAXCASTLEARCHER = 12;
-        public const int MAXCALSTEGUARD = 4;
+        /// <summary>
+        /// 最大守卫次数
+        /// </summary>
+        public const int MaxCastleArcher = 12;
+        /// <summary>
+        /// 最大城堡守卫
+        /// </summary>
+        public const int MaxCalsteGuard = 4;
     }
 
     public class TAttackerInfo

@@ -17,7 +17,6 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
-            string sMsg;
             if (string.IsNullOrEmpty(sMapName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -29,7 +28,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            sMsg = "地图模式: " + Envir.GetEnvirInfo();
+            var sMsg = "地图模式: " + Envir.GetEnvirInfo();
             PlayObject.SysMsg(sMsg, MsgColor.Blue, MsgType.Hint);
         }
     }

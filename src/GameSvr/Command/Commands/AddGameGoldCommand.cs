@@ -16,7 +16,6 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            TPlayObject m_PlayObject;
             var sHumName = @params.Length > 0 ? @params[0] : "";
             var nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0;
             if (PlayObject.m_btPermission < 6)
@@ -28,7 +27,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
                 if (m_PlayObject.m_nGameGold + nPoint < 2000000)
