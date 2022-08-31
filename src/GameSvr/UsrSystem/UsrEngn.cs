@@ -2148,7 +2148,7 @@ namespace GameSvr.UsrSystem
                 PlayObject.m_boAllowGroup = false;
             }
             PlayObject.btB2 = HumData.btF9;
-            PlayObject.m_btAttatckMode = HumData.btAttatckMode;
+            PlayObject.m_btAttatckMode = (AttackMode)HumData.btAttatckMode;
             PlayObject.m_nIncHealth = HumData.btIncHealth;
             PlayObject.m_nIncSpell = HumData.btIncSpell;
             PlayObject.m_nIncHealing = HumData.btIncHealing;

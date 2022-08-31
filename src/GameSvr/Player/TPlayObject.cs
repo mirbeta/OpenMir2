@@ -2815,7 +2815,7 @@ namespace GameSvr.Player
                 HumData.btAllowGroup = 0;
             }
             HumData.btF9 = btB2;
-            HumData.btAttatckMode = m_btAttatckMode;
+            HumData.btAttatckMode = (byte)m_btAttatckMode;
             HumData.btIncHealth = (byte)m_nIncHealth;
             HumData.btIncSpell = (byte)m_nIncSpell;
             HumData.btIncHealing = (byte)m_nIncHealing;

@@ -240,7 +240,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 下属攻击状态
         /// </summary>
-        public byte m_btAttatckMode = 0;
+        public AttackMode m_btAttatckMode = 0;
         /// <summary>
         /// 人物名字的颜色
         /// </summary>        
@@ -4126,7 +4126,7 @@ namespace GameSvr.Actor
                 {
                     switch (m_btAttatckMode)
                     {
-                        case M2Share.HAM_ALL:
+                        case AttackMode.HAM_ALL:
                             if ((BaseObject.m_btRaceServer < Grobal2.RC_NPC) || (BaseObject.m_btRaceServer > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
@@ -4136,19 +4136,19 @@ namespace GameSvr.Actor
                                 result = IsAttackTarget_sub_4C88E4();
                             }
                             break;
-                        case M2Share.HAM_PEACE:
+                        case AttackMode.HAM_PEACE:
                             if (BaseObject.m_btRaceServer >= Grobal2.RC_ANIMAL)
                             {
                                 result = true;
                             }
                             break;
-                        case M2Share.HAM_DEAR:
+                        case AttackMode.HAM_DEAR:
                             if (BaseObject != (this as TPlayObject).m_DearHuman)
                             {
                                 result = true;
                             }
                             break;
-                        case M2Share.HAM_MASTER:
+                        case AttackMode.HAM_MASTER:
                             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                             {
                                 result = true;
@@ -4180,7 +4180,7 @@ namespace GameSvr.Actor
                                 result = true;
                             }
                             break;
-                        case M2Share.HAM_GROUP:
+                        case AttackMode.HAM_GROUP:
                             if ((BaseObject.m_btRaceServer < Grobal2.RC_NPC) || (BaseObject.m_btRaceServer > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
@@ -4197,7 +4197,7 @@ namespace GameSvr.Actor
                                 result = IsAttackTarget_sub_4C88E4();
                             }
                             break;
-                        case M2Share.HAM_GUILD:
+                        case AttackMode.HAM_GUILD:
                             if ((BaseObject.m_btRaceServer < Grobal2.RC_NPC) || (BaseObject.m_btRaceServer > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
@@ -4224,7 +4224,7 @@ namespace GameSvr.Actor
                                 result = IsAttackTarget_sub_4C88E4();
                             }
                             break;
-                        case M2Share.HAM_PKATTACK:
+                        case AttackMode.HAM_PKATTACK:
                             if ((BaseObject.m_btRaceServer < Grobal2.RC_NPC) || (BaseObject.m_btRaceServer > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
@@ -4287,7 +4287,7 @@ namespace GameSvr.Actor
             {
                 if (BaseObject.m_Master == this)
                 {
-                    if (m_btAttatckMode != M2Share.HAM_ALL)
+                    if (m_btAttatckMode != AttackMode.HAM_ALL)
                     {
                         result = false;
                     }
@@ -4938,19 +4938,19 @@ namespace GameSvr.Actor
             {
                 switch (m_btAttatckMode)
                 {
-                    case M2Share.HAM_ALL:
+                    case AttackMode.HAM_ALL:
                         result = true;
                         break;
-                    case M2Share.HAM_PEACE:
+                    case AttackMode.HAM_PEACE:
                         result = true;
                         break;
-                    case M2Share.HAM_DEAR:
+                    case AttackMode.HAM_DEAR:
                         if ((this == cret) || (cret == (this as TPlayObject).m_DearHuman))
                         {
                             result = true;
                         }
                         break;
-                    case M2Share.HAM_MASTER:
+                    case AttackMode.HAM_MASTER:
                         if (this == cret)
                         {
                             result = true;
@@ -4978,7 +4978,7 @@ namespace GameSvr.Actor
                             }
                         }
                         break;
-                    case M2Share.HAM_GROUP:
+                    case AttackMode.HAM_GROUP:
                         if (cret == this)
                         {
                             result = true;
@@ -4988,7 +4988,7 @@ namespace GameSvr.Actor
                             result = true;
                         }
                         break;
-                    case M2Share.HAM_GUILD:
+                    case AttackMode.HAM_GUILD:
                         if (cret == this)
                         {
                             result = true;
@@ -5008,7 +5008,7 @@ namespace GameSvr.Actor
                             }
                         }
                         break;
-                    case M2Share.HAM_PKATTACK:
+                    case AttackMode.HAM_PKATTACK:
                         if (cret == this)
                         {
                             result = true;

@@ -1328,25 +1328,25 @@ namespace GameSvr.Npc
             {
                 switch (PlayObject.m_btAttatckMode)
                 {
-                    case M2Share.HAM_ALL: // [攻击模式: 全体攻击]
+                    case AttackMode.HAM_ALL: // [攻击模式: 全体攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "0");
                         break;
-                    case M2Share.HAM_PEACE: // [攻击模式: 和平攻击]
+                    case AttackMode.HAM_PEACE: // [攻击模式: 和平攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "1");
                         break;
-                    case M2Share.HAM_DEAR:// [攻击模式: 夫妻攻击]
+                    case AttackMode.HAM_DEAR:// [攻击模式: 夫妻攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "2");
                         break;
-                    case M2Share.HAM_MASTER:// [攻击模式: 师徒攻击]
+                    case AttackMode.HAM_MASTER:// [攻击模式: 师徒攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "3");
                         break;
-                    case M2Share.HAM_GROUP: // [攻击模式: 编组攻击]
+                    case AttackMode.HAM_GROUP: // [攻击模式: 编组攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "4");
                         break;
-                    case M2Share.HAM_GUILD: // [攻击模式: 行会攻击]
+                    case AttackMode.HAM_GUILD: // [攻击模式: 行会攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "5");
                         break;
-                    case M2Share.HAM_PKATTACK: // [攻击模式: 红名攻击]
+                    case AttackMode.HAM_PKATTACK: // [攻击模式: 红名攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "6");
                         break;
                 }
