@@ -430,7 +430,7 @@ namespace GameSvr.RobotPlay
                 }
                 nTargetX = nX;
                 nTargetY = nY;
-                nDir = (byte)new System.Random(7).Next();
+                nDir = M2Share.RandomNumber.RandomByte(7);
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }

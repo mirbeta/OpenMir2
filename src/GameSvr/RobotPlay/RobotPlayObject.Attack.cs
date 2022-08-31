@@ -9,7 +9,6 @@ namespace GameSvr.RobotPlay
         /// <summary>
         /// 物理攻击
         /// </summary>
-        /// <param name="wHitMode"></param>
         /// <returns></returns>
         private bool WarrAttackTarget1(short wHitMode)
         {
@@ -162,7 +161,6 @@ namespace GameSvr.RobotPlay
         /// <returns></returns>
         private bool WizardAttackTarget1()
         {
-            TUserMagic UserMagic;
             bool result = false;
             try
             {
@@ -186,7 +184,7 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    UserMagic = FindMagic(m_nSelectMagic);
+                    var UserMagic = FindMagic(m_nSelectMagic);
                     if (UserMagic != null)
                     {
                         if (UserMagic.btKey == 0)// 技能打开状态才能使用

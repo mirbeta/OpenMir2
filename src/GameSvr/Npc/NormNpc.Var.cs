@@ -2097,7 +2097,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$RANDOMNO":// 随机值变量
-                    nValue = (new System.Random(Int32.MaxValue)).Next();
+                    nValue = M2Share.RandomNumber.Random(Int32.MaxValue);
                     nDataType = 1;
                     result = true;
                     return result;

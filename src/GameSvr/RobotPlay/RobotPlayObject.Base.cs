@@ -60,7 +60,7 @@ namespace GameSvr.RobotPlay
                                 m_nGotoProtectXYCount++;
                                 if (Math.Abs(m_nCurrX - m_nProtectTargetX) <= 3 && Math.Abs(m_nCurrY - m_nProtectTargetY) <= 3)
                                 {
-                                    Direction = (byte)new System.Random(8).Next();
+                                    Direction = (byte)M2Share.RandomNumber.Random(8);
                                     m_boProtectOK = true;
                                     m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                 }
@@ -69,7 +69,7 @@ namespace GameSvr.RobotPlay
                                     if (Math.Abs(m_nCurrX - m_nProtectTargetX) > 13 || Math.Abs(m_nCurrY - m_nProtectTargetY) > 13)
                                     {
                                         SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
-                                        Direction = (byte)new System.Random(8).Next();
+                                        Direction = (byte)M2Share.RandomNumber.Random(8);
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                     }
@@ -140,7 +140,7 @@ namespace GameSvr.RobotPlay
                                     if (m_boProtectStatus) // 守护状态
                                     {
                                         SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
-                                        Direction = (byte)new System.Random(8).Next();
+                                        Direction = M2Share.RandomNumber.RandomByte(8);
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0; // 是向守护坐标的累计数 20090203
                                     }
@@ -863,7 +863,7 @@ namespace GameSvr.RobotPlay
                     {
                         if (m_TargetCret != null && (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null && m_TargetCret.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                         {
-                            if (Struck_MINXY(m_TargetCret, hiter) == hiter || new System.Random(6).Next() == 0)
+                            if (Struck_MINXY(m_TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
                             {
                                 SetTargetCreat(hiter);
                             }
@@ -875,7 +875,7 @@ namespace GameSvr.RobotPlay
                     }
                     else
                     {
-                        if (m_TargetCret != null && Struck_MINXY(m_TargetCret, hiter) == hiter || new System.Random(6).Next() == 0)
+                        if (m_TargetCret != null && Struck_MINXY(m_TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
                         {
                             if (m_btJob > 0 || m_TargetCret != null && (HUtil32.GetTickCount() - m_dwTargetFocusTick) > 1000 * 3)
                             {
@@ -904,14 +904,14 @@ namespace GameSvr.RobotPlay
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[new System.Random(m_AISayMsgList.Count).Next()]);
+                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
                         }
                     }
                 }
             }
             if (m_boAnimal)
             {
-                m_nMeatQuality = (ushort)(m_nMeatQuality - new System.Random(300).Next());
+                m_nMeatQuality = (ushort)(m_nMeatQuality - M2Share.RandomNumber.Random(300));
                 if (m_nMeatQuality < 0)
                 {
                     m_nMeatQuality = 0;

@@ -112,7 +112,7 @@ namespace SelGate.Services
         {
             if (GateShare.ServerGateList.Any())
             {
-                var random = new System.Random().Next(GateShare.ServerGateList.Count);
+                var random = RandomNumber.GetInstance().Random(GateShare.ServerGateList.Count);
                 return GateShare.ServerGateList[random];
             }
             return null;

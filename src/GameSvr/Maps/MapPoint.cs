@@ -152,7 +152,6 @@ namespace GameSvr.Maps
             short nCurrX;
             short nCurrY;
             byte btDir = 0;
-            PointInfo Pt;
             int nStep;
             result = false;
             if (FPathType == TPathType.t_Dynamic)
@@ -220,6 +219,7 @@ namespace GameSvr.Maps
                 {
                     m_nPostion = 0;
                 }
+                PointInfo Pt;
                 for (var i = m_nPostion; i < m_PEnvir.MPointList.Count; i++)
                 {
                     Pt = m_PEnvir.MPointList[i];
@@ -312,7 +312,7 @@ namespace GameSvr.Maps
             switch (btDir)
             {
                 case Grobal2.DR_UP:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_UPRIGHT;
@@ -329,7 +329,7 @@ namespace GameSvr.Maps
                     }
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_RIGHT;
@@ -346,7 +346,7 @@ namespace GameSvr.Maps
                     }
                     break;
                 case Grobal2.DR_RIGHT:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_DOWNRIGHT;
@@ -363,7 +363,7 @@ namespace GameSvr.Maps
                     }
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_DOWN;
@@ -380,7 +380,7 @@ namespace GameSvr.Maps
                     }
                     break;
                 case Grobal2.DR_DOWN:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_DOWNLEFT;
@@ -397,7 +397,7 @@ namespace GameSvr.Maps
                     }
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_LEFT;
@@ -414,7 +414,7 @@ namespace GameSvr.Maps
                     }
                     break;
                 case Grobal2.DR_LEFT:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_UPLEFT;
@@ -431,7 +431,7 @@ namespace GameSvr.Maps
                     }
                     break;
                 case Grobal2.DR_UPLEFT:
-                    switch (new System.Random(4).Next())
+                    switch (M2Share.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Grobal2.DR_UP;
@@ -462,7 +462,6 @@ namespace GameSvr.Maps
             short nCurrX;
             short nCurrY;
             byte btDir = 0;
-            PointInfo Pt;
             int nStep;
             if (FPathType == TPathType.t_Dynamic)
             {
@@ -510,6 +509,7 @@ namespace GameSvr.Maps
                 {
                     m_nPostion = 0;
                 }
+                PointInfo Pt;
                 for (var i = m_nPostion; i < m_PEnvir.MPointList.Count; i++)
                 {
                     Pt = m_PEnvir.MPointList[i];

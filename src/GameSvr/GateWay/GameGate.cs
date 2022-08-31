@@ -27,7 +27,7 @@ namespace GameSvr.GateWay
             _gateIdx = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
-            _sendQueue = new GateSendQueue(gateInfo.Socket);
+            _sendQueue = new GateSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
         }
 
@@ -594,11 +594,13 @@ namespace GameSvr.GateWay
         {
             private readonly Channel<byte[]> _sendQueue = null;
             private readonly Socket _sendSocket;
+            private readonly GameGateInfo _gameGate;
 
-            public GateSendQueue(Socket socket)
+            public GateSendQueue(GameGateInfo gameGate)
             {
                 _sendQueue = Channel.CreateUnbounded<byte[]>();
-                _sendSocket = socket;
+                _gameGate = gameGate;
+                _sendSocket = gameGate.Socket;
             }
 
             /// <summary>
