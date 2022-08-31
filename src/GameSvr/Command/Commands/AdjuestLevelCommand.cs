@@ -18,7 +18,6 @@ namespace GameSvr.Command.Commands
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var nLevel = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
-            int nOLevel;
             if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -27,7 +26,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                nOLevel = m_PlayObject.m_Abil.Level;
+                int nOLevel = m_PlayObject.m_Abil.Level;
                 m_PlayObject.HasLevelUp(1);
                 M2Share.AddGameDataLog("17" + "\09" + m_PlayObject.m_sMapName + "\09" + m_PlayObject.m_nCurrX + "\09" + m_PlayObject.m_nCurrY + "\09"
                     + m_PlayObject.m_sCharName + "\09" + m_PlayObject.m_Abil.Level + "\09" + PlayObject.m_sCharName + "\09" + "+(" + nLevel + ")" + "\09" + "0");

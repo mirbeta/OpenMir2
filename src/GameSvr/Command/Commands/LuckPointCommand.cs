@@ -5,7 +5,7 @@ using SystemModule.Data;
 namespace GameSvr.Command.Commands
 {
     /// <summary>
-    /// 查看指定玩家幸运点
+    /// 调整指定玩家幸运点
     /// </summary>
     [GameCommand("LuckPoint", "查看指定玩家幸运点", GameCommandConst.g_sGameCommandLuckPointHelpMsg, 10)]
     public class LuckPointCommand : BaseCommond
@@ -25,15 +25,15 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
-            if (PlayObject == null)
+            var mPlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sCtr == "")
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandLuckPointMsg, sHumanName, PlayObject.m_nBodyLuckLevel, PlayObject.m_dBodyLuck, PlayObject.m_nLuck), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandLuckPointMsg, sHumanName, mPlayObject.m_nBodyLuckLevel, mPlayObject.m_dBodyLuck, mPlayObject.m_nLuck), MsgColor.Green, MsgType.Hint);
                 return;
             }
             var nPoint = HUtil32.Str_ToInt(sPoint, 0);
@@ -41,20 +41,20 @@ namespace GameSvr.Command.Commands
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.m_nLuck = nPoint;
+                    mPlayObject.m_nLuck = nPoint;
                     break;
                 case '-':
-                    if (PlayObject.m_nLuck >= nPoint)
+                    if (mPlayObject.m_nLuck >= nPoint)
                     {
-                        PlayObject.m_nLuck -= nPoint;
+                        mPlayObject.m_nLuck -= nPoint;
                     }
                     else
                     {
-                        PlayObject.m_nLuck = 0;
+                        mPlayObject.m_nLuck = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.m_nLuck += nPoint;
+                    mPlayObject.m_nLuck += nPoint;
                     break;
             }
         }

@@ -17,7 +17,6 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            TPlayObject m_PlayObject;
             var sHumName = @Params.Length > 0 ? @Params[0] : "";//玩家名称
             var nCount = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 0;//金币数量
             var nServerIndex = 0;
@@ -30,7 +29,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
                 if (m_PlayObject.m_nGold + nCount < m_PlayObject.m_nGoldMax)

@@ -25,8 +25,6 @@ namespace GameSvr.Command.Commands
             var sType = @Params.Length > 3 ? @Params[3] : "";
 
             int nItemCount;
-            int nCount;
-            int nType;
             StdItem StdItem;
             TUserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || sItemCount == "" || sType == "")
@@ -40,8 +38,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            nCount = HUtil32.Str_ToInt(sItemCount, 0);
-            nType = HUtil32.Str_ToInt(sType, 0);
+            var nCount = HUtil32.Str_ToInt(sItemCount, 0);
+            var nType = HUtil32.Str_ToInt(sType, 0);
             switch (nType)
             {
                 case 0:

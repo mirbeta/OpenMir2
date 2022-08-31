@@ -22,13 +22,13 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var FindEnvir = M2Share.MapManager.FindMap(sMapName);
-            if (FindEnvir == null)
+            var envirnoment = M2Share.MapManager.FindMap(sMapName);
+            if (envirnoment == null)
             {
                 PlayObject.SysMsg(GameCommandConst.g_sGameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMobCountMonsterCount, M2Share.UserEngine.GetMapMonster(FindEnvir, null)), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMobCountMonsterCount, M2Share.UserEngine.GetMapMonster(envirnoment, null)), MsgColor.Green, MsgType.Hint);
         }
     }
 }

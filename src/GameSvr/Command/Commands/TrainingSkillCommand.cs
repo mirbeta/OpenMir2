@@ -22,14 +22,13 @@ namespace GameSvr.Command.Commands
             var sSkillName = @Params.Length > 1 ? @Params[1] : "";
             var nLevel = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
             TUserMagic UserMagic;
-            TPlayObject m_PlayObject;
             if (string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel <= 0)
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);

@@ -17,13 +17,13 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var sCASTLENAME = @Params.Length > 0 ? @Params[0] : "";
-            if (sCASTLENAME == "")
+            var sCastleName = @Params.Length > 0 ? @Params[0] : "";
+            if (sCastleName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Castle = M2Share.CastleManager.Find(sCASTLENAME);
+            var Castle = M2Share.CastleManager.Find(sCastleName);
             if (Castle != null)
             {
                 Castle.m_boUnderWar = !Castle.m_boUnderWar;
@@ -46,7 +46,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

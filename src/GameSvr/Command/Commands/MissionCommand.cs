@@ -19,15 +19,13 @@ namespace GameSvr.Command.Commands
             }
             var sX = @Params.Length > 0 ? @Params[0] : "";
             var sY = @Params.Length > 1 ? @Params[1] : "";
-            short nX;
-            short nY;
             if (sX == "" || sY == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            nX = (short)HUtil32.Str_ToInt(sX, 0);
-            nY = (short)HUtil32.Str_ToInt(sY, 0);
+            var nX = (short)HUtil32.Str_ToInt(sX, 0);
+            var nY = (short)HUtil32.Str_ToInt(sY, 0);
             M2Share.g_boMission = true;
             M2Share.g_sMissionMap = PlayObject.m_sMapName;
             M2Share.g_nMissionX = nX;

@@ -18,17 +18,15 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var sMINEName = @Params.Length > 0 ? @Params[0] : "";
+            var sMineName = @Params.Length > 0 ? @Params[0] : "";
             var nMineCount = @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
             var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
-            TUserItem UserItem = null;
-            StdItem StdItem;
             if (PlayObject.m_btPermission < this.GameCommand.nPermissionMin)
             {
                 PlayObject.SysMsg(GameCommandConst.g_sGameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (sMINEName == "" || sMINEName != "" && sMINEName[0] == '?' || nMineCount <= 0)
+            if (sMineName == "" || sMineName != "" && sMineName[0] == '?' || nMineCount <= 0)
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
@@ -40,10 +38,10 @@ namespace GameSvr.Command.Commands
             // 如纯度不填,则随机给纯度
             for (var i = 0; i < nMineCount; i++)
             {
-                UserItem = new TUserItem();
-                if (M2Share.UserEngine.CopyToUserItemFromName(sMINEName, ref UserItem))
+                var UserItem = new TUserItem();
+                if (M2Share.UserEngine.CopyToUserItemFromName(sMineName, ref UserItem))
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                    var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem != null && StdItem.StdMode == 43)
                     {
                         if (PlayObject.IsAddWeightAvailable(StdItem.Weight * nMineCount))

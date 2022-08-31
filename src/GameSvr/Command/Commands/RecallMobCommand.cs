@@ -14,6 +14,10 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void RecallMob(string[] @Params, TPlayObject PlayObject)
         {
+            if (Params == null)
+            {
+                return;
+            }
             var sMonName = @Params.Length > 0 ? @Params[0] : "";
             var nCount = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 0;
             var nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;

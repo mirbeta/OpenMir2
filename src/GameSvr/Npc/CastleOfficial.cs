@@ -1,4 +1,5 @@
-﻿using GameSvr.Monster.Monsters;
+﻿using GameSvr.Castle;
+using GameSvr.Monster.Monsters;
 using GameSvr.Player;
 using GameSvr.Script;
 using SystemModule;
@@ -272,7 +273,7 @@ namespace GameSvr.Npc
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nHireGuardPrice)
             {
                 var n10 = HUtil32.Str_ToInt(sIndex, 0) - 1;
-                if (n10 <= Castle.Castle.MAXCALSTEGUARD)
+                if (n10 <= CastleConst.MaxCalsteGuard)
                 {
                     if (this.m_Castle.m_Guard[n10].BaseObject == null)
                     {
@@ -321,13 +322,13 @@ namespace GameSvr.Npc
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nHireArcherPrice)
             {
                 var n10 = HUtil32.Str_ToInt(sIndex, 0) - 1;
-                if (n10 <= Castle.Castle.MAXCASTLEARCHER)
+                if (n10 <= CastleConst.MaxCastleArcher)
                 {
-                    if (this.m_Castle.m_Archer[n10].BaseObject == null)
+                    if (this.m_Castle.Archer[n10].BaseObject == null)
                     {
                         if (!this.m_Castle.m_boUnderWar)
                         {
-                            var ObjUnit = this.m_Castle.m_Archer[n10];
+                            var ObjUnit = this.m_Castle.Archer[n10];
                             ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(this.m_Castle.m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {

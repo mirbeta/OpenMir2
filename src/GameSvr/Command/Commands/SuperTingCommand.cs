@@ -20,7 +20,6 @@ namespace GameSvr.Command.Commands
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sRange = @Params.Length > 1 ? @Params[1] : "";
-            TPlayObject m_PlayObject;
             TPlayObject MoveHuman;
             IList<TBaseObject> HumanList;
             if (sRange == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
@@ -29,7 +28,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var nRange = HUtil32._MAX(10, HUtil32.Str_ToInt(sRange, 2));
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 HumanList = new List<TBaseObject>();

@@ -17,7 +17,6 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            TPlayObject m_PlayObject;
             char Ctr = '1';
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             string sCtr = @params.Length > 1 ? @params[1] : "";
@@ -36,7 +35,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

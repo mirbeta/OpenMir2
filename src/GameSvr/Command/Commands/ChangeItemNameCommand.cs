@@ -17,8 +17,6 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            int nMakeIndex;
-            int nItemIndex;
             var sMakeIndex = @params.Length > 0 ? @params[0] : "";
             var sItemIndex = @params.Length > 1 ? @params[1] : "";
             var sItemName = @params.Length > 2 ? @params[2] : "";
@@ -27,8 +25,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-            nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+            var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
+            var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
             if (nMakeIndex <= 0 || nItemIndex < 0)
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

@@ -17,18 +17,18 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var sCASTLENAME = @Params.Length > 0 ? @Params[0] : "";
+            var sCastleName = @Params.Length > 0 ? @Params[0] : "";
             var sGuildName = @Params.Length > 1 ? @Params[1] : "";
-            var boFlag = @Params.Length > 2 ? bool.Parse(@Params[2]) : false;
-            if (sCASTLENAME == "" || sGuildName == "")
+            var boFlag = @Params.Length > 2 && bool.Parse(@Params[2]);
+            if (sCastleName == "" || sGuildName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Castle = M2Share.CastleManager.Find(sCASTLENAME);
+            var Castle = M2Share.CastleManager.Find(sCastleName);
             if (Castle == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = M2Share.GuildManager.FindGuild(sGuildName);

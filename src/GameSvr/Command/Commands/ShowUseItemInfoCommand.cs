@@ -18,7 +18,6 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            TUserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -32,7 +31,7 @@ namespace GameSvr.Command.Commands
             }
             for (var i = 0; i < m_PlayObject.m_UseItems.Length; i++)
             {
-                UserItem = m_PlayObject.m_UseItems[i];
+                var UserItem = m_PlayObject.m_UseItems[i];
                 if (UserItem.wIndex == 0)
                 {
                     continue;

@@ -12,12 +12,11 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ReloadMonItems(TPlayObject PlayObject)
         {
-            TMonInfo Monster;
             try
             {
                 for (var i = 0; i < M2Share.UserEngine.MonsterList.Count; i++)
                 {
-                    Monster = M2Share.UserEngine.MonsterList[i];
+                    var Monster = M2Share.UserEngine.MonsterList[i];
                     M2Share.LocalDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
                 }
                 PlayObject.SysMsg("怪物爆物品列表重加载完成...", MsgColor.Green, MsgType.Hint);

@@ -18,7 +18,6 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            TPlayObject m_PlayObject;
             if (PlayObject.m_boProbeNecklace || PlayObject.m_btPermission >= 6)
             {
                 if (string.IsNullOrEmpty(sHumanName))
@@ -29,7 +28,7 @@ namespace GameSvr.Command.Commands
                 if (HUtil32.GetTickCount() - PlayObject.m_dwProbeTick > 10000 || PlayObject.m_btPermission >= 3)
                 {
                     PlayObject.m_dwProbeTick = HUtil32.GetTickCount();
-                    m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+                    var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                     if (m_PlayObject != null)
                     {
                         PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.m_PEnvir.SMapDesc + '(' + m_PlayObject.m_PEnvir.SMapName + ") " + m_PlayObject.m_nCurrX + ':'

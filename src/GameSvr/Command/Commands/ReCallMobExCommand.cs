@@ -21,7 +21,6 @@ namespace GameSvr.Command.Commands
             var nNameColor = @Params.Length > 0 ? Convert.ToInt32(@Params[1]) : 0;
             var nX = @Params.Length > 0 ? Convert.ToInt16(@Params[2]) : (short)0;
             var nY = @Params.Length > 0 ? Convert.ToInt16(@Params[3]) : (short)0;
-            TBaseObject mon;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -43,7 +42,7 @@ namespace GameSvr.Command.Commands
             {
                 nNameColor = 255;
             }
-            mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.SMapName, nX, nY, sMonName);
+            var mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.SMapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.m_Master = PlayObject;

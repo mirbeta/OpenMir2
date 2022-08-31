@@ -11,7 +11,10 @@ namespace GameSvr.Castle
 {
     public class TUserCastle
     {
-        public TObjUnit[] m_Archer = new TObjUnit[12];
+        /// <summary>
+        /// 守卫列表
+        /// </summary>
+        public readonly TObjUnit[] Archer = new TObjUnit[CastleConst.MaxCastleArcher];
         /// <summary>
         /// 攻城行会列表
         /// </summary>
@@ -27,7 +30,7 @@ namespace GameSvr.Castle
         /// <summary>
         /// 是否开始攻城
         /// </summary>
-        public bool m_boStartWar;
+        private bool IsStartWar;
         public bool m_boUnderWar;
         public TObjUnit m_CenterWall;
         public DateTime m_ChangeDate;
@@ -114,7 +117,7 @@ namespace GameSvr.Castle
         /// <summary>
         /// 沙巴克战役列表
         /// </summary>
-        const string AttackSabukWallList = "AttackSabukWall.txt";
+        private const string AttackSabukWallList = "AttackSabukWall.txt";
         /// <summary>
         /// 沙巴克配置文件
         /// </summary>
@@ -132,7 +135,7 @@ namespace GameSvr.Castle
             m_sSecretMap = "D701";
             m_MapCastle = null;
             m_DoorStatus = null;
-            m_boStartWar = false;
+            IsStartWar = false;
             m_boUnderWar = false;
             m_boShowOverMsg = false;
             m_AttackWarList = new List<TAttackerInfo>();
@@ -220,14 +223,14 @@ namespace GameSvr.Castle
                     {
                         M2Share.ErrorMessage("[错误信息] 城堡初始化中城墙失败，检查怪物数据库里有没中城墙的设置: " + m_CenterWall.sName);
                     }
-                    for (var i = 0; i < m_Archer.Length; i++)
+                    for (var i = 0; i < Archer.Length; i++)
                     {
-                        ObjUnit = m_Archer[i];
+                        ObjUnit = Archer[i];
                         if (ObjUnit.nHP <= 0) continue;
                         ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                         {
-                            ObjUnit.BaseObject.m_WAbil.HP = m_Archer[i].nHP;
+                            ObjUnit.BaseObject.m_WAbil.HP = Archer[i].nHP;
                             ObjUnit.BaseObject.m_Castle = this;
                             ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
                             ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
@@ -301,8 +304,7 @@ namespace GameSvr.Castle
                 if (guild == null) continue;
                 var attackerInfo = new TAttackerInfo();
                 HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
-                var time = DateTime.Now;
-                if (DateTime.TryParse(s20, out time))
+                if (DateTime.TryParse(s20, out var time))
                 {
                     attackerInfo.AttackDate = time;
                 }
@@ -352,14 +354,14 @@ namespace GameSvr.Castle
                 {
                     m_nTodayIncome = 0;
                     m_IncomeToday = DateTime.Now;
-                    m_boStartWar = false;
+                    IsStartWar = false;
                 }
-                if (!m_boStartWar && !m_boUnderWar)
+                if (!IsStartWar && !m_boUnderWar)
                 {
                     var hour = DateTime.Now.Hour;
                     if (hour == M2Share.g_Config.nStartCastlewarTime) // 20
                     {
-                        m_boStartWar = true;
+                        IsStartWar = true;
                         m_AttackGuildList.Clear();
                         for (var i = m_AttackWarList.Count - 1; i >= 0; i--)
                         {
@@ -399,11 +401,11 @@ namespace GameSvr.Castle
                         m_Guard[i].BaseObject = null;
                     }
                 }
-                for (var i = 0; i < m_Archer.Length; i++)
+                for (var i = 0; i < Archer.Length; i++)
                 {
-                    if (m_Archer[i].BaseObject != null && m_Archer[i].BaseObject.m_boGhost)
+                    if (Archer[i].BaseObject != null && Archer[i].BaseObject.m_boGhost)
                     {
-                        m_Archer[i].BaseObject = null;
+                        Archer[i].BaseObject = null;
                     }
                 }
                 if (m_boUnderWar)

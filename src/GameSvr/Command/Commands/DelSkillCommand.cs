@@ -20,7 +20,6 @@ namespace GameSvr.Command.Commands
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             string sSkillName = @Params.Length > 1 ? @Params[1] : "";
             string Herostr = @Params.Length > 2 ? @Params[2] : "";
-            TPlayObject m_PlayObject;
             bool boDelAll;
             TUserMagic UserMagic;
             if ((string.IsNullOrEmpty(sHumanName)) || (sSkillName == ""))
@@ -36,7 +35,7 @@ namespace GameSvr.Command.Commands
             {
                 boDelAll = false;
             }
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
