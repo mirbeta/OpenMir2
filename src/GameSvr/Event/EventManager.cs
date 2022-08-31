@@ -7,7 +7,13 @@ namespace GameSvr.Event
     {
         private readonly IList<MirEvent> _eventList = null;
         private readonly IList<MirEvent> _closedEventList = null;
-
+        
+        public EventManager()
+        {
+            _eventList = new List<MirEvent>();
+            _closedEventList = new List<MirEvent>();
+        }
+        
         public void Run()
         {
             MirEvent executeEvent;
@@ -39,7 +45,6 @@ namespace GameSvr.Event
 
         public MirEvent GetEvent(Envirnoment Envir, int nX, int nY, int nType)
         {
-            MirEvent result = null;
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
                 MirEvent currentEvent = _eventList[i];
@@ -47,23 +52,16 @@ namespace GameSvr.Event
                 {
                     if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY)
                     {
-                        result = currentEvent;
-                        break;
+                        return currentEvent;
                     }
                 }
             }
-            return result;
+            return null;
         }
 
         public void AddEvent(MirEvent @event)
         {
             _eventList.Add(@event);
-        }
-
-        public EventManager()
-        {
-            _eventList = new List<MirEvent>();
-            _closedEventList = new List<MirEvent>();
         }
     }
 }

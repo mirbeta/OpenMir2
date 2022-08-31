@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 
-namespace GameSvr.GameGate
+namespace GameSvr.GateWay
 {
     public class GameGateInfo
     {

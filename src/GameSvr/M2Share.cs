@@ -3,7 +3,7 @@ using GameSvr.Command;
 using GameSvr.Configs;
 using GameSvr.DataStores;
 using GameSvr.Event;
-using GameSvr.GameGate;
+using GameSvr.GateWay;
 using GameSvr.Guild;
 using GameSvr.Items;
 using GameSvr.Magic;

@@ -1,20 +1,23 @@
 ﻿using GameSvr.Player;
 using GameSvr.Services;
+using NLog;
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.GameGate
+namespace GameSvr.GateWay
 {
     public class GameGate
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private readonly int _gateIdx;
         private readonly GameGateInfo _gateInfo;
         private readonly GateSendQueue _sendQueue;
-        private readonly object runSocketSection;
+        private readonly object _runSocketSection;
         private byte[] _gameBuffer;
         private int _buffLen;
         private readonly CancellationTokenSource _cancellation;
@@ -23,7 +26,7 @@ namespace GameSvr.GameGate
         {
             _gateIdx = gateIdx;
             _gateInfo = gateInfo;
-            runSocketSection = new object();
+            _runSocketSection = new object();
             _sendQueue = new GateSendQueue(gateInfo.Socket);
             _cancellation = new CancellationTokenSource();
         }
@@ -82,7 +85,7 @@ namespace GameSvr.GameGate
                 nLen = _buffLen + nMsgLen;
                 while (nLen >= PacketHeader.PacketSize)
                 {
-                    var msgHeader = SystemModule.Packet.Packets.ToPacket<PacketHeader>(protoBuff);
+                    var msgHeader = Packets.ToPacket<PacketHeader>(protoBuff);
                     if (msgHeader.PacketCode == 0)
                     {
                         return;
@@ -120,7 +123,7 @@ namespace GameSvr.GameGate
                         Buffer.BlockCopy(protoBuff, buffIndex, messageBuff, 0, PacketHeader.PacketSize);
                         protoBuff = messageBuff;
                         nLen -= 1;
-                        Console.WriteLine("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
+                        Log.Error("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
                     }
                     if (nLen < PacketHeader.PacketSize)
                     {
@@ -149,7 +152,6 @@ namespace GameSvr.GameGate
         /// <summary>
         /// 添加到网关发送队列
         /// GameSvr -> GameGate
-        /// todo 合并小封包然后再次发送
         /// </summary>
         /// <returns></returns>
         public void HandleSendBuffer(byte[] buffer)
@@ -378,7 +380,7 @@ namespace GameSvr.GameGate
             GameGateUserInfo GateUser;
             if (GateInfo.UserList.Count > 0)
             {
-                HUtil32.EnterCriticalSections(runSocketSection);
+                HUtil32.EnterCriticalSections(_runSocketSection);
                 try
                 {
                     for (var i = 0; i < GateInfo.UserList.Count; i++)
@@ -420,7 +422,7 @@ namespace GameSvr.GameGate
                 }
                 finally
                 {
-                    HUtil32.LeaveCriticalSections(runSocketSection);
+                    HUtil32.LeaveCriticalSections(_runSocketSection);
                 }
             }
         }
@@ -567,7 +569,7 @@ namespace GameSvr.GameGate
         /// </summary>
         public void SetGateUserList(int nSocket, TPlayObject PlayObject)
         {
-            HUtil32.EnterCriticalSection(runSocketSection);
+            HUtil32.EnterCriticalSection(_runSocketSection);
             try
             {
                 for (var i = 0; i < GateInfo.UserList.Count; i++)
@@ -584,7 +586,7 @@ namespace GameSvr.GameGate
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(runSocketSection);
+                HUtil32.LeaveCriticalSection(_runSocketSection);
             }
         }
 

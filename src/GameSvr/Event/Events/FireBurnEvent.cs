@@ -8,6 +8,9 @@ namespace GameSvr.Event.Events
     /// </summary>
     public class FireBurnEvent : MirEvent
     {
+        /// <summary>
+        /// 火墙运行时间
+        /// </summary>
         private int m_fireRunTick = 0;
 
         public FireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.m_PEnvir, nX, nY, nType, nTime, true)
