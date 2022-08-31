@@ -365,7 +365,7 @@ namespace GameSvr.RobotPlay
                 }
                 else
                 {
-                    if (m_btAttatckMode == M2Share.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
+                    if (m_btAttatckMode == AttackMode.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
                     {
                         if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {

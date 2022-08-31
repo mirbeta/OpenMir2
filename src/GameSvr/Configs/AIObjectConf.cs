@@ -43,7 +43,7 @@ namespace GameSvr.Configs
             nAttatckMode = (byte)ReadInteger("Info", "AttatckMode", 6);// 攻击模式
             if (nAttatckMode >= 0 && nAttatckMode <= 6)
             {
-                playObject.m_btAttatckMode = nAttatckMode;
+                playObject.m_btAttatckMode = (AttackMode)nAttatckMode;
             }
             sLineText = ReadString("Info", "UseSkill", "");
             if (sLineText != "")

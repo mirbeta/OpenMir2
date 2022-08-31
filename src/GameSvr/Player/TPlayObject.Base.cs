@@ -669,7 +669,7 @@ namespace GameSvr.Player
             SendSocket(m_DefMsg, EDcode.EncodeBuffer(MessageBodyWL));
             var nRecog = GetFeatureToLong();
             SendDefMessage(Grobal2.SM_FEATURECHANGED, ObjectId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
-            SendDefMessage(Grobal2.SM_ATTACKMODE, m_btAttatckMode, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)m_btAttatckMode, 0, 0, 0, "");
         }
 
         /// <summary>
@@ -864,25 +864,25 @@ namespace GameSvr.Player
                     }
                     switch (m_btAttatckMode)
                     {
-                        case M2Share.HAM_ALL:// [攻击模式: 全体攻击]
+                        case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
                             SysMsg(M2Share.sAttackModeOfAll, MsgColor.Green, MsgType.Hint);
                             break;
-                        case M2Share.HAM_PEACE:// [攻击模式: 和平攻击]
+                        case AttackMode.HAM_PEACE:// [攻击模式: 和平攻击]
                             SysMsg(M2Share.sAttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
                             break;
-                        case M2Share.HAM_DEAR:// [攻击模式: 和平攻击]
+                        case AttackMode.HAM_DEAR:// [攻击模式: 和平攻击]
                             SysMsg(M2Share.sAttackModeOfDear, MsgColor.Green, MsgType.Hint);
                             break;
-                        case M2Share.HAM_MASTER:// [攻击模式: 和平攻击]
+                        case AttackMode.HAM_MASTER:// [攻击模式: 和平攻击]
                             SysMsg(M2Share.sAttackModeOfMaster, MsgColor.Green, MsgType.Hint);
                             break;
-                        case M2Share.HAM_GROUP:// [攻击模式: 编组攻击]
+                        case AttackMode.HAM_GROUP:// [攻击模式: 编组攻击]
                             SysMsg(M2Share.sAttackModeOfGroup, MsgColor.Green, MsgType.Hint);
                             break;
-                        case M2Share.HAM_GUILD:// [攻击模式: 行会攻击]
+                        case AttackMode.HAM_GUILD:// [攻击模式: 行会攻击]
                             SysMsg(M2Share.sAttackModeOfGuild, MsgColor.Green, MsgType.Hint);
                             break;
-                        case M2Share.HAM_PKATTACK:// [攻击模式: 红名攻击]
+                        case AttackMode.HAM_PKATTACK:// [攻击模式: 红名攻击]
                             SysMsg(M2Share.sAttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
                             break;
                     }
