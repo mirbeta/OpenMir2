@@ -14,10 +14,10 @@
 
 ### 如何使用    
 ## 客户端
->  目前你可用使用网上泄露的Delphi源码自行编译客户端，如（BLUE 小火炬 刺客二代）等 
+>  (https://github.com/mirbeta/MirClient) 在这里，需要自行安装Delphi XE 10.4以上版本环境编译.
 
 ## 服务端
-> 能够使用网络上大部分传奇私服服务端（1.10-1.76）版本，会存在部分脚本命令不支持的问题，可提交issues或pr来对其支持。
+> (https://github.com/mirbeta/MirServer) 在这里，基础的游戏服务端.
 
 ## 项目说明. 
 1. DBSvr (数据库服务，读取和保存玩家数据). 
