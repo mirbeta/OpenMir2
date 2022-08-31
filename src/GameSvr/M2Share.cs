@@ -26,9 +26,21 @@ namespace GameSvr
 {
     public enum PlayJob : byte
     {
-        Warr = 0,
+        /// <summary>
+        /// 战士
+        /// </summary>
+        Warrior = 0,
+        /// <summary>
+        /// 法师
+        /// </summary>
         Wizard = 1,
-        Taos = 2,
+        /// <summary>
+        /// 道士
+        /// </summary>
+        Taoist = 2,
+        /// <summary>
+        /// 未知
+        /// </summary>
         None = 3
     }
 
@@ -505,47 +517,13 @@ namespace GameSvr
         private const string sSTATUS_FAIL = "+FL/{0}";
         private const string sSTATUS_GOOD = "+GD/{0}";
 
-        public const int MAXUPLEVEL = 255;
-        public const int MAXHUMPOWER = 1000;
-        public const int BODYLUCKUNIT = 5000;
+        public const ushort MAXUPLEVEL = ushort.MaxValue;
+        public const ushort MAXHUMPOWER = 1000;
+        public const ushort BODYLUCKUNIT = 5000;
+        public const ushort DEFHIT = 5;
+        public const ushort DEFSPEED = 15;
 
-
-        public const int DEFHIT = 5;
-        public const int DEFSPEED = 15;
-        public const int SIZEOFTHUMAN = 3588;
-        public const int MONSTER_SANDMOB = 3;
-        public const int MONSTER_ROCKMAN = 4;
-        public const int MONSTER_RON = 9;
-        public const int MONSTER_MINORNUMA = 18;
-        public const int ARCHER_POLICE = 20;
-        public const int SUPREGUARD = 11;
-        public const int PETSUPREGUARD = 12;
-        public const int ANIMAL_CHICKEN = 51;
-        public const int ANIMAL_DEER = 52;
-        public const int ANIMAL_WOLF = 53;
-        public const int TRAINER = 55;
-        public const int MONSTER_OMA = 80;
-        public const int MONSTER_OMAKNIGHT = 81;
-        public const int MONSTER_SPITSPIDER = 82;
-        public const int MONSTER_STICK = 85;
-        public const int MONSTER_DUALAXE = 87;
-        public const int MONSTER_THONEDARK = 93;
-        public const int MONSTER_LIGHTZOMBI = 94;
-        public const int MONSTER_DIGOUTZOMBI = 95;
-        public const int MONSTER_ZILKINZOMBI = 96;
-        public const int MONSTER_WHITESKELETON = 100;
-        public const int MONSTER_BEEQUEEN = 103;
-        public const int MONSTER_BEE = 125;
-        public const int MONSTER_MAGUNGSA = 143;
-        public const int MONSTER_SCULTURE = 101;
-        public const int MONSTER_SCULTUREKING = 102;
-        public const int MONSTER_ARCHERGUARD = 112;
-        public const int MONSTER_ELFMONSTER = 113;
-        public const int MONSTER_ELFWARRIOR = 114;
-
-        public const string sMarket_Def = "Market_Def";
-        public const string sNpc_def = "Npc_def";
-
+        
         public const string U_DRESSNAME = "衣服";
         public const string U_WEAPONNAME = "武器";
         public const string U_RIGHTHANDNAME = "照明物";

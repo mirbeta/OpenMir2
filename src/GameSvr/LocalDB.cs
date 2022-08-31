@@ -1,6 +1,7 @@
 using GameSvr.Actor;
 using GameSvr.Monster;
 using GameSvr.Npc;
+using GameSvr.Script;
 using System.Collections;
 using SystemModule;
 using SystemModule.Common;
@@ -209,8 +210,8 @@ namespace GameSvr
         {
             try
             {
-                var sScriptFile = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, M2Share.sMarket_Def, "QFunction-0.txt");
-                var sScritpDir = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, M2Share.sMarket_Def);
+                var sScriptFile = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, ScriptConst.sMarket_Def, "QFunction-0.txt");
+                var sScritpDir = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, ScriptConst.sMarket_Def);
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);
@@ -232,7 +233,7 @@ namespace GameSvr
                         m_sCharName = "QFunction",
                         m_nFlag = 0,
                         m_wAppr = 0,
-                        m_sFilePath = M2Share.sMarket_Def,
+                        m_sFilePath = ScriptConst.sMarket_Def,
                         m_sScript = "QFunction",
                         m_boIsHide = true,
                         m_boIsQuest = false

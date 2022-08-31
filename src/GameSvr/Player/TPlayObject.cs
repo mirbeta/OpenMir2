@@ -1234,7 +1234,7 @@ namespace GameSvr.Player
             NakedAbil = null;
             switch (m_btJob)
             {
-                case PlayJob.Warr:
+                case PlayJob.Warrior:
                     BonusTick = M2Share.g_Config.BonusAbilofWarr;
                     NakedAbil = M2Share.g_Config.NakedAbilofWarr;
                     break;
@@ -1242,7 +1242,7 @@ namespace GameSvr.Player
                     BonusTick = M2Share.g_Config.BonusAbilofWizard;
                     NakedAbil = M2Share.g_Config.NakedAbilofWizard;
                     break;
-                case PlayJob.Taos:
+                case PlayJob.Taoist:
                     BonusTick = M2Share.g_Config.BonusAbilofTaos;
                     NakedAbil = M2Share.g_Config.NakedAbilofTaos;
                     break;
@@ -1311,13 +1311,13 @@ namespace GameSvr.Player
             var sSendMsg = string.Empty;
             switch (m_btJob)
             {
-                case PlayJob.Warr:
+                case PlayJob.Warrior:
                     sSendMsg = EDcode.EncodeBuffer(M2Share.g_Config.BonusAbilofWarr) + '/' + EDcode.EncodeBuffer(m_BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.g_Config.NakedAbilofWarr);
                     break;
                 case PlayJob.Wizard:
                     sSendMsg = EDcode.EncodeBuffer(M2Share.g_Config.BonusAbilofWizard) + '/' + EDcode.EncodeBuffer(m_BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.g_Config.NakedAbilofWizard);
                     break;
-                case PlayJob.Taos:
+                case PlayJob.Taoist:
                     sSendMsg = EDcode.EncodeBuffer(M2Share.g_Config.BonusAbilofTaos) + '/' + EDcode.EncodeBuffer(m_BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.g_Config.NakedAbilofTaos);
                     break;
             }
@@ -2439,7 +2439,7 @@ namespace GameSvr.Player
         private void ChangeServerMakeSlave(TSlaveInfo slaveInfo)
         {
             int nSlavecount = 0;
-            if (m_btJob == PlayJob.Taos)
+            if (m_btJob == PlayJob.Taoist)
             {
                 nSlavecount = 1;
             }

@@ -469,7 +469,7 @@ namespace GameSvr.RobotPlay
                 }
                 switch (m_btJob)
                 {
-                    case PlayJob.Warr:
+                    case PlayJob.Warrior:
                         if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWarrorAttackTime)
                         {
                             m_boIsUseMagic = false;// 是否能躲避
@@ -487,7 +487,7 @@ namespace GameSvr.RobotPlay
                         }
                         m_nSelectMagic = 0;
                         break;
-                    case PlayJob.Taos:
+                    case PlayJob.Taoist:
                         if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAITaoistAttackTime)
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
