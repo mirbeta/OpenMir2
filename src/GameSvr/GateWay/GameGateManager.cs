@@ -11,7 +11,7 @@ using SystemModule.Packet.ClientPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
-namespace GameSvr.GameGate
+namespace GameSvr.GateWay
 {
     public class GameGateManager
     {
