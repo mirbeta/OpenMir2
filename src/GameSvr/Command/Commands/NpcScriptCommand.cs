@@ -1,5 +1,6 @@
 ﻿using GameSvr.Npc;
 using GameSvr.Player;
+using GameSvr.Script;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -42,12 +43,12 @@ namespace GameSvr.Command.Commands
             if (nNPCType == 0)
             {
                 var Merchant = (Merchant)BaseObject;
-                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + M2Share.sMarket_Def + Merchant.m_sScript + "-" + Merchant.m_sMapName + ".txt";
+                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + ScriptConst.sMarket_Def + Merchant.m_sScript + "-" + Merchant.m_sMapName + ".txt";
             }
             if (nNPCType == 1)
             {
                 var NormNpc = (NormNpc)BaseObject;
-                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + M2Share.sNpc_def + NormNpc.m_sCharName + "-" + NormNpc.m_sMapName + ".txt";
+                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + ScriptConst.sNpc_def + NormNpc.m_sCharName + "-" + NormNpc.m_sMapName + ".txt";
             }
             if (File.Exists(sScriptFileName))
             {

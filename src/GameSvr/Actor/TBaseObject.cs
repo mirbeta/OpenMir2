@@ -620,7 +620,7 @@ namespace GameSvr.Actor
             m_btRaceServer = Grobal2.RC_ANIMAL;
             m_btRaceImg = 0;
             m_btHair = 0;
-            m_btJob = PlayJob.Warr;
+            m_btJob = PlayJob.Warrior;
             m_nGold = 0;
             m_wAppr = 0;
             bo2B9 = true;
@@ -969,7 +969,7 @@ namespace GameSvr.Actor
             double nLevel = m_Abil.Level;
             switch (m_btJob)
             {
-                case PlayJob.Taos:
+                case PlayJob.Taoist:
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP + M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
@@ -1003,7 +1003,7 @@ namespace GameSvr.Actor
                     m_Abil.AC = 0;
                     m_Abil.MAC = 0;
                     break;
-                case PlayJob.Warr:
+                case PlayJob.Warrior:
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP + M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
@@ -2381,20 +2381,20 @@ namespace GameSvr.Actor
             TNakedAbility BonusTick = null;
             switch (m_btJob)
             {
-                case PlayJob.Warr:
+                case PlayJob.Warrior:
                     BonusTick = M2Share.g_Config.BonusAbilofWarr;
                     break;
                 case PlayJob.Wizard:
                     BonusTick = M2Share.g_Config.BonusAbilofWizard;
                     break;
-                case PlayJob.Taos:
+                case PlayJob.Taoist:
                     BonusTick = M2Share.g_Config.BonusAbilofTaos;
                     break;
             }
             m_btHitPoint = (byte)(M2Share.DEFHIT + m_BonusAbil.Hit / BonusTick.Hit);
             switch (m_btJob)
             {
-                case PlayJob.Taos:
+                case PlayJob.Taoist:
                     m_btSpeedPoint = (byte)(M2Share.DEFSPEED + m_BonusAbil.Speed / BonusTick.Speed + 3);
                     break;
                 default:
@@ -2571,7 +2571,7 @@ namespace GameSvr.Actor
                     }
                     break;
                 case 2:
-                    if (m_btJob != PlayJob.Taos)
+                    if (m_btJob != PlayJob.Taoist)
                     {
                         DelItemSkill_DeleteSkill(M2Share.g_Config.sHealSkill);
                     }
@@ -2798,19 +2798,18 @@ namespace GameSvr.Actor
 
         protected bool InSafeArea()
         {
-            bool result = false;
             int n14;
             int n18;
             if (m_PEnvir == null)
             {
-                return result;
+                return false;
             }
-            result = m_PEnvir.Flag.boSAFE;
+            bool result = m_PEnvir.Flag.boSAFE;
             if (result)
             {
                 return result;
             }
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 if (M2Share.StartPointList[i].m_sMapName == m_PEnvir.SMapName)
                 {
@@ -2828,11 +2827,11 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public void MonsterRecalcAbilitys()
+        private void MonsterRecalcAbilitys()
         {
             m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_Abil.DC));
             int n8 = 0;
-            if ((m_btRaceServer == M2Share.MONSTER_WHITESKELETON) || (m_btRaceServer == M2Share.MONSTER_ELFMONSTER) || (m_btRaceServer == M2Share.MONSTER_ELFWARRIOR))
+            if ((m_btRaceServer == MonsterConst.MONSTER_WHITESKELETON) || (m_btRaceServer == MonsterConst.MONSTER_ELFMONSTER) || (m_btRaceServer == MonsterConst.MONSTER_ELFWARRIOR))
             {
                 m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.Round((m_btSlaveExpLevel * 0.1 + 0.3) * 3.0 * m_btSlaveExpLevel + HUtil32.HiWord(m_WAbil.DC)));
                 n8 = n8 + HUtil32.Round((m_btSlaveExpLevel * 0.1 + 0.3) * m_Abil.MaxHP) * m_btSlaveExpLevel;
@@ -2923,13 +2922,12 @@ namespace GameSvr.Actor
         /// </summary>
         public void SendDelayMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
-            SendMessage SendMessage;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!m_boGhost)
                 {
-                    SendMessage = new SendMessage
+                    var SendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -2958,13 +2956,12 @@ namespace GameSvr.Actor
         /// </summary>
         public void SendDelayMsg(int BaseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
-            SendMessage SendMessage;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!m_boGhost)
                 {
-                    SendMessage = new SendMessage
+                    var SendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -2997,7 +2994,6 @@ namespace GameSvr.Actor
 
         private void SendUpdateDelayMsg(TBaseObject BaseObject, short wIdent, short wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
-            SendMessage SendMessage;
             int i;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
@@ -3009,7 +3005,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    SendMessage = m_MsgList[i];
+                    var SendMessage = m_MsgList[i];
                     if ((SendMessage.wIdent == wIdent) && (SendMessage.nParam1 == lParam1))
                     {
                         m_MsgList.RemoveAt(i);
@@ -3028,7 +3024,6 @@ namespace GameSvr.Actor
 
         public void SendUpdateMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg)
         {
-            SendMessage SendMessage;
             int i;
             try
             {
@@ -3040,7 +3035,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    SendMessage = m_MsgList[i];
+                    var SendMessage = m_MsgList[i];
                     if (SendMessage.wIdent == wIdent)
                     {
                         m_MsgList.RemoveAt(i);
@@ -3060,7 +3055,6 @@ namespace GameSvr.Actor
 
         public void SendActionMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg)
         {
-            SendMessage SendMessage;
             int i;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
@@ -3072,7 +3066,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    SendMessage = m_MsgList[i];
+                    var SendMessage = m_MsgList[i];
                     if ((SendMessage.wIdent == Grobal2.CM_TURN) || (SendMessage.wIdent == Grobal2.CM_WALK) || (SendMessage.wIdent == Grobal2.CM_SITDOWN) || (SendMessage.wIdent == Grobal2.CM_HORSERUN) || (SendMessage.wIdent == Grobal2.CM_RUN) || (SendMessage.wIdent == Grobal2.CM_HIT) || (SendMessage.wIdent == Grobal2.CM_HEAVYHIT) || (SendMessage.wIdent == Grobal2.CM_BIGHIT) || (SendMessage.wIdent == Grobal2.CM_POWERHIT) || (SendMessage.wIdent == Grobal2.CM_LONGHIT) || (SendMessage.wIdent == Grobal2.CM_WIDEHIT) || (SendMessage.wIdent == Grobal2.CM_FIREHIT))
                     {
                         m_MsgList.RemoveAt(i);
@@ -3093,7 +3087,6 @@ namespace GameSvr.Actor
         {
             bool result = false;
             int I;
-            SendMessage SendMessage;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
@@ -3104,7 +3097,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    SendMessage = m_MsgList[I];
+                    var SendMessage = m_MsgList[I];
                     if ((SendMessage.dwDeliveryTime != 0) && (HUtil32.GetTickCount() < SendMessage.dwDeliveryTime))//延时消息
                     {
                         I++;
@@ -3431,14 +3424,12 @@ namespace GameSvr.Actor
 
         public virtual void Initialize()
         {
-            TUserMagic UserMagic;
             AbilCopyToWAbil();
-            for (int i = 0; i < m_MagicList.Count; i++)
+            for (var i = 0; i < m_MagicList.Count; i++)
             {
-                UserMagic = m_MagicList[i];
-                if (UserMagic.btLevel >= 4)
+                if (m_MagicList[i].btLevel >= 4)
                 {
-                    UserMagic.btLevel = 0;
+                    m_MagicList[i].btLevel = 0;
                 }
             }
             m_boAddtoMapSuccess = true;
@@ -4578,13 +4569,13 @@ namespace GameSvr.Actor
             {
                 switch (m_LastHiter.m_btJob)
                 {
-                    case PlayJob.Warr:
+                    case PlayJob.Warrior:
                         nDamage = nDamage * M2Share.g_Config.nWarrMon / 10;
                         break;
                     case PlayJob.Wizard:
                         nDamage = nDamage * M2Share.g_Config.nWizardMon / 10;
                         break;
-                    case PlayJob.Taos:
+                    case PlayJob.Taoist:
                         nDamage = nDamage * M2Share.g_Config.nTaosMon / 10;
                         break;
                 }

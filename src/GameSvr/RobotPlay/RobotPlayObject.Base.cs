@@ -105,7 +105,7 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (m_btJob > 0)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_WAbil.MaxHP < 700 && m_btJob == PlayJob.Taos && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                                        if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_WAbil.MaxHP < 700 && m_btJob == PlayJob.Taoist && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
                                         {
                                             // 道法22前是否物理攻击
                                             if (m_Master != null)

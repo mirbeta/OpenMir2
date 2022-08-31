@@ -1513,13 +1513,13 @@ namespace GameSvr.Player
                     {
                         switch (m_btJob)
                         {
-                            case PlayJob.Warr:
+                            case PlayJob.Warrior:
                                 sCharName = M2Share.g_sWarrReNewName.Replace("%chrname", m_sCharName);
                                 break;
                             case PlayJob.Wizard:
                                 sCharName = M2Share.g_sWizardReNewName.Replace("%chrname", m_sCharName);
                                 break;
-                            case PlayJob.Taos:
+                            case PlayJob.Taoist:
                                 sCharName = M2Share.g_sTaosReNewName.Replace("%chrname", m_sCharName);
                                 break;
                         }

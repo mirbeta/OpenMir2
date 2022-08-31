@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
             {
                 if (string.Compare(sJobName, "Warr", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.m_btJob = PlayJob.Warr;
+                    m_PlayObject.m_btJob = PlayJob.Warrior;
                 }
                 if (string.Compare(sJobName, "Wizard", StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -36,7 +36,7 @@ namespace GameSvr.Command.Commands
                 }
                 if (string.Compare(sJobName, "Taos", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.m_btJob = PlayJob.Taos;
+                    m_PlayObject.m_btJob = PlayJob.Taoist;
                 }
                 m_PlayObject.HasLevelUp(1);
                 m_PlayObject.SysMsg(GameCommandConst.g_sGameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);

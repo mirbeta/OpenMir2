@@ -1837,7 +1837,7 @@ namespace GameSvr.RobotPlay
             bool result = false;
             switch (m_btJob)
             {
-                case PlayJob.Warr:
+                case PlayJob.Warrior:
                     result = true;
                     break;
                 case PlayJob.Wizard:
@@ -1867,7 +1867,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case PlayJob.Taos:
+                case PlayJob.Taoist:
                     for (var i = 0; i < m_MagicList.Count; i++)
                     {
                         UserMagic = m_MagicList[i];
@@ -2194,7 +2194,7 @@ namespace GameSvr.RobotPlay
                         return true;
                     }
                     if ((M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_WAbil.MaxHP < 700 && 
-                        m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT && m_btJob == PlayJob.Taos) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
+                        m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT && m_btJob == PlayJob.Taoist) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
                     {
                         return true;
                     }
@@ -2832,7 +2832,7 @@ namespace GameSvr.RobotPlay
             short result = 0;
             switch (m_btJob)
             {
-                case PlayJob.Warr:
+                case PlayJob.Warrior:
                     if (AllowUseMagic(26) && HUtil32.GetTickCount() - m_dwLatestFireHitTick > 9000)// 烈火
                     {
                         m_boFireHitSkill = true;
@@ -3839,7 +3839,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case PlayJob.Taos:// 道士
+                case PlayJob.Taoist:// 道士
                     if (m_SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - m_SkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && m_WAbil.MP > 20)
                     {
                         m_SkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低

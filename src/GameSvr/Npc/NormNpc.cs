@@ -1564,7 +1564,7 @@ namespace GameSvr.Npc
         {
             if (m_boIsQuest)
             {
-                m_sPath = M2Share.sNpc_def;
+                m_sPath = ScriptConst.sNpc_def;
                 var s08 = this.m_sCharName + '-' + this.m_sMapName;
                 M2Share.ScriptSystem.LoadNpcScript(this, m_sFilePath, s08);
             }
@@ -1633,7 +1633,7 @@ namespace GameSvr.Npc
                 HUtil32.GetValidStr3(sData, ref sLabel, new[] { '\r' });
                 if (PlayObject.m_sScriptCurrLable != sLabel)
                 {
-                    if (sLabel != ScriptCommandConst.sBACK)
+                    if (sLabel != ScriptConst.sBACK)
                     {
                         PlayObject.m_sScriptGoBackLable = PlayObject.m_sScriptCurrLable;
                         PlayObject.m_sScriptCurrLable = sLabel;

@@ -43,7 +43,7 @@ namespace GameSvr.RobotPlay
                                         return result;
                                     }
                                     break;
-                                case PlayJob.Taos:
+                                case PlayJob.Taoist:
                                     if (m_TargetCret != null)
                                     {
                                         if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪
