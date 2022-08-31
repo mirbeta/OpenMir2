@@ -34,7 +34,7 @@ namespace GameSvr.Configs
             playObject.m_boNoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
             playObject.m_boNoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
             playObject.m_nDropUseItemRate = ReadInteger("Info", "DropUseItemRate", 100);// 掉装备机率
-            playObject.m_btJob = (byte)ReadInteger("Info", "Job", 0);
+            playObject.m_btJob = (PlayJob)ReadInteger("Info", "Job", 0);
             playObject.Gender = Enum.Parse<PlayGender>(ReadString("Info", "Gender", "0"));
             playObject.m_btHair = (byte)ReadInteger("Info", "Hair", 0);
             playObject.m_Abil.Level = (byte)ReadInteger("Info", "Level", 1);
@@ -61,7 +61,7 @@ namespace GameSvr.Configs
                             Magic = M2Share.UserEngine.FindMagic(sMagicName);
                             if (Magic != null)
                             {
-                                if (Magic.btJob == 99 || Magic.btJob == playObject.m_btJob)
+                                if (Magic.btJob == 99 || Magic.btJob == (byte)playObject.m_btJob)
                                 {
                                     UserMagic = new TUserMagic();
                                     UserMagic.MagicInfo = Magic;

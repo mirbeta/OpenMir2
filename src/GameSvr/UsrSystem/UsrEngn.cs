@@ -2104,7 +2104,7 @@ namespace GameSvr.UsrSystem
             PlayObject.Direction = HumData.btDir;
             PlayObject.m_btHair = HumData.btHair;
             PlayObject.Gender = Enum.Parse<PlayGender>(HumData.btSex.ToString());
-            PlayObject.m_btJob = HumData.btJob;
+            PlayObject.m_btJob = (PlayJob)HumData.btJob;
             PlayObject.m_nGold = HumData.nGold;
             PlayObject.m_Abil.Level = HumData.Abil.Level;
             PlayObject.m_Abil.HP = HumData.Abil.HP;
@@ -2236,7 +2236,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        private string GetHomeInfo(int nJob, ref short nX, ref short nY)
+        private string GetHomeInfo(PlayJob nJob, ref short nX, ref short nY)
         {
             string result;
             int I;

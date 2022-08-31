@@ -1552,7 +1552,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_LEVELUP:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, (int)m_Abil.Exp, m_Abil.Level, 0, 0);
                     SendSocket(m_DefMsg);
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord(m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord((byte)m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
                     SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(m_nAntiMagic, 0), 0), HUtil32.MakeWord(m_btHitPoint, m_btSpeedPoint), HUtil32.MakeWord(m_btAntiPoison, m_nPoisonRecover), HUtil32.MakeWord(m_nHealthRecover, m_nSpellRecover), "");
                     break;
@@ -1612,7 +1612,7 @@ namespace GameSvr.Player
                     SendSocket(m_DefMsg, EDcode.EncodeString(ProcessMsg.sMsg));
                     break;
                 case Grobal2.RM_ABILITY:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord(m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord((byte)m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
                     break;
                 case Grobal2.RM_HEALTHSPELLCHANGED:

@@ -533,21 +533,21 @@ namespace GameSvr.Npc
                     case ScriptCommandConst.nCHECKJOB:
                         if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptCommandConst.sWarrior, ScriptCommandConst.sWarrior.Length))
                         {
-                            if (PlayObject.m_btJob != M2Share.jWarr)
+                            if (PlayObject.m_btJob != PlayJob.Warr)
                             {
                                 result = false;
                             }
                         }
                         if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptCommandConst.sWizard, ScriptCommandConst.sWizard.Length))
                         {
-                            if (PlayObject.m_btJob != M2Share.jWizard)
+                            if (PlayObject.m_btJob != PlayJob.Wizard)
                             {
                                 result = false;
                             }
                         }
                         if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptCommandConst.sTaos, ScriptCommandConst.sTaos.Length))
                         {
-                            if (PlayObject.m_btJob != M2Share.jTaos)
+                            if (PlayObject.m_btJob != PlayJob.Taos)
                             {
                                 result = false;
                             }

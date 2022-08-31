@@ -1234,15 +1234,15 @@ namespace GameSvr.Player
             NakedAbil = null;
             switch (m_btJob)
             {
-                case M2Share.jWarr:
+                case PlayJob.Warr:
                     BonusTick = M2Share.g_Config.BonusAbilofWarr;
                     NakedAbil = M2Share.g_Config.NakedAbilofWarr;
                     break;
-                case M2Share.jWizard:
+                case PlayJob.Wizard:
                     BonusTick = M2Share.g_Config.BonusAbilofWizard;
                     NakedAbil = M2Share.g_Config.NakedAbilofWizard;
                     break;
-                case M2Share.jTaos:
+                case PlayJob.Taos:
                     BonusTick = M2Share.g_Config.BonusAbilofTaos;
                     NakedAbil = M2Share.g_Config.NakedAbilofTaos;
                     break;
@@ -1311,13 +1311,13 @@ namespace GameSvr.Player
             var sSendMsg = string.Empty;
             switch (m_btJob)
             {
-                case M2Share.jWarr:
+                case PlayJob.Warr:
                     sSendMsg = EDcode.EncodeBuffer(M2Share.g_Config.BonusAbilofWarr) + '/' + EDcode.EncodeBuffer(m_BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.g_Config.NakedAbilofWarr);
                     break;
-                case M2Share.jWizard:
+                case PlayJob.Wizard:
                     sSendMsg = EDcode.EncodeBuffer(M2Share.g_Config.BonusAbilofWizard) + '/' + EDcode.EncodeBuffer(m_BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.g_Config.NakedAbilofWizard);
                     break;
-                case M2Share.jTaos:
+                case PlayJob.Taos:
                     sSendMsg = EDcode.EncodeBuffer(M2Share.g_Config.BonusAbilofTaos) + '/' + EDcode.EncodeBuffer(m_BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.g_Config.NakedAbilofTaos);
                     break;
             }
@@ -1881,7 +1881,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 10:
-                    if (m_btJob == HUtil32.LoWord(StdItem.NeedLevel) && m_Abil.Level >= HUtil32.HiWord(StdItem.NeedLevel))
+                    if (m_btJob == (PlayJob)HUtil32.LoWord(StdItem.NeedLevel) && m_Abil.Level >= HUtil32.HiWord(StdItem.NeedLevel))
                     {
                         result = true;
                     }
@@ -1891,7 +1891,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 11:
-                    if (m_btJob == HUtil32.LoWord(StdItem.NeedLevel) && HUtil32.HiWord(m_WAbil.DC) >= HUtil32.HiWord(StdItem.NeedLevel))
+                    if (m_btJob == (PlayJob)HUtil32.LoWord(StdItem.NeedLevel) && HUtil32.HiWord(m_WAbil.DC) >= HUtil32.HiWord(StdItem.NeedLevel))
                     {
                         result = true;
                     }
@@ -1901,7 +1901,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 12:
-                    if (m_btJob == HUtil32.LoWord(StdItem.NeedLevel) && HUtil32.HiWord(m_WAbil.MC) >= HUtil32.HiWord(StdItem.NeedLevel))
+                    if (m_btJob == (PlayJob)HUtil32.LoWord(StdItem.NeedLevel) && HUtil32.HiWord(m_WAbil.MC) >= HUtil32.HiWord(StdItem.NeedLevel))
                     {
                         result = true;
                     }
@@ -1911,7 +1911,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 13:
-                    if (m_btJob == HUtil32.LoWord(StdItem.NeedLevel) && HUtil32.HiWord(m_WAbil.SC) >= HUtil32.HiWord(StdItem.NeedLevel))
+                    if (m_btJob == (PlayJob)HUtil32.LoWord(StdItem.NeedLevel) && HUtil32.HiWord(m_WAbil.SC) >= HUtil32.HiWord(StdItem.NeedLevel))
                     {
                         result = true;
                     }
@@ -2278,7 +2278,7 @@ namespace GameSvr.Player
             {
                 if (!IsTrainingSkill(magic.wMagicID))
                 {
-                    if (magic.btJob == 99 || magic.btJob == m_btJob)
+                    if (magic.btJob == 99 || magic.btJob == (byte)m_btJob)
                     {
                         if (m_Abil.Level >= magic.TrainLevel[0])
                         {
@@ -2439,7 +2439,7 @@ namespace GameSvr.Player
         private void ChangeServerMakeSlave(TSlaveInfo slaveInfo)
         {
             int nSlavecount = 0;
-            if (m_btJob == M2Share.jTaos)
+            if (m_btJob == PlayJob.Taos)
             {
                 nSlavecount = 1;
             }
@@ -2774,7 +2774,7 @@ namespace GameSvr.Player
             HumData.btDir = Direction;
             HumData.btHair = m_btHair;
             HumData.btSex = (byte)Gender;
-            HumData.btJob = m_btJob;
+            HumData.btJob = (byte)m_btJob;
             HumData.nGold = m_nGold;
             HumData.Abil.Level = m_Abil.Level;
             HumData.Abil.HP = m_Abil.HP;
