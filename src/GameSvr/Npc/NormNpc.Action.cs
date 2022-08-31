@@ -3450,7 +3450,7 @@ namespace GameSvr.Npc
                                 Dispose(MapItem);
                                 MapItem = MapItemA;
                             }
-                            this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, dX, dY, MapItem.Name + "@0");
+                            this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, dX, dY, MapItem.Name + "@0");
                         }
                         else
                         {
@@ -3511,7 +3511,7 @@ namespace GameSvr.Npc
                                         Dispose(MapItem);
                                         MapItem = MapItemA;
                                     }
-                                    this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, dX, dY, MapItem.Name + NameCorlr);
+                                    this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, dX, dY, MapItem.Name + NameCorlr);
                                 }
                                 else
                                 {

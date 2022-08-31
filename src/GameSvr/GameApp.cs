@@ -263,6 +263,7 @@ namespace GameSvr
             M2Share.GateManager = GameGateMgr.Instance;
             M2Share.g_FindPath = new FindPath();
             M2Share.CommandSystem = new CommandManager();
+            M2Share.CellObjectSystem = new CellObjectMgr();
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapManager = new MapManager();

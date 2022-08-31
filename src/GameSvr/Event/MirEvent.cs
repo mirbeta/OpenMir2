@@ -4,7 +4,7 @@ using SystemModule;
 
 namespace GameSvr.Event
 {
-    public class MirEvent : IDisposable
+    public class MirEvent : EntityId, IDisposable
     {
         /// <summary>
         /// 事件唯一ID

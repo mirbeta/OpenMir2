@@ -109,6 +109,7 @@ namespace GameSvr
         /// 游戏命令系统
         /// </summary>
         public static CommandManager CommandSystem = null;
+        public static CellObjectMgr CellObjectSystem;
         public static LocalDB LocalDB = null;
         public static CommonDB CommonDB = null;
         public static MirLog LogSystem = null;

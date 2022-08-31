@@ -49,7 +49,7 @@ namespace GameSvr.UsrSystem
             return actor;
         }
 
-        private void Revome(int actorId)
+        public void Remove(int actorId)
         {
             TBaseObject ghostactor = null;
             _actors.TryRemove(actorId, out ghostactor);
@@ -94,7 +94,7 @@ namespace GameSvr.UsrSystem
                     {
                         if ((HUtil32.GetTickCount() - actor.m_dwDeathTick) > M2Share.g_Config.dwMakeGhostTime) //超过清理时间
                         {
-                            Revome(actorId);
+                            Remove(actorId);
                         }
                     }
                 }

@@ -1,3 +1,6 @@
+using System.Collections.Concurrent;
+using SystemModule;
+
 namespace GameSvr.Maps
 {
     /// <summary>
@@ -19,7 +22,7 @@ namespace GameSvr.Maps
     public class CellObject
     {
         public CellType CellType;
-        public object CellObj;
+        public int CellObjId;
         public int dwAddTime;
         public bool boObjectDisPose;
     }
@@ -64,24 +67,29 @@ namespace GameSvr.Maps
         /// <summary>
         /// 对象数量
         /// </summary>
-        public int Count => ObjList.Count;
+        public int Count => ObjList?.Count ?? 0;
 
-        public IList<CellObject> ObjList;
+        public List<CellObject> ObjList;
 
-        public void Add(CellObject @object)
+        public void Add(CellObject cell, EntityId entityId)
         {
-            ObjList.Add(@object);
+            ObjList.Add(cell);
+            M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);
         }
 
-        public void Remove(int idx)
+        public void Remove(CellObject cell)
         {
-            ObjList.RemoveAt(idx);
+            if (ObjList != null)
+            {
+                ObjList.Remove(cell);
+                M2Share.CellObjectSystem.Remove(cell.CellObjId);
+                cell = null;
+            }
         }
 
         public void Dispose()
         {
             ObjList.Clear();
-            ObjList = null;
         }
 
         public MapCellinfo()

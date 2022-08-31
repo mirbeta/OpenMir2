@@ -84,8 +84,8 @@ namespace GameSvr.UsrSystem
         public IList<StdItem> StdItemList;
         public long m_dwAILogonTick;//处理假人间隔
         private readonly IList<RoBotLogon> m_UserLogonList;//假人列表
-        private readonly Thread _userEngineThread;
-        private readonly Thread _processAiThread;
+        private Timer _userEngineThread;
+        private Thread _processAiThread;
 
         public UserEngine()
         {
@@ -127,8 +127,6 @@ namespace GameSvr.UsrSystem
             OldMagicList = new ArrayList();
             m_OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
             m_UserLogonList = new List<RoBotLogon>();
-            _userEngineThread = new Thread(PrcocessData) { IsBackground = true };
-            _processAiThread = new Thread(ProcessAiPlayObjectData) { IsBackground = true };
             m_AiPlayObjectList = new List<TPlayObject>();
         }
 
@@ -141,12 +139,13 @@ namespace GameSvr.UsrSystem
 
         public void Start()
         {
-            _userEngineThread.Start();
+            _userEngineThread = new Timer(PrcocessData, null, 0, 20);
+            _processAiThread = new Thread(ProcessAiPlayObjectData) { IsBackground = true };
         }
 
         public void Stop()
         {
-            _userEngineThread.Interrupt();
+            _userEngineThread.Dispose();
             _processAiThread.Interrupt();
         }
 
@@ -582,7 +581,7 @@ namespace GameSvr.UsrSystem
                     m_NewHumanList.Clear();
                     for (var i = 0; i < m_ListOfGateIdx.Count; i++)
                     {
-                        M2Share.GateManager.CloseUser((int)m_ListOfGateIdx[i], (int)m_ListOfSocket[i]);
+                        M2Share.GateManager.CloseUser(m_ListOfGateIdx[i], m_ListOfSocket[i]);
                     }
                     m_ListOfGateIdx.Clear();
                     m_ListOfSocket.Clear();
@@ -2370,7 +2369,7 @@ namespace GameSvr.UsrSystem
                             OSObject = MapCellInfo.ObjList[i];
                             if (OSObject != null && OSObject.CellType == CellType.OS_MOVINGOBJECT)
                             {
-                                BaseObject = (TBaseObject)OSObject.CellObj;
+                                BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
                                 if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject.SendMsg(BaseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
@@ -2665,7 +2664,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        private void PrcocessData()
+        private void PrcocessData(object state)
         {
             try
             {

@@ -107,7 +107,7 @@ namespace GameSvr.Actor
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg1 = "[Exception] TBaseObject::SearchViewRange";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange 1-{0} {1} {2} {3} {4} {5}";
+            const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
             if (m_PEnvir == null)
             {
                 M2Share.ErrorMessage("SearchViewRange nil PEnvir");
@@ -143,21 +143,16 @@ namespace GameSvr.Actor
                         {
                             n24 = 1;
                             var nIdx = 0;
-                            while (true)
+                            for (var i = 0; i < MapCellInfo.Count; i++)
                             {
-                                if (MapCellInfo.Count <= nIdx)
-                                {
-                                    break;
-                                }
-                                var OSObject = MapCellInfo.ObjList[nIdx];
+                                var OSObject = MapCellInfo.ObjList[i];
                                 if (OSObject != null)
                                 {
                                     if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
-                                            OSObject = null;
-                                            MapCellInfo.Remove(nIdx);
+                                            MapCellInfo.Remove(OSObject);
                                             if (MapCellInfo.Count > 0)
                                             {
                                                 continue;
@@ -165,7 +160,8 @@ namespace GameSvr.Actor
                                             MapCellInfo.Dispose();
                                             break;
                                         }
-                                        var BaseObject = OSObject.CellObj as TBaseObject;
+                                        var BaseObject = (TBaseObject)M2Share.ObjectManager.Get(OSObject.CellObjId);
+                                        ;
                                         if (BaseObject != null)
                                         {
                                             if (!BaseObject.m_boDeath && !BaseObject.m_boInvisible)
@@ -243,46 +239,45 @@ namespace GameSvr.Actor
                     var mapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
                     if (mapCell && (mapCellInfo.ObjList != null))
                     {
-                        var nIdx = 0;
-                        while (true)
+                        try
                         {
-                            if (mapCellInfo.Count <= nIdx)
+                            for (var i = 0; i < mapCellInfo.Count; i++)
                             {
-                                break;
-                            }
-                            var OSObject = mapCellInfo.ObjList[nIdx];
-                            if (OSObject != null)
-                            {
-                                if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
+                                var OSObject = mapCellInfo.ObjList[i];
+                                if (OSObject != null)
                                 {
-                                    if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
+                                    if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                                     {
-                                        OSObject = null;
-                                        mapCellInfo.Remove(nIdx);
-                                        if (mapCellInfo.Count > 0)
+                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
-                                            continue;
+                                            mapCellInfo.Remove(OSObject);
+                                            if (mapCellInfo.Count > 0)
+                                            {
+                                                continue;
+                                            }
+                                            mapCellInfo.Dispose();
+                                            break;
                                         }
-                                        mapCellInfo.Dispose();
-                                        break;
                                     }
-                                }
-                                if ((OSObject.CellType == CellType.OS_ITEMOBJECT) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
-                                {
-                                    if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
+                                    if ((OSObject.CellType == CellType.OS_ITEMOBJECT) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
                                     {
-                                        Dispose(OSObject.CellObj);
-                                        Dispose(OSObject);
-                                        mapCellInfo.Remove(nIdx);
-                                        if (mapCellInfo.Count > 0)
+                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                         {
-                                            continue;
+                                            mapCellInfo.Remove(OSObject);
+                                            if (mapCellInfo.Count > 0)
+                                            {
+                                                continue;
+                                            }
+                                            mapCellInfo.Dispose();
                                         }
-                                        mapCellInfo.Dispose();
                                     }
                                 }
                             }
-                            nIdx++;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            throw;
                         }
                     }
                 }

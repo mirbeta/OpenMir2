@@ -3,12 +3,8 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Maps
 {
-    public class MapItem
+    public class MapItem : EntityId
     {
-        /// <summary>
-        /// 物品唯一ID
-        /// </summary>
-        public int Id;
         /// <summary>
         /// 物品名称
         /// </summary>
@@ -30,10 +26,5 @@ namespace GameSvr.Maps
         /// </summary>
         public int CanPickUpTick;
         public TUserItem UserItem;
-
-        public MapItem()
-        {
-            Id = HUtil32.Sequence();
-        }
     }
 }
