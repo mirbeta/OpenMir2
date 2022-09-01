@@ -577,7 +577,7 @@ namespace GameSvr.Actor
                                         (this as TPlayObject).TrainSkill(attackMagic, 1);
                                         if (!(this as TPlayObject).CheckMagicLevelup(attackMagic))
                                         {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                            SendDelayMsg(this.ObjectId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
                                         }
                                     }
                                 }
@@ -591,7 +591,7 @@ namespace GameSvr.Actor
                                         (this as TPlayObject).TrainSkill(attackMagic, 1);
                                         if (!(this as TPlayObject).CheckMagicLevelup(attackMagic))
                                         {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                            SendDelayMsg(this.ObjectId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
                                         }
                                     }
                                 }
@@ -605,7 +605,7 @@ namespace GameSvr.Actor
                                         (this as TPlayObject).TrainSkill(attackMagic, 1);
                                         if (!(this as TPlayObject).CheckMagicLevelup(attackMagic))
                                         {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                            SendDelayMsg(this.ObjectId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
                                         }
                                     }
                                 }

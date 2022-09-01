@@ -3439,9 +3439,9 @@ namespace GameSvr.Npc
                         MapItem.Name = Grobal2.sSTRING_GOLDNAME;
                         MapItem.Count = nCount;
                         MapItem.Looks = M2Share.GetGoldShape(nCount);
-                        MapItem.OfBaseObject = PlayObject; // 物品谁可以捡起
+                        MapItem.OfBaseObject = PlayObject.ObjectId; 
                         MapItem.CanPickUpTick = HUtil32.GetTickCount();
-                        MapItem.DropBaseObject = PlayObject; // 谁掉落的
+                        MapItem.DropBaseObject = PlayObject.ObjectId;
                         MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
                         if (MapItemA != null)
                         {
@@ -3499,9 +3499,9 @@ namespace GameSvr.Npc
                                 MapItem.AniCount = StdItem.AniCount;
                                 MapItem.Reserved = 0;
                                 MapItem.Count = nCount;
-                                MapItem.OfBaseObject = PlayObject;
+                                MapItem.OfBaseObject = PlayObject.ObjectId;
                                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
-                                MapItem.DropBaseObject = PlayObject;
+                                MapItem.DropBaseObject = PlayObject.ObjectId;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
                                 MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
                                 if (MapItemA != null)

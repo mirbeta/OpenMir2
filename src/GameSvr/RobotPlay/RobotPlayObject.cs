@@ -395,8 +395,6 @@ namespace GameSvr.RobotPlay
 
         protected override void ProcessSayMsg(string sData)
         {
-            bool boDisableSayMsg;
-            string sParam1 = string.Empty;
             const string sExceptionMsg = "TAIPlayObject.ProcessSayMsg Msg:%s";
             if (string.IsNullOrEmpty(sData))
             {
@@ -404,6 +402,7 @@ namespace GameSvr.RobotPlay
             }
             try
             {
+                var sParam1 = string.Empty;
                 if (sData.Length > M2Share.g_Config.nSayMsgMaxLen)
                 {
                     sData = sData.Substring(0, M2Share.g_Config.nSayMsgMaxLen);
@@ -412,7 +411,7 @@ namespace GameSvr.RobotPlay
                 {
                     m_boDisableSayMsg = false;
                 }
-                boDisableSayMsg = m_boDisableSayMsg;
+                var boDisableSayMsg = m_boDisableSayMsg;
                 //g_DenySayMsgList.Lock;
                 //if (g_DenySayMsgList.GetIndex(m_sCharName) >= 0)
                 //{
@@ -725,8 +724,6 @@ namespace GameSvr.RobotPlay
             bool result = false;
             VisibleMapItem VisibleMapItem = null;
             bool boFound;
-            int n01;
-            int n02;
             try
             {
                 if ((HUtil32.GetTickCount() - m_dwPickUpItemTick) < nPickUpTime)
@@ -766,7 +763,7 @@ namespace GameSvr.RobotPlay
                             return result;
                         }
                     }
-                    n01 = 999;
+                    var n01 = 999;
                     VisibleMapItem SelVisibleMapItem = null;
                     boFound = false;
                     if (m_SelMapItem != null)
@@ -794,16 +791,16 @@ namespace GameSvr.RobotPlay
                             {
                                 if (VisibleMapItem.VisibleFlag > 0)
                                 {
-                                    MapItem MapItem = VisibleMapItem.MapItem;
-                                    if (MapItem != null)
+                                    var mapItem = VisibleMapItem.MapItem;
+                                    if (mapItem != null)
                                     {
-                                        if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(MapItem.UserItem.wIndex)))
+                                        if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(mapItem.UserItem.wIndex)))
                                         {
-                                            if (MapItem.OfBaseObject == null || MapItem.OfBaseObject == this || ((TBaseObject)MapItem.OfBaseObject).m_Master == this)
+                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ObjectId || (M2Share.ObjectManager.Get(mapItem.OfBaseObject).m_Master == this))
                                             {
                                                 if (Math.Abs(VisibleMapItem.nX - m_nCurrX) <= 5 && Math.Abs(VisibleMapItem.nY - m_nCurrY) <= 5)
                                                 {
-                                                    n02 = Math.Abs(VisibleMapItem.nX - m_nCurrX) + Math.Abs(VisibleMapItem.nY - m_nCurrY);
+                                                    var n02 = Math.Abs(VisibleMapItem.nX - m_nCurrX) + Math.Abs(VisibleMapItem.nY - m_nCurrY);
                                                     if (n02 < n01)
                                                     {
                                                         n01 = n02;

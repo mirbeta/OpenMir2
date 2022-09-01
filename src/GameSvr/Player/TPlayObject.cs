@@ -18,10 +18,10 @@ namespace GameSvr.Player
 {
     public partial class TPlayObject : AnimalObject
     {
-        private bool ClientPickUpItem_IsSelf(TBaseObject BaseObject)
+        private bool ClientPickUpItem_IsSelf(int BaseObject)
         {
             bool result;
-            if (BaseObject == null || this == BaseObject)
+            if (BaseObject == 0 || this.ObjectId == BaseObject)
             {
                 result = true;
             }
@@ -32,7 +32,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientPickUpItem_IsOfGroup(TBaseObject BaseObject)
+        private bool ClientPickUpItem_IsOfGroup(int BaseObject)
         {
             if (m_GroupOwner == null)
             {
@@ -40,7 +40,7 @@ namespace GameSvr.Player
             }
             for (var i = 0; i < m_GroupOwner.m_GroupMembers.Count; i++)
             {
-                if (m_GroupOwner.m_GroupMembers[i] == BaseObject)
+                if (m_GroupOwner.m_GroupMembers[i].ObjectId == BaseObject)
                 {
                     return true;
                 }
@@ -62,9 +62,9 @@ namespace GameSvr.Player
             }
             if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
             {
-                mapItem.OfBaseObject = null;
+                mapItem.OfBaseObject = 0;
             }
-            if (!ClientPickUpItem_IsSelf(mapItem.OfBaseObject as TBaseObject) && !ClientPickUpItem_IsOfGroup(mapItem.OfBaseObject as TBaseObject))
+            if (!ClientPickUpItem_IsSelf(mapItem.OfBaseObject) && !ClientPickUpItem_IsOfGroup(mapItem.OfBaseObject))
             {
                 SysMsg(M2Share.g_sCanotPickUpItem, MsgColor.Red, MsgType.Hint);
                 return false;

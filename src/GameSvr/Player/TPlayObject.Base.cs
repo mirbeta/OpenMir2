@@ -1333,27 +1333,27 @@ namespace GameSvr.Player
                                             }
                                             var MapItem = (MapItem)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
                                             UpdateVisibleItem(n20, n1C, MapItem);
-                                            if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
+                                            if (MapItem.OfBaseObject > 0 || MapItem.DropBaseObject > 0)
                                             {
                                                 if ((HUtil32.GetTickCount() - MapItem.CanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
                                                 {
-                                                    MapItem.OfBaseObject = null;
-                                                    MapItem.DropBaseObject = null;
+                                                    MapItem.OfBaseObject = 0;
+                                                    MapItem.DropBaseObject = 0;
                                                 }
                                                 else
                                                 {
-                                                    if (MapItem.OfBaseObject as TBaseObject != null)
+                                                    if (M2Share.ObjectManager.Get(MapItem.OfBaseObject) != null)
                                                     {
-                                                        if ((MapItem.OfBaseObject as TBaseObject).m_boGhost)
+                                                        if (M2Share.ObjectManager.Get(MapItem.OfBaseObject).m_boGhost)
                                                         {
-                                                            MapItem.OfBaseObject = null;
+                                                            MapItem.OfBaseObject = 0;
                                                         }
                                                     }
-                                                    if (MapItem.DropBaseObject as TBaseObject != null)
+                                                    if (M2Share.ObjectManager.Get(MapItem.DropBaseObject) != null)
                                                     {
-                                                        if ((MapItem.DropBaseObject as TBaseObject).m_boGhost)
+                                                        if (M2Share.ObjectManager.Get(MapItem.DropBaseObject).m_boGhost)
                                                         {
-                                                            MapItem.DropBaseObject = null;
+                                                            MapItem.DropBaseObject = 0;
                                                         }
                                                     }
                                                 }

@@ -2378,17 +2378,17 @@ namespace GameSvr.Npc
 
         private void GotoLableSendMerChantSayMsg(TPlayObject PlayObject, string sMsg, bool boFlag)
         {
-            string s10 = string.Empty;
-            string s14 = sMsg;
+            string sVariable = string.Empty;
+            string sSource = sMsg;
             int nC = 0;
             while (true)
             {
-                if (HUtil32.TagCount(s14, '>') < 1)
+                if (HUtil32.TagCount(sSource, '>') < 1)
                 {
                     break;
                 }
-                s14 = HUtil32.ArrestStringEx(s14, "<", ">", ref s10);
-                GetVariableText(PlayObject, ref sMsg, s10);
+                sSource = HUtil32.ArrestStringEx(sSource, "<", ">", ref sVariable);
+                GetVariableText(PlayObject, ref sMsg, sVariable);
                 nC++;
                 if (nC >= 101)
                 {

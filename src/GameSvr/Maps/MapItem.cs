@@ -19,8 +19,14 @@ namespace GameSvr.Maps
         /// 数量
         /// </summary>
         public int Count;
-        public object DropBaseObject;
-        public object OfBaseObject;
+        /// <summary>
+        /// 谁掉落的
+        /// </summary>
+        public int DropBaseObject;
+        /// <summary>
+        /// 物品谁可以捡起
+        /// </summary>
+        public int OfBaseObject;
         /// <summary>
         /// 可以拾取的时间
         /// </summary>
