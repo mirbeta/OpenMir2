@@ -12,8 +12,7 @@ namespace GameSvr.Actor
         /// </summary>
         public int DeliveryTime;
         public int BaseObject;
-        public int ObjectId;
-        public bool boLateDelivery;
+        public bool LateDelivery;
         public string Buff;
     }
 
@@ -46,10 +45,5 @@ namespace GameSvr.Actor
     {
         Man = 0,
         WoMan = 1
-    }
-
-    public enum Job
-    {
-
     }
 }

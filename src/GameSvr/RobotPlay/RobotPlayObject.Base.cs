@@ -604,23 +604,23 @@ namespace GameSvr.RobotPlay
                                                     {
                                                         if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
                                                         {
-                                                            MapItem.OfBaseObject = null;
-                                                            MapItem.DropBaseObject = null;
+                                                            MapItem.OfBaseObject = 0;
+                                                            MapItem.DropBaseObject = 0;
                                                         }
                                                         else
                                                         {
-                                                            if (MapItem.OfBaseObject != null)
+                                                            if (MapItem.OfBaseObject > 0)
                                                             {
-                                                                if (((TBaseObject)MapItem.OfBaseObject).m_boGhost)
+                                                                if (M2Share.ObjectManager.Get(MapItem.OfBaseObject).m_boGhost)
                                                                 {
-                                                                    MapItem.OfBaseObject = null;
+                                                                    MapItem.OfBaseObject = 0;
                                                                 }
                                                             }
-                                                            if (MapItem.DropBaseObject != null)
+                                                            if (MapItem.DropBaseObject >0)
                                                             {
-                                                                if (((TBaseObject)MapItem.DropBaseObject).m_boGhost)
+                                                                if (M2Share.ObjectManager.Get(MapItem.DropBaseObject).m_boGhost)
                                                                 {
-                                                                    MapItem.DropBaseObject = null;
+                                                                    MapItem.DropBaseObject = 0;
                                                                 }
                                                             }
                                                         }

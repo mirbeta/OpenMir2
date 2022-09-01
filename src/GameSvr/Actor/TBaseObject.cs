@@ -917,9 +917,9 @@ namespace GameSvr.Actor
                 MapItem.AniCount = StdItem.AniCount;
                 MapItem.Reserved = 0;
                 MapItem.Count = 1;
-                MapItem.OfBaseObject = ItemOfCreat;
+                MapItem.OfBaseObject = ItemOfCreat.ObjectId;
                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
-                MapItem.DropBaseObject = DropCreat;
+                MapItem.DropBaseObject = DropCreat.ObjectId;
                 GetDropPosition(m_nCurrX, m_nCurrY, nScatterRange, ref dx, ref dy);
                 pr = (MapItem)m_PEnvir.AddToMap(dx, dy, CellType.ItemObject, MapItem);
                 if (pr == MapItem)
@@ -1247,9 +1247,9 @@ namespace GameSvr.Actor
                 Name = Grobal2.sSTRING_GOLDNAME,
                 Count = nGold,
                 Looks = M2Share.GetGoldShape(nGold),
-                OfBaseObject = GoldOfCreat,
+                OfBaseObject = GoldOfCreat.ObjectId,
                 CanPickUpTick = HUtil32.GetTickCount(),
-                DropBaseObject = DropGoldCreat
+                DropBaseObject = DropGoldCreat.ObjectId
             };
             GetDropPosition(m_nCurrX, m_nCurrY, 3, ref nX, ref nY);
             MapItem MapItemA = (MapItem)m_PEnvir.AddToMap(nX, nY, CellType.ItemObject, MapItem);
@@ -2859,13 +2859,12 @@ namespace GameSvr.Actor
 
         public void SendFirstMsg(TBaseObject BaseObject, short wIdent, short wParam, int lParam1, int lParam2, int lParam3, string sMsg)
         {
-            SendMessage SendMessage;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!m_boGhost)
                 {
-                    SendMessage = new SendMessage
+                    var SendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -2887,31 +2886,30 @@ namespace GameSvr.Actor
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
         }
-
+        
         public void SendMsg(TBaseObject BaseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
-            SendMessage SendMessage;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+                var sendMessage = new SendMessage
+                {
+                    wIdent = wIdent,
+                    wParam = wParam,
+                    nParam1 = nParam1,
+                    nParam2 = nParam2,
+                    nParam3 = nParam3,
+                    DeliveryTime = 0,
+                    BaseObject = BaseObject.ObjectId,
+                    LateDelivery = false
+                };
                 if (!m_boGhost)
                 {
-                    SendMessage = new SendMessage
-                    {
-                        wIdent = wIdent,
-                        wParam = wParam,
-                        nParam1 = nParam1,
-                        nParam2 = nParam2,
-                        nParam3 = nParam3,
-                        DeliveryTime = 0,
-                        BaseObject = BaseObject.ObjectId,
-                        boLateDelivery = false
-                    };
                     if (!string.IsNullOrEmpty(sMsg))
                     {
-                        SendMessage.Buff = sMsg;
+                        sendMessage.Buff = sMsg;
                     }
-                    m_MsgList.Add(SendMessage);
+                    m_MsgList.Add(sendMessage);
                 }
             }
             finally
@@ -2930,7 +2928,7 @@ namespace GameSvr.Actor
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!m_boGhost)
                 {
-                    var SendMessage = new SendMessage
+                    var sendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -2939,13 +2937,13 @@ namespace GameSvr.Actor
                         nParam3 = lParam3,
                         DeliveryTime = HUtil32.GetTickCount() + dwDelay,
                         BaseObject = BaseObject.ObjectId,
-                        boLateDelivery = true
+                        LateDelivery = true
                     };
                     if (!string.IsNullOrEmpty(sMsg))
                     {
-                        SendMessage.Buff = sMsg;
+                        sendMessage.Buff = sMsg;
                     }
-                    m_MsgList.Add(SendMessage);
+                    m_MsgList.Add(sendMessage);
                 }
             }
             finally
@@ -2972,11 +2970,11 @@ namespace GameSvr.Actor
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         DeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        boLateDelivery = true
+                        LateDelivery = true
                     };
                     if (BaseObject == Grobal2.RM_STRUCK)
                     {
-                        SendMessage.ObjectId = Grobal2.RM_STRUCK;
+                        SendMessage.BaseObject = Grobal2.RM_STRUCK;
                     }
                     else
                     {
@@ -3022,7 +3020,7 @@ namespace GameSvr.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-            SendDelayMsg(BaseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
+            SendDelayMsg(BaseObject.ObjectId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
         }
 
         public void SendUpdateMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg)
@@ -3100,26 +3098,26 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    var SendMessage = m_MsgList[I];
-                    if ((SendMessage.DeliveryTime != 0) && (HUtil32.GetTickCount() < SendMessage.DeliveryTime))//延时消息
+                    var sendMessage = m_MsgList[I];
+                    if ((sendMessage.DeliveryTime != 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime))//延时消息
                     {
                         I++;
                         continue;
                     }
                     m_MsgList.RemoveAt(I);
                     Msg = new TProcessMessage();
-                    Msg.wIdent = SendMessage.wIdent;
-                    Msg.wParam = SendMessage.wParam;
-                    Msg.nParam1 = SendMessage.nParam1;
-                    Msg.nParam2 = SendMessage.nParam2;
-                    Msg.nParam3 = SendMessage.nParam3;
-                    if (SendMessage.BaseObject > 0)
+                    Msg.wIdent = sendMessage.wIdent;
+                    Msg.wParam = sendMessage.wParam;
+                    Msg.nParam1 = sendMessage.nParam1;
+                    Msg.nParam2 = sendMessage.nParam2;
+                    Msg.nParam3 = sendMessage.nParam3;
+                    if (sendMessage.BaseObject > 0)
                     {
-                        Msg.BaseObject = SendMessage.BaseObject;
+                        Msg.BaseObject = sendMessage.BaseObject;
                     }
-                    Msg.dwDeliveryTime = SendMessage.DeliveryTime;
-                    Msg.boLateDelivery = SendMessage.boLateDelivery;
-                    Msg.sMsg = !string.IsNullOrEmpty(SendMessage.Buff) ? SendMessage.Buff : string.Empty;
+                    Msg.dwDeliveryTime = sendMessage.DeliveryTime;
+                    Msg.boLateDelivery = sendMessage.LateDelivery;
+                    Msg.sMsg = !string.IsNullOrEmpty(sendMessage.Buff) ? sendMessage.Buff : string.Empty;
                     result = true;
                     break;
                 }
