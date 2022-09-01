@@ -347,7 +347,7 @@ namespace GameSvr.Configs
         /// <summary>
         /// 消息发送范围
         /// </summary>
-        public int nSendRefMsgRange;
+        public byte nSendRefMsgRange;
         public bool boDecLampDura;
         public bool boHungerSystem;
         public bool boHungerDecHP;

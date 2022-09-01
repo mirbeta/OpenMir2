@@ -3253,7 +3253,7 @@ namespace GameSvr.Npc
                 return;
             }
             PlayObject.GetFrontPosition(ref nX, ref nY);
-            var Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.SMapName, nX, nY, sMonName);
+            var Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.MapName, nX, nY, sMonName);
             if (Monster == null)
             {
                 return;
@@ -3442,7 +3442,7 @@ namespace GameSvr.Npc
                         MapItem.OfBaseObject = PlayObject; // 物品谁可以捡起
                         MapItem.CanPickUpTick = HUtil32.GetTickCount();
                         MapItem.DropBaseObject = PlayObject; // 谁掉落的
-                        MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.OS_ITEMOBJECT, MapItem);
+                        MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
                         if (MapItemA != null)
                         {
                             if (MapItemA != MapItem)
@@ -3503,7 +3503,7 @@ namespace GameSvr.Npc
                                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
                                 MapItem.DropBaseObject = PlayObject;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
-                                MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.OS_ITEMOBJECT, MapItem);
+                                MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
                                 if (MapItemA != null)
                                 {
                                     if (MapItemA != MapItem)

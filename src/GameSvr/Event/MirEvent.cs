@@ -67,7 +67,7 @@ namespace GameSvr.Event
             m_dwRunTick = 500;
             if (m_Envir != null && Visible)
             {
-                m_Envir.AddToMap(m_nX, m_nY, CellType.OS_EVENTOBJECT, this);
+                m_Envir.AddToMap(m_nX, m_nY, CellType.EventObject, this);
             }
             else
             {
@@ -95,7 +95,7 @@ namespace GameSvr.Event
             Visible = false;
             if (m_Envir != null)
             {
-                m_Envir.DeleteFromMap(m_nX, m_nY, CellType.OS_EVENTOBJECT, this);
+                m_Envir.DeleteFromMap(m_nX, m_nY, CellType.EventObject, this);
             }
             m_Envir = null;
         }

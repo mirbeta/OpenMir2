@@ -7,8 +7,11 @@ namespace GameSvr.Actor
         public int nParam1;
         public int nParam2;
         public int nParam3;
-        public int dwDeliveryTime;
-        public TBaseObject BaseObject;
+        /// <summary>
+        /// 延时时间
+        /// </summary>
+        public int DeliveryTime;
+        public int BaseObject;
         public int ObjectId;
         public bool boLateDelivery;
         public string Buff;

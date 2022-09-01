@@ -68,7 +68,7 @@ namespace GameSvr.RobotPlay
                                 {
                                     if (Math.Abs(m_nCurrX - m_nProtectTargetX) > 13 || Math.Abs(m_nCurrY - m_nProtectTargetY) > 13)
                                     {
-                                        SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
+                                        SpaceMove(m_ManagedEnvir.MapName, m_nProtectTargetX, m_nProtectTargetY, 1);
                                         Direction = (byte)M2Share.RandomNumber.Random(8);
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
@@ -139,7 +139,7 @@ namespace GameSvr.RobotPlay
                                     DelTargetCreat();
                                     if (m_boProtectStatus) // 守护状态
                                     {
-                                        SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
+                                        SpaceMove(m_ManagedEnvir.MapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
                                         Direction = M2Share.RandomNumber.RandomByte(8);
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0; // 是向守护坐标的累计数 20090203
@@ -474,7 +474,7 @@ namespace GameSvr.RobotPlay
             int n18;
             int n1C;
             int nIdx;
-            MapCellinfo MapCellInfo;
+            MapCellInfo cellInfo;
             CellObject OSObject = null;
             TBaseObject BaseObject;
             MapItem MapItem;
@@ -514,53 +514,53 @@ namespace GameSvr.RobotPlay
                 {
                     for (n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        var mapCell = false;
-                        MapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
-                        if (mapCell && MapCellInfo.ObjList != null)
+                        var cellsuccess = false;
+                        cellInfo = m_PEnvir.GetCellInfo(n18, n1C, ref cellsuccess);
+                        if (cellsuccess && cellInfo.ObjList != null)
                         {
                             nIdx = 0;
-                            while (MapCellInfo.Count>0)
+                            while (cellInfo.Count>0)
                             {
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;
                                 }
-                                if (MapCellInfo.ObjList != null && MapCellInfo.Count <= 0)
+                                if (cellInfo.ObjList != null && cellInfo.Count <= 0)
                                 {
-                                    MapCellInfo.Dispose();
+                                    cellInfo.Dispose();
                                     break;
                                 }
-                                if (MapCellInfo.ObjList == null)
+                                if (cellInfo.ObjList == null)
                                 {
                                     break;
                                 }
-                                if (MapCellInfo.Count <= nIdx)
+                                if (cellInfo.Count <= nIdx)
                                 {
                                     break;
                                 }
                                 try
                                 {
-                                    OSObject = MapCellInfo.ObjList[nIdx];
+                                    OSObject = cellInfo.ObjList[nIdx];
                                 }
                                 catch
                                 {
-                                    MapCellInfo.Remove(OSObject);
+                                    cellInfo.Remove(OSObject);
                                     continue;
                                 }
                                 if (OSObject != null)
                                 {
-                                    if (!OSObject.boObjectDisPose)
+                                    if (!OSObject.ObjectDispose)
                                     {
                                         switch (OSObject.CellType)
                                         {
-                                            case CellType.OS_MOVINGOBJECT:
-                                                if (HUtil32.GetTickCount() - OSObject.dwAddTime >= 60000)
+                                            case CellType.MovingObject:
+                                                if (HUtil32.GetTickCount() - OSObject.AddTime >= 60000)
                                                 {
-                                                    OSObject.boObjectDisPose = true;
-                                                    MapCellInfo.Remove(OSObject);
-                                                    if (MapCellInfo.Count <= 0)
+                                                    OSObject.ObjectDispose = true;
+                                                    cellInfo.Remove(OSObject);
+                                                    if (cellInfo.Count <= 0)
                                                     {
-                                                        MapCellInfo.Dispose();
+                                                        cellInfo.Dispose();
                                                         break;
                                                     }
                                                     continue;
@@ -577,10 +577,10 @@ namespace GameSvr.RobotPlay
                                                     }
                                                 }
                                                 break;
-                                            case CellType.OS_ITEMOBJECT:
+                                            case CellType.ItemObject:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (HUtil32.GetTickCount() - OSObject.dwAddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
+                                                    if (HUtil32.GetTickCount() - OSObject.AddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                                     {
                                                         if (OSObject.CellObjId > 0)
                                                         {
@@ -588,12 +588,12 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         if (OSObject != null)
                                                         {
-                                                            OSObject.boObjectDisPose = true;
+                                                            OSObject.ObjectDispose = true;
                                                         }
-                                                        MapCellInfo.Remove(OSObject);
-                                                        if (MapCellInfo.Count <= 0)
+                                                        cellInfo.Remove(OSObject);
+                                                        if (cellInfo.Count <= 0)
                                                         {
-                                                            MapCellInfo.Dispose();
+                                                            cellInfo.Dispose();
                                                             break;
                                                         }
                                                         continue;
@@ -627,7 +627,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                 }
                                                 break;
-                                            case CellType.OS_EVENTOBJECT:
+                                            case CellType.EventObject:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (OSObject.CellObjId < 0)

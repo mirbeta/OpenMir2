@@ -50,10 +50,10 @@ namespace GameSvr.Monster.Monsters
                     m_TargetCret.GetBackPosition(ref n8, ref nC);
                     if (m_PEnvir.CanWalk(n8, nC, false))
                     {
-                        SpaceMove(m_PEnvir.SMapName, n8, nC, 0);
+                        SpaceMove(m_PEnvir.MapName, n8, nC, 0);
                         return;
                     }
-                    MapRandomMove(m_PEnvir.SMapName, 0);
+                    MapRandomMove(m_PEnvir.MapName, 0);
                     return;
                 }
                 n10 = n560;

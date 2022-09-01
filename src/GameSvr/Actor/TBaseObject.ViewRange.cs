@@ -127,50 +127,55 @@ namespace GameSvr.Actor
                 M2Share.ErrorMessage(sExceptionMsg1);
                 KickException();
             }
-            var nStartX = m_nCurrX - m_nViewRange;
-            var nEndX = m_nCurrX + m_nViewRange;
-            var nStartY = m_nCurrY - m_nViewRange;
-            var nEndY = m_nCurrY + m_nViewRange;
+            var nStartX = (short)(m_nCurrX - m_nViewRange);
+            var nEndX = (short)(m_nCurrX + m_nViewRange);
+            var nStartY =  (short)(m_nCurrY - m_nViewRange);
+            var nEndY =  (short)(m_nCurrY + m_nViewRange);
             try
             {
                 for (var n18 = nStartX; n18 <= nEndX; n18++)
                 {
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        var mapCell = false;
-                        var MapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
-                        if (mapCell && (MapCellInfo.ObjList != null))
+                        var cellsuccess = false;
+                        var cellInfo = m_PEnvir.GetCellInfo(n18, n1C, ref cellsuccess);
+                        if (cellsuccess && (cellInfo.ObjList != null))
                         {
                             n24 = 1;
                             var nIdx = 0;
-                            for (var i = 0; i < MapCellInfo.Count; i++)
+                            while (true)
                             {
-                                var OSObject = MapCellInfo.ObjList[i];
-                                if (OSObject != null)
+                                if (cellInfo.Count <= nIdx)
                                 {
-                                    if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
+                                    break;
+                                }
+                                var osObject = cellInfo.ObjList[nIdx];
+                                if (osObject != null)
+                                {
+                                    if (osObject.CellType == CellType.MovingObject)
                                     {
-                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
+                                        if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                         {
-                                            MapCellInfo.Remove(OSObject);
-                                            if (MapCellInfo.Count > 0)
+                                            cellInfo.Remove(osObject);
+                                            if (cellInfo.Count > 0)
                                             {
                                                 continue;
                                             }
-                                            MapCellInfo.Dispose();
+                                            cellInfo.Dispose();
                                             break;
                                         }
-                                        var BaseObject = (TBaseObject)M2Share.ObjectManager.Get(OSObject.CellObjId);
-                                        ;
-                                        if (BaseObject != null)
+                                        var baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);
+                                        if (baseObject != null)
                                         {
-                                            if (!BaseObject.m_boDeath && !BaseObject.m_boInvisible)
+                                            if (!baseObject.m_boDeath && !baseObject.m_boInvisible)
                                             {
-                                                if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
+                                                if (!baseObject.m_boGhost && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
                                                 {
-                                                    if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                                                    if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || 
+                                                        ((baseObject.m_Master != null) && (Math.Abs(baseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(baseObject.m_nCurrY - m_nCurrY) <= 3)) || 
+                                                        (baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                                                     {
-                                                        UpdateVisibleGay(BaseObject);
+                                                        UpdateVisibleGay(baseObject);
                                                     }
                                                 }
                                             }
@@ -227,48 +232,48 @@ namespace GameSvr.Actor
             {
                 m_VisibleActors[i].nVisibleFlag = 0;
             }
-            var nStartX = m_nCurrX - m_nViewRange;
-            var nEndX = m_nCurrX + m_nViewRange;
-            var nStartY = m_nCurrY - m_nViewRange;
-            var nEndY = m_nCurrY + m_nViewRange;
+            var nStartX = (short)(m_nCurrX - m_nViewRange);
+            var nEndX = (short)(m_nCurrX + m_nViewRange);
+            var nStartY = (short)(m_nCurrY - m_nViewRange);
+            var nEndY = (short)(m_nCurrY + m_nViewRange);
             for (var n18 = nStartX; n18 <= nEndX; n18++)
             {
                 for (var n1C = nStartY; n1C <= nEndY; n1C++)
                 {
-                    var mapCell = false;
-                    var mapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
-                    if (mapCell && (mapCellInfo.ObjList != null))
+                    var cellsuccess = false;
+                    var cellInfo = m_PEnvir.GetCellInfo(n18, n1C, ref cellsuccess);
+                    if (cellsuccess && (cellInfo.ObjList != null))
                     {
                         try
                         {
-                            for (var i = 0; i < mapCellInfo.Count; i++)
+                            for (var i = 0; i < cellInfo.Count; i++)
                             {
-                                var OSObject = mapCellInfo.ObjList[i];
+                                var OSObject = cellInfo.ObjList[i];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
+                                    if (OSObject.CellType == CellType.MovingObject)
                                     {
-                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
+                                        if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
                                         {
-                                            mapCellInfo.Remove(OSObject);
-                                            if (mapCellInfo.Count > 0)
+                                            cellInfo.Remove(OSObject);
+                                            if (cellInfo.Count > 0)
                                             {
                                                 continue;
                                             }
-                                            mapCellInfo.Dispose();
+                                            cellInfo.Dispose();
                                             break;
                                         }
                                     }
-                                    if ((OSObject.CellType == CellType.OS_ITEMOBJECT) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
+                                    if ((OSObject.CellType == CellType.ItemObject) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
                                     {
-                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
+                                        if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                         {
-                                            mapCellInfo.Remove(OSObject);
-                                            if (mapCellInfo.Count > 0)
+                                            cellInfo.Remove(OSObject);
+                                            if (cellInfo.Count > 0)
                                             {
                                                 continue;
                                             }
-                                            mapCellInfo.Dispose();
+                                            cellInfo.Dispose();
                                         }
                                     }
                                 }

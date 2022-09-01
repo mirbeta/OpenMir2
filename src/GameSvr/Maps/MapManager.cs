@@ -58,7 +58,7 @@ namespace GameSvr.Maps
             var list = new List<Envirnoment>();
             foreach (var item in m_MapList.Values)
             {
-                if (item.MDoorList.Count > 0)
+                if (item.DoorList.Count > 0)
                 {
                     list.Add(item);
                 }
@@ -88,14 +88,14 @@ namespace GameSvr.Maps
             }
             var envirnoment = new Envirnoment
             {
-                SMapName = sMapName,
-                MSMapFileName = m_sMapFileName,
-                SMapDesc = sMapDesc,
+                MapName = sMapName,
+                MapFileName = m_sMapFileName,
+                MapDesc = sMapDesc,
                 NServerIndex = nServerNumber,
                 Flag = MapFlag,
                 QuestNpc = QuestNPC
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.SMapName, out var minMap))
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap))
             {
                 envirnoment.NMinMap = minMap;
             }
@@ -124,14 +124,14 @@ namespace GameSvr.Maps
             Envirnoment DEnvir = FindMap(sDMapNO);
             if (SEnvir != null && DEnvir != null)
             {
-                var GateObj = new TGateObj
+                var GateObj = new GateObject
                 {
                     boFlag = false,
                     DEnvir = DEnvir,
                     nDMapX = (short)nDMapX,
                     nDMapY = (short)nDMapY
                 };
-                SEnvir.AddToMap(nSMapX, nSMapY, CellType.OS_GATEOBJECT, GateObj);
+                SEnvir.AddToMap(nSMapX, nSMapY, CellType.GateObject, GateObj);
                 result = true;
             }
             return result;

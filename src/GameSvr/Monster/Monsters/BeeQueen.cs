@@ -32,7 +32,7 @@ namespace GameSvr.Monster.Monsters
         {
             if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                var BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.SMapName, m_nCurrX, m_nCurrY, M2Share.g_Config.sBee);
+                var BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.MapName, m_nCurrX, m_nCurrY, M2Share.g_Config.sBee);
                 if (BB != null)
                 {
                     BB.SetTargetCreat(m_TargetCret);

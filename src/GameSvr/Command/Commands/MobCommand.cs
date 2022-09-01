@@ -40,7 +40,7 @@ namespace GameSvr.Command.Commands
             PlayObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (var i = 0; i < nCount; i++)
             {
-                TBaseObject Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.SMapName, nX, nY, sMonName);
+                TBaseObject Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.MapName, nX, nY, sMonName);
                 if (Monster != null)
                 {
                     Monster.m_btSlaveMakeLevel = nLevel;

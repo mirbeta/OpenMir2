@@ -84,7 +84,7 @@ namespace GameSvr
     }
 
     public static class M2Share
-    {
+    {        
         /// <summary>
         /// 服务器编号
         /// </summary>

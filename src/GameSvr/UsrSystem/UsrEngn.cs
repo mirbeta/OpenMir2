@@ -139,7 +139,7 @@ namespace GameSvr.UsrSystem
 
         public void Start()
         {
-            _userEngineThread = new Timer(PrcocessData, null, 0, 20);
+            _userEngineThread = new Timer(PrcocessData, null, 1000, 20);
             _processAiThread = new Thread(ProcessAiPlayObjectData) { IsBackground = true };
         }
 
@@ -330,7 +330,7 @@ namespace GameSvr.UsrSystem
                     Envirnoment Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
                     if (Envir != null)
                     {
-                        PlayObject.m_sMapFileName = Envir.MSMapFileName;
+                        PlayObject.m_sMapFileName = Envir.MapFileName;
                         if (Envir.Flag.boFight3Zone) // 是否在行会战争地图死亡
                         {
                             if (PlayObject.m_Abil.HP <= 0 && PlayObject.m_nFightZoneDieCount < 3)
@@ -414,7 +414,7 @@ namespace GameSvr.UsrSystem
                         PlayObject = null;
                         return result;
                     }
-                    PlayObject.m_sMapFileName = Envir.MSMapFileName;
+                    PlayObject.m_sMapFileName = Envir.MapFileName;
                     var nC = 0;
                     while (true)
                     {
@@ -442,7 +442,7 @@ namespace GameSvr.UsrSystem
                     }
                     else
                         PlayObject.m_boReadyRun = false;
-                    PlayObject.m_sMapFileName = Envir.MSMapFileName;
+                    PlayObject.m_sMapFileName = Envir.MapFileName;
                 }
                 else
                 {
@@ -1760,13 +1760,13 @@ namespace GameSvr.UsrSystem
                 if (Cert.m_boAddtoMapSuccess)
                 {
                     p28 = null;
-                    if (Cert.m_PEnvir.WWidth < 50)
+                    if (Cert.m_PEnvir.Width < 50)
                         n20 = 2;
                     else
                         n20 = 3;
-                    if (Cert.m_PEnvir.WHeight < 250)
+                    if (Cert.m_PEnvir.Height < 250)
                     {
-                        if (Cert.m_PEnvir.WHeight < 30)
+                        if (Cert.m_PEnvir.Height < 30)
                             n24 = 2;
                         else
                             n24 = 20;
@@ -1781,23 +1781,23 @@ namespace GameSvr.UsrSystem
                     {
                         if (!Cert.m_PEnvir.CanWalk(Cert.m_nCurrX, Cert.m_nCurrY, false))
                         {
-                            if (Cert.m_PEnvir.WWidth - n24 - 1 > Cert.m_nCurrX)
+                            if (Cert.m_PEnvir.Width - n24 - 1 > Cert.m_nCurrX)
                             {
                                 Cert.m_nCurrX += (short)n20;
                             }
                             else
                             {
-                                Cert.m_nCurrX = (short)(M2Share.RandomNumber.Random(Cert.m_PEnvir.WWidth / 2) + n24);
-                                if (Cert.m_PEnvir.WHeight - n24 - 1 > Cert.m_nCurrY)
+                                Cert.m_nCurrX = (short)(M2Share.RandomNumber.Random(Cert.m_PEnvir.Width / 2) + n24);
+                                if (Cert.m_PEnvir.Height - n24 - 1 > Cert.m_nCurrY)
                                     Cert.m_nCurrY += (short)n20;
                                 else
                                     Cert.m_nCurrY =
-                                        (short)(M2Share.RandomNumber.Random(Cert.m_PEnvir.WHeight / 2) + n24);
+                                        (short)(M2Share.RandomNumber.Random(Cert.m_PEnvir.Height / 2) + n24);
                             }
                         }
                         else
                         {
-                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.OS_MOVINGOBJECT, Cert);
+                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.MovingObject, Cert);
                             break;
                         }
 
@@ -2349,9 +2349,6 @@ namespace GameSvr.UsrSystem
         private void SendDoorStatus(Envirnoment Envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY,
             int nA, string sStr)
         {
-            MapCellinfo MapCellInfo;
-            CellObject OSObject;
-            TBaseObject BaseObject;
             int n1C = nX - 12;
             int n24 = nX + 12;
             int n20 = nY - 12;
@@ -2360,16 +2357,16 @@ namespace GameSvr.UsrSystem
             {
                 for (var n14 = n20; n14 <= n28; n14++)
                 {
-                    var mapCell = false;
-                    MapCellInfo = Envir.GetMapCellInfo(n10, n14, ref mapCell);
-                    if (mapCell && MapCellInfo.ObjList != null)
+                    var cellsuccess = false;
+                    var cellInfo = Envir.GetCellInfo(n10, n14, ref cellsuccess);
+                    if (cellsuccess && cellInfo.ObjList != null)
                     {
-                        for (var i = 0; i < MapCellInfo.Count; i++)
+                        for (var i = 0; i < cellInfo.Count; i++)
                         {
-                            OSObject = MapCellInfo.ObjList[i];
-                            if (OSObject != null && OSObject.CellType == CellType.OS_MOVINGOBJECT)
+                            var OSObject = cellInfo.ObjList[i];
+                            if (OSObject != null && OSObject.CellType == CellType.MovingObject)
                             {
-                                BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
+                                var BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
                                 if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject.SendMsg(BaseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
@@ -2388,9 +2385,9 @@ namespace GameSvr.UsrSystem
             for (var i = 0; i < dorrList.Count; i++)
             {
                 var Envir = dorrList[i];
-                for (var j = 0; j < Envir.MDoorList.Count; j++)
+                for (var j = 0; j < Envir.DoorList.Count; j++)
                 {
-                    Door = Envir.MDoorList[j];
+                    Door = Envir.DoorList[j];
                     if (Door.Status.boOpened)
                     {
                         if ((HUtil32.GetTickCount() - Door.Status.dwOpenTick) > 5 * 1000)
@@ -2668,24 +2665,20 @@ namespace GameSvr.UsrSystem
         {
             try
             {
-                while (M2Share.boStartReady)
+                ProcessHumans();
+                ProcessMonsters();
+                ProcessMerchants();
+                ProcessNpcs();
+                if ((HUtil32.GetTickCount() - dwProcessMissionsTime) > 1000)
                 {
-                    ProcessHumans();
-                    ProcessMonsters();
-                    ProcessMerchants();
-                    ProcessNpcs();
-                    if ((HUtil32.GetTickCount() - dwProcessMissionsTime) > 1000)
-                    {
-                        dwProcessMissionsTime = HUtil32.GetTickCount();
-                        ProcessMissions();
-                        ProcessEvents();
-                    }
-                    if ((HUtil32.GetTickCount() - dwProcessMapDoorTick) > 500)
-                    {
-                        dwProcessMapDoorTick = HUtil32.GetTickCount();
-                        ProcessMapDoor();
-                    }
-                    Thread.Sleep(20);
+                    dwProcessMissionsTime = HUtil32.GetTickCount();
+                    ProcessMissions();
+                    ProcessEvents();
+                }
+                if ((HUtil32.GetTickCount() - dwProcessMapDoorTick) > 500)
+                {
+                    dwProcessMapDoorTick = HUtil32.GetTickCount();
+                    ProcessMapDoor();
                 }
             }
             catch (Exception e)
@@ -2782,7 +2775,7 @@ namespace GameSvr.UsrSystem
             if (Cert.m_boAddtoMapSuccess)
             {
                 p28 = null;
-                if (Cert.m_PEnvir.WWidth < 50)
+                if (Cert.m_PEnvir.Width < 50)
                 {
                     n20 = 2;
                 }
@@ -2790,9 +2783,9 @@ namespace GameSvr.UsrSystem
                 {
                     n20 = 3;
                 }
-                if ((Cert.m_PEnvir.WHeight < 250))
+                if ((Cert.m_PEnvir.Height < 250))
                 {
-                    if ((Cert.m_PEnvir.WHeight < 30))
+                    if ((Cert.m_PEnvir.Height < 30))
                     {
                         n24 = 2;
                     }
@@ -2810,26 +2803,26 @@ namespace GameSvr.UsrSystem
                 {
                     if (!Cert.m_PEnvir.CanWalk(Cert.m_nCurrX, Cert.m_nCurrY, false))
                     {
-                        if ((Cert.m_PEnvir.WWidth - n24 - 1) > Cert.m_nCurrX)
+                        if ((Cert.m_PEnvir.Width - n24 - 1) > Cert.m_nCurrX)
                         {
                             Cert.m_nCurrX += (short)n20;
                         }
                         else
                         {
-                            Cert.m_nCurrX = (byte)((M2Share.RandomNumber.Random(Cert.m_PEnvir.WWidth / 2)) + n24);
-                            if (Cert.m_PEnvir.WHeight - n24 - 1 > Cert.m_nCurrY)
+                            Cert.m_nCurrX = (byte)((M2Share.RandomNumber.Random(Cert.m_PEnvir.Width / 2)) + n24);
+                            if (Cert.m_PEnvir.Height - n24 - 1 > Cert.m_nCurrY)
                             {
                                 Cert.m_nCurrY += (short)n20;
                             }
                             else
                             {
-                                Cert.m_nCurrY = (byte)(M2Share.RandomNumber.Random(Cert.m_PEnvir.WHeight / 2) + n24);
+                                Cert.m_nCurrY = (byte)(M2Share.RandomNumber.Random(Cert.m_PEnvir.Height / 2) + n24);
                             }
                         }
                     }
                     else
                     {
-                        p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.OS_MOVINGOBJECT, Cert);
+                        p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.MovingObject, Cert);
                         break;
                     }
                     n1C++;
