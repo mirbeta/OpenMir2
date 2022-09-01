@@ -156,7 +156,7 @@ namespace GameSvr.GateWay
         /// <returns></returns>
         public void HandleSendBuffer(byte[] buffer)
         {
-            if (!GateInfo.boUsed && GateInfo.Socket == null)
+            if (!GateInfo.BoUsed && GateInfo.Socket == null)
             {
                 return;
             }

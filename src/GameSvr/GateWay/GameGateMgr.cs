@@ -76,7 +76,7 @@ namespace GameSvr.GateWay
                 gateInfo.dwSendTick = HUtil32.GetTickCount();
                 gateInfo.nSendMsgBytes = 0;
                 gateInfo.nSendedMsgCount = 0;
-                gateInfo.boUsed = true;
+                gateInfo.BoUsed = true;
                 gateInfo.SocketId = e.ConnectionId;
                 gateInfo.Socket = e.Socket;
                 gateInfo.UserList = new List<GateUserInfo>();
@@ -117,7 +117,7 @@ namespace GameSvr.GateWay
                 for (int i = 0; i < _gameGates.Count; i++)
                 {
                     var gateInfo = _gameGates[keys[i]].GateInfo;
-                    if (gateInfo.boUsed && gateInfo.Socket != null && gateInfo.UserList != null)
+                    if (gateInfo.BoUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
                         HUtil32.EnterCriticalSection(m_RunSocketSection);
                         try
@@ -222,7 +222,7 @@ namespace GameSvr.GateWay
                         }
                     }
                     gateInfo.UserList = null;
-                    gateInfo.boUsed = false;
+                    gateInfo.BoUsed = false;
                     gateInfo.Socket = null;
                     M2Share.ErrorMessage(string.Format(sGateClose, e.EndPoint.Address, e.EndPoint.Port));
                     if (_gameGates.Remove(e.SocHandle, out var gameGate))
