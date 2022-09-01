@@ -121,8 +121,6 @@ namespace SystemModule
         /// <summary>
         /// 判断数值是否在范围之内
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
         /// <returns></returns>
         public static bool RangeInDefined(int values, int min, int max)
         {
@@ -132,8 +130,6 @@ namespace SystemModule
         /// <summary>
         /// 判断数值是否在范围之内
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
         /// <returns></returns>
         public static bool RangeInDefined(long values, int min, int max)
         {
