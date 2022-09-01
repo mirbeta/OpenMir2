@@ -259,9 +259,6 @@ namespace GameSvr.Player
 
         private bool ClientDropItem(string sItemName, int nItemIdx)
         {
-            TUserItem UserItem;
-            StdItem StdItem;
-            string sUserItemName;
             var result = false;
             if (!m_boClientFlag)
             {
@@ -293,15 +290,15 @@ namespace GameSvr.Player
             {
                 for (var i = 0; i < m_ItemList.Count; i++)
                 {
-                    UserItem = m_ItemList[i];
+                    var UserItem = m_ItemList[i];
                     if (UserItem != null && UserItem.MakeIndex == nItemIdx)
                     {
-                        StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                        var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                         if (StdItem == null)
                         {
                             continue;
                         }
-                        sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
+                        var sUserItemName = ItmUnit.GetItemName(UserItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_Config.boControlDropItem && StdItem.Price < M2Share.g_Config.nCanDropPrice)
@@ -401,19 +398,16 @@ namespace GameSvr.Player
         {
             var n14 = -1;
             var n18 = 0;
-            TUserItem UserItem = null;
-            TUserItem TakeOffItem = null;
+            TUserItem userItem = null;
             StdItem StdItem = null;
-            StdItem StdItem20 = null;
             TClientStdItem StdItem58 = null;
-            string sUserItemName;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
-                if (UserItem != null && UserItem.MakeIndex == nItemIdx)
+                userItem = m_ItemList[i];
+                if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    sUserItemName = ItmUnit.GetItemName(UserItem);
+                    StdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                    var sUserItemName = ItmUnit.GetItemName(userItem);
                     if (StdItem != null)
                     {
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -423,23 +417,23 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                UserItem = null;
+                userItem = null;
             }
-            if (StdItem != null && UserItem != null)
+            if (StdItem != null && userItem != null)
             {
                 if (M2Share.CheckUserItems(btWhere, StdItem))
                 {
                     StdItem.GetStandardItem(ref StdItem58);
-                    StdItem.GetItemAddValue(UserItem, ref StdItem58);
-                    StdItem58.Name = ItmUnit.GetItemName(UserItem);
-                    if (CheckTakeOnItems(btWhere, ref StdItem58) && CheckItemBindUse(UserItem))
+                    StdItem.GetItemAddValue(userItem, ref StdItem58);
+                    StdItem58.Name = ItmUnit.GetItemName(userItem);
+                    if (CheckTakeOnItems(btWhere, ref StdItem58) && CheckItemBindUse(userItem))
                     {
-                        TakeOffItem = null;
+                        TUserItem TakeOffItem = null;
                         if (btWhere >= 0 && btWhere <= 12)
                         {
                             if (m_UseItems[btWhere] != null && m_UseItems[btWhere].wIndex > 0)
                             {
-                                StdItem20 = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
+                                var StdItem20 = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
                                 if (StdItem20 != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem20.StdMode))
                                 {
                                     if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
@@ -472,11 +466,11 @@ namespace GameSvr.Player
                                 }
                                 TakeOffItem = m_UseItems[btWhere];
                             }
-                            if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode) && UserItem.btValue[8] != 0)
+                            if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode) && userItem.btValue[8] != 0)
                             {
-                                UserItem.btValue[8] = 0;
+                                userItem.btValue[8] = 0;
                             }
-                            m_UseItems[btWhere] = UserItem;
+                            m_UseItems[btWhere] = userItem;
                             DelBagItem(n14);
                             if (TakeOffItem != null)
                             {
@@ -511,16 +505,13 @@ namespace GameSvr.Player
         private void ClientTakeOffItems(byte btWhere, int nItemIdx, string sItemName)
         {
             var n10 = 0;
-            StdItem StdItem = null;
-            TUserItem UserItem = null;
-            string sUserItemName;
             if (!m_boDealing && btWhere < 13)
             {
                 if (m_UseItems[btWhere].wIndex > 0)
                 {
                     if (m_UseItems[btWhere].MakeIndex == nItemIdx)
                     {
-                        StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
+                        var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
                         if (StdItem != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                         {
                             if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
@@ -552,10 +543,10 @@ namespace GameSvr.Player
                             goto FailExit;
                         }
                         // 取自定义物品名称
-                        sUserItemName = ItmUnit.GetItemName(m_UseItems[btWhere]);
+                        var sUserItemName = ItmUnit.GetItemName(m_UseItems[btWhere]);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            UserItem = m_UseItems[btWhere];
+                            var UserItem = m_UseItems[btWhere];
                             if (AddItemToBag(UserItem))
                             {
                                 SendAddItem(UserItem);
@@ -608,10 +599,9 @@ namespace GameSvr.Player
         private bool ClientUseItems_GetUnBindItems(string sItemName, int nCount)
         {
             var result = false;
-            TUserItem UserItem;
             for (var i = 0; i < nCount; i++)
             {
-                UserItem = new TUserItem();
+                var UserItem = new TUserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     m_ItemList.Add(UserItem);
@@ -633,7 +623,6 @@ namespace GameSvr.Player
         private void ClientUseItems(int nItemIdx, string sItemName)
         {
             var boEatOK = false;
-            TUserItem UserItem = null;
             StdItem StdItem = null;
             TUserItem UserItem34 = null;
             if (m_boCanUseItem)
@@ -642,7 +631,7 @@ namespace GameSvr.Player
                 {
                     for (var i = 0; i < m_ItemList.Count; i++)
                     {
-                        UserItem = m_ItemList[i];
+                        var UserItem = m_ItemList[i];
                         if (UserItem != null && UserItem.MakeIndex == nItemIdx)
                         {
                             UserItem34 = UserItem;
@@ -786,10 +775,9 @@ namespace GameSvr.Player
 
         private void ClientChangeMagicKey(int nSkillIdx, int nKey)
         {
-            TUserMagic UserMagic;
             for (var i = 0; i < m_MagicList.Count; i++)
             {
-                UserMagic = m_MagicList[i];
+                var UserMagic = m_MagicList[i];
                 if (UserMagic.MagicInfo.wMagicID == nSkillIdx)
                 {
                     UserMagic.btKey = (byte)nKey;
@@ -923,7 +911,6 @@ namespace GameSvr.Player
 
         private void ClientDealTry(string sHumName)
         {
-            TPlayObject TargetPlayObject;
             if (M2Share.g_Config.boDisableDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDisableDealItemsMsg);
@@ -943,7 +930,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotTryDealMsg);
                 return;
             }
-            TargetPlayObject = (TPlayObject)GetPoseCreate();
+            var TargetPlayObject = (TPlayObject)GetPoseCreate();
             if (TargetPlayObject != null && TargetPlayObject != this)
             {
                 if (TargetPlayObject.GetPoseCreate() == this && !TargetPlayObject.m_boDealing)
@@ -976,9 +963,6 @@ namespace GameSvr.Player
 
         private void ClientAddDealItem(int nItemIdx, string sItemName)
         {
-            bool bo11;
-            TUserItem UserItem;
-            string sUserItemName;
             if (m_DealCreat == null || !m_boDealing)
             {
                 return;
@@ -988,15 +972,15 @@ namespace GameSvr.Player
                 // 折分物品名称(信件物品的名称后面加了使用次数)
                 HUtil32.GetValidStr3(sItemName, ref sItemName, new string[] { " " });
             }
-            bo11 = false;
+            var bo11 = false;
             if (!m_DealCreat.m_boDealOK)
             {
                 for (var i = 0; i < m_ItemList.Count; i++)
                 {
-                    UserItem = m_ItemList[i];
+                    var UserItem = m_ItemList[i];
                     if (UserItem.MakeIndex == nItemIdx)
                     {
-                        sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
+                        var sUserItemName = ItmUnit.GetItemName(UserItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && m_DealItemList.Count < 12)
                         {
                             m_DealItemList.Add(UserItem);
@@ -1016,8 +1000,6 @@ namespace GameSvr.Player
 
         private void ClientDelDealItem(int nItemIdx, string sItemName)
         {
-            TUserItem UserItem;
-            string sUserItemName;
             if (M2Share.g_Config.boCanNotGetBackDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
@@ -1038,10 +1020,10 @@ namespace GameSvr.Player
             {
                 for (var i = 0; i < m_DealItemList.Count; i++)
                 {
-                    UserItem = m_DealItemList[i];
+                    var UserItem = m_DealItemList[i];
                     if (UserItem.MakeIndex == nItemIdx)
                     {
-                        sUserItemName = ItmUnit.GetItemName(UserItem);
+                        var sUserItemName = ItmUnit.GetItemName(UserItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             m_ItemList.Add(UserItem);
@@ -1066,7 +1048,6 @@ namespace GameSvr.Player
 
         private void ClientChangeDealGold(int nGold)
         {
-            bool bo09;
             if (m_nDealGolds > 0 && M2Share.g_Config.boCanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
@@ -1078,7 +1059,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_DEALCHGGOLD_FAIL, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
                 return;
             }
-            bo09 = false;
+            var bo09 = false;
             if (m_DealCreat != null && GetPoseCreate() == m_DealCreat)
             {
                 if (!m_DealCreat.m_boDealOK)
@@ -1103,10 +1084,6 @@ namespace GameSvr.Player
 
         private void ClientDealEnd()
         {
-            bool bo11;
-            TUserItem UserItem;
-            StdItem StdItem;
-            TPlayObject PlayObject;
             m_boDealOK = true;
             if (m_DealCreat == null)
             {
@@ -1120,7 +1097,7 @@ namespace GameSvr.Player
             }
             if (m_DealCreat.m_boDealOK)
             {
-                bo11 = true;
+                var bo11 = true;
                 if (Grobal2.MAXBAGITEM - m_ItemList.Count < m_DealCreat.m_DealItemList.Count)
                 {
                     bo11 = false;
@@ -1143,6 +1120,8 @@ namespace GameSvr.Player
                 }
                 if (bo11)
                 {
+                    TUserItem UserItem;
+                    StdItem StdItem;
                     for (var i = 0; i < m_DealItemList.Count; i++)
                     {
                         UserItem = m_DealItemList[i];
@@ -1195,7 +1174,7 @@ namespace GameSvr.Player
                             M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + m_DealCreat.m_nGold + "\t" + '1' + "\t" + m_sCharName);
                         }
                     }
-                    PlayObject = m_DealCreat as TPlayObject;
+                    var PlayObject = m_DealCreat as TPlayObject;
                     PlayObject.SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
                     PlayObject.SysMsg(M2Share.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     PlayObject.m_DealCreat = null;
@@ -1236,16 +1215,16 @@ namespace GameSvr.Player
             }
         }
 
-        private void ClientMakeDrugItem(int NPC, string nItemName)
+        private void ClientMakeDrugItem(int objectId, string nItemName)
         {
-            var Merchant = (Merchant)M2Share.UserEngine.FindMerchant(NPC);
-            if (Merchant == null || !Merchant.m_boMakeDrug)
+            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(objectId);
+            if (merchant == null || !merchant.m_boMakeDrug)
             {
                 return;
             }
-            if (Merchant.m_PEnvir == m_PEnvir && Math.Abs(Merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Merchant.m_nCurrY - m_nCurrY) < 15)
+            if (merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
-                Merchant.ClientMakeDrugItem(this, nItemName);
+                merchant.ClientMakeDrugItem(this, nItemName);
             }
         }
 
@@ -1306,7 +1285,6 @@ namespace GameSvr.Player
 
         private void ClientGuildMemberList()
         {
-            TGuildRank GuildRank;
             var sSendMsg = string.Empty;
             if (m_MyGuild == null)
             {
@@ -1314,7 +1292,7 @@ namespace GameSvr.Player
             }
             for (var i = 0; i < m_MyGuild.m_RankList.Count; i++)
             {
-                GuildRank = m_MyGuild.m_RankList[i];
+                var GuildRank = m_MyGuild.m_RankList[i];
                 sSendMsg = sSendMsg + '#' + GuildRank.nRankNo + "/*" + GuildRank.sRankName + '/';
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
@@ -1392,7 +1370,6 @@ namespace GameSvr.Player
         private void ClientGuildDelMember(string sHumName)
         {
             string s14;
-            TPlayObject PlayObject;
             var nC = 1;
             if (IsGuildMaster())
             {
@@ -1402,7 +1379,7 @@ namespace GameSvr.Player
                     {
                         if (m_MyGuild.DelMember(sHumName))
                         {
-                            PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+                            var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
                             if (PlayObject != null)
                             {
                                 PlayObject.m_MyGuild = null;
