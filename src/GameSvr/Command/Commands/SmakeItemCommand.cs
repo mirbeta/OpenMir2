@@ -2,6 +2,7 @@
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Command.Commands
 {
@@ -64,7 +65,7 @@ namespace GameSvr.Command.Commands
                         + PlayObject.m_UseItems[nWhere].btValue[1] + '/' + PlayObject.m_UseItems[nWhere].btValue[2] + '/'
                         + PlayObject.m_UseItems[nWhere].btValue[3] + '/' + PlayObject.m_UseItems[nWhere].btValue[4] + '/' + PlayObject.m_UseItems[nWhere].btValue[5]
                         + '/' + PlayObject.m_UseItems[nWhere].btValue[6] + '/' + PlayObject.m_UseItems[nWhere].btValue[7] + '/' + PlayObject.m_UseItems[nWhere].btValue[8]
-                        + '/' + PlayObject.m_UseItems[nWhere].btValue[9] + '/' + PlayObject.m_UseItems[nWhere].btValue[10] + '/' + PlayObject.m_UseItems[nWhere].btValue[11]
+                        + '/' + PlayObject.m_UseItems[nWhere].btValue[9] + '/' + PlayObject.m_UseItems[nWhere].btValue[ItemAttr.WeaponUpgrade] + '/' + PlayObject.m_UseItems[nWhere].btValue[11]
                         + '/' + PlayObject.m_UseItems[nWhere].btValue[12] + '/' + PlayObject.m_UseItems[nWhere].btValue[13];
                     PlayObject.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
                     if (M2Share.g_Config.boShowMakeItemMsg)

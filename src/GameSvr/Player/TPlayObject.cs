@@ -1113,7 +1113,7 @@ namespace GameSvr.Player
                             OSObject = cellInfo.ObjList[i];
                             if (OSObject.CellType == CellType.MovingObject)
                             {
-                                BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
+                                BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);;
                                 if (BaseObject != null)
                                 {
                                     if (!BaseObject.m_boGhost && BaseObject == TargeTBaseObject)

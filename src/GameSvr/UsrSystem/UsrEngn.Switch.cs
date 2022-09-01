@@ -52,7 +52,7 @@ namespace GameSvr.UsrSystem
                 if (SwitchData.SlaveArr[nCount].SlaveName == "") break;
                 SlaveInfo = SwitchData.SlaveArr[nCount];
                 var slaveId = HUtil32.Sequence();
-                M2Share.ObjectManager.AddOhter(slaveId, SlaveInfo);
+                M2Share.ActorManager.AddOhter(slaveId, SlaveInfo);
                 PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
                 if (nCount >= 5) break;

@@ -14,7 +14,7 @@ namespace GameSvr.Player
     {
         private void ClientQueryUserName(int targetId, int x, int y)
         {
-            var BaseObject = M2Share.ObjectManager.Get(targetId);
+            var BaseObject = M2Share.ActorManager.Get(targetId);
             if (CretInNearXY(BaseObject, x, y))
             {
                 var tagColor = GetCharColor(BaseObject);
@@ -73,7 +73,7 @@ namespace GameSvr.Player
         private void ClientQueryUserInformation(int charId, int nX, int nY)
         {
             TClientItem ClientItem = null;
-            var PlayObject = (TPlayObject)M2Share.ObjectManager.Get(charId);
+            var PlayObject = (TPlayObject)M2Share.ActorManager.Get(charId);
             if (!CretInNearXY(PlayObject, nX, nY))
             {
                 return;
@@ -736,7 +736,7 @@ namespace GameSvr.Player
         {
             var result = false;
             dwDelayTime = 0;
-            var BaseObject = M2Share.ObjectManager.Get(charId);
+            var BaseObject = M2Share.ActorManager.Get(charId);
             if (!M2Share.g_Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;

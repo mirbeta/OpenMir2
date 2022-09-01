@@ -1,3 +1,4 @@
+using GameSvr.Actor;
 using GameSvr.Castle;
 using GameSvr.Command;
 using GameSvr.Configs;
@@ -95,7 +96,7 @@ namespace GameSvr
         public static int g_dwStartTick = 0;
         public static int ShareFileNameNum = 0;
         public static int g_nServerTickDifference = 0;
-        public static ObjectManager ObjectManager = null;
+        public static ActorManager ActorManager = null;
         public static ServerConfig ServerConf = null;
         public static GameCmdConfig CommandConf = null;
         public static StringConfig StringConf = null;

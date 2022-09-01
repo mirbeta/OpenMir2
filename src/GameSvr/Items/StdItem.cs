@@ -80,7 +80,7 @@ namespace GameSvr.Items
                     //{
                     //    stdItem.Source = (sbyte)userItem.btValue[7];
                     //}
-                    //if (userItem.btValue[10] != 0)
+                    //if (userItem.btValue[ItemAttr.WeaponUpgrade] != 0)
                     //{
                     //    stdItem.reserved = (byte)(stdItem.reserved | 1);
                     //}

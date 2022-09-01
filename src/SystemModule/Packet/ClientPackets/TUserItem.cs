@@ -3,6 +3,14 @@ using System.IO;
 
 namespace SystemModule.Packet.ClientPackets
 {
+    public class ItemAttr
+    {
+        /// <summary>
+        /// 武器升级
+        /// </summary>
+        public const int WeaponUpgrade = 10;
+    }
+
     [ProtoContract]
     public class TUserItem : Packets
     {

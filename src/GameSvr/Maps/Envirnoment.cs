@@ -228,7 +228,7 @@ namespace GameSvr.Maps
                                 var OSObject = cellInfo.ObjList[i];
                                 if (OSObject.CellType == CellType.MovingObject)
                                 {
-                                    baseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);
+                                    baseObject = M2Share.ActorManager.Get(OSObject.CellObjId);
                                     if (baseObject != null)
                                     {
                                         if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
@@ -335,7 +335,7 @@ namespace GameSvr.Maps
                         osObject = cellInfo.ObjList[i];
                         if (osObject.CellType == CellType.MovingObject)
                         {
-                            baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);
+                            baseObject = M2Share.ActorManager.Get(osObject.CellObjId);
                             ;
                             if (baseObject != null)
                             {
@@ -381,7 +381,7 @@ namespace GameSvr.Maps
                         osObject = cellInfo.ObjList[i];
                         if (!boFlag && osObject.CellType == CellType.MovingObject)
                         {
-                            baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);;
+                            baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
                             if (baseObject != null)
                             {
                                 if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
@@ -420,7 +420,7 @@ namespace GameSvr.Maps
                         osObject = cellInfo.ObjList[i];
                         if (osObject.CellType == CellType.MovingObject)
                         {
-                            baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);;
+                            baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
                             if (baseObject != null)
                             {
                                 castle = M2Share.CastleManager.InCastleWarArea(baseObject);
@@ -593,7 +593,7 @@ namespace GameSvr.Maps
                         }
                         if (osObject.CellType == CellType.MovingObject)
                         {
-                            baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);;
+                            baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
                             if (!baseObject.m_boDeath)
                             {
                                 Bo2C = false;
@@ -975,7 +975,7 @@ namespace GameSvr.Maps
                     }
                     if (osObject.CellType == CellType.MovingObject)
                     {
-                        var baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);;
+                        var baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
                         if (baseObject != null)
                         {
                             if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
@@ -1117,7 +1117,7 @@ namespace GameSvr.Maps
                     osObject = cellInfo.ObjList[i];
                     if (osObject.CellType == CellType.MovingObject)
                     {
-                        baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);;
+                        baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
                         if (baseObject != null && !baseObject.m_boGhost && baseObject.bo2B9 && (!boFlag || !baseObject.m_boDeath))
                         {
                             result = baseObject;
@@ -1204,7 +1204,7 @@ namespace GameSvr.Maps
                         }
                         if (osObject.CellType == CellType.MovingObject)
                         {
-                            baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);
+                            baseObject = M2Share.ActorManager.Get(osObject.CellObjId);
                             if (!baseObject.m_boDeath)
                             {
                                 Bo2C = false;
@@ -1304,7 +1304,7 @@ namespace GameSvr.Maps
                     osObject = cellInfo.ObjList[i];
                     if (osObject.CellType == CellType.MovingObject)
                     {
-                        baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);;
+                        baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
                         if (baseObject != null)
                         {
                             if (!baseObject.m_boGhost && baseObject.bo2B9)
@@ -1400,7 +1400,7 @@ namespace GameSvr.Maps
                     osObject = cellInfo.ObjList[i];
                     if (osObject.CellType == CellType.MovingObject)
                     {
-                        baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);;
+                        baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
                         if (baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
                             result = true;
