@@ -1953,7 +1953,7 @@ namespace GameSvr.UsrSystem
 
         public object FindMerchant(int merchantId)
         {
-            var normNpc = M2Share.ObjectManager.Get(merchantId);
+            var normNpc = M2Share.ActorManager.Get(merchantId);
             NormNpc npcObject = null;
             var npcType = normNpc.GetType();
             if (npcType == typeof(Merchant))
@@ -1977,7 +1977,7 @@ namespace GameSvr.UsrSystem
 
         public object FindNPC(int npcId)
         {
-            return M2Share.ObjectManager.Get(npcId); ;
+            return M2Share.ActorManager.Get(npcId); ;
         }
 
         /// <summary>
@@ -2366,7 +2366,7 @@ namespace GameSvr.UsrSystem
                             var OSObject = cellInfo.ObjList[i];
                             if (OSObject != null && OSObject.CellType == CellType.MovingObject)
                             {
-                                var BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
+                                var BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);;
                                 if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject.SendMsg(BaseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);

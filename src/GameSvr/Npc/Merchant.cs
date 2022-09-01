@@ -444,7 +444,7 @@ namespace GameSvr.Npc
             if (DelItemList != null)
             {
                 var objectId = HUtil32.Sequence();
-                M2Share.ObjectManager.AddOhter(objectId, DelItemList);
+                M2Share.ActorManager.AddOhter(objectId, DelItemList);
                 User.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
             if (DuraList != null)
@@ -608,19 +608,19 @@ namespace GameSvr.Npc
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCRate) < n10)
                     {
-                        UpgradeInfo.UserItem.btValue[10] = 10;
+                        UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 10;
                         if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCTwoPointRate) == 0)
                         {
-                            UpgradeInfo.UserItem.btValue[10] = 11;
+                            UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 11;
                         }
                         if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCThreePointRate) == 0)
                         {
-                            UpgradeInfo.UserItem.btValue[10] = 12;
+                            UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 12;
                         }
                     }
                     else
                     {
-                        UpgradeInfo.UserItem.btValue[10] = 1;
+                        UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 1;
                     }
                 }
                 if (UpgradeInfo.btMc >= UpgradeInfo.btDc && UpgradeInfo.btMc >= UpgradeInfo.btSc || n1C == 1)
@@ -629,19 +629,19 @@ namespace GameSvr.Npc
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCRate) < n10)
                     {
-                        UpgradeInfo.UserItem.btValue[10] = 20;
+                        UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 20;
                         if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCTwoPointRate) == 0)
                         {
-                            UpgradeInfo.UserItem.btValue[10] = 21;
+                            UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 21;
                         }
                         if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCThreePointRate) == 0)
                         {
-                            UpgradeInfo.UserItem.btValue[10] = 22;
+                            UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 22;
                         }
                     }
                     else
                     {
-                        UpgradeInfo.UserItem.btValue[10] = 1;
+                        UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 1;
                     }
                 }
                 if (UpgradeInfo.btSc >= UpgradeInfo.btMc && UpgradeInfo.btSc >= UpgradeInfo.btDc || n1C == 2)
@@ -650,19 +650,19 @@ namespace GameSvr.Npc
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCRate) < n10)
                     {
-                        UpgradeInfo.UserItem.btValue[10] = 30;
+                        UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 30;
                         if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCTwoPointRate) == 0)
                         {
-                            UpgradeInfo.UserItem.btValue[10] = 31;
+                            UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 31;
                         }
                         if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCThreePointRate) == 0)
                         {
-                            UpgradeInfo.UserItem.btValue[10] = 32;
+                            UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 32;
                         }
                     }
                     else
                     {
-                        UpgradeInfo.UserItem.btValue[10] = 1;
+                        UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 1;
                     }
                 }
                 var UserItem = UpgradeInfo.UserItem;
@@ -1525,7 +1525,7 @@ namespace GameSvr.Npc
                 if (List28 != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ObjectManager.AddOhter(ObjectId, List28);
+                    M2Share.ActorManager.AddOhter(ObjectId, List28);
                     PlayObject.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }

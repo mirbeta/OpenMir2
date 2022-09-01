@@ -673,7 +673,7 @@ namespace GameSvr.Player
             TBaseObject BaseObject = null;
             if (ProcessMsg.BaseObject > 0)
             {
-                BaseObject = M2Share.ObjectManager.Get(ProcessMsg.BaseObject);
+                BaseObject = M2Share.ActorManager.Get(ProcessMsg.BaseObject);
             }
             switch (ProcessMsg.wIdent)
             {
@@ -1236,7 +1236,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_SPELL:
-                    if (ClientSpellXY((short)ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, M2Share.ObjectManager.Get(ProcessMsg.nParam3), ProcessMsg.boLateDelivery, ref dwDelayTime))
+                    if (ClientSpellXY((short)ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, M2Share.ActorManager.Get(ProcessMsg.nParam3), ProcessMsg.boLateDelivery, ref dwDelayTime))
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1464,18 +1464,18 @@ namespace GameSvr.Player
                     {
                         if (ProcessMsg.BaseObject == ObjectId)
                         {
-                            if (M2Share.ObjectManager.Get(ProcessMsg.nParam3) != null)
+                            if (M2Share.ActorManager.Get(ProcessMsg.nParam3) != null)
                             {
-                                if (M2Share.ObjectManager.Get(ProcessMsg.nParam3).m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                if (M2Share.ActorManager.Get(ProcessMsg.nParam3).m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    SetPKFlag(M2Share.ObjectManager.Get(ProcessMsg.nParam3));
+                                    SetPKFlag(M2Share.ActorManager.Get(ProcessMsg.nParam3));
                                 }
-                                SetLastHiter(M2Share.ObjectManager.Get(ProcessMsg.nParam3));
+                                SetLastHiter(M2Share.ActorManager.Get(ProcessMsg.nParam3));
                             }
-                            if (M2Share.CastleManager.IsCastleMember(this) != null && M2Share.ObjectManager.Get(ProcessMsg.nParam3) != null)
+                            if (M2Share.CastleManager.IsCastleMember(this) != null && M2Share.ActorManager.Get(ProcessMsg.nParam3) != null)
                             {
-                                M2Share.ObjectManager.Get(ProcessMsg.nParam3).bo2B0 = true;
-                                M2Share.ObjectManager.Get(ProcessMsg.nParam3).m_dw2B4Tick = HUtil32.GetTickCount();
+                                M2Share.ActorManager.Get(ProcessMsg.nParam3).bo2B0 = true;
+                                M2Share.ActorManager.Get(ProcessMsg.nParam3).m_dw2B4Tick = HUtil32.GetTickCount();
                             }
                             m_nHealthTick = 0;
                             m_nSpellTick = 0;
@@ -1750,7 +1750,7 @@ namespace GameSvr.Player
                     SendSaveItemList(ProcessMsg.nParam1);
                     break;
                 case Grobal2.RM_SENDDELITEMLIST:
-                    var delItemList = (IList<TDeleteItem>)M2Share.ObjectManager.GetOhter(ProcessMsg.nParam1);
+                    var delItemList = (IList<TDeleteItem>)M2Share.ActorManager.GetOhter(ProcessMsg.nParam1);
                     SendDelItemList(delItemList);
                     break;
                 case Grobal2.RM_USERMAKEDRUGITEMLIST:
@@ -1784,11 +1784,11 @@ namespace GameSvr.Player
                     SendSocket(m_DefMsg);
                     break;
                 case Grobal2.RM_FLYAXE:
-                    if (M2Share.ObjectManager.Get(ProcessMsg.nParam3) != null)
+                    if (M2Share.ActorManager.Get(ProcessMsg.nParam3) != null)
                     {
                         var MessageBodyW = new TMessageBodyW();
-                        MessageBodyW.Param1 = (ushort)M2Share.ObjectManager.Get(ProcessMsg.nParam3).m_nCurrX;
-                        MessageBodyW.Param2 = (ushort)M2Share.ObjectManager.Get(ProcessMsg.nParam3).m_nCurrY;
+                        MessageBodyW.Param1 = (ushort)M2Share.ActorManager.Get(ProcessMsg.nParam3).m_nCurrX;
+                        MessageBodyW.Param2 = (ushort)M2Share.ActorManager.Get(ProcessMsg.nParam3).m_nCurrY;
                         MessageBodyW.Tag1 = HUtil32.LoWord(ProcessMsg.nParam3);
                         MessageBodyW.Tag2 = HUtil32.HiWord(ProcessMsg.nParam3);
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FLYAXE, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
@@ -1796,11 +1796,11 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.RM_LIGHTING:
-                    if (M2Share.ObjectManager.Get(ProcessMsg.nParam3) != null)
+                    if (M2Share.ActorManager.Get(ProcessMsg.nParam3) != null)
                     {
                         MessageBodyWL = new TMessageBodyWL();
-                        MessageBodyWL.lParam1 = M2Share.ObjectManager.Get(ProcessMsg.nParam3).m_nCurrX;
-                        MessageBodyWL.lParam2 = M2Share.ObjectManager.Get(ProcessMsg.nParam3).m_nCurrY;
+                        MessageBodyWL.lParam1 = M2Share.ActorManager.Get(ProcessMsg.nParam3).m_nCurrX;
+                        MessageBodyWL.lParam2 = M2Share.ActorManager.Get(ProcessMsg.nParam3).m_nCurrY;
                         MessageBodyWL.lTag1 = ProcessMsg.nParam3;
                         MessageBodyWL.lTag2 = ProcessMsg.wParam;
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LIGHTING, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, BaseObject.Direction);
@@ -1885,7 +1885,7 @@ namespace GameSvr.Player
                     SendAdjustBonus();
                     break;
                 case Grobal2.RM_10401:
-                    ChangeServerMakeSlave((TSlaveInfo)M2Share.ObjectManager.GetOhter(ProcessMsg.nParam1));
+                    ChangeServerMakeSlave((TSlaveInfo)M2Share.ActorManager.GetOhter(ProcessMsg.nParam1));
                     break;
                 case Grobal2.RM_OPENHEALTH:
                     SendDefMessage(Grobal2.SM_OPENHEALTH, ProcessMsg.BaseObject, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, 0, "");
@@ -1904,8 +1904,8 @@ namespace GameSvr.Player
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHANGEFACE, ProcessMsg.nParam1, HUtil32.LoWord(ProcessMsg.nParam2), HUtil32.HiWord(ProcessMsg.nParam2), 0);
                         CharDesc = new TCharDesc();
-                        CharDesc.Feature = M2Share.ObjectManager.Get(ProcessMsg.nParam2).GetFeature(this);
-                        CharDesc.Status = M2Share.ObjectManager.Get(ProcessMsg.nParam2).m_nCharStatus;
+                        CharDesc.Feature = M2Share.ActorManager.Get(ProcessMsg.nParam2).GetFeature(this);
+                        CharDesc.Status = M2Share.ActorManager.Get(ProcessMsg.nParam2).m_nCharStatus;
                         SendSocket(m_DefMsg, EDcode.EncodeBuffer(CharDesc));
                     }
                     break;
@@ -2092,7 +2092,7 @@ namespace GameSvr.Player
                 if (delList != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ObjectManager.AddOhter(ObjectId, delList);
+                    M2Share.ActorManager.AddOhter(ObjectId, delList);
                     this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }

@@ -45,7 +45,7 @@ namespace GameSvr
             }
             if ((HUtil32.GetTickCount() - _clearIntervalTime) > 60000)
             {
-                M2Share.ObjectManager.ClearObject();
+                M2Share.ActorManager.ClearObject();
                 _clearIntervalTime = HUtil32.GetTickCount();
             }
         }

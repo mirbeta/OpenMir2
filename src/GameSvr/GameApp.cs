@@ -1,4 +1,5 @@
-﻿using GameSvr.Castle;
+﻿using GameSvr.Actor;
+using GameSvr.Castle;
 using GameSvr.Command;
 using GameSvr.DataStores;
 using GameSvr.Event;
@@ -258,7 +259,7 @@ namespace GameSvr
             M2Share.g_Config.nWinLotteryLevel6 = 0;
             M2Share.LoadConfig();
             M2Share.DataServer = new DBService();
-            M2Share.ObjectManager = new ObjectManager();
+            M2Share.ActorManager = new ActorManager();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.GateManager = GameGateMgr.Instance;
             M2Share.g_FindPath = new FindPath();

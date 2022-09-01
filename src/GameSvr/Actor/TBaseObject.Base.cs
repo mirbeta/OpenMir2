@@ -1292,7 +1292,7 @@ namespace GameSvr.Actor
                 if (DropItemList != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ObjectManager.AddOhter(ObjectId, DropItemList);
+                    M2Share.ActorManager.AddOhter(ObjectId, DropItemList);
                     SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
@@ -1382,7 +1382,7 @@ namespace GameSvr.Actor
                             StruckDamage(nDamage);
                             HealthSpellChanged();
                             SendRefMsg(Grobal2.RM_STRUCK_MAG, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
-                            TargetBaseObject = M2Share.ObjectManager.Get(ProcessMsg.BaseObject);
+                            TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.BaseObject);
                             if (M2Share.g_Config.boMonDelHptoExp)
                             {
                                 if (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -1474,7 +1474,7 @@ namespace GameSvr.Actor
                         nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
                         nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
                         nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ObjectManager.Get(ProcessMsg.nParam3);
+                        TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam3);
                         if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(TargetBaseObject);
@@ -1496,14 +1496,14 @@ namespace GameSvr.Actor
                         nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
                         nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
                         nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ObjectManager.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
                         if (TargetBaseObject != null)
                         {
                             TargetBaseObject.CharPushed((byte)nPower, nRage);
                         }
                         break;
                     case Grobal2.RM_POISON:
-                        TargetBaseObject = M2Share.ObjectManager.Get(ProcessMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
+                        TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
                         if (TargetBaseObject != null)
                         {
                             if (IsProperTarget(TargetBaseObject))

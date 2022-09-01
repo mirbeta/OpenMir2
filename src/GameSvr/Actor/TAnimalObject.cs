@@ -118,7 +118,7 @@ namespace GameSvr.Actor
         {
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
             {
-                var struckObject = M2Share.ObjectManager.Get(ProcessMsg.nParam3);
+                var struckObject = M2Share.ActorManager.Get(ProcessMsg.nParam3);
                 if (ProcessMsg.BaseObject == this.ObjectId && struckObject != null)
                 {
                     this.SetLastHiter(struckObject);

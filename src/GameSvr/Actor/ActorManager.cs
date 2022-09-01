@@ -1,19 +1,18 @@
-﻿using GameSvr.Actor;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using SystemModule;
 
-namespace GameSvr.UsrSystem
+namespace GameSvr.Actor
 {
     /// <summary>
     /// 对象管理系统
     /// </summary>
-    public class ObjectManager
+    public class ActorManager
     {
         /// <summary>
         /// 精灵对象列表
         /// </summary>
-        private readonly ConcurrentDictionary<int, TBaseObject> _actors = new ConcurrentDictionary<int, TBaseObject>();
+        private readonly ConcurrentDictionary<int, TBaseObject> _actorsMap = new ConcurrentDictionary<int, TBaseObject>();
         /// <summary>
         /// 其他对象
         /// </summary>
@@ -21,7 +20,7 @@ namespace GameSvr.UsrSystem
 
         public void Add(int actorId, TBaseObject actor)
         {
-            _actors.TryAdd(actorId, actor);
+            _actorsMap.TryAdd(actorId, actor);
         }
 
         public void AddOhter(int objectId, object obj)
@@ -42,7 +41,7 @@ namespace GameSvr.UsrSystem
         public TBaseObject Get(int actorId)
         {
             TBaseObject actor = null;
-            if (_actors.TryGetValue(actorId, out actor))
+            if (_actorsMap.TryGetValue(actorId, out actor))
             {
                 return actor;
             }
@@ -52,7 +51,7 @@ namespace GameSvr.UsrSystem
         public void Remove(int actorId)
         {
             TBaseObject ghostactor = null;
-            _actors.TryRemove(actorId, out ghostactor);
+            _actorsMap.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
                 Debug.WriteLine($"清理死亡对象 名称:[{ghostactor.m_sCharName}] 地图:{ghostactor.m_sMapName} 坐标:{ghostactor.m_nCurrX}:{ghostactor.m_nCurrY}");
@@ -74,13 +73,13 @@ namespace GameSvr.UsrSystem
         /// </summary>
         public void ClearObject()
         {
-            var actorIds = _actors.Keys;
+            var actorIds = _actorsMap.Keys;
             TBaseObject actor = null;
             var playCount = 0;
             var monsterCount = 0;
             foreach (var actorId in actorIds)
             {
-                if (_actors.TryGetValue(actorId, out actor))
+                if (_actorsMap.TryGetValue(actorId, out actor))
                 {
                     if (actor.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {

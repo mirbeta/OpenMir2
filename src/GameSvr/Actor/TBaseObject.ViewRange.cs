@@ -156,7 +156,7 @@ namespace GameSvr.Actor
                                             cellInfo.Dispose();
                                             break;
                                         }
-                                        var baseObject = M2Share.ObjectManager.Get(osObject.CellObjId);
+                                        var baseObject = M2Share.ActorManager.Get(osObject.CellObjId);
                                         if (baseObject != null)
                                         {
                                             if (!baseObject.m_boDeath && !baseObject.m_boInvisible)

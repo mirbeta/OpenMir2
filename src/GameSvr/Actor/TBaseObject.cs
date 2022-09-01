@@ -807,7 +807,7 @@ namespace GameSvr.Actor
             m_boFastParalysis = false;
             m_boNastyMode = false;
             m_MagicArr = new TUserMagic[100];
-            M2Share.ObjectManager.Add(ObjectId, this);
+            M2Share.ActorManager.Add(ObjectId, this);
         }
 
         public void ChangePKStatus(bool boWarFlag)
@@ -3158,7 +3158,7 @@ namespace GameSvr.Actor
                                 OSObject = cellInfo.ObjList[i];
                                 if ((OSObject != null) && (OSObject.CellType == CellType.MovingObject))
                                 {
-                                    BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);
+                                    BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);
                                     if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
                                     {
                                         rList.Add(BaseObject);
@@ -3231,7 +3231,7 @@ namespace GameSvr.Actor
                                                 {
                                                     try
                                                     {
-                                                        BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);
+                                                        BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);
                                                         if ((BaseObject != null) && !BaseObject.m_boGhost)
                                                         {
                                                             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -5022,7 +5022,7 @@ namespace GameSvr.Actor
                             var OSObject = cellInfo.ObjList[k];
                             if ((OSObject != null) && (OSObject.CellType == CellType.MovingObject))
                             {
-                                var BaseObject = M2Share.ObjectManager.Get(OSObject.CellObjId);;
+                                var BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);;
                                 if ((BaseObject != null) && (!BaseObject.m_boGhost))
                                 {
                                     if (IsProperFriend(BaseObject))

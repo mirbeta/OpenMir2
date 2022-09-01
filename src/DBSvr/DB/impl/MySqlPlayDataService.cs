@@ -924,7 +924,7 @@ namespace DBSvr.DB.impl
                         command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].btValue[7]);
                         command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].btValue[8]);
                         command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].btValue[9]);
-                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[10]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[ItemAttr.WeaponUpgrade]);
                         command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].btValue[11]);
                         command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].btValue[12]);
                         command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].btValue[13]);
@@ -963,7 +963,7 @@ namespace DBSvr.DB.impl
                         command.Parameters.AddWithValue("@FLD_VALUE7", hd.HumItems[i].btValue[7]);
                         command.Parameters.AddWithValue("@FLD_VALUE8", hd.HumItems[i].btValue[8]);
                         command.Parameters.AddWithValue("@FLD_VALUE9", hd.HumItems[i].btValue[9]);
-                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.HumItems[i].btValue[10]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.HumItems[i].btValue[ItemAttr.WeaponUpgrade]);
                         command.Parameters.AddWithValue("@FLD_VALUE11", hd.HumItems[i].btValue[11]);
                         command.Parameters.AddWithValue("@FLD_VALUE12", hd.HumItems[i].btValue[12]);
                         command.Parameters.AddWithValue("@FLD_VALUE13", hd.HumItems[i].btValue[13]);
@@ -1040,7 +1040,7 @@ namespace DBSvr.DB.impl
                         command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].btValue[7]);
                         command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].btValue[8]);
                         command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].btValue[9]);
-                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[10]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[ItemAttr.WeaponUpgrade]);
                         command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].btValue[11]);
                         command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].btValue[12]);
                         command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].btValue[13]);

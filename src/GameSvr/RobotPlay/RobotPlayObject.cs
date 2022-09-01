@@ -796,7 +796,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(mapItem.UserItem.wIndex)))
                                         {
-                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ObjectId || (M2Share.ObjectManager.Get(mapItem.OfBaseObject).m_Master == this))
+                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ObjectId || (M2Share.ActorManager.Get(mapItem.OfBaseObject).m_Master == this))
                                             {
                                                 if (Math.Abs(VisibleMapItem.nX - m_nCurrX) <= 5 && Math.Abs(VisibleMapItem.nY - m_nCurrY) <= 5)
                                                 {
@@ -1331,7 +1331,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (ProcessMsg.BaseObject == this.ObjectId)
                     {
-                        AttackBaseObject = M2Share.ObjectManager.Get(ProcessMsg.nParam3);
+                        AttackBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
                         {
                             if (AttackBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)

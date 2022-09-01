@@ -565,7 +565,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                BaseObject = (TBaseObject)M2Share.ObjectManager.Get(OSObject.CellObjId);;
+                                                BaseObject = (TBaseObject)M2Share.ActorManager.Get(OSObject.CellObjId);;
                                                 if (BaseObject != null)
                                                 {
                                                     if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
@@ -611,14 +611,14 @@ namespace GameSvr.RobotPlay
                                                         {
                                                             if (MapItem.OfBaseObject > 0)
                                                             {
-                                                                if (M2Share.ObjectManager.Get(MapItem.OfBaseObject).m_boGhost)
+                                                                if (M2Share.ActorManager.Get(MapItem.OfBaseObject).m_boGhost)
                                                                 {
                                                                     MapItem.OfBaseObject = 0;
                                                                 }
                                                             }
                                                             if (MapItem.DropBaseObject >0)
                                                             {
-                                                                if (M2Share.ObjectManager.Get(MapItem.DropBaseObject).m_boGhost)
+                                                                if (M2Share.ActorManager.Get(MapItem.DropBaseObject).m_boGhost)
                                                                 {
                                                                     MapItem.DropBaseObject = 0;
                                                                 }
