@@ -19,7 +19,7 @@ namespace GameSvr.Actor
                 visibleBaseObject = m_VisibleActors[i];
                 if (visibleBaseObject.BaseObject == baseObject)
                 {
-                    visibleBaseObject.nVisibleFlag = 1;
+                    visibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
@@ -30,7 +30,7 @@ namespace GameSvr.Actor
             }
             visibleBaseObject = new TVisibleBaseObject
             {
-                nVisibleFlag = 2,
+                VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = baseObject
             };
             m_VisibleActors.Add(visibleBaseObject);
@@ -45,7 +45,7 @@ namespace GameSvr.Actor
                 visibleMapItem = m_VisibleItems[i];
                 if (visibleMapItem.MapItem == MapItem)
                 {
-                    visibleMapItem.nVisibleFlag = 1;
+                    visibleMapItem.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
@@ -56,7 +56,7 @@ namespace GameSvr.Actor
             }
             visibleMapItem = new VisibleMapItem
             {
-                nVisibleFlag = 2,
+                VisibleFlag = VisibleFlag.Hidden,
                 nX = wX,
                 nY = wY,
                 MapItem = MapItem,
@@ -74,7 +74,7 @@ namespace GameSvr.Actor
                 var mapEvent = m_VisibleEvents[i];
                 if (mapEvent == MapEvent)
                 {
-                    mapEvent.VisibleFlag = 1;
+                    mapEvent.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
@@ -83,7 +83,7 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            MapEvent.VisibleFlag = 2;
+            MapEvent.VisibleFlag = VisibleFlag.Hidden;
             MapEvent.m_nX = wX;
             MapEvent.m_nY = wY;
             m_VisibleEvents.Add(MapEvent);
@@ -115,17 +115,9 @@ namespace GameSvr.Actor
             }
             var n24 = 0;
             m_boIsVisibleActive = false;// 先置为FALSE
-            try
+            for (var i = 0; i < m_VisibleActors.Count; i++)
             {
-                for (var i = 0; i < m_VisibleActors.Count; i++)
-                {
-                    m_VisibleActors[i].nVisibleFlag = 0;
-                }
-            }
-            catch
-            {
-                M2Share.ErrorMessage(sExceptionMsg1);
-                KickException();
+                m_VisibleActors[i].VisibleFlag = 0;
             }
             var nStartX = (short)(m_nCurrX - m_nViewRange);
             var nEndX = (short)(m_nCurrX + m_nViewRange);
@@ -204,11 +196,11 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    var VisibleBaseObject = m_VisibleActors[n18];
-                    if (VisibleBaseObject.nVisibleFlag == 0)
+                    var visibleBaseObject = m_VisibleActors[n18];
+                    if (visibleBaseObject.VisibleFlag == 0)
                     {
                         m_VisibleActors.RemoveAt(n18);
-                        Dispose(VisibleBaseObject);
+                        Dispose(visibleBaseObject);
                         continue;
                     }
                     n18++;
@@ -230,7 +222,7 @@ namespace GameSvr.Actor
             m_boIsVisibleActive = false;
             for (var i = 0; i < m_VisibleActors.Count; i++)
             {
-                m_VisibleActors[i].nVisibleFlag = 0;
+                m_VisibleActors[i].VisibleFlag = 0;
             }
             var nStartX = (short)(m_nCurrX - m_nViewRange);
             var nEndX = (short)(m_nCurrX + m_nViewRange);
@@ -297,7 +289,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (m_VisibleActors[n17].nVisibleFlag == 0)
+                    if (m_VisibleActors[n17].VisibleFlag == 0)
                     {
                         m_VisibleActors.RemoveAt(n17);
                         continue;

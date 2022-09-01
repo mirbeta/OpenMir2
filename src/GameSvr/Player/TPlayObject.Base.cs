@@ -1231,7 +1231,7 @@ namespace GameSvr.Player
                 VisibleBaseObject = m_VisibleActors[i];
                 if (VisibleBaseObject.BaseObject == BaseObject)
                 {
-                    VisibleBaseObject.nVisibleFlag = 1;
+                    VisibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
@@ -1242,7 +1242,7 @@ namespace GameSvr.Player
             }
             VisibleBaseObject = new TVisibleBaseObject
             {
-                nVisibleFlag = 2,
+                VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = BaseObject
             };
             m_VisibleActors.Add(VisibleBaseObject);
@@ -1259,7 +1259,7 @@ namespace GameSvr.Player
             MirEvent MapEvent = null;
             for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
             {
-                m_VisibleItems[i].nVisibleFlag = 0;
+                m_VisibleItems[i].VisibleFlag = 0;
             }
             for (var i = m_VisibleEvents.Count - 1; i >= 0; i--)
             {
@@ -1267,7 +1267,7 @@ namespace GameSvr.Player
             }
             for (var i = m_VisibleActors.Count - 1; i >= 0; i--)
             {
-                m_VisibleActors[i].nVisibleFlag = 0;
+                m_VisibleActors[i].VisibleFlag = 0;
             }
             var nStartX = m_nCurrX - m_nViewRange;
             var nEndX = m_nCurrX + m_nViewRange;
@@ -1382,7 +1382,7 @@ namespace GameSvr.Player
                         break;
                     }
                     var VisibleBaseObject = m_VisibleActors[n18];
-                    if (VisibleBaseObject.nVisibleFlag == 0)
+                    if (VisibleBaseObject.VisibleFlag == 0)
                     {
                         if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
@@ -1396,7 +1396,7 @@ namespace GameSvr.Player
                         Dispose(VisibleBaseObject);
                         continue;
                     }
-                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT && VisibleBaseObject.nVisibleFlag == 2)
+                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT && VisibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
                     {
                         BaseObject = VisibleBaseObject.BaseObject;
                         if (BaseObject != this)
@@ -1429,14 +1429,14 @@ namespace GameSvr.Player
                         break;
                     }
                     var VisibleMapItem = m_VisibleItems[I];
-                    if (VisibleMapItem.nVisibleFlag == 0)
+                    if (VisibleMapItem.VisibleFlag == 0)
                     {
                         SendMsg(this, Grobal2.RM_ITEMHIDE, 0, VisibleMapItem.MapItem.ObjectId, VisibleMapItem.nX, VisibleMapItem.nY, "");
                         m_VisibleItems.RemoveAt(I);
                         Dispose(VisibleMapItem);
                         continue;
                     }
-                    if (VisibleMapItem.nVisibleFlag == 2)
+                    if (VisibleMapItem.VisibleFlag == VisibleFlag.Hidden)
                     {
                         SendMsg(this, Grobal2.RM_ITEMSHOW, VisibleMapItem.wLooks, VisibleMapItem.MapItem.ObjectId, VisibleMapItem.nX, VisibleMapItem.nY, VisibleMapItem.sName);
                     }
@@ -1450,13 +1450,13 @@ namespace GameSvr.Player
                         break;
                     }
                     MapEvent = m_VisibleEvents[I];
-                    if (MapEvent.VisibleFlag == 0)
+                    if (MapEvent.VisibleFlag == VisibleFlag.Visible)
                     {
                         SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
                         m_VisibleEvents.RemoveAt(I);
                         continue;
                     }
-                    if (MapEvent.VisibleFlag == 2)
+                    if (MapEvent.VisibleFlag == VisibleFlag.Hidden)
                     {
                         SendMsg(this, Grobal2.RM_SHOWEVENT, (short)MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
                     }

@@ -481,7 +481,7 @@ namespace GameSvr.RobotPlay
             MirEvent MapEvent;
             TVisibleBaseObject VisibleBaseObject;
             VisibleMapItem VisibleMapItem;
-            int nVisibleFlag;
+            VisibleFlag nVisibleFlag;
             const string sExceptionMsg1 = "TAIPlayObject::SearchViewRange Code:{0}";
             const string sExceptionMsg2 = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             try
@@ -494,7 +494,7 @@ namespace GameSvr.RobotPlay
                 {
                     for (var i = 0; i < m_VisibleItems.Count; i++)
                     {
-                        m_VisibleItems[i].nVisibleFlag = 0;
+                        m_VisibleItems[i].VisibleFlag = 0;
                     }
                 }
             }
@@ -665,7 +665,7 @@ namespace GameSvr.RobotPlay
                         try
                         {
                             VisibleBaseObject = m_VisibleActors[n18];
-                            nVisibleFlag = VisibleBaseObject.nVisibleFlag;
+                            nVisibleFlag = VisibleBaseObject.VisibleFlag;
                         }
                         catch
                         {
@@ -676,9 +676,9 @@ namespace GameSvr.RobotPlay
                             }
                             break;
                         }
-                        switch (VisibleBaseObject.nVisibleFlag)
+                        switch (VisibleBaseObject.VisibleFlag)
                         {
-                            case 0:
+                            case VisibleFlag.Visible:
                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject = VisibleBaseObject.BaseObject;
@@ -696,7 +696,7 @@ namespace GameSvr.RobotPlay
                                     Dispose(VisibleBaseObject);
                                 }
                                 continue;
-                            case 2:
+                            case VisibleFlag.Hidden:
                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject = VisibleBaseObject.BaseObject;
@@ -725,10 +725,10 @@ namespace GameSvr.RobotPlay
                                         }
                                     }
                                 }
-                                VisibleBaseObject.nVisibleFlag = 0;
+                                VisibleBaseObject.VisibleFlag = 0;
                                 break;
-                            case 1:
-                                VisibleBaseObject.nVisibleFlag = 0;
+                            case VisibleFlag.Invisible:
+                                VisibleBaseObject.VisibleFlag = 0;
                                 break;
                         }
                     }
@@ -758,7 +758,7 @@ namespace GameSvr.RobotPlay
                         try
                         {
                             VisibleMapItem = m_VisibleItems[position];
-                            nVisibleFlag = VisibleMapItem.nVisibleFlag;
+                            nVisibleFlag = VisibleMapItem.VisibleFlag;
                         }
                         catch
                         {
@@ -769,7 +769,7 @@ namespace GameSvr.RobotPlay
                             }
                             break;
                         }
-                        if (VisibleMapItem.nVisibleFlag == 0)
+                        if (VisibleMapItem.VisibleFlag == 0)
                         {
                             m_VisibleItems.RemoveAt(position);
                             VisibleMapItem = null;
@@ -813,7 +813,7 @@ namespace GameSvr.RobotPlay
                         {
                             switch (MapEvent.VisibleFlag)
                             {
-                                case 0:
+                                case VisibleFlag.Visible:
                                     SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
                                     m_VisibleEvents.RemoveAt(position);
                                     if (m_VisibleEvents.Count > 0)
@@ -821,10 +821,10 @@ namespace GameSvr.RobotPlay
                                         continue;
                                     }
                                     break;
-                                case 1:
+                                case VisibleFlag.Invisible:
                                     MapEvent.VisibleFlag = 0;
                                     break;
-                                case 2:
+                                case VisibleFlag.Hidden:
                                     SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
                                     MapEvent.VisibleFlag = 0;
                                     break;

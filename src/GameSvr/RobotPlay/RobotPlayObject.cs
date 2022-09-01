@@ -627,11 +627,11 @@ namespace GameSvr.RobotPlay
             for (var i = 0; i < m_VisibleItems.Count; i++)
             {
                 VisibleMapItem = m_VisibleItems[i];
-                if (VisibleMapItem != null && VisibleMapItem.nVisibleFlag > 0)
+                if (VisibleMapItem != null && VisibleMapItem.VisibleFlag > 0)
                 {
                     if (VisibleMapItem.MapItem == MapItem)
                     {
-                        VisibleMapItem.nVisibleFlag = 0;
+                        VisibleMapItem.VisibleFlag = 0;
                         break;
                     }
                 }
@@ -743,7 +743,7 @@ namespace GameSvr.RobotPlay
                         for (var i = 0; i < m_VisibleItems.Count; i++)
                         {
                             VisibleMapItem = m_VisibleItems[i];
-                            if (VisibleMapItem != null && VisibleMapItem.nVisibleFlag > 0)
+                            if (VisibleMapItem != null && VisibleMapItem.VisibleFlag > 0)
                             {
                                 if (VisibleMapItem.MapItem == m_SelMapItem)
                                 {
@@ -774,7 +774,7 @@ namespace GameSvr.RobotPlay
                         for (var i = 0; i < m_VisibleItems.Count; i++)
                         {
                             VisibleMapItem = m_VisibleItems[i];
-                            if (VisibleMapItem != null && VisibleMapItem.nVisibleFlag > 0)
+                            if (VisibleMapItem != null && VisibleMapItem.VisibleFlag > 0)
                             {
                                 if (VisibleMapItem.MapItem == m_SelMapItem)
                                 {
@@ -792,7 +792,7 @@ namespace GameSvr.RobotPlay
                             VisibleMapItem = m_VisibleItems[i];
                             if (VisibleMapItem != null)
                             {
-                                if (VisibleMapItem.nVisibleFlag > 0)
+                                if (VisibleMapItem.VisibleFlag > 0)
                                 {
                                     MapItem MapItem = VisibleMapItem.MapItem;
                                     if (MapItem != null)

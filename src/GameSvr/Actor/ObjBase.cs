@@ -23,7 +23,23 @@ namespace GameSvr.Actor
     public class TVisibleBaseObject
     {
         public TBaseObject BaseObject;
-        public int nVisibleFlag;
+        public VisibleFlag VisibleFlag;
+    }
+
+    public enum VisibleFlag : byte
+    {
+        /// <summary>
+        /// 可见
+        /// </summary>
+        Visible = 0,
+        /// <summary>
+        /// 不可见
+        /// </summary>
+        Invisible = 1,
+        /// <summary>
+        /// 隐藏
+        /// </summary>
+        Hidden = 2
     }
 
     public enum PlayGender : byte
