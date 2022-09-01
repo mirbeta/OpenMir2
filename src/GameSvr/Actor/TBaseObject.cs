@@ -3180,9 +3180,6 @@ namespace GameSvr.Actor
 
         public void SendRefMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
-            MapCellInfo cellInfo;
-            CellObject OSObject;
-            TBaseObject BaseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (m_PEnvir == null)
             {
@@ -3197,6 +3194,7 @@ namespace GameSvr.Actor
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
+                TBaseObject BaseObject;
                 if (((HUtil32.GetTickCount() - m_SendRefMsgTick) >= 500) || (m_VisibleHumanList.Count == 0))
                 {
                     m_SendRefMsgTick = HUtil32.GetTickCount();
@@ -3210,14 +3208,14 @@ namespace GameSvr.Actor
                         for (var nCY = nLY; nCY <= nHY; nCY++)
                         {
                             var cellsuccess = false;
-                            cellInfo = m_PEnvir.GetCellInfo(nCX, nCY, ref cellsuccess);
+                            var cellInfo = m_PEnvir.GetCellInfo(nCX, nCY, ref cellsuccess);
                             if (cellsuccess)
                             {
                                 if (cellInfo.ObjList != null)
                                 {
                                     for (var i = 0; i < cellInfo.Count; i++)
                                     {
-                                        OSObject = cellInfo.ObjList[i];
+                                        var OSObject = cellInfo.ObjList[i];
                                         if (OSObject != null)
                                         {
                                             if (OSObject.CellType == CellType.MovingObject)

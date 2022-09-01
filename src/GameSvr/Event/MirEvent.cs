@@ -10,7 +10,7 @@ namespace GameSvr.Event
         /// 事件唯一ID
         /// </summary>
         public readonly int Id;
-        public int VisibleFlag = 0;
+        public VisibleFlag VisibleFlag = 0;
         public Envirnoment m_Envir = null;
         public int m_nX = 0;
         public int m_nY = 0;

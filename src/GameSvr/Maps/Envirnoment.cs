@@ -3,6 +3,7 @@ using GameSvr.Castle;
 using GameSvr.Event;
 using GameSvr.Event.Events;
 using GameSvr.Npc;
+using System.Buffers;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -25,7 +26,8 @@ namespace GameSvr.Maps
         public string MapFileName = string.Empty;
         public string MapName = string.Empty;
         public string MapDesc = string.Empty;
-        private MapCellInfo[] _cellArray;
+        private Memory<MapCellInfo> _cellArray;
+        private MemoryPool<MapCellInfo> _cellPool;
         public int NMinMap = 0;
         public int NServerIndex = 0;
         /// <summary>
@@ -59,6 +61,7 @@ namespace GameSvr.Maps
             DoorList = new List<TDoorInfo>();
             QuestList = new List<TMapQuestInfo>();
             _whisperTick = 0;
+            _cellPool = MemoryPool<MapCellInfo>.Shared;
         }
 
         ~Envirnoment()
@@ -176,7 +179,7 @@ namespace GameSvr.Maps
             bool result;
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                cellInfo = _cellArray[nX * Height + nY];
+                cellInfo = _cellArray.Span[nX * Height + nY];
                 result = true;
             }
             else
@@ -190,7 +193,7 @@ namespace GameSvr.Maps
         {
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                MapCellInfo cellInfo = _cellArray[nX * Height + nY];
+                MapCellInfo cellInfo = _cellArray.Span[nX * Height + nY];
                 if (cellInfo == null)
                 {
                     success = false;
@@ -658,7 +661,7 @@ namespace GameSvr.Maps
             {
                 MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
                 var bo1A = false;
-                if (cellsuccess && cellInfo.Attribute != 0)
+                if (cellsuccess && cellInfo.Attribute != CellAttribute.Walk)
                 {
                     var isSpace = false;// 人物可以走到的地方才放上矿藏
                     for (var x = nX - 1; x <= nX + 1; x++)
@@ -784,16 +787,16 @@ namespace GameSvr.Maps
                             // wBkImg High
                             if ((buffer[buffIndex + 1] & 0x80) != 0)
                             {
-                                _cellArray[n24 + nH] = MapCellInfoConst.HighWall;
+                                _cellArray.Span[n24 + nH] = MapCellInfoConst.HighWall;
                             }
                             // wFrImg High
                             if ((buffer[buffIndex + 5] & 0x80) != 0)
                             {
-                                _cellArray[n24 + nH] = MapCellInfoConst.LowWall;
+                                _cellArray.Span[n24 + nH] = MapCellInfoConst.LowWall;
                             }
-                            if (_cellArray[n24 + nH] == null)
+                            if (_cellArray.Span[n24 + nH] == null)
                             {
-                                _cellArray[n24 + nH] = new MapCellInfo();
+                                _cellArray.Span[n24 + nH] = new MapCellInfo();
                             }
                             // btDoorIndex
                             if ((buffer[buffIndex + 6] & 0x80) != 0)
@@ -884,15 +887,15 @@ namespace GameSvr.Maps
         {
             if (nWidth > 1 && nHeight > 1)
             {
-                if (_cellArray != null)
+                if (!_cellArray.IsEmpty)
                 {
                     for (var nW = 0; nW < Width; nW++)
                     {
                         for (var nH = 0; nH < Height; nH++)
                         {
-                            if (_cellArray[nW * Height + nH].ObjList != null)
+                            if (_cellArray.Span[nW * Height + nH].ObjList != null)
                             {
-                                _cellArray[nW * Height + nH].Dispose();
+                                _cellArray.Span[nW * Height + nH].Dispose();
                             }
                         }
                     }
@@ -900,7 +903,8 @@ namespace GameSvr.Maps
                 }
                 Width = nWidth;
                 Height = nHeight;
-                _cellArray = new MapCellInfo[nWidth * nHeight];
+                //_cellArray = new MapCellInfo[nWidth * nHeight];
+                _cellArray = _cellPool.Rent(nWidth * nHeight).Memory;
             }
         }
 

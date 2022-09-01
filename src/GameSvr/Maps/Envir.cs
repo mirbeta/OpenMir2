@@ -1,3 +1,5 @@
+using GameSvr.Actor;
+
 namespace GameSvr.Maps
 {
     public class MapCellInfoConst
@@ -23,7 +25,7 @@ namespace GameSvr.Maps
         public MapItem MapItem;
         public string sName;
         public ushort wLooks;
-        public int nVisibleFlag;
+        public VisibleFlag VisibleFlag;
     }
 
     /// <summary>
