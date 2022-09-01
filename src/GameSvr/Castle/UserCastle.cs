@@ -251,9 +251,9 @@ namespace GameSvr.Castle
                         else
                             M2Share.ErrorMessage("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
                     }
-                    for (var i = 0; i < m_MapCastle.MDoorList.Count; i++)
+                    for (var i = 0; i < m_MapCastle.DoorList.Count; i++)
                     {
-                        Door = m_MapCastle.MDoorList[i];
+                        Door = m_MapCastle.DoorList[i];
                         if (Math.Abs(Door.nX - m_nPalaceDoorX) <= 3 && Math.Abs(Door.nY - m_nPalaceDoorY) <= 3)
                         {
                             m_DoorStatus = Door.Status;
@@ -458,7 +458,7 @@ namespace GameSvr.Castle
                 Math.Abs(m_nHomeY - nY) < m_nWarRangeY) return true;
             if (envir == m_MapPalace || envir == m_MapSecret) return true;
             for (var i = 0; i < m_EnvirList.Count; i++) // 增加取得城堡所有地图列表
-                if (m_EnvirList[i] == envir.SMapName)
+                if (m_EnvirList[i] == envir.MapName)
                     return true;
             return false;
         }

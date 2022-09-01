@@ -2122,7 +2122,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$MAP":
-                    sValue = PlayObject.m_PEnvir.SMapName;
+                    sValue = PlayObject.m_PEnvir.MapName;
                     nDataType = 0;
                     result = true;
                     return result;

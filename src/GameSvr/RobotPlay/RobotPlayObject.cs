@@ -650,7 +650,7 @@ namespace GameSvr.RobotPlay
             }
             if (string.Compare(MapItem.Name, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (m_PEnvir.DeleteFromMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem) == 1)
+                if (m_PEnvir.DeleteFromMap(nX, nY, CellType.ItemObject, MapItem) == 1)
                 {
                     if (this.IncGold(MapItem.Count))
                     {
@@ -662,12 +662,12 @@ namespace GameSvr.RobotPlay
                     }
                     else
                     {
-                        m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
+                        m_PEnvir.AddToMap(nX, nY, CellType.ItemObject, MapItem);
                     }
                 }
                 else
                 {
-                    m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
+                    m_PEnvir.AddToMap(nX, nY, CellType.ItemObject, MapItem);
                 }
             }
             else
@@ -676,7 +676,7 @@ namespace GameSvr.RobotPlay
                 StdItem = M2Share.UserEngine.GetStdItem(MapItem.UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    if (m_PEnvir.DeleteFromMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem) == 1)
+                    if (m_PEnvir.DeleteFromMap(nX, nY, CellType.ItemObject, MapItem) == 1)
                     {
                         UserItem = new TUserItem();
                         UserItem = MapItem.UserItem;
@@ -701,19 +701,19 @@ namespace GameSvr.RobotPlay
                             else
                             {
                                 Dispose(UserItem);
-                                m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
+                                m_PEnvir.AddToMap(nX, nY, CellType.ItemObject, MapItem);
                             }
                         }
                         else
                         {
                             Dispose(UserItem);
-                            m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
+                            m_PEnvir.AddToMap(nX, nY, CellType.ItemObject, MapItem);
                         }
                     }
                     else
                     {
                         Dispose(UserItem);
-                        m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
+                        m_PEnvir.AddToMap(nX, nY, CellType.ItemObject, MapItem);
                     }
                 }
             }
@@ -1483,7 +1483,7 @@ namespace GameSvr.RobotPlay
                 DelTargetCreat();
                 m_nTargetX = nX;
                 m_nTargetY = nY;
-                SpaceMove(m_Master.m_PEnvir.SMapName, m_nTargetX, m_nTargetY, 1);
+                SpaceMove(m_Master.m_PEnvir.MapName, m_nTargetX, m_nTargetY, 1);
                 return true;
             }
             m_Master.GetBackPosition(ref nCurrX, ref nCurrY);
@@ -2551,7 +2551,7 @@ namespace GameSvr.RobotPlay
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        if (m_nCurrX < m_PEnvir.WWidth - 2 &&
+                        if (m_nCurrX < m_PEnvir.Width - 2 &&
                           m_nCurrY > 1 &&
                           (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
                         (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
@@ -2562,7 +2562,7 @@ namespace GameSvr.RobotPlay
                         }
                         break;
                     case Grobal2.DR_RIGHT:
-                        if (m_nCurrX < m_PEnvir.WWidth - 2 &&
+                        if (m_nCurrX < m_PEnvir.Width - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY, true) > 0)
@@ -2571,8 +2571,8 @@ namespace GameSvr.RobotPlay
                         }
                         break;
                     case Grobal2.DR_DOWNRIGHT:
-                        if (m_nCurrX < m_PEnvir.WWidth - 2 &&
-  m_nCurrY < m_PEnvir.WHeight - 2 &&
+                        if (m_nCurrX < m_PEnvir.Width - 2 &&
+  m_nCurrY < m_PEnvir.Height - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY + 2, true) > 0)
@@ -2582,7 +2582,7 @@ namespace GameSvr.RobotPlay
                         }
                         break;
                     case Grobal2.DR_DOWN:
-                        if (m_nCurrY < m_PEnvir.WHeight - 2 &&
+                        if (m_nCurrY < m_PEnvir.Height - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 2, true) > 0)
@@ -2592,7 +2592,7 @@ namespace GameSvr.RobotPlay
                         break;
                     case Grobal2.DR_DOWNLEFT:
                         if (m_nCurrX > 1 &&
-  m_nCurrY < m_PEnvir.WHeight - 2 &&
+  m_nCurrY < m_PEnvir.Height - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY + 2, true) > 0)

@@ -833,7 +833,7 @@ namespace GameSvr.Configs
             M2Share.g_Config.nStartPermission = ReadInteger("Setup", "StartPermission", M2Share.g_Config.nStartPermission);
             if (ReadInteger("Setup", "SendRefMsgRange", -1) < 0)
                 WriteInteger("Setup", "SendRefMsgRange", M2Share.g_Config.nSendRefMsgRange);
-            M2Share.g_Config.nSendRefMsgRange = ReadInteger("Setup", "SendRefMsgRange", M2Share.g_Config.nSendRefMsgRange);
+            M2Share.g_Config.nSendRefMsgRange = (byte)ReadInteger("Setup", "SendRefMsgRange", M2Share.g_Config.nSendRefMsgRange);
             if (ReadInteger("Setup", "DecLampDura", -1) < 0)
                 WriteBool("Setup", "DecLampDura", M2Share.g_Config.boDecLampDura);
             M2Share.g_Config.boDecLampDura = ReadBool("Setup", "DecLampDura", M2Share.g_Config.boDecLampDura);

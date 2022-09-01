@@ -209,9 +209,9 @@ namespace GameSvr
             for (var i = 0; i < mineMapList.Count; i++)
             {
                 Envir = mineMapList[i];
-                for (var nW = 0; nW < Envir.WWidth; nW++)
+                for (var nW = 0; nW < Envir.Width; nW++)
                 {
-                    for (var nH = 0; nH < Envir.WHeight; nH++)
+                    for (var nH = 0; nH < Envir.Height; nH++)
                     {
                         var mine = new StoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)

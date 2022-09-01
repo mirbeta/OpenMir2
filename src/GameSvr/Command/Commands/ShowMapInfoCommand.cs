@@ -9,8 +9,8 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ShowMapInfo(TPlayObject PlayObject)
         {
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapInfoMsg, PlayObject.m_PEnvir.SMapName, PlayObject.m_PEnvir.SMapDesc), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapInfoSizeMsg, PlayObject.m_PEnvir.WWidth, PlayObject.m_PEnvir.WHeight), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapInfoMsg, PlayObject.m_PEnvir.MapName, PlayObject.m_PEnvir.MapDesc), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapInfoSizeMsg, PlayObject.m_PEnvir.Width, PlayObject.m_PEnvir.Height), MsgColor.Green, MsgType.Hint);
         }
     }
 }

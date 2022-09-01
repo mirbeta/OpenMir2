@@ -707,12 +707,12 @@ namespace GameSvr.Player
                 {
                     if (GetRangeHumanCount() >= 80)
                     {
-                        MapRandomMove(m_PEnvir.SMapName, 0);
+                        MapRandomMove(m_PEnvir.MapName, 0);
                     }
                 }
                 if (m_boDieInFight3Zone)
                 {
-                    MapRandomMove(m_PEnvir.SMapName, 0);
+                    MapRandomMove(m_PEnvir.MapName, 0);
                 }
                 if (M2Share.UserEngine.GetHumPermission(m_sCharName, ref sIPaddr, ref m_btPermission))
                 {
@@ -1254,7 +1254,7 @@ namespace GameSvr.Player
 
         public override void SearchViewRange()
         {
-            MapCellinfo MapCellInfo;
+            MapCellInfo cellInfo;
             TBaseObject BaseObject = null;
             MirEvent MapEvent = null;
             for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
@@ -1279,30 +1279,30 @@ namespace GameSvr.Player
                 {
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        var mapCell = false;
-                        MapCellInfo = m_PEnvir.GetMapCellInfo(n20, n1C, ref mapCell);
-                        if (mapCell && MapCellInfo.ObjList != null)
+                        var cellsuccess = false;
+                        cellInfo = m_PEnvir.GetCellInfo(n20, n1C, ref cellsuccess);
+                        if (cellsuccess && cellInfo.ObjList != null)
                         {
                             var nIdx = 0;
                             while (true)
                             {
-                                if (MapCellInfo.Count <= nIdx)
+                                if (cellInfo.Count <= nIdx)
                                 {
                                     break;
                                 }
-                                var OSObject =  MapCellInfo.ObjList[nIdx];
+                                var OSObject =  cellInfo.ObjList[nIdx];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
+                                    if (OSObject.CellType == CellType.MovingObject)
                                     {
-                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
+                                        if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
                                         {
-                                            MapCellInfo.Remove(OSObject);
-                                            if (MapCellInfo.Count > 0)
+                                            cellInfo.Remove(OSObject);
+                                            if (cellInfo.Count > 0)
                                             {
                                                 continue;
                                             }
-                                            MapCellInfo.Dispose();
+                                            cellInfo.Dispose();
                                             break;
                                         }
                                         BaseObject = (TBaseObject)M2Share.ObjectManager.Get(OSObject.CellObjId);
@@ -1319,16 +1319,16 @@ namespace GameSvr.Player
                                     }
                                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                     {
-                                        if (OSObject.CellType == CellType.OS_ITEMOBJECT)
+                                        if (OSObject.CellType == CellType.ItemObject)
                                         {
-                                            if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
+                                            if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
-                                                MapCellInfo.Remove(OSObject);
-                                                if (MapCellInfo.Count > 0)
+                                                cellInfo.Remove(OSObject);
+                                                if (cellInfo.Count > 0)
                                                 {
                                                     continue;
                                                 }
-                                                MapCellInfo.Dispose();
+                                                cellInfo.Dispose();
                                                 break;
                                             }
                                             var MapItem = (MapItem)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
@@ -1359,7 +1359,7 @@ namespace GameSvr.Player
                                                 }
                                             }
                                         }
-                                        if (OSObject.CellType == CellType.OS_EVENTOBJECT)
+                                        if (OSObject.CellType == CellType.EventObject)
                                         {
                                             MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
                                             if (MapEvent.Visible)
@@ -1604,7 +1604,7 @@ namespace GameSvr.Player
                     {
                         sSayMsg = M2Share.g_sManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
                         sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                        sSayMsg = sSayMsg.Replace("%m", m_PEnvir.SMapDesc);
+                        sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
                         m_DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
@@ -1613,7 +1613,7 @@ namespace GameSvr.Player
                     {
                         sSayMsg = M2Share.g_sWoManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
                         sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                        sSayMsg = sSayMsg.Replace("%m", m_PEnvir.SMapDesc);
+                        sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
                         m_DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
@@ -1629,7 +1629,7 @@ namespace GameSvr.Player
                         {
                             Human = m_MasterList[i];
                             sSayMsg = M2Share.g_sMasterLongOutMasterListOnlineMsg.Replace("%s", m_sCharName);
-                            sSayMsg = sSayMsg.Replace("%m", m_PEnvir.SMapDesc);
+                            sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
                             sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                             sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
                             Human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
@@ -1644,7 +1644,7 @@ namespace GameSvr.Player
                         }
                         sSayMsg = M2Share.g_sMasterListLongOutMasterOnlineMsg.Replace("%d", m_sMasterName);
                         sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                        sSayMsg = sSayMsg.Replace("%m", m_PEnvir.SMapDesc);
+                        sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
                         m_MasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);

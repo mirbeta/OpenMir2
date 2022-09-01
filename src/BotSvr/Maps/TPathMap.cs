@@ -13,7 +13,7 @@ namespace BotSvr.Maps
         public TCellParams[,] m_MapData;
         public TMapInfo[] m_MapBuf;
         protected int m_nPathWidth = 0;
-        protected TPathMapCell[,] m_PathMapArray;
+        protected TPathcellsuccess[,] m_PathMapArray;
 
         public TPathMap() : base()
         {
@@ -152,7 +152,7 @@ namespace BotSvr.Maps
             //NewWave.Clear();
         }
 
-        protected TPathMapCell[,] FillPathMap(int X1, int Y1, int X2, int Y2)
+        protected TPathcellsuccess[,] FillPathMap(int X1, int Y1, int X2, int Y2)
         {
             TWaveCell i;
             var Finished = (X1 == X2) && (Y1 == Y2);
@@ -160,7 +160,7 @@ namespace BotSvr.Maps
             {
                 return null;
             }
-            var result = new TPathMapCell[m_MapHeader.wHeight, m_MapHeader.wWidth];
+            var result = new TPathcellsuccess[m_MapHeader.wHeight, m_MapHeader.wWidth];
             for (var Y = 0; Y < (m_MapHeader.wHeight - 1); Y++)
             {
                 for (var X = 0; X < (m_MapHeader.wWidth - 1); X++)

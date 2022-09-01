@@ -24,7 +24,7 @@ namespace GameSvr.Monster
         protected TBaseObject MakeClone(string sMonName, TBaseObject OldMon)
         {
             TBaseObject result = null;
-            var ElfMon = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.SMapName, m_nCurrX, m_nCurrY, sMonName);
+            var ElfMon = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.MapName, m_nCurrX, m_nCurrY, sMonName);
             if (ElfMon != null)
             {
                 ElfMon.m_Master = OldMon.m_Master;
@@ -186,7 +186,7 @@ namespace GameSvr.Monster
                             }
                             if (!m_Master.m_boSlaveRelax && (m_PEnvir != m_Master.m_PEnvir || Math.Abs(m_nCurrX - m_Master.m_nCurrX) > 20 || Math.Abs(m_nCurrY - m_Master.m_nCurrY) > 20))
                             {
-                                SpaceMove(m_Master.m_PEnvir.SMapName, m_nTargetX, m_nTargetY, 1);
+                                SpaceMove(m_Master.m_PEnvir.MapName, m_nTargetX, m_nTargetY, 1);
                             }
                         }
                     }

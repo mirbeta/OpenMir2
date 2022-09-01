@@ -36,7 +36,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.SMapDesc), MsgColor.Red, MsgType.Hint);//不允许传送
+                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.MapDesc), MsgColor.Red, MsgType.Hint);//不允许传送
             }
         }
     }

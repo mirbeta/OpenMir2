@@ -52,7 +52,7 @@ namespace GameSvr.Command.Commands
                     Envir = M2Share.MapManager.Maps[i];
                     if (Envir != null)
                     {
-                        if (boKillAllMap || string.Compare(Envir.SMapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (boKillAllMap || string.Compare(Envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             M2Share.UserEngine.GetMapMonster(Envir, MonList);
                             if (MonList.Count > 0)

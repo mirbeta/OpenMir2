@@ -15,7 +15,7 @@ namespace GameSvr.Event.Events
             AddToMap = true;
             if (nType is 55 or 56 or 57)
             {
-                if (m_Envir.AddToMapItemEvent(nX, nY, CellType.OS_EVENTOBJECT, this) == null)
+                if (m_Envir.AddToMapItemEvent(nX, nY, CellType.EventObject, this) == null)
                 {
                     AddToMap = false;
                 }
@@ -30,7 +30,7 @@ namespace GameSvr.Event.Events
             }
             else
             {
-                if (m_Envir.AddToMapMineEvent(nX, nY, CellType.OS_EVENTOBJECT, this) == null)
+                if (m_Envir.AddToMapMineEvent(nX, nY, CellType.EventObject, this) == null)
                 {
                     AddToMap = false;
                 }

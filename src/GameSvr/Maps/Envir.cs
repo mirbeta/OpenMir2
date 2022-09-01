@@ -1,8 +1,18 @@
-using System.Collections.Concurrent;
-using SystemModule;
-
 namespace GameSvr.Maps
 {
+    public class MapCellInfoConst
+    {
+        public static MapCellInfo LowWall = new MapCellInfo
+        {
+            Attribute = CellAttribute.LowWall
+        };
+
+        public static MapCellInfo HighWall = new MapCellInfo
+        {
+            Attribute = CellAttribute.HighWall
+        };
+    }
+
     /// <summary>
     /// 可见的地图物品
     /// </summary>
@@ -21,21 +31,33 @@ namespace GameSvr.Maps
     /// </summary>
     public class CellObject
     {
-        public CellType CellType;
+        /// <summary>
+        /// 唯一ID
+        /// </summary>
         public int CellObjId;
-        public int dwAddTime;
-        public bool boObjectDisPose;
+        /// <summary>
+        /// Cell类型
+        /// </summary>
+        public CellType CellType;
+        /// <summary>
+        /// 添加时间
+        /// </summary>
+        public int AddTime;
+        /// <summary>
+        /// 对象释放已释放
+        /// </summary>
+        public bool ObjectDispose;
     }
 
     public enum CellType : byte
     {
-        OS_EVENTOBJECT = 1,
-        OS_MOVINGOBJECT = 2,
-        OS_ITEMOBJECT = 3,
-        OS_GATEOBJECT = 4,
-        OS_MAPEVENT = 5,
-        OS_DOOR = 6,
-        OS_ROON = 7
+        EventObject = 1,
+        MovingObject = 2,
+        ItemObject = 3,
+        GateObject = 4,
+        MapEvent = 5,
+        Door = 6,
+        Roon = 7
     }
 
     public enum CellAttribute : byte
@@ -46,57 +68,6 @@ namespace GameSvr.Maps
         Walk = 0,
         HighWall = 1,
         LowWall = 2
-    }
-
-    public class MapCellinfo
-    {
-        public static MapCellinfo LowWall => new MapCellinfo
-        {
-            Attribute = CellAttribute.LowWall
-        };
-
-        public static MapCellinfo HighWall => new MapCellinfo
-        {
-            Attribute = CellAttribute.HighWall
-        };
-
-        public bool Valid => Attribute == CellAttribute.Walk;
-
-        public CellAttribute Attribute;
-
-        /// <summary>
-        /// 对象数量
-        /// </summary>
-        public int Count => ObjList?.Count ?? 0;
-
-        public List<CellObject> ObjList;
-
-        public void Add(CellObject cell, EntityId entityId)
-        {
-            ObjList.Add(cell);
-            M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);
-        }
-
-        public void Remove(CellObject cell)
-        {
-            if (ObjList != null)
-            {
-                ObjList.Remove(cell);
-                M2Share.CellObjectSystem.Remove(cell.CellObjId);
-                cell = null;
-            }
-        }
-
-        public void Dispose()
-        {
-            ObjList.Clear();
-        }
-
-        public MapCellinfo()
-        {
-            ObjList = new List<CellObject>();
-            Attribute = CellAttribute.Walk;
-        }
     }
 
     public class PointInfo

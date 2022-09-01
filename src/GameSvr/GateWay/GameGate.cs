@@ -215,7 +215,6 @@ namespace GameSvr.GateWay
                             GateInfo.nSendBytesCount += nSendBuffLen;
                             GateInfo.nSendBlockCount += nSendBuffLen;
                         }
-                        nSendBuffLen = 0;
                         break;
                     }
                 }

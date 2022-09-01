@@ -11,6 +11,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+		<Description>网络游戏数据处理引擎</Description>
 	</PropertyGroup>
 	<Choose>
 		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">

@@ -38,7 +38,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             IList<TBaseObject> HumanList = new List<TBaseObject>();
-            M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.WWidth / 2, SrcEnvir.WHeight / 2, 1000, HumanList);
+            M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.Width / 2, SrcEnvir.Height / 2, 1000, HumanList);
             for (var i = 0; i < HumanList.Count; i++)
             {
                 MoveHuman = (TPlayObject)HumanList[i];

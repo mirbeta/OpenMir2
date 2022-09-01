@@ -13,7 +13,7 @@ namespace GameSvr.Services
         private readonly IList<TGoldChangeInfo> m_ChangeGoldList = null;
         private IList<TLoadDBInfo> m_LoadRcdTempList = null;
         private readonly IList<TSaveRcd> m_SaveRcdTempList = null;
-        private readonly Thread _frontEngine;
+        private Timer _frontEngineThread;
 
         public TFrontEngine()
         {
@@ -23,33 +23,25 @@ namespace GameSvr.Services
             m_ChangeGoldList = new List<TGoldChangeInfo>();
             m_LoadRcdTempList = new List<TLoadDBInfo>();
             m_SaveRcdTempList = new List<TSaveRcd>();
-            _frontEngine = new Thread(Execute)
-            {
-                IsBackground = true
-            };
         }
 
         public void Start()
         {
-            _frontEngine.Start();
+            _frontEngineThread = new Timer(Execute, null, 1000, 200);
         }
 
-        private void Execute()
+        private void Execute(object  obj)
         {
             const string sExceptionMsg = "[Exception] TFrontEngine::Execute";
-            while (true)
+            try
             {
-                try
-                {
-                    ProcessGameDate();
-                    GetGameTime();
-                }
-                catch (Exception ex)
-                {
-                    M2Share.ErrorMessage(sExceptionMsg);
-                    M2Share.ErrorMessage(ex.StackTrace);
-                }
-                Thread.Sleep(200);
+                ProcessGameDate();
+                GetGameTime();
+            }
+            catch (Exception ex)
+            {
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(ex.StackTrace);
             }
         }
 

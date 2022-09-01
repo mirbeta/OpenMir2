@@ -18,7 +18,7 @@ namespace GameSvr.Player
             this.m_PEnvir = PlayObject.m_PEnvir;
             this.Gender = PlayObject.Gender;
             this.m_btHair = PlayObject.m_btHair;
-            this.m_PEnvir.AddToMap(this.m_nCurrX, this.m_nCurrY, CellType.OS_MOVINGOBJECT, this);
+            this.m_PEnvir.AddToMap(this.m_nCurrX, this.m_nCurrY, CellType.MovingObject, this);
             this.SendRefMsg(Grobal2.RM_TURN, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, this.m_sCharName);
         }
 
