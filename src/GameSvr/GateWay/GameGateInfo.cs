@@ -7,7 +7,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 网关是否已启用
         /// </summary>
-        public bool boUsed;
+        public bool BoUsed;
         public Socket Socket;
         public string SocketId;
         /// <summary>
