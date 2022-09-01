@@ -1834,7 +1834,7 @@ namespace GameSvr.Actor
             Envirnoment Envir = M2Share.MapManager.FindMap(sMap);
             if (Envir != null)
             {
-                if (M2Share.nServerIndex == Envir.NServerIndex)
+                if (M2Share.nServerIndex == Envir.ServerIndex)
                 {
                     Envirnoment OldEnvir = m_PEnvir;
                     nOldX = m_nCurrX;
@@ -1897,7 +1897,7 @@ namespace GameSvr.Actor
                             PlayObject.m_nSwitchMapX = nX;
                             PlayObject.m_nSwitchMapY = nY;
                             PlayObject.m_boSwitchData = true;
-                            PlayObject.m_nServerIndex = Envir.NServerIndex;
+                            PlayObject.m_nServerIndex = Envir.ServerIndex;
                             PlayObject.m_boEmergencyClose = true;
                             PlayObject.m_boReconnection = true;
                         }
@@ -3518,7 +3518,7 @@ namespace GameSvr.Actor
                                         {
                                             if ((!GateObj.DEnvir.Flag.boNEEDHOLE) || (M2Share.EventManager.GetEvent(m_PEnvir, m_nCurrX, m_nCurrY, Grobal2.ET_DIGOUTZOMBI) != null))
                                             {
-                                                if (M2Share.nServerIndex == GateObj.DEnvir.NServerIndex)
+                                                if (M2Share.nServerIndex == GateObj.DEnvir.ServerIndex)
                                                 {
                                                     if (!EnterAnotherMap(GateObj.DEnvir, GateObj.nDMapX, GateObj.nDMapY))
                                                     {
@@ -3534,7 +3534,7 @@ namespace GameSvr.Actor
                                                     PlayObject.m_nSwitchMapX = GateObj.nDMapX;
                                                     PlayObject.m_nSwitchMapY = GateObj.nDMapY;
                                                     PlayObject.m_boSwitchData = true;
-                                                    PlayObject.m_nServerIndex = GateObj.DEnvir.NServerIndex;
+                                                    PlayObject.m_nServerIndex = GateObj.DEnvir.ServerIndex;
                                                     PlayObject.m_boEmergencyClose = true;
                                                     PlayObject.m_boReconnection = true;
                                                 }

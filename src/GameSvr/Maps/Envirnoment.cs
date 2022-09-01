@@ -27,9 +27,9 @@ namespace GameSvr.Maps
         public string MapName = string.Empty;
         public string MapDesc = string.Empty;
         private Memory<MapCellInfo> _cellArray;
-        private MemoryPool<MapCellInfo> _cellPool;
+        private readonly MemoryPool<MapCellInfo> _cellPool;
         public int NMinMap = 0;
-        public int NServerIndex = 0;
+        public int ServerIndex = 0;
         /// <summary>
         /// 进入本地图所需等级
         /// </summary>
@@ -40,11 +40,11 @@ namespace GameSvr.Maps
         /// 门
         /// </summary>
         public IList<TDoorInfo> DoorList = null;
-        public object QuestNpc = null;
+        public Merchant QuestNpc = null;
         /// <summary>
         /// 任务
         /// </summary>
-        private IList<TMapQuestInfo> QuestList = null;
+        private readonly IList<TMapQuestInfo> _questList = null;
         private int _whisperTick = 0;
         private int _monCount = 0;
         private int _humCount = 0;
@@ -52,14 +52,13 @@ namespace GameSvr.Maps
 
         public Envirnoment()
         {
-            MapName = string.Empty;
-            NServerIndex = 0;
+            ServerIndex = 0;
             NMinMap = 0;
             Flag = new TMapFlag();
             _monCount = 0;
             _humCount = 0;
             DoorList = new List<TDoorInfo>();
-            QuestList = new List<TMapQuestInfo>();
+            _questList = new List<TMapQuestInfo>();
             _whisperTick = 0;
             _cellPool = MemoryPool<MapCellInfo>.Shared;
         }
@@ -609,7 +608,7 @@ namespace GameSvr.Maps
         public bool IsCheapStuff()
         {
             bool result;
-            if (QuestList.Count > 0)
+            if (_questList.Count > 0)
             {
                 result = true;
             }
@@ -955,7 +954,7 @@ namespace GameSvr.Maps
             };
             M2Share.UserEngine.QuestNPCList.Add(mapMerchant);
             mapQuest.NPC = mapMerchant;
-            QuestList.Add(mapQuest);
+            _questList.Add(mapQuest);
             result = true;
             return result;
         }
@@ -1136,9 +1135,9 @@ namespace GameSvr.Maps
             TMapQuestInfo mapQuestFlag;
             int nFlagValue;
             bool bo1D;
-            for (var i = 0; i < QuestList.Count; i++)
+            for (var i = 0; i < _questList.Count; i++)
             {
-                mapQuestFlag = QuestList[i];
+                mapQuestFlag = _questList[i];
                 nFlagValue = baseObject.GetQuestFalgStatus(mapQuestFlag.nFlag);
                 if (nFlagValue == mapQuestFlag.nValue)
                 {

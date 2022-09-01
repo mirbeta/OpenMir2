@@ -1,4 +1,5 @@
 ﻿using GameSvr.Event.Events;
+using GameSvr.Npc;
 using SystemModule;
 using SystemModule.Data;
 
@@ -66,20 +67,20 @@ namespace GameSvr.Maps
             return list;
         }
 
-        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, object QuestNPC)
+        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, Merchant QuestNPC)
         {
-            var m_sMapFileName = string.Empty;
+            var sMapFileName = string.Empty;
             var sTempName = sMapName;
             if (sTempName.IndexOf('|') > -1)
             {
-                m_sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, new[] { '|' });
+                sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, new[] { '|' });
             }
             else
             {
-                sTempName = HUtil32.ArrestStringEx(sTempName, "<", ">", ref m_sMapFileName);
-                if (m_sMapFileName == "")
+                sTempName = HUtil32.ArrestStringEx(sTempName, "<", ">", ref sMapFileName);
+                if (sMapFileName == "")
                 {
-                    m_sMapFileName = sMapName;
+                    sMapFileName = sMapName;
                 }
                 else
                 {
@@ -89,9 +90,9 @@ namespace GameSvr.Maps
             var envirnoment = new Envirnoment
             {
                 MapName = sMapName,
-                MapFileName = m_sMapFileName,
+                MapFileName = sMapFileName,
                 MapDesc = sMapDesc,
-                NServerIndex = nServerNumber,
+                ServerIndex = nServerNumber,
                 Flag = MapFlag,
                 QuestNpc = QuestNPC
             };
@@ -99,7 +100,7 @@ namespace GameSvr.Maps
             {
                 envirnoment.NMinMap = minMap;
             }
-            if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sMapDir, m_sMapFileName + ".map")))
+            if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sMapDir, sMapFileName + ".map")))
             {
                 if (!m_MapList.ContainsKey(sMapName))
                 {
@@ -148,7 +149,7 @@ namespace GameSvr.Maps
             Envirnoment result = null;
             if (m_MapList.TryGetValue(sMapName, out var envirnoment))
             {
-                if (envirnoment.NServerIndex == nServerIdx)
+                if (envirnoment.ServerIndex == nServerIdx)
                 {
                     result = envirnoment;
                 }
@@ -165,7 +166,7 @@ namespace GameSvr.Maps
         {
             if (m_MapList.TryGetValue(sMapName, out var envirnoment))
             {
-                return envirnoment.NServerIndex;
+                return envirnoment.ServerIndex;
             }
             return 0;
         }
