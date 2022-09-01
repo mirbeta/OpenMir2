@@ -8,9 +8,9 @@ namespace SystemModule
     public class HUtil32
     {
         public const string Backslash = "/";
-
-        public static TUserItem DelfautItem = new TUserItem();
-        public static TMagicRcd DetailtMagicRcd = new TMagicRcd();
+        public static readonly string[] Separator =  { " ", ",", "\t" };
+        public static readonly TUserItem DelfautItem = new TUserItem();
+        public static readonly TMagicRcd DetailtMagicRcd = new TMagicRcd();
 
         /// <summary>
         /// 根据GUID获取唯一数字序列
@@ -25,7 +25,6 @@ namespace SystemModule
                 sequence = BitConverter.ToInt32(bytes, 0);
                 if (sequence > 0) break;
             }
-
             return sequence;
         }
 
@@ -64,11 +63,6 @@ namespace SystemModule
             return (ushort)lowPart | ((short)highPart << 16);
         }
 
-        //public static ushort MakeWord(byte bLow, byte bHigh)
-        //{
-        //    return (ushort)(bLow | (bHigh << 8));
-        //}
-
         public static ushort MakeWord(int bLow, int bHigh)
         {
             return (ushort)(bLow | (bHigh << 8));
@@ -89,29 +83,29 @@ namespace SystemModule
             return (ushort)dword;
         }
 
-        public static byte HiByte(short W)
+        public static byte HiByte(short w)
         {
-            return (byte)(W >> 8);
+            return (byte)(w >> 8);
         }
 
-        public static byte HiByte(int W)
+        public static byte HiByte(int w)
         {
-            return (byte)(W >> 8);
+            return (byte)(w >> 8);
         }
 
-        public static byte LoByte(short W)
+        public static byte LoByte(short w)
         {
-            return (byte)W;
+            return (byte)w;
         }
 
-        public static byte LoByte(int W)
+        public static byte LoByte(int w)
         {
-            return (byte)W;
+            return (byte)w;
         }
 
-        public static bool IsVarNumber(string Str)
+        public static bool IsVarNumber(string str)
         {
-            return (CompareLStr(Str, "HUMAN", 5)) || (CompareLStr(Str, "GUILD", 5)) || (CompareLStr(Str, "GLOBAL", 6));
+            return (CompareLStr(str, "HUMAN", 5)) || (CompareLStr(str, "GUILD", 5)) || (CompareLStr(str, "GLOBAL", 6));
         }
 
         public static int Round(object r)
@@ -203,9 +197,9 @@ namespace SystemModule
         /// </summary>
         /// <param name="str"></param>
         /// <param name="retby"></param>
-        /// <param name="StartIndex"></param>
+        /// <param name="startIndex"></param>
         /// <returns></returns>
-        private static unsafe int StringToBytePtr(string str, byte* retby, int StartIndex)
+        private static unsafe int StringToBytePtr(string str, byte* retby, int startIndex)
         {
             var bDecode = false;
             if (string.IsNullOrEmpty(str)) return 0;
@@ -227,20 +221,20 @@ namespace SystemModule
             if (bDecode)
             {
                 var by = Encoding.GetEncoding("gb2312").GetBytes(str);
-                var pb = retby + StartIndex;
+                var pb = retby + startIndex;
                 for (var i = 0; i < by.Length; i++)
                     *pb++ = by[i];
             }
             else
             {
-                var pb = retby + StartIndex;
+                var pb = retby + startIndex;
                 for (var i = 0; i < str.Length; i++) *pb++ = (byte)str[i];
             }
 
             return nLen;
         }
 
-        public static string CaptureString(string source, ref string rdstr)
+        protected static string CaptureString(string source, ref string rdstr)
         {
             string result;
             int st;
@@ -292,113 +286,98 @@ namespace SystemModule
             return result;
         }
 
-        public static int Str_ToInt(string Str, int def)
+        public static int Str_ToInt(string str, int def)
         {
             var result = def;
-            if (int.TryParse(Str, out result))
+            if (int.TryParse(str, out result))
             {
                 return result;
             }
             return result;
         }
 
-        public static DateTime Str_ToDate(string Str)
+        public static DateTime Str_ToDate(string str)
         {
             DateTime result;
-            if (Str.Trim() == "")
+            if (str.Trim() == "")
                 result = DateTime.Today;
             else
-                result = Convert.ToDateTime(Str);
+                result = Convert.ToDateTime(str);
             return result;
         }
 
-        public static DateTime Str_ToTime(string Str)
+        public static DateTime Str_ToTime(string str)
         {
             DateTime result;
-            if (Str.Trim() == "")
+            if (str.Trim() == "")
                 result = DateTime.Now;
             else
-                result = Convert.ToDateTime(Str);
+                result = Convert.ToDateTime(str);
             return result;
         }
 
-        public static string GetValidStr3(string Str, ref string Dest, char Divider)
+        public static string GetValidStr3(string str, ref string dest, char divider)
         {
-            var Ary = Str.Split('/'); //返回不包含空的值
-            if (Ary.Length > 0)
-                Dest = Ary[0]; //目标置为第一个
-            else
-                Dest = "";
-            if (Ary.Length > 1)
-                return Ary[1]; //返回第二个
-            else
-                return "";
+            var ary = str.Split('/'); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : ""; //目标置为第一个
+            return ary.Length > 1 ? ary[1] : ""; //返回第二个
         }
 
-        public static string GetValidStr3(string Str, ref string Dest, char[] DividerAry)
+        public static string GetValidStr3(string str, ref string dest, char[] dividerAry)
         {
-            var Div = new char[DividerAry.Length];
-            int i;
-            for (i = 0; i < DividerAry.Length; i++) Div[i] = DividerAry[i];
-            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            if (Ary.Length > 0)
-                Dest = Ary[0]; //目标置为第一个
-            else
-                Dest = "";
-            if (Ary.Length > 1)
-                return Ary[1]; //返回第二个
-            else
-                return "";
+            var div = new char[dividerAry.Length];
+            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
+            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : ""; //目标置为第一个
+            return ary.Length > 1 ? ary[1] : ""; //返回第二个
         }
 
-        public static string GetValidStr3(string Str, ref string Dest, string[] DividerAry)
+        public static string GetValidStr3(string str, ref string dest, string[] dividerAry)
         {
-            var Div = new char[DividerAry.Length];
-            for (var i = 0; i < DividerAry.Length; i++) Div[i] = DividerAry[i][0];
-            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            Dest = Ary.Length > 0 ? Ary[0] : "";
-            return Ary.Length > 1 ? Ary[1] : "";
+            var div = new char[dividerAry.Length];
+            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i][0];
+            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : "";
+            return ary.Length > 1 ? ary[1] : "";
         }
 
-        public static string GetValidStr3(string Str, ref int Dest, string[] DividerAry)
+        public static string GetValidStr3(string str, ref int dest, string[] dividerAry)
         {
-            var Div = new char[DividerAry.Length];
-            for (var i = 0; i < DividerAry.Length; i++) Div[i] = DividerAry[i][0];
-            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            if (Ary.Length > 0)
+            var div = new char[dividerAry.Length];
+            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i][0];
+            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            if (ary.Length <= 0) return ary.Length > 1 ? ary[1] : "";
+            if (!int.TryParse(ary[0], out dest))
             {
-                if (!int.TryParse(Ary[0], out Dest))
-                {
-                    Dest = -1;
-                }
+                dest = -1;
             }
-            return Ary.Length > 1 ? Ary[1] : "";
+            return ary.Length > 1 ? ary[1] : "";
         }
 
-        public static string GetValidStr3(string Str, ref string Dest, string DividerAry)
+        public static string GetValidStr3(string str, ref string dest, string dividerAry)
         {
-            var div = new char[DividerAry.Length];
-            for (var i = 0; i < DividerAry.Length; i++) div[i] = DividerAry[i];
-            var Ary = Str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            Dest = Ary.Length > 0 ? Ary[0] : "";
-            return Ary.Length > 1 ? Ary[1] : "";
+            var div = new char[dividerAry.Length];
+            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
+            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : "";
+            return ary.Length > 1 ? ary[1] : "";
         }
 
-        public static string GetValidStrCap(string Str, ref string Dest, string[] Divider)
+        public static string GetValidStrCap(string str, ref string dest, string[] divider)
         {
             string result;
-            Str = Str.TrimStart();
-            if (Str != "")
+            str = str.TrimStart();
+            if (str != "")
             {
-                if (Str[0] == '\"')
-                    result = CaptureString(Str, ref Dest);
+                if (str[0] == '\"')
+                    result = CaptureString(str, ref dest);
                 else
-                    result = GetValidStr3(Str, ref Dest, Divider);
+                    result = GetValidStr3(str, ref dest, divider);
             }
             else
             {
                 result = "";
-                Dest = "";
+                dest = "";
             }
             return result;
         }
@@ -431,7 +410,7 @@ namespace SystemModule
             {
                 return string.Empty;
             }
-            ReadOnlySpan<char> sourceSpan = source.AsSpan();
+            var sourceSpan = source.AsSpan();
             var spanLen = sourceSpan.Length;
             var result = string.Empty;
             var findData = false;
@@ -486,103 +465,28 @@ namespace SystemModule
             }
             return result;
         }
-               
-        /// <summary>
-        /// 截取字符串 例 ArrestStringEx('[1234]','[',']',str)    str=1234
-        /// </summary>
-        /// <param name="Source">源字符串</param>
-        /// <param name="searchAfter">需要匹配的符号</param>
-        /// <param name="arrestBefore">需要匹配的符号</param>
-        /// <param name="arrestStr">截取之后的结果</param>
-        /// <returns></returns>
-        public static string ArrestString(string source, char searchAfter, char arrestBefore, ref string arrestStr)
-        {
-            if (string.IsNullOrEmpty(source))
-            {
-                return string.Empty;
-            }
-            var result = string.Empty;
-            bool GoodData = false;
-            arrestStr = string.Empty;
-            try
-            {
-                int srclen = source.Length;
-                if (srclen >= 2)
-                {
-                    if (source[0] == searchAfter)
-                    {
-                        source = source.Substring(1, srclen - 1);
-                        srclen = source.Length;
-                        GoodData = true;
-                    }
-                    else
-                    {
-                        var n = source.IndexOf(searchAfter, StringComparison.Ordinal) + 1;
-                        if (n > 0)
-                        {
-                            source = source.Substring(n, srclen - n);
-                            srclen = source.Length;
-                            GoodData = true;
-                        }
-                    }
-                }
-                if (GoodData)
-                {
-                    var n = source.IndexOf(arrestBefore, StringComparison.Ordinal) + 1;
-                    if (n > 0)
-                    {
-                        arrestStr = source[..(n - 1)];
-                        result = source.Substring(n, srclen - n);
-                    }
-                    else
-                    {
-                        result = searchAfter + source;
-                    }
-                }
-                else
-                {
-                    for (var i = 0; i < srclen; i++)
-                    {
-                        if (source[i - 1] == searchAfter)
-                        {
-                            result = source.Substring(i - 1, srclen - i + 1);
-                            break;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                arrestStr = string.Empty;
-                result = string.Empty;
-            }
-            return result;
-        }
-        
+
         public static bool CompareLStr(string src, string targ, int compn)
         {
-            var result = false;
-            if (compn <= 0) return result;
-            if (src.Length < compn) return result;
-            if (targ.Length < compn) return result;
-            result = true;
-            for (var i = 0; i < compn - 1; i++)
+            if (compn <= 0) return false;
+            if (src.Length < compn) return false;
+            if (targ.Length < compn) return false;
+            for (var i = 0; i < compn; i++)
             {
                 if (char.ToUpper(src[i]) == char.ToUpper(targ[i])) continue;
-                result = false;
-                break;
+                return false;
             }
-            return result;
+            return true;
         }
 
-        private static bool IsEnglish(char Ch)
+        private static bool IsEnglish(char ch)
         {
-            return Ch >= 'A' && Ch <= 'Z' || Ch >= 'a' && Ch <= 'z';
+            return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z';
         }
 
-        public static bool IsEngNumeric(char Ch)
+        public static bool IsEngNumeric(char ch)
         {
-            return IsEnglish(Ch) || Ch >= '0' && Ch <= '9'; ;
+            return IsEnglish(ch) || ch >= '0' && ch <= '9'; ;
         }
 
         public static bool IsEnglishStr(string sEngStr)
@@ -612,7 +516,7 @@ namespace SystemModule
         public static int TagCount(string source, char tag)
         {
             var tcount = 0;
-            for (var i = 0; i < source.Length - 1; i++)
+            for (var i = 0; i < source.Length; i++)
                 if (source[i] == tag)
                     tcount++;
             return tcount;
@@ -620,52 +524,27 @@ namespace SystemModule
 
         public static string BoolToStr(bool boo)
         {
-            string result;
-            if (boo)
-                result = "TRUE";
-            else
-                result = "FALSE";
-            return result;
+            return boo ? "TRUE" : "FALSE";
         }
 
         public static int _MIN(int n1, int n2)
         {
-            int result;
-            if (n1 < n2)
-                result = n1;
-            else
-                result = n2;
-            return result;
+            return n1 < n2 ? n1 : n2;
         }
 
         public static int _MAX(int n1, int n2)
         {
-            int result;
-            if (n1 > n2)
-                result = n1;
-            else
-                result = n2;
-            return result;
+            return n1 > n2 ? n1 : n2;
         }
 
         public static string BoolToCStr(bool b)
         {
-            string result;
-            if (b)
-                result = "是";
-            else
-                result = "否";
-            return result;
+            return b ? "是" : "否"; ;
         }
 
         public static string BoolToIntStr(bool b)
         {
-            string result;
-            if (b)
-                result = "1";
-            else
-                result = "0";
-            return result;
+            return b ? "1" : "0";
         }
 
         public static byte[] GetBytes(string str)
@@ -683,32 +562,32 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetByteCount(strSrc.ToString());
         }
 
-        public static int GetDayCount(DateTime MaxDate, DateTime MinDate)
+        public static int GetDayCount(DateTime maxDate, DateTime minDate)
         {
-            if (MaxDate < MinDate) return 0;
-            int YearMax = MaxDate.Year;
-            int MonthMax = MaxDate.Month;
-            int DayMax = MaxDate.Day;
-            int YearMin = MinDate.Year;
-            int MonthMin = MinDate.Month;
-            int DayMin = MinDate.Day;
-            YearMax -= YearMin;
-            YearMin = 0;
-            return YearMax * 12 * 30 + MonthMax * 30 + DayMax - (YearMin * 12 * 30 + MonthMin * 30 + DayMin);
+            if (maxDate < minDate) return 0;
+            int yearMax = maxDate.Year;
+            int monthMax = maxDate.Month;
+            int dayMax = maxDate.Day;
+            int yearMin = minDate.Year;
+            int monthMin = minDate.Month;
+            int dayMin = minDate.Day;
+            yearMax -= yearMin;
+            yearMin = 0;
+            return yearMax * 12 * 30 + monthMax * 30 + dayMax - (yearMin * 12 * 30 + monthMin * 30 + dayMin);
         }
 
         /// <summary>
         /// SByte转string
         /// </summary>
         /// <param name="by"></param>
-        /// <param name="StartIndex"></param>
-        /// <param name="Len"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="len"></param>
         /// <returns></returns>
-        public static unsafe string SBytePtrToString(sbyte* by, int StartIndex, int Len)
+        public static unsafe string SBytePtrToString(sbyte* by, int startIndex, int len)
         {
             try
             {
-                return BytePtrToString((byte*)by, StartIndex, Len);
+                return BytePtrToString((byte*)by, startIndex, len);
             }
             catch (Exception ex)
             {
@@ -716,14 +595,12 @@ namespace SystemModule
             }
         }
 
-        private static unsafe string BytePtrToString(byte* by, int StartIndex, int Len)
+        private static unsafe string BytePtrToString(byte* by, int startIndex, int len)
         {
-            var ret = new string('\0', Len);
+            var ret = new string('\0', len);
             var sb = new StringBuilder(ret);
-
-            by += StartIndex;
-            for (var i = 0; i < Len; i++) sb[i] = (char)*@by++;
-
+            by += startIndex;
+            for (var i = 0; i < len; i++) sb[i] = (char)*@by++;
             return sb.ToString();
         }
 
@@ -742,14 +619,14 @@ namespace SystemModule
             return ret;
         }
 
-        public static bool CompareBackLStr(string Src, string targ, int compn)
+        public static bool CompareBackLStr(string src, string targ, int compn)
         {
             var result = false;
             if (compn <= 0)
             {
                 return result;
             }
-            if (Src.Length < compn)
+            if (src.Length < compn)
             {
                 return result;
             }
@@ -757,12 +634,12 @@ namespace SystemModule
             {
                 return result;
             }
-            var slen = Src.Length;
+            var slen = src.Length;
             var tLen = targ.Length;
             result = true;
             for (var i = 0; i < compn; i++)
             {
-                if (char.ToUpper(Src[slen - (i + 1)]) != char.ToUpper(targ[tLen - (i + 1)]))
+                if (char.ToUpper(src[slen - (i + 1)]) != char.ToUpper(targ[tLen - (i + 1)]))
                 {
                     result = false;
                     break;
