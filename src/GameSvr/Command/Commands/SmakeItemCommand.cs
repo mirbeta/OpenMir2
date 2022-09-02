@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
     public class SmakeItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SmakeItem(string[] @Params, TPlayObject PlayObject)
+        public void SmakeItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -277,7 +277,7 @@ namespace GameSvr.Actor
                                     m_UseItems[Grobal2.U_CHARM].Dura = 0;
                                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                     {
-                                        (this as TPlayObject).SendDelItems(m_UseItems[Grobal2.U_CHARM]);
+                                        (this as PlayObject).SendDelItems(m_UseItems[Grobal2.U_CHARM]);
                                     }
                                     m_UseItems[Grobal2.U_CHARM].wIndex = 0;
                                 }
@@ -321,7 +321,7 @@ namespace GameSvr.Actor
                                     m_UseItems[Grobal2.U_CHARM].Dura = 0;
                                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                     {
-                                        (this as TPlayObject).SendDelItems(m_UseItems[Grobal2.U_CHARM]);
+                                        (this as PlayObject).SendDelItems(m_UseItems[Grobal2.U_CHARM]);
                                     }
                                     m_UseItems[Grobal2.U_CHARM].wIndex = 0;
                                 }
@@ -743,7 +743,7 @@ namespace GameSvr.Actor
                         {
                             if (M2Share.g_FunctionNPC != null)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter as TPlayObject, "@PlayKillMob", false);
+                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter as PlayObject, "@PlayKillMob", false);
                             }
                             tExp = m_ExpHitter.CalcGetExp(m_Abil.Level, m_dwFightExp);
                             if (!M2Share.g_Config.boVentureServer)
@@ -754,7 +754,7 @@ namespace GameSvr.Actor
                                 }
                                 else
                                 {
-                                    (m_ExpHitter as TPlayObject).GainExp(tExp);
+                                    (m_ExpHitter as PlayObject).GainExp(tExp);
                                 }
                             }
                             // 是否执行任务脚本
@@ -765,7 +765,7 @@ namespace GameSvr.Actor
                                 {
                                     for (var i = 0; i < m_ExpHitter.m_GroupOwner.m_GroupMembers.Count; i++)
                                     {
-                                        TPlayObject GroupHuman = m_ExpHitter.m_GroupOwner.m_GroupMembers[i];
+                                        PlayObject GroupHuman = m_ExpHitter.m_GroupOwner.m_GroupMembers[i];
                                         if (!GroupHuman.m_boDeath && m_ExpHitter.m_PEnvir == GroupHuman.m_PEnvir && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && m_ExpHitter == GroupHuman)
                                         {
                                             tCheck = false;
@@ -784,7 +784,7 @@ namespace GameSvr.Actor
                                 QuestNPC = (Merchant)m_PEnvir.GetQuestNpc(m_ExpHitter, m_sCharName, "", false);
                                 if (QuestNPC != null)
                                 {
-                                    QuestNPC.Click(m_ExpHitter as TPlayObject);
+                                    QuestNPC.Click(m_ExpHitter as PlayObject);
                                 }
                             }
                         }
@@ -802,7 +802,7 @@ namespace GameSvr.Actor
                                     }
                                     else
                                     {
-                                        (m_ExpHitter.m_Master as TPlayObject).GainExp(tExp);
+                                        (m_ExpHitter.m_Master as PlayObject).GainExp(tExp);
                                     }
                                 }
                             }
@@ -814,7 +814,7 @@ namespace GameSvr.Actor
                         {
                             if (M2Share.g_FunctionNPC != null)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(m_LastHiter as TPlayObject, "@PlayKillMob", false);
+                                M2Share.g_FunctionNPC.GotoLable(m_LastHiter as PlayObject, "@PlayKillMob", false);
                             }
                             tExp = m_LastHiter.CalcGetExp(m_Abil.Level, m_dwFightExp);
                             if (!M2Share.g_Config.boVentureServer)
@@ -825,7 +825,7 @@ namespace GameSvr.Actor
                                 }
                                 else
                                 {
-                                    (m_LastHiter as TPlayObject).GainExp(tExp);
+                                    (m_LastHiter as PlayObject).GainExp(tExp);
                                 }
                             }
                         }
@@ -882,7 +882,7 @@ namespace GameSvr.Actor
                     {
                         if ((M2Share.g_Config.boKillHumanWinLevel || M2Share.g_Config.boKillHumanWinExp || m_PEnvir.Flag.boPKWINLEVEL || m_PEnvir.Flag.boPKWINEXP) && m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
-                            (this as TPlayObject).PKDie(m_LastHiter as TPlayObject);
+                            (this as PlayObject).PKDie(m_LastHiter as PlayObject);
                         }
                         else
                         {
@@ -1387,7 +1387,7 @@ namespace GameSvr.Actor
                             {
                                 if (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    if ((TargetBaseObject as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                    if ((TargetBaseObject as PlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(m_sCharName))
                                         {
@@ -1397,7 +1397,7 @@ namespace GameSvr.Actor
                                             }
                                             else
                                             {
-                                                (TargetBaseObject as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                (TargetBaseObject as PlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
                                             }
                                         }
                                     }
@@ -1406,7 +1406,7 @@ namespace GameSvr.Actor
                                 {
                                     if (TargetBaseObject.m_Master != null)
                                     {
-                                        if ((TargetBaseObject.m_Master as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                        if ((TargetBaseObject.m_Master as PlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
                                         {
                                             if (!M2Share.GetNoHptoexpMonList(m_sCharName))
                                             {
@@ -1416,7 +1416,7 @@ namespace GameSvr.Actor
                                                 }
                                                 else
                                                 {
-                                                    (TargetBaseObject.m_Master as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                    (TargetBaseObject.m_Master as PlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
                                                 }
                                             }
                                         }

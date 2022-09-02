@@ -36,7 +36,7 @@ namespace GameSvr.Npc
             m_ScriptList.Clear();
         }
 
-        public virtual void Click(TPlayObject PlayObject)
+        public virtual void Click(PlayObject PlayObject)
         {
             PlayObject.m_nScriptGotoCount = 0;
             PlayObject.m_sScriptGoBackLable = "";
@@ -63,7 +63,7 @@ namespace GameSvr.Npc
             ClearScript();
         }
 
-        private void ExeAction(TPlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3)
+        private void ExeAction(PlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3)
         {
             int nInt1;
             long dwInt;
@@ -227,7 +227,7 @@ namespace GameSvr.Npc
             }
         }
 
-        public string GetLineVariableText(TPlayObject PlayObject, string sMsg)
+        public string GetLineVariableText(PlayObject PlayObject, string sMsg)
         {
             var nC = 0;
             var s10 = string.Empty;
@@ -254,7 +254,7 @@ namespace GameSvr.Npc
         /// <param name="PlayObject"></param>
         /// <param name="sMsg"></param>
         /// <param name="sVariable"></param>
-        protected virtual void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        protected virtual void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
             string sText = string.Empty;
             string s14 = string.Empty;
@@ -343,7 +343,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.g_HighLevelHuman != null)
                         {
-                            sText = ((TPlayObject)M2Share.g_HighLevelHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.g_HighLevelHuman).GetMyInfo();
                         }
                         else
                         {
@@ -356,7 +356,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.g_HighPKPointHuman != null)
                         {
-                            sText = ((TPlayObject)M2Share.g_HighPKPointHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.g_HighPKPointHuman).GetMyInfo();
                         }
                         else
                         {
@@ -369,7 +369,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.g_HighDCHuman != null)
                         {
-                            sText = ((TPlayObject)M2Share.g_HighDCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.g_HighDCHuman).GetMyInfo();
                         }
                         else
                         {
@@ -382,7 +382,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.g_HighMCHuman != null)
                         {
-                            sText = ((TPlayObject)M2Share.g_HighMCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.g_HighMCHuman).GetMyInfo();
                         }
                         else
                         {
@@ -395,7 +395,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.g_HighSCHuman != null)
                         {
-                            sText = ((TPlayObject)M2Share.g_HighSCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.g_HighSCHuman).GetMyInfo();
                         }
                         else
                         {
@@ -408,7 +408,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.g_HighOnlineHuman != null)
                         {
-                            sText = ((TPlayObject)M2Share.g_HighOnlineHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.g_HighOnlineHuman).GetMyInfo();
                         }
                         else
                         {
@@ -1589,20 +1589,20 @@ namespace GameSvr.Npc
             base.Run();
         }
 
-        private void ScriptActionError(TPlayObject PlayObject, string sErrMsg, TQuestActionInfo QuestActionInfo, string sCmd)
+        private void ScriptActionError(PlayObject PlayObject, string sErrMsg, TQuestActionInfo QuestActionInfo, string sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.MainOutMessage(sMsg);
         }
 
-        private void ScriptConditionError(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, string sCmd)
+        private void ScriptConditionError(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, string sCmd)
         {
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + this.m_sCharName + " 地图:" + this.m_sMapName + " 座标:" + this.m_nCurrX + ':' + this.m_nCurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.MainOutMessage("[脚本参数不正确] " + sMsg);
         }
 
-        protected void SendMsgToUser(TPlayObject PlayObject, string sMsg)
+        protected void SendMsgToUser(PlayObject PlayObject, string sMsg)
         {
             PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + '/' + sMsg);
         }
@@ -1624,7 +1624,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        public virtual void UserSelect(TPlayObject PlayObject, string sData)
+        public virtual void UserSelect(PlayObject PlayObject, string sData)
         {
             string sLabel = string.Empty;
             PlayObject.m_nScriptGotoCount = 0;
@@ -1653,7 +1653,7 @@ namespace GameSvr.Npc
             }
         }
 
-        protected virtual void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected virtual void SendCustemMsg(PlayObject PlayObject, string sMsg)
         {
             if (!M2Share.g_Config.boSendCustemMsg)
             {
@@ -1673,7 +1673,7 @@ namespace GameSvr.Npc
             this.m_Castle = M2Share.CastleManager.InCastleWarArea(this);
         }
 
-        private Dictionary<string, TDynamicVar> GetDynamicVarList(TPlayObject PlayObject, string sType, ref string sName)
+        private Dictionary<string, TDynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)
         {
             Dictionary<string, TDynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
@@ -1703,7 +1703,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GetValValue(TPlayObject PlayObject, string sMsg, ref int nValue)
+        private bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)
         {
             bool result = false;
             if (sMsg == "")
@@ -1777,7 +1777,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GetValValue(TPlayObject PlayObject, string sMsg, ref string sValue)
+        private bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue)
         {
             bool result = false;
             int n01;
@@ -1819,7 +1819,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool SetValValue(TPlayObject PlayObject, string sMsg, int nValue)
+        private bool SetValValue(PlayObject PlayObject, string sMsg, int nValue)
         {
             bool result = false;
             int n01;
@@ -1881,7 +1881,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool SetValValue(TPlayObject PlayObject, string sMsg, string sValue)
+        private bool SetValValue(PlayObject PlayObject, string sMsg, string sValue)
         {
             bool result = false;
             int n01;

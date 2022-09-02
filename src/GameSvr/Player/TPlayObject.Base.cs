@@ -10,7 +10,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Player
 {
-    public partial class TPlayObject
+    public partial class PlayObject
     {
         public ClientPacket m_DefMsg;
         public string m_sOldSayMsg = string.Empty;
@@ -262,7 +262,7 @@ namespace GameSvr.Player
         /// 配偶名称
         /// </summary>
         public string m_sDearName;
-        public TPlayObject m_DearHuman = null;
+        public PlayObject m_DearHuman = null;
         /// <summary>
         /// 是否允许夫妻传送
         /// </summary>
@@ -277,8 +277,8 @@ namespace GameSvr.Player
         /// 师徒名称
         /// </summary>
         public string m_sMasterName;
-        public TPlayObject m_MasterHuman = null;
-        public IList<TPlayObject> m_MasterList = null;
+        public PlayObject m_MasterHuman = null;
+        public IList<PlayObject> m_MasterList = null;
         public bool m_boMaster = false;
         /// <summary>
         /// 声望点
@@ -384,7 +384,7 @@ namespace GameSvr.Player
         public int m_dwPayMentPointTick = 0;
         public int m_dwDecHPTick = 0;
         public int m_dwIncHPTick = 0;
-        public TPlayObject m_GetWhisperHuman = null;
+        public PlayObject m_GetWhisperHuman = null;
         public int m_dwClearObjTick = 0;
         public short m_wContribution = 0;
         // 贡献度
@@ -438,7 +438,7 @@ namespace GameSvr.Player
         private IList<TUserItem> m_SellOffItemList = null;
 
 
-        public TPlayObject() : base()
+        public PlayObject() : base()
         {
             m_btRaceServer = Grobal2.RC_PLAYOBJECT;
             m_boEmergencyClose = false;
@@ -539,7 +539,7 @@ namespace GameSvr.Player
             m_nPayMentPoint = 0;
             m_DearHuman = null;
             m_MasterHuman = null;
-            m_MasterList = new List<TPlayObject>();
+            m_MasterList = new List<PlayObject>();
             m_boSendMsgFlag = false;
             m_boChangeItemNameFlag = false;
             m_boCanMasterRecall = false;
@@ -1248,7 +1248,7 @@ namespace GameSvr.Player
             m_VisibleActors.Add(VisibleBaseObject);
             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
-                SendWhisperMsg(BaseObject as TPlayObject);
+                SendWhisperMsg(BaseObject as PlayObject);
             }
         }
 
@@ -1569,7 +1569,7 @@ namespace GameSvr.Player
         public override void MakeGhost()
         {
             string sSayMsg;
-            TPlayObject Human;
+            PlayObject Human;
             const string sExceptionMsg = "[Exception] TPlayObject::MakeGhost";
             try
             {

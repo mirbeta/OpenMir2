@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class TakeOffHorseCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TakeOffHorse(TPlayObject PlayObject)
+        public void TakeOffHorse(PlayObject PlayObject)
         {
             if (!PlayObject.m_boOnHorse)
             {

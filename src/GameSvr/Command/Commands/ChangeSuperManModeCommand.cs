@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ChangeSuperManModeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeSuperManMode(TPlayObject PlayObject)
+        public void ChangeSuperManMode(PlayObject PlayObject)
         {
             var boFlag = !PlayObject.m_boSuperMan;
             PlayObject.m_boSuperMan = boFlag;

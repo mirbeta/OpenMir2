@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class KillCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Kill(string[] @Params, TPlayObject PlayObject)
+        public void Kill(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

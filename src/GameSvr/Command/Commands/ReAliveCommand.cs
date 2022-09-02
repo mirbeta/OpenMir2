@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ReAliveCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReAlive(string[] @params, TPlayObject PlayObject)
+        public void ReAlive(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

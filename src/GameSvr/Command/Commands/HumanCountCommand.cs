@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class HumanCountCommand : BaseCommond
     {
         [DefaultCommand]
-        public void HumanCount(string[] @Params, TPlayObject PlayObject)
+        public void HumanCount(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

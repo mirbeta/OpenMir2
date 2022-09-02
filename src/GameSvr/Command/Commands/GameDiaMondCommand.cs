@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class GameDiaMondCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GameDiaMond(string[] @Params, TPlayObject PlayObject)
+        public void GameDiaMond(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";

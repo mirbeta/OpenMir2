@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class SuperTingCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SuperTing(string[] @Params, TPlayObject PlayObject)
+        public void SuperTing(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {
@@ -20,7 +20,7 @@ namespace GameSvr.Command.Commands
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sRange = @Params.Length > 1 ? @Params[1] : "";
-            TPlayObject MoveHuman;
+            PlayObject MoveHuman;
             IList<TBaseObject> HumanList;
             if (sRange == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
                 M2Share.UserEngine.GetMapRageHuman(m_PlayObject.m_PEnvir, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, nRange, HumanList);
                 for (var i = 0; i < HumanList.Count; i++)
                 {
-                    MoveHuman = HumanList[i] as TPlayObject;
+                    MoveHuman = HumanList[i] as PlayObject;
                     if (MoveHuman != PlayObject)
                     {
                         MoveHuman.MapRandomMove(MoveHuman.m_sHomeMap, 0);

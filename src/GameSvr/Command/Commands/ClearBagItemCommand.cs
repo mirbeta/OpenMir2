@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     public class ClearBagItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ClearBagItem(string[] @Params, TPlayObject PlayObject)
+        public void ClearBagItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

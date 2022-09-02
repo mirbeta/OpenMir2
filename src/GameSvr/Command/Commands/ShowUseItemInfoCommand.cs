@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ShowUseItemInfoCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowUseItem(string[] @Params, TPlayObject PlayObject)
+        public void ShowUseItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class BackStepCommand : BaseCommond
     {
         [DefaultCommand]
-        public void BackStep(string[] @Params, TPlayObject PlayObject)
+        public void BackStep(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

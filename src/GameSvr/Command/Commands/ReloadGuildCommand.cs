@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ReloadGuildCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadGuild(string[] @Params, TPlayObject PlayObject)
+        public void ReloadGuild(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

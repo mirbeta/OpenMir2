@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ReCallMobExCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReCallMobEx(string[] @Params, TPlayObject PlayObject)
+        public void ReCallMobEx(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

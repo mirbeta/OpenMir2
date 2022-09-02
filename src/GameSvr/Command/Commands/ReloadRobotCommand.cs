@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     [GameCommand("ReloadRobot", "重新加载机器人脚本", 10)]
     public class ReloadRobotCommand : BaseCommond
     {
-        public void ReloadRobot(TPlayObject PlayObject)
+        public void ReloadRobot(PlayObject PlayObject)
         {
             M2Share.RobotManage.ReLoadRobot();
             PlayObject.SysMsg("重新加载机器人配置完成...", MsgColor.Green, MsgType.Hint);

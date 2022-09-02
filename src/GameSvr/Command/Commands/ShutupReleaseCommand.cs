@@ -8,7 +8,7 @@ namespace GameSvr.Command.Commands
     public class ShutupReleaseCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShutupRelease(string[] @params, TPlayObject PlayObject)
+        public void ShutupRelease(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

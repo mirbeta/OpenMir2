@@ -15,7 +15,7 @@ namespace GameSvr.RobotPlay
     /// <summary>
     /// 假人
     /// </summary>
-    public partial class RobotPlayObject : TPlayObject
+    public partial class RobotPlayObject : PlayObject
     {
         public long m_dwSearchTargetTick = 0;
         /// <summary>
@@ -353,7 +353,7 @@ namespace GameSvr.RobotPlay
 
         protected override void Whisper(string whostr, string saystr)
         {
-            TPlayObject PlayObject = M2Share.UserEngine.GetPlayObject(whostr);
+            PlayObject PlayObject = M2Share.UserEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
                 if (!PlayObject.m_boReadyRun)

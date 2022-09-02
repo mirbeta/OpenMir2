@@ -12,7 +12,7 @@ namespace GameSvr.Npc
 {
     public partial class NormNpc
     {
-        private void GotoLable(TPlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
+        private void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
         {
             bool bo11;
             string sSendMsg;
@@ -113,12 +113,12 @@ namespace GameSvr.Npc
             }
         }
 
-        public void GotoLable(TPlayObject PlayObject, string sLabel, bool boExtJmp)
+        public void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp)
         {
             GotoLable(PlayObject, sLabel, boExtJmp, "");
         }
 
-        private bool GotoLable_CheckQuestStatus(TPlayObject PlayObject, TScript ScriptInfo)
+        private bool GotoLable_CheckQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
         {
             bool result = true;
             int I;
@@ -148,7 +148,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private TUserItem GotoLable_CheckItemW(TPlayObject PlayObject, string sItemType, int nParam)
+        private TUserItem GotoLable_CheckItemW(PlayObject PlayObject, string sItemType, int nParam)
         {
             TUserItem result = null;
             int nCount = 0;
@@ -273,7 +273,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void GotoLable_QuestCheckCondition_SetVal(TPlayObject PlayObject, string sIndex, int nCount)
+        private void GotoLable_QuestCheckCondition_SetVal(PlayObject PlayObject, string sIndex, int nCount)
         {
             var n14 = M2Share.GetValNameNo(sIndex);
             if (n14 >= 0)
@@ -305,7 +305,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private bool GotoLable_QuestCheckCondition_CheckDieMon(TPlayObject PlayObject, string MonName)
+        private bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
             if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.m_sCharName == MonName))
@@ -315,7 +315,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLable_QuestCheckCondition_CheckKillMon(TPlayObject PlayObject, string MonName)
+        private bool GotoLable_QuestCheckCondition_CheckKillMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
             if ((PlayObject.m_TargetCret != null) && (PlayObject.m_TargetCret.m_sCharName == MonName))
@@ -325,12 +325,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        public bool GotoLable_QuestCheckCondition_CheckRandomNo(TPlayObject PlayObject, string sNumber)
+        public bool GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject PlayObject, string sNumber)
         {
             return PlayObject.m_sRandomNo == sNumber;
         }
 
-        private bool GotoLable_QuestCheckCondition_CheckUserDateType(TPlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
+        private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
         {
             string sText = string.Empty;
             string Name = string.Empty;
@@ -381,7 +381,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLableQuestCheckCondition(TPlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref TUserItem UserItem)
+        private bool GotoLableQuestCheckCondition(PlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref TUserItem UserItem)
         {
             bool result = true;
             TQuestConditionInfo QuestConditionInfo;
@@ -1297,12 +1297,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool CheckKillMon2(TPlayObject PlayObject, string sMonName)
+        private bool CheckKillMon2(PlayObject PlayObject, string sMonName)
         {
             return true;
         }
 
-        private bool GotoLable_JmpToLable(TPlayObject PlayObject, string sLabel)
+        private bool GotoLable_JmpToLable(PlayObject PlayObject, string sLabel)
         {
             PlayObject.m_nScriptGotoCount++;
             if (PlayObject.m_nScriptGotoCount > M2Share.g_Config.nScriptGotoCountLimit)
@@ -1313,7 +1313,7 @@ namespace GameSvr.Npc
             return true;
         }
 
-        private void GotoLable_GoToQuest(TPlayObject PlayObject, int nQuest)
+        private void GotoLable_GoToQuest(PlayObject PlayObject, int nQuest)
         {
             TScript Script;
             for (var i = 0; i < m_ScriptList.Count; i++)
@@ -1476,7 +1476,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void GotoLable_TakeItem(TPlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
+        private void GotoLable_TakeItem(PlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
         {
             TUserItem UserItem;
             StdItem StdItem;
@@ -1513,7 +1513,7 @@ namespace GameSvr.Npc
             }
         }
 
-        public void GotoLable_GiveItem(TPlayObject PlayObject, string sItemName, int nItemCount)
+        public void GotoLable_GiveItem(PlayObject PlayObject, string sItemName, int nItemCount)
         {
             TUserItem UserItem;
             StdItem StdItem;
@@ -1571,7 +1571,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void GotoLable_TakeWItem(TPlayObject PlayObject, string sItemName, int nItemCount)
+        private void GotoLable_TakeWItem(PlayObject PlayObject, string sItemName, int nItemCount)
         {
             string sName = string.Empty;
             string sC = string.Empty;
@@ -1708,7 +1708,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private bool GotoLableQuestActionProcess(TPlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem, ref bool bo11)
+        private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem, ref bool bo11)
         {
             bool result = true;
             TQuestActionInfo QuestActionInfo;
@@ -1723,7 +1723,7 @@ namespace GameSvr.Npc
             string s48 = string.Empty;
             Envirnoment Envir;
             IList<TBaseObject> List58;
-            TPlayObject User;
+            PlayObject User;
             var n18 = 0;
             var n34 = 0;
             var n38 = 0;
@@ -1938,7 +1938,7 @@ namespace GameSvr.Npc
                             M2Share.UserEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
                             if (List58.Count > 0)
                             {
-                                User = (TPlayObject)List58[0];
+                                User = (PlayObject)List58[0];
                                 User.MapRandomMove(this.m_sMapName, 0);
                             }
                             PlayObject.MapRandomMove(QuestActionInfo.sParam1, 0);
@@ -1956,7 +1956,7 @@ namespace GameSvr.Npc
                             M2Share.UserEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
                             for (var k = 0; k < List58.Count; k++)
                             {
-                                User = (TPlayObject)List58[k];
+                                User = (PlayObject)List58[k];
                                 User.MapRandomMove(this.m_sMapName, 0);
                                 if (k > 20)
                                 {
@@ -2376,7 +2376,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void GotoLableSendMerChantSayMsg(TPlayObject PlayObject, string sMsg, bool boFlag)
+        private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag)
         {
             string sVariable = string.Empty;
             string sSource = sMsg;

@@ -18,7 +18,7 @@ namespace GameSvr.Npc
 
         }
 
-        public override void Click(TPlayObject PlayObject)
+        public override void Click(PlayObject PlayObject)
         {
             if (this.m_Castle == null)
             {
@@ -31,7 +31,7 @@ namespace GameSvr.Npc
             }
         }
 
-        protected override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        protected override void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
             var sText = string.Empty;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
@@ -91,7 +91,7 @@ namespace GameSvr.Npc
             }
         }
 
-        public override void UserSelect(TPlayObject PlayObject, string sData)
+        public override void UserSelect(PlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
             const string sExceptionMsg = "[Exception] TCastleManager::UserSelect... ";
@@ -263,7 +263,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void HireGuard(string sIndex, TPlayObject PlayObject)
+        private void HireGuard(string sIndex, PlayObject PlayObject)
         {
             if (this.m_Castle == null)
             {
@@ -312,7 +312,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void HireArcher(string sIndex, TPlayObject PlayObject)
+        private void HireArcher(string sIndex, PlayObject PlayObject)
         {
             if (this.m_Castle == null)
             {
@@ -361,7 +361,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void RepairDoor(TPlayObject PlayObject)
+        private void RepairDoor(PlayObject PlayObject)
         {
             if (this.m_Castle == null)
             {
@@ -386,7 +386,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void RepairWallNow(int nWallIndex, TPlayObject PlayObject)
+        private void RepairWallNow(int nWallIndex, PlayObject PlayObject)
         {
             if (this.m_Castle == null)
             {
@@ -411,7 +411,7 @@ namespace GameSvr.Npc
             }
         }
 
-        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(PlayObject PlayObject, string sMsg)
         {
             if (!M2Share.g_Config.boSubkMasterSendMsg)
             {

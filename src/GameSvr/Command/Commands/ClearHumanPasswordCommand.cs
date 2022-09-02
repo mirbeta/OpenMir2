@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ClearHumanPasswordCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ClearHumanPassword(string[] @Params, TPlayObject PlayObject)
+        public void ClearHumanPassword(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -16,7 +16,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Player
 {
-    public partial class TPlayObject : AnimalObject
+    public partial class PlayObject : AnimalObject
     {
         private bool ClientPickUpItem_IsSelf(int BaseObject)
         {
@@ -797,7 +797,7 @@ namespace GameSvr.Player
             SendDefMessage(Grobal2.SM_DEALCANCEL, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
-                (m_DealCreat as TPlayObject).DealCancel();
+                (m_DealCreat as PlayObject).DealCancel();
             }
             m_DealCreat = null;
             GetBackDealItems();
@@ -825,7 +825,7 @@ namespace GameSvr.Player
         {
             int n;
             int sumlv;
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             const string sExceptionMsg = "[Exception] TPlayObject::GainExp";
             double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
             try
@@ -980,7 +980,7 @@ namespace GameSvr.Player
             SendDefMessage(Grobal2.SM_MAPDESCRIPTION, nMUSICID, 0, 0, 0, m_PEnvir.MapDesc);
         }
 
-        private void SendWhisperMsg(TPlayObject PlayObject)
+        private void SendWhisperMsg(PlayObject PlayObject)
         {
             if (PlayObject == this)
             {
@@ -1357,7 +1357,7 @@ namespace GameSvr.Player
             }
         }
 
-        public void PKDie(TPlayObject PlayObject)
+        public void PKDie(PlayObject PlayObject)
         {
             var nWinLevel = M2Share.g_Config.nKillHumanWinLevel;
             var nLostLevel = M2Share.g_Config.nKilledLostLevel;
@@ -1500,7 +1500,7 @@ namespace GameSvr.Player
 
         public void SendGroupMembers()
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             var sSendMsg = "";
             for (var i = 0; i < m_GroupMembers.Count; i++)
             {
@@ -2271,7 +2271,7 @@ namespace GameSvr.Player
         private bool ReadBook(StdItem StdItem)
         {
             TUserMagic UserMagic;
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             var result = false;
             var magic = M2Share.UserEngine.FindMagic(StdItem.Name);
             if (magic != null)
@@ -2480,7 +2480,7 @@ namespace GameSvr.Player
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
-                    (m_DealCreat as TPlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                    (m_DealCreat as PlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
                     m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
                     m_DealLastTick = HUtil32.GetTickCount();
                 }
@@ -2508,7 +2508,7 @@ namespace GameSvr.Player
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
-                    (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                    (m_DealCreat as PlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
                     m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
                     m_DealLastTick = HUtil32.GetTickCount();
                 }
@@ -2524,7 +2524,7 @@ namespace GameSvr.Player
             m_DealLastTick = HUtil32.GetTickCount();
         }
 
-        private void JoinGroup(TPlayObject PlayObject)
+        private void JoinGroup(PlayObject PlayObject)
         {
             m_GroupOwner = PlayObject;
             SendGroupText(format(M2Share.g_sJoinGroup, m_sCharName));
@@ -3368,7 +3368,7 @@ namespace GameSvr.Player
         {
             bool boIsfound = false;
             string sSayMsg;
-            TPlayObject Human;
+            PlayObject Human;
             for (var i = 0; i < M2Share.g_UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
             {
                 if (string.Compare(M2Share.g_UnForceMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)

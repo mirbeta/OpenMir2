@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class MoveMobToCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MoveMobTo(string[] @Params, TPlayObject PlayObject)
+        public void MoveMobTo(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

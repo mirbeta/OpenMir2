@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class MapMoveHumanCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MapMoveHuman(string[] @Params, TPlayObject PlayObject)
+        public void MapMoveHuman(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {
@@ -19,7 +19,7 @@ namespace GameSvr.Command.Commands
             }
             var sSrcMap = @Params.Length > 0 ? @Params[0] : "";
             var sDenMap = @Params.Length > 1 ? @Params[1] : "";
-            TPlayObject MoveHuman;
+            PlayObject MoveHuman;
             if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
             M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.Width / 2, SrcEnvir.Height / 2, 1000, HumanList);
             for (var i = 0; i < HumanList.Count; i++)
             {
-                MoveHuman = (TPlayObject)HumanList[i];
+                MoveHuman = (PlayObject)HumanList[i];
                 if (MoveHuman != PlayObject)
                 {
                     MoveHuman.MapRandomMove(sDenMap, 0);

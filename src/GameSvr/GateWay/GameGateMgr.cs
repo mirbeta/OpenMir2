@@ -260,7 +260,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 设置用户对应网关编号
         /// </summary>
-        public void SetGateUserList(int nGateIdx, int nSocket, TPlayObject PlayObject)
+        public void SetGateUserList(int nGateIdx, int nSocket, PlayObject PlayObject)
         {
             if (!_gameGates.ContainsKey(nGateIdx))
             {

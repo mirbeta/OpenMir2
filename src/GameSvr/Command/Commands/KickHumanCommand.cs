@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class KickHumanCommand : BaseCommond
     {
         [DefaultCommand]
-        public void KickHuman(string[] @params, TPlayObject PlayObject)
+        public void KickHuman(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

@@ -42,7 +42,7 @@ namespace GameSvr.Magic
         /// 检查护身符
         /// </summary>
         /// <returns></returns>
-        public static bool CheckAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
+        public static bool CheckAmulet(PlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
             if (PlayObject == null)
             {
@@ -104,7 +104,7 @@ namespace GameSvr.Magic
         /// <summary>
         /// 使用护身符
         /// </summary>
-        public static void UseAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
+        public static void UseAmulet(PlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
             if (PlayObject == null)
             {

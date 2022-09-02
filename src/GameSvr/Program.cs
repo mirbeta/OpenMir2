@@ -24,12 +24,6 @@ namespace GameSvr
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
-            var Ability = new TClientStdItem();
-            Ability.Name = "哈哈哈";
-            Ability.Looks = 100;
-
-            var abstr = EDcode.EncodeBuffer(Ability);
-
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()

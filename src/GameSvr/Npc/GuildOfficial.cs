@@ -18,12 +18,12 @@ namespace GameSvr.Npc
             this.m_wAppr = 8;
         }
 
-        public override void Click(TPlayObject PlayObject)
+        public override void Click(PlayObject PlayObject)
         {
             base.Click(PlayObject);
         }
 
-        protected override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        protected override void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
             if (sVariable == "$REQUESTCASTLELIST")
@@ -56,7 +56,7 @@ namespace GameSvr.Npc
             base.Run();
         }
 
-        public override void UserSelect(TPlayObject PlayObject, string sData)
+        public override void UserSelect(PlayObject PlayObject, string sData)
         {
             var sMsg = string.Empty;
             var sLabel = string.Empty;
@@ -115,7 +115,7 @@ namespace GameSvr.Npc
         /// <param name="PlayObject"></param>
         /// <param name="sGuildName"></param>
         /// <returns></returns>
-        private int ReQuestBuildGuild(TPlayObject PlayObject, string sGuildName)
+        private int ReQuestBuildGuild(PlayObject PlayObject, string sGuildName)
         {
             var result = 0;
             sGuildName = sGuildName.Trim();
@@ -181,7 +181,7 @@ namespace GameSvr.Npc
         /// <param name="PlayObject"></param>
         /// <param name="sGuildName"></param>
         /// <returns></returns>
-        private void ReQuestGuildWar(TPlayObject PlayObject, string sGuildName)
+        private void ReQuestGuildWar(PlayObject PlayObject, string sGuildName)
         {
             if (M2Share.GuildManager.FindGuild(sGuildName) != null)
             {
@@ -202,12 +202,12 @@ namespace GameSvr.Npc
             }
         }
 
-        private void DoNate(TPlayObject PlayObject)
+        private void DoNate(PlayObject PlayObject)
         {
             PlayObject.SendMsg(this, Grobal2.RM_DONATE_OK, 0, 0, 0, 0, "");
         }
 
-        private void ReQuestCastleWar(TPlayObject PlayObject, string sIndex)
+        private void ReQuestCastleWar(PlayObject PlayObject, string sIndex)
         {
             var nIndex = HUtil32.Str_ToInt(sIndex, -1);
             if (nIndex < 0)
@@ -242,7 +242,7 @@ namespace GameSvr.Npc
             }
         }
 
-        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(PlayObject PlayObject, string sMsg)
         {
             base.SendCustemMsg(PlayObject, sMsg);
         }

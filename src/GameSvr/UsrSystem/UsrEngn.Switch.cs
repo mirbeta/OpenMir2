@@ -23,7 +23,7 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        private void LoadSwitchData(TSwitchDataInfo SwitchData, ref TPlayObject PlayObject)
+        private void LoadSwitchData(TSwitchDataInfo SwitchData, ref PlayObject PlayObject)
         {
             int nCount;
             TSlaveInfo SlaveInfo;
@@ -88,7 +88,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        private bool SendSwitchData(TPlayObject PlayObject, int nServerIndex)
+        private bool SendSwitchData(PlayObject PlayObject, int nServerIndex)
         {
             TSwitchDataInfo SwitchData = null;
             MakeSwitchData(PlayObject, ref SwitchData);
@@ -99,7 +99,7 @@ namespace GameSvr.UsrSystem
             return true;
         }
 
-        private void MakeSwitchData(TPlayObject PlayObject, ref TSwitchDataInfo SwitchData)
+        private void MakeSwitchData(PlayObject PlayObject, ref TSwitchDataInfo SwitchData)
         {
             SwitchData = new TSwitchDataInfo();
             SwitchData.sChrName = PlayObject.m_sCharName;

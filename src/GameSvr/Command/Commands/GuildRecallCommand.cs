@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
     public class GuildRecallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GuildRecall(TPlayObject PlayObject)
+        public void GuildRecall(PlayObject PlayObject)
         {
             if (!PlayObject.m_boGuildMove && PlayObject.m_btPermission < 6)
             {
@@ -58,7 +58,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg($"{PlayObject.m_wGroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            TPlayObject m_PlayObject;
+            PlayObject m_PlayObject;
             for (var i = 0; i < PlayObject.m_MyGuild.m_RankList.Count; i++)
             {
                 GuildRank = PlayObject.m_MyGuild.m_RankList[i];

@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     public class SignMapMoveCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SignMapMove(TPlayObject PlayObject)
+        public void SignMapMove(PlayObject PlayObject)
         {
             //try
             //{

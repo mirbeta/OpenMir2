@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ChangeItemNameCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeItemName(string[] @params, TPlayObject PlayObject)
+        public void ChangeItemName(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

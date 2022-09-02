@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ChangeLevelCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeLevel(string[] @Params, TPlayObject PlayObject)
+        public void ChangeLevel(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

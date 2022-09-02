@@ -4,7 +4,7 @@ using SystemModule.Data;
 
 namespace GameSvr.Player
 {
-    public partial class TPlayObject
+    public partial class PlayObject
     {
         protected virtual void Whisper(string whostr, string saystr)
         {
@@ -256,7 +256,7 @@ namespace GameSvr.Player
             var sParam5 = string.Empty;
             var sParam6 = string.Empty;
             var sParam7 = string.Empty;
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             int nFlag;
             int nValue;
             int nLen;

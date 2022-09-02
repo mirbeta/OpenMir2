@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class TrainingMagicCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TrainingMagic(string[] @Params, TPlayObject PlayObject)
+        public void TrainingMagic(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

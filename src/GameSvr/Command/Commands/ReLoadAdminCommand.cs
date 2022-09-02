@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ReLoadAdminCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReLoadAdmin(TPlayObject playObject)
+        public void ReLoadAdmin(PlayObject playObject)
         {
             M2Share.LocalDB.LoadAdminList();
             M2Share.UserEngine.SendServerGroupMsg(213, M2Share.nServerIndex, "");

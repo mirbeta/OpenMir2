@@ -513,7 +513,7 @@ namespace GameSvr.Castle
             var result = true;
             for (var i = 0; i < playPbjectList.Count; i++)
             {
-                var playObject = (TPlayObject)playPbjectList[i];
+                var playObject = (PlayObject)playPbjectList[i];
                 if (!playObject.m_boDeath && playObject.m_MyGuild != guild)
                 {
                     result = false;
@@ -543,12 +543,12 @@ namespace GameSvr.Castle
 
         public void StartWallconquestWar()
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             var ListC = new List<TBaseObject>();
             M2Share.UserEngine.GetMapRageHuman(m_MapPalace, m_nHomeX, m_nHomeY, 100, ListC);
             for (var i = 0; i < ListC.Count; i++)
             {
-                PlayObject = (TPlayObject)ListC[i];
+                PlayObject = (PlayObject)ListC[i];
                 PlayObject.RefShowName();
             }
         }
@@ -558,11 +558,11 @@ namespace GameSvr.Castle
         /// </summary>
         public void StopWallconquestWar()
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             const string sWallWarStop = "[{0} 攻城战已经结束]";
             m_boUnderWar = false;
             m_AttackGuildList.Clear();
-            IList<TPlayObject> ListC = new List<TPlayObject>();
+            IList<PlayObject> ListC = new List<PlayObject>();
             M2Share.UserEngine.GetMapOfRangeHumanCount(m_MapCastle, m_nHomeX, m_nHomeY, 100);
             for (var i = 0; i < ListC.Count; i++)
             {
@@ -726,7 +726,7 @@ namespace GameSvr.Castle
         /// <param name="PlayObject"></param>
         /// <param name="nGold"></param>
         /// <returns></returns>
-        public int WithDrawalGolds(TPlayObject PlayObject, int nGold)
+        public int WithDrawalGolds(PlayObject PlayObject, int nGold)
         {
             var result = -1;
             if (nGold <= 0)
@@ -762,7 +762,7 @@ namespace GameSvr.Castle
             return result;
         }
 
-        public int ReceiptGolds(TPlayObject PlayObject, int nGold)
+        public int ReceiptGolds(PlayObject PlayObject, int nGold)
         {
             var result = -1;
             if (nGold <= 0)

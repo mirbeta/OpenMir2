@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class DisableSendMsgCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DisableSendMsg(string[] @Params, TPlayObject PlayObject)
+        public void DisableSendMsg(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

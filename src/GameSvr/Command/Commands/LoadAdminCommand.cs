@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class LoadAdminCommand : BaseCommond
     {
         [DefaultCommand]
-        public void LoadAdmin(TPlayObject PlayObject)
+        public void LoadAdmin(PlayObject PlayObject)
         {
             if (PlayObject.m_btPermission < 6)
             {

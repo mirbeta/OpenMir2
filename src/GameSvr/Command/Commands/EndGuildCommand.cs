@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class EndGuildCommand : BaseCommond
     {
         [DefaultCommand]
-        public void EndGuild(TPlayObject PlayObject)
+        public void EndGuild(PlayObject PlayObject)
         {
             if (PlayObject.m_MyGuild != null)
             {

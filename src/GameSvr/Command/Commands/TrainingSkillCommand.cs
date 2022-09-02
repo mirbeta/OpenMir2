@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class TrainingSkillCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TrainingSkill(string[] @Params, TPlayObject PlayObject)
+        public void TrainingSkill(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ChangeJobCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeJob(string[] @params, TPlayObject PlayObject)
+        public void ChangeJob(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

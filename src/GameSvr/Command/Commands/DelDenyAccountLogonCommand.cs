@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class DelDenyAccountLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelDenyAccountLogon(string[] @Params, TPlayObject PlayObject)
+        public void DelDenyAccountLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

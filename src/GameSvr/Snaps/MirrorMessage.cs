@@ -8,7 +8,7 @@ namespace GameSvr.Snaps
 {
     public class SpapsMessage
     {
-        private readonly TPlayObject PlayObject = null;
+        private readonly PlayObject PlayObject = null;
 
         public SpapsMessage()
         {
@@ -180,7 +180,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.m_boHearWhisper)
@@ -198,7 +198,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.m_boHearWhisper)
@@ -216,7 +216,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.m_boHearWhisper)
@@ -438,7 +438,7 @@ namespace GameSvr.Snaps
 
         private void MsgGetLoverLogin(int sNum, string Body)
         {
-            TPlayObject humlover;
+            PlayObject humlover;
             string Str;
             var uname = string.Empty;
             var lovername = string.Empty;

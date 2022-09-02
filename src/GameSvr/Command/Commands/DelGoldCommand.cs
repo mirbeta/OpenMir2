@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class DelGoldCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelGold(string[] @Params, TPlayObject PlayObject)
+        public void DelGold(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

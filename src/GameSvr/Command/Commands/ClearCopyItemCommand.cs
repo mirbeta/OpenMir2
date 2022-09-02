@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ClearCopyItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ClearCopyItem(string[] @Params, TPlayObject PlayObject)
+        public void ClearCopyItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

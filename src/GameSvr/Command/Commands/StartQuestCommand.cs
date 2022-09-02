@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class StartQuestCommand : BaseCommond
     {
         [DefaultCommand]
-        public void StartQuest(string[] @params, TPlayObject PlayObject)
+        public void StartQuest(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

@@ -293,7 +293,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void UpgradeWaponAddValue(TPlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
+        private void UpgradeWaponAddValue(PlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
             TUserItem UserItem;
             StdItem StdItem;
@@ -453,7 +453,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void UpgradeWapon(TPlayObject User)
+        private void UpgradeWapon(PlayObject User)
         {
             var bo0D = false;
             TUpgradeInfo upgradeInfo;
@@ -520,7 +520,7 @@ namespace GameSvr.Npc
         /// 取回升级武器
         /// </summary>
         /// <param name="User"></param>
-        private void GetBackupgWeapon(TPlayObject User)
+        private void GetBackupgWeapon(PlayObject User)
         {
             TUpgradeInfo UpgradeInfo = null;
             int n18 = 0;
@@ -695,7 +695,7 @@ namespace GameSvr.Npc
         /// <param name="PlayObject"></param>
         /// <param name="nPrice"></param>
         /// <returns></returns>
-        private int GetUserPrice(TPlayObject PlayObject, double nPrice)
+        private int GetUserPrice(PlayObject PlayObject, double nPrice)
         {
             int result;
             if (m_boCastle)
@@ -717,12 +717,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void UserSelect_SuperRepairItem(TPlayObject User)
+        private void UserSelect_SuperRepairItem(PlayObject User)
         {
             User.SendMsg(this, Grobal2.RM_SENDUSERSREPAIR, 0, ObjectId, 0, 0, "");
         }
 
-        private void UserSelect_BuyItem(TPlayObject User, int nInt)
+        private void UserSelect_BuyItem(PlayObject User, int nInt)
         {
             var sSendMsg = string.Empty;
             var n10 = 0;
@@ -752,17 +752,17 @@ namespace GameSvr.Npc
             User.SendMsg(this, Grobal2.RM_SENDGOODSLIST, 0, ObjectId, n10, 0, sSendMsg);
         }
 
-        private void UserSelect_SellItem(TPlayObject User)
+        private void UserSelect_SellItem(PlayObject User)
         {
             User.SendMsg(this, Grobal2.RM_SENDUSERSELL, 0, ObjectId, 0, 0, "");
         }
 
-        private void UserSelect_RepairItem(TPlayObject User)
+        private void UserSelect_RepairItem(PlayObject User)
         {
             User.SendMsg(this, Grobal2.RM_SENDUSERREPAIR, 0, ObjectId, 0, 0, "");
         }
 
-        private void UserSelect_MakeDurg(TPlayObject User)
+        private void UserSelect_MakeDurg(PlayObject User)
         {
             IList<TUserItem> List14;
             TUserItem UserItem;
@@ -784,16 +784,16 @@ namespace GameSvr.Npc
             }
         }
 
-        private void UserSelect_ItemPrices(TPlayObject User)
+        private void UserSelect_ItemPrices(PlayObject User)
         {
         }
 
-        private void UserSelect_Storage(TPlayObject User)
+        private void UserSelect_Storage(PlayObject User)
         {
             User.SendMsg(this, Grobal2.RM_USERSTORAGEITEM, 0, ObjectId, 0, 0, "");
         }
 
-        private void UserSelect_GetBack(TPlayObject User)
+        private void UserSelect_GetBack(PlayObject User)
         {
             User.SendMsg(this, Grobal2.RM_USERGETBACKITEM, 0, ObjectId, 0, 0, "");
         }
@@ -802,7 +802,7 @@ namespace GameSvr.Npc
         /// 打开出售物品窗口
         /// </summary>
         /// <param name="User"></param>
-        private void UserSelect_OpenDealOffForm(TPlayObject User)
+        private void UserSelect_OpenDealOffForm(PlayObject User)
         {
             if (User.bo_YBDEAL)
             {
@@ -822,7 +822,7 @@ namespace GameSvr.Npc
             }
         }
 
-        public override void UserSelect(TPlayObject PlayObject, string sData)
+        public override void UserSelect(PlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
             const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: {0}";
@@ -1115,12 +1115,12 @@ namespace GameSvr.Npc
             M2Share.ScriptSystem.LoadScriptFile(this, ScriptConst.sMarket_Def, sC, true);
         }
 
-        public override void Click(TPlayObject PlayObject)
+        public override void Click(PlayObject PlayObject)
         {
             base.Click(PlayObject);
         }
 
-        protected override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        protected override void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
             string sText;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
@@ -1238,7 +1238,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        public void ClientBuyItem(TPlayObject PlayObject, string sItemName, int nInt)
+        public void ClientBuyItem(PlayObject PlayObject, string sItemName, int nInt)
         {
             IList<TUserItem> List20;
             TUserItem UserItem;
@@ -1328,7 +1328,7 @@ namespace GameSvr.Npc
             }
         }
 
-        public void ClientGetDetailGoodsList(TPlayObject PlayObject, string sItemName, int nInt)
+        public void ClientGetDetailGoodsList(PlayObject PlayObject, string sItemName, int nInt)
         {
             IList<TUserItem> List20;
             var sSendMsg = string.Empty;
@@ -1370,7 +1370,7 @@ namespace GameSvr.Npc
             PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
         }
 
-        public void ClientQuerySellPrice(TPlayObject PlayObject, TUserItem UserItem)
+        public void ClientQuerySellPrice(PlayObject PlayObject, TUserItem UserItem)
         {
             var nC = GetSellItemPrice(GetUserItemPrice(UserItem));
             if (nC >= 0)
@@ -1402,7 +1402,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        public bool ClientSellItem(TPlayObject PlayObject, TUserItem UserItem)
+        public bool ClientSellItem(PlayObject PlayObject, TUserItem UserItem)
         {
             var result = false;
             StdItem StdItem;
@@ -1461,7 +1461,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ClientMakeDrugItem_sub_4A28FC(TPlayObject PlayObject, string sItemName)
+        private bool ClientMakeDrugItem_sub_4A28FC(PlayObject PlayObject, string sItemName)
         {
             bool result = false;
             IList<TMakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
@@ -1532,7 +1532,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        public void ClientMakeDrugItem(TPlayObject PlayObject, string sItemName)
+        public void ClientMakeDrugItem(PlayObject PlayObject, string sItemName)
         {
             IList<TUserItem> List1C;
             TUserItem MakeItem;
@@ -1596,7 +1596,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="UserItem"></param>
-        public void ClientQueryRepairCost(TPlayObject PlayObject, TUserItem UserItem)
+        public void ClientQueryRepairCost(PlayObject PlayObject, TUserItem UserItem)
         {
             int nRepairPrice;
             var nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
@@ -1642,7 +1642,7 @@ namespace GameSvr.Npc
         /// <param name="PlayObject"></param>
         /// <param name="UserItem"></param>
         /// <returns></returns>
-        public bool ClientRepairItem(TPlayObject PlayObject, TUserItem UserItem)
+        public bool ClientRepairItem(PlayObject PlayObject, TUserItem UserItem)
         {
             int nRepairPrice;
             var result = false;
@@ -1760,12 +1760,12 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="sMsg"></param>
-        protected void SetOffLineMsg(TPlayObject PlayObject, string sMsg)
+        protected void SetOffLineMsg(PlayObject PlayObject, string sMsg)
         {
             PlayObject.m_sOffLineLeaveword = sMsg;
         }
 
-        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(PlayObject PlayObject, string sMsg)
         {
             base.SendCustemMsg(PlayObject, sMsg);
         }
@@ -1806,7 +1806,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ChangeUseItemName(TPlayObject PlayObject, string sLabel, string sItemName)
+        private void ChangeUseItemName(PlayObject PlayObject, string sLabel, string sItemName)
         {
             if (!PlayObject.m_boChangeItemNameFlag)
             {

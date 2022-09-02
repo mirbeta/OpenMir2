@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class MobCountCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MobCount(string[] @Params, TPlayObject PlayObject)
+        public void MobCount(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

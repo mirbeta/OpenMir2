@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class DeleteItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DeleteItem(string[] @Params, TPlayObject PlayObject)
+        public void DeleteItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

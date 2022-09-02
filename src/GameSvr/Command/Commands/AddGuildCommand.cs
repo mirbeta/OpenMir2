@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class AddGuildCommand : BaseCommond
     {
         [DefaultCommand]
-        public void AddGuild(string[] @Params, TPlayObject PlayObject)
+        public void AddGuild(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

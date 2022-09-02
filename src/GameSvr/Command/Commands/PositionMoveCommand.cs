@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class PositionMoveCommand : BaseCommond
     {
         [DefaultCommand]
-        public void PositionMove(string[] @Params, TPlayObject PlayObject)
+        public void PositionMove(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

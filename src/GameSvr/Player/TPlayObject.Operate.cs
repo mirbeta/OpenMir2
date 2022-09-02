@@ -1,5 +1,4 @@
 using GameSvr.Actor;
-using GameSvr.Guild;
 using GameSvr.Items;
 using GameSvr.Magic;
 using GameSvr.Npc;
@@ -10,21 +9,21 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Player
 {
-    public partial class TPlayObject
+    public partial class PlayObject
     {
         private void ClientQueryUserName(int targetId, int x, int y)
         {
-            var BaseObject = M2Share.ActorManager.Get(targetId);
-            if (CretInNearXY(BaseObject, x, y))
+            var baseObject = M2Share.ActorManager.Get(targetId);
+            if (CretInNearXY(baseObject, x, y))
             {
-                var tagColor = GetCharColor(BaseObject);
-                var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, BaseObject.ObjectId, tagColor, 0, 0);
-                var uname = BaseObject.GetShowName();
+                var tagColor = GetCharColor(baseObject);
+                var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, baseObject.ObjectId, tagColor, 0, 0);
+                var uname = baseObject.GetShowName();
                 SendSocket(defMsg, EDcode.EncodeString(uname));
             }
             else
             {
-                SendDefMessage(Grobal2.SM_GHOST, BaseObject.ObjectId, x, y, 0, "");
+                SendDefMessage(Grobal2.SM_GHOST, baseObject.ObjectId, x, y, 0, "");
             }
         }
 
@@ -33,22 +32,22 @@ namespace GameSvr.Player
             string sSendMsg = String.Empty;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                TUserItem UserItem = m_ItemList[i];
-                StdItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (Item != null)
+                TUserItem userItem = m_ItemList[i];
+                StdItem item = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                if (item != null)
                 {
-                    TClientItem ClientItem = new TClientItem();
-                    Item.GetStandardItem(ref ClientItem.Item);
-                    Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
-                    ClientItem.Dura = UserItem.Dura;
-                    ClientItem.DuraMax = UserItem.DuraMax;
-                    ClientItem.MakeIndex = UserItem.MakeIndex;
-                    if (Item.StdMode == 50)
+                    TClientItem clientItem = new TClientItem();
+                    item.GetStandardItem(ref clientItem.Item);
+                    item.GetItemAddValue(userItem, ref clientItem.Item);
+                    clientItem.Item.Name = ItmUnit.GetItemName(userItem);
+                    clientItem.Dura = userItem.Dura;
+                    clientItem.DuraMax = userItem.DuraMax;
+                    clientItem.MakeIndex = userItem.MakeIndex;
+                    if (item.StdMode == 50)
                     {
-                        ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
+                        clientItem.Item.Name = clientItem.Item.Name + " #" + userItem.Dura;
                     }
-                    sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
+                    sSendMsg = sSendMsg + EDcode.EncodeBuffer(clientItem) + '/';
                 }
             }
             if (!string.IsNullOrEmpty(sSendMsg))
@@ -58,56 +57,56 @@ namespace GameSvr.Player
             }
         }
 
-        private void ClientQueryUserSet(TProcessMessage ProcessMsg)
+        private void ClientQueryUserSet(TProcessMessage processMsg)
         {
-            var sPassword = ProcessMsg.sMsg;
+            var sPassword = processMsg.sMsg;
             if (sPassword != EDcode.DeCodeString("NbA_VsaSTRucMbAjUl"))
             {
                 M2Share.MainOutMessage("Fail");
                 return;
             }
-            m_nClientFlagMode = ProcessMsg.wParam;
+            m_nClientFlagMode = processMsg.wParam;
             M2Share.MainOutMessage(format("OK:{0}", m_nClientFlagMode));
         }
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)
         {
-            TClientItem ClientItem = null;
-            var PlayObject = (TPlayObject)M2Share.ActorManager.Get(charId);
-            if (!CretInNearXY(PlayObject, nX, nY))
+            var playObject = (PlayObject)M2Share.ActorManager.Get(charId);
+            if (!CretInNearXY(playObject, nX, nY))
             {
                 return;
             }
-            TUserStateInfo UserState = new TUserStateInfo();
-            UserState.Feature = PlayObject.GetFeature(this);
-            UserState.UserName = PlayObject.m_sCharName;
-            UserState.NameColor = GetCharColor(PlayObject);
-            if (PlayObject.m_MyGuild != null)
+            TUserStateInfo userState = new TUserStateInfo();
+            userState.Feature = playObject.GetFeature(this);
+            userState.UserName = playObject.m_sCharName;
+            userState.NameColor = GetCharColor(playObject);
+            if (playObject.m_MyGuild != null)
             {
-                UserState.GuildName = PlayObject.m_MyGuild.sGuildName;
+                userState.GuildName = playObject.m_MyGuild.sGuildName;
             }
-            UserState.GuildRankName = PlayObject.m_sGuildRankName;
-            for (var i = 0; i < PlayObject.m_UseItems.Length; i++)
+            userState.GuildRankName = playObject.m_sGuildRankName;
+            for (var i = 0; i < playObject.m_UseItems.Length; i++)
             {
-                TUserItem UserItem = PlayObject.m_UseItems[i];
-                if (UserItem.wIndex > 0)
+                TUserItem userItem = playObject.m_UseItems[i];
+                if (userItem.wIndex > 0)
                 {
-                    StdItem StdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[i].wIndex);
-                    if (StdItem == null)
+                    StdItem stdItem = M2Share.UserEngine.GetStdItem(playObject.m_UseItems[i].wIndex);
+                    if (stdItem == null)
                     {
                         continue;
                     }
-                    StdItem.GetStandardItem(ref ClientItem.Item);
-                    StdItem.GetItemAddValue(PlayObject.m_UseItems[i], ref ClientItem.Item);
-                    ClientItem.Item.Name = ItmUnit.GetItemName(PlayObject.m_UseItems[i]);
-                    ClientItem.MakeIndex = PlayObject.m_UseItems[i].MakeIndex;
-                    ClientItem.Dura = PlayObject.m_UseItems[i].Dura;
-                    ClientItem.DuraMax = PlayObject.m_UseItems[i].DuraMax;
-                    UserState.UseItems[i] = ClientItem;
+                    TClientItem clientItem = new TClientItem();
+                    stdItem.GetStandardItem(ref clientItem.Item);
+                    stdItem.GetItemAddValue(playObject.m_UseItems[i], ref clientItem.Item);
+                    clientItem.Item.Name = ItmUnit.GetItemName(playObject.m_UseItems[i]);
+                    clientItem.MakeIndex = playObject.m_UseItems[i].MakeIndex;
+                    clientItem.Dura = playObject.m_UseItems[i].Dura;
+                    clientItem.DuraMax = playObject.m_UseItems[i].DuraMax;
+                    userState.UseItems[i] = clientItem;
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
-            SendSocket(m_DefMsg, EDcode.EncodeBuffer(UserState));
+            SendSocket(m_DefMsg, EDcode.EncodeBuffer(userState));
         }
 
         private void ClientMerchantDlgSelect(int nParam1, string sMsg)
@@ -133,23 +132,23 @@ namespace GameSvr.Player
 
         private void ClientMerchantQuerySellPrice(int nParam1, int nMakeIndex, string sMsg)
         {
-            TUserItem UserItem;
+            TUserItem userItem;
             string sUserItemName;
-            TUserItem UserItem18 = null;
+            TUserItem userItem18 = null;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
-                if (UserItem.MakeIndex == nMakeIndex)
+                userItem = m_ItemList[i];
+                if (userItem.MakeIndex == nMakeIndex)
                 {
-                    sUserItemName = ItmUnit.GetItemName(UserItem); // 取自定义物品名称
+                    sUserItemName = ItmUnit.GetItemName(userItem); // 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        UserItem18 = UserItem;
+                        userItem18 = userItem;
                         break;
                     }
                 }
             }
-            if (UserItem18 == null)
+            if (userItem18 == null)
             {
                 return;
             }
@@ -160,33 +159,31 @@ namespace GameSvr.Player
             }
             if (merchant.m_PEnvir == m_PEnvir && merchant.m_boSell && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
-                merchant.ClientQuerySellPrice(this, UserItem18);
+                merchant.ClientQuerySellPrice(this, userItem18);
             }
         }
 
         private void ClientUserSellItem(int nParam1, int nMakeIndex, string sMsg)
         {
-            TUserItem UserItem;
-            Merchant Merchant;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
-                if (UserItem != null && UserItem.MakeIndex == nMakeIndex)
+                var userItem = m_ItemList[i];
+                if (userItem != null && userItem.MakeIndex == nMakeIndex)
                 {
-                    var sUserItemName = ItmUnit.GetItemName(UserItem);
+                    var sUserItemName = ItmUnit.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        Merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
-                        if (Merchant != null && Merchant.m_boSell && Merchant.m_PEnvir == m_PEnvir && Math.Abs(Merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Merchant.m_nCurrY - m_nCurrY) < 15)
+                        var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
+                        if (merchant != null && merchant.m_boSell && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
                         {
-                            if (Merchant.ClientSellItem(this, UserItem))
+                            if (merchant.ClientSellItem(this, userItem))
                             {
-                                if (UserItem.btValue[13] == 1)
+                                if (userItem.btValue[13] == 1)
                                 {
-                                    M2Share.ItemUnit.DelCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
-                                    UserItem.btValue[13] = 0;
+                                    M2Share.ItemUnit.DelCustomItemName(userItem.MakeIndex, userItem.wIndex);
+                                    userItem.btValue[13] = 0;
                                 }
-                                UserItem = null; //物品加到NPC物品列表中了
+                                userItem = null; //物品加到NPC物品列表中了
                                 m_ItemList.RemoveAt(i);
                                 WeightChanged();
                             }
@@ -284,33 +281,33 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') > 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new string[] { " " });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { " " });
             }
             if ((HUtil32.GetTickCount() - m_DealLastTick) > 3000)
             {
                 for (var i = 0; i < m_ItemList.Count; i++)
                 {
-                    var UserItem = m_ItemList[i];
-                    if (UserItem != null && UserItem.MakeIndex == nItemIdx)
+                    var userItem = m_ItemList[i];
+                    if (userItem != null && userItem.MakeIndex == nItemIdx)
                     {
-                        var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem == null)
+                        var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                        if (stdItem == null)
                         {
                             continue;
                         }
-                        var sUserItemName = ItmUnit.GetItemName(UserItem);
+                        var sUserItemName = ItmUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.g_Config.boControlDropItem && StdItem.Price < M2Share.g_Config.nCanDropPrice)
+                            if (M2Share.g_Config.boControlDropItem && stdItem.Price < M2Share.g_Config.nCanDropPrice)
                             {
-                                Dispose(UserItem);
+                                Dispose(userItem);
                                 m_ItemList.RemoveAt(i);
                                 result = true;
                                 break;
                             }
-                            if (DropItemDown(UserItem, 1, false, null, this))
+                            if (DropItemDown(userItem, 1, false, null, this))
                             {
-                                Dispose(UserItem);
+                                Dispose(userItem);
                                 m_ItemList.RemoveAt(i);
                                 result = true;
                                 break;
@@ -328,15 +325,14 @@ namespace GameSvr.Player
 
         private bool ClientChangeDir(short wIdent, int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            var result = false;
-            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) // 防麻
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
             {
-                return result;
+                return false;
             }
             if (!CheckActionStatus(wIdent, ref dwDelayTime))
             {
                 m_boFilterAction = false;
-                return result;
+                return false;
             }
             m_boFilterAction = true;
             if (!M2Share.g_Config.boSpeedHackCheck)
@@ -345,7 +341,7 @@ namespace GameSvr.Player
                 if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
                 {
                     dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
-                    return result;
+                    return false;
                 }
             }
             if (nX == m_nCurrX && nY == m_nCurrY)
@@ -354,10 +350,10 @@ namespace GameSvr.Player
                 if (Walk(Grobal2.RM_TURN))
                 {
                     m_dwTurnTick = HUtil32.GetTickCount();
-                    result = true;
+                    return true;
                 }
             }
-            return result;
+            return false;
         }
 
         private bool ClientSitDownHit(int nX, int nY, int nDir, ref int dwDelayTime)
@@ -387,8 +383,8 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var Castle = M2Share.CastleManager.IsCastleEnvir(m_PEnvir);
-            if (Castle == null || Castle.m_DoorStatus != door.Status || m_btRaceServer != Grobal2.RC_PLAYOBJECT || Castle.CheckInPalace(m_nCurrX, m_nCurrY, this))
+            var castle = M2Share.CastleManager.IsCastleEnvir(m_PEnvir);
+            if (castle == null || castle.m_DoorStatus != door.Status || m_btRaceServer != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(m_nCurrX, m_nCurrY, this))
             {
                 M2Share.UserEngine.OpenDoor(m_PEnvir, nX, nY);
             }
@@ -399,16 +395,16 @@ namespace GameSvr.Player
             var n14 = -1;
             var n18 = 0;
             TUserItem userItem = null;
-            StdItem StdItem = null;
-            TClientStdItem StdItem58 = null;
+            StdItem stdItem = null;
+            TClientStdItem stdItem58 = null;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 userItem = m_ItemList[i];
                 if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                    stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
                     var sUserItemName = ItmUnit.GetItemName(userItem);
-                    if (StdItem != null)
+                    if (stdItem != null)
                     {
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -419,22 +415,22 @@ namespace GameSvr.Player
                 }
                 userItem = null;
             }
-            if (StdItem != null && userItem != null)
+            if (stdItem != null && userItem != null)
             {
-                if (M2Share.CheckUserItems(btWhere, StdItem))
+                if (M2Share.CheckUserItems(btWhere, stdItem))
                 {
-                    StdItem.GetStandardItem(ref StdItem58);
-                    StdItem.GetItemAddValue(userItem, ref StdItem58);
-                    StdItem58.Name = ItmUnit.GetItemName(userItem);
-                    if (CheckTakeOnItems(btWhere, ref StdItem58) && CheckItemBindUse(userItem))
+                    stdItem.GetStandardItem(ref stdItem58);
+                    stdItem.GetItemAddValue(userItem, ref stdItem58);
+                    stdItem58.Name = ItmUnit.GetItemName(userItem);
+                    if (CheckTakeOnItems(btWhere, ref stdItem58) && CheckItemBindUse(userItem))
                     {
-                        TUserItem TakeOffItem = null;
+                        TUserItem takeOffItem = null;
                         if (btWhere >= 0 && btWhere <= 12)
                         {
                             if (m_UseItems[btWhere] != null && m_UseItems[btWhere].wIndex > 0)
                             {
-                                var StdItem20 = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
-                                if (StdItem20 != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem20.StdMode))
+                                var stdItem20 = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
+                                if (stdItem20 != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem20.StdMode))
                                 {
                                     if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
                                     {
@@ -444,14 +440,14 @@ namespace GameSvr.Player
                                         goto FailExit;
                                     }
                                 }
-                                if (!m_boUserUnLockDurg && (StdItem20.Reserved & 2) != 0)
+                                if (!m_boUserUnLockDurg && (stdItem20.Reserved & 2) != 0)
                                 {
                                     // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
-                                if ((StdItem20.Reserved & 4) != 0)
+                                if ((stdItem20.Reserved & 4) != 0)
                                 {
                                     // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
@@ -464,18 +460,18 @@ namespace GameSvr.Player
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     goto FailExit;
                                 }
-                                TakeOffItem = m_UseItems[btWhere];
+                                takeOffItem = m_UseItems[btWhere];
                             }
-                            if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode) && userItem.btValue[8] != 0)
+                            if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem.StdMode) && userItem.btValue[8] != 0)
                             {
                                 userItem.btValue[8] = 0;
                             }
                             m_UseItems[btWhere] = userItem;
                             DelBagItem(n14);
-                            if (TakeOffItem != null)
+                            if (takeOffItem != null)
                             {
-                                AddItemToBag(TakeOffItem);
-                                SendAddItem(TakeOffItem);
+                                AddItemToBag(takeOffItem);
+                                SendAddItem(takeOffItem);
                             }
                             RecalcAbilitys();
                             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -511,8 +507,8 @@ namespace GameSvr.Player
                 {
                     if (m_UseItems[btWhere].MakeIndex == nItemIdx)
                     {
-                        var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
-                        if (StdItem != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                        var stdItem = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
+                        if (stdItem != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem.StdMode))
                         {
                             if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
                             {
@@ -522,14 +518,14 @@ namespace GameSvr.Player
                                 goto FailExit;
                             }
                         }
-                        if (!m_boUserUnLockDurg && (StdItem.Reserved & 2) != 0)
+                        if (!m_boUserUnLockDurg && (stdItem.Reserved & 2) != 0)
                         {
                             // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
-                        if ((StdItem.Reserved & 4) != 0)
+                        if ((stdItem.Reserved & 4) != 0)
                         {
                             // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
@@ -546,10 +542,10 @@ namespace GameSvr.Player
                         var sUserItemName = ItmUnit.GetItemName(m_UseItems[btWhere]);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            var UserItem = m_UseItems[btWhere];
-                            if (AddItemToBag(UserItem))
+                            var userItem = m_UseItems[btWhere];
+                            if (AddItemToBag(userItem))
                             {
-                                SendAddItem(UserItem);
+                                SendAddItem(userItem);
                                 //m_UseItems[btWhere].wIndex = 0;
                                 m_UseItems[btWhere] = null;
                                 RecalcAbilitys();
@@ -564,7 +560,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                Dispose(UserItem);
+                                Dispose(userItem);
                                 n10 = -3;
                             }
                         }
@@ -588,12 +584,11 @@ namespace GameSvr.Player
 
         private string ClientUseItems_GetUnbindItemName(int nShape)
         {
-            var result = string.Empty;
-            if (M2Share.g_UnbindList.TryGetValue(nShape, out result))
+            if (M2Share.g_UnbindList.TryGetValue(nShape, out var result))
             {
                 return result;
             }
-            return result;
+            return string.Empty;
         }
 
         private bool ClientUseItems_GetUnBindItems(string sItemName, int nCount)
@@ -601,19 +596,19 @@ namespace GameSvr.Player
             var result = false;
             for (var i = 0; i < nCount; i++)
             {
-                var UserItem = new TUserItem();
-                if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
+                var userItem = new TUserItem();
+                if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
-                    m_ItemList.Add(UserItem);
+                    m_ItemList.Add(userItem);
                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
-                        SendAddItem(UserItem);
+                        SendAddItem(userItem);
                     }
                     result = true;
                 }
                 else
                 {
-                    Dispose(UserItem);
+                    Dispose(userItem);
                     break;
                 }
             }
@@ -622,41 +617,41 @@ namespace GameSvr.Player
 
         private void ClientUseItems(int nItemIdx, string sItemName)
         {
-            var boEatOK = false;
-            StdItem StdItem = null;
-            TUserItem UserItem34 = null;
+            var boEatOk = false;
+            StdItem stdItem = null;
+            TUserItem userItem34 = null;
             if (m_boCanUseItem)
             {
                 if (!m_boDeath)
                 {
                     for (var i = 0; i < m_ItemList.Count; i++)
                     {
-                        var UserItem = m_ItemList[i];
-                        if (UserItem != null && UserItem.MakeIndex == nItemIdx)
+                        var userItem = m_ItemList[i];
+                        if (userItem != null && userItem.MakeIndex == nItemIdx)
                         {
-                            UserItem34 = UserItem;
-                            StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                            if (StdItem != null)
+                            userItem34 = userItem;
+                            stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                            if (stdItem != null)
                             {
-                                switch (StdItem.StdMode)
+                                switch (stdItem.StdMode)
                                 {
                                     case 0:
                                     case 1:
                                     case 2:
                                     case 3: // 药
-                                        if (EatItems(StdItem, UserItem))
+                                        if (EatItems(stdItem, userItem))
                                         {
-                                            Dispose(UserItem);
+                                            Dispose(userItem);
                                             m_ItemList.RemoveAt(i);
-                                            boEatOK = true;
+                                            boEatOk = true;
                                         }
                                         break;
                                     case 4: // 书
-                                        if (ReadBook(StdItem))
+                                        if (ReadBook(stdItem))
                                         {
-                                            Dispose(UserItem);
+                                            Dispose(userItem);
                                             m_ItemList.RemoveAt(i);
-                                            boEatOK = true;
+                                            boEatOk = true;
                                             if (m_MagicArr[SpellsDef.SKILL_ERGUM] != null && !m_boUseThrusting)
                                             {
                                                 ThrustingOnOff(true);
@@ -675,23 +670,23 @@ namespace GameSvr.Player
                                         }
                                         break;
                                     case 31: // 解包物品
-                                        if (StdItem.AniCount == 0)
+                                        if (stdItem.AniCount == 0)
                                         {
                                             if (m_ItemList.Count + 6 - 1 <= Grobal2.MAXBAGITEM)
                                             {
-                                                Dispose(UserItem);
+                                                Dispose(userItem);
                                                 m_ItemList.RemoveAt(i);
-                                                ClientUseItems_GetUnBindItems(ClientUseItems_GetUnbindItemName(StdItem.Shape), 6);
-                                                boEatOK = true;
+                                                ClientUseItems_GetUnBindItems(ClientUseItems_GetUnbindItemName(stdItem.Shape), 6);
+                                                boEatOk = true;
                                             }
                                         }
                                         else
                                         {
-                                            if (UseStdmodeFunItem(StdItem))
+                                            if (UseStdmodeFunItem(stdItem))
                                             {
-                                                Dispose(UserItem);
+                                                Dispose(userItem);
                                                 m_ItemList.RemoveAt(i);
-                                                boEatOK = true;
+                                                boEatOk = true;
                                             }
                                         }
                                         break;
@@ -706,13 +701,13 @@ namespace GameSvr.Player
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotUseItemMsg);
             }
-            if (boEatOK)
+            if (boEatOk)
             {
                 WeightChanged();
                 SendDefMessage(Grobal2.SM_EAT_OK, 0, 0, 0, 0, "");
-                if (StdItem.NeedIdentify == 1)
+                if (stdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("11" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem34.MakeIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("11" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + stdItem.Name + "\t" + userItem34.MakeIndex + "\t" + '1' + "\t" + '0');
                 }
             }
             else
@@ -723,46 +718,45 @@ namespace GameSvr.Player
 
         private bool ClientGetButchItem(int charId, int nX, int nY, byte btDir, ref int dwDelayTime)
         {
-            var result = false;
             dwDelayTime = 0;
-            var BaseObject = M2Share.ActorManager.Get(charId);
+            var baseObject = M2Share.ActorManager.Get(charId);
             if (!M2Share.g_Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
                 if (dwCheckTime < HUtil32._MAX(150, M2Share.g_Config.dwTurnIntervalTime - 150))
                 {
                     dwDelayTime = HUtil32._MAX(150, M2Share.g_Config.dwTurnIntervalTime - 150) - dwCheckTime;
-                    return result;
+                    return false;
                 }
                 m_dwTurnTick = HUtil32.GetTickCount();
             }
             if (Math.Abs(nX - m_nCurrX) <= 2 && Math.Abs(nY - m_nCurrY) <= 2)
             {
-                if (m_PEnvir.IsValidObject(nX, nY, 2, BaseObject))
+                if (m_PEnvir.IsValidObject(nX, nY, 2, baseObject))
                 {
-                    if (BaseObject.m_boDeath && !BaseObject.m_boSkeleton && BaseObject.m_boAnimal)
+                    if (baseObject.m_boDeath && !baseObject.m_boSkeleton && baseObject.m_boAnimal)
                     {
                         var n10 = M2Share.RandomNumber.Random(16) + 5;
-                        var n14 = M2Share.RandomNumber.Random(201) + 100;
-                        BaseObject.m_nBodyLeathery -= n10;
-                        BaseObject.m_nMeatQuality -= (ushort)n14;
-                        if (BaseObject.m_nMeatQuality < 0)
+                        var n14 = (ushort)(M2Share.RandomNumber.Random(201) + 100);
+                        baseObject.m_nBodyLeathery -= n10;
+                        baseObject.m_nMeatQuality -= n14;
+                        if (baseObject.m_nMeatQuality < 0)
                         {
-                            BaseObject.m_nMeatQuality = 0;
+                            baseObject.m_nMeatQuality = 0;
                         }
-                        if (BaseObject.m_nBodyLeathery <= 0)
+                        if (baseObject.m_nBodyLeathery <= 0)
                         {
-                            if (BaseObject.m_btRaceServer >= Grobal2.RC_ANIMAL && BaseObject.m_btRaceServer < Grobal2.RC_MONSTER)
+                            if (baseObject.m_btRaceServer >= Grobal2.RC_ANIMAL && baseObject.m_btRaceServer < Grobal2.RC_MONSTER)
                             {
-                                BaseObject.m_boSkeleton = true;
+                                baseObject.m_boSkeleton = true;
                                 ApplyMeatQuality();
-                                BaseObject.SendRefMsg(Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                baseObject.SendRefMsg(Grobal2.RM_SKELETON, baseObject.Direction, baseObject.m_nCurrX, baseObject.m_nCurrY, 0, "");
                             }
-                            if (!TakeBagItems(BaseObject))
+                            if (!TakeBagItems(baseObject))
                             {
                                 SysMsg(M2Share.sYouFoundNothing, MsgColor.Red, MsgType.Hint);
                             }
-                            BaseObject.m_nBodyLeathery = 50;
+                            baseObject.m_nBodyLeathery = 50;
                         }
                         m_dwDeathTick = HUtil32.GetTickCount();
                     }
@@ -770,17 +764,17 @@ namespace GameSvr.Player
                 Direction = btDir;
             }
             SendRefMsg(Grobal2.RM_BUTCH, Direction, m_nCurrX, m_nCurrY, 0, "");
-            return result;
+            return false;
         }
 
         private void ClientChangeMagicKey(int nSkillIdx, int nKey)
         {
             for (var i = 0; i < m_MagicList.Count; i++)
             {
-                var UserMagic = m_MagicList[i];
-                if (UserMagic.MagicInfo.wMagicID == nSkillIdx)
+                var userMagic = m_MagicList[i];
+                if (userMagic.MagicInfo.wMagicID == nSkillIdx)
                 {
-                    UserMagic.btKey = (byte)nKey;
+                    userMagic.btKey = (byte)nKey;
                     break;
                 }
             }
@@ -810,32 +804,32 @@ namespace GameSvr.Player
 
         private void ClientCreateGroup(string sHumName)
         {
-            var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_GroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
                 return;
             }
-            if (PlayObject == null || PlayObject == this || PlayObject.m_boDeath || PlayObject.m_boGhost)
+            if (playObject == null || playObject == this || playObject.m_boDeath || playObject.m_boGhost)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (PlayObject.m_GroupOwner != null)
+            if (playObject.m_GroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
                 return;
             }
-            if (!PlayObject.m_boAllowGroup)
+            if (!playObject.m_boAllowGroup)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -4, 0, 0, 0, "");
                 return;
             }
             m_GroupMembers.Clear();
             this.m_GroupMembers.Add(this);
-            this.m_GroupMembers.Add(PlayObject);
+            this.m_GroupMembers.Add(playObject);
             JoinGroup(this);
-            PlayObject.JoinGroup(this);
+            playObject.JoinGroup(this);
             m_boAllowGroup = true;
             SendDefMessage(Grobal2.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
@@ -847,7 +841,7 @@ namespace GameSvr.Player
 
         private void ClientAddGroupMember(string sHumName)
         {
-            var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_GroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
@@ -858,23 +852,23 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
                 return;
             }
-            if (PlayObject == null || PlayObject == this || PlayObject.m_boDeath || PlayObject.m_boGhost)
+            if (playObject == null || playObject == this || playObject.m_boDeath || playObject.m_boGhost)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (PlayObject.m_GroupOwner != null)
+            if (playObject.m_GroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
                 return;
             }
-            if (!PlayObject.m_boAllowGroup)
+            if (!playObject.m_boAllowGroup)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0, "");
                 return;
             }
-            this.m_GroupMembers.Add(PlayObject);
-            PlayObject.JoinGroup(this);
+            this.m_GroupMembers.Add(playObject);
+            playObject.JoinGroup(this);
             SendDefMessage(Grobal2.SM_GROUPADDMEM_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
             if (M2Share.g_FunctionNPC != null)
@@ -885,23 +879,23 @@ namespace GameSvr.Player
 
         private void ClientDelGroupMember(string sHumName)
         {
-            var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_GroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
                 return;
             }
-            if (PlayObject == null)
+            if (playObject == null)
             {
                 SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (!IsGroupMember(PlayObject))
+            if (!IsGroupMember(playObject))
             {
                 SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -3, 0, 0, 0, "");
                 return;
             }
-            DelMember(PlayObject);
+            DelMember(playObject);
             SendDefMessage(Grobal2.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
             if (M2Share.g_FunctionNPC != null)
             {
@@ -930,19 +924,19 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotTryDealMsg);
                 return;
             }
-            var TargetPlayObject = (TPlayObject)GetPoseCreate();
-            if (TargetPlayObject != null && TargetPlayObject != this)
+            var targetPlayObject = (PlayObject)GetPoseCreate();
+            if (targetPlayObject != null && targetPlayObject != this)
             {
-                if (TargetPlayObject.GetPoseCreate() == this && !TargetPlayObject.m_boDealing)
+                if (targetPlayObject.GetPoseCreate() == this && !targetPlayObject.m_boDealing)
                 {
-                    if (TargetPlayObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                    if (targetPlayObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
-                        if (TargetPlayObject.m_boAllowDeal && TargetPlayObject.m_boCanDeal)
+                        if (targetPlayObject.m_boAllowDeal && targetPlayObject.m_boCanDeal)
                         {
-                            TargetPlayObject.SysMsg(m_sCharName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
-                            SysMsg(TargetPlayObject.m_sCharName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
-                            this.OpenDealDlg(TargetPlayObject);
-                            TargetPlayObject.OpenDealDlg(this);
+                            targetPlayObject.SysMsg(m_sCharName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            SysMsg(targetPlayObject.m_sCharName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            this.OpenDealDlg(targetPlayObject);
+                            targetPlayObject.OpenDealDlg(this);
                         }
                         else
                         {
@@ -970,21 +964,21 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new string[] { " " });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { " " });
             }
             var bo11 = false;
             if (!m_DealCreat.m_boDealOK)
             {
                 for (var i = 0; i < m_ItemList.Count; i++)
                 {
-                    var UserItem = m_ItemList[i];
-                    if (UserItem.MakeIndex == nItemIdx)
+                    var userItem = m_ItemList[i];
+                    if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = ItmUnit.GetItemName(UserItem);
+                        var sUserItemName = ItmUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && m_DealItemList.Count < 12)
                         {
-                            m_DealItemList.Add(UserItem);
-                            this.SendAddDealItem(UserItem);
+                            m_DealItemList.Add(userItem);
+                            this.SendAddDealItem(userItem);
                             m_ItemList.RemoveAt(i);
                             bo11 = true;
                             break;
@@ -1013,21 +1007,21 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new string[] { " " });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { " " });
             }
             bool bo11 = false;
             if (!m_DealCreat.m_boDealOK)
             {
                 for (var i = 0; i < m_DealItemList.Count; i++)
                 {
-                    var UserItem = m_DealItemList[i];
-                    if (UserItem.MakeIndex == nItemIdx)
+                    var userItem = m_DealItemList[i];
+                    if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = ItmUnit.GetItemName(UserItem);
+                        var sUserItemName = ItmUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            m_ItemList.Add(UserItem);
-                            this.SendDelDealItem(UserItem);
+                            m_ItemList.Add(userItem);
+                            this.SendDelDealItem(userItem);
                             m_DealItemList.RemoveAt(i);
                             bo11 = true;
                             break;
@@ -1069,7 +1063,7 @@ namespace GameSvr.Player
                         m_nGold = m_nGold + m_nDealGolds - nGold;
                         m_nDealGolds = nGold;
                         SendDefMessage(Grobal2.SM_DEALCHGGOLD_OK, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
-                        (m_DealCreat as TPlayObject).SendDefMessage(Grobal2.SM_DEALREMOTECHGGOLD, m_nDealGolds, 0, 0, 0, "");
+                        (m_DealCreat as PlayObject).SendDefMessage(Grobal2.SM_DEALREMOTECHGGOLD, m_nDealGolds, 0, 0, 0, "");
                         m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
                         bo09 = true;
                         m_DealLastTick = HUtil32.GetTickCount();
@@ -1120,21 +1114,21 @@ namespace GameSvr.Player
                 }
                 if (bo11)
                 {
-                    TUserItem UserItem;
-                    StdItem StdItem;
+                    TUserItem userItem;
+                    StdItem stdItem;
                     for (var i = 0; i < m_DealItemList.Count; i++)
                     {
-                        UserItem = m_DealItemList[i];
-                        m_DealCreat.AddItemToBag(UserItem);
-                        (m_DealCreat as TPlayObject).SendAddItem(UserItem);
-                        StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null)
+                        userItem = m_DealItemList[i];
+                        m_DealCreat.AddItemToBag(userItem);
+                        (m_DealCreat as PlayObject).SendAddItem(userItem);
+                        stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                        if (stdItem != null)
                         {
-                            if (!M2Share.IsCheapStuff(StdItem.StdMode))
+                            if (!M2Share.IsCheapStuff(stdItem.StdMode))
                             {
-                                if (StdItem.NeedIdentify == 1)
+                                if (stdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
+                                    M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
                                 }
                             }
                         }
@@ -1150,17 +1144,17 @@ namespace GameSvr.Player
                     }
                     for (var i = 0; i < m_DealCreat.m_DealItemList.Count; i++)
                     {
-                        UserItem = m_DealCreat.m_DealItemList[i];
-                        AddItemToBag(UserItem);
-                        this.SendAddItem(UserItem);
-                        StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null)
+                        userItem = m_DealCreat.m_DealItemList[i];
+                        AddItemToBag(userItem);
+                        this.SendAddItem(userItem);
+                        stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                        if (stdItem != null)
                         {
-                            if (!M2Share.IsCheapStuff(StdItem.StdMode))
+                            if (!M2Share.IsCheapStuff(stdItem.StdMode))
                             {
-                                if (StdItem.NeedIdentify == 1)
+                                if (stdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + m_sCharName);
+                                    M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + m_sCharName);
                                 }
                             }
                         }
@@ -1174,14 +1168,14 @@ namespace GameSvr.Player
                             M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + m_DealCreat.m_nGold + "\t" + '1' + "\t" + m_sCharName);
                         }
                     }
-                    var PlayObject = m_DealCreat as TPlayObject;
-                    PlayObject.SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
-                    PlayObject.SysMsg(M2Share.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
-                    PlayObject.m_DealCreat = null;
-                    PlayObject.m_boDealing = false;
-                    PlayObject.m_DealItemList.Clear();
-                    PlayObject.m_nDealGolds = 0;
-                    PlayObject.m_boDealOK = false;
+                    var playObject = m_DealCreat as PlayObject;
+                    playObject.SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
+                    playObject.SysMsg(M2Share.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    playObject.m_DealCreat = null;
+                    playObject.m_boDealing = false;
+                    playObject.m_DealItemList.Clear();
+                    playObject.m_nDealGolds = 0;
+                    playObject.m_boDealOK = false;
                     SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
                     SysMsg(M2Share.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     m_DealCreat = null;
@@ -1292,15 +1286,15 @@ namespace GameSvr.Player
             }
             for (var i = 0; i < m_MyGuild.m_RankList.Count; i++)
             {
-                var GuildRank = m_MyGuild.m_RankList[i];
-                sSendMsg = sSendMsg + '#' + GuildRank.nRankNo + "/*" + GuildRank.sRankName + '/';
-                for (var j = 0; j < GuildRank.MemberList.Count; j++)
+                var guildRank = m_MyGuild.m_RankList[i];
+                sSendMsg = sSendMsg + '#' + guildRank.nRankNo + "/*" + guildRank.sRankName + '/';
+                for (var j = 0; j < guildRank.MemberList.Count; j++)
                 {
                     if (sSendMsg.Length > 5000)
                     {
                         break;
                     }
-                    sSendMsg = sSendMsg + GuildRank.MemberList[j].sMemberName + '/';
+                    sSendMsg = sSendMsg + guildRank.MemberList[j].sMemberName + '/';
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
@@ -1312,23 +1306,23 @@ namespace GameSvr.Player
             var nC = 1; // '你没有权利使用这个命令。'
             if (IsGuildMaster())
             {
-                var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
-                if (PlayObject != null)
+                var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
+                if (playObject != null)
                 {
-                    if (PlayObject.GetPoseCreate() == this)
+                    if (playObject.GetPoseCreate() == this)
                     {
-                        if (PlayObject.m_boAllowGuild)
+                        if (playObject.m_boAllowGuild)
                         {
                             if (!m_MyGuild.IsMember(sHumName))
                             {
-                                if (PlayObject.m_MyGuild == null && m_MyGuild.m_RankList.Count < 400)
+                                if (playObject.m_MyGuild == null && m_MyGuild.m_RankList.Count < 400)
                                 {
-                                    m_MyGuild.AddMember(PlayObject);
+                                    m_MyGuild.AddMember(playObject);
                                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
-                                    PlayObject.m_MyGuild = m_MyGuild;
-                                    PlayObject.m_sGuildRankName = m_MyGuild.GetRankName(PlayObject, ref PlayObject.m_nGuildRankNo);
-                                    PlayObject.RefShowName();
-                                    PlayObject.SysMsg("你已加入行会: " + m_MyGuild.sGuildName + " 当前封号为: " + PlayObject.m_sGuildRankName, MsgColor.Green, MsgType.Hint);
+                                    playObject.m_MyGuild = m_MyGuild;
+                                    playObject.m_sGuildRankName = m_MyGuild.GetRankName(playObject, ref playObject.m_nGuildRankNo);
+                                    playObject.RefShowName();
+                                    playObject.SysMsg("你已加入行会: " + m_MyGuild.sGuildName + " 当前封号为: " + playObject.m_sGuildRankName, MsgColor.Green, MsgType.Hint);
                                     nC = 0;
                                 }
                                 else
@@ -1344,7 +1338,7 @@ namespace GameSvr.Player
                         else
                         {
                             nC = 5; // '对方不允许加入行会。'
-                            PlayObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + M2Share.g_GameCommand.LETGUILD.sCmd + ']', MsgColor.Red, MsgType.Hint);
+                            playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + M2Share.g_GameCommand.LETGUILD.sCmd + ']', MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
@@ -1369,7 +1363,6 @@ namespace GameSvr.Player
 
         private void ClientGuildDelMember(string sHumName)
         {
-            string s14;
             var nC = 1;
             if (IsGuildMaster())
             {
@@ -1379,12 +1372,12 @@ namespace GameSvr.Player
                     {
                         if (m_MyGuild.DelMember(sHumName))
                         {
-                            var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
-                            if (PlayObject != null)
+                            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
+                            if (playObject != null)
                             {
-                                PlayObject.m_MyGuild = null;
-                                PlayObject.RefRankInfo(0, "");
-                                PlayObject.RefShowName();
+                                playObject.m_MyGuild = null;
+                                playObject.RefRankInfo(0, "");
+                                playObject.RefShowName();
                             }
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
                             nC = 0;
@@ -1397,7 +1390,7 @@ namespace GameSvr.Player
                     else
                     {
                         nC = 3;
-                        s14 = m_MyGuild.sGuildName;
+                        var s14 = m_MyGuild.sGuildName;
                         if (m_MyGuild.CancelGuld(sHumName))
                         {
                             M2Share.GuildManager.DelGuild(s14);
@@ -1435,7 +1428,7 @@ namespace GameSvr.Player
             m_MyGuild.NoticeList.Clear();
             while (!string.IsNullOrEmpty(sNotict))
             {
-                sNotict = HUtil32.GetValidStr3(sNotict, ref sC, new string[] { "\r" });
+                sNotict = HUtil32.GetValidStr3(sNotict, ref sC, new[] { "\r" });
                 m_MyGuild.NoticeList.Add(sC);
             }
             m_MyGuild.SaveGuildInfoFile();
@@ -1470,23 +1463,23 @@ namespace GameSvr.Player
             try
             {
                 var n8 = -1;
-                TBaseObject BaseObjectC = GetPoseCreate();
-                if (BaseObjectC != null && BaseObjectC.m_MyGuild != null && BaseObjectC.m_btRaceServer == Grobal2.RC_PLAYOBJECT && BaseObjectC.GetPoseCreate() == this)
+                TBaseObject baseObjectC = GetPoseCreate();
+                if (baseObjectC != null && baseObjectC.m_MyGuild != null && baseObjectC.m_btRaceServer == Grobal2.RC_PLAYOBJECT && baseObjectC.GetPoseCreate() == this)
                 {
-                    if (BaseObjectC.m_MyGuild.m_boEnableAuthAlly)
+                    if (baseObjectC.m_MyGuild.m_boEnableAuthAlly)
                     {
-                        if (BaseObjectC.IsGuildMaster() && IsGuildMaster())
+                        if (baseObjectC.IsGuildMaster() && IsGuildMaster())
                         {
-                            if (m_MyGuild.IsNotWarGuild(BaseObjectC.m_MyGuild) && BaseObjectC.m_MyGuild.IsNotWarGuild(m_MyGuild))
+                            if (m_MyGuild.IsNotWarGuild(baseObjectC.m_MyGuild) && baseObjectC.m_MyGuild.IsNotWarGuild(m_MyGuild))
                             {
-                                m_MyGuild.AllyGuild(BaseObjectC.m_MyGuild);
-                                BaseObjectC.m_MyGuild.AllyGuild(m_MyGuild);
-                                m_MyGuild.SendGuildMsg(BaseObjectC.m_MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
-                                BaseObjectC.m_MyGuild.SendGuildMsg(m_MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
+                                m_MyGuild.AllyGuild(baseObjectC.m_MyGuild);
+                                baseObjectC.m_MyGuild.AllyGuild(m_MyGuild);
+                                m_MyGuild.SendGuildMsg(baseObjectC.m_MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
+                                baseObjectC.m_MyGuild.SendGuildMsg(m_MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
                                 m_MyGuild.RefMemberName();
-                                BaseObjectC.m_MyGuild.RefMemberName();
+                                baseObjectC.m_MyGuild.RefMemberName();
                                 M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
-                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, BaseObjectC.m_MyGuild.sGuildName);
+                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, baseObjectC.m_MyGuild.sGuildName);
                                 n8 = 0;
                             }
                             else
@@ -1522,7 +1515,7 @@ namespace GameSvr.Player
 
         private void ClientGuildBreakAlly(string sGuildName)
         {
-            var n10 = -1;
+            int n10;
             if (!IsGuildMaster())
             {
                 return;
@@ -1563,92 +1556,87 @@ namespace GameSvr.Player
 
         private void ClientQueryRepairCost(int nParam1, int nInt, string sMsg)
         {
-            TUserItem UserItem;
-            TUserItem UserItemA = null;
+            TUserItem userItemA = null;
             string sUserItemName;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
-                if (UserItem.MakeIndex == nInt)
+                var userItem = m_ItemList[i];
+                if (userItem.MakeIndex == nInt)
                 {
-                    sUserItemName = ItmUnit.GetItemName(UserItem); // 取自定义物品名称
+                    sUserItemName = ItmUnit.GetItemName(userItem); // 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        UserItemA = UserItem;
+                        userItemA = userItem;
                         break;
                     }
                 }
             }
-            if (UserItemA == null)
+            if (userItemA == null)
             {
                 return;
             }
             var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
-                merchant.ClientQueryRepairCost(this, UserItemA);
+                merchant.ClientQueryRepairCost(this, userItemA);
             }
         }
 
         private void ClientRepairItem(int nParam1, int nInt, string sMsg)
         {
-            TUserItem UserItem = null;
-            string sUserItemName;
+            TUserItem userItem = null;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
-                sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
-                if (UserItem.MakeIndex == nInt && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
+                userItem = m_ItemList[i];
+                var sUserItemName = ItmUnit.GetItemName(userItem);
+                if (userItem.MakeIndex == nInt && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     break;
                 }
             }
-            if (UserItem == null)
+            if (userItem == null)
             {
                 return;
             }
             Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
-                merchant.ClientRepairItem(this, UserItem);
+                merchant.ClientRepairItem(this, userItem);
             }
         }
 
-        private void ClientStorageItem(int ObjectId, int nItemIdx, string sMsg)
+        private void ClientStorageItem(int objectId, int nItemIdx, string sMsg)
         {
-            StdItem StdItem;
             var bo19 = false;
-            TUserItem UserItem = null;
-            string sUserItemName;
             if (sMsg.IndexOf(' ') >= 0)
             {
-                HUtil32.GetValidStr3(sMsg, ref sMsg, new string[] { " " });
+                HUtil32.GetValidStr3(sMsg, ref sMsg, new[] { " " });
             }
             if (m_nPayMent == 1 && !M2Share.g_Config.boTryModeUseStorage)
             {
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(ObjectId);
+            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(objectId);
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
-                sUserItemName = ItmUnit.GetItemName(UserItem); // 取自定义物品名称
-                if (UserItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
+                var userItem = m_ItemList[i];
+                var sUserItemName = ItmUnit.GetItemName(userItem);// 取自定义物品名称
+                if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
                     if (merchant != null && merchant.m_boStorage && (merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15 || merchant == M2Share.g_FunctionNPC))
                     {
                         if (m_StorageItemList.Count < 39)
                         {
-                            m_StorageItemList.Add(UserItem);
+                            m_StorageItemList.Add(userItem);
                             m_ItemList.RemoveAt(i);
                             WeightChanged();
                             SendDefMessage(Grobal2.SM_STORAGE_OK, 0, 0, 0, 0, "");
-                            StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                            if (StdItem.NeedIdentify == 1)
+                            var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                            if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('1' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                M2Share.AddGameDataLog('1' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
                         else
@@ -1666,13 +1654,10 @@ namespace GameSvr.Player
             }
         }
 
-        private void ClientTakeBackStorageItem(int NPC, int nItemIdx, string sMsg)
+        private void ClientTakeBackStorageItem(int npc, int nItemIdx, string sMsg)
         {
-            StdItem StdItem;
-            string sUserItemName;
             var bo19 = false;
-            TUserItem UserItem = null;
-            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(NPC);
+            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(npc);
             if (merchant == null)
             {
                 return;
@@ -1690,24 +1675,24 @@ namespace GameSvr.Player
             }
             for (var i = 0; i < m_StorageItemList.Count; i++)
             {
-                UserItem = m_StorageItemList[i];
-                sUserItemName = ItmUnit.GetItemName(UserItem); // 取自定义物品名称
-                if (UserItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
+                var userItem = m_StorageItemList[i];
+                var sUserItemName = ItmUnit.GetItemName(userItem);
+                if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
+                    if (IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(userItem.wIndex)))
                     {
                         // 检查NPC是否允许取物品
                         if (merchant.m_boGetback && (merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15 || merchant == M2Share.g_FunctionNPC))
                         {
-                            if (AddItemToBag(UserItem))
+                            if (AddItemToBag(userItem))
                             {
-                                SendAddItem(UserItem);
+                                SendAddItem(userItem);
                                 m_StorageItemList.RemoveAt(i);
                                 SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
-                                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                                if (StdItem.NeedIdentify == 1)
+                                var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                                if (stdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('0' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                    M2Share.AddGameDataLog('0' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
                                 }
                             }
                             else

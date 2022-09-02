@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class HairCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Hair(string[] @Params, TPlayObject PlayObject)
+        public void Hair(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

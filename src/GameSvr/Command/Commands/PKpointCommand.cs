@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class PKpointCommand : BaseCommond
     {
         [DefaultCommand]
-        public void PKpoint(string[] @Params, TPlayObject PlayObject)
+        public void PKpoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

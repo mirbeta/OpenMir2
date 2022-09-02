@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ShowSbkGoldCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowSbkGold(string[] @Params, TPlayObject PlayObject)
+        public void ShowSbkGold(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -13,7 +13,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void MovrData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void MovrData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var n14 = 0;
             var s34 = string.Empty;
@@ -116,7 +116,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void MovData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void MovData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;
@@ -266,7 +266,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void IncInteger(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void IncInteger(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int n14;
             int n3C = 0;
@@ -713,7 +713,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void DecInteger(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void DecInteger(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int n14;
             int n3C = 0;
@@ -1188,7 +1188,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void DivData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void DivData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var s34 = string.Empty;
             var n18 = 0;
@@ -1336,7 +1336,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void MulData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void MulData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var s34 = string.Empty;
             var n18 = 0;
@@ -1520,7 +1520,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void PercentData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void PercentData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var s34 = string.Empty;
             var n18 = 0;
@@ -1675,7 +1675,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void SumData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void SumData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var n18 = 0;
             var n14 = 0;
@@ -1853,7 +1853,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private bool GetMovDataHumanInfoValue(TPlayObject PlayObject, string sVariable, ref string sValue, ref int nValue, ref int nDataType)
+        private bool GetMovDataHumanInfoValue(PlayObject PlayObject, string sVariable, ref string sValue, ref int nValue, ref int nDataType)
         {
             string s10 = string.Empty;
             string sVarValue2 = string.Empty;
@@ -2484,7 +2484,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool SetMovDataValNameValue(TPlayObject PlayObject, string sVarName, string sValue, int nValue, int nDataType)
+        private bool SetMovDataValNameValue(PlayObject PlayObject, string sVarName, string sValue, int nValue, int nDataType)
         {
             bool result = false;
             var n100 = M2Share.GetValNameNo(sVarName);
@@ -2669,7 +2669,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GetMovDataValNameValue(TPlayObject PlayObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
+        private bool GetMovDataValNameValue(PlayObject PlayObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
             bool result = false;
             nValue = -1;
@@ -2746,7 +2746,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GetMovDataDynamicVarValue(TPlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
+        private bool GetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
             TDynamicVar DynamicVar;
             string sName = string.Empty;
@@ -2776,7 +2776,7 @@ namespace GameSvr.Npc
             return false;
         }
 
-        private bool SetMovDataDynamicVarValue(TPlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
+        private bool SetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
         {
             TDynamicVar DynamicVar;
             string sName = string.Empty;

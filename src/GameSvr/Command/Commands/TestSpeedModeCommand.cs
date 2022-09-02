@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class TestSpeedModeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TestSpeedMode(TPlayObject PlayObject)
+        public void TestSpeedMode(PlayObject PlayObject)
         {
             PlayObject.m_boTestSpeedMode = !PlayObject.m_boTestSpeedMode;
             if (PlayObject.m_boTestSpeedMode)

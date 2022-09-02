@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ChangeAdminModeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeAdminMode(TPlayObject PlayObject)
+        public void ChangeAdminMode(PlayObject PlayObject)
         {
             PlayObject.m_boAdminMode = !PlayObject.m_boAdminMode;
             PlayObject.SysMsg(PlayObject.m_boAdminMode ? M2Share.sGameMasterMode : M2Share.sReleaseGameMasterMode,

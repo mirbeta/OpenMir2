@@ -28,7 +28,7 @@ namespace GameSvr.Command
         /// <param name="parameters"></param>
         /// <param name="playObject"></param>
         /// <returns></returns>
-        public virtual string Handle(string parameters, TPlayObject playObject = null)
+        public virtual string Handle(string parameters, PlayObject playObject = null)
         {
             if (playObject != null)
             {
@@ -62,7 +62,7 @@ namespace GameSvr.Command
         /// <param name="PlayObject"></param>
         /// <returns></returns>
         [DefaultCommand]
-        public virtual string Fallback(string[] @params = null, TPlayObject PlayObject = null)
+        public virtual string Fallback(string[] @params = null, PlayObject PlayObject = null)
         {
             return string.Empty;
         }

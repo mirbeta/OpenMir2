@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class TestGetBagItemsCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TestGetBagItems(TPlayObject PlayObject)
+        public void TestGetBagItems(PlayObject PlayObject)
         {
             byte btDc = 0;
             byte btSc = 0;

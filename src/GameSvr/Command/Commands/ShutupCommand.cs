@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ShutupCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Shutup(string[] @Params, TPlayObject PlayObject)
+        public void Shutup(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

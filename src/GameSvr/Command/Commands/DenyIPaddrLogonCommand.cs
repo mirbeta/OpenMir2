@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class DenyIPaddrLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DenyIPaddrLogon(string[] @Params, TPlayObject PlayObject)
+        public void DenyIPaddrLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

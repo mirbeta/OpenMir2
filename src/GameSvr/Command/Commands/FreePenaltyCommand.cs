@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class FreePenaltyCommand : BaseCommond
     {
         [DefaultCommand]
-        public void FreePenalty(string[] @Params, TPlayObject PlayObject)
+        public void FreePenalty(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

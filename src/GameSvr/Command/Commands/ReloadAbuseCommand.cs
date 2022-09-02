@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class ReloadAbuseCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadAbuse(TPlayObject PlayObject)
+        public void ReloadAbuse(PlayObject PlayObject)
         {
 
         }

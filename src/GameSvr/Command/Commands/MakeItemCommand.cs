@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
     public class MakeItemCommond : BaseCommond
     {
         [DefaultCommand]
-        public void CmdMakeItem(string[] Params, TPlayObject PlayObject)
+        public void CmdMakeItem(string[] Params, PlayObject PlayObject)
         {
             if (Params == null) return;
             var sItemName = Params.Length > 0 ? Params[0] : ""; //物品名称

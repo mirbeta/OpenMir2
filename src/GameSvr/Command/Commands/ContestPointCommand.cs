@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ContestPointCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ContestPoint(string[] @Params, TPlayObject PlayObject)
+        public void ContestPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

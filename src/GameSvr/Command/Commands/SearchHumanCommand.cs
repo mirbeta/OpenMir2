@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class SearchHumanCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SearchHuman(string[] @Params, TPlayObject PlayObject)
+        public void SearchHuman(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

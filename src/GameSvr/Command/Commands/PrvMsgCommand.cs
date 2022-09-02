@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class PrvMsgCommand : BaseCommond
     {
         [DefaultCommand]
-        public void PrvMsg(string[] @Params, TPlayObject PlayObject)
+        public void PrvMsg(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

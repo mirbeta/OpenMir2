@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class DelGuildCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelGuild(string[] @Params, TPlayObject PlayObject)
+        public void DelGuild(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     public class UnBindUseItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public void UnBindUseItem(string[] @Params, TPlayObject PlayObject)
+        public void UnBindUseItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

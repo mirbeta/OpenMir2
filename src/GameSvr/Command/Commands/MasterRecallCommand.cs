@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class MasterRecallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MasterRecall(TPlayObject PlayObject)
+        public void MasterRecall(PlayObject PlayObject)
         {
             if (!PlayObject.m_boMaster)
             {

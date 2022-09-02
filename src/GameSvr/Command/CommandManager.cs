@@ -105,7 +105,7 @@ namespace GameSvr.Command
         /// <param name="line">命令字符串</param>
         /// <param name="playObject">命令对象</param>
         /// <returns><see cref="bool"/></returns>
-        public bool ExecCmd(string line, TPlayObject playObject)
+        public bool ExecCmd(string line, PlayObject playObject)
         {
             var output = string.Empty;
             string command;
@@ -189,7 +189,7 @@ namespace GameSvr.Command
         [GameCommand("commands", "列出可用的命令")]
         public class CommandsCommandGroup : BaseCommond
         {
-            public override string Fallback(string[] parameters = null, TPlayObject PlayObject = null)
+            public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {
                 var output = "Available commands: ";
                 var commandList = CommandMaps.Values.ToList();
@@ -206,12 +206,12 @@ namespace GameSvr.Command
         [GameCommand("help", "帮助命令")]
         public class HelpCommandGroup : BaseCommond
         {
-            public override string Fallback(string[] parameters = null, TPlayObject PlayObject = null)
+            public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {
                 return "usage: help <command>";
             }
 
-            public override string Handle(string parameters, TPlayObject PlayObject = null)
+            public override string Handle(string parameters, PlayObject PlayObject = null)
             {
                 if (parameters == string.Empty)
                     return this.Fallback();
