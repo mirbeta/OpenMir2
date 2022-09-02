@@ -3552,7 +3552,7 @@ namespace GameSvr.Npc
                     {
                         nDX = nOrgX + k;
                         nDY = nOrgY + j;
-                        if (neEnvir.GetItemEx(nDX, nDY, ref nItemCount) == null)
+                        if (neEnvir.GetItemEx(nDX, nDY, ref nItemCount) == 0)
                         {
                             if (neEnvir.Bo2C)
                             {

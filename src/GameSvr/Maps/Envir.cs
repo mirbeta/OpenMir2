@@ -16,7 +16,7 @@ namespace GameSvr.Maps
     }
 
     /// <summary>
-    /// 可见的地图物品
+    /// 地图物品
     /// </summary>
     public class VisibleMapItem
     {

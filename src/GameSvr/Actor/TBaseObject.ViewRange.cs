@@ -9,7 +9,7 @@ namespace GameSvr.Actor
         protected virtual void UpdateVisibleGay(TBaseObject baseObject)
         {
             bool boIsVisible = false;
-            TVisibleBaseObject visibleBaseObject;
+            VisibleBaseObject visibleBaseObject;
             if ((baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (baseObject.m_Master != null))// 如果是人物或宝宝则置TRUE
             {
                 m_boIsVisibleActive = true;
@@ -28,7 +28,7 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            visibleBaseObject = new TVisibleBaseObject
+            visibleBaseObject = new VisibleBaseObject
             {
                 VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = baseObject
