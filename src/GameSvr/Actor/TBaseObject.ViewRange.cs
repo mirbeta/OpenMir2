@@ -106,8 +106,7 @@ namespace GameSvr.Actor
 
         public virtual void SearchViewRange()
         {
-            const string sExceptionMsg1 = "[Exception] TBaseObject::SearchViewRange";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
+            const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
             if (m_PEnvir == null)
             {
                 M2Share.ErrorMessage("SearchViewRange nil PEnvir");
@@ -182,7 +181,7 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg2, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
+                M2Share.ErrorMessage(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
                 M2Share.ErrorMessage(e.Message);
                 KickException();
             }
@@ -197,7 +196,7 @@ namespace GameSvr.Actor
                         break;
                     }
                     var visibleBaseObject = m_VisibleActors[n18];
-                    if (visibleBaseObject.VisibleFlag == 0)
+                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Visible)
                     {
                         m_VisibleActors.RemoveAt(n18);
                         Dispose(visibleBaseObject);
@@ -208,7 +207,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.ErrorMessage(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
                 KickException();
             }
         }
