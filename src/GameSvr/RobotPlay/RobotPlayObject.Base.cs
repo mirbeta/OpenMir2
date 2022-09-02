@@ -467,52 +467,34 @@ namespace GameSvr.RobotPlay
 
         public override void SearchViewRange()
         {
-            int nStartX;
-            int nEndX;
-            int nStartY;
-            int nEndY;
-            int n18;
-            int n1C;
             int nIdx;
             MapCellInfo cellInfo;
-            CellObject OSObject = null;
-            TBaseObject BaseObject;
-            MapItem MapItem;
+            CellObject osObject = null;
+            TBaseObject baseObject;
             MirEvent MapEvent;
-            VisibleBaseObject VisibleBaseObject;
-            VisibleMapItem VisibleMapItem;
             VisibleFlag nVisibleFlag;
-            const string sExceptionMsg1 = "TAIPlayObject::SearchViewRange Code:{0}";
-            const string sExceptionMsg2 = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
-            try
+            const string sExceptionMsg = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
+            if (m_boGhost)
             {
-                if (m_boGhost)
-                {
-                    return;
-                }
-                if (m_VisibleItems.Count > 0)
-                {
-                    for (var i = 0; i < m_VisibleItems.Count; i++)
-                    {
-                        m_VisibleItems[i].VisibleFlag = 0;
-                    }
-                }
+                return;
             }
-            catch
+            if (m_VisibleItems.Count > 0)
             {
-                M2Share.MainOutMessage(sExceptionMsg1);
-                KickException();
+                for (var i = 0; i < m_VisibleItems.Count; i++)
+                {
+                    m_VisibleItems[i].VisibleFlag = 0;
+                }
             }
             try
             {
-                nStartX = m_nCurrX - m_nViewRange;
-                nEndX = m_nCurrX + m_nViewRange;
-                nStartY = m_nCurrY - m_nViewRange;
-                nEndY = m_nCurrY + m_nViewRange;
+                var nStartX = m_nCurrX - m_nViewRange;
+                var nEndX = m_nCurrX + m_nViewRange;
+                var nStartY = m_nCurrY - m_nViewRange;
+                var nEndY = m_nCurrY + m_nViewRange;
                 var dwRunTick = HUtil32.GetTickCount();
-                for (n18 = nStartX; n18 <= nEndX; n18++)
+                for (var n18 = nStartX; n18 <= nEndX; n18++)
                 {
-                    for (n1C = nStartY; n1C <= nEndY; n1C++)
+                    for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
                         var cellsuccess = false;
                         cellInfo = m_PEnvir.GetCellInfo(n18, n1C, ref cellsuccess);
@@ -540,24 +522,24 @@ namespace GameSvr.RobotPlay
                                 }
                                 try
                                 {
-                                    OSObject = cellInfo.ObjList[nIdx];
+                                    osObject = cellInfo.ObjList[nIdx];
                                 }
                                 catch
                                 {
-                                    cellInfo.Remove(OSObject);
+                                    cellInfo.Remove(osObject);
                                     continue;
                                 }
-                                if (OSObject != null)
+                                if (osObject != null)
                                 {
-                                    if (!OSObject.ObjectDispose)
+                                    if (!osObject.ObjectDispose)
                                     {
-                                        switch (OSObject.CellType)
+                                        switch (osObject.CellType)
                                         {
                                             case CellType.MovingObject:
-                                                if (HUtil32.GetTickCount() - OSObject.AddTime >= 60000)
+                                                if (HUtil32.GetTickCount() - osObject.AddTime >= 60000)
                                                 {
-                                                    OSObject.ObjectDispose = true;
-                                                    cellInfo.Remove(OSObject);
+                                                    osObject.ObjectDispose = true;
+                                                    cellInfo.Remove(osObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Dispose();
@@ -565,14 +547,14 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                BaseObject = (TBaseObject)M2Share.ActorManager.Get(OSObject.CellObjId);;
-                                                if (BaseObject != null)
+                                                baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
+                                                if (baseObject != null)
                                                 {
-                                                    if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
+                                                    if (!baseObject.m_boGhost && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
                                                     {
-                                                        if (m_btRaceServer < Grobal2.RC_ANIMAL || m_Master != null || m_boCrazyMode || m_boWantRefMsg || BaseObject.m_Master != null && Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3 || BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                                        if (m_btRaceServer < Grobal2.RC_ANIMAL || m_Master != null || m_boCrazyMode || m_boWantRefMsg || baseObject.m_Master != null && Math.Abs(baseObject.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(baseObject.m_nCurrY - m_nCurrY) <= 3 || baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                         {
-                                                            UpdateVisibleGay(BaseObject);
+                                                            UpdateVisibleGay(baseObject);
                                                         }
                                                     }
                                                 }
@@ -580,17 +562,17 @@ namespace GameSvr.RobotPlay
                                             case CellType.ItemObject:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (HUtil32.GetTickCount() - OSObject.AddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
+                                                    if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                                     {
-                                                        if (OSObject.CellObjId > 0)
+                                                        if (osObject.CellObjId > 0)
                                                         {
-                                                            M2Share.CellObjectSystem.Dispose(OSObject.CellObjId);
+                                                            M2Share.CellObjectSystem.Dispose(osObject.CellObjId);
                                                         }
-                                                        if (OSObject != null)
+                                                        if (osObject != null)
                                                         {
-                                                            OSObject.ObjectDispose = true;
+                                                            osObject.ObjectDispose = true;
                                                         }
-                                                        cellInfo.Remove(OSObject);
+                                                        cellInfo.Remove(osObject);
                                                         if (cellInfo.Count <= 0)
                                                         {
                                                             cellInfo.Dispose();
@@ -598,9 +580,9 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         continue;
                                                     }
-                                                    MapItem = (MapItem)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
+                                                    var MapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                                     UpdateVisibleItem(n18, n1C, MapItem);
-                                                    if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
+                                                    if (MapItem.OfBaseObject != 0 || MapItem.DropBaseObject != 0)
                                                     {
                                                         if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
                                                         {
@@ -630,9 +612,9 @@ namespace GameSvr.RobotPlay
                                             case CellType.EventObject:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (OSObject.CellObjId < 0)
+                                                    if (osObject.CellObjId < 0)
                                                     {
-                                                        MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
+                                                        MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                                         UpdateVisibleEvent(n18, n1C, MapEvent);
                                                     }
                                                 }
@@ -648,12 +630,12 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.MainOutMessage(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
             try
             {
-                n18 = 0;
+                var n18 = 0;
                 while (true)
                 {
                     try
@@ -662,6 +644,7 @@ namespace GameSvr.RobotPlay
                         {
                             break;
                         }
+                        VisibleBaseObject VisibleBaseObject;
                         try
                         {
                             VisibleBaseObject = m_VisibleActors[n18];
@@ -681,12 +664,12 @@ namespace GameSvr.RobotPlay
                             case VisibleFlag.Visible:
                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    BaseObject = VisibleBaseObject.BaseObject;
-                                    if (BaseObject != null)
+                                    baseObject = VisibleBaseObject.BaseObject;
+                                    if (baseObject != null)
                                     {
-                                        if (!BaseObject.m_boFixedHideMode && !BaseObject.m_boGhost)
+                                        if (!baseObject.m_boFixedHideMode && !baseObject.m_boGhost)
                                         {
-                                            SendMsg(BaseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                                            SendMsg(baseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                                         }
                                     }
                                 }
@@ -699,27 +682,27 @@ namespace GameSvr.RobotPlay
                             case VisibleFlag.Hidden:
                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    BaseObject = VisibleBaseObject.BaseObject;
-                                    if (BaseObject != null)
+                                    baseObject = VisibleBaseObject.BaseObject;
+                                    if (baseObject != null)
                                     {
-                                        if (BaseObject != this && !BaseObject.m_boGhost && !m_boGhost)
+                                        if (baseObject != this && !baseObject.m_boGhost && !m_boGhost)
                                         {
-                                            if (BaseObject.m_boDeath)
+                                            if (baseObject.m_boDeath)
                                             {
-                                                if (BaseObject.m_boSkeleton)
+                                                if (baseObject.m_boSkeleton)
                                                 {
-                                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                                    SendMsg(baseObject, Grobal2.RM_SKELETON, baseObject.Direction, baseObject.m_nCurrX, baseObject.m_nCurrY, 0, "");
                                                 }
                                                 else
                                                 {
-                                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                                    SendMsg(baseObject, Grobal2.RM_DEATH, baseObject.Direction, baseObject.m_nCurrX, baseObject.m_nCurrY, 0, "");
                                                 }
                                             }
                                             else
                                             {
-                                                if (BaseObject != null)
+                                                if (baseObject != null)
                                                 {
-                                                    SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
+                                                    SendMsg(baseObject, Grobal2.RM_TURN, baseObject.Direction, baseObject.m_nCurrX, baseObject.m_nCurrY, 0, baseObject.GetShowName());
                                                 }
                                             }
                                         }
@@ -741,7 +724,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.MainOutMessage(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
             try
@@ -755,6 +738,8 @@ namespace GameSvr.RobotPlay
                         {
                             break;
                         }
+
+                        VisibleMapItem VisibleMapItem;
                         try
                         {
                             VisibleMapItem = m_VisibleItems[position];
@@ -840,7 +825,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + m_nCurrX.ToString() + ',' + m_nCurrY.ToString() + ',' + " SearchViewRange 3");
+                M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + m_nCurrX + ',' + m_nCurrY + ',' + " SearchViewRange");
                 KickException();
             }
         }

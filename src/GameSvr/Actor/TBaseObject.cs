@@ -6,7 +6,6 @@ using GameSvr.Magic;
 using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
-using GameSvr.Npc;
 using GameSvr.Player;
 using System.Collections;
 using SystemModule;
