@@ -206,9 +206,9 @@ namespace GameSvr.Maps
             {
                 nMX = 0;
                 nMY = 0;
-                if (((TPlayObject)FBaseObject).m_PEnvir != m_PEnvir)
+                if (((PlayObject)FBaseObject).m_PEnvir != m_PEnvir)
                 {
-                    m_PEnvir = ((TPlayObject)FBaseObject).m_PEnvir;
+                    m_PEnvir = ((PlayObject)FBaseObject).m_PEnvir;
                     m_nPostion = 0;
                     m_nCurrX = nX;
                     m_nCurrY = nY;
@@ -468,15 +468,15 @@ namespace GameSvr.Maps
                 m_nCurrX = nX;
                 m_nCurrY = nY;
                 nC = 0;
-                btDir = ((TPlayObject)FBaseObject).Direction;
+                btDir = ((PlayObject)FBaseObject).Direction;
                 while (true)
                 {
                     btDir = GetPoint1_GetNextDir(btDir);
                     for (var i = 2; i >= 1; i--)
                     {
-                        if (((TPlayObject)FBaseObject).m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
+                        if (((PlayObject)FBaseObject).m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
                         {
-                            if (((TPlayObject)FBaseObject).CanMove(nMX, nMY, false))
+                            if (((PlayObject)FBaseObject).CanMove(nMX, nMY, false))
                             {
                                 nX = nMX;
                                 nY = nMY;
@@ -496,9 +496,9 @@ namespace GameSvr.Maps
             {
                 nMX = 0;
                 nMY = 0;
-                if (((TPlayObject)FBaseObject).m_PEnvir != m_PEnvir)
+                if (((PlayObject)FBaseObject).m_PEnvir != m_PEnvir)
                 {
-                    m_PEnvir = ((TPlayObject)FBaseObject).m_PEnvir;
+                    m_PEnvir = ((PlayObject)FBaseObject).m_PEnvir;
                     m_nPostion = 0;
                     m_nCurrX = nX;
                     m_nCurrY = nY;
@@ -571,7 +571,7 @@ namespace GameSvr.Maps
                             }
                         }
                     }
-                    if (!((TPlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
+                    if (!((PlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
                     {
                         for (var i = m_nPostion + 1; i < m_PEnvir.MPointList.Count; i++)
                         {

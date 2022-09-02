@@ -566,7 +566,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 设置用户对应网关编号
         /// </summary>
-        public void SetGateUserList(int nSocket, TPlayObject PlayObject)
+        public void SetGateUserList(int nSocket, PlayObject PlayObject)
         {
             HUtil32.EnterCriticalSection(_runSocketSection);
             try

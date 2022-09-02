@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class AllowGroupReCallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void AllowGroupReCall(TPlayObject PlayObject)
+        public void AllowGroupReCall(PlayObject PlayObject)
         {
             PlayObject.m_boAllowGroupReCall = !PlayObject.m_boAllowGroupReCall;
             if (PlayObject.m_boAllowGroupReCall)

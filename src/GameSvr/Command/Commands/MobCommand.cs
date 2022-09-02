@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class MobCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Mob(string[] @Params, TPlayObject PlayObject)
+        public void Mob(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

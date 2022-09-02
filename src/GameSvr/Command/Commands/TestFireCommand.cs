@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class TestFireCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TestFire(string[] @params, TPlayObject PlayObject)
+        public void TestFire(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

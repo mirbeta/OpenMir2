@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ChangeObModeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeObMode(TPlayObject PlayObject)
+        public void ChangeObMode(PlayObject PlayObject)
         {
             var boFlag = !PlayObject.m_boObMode;
             if (boFlag)

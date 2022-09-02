@@ -14,7 +14,6 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using ThreadState = System.Threading.ThreadState;
 
 namespace GameSvr.UsrSystem
 {
@@ -46,17 +45,17 @@ namespace GameSvr.UsrSystem
         private readonly ArrayList m_MonFreeList;
         public IList<MonGenInfo> m_MonGenList;
         private int m_nCurrMonGen;
-        private readonly IList<TPlayObject> m_NewHumanList;
+        private readonly IList<PlayObject> m_NewHumanList;
         /// <summary>
         /// 当前怪物列表刷新位置索引
         /// </summary>
         private int m_nMonGenCertListPosition;
         private int m_nMonGenListPosition;
         private int m_nProcHumIDx;
-        private readonly IList<TPlayObject> m_PlayObjectFreeList;
+        private readonly IList<PlayObject> m_PlayObjectFreeList;
         private readonly Dictionary<string, ServerGruopInfo> m_OtherUserNameList;
-        private readonly IList<TPlayObject> m_PlayObjectList;
-        private readonly IList<TPlayObject> m_AiPlayObjectList;
+        private readonly IList<PlayObject> m_PlayObjectList;
+        private readonly IList<PlayObject> m_AiPlayObjectList;
         public IList<TMonInfo> MonsterList;
         private int nMerchantPosition;
         /// <summary>
@@ -91,8 +90,8 @@ namespace GameSvr.UsrSystem
         {
             m_LoadPlaySection = new object();
             m_LoadPlayList = new List<TUserOpenInfo>();
-            m_PlayObjectList = new List<TPlayObject>();
-            m_PlayObjectFreeList = new List<TPlayObject>();
+            m_PlayObjectList = new List<PlayObject>();
+            m_PlayObjectFreeList = new List<PlayObject>();
             m_ChangeHumanDBGoldList = new List<TGoldChangeInfo>();
             dwShowOnlineTick = HUtil32.GetTickCount();
             dwSendOnlineHumTime = HUtil32.GetTickCount();
@@ -121,13 +120,13 @@ namespace GameSvr.UsrSystem
             dwProcessMerchantTimeMax = 0;
             dwProcessNpcTimeMin = 0;
             dwProcessNpcTimeMax = 0;
-            m_NewHumanList = new List<TPlayObject>();
+            m_NewHumanList = new List<PlayObject>();
             m_ListOfGateIdx = new List<int>();
             m_ListOfSocket = new List<int>();
             OldMagicList = new ArrayList();
             m_OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
             m_UserLogonList = new List<RoBotLogon>();
-            m_AiPlayObjectList = new List<TPlayObject>();
+            m_AiPlayObjectList = new List<PlayObject>();
         }
 
         public int MonsterCount => nMonsterCount;
@@ -135,7 +134,7 @@ namespace GameSvr.UsrSystem
         public int PlayObjectCount => GetUserCount();
         public int LoadPlayCount => GetLoadPlayCount();
 
-        public IEnumerable<TPlayObject> PlayObjects => m_PlayObjectList;
+        public IEnumerable<PlayObject> PlayObjects => m_PlayObjectList;
 
         public void Start()
         {
@@ -272,10 +271,10 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        private TPlayObject ProcessHumans_MakeNewHuman(TUserOpenInfo UserOpenInfo)
+        private PlayObject ProcessHumans_MakeNewHuman(TUserOpenInfo UserOpenInfo)
         {
-            TPlayObject result = null;
-            TPlayObject PlayObject = null;
+            PlayObject result = null;
+            PlayObject PlayObject = null;
             TSwitchDataInfo SwitchDataInfo = null;
             const string sExceptionMsg = "[Exception] TUserEngine::MakeNewHuman";
             const string sChangeServerFail1 = "chg-server-fail-1 [{0}] -> [{1}] [{2}]";
@@ -286,7 +285,7 @@ namespace GameSvr.UsrSystem
         ReGetMap:
             try
             {
-                PlayObject = new TPlayObject();
+                PlayObject = new PlayObject();
                 if (!M2Share.g_Config.boVentureServer)
                 {
                     UserOpenInfo.sChrName = string.Empty;
@@ -519,7 +518,7 @@ namespace GameSvr.UsrSystem
             const string sExceptionMsg1 = "[Exception] TUserEngine::ProcessHumans -> Ready, Save, Load...";
             const string sExceptionMsg3 = "[Exception] TUserEngine::ProcessHumans ClosePlayer.Delete";
             var dwCheckTime = HUtil32.GetTickCount();
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             if ((HUtil32.GetTickCount() - m_dwProcessLoadPlayTick) > 200)
             {
                 m_dwProcessLoadPlayTick = HUtil32.GetTickCount();
@@ -1272,7 +1271,7 @@ namespace GameSvr.UsrSystem
 
         public void CryCry(short wIdent, Envirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
@@ -1356,7 +1355,7 @@ namespace GameSvr.UsrSystem
             return false;
         }
 
-        public void ProcessUserMessage(TPlayObject PlayObject, ClientPacket DefMsg, string Buff)
+        public void ProcessUserMessage(PlayObject PlayObject, ClientPacket DefMsg, string Buff)
         {
             var sMsg = string.Empty;
             if (PlayObject.m_boOffLineFlag) return;
@@ -1483,7 +1482,7 @@ namespace GameSvr.UsrSystem
 
         public void GetISMChangeServerReceive(string flName)
         {
-            TPlayObject hum;
+            PlayObject hum;
             for (var i = 0; i < m_PlayObjectFreeList.Count; i++)
             {
                 hum = m_PlayObjectFreeList[i];
@@ -1886,14 +1885,14 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        public TPlayObject GetPlayObject(string sName)
+        public PlayObject GetPlayObject(string sName)
         {
-            TPlayObject result = null;
+            PlayObject result = null;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    TPlayObject PlayObject = m_PlayObjectList[i];
+                    PlayObject PlayObject = m_PlayObjectList[i];
                     if (!PlayObject.m_boGhost)
                     {
                         if (!(PlayObject.m_boPasswordLocked && PlayObject.m_boObMode && PlayObject.m_boAdminMode))
@@ -1909,7 +1908,7 @@ namespace GameSvr.UsrSystem
 
         public void KickPlayObjectEx(string sName)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -1929,9 +1928,9 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public TPlayObject GetPlayObjectEx(string sName)
+        public PlayObject GetPlayObjectEx(string sName)
         {
-            TPlayObject result = null;
+            PlayObject result = null;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -1987,7 +1986,7 @@ namespace GameSvr.UsrSystem
         public int GetMapOfRangeHumanCount(Envirnoment Envir, int nX, int nY, int nRange)
         {
             var result = 0;
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
@@ -2036,7 +2035,7 @@ namespace GameSvr.UsrSystem
 
         private void KickOnlineUser(string sChrName)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
@@ -2048,7 +2047,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        private void SendChangeServer(TPlayObject PlayObject, byte nServerIndex)
+        private void SendChangeServer(PlayObject PlayObject, byte nServerIndex)
         {
             var sIPaddr = string.Empty;
             var nPort = 0;
@@ -2060,7 +2059,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public void SaveHumanRcd(TPlayObject PlayObject)
+        public void SaveHumanRcd(PlayObject PlayObject)
         {
             if (PlayObject.m_boAI) //AI玩家不需要保存数据
             {
@@ -2079,13 +2078,13 @@ namespace GameSvr.UsrSystem
             M2Share.FrontEngine.AddToSaveRcdList(SaveRcd);
         }
 
-        private void AddToHumanFreeList(TPlayObject PlayObject)
+        private void AddToHumanFreeList(PlayObject PlayObject)
         {
             PlayObject.m_dwGhostTick = HUtil32.GetTickCount();
             m_PlayObjectFreeList.Add(PlayObject);
         }
 
-        private void GetHumData(TPlayObject PlayObject, ref THumDataInfo HumanRcd)
+        private void GetHumData(PlayObject PlayObject, ref THumDataInfo HumanRcd)
         {
             THumInfoData HumData;
             TUserItem[] HumItems;
@@ -2256,12 +2255,12 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        private short GetRandHomeX(TPlayObject PlayObject)
+        private short GetRandHomeX(PlayObject PlayObject)
         {
             return (short)(M2Share.RandomNumber.Random(3) + (PlayObject.m_nHomeX - 2));
         }
 
-        private short GetRandHomeY(TPlayObject PlayObject)
+        private short GetRandHomeY(PlayObject PlayObject)
         {
             return (short)(M2Share.RandomNumber.Random(3) + (PlayObject.m_nHomeY - 2));
         }
@@ -2551,7 +2550,7 @@ namespace GameSvr.UsrSystem
 
         public void HumanExpire(string sAccount)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             if (!M2Share.g_Config.boKickExpireHuman) return;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
@@ -2566,7 +2565,7 @@ namespace GameSvr.UsrSystem
 
         public int GetMapHuman(string sMapName)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             var result = 0;
             var Envir = M2Share.MapManager.FindMap(sMapName);
             if (Envir == null) return result;
@@ -2581,7 +2580,7 @@ namespace GameSvr.UsrSystem
         public int GetMapRageHuman(Envirnoment Envir, int nRageX, int nRageY, int nRage, IList<TBaseObject> List)
         {
             var result = 0;
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
@@ -2617,7 +2616,7 @@ namespace GameSvr.UsrSystem
         /// </summary>
         public void SendBroadCastMsgExt(string sMsg, MsgType MsgType)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
@@ -2628,7 +2627,7 @@ namespace GameSvr.UsrSystem
 
         public void SendBroadCastMsg(string sMsg, MsgType MsgType)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
@@ -2841,7 +2840,7 @@ namespace GameSvr.UsrSystem
 
         public void SendQuestMsg(string sQuestName)
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];

@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class CreditPointCommand : BaseCommond
     {
         [DefaultCommand]
-        public void CreditPoint(string[] @Params, TPlayObject PlayObject)
+        public void CreditPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

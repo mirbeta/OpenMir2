@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ReGotoHumanCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReGotoHuman(string[] @Params, TPlayObject PlayObject)
+        public void ReGotoHuman(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

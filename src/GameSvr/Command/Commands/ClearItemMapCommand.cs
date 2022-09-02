@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class ClearItemMapCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ClearItemMap(string[] @Params, TPlayObject PlayObject)
+        public void ClearItemMap(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

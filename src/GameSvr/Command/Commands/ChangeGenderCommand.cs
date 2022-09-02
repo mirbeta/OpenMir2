@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ChangeGenderCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeGender(string[] @Params, TPlayObject PlayObject)
+        public void ChangeGender(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

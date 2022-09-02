@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ReNewLevelCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReNewLevel(string[] @Params, TPlayObject PlayObject)
+        public void ReNewLevel(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

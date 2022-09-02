@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class GuildWarCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GuildWar(TPlayObject PlayObject)
+        public void GuildWar(PlayObject PlayObject)
         {
             if (PlayObject.m_btPermission < 6)
             {

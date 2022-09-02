@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class AdjuestExpCommand : BaseCommond
     {
         [DefaultCommand]
-        public void AdjuestExp(string[] @Params, TPlayObject PlayObject)
+        public void AdjuestExp(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

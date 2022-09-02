@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     public class EndContestCommand : BaseCommond
     {
         [DefaultCommand]
-        public void EndContest(string[] @Params, TPlayObject PlayObject)
+        public void EndContest(string[] @Params, PlayObject PlayObject)
         {
             //string sParam1 = @Params.Length > 0 ? @Params[0] : "";
             //List<TPlayObject> List10;

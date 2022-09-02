@@ -12,7 +12,7 @@ namespace GameSvr.Guild
     public class TGuildMember
     {
         public string sMemberName;
-        public TPlayObject PlayObject;
+        public PlayObject PlayObject;
     }
 
     public class TWarGuild

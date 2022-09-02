@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
     public class MobFireBurnCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MobFireBurn(string[] @Params, TPlayObject PlayObject)
+        public void MobFireBurn(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

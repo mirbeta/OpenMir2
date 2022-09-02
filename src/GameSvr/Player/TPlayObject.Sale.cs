@@ -9,7 +9,7 @@ namespace GameSvr.Player
     /// <summary>
     /// 元宝寄售相关
     /// </summary>
-    public partial class TPlayObject
+    public partial class PlayObject
     {
         /// <summary>
         /// 人物上线,检查是否有交易结束还没得到元宝 
@@ -290,7 +290,7 @@ namespace GameSvr.Player
         {
             StdItem StdItem;
             TUserItem UserItem;
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             try
             {
                 for (var i = M2Share.sSellOffItemList.Count - 1; i >= 0; i--)

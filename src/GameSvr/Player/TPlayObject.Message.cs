@@ -9,7 +9,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Player
 {
-    public partial class TPlayObject
+    public partial class PlayObject
     {
         public override void Run()
         {
@@ -504,19 +504,19 @@ namespace GameSvr.Player
                 }
                 if (m_btPermission < 6)
                 {
-                    if (M2Share.g_HighLevelHuman == null || (M2Share.g_HighLevelHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighLevelHuman == null || (M2Share.g_HighLevelHuman as PlayObject).m_boGhost)
                     {
                         M2Share.g_HighLevelHuman = this;
                     }
                     else
                     {
-                        if (m_Abil.Level > (M2Share.g_HighLevelHuman as TPlayObject).m_Abil.Level)
+                        if (m_Abil.Level > (M2Share.g_HighLevelHuman as PlayObject).m_Abil.Level)
                         {
                             M2Share.g_HighLevelHuman = this;
                         }
                     }
                     // 最高PK
-                    if (M2Share.g_HighPKPointHuman == null || (M2Share.g_HighPKPointHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighPKPointHuman == null || (M2Share.g_HighPKPointHuman as PlayObject).m_boGhost)
                     {
                         if (m_nPkPoint > 0)
                         {
@@ -525,55 +525,55 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        if (m_nPkPoint > (M2Share.g_HighPKPointHuman as TPlayObject).m_nPkPoint)
+                        if (m_nPkPoint > (M2Share.g_HighPKPointHuman as PlayObject).m_nPkPoint)
                         {
                             M2Share.g_HighPKPointHuman = this;
                         }
                     }
                     // 最高攻击力
-                    if (M2Share.g_HighDCHuman == null || (M2Share.g_HighDCHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighDCHuman == null || (M2Share.g_HighDCHuman as PlayObject).m_boGhost)
                     {
                         M2Share.g_HighDCHuman = this;
                     }
                     else
                     {
-                        if (HUtil32.HiWord(m_WAbil.DC) > HUtil32.HiWord((M2Share.g_HighDCHuman as TPlayObject).m_WAbil.DC))
+                        if (HUtil32.HiWord(m_WAbil.DC) > HUtil32.HiWord((M2Share.g_HighDCHuman as PlayObject).m_WAbil.DC))
                         {
                             M2Share.g_HighDCHuman = this;
                         }
                     }
                     // 最高魔法
-                    if (M2Share.g_HighMCHuman == null || (M2Share.g_HighMCHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighMCHuman == null || (M2Share.g_HighMCHuman as PlayObject).m_boGhost)
                     {
                         M2Share.g_HighMCHuman = this;
                     }
                     else
                     {
-                        if (HUtil32.HiWord(m_WAbil.MC) > HUtil32.HiWord((M2Share.g_HighMCHuman as TPlayObject).m_WAbil.MC))
+                        if (HUtil32.HiWord(m_WAbil.MC) > HUtil32.HiWord((M2Share.g_HighMCHuman as PlayObject).m_WAbil.MC))
                         {
                             M2Share.g_HighMCHuman = this;
                         }
                     }
                     // 最高道术
-                    if (M2Share.g_HighSCHuman == null || (M2Share.g_HighSCHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighSCHuman == null || (M2Share.g_HighSCHuman as PlayObject).m_boGhost)
                     {
                         M2Share.g_HighSCHuman = this;
                     }
                     else
                     {
-                        if (HUtil32.HiWord(m_WAbil.SC) > HUtil32.HiWord((M2Share.g_HighSCHuman as TPlayObject).m_WAbil.SC))
+                        if (HUtil32.HiWord(m_WAbil.SC) > HUtil32.HiWord((M2Share.g_HighSCHuman as PlayObject).m_WAbil.SC))
                         {
                             M2Share.g_HighSCHuman = this;
                         }
                     }
                     // 最长在线时间
-                    if (M2Share.g_HighOnlineHuman == null || (M2Share.g_HighOnlineHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighOnlineHuman == null || (M2Share.g_HighOnlineHuman as PlayObject).m_boGhost)
                     {
                         M2Share.g_HighOnlineHuman = this;
                     }
                     else
                     {
-                        if (m_dwLogonTick < (M2Share.g_HighOnlineHuman as TPlayObject).m_dwLogonTick)
+                        if (m_dwLogonTick < (M2Share.g_HighOnlineHuman as PlayObject).m_dwLogonTick)
                         {
                             M2Share.g_HighOnlineHuman = this;
                         }

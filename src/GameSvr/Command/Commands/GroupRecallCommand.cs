@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class GroupRecallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GroupRecall(TPlayObject PlayObject)
+        public void GroupRecall(PlayObject PlayObject)
         {
             if (PlayObject.m_boRecallSuite || PlayObject.m_btPermission >= 6)
             {

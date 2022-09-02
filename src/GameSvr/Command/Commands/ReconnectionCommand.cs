@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ReconnectionCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Reconnection(string[] @params, TPlayObject PlayObject)
+        public void Reconnection(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

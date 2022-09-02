@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ChangeMasterNameCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeMasterName(string[] @Params, TPlayObject PlayObject)
+        public void ChangeMasterName(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

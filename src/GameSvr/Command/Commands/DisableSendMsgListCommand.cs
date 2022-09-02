@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class DisableSendMsgListCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DisableSendMsgList(TPlayObject PlayObject)
+        public void DisableSendMsgList(PlayObject PlayObject)
         {
             if (M2Share.g_DisableSendMsgList.Count <= 0)
             {

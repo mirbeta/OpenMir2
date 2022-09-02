@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ForcedWallconquestWarCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ForcedWallconquestWar(string[] @Params, TPlayObject PlayObject)
+        public void ForcedWallconquestWar(string[] @Params, PlayObject PlayObject)
         {
             if (Params == null)
             {

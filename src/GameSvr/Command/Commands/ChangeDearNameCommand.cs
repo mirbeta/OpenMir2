@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ChangeDearNameCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeDearName(string[] @Params, TPlayObject PlayObject)
+        public void ChangeDearName(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

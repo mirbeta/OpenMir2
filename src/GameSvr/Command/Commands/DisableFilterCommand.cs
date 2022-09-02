@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class DisableFilterCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DisableFilter(TPlayObject PlayObject)
+        public void DisableFilter(PlayObject PlayObject)
         {
             M2Share.boFilterWord = !M2Share.boFilterWord;
             if (M2Share.boFilterWord)

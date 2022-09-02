@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class DelNpcCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelNpc(TPlayObject PlayObject)
+        public void DelNpc(PlayObject PlayObject)
         {
             const string sDelOK = "删除NPC成功...";
             TBaseObject BaseObject = PlayObject.GetPoseCreate();

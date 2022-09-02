@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class HungerCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Hunger(string[] @Params, TPlayObject PlayObject)
+        public void Hunger(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

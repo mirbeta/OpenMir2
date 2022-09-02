@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class HumanLocalCommand : BaseCommond
     {
         [DefaultCommand]
-        public void HumanLocal(string[] @Params, TPlayObject PlayObject)
+        public void HumanLocal(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -5,7 +5,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Robots
 {
-    public class RobotObject : TPlayObject
+    public class RobotObject : PlayObject
     {
         public string m_sScriptFileName = string.Empty;
         private IList<AutoRunInfo> _autoRunList = null;

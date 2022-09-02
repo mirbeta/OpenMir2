@@ -6,7 +6,7 @@ using SystemModule.Data;
 
 namespace GameSvr.Player
 {
-    public partial class TPlayObject
+    public partial class PlayObject
     {
         private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
         {

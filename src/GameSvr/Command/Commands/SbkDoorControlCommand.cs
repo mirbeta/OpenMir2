@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class SbkDoorControlCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SbkDoorControl(TPlayObject PlayObject)
+        public void SbkDoorControl(PlayObject PlayObject)
         {
         }
     }

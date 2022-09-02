@@ -13,10 +13,10 @@ namespace GameSvr.Command.Commands
     public class StartContestCommand : BaseCommond
     {
         [DefaultCommand]
-        public void StartContest(TPlayObject PlayObject)
+        public void StartContest(PlayObject PlayObject)
         {
-            TPlayObject m_PlayObject;
-            TPlayObject PlayObjectA;
+            PlayObject m_PlayObject;
+            PlayObject PlayObjectA;
             bool bo19;
             if (!PlayObject.m_PEnvir.Flag.boFight3Zone)
             {
@@ -25,12 +25,12 @@ namespace GameSvr.Command.Commands
             }
             PlayObject.SysMsg("开始行会争霸赛。", MsgColor.Red, MsgType.Hint);
             IList<TBaseObject> List10 = new List<TBaseObject>();
-            IList<TPlayObject> List14 = new List<TPlayObject>();
+            IList<PlayObject> List14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
             M2Share.UserEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, List10);
             for (var i = 0; i < List10.Count; i++)
             {
-                m_PlayObject = List10[i] as TPlayObject;
+                m_PlayObject = List10[i] as PlayObject;
                 if (!m_PlayObject.m_boObMode || !m_PlayObject.m_boAdminMode)
                 {
                     m_PlayObject.m_nFightZoneDieCount = 0;
@@ -63,7 +63,7 @@ namespace GameSvr.Command.Commands
                 Guild.StartTeamFight();
                 for (int II = 0; II < List10.Count; II++)
                 {
-                    m_PlayObject = List10[i] as TPlayObject;
+                    m_PlayObject = List10[i] as PlayObject;
                     if (m_PlayObject.m_MyGuild == Guild)
                     {
                         Guild.AddTeamFightMember(m_PlayObject.m_sCharName);

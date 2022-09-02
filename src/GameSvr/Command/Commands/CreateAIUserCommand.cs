@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class CreateAIUserCommand : BaseCommond
     {
         [DefaultCommand]
-        public void AddAIUser(string[] @params, TPlayObject PlayObject)
+        public void AddAIUser(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

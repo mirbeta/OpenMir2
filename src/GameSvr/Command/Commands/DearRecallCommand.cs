@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class DearRecallCommond : BaseCommond
     {
         [DefaultCommand]
-        public void DearRecall(TPlayObject PlayObject)
+        public void DearRecall(PlayObject PlayObject)
         {
             if (PlayObject.m_sDearName == "")
             {

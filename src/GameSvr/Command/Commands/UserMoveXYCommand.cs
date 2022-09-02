@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class UserMoveXYCommand : BaseCommond
     {
         [DefaultCommand]
-        public void UserMoveXY(string[] @Params, TPlayObject PlayObject)
+        public void UserMoveXY(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

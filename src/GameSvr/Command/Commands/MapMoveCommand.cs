@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class MapMoveCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MapMove(string[] @Params, TPlayObject PlayObject)
+        public void MapMove(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

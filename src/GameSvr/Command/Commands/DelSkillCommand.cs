@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class DelSkillCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelSkill(string[] @Params, TPlayObject PlayObject)
+        public void DelSkill(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

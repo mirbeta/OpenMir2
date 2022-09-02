@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class TrainingCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Training(TPlayObject PlayObject)
+        public void Training(PlayObject PlayObject)
         {
             if (PlayObject.m_btPermission < 6)
             {

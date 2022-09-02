@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     public class ShowEffectCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowEffect(string[] @Params, TPlayObject PlayObject)
+        public void ShowEffect(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

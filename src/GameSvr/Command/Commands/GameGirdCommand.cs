@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     public class GameGirdCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GameGird(string[] @Params, TPlayObject PlayObject)
+        public void GameGird(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             //string sCtr = @Params.Length > 1 ? @Params[1] : "";

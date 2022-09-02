@@ -163,7 +163,7 @@ namespace GameSvr.Services
                     {
                         if (SaveRcd.PlayObject != null)
                         {
-                            ((TPlayObject)SaveRcd.PlayObject).m_boRcdSaved = true;
+                            ((PlayObject)SaveRcd.PlayObject).m_boRcdSaved = true;
                         }
                         HUtil32.EnterCriticalSection(m_UserCriticalSection);
                         try

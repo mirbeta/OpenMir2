@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class GamePointCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GamePoint(string[] @params, TPlayObject PlayObject)
+        public void GamePoint(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

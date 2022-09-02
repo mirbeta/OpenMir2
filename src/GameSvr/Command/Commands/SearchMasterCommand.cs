@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class SearchMasterCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SearchMaster(TPlayObject PlayObject)
+        public void SearchMaster(PlayObject PlayObject)
         {
             if (PlayObject.m_sMasterName == "")
             {

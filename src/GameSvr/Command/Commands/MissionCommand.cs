@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class MissionCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Mission(string[] @Params, TPlayObject PlayObject)
+        public void Mission(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

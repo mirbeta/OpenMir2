@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class AdjuestLevelCommand : BaseCommond
     {
         [DefaultCommand]
-        public void AdjuestLevel(string[] @Params, TPlayObject PlayObject)
+        public void AdjuestLevel(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

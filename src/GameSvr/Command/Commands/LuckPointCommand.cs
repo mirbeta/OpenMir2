@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class LuckPointCommand : BaseCommond
     {
         [DefaultCommand]
-        public void LuckPoint(string[] @Params, TPlayObject PlayObject)
+        public void LuckPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -9,12 +9,12 @@ namespace GameSvr.Services
     public class AccountService
     {
         private int _dwClearEmptySessionTick = 0;
-        private readonly IList<TSessInfo> m_SessionList = null;
+        private readonly IList<TSessInfo> _sessionList = null;
         private readonly ClientScoket _clientScoket;
 
         public AccountService()
         {
-            m_SessionList = new List<TSessInfo>();
+            _sessionList = new List<TSessInfo>();
             M2Share.g_Config.boIDSocketConnected = false;
             _clientScoket = new ClientScoket();
             _clientScoket.OnConnected += IDSocketConnect;
@@ -86,9 +86,9 @@ namespace GameSvr.Services
         public void SendHumanLogOutMsg(string sUserId, int nId)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            for (var i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                var sessInfo = m_SessionList[i];
+                var sessInfo = _sessionList[i];
                 if (sessInfo.nSessionID == nId && sessInfo.sAccount == sUserId)
                 {
                     break;
@@ -99,9 +99,9 @@ namespace GameSvr.Services
 
         public void SendHumanLogOutMsgA(string sUserID, int nID)
         {
-            for (var i = m_SessionList.Count - 1; i >= 0; i--)
+            for (var i = _sessionList.Count - 1; i >= 0; i--)
             {
-                var sessInfo = m_SessionList[i];
+                var sessInfo = _sessionList[i];
                 if (sessInfo.nSessionID == nID && sessInfo.sAccount == sUserID)
                 {
                     break;
@@ -252,7 +252,7 @@ namespace GameSvr.Services
             sessInfo.dwStartTick = HUtil32.GetTickCount();
             sessInfo.ActiveTick = HUtil32.GetTickCount();
             sessInfo.nRefCount = 1;
-            m_SessionList.Add(sessInfo);
+            _sessionList.Add(sessInfo);
         }
 
         private void DelSession(int nSessionID)
@@ -262,13 +262,13 @@ namespace GameSvr.Services
             const string sExceptionMsg = "[Exception] FrmIdSoc::DelSession";
             try
             {
-                for (var i = 0; i < m_SessionList.Count; i++)
+                for (var i = 0; i < _sessionList.Count; i++)
                 {
-                    SessInfo = m_SessionList[i];
+                    SessInfo = _sessionList[i];
                     if (SessInfo.nSessionID == nSessionID)
                     {
                         sAccount = SessInfo.sAccount;
-                        m_SessionList.RemoveAt(i);
+                        _sessionList.RemoveAt(i);
                         SessInfo = null;
                         break;
                     }
@@ -287,11 +287,11 @@ namespace GameSvr.Services
 
         private void ClearSession()
         {
-            for (var i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                m_SessionList[i] = null;
+                _sessionList[i] = null;
             }
-            m_SessionList.Clear();
+            _sessionList.Clear();
         }
 
         public TSessInfo GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent)
@@ -301,9 +301,9 @@ namespace GameSvr.Services
             const string sGetFailMsg = "[非法登录] 全局会话验证失败({0}/{1}/{2})";
             nPayMent = 0;
             nPayMode = 0;
-            for (var i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                var sessInfo = m_SessionList[i];
+                var sessInfo = _sessionList[i];
                 if (sessInfo.nSessionID == nSessionID && sessInfo.sAccount == sAccount)
                 {
                     switch (sessInfo.PayMent)
@@ -401,14 +401,14 @@ namespace GameSvr.Services
 
         public int GetSessionCount()
         {
-            return m_SessionList.Count;
+            return _sessionList.Count;
         }
 
         public void GetSessionList(ArrayList List)
         {
-            for (var i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                List.Add(m_SessionList[i]);
+                List.Add(_sessionList[i]);
             }
         }
     }

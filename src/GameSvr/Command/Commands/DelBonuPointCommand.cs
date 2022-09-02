@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class DelBonuPointCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelBonuPoint(string[] @Params, TPlayObject PlayObject)
+        public void DelBonuPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

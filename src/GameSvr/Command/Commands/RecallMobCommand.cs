@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
     public class RecallMobCommand : BaseCommond
     {
         [DefaultCommand]
-        public void RecallMob(string[] @Params, TPlayObject PlayObject)
+        public void RecallMob(string[] @Params, PlayObject PlayObject)
         {
             if (Params == null)
             {

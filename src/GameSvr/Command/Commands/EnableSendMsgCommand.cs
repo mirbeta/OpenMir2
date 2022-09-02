@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class EnableSendMsgCommand : BaseCommond
     {
         [DefaultCommand]
-        public void EnableSendMsg(string[] @params, TPlayObject PlayObject)
+        public void EnableSendMsg(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

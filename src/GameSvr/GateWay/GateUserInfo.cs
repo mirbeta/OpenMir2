@@ -10,7 +10,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 人物对象
         /// </summary>
-        public TPlayObject PlayObject;
+        public PlayObject PlayObject;
         public int nSessionID;
         /// <summary>
         /// 账号

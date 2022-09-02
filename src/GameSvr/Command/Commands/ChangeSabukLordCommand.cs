@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ChangeSabukLordCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeSabukLord(string[] @Params, TPlayObject PlayObject)
+        public void ChangeSabukLord(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -490,7 +490,7 @@ namespace GameSvr.Guild
             return true;
         }
 
-        public string GetRankName(TPlayObject PlayObject, ref int nRankNo)
+        public string GetRankName(PlayObject PlayObject, ref int nRankNo)
         {
             var result = string.Empty;
             TGuildRank GuildRank;
@@ -541,7 +541,7 @@ namespace GameSvr.Guild
             }
         }
 
-        public void DelHumanObj(TPlayObject PlayObject)
+        public void DelHumanObj(PlayObject PlayObject)
         {
             CheckSaveGuildFile();
             for (var i = 0; i < m_RankList.Count; i++)
@@ -600,7 +600,7 @@ namespace GameSvr.Guild
 
         public void BackupGuildFile()
         {
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             TGuildRank GuildRank;
             if (M2Share.nServerIndex == 0)
             {
@@ -633,7 +633,7 @@ namespace GameSvr.Guild
             SaveGuildInfoFile();
         }
 
-        public void AddMember(TPlayObject PlayObject)
+        public void AddMember(PlayObject PlayObject)
         {
             TGuildRank GuildRank;
             TGuildRank GuildRank18 = null;
@@ -735,7 +735,7 @@ namespace GameSvr.Guild
             int n2C;
             int n30;
             bool boCheckChange;
-            TPlayObject PlayObject;
+            PlayObject PlayObject;
             IList<TGuildRank> GuildRankList = new List<TGuildRank>();
             TGuildRank GuildRank = null;
             while (true)

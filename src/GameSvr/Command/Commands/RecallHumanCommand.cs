@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class RecallHumanCommand : BaseCommond
     {
         [DefaultCommand]
-        public void RecallHuman(string[] @Params, TPlayObject PlayObject)
+        public void RecallHuman(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

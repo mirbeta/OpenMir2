@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ViewWhisperCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ViewWhisper(string[] @Params, TPlayObject PlayObject)
+        public void ViewWhisper(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

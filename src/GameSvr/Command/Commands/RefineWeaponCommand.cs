@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class RefineWeaponCommand : BaseCommond
     {
         [DefaultCommand]
-        public void RefineWeapon(string[] @Params, TPlayObject PlayObject)
+        public void RefineWeapon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ReloadMonItemsCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadMonItems(TPlayObject PlayObject)
+        public void ReloadMonItems(PlayObject PlayObject)
         {
             try
             {

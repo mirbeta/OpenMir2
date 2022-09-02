@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class TingCommand : BaseCommond
     {
         [DefaultCommand]
-        public void Ting(string[] @Params, TPlayObject PlayObject)
+        public void Ting(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

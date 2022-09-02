@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ChangeUserFullCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeUserFull(string[] @Params, TPlayObject PlayObject)
+        public void ChangeUserFull(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

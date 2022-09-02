@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
     public class BindUseItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public void BindUseItem(string[] @Params, TPlayObject PlayObject)
+        public void BindUseItem(string[] @Params, PlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sItem = @Params.Length > 1 ? @Params[1] : "";

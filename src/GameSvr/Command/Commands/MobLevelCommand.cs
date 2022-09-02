@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class MobLevelCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MobLevel(TPlayObject PlayObject)
+        public void MobLevel(PlayObject PlayObject)
         {
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             PlayObject.m_PEnvir.GetRangeBaseObject(PlayObject.m_nCurrX, PlayObject.m_nCurrY, 2, true, BaseObjectList);

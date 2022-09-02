@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class HumanInfoCommand : BaseCommond
     {
         [DefaultCommand]
-        public void HumanInfo(string[] @Params, TPlayObject PlayObject)
+        public void HumanInfo(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

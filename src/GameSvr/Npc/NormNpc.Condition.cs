@@ -12,7 +12,7 @@ namespace GameSvr.Npc
 {
     public partial class NormNpc
     {
-        private bool ConditionOfCheckAccountIPList(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckAccountIPList(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             string sLine;
@@ -48,7 +48,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckBagSize(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckBagSize(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nSize = QuestConditionInfo.nParam1;
@@ -64,7 +64,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckBonusPoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckBonusPoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nTotlePoint = this.m_BonusAbil.DC + this.m_BonusAbil.MC + this.m_BonusAbil.SC + this.m_BonusAbil.AC + this.m_BonusAbil.MAC + this.m_BonusAbil.HP + this.m_BonusAbil.MP + this.m_BonusAbil.Hit + this.m_BonusAbil.Speed + this.m_BonusAbil.X2;
@@ -100,7 +100,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckHP_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
+        private bool ConditionOfCheckHP_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -133,7 +133,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckHP(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckHP(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var cMethodMin = QuestConditionInfo.sParam1[0];
@@ -175,7 +175,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMP_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
+        private bool ConditionOfCheckMP_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -208,7 +208,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMP(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMP(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var cMethodMin = QuestConditionInfo.sParam1[0];
@@ -250,7 +250,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckDC_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
+        private bool ConditionOfCheckDC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -285,7 +285,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckDC(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckDC(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var cMethodMin = QuestConditionInfo.sParam1[0];
@@ -327,7 +327,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMC_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
+        private bool ConditionOfCheckMC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -360,7 +360,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMC(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMC(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var cMethodMin = QuestConditionInfo.sParam1[0];
@@ -402,7 +402,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckSC_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
+        private bool ConditionOfCheckSC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -435,7 +435,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckSC(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckSC(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var cMethodMin = QuestConditionInfo.sParam1[0];
@@ -477,7 +477,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckExp(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckExp(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var dwExp = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
@@ -517,7 +517,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckFlourishPoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckFlourishPoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -562,7 +562,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckChiefItemCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckChiefItemCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -607,7 +607,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckGuildAuraePoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckGuildAuraePoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -652,7 +652,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckGuildBuildPoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckGuildBuildPoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -697,7 +697,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckStabilityPoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckStabilityPoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -742,7 +742,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckGameGold(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckGameGold(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nGameGold = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -782,7 +782,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckGamePoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckGamePoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nGamePoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -822,7 +822,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckGroupCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckGroupCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             if (PlayObject.m_GroupOwner == null)
@@ -866,7 +866,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfIsHigh(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfIsHigh(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             if (QuestConditionInfo.sParam1 == "")
@@ -899,12 +899,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckHaveGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckHaveGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.m_MyGuild != null;
         }
 
-        private bool ConditionOfCheckInMapRange(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckInMapRange(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var sMapName = QuestConditionInfo.sParam1;
             var nX = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -926,7 +926,7 @@ namespace GameSvr.Npc
             return false;
         }
 
-        private bool ConditionOfCheckIsAttackGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsAttackGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             if (this.m_Castle == null)
             {
@@ -940,7 +940,7 @@ namespace GameSvr.Npc
             return this.m_Castle.IsAttackGuild(PlayObject.m_MyGuild);
         }
 
-        private bool ConditionOfCheckCastleChageDay(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckCastleChageDay(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -981,7 +981,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckCastleWarDay(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckCastleWarDay(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1022,7 +1022,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckCastleDoorStatus(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckCastleDoorStatus(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1069,7 +1069,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckIsAttackAllyGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsAttackAllyGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             if (this.m_Castle == null)
             {
@@ -1083,7 +1083,7 @@ namespace GameSvr.Npc
             return this.m_Castle.IsAttackAllyGuild(PlayObject.m_MyGuild);
         }
 
-        private bool ConditionOfCheckIsDefenseAllyGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsDefenseAllyGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             if (this.m_Castle == null)
             {
@@ -1097,7 +1097,7 @@ namespace GameSvr.Npc
             return this.m_Castle.IsDefenseAllyGuild(PlayObject.m_MyGuild);
         }
 
-        private bool ConditionOfCheckIsDefenseGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsDefenseGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             if (this.m_Castle == null)
             {
@@ -1111,32 +1111,32 @@ namespace GameSvr.Npc
             return this.m_Castle.IsDefenseGuild(PlayObject.m_MyGuild);
         }
 
-        private bool ConditionOfCheckIsCastleaGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsCastleaGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return M2Share.CastleManager.IsCastleMember(PlayObject) != null;
         }
 
-        private bool ConditionOfCheckIsCastleMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsCastleMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.IsGuildMaster() && (M2Share.CastleManager.IsCastleMember(PlayObject) != null);
         }
 
-        private bool ConditionOfCheckIsGuildMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsGuildMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.IsGuildMaster();
         }
 
-        private bool ConditionOfCheckIsMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return !string.IsNullOrEmpty(PlayObject.m_sMasterName) && PlayObject.m_boMaster;
         }
 
-        private bool ConditionOfCheckListCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckListCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return false;
         }
 
-        private bool ConditionOfCheckItemAddValue(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckItemAddValue(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
@@ -1188,7 +1188,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckItemType(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckItemType(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
@@ -1211,7 +1211,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckLevelEx(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckLevelEx(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1251,7 +1251,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckNameListPostion(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckNameListPostion(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             string sLine;
             var result = false;
@@ -1292,12 +1292,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMarry(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMarry(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return !string.IsNullOrEmpty(PlayObject.m_sDearName);
         }
 
-        private bool ConditionOfCheckMarryCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMarryCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1337,12 +1337,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return !string.IsNullOrEmpty(PlayObject.m_sMasterName) && !PlayObject.m_boMaster;
         }
 
-        private bool ConditionOfCheckMemBerLevel(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMemBerLevel(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1382,7 +1382,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMemberType(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMemberType(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nType = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1422,7 +1422,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckNameIPList(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckNameIPList(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             StringList LoadList;
             string sLine;
@@ -1459,7 +1459,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseDir(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPoseDir(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
@@ -1487,7 +1487,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseGender(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPoseGender(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             byte btSex = 0;
@@ -1518,13 +1518,13 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseIsMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPoseIsMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
             {
-                if ((((TPlayObject)PoseHuman).m_sMasterName != "") && ((TPlayObject)PoseHuman).m_boMaster)
+                if ((((PlayObject)PoseHuman).m_sMasterName != "") && ((PlayObject)PoseHuman).m_boMaster)
                 {
                     result = true;
                 }
@@ -1532,7 +1532,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseLevel(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPoseLevel(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1576,13 +1576,13 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseMarry(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPoseMarry(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             TBaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
             {
-                if (((TPlayObject)PoseHuman).m_sDearName != "")
+                if (((PlayObject)PoseHuman).m_sDearName != "")
                 {
                     result = true;
                 }
@@ -1590,13 +1590,13 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPoseMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             TBaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
             {
-                if ((((TPlayObject)PoseHuman).m_sMasterName != "") && !((TPlayObject)PoseHuman).m_boMaster)
+                if ((((PlayObject)PoseHuman).m_sMasterName != "") && !((PlayObject)PoseHuman).m_boMaster)
                 {
                     result = true;
                 }
@@ -1604,12 +1604,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckServerName(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckServerName(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return QuestConditionInfo.sParam1 == M2Share.g_Config.sServerName;
         }
 
-        private bool ConditionOfCheckSlaveCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckSlaveCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             int nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1649,12 +1649,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMap(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMap(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return QuestConditionInfo.sParam1 == PlayObject.m_sMapName;
         }
 
-        private bool ConditionOfCheckPos(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPos(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result;
             int nX = QuestConditionInfo.nParam2;
@@ -1670,7 +1670,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfReviveSlave(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfReviveSlave(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             int resultc = -1;
@@ -1709,7 +1709,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMagicLvl(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMagicLvl(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             TUserMagic UserMagic;
@@ -1728,12 +1728,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckGroupClass(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckGroupClass(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             int nCount = 0;
             PlayJob nJob = PlayJob.None;
-            TPlayObject PlayObjectEx;
+            PlayObject PlayObjectEx;
             if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior, ScriptConst.sWarrior.Length))
             {
                 nJob = PlayJob.Warrior;
@@ -1793,7 +1793,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckRangeMonCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckRangeMonCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             TBaseObject BaseObject;
             bool result = false;
@@ -1850,7 +1850,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckReNewLevel(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckReNewLevel(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             int nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -1890,7 +1890,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckSlaveLevel(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckSlaveLevel(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             TBaseObject BaseObject;
             bool result = false;
@@ -1944,7 +1944,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckUseItem(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckUseItem(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             int nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
@@ -1960,7 +1960,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckVar(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckVar(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar;
@@ -2028,18 +2028,18 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfHaveMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfHaveMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return !string.IsNullOrEmpty(PlayObject.m_sMasterName);
         }
 
-        private bool ConditionOfPoseHaveMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfPoseHaveMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
             {
-                if (((TPlayObject)PoseHuman).m_sMasterName != "")
+                if (((PlayObject)PoseHuman).m_sMasterName != "")
                 {
                     result = true;
                 }
@@ -2047,7 +2047,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckCastleGold(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckCastleGold(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nGold = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -2087,7 +2087,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckContribution(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckContribution(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nContribution = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -2127,7 +2127,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckCreditPoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckCreditPoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nCreditPoint = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -2167,7 +2167,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckOfGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckOfGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             if (QuestConditionInfo.sParam1 == "")
@@ -2185,7 +2185,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckOnlineLongMin(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckOnlineLongMin(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nOnlineMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -2226,7 +2226,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPasswordErrorCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPasswordErrorCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nErrorCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
@@ -2266,17 +2266,17 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfIsLockPassword(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfIsLockPassword(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.m_boPasswordLocked;
         }
 
-        private bool ConditionOfIsLockStorage(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfIsLockStorage(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             return !PlayObject.m_boCanGetBackItem;
         }
 
-        private bool ConditionOfCheckPayMent(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckPayMent(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nPayMent = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
@@ -2292,7 +2292,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckSlaveName(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckSlaveName(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             TBaseObject BaseObject;
             var result = false;
@@ -2314,7 +2314,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckNameDateList(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckNameDateList(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             StringList LoadList;
@@ -2464,7 +2464,7 @@ namespace GameSvr.Npc
         }
 
         // CHECKMAPHUMANCOUNT MAP = COUNT
-        private bool ConditionOfCheckMapHumanCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMapHumanCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
@@ -2505,7 +2505,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMapMonCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckMapMonCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
@@ -2547,7 +2547,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckIsOnMap(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool ConditionOfCheckIsOnMap(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             if (PlayObject.m_sMapFileName == QuestConditionInfo.sParam1 || PlayObject.m_sMapName == QuestConditionInfo.sParam1)
             {
@@ -2556,7 +2556,7 @@ namespace GameSvr.Npc
             return false;
         }
 
-        private bool LargeData(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool LargeData(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             int n14 = 0;
@@ -2580,7 +2580,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool Smalldata(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool Smalldata(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             int n14 = 0;
@@ -2604,7 +2604,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool EqualData(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        private bool EqualData(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             int n14 = 0;
@@ -2630,7 +2630,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool CheckVarNameNo(TPlayObject PlayObject, TQuestConditionInfo CheckQuestConditionInfo, ref int n140, ref int n180)
+        private bool CheckVarNameNo(PlayObject PlayObject, TQuestConditionInfo CheckQuestConditionInfo, ref int n140, ref int n180)
         {
             bool result = false;
             string sParam1 = string.Empty;
@@ -2763,7 +2763,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLable_CheckVarNameNo_GetDynamicVarValue(TPlayObject PlayObject, string sVarType, string sValName, ref int nValue)
+        private bool GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject PlayObject, string sVarType, string sValName, ref int nValue)
         {
             bool result = false;
             TDynamicVar DynamicVar;
@@ -2791,7 +2791,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLable_CheckVarNameNo_GetValValue(TPlayObject PlayObject, string sValName, ref int nValue)
+        private bool GotoLable_CheckVarNameNo_GetValValue(PlayObject PlayObject, string sValName, ref int nValue)
         {
             nValue = 0;
             bool result = false;

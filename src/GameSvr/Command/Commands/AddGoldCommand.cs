@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class AddGoldCommand : BaseCommond
     {
         [DefaultCommand]
-        public void AddGold(string[] @Params, TPlayObject PlayObject)
+        public void AddGold(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

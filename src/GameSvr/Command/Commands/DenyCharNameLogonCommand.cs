@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class DenyCharNameLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DenyCharNameLogon(string[] @Params, TPlayObject PlayObject)
+        public void DenyCharNameLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

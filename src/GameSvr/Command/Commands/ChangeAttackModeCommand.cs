@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ChangeAttackModeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeAttackMode(TPlayObject PlayObject)
+        public void ChangeAttackMode(PlayObject PlayObject)
         {
             if (PlayObject.m_btAttatckMode >= AttackMode.HAM_PKATTACK)
             {

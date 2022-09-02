@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class ClearMissionCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ClearMission(string[] @Params, TPlayObject PlayObject)
+        public void ClearMission(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

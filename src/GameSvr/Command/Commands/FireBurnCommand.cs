@@ -8,7 +8,7 @@ namespace GameSvr.Command.Commands
     public class FireBurnCommand : BaseCommond
     {
         [DefaultCommand]
-        public void FireBurn(string[] @Params, TPlayObject PlayObject)
+        public void FireBurn(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

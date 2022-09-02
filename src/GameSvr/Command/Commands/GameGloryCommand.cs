@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     public class GameGloryCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GameGlory(string[] @Params, TPlayObject PlayObject)
+        public void GameGlory(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";

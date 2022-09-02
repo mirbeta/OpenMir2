@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     public class LotteryTicketCommandL : BaseCommond
     {
         [DefaultCommand]
-        public void LotteryTicket(TPlayObject PlayObject)
+        public void LotteryTicket(PlayObject PlayObject)
         {
             PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandLotteryTicketMsg, M2Share.g_Config.nWinLotteryCount,
                 M2Share.g_Config.nNoWinLotteryCount, M2Share.g_Config.nWinLotteryLevel1, M2Share.g_Config.nWinLotteryLevel2,

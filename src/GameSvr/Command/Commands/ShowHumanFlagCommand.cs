@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class ShowHumanFlagCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowHumanFlag(string[] @Params, TPlayObject PlayObject)
+        public void ShowHumanFlag(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

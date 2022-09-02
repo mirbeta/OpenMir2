@@ -121,7 +121,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        public void DoSpell_sub_4934B4(TPlayObject PlayObject)
+        public void DoSpell_sub_4934B4(PlayObject PlayObject)
         {
             if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL].Dura < 100)
             {
@@ -131,7 +131,7 @@ namespace GameSvr.Magic
             }
         }
 
-        public bool DoSpell(TPlayObject PlayObject, TUserMagic UserMagic, short nTargetX, short nTargetY, TBaseObject TargeTBaseObject)
+        public bool DoSpell(PlayObject PlayObject, TUserMagic UserMagic, short nTargetX, short nTargetY, TBaseObject TargeTBaseObject)
         {
             var result = false;
             short n14 = 0;
@@ -846,7 +846,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagWindTebo(TPlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagWindTebo(PlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
             var PoseBaseObject = PlayObject.GetPoseCreate();
@@ -870,13 +870,13 @@ namespace GameSvr.Magic
             if (M2Share.RandomNumber.Random(11) < nLevel * 2 + 4)
             {
                 BaseObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE2, 0, 0, 0, 0, "");
-                if (BaseObject is TPlayObject)
+                if (BaseObject is PlayObject)
                 {
                     var Envir = BaseObject.m_PEnvir;
                     BaseObject.MapRandomMove(BaseObject.m_sHomeMap, 1);
                     if (Envir != BaseObject.m_PEnvir && BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
-                        var PlayObject = (TPlayObject)BaseObject;
+                        var PlayObject = (PlayObject)BaseObject;
                         PlayObject.m_boTimeRecall = false;
                     }
                 }
@@ -885,7 +885,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagGroupAmyounsul(TPlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, TBaseObject TargeTBaseObject)
+        private bool MagGroupAmyounsul(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, TBaseObject TargeTBaseObject)
         {
             short nAmuletIdx = 0;
             var result = false;
@@ -935,7 +935,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagGroupDeDing(TPlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, TBaseObject TargeTBaseObject)
+        private bool MagGroupDeDing(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, TBaseObject TargeTBaseObject)
         {
             TBaseObject BaseObject;
             var result = false;
@@ -976,7 +976,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagGroupLightening(TPlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, TBaseObject TargeTBaseObject, ref bool boSpellFire)
+        private bool MagGroupLightening(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, TBaseObject TargeTBaseObject, ref bool boSpellFire)
         {
             var result = false;
             boSpellFire = false;
@@ -1016,7 +1016,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagHbFireBall(TPlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, ref TBaseObject TargetBaseObject)
+        private bool MagHbFireBall(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, ref TBaseObject TargetBaseObject)
         {
             var result = false;
             if (!PlayObject.MagCanHitTarget(PlayObject.m_nCurrX, PlayObject.m_nCurrY, TargetBaseObject))
@@ -1060,7 +1060,7 @@ namespace GameSvr.Magic
         /// 火墙
         /// </summary>
         /// <returns></returns>
-        private int MagMakeFireCross(TPlayObject PlayObject, int nDamage, int nHTime, int nX, int nY)
+        private int MagMakeFireCross(PlayObject PlayObject, int nDamage, int nHTime, int nX, int nY)
         {
             const string sDisableInSafeZoneFireCross = "安全区不允许使用...";
             if (M2Share.g_Config.boDisableInSafeZoneFireCross && PlayObject.InSafeZone(PlayObject.m_PEnvir, nX, nY))
@@ -1286,7 +1286,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagMakeSinSuSlave(TPlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeSinSuSlave(PlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
@@ -1321,7 +1321,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagMakeSlave(TPlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeSlave(PlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
@@ -1352,13 +1352,13 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagMakeClone(TPlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeClone(PlayObject PlayObject, TUserMagic UserMagic)
         {
             var playCloneObject = new TPlayCloneObject(PlayObject);
             return true;
         }
 
-        private bool MagMakeAngelSlave(TPlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeAngelSlave(PlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())

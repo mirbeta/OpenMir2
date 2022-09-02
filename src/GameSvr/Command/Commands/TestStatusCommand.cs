@@ -8,7 +8,7 @@ namespace GameSvr.Command.Commands
     public class TestStatusCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TestStatus(string[] @Params, TPlayObject PlayObject)
+        public void TestStatus(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

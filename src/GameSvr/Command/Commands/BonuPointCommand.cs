@@ -11,7 +11,7 @@ namespace GameSvr.Command.Commands
     public class BonuPointCommand : BaseCommond
     {
         [DefaultCommand]
-        public void BonuPoint(string[] @Params, TPlayObject PlayObject)
+        public void BonuPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

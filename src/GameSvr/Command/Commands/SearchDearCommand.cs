@@ -10,7 +10,7 @@ namespace GameSvr.Command.Commands
     public class SearchDearCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SearchDear(TPlayObject PlayObject)
+        public void SearchDear(PlayObject PlayObject)
         {
             if (PlayObject.m_sDearName == "")
             {

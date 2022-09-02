@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
     public class GetUserItemsCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GetUserItems(string[] @Params, TPlayObject PlayObject)
+        public void GetUserItems(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {
