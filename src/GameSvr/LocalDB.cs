@@ -164,7 +164,6 @@ namespace GameSvr
         public void LoadMakeItem()
         {
             int nItemCount;
-            var sLine = string.Empty;
             var sSubName = string.Empty;
             var sItemName = string.Empty;
             IList<TMakeItem> List28 = null;
@@ -175,7 +174,7 @@ namespace GameSvr
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLine = LoadList[i].Trim();
+                    var sLine = LoadList[i].Trim();
                     if (string.IsNullOrEmpty(sLine) || sLine.StartsWith(";"))
                     {
                         continue;
@@ -422,7 +421,6 @@ namespace GameSvr
 
         public void LoadMerchant()
         {
-            var sLineText = string.Empty;
             var sScript = string.Empty;
             var sMapName = string.Empty;
             var sX = string.Empty;
@@ -440,8 +438,8 @@ namespace GameSvr
                 tMerchantList.LoadFromFile(sFileName);
                 for (var i = 0; i < tMerchantList.Count; i++)
                 {
-                    sLineText = tMerchantList[i].Trim();
-                    if (sLineText != "" && sLineText[0] != ';')
+                    var sLineText = tMerchantList[i].Trim();
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, new[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, new[] { " ", "\t" });
@@ -457,9 +455,9 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIsCalste, new[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, new[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, new[] { " ", "\t" });
-                        if (sScript != "" && sMapName != "" && sAppr != "")
+                        if (!string.IsNullOrEmpty(sScript) && !string.IsNullOrEmpty(sMapName) && !string.IsNullOrEmpty(sAppr))
                         {
-                            var tMerchantNPC = new Merchant
+                            var merchantNpc = new Merchant
                             {
                                 m_sScript = sScript,
                                 m_sMapName = sMapName,
@@ -472,13 +470,13 @@ namespace GameSvr
                             };
                             if (HUtil32.Str_ToInt(sIsCalste, 0) != 0)
                             {
-                                tMerchantNPC.m_boCastle = true;
+                                merchantNpc.m_boCastle = true;
                             }
-                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && tMerchantNPC.m_dwMoveTime > 0)
+                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && merchantNpc.m_dwMoveTime > 0)
                             {
-                                tMerchantNPC.m_boCanMove = true;
+                                merchantNpc.m_boCanMove = true;
                             }
-                            M2Share.UserEngine.AddMerchant(tMerchantNPC);
+                            M2Share.UserEngine.AddMerchant(merchantNpc);
                         }
                     }
                 }
@@ -531,7 +529,7 @@ namespace GameSvr
                     }
                     i++;
                 }
-                MonGenInfo MonGenInfo;
+                MonGenInfo MonGenInfo = null;
                 for (i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
@@ -573,11 +571,11 @@ namespace GameSvr
                         }
                     }
                 }
-                MonGenInfo = new MonGenInfo
-                {
-                    CertList = new List<TBaseObject>(),
-                    Envir = null
-                };
+                //MonGenInfo = new MonGenInfo
+                //{
+                //    CertList = new List<TBaseObject>(),
+                //    Envir = null
+                //};
                 M2Share.UserEngine.m_MonGenList.Add(MonGenInfo);
                 result = 1;
             }
