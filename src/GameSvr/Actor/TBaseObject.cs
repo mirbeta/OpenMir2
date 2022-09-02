@@ -517,7 +517,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 可见玩家列表
         /// </summary>
-        public IList<TVisibleBaseObject> m_VisibleActors = null;
+        public IList<VisibleBaseObject> m_VisibleActors = null;
         /// <summary>
         /// 人物背包
         /// </summary>
@@ -705,7 +705,7 @@ namespace GameSvr.Actor
             m_AddAbil = new TAddAbility();
             m_MsgList = new List<SendMessage>();
             m_VisibleHumanList = new List<TBaseObject>();
-            m_VisibleActors = new List<TVisibleBaseObject>();
+            m_VisibleActors = new List<VisibleBaseObject>();
             m_VisibleItems = new List<VisibleMapItem>();
             m_VisibleEvents = new List<MirEvent>();
             m_ItemList = new List<TUserItem>();
@@ -834,7 +834,7 @@ namespace GameSvr.Actor
                     {
                         nDX = nOrgX + iii;
                         nDY = nOrgY + ii;
-                        if (m_PEnvir.GetItemEx(nDX, nDY, ref nItemCount) == null)
+                        if (m_PEnvir.GetItemEx(nDX, nDY, ref nItemCount) == 0)
                         {
                             if (m_PEnvir.Bo2C)
                             {
@@ -3587,7 +3587,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 切换地图
         /// </summary>
-        private bool EnterAnotherMap(Envirnoment Envir, int nDMapX, int nDMapY)
+        private bool EnterAnotherMap(Envirnoment Envir, short nDMapX, short nDMapY)
         {
             bool result = false;
             const string sExceptionMsg7 = "[Exception] TBaseObject::EnterAnotherMap";
@@ -3600,7 +3600,7 @@ namespace GameSvr.Actor
                 }
                 if (Envir.QuestNpc != null)
                 {
-                    ((Merchant)Envir.QuestNpc).Click(this as PlayObject);
+                    Envir.QuestNpc.Click(this as PlayObject);
                 }
                 if (Envir.Flag.nNEEDSETONFlag >= 0)
                 {
@@ -3628,8 +3628,8 @@ namespace GameSvr.Actor
                     m_boOnHorse = false;
                 }
                 var OldEnvir = m_PEnvir;
-                int nOldX = m_nCurrX;
-                int nOldY = m_nCurrY;
+                short nOldX = m_nCurrX;
+                short nOldY = m_nCurrY;
                 DisappearA();
                 m_VisibleHumanList.Clear();
                 for (var i = 0; i < m_VisibleItems.Count; i++)
@@ -3647,8 +3647,8 @@ namespace GameSvr.Actor
                 m_PEnvir = Envir;
                 m_sMapName = Envir.MapName;
                 m_sMapFileName = Envir.MapFileName;
-                m_nCurrX = (short)nDMapX;
-                m_nCurrY = (short)nDMapY;
+                m_nCurrX = nDMapX;
+                m_nCurrY = nDMapY;
                 SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, Envir.MapFileName);
                 if (AddToMap())
                 {
@@ -3659,8 +3659,8 @@ namespace GameSvr.Actor
                 else
                 {
                     m_PEnvir = OldEnvir;
-                    m_nCurrX = (short)nOldX;
-                    m_nCurrY = (short)nOldY;
+                    m_nCurrX = nOldX;
+                    m_nCurrY = nOldY;
                     m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.MovingObject, this);
                 }
                 OnEnvirnomentChanged();

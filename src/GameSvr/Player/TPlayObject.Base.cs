@@ -1221,7 +1221,7 @@ namespace GameSvr.Player
         protected override void UpdateVisibleGay(TBaseObject BaseObject)
         {
             var boIsVisible = false;
-            TVisibleBaseObject VisibleBaseObject;
+            VisibleBaseObject VisibleBaseObject;
             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)
             {
                 m_boIsVisibleActive = true;// 如果是人物或宝宝则置TRUE
@@ -1240,7 +1240,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            VisibleBaseObject = new TVisibleBaseObject
+            VisibleBaseObject = new VisibleBaseObject
             {
                 VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = BaseObject

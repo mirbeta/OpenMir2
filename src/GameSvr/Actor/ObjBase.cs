@@ -19,7 +19,7 @@ namespace GameSvr.Actor
     /// <summary>
     /// 可见的精灵
     /// </summary>
-    public class TVisibleBaseObject
+    public class VisibleBaseObject
     {
         public TBaseObject BaseObject;
         public VisibleFlag VisibleFlag;

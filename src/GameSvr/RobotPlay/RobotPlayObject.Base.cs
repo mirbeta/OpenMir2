@@ -479,7 +479,7 @@ namespace GameSvr.RobotPlay
             TBaseObject BaseObject;
             MapItem MapItem;
             MirEvent MapEvent;
-            TVisibleBaseObject VisibleBaseObject;
+            VisibleBaseObject VisibleBaseObject;
             VisibleMapItem VisibleMapItem;
             VisibleFlag nVisibleFlag;
             const string sExceptionMsg1 = "TAIPlayObject::SearchViewRange Code:{0}";
