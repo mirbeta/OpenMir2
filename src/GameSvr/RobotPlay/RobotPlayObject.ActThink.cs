@@ -212,7 +212,7 @@ namespace GameSvr.RobotPlay
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, (byte)i, boFlag))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
@@ -311,7 +311,7 @@ namespace GameSvr.RobotPlay
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, (byte)i, boFlag))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
@@ -332,7 +332,7 @@ namespace GameSvr.RobotPlay
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, (byte)i, boFlag))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;

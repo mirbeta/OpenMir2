@@ -211,12 +211,12 @@ namespace GameSvr.Maps
             bool cellsuccess = false;
             TBaseObject baseObject;
             CellObject osObject;
-            bool bo1A;
+            bool moveSuccess;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
             var result = 0;
             try
             {
-                bo1A = true;
+                moveSuccess = true;
                 var cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
                 if (!boFlag && cellsuccess)
                 {
@@ -234,7 +234,7 @@ namespace GameSvr.Maps
                                     {
                                         if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
                                         {
-                                            bo1A = false;
+                                            moveSuccess = false;
                                             break;
                                         }
                                     }
@@ -245,10 +245,10 @@ namespace GameSvr.Maps
                     else
                     {
                         result = -1;
-                        bo1A = false;
+                        moveSuccess = false;
                     }
                 }
-                if (bo1A)
+                if (moveSuccess)
                 {
                     if (GetCellInfo(nX, nY, ref cellInfo) && cellInfo.Attribute != CellAttribute.Walk)
                     {
