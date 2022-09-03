@@ -1078,9 +1078,9 @@ namespace GameSvr.Npc
                 {
                     if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物
                     {
-                        for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                        for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
                         {
-                            MonGen = M2Share.UserEngine.m_MonGenList[i];
+                            MonGen = M2Share.UserEngine.MonGenList[i];
                             if (MonGen == null)
                             {
                                 continue;
@@ -1097,9 +1097,9 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                        for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
                         {
-                            MonGen = M2Share.UserEngine.m_MonGenList[i];
+                            MonGen = M2Share.UserEngine.MonGenList[i];
                             if (MonGen == null)
                             {
                                 continue;
@@ -1123,9 +1123,9 @@ namespace GameSvr.Npc
                     {
                         if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
                         {
-                            for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                            for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
                             {
-                                MonGen = M2Share.UserEngine.m_MonGenList[i];
+                                MonGen = M2Share.UserEngine.MonGenList[i];
                                 if (MonGen == null)
                                 {
                                     continue;
@@ -1142,9 +1142,9 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                            for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
                             {
-                                MonGen = M2Share.UserEngine.m_MonGenList[i];
+                                MonGen = M2Share.UserEngine.MonGenList[i];
                                 if (MonGen == null)
                                 {
                                     continue;

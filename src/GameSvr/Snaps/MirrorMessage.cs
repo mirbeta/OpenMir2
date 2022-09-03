@@ -158,7 +158,7 @@ namespace GameSvr.Snaps
         private void MsgGetUserChangeServerRecieveOk(int sNum, string Body)
         {
             var ufilename = Body;
-            M2Share.UserEngine.GetISMChangeServerReceive(ufilename);
+            M2Share.UserEngine.GetIsmChangeServerReceive(ufilename);
         }
 
         private void MsgGetUserLogon(int sNum, string Body)

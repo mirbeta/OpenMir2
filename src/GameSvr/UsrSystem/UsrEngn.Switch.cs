@@ -11,9 +11,9 @@ namespace GameSvr.UsrSystem
         {
             TSwitchDataInfo result = null;
             TSwitchDataInfo SwitchData = null;
-            for (var i = 0; i < m_ChangeServerList.Count; i++)
+            for (var i = 0; i < _mChangeServerList.Count; i++)
             {
-                SwitchData = m_ChangeServerList[i];
+                SwitchData = _mChangeServerList[i];
                 if (string.Compare(SwitchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && SwitchData.nCode == nCode)
                 {
                     result = SwitchData;
@@ -70,19 +70,19 @@ namespace GameSvr.UsrSystem
         public void AddSwitchData(TSwitchDataInfo SwitchData)
         {
             SwitchData.dwWaitTime = HUtil32.GetTickCount();
-            m_ChangeServerList.Add(SwitchData);
+            _mChangeServerList.Add(SwitchData);
         }
 
         private void DelSwitchData(TSwitchDataInfo SwitchData)
         {
             TSwitchDataInfo SwitchDataInfo;
-            for (var i = 0; i < m_ChangeServerList.Count; i++)
+            for (var i = 0; i < _mChangeServerList.Count; i++)
             {
-                SwitchDataInfo = m_ChangeServerList[i];
+                SwitchDataInfo = _mChangeServerList[i];
                 if (SwitchDataInfo == SwitchData)
                 {
                     SwitchDataInfo = null;
-                    m_ChangeServerList.RemoveAt(i);
+                    _mChangeServerList.RemoveAt(i);
                     break;
                 }
             }
@@ -146,12 +146,12 @@ namespace GameSvr.UsrSystem
 
         public void CheckSwitchServerTimeOut()
         {
-            for (var i = m_ChangeServerList.Count - 1; i >= 0; i--)
+            for (var i = _mChangeServerList.Count - 1; i >= 0; i--)
             {
-                if ((HUtil32.GetTickCount() - m_ChangeServerList[i].dwWaitTime) > 30 * 1000)
+                if ((HUtil32.GetTickCount() - _mChangeServerList[i].dwWaitTime) > 30 * 1000)
                 {
-                    m_ChangeServerList[i] = null;
-                    m_ChangeServerList.RemoveAt(i);
+                    _mChangeServerList[i] = null;
+                    _mChangeServerList.RemoveAt(i);
                 }
             }
         }

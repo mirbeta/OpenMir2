@@ -81,7 +81,7 @@ namespace GameSvr
                 _logger.LogInformation("加载技能数据库失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
+            _logger.LogInformation($"加载技能数据库成功({M2Share.UserEngine.MagicList.Count})...");
             _logger.LogInformation("正在加载怪物刷新配置信息...");
             nCode = M2Share.LocalDB.LoadMonGen();
             if (nCode < 0)
@@ -89,7 +89,7 @@ namespace GameSvr
                 _logger.LogInformation("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"加载怪物刷新配置信息成功({M2Share.UserEngine.m_MonGenList.Count})...");
+            _logger.LogInformation($"加载怪物刷新配置信息成功({M2Share.UserEngine.MonGenList.Count})...");
             _logger.LogInformation("正加载怪物说话配置信息...");
             M2Share.LoadMonSayMsg();
             _logger.LogInformation($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
