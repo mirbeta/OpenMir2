@@ -37,7 +37,7 @@ namespace GameSvr
             {
                 return false;
             }
-            M2Share.UserEngine.m_AdminList.Clear();
+            M2Share.UserEngine.MAdminList.Clear();
             using var LoadList = new StringList();
             LoadList.LoadFromFile(sfilename);
             for (var i = 0; i < LoadList.Count; i++)
@@ -102,7 +102,7 @@ namespace GameSvr
                             sChrName = sCharName,
                             sIPaddr = sIPaddr
                         };
-                        M2Share.UserEngine.m_AdminList.Add(AdminInfo);
+                        M2Share.UserEngine.MAdminList.Add(AdminInfo);
                     }
                 }
             }
@@ -295,7 +295,7 @@ namespace GameSvr
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.UserEngine.QuestNPCList.Add(M2Share.g_ManageNPC);
+                    M2Share.UserEngine.QuestNpcList.Add(M2Share.g_ManageNPC);
                 }
                 else
                 {
@@ -339,7 +339,7 @@ namespace GameSvr
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.UserEngine.QuestNPCList.Add(M2Share.g_RobotNPC);
+                    M2Share.UserEngine.QuestNpcList.Add(M2Share.g_RobotNPC);
                 }
                 else
                 {
@@ -564,7 +564,7 @@ namespace GameSvr
                             MonGenInfo.Envir = M2Share.MapManager.FindMap(MonGenInfo.sMapName);
                             if (MonGenInfo.Envir != null)
                             {
-                                M2Share.UserEngine.m_MonGenList.Add(MonGenInfo);
+                                M2Share.UserEngine.MonGenList.Add(MonGenInfo);
                             }
                             else
                             {
@@ -578,7 +578,7 @@ namespace GameSvr
                     CertList = new List<TBaseObject>(),
                     Envir = null
                 };
-                M2Share.UserEngine.m_MonGenList.Add(MonGenInfo);
+                M2Share.UserEngine.MonGenList.Add(MonGenInfo);
                 result = 1;
             }
             return result;
@@ -700,7 +700,7 @@ namespace GameSvr
                                 NPC.m_sCharName = s20;
                                 NPC.m_nFlag = (short)HUtil32.Str_ToInt(s34, 0);
                                 NPC.m_wAppr = (ushort)HUtil32.Str_ToInt(s38, 0);
-                                M2Share.UserEngine.QuestNPCList.Add(NPC);
+                                M2Share.UserEngine.QuestNpcList.Add(NPC);
 
                             }
                         }
@@ -1005,9 +1005,9 @@ namespace GameSvr
             {
                 return;
             }
-            for (var i = 0; i < M2Share.UserEngine.m_MerchantList.Count; i++)
+            for (var i = 0; i < M2Share.UserEngine.MerchantList.Count; i++)
             {
-                Merchant = M2Share.UserEngine.m_MerchantList[i];
+                Merchant = M2Share.UserEngine.MerchantList[i];
                 if (Merchant != M2Share.g_FunctionNPC)
                 {
                     Merchant.m_nFlag = -1;
@@ -1037,9 +1037,9 @@ namespace GameSvr
                     nX = HUtil32.Str_ToInt(sX, 0);
                     nY = HUtil32.Str_ToInt(sY, 0);
                     boNewNpc = true;
-                    for (var j = 0; j < M2Share.UserEngine.m_MerchantList.Count; j++)
+                    for (var j = 0; j < M2Share.UserEngine.MerchantList.Count; j++)
                     {
-                        Merchant = M2Share.UserEngine.m_MerchantList[j];
+                        Merchant = M2Share.UserEngine.MerchantList[j];
                         if (Merchant.m_sMapName == sMapName && Merchant.m_nCurrX == nX && Merchant.m_nCurrY == nY)
                         {
                             boNewNpc = false;
@@ -1091,20 +1091,20 @@ namespace GameSvr
                             {
                                 Merchant.m_boCanMove = true;
                             }
-                            M2Share.UserEngine.m_MerchantList.Add(Merchant);
+                            M2Share.UserEngine.MerchantList.Add(Merchant);
                             Merchant.Initialize();
                         }
                     }
                 }
             }
-            for (var i = M2Share.UserEngine.m_MerchantList.Count - 1; i >= 0; i--)
+            for (var i = M2Share.UserEngine.MerchantList.Count - 1; i >= 0; i--)
             {
-                Merchant = M2Share.UserEngine.m_MerchantList[i];
+                Merchant = M2Share.UserEngine.MerchantList[i];
                 if (Merchant.m_nFlag == -1)
                 {
                     Merchant.m_boGhost = true;
                     Merchant.m_dwGhostTick = HUtil32.GetTickCount();
-                    M2Share.UserEngine.m_MerchantList.RemoveAt(i);
+                    M2Share.UserEngine.MerchantList.RemoveAt(i);
                 }
             }
         }

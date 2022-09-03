@@ -1202,7 +1202,7 @@ namespace GameSvr.Magic
                     HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX + 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[7] = HolyCurtainEvent;
-                    M2Share.UserEngine.m_MagicEventList.Add(MagicEvent);
+                    M2Share.UserEngine.MagicEventList.Add(MagicEvent);
                 }
                 else
                 {

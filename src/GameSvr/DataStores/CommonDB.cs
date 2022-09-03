@@ -177,7 +177,7 @@ namespace GameSvr.DataStores
                         Magic.sDescr = dr.GetString("Descr");
                         if (Magic.wMagicID > 0)
                         {
-                            M2Share.UserEngine.m_MagicList.Add(Magic);
+                            M2Share.UserEngine.MagicList.Add(Magic);
                         }
                         else
                         {

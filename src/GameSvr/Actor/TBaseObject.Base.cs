@@ -774,14 +774,14 @@ namespace GameSvr.Actor
                                         {
                                             tCheck = true;
                                         }
-                                        QuestNPC = (Merchant)m_PEnvir.GetQuestNpc(GroupHuman, m_sCharName, "", tCheck);
+                                        QuestNPC = m_PEnvir.GetQuestNpc(GroupHuman, m_sCharName, "", tCheck);
                                         if (QuestNPC != null)
                                         {
                                             QuestNPC.Click(GroupHuman);
                                         }
                                     }
                                 }
-                                QuestNPC = (Merchant)m_PEnvir.GetQuestNpc(m_ExpHitter, m_sCharName, "", false);
+                                QuestNPC = m_PEnvir.GetQuestNpc(m_ExpHitter, m_sCharName, "", false);
                                 if (QuestNPC != null)
                                 {
                                     QuestNPC.Click(m_ExpHitter as PlayObject);

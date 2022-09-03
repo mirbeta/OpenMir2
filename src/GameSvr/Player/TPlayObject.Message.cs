@@ -89,7 +89,7 @@ namespace GameSvr.Player
                     NormNpc normNpc = (Merchant)M2Share.UserEngine.FindMerchant(m_DelayCallNPC);
                     if (normNpc == null)
                     {
-                        normNpc = (NormNpc)M2Share.UserEngine.FindNPC(m_DelayCallNPC);
+                        normNpc = (NormNpc)M2Share.UserEngine.FindNpc(m_DelayCallNPC);
                     }
                     if (normNpc != null)
                     {

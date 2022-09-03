@@ -118,7 +118,7 @@ namespace GameSvr.Player
             NormNpc npc = (NormNpc)M2Share.UserEngine.FindMerchant(nParam1);
             if (npc == null)
             {
-                npc = (NormNpc)M2Share.UserEngine.FindNPC(nParam1);
+                npc = (NormNpc)M2Share.UserEngine.FindNpc(nParam1);
             }
             if (npc == null)
             {
@@ -1198,7 +1198,7 @@ namespace GameSvr.Player
 
         private void ClientGetMinMap()
         {
-            var nMinMap = m_PEnvir.NMinMap;
+            var nMinMap = m_PEnvir.MinMap;
             if (nMinMap > 0)
             {
                 SendDefMessage(Grobal2.SM_READMINIMAP_OK, 0, (short)nMinMap, 0, 0, "");

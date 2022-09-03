@@ -28,39 +28,40 @@ namespace GameSvr.Maps
         public string MapDesc = string.Empty;
         private Memory<MapCellInfo> _cellArray;
         private readonly MemoryPool<MapCellInfo> _cellPool;
-        public int NMinMap = 0;
+        public int MinMap = 0;
         public int ServerIndex = 0;
         /// <summary>
         /// 进入本地图所需等级
         /// </summary>
-        public int RequestLevel = 0;
+        public readonly int RequestLevel = 0;
         public TMapFlag Flag = null;
         public bool Bo2C = false;
         /// <summary>
         /// 门
         /// </summary>
-        public IList<TDoorInfo> DoorList = null;
+        public readonly IList<TDoorInfo> DoorList = null;
         public Merchant QuestNpc = null;
         /// <summary>
         /// 任务
         /// </summary>
         private readonly IList<TMapQuestInfo> _questList = null;
-        private int _whisperTick = 0;
+        private int WhisperTick = 0;
         private int _monCount = 0;
         private int _humCount = 0;
-        public IList<PointInfo> MPointList;
+        public readonly IList<PointInfo> PointList;
 
         public Envirnoment()
         {
             ServerIndex = 0;
-            NMinMap = 0;
+            MinMap = 0;
             Flag = new TMapFlag();
             _monCount = 0;
             _humCount = 0;
             DoorList = new List<TDoorInfo>();
             _questList = new List<TMapQuestInfo>();
-            _whisperTick = 0;
+            WhisperTick = 0;
             _cellPool = MemoryPool<MapCellInfo>.Shared;
+            PointList = new List<PointInfo>();
         }
 
         ~Envirnoment()
@@ -249,7 +250,7 @@ namespace GameSvr.Maps
                 }
                 if (bo1A)
                 {
-                    if (GetCellInfo(nX, nY, ref cellInfo) && cellInfo.Attribute != 0)
+                    if (GetCellInfo(nX, nY, ref cellInfo) && cellInfo.Attribute != CellAttribute.Walk)
                     {
                         result = -1;
                     }
@@ -855,7 +856,7 @@ namespace GameSvr.Maps
                         var nY = (short)HUtil32.Str_ToInt(sY, -1);
                         if (nX >= 0 && nY >= 0 && nX < Width && nY < Height)
                         {
-                            MPointList.Add(new PointInfo(nX, nY));
+                            PointList.Add(new PointInfo(nX, nY));
                         }
                     }
                 }
@@ -937,7 +938,7 @@ namespace GameSvr.Maps
                 m_boIsHide = true,
                 m_boIsQuest = false
             };
-            M2Share.UserEngine.QuestNPCList.Add(mapMerchant);
+            M2Share.UserEngine.QuestNpcList.Add(mapMerchant);
             mapQuest.NPC = mapMerchant;
             _questList.Add(mapQuest);
             result = true;
@@ -1110,9 +1111,8 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public object GetQuestNpc(TBaseObject baseObject, string sCharName, string sItem, bool boFlag)
+        public Merchant GetQuestNpc(TBaseObject baseObject, string sCharName, string sItem, bool boFlag)
         {
-            object result = null;
             bool bo1D;
             for (var i = 0; i < _questList.Count; i++)
             {
@@ -1146,13 +1146,12 @@ namespace GameSvr.Maps
                         }
                         if (bo1D)
                         {
-                            result = mapQuestFlag.NPC;
-                            break;
+                            return (Merchant)mapQuestFlag.NPC;
                         }
                     }
                 }
             }
-            return result;
+            return null;
         }
 
         public int GetItemEx(int nX, int nY, ref int nCount)

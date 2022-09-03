@@ -743,7 +743,7 @@ namespace GameSvr.Player
             if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwClickNpcTime)
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
-                var normNpc = (NormNpc)M2Share.UserEngine.FindMerchant(npcId) ?? (NormNpc)M2Share.UserEngine.FindNPC(npcId);
+                var normNpc = (NormNpc)M2Share.UserEngine.FindMerchant(npcId) ?? (NormNpc)M2Share.UserEngine.FindNpc(npcId);
                 if (normNpc != null)
                 {
                     if (normNpc.m_PEnvir == m_PEnvir && Math.Abs(normNpc.m_nCurrX - m_nCurrX) <= 15 && Math.Abs(normNpc.m_nCurrY - m_nCurrY) <= 15)
@@ -998,9 +998,9 @@ namespace GameSvr.Player
 
         private void ReadAllBook()
         {
-            for (var i = 0; i < M2Share.UserEngine.m_MagicList.Count; i++)
+            for (var i = 0; i < M2Share.UserEngine.MagicList.Count; i++)
             {
-                var Magic = M2Share.UserEngine.m_MagicList[i];
+                var Magic = M2Share.UserEngine.MagicList[i];
                 TUserMagic UserMagic = new TUserMagic
                 {
                     MagicInfo = Magic,
