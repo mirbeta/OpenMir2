@@ -1,10 +1,12 @@
-﻿using SystemModule;
+﻿using NLog;
+using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr.Robots
 {
     public class RobotManage
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private IList<RobotObject> _robotHumanList = null;
 
         public RobotManage()
@@ -60,8 +62,8 @@ namespace GameSvr.Robots
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.Message);
             }
         }
 

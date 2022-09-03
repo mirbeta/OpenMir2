@@ -1,6 +1,7 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Command;
 using GameSvr.Maps;
+using NLog;
 using System.Collections;
 using SystemModule.Common;
 
@@ -8,6 +9,7 @@ namespace GameSvr.Castle
 {
     public class CastleManager
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<TUserCastle> _castleList;
 
         public CastleManager()
@@ -164,11 +166,11 @@ namespace GameSvr.Castle
                         }
                     }
                 }
-                M2Share.MainOutMessage($"已读取 [{_castleList.Count}] 个城堡信息...", messageColor: ConsoleColor.Green);
+                _logger.Info($"已读取 [{_castleList.Count}] 个城堡信息...");
             }
             else
             {
-                M2Share.MainOutMessage("城堡列表文件未找到!!!");
+                _logger.Error("城堡列表文件未找到!!!");
             }
         }
 

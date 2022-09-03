@@ -806,7 +806,7 @@ namespace GameSvr.Actor
             m_boFastParalysis = false;
             m_boNastyMode = false;
             m_MagicArr = new TUserMagic[100];
-            M2Share.ActorManager.Add(ObjectId, this);
+            M2Share.ActorMgr.Add(ObjectId, this);
         }
 
         public void ChangePKStatus(bool boWarFlag)
@@ -1142,7 +1142,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
             return result;
         }
@@ -2190,8 +2190,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.Message);
             }
             return result;
         }
@@ -2247,7 +2247,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
         }
 
@@ -3157,7 +3157,7 @@ namespace GameSvr.Actor
                                 OSObject = cellInfo.ObjList[i];
                                 if ((OSObject != null) && (OSObject.CellType == CellType.MovingObject))
                                 {
-                                    BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);
+                                    BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                     if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
                                     {
                                         rList.Add(BaseObject);
@@ -3170,7 +3170,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
             return true;
         }
@@ -3180,7 +3180,7 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (m_PEnvir == null)
             {
-                M2Share.ErrorMessage(m_sCharName + " SendRefMsg nil PEnvir ");
+                M2Share.LogSystem.Error(m_sCharName + " SendRefMsg nil PEnvir ");
                 return;
             }
             if (m_boObMode || m_boFixedHideMode)
@@ -3230,7 +3230,7 @@ namespace GameSvr.Actor
                                                 {
                                                     try
                                                     {
-                                                        BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);
+                                                        BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                                         if ((BaseObject != null) && !BaseObject.m_boGhost)
                                                         {
                                                             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -3255,8 +3255,8 @@ namespace GameSvr.Actor
                                                         {
                                                             cellInfo.Dispose();
                                                         }
-                                                        M2Share.ErrorMessage(format(sExceptionMsg, m_sCharName));
-                                                        M2Share.ErrorMessage(e.Message);
+                                                        M2Share.LogSystem.Error(format(sExceptionMsg, m_sCharName));
+                                                        M2Share.LogSystem.Error(e.Message);
                                                     }
                                                 }
                                             }
@@ -3491,7 +3491,7 @@ namespace GameSvr.Actor
             bool result = true;
             if (m_PEnvir == null)
             {
-                M2Share.ErrorMessage("Walk nil PEnvir");
+                M2Share.LogSystem.Error("Walk nil PEnvir");
                 return result;
             }
             try
@@ -3577,8 +3577,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.LogSystem.Error(e.Message);
             }
             return result;
         }
@@ -3676,7 +3676,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg7);
+                M2Share.LogSystem.Error(sExceptionMsg7);
             }
             return result;
         }
@@ -5021,7 +5021,7 @@ namespace GameSvr.Actor
                             var OSObject = cellInfo.ObjList[k];
                             if ((OSObject != null) && (OSObject.CellType == CellType.MovingObject))
                             {
-                                var BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);;
+                                var BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);;
                                 if ((BaseObject != null) && (!BaseObject.m_boGhost))
                                 {
                                     if (IsProperFriend(BaseObject))

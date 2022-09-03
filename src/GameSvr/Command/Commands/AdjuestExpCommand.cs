@@ -34,7 +34,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
                 {
-                    M2Share.MainOutMessage("[经验调整] " + PlayObject.m_sCharName + '(' + m_PlayObject.m_sCharName + ' ' + dwOExp + " -> " + m_PlayObject.m_Abil.Exp + ')');
+                    M2Share.LogSystem.Warn("[经验调整] " + PlayObject.m_sCharName + '(' + m_PlayObject.m_sCharName + ' ' + dwOExp + " -> " + m_PlayObject.m_Abil.Exp + ')');
                 }
             }
             else

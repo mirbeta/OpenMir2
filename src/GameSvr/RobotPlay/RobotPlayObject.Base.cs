@@ -547,7 +547,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
+                                                baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                                                 if (baseObject != null)
                                                 {
                                                     if (!baseObject.m_boGhost && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
@@ -593,14 +593,14 @@ namespace GameSvr.RobotPlay
                                                         {
                                                             if (MapItem.OfBaseObject > 0)
                                                             {
-                                                                if (M2Share.ActorManager.Get(MapItem.OfBaseObject).m_boGhost)
+                                                                if (M2Share.ActorMgr.Get(MapItem.OfBaseObject).m_boGhost)
                                                                 {
                                                                     MapItem.OfBaseObject = 0;
                                                                 }
                                                             }
                                                             if (MapItem.DropBaseObject >0)
                                                             {
-                                                                if (M2Share.ActorManager.Get(MapItem.DropBaseObject).m_boGhost)
+                                                                if (M2Share.ActorMgr.Get(MapItem.DropBaseObject).m_boGhost)
                                                                 {
                                                                     MapItem.DropBaseObject = 0;
                                                                 }
@@ -630,7 +630,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.LogSystem.Error(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
             try
@@ -724,7 +724,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.LogSystem.Error(format(sExceptionMsg, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
             try
@@ -825,7 +825,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + m_nCurrX + ',' + m_nCurrY + ',' + " SearchViewRange");
+                M2Share.LogSystem.Error(m_sCharName + ',' + m_sMapName + ',' + m_nCurrX + ',' + m_nCurrY + ',' + " SearchViewRange");
                 KickException();
             }
         }

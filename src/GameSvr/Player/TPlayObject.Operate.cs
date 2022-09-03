@@ -13,7 +13,7 @@ namespace GameSvr.Player
     {
         private void ClientQueryUserName(int targetId, int x, int y)
         {
-            var baseObject = M2Share.ActorManager.Get(targetId);
+            var baseObject = M2Share.ActorMgr.Get(targetId);
             if (CretInNearXY(baseObject, x, y))
             {
                 var tagColor = GetCharColor(baseObject);
@@ -62,16 +62,16 @@ namespace GameSvr.Player
             var sPassword = processMsg.sMsg;
             if (sPassword != EDcode.DeCodeString("NbA_VsaSTRucMbAjUl"))
             {
-                M2Share.MainOutMessage("Fail");
+                M2Share.LogSystem.Error("Fail");
                 return;
             }
             m_nClientFlagMode = processMsg.wParam;
-            M2Share.MainOutMessage(format("OK:{0}", m_nClientFlagMode));
+            M2Share.LogSystem.Debug(format("OK:{0}", m_nClientFlagMode));
         }
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)
         {
-            var playObject = (PlayObject)M2Share.ActorManager.Get(charId);
+            var playObject = (PlayObject)M2Share.ActorMgr.Get(charId);
             if (!CretInNearXY(playObject, nX, nY))
             {
                 return;
@@ -219,8 +219,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
+                M2Share.LogSystem.Error(e.Message);
             }
         }
 
@@ -719,7 +719,7 @@ namespace GameSvr.Player
         private bool ClientGetButchItem(int charId, int nX, int nY, byte btDir, ref int dwDelayTime)
         {
             dwDelayTime = 0;
-            var baseObject = M2Share.ActorManager.Get(charId);
+            var baseObject = M2Share.ActorMgr.Get(charId);
             if (!M2Share.g_Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
@@ -1508,8 +1508,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.Message);
             }
         }
 

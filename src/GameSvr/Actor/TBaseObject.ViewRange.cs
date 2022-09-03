@@ -109,7 +109,7 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
             if (m_PEnvir == null)
             {
-                M2Share.ErrorMessage("SearchViewRange nil PEnvir");
+                M2Share.LogSystem.Error("SearchViewRange nil PEnvir");
                 return;
             }
             var n24 = 0;
@@ -155,7 +155,7 @@ namespace GameSvr.Actor
                                             cellInfo.Dispose();
                                             break;
                                         }
-                                        var baseObject = M2Share.ActorManager.Get(osObject.CellObjId);
+                                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                         if (baseObject != null)
                                         {
                                             if (!baseObject.m_boDeath && !baseObject.m_boInvisible)
@@ -181,8 +181,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
+                M2Share.LogSystem.Error(e.Message);
                 KickException();
             }
             n24 = 2;
@@ -207,7 +207,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
+                M2Share.LogSystem.Error(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
                 KickException();
             }
         }

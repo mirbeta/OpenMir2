@@ -538,7 +538,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
             return result;
         }
@@ -625,7 +625,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
             return result;
         }
@@ -877,7 +877,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
         }
 
@@ -1097,7 +1097,7 @@ namespace GameSvr.Player
             TBaseObject BaseObject;
             if (m_PEnvir == null)
             {
-                M2Share.MainOutMessage("CretInNearXY nil PEnvir");
+                M2Share.LogSystem.Error("CretInNearXY nil PEnvir");
                 return false;
             }
             for (var nCX = nX - 1; nCX <= nX + 1; nCX++)
@@ -1113,7 +1113,7 @@ namespace GameSvr.Player
                             OSObject = cellInfo.ObjList[i];
                             if (OSObject.CellType == CellType.MovingObject)
                             {
-                                BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);;
+                                BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);;
                                 if (BaseObject != null)
                                 {
                                     if (!BaseObject.m_boGhost && BaseObject == TargeTBaseObject)
@@ -1674,8 +1674,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
+                M2Share.LogSystem.Error(e.Message);
             }
             return result;
         }

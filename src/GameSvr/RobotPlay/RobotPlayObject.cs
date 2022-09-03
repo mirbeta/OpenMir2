@@ -487,7 +487,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg, new object[] { sData }));
+                M2Share.LogSystem.Error(format(sExceptionMsg, new object[] { sData }));
             }
         }
 
@@ -796,7 +796,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(mapItem.UserItem.wIndex)))
                                         {
-                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ObjectId || (M2Share.ActorManager.Get(mapItem.OfBaseObject).m_Master == this))
+                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ObjectId || (M2Share.ActorMgr.Get(mapItem.OfBaseObject).m_Master == this))
                                             {
                                                 if (Math.Abs(VisibleMapItem.nX - m_nCurrX) <= 5 && Math.Abs(VisibleMapItem.nY - m_nCurrY) <= 5)
                                                 {
@@ -844,7 +844,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.MainOutMessage(" TAIPlayObject.SearchPickUpItem");
+                M2Share.LogSystem.Error(" TAIPlayObject.SearchPickUpItem");
             }
             return result;
         }
@@ -1331,7 +1331,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (ProcessMsg.BaseObject == this.ObjectId)
                     {
-                        AttackBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam3);
+                        AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
                         {
                             if (AttackBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -1362,7 +1362,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception ex)
             {
-                M2Share.MainOutMessage(ex.Message);
+                M2Share.LogSystem.Error(ex.Message);
             }
             return result;
         }
@@ -2078,7 +2078,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
+                M2Share.LogSystem.Error(format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
             }
             return result;
         }
@@ -2139,7 +2139,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.MainOutMessage("TAIPlayObject.Thinking");
+                M2Share.LogSystem.Error("TAIPlayObject.Thinking");
             }
             return result;
         }
@@ -2635,7 +2635,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
             return result;
         }
@@ -4343,7 +4343,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage("TAIPlayObject.CheckHeroAmulet");
+                M2Share.LogSystem.Error("TAIPlayObject.CheckHeroAmulet");
             }
             return result;
         }

@@ -13,11 +13,11 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ShutupList(PlayObject PlayObject)
         {
-            HUtil32.EnterCriticalSection(M2Share.g_DenySayMsgList);
+            HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try
             {
-                var nCount = M2Share.g_DenySayMsgList.Count;
-                if (M2Share.g_DenySayMsgList.Count <= 0)
+                var nCount = M2Share.DenySayMsgList.Count;
+                if (M2Share.DenySayMsgList.Count <= 0)
                 {
                     PlayObject.SysMsg(GameCommandConst.g_sGameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
                 }
@@ -37,7 +37,7 @@ namespace GameSvr.Command.Commands
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.g_DenySayMsgList);
+                HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
             }
         }
     }

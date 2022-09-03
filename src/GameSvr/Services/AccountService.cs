@@ -1,3 +1,4 @@
+using NLog;
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;
@@ -8,6 +9,7 @@ namespace GameSvr.Services
 {
     public class AccountService
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int _dwClearEmptySessionTick = 0;
         private readonly IList<TSessInfo> _sessionList = null;
         private readonly ClientScoket _clientScoket;
@@ -60,13 +62,13 @@ namespace GameSvr.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]拒绝链接...");
+                    _logger.Error("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]关闭连接...");
+                    _logger.Error("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]链接超时...");
+                    _logger.Error("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]链接超时...");
                     break;
             }
         }
@@ -193,7 +195,7 @@ namespace GameSvr.Services
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
             if ((HUtil32.GetTickCount() - _dwClearEmptySessionTick) > 10000)
             {
@@ -220,7 +222,7 @@ namespace GameSvr.Services
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
         }
 
@@ -235,8 +237,8 @@ namespace GameSvr.Services
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.Message);
             }
         }
 
@@ -280,8 +282,8 @@ namespace GameSvr.Services
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.Message);
             }
         }
 
@@ -326,7 +328,7 @@ namespace GameSvr.Services
             }
             if (M2Share.g_Config.boViewAdmissionFailure && !boFound)
             {
-                M2Share.ErrorMessage(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
+                _logger.Error(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
             }
             return result;
         }
@@ -352,7 +354,7 @@ namespace GameSvr.Services
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
         }
 
@@ -378,7 +380,7 @@ namespace GameSvr.Services
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             M2Share.g_Config.boIDSocketConnected = true;
-            M2Share.MainOutMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]连接成功...", messageColor: ConsoleColor.Green);
+            _logger.Info("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]连接成功...");
             SendOnlineHumCountMsg(M2Share.UserEngine.OnlinePlayObject);
         }
 
@@ -391,7 +393,7 @@ namespace GameSvr.Services
             ClearSession();
             M2Share.g_Config.boIDSocketConnected = false;
             _clientScoket.IsConnected = false;
-            M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]断开连接...");
+            _logger.Error("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]断开连接...");
         }
 
         public void Close()

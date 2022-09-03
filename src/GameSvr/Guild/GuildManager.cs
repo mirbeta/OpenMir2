@@ -1,10 +1,12 @@
-﻿using SystemModule;
+﻿using NLog;
+using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr.Guild
 {
     public class GuildManager
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<GuildInfo> GuildList = null;
 
         public bool AddGuild(string sGuildName, string sChief)
@@ -90,16 +92,16 @@ namespace GameSvr.Guild
                     Guild = GuildList[i];
                     if (!Guild.LoadGuild())
                     {
-                        M2Share.ErrorMessage(Guild.sGuildName + " 读取出错!!!");
+                        _logger.Warn(Guild.sGuildName + " 读取出错!!!");
                         GuildList.RemoveAt(i);
                         SaveGuildList();
                     }
                 }
-                M2Share.MainOutMessage($"已读取 [{GuildList.Count}] 个行会信息...", messageColor: ConsoleColor.Green);
+                _logger.Info($"已读取 [{GuildList.Count}] 个行会信息...");
             }
             else
             {
-                M2Share.ErrorMessage("行会信息文件未找到!!!");
+                _logger.Error("行会信息文件未找到!!!");
             }
         }
 
@@ -132,7 +134,7 @@ namespace GameSvr.Guild
             }
             catch
             {
-                M2Share.MainOutMessage("行会信息保存失败!!!");
+                _logger.Error("行会信息保存失败!!!");
             }
             SaveList = null;
         }

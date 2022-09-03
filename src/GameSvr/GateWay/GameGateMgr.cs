@@ -1,5 +1,6 @@
 ﻿using GameSvr.Player;
 using GameSvr.Services;
+using NLog;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -15,6 +16,7 @@ namespace GameSvr.GateWay
 {
     public class GameGateMgr
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly GameGateMgr instance = new GameGateMgr();
         public static GameGateMgr Instance => instance;
         private readonly SocketServer _gateSocket = null;
@@ -40,7 +42,7 @@ namespace GameSvr.GateWay
             _gateSocket.Init();
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
             StartMessageThread(stoppingToken);
-            M2Share.MainOutMessage($"游戏网关[{M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
+            _logger.Info($"游戏网关[{M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
         }
 
         public void Stop()
@@ -84,13 +86,13 @@ namespace GameSvr.GateWay
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
-                M2Share.MainOutMessage(string.Format(sGateOpen, e.EndPoint));
+                _logger.Info(string.Format(sGateOpen, e.EndPoint));
                 _gameGates.TryAdd(e.SocHandle, new GameGate(e.SocHandle, gateInfo));
                 _gameGates[e.SocHandle].StartGateQueue();
             }
             else
             {
-                M2Share.ErrorMessage(string.Format(sKickGate, e.EndPoint));
+                _logger.Error(string.Format(sKickGate, e.EndPoint));
                 e.Socket.Close();
             }
         }
@@ -163,8 +165,8 @@ namespace GameSvr.GateWay
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.Message, MessageType.Error);
             }
         }
 
@@ -224,14 +226,14 @@ namespace GameSvr.GateWay
                     gateInfo.UserList = null;
                     gateInfo.BoUsed = false;
                     gateInfo.Socket = null;
-                    M2Share.ErrorMessage(string.Format(sGateClose, e.EndPoint.Address, e.EndPoint.Port));
+                    _logger.Error(string.Format(sGateClose, e.EndPoint.Address, e.EndPoint.Port));
                     if (_gameGates.Remove(e.SocHandle, out var gameGate))
                     {
                         gameGate.Stop();
                     }
                     else
                     {
-                        Console.WriteLine("取消网关服务失败.");
+                        _logger.Error("取消网关服务失败.");
                     }
                 }
             }

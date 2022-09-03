@@ -108,12 +108,12 @@ namespace GameSvr.Maps
                 }
                 else
                 {
-                    M2Share.ErrorMessage("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
+                    M2Share.LogSystem.Error("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
                 }
             }
             else
             {
-                M2Share.ErrorMessage("地图文件: " + M2Share.g_Config.sMapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
+                M2Share.LogSystem.Error("地图文件: " + M2Share.g_Config.sMapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
             }
             return envirnoment;
         }
