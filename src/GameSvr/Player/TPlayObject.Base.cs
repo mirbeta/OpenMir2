@@ -1254,9 +1254,6 @@ namespace GameSvr.Player
 
         public override void SearchViewRange()
         {
-            MapCellInfo cellInfo;
-            TBaseObject BaseObject = null;
-            MirEvent MapEvent = null;
             for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
             {
                 m_VisibleItems[i].VisibleFlag = 0;
@@ -1275,12 +1272,14 @@ namespace GameSvr.Player
             var nEndY = m_nCurrY + m_nViewRange;
             try
             {
+                TBaseObject BaseObject = null;
+                MirEvent MapEvent = null;
                 for (var n20 = nStartX; n20 <= nEndX; n20++)
                 {
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
                         var cellsuccess = false;
-                        cellInfo = m_PEnvir.GetCellInfo(n20, n1C, ref cellsuccess);
+                        var cellInfo = m_PEnvir.GetCellInfo(n20, n1C, ref cellsuccess);
                         if (cellsuccess && cellInfo.ObjList != null)
                         {
                             var nIdx = 0;
@@ -1305,7 +1304,7 @@ namespace GameSvr.Player
                                             cellInfo.Dispose();
                                             break;
                                         }
-                                        BaseObject = (TBaseObject)M2Share.ActorManager.Get(OSObject.CellObjId);
+                                        BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);
                                         if (BaseObject != null && !BaseObject.m_boInvisible)
                                         {
                                             if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)

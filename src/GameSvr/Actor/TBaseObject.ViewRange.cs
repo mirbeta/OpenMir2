@@ -196,7 +196,7 @@ namespace GameSvr.Actor
                         break;
                     }
                     var visibleBaseObject = m_VisibleActors[n18];
-                    if (visibleBaseObject.VisibleFlag == 0)
+                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Visible)
                     {
                         m_VisibleActors.RemoveAt(n18);
                         Dispose(visibleBaseObject);
