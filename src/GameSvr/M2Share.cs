@@ -96,7 +96,7 @@ namespace GameSvr
         public static int g_dwStartTick = 0;
         public static int ShareFileNameNum = 0;
         public static int g_nServerTickDifference = 0;
-        public static ActorManager ActorManager = null;
+        public static ActorMgr ActorMgr = null;
         public static ServerConfig ServerConf = null;
         public static GameCmdConfig CommandConf = null;
         public static StringConfig StringConf = null;
@@ -118,7 +118,7 @@ namespace GameSvr
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GameGateMgr GateManager = null;
-        public static ArrayList LogStringList = null;
+        public static ConcurrentQueue<string> DataLogQueue = null;
         public static ArrayList LogonCostLogList = null;
         public static MapManager MapManager = null;
         public static ItemUnit ItemUnit = null;
@@ -130,12 +130,12 @@ namespace GameSvr
         public static TFrontEngine FrontEngine = null;
         public static UserEngine UserEngine = null;
         public static RobotManage RobotManage = null;
-        public static Dictionary<string, IList<TMakeItem>> g_MakeItemList = null;
+        public static Dictionary<string, IList<TMakeItem>> MakeItemList = null;
         public static IList<TStartPoint> StartPointList = null;
         public static TStartPoint g_RedStartPoint = null;
         public static TRouteInfo[] ServerTableList = null;
-        public static ConcurrentDictionary<string, long> g_DenySayMsgList = null;
-        public static Dictionary<string, int> MiniMapList = null;
+        public static ConcurrentDictionary<string, long> DenySayMsgList = null;
+        public static ConcurrentDictionary<string, int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
         public static IList<TDealOffInfo> sSellOffItemList = null;
         /// <summary>
@@ -171,7 +171,7 @@ namespace GameSvr
         /// <summary>
         /// 怪物爆物品限制
         /// </summary>
-        public static Dictionary<string, TMonDrop> g_MonDropLimitLIst = null;
+        public static ConcurrentDictionary<string, TMonDrop> g_MonDropLimitLIst = null;
         /// <summary>
         /// 禁止取下物品列表
         /// </summary>
@@ -180,12 +180,18 @@ namespace GameSvr
         public static IList<TItemBind> g_ItemBindIPaddr = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
         public static IList<TItemBind> g_ItemBindCharName = null;
+        /// <summary>
+        /// 出师记录表
+        /// </summary>
         public static IList<string> g_UnMasterList = null;
-        // 出师记录表
+        /// <summary>
+        /// 强行出师记录表
+        /// </summary>
         public static IList<string> g_UnForceMasterList = null;
-        // 强行出师记录表
+        /// <summary>
+        /// 游戏日志物品名
+        /// </summary>
         public static IList<string> g_GameLogItemNameList = null;
-        // 游戏日志物品名
         public static bool g_boGameLogGold = false;
         public static bool g_boGameLogGameGold = false;
         public static bool g_boGameLogGamePoint = false;
@@ -200,7 +206,6 @@ namespace GameSvr
         // 不清除怪物列表
         public static IList<string> g_NoHptoexpMonLIst = null;
         // 不清除怪物列表
-        public static object LogMsgCriticalSection = null;
         public static object ProcessMsgCriticalSection = null;
         public static object UserDBSection = null;
         public static object ProcessHumanCriticalSection = null;
@@ -228,12 +233,7 @@ namespace GameSvr
         public static int g_dwSocLimit = 10;
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
-        public static string sConfigPath = "";
-        public const string sConfigFileName = "Server.conf";
-        public const string sExpConfigFileName = "Exps.conf";
-        public const string sCommandFileName = "Command.conf";
-        public const string sStringFileName = "String.conf";
-        public const string sGlobalConfigFileName = "Global.conf";
+        public static string sConfigPath;
         public static int dwRunDBTimeMax = 0;
         public static int g_nGameTime = 0;
         public static NormNpc g_ManageNPC = null;
@@ -657,29 +657,14 @@ namespace GameSvr
             {
                 throw new Exception("不受支持的操作系统");
             }
-            ServerConf = new ServerConfig(Path.Combine(sConfigPath, sConfigFileName));
-            CommandConf = new GameCmdConfig(Path.Combine(sConfigPath, sCommandFileName));
-            StringConf = new StringConfig(Path.Combine(sConfigPath, sStringFileName));
-            ExpConf = new ExpsConfig(Path.Combine(sConfigPath, sExpConfigFileName));
-            GlobalConf = new GlobalConfig(Path.Combine(sConfigPath, sGlobalConfigFileName));
+            ServerConf = new ServerConfig(Path.Combine(sConfigPath, ConfConst.sConfigFileName));
+            CommandConf = new GameCmdConfig(Path.Combine(sConfigPath, ConfConst.sCommandFileName));
+            StringConf = new StringConfig(Path.Combine(sConfigPath, ConfConst.sStringFileName));
+            ExpConf = new ExpsConfig(Path.Combine(sConfigPath, ConfConst.sExpConfigFileName));
+            GlobalConf = new GlobalConfig(Path.Combine(sConfigPath, ConfConst.sGlobalConfigFileName));
             LogSystem = new MirLog();
             g_Config = new GameSvrConfig();
             RandomNumber = RandomNumber.GetInstance();
-        }
-
-        public static void MainOutMessage(string Msg)
-        {
-            Console.WriteLine("[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] " + Msg);
-        }
-
-        public static void MainOutMessage(string Msg, MessageType messageType = MessageType.Success, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.White)
-        {
-            LogSystem.LogInfo(Msg, messageType, messageLevel: messageLevel, messageColor: messageColor);
-        }
-
-        public static void ErrorMessage(string Msg, MessageType messageType = MessageType.Error, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.Red)
-        {
-            LogSystem.LogInfo(Msg, messageType, messageLevel: messageLevel, messageColor: messageColor);
         }
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
@@ -1238,8 +1223,8 @@ namespace GameSvr
         public static bool IsAccessory(int nIndex)
         {
             bool result;
-            var Item = UserEngine.GetStdItem(nIndex);
-            if (new ArrayList(new byte[] { 19, 20, 21, 22, 23, 24, 26 }).Contains(Item.StdMode))// 修正错误
+            var item = UserEngine.GetStdItem(nIndex);
+            if (new ArrayList(new byte[] { 19, 20, 21, 22, 23, 24, 26 }).Contains(item.StdMode))// 修正错误
             {
                 result = true;
             }
@@ -1252,7 +1237,7 @@ namespace GameSvr
 
         public static IList<TMakeItem> GetMakeItemInfo(string sItemName)
         {
-            if (g_MakeItemList.TryGetValue(sItemName, out var itemList))
+            if (MakeItemList.TryGetValue(sItemName, out var itemList))
             {
                 return itemList;
             }
@@ -1279,28 +1264,12 @@ namespace GameSvr
 
         public static void AddGameDataLog(string sMsg)
         {
-            HUtil32.EnterCriticalSection(LogMsgCriticalSection);
-            try
-            {
-                LogStringList.Add(sMsg);
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(LogMsgCriticalSection);
-            }
+            DataLogQueue.Enqueue(sMsg);
         }
 
         public static void AddLogonCostLog(string sMsg)
         {
-            HUtil32.EnterCriticalSection(LogMsgCriticalSection);
-            try
-            {
-                LogonCostLogList.Add(sMsg);
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(LogMsgCriticalSection);
-            }
+            LogonCostLogList.Add(sMsg);
         }
 
         public static void TrimStringList(StringList sList)
@@ -2259,27 +2228,23 @@ namespace GameSvr
 
         public static bool SaveDenyIPAddrList()
         {
-            bool result;
             string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyIPAddrList.txt";
             //SaveList = new StringList();
             //g_DenyIPAddrList.__Lock();
             //try {
             //    for (I = 0; I < g_DenyIPAddrList.Count; I ++ )
             //    {
-
             //        if (((int)g_DenyIPAddrList.Values[I]) != 0)
             //        {
             //            SaveList.Add(g_DenyIPAddrList[I]);
             //        }
             //    }
-
             //    SaveList.SaveToFile(sFileName);
             //} finally {
             //    g_DenyIPAddrList.UnLock();
             //}
-
             //SaveList.Free;
-            result = true;
+            var result = true;
             return result;
         }
 

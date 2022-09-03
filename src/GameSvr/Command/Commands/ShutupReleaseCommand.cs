@@ -21,7 +21,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            HUtil32.EnterCriticalSection(M2Share.g_DenySayMsgList);
+            HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try
             {
                 //if (M2Share.g_DenySayMsgList.ContainsKey(sHumanName))
@@ -43,7 +43,7 @@ namespace GameSvr.Command.Commands
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.g_DenySayMsgList);
+                HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
             }
         }
     }

@@ -3,6 +3,8 @@ using GameSvr.Guild;
 using GameSvr.Maps;
 using GameSvr.Monster.Monsters;
 using GameSvr.Player;
+using NLog;
+using NLog.Fluent;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -11,6 +13,7 @@ namespace GameSvr.Castle
 {
     public class TUserCastle
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 守卫列表
         /// </summary>
@@ -173,9 +176,9 @@ namespace GameSvr.Castle
             if (M2Share.MapManager.GetMapOfServerIndex(m_sMapName) == M2Share.nServerIndex)
             {
                 m_MapPalace = M2Share.MapManager.FindMap(m_sPalaceMap);
-                if (m_MapPalace == null) M2Share.MainOutMessage($"皇宫地图{m_sPalaceMap}没找到!!!");
+                if (m_MapPalace == null) _logger.Warn($"皇宫地图{m_sPalaceMap}没找到!!!");
                 m_MapSecret = M2Share.MapManager.FindMap(m_sSecretMap);
-                if (m_MapSecret == null) M2Share.MainOutMessage($"密道地图{m_sSecretMap}没找到!!!");
+                if (m_MapSecret == null) _logger.Warn($"密道地图{m_sSecretMap}没找到!!!");
                 m_MapCastle = M2Share.MapManager.FindMap(m_sMapName);
                 if (m_MapCastle != null)
                 {
@@ -191,7 +194,7 @@ namespace GameSvr.Castle
                     }
                     else
                     {
-                        M2Share.ErrorMessage("[Error] UserCastle.Initialize MainDoor.UnitObj = nil");
+                        _logger.Warn("[Error] UserCastle.Initialize MainDoor.UnitObj = nil");
                     }
                     m_LeftWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_LeftWall.nX, m_LeftWall.nY, m_LeftWall.sName);
                     if (m_LeftWall.BaseObject != null)
@@ -201,7 +204,7 @@ namespace GameSvr.Castle
                     }
                     else
                     {
-                        M2Share.ErrorMessage("[错误信息] 城堡初始化城门失败，检查怪物数据库里有没城门的设置: " + m_MainDoor.sName);
+                        _logger.Warn("[错误信息] 城堡初始化城门失败，检查怪物数据库里有没城门的设置: " + m_MainDoor.sName);
                     }
                     m_CenterWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_CenterWall.nX, m_CenterWall.nY, m_CenterWall.sName);
                     if (m_CenterWall.BaseObject != null)
@@ -211,7 +214,7 @@ namespace GameSvr.Castle
                     }
                     else
                     {
-                        M2Share.ErrorMessage("[错误信息] 城堡初始化左城墙失败，检查怪物数据库里有没左城墙的设置: " + m_LeftWall.sName);
+                        _logger.Warn("[错误信息] 城堡初始化左城墙失败，检查怪物数据库里有没左城墙的设置: " + m_LeftWall.sName);
                     }
                     m_RightWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_RightWall.nX, m_RightWall.nY, m_RightWall.sName);
                     if (m_RightWall.BaseObject != null)
@@ -221,7 +224,7 @@ namespace GameSvr.Castle
                     }
                     else
                     {
-                        M2Share.ErrorMessage("[错误信息] 城堡初始化中城墙失败，检查怪物数据库里有没中城墙的设置: " + m_CenterWall.sName);
+                        _logger.Warn("[错误信息] 城堡初始化中城墙失败，检查怪物数据库里有没中城墙的设置: " + m_CenterWall.sName);
                     }
                     for (var i = 0; i < Archer.Length; i++)
                     {
@@ -238,7 +241,7 @@ namespace GameSvr.Castle
                         }
                         else
                         {
-                            M2Share.ErrorMessage("[错误信息] 城堡初始化弓箭手失败，检查怪物数据库里有没弓箭手的设置: " + ObjUnit.sName);
+                            _logger.Warn("[错误信息] 城堡初始化弓箭手失败，检查怪物数据库里有没弓箭手的设置: " + ObjUnit.sName);
                         }
                     }
                     for (var i = 0; i < m_Guard.Length; i++)
@@ -249,7 +252,7 @@ namespace GameSvr.Castle
                         if (ObjUnit.BaseObject != null)
                             ObjUnit.BaseObject.m_WAbil.HP = m_Guard[i].nHP;
                         else
-                            M2Share.ErrorMessage("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
+                            _logger.Warn("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
                     }
                     for (var i = 0; i < m_MapCastle.DoorList.Count; i++)
                     {
@@ -262,7 +265,7 @@ namespace GameSvr.Castle
                 }
                 else
                 {
-                    M2Share.ErrorMessage($"[错误信息] 城堡所在地图不存在(检查地图配置文件里是否有地图{m_sMapName}的设置)");
+                    _logger.Warn($"[错误信息] 城堡所在地图不存在(检查地图配置文件里是否有地图{m_sMapName}的设置)");
                 }
             }
         }
@@ -389,7 +392,7 @@ namespace GameSvr.Castle
                             var s20 = string.Format(sWarStartMsg, m_sName);
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
-                            M2Share.MainOutMessage(s20);
+                            _logger.Info(s20);
                             MainDoorControl(true);
                         }
                     }
@@ -421,7 +424,7 @@ namespace GameSvr.Castle
                             var s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
-                            M2Share.MainOutMessage(s20);
+                            _logger.Warn(s20);
                         }
                     }
                     if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > M2Share.g_Config.dwCastleWarTime)
@@ -438,7 +441,7 @@ namespace GameSvr.Castle
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
         }
 
@@ -538,7 +541,7 @@ namespace GameSvr.Castle
             var s10 = string.Format(sGetCastleMsg, m_sName, m_sOwnGuild);
             M2Share.UserEngine.SendBroadCastMsgExt(s10, MsgType.System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s10);
-            M2Share.MainOutMessage(s10);
+            _logger.Info(s10);
         }
 
         public void StartWallconquestWar()
@@ -558,7 +561,6 @@ namespace GameSvr.Castle
         /// </summary>
         public void StopWallconquestWar()
         {
-            PlayObject PlayObject;
             const string sWallWarStop = "[{0} 攻城战已经结束]";
             m_boUnderWar = false;
             m_AttackGuildList.Clear();
@@ -566,7 +568,7 @@ namespace GameSvr.Castle
             M2Share.UserEngine.GetMapOfRangeHumanCount(m_MapCastle, m_nHomeX, m_nHomeY, 100);
             for (var i = 0; i < ListC.Count; i++)
             {
-                PlayObject = ListC[i];
+                var PlayObject = ListC[i];
                 PlayObject.ChangePKStatus(false);
                 if (PlayObject.m_MyGuild != m_MasterGuild)
                 {
@@ -576,7 +578,7 @@ namespace GameSvr.Castle
             var s14 = string.Format(sWallWarStop, m_sName);
             M2Share.UserEngine.SendBroadCastMsgExt(s14, MsgType.System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s14);
-            M2Share.MainOutMessage(s14);
+            _logger.Info(s14);
         }
 
         public int InPalaceGuildCount()

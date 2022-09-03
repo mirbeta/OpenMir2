@@ -78,8 +78,8 @@ namespace GameSvr
                     _runTimeTick = HUtil32.GetTickCount();
                     M2Share.GuildManager.Run();
                     M2Share.CastleManager.Run();
-                    var denyList = new List<string>(M2Share.g_DenySayMsgList.Count);
-                    foreach (var item in M2Share.g_DenySayMsgList)
+                    var denyList = new List<string>(M2Share.DenySayMsgList.Count);
+                    foreach (var item in M2Share.DenySayMsgList)
                     {
                         if (HUtil32.GetTickCount() > item.Value)
                         {
@@ -88,7 +88,7 @@ namespace GameSvr
                     }
                     for (var i = 0; i < denyList.Count; i++)
                     {
-                        if (M2Share.g_DenySayMsgList.TryRemove(denyList[i], out var denyName))
+                        if (M2Share.DenySayMsgList.TryRemove(denyList[i], out var denyName))
                         {
                             _logger.LogDebug($"解除玩家[{denyList[i]}]禁言");
                         }

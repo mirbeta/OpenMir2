@@ -7,7 +7,7 @@ namespace GameSvr.Actor
     /// <summary>
     /// 对象管理系统
     /// </summary>
-    public class ActorManager
+    public class ActorMgr
     {
         /// <summary>
         /// 精灵对象列表

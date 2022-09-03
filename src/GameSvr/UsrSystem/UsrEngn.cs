@@ -10,6 +10,7 @@ using GameSvr.Player;
 using GameSvr.RobotPlay;
 using GameSvr.Services;
 using GameSvr.Snaps;
+using NLog;
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;
@@ -19,6 +20,7 @@ namespace GameSvr.UsrSystem
 {
     public partial class UserEngine
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int _dwProcessMapDoorTick;
         public int DwProcessMerchantTimeMax;
         public int DwProcessMerchantTimeMin;
@@ -153,10 +155,10 @@ namespace GameSvr.UsrSystem
 
         public void Initialize()
         {
-            M2Share.MainOutMessage("正在初始化NPC脚本...");
+            _logger.Info("正在初始化NPC脚本...");
             MerchantInitialize();
             NpCinitialize();
-            M2Share.MainOutMessage("初始化NPC脚本完成...");
+            _logger.Info("初始化NPC脚本完成...");
             for (var i = 0; i < MonGenList.Count; i++)
             {
                 if (MonGenList[i] != null)
@@ -190,9 +192,9 @@ namespace GameSvr.UsrSystem
                     merchant.Initialize();
                     if (merchant.m_boAddtoMapSuccess && !merchant.m_boIsHide)
                     {
-                        M2Share.MainOutMessage("Merchant Initalize fail..." + merchant.m_sCharName + ' ' +
-                                               merchant.m_sMapName + '(' +
-                                               merchant.m_nCurrX + ':' + merchant.m_nCurrY + ')');
+                        _logger.Warn("Merchant Initalize fail..." + merchant.m_sCharName + ' ' +
+                                     merchant.m_sMapName + '(' +
+                                     merchant.m_nCurrX + ':' + merchant.m_nCurrY + ')');
                         MerchantList.RemoveAt(i);
                     }
                     else
@@ -203,7 +205,7 @@ namespace GameSvr.UsrSystem
                 }
                 else
                 {
-                    M2Share.MainOutMessage(merchant.m_sCharName + " - Merchant Initalize fail... (m.PEnvir=nil)");
+                    _logger.Error(merchant.m_sCharName + " - Merchant Initalize fail... (m.PEnvir=nil)");
                     MerchantList.RemoveAt(i);
                 }
             }
@@ -222,7 +224,7 @@ namespace GameSvr.UsrSystem
                     normNpc.Initialize();
                     if (normNpc.m_boAddtoMapSuccess && !normNpc.m_boIsHide)
                     {
-                        M2Share.MainOutMessage(normNpc.m_sCharName + " Npc Initalize fail... ");
+                        _logger.Warn(normNpc.m_sCharName + " Npc Initalize fail... ");
                         QuestNpcList.RemoveAt(i);
                     }
                     else
@@ -232,7 +234,7 @@ namespace GameSvr.UsrSystem
                 }
                 else
                 {
-                    M2Share.MainOutMessage(normNpc.m_sCharName + " Npc Initalize fail... (npc.PEnvir=nil) ");
+                    _logger.Error(normNpc.m_sCharName + " Npc Initalize fail... (npc.PEnvir=nil) ");
                     QuestNpcList.RemoveAt(i);
                 }
             }
@@ -409,7 +411,7 @@ namespace GameSvr.UsrSystem
                         playObject.m_nServerIndex = M2Share.MapManager.GetMapOfServerIndex(playObject.m_sMapName);
                         if (playObject.m_Abil.HP != 14)
                         {
-                            M2Share.MainOutMessage(string.Format(sChangeServerFail1, new object[] { M2Share.nServerIndex, playObject.m_nServerIndex, playObject.m_sMapName }));
+                            _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.nServerIndex, playObject.m_nServerIndex, playObject.m_sMapName }));
                         }
                         SendSwitchData(playObject, playObject.m_nServerIndex);
                         SendChangeServer(playObject, (byte)playObject.m_nServerIndex);
@@ -428,7 +430,7 @@ namespace GameSvr.UsrSystem
                     }
                     if (!envir.CanWalk(playObject.m_nCurrX, playObject.m_nCurrY, true))
                     {
-                        M2Share.MainOutMessage(string.Format(sChangeServerFail2,
+                        _logger.Warn(string.Format(sChangeServerFail2,
                             new object[] { M2Share.nServerIndex, playObject.m_nServerIndex, playObject.m_sMapName }));
                         playObject.m_sMapName = M2Share.g_Config.sHomeMap;
                         envir = M2Share.MapManager.FindMap(M2Share.g_Config.sHomeMap);
@@ -439,7 +441,7 @@ namespace GameSvr.UsrSystem
                     playObject.OnEnvirnomentChanged();
                     if (playObject.m_PEnvir == null)
                     {
-                        M2Share.MainOutMessage(sErrorEnvirIsNil);
+                        _logger.Error(sErrorEnvirIsNil);
                         goto ReGetMap;
                     }
                     else
@@ -459,7 +461,7 @@ namespace GameSvr.UsrSystem
                     Envirnoment envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, playObject.m_sMapName);
                     if (envir != null)
                     {
-                        M2Share.MainOutMessage(string.Format(sChangeServerFail3,
+                        _logger.Warn(string.Format(sChangeServerFail3,
                             new object[] { M2Share.nServerIndex, playObject.m_nServerIndex, playObject.m_sMapName }));
                         playObject.m_sMapName = M2Share.g_Config.sHomeMap;
                         envir = M2Share.MapManager.FindMap(M2Share.g_Config.sHomeMap);
@@ -470,7 +472,7 @@ namespace GameSvr.UsrSystem
                     {
                         if (!envir.CanWalk(playObject.m_nCurrX, playObject.m_nCurrY, true))
                         {
-                            M2Share.MainOutMessage(string.Format(sChangeServerFail4,
+                            _logger.Warn(string.Format(sChangeServerFail4,
                                 new object[] { M2Share.nServerIndex, playObject.m_nServerIndex, playObject.m_sMapName }));
                             playObject.m_sMapName = M2Share.g_Config.sHomeMap;
                             envir = M2Share.MapManager.FindMap(M2Share.g_Config.sHomeMap);
@@ -482,7 +484,7 @@ namespace GameSvr.UsrSystem
                         playObject.OnEnvirnomentChanged();
                         if (playObject.m_PEnvir == null)
                         {
-                            M2Share.MainOutMessage(sErrorEnvirIsNil);
+                            _logger.Error(sErrorEnvirIsNil);
                             goto ReGetMap;
                         }
                         else
@@ -510,8 +512,8 @@ namespace GameSvr.UsrSystem
             }
             catch (Exception ex)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(ex.StackTrace);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(ex.StackTrace);
             }
             return result;
         }
@@ -590,8 +592,8 @@ namespace GameSvr.UsrSystem
                 }
                 catch (Exception e)
                 {
-                    M2Share.ErrorMessage(sExceptionMsg1);
-                    M2Share.ErrorMessage(e.Message);
+                    _logger.Error(sExceptionMsg1);
+                    _logger.Error(e.Message);
                 }
             }
 
@@ -644,11 +646,9 @@ namespace GameSvr.UsrSystem
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg3);
+                _logger.Error(sExceptionMsg3);
             }
-
             ProcessPlayObjectData();
-
             _nProcessHumanLoopTime++;
             M2Share.g_nProcessHumanLoopTime = _nProcessHumanLoopTime;
             if (_procHumIdx == 0)
@@ -734,8 +734,8 @@ namespace GameSvr.UsrSystem
             }
             catch (Exception ex)
             {
-                M2Share.MainOutMessage(sExceptionMsg8);
-                M2Share.MainOutMessage(ex.StackTrace);
+               _logger.Error(sExceptionMsg8);
+               _logger.Error(ex.StackTrace);
             }
         }
 
@@ -841,8 +841,8 @@ namespace GameSvr.UsrSystem
             }
             catch (Exception ex)
             {
-                M2Share.MainOutMessage("[Exception] TUserEngine::ProcessHumans");
-                M2Share.MainOutMessage(ex.StackTrace);
+                _logger.Error("[Exception] TUserEngine::ProcessHumans");
+                _logger.Error(ex.StackTrace);
             }
         }
 
@@ -896,7 +896,7 @@ namespace GameSvr.UsrSystem
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
             DwProcessMerchantTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (DwProcessMerchantTimeMin > DwProcessMerchantTimeMax)
@@ -1087,7 +1087,7 @@ namespace GameSvr.UsrSystem
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(e.StackTrace);
+                _logger.Error(e.StackTrace);
             }
         }
 
@@ -1157,7 +1157,7 @@ namespace GameSvr.UsrSystem
             }
             catch
             {
-                M2Share.MainOutMessage("[Exceptioin] TUserEngine.ProcessNpcs");
+                _logger.Error("[Exceptioin] TUserEngine.ProcessNpcs");
             }
             DwProcessNpcTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (DwProcessNpcTimeMin > DwProcessNpcTimeMax) DwProcessNpcTimeMax = DwProcessNpcTimeMin;
@@ -1194,7 +1194,7 @@ namespace GameSvr.UsrSystem
                 {
                     _dwShowOnlineTick = HUtil32.GetTickCount();
                     M2Share.NoticeManager.LoadingNotice();
-                    M2Share.MainOutMessage("在线数: " + PlayObjectCount);
+                    _logger.Info("在线数: " + PlayObjectCount);
                     M2Share.CastleManager.Save();
                 }
                 if ((HUtil32.GetTickCount() - _dwSendOnlineHumTime) > 10000)
@@ -1205,8 +1205,8 @@ namespace GameSvr.UsrSystem
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.Message);
             }
         }
 
@@ -1883,7 +1883,7 @@ namespace GameSvr.UsrSystem
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
             return result;
         }
@@ -1955,7 +1955,7 @@ namespace GameSvr.UsrSystem
 
         public object FindMerchant(int merchantId)
         {
-            var normNpc = M2Share.ActorManager.Get(merchantId);
+            var normNpc = M2Share.ActorMgr.Get(merchantId);
             NormNpc npcObject = null;
             var npcType = normNpc.GetType();
             if (npcType == typeof(Merchant))
@@ -1979,7 +1979,7 @@ namespace GameSvr.UsrSystem
 
         public object FindNpc(int npcId)
         {
-            return M2Share.ActorManager.Get(npcId); ;
+            return M2Share.ActorMgr.Get(npcId); ;
         }
 
         /// <summary>
@@ -2368,7 +2368,7 @@ namespace GameSvr.UsrSystem
                             var osObject = cellInfo.ObjList[i];
                             if (osObject != null && osObject.CellType == CellType.MovingObject)
                             {
-                                var baseObject = M2Share.ActorManager.Get(osObject.CellObjId);;
+                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                                 if (baseObject != null && !baseObject.m_boGhost && baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);

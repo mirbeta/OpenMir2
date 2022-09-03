@@ -152,8 +152,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.Message);
             }
             return result;
         }

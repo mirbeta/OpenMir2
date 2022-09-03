@@ -401,10 +401,10 @@ namespace GameSvr.Maps
                         {
                             if (M2Share.MiniMapList.ContainsKey(sMapNO))
                             {
-                                M2Share.ErrorMessage($"重复小地图配置信息[{sMapNO}]");
+                                M2Share.LogSystem.Error($"重复小地图配置信息[{sMapNO}]");
                                 continue;
                             }
-                            M2Share.MiniMapList.Add(sMapNO, nIdx);
+                            M2Share.MiniMapList.TryAdd(sMapNO, nIdx);
                         }
                     }
                 }

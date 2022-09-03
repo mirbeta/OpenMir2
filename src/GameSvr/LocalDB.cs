@@ -184,7 +184,7 @@ namespace GameSvr
                     {
                         if (List28 != null)
                         {
-                            M2Share.g_MakeItemList.Add(sItemName, List28);
+                            M2Share.MakeItemList.Add(sItemName, List28);
                         }
                         List28 = new List<TMakeItem>();
                         HUtil32.ArrestStringEx(sLine, "[", "]", ref sItemName);
@@ -201,7 +201,7 @@ namespace GameSvr
                 }
                 if (List28 != null)
                 {
-                    M2Share.g_MakeItemList.Add(sItemName, List28);
+                    M2Share.MakeItemList.Add(sItemName, List28);
                 }
             }
         }

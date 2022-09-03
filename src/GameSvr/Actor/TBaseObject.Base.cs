@@ -32,8 +32,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg0);
-                M2Share.ErrorMessage(e.StackTrace);
+                M2Share.LogSystem.Error(sExceptionMsg0);
+                M2Share.LogSystem.Error(e.StackTrace);
             }
             try
             {
@@ -124,8 +124,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg1);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg1);
+                M2Share.LogSystem.Error(e.Message);
             }
             try
             {
@@ -227,7 +227,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg2);
+                M2Share.LogSystem.Error(sExceptionMsg2);
             }
             // 血气石处理开始
             try
@@ -332,7 +332,7 @@ namespace GameSvr.Actor
             }
             catch (Exception)
             {
-                M2Share.ErrorMessage(sExceptionMsg7);
+                M2Share.LogSystem.Error(sExceptionMsg7);
             }
             // 血气石处理结束
             // TBaseObject.Run 3 清理目标对象
@@ -480,7 +480,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg3);
+                M2Share.LogSystem.Error(sExceptionMsg3);
             }
             try
             {
@@ -571,8 +571,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg4);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg4);
+                M2Share.LogSystem.Error(e.Message);
             }
             try
             {
@@ -658,7 +658,7 @@ namespace GameSvr.Actor
             }
             catch (Exception)
             {
-                M2Share.ErrorMessage(sExceptionMsg5);
+                M2Share.LogSystem.Error(sExceptionMsg5);
             }
             try
             {
@@ -680,7 +680,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg6);
+                M2Share.LogSystem.Error(sExceptionMsg6);
             }
             M2Share.g_nBaseObjTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (M2Share.g_nBaseObjTimeMax < M2Share.g_nBaseObjTimeMin)
@@ -839,8 +839,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg1);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg1);
+                M2Share.LogSystem.Error(e.Message);
             }
             try
             {
@@ -936,7 +936,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg2);
+                M2Share.LogSystem.Error(sExceptionMsg2);
             }
             try
             {
@@ -1037,7 +1037,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg3);
+                M2Share.LogSystem.Error(sExceptionMsg3);
             }
         }
 
@@ -1187,7 +1187,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
         }
 
@@ -1292,14 +1292,14 @@ namespace GameSvr.Actor
                 if (DropItemList != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ActorManager.AddOhter(ObjectId, DropItemList);
+                    M2Share.ActorMgr.AddOhter(ObjectId, DropItemList);
                     SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
             catch (Exception ex)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(ex.StackTrace);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(ex.StackTrace);
             }
         }
 
@@ -1382,7 +1382,7 @@ namespace GameSvr.Actor
                             StruckDamage(nDamage);
                             HealthSpellChanged();
                             SendRefMsg(Grobal2.RM_STRUCK_MAG, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
-                            TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.BaseObject);
+                            TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.BaseObject);
                             if (M2Share.g_Config.boMonDelHptoExp)
                             {
                                 if (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -1474,7 +1474,7 @@ namespace GameSvr.Actor
                         nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
                         nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
                         nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam3);
+                        TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
                         if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(TargetBaseObject);
@@ -1496,14 +1496,14 @@ namespace GameSvr.Actor
                         nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
                         nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
                         nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
                         if (TargetBaseObject != null)
                         {
                             TargetBaseObject.CharPushed((byte)nPower, nRage);
                         }
                         break;
                     case Grobal2.RM_POISON:
-                        TargetBaseObject = M2Share.ActorManager.Get(ProcessMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
+                        TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
                         if (TargetBaseObject != null)
                         {
                             if (IsProperTarget(TargetBaseObject))
@@ -1535,8 +1535,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.Message);
             }
             return result;
         }

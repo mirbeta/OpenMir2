@@ -33,7 +33,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
                 {
-                    M2Share.MainOutMessage("[等级调整] " + PlayObject.m_sCharName + "(" + m_PlayObject.m_sCharName + " " + nOLevel + " -> " + m_PlayObject.m_Abil.Level + ")");
+                    M2Share.LogSystem.Warn("[等级调整] " + PlayObject.m_sCharName + "(" + m_PlayObject.m_sCharName + " " + nOLevel + " -> " + m_PlayObject.m_Abil.Level + ")");
                 }
             }
             else

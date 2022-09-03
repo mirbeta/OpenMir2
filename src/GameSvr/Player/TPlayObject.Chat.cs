@@ -133,7 +133,7 @@ namespace GameSvr.Player
                     m_boDisableSayMsg = false;
                 }
                 boDisableSayMsg = m_boDisableSayMsg;
-                if (M2Share.g_DenySayMsgList.ContainsKey(this.m_sCharName))
+                if (M2Share.DenySayMsgList.ContainsKey(this.m_sCharName))
                 {
                     boDisableSayMsg = true;
                 }
@@ -240,8 +240,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg, sData));
-                M2Share.ErrorMessage(e.StackTrace);
+                M2Share.LogSystem.Error(format(sExceptionMsg, sData));
+                M2Share.LogSystem.Error(e.StackTrace);
             }
         }
 
@@ -861,8 +861,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg, sData));
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(format(sExceptionMsg, sData));
+                M2Share.LogSystem.Error(e.Message);
             }
         }
     }

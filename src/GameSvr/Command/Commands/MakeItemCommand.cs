@@ -71,7 +71,7 @@ namespace GameSvr.Command.Commands
                     PlayObject.SendAddItem(UserItem);
                     if (PlayObject.m_btPermission >= 6)
                     {
-                        M2Share.MainOutMessage("[制造物品] " + PlayObject.m_sCharName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
+                        M2Share.LogSystem.Warn("[制造物品] " + PlayObject.m_sCharName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
                     }
                     if (StdItem.NeedIdentify == 1)
                     {

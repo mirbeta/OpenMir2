@@ -259,13 +259,13 @@ namespace GameSvr
             M2Share.g_Config.nWinLotteryLevel6 = 0;
             M2Share.LoadConfig();
             M2Share.DataServer = new DBService();
-            M2Share.ActorManager = new ActorManager();
+            M2Share.ActorMgr = new ActorMgr();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.GateManager = GameGateMgr.Instance;
             M2Share.g_FindPath = new FindPath();
             M2Share.CommandSystem = new CommandManager();
             M2Share.CellObjectSystem = new CellObjectMgr();
-            M2Share.LogStringList = new ArrayList();
+            M2Share.DataLogQueue = new();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapManager = new MapManager();
             M2Share.ItemUnit = new ItemUnit();
@@ -277,11 +277,11 @@ namespace GameSvr
             M2Share.FrontEngine = new TFrontEngine();
             M2Share.UserEngine = new UserEngine();
             M2Share.RobotManage = new RobotManage();
-            M2Share.g_MakeItemList = new Dictionary<string, IList<TMakeItem>>(StringComparer.OrdinalIgnoreCase);
+            M2Share.MakeItemList = new Dictionary<string, IList<TMakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<TStartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
-            M2Share.g_DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-            M2Share.MiniMapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            M2Share.DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+            M2Share.MiniMapList = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             M2Share.g_UnbindList = new Dictionary<int, string>();
             M2Share.LineNoticeList = new List<string>();
             M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
@@ -293,7 +293,7 @@ namespace GameSvr
             M2Share.g_DisableSellOffList = new List<string>();
             M2Share.g_DisableMoveMapList = new List<string>();
             M2Share.g_DisableSendMsgList = new List<string>();
-            M2Share.g_MonDropLimitLIst = new Dictionary<string, TMonDrop>(StringComparer.OrdinalIgnoreCase);
+            M2Share.g_MonDropLimitLIst = new ConcurrentDictionary<string, TMonDrop>(StringComparer.OrdinalIgnoreCase);
             M2Share.g_DisableTakeOffList = new List<string>();
             M2Share.g_UnMasterList = new List<string>();
             M2Share.g_UnForceMasterList = new List<string>();
@@ -306,7 +306,6 @@ namespace GameSvr
             M2Share.g_ItemBindIPaddr = new List<TItemBind>();
             M2Share.g_ItemBindAccount = new List<TItemBind>();
             M2Share.g_ItemBindCharName = new List<TItemBind>();
-            M2Share.LogMsgCriticalSection = new object();
             M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.g_Config.UserIDSection = new object();
@@ -320,7 +319,6 @@ namespace GameSvr
 
         private void LoadServerTable()
         {
-            StringList LoadList;
             var nRouteIdx = 0;
             var sLineText = string.Empty;
             var sIdx = string.Empty;
@@ -334,7 +332,7 @@ namespace GameSvr
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sBaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {

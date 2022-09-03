@@ -646,7 +646,7 @@ namespace GameSvr.Player
                 }
                 catch (Exception)
                 {
-                    M2Share.ErrorMessage(sExceptionMsg);
+                    M2Share.LogSystem.Error(sExceptionMsg);
                 }
             }
         }
@@ -1007,8 +1007,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.StackTrace);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.StackTrace);
             }
             // ReadAllBook();
         }
@@ -1304,7 +1304,7 @@ namespace GameSvr.Player
                                             cellInfo.Dispose();
                                             break;
                                         }
-                                        BaseObject = M2Share.ActorManager.Get(OSObject.CellObjId);
+                                        BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                         if (BaseObject != null && !BaseObject.m_boInvisible)
                                         {
                                             if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
@@ -1341,16 +1341,16 @@ namespace GameSvr.Player
                                                 }
                                                 else
                                                 {
-                                                    if (M2Share.ActorManager.Get(MapItem.OfBaseObject) != null)
+                                                    if (M2Share.ActorMgr.Get(MapItem.OfBaseObject) != null)
                                                     {
-                                                        if (M2Share.ActorManager.Get(MapItem.OfBaseObject).m_boGhost)
+                                                        if (M2Share.ActorMgr.Get(MapItem.OfBaseObject).m_boGhost)
                                                         {
                                                             MapItem.OfBaseObject = 0;
                                                         }
                                                     }
-                                                    if (M2Share.ActorManager.Get(MapItem.DropBaseObject) != null)
+                                                    if (M2Share.ActorMgr.Get(MapItem.DropBaseObject) != null)
                                                     {
-                                                        if (M2Share.ActorManager.Get(MapItem.DropBaseObject).m_boGhost)
+                                                        if (M2Share.ActorMgr.Get(MapItem.DropBaseObject).m_boGhost)
                                                         {
                                                             MapItem.DropBaseObject = 0;
                                                         }
@@ -1464,7 +1464,7 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(e.StackTrace);
+                M2Share.LogSystem.Error(e.StackTrace);
                 KickException();
             }
         }
@@ -1559,8 +1559,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.Message);
             }
             return result;
         }
@@ -1665,8 +1665,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.Message);
             }
             base.MakeGhost();
         }
@@ -1711,13 +1711,13 @@ namespace GameSvr.Player
                 if (DelList != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ActorManager.AddOhter(ObjectId, DelList);
+                    M2Share.ActorMgr.AddOhter(ObjectId, DelList);
                     this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
         }
     }

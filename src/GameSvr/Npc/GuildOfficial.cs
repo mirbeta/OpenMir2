@@ -105,7 +105,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.LogSystem.Error(sExceptionMsg);
             }
         }
 

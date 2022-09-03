@@ -235,7 +235,7 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg, m_sCharName, m_nCurrX, m_nCurrY, e.Message, ScriptConst.nCHECK));
+                M2Share.LogSystem.Error(format(sExceptionMsg, m_sCharName, m_nCurrX, m_nCurrY, e.Message, ScriptConst.nCHECK));
             }
         }
 
@@ -289,7 +289,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.MainOutMessage("Failure in saving upgradinglist - " + m_sCharName);
+                M2Share.LogSystem.Error("Failure in saving upgradinglist - " + m_sCharName);
             }
         }
 
@@ -444,7 +444,7 @@ namespace GameSvr.Npc
             if (DelItemList != null)
             {
                 var objectId = HUtil32.Sequence();
-                M2Share.ActorManager.AddOhter(objectId, DelItemList);
+                M2Share.ActorMgr.AddOhter(objectId, DelItemList);
                 User.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
             if (DuraList != null)
@@ -981,8 +981,8 @@ namespace GameSvr.Npc
             }
             catch (Exception ex)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg, sData));
-                M2Share.MainOutMessage(ex.StackTrace);
+                M2Share.LogSystem.Error(format(sExceptionMsg, sData));
+                M2Share.LogSystem.Error(ex.StackTrace);
             }
         }
 
@@ -1036,7 +1036,7 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(e.Message);
             }
             base.Run();
         }
@@ -1525,7 +1525,7 @@ namespace GameSvr.Npc
                 if (List28 != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ActorManager.AddOhter(ObjectId, List28);
+                    M2Share.ActorMgr.AddOhter(ObjectId, List28);
                     PlayObject.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
@@ -1751,7 +1751,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.MainOutMessage("Failure in loading upgradinglist - " + m_sCharName);
+                M2Share.LogSystem.Error("Failure in loading upgradinglist - " + m_sCharName);
             }
         }
 
@@ -1801,8 +1801,8 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.LogSystem.Error(e.Message);
             }
         }
 

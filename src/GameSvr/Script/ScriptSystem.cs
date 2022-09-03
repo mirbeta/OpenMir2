@@ -1,4 +1,5 @@
 ﻿using GameSvr.Npc;
+using NLog;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using SystemModule;
@@ -8,6 +9,7 @@ namespace GameSvr.Script
 {
     public class ScriptSystem
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
 
         public int LoadNpcScript(NormNpc NPC, string sPatch, string sScritpName)
@@ -131,7 +133,7 @@ namespace GameSvr.Script
                     }
                     else
                     {
-                        M2Share.MainOutMessage("script error, load fail: " + sCallScriptFile + s18);
+                        _logger.Error("script error, load fail: " + sCallScriptFile + s18);
                     }
                 }
             }
@@ -187,7 +189,7 @@ namespace GameSvr.Script
                         }
                         else
                         {
-                            M2Share.MainOutMessage("script error, load fail: " + s28);
+                            _logger.Error("script error, load fail: " + s28);
                         }
                         LoadList[i] = "";
                     }
@@ -1789,7 +1791,7 @@ namespace GameSvr.Script
                             else
                             {
                                 QuestConditionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
+                                _logger.Error("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 12)
@@ -1802,7 +1804,7 @@ namespace GameSvr.Script
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
+                                _logger.Error("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 13)
@@ -1815,7 +1817,7 @@ namespace GameSvr.Script
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
+                                _logger.Error("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 14)
@@ -1854,7 +1856,7 @@ namespace GameSvr.Script
             }
             else
             {
-                M2Share.MainOutMessage("Script file not found: " + sScritpFileName);
+                _logger.Error("Script file not found: " + sScritpFileName);
             }
             return 1;
         }

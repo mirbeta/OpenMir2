@@ -25,12 +25,10 @@ namespace GameSvr.Monster.Monsters
                     }
                     if (ProcessMsg.wIdent == Grobal2.RM_SPELL)
                     {
-                        M2Share.MainOutMessage("rmSpell: " + ProcessMsg.nParam3);
                         m_Master.m_WAbil.MP -= (ushort)ProcessMsg.nParam3;
                     }
                     else
                     {
-                        M2Share.MainOutMessage("rmHit: " + ProcessMsg.wParam);
                         m_Master.m_WAbil.MP -= (ushort)ProcessMsg.wParam;
                     }
                 }

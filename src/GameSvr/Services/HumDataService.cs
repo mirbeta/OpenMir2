@@ -72,7 +72,7 @@ namespace GameSvr.Services
             }
             if (!boLoadDBOK)
             {
-                M2Share.ErrorMessage(boLoadRcd ? sLoadDBTimeOut : sSaveDBTimeOut);
+                M2Share.LogSystem.Error(boLoadRcd ? sLoadDBTimeOut : sSaveDBTimeOut);
             }
             if ((HUtil32.GetTickCount() - dwTimeOutTick) > M2Share.dwRunDBTimeMax)
             {
@@ -136,7 +136,7 @@ namespace GameSvr.Services
                     }
                     else
                     {
-                        M2Share.ErrorMessage($"[RunDB] 保存人物({sCharName})数据失败");
+                        M2Share.LogSystem.Error($"[RunDB] 保存人物({sCharName})数据失败");
                     }
                 }
             }

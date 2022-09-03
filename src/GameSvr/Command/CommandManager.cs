@@ -39,7 +39,7 @@ namespace GameSvr.Command
                 var groupAttribute = attributes[0];
                 if (CommandMaps.ContainsKey(groupAttribute.Name))
                 {
-                    M2Share.ErrorMessage($"重复游戏命令: {groupAttribute.Name}");
+                    M2Share.LogSystem.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
 
                 if (CustomCommands.TryGetValue(groupAttribute.Name, out cmdName))

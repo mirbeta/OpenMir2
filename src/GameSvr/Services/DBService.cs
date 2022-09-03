@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using NLog;
+using SystemModule;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -7,6 +8,7 @@ namespace GameSvr.Services
 {
     public class DBService
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ClientScoket _clientScoket;
         private static int _packetLen = 0;
         private byte[] _recvBuff;
@@ -69,13 +71,13 @@ namespace GameSvr.Services
         private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = false;
-            M2Share.ErrorMessage("数据库服务器[" + e.RemoteEndPoint + "]断开连接...");
+            _logger.Error("数据库服务器[" + e.RemoteEndPoint + "]断开连接...");
         }
 
         private void DbScoketConnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = true;
-            M2Share.MainOutMessage("数据库服务器[" + e.RemoteEndPoint + "]连接成功...", messageColor: System.ConsoleColor.Green);
+            _logger.Info("数据库服务器[" + e.RemoteEndPoint + "]连接成功...");
         }
 
         private void DBSocketError(object sender, DSCClientErrorEventArgs e)
@@ -84,13 +86,13 @@ namespace GameSvr.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]拒绝链接...");
+                    _logger.Error("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]关闭连接...");
+                    _logger.Error("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]链接超时...");
+                    _logger.Error("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]链接超时...");
                     break;
             }
         }

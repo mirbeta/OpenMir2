@@ -13,7 +13,7 @@ namespace GameSvr.GateWay
 {
     public class GameGate
     {
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly int _gateIdx;
         private readonly GameGateInfo _gateInfo;
         private readonly GateSendQueue _sendQueue;
@@ -75,7 +75,7 @@ namespace GameSvr.GateWay
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg1);
+                _logger.Error(sExceptionMsg1);
             }
             var nLen = 0;
             var buffIndex = 0;
@@ -123,7 +123,7 @@ namespace GameSvr.GateWay
                         Buffer.BlockCopy(protoBuff, buffIndex, messageBuff, 0, PacketHeader.PacketSize);
                         protoBuff = messageBuff;
                         nLen -= 1;
-                        Log.Error("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
+                        _logger.Error("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
                     }
                     if (nLen < PacketHeader.PacketSize)
                     {
@@ -133,7 +133,7 @@ namespace GameSvr.GateWay
             }
             catch (Exception)
             {
-                M2Share.ErrorMessage(sExceptionMsg2);
+                _logger.Error(sExceptionMsg2);
             }
             if (nLen > 0)
             {
@@ -225,8 +225,8 @@ namespace GameSvr.GateWay
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.StackTrace, MessageType.Error);
             }
         }
 
@@ -305,7 +305,7 @@ namespace GameSvr.GateWay
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                _logger.Error(sExceptionMsg, MessageType.Error);
             }
             return result;
         }
@@ -349,7 +349,7 @@ namespace GameSvr.GateWay
                                 }
                                 catch
                                 {
-                                    M2Share.ErrorMessage(sExceptionMsg);
+                                    _logger.Error(sExceptionMsg);
                                 }
                             }
                             else
@@ -370,7 +370,7 @@ namespace GameSvr.GateWay
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
         }
 
@@ -559,7 +559,7 @@ namespace GameSvr.GateWay
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
         }
 
