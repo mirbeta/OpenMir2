@@ -1458,10 +1458,10 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_10101:
-                        SendRefMsg(ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg);
+                        SendRefMsg(ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.Msg);
                         if ((ProcessMsg.BaseObject == Grobal2.RM_STRUCK) && (Race != Grobal2.RC_PLAYOBJECT))
                         {
-                            SendMsg(this, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg);
+                            SendMsg(this, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.Msg);
                         }
                         if (FastParalysis)
                         {
@@ -1489,7 +1489,7 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_10155:
-                        MapRandomMove(ProcessMsg.sMsg, ProcessMsg.wParam);
+                        MapRandomMove(ProcessMsg.Msg, ProcessMsg.wParam);
                         break;
                     case Grobal2.RM_DELAYPUSHED:
                         nPower = ProcessMsg.wParam;
