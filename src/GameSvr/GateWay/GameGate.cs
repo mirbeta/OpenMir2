@@ -399,12 +399,12 @@ namespace GameSvr.GateWay
                                 }
                                 if (GateUser.PlayObject != null)
                                 {
-                                    if (!GateUser.PlayObject.m_boOffLineFlag)
+                                    if (!GateUser.PlayObject.OffLineFlag)
                                     {
                                         GateUser.PlayObject.m_boSoftClose = true;
                                     }
                                 }
-                                if (GateUser.PlayObject != null && GateUser.PlayObject.m_boGhost && !GateUser.PlayObject.m_boReconnection)
+                                if (GateUser.PlayObject != null && GateUser.PlayObject.Ghost && !GateUser.PlayObject.m_boReconnection)
                                 {
                                     IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                 }

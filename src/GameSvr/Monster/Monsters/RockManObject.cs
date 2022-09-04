@@ -4,7 +4,7 @@
     {
         public RockManObject() : base()
         {
-            m_boHideMode = true;
+            HideMode = true;
         }
 
         public override void Run()

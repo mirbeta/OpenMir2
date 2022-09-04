@@ -50,22 +50,22 @@ namespace GameSvr.Magic
             }
             StdItem amuletStdItem = null;
             Idx = 0;
-            if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
+            if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
             {
-                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex);
+                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
                     {
                         case 1:
-                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_ARMRINGL;
                                 return true;
                             }
                             break;
                         case 2:
-                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_ARMRINGL;
                                 return true;
@@ -74,22 +74,22 @@ namespace GameSvr.Magic
                     }
                 }
             }
-            if (PlayObject.m_UseItems[Grobal2.U_BUJUK] != null && PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex > 0)
+            if (PlayObject.UseItems[Grobal2.U_BUJUK] != null && PlayObject.UseItems[Grobal2.U_BUJUK].wIndex > 0)
             {
-                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex);
+                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
                     {
                         case 1:
-                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_BUJUK;
                                 return true;
                             }
                             break;
                         case 2:
-                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = Grobal2.U_BUJUK;
                                 return true;
@@ -111,16 +111,16 @@ namespace GameSvr.Magic
                 return;
             }
             var dura = (ushort)(nCount * 100);
-            if (PlayObject.m_UseItems[Idx] != null && PlayObject.m_UseItems[Idx].Dura > dura)
+            if (PlayObject.UseItems[Idx] != null && PlayObject.UseItems[Idx].Dura > dura)
             {
-                PlayObject.m_UseItems[Idx].Dura -= dura;//减少护身符持久即数量
-                PlayObject.SendMsg(PlayObject, Grobal2.RM_DURACHANGE, Idx, PlayObject.m_UseItems[Idx].Dura, PlayObject.m_UseItems[Idx].DuraMax, 0, "");
+                PlayObject.UseItems[Idx].Dura -= dura;//减少护身符持久即数量
+                PlayObject.SendMsg(PlayObject, Grobal2.RM_DURACHANGE, Idx, PlayObject.UseItems[Idx].Dura, PlayObject.UseItems[Idx].DuraMax, 0, "");
             }
             else
             {
-                PlayObject.m_UseItems[Idx].Dura = 0;
-                PlayObject.SendDelItems(PlayObject.m_UseItems[Idx]);
-                PlayObject.m_UseItems[Idx].wIndex = 0;
+                PlayObject.UseItems[Idx].Dura = 0;
+                PlayObject.SendDelItems(PlayObject.UseItems[Idx]);
+                PlayObject.UseItems[Idx].wIndex = 0;
             }
         }
     }

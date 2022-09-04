@@ -33,10 +33,10 @@ namespace GameSvr.Command
             if (playObject != null)
             {
 #if DEBUG
-                playObject.m_btPermission = 10;
+                playObject.Permission = 10;
                 playObject.SysMsg("当前运行调试模式,权限等级：10", MsgColor.Red, MsgType.Hint);
 #endif
-                if (playObject.m_btPermission < this.GameCommand.nPermissionMin)// 检查用户是否有权限来调用命令。
+                if (playObject.Permission < this.GameCommand.nPermissionMin)// 检查用户是否有权限来调用命令。
                 {
                     return GameCommandConst.g_sGameCommandPermissionTooLow;
                 }

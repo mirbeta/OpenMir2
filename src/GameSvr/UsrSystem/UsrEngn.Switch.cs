@@ -31,12 +31,12 @@ namespace GameSvr.UsrSystem
             {
 
             }
-            PlayObject.m_boBanShout = SwitchData.boBanShout;
-            PlayObject.m_boHearWhisper = SwitchData.boHearWhisper;
-            PlayObject.m_boBanGuildChat = SwitchData.boBanGuildChat;
-            PlayObject.m_boBanGuildChat = SwitchData.boBanGuildChat;
-            PlayObject.m_boAdminMode = SwitchData.boAdminMode;
-            PlayObject.m_boObMode = SwitchData.boObMode;
+            PlayObject.BanShout = SwitchData.boBanShout;
+            PlayObject.HearWhisper = SwitchData.boHearWhisper;
+            PlayObject.BanGuildChat = SwitchData.boBanGuildChat;
+            PlayObject.BanGuildChat = SwitchData.boBanGuildChat;
+            PlayObject.AdminMode = SwitchData.boAdminMode;
+            PlayObject.ObMode = SwitchData.boObMode;
             nCount = 0;
             while (true)
             {
@@ -102,33 +102,33 @@ namespace GameSvr.UsrSystem
         private void MakeSwitchData(PlayObject PlayObject, ref TSwitchDataInfo SwitchData)
         {
             SwitchData = new TSwitchDataInfo();
-            SwitchData.sChrName = PlayObject.m_sCharName;
-            SwitchData.sMap = PlayObject.m_sMapName;
-            SwitchData.wX = PlayObject.m_nCurrX;
-            SwitchData.wY = PlayObject.m_nCurrY;
+            SwitchData.sChrName = PlayObject.CharName;
+            SwitchData.sMap = PlayObject.MapName;
+            SwitchData.wX = PlayObject.CurrX;
+            SwitchData.wY = PlayObject.CurrY;
             SwitchData.Abil = PlayObject.m_Abil;
             SwitchData.nCode = PlayObject.m_nSessionID;
-            SwitchData.boBanShout = PlayObject.m_boBanShout;
-            SwitchData.boHearWhisper = PlayObject.m_boHearWhisper;
-            SwitchData.boBanGuildChat = PlayObject.m_boBanGuildChat;
-            SwitchData.boBanGuildChat = PlayObject.m_boBanGuildChat;
-            SwitchData.boAdminMode = PlayObject.m_boAdminMode;
-            SwitchData.boObMode = PlayObject.m_boObMode;
+            SwitchData.boBanShout = PlayObject.BanShout;
+            SwitchData.boHearWhisper = PlayObject.HearWhisper;
+            SwitchData.boBanGuildChat = PlayObject.BanGuildChat;
+            SwitchData.boBanGuildChat = PlayObject.BanGuildChat;
+            SwitchData.boAdminMode = PlayObject.AdminMode;
+            SwitchData.boObMode = PlayObject.ObMode;
             for (var i = 0; i < PlayObject.m_BlockWhisperList.Count; i++)
             {
                 SwitchData.BlockWhisperArr.Add(PlayObject.m_BlockWhisperList[i]);
             }
             TBaseObject BaseObject = null;
-            for (var i = 0; i < PlayObject.m_SlaveList.Count; i++)
+            for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
-                BaseObject = PlayObject.m_SlaveList[i];
+                BaseObject = PlayObject.SlaveList[i];
                 if (i <= 4)
                 {
-                    SwitchData.SlaveArr[i].SlaveName = BaseObject.m_sCharName;
-                    SwitchData.SlaveArr[i].KillCount = BaseObject.m_nKillMonCount;
-                    SwitchData.SlaveArr[i].SalveLevel = BaseObject.m_btSlaveMakeLevel;
-                    SwitchData.SlaveArr[i].SlaveExpLevel = BaseObject.m_btSlaveExpLevel;
-                    SwitchData.SlaveArr[i].RoyaltySec = (BaseObject.m_dwMasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
+                    SwitchData.SlaveArr[i].SlaveName = BaseObject.CharName;
+                    SwitchData.SlaveArr[i].KillCount = BaseObject.KillMonCount;
+                    SwitchData.SlaveArr[i].SalveLevel = BaseObject.SlaveMakeLevel;
+                    SwitchData.SlaveArr[i].SlaveExpLevel = BaseObject.SlaveExpLevel;
+                    SwitchData.SlaveArr[i].RoyaltySec = (BaseObject.MasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
                     SwitchData.SlaveArr[i].nHP = BaseObject.m_WAbil.HP;
                     SwitchData.SlaveArr[i].nMP = BaseObject.m_WAbil.MP;
                 }

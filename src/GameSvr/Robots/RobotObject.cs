@@ -170,7 +170,7 @@ namespace GameSvr.Robots
         public RobotObject() : base()
         {
             _autoRunList = new List<AutoRunInfo>();
-            this.m_boSuperMan = true;
+            this.SuperMan = true;
         }
 
         ~RobotObject()

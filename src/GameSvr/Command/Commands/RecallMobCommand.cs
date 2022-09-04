@@ -43,7 +43,7 @@ namespace GameSvr.Command.Commands
             }
             for (var i = 0; i < nCount; i++)
             {
-                if (PlayObject.m_SlaveList.Count >= 20)
+                if (PlayObject.SlaveList.Count >= 20)
                 {
                     break;
                 }
@@ -52,21 +52,21 @@ namespace GameSvr.Command.Commands
                 if (mon != null)
                 {
                     mon.m_Master = PlayObject;
-                    mon.m_dwMasterRoyaltyTick = nTick;
-                    mon.m_btSlaveMakeLevel = 3;
-                    mon.m_btSlaveExpLevel = (byte)nLevel;
+                    mon.MasterRoyaltyTick = nTick;
+                    mon.SlaveMakeLevel = 3;
+                    mon.SlaveExpLevel = (byte)nLevel;
                     if (nAutoChangeColor == 1)
                     {
-                        mon.m_boAutoChangeColor = true;
+                        mon.AutoChangeColor = true;
                     }
                     else if (nFixColor > 0)
                     {
-                        mon.m_boFixColor = true;
-                        mon.m_nFixColorIdx = nFixColor - 1;
+                        mon.FixColor = true;
+                        mon.FixColorIdx = nFixColor - 1;
                     }
                     mon.RecalcAbilitys();
                     mon.RefNameColor();
-                    PlayObject.m_SlaveList.Add(mon);
+                    PlayObject.SlaveList.Add(mon);
                 }
             }
         }

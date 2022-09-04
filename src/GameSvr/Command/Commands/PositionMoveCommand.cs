@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
                     PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (PlayObject.m_btPermission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
+                if (PlayObject.Permission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
                 {
                     Envir = M2Share.MapManager.FindMap(sMapName);
                     if (Envir != null)

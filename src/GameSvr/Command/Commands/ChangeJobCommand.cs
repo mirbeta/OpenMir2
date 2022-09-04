@@ -28,15 +28,15 @@ namespace GameSvr.Command.Commands
             {
                 if (string.Compare(sJobName, "Warr", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.m_btJob = PlayJob.Warrior;
+                    m_PlayObject.Job = PlayJob.Warrior;
                 }
                 if (string.Compare(sJobName, "Wizard", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.m_btJob = PlayJob.Wizard;
+                    m_PlayObject.Job = PlayJob.Wizard;
                 }
                 if (string.Compare(sJobName, "Taos", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.m_btJob = PlayJob.Taoist;
+                    m_PlayObject.Job = PlayJob.Taoist;
                 }
                 m_PlayObject.HasLevelUp(1);
                 m_PlayObject.SysMsg(GameCommandConst.g_sGameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);

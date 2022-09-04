@@ -6,25 +6,25 @@ namespace GameSvr.Monster.Monsters
 {
     public class BeeQueen : AnimalObject
     {
-        private readonly IList<TBaseObject> BBList;
+        private readonly IList<TBaseObject> BeeList;
 
         public BeeQueen() : base()
         {
-            m_nViewRange = 9;
+            ViewRange = 9;
             m_nRunTime = 250;
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             m_dwSearchTick = HUtil32.GetTickCount();
             m_boStickMode = true;
-            BBList = new List<TBaseObject>();
+            BeeList = new List<TBaseObject>();
         }
 
         private void MakeChildBee()
         {
-            if (BBList.Count >= 15)
+            if (BeeList.Count >= 15)
             {
                 return;
             }
-            SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
             SendDelayMsg(this, Grobal2.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 
@@ -32,11 +32,11 @@ namespace GameSvr.Monster.Monsters
         {
             if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                var BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.MapName, m_nCurrX, m_nCurrY, M2Share.g_Config.sBee);
+                var BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.MapName, CurrX, CurrY, M2Share.g_Config.sBee);
                 if (BB != null)
                 {
-                    BB.SetTargetCreat(m_TargetCret);
-                    BBList.Add(BB);
+                    BB.SetTargetCreat(TargetCret);
+                    BeeList.Add(BB);
                 }
             }
             return base.Operate(ProcessMsg);
@@ -44,26 +44,26 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
-                    m_dwWalkTick = HUtil32.GetTickCount();
-                    if ((HUtil32.GetTickCount() - m_dwHitTick) >= m_nNextHitTime)
+                    WalkTick = HUtil32.GetTickCount();
+                    if ((HUtil32.GetTickCount() - AttackTick) >= NextHitTime)
                     {
-                        m_dwHitTick = HUtil32.GetTickCount();
+                        AttackTick = HUtil32.GetTickCount();
                         SearchTarget();
-                        if (m_TargetCret != null)
+                        if (TargetCret != null)
                         {
                             MakeChildBee();
                         }
                     }
-                    for (var i = BBList.Count - 1; i >= 0; i--)
+                    for (var i = BeeList.Count - 1; i >= 0; i--)
                     {
-                        var BB = BBList[i];
-                        if (BB.m_boDeath || BB.m_boGhost)
+                        var BB = BeeList[i];
+                        if (BB.Death || BB.Ghost)
                         {
-                            BBList.RemoveAt(i);
+                            BeeList.RemoveAt(i);
                         }
                     }
                 }

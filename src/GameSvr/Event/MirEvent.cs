@@ -82,7 +82,7 @@ namespace GameSvr.Event
                 Closed = true;
                 Close();
             }
-            if (OwnBaseObject != null && (OwnBaseObject.m_boGhost || OwnBaseObject.m_boDeath))
+            if (OwnBaseObject != null && (OwnBaseObject.Ghost || OwnBaseObject.Death))
             {
                 OwnBaseObject = null;
             }

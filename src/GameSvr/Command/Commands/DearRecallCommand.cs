@@ -43,11 +43,11 @@ namespace GameSvr.Command.Commands
             PlayObject.m_dwDearRecallTick = HUtil32.GetTickCount();
             if (PlayObject.m_DearHuman.m_boCanDearRecall)
             {
-                PlayObject.RecallHuman(PlayObject.m_DearHuman.m_sCharName);
+                PlayObject.RecallHuman(PlayObject.m_DearHuman.CharName);
             }
             else
             {
-                PlayObject.SysMsg(PlayObject.m_DearHuman.m_sCharName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(PlayObject.m_DearHuman.CharName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

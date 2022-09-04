@@ -183,7 +183,7 @@ namespace GameSvr.Snaps
                 PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (hum.m_boHearWhisper)
+                    if (hum.HearWhisper)
                     {
                         hum.WhisperRe(Str, 1);
                     }
@@ -201,7 +201,7 @@ namespace GameSvr.Snaps
                 PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (hum.m_boHearWhisper)
+                    if (hum.HearWhisper)
                     {
                         hum.WhisperRe(Str, 0);
                     }
@@ -219,7 +219,7 @@ namespace GameSvr.Snaps
                 PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (hum.m_boHearWhisper)
+                    if (hum.HearWhisper)
                     {
                         hum.WhisperRe(Str, 2);
                     }

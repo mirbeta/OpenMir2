@@ -14,7 +14,7 @@ namespace GameSvr.Command.Commands
         public void MobLevel(PlayObject PlayObject)
         {
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
-            PlayObject.m_PEnvir.GetRangeBaseObject(PlayObject.m_nCurrX, PlayObject.m_nCurrY, 2, true, BaseObjectList);
+            PlayObject.m_PEnvir.GetRangeBaseObject(PlayObject.CurrX, PlayObject.CurrY, 2, true, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 PlayObject.SysMsg(BaseObjectList[i].GeTBaseObjectInfo(), MsgColor.Green, MsgType.Hint);

@@ -12,8 +12,8 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ChangeAdminMode(PlayObject PlayObject)
         {
-            PlayObject.m_boAdminMode = !PlayObject.m_boAdminMode;
-            PlayObject.SysMsg(PlayObject.m_boAdminMode ? M2Share.sGameMasterMode : M2Share.sReleaseGameMasterMode,
+            PlayObject.AdminMode = !PlayObject.AdminMode;
+            PlayObject.SysMsg(PlayObject.AdminMode ? M2Share.sGameMasterMode : M2Share.sReleaseGameMasterMode,
                 MsgColor.Green, MsgType.Hint);
         }
     }

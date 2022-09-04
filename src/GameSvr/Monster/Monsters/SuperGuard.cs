@@ -17,24 +17,24 @@ namespace GameSvr.Monster.Monsters
             short nOldY;
             byte btOldDir;
             short wHitMode;
-            if (this.m_TargetCret.m_PEnvir == this.m_PEnvir)
+            if (this.TargetCret.m_PEnvir == this.m_PEnvir)
             {
-                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
                 {
-                    this.m_dwHitTick = HUtil32.GetTickCount();
-                    this.m_dwTargetFocusTick = HUtil32.GetTickCount();
-                    nOldX = this.m_nCurrX;
-                    nOldY = this.m_nCurrY;
+                    this.AttackTick = HUtil32.GetTickCount();
+                    this.TargetFocusTick = HUtil32.GetTickCount();
+                    nOldX = this.CurrX;
+                    nOldY = this.CurrY;
                     btOldDir = this.Direction;
-                    this.m_TargetCret.GetBackPosition(ref this.m_nCurrX, ref this.m_nCurrY);
-                    this.Direction = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, this.m_TargetCret.m_nCurrX, this.m_TargetCret.m_nCurrY);
-                    this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
+                    this.TargetCret.GetBackPosition(ref this.CurrX, ref this.CurrY);
+                    this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
+                    this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
                     wHitMode = 0;
-                    this._Attack(ref wHitMode, this.m_TargetCret);
-                    this.m_TargetCret.SetLastHiter(this);
-                    this.m_TargetCret.m_ExpHitter = null;
-                    this.m_nCurrX = nOldX;
-                    this.m_nCurrY = nOldY;
+                    this._Attack(ref wHitMode, this.TargetCret);
+                    this.TargetCret.SetLastHiter(this);
+                    this.TargetCret.m_ExpHitter = null;
+                    this.CurrX = nOldX;
+                    this.CurrY = nOldY;
                     this.Direction = btOldDir;
                     this.TurnTo(this.Direction);
                     this.BreakHolySeizeMode();
@@ -50,7 +50,7 @@ namespace GameSvr.Monster.Monsters
 
         public SuperGuard() : base()
         {
-            this.m_nViewRange = 7;
+            this.ViewRange = 7;
             this.m_nLight = 4;
             m_boAttackPet = true;
         }
@@ -68,12 +68,12 @@ namespace GameSvr.Monster.Monsters
                 this.m_Master = null;
             }
             // 不允许召唤为宝宝
-            if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+            if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
             {
-                for (var i = 0; i < this.m_VisibleActors.Count; i++)
+                for (var i = 0; i < this.VisibleActors.Count; i++)
                 {
-                    BaseObject = this.m_VisibleActors[i].BaseObject;
-                    if (BaseObject.m_boDeath)
+                    BaseObject = this.VisibleActors[i].BaseObject;
+                    if (BaseObject.Death)
                     {
                         continue;
                     }
@@ -93,7 +93,7 @@ namespace GameSvr.Monster.Monsters
                             }
                             else
                             {
-                                if (BaseObject.m_TargetCret == this)
+                                if (BaseObject.TargetCret == this)
                                 {
                                     this.SetTargetCreat(BaseObject);
                                     break;
@@ -103,7 +103,7 @@ namespace GameSvr.Monster.Monsters
                     }
                 }
             }
-            if (this.m_TargetCret != null)
+            if (this.TargetCret != null)
             {
                 AttackTarget();
             }

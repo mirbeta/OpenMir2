@@ -416,10 +416,10 @@ namespace GameSvr.Maps
         {
             var questNPC = new Merchant
             {
-                m_sMapName = "0",
-                m_nCurrX = 0,
-                m_nCurrY = 0,
-                m_sCharName = sName,
+                MapName = "0",
+                CurrX = 0,
+                CurrY = 0,
+                CharName = sName,
                 m_nFlag = 0,
                 m_wAppr = 0,
                 m_sFilePath = "MapQuest_def",

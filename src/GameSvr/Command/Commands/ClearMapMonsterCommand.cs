@@ -69,7 +69,7 @@ namespace GameSvr.Command.Commands
                                                 continue;
                                             }
                                         }
-                                        if (boKillAll || string.Compare(sMonName, BaseObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                                        if (boKillAll || string.Compare(sMonName, BaseObject.CharName, StringComparison.OrdinalIgnoreCase) == 0)
                                         {
                                             BaseObject.m_boNoItem = boNotItem;
                                             BaseObject.m_WAbil.HP = 0;

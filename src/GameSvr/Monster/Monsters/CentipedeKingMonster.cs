@@ -10,10 +10,10 @@ namespace GameSvr.Monster.Monsters
 
         public CentipedeKingMonster() : base()
         {
-            m_nViewRange = 6;
+            ViewRange = 6;
             nComeOutValue = 4;
             nAttackRange = 6;
-            m_boAnimal = false;
+            Animal = false;
             m_dwAttickTick = HUtil32.GetTickCount();
         }
 
@@ -21,16 +21,16 @@ namespace GameSvr.Monster.Monsters
         {
             var result = false;
             TBaseObject BaseObject;
-            for (var i = 0; i < m_VisibleActors.Count; i++)
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                BaseObject = m_VisibleActors[i].BaseObject;
-                if (BaseObject.m_boDeath)
+                BaseObject = VisibleActors[i].BaseObject;
+                if (BaseObject.Death)
                 {
                     continue;
                 }
                 if (IsProperTarget(BaseObject))
                 {
-                    if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= m_nViewRange && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= m_nViewRange)
+                    if (Math.Abs(CurrX - BaseObject.CurrX) <= ViewRange && Math.Abs(CurrY - BaseObject.CurrY) <= ViewRange)
                     {
                         result = true;
                         break;
@@ -50,25 +50,25 @@ namespace GameSvr.Monster.Monsters
             {
                 return result;
             }
-            if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+            if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
             {
-                m_dwHitTick = HUtil32.GetTickCount();
-                SendAttackMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY);
+                AttackTick = HUtil32.GetTickCount();
+                SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
                 WAbil = m_WAbil;
                 nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
-                for (var i = 0; i < m_VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject = m_VisibleActors[i].BaseObject;
-                    if (BaseObject.m_boDeath)
+                    BaseObject = VisibleActors[i].BaseObject;
+                    if (BaseObject.Death)
                     {
                         continue;
                     }
                     if (IsProperTarget(BaseObject))
                     {
-                        if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) < m_nViewRange && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) < m_nViewRange)
+                        if (Math.Abs(CurrX - BaseObject.CurrX) < ViewRange && Math.Abs(CurrY - BaseObject.CurrY) < ViewRange)
                         {
-                            m_dwTargetFocusTick = HUtil32.GetTickCount();
-                            SendDelayMsg(this, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.m_nCurrX, BaseObject.m_nCurrY), 2, BaseObject.ObjectId, "", 600);
+                            TargetFocusTick = HUtil32.GetTickCount();
+                            SendDelayMsg(this, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 2, BaseObject.ObjectId, "", 600);
                             if (M2Share.RandomNumber.Random(4) == 0)
                             {
                                 if (M2Share.RandomNumber.Random(3) != 0)
@@ -79,7 +79,7 @@ namespace GameSvr.Monster.Monsters
                                 {
                                     BaseObject.MakePosion(Grobal2.POISON_STONE, 5, 0);
                                 }
-                                m_TargetCret = BaseObject;
+                                TargetCret = BaseObject;
                             }
                         }
                     }
@@ -98,27 +98,27 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             TBaseObject BaseObject;
-            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
                 {
-                    m_dwWalkTick = HUtil32.GetTickCount();
-                    if (m_boFixedHideMode)
+                    WalkTick = HUtil32.GetTickCount();
+                    if (FixedHideMode)
                     {
                         if ((HUtil32.GetTickCount() - m_dwAttickTick) > 10000)
                         {
-                            for (var i = 0; i < m_VisibleActors.Count; i++)
+                            for (var i = 0; i < VisibleActors.Count; i++)
                             {
-                                BaseObject = m_VisibleActors[i].BaseObject;
-                                if (BaseObject.m_boDeath)
+                                BaseObject = VisibleActors[i].BaseObject;
+                                if (BaseObject.Death)
                                 {
                                     continue;
                                 }
                                 if (IsProperTarget(BaseObject))
                                 {
-                                    if (!BaseObject.m_boHideMode || m_boCoolEye)
+                                    if (!BaseObject.HideMode || CoolEye)
                                     {
-                                        if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) < nComeOutValue && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) < nComeOutValue)
+                                        if (Math.Abs(CurrX - BaseObject.CurrX) < nComeOutValue && Math.Abs(CurrY - BaseObject.CurrY) < nComeOutValue)
                                         {
                                             ComeOut();
                                             m_dwAttickTick = HUtil32.GetTickCount();

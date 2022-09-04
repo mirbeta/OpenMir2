@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
             }
             if (nCount <= 0) nCount = 1;
             if (nCount > 10) nCount = 10;
-            if (PlayObject.m_btPermission < GameCommand.nPermissionMax)
+            if (PlayObject.Permission < GameCommand.nPermissionMax)
             {
                 if (!M2Share.CanMakeItem(sItemName))
                 {
@@ -47,12 +47,12 @@ namespace GameSvr.Command.Commands
             }
             for (var i = 0; i < nCount; i++)
             {
-                if (PlayObject.m_ItemList.Count >= Grobal2.MAXBAGITEM) return;
+                if (PlayObject.ItemList.Count >= Grobal2.MAXBAGITEM) return;
                 TUserItem UserItem = null;
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (StdItem.Price >= 15000 && !M2Share.g_Config.boTestServer && PlayObject.m_btPermission < 5)
+                    if (StdItem.Price >= 15000 && !M2Share.g_Config.boTestServer && PlayObject.Permission < 5)
                     {
                         UserItem = null;
                     }
@@ -63,25 +63,25 @@ namespace GameSvr.Command.Commands
                             StdItem.RandomUpgradeItem(UserItem);
                         }
                     }
-                    if (PlayObject.m_btPermission >= GameCommand.nPermissionMax)
+                    if (PlayObject.Permission >= GameCommand.nPermissionMax)
                     {
                         UserItem.MakeIndex = M2Share.GetItemNumberEx(); // 制造的物品另行取得物品ID
                     }
-                    PlayObject.m_ItemList.Add(UserItem);
+                    PlayObject.ItemList.Add(UserItem);
                     PlayObject.SendAddItem(UserItem);
-                    if (PlayObject.m_btPermission >= 6)
+                    if (PlayObject.Permission >= 6)
                     {
-                        M2Share.LogSystem.Warn("[制造物品] " + PlayObject.m_sCharName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
+                        M2Share.LogSystem.Warn("[制造物品] " + PlayObject.CharName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
                     }
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("5" + "\09" + PlayObject.m_sMapName + "\09" + PlayObject.m_nCurrX +
-                           "\09" + PlayObject.m_nCurrY + "\09" + PlayObject.m_sCharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
+                        M2Share.AddGameDataLog("5" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX +
+                           "\09" + PlayObject.CurrY + "\09" + PlayObject.CharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
                            HUtil32.LoWord(StdItem.Dc) + "/" + HUtil32.HiWord(StdItem.Dc) + ")" + "(" + HUtil32.LoWord(StdItem.Mc) + "/" + HUtil32.HiWord(StdItem.Mc) + ")" + "(" +
                            HUtil32.LoWord(StdItem.Sc) + "/" + HUtil32.HiWord(StdItem.Sc) + ")" + "(" + HUtil32.LoWord(StdItem.Ac) + "/" +
                            HUtil32.HiWord(StdItem.Ac) + ")" + "(" + HUtil32.LoWord(StdItem.Mac) + "/" + HUtil32.HiWord(StdItem.Mac) + ")" + UserItem.btValue[0]
                            + "/" + UserItem.btValue[1] + "/" + UserItem.btValue[2] + "/" + UserItem.btValue[3] + "/" + UserItem.btValue[4] + "/" + UserItem.btValue[5] + "/" + UserItem.btValue[6]
-                           + "/" + UserItem.btValue[7] + "/" + UserItem.btValue[8] + "/" + UserItem.btValue[14] + "\09" + PlayObject.m_sCharName);
+                           + "/" + UserItem.btValue[7] + "/" + UserItem.btValue[8] + "/" + UserItem.btValue[14] + "\09" + PlayObject.CharName);
                     }
                 }
                 else

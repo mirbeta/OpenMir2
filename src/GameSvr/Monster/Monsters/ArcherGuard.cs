@@ -8,15 +8,15 @@ namespace GameSvr.Monster.Monsters
     {
         public ArcherGuard() : base()
         {
-            m_nViewRange = 12;
-            m_boWantRefMsg = true;
+            ViewRange = 12;
+            WantRefMsg = true;
             m_Castle = null;
             Direction = 0;
         }
 
         private void sub_4A6B30(TBaseObject TargeTBaseObject)
         {
-            Direction = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
+            Direction = M2Share.GetNextDirection(CurrX, CurrY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
             TAbility WAbil = m_WAbil;
             var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (nPower > 0)
@@ -28,9 +28,9 @@ namespace GameSvr.Monster.Monsters
                 TargeTBaseObject.SetLastHiter(this);
                 TargeTBaseObject.m_ExpHitter = null;
                 TargeTBaseObject.StruckDamage(nPower);
-                TargeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nPower, TargeTBaseObject.m_WAbil.HP, TargeTBaseObject.m_WAbil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(m_nCurrX - TargeTBaseObject.m_nCurrX), Math.Abs(m_nCurrY - TargeTBaseObject.m_nCurrY)) * 50 + 600);
+                TargeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nPower, TargeTBaseObject.m_WAbil.HP, TargeTBaseObject.m_WAbil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - TargeTBaseObject.CurrX), Math.Abs(CurrY - TargeTBaseObject.CurrY)) * 50 + 600);
             }
-            SendRefMsg(Grobal2.RM_FLYAXE, Direction, m_nCurrX, m_nCurrY, TargeTBaseObject.ObjectId, "");
+            SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, TargeTBaseObject.ObjectId, "");
         }
 
         public override void Run()
@@ -38,21 +38,21 @@ namespace GameSvr.Monster.Monsters
             int nRage = 9999;
             TBaseObject BaseObject = null;
             TBaseObject TargetBaseObject = null;
-            if (!m_boDeath && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
-                    m_dwWalkTick = HUtil32.GetTickCount();
-                    for (var i = 0; i < m_VisibleActors.Count; i++)
+                    WalkTick = HUtil32.GetTickCount();
+                    for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = m_VisibleActors[i].BaseObject;
-                        if (BaseObject.m_boDeath)
+                        BaseObject = VisibleActors[i].BaseObject;
+                        if (BaseObject.Death)
                         {
                             continue;
                         }
                         if (IsProperTarget(BaseObject))
                         {
-                            var nAbs = Math.Abs(m_nCurrX - BaseObject.m_nCurrX) + Math.Abs(m_nCurrY - BaseObject.m_nCurrY);
+                            var nAbs = Math.Abs(CurrX - BaseObject.CurrX) + Math.Abs(CurrY - BaseObject.CurrY);
                             if (nAbs < nRage)
                             {
                                 nRage = nAbs;
@@ -69,12 +69,12 @@ namespace GameSvr.Monster.Monsters
                         DelTargetCreat();
                     }
                 }
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
-                    if ((HUtil32.GetTickCount() - m_dwHitTick) >= m_nNextHitTime)
+                    if ((HUtil32.GetTickCount() - AttackTick) >= NextHitTime)
                     {
-                        m_dwHitTick = HUtil32.GetTickCount();
-                        sub_4A6B30(m_TargetCret);
+                        AttackTick = HUtil32.GetTickCount();
+                        sub_4A6B30(TargetCret);
                     }
                 }
                 else

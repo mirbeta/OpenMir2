@@ -51,7 +51,7 @@ namespace GameSvr.Command.Commands
             UserMagic.btLevel = (byte)nLevel;
             UserMagic.btKey = 0;
             UserMagic.nTranPoint = 0;
-            m_PlayObject.m_MagicList.Add(UserMagic);
+            m_PlayObject.MagicList.Add(UserMagic);
             m_PlayObject.SendAddMagic(UserMagic);
             m_PlayObject.RecalcAbilitys();
             PlayObject.SysMsg($"{sHumanName} 的 {sSkillName} 技能修炼成功!!!", MsgColor.Green, MsgType.Hint);

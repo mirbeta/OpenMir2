@@ -10,7 +10,7 @@ namespace GameSvr.Monster.Monsters
 
         public WallStructure() : base()
         {
-            this.m_boAnimal = false;
+            this.Animal = false;
             this.m_boStickMode = true;
             boSetMapFlaged = false;
             this.m_btAntiPoison = 200;
@@ -38,7 +38,7 @@ namespace GameSvr.Monster.Monsters
                 n08 = 0;
             }
             this.Direction = n08;
-            this.SendRefMsg(Grobal2.RM_ALIVE, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.SendRefMsg(Grobal2.RM_ALIVE, this.Direction, this.CurrX, this.CurrY, 0, "");
         }
 
         public override void Die()
@@ -50,12 +50,12 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             int n08;
-            if (this.m_boDeath)
+            if (this.Death)
             {
-                this.m_dwDeathTick = HUtil32.GetTickCount();
+                this.DeathTick = HUtil32.GetTickCount();
                 if (boSetMapFlaged)
                 {
-                    this.m_PEnvir.SetMapXyFlag(this.m_nCurrX, this.m_nCurrY, true);
+                    this.m_PEnvir.SetMapXyFlag(this.CurrX, this.CurrY, true);
                     boSetMapFlaged = false;
                 }
             }
@@ -64,7 +64,7 @@ namespace GameSvr.Monster.Monsters
                 this.m_nHealthTick = 0;
                 if (!boSetMapFlaged)
                 {
-                    this.m_PEnvir.SetMapXyFlag(this.m_nCurrX, this.m_nCurrY, false);
+                    this.m_PEnvir.SetMapXyFlag(this.CurrX, this.CurrY, false);
                     boSetMapFlaged = true;
                 }
             }
@@ -79,7 +79,7 @@ namespace GameSvr.Monster.Monsters
             if (this.Direction != n08 && n08 < 5)
             {
                 this.Direction = (byte)n08;
-                this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
+                this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
             }
             base.Run();
         }

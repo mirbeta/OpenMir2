@@ -50,7 +50,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            UserItem = m_PlayObject.m_UseItems[nItem];
+            UserItem = m_PlayObject.UseItems[nItem];
             if (UserItem.wIndex == 0)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandBindUseItemNoItemMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
@@ -102,7 +102,7 @@ namespace GameSvr.Command.Commands
                     break;
 
                 case 1:
-                    sBindName = m_PlayObject.m_sCharName;
+                    sBindName = m_PlayObject.CharName;
                     boFind = false;
                     HUtil32.EnterCriticalSection(M2Share.g_ItemBindCharName);
                     try

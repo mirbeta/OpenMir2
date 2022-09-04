@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
 
         public SpiderHouseMonster() : base()
         {
-            m_nViewRange = 9;
+            ViewRange = 9;
             m_nRunTime = 250;
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             m_dwSearchTick = 0;
@@ -23,7 +23,7 @@ namespace GameSvr.Monster.Monsters
         {
             if (BBList.Count < 15)
             {
-                SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
+                SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 SendDelayMsg(this, Grobal2.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
             }
         }
@@ -35,14 +35,14 @@ namespace GameSvr.Monster.Monsters
             short n0C = 0;
             if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                n08 = m_nCurrX;
-                n0C = (short)(m_nCurrY + 1);
+                n08 = CurrX;
+                n0C = (short)(CurrY + 1);
                 if (m_PEnvir.CanWalk(n08, n0C, true))
                 {
                     BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.MapName, n08, n0C, M2Share.g_Config.sSpider);
                     if (BB != null)
                     {
-                        BB.SetTargetCreat(m_TargetCret);
+                        BB.SetTargetCreat(TargetCret);
                         BBList.Add(BB);
                     }
                 }
@@ -53,16 +53,16 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             TBaseObject BB;
-            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
-                    m_dwWalkTick = HUtil32.GetTickCount();
-                    if ((HUtil32.GetTickCount() - m_dwHitTick) >= m_nNextHitTime)
+                    WalkTick = HUtil32.GetTickCount();
+                    if ((HUtil32.GetTickCount() - AttackTick) >= NextHitTime)
                     {
-                        m_dwHitTick = HUtil32.GetTickCount();
+                        AttackTick = HUtil32.GetTickCount();
                         SearchTarget();
-                        if (m_TargetCret != null)
+                        if (TargetCret != null)
                         {
                             GenBB();
                         }
@@ -70,7 +70,7 @@ namespace GameSvr.Monster.Monsters
                     for (var i = BBList.Count - 1; i >= 0; i--)
                     {
                         BB = BBList[i];
-                        if (BB.m_boDeath || BB.m_boGhost)
+                        if (BB.Death || BB.Ghost)
                         {
                             BBList.RemoveAt(i);
                         }

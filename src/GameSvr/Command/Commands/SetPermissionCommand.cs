@@ -34,10 +34,10 @@ namespace GameSvr.Command.Commands
             }
             if (M2Share.g_Config.boShowMakeItemMsg)
             {
-                M2Share.LogSystem.Warn(string.Format(sOutFormatMsg, PlayObject.m_sCharName, m_PlayObject.m_sCharName, m_PlayObject.m_btPermission, nPerission));
+                M2Share.LogSystem.Warn(string.Format(sOutFormatMsg, PlayObject.CharName, m_PlayObject.CharName, m_PlayObject.Permission, nPerission));
             }
-            m_PlayObject.m_btPermission = (byte)nPerission;
-            PlayObject.SysMsg(sHumanName + " 当前权限为: " + m_PlayObject.m_btPermission, MsgColor.Red, MsgType.Hint);
+            m_PlayObject.Permission = (byte)nPerission;
+            PlayObject.SysMsg(sHumanName + " 当前权限为: " + m_PlayObject.Permission, MsgColor.Red, MsgType.Hint);
         }
     }
 }

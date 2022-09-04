@@ -28,12 +28,12 @@ namespace GameSvr.Command.Commands
             {
                 int nOLevel = m_PlayObject.m_Abil.Level;
                 m_PlayObject.HasLevelUp(1);
-                M2Share.AddGameDataLog("17" + "\09" + m_PlayObject.m_sMapName + "\09" + m_PlayObject.m_nCurrX + "\09" + m_PlayObject.m_nCurrY + "\09"
-                    + m_PlayObject.m_sCharName + "\09" + m_PlayObject.m_Abil.Level + "\09" + PlayObject.m_sCharName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
+                M2Share.AddGameDataLog("17" + "\09" + m_PlayObject.MapName + "\09" + m_PlayObject.CurrX + "\09" + m_PlayObject.CurrY + "\09"
+                    + m_PlayObject.CharName + "\09" + m_PlayObject.m_Abil.Level + "\09" + PlayObject.CharName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
                 PlayObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
                 {
-                    M2Share.LogSystem.Warn("[等级调整] " + PlayObject.m_sCharName + "(" + m_PlayObject.m_sCharName + " " + nOLevel + " -> " + m_PlayObject.m_Abil.Level + ")");
+                    M2Share.LogSystem.Warn("[等级调整] " + PlayObject.CharName + "(" + m_PlayObject.CharName + " " + nOLevel + " -> " + m_PlayObject.m_Abil.Level + ")");
                 }
             }
             else

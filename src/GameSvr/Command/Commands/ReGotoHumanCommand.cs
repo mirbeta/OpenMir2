@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SpaceMove(m_PlayObject.m_PEnvir.MapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, 0);
+            PlayObject.SpaceMove(m_PlayObject.m_PEnvir.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY, 0);
         }
     }
 }

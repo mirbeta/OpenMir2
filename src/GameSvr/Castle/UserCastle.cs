@@ -399,23 +399,23 @@ namespace GameSvr.Castle
                 }
                 for (var i = 0; i < m_Guard.Length; i++)
                 {
-                    if (m_Guard[i].BaseObject != null && m_Guard[i].BaseObject.m_boGhost)
+                    if (m_Guard[i].BaseObject != null && m_Guard[i].BaseObject.Ghost)
                     {
                         m_Guard[i].BaseObject = null;
                     }
                 }
                 for (var i = 0; i < Archer.Length; i++)
                 {
-                    if (Archer[i].BaseObject != null && Archer[i].BaseObject.m_boGhost)
+                    if (Archer[i].BaseObject != null && Archer[i].BaseObject.Ghost)
                     {
                         Archer[i].BaseObject = null;
                     }
                 }
                 if (m_boUnderWar)
                 {
-                    if (m_LeftWall.BaseObject != null) m_LeftWall.BaseObject.m_boStoneMode = false;
-                    if (m_CenterWall.BaseObject != null) m_CenterWall.BaseObject.m_boStoneMode = false;
-                    if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.m_boStoneMode = false;
+                    if (m_LeftWall.BaseObject != null) m_LeftWall.BaseObject.StoneMode = false;
+                    if (m_CenterWall.BaseObject != null) m_CenterWall.BaseObject.StoneMode = false;
+                    if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.StoneMode = false;
                     if (!m_boShowOverMsg)
                     {
                         if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
@@ -434,9 +434,9 @@ namespace GameSvr.Castle
                 }
                 else
                 {
-                    if (m_LeftWall.BaseObject != null) m_LeftWall.BaseObject.m_boStoneMode = true;
-                    if (m_CenterWall.BaseObject != null) m_CenterWall.BaseObject.m_boStoneMode = true;
-                    if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.m_boStoneMode = true;
+                    if (m_LeftWall.BaseObject != null) m_LeftWall.BaseObject.StoneMode = true;
+                    if (m_CenterWall.BaseObject != null) m_CenterWall.BaseObject.StoneMode = true;
+                    if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.StoneMode = true;
                 }
             }
             catch
@@ -468,7 +468,7 @@ namespace GameSvr.Castle
 
         public bool IsMember(TBaseObject cert)
         {
-            return IsMasterGuild(cert.m_MyGuild);
+            return IsMasterGuild(cert.MyGuild);
         }
 
         // 检查是否为攻城方行会的联盟行会
@@ -517,7 +517,7 @@ namespace GameSvr.Castle
             for (var i = 0; i < playPbjectList.Count; i++)
             {
                 var playObject = (PlayObject)playPbjectList[i];
-                if (!playObject.m_boDeath && playObject.m_MyGuild != guild)
+                if (!playObject.Death && playObject.MyGuild != guild)
                 {
                     result = false;
                     break;
@@ -570,9 +570,9 @@ namespace GameSvr.Castle
             {
                 var PlayObject = ListC[i];
                 PlayObject.ChangePKStatus(false);
-                if (PlayObject.m_MyGuild != m_MasterGuild)
+                if (PlayObject.MyGuild != m_MasterGuild)
                 {
-                    PlayObject.MapRandomMove(PlayObject.m_sHomeMap, 0);
+                    PlayObject.MapRandomMove(PlayObject.HomeMap, 0);
                 }
             }
             var s14 = string.Format(sWallWarStop, m_sName);
@@ -622,17 +622,17 @@ namespace GameSvr.Castle
         public bool CheckInPalace(int nX, int nY, TBaseObject cert)
         {
             TObjUnit ObjUnit;
-            var result = IsMasterGuild(cert.m_MyGuild);
+            var result = IsMasterGuild(cert.MyGuild);
             if (result) return result;
             ObjUnit = m_LeftWall;
-            if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.m_boDeath && ObjUnit.BaseObject.m_nCurrX == nX &&
-                ObjUnit.BaseObject.m_nCurrY == nY) result = true;
+            if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.Death && ObjUnit.BaseObject.CurrX == nX &&
+                ObjUnit.BaseObject.CurrY == nY) result = true;
             ObjUnit = m_CenterWall;
-            if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.m_boDeath && ObjUnit.BaseObject.m_nCurrX == nX &&
-                ObjUnit.BaseObject.m_nCurrY == nY) result = true;
+            if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.Death && ObjUnit.BaseObject.CurrX == nX &&
+                ObjUnit.BaseObject.CurrY == nY) result = true;
             ObjUnit = m_RightWall;
-            if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.m_boDeath && ObjUnit.BaseObject.m_nCurrX == nX &&
-                ObjUnit.BaseObject.m_nCurrY == nY) result = true;
+            if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.Death && ObjUnit.BaseObject.CurrX == nX &&
+                ObjUnit.BaseObject.CurrY == nY) result = true;
             return result;
         }
 
@@ -736,17 +736,17 @@ namespace GameSvr.Castle
                 result = -4;
                 return result;
             }
-            if (m_MasterGuild == PlayObject.m_MyGuild && PlayObject.m_nGuildRankNo == 1)
+            if (m_MasterGuild == PlayObject.MyGuild && PlayObject.GuildRankNo == 1)
             {
                 if (nGold <= m_nTotalGold)
                 {
-                    if (PlayObject.m_nGold + nGold <= PlayObject.m_nGoldMax)
+                    if (PlayObject.Gold + nGold <= PlayObject.GoldMax)
                     {
                         m_nTotalGold -= nGold;
                         PlayObject.IncGold(nGold);
                         if (M2Share.g_boGameLogGold)
-                            M2Share.AddGameDataLog("22" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX +
-                                                   "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" +
+                            M2Share.AddGameDataLog("22" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX +
+                                                   "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" +
                                                    Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         PlayObject.GoldChanged();
                         result = 1;
@@ -772,17 +772,17 @@ namespace GameSvr.Castle
                 result = -4;
                 return result;
             }
-            if (m_MasterGuild == PlayObject.m_MyGuild && PlayObject.m_nGuildRankNo == 1 && nGold > 0)
+            if (m_MasterGuild == PlayObject.MyGuild && PlayObject.GuildRankNo == 1 && nGold > 0)
             {
-                if (nGold <= PlayObject.m_nGold)
+                if (nGold <= PlayObject.Gold)
                 {
                     if (m_nTotalGold + nGold <= M2Share.g_Config.nCastleGoldMax)
                     {
-                        PlayObject.m_nGold -= nGold;
+                        PlayObject.Gold -= nGold;
                         m_nTotalGold += nGold;
                         if (M2Share.g_boGameLogGold)
-                            M2Share.AddGameDataLog("23" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX +
-                                                   "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" +
+                            M2Share.AddGameDataLog("23" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX +
+                                                   "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" +
                                                    Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         PlayObject.GoldChanged();
                         result = 1;
@@ -806,7 +806,7 @@ namespace GameSvr.Castle
         /// <param name="boClose"></param>
         public void MainDoorControl(bool boClose)
         {
-            if (m_MainDoor.BaseObject != null && !m_MainDoor.BaseObject.m_boGhost)
+            if (m_MainDoor.BaseObject != null && !m_MainDoor.BaseObject.Ghost)
             {
                 if (boClose)
                 {
@@ -837,9 +837,9 @@ namespace GameSvr.Castle
             {
                 return result;
             }
-            if (!CastleDoor.BaseObject.m_boDeath)
+            if (!CastleDoor.BaseObject.Death)
             {
-                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick) > 60 * 1000)
+                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.StruckTick) > 60 * 1000)
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
                     ((CastleDoor)CastleDoor.BaseObject).RefStatus();
@@ -848,10 +848,10 @@ namespace GameSvr.Castle
             }
             else
             {
-                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick) > 60 * 1000)
+                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.StruckTick) > 60 * 1000)
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
-                    CastleDoor.BaseObject.m_boDeath = false;
+                    CastleDoor.BaseObject.Death = false;
                     ((CastleDoor)CastleDoor.BaseObject).m_boOpened = false;
                     ((CastleDoor)CastleDoor.BaseObject).RefStatus();
                     result = true;
@@ -885,9 +885,9 @@ namespace GameSvr.Castle
             {
                 return result;
             }
-            if (!Wall.m_boDeath)
+            if (!Wall.Death)
             {
-                if ((HUtil32.GetTickCount() - Wall.m_dwStruckTick) > 60 * 1000)
+                if ((HUtil32.GetTickCount() - Wall.StruckTick) > 60 * 1000)
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
                     ((WallStructure)Wall).RefStatus();
@@ -896,10 +896,10 @@ namespace GameSvr.Castle
             }
             else
             {
-                if ((HUtil32.GetTickCount() - Wall.m_dwStruckTick) > 60 * 1000)
+                if ((HUtil32.GetTickCount() - Wall.StruckTick) > 60 * 1000)
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
-                    Wall.m_boDeath = false;
+                    Wall.Death = false;
                     ((WallStructure)Wall).RefStatus();
                     result = true;
                 }

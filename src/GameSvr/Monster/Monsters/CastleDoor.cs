@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
 
         public CastleDoor() : base()
         {
-            m_boAnimal = false;
+            Animal = false;
             m_boStickMode = true;
             m_boOpened = false;
             m_btAntiPoison = 200;
@@ -24,9 +24,9 @@ namespace GameSvr.Monster.Monsters
         private void SetMapXYFlag(int nFlag)
         {
             bool bo06;
-            m_PEnvir.SetMapXyFlag(m_nCurrX, m_nCurrY - 2, true);
-            m_PEnvir.SetMapXyFlag(m_nCurrX + 1, m_nCurrY - 1, true);
-            m_PEnvir.SetMapXyFlag(m_nCurrX + 1, m_nCurrY - 2, true);
+            m_PEnvir.SetMapXyFlag(CurrX, CurrY - 2, true);
+            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 1, true);
+            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 2, true);
             if (nFlag == 1)
             {
                 bo06 = false;
@@ -35,40 +35,40 @@ namespace GameSvr.Monster.Monsters
             {
                 bo06 = true;
             }
-            m_PEnvir.SetMapXyFlag(m_nCurrX, m_nCurrY, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX, m_nCurrY - 1, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX, m_nCurrY - 2, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX + 1, m_nCurrY - 1, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX + 1, m_nCurrY - 2, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX - 1, m_nCurrY, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX - 2, m_nCurrY, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX - 1, m_nCurrY - 1, bo06);
-            m_PEnvir.SetMapXyFlag(m_nCurrX - 1, m_nCurrY + 1, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX, CurrY, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX, CurrY - 1, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX, CurrY - 2, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 1, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 2, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX - 1, CurrY, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX - 2, CurrY, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX - 1, CurrY - 1, bo06);
+            m_PEnvir.SetMapXyFlag(CurrX - 1, CurrY + 1, bo06);
             if (nFlag == 0)
             {
-                m_PEnvir.SetMapXyFlag(m_nCurrX, m_nCurrY - 2, false);
-                m_PEnvir.SetMapXyFlag(m_nCurrX + 1, m_nCurrY - 1, false);
-                m_PEnvir.SetMapXyFlag(m_nCurrX + 1, m_nCurrY - 2, false);
+                m_PEnvir.SetMapXyFlag(CurrX, CurrY - 2, false);
+                m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 1, false);
+                m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 2, false);
             }
         }
 
         public void Open()
         {
-            if (m_boDeath)
+            if (Death)
             {
                 return;
             }
             Direction = 7;
-            SendRefMsg(Grobal2.RM_DIGUP, Direction, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             m_boOpened = true;
-            m_boStoneMode = true;
+            StoneMode = true;
             SetMapXYFlag(0);
             bo2B9 = false;
         }
 
         public void Close()
         {
-            if (m_boDeath)
+            if (Death)
             {
                 return;
             }
@@ -77,9 +77,9 @@ namespace GameSvr.Monster.Monsters
             {
                 Direction = 0;
             }
-            SendRefMsg(Grobal2.RM_DIGDOWN, Direction, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
             m_boOpened = false;
-            m_boStoneMode = false;
+            StoneMode = false;
             SetMapXYFlag(1);
             bo2B9 = true;
         }
@@ -92,9 +92,9 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (m_boDeath && m_Castle != null)
+            if (Death && m_Castle != null)
             {
-                m_dwDeathTick = HUtil32.GetTickCount();
+                DeathTick = HUtil32.GetTickCount();
             }
             else
             {
@@ -106,7 +106,7 @@ namespace GameSvr.Monster.Monsters
                 if (Direction != n08 && n08 < 3)
                 {
                     Direction = (byte)n08;
-                    SendRefMsg(Grobal2.RM_TURN, Direction, m_nCurrX, m_nCurrY, 0, "");
+                    SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, 0, "");
                 }
             }
             base.Run();
@@ -120,7 +120,7 @@ namespace GameSvr.Monster.Monsters
                 n08 = 0;
             }
             Direction = (byte)n08;
-            SendRefMsg(Grobal2.RM_ALIVE, Direction, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
         }
 
         public override void Initialize()

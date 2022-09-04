@@ -18,7 +18,7 @@ namespace GameSvr.Npc
             string sLine;
             string sName = string.Empty;
             string sIPaddr;
-            var sCharName = PlayObject.m_sCharName;
+            var sCharName = PlayObject.CharName;
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             var LoadList = new StringList();
@@ -57,7 +57,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKBAGSIZE);
                 return result;
             }
-            if (PlayObject.m_ItemList.Count + nSize <= Grobal2.MAXBAGITEM)
+            if (PlayObject.ItemList.Count + nSize <= Grobal2.MAXBAGITEM)
             {
                 result = true;
             }
@@ -526,11 +526,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKFLOURISHPOINT);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            var Guild = PlayObject.m_MyGuild;
+            var Guild = PlayObject.MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -571,11 +571,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKFLOURISHPOINT);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            var Guild = PlayObject.m_MyGuild;
+            var Guild = PlayObject.MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -616,11 +616,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKAURAEPOINT);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            var Guild = PlayObject.m_MyGuild;
+            var Guild = PlayObject.MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -661,11 +661,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKBUILDPOINT);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            var Guild = PlayObject.m_MyGuild;
+            var Guild = PlayObject.MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -706,11 +706,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKSTABILITYPOINT);
                 return result;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return result;
             }
-            var Guild = PlayObject.m_MyGuild;
+            var Guild = PlayObject.MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -839,25 +839,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_GroupOwner.m_GroupMembers.Count == nCount)
+                    if (PlayObject.m_GroupOwner.GroupMembers.Count == nCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_GroupOwner.m_GroupMembers.Count > nCount)
+                    if (PlayObject.m_GroupOwner.GroupMembers.Count > nCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_GroupOwner.m_GroupMembers.Count < nCount)
+                    if (PlayObject.m_GroupOwner.GroupMembers.Count < nCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_GroupOwner.m_GroupMembers.Count >= nCount)
+                    if (PlayObject.m_GroupOwner.GroupMembers.Count >= nCount)
                     {
                         result = true;
                     }
@@ -901,7 +901,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckHaveGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            return PlayObject.m_MyGuild != null;
+            return PlayObject.MyGuild != null;
         }
 
         private bool ConditionOfCheckInMapRange(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -915,11 +915,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKINMAPRANGE);
                 return false;
             }
-            if (string.Compare(PlayObject.m_sMapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.Compare(PlayObject.MapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 return false;
             }
-            if ((Math.Abs(PlayObject.m_nCurrX - nX) <= nRange) && (Math.Abs(PlayObject.m_nCurrY - nY) <= nRange))
+            if ((Math.Abs(PlayObject.CurrX - nX) <= nRange) && (Math.Abs(PlayObject.CurrY - nY) <= nRange))
             {
                 return true;
             }
@@ -933,11 +933,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISATTACKGUILD);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            return this.m_Castle.IsAttackGuild(PlayObject.m_MyGuild);
+            return this.m_Castle.IsAttackGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckCastleChageDay(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1048,7 +1048,7 @@ namespace GameSvr.Npc
             switch (nDoorStatus)
             {
                 case 0:
-                    if (CastleDoor.m_boDeath)
+                    if (CastleDoor.Death)
                     {
                         result = true;
                     }
@@ -1076,11 +1076,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISATTACKALLYGUILD);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            return this.m_Castle.IsAttackAllyGuild(PlayObject.m_MyGuild);
+            return this.m_Castle.IsAttackAllyGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseAllyGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1090,11 +1090,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISDEFENSEALLYGUILD);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            return this.m_Castle.IsDefenseAllyGuild(PlayObject.m_MyGuild);
+            return this.m_Castle.IsDefenseAllyGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1104,11 +1104,11 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISDEFENSEGUILD);
                 return false;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
                 return false;
             }
-            return this.m_Castle.IsDefenseGuild(PlayObject.m_MyGuild);
+            return this.m_Castle.IsDefenseGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsCastleaGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1142,12 +1142,12 @@ namespace GameSvr.Npc
             var nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
             var cMethod = QuestConditionInfo.sParam2[0];
             var nAddValue = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
-            if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.Length) || (nAddValue < 0))
+            if (!(nWhere >= 0 && nWhere <= PlayObject.UseItems.Length) || (nAddValue < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKITEMADDVALUE);
                 return result;
             }
-            var UserItem = PlayObject.m_UseItems[nWhere];
+            var UserItem = PlayObject.UseItems[nWhere];
             if (UserItem.wIndex == 0)
             {
                 return result;
@@ -1193,12 +1193,12 @@ namespace GameSvr.Npc
             var result = false;
             var nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
             var nType = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.Length))
+            if (!(nWhere >= 0 && nWhere <= PlayObject.UseItems.Length))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKITEMTYPE);
                 return result;
             }
-            var UserItem = PlayObject.m_UseItems[nWhere];
+            var UserItem = PlayObject.UseItems[nWhere];
             if (UserItem == null && UserItem.wIndex == 0)
             {
                 return result;
@@ -1256,7 +1256,7 @@ namespace GameSvr.Npc
             string sLine;
             var result = false;
             var nNamePostion = -1;
-            var sCharName = PlayObject.m_sCharName;
+            var sCharName = PlayObject.CharName;
             if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
                 var LoadList = new StringList();
@@ -1429,7 +1429,7 @@ namespace GameSvr.Npc
             string sName = string.Empty;
             string sIPaddr;
             var result = false;
-            var sCharName = PlayObject.m_sCharName;
+            var sCharName = PlayObject.CharName;
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             LoadList = new StringList();
@@ -1622,25 +1622,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_SlaveList.Count == nCount)
+                    if (PlayObject.SlaveList.Count == nCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_SlaveList.Count > nCount)
+                    if (PlayObject.SlaveList.Count > nCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_SlaveList.Count < nCount)
+                    if (PlayObject.SlaveList.Count < nCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_SlaveList.Count >= nCount)
+                    if (PlayObject.SlaveList.Count >= nCount)
                     {
                         result = true;
                     }
@@ -1651,7 +1651,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMap(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            return QuestConditionInfo.sParam1 == PlayObject.m_sMapName;
+            return QuestConditionInfo.sParam1 == PlayObject.MapName;
         }
 
         private bool ConditionOfCheckPos(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1659,7 +1659,7 @@ namespace GameSvr.Npc
             bool result;
             int nX = QuestConditionInfo.nParam2;
             int nY = QuestConditionInfo.nParam3;
-            if ((QuestConditionInfo.sParam1 == PlayObject.m_sMapName) && (nX == PlayObject.m_nCurrX) && (nY == PlayObject.m_nCurrY))
+            if ((QuestConditionInfo.sParam1 == PlayObject.MapName) && (nX == PlayObject.CurrX) && (nY == PlayObject.CurrY))
             {
                 result = true;
             }
@@ -1681,7 +1681,7 @@ namespace GameSvr.Npc
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "PetData", PlayObject.m_sCharName + ".txt");
+            string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "PetData", PlayObject.CharName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -1713,9 +1713,9 @@ namespace GameSvr.Npc
         {
             bool result = false;
             TUserMagic UserMagic;
-            for (var i = 0; i < PlayObject.m_MagicList.Count; i++)
+            for (var i = 0; i < PlayObject.MagicList.Count; i++)
             {
-                UserMagic = PlayObject.m_MagicList[i];
+                UserMagic = PlayObject.MagicList[i];
                 if (string.Compare(UserMagic.MagicInfo.sMagicName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (UserMagic.btLevel == QuestConditionInfo.nParam2)
@@ -1753,10 +1753,10 @@ namespace GameSvr.Npc
             }
             if (PlayObject.m_GroupOwner != null)
             {
-                for (var i = 0; i < PlayObject.m_GroupMembers.Count; i++)
+                for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {
-                    PlayObjectEx = PlayObject.m_GroupMembers[i];
-                    if (PlayObjectEx.m_btJob == nJob)
+                    PlayObjectEx = PlayObject.GroupMembers[i];
+                    if (PlayObjectEx.Job == nJob)
                     {
                         nCount++;
                     }
@@ -1901,9 +1901,9 @@ namespace GameSvr.Npc
                 return result;
             }
             var nSlaveLevel = -1;
-            for (var i = 0; i < PlayObject.m_SlaveList.Count; i++)
+            for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
-                BaseObject = PlayObject.m_SlaveList[i];
+                BaseObject = PlayObject.SlaveList[i];
                 if (BaseObject.m_Abil.Level > nSlaveLevel)
                 {
                     nSlaveLevel = BaseObject.m_Abil.Level;
@@ -1948,12 +1948,12 @@ namespace GameSvr.Npc
         {
             bool result = false;
             int nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
-            if ((nWhere < 0) || (nWhere > PlayObject.m_UseItems.Length))
+            if ((nWhere < 0) || (nWhere > PlayObject.UseItems.Length))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKUSEITEM);
                 return result;
             }
-            if (PlayObject.m_UseItems[nWhere].wIndex > 0)
+            if (PlayObject.UseItems[nWhere].wIndex > 0)
             {
                 result = true;
             }
@@ -2175,9 +2175,9 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKOFGUILD);
                 return result;
             }
-            if (PlayObject.m_MyGuild != null)
+            if (PlayObject.MyGuild != null)
             {
-                if (string.Compare(PlayObject.m_MyGuild.sGuildName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObject.MyGuild.sGuildName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                 }
@@ -2302,10 +2302,10 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKSLAVENAME);
                 return result;
             }
-            for (var i = 0; i < PlayObject.m_SlaveList.Count; i++)
+            for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
-                BaseObject = PlayObject.m_SlaveList[i];
-                if (string.Compare(sSlaveName, BaseObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                BaseObject = PlayObject.SlaveList[i];
+                if (string.Compare(sSlaveName, BaseObject.CharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                     break;
@@ -2353,7 +2353,7 @@ namespace GameSvr.Npc
                     sLineText = LoadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                    if ((string.Compare(sHumName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
+                    if ((string.Compare(sHumName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
                     {
                         nDay = int.MaxValue;
                         //if (TryStrToDateTime(sDate, dOldDate))
@@ -2549,7 +2549,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckIsOnMap(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            if (PlayObject.m_sMapFileName == QuestConditionInfo.sParam1 || PlayObject.m_sMapName == QuestConditionInfo.sParam1)
+            if (PlayObject.MapFileName == QuestConditionInfo.sParam1 || PlayObject.MapName == QuestConditionInfo.sParam1)
             {
                 return true;
             }

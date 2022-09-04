@@ -35,19 +35,19 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var nItemCount = 0;
-            for (var i = m_PlayObject.m_ItemList.Count - 1; i >= 0; i--)
+            for (var i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
             {
-                if (m_PlayObject.m_ItemList.Count <= 0)
+                if (m_PlayObject.ItemList.Count <= 0)
                 {
                     break;
                 }
 
-                UserItem = m_PlayObject.m_ItemList[i];
+                UserItem = m_PlayObject.ItemList[i];
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.SendDelItems(UserItem);
-                    m_PlayObject.m_ItemList.RemoveAt(i);
+                    m_PlayObject.ItemList.RemoveAt(i);
                     UserItem = null;
                     nItemCount++;
                     if (nItemCount >= nCount)

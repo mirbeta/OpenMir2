@@ -34,9 +34,9 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i < m_PlayObject.m_MagicList.Count; i++)
+            for (var i = 0; i < m_PlayObject.MagicList.Count; i++)
             {
-                UserMagic = m_PlayObject.m_MagicList[i];
+                UserMagic = m_PlayObject.MagicList[i];
                 //if (string.Compare(UserMagic.MagicInfo.GetMagicName(), sSkillName, true) == 0)
                 //{
                 //    UserMagic.btLevel = (byte)nLevel;

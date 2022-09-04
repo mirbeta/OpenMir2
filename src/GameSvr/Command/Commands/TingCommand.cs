@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                m_PlayObject.MapRandomMove(m_PlayObject.m_sHomeMap, 0);
+                m_PlayObject.MapRandomMove(m_PlayObject.HomeMap, 0);
             }
             else
             {

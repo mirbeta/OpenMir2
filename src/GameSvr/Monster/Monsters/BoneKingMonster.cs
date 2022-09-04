@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
         public BoneKingMonster() : base()
         {
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
-            m_nViewRange = 8;
+            ViewRange = 8;
             Direction = 5;
             m_nDangerLevel = 5;
             m_SlaveObjectList = new List<TBaseObject>();
@@ -31,7 +31,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     break;
                 }
-                BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
+                BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
                 if (BaseObject != null)
                 {
                     m_SlaveObjectList.Add(BaseObject);
@@ -49,11 +49,11 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             TBaseObject BaseObject;
-            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
+            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - WalkTick >= WalkSpeed)
             {
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                     if (m_nDangerLevel > m_WAbil.HP / m_WAbil.MaxHP * 5 && m_nDangerLevel > 0)
                     {
@@ -68,7 +68,7 @@ namespace GameSvr.Monster.Monsters
                 for (var i = m_SlaveObjectList.Count - 1; i >= 0; i--)
                 {
                     BaseObject = m_SlaveObjectList[i];
-                    if (BaseObject.m_boDeath || BaseObject.m_boGhost)
+                    if (BaseObject.Death || BaseObject.Ghost)
                     {
                         m_SlaveObjectList.RemoveAt(i);
                     }

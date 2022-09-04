@@ -21,7 +21,7 @@ namespace GameSvr.Player
                 {
                     return result;
                 }
-                if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)// 防麻
+                if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)// 防麻
                 {
                     return result;
                 }
@@ -71,15 +71,15 @@ namespace GameSvr.Player
 
                     }
                 }
-                if (nX == m_nCurrX && nY == m_nCurrY)
+                if (nX == CurrX && nY == CurrY)
                 {
                     result = true;
                     m_dwAttackTick = HUtil32.GetTickCount();
-                    if (wIdent == Grobal2.CM_HEAVYHIT && m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
+                    if (wIdent == Grobal2.CM_HEAVYHIT && UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !m_PEnvir.CanWalk(n14, n18, false))
                         {
-                            StdItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
+                            StdItem StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -129,18 +129,18 @@ namespace GameSvr.Player
                             AttackDir(null, 11, nDir);
                             break;
                     }
-                    if (m_MagicArr[SpellsDef.SKILL_YEDO] != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)
+                    if (MagicArr[SpellsDef.SKILL_YEDO] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)
                     {
-                        m_btAttackSkillCount -= 1;
-                        if (m_btAttackSkillPointCount == m_btAttackSkillCount)
+                        AttackSkillCount -= 1;
+                        if (AttackSkillPointCount == AttackSkillCount)
                         {
-                            m_boPowerHit = true;
+                            PowerHit = true;
                             SendSocket("+PWR");
                         }
-                        if (m_btAttackSkillCount <= 0)
+                        if (AttackSkillCount <= 0)
                         {
-                            m_btAttackSkillCount = (byte)(7 - m_MagicArr[SpellsDef.SKILL_YEDO].btLevel);
-                            m_btAttackSkillPointCount = M2Share.RandomNumber.RandomByte(m_btAttackSkillCount);
+                            AttackSkillCount = (byte)(7 - MagicArr[SpellsDef.SKILL_YEDO].btLevel);
+                            AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         }
                     }
                     m_nHealthTick -= 30;
@@ -168,7 +168,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)// 防麻
+            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)// 防麻
             {
                 return result;
             }
@@ -221,14 +221,14 @@ namespace GameSvr.Player
 #if Debug
             Debug.WriteLine(format("当前X:{0} 当前Y:{1} 目标X:{2} 目标Y:{3}", new object[] {this.m_nCurrX, this.m_nCurrY, nX, nY}), TMsgColor.c_Green, TMsgType.t_Hint);
 #endif
-            n14 = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nX, nY);
+            n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (HorseRunTo(n14, false))
             {
-                if (m_boTransparent && m_boHideMode)
+                if (Transparent && HideMode)
                 {
                     m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
-                if (m_bo316 || m_nCurrX == nX && m_nCurrY == nY)
+                if (m_bo316 || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }
@@ -254,7 +254,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell)// 防麻
+            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell)// 防麻
             {
                 return result;
             }
@@ -316,9 +316,9 @@ namespace GameSvr.Player
             switch (UserMagic.wMagIdx)
             {
                 case SpellsDef.SKILL_ERGUM:
-                    if (m_MagicArr[SpellsDef.SKILL_ERGUM] != null)
+                    if (MagicArr[SpellsDef.SKILL_ERGUM] != null)
                     {
-                        if (!m_boUseThrusting)
+                        if (!UseThrusting)
                         {
                             ThrustingOnOff(true);
                             SendSocket("+LNG");
@@ -332,9 +332,9 @@ namespace GameSvr.Player
                     result = true;
                     break;
                 case SpellsDef.SKILL_BANWOL:
-                    if (m_MagicArr[SpellsDef.SKILL_BANWOL] != null)
+                    if (MagicArr[SpellsDef.SKILL_BANWOL] != null)
                     {
-                        if (!m_boUseHalfMoon)
+                        if (!UseHalfMoon)
                         {
                             HalfMoonOnOff(true);
                             SendSocket("+WID");
@@ -348,9 +348,9 @@ namespace GameSvr.Player
                     result = true;
                     break;
                 case SpellsDef.SKILL_REDBANWOL:
-                    if (m_MagicArr[SpellsDef.SKILL_REDBANWOL] != null)
+                    if (MagicArr[SpellsDef.SKILL_REDBANWOL] != null)
                     {
-                        if (!m_boRedUseHalfMoon)
+                        if (!RedUseHalfMoon)
                         {
                             RedHalfMoonOnOff(true);
                             SendSocket("+WID");
@@ -364,7 +364,7 @@ namespace GameSvr.Player
                     result = true;
                     break;
                 case SpellsDef.SKILL_FIRESWORD:
-                    if (m_MagicArr[SpellsDef.SKILL_FIRESWORD] != null)
+                    if (MagicArr[SpellsDef.SKILL_FIRESWORD] != null)
                     {
                         if (AllowFireHitSkill())
                         {
@@ -414,9 +414,9 @@ namespace GameSvr.Player
                     }
                     break;
                 case SpellsDef.SKILL_CROSSMOON:
-                    if (m_MagicArr[SpellsDef.SKILL_CROSSMOON] != null)
+                    if (MagicArr[SpellsDef.SKILL_CROSSMOON] != null)
                     {
-                        if (!m_boCrsHitkill)
+                        if (!CrsHitkill)
                         {
                             SkillCrsOnOff(true);
                             SendSocket("+CRS");
@@ -430,7 +430,7 @@ namespace GameSvr.Player
                     result = true;
                     break;
                 case SpellsDef.SKILL_TWINBLADE:// 狂风斩
-                    if (m_MagicArr[SpellsDef.SKILL_TWINBLADE] != null)
+                    if (MagicArr[SpellsDef.SKILL_TWINBLADE] != null)
                     {
                         if (AllowTwinHitSkill())
                         {
@@ -449,7 +449,7 @@ namespace GameSvr.Player
                     result = true;
                     break;
                 case SpellsDef.SKILL_43:// 破空剑
-                    if (m_MagicArr[SpellsDef.SKILL_43] != null)
+                    if (MagicArr[SpellsDef.SKILL_43] != null)
                     {
                         if (!m_bo43kill)
                         {
@@ -465,13 +465,13 @@ namespace GameSvr.Player
                     result = true;
                     break;
                 default:
-                    Direction = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nTargetX, nTargetY); ;
+                    Direction = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
                     TBaseObject BaseObject = null;
                     if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {
                         BaseObject = TargeTBaseObject;
-                        nTargetX = BaseObject.m_nCurrX;
-                        nTargetY = BaseObject.m_nCurrY;
+                        nTargetX = BaseObject.CurrX;
+                        nTargetY = BaseObject.CurrY;
                     }
                     if (!DoSpell(UserMagic, (short)nTargetX, (short)nTargetY, BaseObject))
                     {
@@ -492,7 +492,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)
+            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)
             {
                 return result;
             }
@@ -539,14 +539,14 @@ namespace GameSvr.Player
             }
             m_dwMoveTick = HUtil32.GetTickCount();
             m_bo316 = false;
-            nDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nX, nY);
+            nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (RunTo(nDir, false, nX, nY))
             {
-                if (m_boTransparent && m_boHideMode)
+                if (Transparent && HideMode)
                 {
                     m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
-                if (m_bo316 || m_nCurrX == nX && m_nCurrY == nY)
+                if (m_bo316 || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }
@@ -575,7 +575,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanWalk)
+            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanWalk)
             {
                 return result; // 防麻
             }
@@ -622,9 +622,9 @@ namespace GameSvr.Player
             }
             m_dwMoveTick = HUtil32.GetTickCount();
             m_bo316 = false;
-            n18 = m_nCurrX;
-            n1C = m_nCurrY;
-            n14 = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nX, nY);
+            n18 = CurrX;
+            n1C = CurrY;
+            n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (!m_boClientFlag)
             {
                 if (n14 == 0 && m_nStep == 0)
@@ -673,7 +673,7 @@ namespace GameSvr.Player
             }
             if (WalkTo((byte)n14, false))
             {
-                if (m_bo316 || m_nCurrX == nX && m_nCurrY == nY)
+                if (m_bo316 || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }

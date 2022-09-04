@@ -18,7 +18,7 @@ namespace GameSvr.Command.Commands
             }
             var sHumName = @params.Length > 0 ? @params[0] : "";
             var nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0;
-            if (PlayObject.m_btPermission < 6)
+            if (PlayObject.Permission < 6)
             {
                 return;
             }

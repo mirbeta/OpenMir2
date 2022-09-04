@@ -32,21 +32,21 @@ namespace GameSvr.Command.Commands
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
-                if (m_PlayObject.m_nGold > nCount)
+                if (m_PlayObject.Gold > nCount)
                 {
-                    m_PlayObject.m_nGold -= nCount;
+                    m_PlayObject.Gold -= nCount;
                 }
                 else
                 {
-                    nCount = m_PlayObject.m_nGold;
-                    m_PlayObject.m_nGold = 0;
+                    nCount = m_PlayObject.Gold;
+                    m_PlayObject.Gold = 0;
                 }
                 m_PlayObject.GoldChanged();
                 PlayObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("13" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString() + "\09"
-                        + PlayObject.m_sCharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + (nCount).ToString() + "\09" + "1" + "\09" + sHumName);
+                    M2Share.AddGameDataLog("13" + "\09" + PlayObject.MapName + "\09" + (PlayObject.CurrX).ToString() + "\09" + (PlayObject.CurrY).ToString() + "\09"
+                        + PlayObject.CharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + (nCount).ToString() + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else
@@ -58,7 +58,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    M2Share.FrontEngine.AddChangeGoldList(PlayObject.m_sCharName, sHumName, -nCount);
+                    M2Share.FrontEngine.AddChangeGoldList(PlayObject.CharName, sHumName, -nCount);
                     PlayObject.SysMsg(sHumName + "现在不在线，等其上线时金币将自动减少", MsgColor.Green, MsgType.Hint);
                 }
             }

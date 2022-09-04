@@ -25,9 +25,9 @@ namespace GameSvr.Actor
             m_nNotProcessCount = 0;
             m_nTargetX = -1;
             this.m_btRaceServer = Grobal2.RC_ANIMAL;
-            this.m_dwHitTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
-            this.m_dwWalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
-            this.m_dwSearchEnemyTick = HUtil32.GetTickCount();
+            this.AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
+            this.WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
+            this.SearchEnemyTick = HUtil32.GetTickCount();
             m_boRunAwayMode = false;
             m_dwRunAwayStart = HUtil32.GetTickCount();
             m_dwRunAwayTime = 0;
@@ -41,56 +41,56 @@ namespace GameSvr.Actor
             int n20;
             int nOldX;
             int nOldY;
-            if (this.m_nCurrX != m_nTargetX || this.m_nCurrY != m_nTargetY)
+            if (this.CurrX != m_nTargetX || this.CurrY != m_nTargetY)
             {
                 n10 = m_nTargetX;
                 n14 = m_nTargetY;
                 nDir = Grobal2.DR_DOWN;
-                if (n10 > this.m_nCurrX)
+                if (n10 > this.CurrX)
                 {
                     nDir = Grobal2.DR_RIGHT;
-                    if (n14 > this.m_nCurrY)
+                    if (n14 > this.CurrY)
                     {
                         nDir = Grobal2.DR_DOWNRIGHT;
                     }
-                    if (n14 < this.m_nCurrY)
+                    if (n14 < this.CurrY)
                     {
                         nDir = Grobal2.DR_UPRIGHT;
                     }
                 }
                 else
                 {
-                    if (n10 < this.m_nCurrX)
+                    if (n10 < this.CurrX)
                     {
                         nDir = Grobal2.DR_LEFT;
-                        if (n14 > this.m_nCurrY)
+                        if (n14 > this.CurrY)
                         {
                             nDir = Grobal2.DR_DOWNLEFT;
                         }
-                        if (n14 < this.m_nCurrY)
+                        if (n14 < this.CurrY)
                         {
                             nDir = Grobal2.DR_UPLEFT;
                         }
                     }
                     else
                     {
-                        if (n14 > this.m_nCurrY)
+                        if (n14 > this.CurrY)
                         {
                             nDir = Grobal2.DR_DOWN;
                         }
-                        else if (n14 < this.m_nCurrY)
+                        else if (n14 < this.CurrY)
                         {
                             nDir = Grobal2.DR_UP;
                         }
                     }
                 }
-                nOldX = this.m_nCurrX;
-                nOldY = this.m_nCurrY;
+                nOldX = this.CurrX;
+                nOldY = this.CurrY;
                 this.WalkTo(nDir, false);
                 n20 = M2Share.RandomNumber.Random(3);
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
-                    if (nOldX == this.m_nCurrX && nOldY == this.m_nCurrY)
+                    if (nOldX == this.CurrX && nOldY == this.CurrY)
                     {
                         if (n20 != 0)
                         {
@@ -146,10 +146,10 @@ namespace GameSvr.Actor
         public virtual void Struck(TBaseObject Hiter)
         {
             byte btDir = 0;
-            this.m_dwStruckTick = HUtil32.GetTickCount();
+            this.StruckTick = HUtil32.GetTickCount();
             if (Hiter != null)
             {
-                if (this.m_TargetCret == null || this.GetAttackDir(this.m_TargetCret, ref btDir) || M2Share.RandomNumber.Random(6) == 0)
+                if (this.TargetCret == null || this.GetAttackDir(this.TargetCret, ref btDir) || M2Share.RandomNumber.Random(6) == 0)
                 {
                     if (this.IsProperTarget(Hiter))
                     {
@@ -157,7 +157,7 @@ namespace GameSvr.Actor
                     }
                 }
             }
-            if (this.m_boAnimal)
+            if (this.Animal)
             {
                 this.m_nMeatQuality = (ushort)(this.m_nMeatQuality - M2Share.RandomNumber.Random(300));
                 if (this.m_nMeatQuality < 0)
@@ -165,7 +165,7 @@ namespace GameSvr.Actor
                     this.m_nMeatQuality = 0;
                 }
             }
-            this.m_dwHitTick = this.m_dwHitTick + (150 - HUtil32._MIN(130, this.m_Abil.Level * 4));
+            this.AttackTick = this.AttackTick + (150 - HUtil32._MIN(130, this.m_Abil.Level * 4));
         }
 
         protected void HitMagAttackTarget(TBaseObject TargeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
@@ -173,8 +173,8 @@ namespace GameSvr.Actor
             int nDamage;
             TBaseObject BaseObject;
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
-            this.Direction = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
-            this.m_PEnvir.GetBaseObjects(TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY, false, BaseObjectList);
+            this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
+            this.m_PEnvir.GetBaseObjects(TargeTBaseObject.CurrX, TargeTBaseObject.CurrY, false, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 BaseObject = BaseObjectList[i];
@@ -192,7 +192,7 @@ namespace GameSvr.Actor
             }
             BaseObjectList.Clear();
             BaseObjectList = null;
-            this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
         }
 
         protected override void DelTargetCreat()
@@ -208,14 +208,14 @@ namespace GameSvr.Actor
             TBaseObject BaseObject18 = null;
             int nC;
             var n10 = 999;
-            for (var i = 0; i < this.m_VisibleActors.Count; i++)
+            for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                BaseObject = this.m_VisibleActors[i].BaseObject;
-                if (!BaseObject.m_boDeath)
+                BaseObject = this.VisibleActors[i].BaseObject;
+                if (!BaseObject.Death)
                 {
-                    if (this.IsProperTarget(BaseObject) && (!BaseObject.m_boHideMode || this.m_boCoolEye))
+                    if (this.IsProperTarget(BaseObject) && (!BaseObject.HideMode || this.CoolEye))
                     {
-                        nC = Math.Abs(this.m_nCurrX - BaseObject.m_nCurrX) + Math.Abs(this.m_nCurrY - BaseObject.m_nCurrY);
+                        nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
                         if (nC < n10)
                         {
                             n10 = nC;
@@ -235,15 +235,15 @@ namespace GameSvr.Actor
             TBaseObject BaseObject;
             TBaseObject Creat = null;
             var n10 = 999;
-            for (var i = 0; i < this.m_VisibleActors.Count; i++)
+            for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                BaseObject = this.m_VisibleActors[i].BaseObject;
-                if (BaseObject.m_boDeath)
+                BaseObject = this.VisibleActors[i].BaseObject;
+                if (BaseObject.Death)
                 {
                     continue;
                 }
                 if (!this.IsProperTarget(BaseObject)) continue;
-                var nC = Math.Abs(this.m_nCurrX - BaseObject.m_nCurrX) + Math.Abs(this.m_nCurrY - BaseObject.m_nCurrY);
+                var nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
                 if (nC >= n10) continue;
                 n10 = nC;
                 Creat = BaseObject;

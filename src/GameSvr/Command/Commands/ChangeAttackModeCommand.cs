@@ -13,30 +13,30 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ChangeAttackMode(PlayObject PlayObject)
         {
-            if (PlayObject.m_btAttatckMode >= AttackMode.HAM_PKATTACK)
+            if (PlayObject.AttatckMode >= AttackMode.HAM_PKATTACK)
             {
-                PlayObject.m_btAttatckMode = 0;
+                PlayObject.AttatckMode = 0;
             }
             else
             {
-                if (PlayObject.m_btAttatckMode < AttackMode.HAM_PKATTACK)
+                if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK)
                 {
-                    PlayObject.m_btAttatckMode++;
+                    PlayObject.AttatckMode++;
                 }
                 else
                 {
-                    PlayObject.m_btAttatckMode = AttackMode.HAM_ALL;
+                    PlayObject.AttatckMode = AttackMode.HAM_ALL;
                 }
             }
-            if (PlayObject.m_btAttatckMode < AttackMode.HAM_PKATTACK)
+            if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK)
             {
-                PlayObject.m_btAttatckMode++;
+                PlayObject.AttatckMode++;
             }
             else
             {
-                PlayObject.m_btAttatckMode = AttackMode.HAM_ALL;
+                PlayObject.AttatckMode = AttackMode.HAM_ALL;
             }
-            switch (PlayObject.m_btAttatckMode)
+            switch (PlayObject.AttatckMode)
             {
                 case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
                     PlayObject.SysMsg(M2Share.sAttackModeOfAll, MsgColor.Green, MsgType.Hint);
@@ -60,7 +60,7 @@ namespace GameSvr.Command.Commands
                     PlayObject.SysMsg(M2Share.sAttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
                     break;
             }
-            PlayObject.SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)PlayObject.m_btAttatckMode, 0, 0, 0, "");
+            PlayObject.SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)PlayObject.AttatckMode, 0, 0, 0, "");
         }
     }
 }

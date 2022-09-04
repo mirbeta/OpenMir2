@@ -82,7 +82,7 @@ namespace GameSvr
                             {
                                 foreach (var playObject in M2Share.UserEngine.PlayObjects)
                                 {
-                                    if (playObject.m_boGhost || playObject.m_boDeath) //死亡或者下线的玩家不进行转移
+                                    if (playObject.Ghost || playObject.Death) //死亡或者下线的玩家不进行转移
                                     {
                                         playerCount--;
                                         continue;

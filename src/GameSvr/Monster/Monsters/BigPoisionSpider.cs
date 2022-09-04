@@ -4,7 +4,7 @@
     {
         public BigPoisionSpider() : base()
         {
-            m_boAnimal = false;
+            Animal = false;
             m_boUsePoison = true;
         }
     }

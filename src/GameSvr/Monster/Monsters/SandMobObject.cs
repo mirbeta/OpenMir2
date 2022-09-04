@@ -13,12 +13,12 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boDeath && !m_boGhost)
+            if (!Death && !Ghost)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
                 {
-                    m_dwWalkTick = HUtil32.GetTickCount();
-                    if (m_boFixedHideMode)
+                    WalkTick = HUtil32.GetTickCount();
+                    if (FixedHideMode)
                     {
                         if (m_WAbil.HP > m_WAbil.MaxHP / 20 && CheckComeOut())
                         {
@@ -31,19 +31,19 @@ namespace GameSvr.Monster.Monsters
                         {
                             ComeDown();
                         }
-                        else if (m_TargetCret != null)
+                        else if (TargetCret != null)
                         {
-                            if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) > 15 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) > 15)
+                            if (Math.Abs(CurrX - TargetCret.CurrX) > 15 && Math.Abs(CurrY - TargetCret.CurrY) > 15)
                             {
                                 ComeDown();
                                 return;
                             }
                         }
-                        if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {
                             SearchTarget();
                         }
-                        if (!m_boFixedHideMode)
+                        if (!FixedHideMode)
                         {
                             if (AttackTarget())
                             {

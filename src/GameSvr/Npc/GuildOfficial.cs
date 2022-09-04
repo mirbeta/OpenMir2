@@ -50,7 +50,7 @@ namespace GameSvr.Npc
             {
                 if (M2Share.RandomNumber.Random(30) == 0)
                 {
-                    this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
+                    this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
                 }
             }
             base.Run();
@@ -124,9 +124,9 @@ namespace GameSvr.Npc
             {
                 result = -4;
             }
-            if (PlayObject.m_MyGuild == null)
+            if (PlayObject.MyGuild == null)
             {
-                if (PlayObject.m_nGold >= M2Share.g_Config.nBuildGuildPrice)
+                if (PlayObject.Gold >= M2Share.g_Config.nBuildGuildPrice)
                 {
                     UserItem = PlayObject.CheckItems(M2Share.g_Config.sWomaHorn);
                     if (UserItem == null)
@@ -145,17 +145,17 @@ namespace GameSvr.Npc
             }
             if (result == 0)
             {
-                if (M2Share.GuildManager.AddGuild(sGuildName, PlayObject.m_sCharName))
+                if (M2Share.GuildManager.AddGuild(sGuildName, PlayObject.CharName))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + PlayObject.m_sCharName);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + PlayObject.CharName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.g_Config.sWomaHorn);
                     PlayObject.DecGold(M2Share.g_Config.nBuildGuildPrice);
                     PlayObject.GoldChanged();
-                    PlayObject.m_MyGuild = M2Share.GuildManager.MemberOfGuild(PlayObject.m_sCharName);
-                    if (PlayObject.m_MyGuild != null)
+                    PlayObject.MyGuild = M2Share.GuildManager.MemberOfGuild(PlayObject.CharName);
+                    if (PlayObject.MyGuild != null)
                     {
-                        PlayObject.m_sGuildRankName = PlayObject.m_MyGuild.GetRankName(PlayObject, ref PlayObject.m_nGuildRankNo);
+                        PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref PlayObject.GuildRankNo);
                         this.RefShowName();
                     }
                 }
@@ -185,7 +185,7 @@ namespace GameSvr.Npc
         {
             if (M2Share.GuildManager.FindGuild(sGuildName) != null)
             {
-                if (PlayObject.m_nGold >= M2Share.g_Config.nGuildWarPrice)
+                if (PlayObject.Gold >= M2Share.g_Config.nGuildWarPrice)
                 {
                     PlayObject.DecGold(M2Share.g_Config.nGuildWarPrice);
                     PlayObject.GoldChanged();
@@ -220,7 +220,7 @@ namespace GameSvr.Npc
                 var UserItem = PlayObject.CheckItems(M2Share.g_Config.sZumaPiece);
                 if (UserItem != null)
                 {
-                    if (Castle.AddAttackerInfo(PlayObject.m_MyGuild))
+                    if (Castle.AddAttackerInfo(PlayObject.MyGuild))
                     {
                         PlayObject.SendDelItems(UserItem);
                         PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.g_Config.sZumaPiece);

@@ -8,7 +8,7 @@ namespace GameSvr.Monster.Monsters
         public GasAttackMonster() : base()
         {
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
-            m_boAnimal = true;
+            Animal = true;
         }
 
         protected virtual TBaseObject sub_4A9C78(byte bt05)
@@ -19,7 +19,7 @@ namespace GameSvr.Monster.Monsters
             var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (n10 > 0)
             {
-                SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
+                SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 var BaseObject = GetPoseCreate();
                 if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint)
                 {
@@ -43,16 +43,16 @@ namespace GameSvr.Monster.Monsters
         {
             var result = false;
             byte btDir = 0;
-            if (m_TargetCret == null)
+            if (TargetCret == null)
             {
                 return false;
             }
-            if (GetAttackDir(m_TargetCret, ref btDir))
+            if (GetAttackDir(TargetCret, ref btDir))
             {
-                if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                 {
-                    m_dwHitTick = HUtil32.GetTickCount();
-                    m_dwTargetFocusTick = HUtil32.GetTickCount();
+                    AttackTick = HUtil32.GetTickCount();
+                    TargetFocusTick = HUtil32.GetTickCount();
                     sub_4A9C78(btDir);
                     BreakHolySeizeMode();
                 }
@@ -60,9 +60,9 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                if (m_TargetCret.m_PEnvir == m_PEnvir)
+                if (TargetCret.m_PEnvir == m_PEnvir)
                 {
-                    SetTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+                    SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                 }
                 else
                 {

@@ -195,7 +195,7 @@ namespace GameSvr.Command
                 var commandList = CommandMaps.Values.ToList();
                 foreach (var pair in commandList)
                 {
-                    if (PlayObject != null && pair.GameCommand.nPermissionMin > PlayObject.m_btPermission) continue;
+                    if (PlayObject != null && pair.GameCommand.nPermissionMin > PlayObject.Permission) continue;
                     output += pair.GameCommand.Name + ", ";
                 }
                 output = output.Substring(0, output.Length - 2) + ".";

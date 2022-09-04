@@ -22,8 +22,8 @@ namespace GameSvr.Command.Commands
                 {
                     if (M2Share.UserEngine.MerchantList[i] == BaseObject)
                     {
-                        BaseObject.m_boGhost = true;
-                        BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
+                        BaseObject.Ghost = true;
+                        BaseObject.GhostTick = HUtil32.GetTickCount();
                         BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         PlayObject.SysMsg(sDelOK, MsgColor.Red, MsgType.Hint);
                         return;
@@ -33,8 +33,8 @@ namespace GameSvr.Command.Commands
                 {
                     if (M2Share.UserEngine.QuestNpcList[i] == BaseObject)
                     {
-                        BaseObject.m_boGhost = true;
-                        BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
+                        BaseObject.Ghost = true;
+                        BaseObject.GhostTick = HUtil32.GetTickCount();
                         BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         PlayObject.SysMsg(sDelOK, MsgColor.Red, MsgType.Hint);
                         return;

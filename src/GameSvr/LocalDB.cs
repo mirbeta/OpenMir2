@@ -227,10 +227,10 @@ namespace GameSvr
                 {
                     M2Share.g_FunctionNPC = new Merchant
                     {
-                        m_sMapName = "0",
-                        m_nCurrX = 0,
-                        m_nCurrY = 0,
-                        m_sCharName = "QFunction",
+                        MapName = "0",
+                        CurrX = 0,
+                        CurrY = 0,
+                        CharName = "QFunction",
                         m_nFlag = 0,
                         m_wAppr = 0,
                         m_sFilePath = ScriptConst.sMarket_Def,
@@ -285,10 +285,10 @@ namespace GameSvr
                 {
                     M2Share.g_ManageNPC = new Merchant
                     {
-                        m_sMapName = "0",
-                        m_nCurrX = 0,
-                        m_nCurrY = 0,
-                        m_sCharName = "QManage",
+                        MapName = "0",
+                        CurrX = 0,
+                        CurrY = 0,
+                        CharName = "QManage",
                         m_nFlag = 0,
                         m_wAppr = 0,
                         m_sFilePath = "MapQuest_def",
@@ -329,10 +329,10 @@ namespace GameSvr
                 {
                     M2Share.g_RobotNPC = new Merchant
                     {
-                        m_sMapName = "0",
-                        m_nCurrX = 0,
-                        m_nCurrY = 0,
-                        m_sCharName = "RobotManage",
+                        MapName = "0",
+                        CurrX = 0,
+                        CurrY = 0,
+                        CharName = "RobotManage",
                         m_nFlag = 0,
                         m_wAppr = 0,
                         m_sFilePath = "Robot_def",
@@ -468,10 +468,10 @@ namespace GameSvr
                             var merchantNpc = new Merchant
                             {
                                 m_sScript = sScript,
-                                m_sMapName = sMapName,
-                                m_nCurrX = (short)HUtil32.Str_ToInt(sX, 0),
-                                m_nCurrY = (short)HUtil32.Str_ToInt(sY, 0),
-                                m_sCharName = sName,
+                                MapName = sMapName,
+                                CurrX = (short)HUtil32.Str_ToInt(sX, 0),
+                                CurrY = (short)HUtil32.Str_ToInt(sY, 0),
+                                CharName = sName,
                                 m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0),
                                 m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0),
                                 m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0)
@@ -702,10 +702,10 @@ namespace GameSvr
                             }
                             if (NPC != null)
                             {
-                                NPC.m_sMapName = mapName;
-                                NPC.m_nCurrX = (short)HUtil32.Str_ToInt(cX, 0);
-                                NPC.m_nCurrY = (short)HUtil32.Str_ToInt(cY, 0);
-                                NPC.m_sCharName = charName;
+                                NPC.MapName = mapName;
+                                NPC.CurrX = (short)HUtil32.Str_ToInt(cX, 0);
+                                NPC.CurrY = (short)HUtil32.Str_ToInt(cY, 0);
+                                NPC.CharName = charName;
                                 NPC.m_nFlag = (short)HUtil32.Str_ToInt(flag, 0);
                                 NPC.m_wAppr = (ushort)HUtil32.Str_ToInt(appr, 0);
                                 M2Share.UserEngine.QuestNpcList.Add(NPC);
@@ -1039,11 +1039,11 @@ namespace GameSvr
                     for (var j = 0; j < M2Share.UserEngine.MerchantList.Count; j++)
                     {
                         Merchant = M2Share.UserEngine.MerchantList[j];
-                        if (Merchant.m_sMapName == sMapName && Merchant.m_nCurrX == nX && Merchant.m_nCurrY == nY)
+                        if (Merchant.MapName == sMapName && Merchant.CurrX == nX && Merchant.CurrY == nY)
                         {
                             boNewNpc = false;
                             Merchant.m_sScript = sScript;
-                            Merchant.m_sCharName = sCharName;
+                            Merchant.CharName = sCharName;
                             Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
                             Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
@@ -1066,15 +1066,15 @@ namespace GameSvr
                     {
                         Merchant = new Merchant
                         {
-                            m_sMapName = sMapName
+                            MapName = sMapName
                         };
-                        Merchant.m_PEnvir = M2Share.MapManager.FindMap(Merchant.m_sMapName);
+                        Merchant.m_PEnvir = M2Share.MapManager.FindMap(Merchant.MapName);
                         if (Merchant.m_PEnvir != null)
                         {
                             Merchant.m_sScript = sScript;
-                            Merchant.m_nCurrX = (short)nX;
-                            Merchant.m_nCurrY = (short)nY;
-                            Merchant.m_sCharName = sCharName;
+                            Merchant.CurrX = (short)nX;
+                            Merchant.CurrY = (short)nY;
+                            Merchant.CharName = sCharName;
                             Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
                             Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
@@ -1101,8 +1101,8 @@ namespace GameSvr
                 Merchant = M2Share.UserEngine.MerchantList[i];
                 if (Merchant.m_nFlag == -1)
                 {
-                    Merchant.m_boGhost = true;
-                    Merchant.m_dwGhostTick = HUtil32.GetTickCount();
+                    Merchant.Ghost = true;
+                    Merchant.GhostTick = HUtil32.GetTickCount();
                     M2Share.UserEngine.MerchantList.RemoveAt(i);
                 }
             }
