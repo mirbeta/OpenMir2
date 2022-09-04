@@ -37,7 +37,7 @@ namespace GameSvr
             {
                 return false;
             }
-            M2Share.UserEngine.MAdminList.Clear();
+            M2Share.UserEngine.AdminList.Clear();
             using var LoadList = new StringList();
             LoadList.LoadFromFile(sfilename);
             for (var i = 0; i < LoadList.Count; i++)
@@ -102,7 +102,7 @@ namespace GameSvr
                             sChrName = sCharName,
                             sIPaddr = sIPaddr
                         };
-                        M2Share.UserEngine.MAdminList.Add(AdminInfo);
+                        M2Share.UserEngine.AdminList.Add(AdminInfo);
                     }
                 }
             }

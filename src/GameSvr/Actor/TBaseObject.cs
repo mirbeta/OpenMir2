@@ -532,7 +532,7 @@ namespace GameSvr.Actor
         /// </summary>
         public readonly IList<VisibleBaseObject> VisibleActors;
         /// <summary>
-        /// 人物背包
+        /// 物品列表
         /// </summary>
         public IList<TUserItem> ItemList;
         /// <summary>

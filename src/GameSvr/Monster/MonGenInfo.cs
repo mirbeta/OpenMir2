@@ -17,6 +17,9 @@ namespace GameSvr.Monster
         public int CertCount;
         public object Envir;
         public int nRace;
+        /// <summary>
+        /// 开始刷新时间
+        /// </summary>
         public int dwStartTick;
     }
 }

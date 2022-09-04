@@ -30,7 +30,7 @@ namespace GameSvr.UsrSystem
         private int _dwRegenMonstersTick;
         private int _dwSendOnlineHumTime;
         private int _dwShowOnlineTick;
-        public readonly IList<TAdminInfo> MAdminList;
+        public readonly IList<TAdminInfo> AdminList;
         private readonly IList<TGoldChangeInfo> _mChangeHumanDbGoldList;
         private readonly IList<TSwitchDataInfo> _mChangeServerList;
         private int _mDwProcessLoadPlayTick;
@@ -40,7 +40,7 @@ namespace GameSvr.UsrSystem
         /// 从DB读取人物数据
         /// </summary>
         private readonly IList<TUserOpenInfo> _LoadPlayList;
-        private readonly object _LoadPlaySection;
+        private readonly object LoadPlaySection;
         public readonly IList<MagicEvent> MagicEventList;
         public IList<TMagic> MagicList;
         public readonly IList<Merchant> MerchantList;
@@ -93,7 +93,7 @@ namespace GameSvr.UsrSystem
 
         public UserEngine()
         {
-            _LoadPlaySection = new object();
+            LoadPlaySection = new object();
             _LoadPlayList = new List<TUserOpenInfo>();
             _PlayObjectList = new List<PlayObject>();
             _PlayObjectFreeList = new List<PlayObject>();
@@ -116,7 +116,7 @@ namespace GameSvr.UsrSystem
             MonsterList = new List<TMonInfo>();
             MonGenList = new List<MonGenInfo>();
             MagicList = new List<TMagic>();
-            MAdminList = new List<TAdminInfo>();
+            AdminList = new List<TAdminInfo>();
             MerchantList = new List<Merchant>();
             QuestNpcList = new List<NormNpc>();
             _mChangeServerList = new List<TSwitchDataInfo>();
@@ -163,6 +163,32 @@ namespace GameSvr.UsrSystem
             {
                 if (MonGenList[i] != null)
                     MonGenList[i].nRace = GetMonRace(MonGenList[i].sMonName);
+            }
+        }
+
+        private void PrcocessData(object state)
+        {
+            try
+            {
+                ProcessHumans();
+                ProcessMonsters();
+                ProcessMerchants();
+                ProcessNpcs();
+                if ((HUtil32.GetTickCount() - _dwProcessMissionsTime) > 1000)
+                {
+                    _dwProcessMissionsTime = HUtil32.GetTickCount();
+                    ProcessMissions();
+                    ProcessEvents();
+                }
+                if ((HUtil32.GetTickCount() - _dwProcessMapDoorTick) > 500)
+                {
+                    _dwProcessMapDoorTick = HUtil32.GetTickCount();
+                    ProcessMapDoor();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.StackTrace);
             }
         }
 
@@ -528,7 +554,7 @@ namespace GameSvr.UsrSystem
                 _mDwProcessLoadPlayTick = HUtil32.GetTickCount();
                 try
                 {
-                    HUtil32.EnterCriticalSection(_LoadPlaySection);
+                    HUtil32.EnterCriticalSection(LoadPlaySection);
                     try
                     {
                         for (var i = 0; i < _LoadPlayList.Count; i++)
@@ -574,7 +600,7 @@ namespace GameSvr.UsrSystem
                     }
                     finally
                     {
-                        HUtil32.LeaveCriticalSection(_LoadPlaySection);
+                        HUtil32.LeaveCriticalSection(LoadPlaySection);
                     }
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
@@ -913,6 +939,10 @@ namespace GameSvr.UsrSystem
 
         }
 
+        /// <summary>
+        /// 取怪物刷新时间
+        /// </summary>
+        /// <returns></returns>
         public int ProcessMonsters_GetZenTime(int dwTime)
         {
             int result;
@@ -1098,10 +1128,9 @@ namespace GameSvr.UsrSystem
         private int GetGenMonCount(MonGenInfo monGen)
         {
             var nCount = 0;
-            TBaseObject baseObject;
             for (var i = 0; i < monGen.CertList.Count; i++)
             {
-                baseObject = monGen.CertList[i];
+                TBaseObject baseObject = monGen.CertList[i];
                 if (!baseObject.Death && !baseObject.Ghost)
                 {
                     nCount++;
@@ -1112,7 +1141,6 @@ namespace GameSvr.UsrSystem
 
         private void ProcessNpcs()
         {
-            NormNpc npc;
             var dwRunTick = HUtil32.GetTickCount();
             var boProcessLimit = false;
             try
@@ -1120,7 +1148,7 @@ namespace GameSvr.UsrSystem
                 var dwCurrTick = HUtil32.GetTickCount();
                 for (var i = NpcPosition; i < QuestNpcList.Count; i++)
                 {
-                    npc = QuestNpcList[i];
+                    NormNpc npc = QuestNpcList[i];
                     if (!npc.Ghost)
                     {
                         if ((dwCurrTick - npc.m_dwRunTick) > npc.m_nRunTime)
@@ -1164,7 +1192,6 @@ namespace GameSvr.UsrSystem
 
         public TBaseObject RegenMonsterByName(string sMap, short nX, short nY, string sMonName)
         {
-            TBaseObject result;
             var nRace = GetMonRace(sMonName);
             var baseObject = AddBaseObject(sMap, nX, nY, nRace, sMonName);
             if (baseObject != null)
@@ -1180,8 +1207,7 @@ namespace GameSvr.UsrSystem
                 baseObject.Envir.AddObject(baseObject);
                 baseObject.AddToMaped = true;
             }
-            result = baseObject;
-            return result;
+            return baseObject;
         }
 
         public void Run()
@@ -1224,11 +1250,10 @@ namespace GameSvr.UsrSystem
         public StdItem GetStdItem(string sItemName)
         {
             StdItem result = null;
-            StdItem stdItem = null;
             if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
-                stdItem = StdItemList[i];
+                StdItem stdItem = StdItemList[i];
                 if (string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = stdItem;
@@ -1291,7 +1316,7 @@ namespace GameSvr.UsrSystem
         private void MonGetRandomItems(TBaseObject mon)
         {
             IList<TMonItem> itemList = null;
-            var iname = string.Empty;
+            var itemName = string.Empty;
             for (var i = 0; i < MonsterList.Count; i++)
             {
                 var monster = MonsterList[i];
@@ -1314,14 +1339,14 @@ namespace GameSvr.UsrSystem
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(iname)) iname = monItem.ItemName;
+                            if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
                             TUserItem userItem = null;
-                            if (CopyToUserItemFromName(iname, ref userItem))
+                            if (CopyToUserItemFromName(itemName, ref userItem))
                             {
                                 userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
                                 var stdItem = GetStdItem(userItem.wIndex);
                                 if (stdItem == null) continue;
-                                if (M2Share.RandomNumber.Random(M2Share.g_Config.nMonRandomAddValue) == 0)
+                                if (M2Share.RandomNumber.Random(M2Share.g_Config.nMonRandomAddValue) == 0) //极品掉落几率
                                 {
                                     stdItem.RandomUpgradeItem(userItem);
                                 }
@@ -1484,10 +1509,9 @@ namespace GameSvr.UsrSystem
 
         public void GetIsmChangeServerReceive(string flName)
         {
-            PlayObject hum;
             for (var i = 0; i < _PlayObjectFreeList.Count; i++)
             {
-                hum = _PlayObjectFreeList[i];
+                PlayObject hum = _PlayObjectFreeList[i];
                 if (hum.m_sSwitchDataTempFile == flName)
                 {
                     hum.m_boSwitchDataOK = true;
@@ -2006,11 +2030,10 @@ namespace GameSvr.UsrSystem
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission)
         {
             var result = false;
-            TAdminInfo adminInfo;
             btPermission = (byte)M2Share.g_Config.nStartPermission;
-            for (var i = 0; i < MAdminList.Count; i++)
+            for (var i = 0; i < AdminList.Count; i++)
             {
-                adminInfo = MAdminList[i];
+                TAdminInfo adminInfo = AdminList[i];
                 if (string.Compare(adminInfo.sChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     btPermission = (byte)adminInfo.nLv;
@@ -2024,14 +2047,14 @@ namespace GameSvr.UsrSystem
 
         public void AddUserOpenInfo(TUserOpenInfo userOpenInfo)
         {
-            HUtil32.EnterCriticalSection(_LoadPlaySection);
+            HUtil32.EnterCriticalSection(LoadPlaySection);
             try
             {
                 _LoadPlayList.Add(userOpenInfo);
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(_LoadPlaySection);
+                HUtil32.LeaveCriticalSection(LoadPlaySection);
             }
         }
 
@@ -2063,7 +2086,7 @@ namespace GameSvr.UsrSystem
 
         public void SaveHumanRcd(PlayObject playObject)
         {
-            if (playObject.IsRobot) //AI玩家不需要保存数据
+            if (playObject.IsRobot) //Bot玩家不保存数据
             {
                 return;
             }
@@ -2268,10 +2291,9 @@ namespace GameSvr.UsrSystem
         public TMagic FindMagic(int nMagIdx)
         {
             TMagic result = null;
-            TMagic magic = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
-                magic = MagicList[i];
+                TMagic magic = MagicList[i];
                 if (magic.wMagicID == nMagIdx)
                 {
                     result = magic;
@@ -2283,10 +2305,9 @@ namespace GameSvr.UsrSystem
 
         private void MonInitialize(TBaseObject baseObject, string sMonName)
         {
-            TMonInfo monster;
             for (var i = 0; i < MonsterList.Count; i++)
             {
-                monster = MonsterList[i];
+                TMonInfo monster = MonsterList[i];
                 if (string.Compare(monster.sName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     baseObject.Race = monster.btRace;
@@ -2379,14 +2400,13 @@ namespace GameSvr.UsrSystem
 
         private void ProcessMapDoor()
         {
-            TDoorInfo door;
             var dorrList = M2Share.MapManager.GetDoorMapList();
             for (var i = 0; i < dorrList.Count; i++)
             {
                 var envir = dorrList[i];
                 for (var j = 0; j < envir.DoorList.Count; j++)
                 {
-                    door = envir.DoorList[j];
+                    TDoorInfo door = envir.DoorList[j];
                     if (door.Status.boOpened)
                     {
                         if ((HUtil32.GetTickCount() - door.Status.dwOpenTick) > 5 * 1000)
@@ -2401,16 +2421,14 @@ namespace GameSvr.UsrSystem
         private void ProcessEvents()
         {
             int count;
-            MagicEvent magicEvent;
-            TBaseObject baseObject;
             for (var i = MagicEventList.Count - 1; i >= 0; i--)
             {
-                magicEvent = MagicEventList[i];
+                MagicEvent magicEvent = MagicEventList[i];
                 if (magicEvent != null)
                 {
                     for (var j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--)
                     {
-                        baseObject = magicEvent.BaseObjectList[j];
+                        TBaseObject baseObject = magicEvent.BaseObjectList[j];
                         if (baseObject.Death || baseObject.Ghost || !baseObject.m_boHolySeize)
                             magicEvent.BaseObjectList.RemoveAt(j);
                     }
@@ -2434,10 +2452,9 @@ namespace GameSvr.UsrSystem
         public TMagic FindMagic(string sMagicName)
         {
             TMagic result = null;
-            TMagic magic = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
-                magic = MagicList[i];
+                TMagic magic = MagicList[i];
                 if (magic.sMagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
                 {
                     result = magic;
@@ -2501,10 +2518,9 @@ namespace GameSvr.UsrSystem
 
         public void ReloadMerchantList()
         {
-            Merchant merchant;
             for (var i = 0; i < MerchantList.Count; i++)
             {
-                merchant = MerchantList[i];
+                Merchant merchant = MerchantList[i];
                 if (!merchant.Ghost)
                 {
                     merchant.ClearScript();
@@ -2515,10 +2531,9 @@ namespace GameSvr.UsrSystem
 
         public void ReloadNpcList()
         {
-            NormNpc npc;
             for (var i = 0; i < QuestNpcList.Count; i++)
             {
-                npc = QuestNpcList[i];
+                NormNpc npc = QuestNpcList[i];
                 npc.ClearScript();
                 npc.LoadNPCScript();
             }
@@ -2526,17 +2541,15 @@ namespace GameSvr.UsrSystem
 
         public int GetMapMonster(Envirnoment envir, IList<TBaseObject> list)
         {
-            MonGenInfo monGen;
-            TBaseObject baseObject;
             var result = 0;
             if (envir == null) return result;
             for (var i = 0; i < MonGenList.Count; i++)
             {
-                monGen = MonGenList[i];
+                MonGenInfo monGen = MonGenList[i];
                 if (monGen == null) continue;
                 for (var j = 0; j < monGen.CertList.Count; j++)
                 {
-                    baseObject = monGen.CertList[j];
+                    TBaseObject baseObject = monGen.CertList[j];
                     if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir)
                     {
                         if (list != null)
@@ -2550,11 +2563,10 @@ namespace GameSvr.UsrSystem
 
         public void HumanExpire(string sAccount)
         {
-            PlayObject playObject;
             if (!M2Share.g_Config.boKickExpireHuman) return;
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                PlayObject playObject = _PlayObjectList[i];
                 if (string.Compare(playObject.m_sUserID, sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.m_boExpire = true;
@@ -2565,13 +2577,12 @@ namespace GameSvr.UsrSystem
 
         public int GetMapHuman(string sMapName)
         {
-            PlayObject playObject;
             var result = 0;
             var envir = M2Share.MapManager.FindMap(sMapName);
             if (envir == null) return result;
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                PlayObject playObject = _PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir) result++;
             }
             return result;
@@ -2580,10 +2591,9 @@ namespace GameSvr.UsrSystem
         public int GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, IList<TBaseObject> list)
         {
             var result = 0;
-            PlayObject playObject;
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                PlayObject playObject = _PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir &&
                     Math.Abs(playObject.CurrX - nRageX) <= nRage && Math.Abs(playObject.CurrY - nRageY) <= nRage)
                 {
@@ -2616,10 +2626,9 @@ namespace GameSvr.UsrSystem
         /// </summary>
         public void SendBroadCastMsgExt(string sMsg, MsgType msgType)
         {
-            PlayObject playObject;
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                PlayObject playObject = _PlayObjectList[i];
                 if (!playObject.Ghost)
                     playObject.SysMsg(sMsg, MsgColor.Red, msgType);
             }
@@ -2627,10 +2636,9 @@ namespace GameSvr.UsrSystem
 
         public void SendBroadCastMsg(string sMsg, MsgType msgType)
         {
-            PlayObject playObject;
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                PlayObject playObject = _PlayObjectList[i];
                 if (!playObject.Ghost)
                 {
                     playObject.SysMsg(sMsg, MsgColor.Red, msgType);
@@ -2641,49 +2649,20 @@ namespace GameSvr.UsrSystem
         public void sub_4AE514(TGoldChangeInfo goldChangeInfo)
         {
             var goldChange = goldChangeInfo;
-            HUtil32.EnterCriticalSection(_LoadPlaySection);
+            HUtil32.EnterCriticalSection(LoadPlaySection);
             _mChangeHumanDbGoldList.Add(goldChange);
         }
 
         public void ClearMonSayMsg()
         {
-            MonGenInfo monGen;
-            TBaseObject monBaseObject;
             for (var i = 0; i < MonGenList.Count; i++)
             {
-                monGen = MonGenList[i];
+                MonGenInfo monGen = MonGenList[i];
                 for (var j = 0; j < monGen.CertList.Count; j++)
                 {
-                    monBaseObject = monGen.CertList[j];
+                    TBaseObject monBaseObject = monGen.CertList[j];
                     monBaseObject.SayMsgList = null;
                 }
-            }
-        }
-
-        private void PrcocessData(object state)
-        {
-            try
-            {
-                ProcessHumans();
-                ProcessMonsters();
-                ProcessMerchants();
-                ProcessNpcs();
-                if ((HUtil32.GetTickCount() - _dwProcessMissionsTime) > 1000)
-                {
-                    _dwProcessMissionsTime = HUtil32.GetTickCount();
-                    ProcessMissions();
-                    ProcessEvents();
-                }
-                if ((HUtil32.GetTickCount() - _dwProcessMapDoorTick) > 500)
-                {
-                    _dwProcessMapDoorTick = HUtil32.GetTickCount();
-                    ProcessMapDoor();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
             }
         }
 
@@ -2764,8 +2743,7 @@ namespace GameSvr.UsrSystem
             cert.m_sHeroConfigFileName = ai.sHeroConfigFileName;
             cert.m_sFilePath = ai.sFilePath;
             cert.m_sConfigListFileName = ai.sConfigListFileName;
-            cert.m_sHeroConfigListFileName = ai.sHeroConfigListFileName;
-            // 英雄配置列表目录
+            cert.m_sHeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
             cert.Initialize();
             cert.RecalcLevelAbilitys();
             cert.RecalcAbilitys();
