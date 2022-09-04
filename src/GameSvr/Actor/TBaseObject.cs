@@ -146,9 +146,9 @@ namespace GameSvr.Actor
         public bool m_boRaceImg;
         public ushort m_nHealthRecover;
         public ushort m_nSpellRecover;
-        public byte m_btAntiPoison;
-        public ushort m_nPoisonRecover;
-        public ushort m_nAntiMagic;
+        public byte AntiPoison;
+        public ushort PoisonRecover;
+        public ushort AntiMagic;
         /// <summary>
         /// 人物的幸运值
         /// </summary>
@@ -275,9 +275,15 @@ namespace GameSvr.Actor
         public bool m_boHolySeize;
         public int m_dwHolySeizeTick;
         public int m_dwHolySeizeInterval;
-        public bool m_boCrazyMode;
-        public int m_dwCrazyModeTick;
-        public int m_dwCrazyModeInterval;
+        /// <summary>
+        /// 狂暴模式
+        /// </summary>
+        public bool CrazyMode;
+        private int CrazyModeTick;
+        /// <summary>
+        /// 狂暴间隔
+        /// </summary>
+        public int CrazyModeInterval;
         public bool m_boShowHP;
         /// <summary>
         /// 心灵启示检查时间
@@ -294,8 +300,8 @@ namespace GameSvr.Actor
         public int GhostTick;
         public bool Death;
         public int DeathTick;
-        public bool m_boInvisible;
-        public bool m_boCanReAlive;
+        public bool Invisible;
+        public bool CanReAlive;
         /// <summary>
         /// 复活时间
         /// </summary>
@@ -621,7 +627,7 @@ namespace GameSvr.Actor
         public string m_sOffLineLeaveword = string.Empty;
         // 挂机字符
         public int m_dwKickOffLineTick = 0;
-        public bool m_boNastyMode;
+        public bool NastyMode;
         /// <summary>
         /// 气血石
         /// </summary>
@@ -672,11 +678,11 @@ namespace GameSvr.Actor
             SpeedPoint = 15;
             HitSpeed = 0;
             m_btLifeAttrib = 0;
-            m_btAntiPoison = 0;
-            m_nPoisonRecover = 0;
+            AntiPoison = 0;
+            PoisonRecover = 0;
             m_nHealthRecover = 0;
             m_nSpellRecover = 0;
-            m_nAntiMagic = 0;
+            AntiMagic = 0;
             m_nLuck = 0;
             IncSpell = 0;
             IncHealth = 0;
@@ -708,7 +714,7 @@ namespace GameSvr.Actor
             m_boSkeleton = false;
             bo2BF = false;
             m_boHolySeize = false;
-            m_boCrazyMode = false;
+            CrazyMode = false;
             m_boShowHP = false;
             bo2F0 = false;
             Animal = false;
@@ -825,7 +831,7 @@ namespace GameSvr.Actor
             FixColorIdx = 0;
             FixStatus = -1;
             FastParalysis = false;
-            m_boNastyMode = false;
+            NastyMode = false;
             MagicArr = new TUserMagic[100];
             M2Share.ActorMgr.Add(ObjectId, this);
         }
@@ -1681,7 +1687,7 @@ namespace GameSvr.Actor
                 {
                     if (IsProperTarget(BaseObject))
                     {
-                        if (M2Share.RandomNumber.Random(10) >= BaseObject.m_nAntiMagic)
+                        if (M2Share.RandomNumber.Random(10) >= BaseObject.AntiMagic)
                         {
                             if (undeadattack)
                             {
@@ -2895,7 +2901,7 @@ namespace GameSvr.Actor
             else if (BaseObject.Race == Grobal2.RC_NPC) //增加NPC名字颜色单独控制
             {
                 result = M2Share.g_Config.NpcNameColor;
-                if (BaseObject.m_boCrazyMode) //疯狂模式(红名)
+                if (BaseObject.CrazyMode) //疯狂模式(红名)
                 {
                     result = 0xF9;
                 }
@@ -2916,7 +2922,7 @@ namespace GameSvr.Actor
                     result = 255;
                 }
 
-                if (BaseObject.m_boCrazyMode)
+                if (BaseObject.CrazyMode)
                 {
                     result = 0xF9;
                 }
@@ -4330,13 +4336,13 @@ namespace GameSvr.Actor
                     }
                 }
 
-                if (m_boCrazyMode && ((BaseObject.Race == Grobal2.RC_PLAYOBJECT) ||
+                if (CrazyMode && ((BaseObject.Race == Grobal2.RC_PLAYOBJECT) ||
                                       (BaseObject.Race > Grobal2.RC_PEACENPC)))
                 {
                     result = true;
                 }
 
-                if (m_boNastyMode && ((BaseObject.Race < Grobal2.RC_NPC) ||
+                if (NastyMode && ((BaseObject.Race < Grobal2.RC_NPC) ||
                                       (BaseObject.Race > Grobal2.RC_PEACENPC)))
                 {
                     result = true;
@@ -4652,17 +4658,17 @@ namespace GameSvr.Actor
 
         public void OpenCrazyMode(int nTime)
         {
-            m_boCrazyMode = true;
-            m_dwCrazyModeTick = HUtil32.GetTickCount();
-            m_dwCrazyModeInterval = nTime * 1000;
+            CrazyMode = true;
+            CrazyModeTick = HUtil32.GetTickCount();
+            CrazyModeInterval = nTime * 1000;
             RefNameColor();
         }
 
         public void BreakCrazyMode()
         {
-            if (m_boCrazyMode)
+            if (CrazyMode)
             {
-                m_boCrazyMode = false;
+                CrazyMode = false;
                 RefNameColor();
             }
         }
@@ -5894,7 +5900,7 @@ namespace GameSvr.Actor
             StoneMode = false;
             m_boSkeleton = false;
             m_boHolySeize = false;
-            m_boCrazyMode = false;
+            CrazyMode = false;
             m_boShowHP = false;
             //m_boPlayerDupMode = false;
             FixedHideMode = false;
@@ -5928,7 +5934,7 @@ namespace GameSvr.Actor
             if (this is SoccerBall)
             {
                 ((SoccerBall)(this)).n550 = 0;
-                ((SoccerBall)(this)).m_nTargetX = -1;
+                ((SoccerBall)(this)).TargetX = -1;
             }
 
             if (this is FrostTiger)
@@ -6174,7 +6180,7 @@ namespace GameSvr.Actor
             RecalcAbilitys();
 
             Death = false;
-            m_boInvisible = false;
+            Invisible = false;
 
             SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
 
@@ -6188,11 +6194,11 @@ namespace GameSvr.Actor
 
         internal void OnEnvirnomentChanged()
         {
-            if (m_boCanReAlive)
+            if (CanReAlive)
             {
                 if ((MonGen != null) && (MonGen.Envir != Envir))
                 {
-                    m_boCanReAlive = false;
+                    CanReAlive = false;
                     if (MonGen.nActiveCount > 0)
                     {
                         MonGen.nActiveCount--;

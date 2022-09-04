@@ -61,11 +61,7 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                bool boChangeFace = true;
-                if (TargetCret != null)
-                {
-                    boChangeFace = false;
-                }
+                var boChangeFace = TargetCret == null;
                 if (Master != null && (Master.TargetCret != null || Master.LastHiter != null))
                 {
                     boChangeFace = false;
@@ -75,20 +71,20 @@ namespace GameSvr.Monster.Monsters
                     if ((HUtil32.GetTickCount() - dwDigDownTick) > (6 * 10 * 1000))
                     {
                         TBaseObject elfMon = null;
-                        var ElfName = CharName;
-                        if (ElfName[ElfName.Length - 1] == '1')
+                        var elfName = CharName;
+                        if (elfName[^1] == '1')
                         {
-                            ElfName = ElfName.Substring(0, ElfName.Length - 1);
-                            elfMon = MakeClone(ElfName, this);
+                            elfName = elfName.Substring(0, elfName.Length - 1);
+                            elfMon = MakeClone(elfName, this);
                         }
                         if (elfMon != null)
                         {
                             SendRefMsg(Grobal2.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
                             SendRefMsg(Grobal2.RM_CHANGEFACE, 0, ObjectId, elfMon.ObjectId, 0, "");
                             elfMon.AutoChangeColor = AutoChangeColor;
-                            if (elfMon is ElfMonster)
+                            if (elfMon is ElfMonster monster)
                             {
-                                (elfMon as ElfMonster).AppearNow();
+                                monster.AppearNow();
                             }
                             Master = null;
                             KickException();

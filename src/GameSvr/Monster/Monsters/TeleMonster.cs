@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             {
                 if (this.TargetCret != null)
                 {
-                    if (Math.Abs(this.CurrX - this.m_nTargetX) > 5 || Math.Abs(this.CurrY - this.m_nTargetY) > 5)
+                    if (Math.Abs(this.CurrX - this.TargetX) > 5 || Math.Abs(this.CurrY - this.TargetY) > 5)
                     {
                         this.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         this.SpaceMove(this.TargetCret.MapName, this.TargetCret.CurrX, this.TargetCret.CurrY, 0);

@@ -1305,11 +1305,11 @@ namespace GameSvr.Player
                                             break;
                                         }
                                         BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
-                                        if (BaseObject != null && !BaseObject.m_boInvisible)
+                                        if (BaseObject != null && !BaseObject.Invisible)
                                         {
                                             if (!BaseObject.Ghost && !BaseObject.FixedHideMode && !BaseObject.ObMode)
                                             {
-                                                if (Race < Grobal2.RC_ANIMAL || Master != null || m_boCrazyMode || m_boNastyMode || WantRefMsg || BaseObject.Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                                if (Race < Grobal2.RC_ANIMAL || Master != null || CrazyMode || NastyMode || WantRefMsg || BaseObject.Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     UpdateVisibleGay(BaseObject);
                                                 }

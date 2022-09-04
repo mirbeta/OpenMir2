@@ -1478,9 +1478,9 @@ namespace GameSvr.RobotPlay
                     }
                 }
                 DelTargetCreat();
-                m_nTargetX = nX;
-                m_nTargetY = nY;
-                SpaceMove(Master.Envir.MapName, m_nTargetX, m_nTargetY, 1);
+                TargetX = nX;
+                TargetY = nY;
+                SpaceMove(Master.Envir.MapName, TargetX, TargetY, 1);
                 return true;
             }
             Master.GetBackPosition(ref nCurrX, ref nCurrY);
@@ -2201,7 +2201,7 @@ namespace GameSvr.RobotPlay
                     switch (m_nSelectMagic)
                     {
                         case SpellsDef.SKILL_ERGUM:
-                            if (AllowUseMagic(12) && Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref m_nTargetX, ref m_nTargetY))
+                            if (AllowUseMagic(12) && Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref TargetX, ref TargetY))
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
@@ -2242,7 +2242,7 @@ namespace GameSvr.RobotPlay
                             }
                             break;
                         case 43:
-                            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref m_nTargetX, ref m_nTargetY))
+                            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY))
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)
                                 {
@@ -2276,7 +2276,7 @@ namespace GameSvr.RobotPlay
                                 }
                             }
                             m_nSelectMagic = 0;
-                            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref m_nTargetX, ref m_nTargetY))
+                            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref TargetX, ref TargetY))
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
@@ -2371,50 +2371,50 @@ namespace GameSvr.RobotPlay
                         result = true;
                         if (CurrX - 2 == BaseObject.CurrX && CurrY == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX - 2);
-                            m_nTargetY = CurrY;
+                            TargetX = (short)(CurrX - 2);
+                            TargetY = CurrY;
                             return result;
                         }
                         if (CurrX + 2 == BaseObject.CurrX && CurrY == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX + 2);
-                            m_nTargetY = CurrY;
+                            TargetX = (short)(CurrX + 2);
+                            TargetY = CurrY;
                             return result;
                         }
                         if (CurrX == BaseObject.CurrX && CurrY - 2 == BaseObject.CurrY)
                         {
-                            m_nTargetX = CurrX;
-                            m_nTargetY = (short)(CurrY - 2);
+                            TargetX = CurrX;
+                            TargetY = (short)(CurrY - 2);
                             return result;
                         }
                         if (CurrX == BaseObject.CurrX && CurrY + 2 == BaseObject.CurrY)
                         {
-                            m_nTargetX = CurrX;
-                            m_nTargetY = (short)(CurrY + 2);
+                            TargetX = CurrX;
+                            TargetY = (short)(CurrY + 2);
                             return result;
                         }
                         if (CurrX - 2 == BaseObject.CurrX && CurrY - 2 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX - 2);
-                            m_nTargetY = (short)(CurrY - 2);
+                            TargetX = (short)(CurrX - 2);
+                            TargetY = (short)(CurrY - 2);
                             return result;
                         }
                         if (CurrX + 2 == BaseObject.CurrX && CurrY - 2 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX + 2);
-                            m_nTargetY = (short)(CurrY - 2);
+                            TargetX = (short)(CurrX + 2);
+                            TargetY = (short)(CurrY - 2);
                             return result;
                         }
                         if (CurrX - 2 == BaseObject.CurrX && CurrY + 2 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX - 2);
-                            m_nTargetY = (short)(CurrY + 2);
+                            TargetX = (short)(CurrX - 2);
+                            TargetY = (short)(CurrY + 2);
                             return result;
                         }
                         if (CurrX + 2 == BaseObject.CurrX && CurrY + 2 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX + 2);
-                            m_nTargetY = (short)(CurrY + 2);
+                            TargetX = (short)(CurrX + 2);
+                            TargetY = (short)(CurrY + 2);
                             return result;
                         }
                     }
@@ -2427,50 +2427,50 @@ namespace GameSvr.RobotPlay
                         result = true;
                         if (CurrX - 3 == BaseObject.CurrX && CurrY == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX - 3);
-                            m_nTargetY = CurrY;
+                            TargetX = (short)(CurrX - 3);
+                            TargetY = CurrY;
                             return result;
                         }
                         if (CurrX + 3 == BaseObject.CurrX && CurrY == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX + 3);
-                            m_nTargetY = CurrY;
+                            TargetX = (short)(CurrX + 3);
+                            TargetY = CurrY;
                             return result;
                         }
                         if (CurrX == BaseObject.CurrX && CurrY - 3 == BaseObject.CurrY)
                         {
-                            m_nTargetX = CurrX;
-                            m_nTargetY = (short)(CurrY - 3);
+                            TargetX = CurrX;
+                            TargetY = (short)(CurrY - 3);
                             return result;
                         }
                         if (CurrX == BaseObject.CurrX && CurrY + 3 == BaseObject.CurrY)
                         {
-                            m_nTargetX = CurrX;
-                            m_nTargetY = (short)(CurrY + 3);
+                            TargetX = CurrX;
+                            TargetY = (short)(CurrY + 3);
                             return result;
                         }
                         if (CurrX - 3 == BaseObject.CurrX && CurrY - 3 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX - 3);
-                            m_nTargetY = (short)(CurrY - 3);
+                            TargetX = (short)(CurrX - 3);
+                            TargetY = (short)(CurrY - 3);
                             return result;
                         }
                         if (CurrX + 3 == BaseObject.CurrX && CurrY - 3 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX + 3);
-                            m_nTargetY = (short)(CurrY - 3);
+                            TargetX = (short)(CurrX + 3);
+                            TargetY = (short)(CurrY - 3);
                             return result;
                         }
                         if (CurrX - 3 == BaseObject.CurrX && CurrY + 3 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX - 3);
-                            m_nTargetY = (short)(CurrY + 3);
+                            TargetX = (short)(CurrX - 3);
+                            TargetY = (short)(CurrY + 3);
                             return result;
                         }
                         if (CurrX + 3 == BaseObject.CurrX && CurrY + 3 == BaseObject.CurrY)
                         {
-                            m_nTargetX = (short)(CurrX + 3);
-                            m_nTargetY = (short)(CurrY + 3);
+                            TargetX = (short)(CurrX + 3);
+                            TargetY = (short)(CurrY + 3);
                             return result;
                         }
                     }
@@ -3197,7 +3197,7 @@ namespace GameSvr.RobotPlay
                         result = 45;// 英雄灭天火
                         return result;
                     }
-                    if (HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref m_nTargetX, ref m_nTargetY))
+                    if (HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY))
                     {
                         if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && GetDirBaseObjectsCount(Direction, 5) > 0 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                         {
@@ -3807,12 +3807,12 @@ namespace GameSvr.RobotPlay
                         result = 11;// 英雄雷电术
                         return result;
                     }
-                    if (AllowUseMagic(10) && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref m_nTargetX, ref m_nTargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
+                    if (AllowUseMagic(10) && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                     {
                         result = 10; // 英雄疾光电影
                         return result;
                     }
-                    if (AllowUseMagic(9) && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref m_nTargetX, ref m_nTargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
+                    if (AllowUseMagic(9) && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                     {
                         result = 9; // 地狱火
                         return result;

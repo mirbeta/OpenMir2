@@ -6,7 +6,6 @@ namespace GameSvr.Monster.Monsters
 {
     public class SpiderHouseMonster : AnimalObject
     {
-        public int n54C = 0;
         private readonly IList<TBaseObject> BBList = null;
 
         public SpiderHouseMonster() : base()

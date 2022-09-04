@@ -14,7 +14,6 @@ namespace GameSvr.Monster.Monsters
         protected virtual bool AttackTarget()
         {
             var result = false;
-            TBaseObject BaseObject;
             if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
             {
                 AttackTick = HUtil32.GetTickCount();
@@ -23,7 +22,7 @@ namespace GameSvr.Monster.Monsters
                 var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject = VisibleActors[i].BaseObject;
+                    var BaseObject = VisibleActors[i].BaseObject;
                     if (BaseObject.Death)
                     {
                         continue;

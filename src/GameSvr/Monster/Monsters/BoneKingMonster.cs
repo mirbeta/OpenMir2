@@ -5,16 +5,16 @@ namespace GameSvr.Monster.Monsters
 {
     public class BoneKingMonster : MonsterObject
     {
-        private int m_nDangerLevel;
-        private readonly IList<TBaseObject> m_SlaveObjectList;
+        private short DangerLevel;
+        private readonly IList<TBaseObject> SlaveObjectList;
 
         public BoneKingMonster() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             Direction = 5;
-            m_nDangerLevel = 5;
-            m_SlaveObjectList = new List<TBaseObject>();
+            DangerLevel = 5;
+            SlaveObjectList = new List<TBaseObject>();
         }
 
         private void CallSlave()
@@ -27,14 +27,14 @@ namespace GameSvr.Monster.Monsters
             GetFrontPosition(ref n10, ref n14);
             for (var i = 0; i < nC; i++)
             {
-                if (m_SlaveObjectList.Count >= 30)
+                if (SlaveObjectList.Count >= 30)
                 {
                     break;
                 }
                 BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
                 if (BaseObject != null)
                 {
-                    m_SlaveObjectList.Add(BaseObject);
+                    SlaveObjectList.Add(BaseObject);
                 }
             }
         }
@@ -48,29 +48,28 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            TBaseObject BaseObject;
             if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - WalkTick >= WalkSpeed)
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
-                    if (m_nDangerLevel > m_WAbil.HP / m_WAbil.MaxHP * 5 && m_nDangerLevel > 0)
+                    if (DangerLevel > m_WAbil.HP / m_WAbil.MaxHP * 5 && DangerLevel > 0)
                     {
-                        m_nDangerLevel -= 1;
+                        DangerLevel -= 1;
                         CallSlave();
                     }
                     if (m_WAbil.HP == m_WAbil.MaxHP)
                     {
-                        m_nDangerLevel = 5;
+                        DangerLevel = 5;
                     }
                 }
-                for (var i = m_SlaveObjectList.Count - 1; i >= 0; i--)
+                for (var i = SlaveObjectList.Count - 1; i >= 0; i--)
                 {
-                    BaseObject = m_SlaveObjectList[i];
+                    var BaseObject = SlaveObjectList[i];
                     if (BaseObject.Death || BaseObject.Ghost)
                     {
-                        m_SlaveObjectList.RemoveAt(i);
+                        SlaveObjectList.RemoveAt(i);
                     }
                 }
             }

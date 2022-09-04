@@ -7,29 +7,24 @@ namespace GameSvr.Monster.Monsters
 {
     public class SuperGuard : NormNpc
     {
-        public int n564 = 0;
         protected bool m_boAttackPet = false;
 
         private bool AttackTarget()
         {
             var result = false;
-            short nOldX;
-            short nOldY;
-            byte btOldDir;
-            short wHitMode;
             if (this.TargetCret.Envir == this.Envir)
             {
                 if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
                 {
                     this.AttackTick = HUtil32.GetTickCount();
                     this.TargetFocusTick = HUtil32.GetTickCount();
-                    nOldX = this.CurrX;
-                    nOldY = this.CurrY;
-                    btOldDir = this.Direction;
+                    var nOldX = this.CurrX;
+                    var nOldY = this.CurrY;
+                    var btOldDir = this.Direction;
                     this.TargetCret.GetBackPosition(ref this.CurrX, ref this.CurrY);
                     this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
                     this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
-                    wHitMode = 0;
+                    short wHitMode = 0;
                     this._Attack(ref wHitMode, this.TargetCret);
                     this.TargetCret.SetLastHiter(this);
                     this.TargetCret.ExpHitter = null;
@@ -62,7 +57,6 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            TBaseObject BaseObject;
             if (this.Master != null)
             {
                 this.Master = null;
@@ -72,7 +66,7 @@ namespace GameSvr.Monster.Monsters
             {
                 for (var i = 0; i < this.VisibleActors.Count; i++)
                 {
-                    BaseObject = this.VisibleActors[i].BaseObject;
+                    var BaseObject = this.VisibleActors[i].BaseObject;
                     if (BaseObject.Death)
                     {
                         continue;

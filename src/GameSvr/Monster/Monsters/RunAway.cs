@@ -19,8 +19,8 @@ namespace GameSvr.Monster.Monsters
             {
                 if (TargetCret != null)
                 {
-                    m_nTargetX = TargetCret.CurrX;
-                    m_nTargetY = TargetCret.CurrY;
+                    TargetX = TargetCret.CurrX;
+                    TargetY = TargetCret.CurrY;
                     if (m_WAbil.HP <= HUtil32.Round(m_WAbil.MaxHP / 2) && borunaway == false)
                     {
                         GetFrontPosition(ref nx, ref ny);
@@ -39,7 +39,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         if ((HUtil32.GetTickCount() - time1) > 5000)
                         {
-                            if (Math.Abs(m_nTargetX - CurrX) == 1 && Math.Abs(m_nTargetY - CurrY) == 1)
+                            if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1)
                             {
                                 WalkTo(M2Share.RandomNumber.RandomByte(4), true);
                             }

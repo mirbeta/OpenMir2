@@ -67,7 +67,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (TargetCret != null)
                     {
-                        if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.25) || TargetCret.m_boCrazyMode)
+                        if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.25) || TargetCret.CrazyMode)
                         {
                             // 注释,战不躲避
                             if (AllowUseMagic(12))
@@ -76,7 +76,7 @@ namespace GameSvr.RobotPlay
                                 if (!(Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 2 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 2))
                                 {
                                     GetGotoXY(TargetCret, 2);
-                                    GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                    GotoTargetXY(TargetX, TargetY, 0);
                                 }
                             }
                         }
@@ -180,7 +180,7 @@ namespace GameSvr.RobotPlay
                             if (m_nSelectMagic != 10)// 除疾光电影外
                             {
                                 GetGotoXY(TargetCret, 3);// 法只走向目标3格范围
-                                GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                GotoTargetXY(TargetX, TargetY, 0);
                             }
                         }
                     }
@@ -261,13 +261,13 @@ namespace GameSvr.RobotPlay
                                 if (TargetCret.m_WAbil.MaxHP >= 700)
                                 {
                                     GetGotoXY(TargetCret, 3); // 道只走向目标3格范围
-                                    GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                    GotoTargetXY(TargetX, TargetY, 0);
                                 }
                             }
                             else
                             {
                                 GetGotoXY(TargetCret, 3); // 道只走向目标3格范围
-                                GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                GotoTargetXY(TargetX, TargetY, 0);
                             }
                         }
                     }
@@ -333,7 +333,7 @@ namespace GameSvr.RobotPlay
                             if (!MagCanHitTarget(CurrX, CurrY, TargetCret))
                             {
                                 GetGotoXY(TargetCret, 3);
-                                GotoTargetXY(m_nTargetX, m_nTargetY, 1);
+                                GotoTargetXY(TargetX, TargetY, 1);
                             }
                             break;
                         case SpellsDef.SKILL_AMYOUNSUL:

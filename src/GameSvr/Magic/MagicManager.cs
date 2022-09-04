@@ -167,7 +167,7 @@ namespace GameSvr.Magic
                     {
                         if (PlayObject.IsProperTarget(TargeTBaseObject))
                         {
-                            if (TargeTBaseObject.m_nAntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
+                            if (TargeTBaseObject.AntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                             {
                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                                 PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ObjectId, "", 600);
@@ -222,7 +222,7 @@ namespace GameSvr.Magic
                             if (StdItem != null)
                             {
                                 MagicBase.UseAmulet(PlayObject, 1, 2, ref nAmuletIdx);
-                                if (M2Share.RandomNumber.Random(TargeTBaseObject.m_btAntiPoison + 7) <= 6)
+                                if (M2Share.RandomNumber.Random(TargeTBaseObject.AntiPoison + 7) <= 6)
                                 {
                                     switch (StdItem.Shape)
                                     {
@@ -279,7 +279,7 @@ namespace GameSvr.Magic
                 case SpellsDef.SKILL_LIGHTENING:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
-                        if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.m_nAntiMagic)
+                        if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.AntiMagic)
                         {
                             nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                             if (TargeTBaseObject.m_btLifeAttrib == Grobal2.LA_UNDEAD)
@@ -320,7 +320,7 @@ namespace GameSvr.Magic
                                 {
                                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                                     {
-                                        if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.m_nAntiMagic)
+                                        if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.AntiMagic)
                                         {
                                             if (Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                                             {
@@ -553,7 +553,7 @@ namespace GameSvr.Magic
                 case SpellsDef.SKILL_45:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
-                        if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.m_nAntiMagic)
+                        if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.AntiMagic)
                         {
                             nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                             if (TargeTBaseObject.m_btLifeAttrib == Grobal2.LA_UNDEAD)
@@ -731,9 +731,9 @@ namespace GameSvr.Magic
                                                 TargeTBaseObject.m_WAbil.HP = (ushort)(TargeTBaseObject.m_WAbil.HP / 10);
                                             }
 
-                                            if (TargeTBaseObject.m_boCanReAlive && TargeTBaseObject.Master == null)
+                                            if (TargeTBaseObject.CanReAlive && TargeTBaseObject.Master == null)
                                             {
-                                                TargeTBaseObject.m_boCanReAlive = false;
+                                                TargeTBaseObject.CanReAlive = false;
                                                 if (TargeTBaseObject.MonGen != null)
                                                 {
                                                     if (TargeTBaseObject.MonGen.nActiveCount > 0)
@@ -906,7 +906,7 @@ namespace GameSvr.Magic
                         if (StdItem != null)
                         {
                             MagicBase.UseAmulet(PlayObject, 1, 2, ref nAmuletIdx);
-                            if (M2Share.RandomNumber.Random(BaseObject.m_btAntiPoison + 7) <= 6)
+                            if (M2Share.RandomNumber.Random(BaseObject.AntiPoison + 7) <= 6)
                             {
                                 int nPower;
                                 switch (StdItem.Shape)
@@ -992,7 +992,7 @@ namespace GameSvr.Magic
                 }
                 if (PlayObject.IsProperTarget(BaseObject))
                 {
-                    if (M2Share.RandomNumber.Random(10) >= BaseObject.m_nAntiMagic)
+                    if (M2Share.RandomNumber.Random(10) >= BaseObject.AntiMagic)
                     {
                         var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                         if (BaseObject.m_btLifeAttrib == Grobal2.LA_UNDEAD)
@@ -1029,7 +1029,7 @@ namespace GameSvr.Magic
                 TargetBaseObject = null;
                 return result;
             }
-            if (TargetBaseObject.m_nAntiMagic > M2Share.RandomNumber.Random(10) || Math.Abs(TargetBaseObject.CurrX - nTargetX) > 1 || Math.Abs(TargetBaseObject.CurrY - nTargetY) > 1)
+            if (TargetBaseObject.AntiMagic > M2Share.RandomNumber.Random(10) || Math.Abs(TargetBaseObject.CurrX - nTargetX) > 1 || Math.Abs(TargetBaseObject.CurrY - nTargetY) > 1)
             {
                 TargetBaseObject = null;
                 return result;
@@ -1253,7 +1253,7 @@ namespace GameSvr.Magic
             {
                 if (BaseObject.IsProperTarget(TargeTBaseObject))
                 {
-                    if (TargeTBaseObject.m_nAntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
+                    if (TargeTBaseObject.AntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                     {
                         BaseObject.SendDelayMsg(BaseObject, Grobal2.RM_DELAYMAGIC, (short)(nPower / 3), HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ObjectId, "", 600);
                         if (M2Share.RandomNumber.Random(2) + (BaseObject.Abil.Level - 1) > TargeTBaseObject.Abil.Level)

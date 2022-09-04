@@ -36,7 +36,6 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             int nRage = 9999;
-            TBaseObject BaseObject = null;
             TBaseObject TargetBaseObject = null;
             if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
@@ -45,7 +44,7 @@ namespace GameSvr.Monster.Monsters
                     WalkTick = HUtil32.GetTickCount();
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = VisibleActors[i].BaseObject;
+                        var BaseObject = VisibleActors[i].BaseObject;
                         if (BaseObject.Death)
                         {
                             continue;

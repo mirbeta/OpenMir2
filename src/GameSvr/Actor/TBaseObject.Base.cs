@@ -101,7 +101,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    if (m_boCanReAlive && MonGen != null)
+                    if (CanReAlive && MonGen != null)
                     {
                         var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.UserEngine.ProcessMonsters_GetZenTime(MonGen.dwZenTime) - 20 * 1000);
                         if (dwMakeGhostTime > M2Share.g_Config.dwMakeGhostTime)
@@ -469,7 +469,7 @@ namespace GameSvr.Actor
                 {
                     BreakHolySeizeMode();
                 }
-                if (m_boCrazyMode && ((HUtil32.GetTickCount() - m_dwCrazyModeTick) > m_dwCrazyModeInterval))
+                if (CrazyMode && ((HUtil32.GetTickCount() - CrazyModeTick) > CrazyModeInterval))
                 {
                     BreakCrazyMode();
                 }
@@ -712,11 +712,11 @@ namespace GameSvr.Actor
                 LastHiter = null;
             }
 
-            if (m_boCanReAlive)
+            if (CanReAlive)
             {
                 if ((MonGen != null) && (MonGen.Envir != Envir))
                 {
-                    m_boCanReAlive = false;
+                    CanReAlive = false;
                     if (MonGen.nActiveCount > 0)
                     {
                         MonGen.nActiveCount--;
@@ -1122,9 +1122,9 @@ namespace GameSvr.Actor
 
         public virtual void MakeGhost()
         {
-            if (m_boCanReAlive)
+            if (CanReAlive)
             {
-                m_boInvisible = true;
+                Invisible = true;
                 GhostTick = HUtil32.GetTickCount();
                 Envir.DeleteFromMap(CurrX, CurrY, CellType.MovingObject, this);
                 SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
@@ -1569,11 +1569,11 @@ namespace GameSvr.Actor
             m_WAbil.Weight = 0;
             m_WAbil.WearWeight = 0;
             m_WAbil.HandWeight = 0;
-            m_btAntiPoison = 0;
-            m_nPoisonRecover = 0;
+            AntiPoison = 0;
+            PoisonRecover = 0;
             m_nHealthRecover = 0;
             m_nSpellRecover = 0;
-            m_nAntiMagic = 1;
+            AntiMagic = 1;
             m_nLuck = 0;
             HitSpeed = 0;
             m_boExpItem = false;
@@ -2335,11 +2335,11 @@ namespace GameSvr.Actor
             }
             SpeedPoint += (byte)m_AddAbil.wSpeedPoint;
             m_btHitPoint += (byte)m_AddAbil.wHitPoint;
-            m_btAntiPoison += (byte)m_AddAbil.wAntiPoison;
-            m_nPoisonRecover += m_AddAbil.wPoisonRecover;
+            AntiPoison += (byte)m_AddAbil.wAntiPoison;
+            PoisonRecover += m_AddAbil.wPoisonRecover;
             m_nHealthRecover += m_AddAbil.wHealthRecover;
             m_nSpellRecover += m_AddAbil.wSpellRecover;
-            m_nAntiMagic += m_AddAbil.wAntiMagic;
+            AntiMagic += m_AddAbil.wAntiMagic;
             m_nLuck += m_AddAbil.btLuck;
             m_nLuck -= m_AddAbil.btUnLuck;
             HitSpeed = m_AddAbil.nHitSpeed;

@@ -42,7 +42,7 @@ namespace GameSvr.Monster.Monsters
                                 BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ObjectId, "", 300);
                                 if (m_boUsePoison)
                                 {
-                                    if (M2Share.RandomNumber.Random(m_btAntiPoison + 20) == 0)
+                                    if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0)
                                     {
                                         BaseObject.MakePosion(Grobal2.POISON_DECHEALTH, 30, 1);
                                     }

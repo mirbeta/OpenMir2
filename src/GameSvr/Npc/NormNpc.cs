@@ -49,7 +49,7 @@ namespace GameSvr.Npc
             this.SuperMan = true;
             this.Race = Grobal2.RC_NPC;
             this.Light = 2;
-            this.m_btAntiPoison = 99;
+            this.AntiPoison = 99;
             this.m_ScriptList = new List<TScript>();
             this.m_boStickMode = true;
             this.m_sFilePath = "";

@@ -20,13 +20,13 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (IsProperTarget(TargetCret))
                         {
-                            if (Math.Abs(m_nTargetX - CurrX) <= 8 && Math.Abs(m_nTargetY - CurrY) <= 8)
+                            if (Math.Abs(TargetX - CurrX) <= 8 && Math.Abs(TargetY - CurrY) <= 8)
                             {
                                 var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MC) - HUtil32.LoWord(m_WAbil.MC) + 1) + HUtil32.LoWord(m_WAbil.MC);
                                 if (nPower > 0)
                                 {
                                     var BaseObject = GetPoseCreate();
-                                    if (BaseObject != null && IsProperTarget(BaseObject) && m_nAntiMagic > 0)
+                                    if (BaseObject != null && IsProperTarget(BaseObject) && AntiMagic > 0)
                                     {
                                         nPower = BaseObject.GetMagStruckDamage(this, nPower);
                                         if (nPower > 0)

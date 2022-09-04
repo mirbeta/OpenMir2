@@ -97,8 +97,8 @@ namespace GameSvr.RobotPlay
                                 if (IsNeedGotoXY())// 是否走向目标
                                 {
                                     m_dwActionTick = HUtil32.GetTickCount();
-                                    m_nTargetX = TargetCret.CurrX;
-                                    m_nTargetY = TargetCret.CurrY;
+                                    TargetX = TargetCret.CurrX;
+                                    TargetY = TargetCret.CurrY;
                                     if (AllowUseMagic(12) && Job == 0)
                                     {
                                         GetGotoXY(TargetCret, 2);
@@ -122,7 +122,7 @@ namespace GameSvr.RobotPlay
                                             GetGotoXY(TargetCret, 3); // 道法只走向目标3格范围
                                         }
                                     }
-                                    GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                    GotoTargetXY(TargetX, TargetY, 0);
                                     base.Run();
                                     return;
                                 }
@@ -552,7 +552,7 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                     {
-                                                        if (Race < Grobal2.RC_ANIMAL || Master != null || m_boCrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                                        if (Race < Grobal2.RC_ANIMAL || Master != null || CrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                         {
                                                             UpdateVisibleGay(baseObject);
                                                         }

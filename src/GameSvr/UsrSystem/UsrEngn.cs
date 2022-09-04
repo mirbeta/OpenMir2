@@ -1018,7 +1018,7 @@ namespace GameSvr.UsrSystem
                                 if ((dwCurrentTick - monster.m_dwRunTick) > monster.m_nRunTime)
                                 {
                                     monster.m_dwRunTick = dwRunTick;
-                                    if (monster.Death && monster.m_boCanReAlive && monster.m_boInvisible && (monster.MonGen != null))
+                                    if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
                                     {
                                         if ((HUtil32.GetTickCount() - monster.ReAliveTick) > M2Share.UserEngine.ProcessMonsters_GetZenTime(monster.MonGen.dwZenTime))
                                         {
@@ -1843,7 +1843,7 @@ namespace GameSvr.UsrSystem
                                 (short)(nY - 10 + M2Share.RandomNumber.Random(20)), monGen.nRace, monGen.sMonName);
                             if (cert != null)
                             {
-                                cert.m_boCanReAlive = true;
+                                cert.CanReAlive = true;
                                 cert.ReAliveTick = HUtil32.GetTickCount();
                                 cert.MonGen = monGen;
                                 monGen.nActiveCount++;
@@ -1865,7 +1865,7 @@ namespace GameSvr.UsrSystem
                             cert = AddBaseObject(monGen.sMapName, nX, nY, monGen.nRace, monGen.sMonName);
                             if (cert != null)
                             {
-                                cert.m_boCanReAlive = true;
+                                cert.CanReAlive = true;
                                 cert.ReAliveTick = HUtil32.GetTickCount();
                                 cert.MonGen = monGen;
                                 monGen.nActiveCount++;
@@ -2312,7 +2312,7 @@ namespace GameSvr.UsrSystem
                     baseObject.WalkStep = monster.wWalkStep;
                     baseObject.WalkWait = monster.wWalkWait;
                     baseObject.NextHitTime = monster.wAttackSpeed;
-                    baseObject.m_boNastyMode = monster.boAggro;
+                    baseObject.NastyMode = monster.boAggro;
                     baseObject.m_boNoTame = monster.boTame;
                     break;
                 }

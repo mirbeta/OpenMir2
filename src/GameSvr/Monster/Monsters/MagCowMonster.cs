@@ -20,7 +20,7 @@ namespace GameSvr.Monster.Monsters
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 BaseObject = GetPoseCreate();
-                if (BaseObject != null && IsProperTarget(BaseObject) && m_nAntiMagic >= 0)
+                if (BaseObject != null && IsProperTarget(BaseObject) && AntiMagic >= 0)
                 {
                     n10 = BaseObject.GetMagStruckDamage(this, n10);
                     if (n10 > 0)

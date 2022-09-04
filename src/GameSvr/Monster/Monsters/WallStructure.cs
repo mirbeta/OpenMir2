@@ -4,8 +4,6 @@ namespace GameSvr.Monster.Monsters
 {
     public class WallStructure : GuardUnit
     {
-        public int n55C = 0;
-        private int dw560 = 0;
         public bool boSetMapFlaged = false;
 
         public WallStructure() : base()
@@ -13,7 +11,7 @@ namespace GameSvr.Monster.Monsters
             this.Animal = false;
             this.m_boStickMode = true;
             boSetMapFlaged = false;
-            this.m_btAntiPoison = 200;
+            this.AntiPoison = 200;
         }
 
         public override void Initialize()
@@ -27,7 +25,7 @@ namespace GameSvr.Monster.Monsters
             byte n08;
             if (this.m_WAbil.HP > 0)
             {
-                n08 = (byte)(3 - HUtil32.Round(this.m_WAbil.HP / this.m_WAbil.MaxHP * 3.0));
+                n08 = (byte)(3 - HUtil32.Round(this.m_WAbil.HP / this.m_WAbil.MaxHP * 3));
             }
             else
             {
@@ -44,7 +42,6 @@ namespace GameSvr.Monster.Monsters
         public override void Die()
         {
             base.Die();
-            dw560 = HUtil32.GetTickCount();
         }
 
         public override void Run()
@@ -70,7 +67,7 @@ namespace GameSvr.Monster.Monsters
             }
             if (this.m_WAbil.HP > 0)
             {
-                n08 = 3 - HUtil32.Round(this.m_WAbil.HP / this.m_WAbil.MaxHP * 3.0);
+                n08 = 3 - HUtil32.Round(this.m_WAbil.HP / this.m_WAbil.MaxHP * 3);
             }
             else
             {

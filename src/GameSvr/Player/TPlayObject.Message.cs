@@ -1554,7 +1554,7 @@ namespace GameSvr.Player
                     SendSocket(m_DefMsg);
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
-                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(m_nAntiMagic, 0), 0), HUtil32.MakeWord(m_btHitPoint, SpeedPoint), HUtil32.MakeWord(m_btAntiPoison, m_nPoisonRecover), HUtil32.MakeWord(m_nHealthRecover, m_nSpellRecover), "");
+                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(m_btHitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(m_nHealthRecover, m_nSpellRecover), "");
                     break;
                 case Grobal2.RM_CHANGENAMECOLOR:
                     SendDefMessage(Grobal2.SM_CHANGENAMECOLOR, ProcessMsg.BaseObject, GetCharColor(BaseObject), 0, 0, "");
@@ -1814,7 +1814,7 @@ namespace GameSvr.Player
                     SendChangeGuildName();
                     break;
                 case Grobal2.RM_SUBABILITY:
-                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(m_nAntiMagic, 0), 0), HUtil32.MakeWord(m_btHitPoint, SpeedPoint), HUtil32.MakeWord(m_btAntiPoison, m_nPoisonRecover), HUtil32.MakeWord(m_nHealthRecover, m_nSpellRecover), "");
+                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(m_btHitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(m_nHealthRecover, m_nSpellRecover), "");
                     break;
                 case Grobal2.RM_BUILDGUILD_OK:
                     SendDefMessage(Grobal2.SM_BUILDGUILD_OK, 0, 0, 0, 0, "");
