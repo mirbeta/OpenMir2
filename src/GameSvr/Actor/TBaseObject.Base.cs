@@ -1064,7 +1064,7 @@ namespace GameSvr.Actor
                 {
                     if (Abil.Level > M2Share.g_Config.nPKProtectLevel)// 如果大于指定等级
                     {
-                        if (!BaseObject.m_boPKFlag && BaseObject.Abil.Level <= M2Share.g_Config.nPKProtectLevel &&
+                        if (!BaseObject.PvpFlag && BaseObject.Abil.Level <= M2Share.g_Config.nPKProtectLevel &&
                             BaseObject.PKLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                         {
                             result = false;
@@ -1073,7 +1073,7 @@ namespace GameSvr.Actor
                     }
                     if (Abil.Level <= M2Share.g_Config.nPKProtectLevel)// 如果小于指定等级
                     {
-                        if (!BaseObject.m_boPKFlag && BaseObject.Abil.Level > M2Share.g_Config.nPKProtectLevel && BaseObject.PKLevel() < 2)
+                        if (!BaseObject.PvpFlag && BaseObject.Abil.Level > M2Share.g_Config.nPKProtectLevel && BaseObject.PKLevel() < 2)
                         {
                             result = false;
                             return result;
