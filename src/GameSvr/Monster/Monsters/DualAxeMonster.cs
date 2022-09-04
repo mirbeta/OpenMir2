@@ -125,12 +125,12 @@ namespace GameSvr.Monster.Monsters
                         {
                             if (M2Share.RandomNumber.Random(5) == 0)
                             {
-                                GetBackPosition(ref m_nTargetX, ref m_nTargetY);
+                                GetBackPosition(ref TargetX, ref TargetY);
                             }
                         }
                         else
                         {
-                            GetBackPosition(ref m_nTargetX, ref m_nTargetY);
+                            GetBackPosition(ref TargetX, ref TargetY);
                         }
                     }
                 }

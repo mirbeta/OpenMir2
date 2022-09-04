@@ -136,11 +136,11 @@ namespace GameSvr.Monster.Monsters
                             }
                             else
                             {
-                                m_nTargetX = -1;
+                                TargetX = -1;
                                 if (m_boMission)
                                 {
-                                    m_nTargetX = m_nMissionX;
-                                    m_nTargetY = m_nMissionY;
+                                    TargetX = m_nMissionX;
+                                    TargetY = m_nMissionY;
                                 }
                             }
                         }
@@ -149,23 +149,23 @@ namespace GameSvr.Monster.Monsters
                             if (TargetCret == null)
                             {
                                 Master.GetBackPosition(ref nX, ref nY);
-                                if (Math.Abs(m_nTargetX - nX) > 1 || Math.Abs(m_nTargetY - nY) > 1)
+                                if (Math.Abs(TargetX - nX) > 1 || Math.Abs(TargetY - nY) > 1)
                                 {
-                                    m_nTargetX = nX;
-                                    m_nTargetY = nY;
+                                    TargetX = nX;
+                                    TargetY = nY;
                                     if (Math.Abs(CurrX - nX) <= 2 && Math.Abs(CurrY - nY) <= 2)
                                     {
                                         if (Envir.GetMovingObject(nX, nY, true) != null)
                                         {
-                                            m_nTargetX = CurrX;
-                                            m_nTargetY = CurrY;
+                                            TargetX = CurrX;
+                                            TargetY = CurrY;
                                         }
                                     }
                                 }
                             }
                             if (!Master.SlaveRelax && (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20))
                             {
-                                SpaceMove(Master.Envir.MapName, m_nTargetX, m_nTargetY, 1);
+                                SpaceMove(Master.Envir.MapName, TargetX, TargetY, 1);
                             }
                         }
                     }
@@ -182,7 +182,7 @@ namespace GameSvr.Monster.Monsters
                         base.Run();
                         return;
                     }
-                    if (m_nTargetX != -1)
+                    if (TargetX != -1)
                     {
                         GotoTargetXY();
                     }

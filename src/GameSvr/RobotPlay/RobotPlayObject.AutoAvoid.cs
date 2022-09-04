@@ -449,8 +449,8 @@ namespace GameSvr.RobotPlay
             {
                 byte nDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 nDir = GetBackDir(nDir);
-                Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref m_nTargetX, ref m_nTargetY);
-                result = GotoTargetXY(m_nTargetX, m_nTargetY, 1);
+                Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref TargetX, ref TargetY);
+                result = GotoTargetXY(TargetX, TargetY, 1);
             }
             return result;
         }

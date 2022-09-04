@@ -43,7 +43,7 @@ namespace GameSvr.Monster.Monsters
                         base.Run();
                         return;
                     }
-                    GetBackPosition(ref m_nTargetX, ref m_nTargetY);
+                    GetBackPosition(ref TargetX, ref TargetY);
                 }
                 if (TargetCret != null && Math.Abs(CurrX - TargetCret.CurrX) < 6 && Math.Abs(CurrY - TargetCret.CurrY) < 6 && (HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                 {

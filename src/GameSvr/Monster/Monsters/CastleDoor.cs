@@ -7,18 +7,14 @@ namespace GameSvr.Monster.Monsters
     /// </summary>
     public class CastleDoor : GuardUnit
     {
-        public int dw55C = 0;
         public bool m_boOpened = false;
-        public bool bo565n = false;
-        public bool bo566n = false;
-        public bool bo567n = false;
 
         public CastleDoor() : base()
         {
             Animal = false;
             m_boStickMode = true;
             m_boOpened = false;
-            m_btAntiPoison = 200;
+            AntiPoison = 200;
         }
 
         private void SetMapXYFlag(int nFlag)
@@ -72,7 +68,7 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            Direction = (byte)(3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0));
+            Direction = (byte)(3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3));
             if (Direction - 3 >= 0)
             {
                 Direction = 0;
@@ -102,7 +98,7 @@ namespace GameSvr.Monster.Monsters
             }
             if (!m_boOpened)
             {
-                int n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0);
+                int n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3);
                 if (Direction != n08 && n08 < 3)
                 {
                     Direction = (byte)n08;
@@ -114,7 +110,7 @@ namespace GameSvr.Monster.Monsters
 
         public void RefStatus()
         {
-            var n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0);
+            var n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3);
             if (n08 - 3 >= 0)
             {
                 n08 = 0;

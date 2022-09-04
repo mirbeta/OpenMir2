@@ -23,13 +23,12 @@ namespace GameSvr.Monster.Monsters
 
         private void MeltStoneAll()
         {
-            TBaseObject BaseObject;
             MeltStone();
             IList<TBaseObject> List10 = new List<TBaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 7, List10);
             for (var i = 0; i < List10.Count; i++)
             {
-                BaseObject = List10[i];
+                var BaseObject = List10[i];
                 if (BaseObject.StoneMode)
                 {
                     if (BaseObject is ScultureMonster)
@@ -42,14 +41,13 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            TBaseObject BaseObject;
             if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
                 if (StoneMode)
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = VisibleActors[i].BaseObject;
+                        var BaseObject = VisibleActors[i].BaseObject;
                         if (BaseObject.Death)
                         {
                             continue;

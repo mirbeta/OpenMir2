@@ -2,8 +2,6 @@
 {
     public class DefendMonster : MonsterObject
     {
-        public bool callguardrun = false;
-
         public DefendMonster()
             : base()
         {

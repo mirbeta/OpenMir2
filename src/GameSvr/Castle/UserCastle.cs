@@ -235,8 +235,6 @@ namespace GameSvr.Castle
                         {
                             ObjUnit.BaseObject.m_WAbil.HP = Archer[i].nHP;
                             ObjUnit.BaseObject.Castle = this;
-                            ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
-                            ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
                             ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
                         }
                         else

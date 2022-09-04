@@ -6,7 +6,6 @@ namespace GameSvr.Monster.Monsters
 {
     public class StickMonster : AnimalObject
     {
-        public int n54C = 0;
         protected int nComeOutValue = 0;
         protected int nAttackRange = 0;
 
@@ -101,7 +100,6 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            bool bo05;
             if (!this.Ghost && !this.Death && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - this.WalkTick) > this.WalkSpeed)
@@ -120,7 +118,7 @@ namespace GameSvr.Monster.Monsters
                         {
                             this.SearchTarget();
                         }
-                        bo05 = false;
+                        var bo05 = false;
                         if (this.TargetCret != null)
                         {
                             if (Math.Abs(this.TargetCret.CurrX - this.CurrX) > nAttackRange || Math.Abs(this.TargetCret.CurrY - this.CurrY) > nAttackRange)

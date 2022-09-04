@@ -9,8 +9,8 @@ namespace GameSvr.Actor
         /// 未被处理次数，用于怪物处理循环
         /// </summary>
         public int m_nNotProcessCount = 0;
-        public short m_nTargetX = 0;
-        public short m_nTargetY = 0;
+        internal short TargetX = 0;
+        internal short TargetY = 0;
         public bool m_boRunAwayMode = false;
         public int m_dwRunAwayStart = 0;
         public int m_dwRunAwayTime = 0;
@@ -23,7 +23,7 @@ namespace GameSvr.Actor
         public AnimalObject() : base()
         {
             m_nNotProcessCount = 0;
-            m_nTargetX = -1;
+            TargetX = -1;
             this.Race = Grobal2.RC_ANIMAL;
             this.AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
@@ -41,10 +41,10 @@ namespace GameSvr.Actor
             int n20;
             int nOldX;
             int nOldY;
-            if (this.CurrX != m_nTargetX || this.CurrY != m_nTargetY)
+            if (this.CurrX != TargetX || this.CurrY != TargetY)
             {
-                n10 = m_nTargetX;
-                n14 = m_nTargetY;
+                n10 = TargetX;
+                n14 = TargetY;
                 nDir = Grobal2.DR_DOWN;
                 if (n10 > this.CurrX)
                 {
@@ -170,17 +170,15 @@ namespace GameSvr.Actor
 
         protected void HitMagAttackTarget(TBaseObject TargeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
         {
-            int nDamage;
-            TBaseObject BaseObject;
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
             this.Envir.GetBaseObjects(TargeTBaseObject.CurrX, TargeTBaseObject.CurrY, false, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
-                BaseObject = BaseObjectList[i];
+                var BaseObject = BaseObjectList[i];
                 if (this.IsProperTarget(BaseObject))
                 {
-                    nDamage = 0;
+                    var nDamage = 0;
                     nDamage += BaseObject.GetHitStruckDamage(this, nHitPower);
                     nDamage += BaseObject.GetMagStruckDamage(this, nMagPower);
                     if (nDamage > 0)
@@ -198,24 +196,22 @@ namespace GameSvr.Actor
         protected override void DelTargetCreat()
         {
             base.DelTargetCreat();
-            m_nTargetX = -1;
-            m_nTargetY = -1;
+            TargetX = -1;
+            TargetY = -1;
         }
 
         protected virtual void SearchTarget()
         {
-            TBaseObject BaseObject = null;
             TBaseObject BaseObject18 = null;
-            int nC;
             var n10 = 999;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                BaseObject = this.VisibleActors[i].BaseObject;
+                var BaseObject = this.VisibleActors[i].BaseObject;
                 if (!BaseObject.Death)
                 {
                     if (this.IsProperTarget(BaseObject) && (!BaseObject.HideMode || this.CoolEye))
                     {
-                        nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
+                        var nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
                         if (nC < n10)
                         {
                             n10 = nC;
@@ -232,12 +228,11 @@ namespace GameSvr.Actor
 
         protected void sub_4C959C()
         {
-            TBaseObject BaseObject;
             TBaseObject Creat = null;
             var n10 = 999;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                BaseObject = this.VisibleActors[i].BaseObject;
+                var BaseObject = this.VisibleActors[i].BaseObject;
                 if (BaseObject.Death)
                 {
                     continue;
@@ -256,8 +251,8 @@ namespace GameSvr.Actor
 
         protected virtual void SetTargetXY(short nX, short nY)
         {
-            m_nTargetX = nX;
-            m_nTargetY = nY;
+            TargetX = nX;
+            TargetY = nY;
         }
 
         protected virtual void Wondering()

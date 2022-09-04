@@ -158,11 +158,11 @@ namespace GameSvr.Actor
                                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                         if (baseObject != null)
                                         {
-                                            if (!baseObject.Death && !baseObject.m_boInvisible)
+                                            if (!baseObject.Death && !baseObject.Invisible)
                                             {
                                                 if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                 {
-                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || m_boCrazyMode || m_boNastyMode || WantRefMsg || 
+                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || 
                                                         ((baseObject.Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || 
                                                         (baseObject.Race == Grobal2.RC_PLAYOBJECT))
                                                     {

@@ -511,7 +511,7 @@ namespace GameSvr.Actor
                 {
                     AttackTarget.StruckDamage(nPower);
                     AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.m_WAbil.HP, AttackTarget.m_WAbil.MaxHP, ObjectId, "", 200);
-                    if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.m_btAntiPoison + M2Share.g_Config.nAttackPosionRate) == 0))
+                    if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.g_Config.nAttackPosionRate) == 0))
                     {
                         AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.g_Config.nAttackPosionTime, 0);
                     }

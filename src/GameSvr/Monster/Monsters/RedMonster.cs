@@ -15,11 +15,11 @@ namespace GameSvr.Monster.Monsters
             {
                 if (TargetCret != null)
                 {
-                    m_nTargetX = TargetCret.CurrX;
-                    m_nTargetY = TargetCret.CurrY;
-                    if (Math.Abs(m_nTargetX - CurrX) == 1 && Math.Abs(m_nTargetY - CurrY) == 1)
+                    TargetX = TargetCret.CurrX;
+                    TargetY = TargetCret.CurrY;
+                    if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1)
                     {
-                        if (M2Share.RandomNumber.Random(TargetCret.m_btAntiPoison + 7) <= 6 && TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0)
+                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0)
                         {
                             TargetCret.MakePosion(Grobal2.POISON_DAMAGEARMOR, 30, 1);
                         }

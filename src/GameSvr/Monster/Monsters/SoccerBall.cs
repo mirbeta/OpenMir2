@@ -14,7 +14,7 @@ namespace GameSvr.Monster.Monsters
             Animal = false;
             SuperMan = true;
             n550 = 0;
-            m_nTargetX = -1;
+            TargetX = -1;
         }
 
         public override void Run()
@@ -55,18 +55,18 @@ namespace GameSvr.Monster.Monsters
                                 Direction = 1;
                                 break;
                         }
-                        Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
+                        Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref TargetX, ref TargetY);
                     }
                 }
             }
             else
             {
-                m_nTargetX = -1;
+                TargetX = -1;
             }
-            if (m_nTargetX != -1)
+            if (TargetX != -1)
             {
                 GotoTargetXY();
-                if (m_nTargetX == CurrX && m_nTargetY == CurrY)
+                if (TargetX == CurrX && TargetY == CurrY)
                 {
                     n550 = 0;
                 }
@@ -83,7 +83,7 @@ namespace GameSvr.Monster.Monsters
             Direction = hiter.Direction;
             n550 = M2Share.RandomNumber.Random(4) + n550 + 4;
             n550 = HUtil32._MIN(20, n550);
-            Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
+            Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref TargetX, ref TargetY);
         }
     }
 }

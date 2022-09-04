@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class CentipedeKingMonster : StickMonster
     {
-        public int m_dwAttickTick = 0;
+        private int m_dwAttickTick = 0;
 
         public CentipedeKingMonster() : base()
         {
@@ -20,10 +20,9 @@ namespace GameSvr.Monster.Monsters
         private bool sub_4A5B0C()
         {
             var result = false;
-            TBaseObject BaseObject;
             for (var i = 0; i < VisibleActors.Count; i++)
             {
-                BaseObject = VisibleActors[i].BaseObject;
+                var BaseObject = VisibleActors[i].BaseObject;
                 if (BaseObject.Death)
                 {
                     continue;
@@ -42,23 +41,19 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool AttackTarget()
         {
-            var result = false;
-            TAbility WAbil;
-            int nPower;
-            TBaseObject BaseObject;
             if (!sub_4A5B0C())
             {
-                return result;
+                return false;
             }
             if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
-                WAbil = m_WAbil;
-                nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+                var WAbil = m_WAbil;
+                var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject = VisibleActors[i].BaseObject;
+                    var BaseObject = VisibleActors[i].BaseObject;
                     if (BaseObject.Death)
                     {
                         continue;
@@ -85,8 +80,7 @@ namespace GameSvr.Monster.Monsters
                     }
                 }
             }
-            result = true;
-            return result;
+            return true;
         }
 
         protected override void ComeOut()
@@ -97,7 +91,6 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            TBaseObject BaseObject;
             if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
@@ -109,7 +102,7 @@ namespace GameSvr.Monster.Monsters
                         {
                             for (var i = 0; i < VisibleActors.Count; i++)
                             {
-                                BaseObject = VisibleActors[i].BaseObject;
+                                var BaseObject = VisibleActors[i].BaseObject;
                                 if (BaseObject.Death)
                                 {
                                     continue;

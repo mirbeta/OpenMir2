@@ -13,7 +13,6 @@ namespace GameSvr.Monster.Monsters
 
         private void AroundAttack()
         {
-            TBaseObject BaseObject;
             short wHitMode = 0;
             GetAttackDir(TargetCret, ref Direction);
             IList<TBaseObject> xTargetList = new List<TBaseObject>();
@@ -22,7 +21,7 @@ namespace GameSvr.Monster.Monsters
             {
                 for (var i = xTargetList.Count - 1; i >= 0; i--)
                 {
-                    BaseObject = xTargetList[i];
+                    var BaseObject = xTargetList[i];
                     if (BaseObject != null)
                     {
                         _Attack(ref wHitMode, BaseObject);
