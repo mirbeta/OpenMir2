@@ -446,7 +446,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 魔法盾等级
         /// </summary>
-        internal byte MagBubbleDefenceLevel;
+        private byte MagBubbleDefenceLevel;
         public int SearchTime;
         public int SearchTick;
         /// <summary>
@@ -557,7 +557,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 仓库物品列表
         /// </summary>
-        public IList<TUserItem> StorageItemList;
+        internal IList<TUserItem> StorageItemList;
         /// <summary>
         /// 走路速度
         /// </summary>
@@ -1234,7 +1234,7 @@ namespace GameSvr.Actor
             return PkPoint / 100;
         }
 
-        public void HealthSpellChanged()
+        protected void HealthSpellChanged()
         {
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
@@ -1247,7 +1247,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public int CalcGetExp(int nLevel, int nExp)
+        private int CalcGetExp(int nLevel, int nExp)
         {
             int result;
             if (M2Share.g_Config.boHighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
@@ -1360,7 +1360,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public int GetGuildRelation(TBaseObject cert1, TBaseObject cert2)
+        private int GetGuildRelation(TBaseObject cert1, TBaseObject cert2)
         {
             int result = 0;
             GuildWarArea = false;
@@ -2076,8 +2076,6 @@ namespace GameSvr.Actor
         /// <summary>
         /// 地图随机移动
         /// </summary>
-        /// <param name="sMapName"></param>
-        /// <param name="nInt"></param>
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
@@ -2122,7 +2120,6 @@ namespace GameSvr.Actor
         /// <summary>
         /// 检查心灵启示
         /// </summary>
-        /// <param name="Magic"></param>
         protected void CheckSeeHealGauge(TUserMagic Magic)
         {
             if (Magic.MagicInfo.wMagicID == 28)
@@ -2142,7 +2139,6 @@ namespace GameSvr.Actor
             {
                 return result;
             }
-
             int n10 = nFlag / 8;
             int n14 = nFlag % 8;
             if ((n10 - m_QuestFlag.Length) < 0)
@@ -2362,8 +2358,7 @@ namespace GameSvr.Actor
                     {
                         return;
                     }
-
-                    var nOldDura = HUtil32.Round(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000);
+                    var nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
                     int nDura = 0;
                     if (M2Share.g_Config.boDecLampDura)
                     {
@@ -2373,7 +2368,6 @@ namespace GameSvr.Actor
                     {
                         nDura = UseItems[Grobal2.U_RIGHTHAND].Dura;
                     }
-
                     if (nDura <= 0)
                     {
                         UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
@@ -2382,7 +2376,6 @@ namespace GameSvr.Actor
                             var PlayObject = this as PlayObject;
                             PlayObject.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
                         }
-
                         UseItems[Grobal2.U_RIGHTHAND].wIndex = 0;
                         Light = 0;
                         SendRefMsg(Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
@@ -2393,7 +2386,6 @@ namespace GameSvr.Actor
                     {
                         UseItems[Grobal2.U_RIGHTHAND].Dura = (ushort)nDura;
                     }
-
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
                         SendMsg(this, Grobal2.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
@@ -2415,11 +2407,10 @@ namespace GameSvr.Actor
             {
                 result = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
             }
-
             return result;
         }
 
-        public bool GetAttackDir(TBaseObject BaseObject, ref byte btDir)
+        protected bool GetAttackDir(TBaseObject BaseObject, ref byte btDir)
         {
             bool result = false;
             if ((CurrX - 1 <= BaseObject.CurrX) && (CurrX + 1 >= BaseObject.CurrX) &&
@@ -2481,7 +2472,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool GetAttackDir(TBaseObject BaseObject, int nRange, ref byte btDir)
+        protected bool GetAttackDir(TBaseObject BaseObject, int nRange, ref byte btDir)
         {
             short nX = 0;
             short nY = 0;
@@ -2494,7 +2485,7 @@ namespace GameSvr.Actor
             return false;
         }
 
-        public bool TargetInSpitRange(TBaseObject BaseObject, ref byte btDir)
+        protected bool TargetInSpitRange(TBaseObject BaseObject, ref byte btDir)
         {
             bool result = false;
             if ((Math.Abs(BaseObject.CurrX - CurrX) <= 2) && (Math.Abs(BaseObject.CurrY - CurrY) <= 2))
@@ -2530,18 +2521,15 @@ namespace GameSvr.Actor
         protected ushort RecalcBagWeight()
         {
             ushort result = 0;
-            TUserItem UserItem;
-            StdItem StdItem;
             for (int i = 0; i < ItemList.Count; i++)
             {
-                UserItem = ItemList[i];
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                var UserItem = ItemList[i];
+                var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
                     result += StdItem.Weight;
                 }
             }
-
             return result;
         }
 
@@ -2550,7 +2538,6 @@ namespace GameSvr.Actor
         /// </summary>
         private void RecalcHitSpeed()
         {
-            TUserMagic UserMagic;
             TNakedAbility BonusTick = null;
             switch (Job)
             {
@@ -2580,7 +2567,7 @@ namespace GameSvr.Actor
             m_nHitDouble = 0;
             for (int i = 0; i < MagicList.Count; i++)
             {
-                UserMagic = MagicList[i];
+                var UserMagic = MagicList[i];
                 MagicArr[UserMagic.wMagIdx] = UserMagic;
                 switch (UserMagic.wMagIdx)
                 {
@@ -2589,21 +2576,18 @@ namespace GameSvr.Actor
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(9 / 3 * UserMagic.btLevel));
                         }
-
                         break;
                     case SpellsDef.SKILL_ILKWANG: // 精神力战法
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(8 / 3 * UserMagic.btLevel));
                         }
-
                         break;
                     case SpellsDef.SKILL_YEDO: // 攻杀剑法
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(3 / 3 * UserMagic.btLevel));
                         }
-
                         m_nHitPlus = (byte)(M2Share.DEFHIT + UserMagic.btLevel);
                         AttackSkillCount = (byte)(7 - UserMagic.btLevel);
                         AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
@@ -2615,7 +2599,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public void AddItemSkill(int nIndex)
+        private void AddItemSkill(int nIndex)
         {
             TMagic Magic = null;
             switch (nIndex)
@@ -2651,22 +2635,12 @@ namespace GameSvr.Actor
 
         private bool AddToMap()
         {
-            bool result;
-            object Point = Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
-            if (Point != null)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-
+            var point = Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
+            var result = point != null;
             if (!FixedHideMode)
             {
                 SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, 0, "");
             }
-
             return result;
         }
 
@@ -2675,7 +2649,7 @@ namespace GameSvr.Actor
         /// </summary>
         /// <param name="UserMagic"></param>
         /// <returns></returns>
-        public short GetMagicSpell(TUserMagic UserMagic)
+        private short GetMagicSpell(TUserMagic UserMagic)
         {
             return (short)HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) *
                                         (UserMagic.btLevel + 1));
@@ -2694,7 +2668,7 @@ namespace GameSvr.Actor
         /// 减少魔法值
         /// </summary>
         /// <param name="nSpellPoint"></param>
-        public void DamageSpell(ushort nSpellPoint)
+        protected void DamageSpell(ushort nSpellPoint)
         {
             if (nSpellPoint > 0)
             {
@@ -2720,16 +2694,14 @@ namespace GameSvr.Actor
             }
         }
 
-        public void DelItemSkill_DeleteSkill(string sSkillName)
+        private void DelItemSkill_DeleteSkill(string sSkillName)
         {
-            TUserMagic UserMagic;
-            PlayObject PlayObject;
             for (int i = 0; i < MagicList.Count; i++)
             {
-                UserMagic = MagicList[i];
+                var UserMagic = MagicList[i];
                 if (UserMagic.MagicInfo.sMagicName == sSkillName)
                 {
-                    PlayObject = this as PlayObject;
+                    var PlayObject = this as PlayObject;
                     PlayObject.SendDelMagic(UserMagic);
                     UserMagic = null;
                     MagicList.RemoveAt(i);
@@ -2738,7 +2710,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public void DelItemSkill(int nIndex)
+        private void DelItemSkill(int nIndex)
         {
             if (Race != Grobal2.RC_PLAYOBJECT)
             {
@@ -2766,7 +2738,6 @@ namespace GameSvr.Actor
 
         public void DelMember(TBaseObject BaseObject)
         {
-            PlayObject PlayObject;
             if (m_GroupOwner != BaseObject)
             {
                 for (int i = 0; i < GroupMembers.Count; i++)
@@ -2787,8 +2758,7 @@ namespace GameSvr.Actor
                     GroupMembers.RemoveAt(i);
                 }
             }
-
-            PlayObject = this as PlayObject;
+            var PlayObject = this as PlayObject;
             if (!PlayObject.CancelGroup())
             {
                 PlayObject.SendDefMessage(Grobal2.SM_GROUPCANCEL, 0, 0, 0, 0, "");
@@ -2799,7 +2769,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public void DoDamageWeapon(int nWeaponDamage)
+        protected void DoDamageWeapon(int nWeaponDamage)
         {
             if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
@@ -3216,7 +3186,6 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-
                     var SendMessage = MsgList[i];
                     if ((SendMessage.wIdent == wIdent) && (SendMessage.nParam1 == lParam1))
                     {
@@ -3224,7 +3193,6 @@ namespace GameSvr.Actor
                         Dispose(SendMessage);
                         continue;
                     }
-
                     i++;
                 }
             }
@@ -3285,7 +3253,6 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-
                     var SendMessage = MsgList[i];
                     if ((SendMessage.wIdent == Grobal2.CM_TURN) || (SendMessage.wIdent == Grobal2.CM_WALK) ||
                         (SendMessage.wIdent == Grobal2.CM_SITDOWN) || (SendMessage.wIdent == Grobal2.CM_HORSERUN) ||
@@ -3298,7 +3265,6 @@ namespace GameSvr.Actor
                         Dispose(SendMessage);
                         continue;
                     }
-
                     i++;
                 }
             }
@@ -3324,14 +3290,12 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-
                     var sendMessage = MsgList[I];
                     if ((sendMessage.DeliveryTime != 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                     {
                         I++;
                         continue;
                     }
-
                     MsgList.RemoveAt(I);
                     Msg = new TProcessMessage();
                     Msg.wIdent = sendMessage.wIdent;
@@ -3343,10 +3307,9 @@ namespace GameSvr.Actor
                     {
                         Msg.BaseObject = sendMessage.BaseObject;
                     }
-
-                    Msg.dwDeliveryTime = sendMessage.DeliveryTime;
-                    Msg.boLateDelivery = sendMessage.LateDelivery;
-                    Msg.sMsg = !string.IsNullOrEmpty(sendMessage.Buff) ? sendMessage.Buff : string.Empty;
+                    Msg.DeliveryTime = sendMessage.DeliveryTime;
+                    Msg.LateDelivery = sendMessage.LateDelivery;
+                    Msg.Msg = !string.IsNullOrEmpty(sendMessage.Buff) ? sendMessage.Buff : string.Empty;
                     result = true;
                     break;
                 }
@@ -3642,7 +3605,6 @@ namespace GameSvr.Actor
                     nStatus = (0x80000000 >> i) | nStatus;
                 }
             }
-
             var status = (m_nCharStatusEx & 0x0000FFFF) | nStatus;
             return status >= int.MaxValue ? 0 : (int)status;
         }
@@ -3662,13 +3624,11 @@ namespace GameSvr.Actor
                     MagicList[i].btLevel = 0;
                 }
             }
-
             AddtoMapSuccess = true;
             if (Envir.CanWalk(CurrX, CurrY, true) && AddToMap())
             {
                 AddtoMapSuccess = false;
             }
-
             CharStatus = GetCharStatus();
             AddBodyLuck(0);
             LoadSayMsg();
@@ -3738,9 +3698,8 @@ namespace GameSvr.Actor
             if (Envir == null)
             {
                 M2Share.LogSystem.Error("Walk nil PEnvir");
-                return result;
+                return true;
             }
-
             try
             {
                 bool cellsuccess = false;
@@ -3754,7 +3713,6 @@ namespace GameSvr.Actor
                         {
                             case CellType.GateObject:
                                 var GateObj = (GateObject)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
-                                ;
                                 if ((GateObj != null))
                                 {
                                     if (Race == Grobal2.RC_PLAYOBJECT)
@@ -3803,9 +3761,7 @@ namespace GameSvr.Actor
                                 if (owinEvent.OwnBaseObject != null)
                                 {
                                     mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
-                                    ;
                                 }
-
                                 if (mapEvent != null)
                                 {
                                     if (mapEvent.OwnBaseObject.IsProperTarget(this))
@@ -3814,7 +3770,6 @@ namespace GameSvr.Actor
                                             0, 0, "");
                                     }
                                 }
-
                                 break;
                             }
                             case CellType.MapEvent:
@@ -3826,7 +3781,6 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-
                 if (result)
                 {
                     SendRefMsg(nIdent, Direction, CurrX, CurrY, 0, "");
@@ -3834,11 +3788,9 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(format(sExceptionMsg,
-                    new object[] { CharName, MapName, CurrX, CurrY }));
+                M2Share.LogSystem.Error(format(sExceptionMsg, CharName, MapName, CurrX, CurrY));
                 M2Share.LogSystem.Error(e.Message);
             }
-
             return result;
         }
 
@@ -3856,12 +3808,10 @@ namespace GameSvr.Actor
                     SysMsg($"需要 {Envir.Flag.nL - 1} 级以上才能进入 {Envir.MapDesc}", MsgColor.Red, MsgType.Hint);
                     return false;
                 }
-
                 if (Envir.QuestNpc != null)
                 {
                     Envir.QuestNpc.Click(this as PlayObject);
                 }
-
                 if (Envir.Flag.nNEEDSETONFlag >= 0)
                 {
                     if (GetQuestFalgStatus(Envir.Flag.nNEEDSETONFlag) != Envir.Flag.nNeedONOFF)
@@ -3869,14 +3819,12 @@ namespace GameSvr.Actor
                         return false;
                     }
                 }
-
                 var cellsuccess = false;
                 Envir.GetCellInfo(nDMapX, nDMapY, ref cellsuccess);
                 if (!cellsuccess)
                 {
                     return false;
                 }
-
                 var Castle = M2Share.CastleManager.IsCastlePalaceEnvir(Envir);
                 if ((Castle != null) && (Race == Grobal2.RC_PLAYOBJECT))
                 {
@@ -3885,12 +3833,10 @@ namespace GameSvr.Actor
                         return false;
                     }
                 }
-
                 if (Envir.Flag.boNOHORSE)
                 {
                     OnHorse = false;
                 }
-
                 var OldEnvir = this.Envir;
                 short nOldX = CurrX;
                 short nOldY = CurrY;
@@ -3900,14 +3846,12 @@ namespace GameSvr.Actor
                 {
                     VisibleItems[i] = null;
                 }
-
                 VisibleItems.Clear();
                 VisibleEvents.Clear();
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     VisibleActors[i] = null;
                 }
-
                 VisibleActors.Clear();
                 SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                 this.Envir = Envir;
@@ -3929,7 +3873,6 @@ namespace GameSvr.Actor
                     CurrY = nOldY;
                     this.Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
                 }
-
                 OnEnvirnomentChanged();
                 if (Race == Grobal2.RC_PLAYOBJECT) // 复位泡点，及金币，时间
                 {
@@ -3937,7 +3880,6 @@ namespace GameSvr.Actor
                     (this as PlayObject).m_dwIncGameGoldTick = HUtil32.GetTickCount();
                     (this as PlayObject).m_dwAutoGetExpTick = HUtil32.GetTickCount();
                 }
-
                 if (this.Envir.Flag.boFight3Zone && (this.Envir.Flag.boFight3Zone != OldEnvir.Flag.boFight3Zone))
                 {
                     RefShowName();
@@ -4157,14 +4099,12 @@ namespace GameSvr.Actor
 
         public void SendGroupText(string sMsg)
         {
-            PlayObject PlayObject;
             sMsg = M2Share.g_Config.sGroupMsgPreFix + sMsg;
             if (m_GroupOwner != null)
             {
                 for (int i = 0; i < m_GroupOwner.GroupMembers.Count; i++)
                 {
-                    PlayObject = m_GroupOwner.GroupMembers[i];
-                    PlayObject.SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.g_Config.btGroupMsgFColor,
+                    m_GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.g_Config.btGroupMsgFColor,
                         M2Share.g_Config.btGroupMsgBColor, 0, sMsg);
                 }
             }
@@ -4197,23 +4137,19 @@ namespace GameSvr.Actor
                 {
                     break;
                 }
-
                 var UserItem = BaseObject.ItemList[0];
                 if (!AddItemToBag(UserItem))
                 {
                     break;
                 }
-
                 if (this is PlayObject)
                 {
                     var PlayObject = this as PlayObject;
                     PlayObject.SendAddItem(UserItem);
                     result = true;
                 }
-
                 BaseObject.ItemList.RemoveAt(0);
             }
-
             return result;
         }
 
@@ -4240,7 +4176,6 @@ namespace GameSvr.Actor
                         nGold = Gold;
                         Gold = 0;
                     }
-
                     if (nGold > 0)
                     {
                         if (!DropGoldDown(nGold, true, GoldOfCreat, this))
@@ -4260,7 +4195,6 @@ namespace GameSvr.Actor
                         break;
                     }
                 }
-
                 GoldChanged();
             }
         }
@@ -4302,7 +4236,7 @@ namespace GameSvr.Actor
             return cert.m_boPKFlag;
         }
 
-        protected bool IsAttackTarget_sub_4C88E4()
+        private bool IsAttackTarget_sub_4C88E4()
         {
             return true;
         }
@@ -4613,7 +4547,6 @@ namespace GameSvr.Actor
                     }
                 }
             }
-
             return result;
         }
 
@@ -4625,19 +4558,15 @@ namespace GameSvr.Actor
 
         public bool InSafeZone()
         {
-            int nSafeX;
-            int nSafeY;
             if (Envir == null)
             {
                 return true;
             }
-
             var result = Envir.Flag.boSAFE;
             if (result)
             {
                 return true;
             }
-
             if ((Envir.MapName != M2Share.g_Config.sRedHomeMap) ||
                 (Math.Abs(CurrX - M2Share.g_Config.nRedHomeX) > M2Share.g_Config.nSafeZoneSize) ||
                 (Math.Abs(CurrY - M2Share.g_Config.nRedHomeY) > M2Share.g_Config.nSafeZoneSize))
@@ -4646,22 +4575,16 @@ namespace GameSvr.Actor
             }
             else
             {
-                result = true;
+                return true;
             }
-
-            if (result)
-            {
-                return result;
-            }
-
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 if (M2Share.StartPointList[i].m_sMapName == Envir.MapName)
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        nSafeX = M2Share.StartPointList[i].m_nCurrX;
-                        nSafeY = M2Share.StartPointList[i].m_nCurrY;
+                        int nSafeX = M2Share.StartPointList[i].m_nCurrX;
+                        int nSafeY = M2Share.StartPointList[i].m_nCurrY;
                         if ((Math.Abs(CurrX - nSafeX) <= M2Share.g_Config.nSafeZoneSize) &&
                             (Math.Abs(CurrY - nSafeY) <= M2Share.g_Config.nSafeZoneSize))
                         {
@@ -4670,25 +4593,20 @@ namespace GameSvr.Actor
                     }
                 }
             }
-
             return result;
         }
 
         public bool InSafeZone(Envirnoment Envir, int nX, int nY)
         {
-            int nSafeX;
-            int nSafeY;
             if (this.Envir == null)
             {
                 return true;
             }
-
             bool result = this.Envir.Flag.boSAFE;
             if (result)
             {
                 return true;
             }
-
             if ((Envir.MapName != M2Share.g_Config.sRedHomeMap) ||
                 (Math.Abs(nX - M2Share.g_Config.nRedHomeX) > M2Share.g_Config.nSafeZoneSize) ||
                 (Math.Abs(nY - M2Share.g_Config.nRedHomeY) > M2Share.g_Config.nSafeZoneSize))
@@ -4699,15 +4617,14 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 if (M2Share.StartPointList[i].m_sMapName == Envir.MapName)
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        nSafeX = M2Share.StartPointList[i].m_nCurrX;
-                        nSafeY = M2Share.StartPointList[i].m_nCurrY;
+                        int nSafeX = M2Share.StartPointList[i].m_nCurrX;
+                        int nSafeY = M2Share.StartPointList[i].m_nCurrY;
                         if ((Math.Abs(nX - nSafeX) <= M2Share.g_Config.nSafeZoneSize) &&
                             (Math.Abs(nY - nSafeY) <= M2Share.g_Config.nSafeZoneSize))
                         {
@@ -4716,7 +4633,6 @@ namespace GameSvr.Actor
                     }
                 }
             }
-
             return result;
         }
 
@@ -4782,7 +4698,6 @@ namespace GameSvr.Actor
             {
                 nTranPoint = nTranPoint * 3;
             }
-
             UserMagic.nTranPoint += nTranPoint;
         }
 
@@ -4835,7 +4750,6 @@ namespace GameSvr.Actor
             {
                 nFlag = 1;
             }
-
             for (int i = SlaveList.Count - 1; i >= 0; i--)
             {
                 if (nFlag == 1)
@@ -4867,7 +4781,6 @@ namespace GameSvr.Actor
             {
                 nArmor = HUtil32.LoWord(m_WAbil.AC);
             }
-
             nDamage = HUtil32._MAX(0, nDamage - nArmor);
             if (nDamage > 0)
             {
@@ -4875,14 +4788,12 @@ namespace GameSvr.Actor
                 {
                     nDamage += Target.m_AddAbil.btUndead;
                 }
-
                 if (AbilMagBubbleDefence)
                 {
                     nDamage = HUtil32.Round(nDamage / 100 * (MagBubbleDefenceLevel + 2) * 8);
                     DamageBubbleDefence(nDamage);
                 }
             }
-
             return (ushort)nDamage;
         }
 

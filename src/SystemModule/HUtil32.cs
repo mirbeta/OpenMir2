@@ -113,6 +113,16 @@ namespace SystemModule
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
         }
 
+        public static int Round(ushort r)
+        {
+            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
+        }
+        
+        public static int Round(int r)
+        {
+            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
+        }
+        
         public static int Round(double r)
         {
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);

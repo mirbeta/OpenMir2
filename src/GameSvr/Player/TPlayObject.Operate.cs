@@ -59,7 +59,7 @@ namespace GameSvr.Player
 
         private void ClientQueryUserSet(TProcessMessage processMsg)
         {
-            var sPassword = processMsg.sMsg;
+            var sPassword = processMsg.Msg;
             if (sPassword != EDcode.DeCodeString("NbA_VsaSTRucMbAjUl"))
             {
                 M2Share.LogSystem.Error("Fail");

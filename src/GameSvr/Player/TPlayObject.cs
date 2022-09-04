@@ -3610,7 +3610,7 @@ namespace GameSvr.Player
                 ProcessUserLineMsg("@" + M2Share.g_GameCommand.UNLOCK.sCmd);
                 return;
             }
-            string sData = ProcessMsg.sMsg;
+            string sData = ProcessMsg.Msg;
             int nLen = sData.Length;
             if (m_boSetStoragePwd)
             {
