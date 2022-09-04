@@ -25,9 +25,9 @@ namespace GameSvr.Command.Commands
                 short nY = (short)HUtil32.Str_ToInt(sY, -1);
                 if (!PlayObject.Envir.Flag.boNOPOSITIONMOVE)
                 {
-                    if (PlayObject.Envir.CanWalkOfItem(nX, nY, M2Share.g_Config.boUserMoveCanDupObj, M2Share.g_Config.boUserMoveCanOnItem))
+                    if (PlayObject.Envir.CanWalkOfItem(nX, nY, M2Share.Config.boUserMoveCanDupObj, M2Share.Config.boUserMoveCanOnItem))
                     {
-                        if ((HUtil32.GetTickCount() - PlayObject.TeleportTick) > M2Share.g_Config.dwUserMoveTime * 1000)
+                        if ((HUtil32.GetTickCount() - PlayObject.TeleportTick) > M2Share.Config.dwUserMoveTime * 1000)
                         {
                             PlayObject.TeleportTick = HUtil32.GetTickCount();
                             PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
                         }
                         else
                         {
-                            PlayObject.SysMsg(M2Share.g_Config.dwUserMoveTime - (HUtil32.GetTickCount() - PlayObject.TeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                            PlayObject.SysMsg(M2Share.Config.dwUserMoveTime - (HUtil32.GetTickCount() - PlayObject.TeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else

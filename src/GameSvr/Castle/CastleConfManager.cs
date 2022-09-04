@@ -33,7 +33,7 @@ namespace GameSvr.Castle
             }
             for (var i = 0; i < userCastle.m_EnvirList.Count; i++)
             {
-                userCastle.m_EnvirList[i] = M2Share.MapManager.FindMap(userCastle.m_EnvirList[i]).MapName;
+                userCastle.m_EnvirList[i] = M2Share.MapMgr.FindMap(userCastle.m_EnvirList[i]).MapName;
             }
             userCastle.m_sMapName = ReadString("Defense", "CastleMap", "3");
             userCastle.m_sHomeMap = ReadString("Defense", "CastleHomeMap", userCastle.m_sHomeMap);
@@ -95,11 +95,11 @@ namespace GameSvr.Castle
 
         public void SaveConfig(TUserCastle userCastle)
         {
-            var filePath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, userCastle.m_sConfigDir);
+            var filePath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir, userCastle.m_sConfigDir);
             var sMapList = string.Empty;
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
-            if (M2Share.MapManager.GetMapOfServerIndex(userCastle.m_sMapName) != M2Share.nServerIndex) return;
+            if (M2Share.MapMgr.GetMapOfServerIndex(userCastle.m_sMapName) != M2Share.ServerIndex) return;
             if (!string.IsNullOrEmpty(userCastle.m_sName))
             {
                 WriteString("Setup", "CastleName", userCastle.m_sName);

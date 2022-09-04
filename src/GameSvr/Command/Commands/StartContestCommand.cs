@@ -54,7 +54,7 @@ namespace GameSvr.Command.Commands
                 }
             }
             PlayObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
-            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.Config.btCryMsgFColor, M2Share.Config.btCryMsgBColor, "- 行会战争已爆发。");
             var s20 = "";
             GuildInfo Guild;
             for (int i = 0; i < guildList.Count; i++)
@@ -71,7 +71,7 @@ namespace GameSvr.Command.Commands
                 }
                 s20 = s20 + Guild.sGuildName + ' ';
             }
-            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, " -参加的门派:" + s20);
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.Config.btCryMsgFColor, M2Share.Config.btCryMsgBColor, " -参加的门派:" + s20);
             List10 = null;
             List14 = null;
         }

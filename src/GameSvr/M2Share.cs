@@ -89,7 +89,7 @@ namespace GameSvr
         /// <summary>
         /// 服务器编号
         /// </summary>
-        public static int nServerIndex = 0;
+        public static int ServerIndex = 0;
         /// <summary>
         /// 服务器启动时间
         /// </summary>
@@ -97,39 +97,41 @@ namespace GameSvr
         public static int ShareFileNameNum = 0;
         public static int g_nServerTickDifference = 0;
         public static ActorMgr ActorMgr = null;
-        public static ServerConfig ServerConf = null;
-        public static GameCmdConfig CommandConf = null;
-        public static StringConfig StringConf = null;
-        public static ExpsConfig ExpConf = null;
-        public static GlobalConfig GlobalConf = null;
+        public static ServerConfig ServerConf;
+        public static GameCmdConfig CommandConf;
+        public static StringConfig StringConf;
+        public static ExpsConfig ExpConf;
+        public static GlobalConfig GlobalConf;
         /// <summary>
         /// 寻路
         /// </summary>
-        public static FindPath g_FindPath;
+        public static FindPath FindPath;
         /// <summary>
         /// 游戏命令系统
         /// </summary>
-        public static CommandManager CommandSystem = null;
+        public static CommandManager CommandMgr = null;
+        /// <summary>
+        /// 地图对象管理
+        /// </summary>
         public static CellObjectMgr CellObjectSystem;
         public static LocalDB LocalDB = null;
         public static CommonDB CommonDB = null;
-        public static MirLog LogSystem = null;
-        public static RandomNumber RandomNumber = null;
+        public static MirLog LogSystem;
+        public static RandomNumber RandomNumber;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static GameGateMgr GateManager = null;
+        public static GameGateMgr GateMgr = null;
         public static ConcurrentQueue<string> DataLogQueue = null;
-        public static ArrayList LogonCostLogList = null;
-        public static MapManager MapManager = null;
+        public static MapManager MapMgr = null;
         public static ItemUnit ItemUnit = null;
-        public static MagicManager MagicManager = null;
-        public static NoticeManager NoticeManager = null;
-        public static GuildManager GuildManager = null;
-        public static EventManager EventManager = null;
-        public static CastleManager CastleManager = null;
+        public static MagicManager MagicMgr = null;
+        public static NoticeManager NoticeMgr = null;
+        public static GuildManager GuildMgr = null;
+        public static EventManager EventMgr = null;
+        public static CastleManager CastleMgr = null;
         public static TFrontEngine FrontEngine = null;
         public static UserEngine UserEngine = null;
-        public static RobotManage RobotManage = null;
+        public static RobotManage RobotMgr = null;
         public static Dictionary<string, IList<TMakeItem>> MakeItemList = null;
         public static IList<TStartPoint> StartPointList = null;
         public static TStartPoint g_RedStartPoint = null;
@@ -138,6 +140,7 @@ namespace GameSvr
         public static ConcurrentDictionary<string, int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
         public static IList<TDealOffInfo> sSellOffItemList = null;
+        public static ArrayList LogonCostLogList = null;
         /// <summary>
         /// 游戏公告列表
         /// </summary>
@@ -250,7 +253,7 @@ namespace GameSvr
         public static object g_HighSCHuman = null;
         public static object g_HighOnlineHuman = null;
         public static int g_dwSpiritMutinyTick = 0;
-        public static GameSvrConfig g_Config = null;
+        public static GameSvrConfig Config;
         public static int[] g_dwOldNeedExps = new int[Grobal2.MaxChangeLevel];
         public static TGameCommand g_GameCommand = new TGameCommand();
         public static string sClientSoftVersionError = "游戏版本错误!!!";
@@ -663,7 +666,7 @@ namespace GameSvr
             ExpConf = new ExpsConfig(Path.Combine(sConfigPath, ConfConst.sExpConfigFileName));
             GlobalConf = new GlobalConfig(Path.Combine(sConfigPath, ConfConst.sGlobalConfigFileName));
             LogSystem = new MirLog();
-            g_Config = new GameSvrConfig();
+            Config = new GameSvrConfig();
             RandomNumber = RandomNumber.GetInstance();
         }
 
@@ -913,7 +916,7 @@ namespace GameSvr
         public static bool CheckGuildName(string sGuildName)
         {
             var result = true;
-            if (sGuildName.Length > g_Config.nGuildNameLen)
+            if (sGuildName.Length > Config.nGuildNameLen)
             {
                 result = false;
                 return result;
@@ -931,26 +934,26 @@ namespace GameSvr
 
         public static int GetItemNumber()
         {
-            g_Config.nItemNumber++;
-            if (g_Config.nItemNumber > int.MaxValue / 2 - 1)
+            Config.nItemNumber++;
+            if (Config.nItemNumber > int.MaxValue / 2 - 1)
             {
-                g_Config.nItemNumber = 1;
+                Config.nItemNumber = 1;
             }
-            return g_Config.nItemNumber;
+            return Config.nItemNumber;
         }
 
         public static int GetItemNumberEx()
         {
-            g_Config.nItemNumberEx++;
-            if (g_Config.nItemNumberEx < int.MaxValue / 2)
+            Config.nItemNumberEx++;
+            if (Config.nItemNumberEx < int.MaxValue / 2)
             {
-                g_Config.nItemNumberEx = int.MaxValue / 2;
+                Config.nItemNumberEx = int.MaxValue / 2;
             }
-            if (g_Config.nItemNumberEx > int.MaxValue - 1)
+            if (Config.nItemNumberEx > int.MaxValue - 1)
             {
-                g_Config.nItemNumberEx = int.MaxValue / 2;
+                Config.nItemNumberEx = int.MaxValue / 2;
             }
-            return g_Config.nItemNumberEx;
+            return Config.nItemNumberEx;
         }
 
         public static string FilterShowName(string sName)
@@ -1380,7 +1383,7 @@ namespace GameSvr
             var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             result = false;
-            sFileName = g_Config.sEnvirDir + "ItemBindIPaddr.txt";
+            sFileName = Config.sEnvirDir + "ItemBindIPaddr.txt";
             LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1430,7 +1433,7 @@ namespace GameSvr
         {
             bool result;
             result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindIPaddr.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "ItemBindIPaddr.txt";
             //SaveList = new StringList();
             //try {
             //    for (I = 0; I < g_ItemBindIPaddr.Count; I++)
@@ -1453,7 +1456,7 @@ namespace GameSvr
             var sItemInde = string.Empty;
             var sBindName = string.Empty;
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindAccount.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "ItemBindAccount.txt";
             LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1502,7 +1505,7 @@ namespace GameSvr
         public static bool SaveItemBindAccount()
         {
             var result = false;
-            var sFileName = g_Config.sEnvirDir + "ItemBindAccount.txt";
+            var sFileName = Config.sEnvirDir + "ItemBindAccount.txt";
             //SaveList = new StringList();
             //g_ItemBindAccount.__Lock();
             //try {
@@ -1527,7 +1530,7 @@ namespace GameSvr
             var sMakeIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindChrName.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "ItemBindChrName.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_ItemBindCharName.__Lock();
@@ -1578,7 +1581,7 @@ namespace GameSvr
         public static bool SaveItemBindCharName()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindChrName.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "ItemBindChrName.txt";
             //g_ItemBindCharName.__Lock();
             //try {
             //    for (I = 0; I < g_ItemBindCharName.Count; I++)
@@ -1598,7 +1601,7 @@ namespace GameSvr
         public static bool LoadDisableMakeItem()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableMakeItem.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DisableMakeItem.txt";
             var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1625,7 +1628,7 @@ namespace GameSvr
 
         public static bool SaveDisableMakeItem()
         {
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableMakeItem.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DisableMakeItem.txt";
             //g_DisableMakeItemList.SaveToFile(sFileName);
             return true;
         }
@@ -1633,7 +1636,7 @@ namespace GameSvr
         public static bool LoadUnMasterList()
         {
             bool result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "UnMaster.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "UnMaster.txt";
             ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1661,7 +1664,7 @@ namespace GameSvr
 
         public static bool SaveUnMasterList()
         {
-            string sFileName = g_Config.sEnvirDir + "UnMaster.txt";
+            string sFileName = Config.sEnvirDir + "UnMaster.txt";
             //g_UnMasterList.SaveToFile(sFileName);
             return true;
         }
@@ -1669,7 +1672,7 @@ namespace GameSvr
         public static bool LoadUnForceMasterList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "UnForceMaster.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "UnForceMaster.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_UnForceMasterList.__Lock();
@@ -1695,7 +1698,7 @@ namespace GameSvr
 
         public static bool SaveUnForceMasterList()
         {
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "UnForceMaster.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "UnForceMaster.txt";
             //g_UnForceMasterList.SaveToFile(sFileName);
             return true;
         }
@@ -1703,7 +1706,7 @@ namespace GameSvr
         public static bool LoadEnableMakeItem()
         {
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "EnableMakeItem.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "EnableMakeItem.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_EnableMakeItemList.__Lock();
@@ -1729,7 +1732,7 @@ namespace GameSvr
 
         public static bool SaveEnableMakeItem()
         {
-            string sFileName = g_Config.sEnvirDir + "EnableMakeItem.txt";
+            string sFileName = Config.sEnvirDir + "EnableMakeItem.txt";
             //g_EnableMakeItemList.SaveToFile(sFileName);
             return true;
         }
@@ -1737,7 +1740,7 @@ namespace GameSvr
         public static bool LoadDisableMoveMap()
         {
             var result = false;
-            var sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
+            var sFileName = Config.sEnvirDir + "DisableMoveMap.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_DisableMoveMapList.__Lock();
@@ -1763,7 +1766,7 @@ namespace GameSvr
 
         public static bool SaveDisableMoveMap()
         {
-            string sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
+            string sFileName = Config.sEnvirDir + "DisableMoveMap.txt";
             //g_DisableMoveMapList.SaveToFile(sFileName);
             return true;
         }
@@ -1771,7 +1774,7 @@ namespace GameSvr
         public static bool LoadAllowSellOffItem()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableSellOffItem.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DisableSellOffItem.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_DisableSellOffList.__Lock();
@@ -1798,7 +1801,7 @@ namespace GameSvr
 
         public static bool SaveAllowSellOffItem()
         {
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableSellOffItem.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DisableSellOffItem.txt";
             //g_DisableSellOffList.SaveToFile(sFileName);
             return true;
         }
@@ -1933,7 +1936,7 @@ namespace GameSvr
         public static bool LoadDisableSendMsgList()
         {
             var result = false;
-            string sFileName = g_Config.sEnvirDir + "DisableSendMsgList.txt";
+            string sFileName = Config.sEnvirDir + "DisableSendMsgList.txt";
             ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1960,7 +1963,7 @@ namespace GameSvr
             var sItemName = string.Empty;
             var sItemCount = string.Empty;
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "MonDropLimitList.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "MonDropLimitList.txt";
             var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1999,7 +2002,7 @@ namespace GameSvr
         public static bool SaveMonDropLimitList()
         {
             bool result;
-            var sFileName = g_Config.sEnvirDir + "MonDropLimitList.txt";
+            var sFileName = Config.sEnvirDir + "MonDropLimitList.txt";
             var LoadList = new ArrayList();
             //for (I = 0; I < g_MonDropLimitLIst.Count; I ++ )
             //{
@@ -2018,7 +2021,7 @@ namespace GameSvr
         {
             var sItemName = string.Empty;
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableTakeOffList.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DisableTakeOffList.txt";
             var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -2059,7 +2062,7 @@ namespace GameSvr
             bool result;
             ArrayList LoadList;
             string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableTakeOffList.txt";
+            sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DisableTakeOffList.txt";
             LoadList = new ArrayList();
             //g_DisableTakeOffList.__Lock();
             //try {
@@ -2094,7 +2097,7 @@ namespace GameSvr
         public static bool SaveDisableSendMsgList()
         {
             bool result;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableSendMsgList.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DisableSendMsgList.txt";
             ArrayList LoadList = new ArrayList();
             for (var i = 0; i < g_DisableSendMsgList.Count; i++)
             {
@@ -2123,7 +2126,7 @@ namespace GameSvr
         public static bool LoadGameLogItemNameList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "GameLogItemNameList.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "GameLogItemNameList.txt";
             var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -2166,7 +2169,7 @@ namespace GameSvr
         public static bool SaveGameLogItemNameList()
         {
             bool result;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "GameLogItemNameList.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "GameLogItemNameList.txt";
             try
             {
 
@@ -2182,7 +2185,7 @@ namespace GameSvr
         public static bool LoadDenyIPAddrList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyIPAddrList.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DenyIPAddrList.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_DenyIPAddrList.__Lock();
@@ -2228,7 +2231,7 @@ namespace GameSvr
 
         public static bool SaveDenyIPAddrList()
         {
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyIPAddrList.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DenyIPAddrList.txt";
             //SaveList = new StringList();
             //g_DenyIPAddrList.__Lock();
             //try {
@@ -2251,7 +2254,7 @@ namespace GameSvr
         public static bool LoadDenyChrNameList()
         {
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyChrNameList.txt";
+            string sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DenyChrNameList.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_DenyChrNameList.__Lock();
@@ -2301,7 +2304,7 @@ namespace GameSvr
         {
             bool result;
             string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyChrNameList.txt";
+            sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DenyChrNameList.txt";
             //SaveList = new StringList();
             //g_DenyChrNameList.__Lock();
             //try {
@@ -2326,7 +2329,7 @@ namespace GameSvr
         public static bool LoadDenyAccountList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyAccountList.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DenyAccountList.txt";
             new ArrayList();
             if (File.Exists(sFileName))
             {
@@ -2376,7 +2379,7 @@ namespace GameSvr
         {
             bool result;
             string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyAccountList.txt";
+            sFileName = M2Share.sConfigPath + Config.sEnvirDir + "DenyAccountList.txt";
             //SaveList = new StringList();
             //g_DenyAccountList.__Lock();
             //try {
@@ -2399,7 +2402,7 @@ namespace GameSvr
         public static bool LoadNoClearMonList()
         {
             var result = false;
-            var sFileName = Path.Combine(M2Share.sConfigPath, g_Config.sEnvirDir, "NoClearMonList.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, Config.sEnvirDir, "NoClearMonList.txt");
             StringList LoadList = null;
             if (File.Exists(sFileName))
             {
@@ -2458,7 +2461,7 @@ namespace GameSvr
         {
             bool result;
             string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "NoHptoExpMonList.txt";
+            sFileName = M2Share.sConfigPath + Config.sEnvirDir + "NoHptoExpMonList.txt";
             //SaveList = new StringList();
             //g_NoHptoexpMonLIst.__Lock();
             //try {
@@ -2481,7 +2484,7 @@ namespace GameSvr
             int I;
             string sFileName;
             StringList SaveList;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "NoClearMonList.txt";
+            sFileName = M2Share.sConfigPath + Config.sEnvirDir + "NoClearMonList.txt";
             SaveList = new StringList();
             try
             {
@@ -2513,7 +2516,7 @@ namespace GameSvr
             string sLineText;
             TMonSayMsg MonSayMsg;
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "GenMsg.txt";
+            var sFileName = M2Share.sConfigPath + Config.sEnvirDir + "GenMsg.txt";
             if (File.Exists(sFileName))
             {
                 g_MonSayMsgList.Clear();

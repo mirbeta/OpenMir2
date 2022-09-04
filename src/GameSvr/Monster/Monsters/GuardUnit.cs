@@ -81,7 +81,7 @@ namespace GameSvr.Monster.Monsters
             {
                 result = true;
             }
-            if (BaseObject.PKLevel() >= 2)
+            if (BaseObject.PvpLevel() >= 2)
             {
                 result = true;
             }

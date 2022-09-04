@@ -23,7 +23,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Guild = M2Share.GuildManager.FindGuild(sGuildName);
+            var Guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (Guild != null)
             {
                 PlayObject.SysMsg($"{sGuildName} 的得分为: {Guild.nContestPoint}", MsgColor.Green, MsgType.Hint);

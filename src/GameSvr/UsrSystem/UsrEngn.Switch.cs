@@ -92,7 +92,7 @@ namespace GameSvr.UsrSystem
         {
             TSwitchDataInfo SwitchData = null;
             MakeSwitchData(PlayObject, ref SwitchData);
-            var flName = "$_" + M2Share.nServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
+            var flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
             PlayObject.m_sSwitchDataTempFile = flName;
             SendServerGroupMsg(Grobal2.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
             M2Share.ShareFileNameNum++;

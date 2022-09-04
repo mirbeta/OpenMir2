@@ -29,47 +29,47 @@ namespace GameSvr.Monster.Monsters
                 if (Envir.GetEvent(nx, ny - 1) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny - 1, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx, ny - 2) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny - 2, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx - 1, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx - 1, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx - 2, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx - 2, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx + 1, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx + 1, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx + 2, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx + 2, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx, ny + 1) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny + 1, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if (Envir.GetEvent(nx, ny + 2) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny + 2, Grobal2.ET_FIRE, FireTime, FireDamage);
-                    M2Share.EventManager.AddEvent(FireBurnEvent);
+                    M2Share.EventMgr.AddEvent(FireBurnEvent);
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {

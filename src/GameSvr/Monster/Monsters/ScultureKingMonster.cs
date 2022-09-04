@@ -27,7 +27,7 @@ namespace GameSvr.Monster.Monsters
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;
             var stoneEvent = new MirEvent(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
-            M2Share.EventManager.AddEvent(stoneEvent);
+            M2Share.EventMgr.AddEvent(stoneEvent);
         }
 
         private void CallSlave()
@@ -42,7 +42,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     break;
                 }
-                var baseObject = M2Share.UserEngine.RegenMonsterByName(MapName, nX, nY, M2Share.g_Config.sZuma[M2Share.RandomNumber.Random(4)]);
+                var baseObject = M2Share.UserEngine.RegenMonsterByName(MapName, nX, nY, M2Share.Config.sZuma[M2Share.RandomNumber.Random(4)]);
                 if (baseObject != null)
                 {
                     m_SlaveObjectList.Add(baseObject);

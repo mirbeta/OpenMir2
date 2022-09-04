@@ -314,7 +314,7 @@ namespace GameSvr.Npc
             for (var i = ItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = ItemList[i];
-                if (M2Share.UserEngine.GetStdItemName(UserItem.wIndex) == M2Share.g_Config.sBlackStone)
+                if (M2Share.UserEngine.GetStdItemName(UserItem.wIndex) == M2Share.Config.sBlackStone)
                 {
                     DuraList.Add(Math.Round(UserItem.Dura / 1.0e3));
                     if (DelItemList == null)
@@ -324,7 +324,7 @@ namespace GameSvr.Npc
                     DelItemList.Add(new TDeleteItem()
                     {
                         MakeIndex = UserItem.MakeIndex,
-                        sItemName = M2Share.g_Config.sBlackStone
+                        sItemName = M2Share.Config.sBlackStone
                     });
                     DisPose(UserItem);
                     ItemList.RemoveAt(i);
@@ -466,19 +466,19 @@ namespace GameSvr.Npc
                     return;
                 }
             }
-            if (User.UseItems[Grobal2.U_WEAPON] != null && User.UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.Gold >= M2Share.g_Config.nUpgradeWeaponPrice
-                && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
+            if (User.UseItems[Grobal2.U_WEAPON] != null && User.UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.Gold >= M2Share.Config.nUpgradeWeaponPrice
+                && User.CheckItems(M2Share.Config.sBlackStone) != null)
             {
-                User.DecGold(M2Share.g_Config.nUpgradeWeaponPrice);
-                if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
+                User.DecGold(M2Share.Config.nUpgradeWeaponPrice);
+                if (m_boCastle || M2Share.Config.boGetAllNpcTax)
                 {
                     if (Castle != null)
                     {
-                        Castle.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
+                        Castle.IncRateGold(M2Share.Config.nUpgradeWeaponPrice);
                     }
-                    else if (M2Share.g_Config.boGetAllNpcTax)
+                    else if (M2Share.Config.boGetAllNpcTax)
                     {
-                        M2Share.CastleManager.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
+                        M2Share.CastleMgr.IncRateGold(M2Share.Config.nUpgradeWeaponPrice);
                     }
                 }
                 User.GoldChanged();
@@ -534,7 +534,7 @@ namespace GameSvr.Npc
                 if (m_UpgradeWeaponList[i].sUserName == User.CharName)
                 {
                     n18 = 1;
-                    if (((HUtil32.GetTickCount() - m_UpgradeWeaponList[i].dwGetBackTick) > M2Share.g_Config.dwUPgradeWeaponGetBackTime) || User.Permission >= 4)
+                    if (((HUtil32.GetTickCount() - m_UpgradeWeaponList[i].dwGetBackTick) > M2Share.Config.dwUPgradeWeaponGetBackTime) || User.Permission >= 4)
                     {
                         UpgradeInfo = m_UpgradeWeaponList[i];
                         m_UpgradeWeaponList.RemoveAt(i);
@@ -606,14 +606,14 @@ namespace GameSvr.Npc
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
-                    if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCRate) < n10)
+                    if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponDCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 10;
-                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCTwoPointRate) == 0)
+                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponDCTwoPointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 11;
                         }
-                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCThreePointRate) == 0)
+                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponDCThreePointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 12;
                         }
@@ -627,14 +627,14 @@ namespace GameSvr.Npc
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
-                    if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCRate) < n10)
+                    if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponMCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 20;
-                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCTwoPointRate) == 0)
+                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponMCTwoPointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 21;
                         }
-                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCThreePointRate) == 0)
+                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponMCThreePointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 22;
                         }
@@ -648,14 +648,14 @@ namespace GameSvr.Npc
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
-                    if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCRate) < n10)
+                    if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponSCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 30;
-                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCTwoPointRate) == 0)
+                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponSCTwoPointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 31;
                         }
-                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCThreePointRate) == 0)
+                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponSCThreePointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 32;
                         }
@@ -702,7 +702,7 @@ namespace GameSvr.Npc
             {
                 if (Castle != null && Castle.IsMasterGuild(PlayObject.MyGuild)) //沙巴克成员修复物品打折
                 {
-                    var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.g_Config.nCastleMemberPriceRate / 100)));//80%
+                    var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.Config.nCastleMemberPriceRate / 100)));//80%
                     result = HUtil32.Round(nPrice / 100 * n14);
                 }
                 else
@@ -775,7 +775,7 @@ namespace GameSvr.Npc
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    sSendMsg = sSendMsg + StdItem.Name + '/' + 0 + '/' + M2Share.g_Config.nMakeDurgPrice + '/' + 1 + '/';
+                    sSendMsg = sSendMsg + StdItem.Name + '/' + 0 + '/' + M2Share.Config.nMakeDurgPrice + '/' + 1 + '/';
                 }
             }
             if (sSendMsg != "")
@@ -1099,7 +1099,7 @@ namespace GameSvr.Npc
             for (var i = m_UpgradeWeaponList.Count - 1; i >= 0; i--)
             {
                 UpgradeInfo = m_UpgradeWeaponList[i];
-                if ((int)Math.Round(DateTime.Now.ToOADate() - UpgradeInfo.dtTime.ToOADate()) >= M2Share.g_Config.nClearExpireUpgradeWeaponDays)
+                if ((int)Math.Round(DateTime.Now.ToOADate() - UpgradeInfo.dtTime.ToOADate()) >= M2Share.Config.nClearExpireUpgradeWeaponDays)
                 {
                     Dispose(UpgradeInfo);
                     m_UpgradeWeaponList.RemoveAt(i);
@@ -1131,7 +1131,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$PRICERATE>", sText);
                     break;
                 case "$UPGRADEWEAPONFEE":
-                    sText = M2Share.g_Config.nUpgradeWeaponPrice.ToString();
+                    sText = M2Share.Config.nUpgradeWeaponPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
                     break;
                 case "$USERWEAPON":
@@ -1274,15 +1274,15 @@ namespace GameSvr.Npc
                                         if (PlayObject.AddItemToBag(UserItem))
                                         {
                                             PlayObject.Gold -= nPrice;
-                                            if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
+                                            if (m_boCastle || M2Share.Config.boGetAllNpcTax)
                                             {
                                                 if (Castle != null)
                                                 {
                                                     Castle.IncRateGold(nPrice);
                                                 }
-                                                else if (M2Share.g_Config.boGetAllNpcTax)
+                                                else if (M2Share.Config.boGetAllNpcTax)
                                                 {
-                                                    M2Share.CastleManager.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
+                                                    M2Share.CastleMgr.IncRateGold(M2Share.Config.nUpgradeWeaponPrice);
                                                 }
                                             }
                                             PlayObject.SendAddItem(UserItem);
@@ -1411,15 +1411,15 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.IncGold(nPrice))
                 {
-                    if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
+                    if (m_boCastle || M2Share.Config.boGetAllNpcTax)
                     {
                         if (Castle != null)
                         {
                             Castle.IncRateGold(nPrice);
                         }
-                        else if (M2Share.g_Config.boGetAllNpcTax)
+                        else if (M2Share.Config.boGetAllNpcTax)
                         {
-                            M2Share.CastleManager.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
+                            M2Share.CastleMgr.IncRateGold(M2Share.Config.nUpgradeWeaponPrice);
                         }
                     }
                     PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_OK, 0, PlayObject.Gold, 0, 0, "");
@@ -1546,7 +1546,7 @@ namespace GameSvr.Npc
                 StdItem = M2Share.UserEngine.GetStdItem(MakeItem.wIndex);
                 if (StdItem != null && StdItem.Name == sItemName)
                 {
-                    if (PlayObject.Gold >= M2Share.g_Config.nMakeDurgPrice)
+                    if (PlayObject.Gold >= M2Share.Config.nMakeDurgPrice)
                     {
                         if (ClientMakeDrugItem_sub_4A28FC(PlayObject, sItemName))
                         {
@@ -1554,7 +1554,7 @@ namespace GameSvr.Npc
                             M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem);
                             if (PlayObject.AddItemToBag(UserItem))
                             {
-                                PlayObject.Gold -= M2Share.g_Config.nMakeDurgPrice;
+                                PlayObject.Gold -= M2Share.Config.nMakeDurgPrice;
                                 PlayObject.SendAddItem(UserItem);
                                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                                 if (StdItem.NeedIdentify == 1)
@@ -1614,7 +1614,7 @@ namespace GameSvr.Npc
                 {
                     if (m_boS_repair)
                     {
-                        nRepairPrice = nRepairPrice * M2Share.g_Config.nSuperRepairPriceRate;
+                        nRepairPrice = nRepairPrice * M2Share.Config.nSuperRepairPriceRate;
                     }
                     else
                     {
@@ -1664,7 +1664,7 @@ namespace GameSvr.Npc
             var nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
             if (PlayObject.ScriptLable == ScriptConst.sSUPERREPAIR)
             {
-                nPrice = nPrice * M2Share.g_Config.nSuperRepairPriceRate;
+                nPrice = nPrice * M2Share.Config.nSuperRepairPriceRate;
             }
             StdItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
@@ -1681,15 +1681,15 @@ namespace GameSvr.Npc
                     }
                     if (PlayObject.DecGold(nRepairPrice))
                     {
-                        if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
+                        if (m_boCastle || M2Share.Config.boGetAllNpcTax)
                         {
                             if (Castle != null)
                             {
                                 Castle.IncRateGold(nRepairPrice);
                             }
-                            else if (M2Share.g_Config.boGetAllNpcTax)
+                            else if (M2Share.Config.boGetAllNpcTax)
                             {
-                                M2Share.CastleManager.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
+                                M2Share.CastleMgr.IncRateGold(M2Share.Config.nUpgradeWeaponPrice);
                             }
                         }
                         if (PlayObject.ScriptLable == ScriptConst.sSUPERREPAIR)
@@ -1700,7 +1700,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.g_Config.nRepairItemDecDura);
+                            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.Config.nRepairItemDecDura);
                             UserItem.Dura = UserItem.DuraMax;
                             PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.Gold, UserItem.Dura, UserItem.DuraMax, "");
                             GotoLable(PlayObject, ScriptConst.sREPAIROK, false);

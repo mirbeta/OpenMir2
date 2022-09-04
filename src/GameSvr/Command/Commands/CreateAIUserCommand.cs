@@ -33,9 +33,9 @@ namespace GameSvr.Command.Commands
                     sCharName = "玩家" + RandomNumber.GetInstance().Random() + "号",
                     sConfigFileName = "",
                     sHeroConfigFileName = "",
-                    sFilePath = M2Share.g_Config.sEnvirDir,
-                    sConfigListFileName = M2Share.g_Config.sAIConfigListFileName,
-                    sHeroConfigListFileName = M2Share.g_Config.sHeroAIConfigListFileName,
+                    sFilePath = M2Share.Config.sEnvirDir,
+                    sConfigListFileName = M2Share.Config.sAIConfigListFileName,
+                    sHeroConfigListFileName = M2Share.Config.sHeroAIConfigListFileName,
                     sMapName = sMapName,
                     nX = nX,
                     nY = nY

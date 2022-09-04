@@ -105,7 +105,7 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (Job > 0)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && TargetCret.m_WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.m_WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
                                         {
                                             // 道法22前是否物理攻击
                                             if (Master != null)
@@ -131,7 +131,7 @@ namespace GameSvr.RobotPlay
 
                         if (IsRobot && !Ghost && !Death)
                         {
-                            if (M2Share.g_Config.boHPAutoMoveMap)
+                            if (M2Share.Config.boHPAutoMoveMap)
                             {
                                 if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
@@ -150,7 +150,7 @@ namespace GameSvr.RobotPlay
                                     }
                                 }
                             }
-                            if (M2Share.g_Config.boAutoRepairItem)
+                            if (M2Share.Config.boAutoRepairItem)
                             {
                                 if (HUtil32.GetTickCount() - m_dwAutoRepairItemTick > 15000)
                                 {
@@ -247,14 +247,14 @@ namespace GameSvr.RobotPlay
                                     }
                                 }
                             }
-                            if (M2Share.g_Config.boRenewHealth) // 自动增加HP MP
+                            if (M2Share.Config.boRenewHealth) // 自动增加HP MP
                             {
                                 if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000)
                                 {
                                     m_dwAutoAddHealthTick = HUtil32.GetTickCount();
                                     nPercent = m_WAbil.HP * 100 / m_WAbil.MaxHP;
                                     nValue = m_WAbil.MaxHP / 10;
-                                    if (nPercent < M2Share.g_Config.nRenewPercent)
+                                    if (nPercent < M2Share.Config.nRenewPercent)
                                     {
                                         if (m_WAbil.HP + nValue >= m_WAbil.MaxHP)
                                         {
@@ -267,7 +267,7 @@ namespace GameSvr.RobotPlay
                                     }
                                     nValue = m_WAbil.MaxMP / 10;
                                     nPercent = m_WAbil.MP * 100 / m_WAbil.MaxMP;
-                                    if (nPercent < M2Share.g_Config.nRenewPercent)
+                                    if (nPercent < M2Share.Config.nRenewPercent)
                                     {
                                         if (m_WAbil.MP + nValue >= m_WAbil.MaxMP)
                                         {
@@ -369,9 +369,9 @@ namespace GameSvr.RobotPlay
                     {
                         if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
                         {
-                            if (PKLevel() >= 2)
+                            if (PvpLevel() >= 2)
                             {
-                                if (BaseObject.PKLevel() < 2)
+                                if (BaseObject.PvpLevel() < 2)
                                 {
                                     result = true;
                                 }
@@ -382,7 +382,7 @@ namespace GameSvr.RobotPlay
                             }
                             else
                             {
-                                if (BaseObject.PKLevel() >= 2)
+                                if (BaseObject.PvpLevel() >= 2)
                                 {
                                     result = true;
                                 }
@@ -430,7 +430,7 @@ namespace GameSvr.RobotPlay
                         {
                             result = false;
                         }
-                        if (BaseObject.IsRobot && (!InFreePKArea || BaseObject.PKLevel() < 2))// 假人不攻击假人,行会战除外
+                        if (BaseObject.IsRobot && (!InFreePKArea || BaseObject.PvpLevel() < 2))// 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }
@@ -562,7 +562,7 @@ namespace GameSvr.RobotPlay
                                             case CellType.ItemObject:
                                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
+                                                    if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.Config.dwClearDropOnFloorItemTime)
                                                     {
                                                         if (osObject.CellObjId > 0)
                                                         {
@@ -584,7 +584,7 @@ namespace GameSvr.RobotPlay
                                                     UpdateVisibleItem(n18, n1C, MapItem);
                                                     if (MapItem.OfBaseObject != 0 || MapItem.DropBaseObject != 0)
                                                     {
-                                                        if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
+                                                        if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.Config.dwFloorItemCanPickUpTime)
                                                         {
                                                             MapItem.OfBaseObject = 0;
                                                             MapItem.DropBaseObject = 0;
@@ -886,7 +886,7 @@ namespace GameSvr.RobotPlay
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, CharName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
+                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, CharName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
                         }
                     }
                 }

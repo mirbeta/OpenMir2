@@ -1730,7 +1730,7 @@ namespace GameSvr.Configs
             else
             {
                 M2Share.g_GameCommand.MAKE.sCmd = LoadString;
-                M2Share.CommandSystem.RegisterCommand("Make", LoadString);
+                M2Share.CommandMgr.RegisterCommand("Make", LoadString);
             }
             nLoadInteger = ReadInteger("Permission", "MakeMin", -1);
             if (nLoadInteger < 0)

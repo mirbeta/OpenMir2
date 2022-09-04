@@ -17,16 +17,16 @@ namespace GameSvr.Services
         public AccountService()
         {
             _sessionList = new List<TSessInfo>();
-            M2Share.g_Config.boIDSocketConnected = false;
+            M2Share.Config.boIDSocketConnected = false;
             _clientScoket = new ClientScoket();
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;
             _clientScoket.ReceivedDatagram += IdSocketRead;
-            if (M2Share.g_Config != null)
+            if (M2Share.Config != null)
             {
-                _clientScoket.Host = M2Share.g_Config.sIDSAddr;
-                _clientScoket.Port = M2Share.g_Config.nIDSPort;
+                _clientScoket.Host = M2Share.Config.sIDSAddr;
+                _clientScoket.Port = M2Share.Config.nIDSPort;
             }
         }
 
@@ -45,15 +45,15 @@ namespace GameSvr.Services
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            HUtil32.EnterCriticalSection(M2Share.g_Config.UserIDSection);
+            HUtil32.EnterCriticalSection(M2Share.Config.UserIDSection);
             try
             {
                 var recvText = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-                M2Share.g_Config.sIDSocketRecvText += recvText;
+                M2Share.Config.sIDSocketRecvText += recvText;
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.g_Config.UserIDSection);
+                HUtil32.LeaveCriticalSection(M2Share.Config.UserIDSection);
             }
         }
 
@@ -120,7 +120,7 @@ namespace GameSvr.Services
         public void SendOnlineHumCountMsg(int nCount)
         {
             const string sFormatMsg = "({0}/{1}/{2}/{3})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.g_Config.sServerName, M2Share.nServerIndex, nCount));
+            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.sServerName, M2Share.ServerIndex, nCount));
         }
 
         public void Run()
@@ -129,7 +129,7 @@ namespace GameSvr.Services
             var sData = string.Empty;
             var sCode = string.Empty;
             const string sExceptionMsg = "[Exception] TFrmIdSoc::DecodeSocStr";
-            var Config = M2Share.g_Config;
+            var Config = M2Share.Config;
             HUtil32.EnterCriticalSection(Config.UserIDSection);
             try
             {
@@ -277,7 +277,7 @@ namespace GameSvr.Services
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    M2Share.GateManager.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.PayMode);
+                    M2Share.GateMgr.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.PayMode);
                 }
             }
             catch (Exception e)
@@ -326,7 +326,7 @@ namespace GameSvr.Services
                     break;
                 }
             }
-            if (M2Share.g_Config.boViewAdmissionFailure && !boFound)
+            if (M2Share.Config.boViewAdmissionFailure && !boFound)
             {
                 _logger.Error(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
             }
@@ -346,7 +346,7 @@ namespace GameSvr.Services
             {
                 var sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                 var nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
-                if (!M2Share.g_Config.boTestServer)
+                if (!M2Share.Config.boTestServer)
                 {
                     M2Share.UserEngine.HumanExpire(sAccount);
                     DelSession(nSessionID);
@@ -379,7 +379,7 @@ namespace GameSvr.Services
 
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            M2Share.g_Config.boIDSocketConnected = true;
+            M2Share.Config.boIDSocketConnected = true;
             _logger.Info("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]连接成功...");
             SendOnlineHumCountMsg(M2Share.UserEngine.OnlinePlayObject);
         }
@@ -391,7 +391,7 @@ namespace GameSvr.Services
             //     return;
             // }
             ClearSession();
-            M2Share.g_Config.boIDSocketConnected = false;
+            M2Share.Config.boIDSocketConnected = false;
             _clientScoket.IsConnected = false;
             _logger.Error("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]断开连接...");
         }

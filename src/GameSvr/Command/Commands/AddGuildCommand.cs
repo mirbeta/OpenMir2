@@ -19,7 +19,7 @@ namespace GameSvr.Command.Commands
             }
             var sGuildName = @Params.Length > 0 ? @Params[0] : "";
             var sGuildChief = @Params.Length > 1 ? @Params[1] : "";
-            if (M2Share.nServerIndex != 0)
+            if (M2Share.ServerIndex != 0)
             {
                 PlayObject.SysMsg("这个命令只能使用在主服务器上", MsgColor.Red, MsgType.Hint);
                 return;
@@ -36,18 +36,18 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.GuildManager.MemberOfGuild(sGuildChief) == null)
+            if (M2Share.GuildMgr.MemberOfGuild(sGuildChief) == null)
             {
-                if (M2Share.GuildManager.AddGuild(sGuildName, sGuildChief))
+                if (M2Share.GuildMgr.AddGuild(sGuildName, sGuildChief))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + sGuildChief);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + sGuildChief);
                     PlayObject.SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, MsgColor.Green, MsgType.Hint);
                     boAddState = true;
                 }
             }
             if (boAddState)
             {
-                Human.MyGuild = M2Share.GuildManager.MemberOfGuild(Human.CharName);
+                Human.MyGuild = M2Share.GuildMgr.MemberOfGuild(Human.CharName);
                 if (Human.MyGuild != null)
                 {
                     Human.GuildRankName = Human.MyGuild.GetRankName(PlayObject, ref Human.GuildRankNo);

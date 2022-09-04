@@ -119,7 +119,7 @@ namespace GameSvr.Player
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
-                var castle = M2Share.CastleManager.InCastleWarArea(this);
+                var castle = M2Share.CastleMgr.InCastleWarArea(this);
                 if (castle != null && castle.m_boUnderWar)
                 {
                     ChangePKStatus(true);
@@ -131,7 +131,7 @@ namespace GameSvr.Player
                     var wMin = DateTime.Now.Minute;
                     var wSec = DateTime.Now.Second;
                     var wMSec = DateTime.Now.Millisecond;
-                    if (M2Share.g_Config.boDiscountForNightTime && (wHour == M2Share.g_Config.nHalfFeeStart || wHour == M2Share.g_Config.nHalfFeeEnd))
+                    if (M2Share.Config.boDiscountForNightTime && (wHour == M2Share.Config.nHalfFeeStart || wHour == M2Share.Config.nHalfFeeEnd))
                     {
                         if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - m_dwLogonTick) > 60000)
                         {
@@ -163,7 +163,7 @@ namespace GameSvr.Player
                                     if (castle.CanGetCastle(MyGuild))
                                     {
                                         castle.GetCastle(MyGuild);
-                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.nServerIndex, MyGuild.sGuildName);
+                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, MyGuild.sGuildName);
                                         if (castle.InPalaceGuildCount() <= 1)
                                         {
                                             castle.StopWallconquestWar();
@@ -196,7 +196,7 @@ namespace GameSvr.Player
             try
             {
                 m_dwGetMsgTick = HUtil32.GetTickCount();
-                while (((HUtil32.GetTickCount() - m_dwGetMsgTick) < M2Share.g_Config.dwHumanGetMsgTime) && GetMessage(ref ProcessMsg))
+                while (((HUtil32.GetTickCount() - m_dwGetMsgTick) < M2Share.Config.dwHumanGetMsgTime) && GetMessage(ref ProcessMsg))
                 {
                     if (!Operate(ProcessMsg))
                     {
@@ -218,11 +218,11 @@ namespace GameSvr.Player
                     }
                     if (!m_boReconnection && m_boSoftClose)
                     {
-                        MyGuild = M2Share.GuildManager.MemberOfGuild(CharName);
+                        MyGuild = M2Share.GuildMgr.MemberOfGuild(CharName);
                         if (MyGuild != null)
                         {
                             MyGuild.SendGuildMsg(CharName + " 已经退出游戏.");
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, MyGuild.sGuildName + '/' + "" + '/' + CharName + " has exited the game.");
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + CharName + " has exited the game.");
                         }
                         IdSrvClient.Instance.SendHumanLogOutMsg(m_sUserID, m_nSessionID);
                     }
@@ -295,7 +295,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.g_boGameLogGameGold)
                 {
-                    M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.g_Config.sGameGoldName, nInteger, '-', "Auto"));
+                    M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (m_boIncGameGold && (HUtil32.GetTickCount() - m_dwIncGameGoldTick) > m_dwIncGameGoldTime)
@@ -314,7 +314,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.g_boGameLogGameGold)
                 {
-                    M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.g_Config.sGameGoldName, nInteger, '-', "Auto"));
+                    M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (!m_boDecGameGold && Envir.Flag.boDECGAMEGOLD)
@@ -336,7 +336,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGameGold)
                     {
-                        M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.g_Config.sGameGoldName, nInteger, '-', "Map"));
+                        M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '-', "Map"));
                     }
                 }
             }
@@ -357,7 +357,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGameGold)
                     {
-                        M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.g_Config.sGameGoldName, nInteger, '+', "Map"));
+                        M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -382,7 +382,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGamePoint)
                     {
-                        M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, MapName, CurrX, CurrY, CharName, M2Share.g_Config.sGamePointName, nInteger, '+', "Map"));
+                        M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, MapName, CurrX, CurrY, CharName, M2Share.Config.sGamePointName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -413,7 +413,7 @@ namespace GameSvr.Player
                 HealthSpellChanged();
             }
             // 降饥饿点
-            if (M2Share.g_Config.boHungerSystem)
+            if (M2Share.Config.boHungerSystem)
             {
                 if ((HUtil32.GetTickCount() - DecHungerPointTick) > 1000)
                 {
@@ -429,7 +429,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        if (M2Share.g_Config.boHungerDecHP)
+                        if (M2Share.Config.boHungerDecHP)
                         {
                             // 减少涨HP，MP
                             m_nHealthTick -= 60;
@@ -584,15 +584,15 @@ namespace GameSvr.Player
             {
                 M2Share.LogSystem.Error(sExceptionMsg3);
             }
-            if (M2Share.g_Config.boReNewChangeColor && m_btReLevel > 0 && (HUtil32.GetTickCount() - m_dwReColorTick) > M2Share.g_Config.dwReNewNameColorTime)
+            if (M2Share.Config.boReNewChangeColor && m_btReLevel > 0 && (HUtil32.GetTickCount() - m_dwReColorTick) > M2Share.Config.dwReNewNameColorTime)
             {
                 m_dwReColorTick = HUtil32.GetTickCount();
                 m_btReColorIdx++;
-                if (m_btReColorIdx > M2Share.g_Config.ReNewNameColor.Length)
+                if (m_btReColorIdx > M2Share.Config.ReNewNameColor.Length)
                 {
                     m_btReColorIdx = 0;
                 }
-                NameColor = M2Share.g_Config.ReNewNameColor[m_btReColorIdx];
+                NameColor = M2Share.Config.ReNewNameColor[m_btReColorIdx];
                 RefNameColor();
             }
             // 检测侦听私聊对像
@@ -638,11 +638,11 @@ namespace GameSvr.Player
                 M2Share.LogSystem.Error(sExceptionMsg4);
                 M2Share.LogSystem.Error(e.Message);
             }
-            if (!m_boClientFlag && m_nStep >= 9 && M2Share.g_Config.boCheckFail)
+            if (!m_boClientFlag && m_nStep >= 9 && M2Share.Config.boCheckFail)
             {
                 if (m_nClientFlagMode == 1)
                 {
-                    M2Share.g_Config.nTestLevel = M2Share.RandomNumber.Random(M2Share.MAXUPLEVEL + 1);
+                    M2Share.Config.nTestLevel = M2Share.RandomNumber.Random(M2Share.MAXUPLEVEL + 1);
                 }
                 else
                 {
@@ -731,17 +731,17 @@ namespace GameSvr.Player
                         if (dwDelayTime != 0)
                         {
                             nMsgCount = GetDigUpMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxDigUpMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxDigUpMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sBunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -750,7 +750,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.g_Config.dwDropOverSpeed)
+                                if (dwDelayTime < M2Share.Config.dwDropOverSpeed)
                                 {
                                     if (m_boTestSpeedMode)
                                     {
@@ -919,17 +919,17 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetTurnMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxTurnMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxTurnMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sBunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -938,7 +938,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.g_Config.dwDropOverSpeed)
+                                if (dwDelayTime < M2Share.Config.dwDropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (m_boTestSpeedMode)
@@ -970,17 +970,17 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetWalkMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxWalkMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxWalkMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sWalkOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -993,7 +993,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
@@ -1029,17 +1029,17 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxRunMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxRunMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sRunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1077,17 +1077,17 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxRunMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxRunMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sRunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1096,7 +1096,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
@@ -1140,17 +1140,17 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetHitMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxHitMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxHitMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sHitOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1159,7 +1159,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (m_boTestSpeedMode)
@@ -1195,17 +1195,17 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetSiteDownMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxSitDonwMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxSitDonwMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sBunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1214,7 +1214,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.g_Config.dwDropOverSpeed)
+                                if (dwDelayTime < M2Share.Config.dwDropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (m_boTestSpeedMode)
@@ -1250,17 +1250,17 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetSpellMsgCount();
-                            if (nMsgCount >= M2Share.g_Config.nMaxSpellMsgCount)
+                            if (nMsgCount >= M2Share.Config.nMaxSpellMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.g_Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
                                 {
-                                    if (M2Share.g_Config.boKickOverSpeed)
+                                    if (M2Share.Config.boKickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.g_Config.boViewHackMessage)
+                                    if (M2Share.Config.boViewHackMessage)
                                     {
                                         M2Share.LogSystem.Warn(format(GameCommandConst.g_sSpellOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1269,7 +1269,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
@@ -1472,7 +1472,7 @@ namespace GameSvr.Player
                                 }
                                 SetLastHiter(M2Share.ActorMgr.Get(ProcessMsg.nParam3));
                             }
-                            if (M2Share.CastleManager.IsCastleMember(this) != null && M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
+                            if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
                             {
                                 M2Share.ActorMgr.Get(ProcessMsg.nParam3).bo2B0 = true;
                                 M2Share.ActorMgr.Get(ProcessMsg.nParam3).m_dw2B4Tick = HUtil32.GetTickCount();
@@ -1485,7 +1485,7 @@ namespace GameSvr.Player
                         }
                         if (ProcessMsg.BaseObject != 0)
                         {
-                            if (ProcessMsg.BaseObject == ObjectId && M2Share.g_Config.boDisableSelfStruck || BaseObject.Race == Grobal2.RC_PLAYOBJECT && M2Share.g_Config.boDisableStruck)
+                            if (ProcessMsg.BaseObject == ObjectId && M2Share.Config.boDisableSelfStruck || BaseObject.Race == Grobal2.RC_PLAYOBJECT && M2Share.Config.boDisableStruck)
                             {
                                 BaseObject.SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
                             }
@@ -1569,7 +1569,7 @@ namespace GameSvr.Player
                     RefUserState();
                     SendMapDescription();
                     SendGoldInfo(true);
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_VERSION_FAIL, M2Share.g_Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.g_Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.g_Config.nClientFile2_CRC), 0);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_VERSION_FAIL, M2Share.Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.Config.nClientFile2_CRC), 0);
                     SendSocket(m_DefMsg, "<<<<<<");//EDcode.EncodeBuffer(HUtil32.GetBytes(M2Share.g_Config.nClientFile3_CRC), sizeof(int))
                     break;
                 case Grobal2.RM_HEAR:
@@ -1719,7 +1719,7 @@ namespace GameSvr.Player
                     SendGoldInfo(false);
                     break;
                 case Grobal2.RM_CHANGELIGHT:
-                    SendDefMessage(Grobal2.SM_CHANGELIGHT, ProcessMsg.BaseObject, (short)BaseObject.Light, (short)M2Share.g_Config.nClientKey, 0, "");
+                    SendDefMessage(Grobal2.SM_CHANGELIGHT, ProcessMsg.BaseObject, (short)BaseObject.Light, (short)M2Share.Config.nClientKey, 0, "");
                     break;
                 case Grobal2.RM_LAMPCHANGEDURA:
                     SendDefMessage(Grobal2.SM_LAMPCHANGEDURA, ProcessMsg.nParam1, 0, 0, 0, "");
@@ -2053,7 +2053,7 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                var nRate = PKLevel() > 2 ? M2Share.g_Config.nDieRedDropUseItemRate : M2Share.g_Config.nDieDropUseItemRate;
+                var nRate = PvpLevel() > 2 ? M2Share.Config.nDieRedDropUseItemRate : M2Share.Config.nDieDropUseItemRate;
                 for (var i = 0; i < UseItems.Length; i++)
                 {
                     if (M2Share.RandomNumber.Random(nRate) != 0)

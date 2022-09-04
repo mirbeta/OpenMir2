@@ -154,7 +154,7 @@ namespace GameSvr.Actor
         /// <param name="UserItem"></param>
         private void CheckWeaponUpgradeStatus(ref TUserItem UserItem)
         {
-            if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
+            if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.Config.nUpgradeWeaponMaxPoint)
             {
                 if (UserItem.btValue[ItemAttr.WeaponUpgrade] == 1)
                 {
@@ -254,7 +254,7 @@ namespace GameSvr.Actor
             bool result = false;
             short nX = 0;
             short nY = 0;
-            nSecPwr = HUtil32.Round(nSecPwr * M2Share.g_Config.nSwordLongPowerRate / 100);
+            nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.nSwordLongPowerRate / 100);
             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
             {
                 TBaseObject BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
@@ -284,7 +284,7 @@ namespace GameSvr.Actor
             short nY = 0;
             while (true)
             {
-                var n10 = (Direction + M2Share.g_Config.WideAttack[nC]) % 8;
+                var n10 = (Direction + M2Share.Config.WideAttack[nC]) % 8;
                 if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
                 {
                     var BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
@@ -312,7 +312,7 @@ namespace GameSvr.Actor
             short nY = 0;
             while (true)
             {
-                n10 = (Direction + M2Share.g_Config.CrsAttack[nC]) % 8;
+                n10 = (Direction + M2Share.Config.CrsAttack[nC]) % 8;
                 if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
                 {
                     var BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
@@ -425,7 +425,7 @@ namespace GameSvr.Actor
                     }
                     if (nSecPwr > 0)
                     {
-                        if (!SwordLongAttack(ref nSecPwr) && M2Share.g_Config.boLimitSwordLong)
+                        if (!SwordLongAttack(ref nSecPwr) && M2Share.Config.boLimitSwordLong)
                         {
                             wHitMode = 0;
                         }
@@ -511,9 +511,9 @@ namespace GameSvr.Actor
                 {
                     AttackTarget.StruckDamage(nPower);
                     AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.m_WAbil.HP, AttackTarget.m_WAbil.MaxHP, ObjectId, "", 200);
-                    if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.g_Config.nAttackPosionRate) == 0))
+                    if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
                     {
-                        AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.g_Config.nAttackPosionTime, 0);
+                        AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.Config.AttackPosionTime, 0);
                     }
                     if (m_nHongMoSuite > 0)// 虹魔，吸血
                     {
@@ -641,27 +641,27 @@ namespace GameSvr.Actor
                         }
                     }
                     result = true;
-                    if (M2Share.g_Config.boMonDelHptoExp)
+                    if (M2Share.Config.boMonDelHptoExp)
                     {
                         if (Race == Grobal2.RC_PLAYOBJECT)
                         {
                             if (this.IsRobot)
                             {
-                                if ((this as RobotPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                if ((this as RobotPlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                     {
-                                        (this as RobotPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                        (this as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                     }
                                 }
                             }
                             else
                             {
-                                if ((this as PlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                if ((this as PlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                     {
-                                        (this as PlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                        (this as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                     }
                                 }
                             }
@@ -672,21 +672,21 @@ namespace GameSvr.Actor
                             {
                                 if (Master.IsRobot)
                                 {
-                                    if ((Master as RobotPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                    if ((Master as RobotPlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
-                                            (Master as RobotPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                            (Master as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    if ((Master as PlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                    if ((Master as PlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
-                                            (Master as PlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                            (Master as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                         }
                                     }
                                 }

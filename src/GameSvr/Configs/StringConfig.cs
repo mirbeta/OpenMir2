@@ -14,114 +14,114 @@ namespace GameSvr.Configs
             string LoadString;
             if (ReadString("Server", "ServerIP", "") == "")
             {
-                WriteString("Server", "ServerIP", M2Share.g_Config.sServerIPaddr);
+                WriteString("Server", "ServerIP", M2Share.Config.sServerIPaddr);
             }
-            M2Share.g_Config.sServerIPaddr = ReadString("Server", "ServerIP", M2Share.g_Config.sServerIPaddr);
+            M2Share.Config.sServerIPaddr = ReadString("Server", "ServerIP", M2Share.Config.sServerIPaddr);
             if (ReadString("Server", "WebSite", "") == "")
             {
-                WriteString("Server", "WebSite", M2Share.g_Config.sWebSite);
+                WriteString("Server", "WebSite", M2Share.Config.sWebSite);
             }
-            M2Share.g_Config.sWebSite = ReadString("Server", "WebSite", M2Share.g_Config.sWebSite);
+            M2Share.Config.sWebSite = ReadString("Server", "WebSite", M2Share.Config.sWebSite);
             if (ReadString("Server", "BbsSite", "") == "")
             {
-                WriteString("Server", "BbsSite", M2Share.g_Config.sBbsSite);
+                WriteString("Server", "BbsSite", M2Share.Config.sBbsSite);
             }
-            M2Share.g_Config.sBbsSite = ReadString("Server", "BbsSite", M2Share.g_Config.sBbsSite);
+            M2Share.Config.sBbsSite = ReadString("Server", "BbsSite", M2Share.Config.sBbsSite);
             if (ReadString("Server", "ClientDownload", "") == "")
             {
-                WriteString("Server", "ClientDownload", M2Share.g_Config.sClientDownload);
+                WriteString("Server", "ClientDownload", M2Share.Config.sClientDownload);
             }
-            M2Share.g_Config.sClientDownload = ReadString("Server", "ClientDownload", M2Share.g_Config.sClientDownload);
+            M2Share.Config.sClientDownload = ReadString("Server", "ClientDownload", M2Share.Config.sClientDownload);
             if (ReadString("Server", "QQ", "") == "")
             {
-                WriteString("Server", "QQ", M2Share.g_Config.sQQ);
+                WriteString("Server", "QQ", M2Share.Config.sQQ);
             }
-            M2Share.g_Config.sQQ = ReadString("Server", "QQ", M2Share.g_Config.sQQ);
+            M2Share.Config.sQQ = ReadString("Server", "QQ", M2Share.Config.sQQ);
             if (ReadString("Server", "Phone", "") == "")
             {
-                WriteString("Server", "Phone", M2Share.g_Config.sPhone);
+                WriteString("Server", "Phone", M2Share.Config.sPhone);
             }
-            M2Share.g_Config.sPhone = ReadString("Server", "Phone", M2Share.g_Config.sPhone);
+            M2Share.Config.sPhone = ReadString("Server", "Phone", M2Share.Config.sPhone);
             if (ReadString("Server", "BankAccount0", "") == "")
             {
-                WriteString("Server", "BankAccount0", M2Share.g_Config.sBankAccount0);
+                WriteString("Server", "BankAccount0", M2Share.Config.sBankAccount0);
             }
-            M2Share.g_Config.sBankAccount0 = ReadString("Server", "BankAccount0", M2Share.g_Config.sBankAccount0);
+            M2Share.Config.sBankAccount0 = ReadString("Server", "BankAccount0", M2Share.Config.sBankAccount0);
             if (ReadString("Server", "BankAccount1", "") == "")
             {
-                WriteString("Server", "BankAccount1", M2Share.g_Config.sBankAccount1);
+                WriteString("Server", "BankAccount1", M2Share.Config.sBankAccount1);
             }
-            M2Share.g_Config.sBankAccount1 = ReadString("Server", "BankAccount1", M2Share.g_Config.sBankAccount1);
+            M2Share.Config.sBankAccount1 = ReadString("Server", "BankAccount1", M2Share.Config.sBankAccount1);
             if (ReadString("Server", "BankAccount2", "") == "")
             {
-                WriteString("Server", "BankAccount2", M2Share.g_Config.sBankAccount2);
+                WriteString("Server", "BankAccount2", M2Share.Config.sBankAccount2);
             }
-            M2Share.g_Config.sBankAccount2 = ReadString("Server", "BankAccount2", M2Share.g_Config.sBankAccount2);
+            M2Share.Config.sBankAccount2 = ReadString("Server", "BankAccount2", M2Share.Config.sBankAccount2);
             if (ReadString("Server", "BankAccount3", "") == "")
             {
-                WriteString("Server", "BankAccount3", M2Share.g_Config.sBankAccount3);
+                WriteString("Server", "BankAccount3", M2Share.Config.sBankAccount3);
             }
-            M2Share.g_Config.sBankAccount3 = ReadString("Server", "BankAccount3", M2Share.g_Config.sBankAccount3);
+            M2Share.Config.sBankAccount3 = ReadString("Server", "BankAccount3", M2Share.Config.sBankAccount3);
             if (ReadString("Server", "BankAccount4", "") == "")
             {
-                WriteString("Server", "BankAccount4", M2Share.g_Config.sBankAccount4);
+                WriteString("Server", "BankAccount4", M2Share.Config.sBankAccount4);
             }
-            M2Share.g_Config.sBankAccount4 = ReadString("Server", "BankAccount4", M2Share.g_Config.sBankAccount4);
+            M2Share.Config.sBankAccount4 = ReadString("Server", "BankAccount4", M2Share.Config.sBankAccount4);
             if (ReadString("Server", "BankAccount5", "") == "")
             {
-                WriteString("Server", "BankAccount5", M2Share.g_Config.sBankAccount5);
+                WriteString("Server", "BankAccount5", M2Share.Config.sBankAccount5);
             }
-            M2Share.g_Config.sBankAccount5 = ReadString("Server", "BankAccount5", M2Share.g_Config.sBankAccount5);
+            M2Share.Config.sBankAccount5 = ReadString("Server", "BankAccount5", M2Share.Config.sBankAccount5);
             if (ReadString("Server", "BankAccount6", "") == "")
             {
-                WriteString("Server", "BankAccount6", M2Share.g_Config.sBankAccount6);
+                WriteString("Server", "BankAccount6", M2Share.Config.sBankAccount6);
             }
-            M2Share.g_Config.sBankAccount6 = ReadString("Server", "BankAccount6", M2Share.g_Config.sBankAccount6);
+            M2Share.Config.sBankAccount6 = ReadString("Server", "BankAccount6", M2Share.Config.sBankAccount6);
             if (ReadString("Server", "BankAccount7", "") == "")
             {
-                WriteString("Server", "BankAccount7", M2Share.g_Config.sBankAccount7);
+                WriteString("Server", "BankAccount7", M2Share.Config.sBankAccount7);
             }
-            M2Share.g_Config.sBankAccount7 = ReadString("Server", "BankAccount7", M2Share.g_Config.sBankAccount7);
+            M2Share.Config.sBankAccount7 = ReadString("Server", "BankAccount7", M2Share.Config.sBankAccount7);
             if (ReadString("Server", "BankAccount8", "") == "")
             {
-                WriteString("Server", "BankAccount8", M2Share.g_Config.sBankAccount8);
+                WriteString("Server", "BankAccount8", M2Share.Config.sBankAccount8);
             }
-            M2Share.g_Config.sBankAccount8 = ReadString("Server", "BankAccount8", M2Share.g_Config.sBankAccount8);
+            M2Share.Config.sBankAccount8 = ReadString("Server", "BankAccount8", M2Share.Config.sBankAccount8);
             if (ReadString("Server", "BankAccount9", "") == "")
             {
-                WriteString("Server", "BankAccount9", M2Share.g_Config.sBankAccount9);
+                WriteString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
             }
-            M2Share.g_Config.sBankAccount9 = ReadString("Server", "BankAccount9", M2Share.g_Config.sBankAccount9);
+            M2Share.Config.sBankAccount9 = ReadString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
             if (ReadString("Guild", "GuildNotice", "") == "")
             {
-                WriteString("Guild", "GuildNotice", M2Share.g_Config.sGuildNotice);
+                WriteString("Guild", "GuildNotice", M2Share.Config.sGuildNotice);
             }
-            M2Share.g_Config.sGuildNotice = ReadString("Guild", "GuildNotice", M2Share.g_Config.sGuildNotice);
+            M2Share.Config.sGuildNotice = ReadString("Guild", "GuildNotice", M2Share.Config.sGuildNotice);
             if (ReadString("Guild", "GuildWar", "") == "")
             {
-                WriteString("Guild", "GuildWar", M2Share.g_Config.sGuildWar);
+                WriteString("Guild", "GuildWar", M2Share.Config.sGuildWar);
             }
-            M2Share.g_Config.sGuildWar = ReadString("Guild", "GuildWar", M2Share.g_Config.sGuildWar);
+            M2Share.Config.sGuildWar = ReadString("Guild", "GuildWar", M2Share.Config.sGuildWar);
             if (ReadString("Guild", "GuildAll", "") == "")
             {
-                WriteString("Guild", "GuildAll", M2Share.g_Config.sGuildAll);
+                WriteString("Guild", "GuildAll", M2Share.Config.sGuildAll);
             }
-            M2Share.g_Config.sGuildAll = ReadString("Guild", "GuildAll", M2Share.g_Config.sGuildAll);
+            M2Share.Config.sGuildAll = ReadString("Guild", "GuildAll", M2Share.Config.sGuildAll);
             if (ReadString("Guild", "GuildMember", "") == "")
             {
-                WriteString("Guild", "GuildMember", M2Share.g_Config.sGuildMember);
+                WriteString("Guild", "GuildMember", M2Share.Config.sGuildMember);
             }
-            M2Share.g_Config.sGuildMember = ReadString("Guild", "GuildMember", M2Share.g_Config.sGuildMember);
+            M2Share.Config.sGuildMember = ReadString("Guild", "GuildMember", M2Share.Config.sGuildMember);
             if (ReadString("Guild", "GuildMemberRank", "") == "")
             {
-                WriteString("Guild", "GuildMemberRank", M2Share.g_Config.sGuildMemberRank);
+                WriteString("Guild", "GuildMemberRank", M2Share.Config.sGuildMemberRank);
             }
-            M2Share.g_Config.sGuildMemberRank = ReadString("Guild", "GuildMemberRank", M2Share.g_Config.sGuildMemberRank);
+            M2Share.Config.sGuildMemberRank = ReadString("Guild", "GuildMemberRank", M2Share.Config.sGuildMemberRank);
             if (ReadString("Guild", "GuildChief", "") == "")
             {
-                WriteString("Guild", "GuildChief", M2Share.g_Config.sGuildChief);
+                WriteString("Guild", "GuildChief", M2Share.Config.sGuildChief);
             }
-            M2Share.g_Config.sGuildChief = ReadString("Guild", "GuildChief", M2Share.g_Config.sGuildChief);
+            M2Share.Config.sGuildChief = ReadString("Guild", "GuildChief", M2Share.Config.sGuildChief);
             LoadString = ReadString("String", "ClientSoftVersionError", "");
             if (LoadString == "")
             {
@@ -669,83 +669,83 @@ namespace GameSvr.Configs
             LoadString = ReadString("String", "LineNoticePreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "LineNoticePreFix", M2Share.g_Config.sLineNoticePreFix);
+                WriteString("String", "LineNoticePreFix", M2Share.Config.sLineNoticePreFix);
             }
             else
             {
-                M2Share.g_Config.sLineNoticePreFix = LoadString;
+                M2Share.Config.sLineNoticePreFix = LoadString;
             }
             LoadString = ReadString("String", "SysMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "SysMsgPreFix", M2Share.g_Config.sSysMsgPreFix);
+                WriteString("String", "SysMsgPreFix", M2Share.Config.sSysMsgPreFix);
             }
             else
             {
-                M2Share.g_Config.sSysMsgPreFix = LoadString;
+                M2Share.Config.sSysMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "GuildMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "GuildMsgPreFix", M2Share.g_Config.sGuildMsgPreFix);
+                WriteString("String", "GuildMsgPreFix", M2Share.Config.sGuildMsgPreFix);
             }
             else
             {
-                M2Share.g_Config.sGuildMsgPreFix = LoadString;
+                M2Share.Config.sGuildMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "GroupMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "GroupMsgPreFix", M2Share.g_Config.sGroupMsgPreFix);
+                WriteString("String", "GroupMsgPreFix", M2Share.Config.sGroupMsgPreFix);
             }
             else
             {
-                M2Share.g_Config.sGroupMsgPreFix = LoadString;
+                M2Share.Config.sGroupMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "HintMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "HintMsgPreFix", M2Share.g_Config.sHintMsgPreFix);
+                WriteString("String", "HintMsgPreFix", M2Share.Config.sHintMsgPreFix);
             }
             else
             {
-                M2Share.g_Config.sHintMsgPreFix = LoadString;
+                M2Share.Config.sHintMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "GMRedMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "GMRedMsgpreFix", M2Share.g_Config.sGMRedMsgpreFix);
+                WriteString("String", "GMRedMsgpreFix", M2Share.Config.sGMRedMsgpreFix);
             }
             else
             {
-                M2Share.g_Config.sGMRedMsgpreFix = LoadString;
+                M2Share.Config.sGMRedMsgpreFix = LoadString;
             }
             LoadString = ReadString("String", "MonSayMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "MonSayMsgpreFix", M2Share.g_Config.sMonSayMsgpreFix);
+                WriteString("String", "MonSayMsgpreFix", M2Share.Config.sMonSayMsgpreFix);
             }
             else
             {
-                M2Share.g_Config.sMonSayMsgpreFix = LoadString;
+                M2Share.Config.sMonSayMsgpreFix = LoadString;
             }
             LoadString = ReadString("String", "CustMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "CustMsgpreFix", M2Share.g_Config.sCustMsgpreFix);
+                WriteString("String", "CustMsgpreFix", M2Share.Config.sCustMsgpreFix);
             }
             else
             {
-                M2Share.g_Config.sCustMsgpreFix = LoadString;
+                M2Share.Config.sCustMsgpreFix = LoadString;
             }
             LoadString = ReadString("String", "CastleMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "CastleMsgpreFix", M2Share.g_Config.sCastleMsgpreFix);
+                WriteString("String", "CastleMsgpreFix", M2Share.Config.sCastleMsgpreFix);
             }
             else
             {
-                M2Share.g_Config.sCastleMsgpreFix = LoadString;
+                M2Share.Config.sCastleMsgpreFix = LoadString;
             }
             LoadString = ReadString("String", "NoPasswordLockSystemMsg", "");
             if (LoadString == "")

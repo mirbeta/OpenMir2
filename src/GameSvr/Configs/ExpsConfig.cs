@@ -16,45 +16,45 @@ namespace GameSvr.Configs
             int LoadInteger = ReadInteger("Exp", "LimitExpLevel", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "LimitExpLevel", M2Share.g_Config.nLimitExpLevel);
+                WriteInteger("Exp", "LimitExpLevel", M2Share.Config.nLimitExpLevel);
             }
             else
             {
-                M2Share.g_Config.nLimitExpLevel = LoadInteger;
+                M2Share.Config.nLimitExpLevel = LoadInteger;
             }
             LoadInteger = ReadInteger("Exp", "LimitExpValue", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "LimitExpValue", M2Share.g_Config.nLimitExpValue);
+                WriteInteger("Exp", "LimitExpValue", M2Share.Config.nLimitExpValue);
             }
             else
             {
-                M2Share.g_Config.nLimitExpValue = LoadInteger;
+                M2Share.Config.nLimitExpValue = LoadInteger;
             }
             LoadInteger = ReadInteger("Exp", "KillMonExpMultiple", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "KillMonExpMultiple", M2Share.g_Config.dwKillMonExpMultiple);
+                WriteInteger("Exp", "KillMonExpMultiple", M2Share.Config.dwKillMonExpMultiple);
             }
             else
             {
-                M2Share.g_Config.dwKillMonExpMultiple = ReadInteger("Exp", "KillMonExpMultiple", M2Share.g_Config.dwKillMonExpMultiple);
+                M2Share.Config.dwKillMonExpMultiple = ReadInteger("Exp", "KillMonExpMultiple", M2Share.Config.dwKillMonExpMultiple);
             }
             LoadInteger = ReadInteger("Exp", "HighLevelKillMonFixExp", -1);
             if (LoadInteger < 0)
             {
-                WriteBool("Exp", "HighLevelKillMonFixExp", M2Share.g_Config.boHighLevelKillMonFixExp);
+                WriteBool("Exp", "HighLevelKillMonFixExp", M2Share.Config.boHighLevelKillMonFixExp);
             }
             else
             {
-                M2Share.g_Config.boHighLevelKillMonFixExp = ReadBool("Exp", "HighLevelKillMonFixExp", M2Share.g_Config.boHighLevelKillMonFixExp);
+                M2Share.Config.boHighLevelKillMonFixExp = ReadBool("Exp", "HighLevelKillMonFixExp", M2Share.Config.boHighLevelKillMonFixExp);
             }
             if (ReadInteger("Exp", "HighLevelGroupFixExp", -1) < 0)
             {
-                WriteBool("Exp", "HighLevelGroupFixExp", M2Share.g_Config.boHighLevelGroupFixExp);
+                WriteBool("Exp", "HighLevelGroupFixExp", M2Share.Config.boHighLevelGroupFixExp);
             }
-            M2Share.g_Config.boHighLevelGroupFixExp = ReadBool("Exp", "HighLevelGroupFixExp", M2Share.g_Config.boHighLevelGroupFixExp);
-            for (var i = 0; i < M2Share.g_Config.dwNeedExps.Length; i++)
+            M2Share.Config.boHighLevelGroupFixExp = ReadBool("Exp", "HighLevelGroupFixExp", M2Share.Config.boHighLevelGroupFixExp);
+            for (var i = 0; i < M2Share.Config.dwNeedExps.Length; i++)
             {
                 LoadString = ReadString("Exp", "Level" + i, "");
                 LoadInteger = HUtil32.Str_ToInt(LoadString, 0);
@@ -65,72 +65,72 @@ namespace GameSvr.Configs
                     {
                         oldNeedExp = ReadInteger("Exp", "Level" + i, 0);
                         WriteString("Exp", "Level" + i, oldNeedExp);
-                        M2Share.g_Config.dwNeedExps[i] = oldNeedExp;
+                        M2Share.Config.dwNeedExps[i] = oldNeedExp;
                     }
                     else
                     {
                         WriteString("Exp", "Level" + i, oldNeedExp);
-                        M2Share.g_Config.dwNeedExps[i] = oldNeedExp;
+                        M2Share.Config.dwNeedExps[i] = oldNeedExp;
                     }
                 }
                 else
                 {
-                    M2Share.g_Config.dwNeedExps[i] = LoadInteger;
+                    M2Share.Config.dwNeedExps[i] = LoadInteger;
                 }
             }
             LoadInteger = ReadInteger("Exp", "UseFixExp", -1);
             if (LoadInteger < 0)
             {
-                WriteBool("Exp", "UseFixExp", M2Share.g_Config.boUseFixExp);
+                WriteBool("Exp", "UseFixExp", M2Share.Config.boUseFixExp);
             }
             else
             {
-                M2Share.g_Config.boUseFixExp = ReadBool("Exp", "UseFixExp", M2Share.g_Config.boUseFixExp);
+                M2Share.Config.boUseFixExp = ReadBool("Exp", "UseFixExp", M2Share.Config.boUseFixExp);
             }
             LoadInteger = ReadInteger("Exp", "MonDelHptoExp", -1);
             if (LoadInteger < 0)
             {
-                WriteBool("Exp", "MonDelHptoExp", M2Share.g_Config.boMonDelHptoExp);
+                WriteBool("Exp", "MonDelHptoExp", M2Share.Config.boMonDelHptoExp);
             }
             else
             {
-                M2Share.g_Config.boMonDelHptoExp = ReadBool("Exp", "MonDelHptoExp", M2Share.g_Config.boMonDelHptoExp);
+                M2Share.Config.boMonDelHptoExp = ReadBool("Exp", "MonDelHptoExp", M2Share.Config.boMonDelHptoExp);
             }
             LoadInteger = ReadInteger("Exp", "BaseExp", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "BaseExp", M2Share.g_Config.nBaseExp);
+                WriteInteger("Exp", "BaseExp", M2Share.Config.nBaseExp);
             }
             else
             {
-                M2Share.g_Config.nBaseExp = LoadInteger;
+                M2Share.Config.nBaseExp = LoadInteger;
             }
             LoadInteger = ReadInteger("Exp", "AddExp", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "AddExp", M2Share.g_Config.nAddExp);
+                WriteInteger("Exp", "AddExp", M2Share.Config.nAddExp);
             }
             else
             {
-                M2Share.g_Config.nAddExp = LoadInteger;
+                M2Share.Config.nAddExp = LoadInteger;
             }
             LoadInteger = ReadInteger("Exp", "MonHptoExpLevel", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "MonHptoExpLevel", M2Share.g_Config.MonHptoExpLevel);
+                WriteInteger("Exp", "MonHptoExpLevel", M2Share.Config.MonHptoExpLevel);
             }
             else
             {
-                M2Share.g_Config.MonHptoExpLevel = LoadInteger;
+                M2Share.Config.MonHptoExpLevel = LoadInteger;
             }
             LoadInteger = ReadInteger("Exp", "MonHptoExpmax", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "MonHptoExpmax", M2Share.g_Config.MonHptoExpmax);
+                WriteInteger("Exp", "MonHptoExpmax", M2Share.Config.MonHptoExpmax);
             }
             else
             {
-                M2Share.g_Config.MonHptoExpmax = LoadInteger;
+                M2Share.Config.MonHptoExpmax = LoadInteger;
             }
         }
     }

@@ -40,9 +40,9 @@ namespace GameSvr.GateWay
         public void Start(CancellationToken stoppingToken)
         {
             _gateSocket.Init();
-            _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
+            _gateSocket.Start(M2Share.Config.sGateAddr, M2Share.Config.nGatePort);
             StartMessageThread(stoppingToken);
-            _logger.Info($"游戏网关[{M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
+            _logger.Info($"游戏网关[{M2Share.Config.sGateAddr}:{M2Share.Config.nGatePort}]已启动...");
         }
 
         public void Stop()
@@ -328,7 +328,7 @@ namespace GameSvr.GateWay
             memoryStream.Seek(0, SeekOrigin.Begin);
             var data = new byte[memoryStream.Length];
             memoryStream.Read(data, 0, data.Length);
-            if (!M2Share.GateManager.AddGateBuffer(nIndex, data))
+            if (!M2Share.GateMgr.AddGateBuffer(nIndex, data))
             {
                 data = null;
             }
@@ -410,12 +410,12 @@ namespace GameSvr.GateWay
 
         private void GateSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            M2Share.GateManager.CloseGate(e);
+            M2Share.GateMgr.CloseGate(e);
         }
 
         private void GateSocketClientConnect(object sender, AsyncUserToken e)
         {
-            M2Share.GateManager.AddGate(e);
+            M2Share.GateMgr.AddGate(e);
         }
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)

@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
         private void sub_4AA8DC()
         {
             var digEvent = new MirEvent(Envir, CurrX, CurrY, 1, 5 * 60 * 1000, true);
-            M2Share.EventManager.AddEvent(digEvent);
+            M2Share.EventMgr.AddEvent(digEvent);
             FixedHideMode = false;
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, digEvent.Id, "");
         }

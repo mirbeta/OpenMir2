@@ -134,7 +134,7 @@ namespace GameSvr.Items
             switch (ItemType)
             {
                 case GoodType.ITEM_WEAPON:
-                    nUpgrade = GetRandomRange(M2Share.g_Config.nWeaponDCAddValueMaxLimit, M2Share.g_Config.nWeaponDCAddValueRate);
+                    nUpgrade = GetRandomRange(M2Share.Config.nWeaponDCAddValueMaxLimit, M2Share.Config.nWeaponDCAddValueRate);
                     if (M2Share.RandomNumber.Random(15) == 0)
                     {
                         userItem.btValue[0] = (byte)(nUpgrade + 1);
@@ -194,18 +194,18 @@ namespace GameSvr.Items
                     {
                         userItem.btValue[1] = (byte)(nUpgrade + 1);
                     }
-                    nUpgrade = GetRandomRange(M2Share.g_Config.nDressDCAddValueMaxLimit, M2Share.g_Config.nDressDCAddValueRate);
-                    if (M2Share.RandomNumber.Random(M2Share.g_Config.nDressDCAddRate) == 0)
+                    nUpgrade = GetRandomRange(M2Share.Config.nDressDCAddValueMaxLimit, M2Share.Config.nDressDCAddValueRate);
+                    if (M2Share.RandomNumber.Random(M2Share.Config.nDressDCAddRate) == 0)
                     {
                         userItem.btValue[2] = (byte)(nUpgrade + 1);
                     }
-                    nUpgrade = GetRandomRange(M2Share.g_Config.nDressMCAddValueMaxLimit, M2Share.g_Config.nDressMCAddValueRate);
-                    if (M2Share.RandomNumber.Random(M2Share.g_Config.nDressMCAddRate) == 0)
+                    nUpgrade = GetRandomRange(M2Share.Config.nDressMCAddValueMaxLimit, M2Share.Config.nDressMCAddValueRate);
+                    if (M2Share.RandomNumber.Random(M2Share.Config.nDressMCAddRate) == 0)
                     {
                         userItem.btValue[3] = (byte)(nUpgrade + 1);
                     }
-                    nUpgrade = GetRandomRange(M2Share.g_Config.nDressSCAddValueMaxLimit, M2Share.g_Config.nDressSCAddValueRate);
-                    if (M2Share.RandomNumber.Random(M2Share.g_Config.nDressSCAddRate) == 0)
+                    nUpgrade = GetRandomRange(M2Share.Config.nDressSCAddValueMaxLimit, M2Share.Config.nDressSCAddValueRate);
+                    if (M2Share.RandomNumber.Random(M2Share.Config.nDressSCAddRate) == 0)
                     {
                         userItem.btValue[4] = (byte)(nUpgrade + 1);
                     }
@@ -233,18 +233,18 @@ namespace GameSvr.Items
                             {
                                 userItem.btValue[1] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nNeckLace202124DCAddValueMaxLimit, M2Share.g_Config.nNeckLace202124DCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nNeckLace202124DCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nNeckLace202124DCAddValueMaxLimit, M2Share.Config.nNeckLace202124DCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nNeckLace202124DCAddRate) == 0)
                             {
                                 userItem.btValue[2] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nNeckLace202124MCAddValueMaxLimit, M2Share.g_Config.nNeckLace202124MCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nNeckLace202124MCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nNeckLace202124MCAddValueMaxLimit, M2Share.Config.nNeckLace202124MCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nNeckLace202124MCAddRate) == 0)
                             {
                                 userItem.btValue[3] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nNeckLace202124SCAddValueMaxLimit, M2Share.g_Config.nNeckLace202124SCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nNeckLace202124SCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nNeckLace202124SCAddValueMaxLimit, M2Share.Config.nNeckLace202124SCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nNeckLace202124SCAddRate) == 0)
                             {
                                 userItem.btValue[4] = (byte)(nUpgrade + 1);
                             }
@@ -267,18 +267,18 @@ namespace GameSvr.Items
                             {
                                 userItem.btValue[1] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nArmRing26DCAddValueMaxLimit, M2Share.g_Config.nArmRing26DCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nArmRing26DCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nArmRing26DCAddValueMaxLimit, M2Share.Config.nArmRing26DCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nArmRing26DCAddRate) == 0)
                             {
                                 userItem.btValue[2] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nArmRing26MCAddValueMaxLimit, M2Share.g_Config.nArmRing26MCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nArmRing26MCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nArmRing26MCAddValueMaxLimit, M2Share.Config.nArmRing26MCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nArmRing26MCAddRate) == 0)
                             {
                                 userItem.btValue[3] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nArmRing26SCAddValueMaxLimit, M2Share.g_Config.nArmRing26SCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nArmRing26SCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nArmRing26SCAddValueMaxLimit, M2Share.Config.nArmRing26SCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nArmRing26SCAddRate) == 0)
                             {
                                 userItem.btValue[4] = (byte)(nUpgrade + 1);
                             }
@@ -301,18 +301,18 @@ namespace GameSvr.Items
                             {
                                 userItem.btValue[1] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nNeckLace19DCAddValueMaxLimit, M2Share.g_Config.nNeckLace19DCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nNeckLace19DCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nNeckLace19DCAddValueMaxLimit, M2Share.Config.nNeckLace19DCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nNeckLace19DCAddRate) == 0)
                             {
                                 userItem.btValue[2] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nNeckLace19MCAddValueMaxLimit, M2Share.g_Config.nNeckLace19MCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nNeckLace19MCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nNeckLace19MCAddValueMaxLimit, M2Share.Config.nNeckLace19MCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nNeckLace19MCAddRate) == 0)
                             {
                                 userItem.btValue[3] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nNeckLace19SCAddValueMaxLimit, M2Share.g_Config.nNeckLace19SCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nNeckLace19SCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nNeckLace19SCAddValueMaxLimit, M2Share.Config.nNeckLace19SCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nNeckLace19SCAddRate) == 0)
                             {
                                 userItem.btValue[4] = (byte)(nUpgrade + 1);
                             }
@@ -325,18 +325,18 @@ namespace GameSvr.Items
                             }
                             break;
                         case 22:
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nRing22DCAddValueMaxLimit, M2Share.g_Config.nRing22DCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nRing22DCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nRing22DCAddValueMaxLimit, M2Share.Config.nRing22DCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nRing22DCAddRate) == 0)
                             {
                                 userItem.btValue[2] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nRing22MCAddValueMaxLimit, M2Share.g_Config.nRing22MCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nRing22MCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nRing22MCAddValueMaxLimit, M2Share.Config.nRing22MCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nRing22MCAddRate) == 0)
                             {
                                 userItem.btValue[3] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nRing22SCAddValueMaxLimit, M2Share.g_Config.nRing22SCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nRing22SCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nRing22SCAddValueMaxLimit, M2Share.Config.nRing22SCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nRing22SCAddRate) == 0)
                             {
                                 userItem.btValue[4] = (byte)(nUpgrade + 1);
                             }
@@ -359,18 +359,18 @@ namespace GameSvr.Items
                             {
                                 userItem.btValue[1] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nRing23DCAddValueMaxLimit, M2Share.g_Config.nRing23DCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nRing23DCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nRing23DCAddValueMaxLimit, M2Share.Config.nRing23DCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nRing23DCAddRate) == 0)
                             {
                                 userItem.btValue[2] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nRing23MCAddValueMaxLimit, M2Share.g_Config.nRing23MCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nRing23MCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nRing23MCAddValueMaxLimit, M2Share.Config.nRing23MCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nRing23MCAddRate) == 0)
                             {
                                 userItem.btValue[3] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nRing23SCAddValueMaxLimit, M2Share.g_Config.nRing23SCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nRing23SCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nRing23SCAddValueMaxLimit, M2Share.Config.nRing23SCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nRing23SCAddRate) == 0)
                             {
                                 userItem.btValue[4] = (byte)(nUpgrade + 1);
                             }
@@ -393,18 +393,18 @@ namespace GameSvr.Items
                             {
                                 userItem.btValue[1] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nHelMetDCAddValueMaxLimit, M2Share.g_Config.nHelMetDCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nHelMetDCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nHelMetDCAddValueMaxLimit, M2Share.Config.nHelMetDCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nHelMetDCAddRate) == 0)
                             {
                                 userItem.btValue[2] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nHelMetMCAddValueMaxLimit, M2Share.g_Config.nHelMetMCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nHelMetMCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nHelMetMCAddValueMaxLimit, M2Share.Config.nHelMetMCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nHelMetMCAddRate) == 0)
                             {
                                 userItem.btValue[3] = (byte)(nUpgrade + 1);
                             }
-                            nUpgrade = GetRandomRange(M2Share.g_Config.nHelMetSCAddValueMaxLimit, M2Share.g_Config.nHelMetSCAddValueRate);
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nHelMetSCAddRate) == 0)
+                            nUpgrade = GetRandomRange(M2Share.Config.nHelMetSCAddValueMaxLimit, M2Share.Config.nHelMetSCAddValueRate);
+                            if (M2Share.RandomNumber.Random(M2Share.Config.nHelMetSCAddRate) == 0)
                             {
                                 userItem.btValue[4] = (byte)(nUpgrade + 1);
                             }
@@ -436,31 +436,31 @@ namespace GameSvr.Items
                     switch (StdMode)
                     {
                         case 15:
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowHelMetACAddValueMaxLimit, M2Share.g_Config.nUnknowHelMetACAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowHelMetACAddValueMaxLimit, M2Share.Config.nUnknowHelMetACAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[0] = (byte)nRandPoint;
                             }
                             nUpgrade = nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowHelMetMACAddValueMaxLimit, M2Share.g_Config.nUnknowHelMetMACAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowHelMetMACAddValueMaxLimit, M2Share.Config.nUnknowHelMetMACAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[1] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowHelMetDCAddValueMaxLimit, M2Share.g_Config.nUnknowHelMetDCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowHelMetDCAddValueMaxLimit, M2Share.Config.nUnknowHelMetDCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[2] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowHelMetMCAddValueMaxLimit, M2Share.g_Config.nUnknowHelMetMCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowHelMetMCAddValueMaxLimit, M2Share.Config.nUnknowHelMetMCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[3] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowHelMetSCAddValueMaxLimit, M2Share.g_Config.nUnknowHelMetSCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowHelMetSCAddValueMaxLimit, M2Share.Config.nUnknowHelMetSCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[4] = (byte)nRandPoint;
@@ -509,31 +509,31 @@ namespace GameSvr.Items
                             break;
                         case 22:
                         case 23:
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowRingACAddValueMaxLimit, M2Share.g_Config.nUnknowRingACAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowRingACAddValueMaxLimit, M2Share.Config.nUnknowRingACAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[0] = (byte)nRandPoint;
                             }
                             nUpgrade = nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowRingMACAddValueMaxLimit, M2Share.g_Config.nUnknowRingMACAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowRingMACAddValueMaxLimit, M2Share.Config.nUnknowRingMACAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[1] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint; // 以上二项为增加项，增加防，及魔防
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowRingDCAddValueMaxLimit, M2Share.g_Config.nUnknowRingDCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowRingDCAddValueMaxLimit, M2Share.Config.nUnknowRingDCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[2] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowRingMCAddValueMaxLimit, M2Share.g_Config.nUnknowRingMCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowRingMCAddValueMaxLimit, M2Share.Config.nUnknowRingMCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[3] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowRingSCAddValueMaxLimit, M2Share.g_Config.nUnknowRingSCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowRingSCAddValueMaxLimit, M2Share.Config.nUnknowRingSCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[4] = (byte)nRandPoint;
@@ -576,31 +576,31 @@ namespace GameSvr.Items
                             break;
                         case 24:
                         case 26:
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowNecklaceACAddValueMaxLimit, M2Share.g_Config.nUnknowNecklaceACAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowNecklaceACAddValueMaxLimit, M2Share.Config.nUnknowNecklaceACAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[0] = (byte)nRandPoint;
                             }
                             nUpgrade = nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowNecklaceMACAddValueMaxLimit, M2Share.g_Config.nUnknowNecklaceMACAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowNecklaceMACAddValueMaxLimit, M2Share.Config.nUnknowNecklaceMACAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[1] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowNecklaceDCAddValueMaxLimit, M2Share.g_Config.nUnknowNecklaceDCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowNecklaceDCAddValueMaxLimit, M2Share.Config.nUnknowNecklaceDCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[2] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowNecklaceMCAddValueMaxLimit, M2Share.g_Config.nUnknowNecklaceMCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowNecklaceMCAddValueMaxLimit, M2Share.Config.nUnknowNecklaceMCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[3] = (byte)nRandPoint;
                             }
                             nUpgrade += nRandPoint;
-                            nRandPoint = GetRandomRange(M2Share.g_Config.nUnknowNecklaceSCAddValueMaxLimit, M2Share.g_Config.nUnknowNecklaceSCAddRate);
+                            nRandPoint = GetRandomRange(M2Share.Config.nUnknowNecklaceSCAddValueMaxLimit, M2Share.Config.nUnknowNecklaceSCAddRate);
                             if (nRandPoint > 0)
                             {
                                 userItem.btValue[4] = (byte)nRandPoint;
@@ -684,7 +684,7 @@ namespace GameSvr.Items
                             addAbility.btLuck += (byte)Mac2;
                             break;
                         case 53: // 新加物品属性
-                            if (M2Share.g_Config.boAddUserItemNewValue)
+                            if (M2Share.Config.boAddUserItemNewValue)
                             {
                                 addAbility.wAntiMagic += Ac2;
                                 addAbility.btUnLuck += (byte)Mac;
@@ -708,7 +708,7 @@ namespace GameSvr.Items
                             addAbility.wSpeedPoint += Mac2;
                             break;
                         case 52:// 原本与 20,24 一个属性，现在分开单独进行设置
-                            if (M2Share.g_Config.boAddUserItemNewValue)
+                            if (M2Share.Config.boAddUserItemNewValue)
                             {
                                 addAbility.wHitPoint += Ac2;
                                 addAbility.wSpeedPoint += Mac2;
@@ -731,7 +731,7 @@ namespace GameSvr.Items
                             addAbility.nHitSpeed -= Mac;
                             break;
                         case 54:
-                            if (M2Share.g_Config.boAddUserItemNewValue)
+                            if (M2Share.Config.boAddUserItemNewValue)
                             {
                                 addAbility.wHealthRecover += Ac2;
                                 addAbility.wSpellRecover += Mac2;

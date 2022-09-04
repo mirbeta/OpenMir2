@@ -31,8 +31,8 @@ namespace GameSvr.Snaps
 
         public void StartSnapsServer()
         {
-            _msgServer.Start(M2Share.g_Config.sMsgSrvAddr, M2Share.g_Config.nMsgSrvPort);
-            M2Share.LogSystem.Info($"节点数据服务[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]已启动.");
+            _msgServer.Start(M2Share.Config.sMsgSrvAddr, M2Share.Config.nMsgSrvPort);
+            M2Share.LogSystem.Info($"节点数据服务[{M2Share.Config.sMsgSrvAddr}:{M2Share.Config.nMsgSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)

@@ -68,7 +68,7 @@ namespace GameSvr.Command.Commands
                         + '/' + PlayObject.UseItems[nWhere].btValue[9] + '/' + PlayObject.UseItems[nWhere].btValue[ItemAttr.WeaponUpgrade] + '/' + PlayObject.UseItems[nWhere].btValue[11]
                         + '/' + PlayObject.UseItems[nWhere].btValue[12] + '/' + PlayObject.UseItems[nWhere].btValue[13];
                     PlayObject.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
-                    if (M2Share.g_Config.boShowMakeItemMsg)
+                    if (M2Share.Config.boShowMakeItemMsg)
                     {
                         M2Share.LogSystem.Warn("[物品调整] " + PlayObject.CharName + '(' + StdItem.Name + " -> " + sShowMsg + ')');
                     }

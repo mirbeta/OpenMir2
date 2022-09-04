@@ -65,7 +65,7 @@ namespace GameSvr
                 _logger.LogInformation("地图数据加载失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"地图数据加载成功({M2Share.MapManager.Maps.Count})...");
+            _logger.LogInformation($"地图数据加载成功({M2Share.MapMgr.Maps.Count})...");
             _logger.LogInformation("正在加载怪物数据库...");
             nCode = M2Share.CommonDB.LoadMonsterDB();
             if (nCode < 0)
@@ -137,20 +137,20 @@ namespace GameSvr
                 _logger.LogInformation("加载文字过滤信息成功...");
             }
             _logger.LogInformation("正在加载公告提示信息...");
-            if (!M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
+            if (!M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.Config.sNoticeDir, "LineNotice.txt")))
             {
                 _logger.LogInformation("加载公告提示信息失败!!!");
             }
             _logger.LogInformation("加载公告提示信息成功...");
             M2Share.LocalDB.LoadAdminList();
             _logger.LogInformation("管理员列表加载成功...");
-            M2Share.GuildManager.LoadGuildInfo();
+            M2Share.GuildMgr.LoadGuildInfo();
             _logger.LogInformation("行会列表加载成功...");
-            M2Share.CastleManager.LoadCastleList();
+            M2Share.CastleMgr.LoadCastleList();
             _logger.LogInformation("城堡列表加载成功...");
-            M2Share.CastleManager.Initialize();
+            M2Share.CastleMgr.Initialize();
             _logger.LogInformation("城堡城初始完成...");
-            if (M2Share.nServerIndex == 0)
+            if (M2Share.ServerIndex == 0)
             {
                 SnapsmService.Instance.StartSnapsServer();
                 _logger.LogInformation("当前服务器运行主节点模式...");
@@ -158,7 +158,7 @@ namespace GameSvr
             else
             {
                 SnapsmClient.Instance.ConnectMsgServer();
-                _logger.LogInformation($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
+                _logger.LogInformation($"当前运行从节点模式...[{M2Share.Config.sMsgSrvAddr}:{M2Share.Config.nMsgSrvPort}]");
             }
         }
 
@@ -168,13 +168,13 @@ namespace GameSvr
             {
                 IdSrvClient.Instance.Initialize();
                 _logger.LogInformation("登录服务器连接初始化完成...");
-                M2Share.MapManager.LoadMapDoor();
+                M2Share.MapMgr.LoadMapDoor();
                 _logger.LogInformation("地图环境加载成功...");
                 MakeStoneMines();
                 _logger.LogInformation("矿物数据初始成功...");
                 M2Share.LocalDB.LoadMerchant();
                 _logger.LogInformation("交易NPC列表加载成功...");
-                if (!M2Share.g_Config.boVentureServer)
+                if (!M2Share.Config.boVentureServer)
                 {
                     M2Share.LocalDB.LoadGuardList();
                     _logger.LogInformation("守卫列表加载成功...");
@@ -186,7 +186,7 @@ namespace GameSvr
                 M2Share.LocalDB.LoadStartPoint();
                 _logger.LogInformation("回城点配置加载成功...");
                 _logger.LogInformation("正在初始安全区光圈...");
-                M2Share.MapManager.MakeSafePkZone();
+                M2Share.MapMgr.MakeSafePkZone();
                 _logger.LogInformation("安全区光圈初始化成功...");
                 M2Share.FrontEngine.Start();
                 _logger.LogInformation("人物数据引擎启动成功...");
@@ -206,7 +206,7 @@ namespace GameSvr
         {
             Envirnoment Envir;
             var stoneList = new List<StoneMineEvent>();
-            var mineMapList = M2Share.MapManager.GetMineMaps();
+            var mineMapList = M2Share.MapMgr.GetMineMaps();
             for (var i = 0; i < mineMapList.Count; i++)
             {
                 Envir = mineMapList[i];
@@ -241,42 +241,42 @@ namespace GameSvr
             M2Share.g_dwNpcLimit = 5;
             M2Share.g_dwSocLimit = 10;
             M2Share.nDecLimit = 20;
-            M2Share.g_Config.nLoadDBErrorCount = 0;
-            M2Share.g_Config.nLoadDBCount = 0;
-            M2Share.g_Config.nSaveDBCount = 0;
-            M2Share.g_Config.nDBQueryID = 0;
-            M2Share.g_Config.nItemNumber = 0;
-            M2Share.g_Config.nItemNumberEx = int.MaxValue / 2;
+            M2Share.Config.nLoadDBErrorCount = 0;
+            M2Share.Config.nLoadDBCount = 0;
+            M2Share.Config.nSaveDBCount = 0;
+            M2Share.Config.nDBQueryID = 0;
+            M2Share.Config.nItemNumber = 0;
+            M2Share.Config.nItemNumberEx = int.MaxValue / 2;
             M2Share.boStartReady = false;
             M2Share.boFilterWord = true;
-            M2Share.g_Config.nWinLotteryCount = 0;
-            M2Share.g_Config.nNoWinLotteryCount = 0;
-            M2Share.g_Config.nWinLotteryLevel1 = 0;
-            M2Share.g_Config.nWinLotteryLevel2 = 0;
-            M2Share.g_Config.nWinLotteryLevel3 = 0;
-            M2Share.g_Config.nWinLotteryLevel4 = 0;
-            M2Share.g_Config.nWinLotteryLevel5 = 0;
-            M2Share.g_Config.nWinLotteryLevel6 = 0;
+            M2Share.Config.nWinLotteryCount = 0;
+            M2Share.Config.nNoWinLotteryCount = 0;
+            M2Share.Config.nWinLotteryLevel1 = 0;
+            M2Share.Config.nWinLotteryLevel2 = 0;
+            M2Share.Config.nWinLotteryLevel3 = 0;
+            M2Share.Config.nWinLotteryLevel4 = 0;
+            M2Share.Config.nWinLotteryLevel5 = 0;
+            M2Share.Config.nWinLotteryLevel6 = 0;
             M2Share.LoadConfig();
             M2Share.DataServer = new DBService();
             M2Share.ActorMgr = new ActorMgr();
             M2Share.ScriptSystem = new ScriptSystem();
-            M2Share.GateManager = GameGateMgr.Instance;
-            M2Share.g_FindPath = new FindPath();
-            M2Share.CommandSystem = new CommandManager();
+            M2Share.GateMgr = GameGateMgr.Instance;
+            M2Share.FindPath = new FindPath();
+            M2Share.CommandMgr = new CommandManager();
             M2Share.CellObjectSystem = new CellObjectMgr();
             M2Share.DataLogQueue = new();
             M2Share.LogonCostLogList = new ArrayList();
-            M2Share.MapManager = new MapManager();
+            M2Share.MapMgr = new MapManager();
             M2Share.ItemUnit = new ItemUnit();
-            M2Share.MagicManager = new MagicManager();
-            M2Share.NoticeManager = new NoticeManager();
-            M2Share.GuildManager = new GuildManager();
-            M2Share.EventManager = new EventManager();
-            M2Share.CastleManager = new CastleManager();
+            M2Share.MagicMgr = new MagicManager();
+            M2Share.NoticeMgr = new NoticeManager();
+            M2Share.GuildMgr = new GuildManager();
+            M2Share.EventMgr = new EventManager();
+            M2Share.CastleMgr = new CastleManager();
             M2Share.FrontEngine = new TFrontEngine();
             M2Share.UserEngine = new UserEngine();
-            M2Share.RobotManage = new RobotManage();
+            M2Share.RobotMgr = new RobotManage();
             M2Share.MakeItemList = new Dictionary<string, IList<TMakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<TStartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
@@ -308,13 +308,13 @@ namespace GameSvr
             M2Share.g_ItemBindCharName = new List<TItemBind>();
             M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
-            M2Share.g_Config.UserIDSection = new object();
+            M2Share.Config.UserIDSection = new object();
             M2Share.UserDBSection = new object();
             M2Share.g_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.sSellOffItemList = new List<TDealOffInfo>();
             LoadServerTable();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
-            M2Share.CommandSystem.RegisterCommand();
+            M2Share.CommandMgr.RegisterCommand();
         }
 
         private void LoadServerTable()
@@ -329,7 +329,7 @@ namespace GameSvr
             var sMapName = string.Empty;
             var sMapInfo = string.Empty;
             var sServerIndex = string.Empty;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sBaseDir, "!servertable.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sBaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();

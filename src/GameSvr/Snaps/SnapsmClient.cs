@@ -42,8 +42,8 @@ namespace GameSvr.Snaps
 
         public void ConnectMsgServer()
         {
-            _msgClient.Host = M2Share.g_Config.sMsgSrvAddr;
-            _msgClient.Port = M2Share.g_Config.nMsgSrvPort;
+            _msgClient.Host = M2Share.Config.sMsgSrvAddr;
+            _msgClient.Port = M2Share.Config.nMsgSrvPort;
             _msgClient.Connect();
         }
 
@@ -57,7 +57,7 @@ namespace GameSvr.Snaps
 
         public void CheckConnected()
         {
-            if (M2Share.g_Config.nServerNumber > 0)
+            if (M2Share.Config.nServerNumber > 0)
             {
                 if (_msgClient.IsConnected)
                 {

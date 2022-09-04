@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            M2Share.g_Config.nUserFull = nCount;
+            M2Share.Config.nUserFull = nCount;
             PlayObject.SysMsg($"服务器上线人数限制: {nCount}", MsgColor.Green, MsgType.Hint);
         }
     }

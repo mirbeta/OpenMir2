@@ -244,7 +244,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             StringList LoadList;
-            sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
             if (File.Exists(sListFileName))
             {
                 LoadList = new StringList();
@@ -284,7 +284,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 119))
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 100] = nCount;
+                    M2Share.Config.GlobalVal[n14 - 100] = nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -296,7 +296,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    M2Share.g_Config.GlobaDyMval[n14 - 400] = (short)nCount;
+                    M2Share.Config.GlobaDyMval[n14 - 400] = (short)nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -336,7 +336,7 @@ namespace GameSvr.Npc
             string Name = string.Empty;
             string ssDay = string.Empty;
             var result = false;
-            sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
             var LoadList = new StringList();
             try
             {
@@ -688,7 +688,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKPKPOINT:
-                        if (PlayObject.PKLevel() < QuestConditionInfo.nParam1)
+                        if (PlayObject.PvpLevel() < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
@@ -700,7 +700,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKMONMAP:
-                        Envir = M2Share.MapManager.FindMap(QuestConditionInfo.sParam1);
+                        Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
                         if (Envir != null)
                         {
                             if (M2Share.UserEngine.GetMapMonster(Envir, null) < QuestConditionInfo.nParam2)
@@ -1305,7 +1305,7 @@ namespace GameSvr.Npc
         private bool GotoLable_JmpToLable(PlayObject PlayObject, string sLabel)
         {
             PlayObject.m_nScriptGotoCount++;
-            if (PlayObject.m_nScriptGotoCount > M2Share.g_Config.nScriptGotoCountLimit)
+            if (PlayObject.m_nScriptGotoCount > M2Share.Config.nScriptGotoCountLimit)
             {
                 return false;
             }
@@ -1335,7 +1335,7 @@ namespace GameSvr.Npc
             string s10 = string.Empty;
             string sText;
             bool bo15;
-            sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
             LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1377,7 +1377,7 @@ namespace GameSvr.Npc
         private void GotoLable_AddList(string sHumName, string sListFileName)
         {
             string s10 = string.Empty;
-            sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1418,7 +1418,7 @@ namespace GameSvr.Npc
         {
             string s10 = string.Empty;
             string sText;
-            sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1446,7 +1446,7 @@ namespace GameSvr.Npc
         {
             string s10 = string.Empty;
             bool bo15;
-            sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1834,7 +1834,7 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nMONCLEAR:
                         List58 = new List<TBaseObject>();
-                        M2Share.UserEngine.GetMapMonster(M2Share.MapManager.FindMap(QuestActionInfo.sParam1), List58);
+                        M2Share.UserEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), List58);
                         for (var k = 0; k < List58.Count; k++)
                         {
                             List58[k].m_boNoItem = true;
@@ -1870,13 +1870,13 @@ namespace GameSvr.Npc
                         switch (QuestActionInfo.nParam1)
                         {
                             case 1:
-                                M2Share.CommandSystem.ExecCmd("ChangeAdminMode", PlayObject);
+                                M2Share.CommandMgr.ExecCmd("ChangeAdminMode", PlayObject);
                                 break;
                             case 2:
-                                M2Share.CommandSystem.ExecCmd("ChangeSuperManMode", PlayObject);
+                                M2Share.CommandMgr.ExecCmd("ChangeSuperManMode", PlayObject);
                                 break;
                             case 3:
-                                M2Share.CommandSystem.ExecCmd("ChangeObMode", PlayObject);
+                                M2Share.CommandMgr.ExecCmd("ChangeObMode", PlayObject);
                                 break;
                             default:
                                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sCHANGEMODE);
@@ -1931,7 +1931,7 @@ namespace GameSvr.Npc
                         MovrData(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nEXCHANGEMAP:
-                        Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
+                        Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
                             List58 = new List<TBaseObject>();
@@ -1949,7 +1949,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nRECALLMAP:
-                        Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
+                        Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
                             List58 = new List<TBaseObject>();
@@ -2316,7 +2316,7 @@ namespace GameSvr.Npc
                         ActionOfRepairAllItem(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_QUERYBAGITEMS:// 刷新包裹
-                        if ((HUtil32.GetTickCount() - PlayObject.m_dwQueryBagItemsTick) > M2Share.g_Config.dwQueryBagItemsTick)
+                        if ((HUtil32.GetTickCount() - PlayObject.m_dwQueryBagItemsTick) > M2Share.Config.dwQueryBagItemsTick)
                         {
                             PlayObject.m_dwQueryBagItemsTick = HUtil32.GetTickCount();
                             PlayObject.ClientQueryBagItems();

@@ -45,13 +45,13 @@ namespace GameSvr.Command.Commands
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Envir = M2Share.MapManager.FindMap(sMAP);
+            var Envir = M2Share.MapMgr.FindMap(sMAP);
             if (Envir != null)
             {
                 var OldEnvir = PlayObject.Envir;
                 PlayObject.Envir = Envir;
                 var FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
-                M2Share.EventManager.AddEvent(FireBurnEvent);
+                M2Share.EventMgr.AddEvent(FireBurnEvent);
                 PlayObject.Envir = OldEnvir;
                 return;
             }

@@ -30,17 +30,17 @@ namespace GameSvr
         public void Stop()
         {
             M2Share.DataServer.Stop();
-            M2Share.GateManager.Stop();
+            M2Share.GateMgr.Stop();
             M2Share.UserEngine.Stop();
         }
 
         public void Run()
         {
-            M2Share.GateManager.Run();
+            M2Share.GateMgr.Run();
             IdSrvClient.Instance.Run();
             M2Share.UserEngine.Run();
             ProcessGameRun();
-            if (M2Share.nServerIndex == 0)
+            if (M2Share.ServerIndex == 0)
             {
                 SnapsmService.Instance.Run();
             }
@@ -52,10 +52,10 @@ namespace GameSvr
 
         private void ProcessGameNotice()
         {
-            if (M2Share.g_Config.boSendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.g_Config.dwSendOnlineTime)
+            if (M2Share.Config.boSendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.Config.dwSendOnlineTime)
             {
                 M2Share.g_dwSendOnlineTick = HUtil32.GetTickCount();
-                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.g_Config.nSendOnlineCountRate / 10)));
+                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.Config.nSendOnlineCountRate / 10)));
                 M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }
@@ -71,13 +71,13 @@ namespace GameSvr
             HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.EventManager.Run();
-                M2Share.RobotManage.Run();
+                M2Share.EventMgr.Run();
+                M2Share.RobotMgr.Run();
                 if ((HUtil32.GetTickCount() - _runTimeTick) > 10000)
                 {
                     _runTimeTick = HUtil32.GetTickCount();
-                    M2Share.GuildManager.Run();
-                    M2Share.CastleManager.Run();
+                    M2Share.GuildMgr.Run();
+                    M2Share.CastleMgr.Run();
                     var denyList = new List<string>(M2Share.DenySayMsgList.Count);
                     foreach (var item in M2Share.DenySayMsgList)
                     {

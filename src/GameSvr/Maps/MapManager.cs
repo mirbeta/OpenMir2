@@ -32,7 +32,7 @@ namespace GameSvr.Maps
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
                                     var SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
-                                    M2Share.EventManager.AddEvent(SafeEvent);
+                                    M2Share.EventMgr.AddEvent(SafeEvent);
                                 }
                             }
                         }
@@ -100,7 +100,7 @@ namespace GameSvr.Maps
             {
                 envirnoment.MinMap = minMap;
             }
-            if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sMapDir, sMapFileName + ".map")))
+            if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath, M2Share.Config.sMapDir, sMapFileName + ".map")))
             {
                 if (!m_MapList.ContainsKey(sMapName))
                 {
@@ -113,7 +113,7 @@ namespace GameSvr.Maps
             }
             else
             {
-                M2Share.LogSystem.Error("地图文件: " + M2Share.g_Config.sMapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
+                M2Share.LogSystem.Error("地图文件: " + M2Share.Config.sMapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
             }
             return envirnoment;
         }

@@ -81,7 +81,7 @@ namespace GameSvr.Items
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sItemName = string.Empty;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "ItemNameList.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "ItemNameList.txt");
             var loadList = new StringList();
             if (File.Exists(sFileName))
             {
@@ -115,7 +115,7 @@ namespace GameSvr.Items
         /// </summary>
         public void SaveCustomItemName()
         {
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "ItemNameList.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "ItemNameList.txt");
             var saveList = new StringList();
             for (var i = _mItemNameList.Count - 1; i >= 0; i--)
             {
