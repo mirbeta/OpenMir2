@@ -11,9 +11,9 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (m_TargetCret == null)
+                if (TargetCret == null)
                 {
                     if (m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
                     {
@@ -24,9 +24,9 @@ namespace GameSvr.Monster.Monsters
                 {
                     m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
                 }
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
             }

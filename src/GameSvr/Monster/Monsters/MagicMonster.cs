@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
             m_boDupMode = false;
             bo554 = false;
             m_dwThinkTick = HUtil32.GetTickCount();
-            m_nViewRange = 8;
+            ViewRange = 8;
             m_nRunTime = 250;
             m_dwSearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             m_dwSearchTick = HUtil32.GetTickCount();
@@ -34,21 +34,21 @@ namespace GameSvr.Monster.Monsters
             if ((HUtil32.GetTickCount() - m_dwThinkTick) > (3 * 1000))
             {
                 m_dwThinkTick = HUtil32.GetTickCount();
-                if (m_PEnvir.GetXyObjCount(m_nCurrX, m_nCurrY) >= 2)
+                if (m_PEnvir.GetXyObjCount(CurrX, CurrY) >= 2)
                 {
                     m_boDupMode = true;
                 }
-                if (!IsProperTarget(m_TargetCret))
+                if (!IsProperTarget(TargetCret))
                 {
-                    m_TargetCret = null;
+                    TargetCret = null;
                 }
             }
             if (m_boDupMode)
             {
-                int nOldX = m_nCurrX;
-                int nOldY = m_nCurrY;
+                int nOldX = CurrX;
+                int nOldY = CurrY;
                 WalkTo(M2Share.RandomNumber.RandomByte(8), false);
-                if (nOldX != m_nCurrX || nOldY != m_nCurrY)
+                if (nOldX != CurrX || nOldY != CurrY)
                 {
                     m_boDupMode = false;
                     result = true;
@@ -61,28 +61,28 @@ namespace GameSvr.Monster.Monsters
         {
             var result = false;
             byte bt06 = 0;
-            if (m_TargetCret != null)
+            if (TargetCret != null)
             {
-                if (m_TargetCret == m_Master)
+                if (TargetCret == m_Master)
                 {
-                    m_TargetCret = null;
+                    TargetCret = null;
                 }
                 else
                 {
-                    if (GetAttackDir(m_TargetCret, ref bt06))
+                    if (GetAttackDir(TargetCret, ref bt06))
                     {
-                        if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {
-                            m_dwHitTick = HUtil32.GetTickCount();
-                            m_dwTargetFocusTick = HUtil32.GetTickCount();
+                            AttackTick = HUtil32.GetTickCount();
+                            TargetFocusTick = HUtil32.GetTickCount();
                         }
                         result = true;
                     }
                     else
                     {
-                        if (m_TargetCret.m_PEnvir == m_PEnvir)
+                        if (TargetCret.m_PEnvir == m_PEnvir)
                         {
-                            SetTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+                            SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                         }
                         else
                         {
@@ -98,35 +98,35 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && !FixedHideMode && !StoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (Think())
                 {
                     base.Run();
                     return;
                 }
-                if (m_boWalkWaitLocked)
+                if (WalkWaitLocked)
                 {
-                    if ((HUtil32.GetTickCount() - m_dwWalkWaitTick) > m_dwWalkWait)
+                    if ((HUtil32.GetTickCount() - WalkWaitTick) > WalkWait)
                     {
-                        m_boWalkWaitLocked = false;
+                        WalkWaitLocked = false;
                     }
                 }
-                if (!m_boWalkWaitLocked && (HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
+                if (!WalkWaitLocked && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
                 {
-                    m_dwWalkTick = HUtil32.GetTickCount();
-                    m_nWalkCount++;
-                    if (m_nWalkCount > m_nWalkStep)
+                    WalkTick = HUtil32.GetTickCount();
+                    WalkCount++;
+                    if (WalkCount > WalkStep)
                     {
-                        m_nWalkCount = 0;
-                        m_boWalkWaitLocked = true;
-                        m_dwWalkWaitTick = HUtil32.GetTickCount();
+                        WalkCount = 0;
+                        WalkWaitLocked = true;
+                        WalkWaitTick = HUtil32.GetTickCount();
                     }
                     if (!m_boRunAwayMode)
                     {
                         if (!m_boNoAttackMode)
                         {
-                            if (m_TargetCret != null)
+                            if (TargetCret != null)
                             {
                                 if (AttackTarget())
                                 {
@@ -146,24 +146,24 @@ namespace GameSvr.Monster.Monsters
                         }
                         if (m_Master != null)
                         {
-                            if (m_TargetCret == null)
+                            if (TargetCret == null)
                             {
                                 m_Master.GetBackPosition(ref nX, ref nY);
                                 if (Math.Abs(m_nTargetX - nX) > 1 || Math.Abs(m_nTargetY - nY) > 1)
                                 {
                                     m_nTargetX = nX;
                                     m_nTargetY = nY;
-                                    if (Math.Abs(m_nCurrX - nX) <= 2 && Math.Abs(m_nCurrY - nY) <= 2)
+                                    if (Math.Abs(CurrX - nX) <= 2 && Math.Abs(CurrY - nY) <= 2)
                                     {
                                         if (m_PEnvir.GetMovingObject(nX, nY, true) != null)
                                         {
-                                            m_nTargetX = m_nCurrX;
-                                            m_nTargetY = m_nCurrY;
+                                            m_nTargetX = CurrX;
+                                            m_nTargetY = CurrY;
                                         }
                                     }
                                 }
                             }
-                            if (!m_Master.m_boSlaveRelax && (m_PEnvir != m_Master.m_PEnvir || Math.Abs(m_nCurrX - m_Master.m_nCurrX) > 20 || Math.Abs(m_nCurrY - m_Master.m_nCurrY) > 20))
+                            if (!m_Master.SlaveRelax && (m_PEnvir != m_Master.m_PEnvir || Math.Abs(CurrX - m_Master.CurrX) > 20 || Math.Abs(CurrY - m_Master.CurrY) > 20))
                             {
                                 SpaceMove(m_Master.m_PEnvir.MapName, m_nTargetX, m_nTargetY, 1);
                             }
@@ -177,7 +177,7 @@ namespace GameSvr.Monster.Monsters
                             m_dwRunAwayTime = 0;
                         }
                     }
-                    if (m_Master != null && m_Master.m_boSlaveRelax)
+                    if (m_Master != null && m_Master.SlaveRelax)
                     {
                         base.Run();
                         return;
@@ -188,7 +188,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (m_TargetCret == null)
+                        if (TargetCret == null)
                         {
                             Wondering();
                         }

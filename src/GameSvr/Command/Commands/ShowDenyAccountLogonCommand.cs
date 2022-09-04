@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ShowDenyAccountLogon(PlayObject PlayObject)
         {
-            if (PlayObject.m_btPermission < 6)
+            if (PlayObject.Permission < 6)
             {
                 return;
             }

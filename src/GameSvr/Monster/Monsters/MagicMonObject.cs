@@ -19,7 +19,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (m_WAbil.HP < m_WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
@@ -29,25 +29,25 @@ namespace GameSvr.Monster.Monsters
                 {
                     m_boUseMagic = false;
                 }
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
                 if (m_Master == null)
                 {
                     return;
                 }
-                var nX = Math.Abs(m_nCurrX - m_Master.m_nCurrX);
-                var nY = Math.Abs(m_nCurrY - m_Master.m_nCurrY);
+                var nX = Math.Abs(CurrX - m_Master.CurrX);
+                var nY = Math.Abs(CurrY - m_Master.CurrY);
                 if (nX <= 5 && nY <= 5)
                 {
                     if (m_boUseMagic || nX == 5 || nY == 5)
                     {
-                        if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {
-                            m_dwHitTick = HUtil32.GetTickCount();
-                            int nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_Master.m_nCurrX, m_Master.m_nCurrY);
+                            AttackTick = HUtil32.GetTickCount();
+                            int nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, m_Master.CurrX, m_Master.CurrY);
                             LightingAttack(nAttackDir);
                         }
                     }

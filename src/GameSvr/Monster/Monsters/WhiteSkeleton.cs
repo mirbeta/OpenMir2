@@ -9,8 +9,8 @@ namespace GameSvr.Monster.Monsters
         public WhiteSkeleton() : base()
         {
             m_boIsFirst = true;
-            this.m_boFixedHideMode = true;
-            this.m_nViewRange = 6;
+            this.FixedHideMode = true;
+            this.ViewRange = 6;
         }
 
         public override void RecalcAbilitys()
@@ -25,17 +25,17 @@ namespace GameSvr.Monster.Monsters
             {
                 m_boIsFirst = false;
                 this.Direction = 5;
-                this.m_boFixedHideMode = false;
-                this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
+                this.FixedHideMode = false;
+                this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
             }
             base.Run();
         }
 
         private void sub_4AAD54()
         {
-            this.m_nNextHitTime = 3000 - this.m_btSlaveMakeLevel * 600;
-            this.m_nWalkSpeed = 1200 - this.m_btSlaveMakeLevel * 250;
-            this.m_dwWalkTick = HUtil32.GetTickCount() + 2000;
+            this.NextHitTime = 3000 - this.SlaveMakeLevel * 600;
+            this.WalkSpeed = 1200 - this.SlaveMakeLevel * 250;
+            this.WalkTick = HUtil32.GetTickCount() + 2000;
         }
     }
 }

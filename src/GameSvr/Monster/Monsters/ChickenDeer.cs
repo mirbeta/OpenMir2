@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
     {
         public ChickenDeer() : base()
         {
-            m_nViewRange = 5;
+            ViewRange = 5;
         }
 
         public override void Run()
@@ -15,22 +15,22 @@ namespace GameSvr.Monster.Monsters
             int n10 = 9999;
             TBaseObject BaseObject1C = null;
             TBaseObject BaseObject = null;
-            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
-                    for (var i = 0; i < m_VisibleActors.Count; i++)
+                    for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = m_VisibleActors[i].BaseObject;
-                        if (BaseObject.m_boDeath)
+                        BaseObject = VisibleActors[i].BaseObject;
+                        if (BaseObject.Death)
                         {
                             continue;
                         }
                         if (IsProperTarget(BaseObject))
                         {
-                            if (!BaseObject.m_boHideMode || m_boCoolEye)
+                            if (!BaseObject.HideMode || CoolEye)
                             {
-                                var nC = Math.Abs(m_nCurrX - BaseObject.m_nCurrX) + Math.Abs(m_nCurrY - BaseObject.m_nCurrY);
+                                var nC = Math.Abs(CurrX - BaseObject.CurrX) + Math.Abs(CurrY - BaseObject.CurrY);
                                 if (nC < n10)
                                 {
                                     n10 = nC;
@@ -42,20 +42,20 @@ namespace GameSvr.Monster.Monsters
                     if (BaseObject1C != null)
                     {
                         m_boRunAwayMode = true;
-                        m_TargetCret = BaseObject1C;
+                        TargetCret = BaseObject1C;
                     }
                     else
                     {
                         m_boRunAwayMode = false;
-                        m_TargetCret = null;
+                        TargetCret = null;
                     }
                 }
-                if (m_boRunAwayMode && m_TargetCret != null && (HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
+                if (m_boRunAwayMode && TargetCret != null && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
-                    if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 6 && Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 6)
+                    if (Math.Abs(CurrX - BaseObject.CurrX) <= 6 && Math.Abs(CurrX - BaseObject.CurrX) <= 6)
                     {
-                        int n14 = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
-                        m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, n14, 5, ref m_nTargetX, ref m_nTargetY);
+                        int n14 = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                        m_PEnvir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, n14, 5, ref m_nTargetX, ref m_nTargetY);
                     }
                 }
             }

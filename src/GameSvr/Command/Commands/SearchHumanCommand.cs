@@ -18,21 +18,21 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            if (PlayObject.m_boProbeNecklace || PlayObject.m_btPermission >= 6)
+            if (PlayObject.ProbeNecklace || PlayObject.Permission >= 6)
             {
                 if (string.IsNullOrEmpty(sHumanName))
                 {
                     PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (HUtil32.GetTickCount() - PlayObject.m_dwProbeTick > 10000 || PlayObject.m_btPermission >= 3)
+                if (HUtil32.GetTickCount() - PlayObject.ProbeTick > 10000 || PlayObject.Permission >= 3)
                 {
-                    PlayObject.m_dwProbeTick = HUtil32.GetTickCount();
+                    PlayObject.ProbeTick = HUtil32.GetTickCount();
                     var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                     if (m_PlayObject != null)
                     {
-                        PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.m_PEnvir.MapDesc + '(' + m_PlayObject.m_PEnvir.MapName + ") " + m_PlayObject.m_nCurrX + ':'
-                            + PlayObject.m_nCurrY, MsgColor.Blue, MsgType.Hint);
+                        PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.m_PEnvir.MapDesc + '(' + m_PlayObject.m_PEnvir.MapName + ") " + m_PlayObject.CurrX + ':'
+                            + PlayObject.CurrY, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    PlayObject.SysMsg((HUtil32.GetTickCount() - PlayObject.m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg((HUtil32.GetTickCount() - PlayObject.ProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else

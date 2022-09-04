@@ -25,7 +25,7 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) || PlayObject.m_btPermission >= 3)
+            if (this.m_Castle.IsMasterGuild(PlayObject.MyGuild) || PlayObject.Permission >= 3)
             {
                 base.Click(PlayObject);
             }
@@ -53,7 +53,7 @@ namespace GameSvr.Npc
                 case "$CASTLEDOORSTATE":
                     {
                         var castleDoor = (CastleDoor)this.m_Castle.m_MainDoor.BaseObject;
-                        if (castleDoor.m_boDeath)
+                        if (castleDoor.Death)
                         {
                             sText = "destroyed";
                         }
@@ -108,8 +108,8 @@ namespace GameSvr.Npc
                 {
                     var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                     s18 = "";
-                    PlayObject.m_sScriptLable = sData;
-                    if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) && PlayObject.IsGuildMaster())
+                    PlayObject.ScriptLable = sData;
+                    if (this.m_Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster())
                     {
                         var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
@@ -421,7 +421,7 @@ namespace GameSvr.Npc
             if (PlayObject.m_boSendMsgFlag)
             {
                 PlayObject.m_boSendMsgFlag = false;
-                M2Share.UserEngine.SendBroadCastMsg(PlayObject.m_sCharName + ": " + sMsg, MsgType.Castle);
+                M2Share.UserEngine.SendBroadCastMsg(PlayObject.CharName + ": " + sMsg, MsgType.Castle);
             }
         }
     }

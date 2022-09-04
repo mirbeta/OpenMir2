@@ -43,8 +43,8 @@ namespace GameSvr.Command.Commands
                 TBaseObject Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.MapName, nX, nY, sMonName);
                 if (Monster != null)
                 {
-                    Monster.m_btSlaveMakeLevel = nLevel;
-                    Monster.m_btSlaveExpLevel = nLevel;
+                    Monster.SlaveMakeLevel = nLevel;
+                    Monster.SlaveExpLevel = nLevel;
                     Monster.RecalcAbilitys();
                     Monster.RefNameColor();
                 }

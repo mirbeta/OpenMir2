@@ -19,10 +19,10 @@ namespace GameSvr.Command.Commands
             var nPoint = @params.Length > 3 ? int.Parse(@params[3]) : 0;
 
             FireBurnEvent FireBurnEvent;
-            var nMinX = PlayObject.m_nCurrX - nRange;
-            var nMaxX = PlayObject.m_nCurrX + nRange;
-            var nMinY = PlayObject.m_nCurrY - nRange;
-            var nMaxY = PlayObject.m_nCurrY + nRange;
+            var nMinX = PlayObject.CurrX - nRange;
+            var nMaxX = PlayObject.CurrX + nRange;
+            var nMinY = PlayObject.CurrY - nRange;
+            var nMaxY = PlayObject.CurrY + nRange;
             for (var nX = nMinX; nX <= nMaxX; nX++)
             {
                 for (var nY = nMinY; nY <= nMaxY; nY++)

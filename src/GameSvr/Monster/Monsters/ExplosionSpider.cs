@@ -8,7 +8,7 @@ namespace GameSvr.Monster.Monsters
 
         public ExplosionSpider() : base()
         {
-            m_nViewRange = 5;
+            ViewRange = 5;
             m_nRunTime = 250;
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             m_dwSearchTick = 0;
@@ -19,16 +19,16 @@ namespace GameSvr.Monster.Monsters
         {
             m_WAbil.HP = 0;
             var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC) + 1) + HUtil32.LoWord(m_WAbil.DC);
-            for (var i = 0; i < m_VisibleActors.Count; i++)
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                var BaseObject = m_VisibleActors[i].BaseObject;
-                if (BaseObject.m_boDeath)
+                var BaseObject = VisibleActors[i].BaseObject;
+                if (BaseObject.Death)
                 {
                     continue;
                 }
                 if (IsProperTarget(BaseObject))
                 {
-                    if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 1 && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= 1)
+                    if (Math.Abs(CurrX - BaseObject.CurrX) <= 1 && Math.Abs(CurrY - BaseObject.CurrY) <= 1)
                     {
                         var damage = 0;
                         damage += BaseObject.GetHitStruckDamage(this, nPower / 2);
@@ -47,25 +47,25 @@ namespace GameSvr.Monster.Monsters
         {
             var result = false;
             byte btDir = 0;
-            if (m_TargetCret == null)
+            if (TargetCret == null)
             {
                 return result;
             }
-            if (GetAttackDir(m_TargetCret, ref btDir))
+            if (GetAttackDir(TargetCret, ref btDir))
             {
-                if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                 {
-                    m_dwHitTick = HUtil32.GetTickCount();
-                    m_dwTargetFocusTick = HUtil32.GetTickCount();
+                    AttackTick = HUtil32.GetTickCount();
+                    TargetFocusTick = HUtil32.GetTickCount();
                     sub_4A65C4();
                 }
                 result = true;
             }
             else
             {
-                if (m_TargetCret.m_PEnvir == m_PEnvir)
+                if (TargetCret.m_PEnvir == m_PEnvir)
                 {
-                    SetTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+                    SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                 }
                 else
                 {
@@ -77,7 +77,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boDeath && !m_boGhost)
+            if (!Death && !Ghost)
             {
                 if ((HUtil32.GetTickCount() - dw558) > (60 * 1000))
                 {

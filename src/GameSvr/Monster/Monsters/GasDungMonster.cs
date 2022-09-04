@@ -4,7 +4,7 @@
     {
         public GasDungMonster() : base()
         {
-            m_nViewRange = 7;
+            ViewRange = 7;
         }
     }
 }

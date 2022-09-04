@@ -2037,17 +2037,17 @@ namespace GameSvr.Npc
                         return result;
                     }
                 case "$USERNAME":// 个人信息
-                    sValue = PlayObject.m_sCharName;
+                    sValue = PlayObject.CharName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$KILLER":// 杀人者变量 
                     {
-                        if (PlayObject.m_boDeath && (PlayObject.m_LastHiter != null))
+                        if (PlayObject.Death && (PlayObject.m_LastHiter != null))
                         {
                             if ((PlayObject.m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                             {
-                                sValue = PlayObject.m_LastHiter.m_sCharName;
+                                sValue = PlayObject.m_LastHiter.CharName;
                             }
                         }
                         else
@@ -2060,11 +2060,11 @@ namespace GameSvr.Npc
                     }
                 case "$MONKILLER":// 杀人的怪物变量 
                     {
-                        if (PlayObject.m_boDeath && (PlayObject.m_LastHiter != null))
+                        if (PlayObject.Death && (PlayObject.m_LastHiter != null))
                         {
                             if ((PlayObject.m_LastHiter.m_btRaceServer != Grobal2.RC_PLAYOBJECT))
                             {
-                                sValue = PlayObject.m_LastHiter.m_sCharName;
+                                sValue = PlayObject.m_LastHiter.CharName;
                             }
                         }
                         else
@@ -2112,12 +2112,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$X": // 人物X坐标
-                    nValue = PlayObject.m_nCurrX;
+                    nValue = PlayObject.CurrX;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$Y": // 人物Y坐标
-                    nValue = PlayObject.m_nCurrY;
+                    nValue = PlayObject.CurrY;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2128,9 +2128,9 @@ namespace GameSvr.Npc
                     return result;
                 case "$GUILDNAME":
                     {
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
-                            sValue = PlayObject.m_MyGuild.sGuildName;
+                            sValue = PlayObject.MyGuild.sGuildName;
                         }
                         else
                         {
@@ -2141,7 +2141,7 @@ namespace GameSvr.Npc
                         return result;
                     }
                 case "$RANKNAME":
-                    sValue = PlayObject.m_sGuildRankName;
+                    sValue = PlayObject.GuildRankName;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2276,12 +2276,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$GOLDCOUNT":
-                    nValue = PlayObject.m_nGold;
+                    nValue = PlayObject.Gold;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$GOLDCOUNTX":
-                    nValue = PlayObject.m_nGoldMax;
+                    nValue = PlayObject.GoldMax;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2311,67 +2311,67 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$DRESS":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_DRESS].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEAPON":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RIGHTHAND":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RIGHTHAND].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$HELMET":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_HELMET].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$NECKLACE":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_NECKLACE].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_R":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGR].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_L":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGL].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_R":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGR].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_L":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BUJUK":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BELT":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BELT].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BOOTS":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BOOTS].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CHARM":
-                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_CHARM].wIndex);
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].wIndex);
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2382,7 +2382,7 @@ namespace GameSvr.Npc
                     return result;
                 case "$GUILDBUILDPOINT":
                     {
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
                             //nValue = PlayObject.m_MyGuild.nBuildPoint;
                         }
@@ -2392,9 +2392,9 @@ namespace GameSvr.Npc
                     }
                 case "$GUILDAURAEPOINT":
                     {
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
-                            nValue = PlayObject.m_MyGuild.Aurae;
+                            nValue = PlayObject.MyGuild.Aurae;
                         }
                         nDataType = 0;
                         result = true;
@@ -2402,9 +2402,9 @@ namespace GameSvr.Npc
                     }
                 case "$GUILDSTABILITYPOINT":
                     {
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
-                            nValue = PlayObject.m_MyGuild.Stability;
+                            nValue = PlayObject.MyGuild.Stability;
                         }
                         nDataType = 0;
                         result = true;
@@ -2412,9 +2412,9 @@ namespace GameSvr.Npc
                     }
                 case "$GUILDFLOURISHPOINT":
                     {
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
-                            nValue = PlayObject.m_MyGuild.Flourishing;
+                            nValue = PlayObject.MyGuild.Flourishing;
                         }
                         nDataType = 0;
                         result = true;

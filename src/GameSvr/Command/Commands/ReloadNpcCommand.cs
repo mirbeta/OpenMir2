@@ -37,14 +37,14 @@ namespace GameSvr.Command.Commands
                 TmpMerList = new List<TBaseObject>();
                 try
                 {
-                    if (M2Share.UserEngine.GetMerchantList(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 9, TmpMerList) > 0)
+                    if (M2Share.UserEngine.GetMerchantList(PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpMerList) > 0)
                     {
                         for (var i = 0; i < TmpMerList.Count; i++)
                         {
                             Merchant = (Merchant)TmpMerList[i];
                             Merchant.ClearScript();
                             Merchant.LoadNPCScript();
-                            PlayObject.SysMsg(Merchant.m_sCharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Merchant.CharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else
@@ -52,14 +52,14 @@ namespace GameSvr.Command.Commands
                         PlayObject.SysMsg("附近未发现任何交易NPC!!!", MsgColor.Red, MsgType.Hint);
                     }
                     TmpNorList = new List<TBaseObject>();
-                    if (M2Share.UserEngine.GetNpcList(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 9, TmpNorList) > 0)
+                    if (M2Share.UserEngine.GetNpcList(PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpNorList) > 0)
                     {
                         for (var i = 0; i < TmpNorList.Count; i++)
                         {
                             NPC = TmpNorList[i] as NormNpc;
                             NPC.ClearScript();
                             NPC.LoadNPCScript();
-                            PlayObject.SysMsg(NPC.m_sCharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(NPC.CharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else

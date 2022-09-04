@@ -19,7 +19,7 @@ namespace GameSvr.Command.Commands
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var nHungerPoint = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : -1;
-            if (PlayObject.m_btPermission < 6)
+            if (PlayObject.Permission < 6)
             {
                 return;
             }

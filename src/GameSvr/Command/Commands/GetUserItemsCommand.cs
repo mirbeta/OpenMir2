@@ -44,13 +44,13 @@ namespace GameSvr.Command.Commands
             {
                 case 0:
                     nItemCount = 0;
-                    for (var i = 0; i < m_PlayObject.m_UseItems.Length; i++)
+                    for (var i = 0; i < m_PlayObject.UseItems.Length; i++)
                     {
-                        if (m_PlayObject.m_ItemList.Count >= 46)
+                        if (m_PlayObject.ItemList.Count >= 46)
                         {
                             break;
                         }
-                        UserItem = m_PlayObject.m_UseItems[i];
+                        UserItem = m_PlayObject.UseItems[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                         if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.Ordinal) == 0)
                         {
@@ -59,10 +59,10 @@ namespace GameSvr.Command.Commands
                                 break;
                             }
                             UserItem = new TUserItem(); ;
-                            UserItem = m_PlayObject.m_UseItems[i];
-                            m_PlayObject.m_ItemList.Add(UserItem);
+                            UserItem = m_PlayObject.UseItems[i];
+                            m_PlayObject.ItemList.Add(UserItem);
                             m_PlayObject.SendAddItem(UserItem);
-                            m_PlayObject.m_UseItems[i].wIndex = 0;
+                            m_PlayObject.UseItems[i].wIndex = 0;
                             nItemCount++;
                             if (nItemCount >= nCount)
                             {
@@ -75,17 +75,17 @@ namespace GameSvr.Command.Commands
 
                 case 1:
                     nItemCount = 0;
-                    for (var i = m_PlayObject.m_ItemList.Count - 1; i >= 0; i--)
+                    for (var i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
                     {
-                        if (m_PlayObject.m_ItemList.Count >= 46)
+                        if (m_PlayObject.ItemList.Count >= 46)
                         {
                             break;
                         }
-                        if (m_PlayObject.m_ItemList.Count <= 0)
+                        if (m_PlayObject.ItemList.Count <= 0)
                         {
                             break;
                         }
-                        UserItem = m_PlayObject.m_ItemList[i];
+                        UserItem = m_PlayObject.ItemList[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                         if (StdItem != null && String.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -94,8 +94,8 @@ namespace GameSvr.Command.Commands
                                 break;
                             }
                             m_PlayObject.SendDelItems(UserItem);
-                            m_PlayObject.m_ItemList.RemoveAt(i);
-                            m_PlayObject.m_ItemList.Add(UserItem);
+                            m_PlayObject.ItemList.RemoveAt(i);
+                            m_PlayObject.ItemList.Add(UserItem);
                             m_PlayObject.SendAddItem(UserItem);
                             nItemCount++;
                             if (nItemCount >= nCount)
@@ -108,17 +108,17 @@ namespace GameSvr.Command.Commands
 
                 case 2:
                     nItemCount = 0;
-                    for (var i = m_PlayObject.m_StorageItemList.Count - 1; i >= 0; i--)
+                    for (var i = m_PlayObject.StorageItemList.Count - 1; i >= 0; i--)
                     {
-                        if (m_PlayObject.m_ItemList.Count >= 46)
+                        if (m_PlayObject.ItemList.Count >= 46)
                         {
                             break;
                         }
-                        if (m_PlayObject.m_StorageItemList.Count <= 0)
+                        if (m_PlayObject.StorageItemList.Count <= 0)
                         {
                             break;
                         }
-                        UserItem = m_PlayObject.m_StorageItemList[i];
+                        UserItem = m_PlayObject.StorageItemList[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                         if (StdItem != null && String.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -126,8 +126,8 @@ namespace GameSvr.Command.Commands
                             {
                                 break;
                             }
-                            m_PlayObject.m_StorageItemList.RemoveAt(i);
-                            m_PlayObject.m_ItemList.Add(UserItem);
+                            m_PlayObject.StorageItemList.RemoveAt(i);
+                            m_PlayObject.ItemList.Add(UserItem);
                             m_PlayObject.SendAddItem(UserItem);
                             nItemCount++;
                             if (nItemCount >= nCount)

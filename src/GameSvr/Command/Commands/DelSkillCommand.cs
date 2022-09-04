@@ -41,19 +41,19 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = m_PlayObject.m_MagicList.Count - 1; i >= 0; i--)
+            for (var i = m_PlayObject.MagicList.Count - 1; i >= 0; i--)
             {
-                if (m_PlayObject.m_MagicList.Count <= 0)
+                if (m_PlayObject.MagicList.Count <= 0)
                 {
                     break;
                 }
-                UserMagic = m_PlayObject.m_MagicList[i];
+                UserMagic = m_PlayObject.MagicList[i];
                 if (UserMagic != null)
                 {
                     if (boDelAll)
                     {
                         UserMagic = null;
-                        m_PlayObject.m_MagicList.RemoveAt(i);
+                        m_PlayObject.MagicList.RemoveAt(i);
                     }
                     else
                     {
@@ -61,7 +61,7 @@ namespace GameSvr.Command.Commands
                         {
                             m_PlayObject.SendDelMagic(UserMagic);
                             UserMagic = null;
-                            m_PlayObject.m_MagicList.RemoveAt(i);
+                            m_PlayObject.MagicList.RemoveAt(i);
                             m_PlayObject.SysMsg($"技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);
                             PlayObject.SysMsg($"{sHumanName}的技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);
                             break;

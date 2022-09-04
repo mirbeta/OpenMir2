@@ -12,10 +12,10 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ChangeSalveStatus(PlayObject PlayObject)
         {
-            PlayObject.m_boSlaveRelax = !PlayObject.m_boSlaveRelax;
-            if (PlayObject.m_SlaveList.Count > 0)
+            PlayObject.SlaveRelax = !PlayObject.SlaveRelax;
+            if (PlayObject.SlaveList.Count > 0)
             {
-                if (PlayObject.m_boSlaveRelax)
+                if (PlayObject.SlaveRelax)
                 {
                     PlayObject.SysMsg(M2Share.sPetRest, MsgColor.Green, MsgType.Hint);
                 }

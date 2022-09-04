@@ -13,14 +13,14 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void EndGuild(PlayObject PlayObject)
         {
-            if (PlayObject.m_MyGuild != null)
+            if (PlayObject.MyGuild != null)
             {
-                if (PlayObject.m_nGuildRankNo > 1)
+                if (PlayObject.GuildRankNo > 1)
                 {
-                    if (PlayObject.m_MyGuild.IsMember(PlayObject.m_sCharName) && PlayObject.m_MyGuild.DelMember(PlayObject.m_sCharName))
+                    if (PlayObject.MyGuild.IsMember(PlayObject.CharName) && PlayObject.MyGuild.DelMember(PlayObject.CharName))
                     {
-                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, PlayObject.m_MyGuild.sGuildName);
-                        PlayObject.m_MyGuild = null;
+                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, PlayObject.MyGuild.sGuildName);
+                        PlayObject.MyGuild = null;
                         PlayObject.RefRankInfo(0, "");
                         PlayObject.RefShowName();
                         PlayObject.SysMsg("你已经退出行会。", MsgColor.Green, MsgType.Hint);

@@ -21,10 +21,10 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                int nx = m_nCurrX;
-                int ny = m_nCurrY;
+                int nx = CurrX;
+                int ny = CurrY;
                 FireBurnEvent FireBurnEvent;
                 if (m_PEnvir.GetEvent(nx, ny - 1) == null)
                 {
@@ -71,9 +71,9 @@ namespace GameSvr.Monster.Monsters
                     FireBurnEvent = new FireBurnEvent(this, nx, ny + 2, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
             }

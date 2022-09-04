@@ -12,11 +12,11 @@ namespace GameSvr.Actor
             VisibleBaseObject visibleBaseObject;
             if ((baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (baseObject.m_Master != null))// 如果是人物或宝宝则置TRUE
             {
-                m_boIsVisibleActive = true;
+                IsVisibleActive = true;
             }
-            for (var i = 0; i < m_VisibleActors.Count; i++)
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                visibleBaseObject = m_VisibleActors[i];
+                visibleBaseObject = VisibleActors[i];
                 if (visibleBaseObject.BaseObject == baseObject)
                 {
                     visibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
@@ -33,16 +33,16 @@ namespace GameSvr.Actor
                 VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = baseObject
             };
-            m_VisibleActors.Add(visibleBaseObject);
+            VisibleActors.Add(visibleBaseObject);
         }
 
         protected void UpdateVisibleItem(int wX, int wY, MapItem MapItem)
         {
             VisibleMapItem visibleMapItem;
             bool boIsVisible = false;
-            for (int i = 0; i < m_VisibleItems.Count; i++)
+            for (int i = 0; i < VisibleItems.Count; i++)
             {
-                visibleMapItem = m_VisibleItems[i];
+                visibleMapItem = VisibleItems[i];
                 if (visibleMapItem.MapItem == MapItem)
                 {
                     visibleMapItem.VisibleFlag = VisibleFlag.Invisible;
@@ -63,15 +63,15 @@ namespace GameSvr.Actor
                 sName = MapItem.Name,
                 wLooks = MapItem.Looks
             };
-            m_VisibleItems.Add(visibleMapItem);
+            VisibleItems.Add(visibleMapItem);
         }
 
         protected void UpdateVisibleEvent(int wX, int wY, MirEvent MapEvent)
         {
             bool boIsVisible = false;
-            for (var i = 0; i < m_VisibleEvents.Count; i++)
+            for (var i = 0; i < VisibleEvents.Count; i++)
             {
-                var mapEvent = m_VisibleEvents[i];
+                var mapEvent = VisibleEvents[i];
                 if (mapEvent == MapEvent)
                 {
                     mapEvent.VisibleFlag = VisibleFlag.Invisible;
@@ -86,15 +86,15 @@ namespace GameSvr.Actor
             MapEvent.VisibleFlag = VisibleFlag.Hidden;
             MapEvent.m_nX = wX;
             MapEvent.m_nY = wY;
-            m_VisibleEvents.Add(MapEvent);
+            VisibleEvents.Add(MapEvent);
         }
 
         public bool IsVisibleHuman()
         {
             bool result = false;
-            for (int i = 0; i < m_VisibleActors.Count; i++)
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
-                var visibleBaseObject = m_VisibleActors[i];
+                var visibleBaseObject = VisibleActors[i];
                 if ((visibleBaseObject.BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (visibleBaseObject.BaseObject.m_Master != null))
                 {
                     result = true;
@@ -113,15 +113,15 @@ namespace GameSvr.Actor
                 return;
             }
             var n24 = 0;
-            m_boIsVisibleActive = false;// 先置为FALSE
-            for (var i = 0; i < m_VisibleActors.Count; i++)
+            IsVisibleActive = false;// 先置为FALSE
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                m_VisibleActors[i].VisibleFlag = 0;
+                VisibleActors[i].VisibleFlag = 0;
             }
-            var nStartX = (short)(m_nCurrX - m_nViewRange);
-            var nEndX = (short)(m_nCurrX + m_nViewRange);
-            var nStartY =  (short)(m_nCurrY - m_nViewRange);
-            var nEndY =  (short)(m_nCurrY + m_nViewRange);
+            var nStartX = (short)(CurrX - ViewRange);
+            var nEndX = (short)(CurrX + ViewRange);
+            var nStartY =  (short)(CurrY - ViewRange);
+            var nEndY =  (short)(CurrY + ViewRange);
             try
             {
                 for (var n18 = nStartX; n18 <= nEndX; n18++)
@@ -158,12 +158,12 @@ namespace GameSvr.Actor
                                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                         if (baseObject != null)
                                         {
-                                            if (!baseObject.m_boDeath && !baseObject.m_boInvisible)
+                                            if (!baseObject.Death && !baseObject.m_boInvisible)
                                             {
-                                                if (!baseObject.m_boGhost && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
+                                                if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                 {
-                                                    if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || 
-                                                        ((baseObject.m_Master != null) && (Math.Abs(baseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(baseObject.m_nCurrY - m_nCurrY) <= 3)) || 
+                                                    if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || WantRefMsg || 
+                                                        ((baseObject.m_Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || 
                                                         (baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                                                     {
                                                         UpdateVisibleGay(baseObject);
@@ -181,7 +181,7 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
+                M2Share.LogSystem.Error(format(sExceptionMsg, n24, CharName, MapName, CurrX, CurrY));
                 M2Share.LogSystem.Error(e.Message);
                 KickException();
             }
@@ -191,14 +191,14 @@ namespace GameSvr.Actor
                 var n18 = 0;
                 while (true)
                 {
-                    if (m_VisibleActors.Count <= n18)
+                    if (VisibleActors.Count <= n18)
                     {
                         break;
                     }
-                    var visibleBaseObject = m_VisibleActors[n18];
+                    var visibleBaseObject = VisibleActors[n18];
                     if (visibleBaseObject.VisibleFlag == VisibleFlag.Visible)
                     {
-                        m_VisibleActors.RemoveAt(n18);
+                        VisibleActors.RemoveAt(n18);
                         Dispose(visibleBaseObject);
                         continue;
                     }
@@ -207,7 +207,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.LogSystem.Error(format(sExceptionMsg, n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY));
+                M2Share.LogSystem.Error(format(sExceptionMsg, n24, CharName, MapName, CurrX, CurrY));
                 KickException();
             }
         }
@@ -218,15 +218,15 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            m_boIsVisibleActive = false;
-            for (var i = 0; i < m_VisibleActors.Count; i++)
+            IsVisibleActive = false;
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                m_VisibleActors[i].VisibleFlag = 0;
+                VisibleActors[i].VisibleFlag = 0;
             }
-            var nStartX = (short)(m_nCurrX - m_nViewRange);
-            var nEndX = (short)(m_nCurrX + m_nViewRange);
-            var nStartY = (short)(m_nCurrY - m_nViewRange);
-            var nEndY = (short)(m_nCurrY + m_nViewRange);
+            var nStartX = (short)(CurrX - ViewRange);
+            var nEndX = (short)(CurrX + ViewRange);
+            var nStartY = (short)(CurrY - ViewRange);
+            var nEndY = (short)(CurrY + ViewRange);
             for (var n18 = nStartX; n18 <= nEndX; n18++)
             {
                 for (var n1C = nStartY; n1C <= nEndY; n1C++)
@@ -255,7 +255,7 @@ namespace GameSvr.Actor
                                             break;
                                         }
                                     }
-                                    if ((OSObject.CellType == CellType.ItemObject) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
+                                    if ((OSObject.CellType == CellType.ItemObject) && !Death && (m_btRaceServer > Grobal2.RC_MONSTER))
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                         {
@@ -280,17 +280,17 @@ namespace GameSvr.Actor
             }
 
             var n17 = 0;
-            if (m_VisibleActors.Count > 0)
+            if (VisibleActors.Count > 0)
             {
                 while (true)
                 {
-                    if (m_VisibleActors.Count <= n17)
+                    if (VisibleActors.Count <= n17)
                     {
                         break;
                     }
-                    if (m_VisibleActors[n17].VisibleFlag == 0)
+                    if (VisibleActors[n17].VisibleFlag == 0)
                     {
-                        m_VisibleActors.RemoveAt(n17);
+                        VisibleActors.RemoveAt(n17);
                         continue;
                     }
                     n17++;

@@ -27,14 +27,14 @@ namespace GameSvr.Command.Commands
             IList<TBaseObject> List10 = new List<TBaseObject>();
             IList<PlayObject> List14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
-            M2Share.UserEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, List10);
+            M2Share.UserEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 1000, List10);
             for (var i = 0; i < List10.Count; i++)
             {
                 m_PlayObject = List10[i] as PlayObject;
-                if (!m_PlayObject.m_boObMode || !m_PlayObject.m_boAdminMode)
+                if (!m_PlayObject.ObMode || !m_PlayObject.AdminMode)
                 {
-                    m_PlayObject.m_nFightZoneDieCount = 0;
-                    if (m_PlayObject.m_MyGuild == null)
+                    m_PlayObject.FightZoneDieCount = 0;
+                    if (m_PlayObject.MyGuild == null)
                     {
                         continue;
                     }
@@ -42,19 +42,19 @@ namespace GameSvr.Command.Commands
                     for (var j = 0; j < List14.Count; j++)
                     {
                         PlayObjectA = List14[j];
-                        if (m_PlayObject.m_MyGuild == PlayObjectA.m_MyGuild)
+                        if (m_PlayObject.MyGuild == PlayObjectA.MyGuild)
                         {
                             bo19 = true;
                         }
                     }
                     if (!bo19)
                     {
-                        guildList.Add(m_PlayObject.m_MyGuild);
+                        guildList.Add(m_PlayObject.MyGuild);
                     }
                 }
             }
             PlayObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
-            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
             var s20 = "";
             GuildInfo Guild;
             for (int i = 0; i < guildList.Count; i++)
@@ -64,14 +64,14 @@ namespace GameSvr.Command.Commands
                 for (int II = 0; II < List10.Count; II++)
                 {
                     m_PlayObject = List10[i] as PlayObject;
-                    if (m_PlayObject.m_MyGuild == Guild)
+                    if (m_PlayObject.MyGuild == Guild)
                     {
-                        Guild.AddTeamFightMember(m_PlayObject.m_sCharName);
+                        Guild.AddTeamFightMember(m_PlayObject.CharName);
                     }
                 }
                 s20 = s20 + Guild.sGuildName + ' ';
             }
-            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, " -参加的门派:" + s20);
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, " -参加的门派:" + s20);
             List10 = null;
             List14 = null;
         }

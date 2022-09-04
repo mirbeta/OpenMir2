@@ -448,7 +448,7 @@ namespace GameSvr.Player
             m_boSoftClose = false;
             m_boReadyRun = false;
             m_dwSaveRcdTick = HUtil32.GetTickCount();
-            m_boWantRefMsg = true;
+            WantRefMsg = true;
             m_boRcdSaved = false;
             m_boDieInFight3Zone = false;
             m_sGotoNpcLabel = "";
@@ -465,7 +465,7 @@ namespace GameSvr.Player
             m_nRunTime = 250;
             m_dwSearchTime = 1000;
             m_dwSearchTick = HUtil32.GetTickCount();
-            m_nViewRange = 12;
+            ViewRange = 12;
             m_boNewHuman = false;
             m_boLoginNoticeOK = false;
             bo6AB = false;
@@ -551,7 +551,7 @@ namespace GameSvr.Player
             m_boOnHorse = false;
             m_wContribution = 0;
             m_sRankLevelName = M2Share.g_sRankLevelName;
-            m_boFixedHideMode = true;
+            FixedHideMode = true;
             m_nStep = 0;
             m_nVal = new int[100];
             m_nMval = new int[100];
@@ -654,7 +654,7 @@ namespace GameSvr.Player
         private void SendLogon()
         {
             var MessageBodyWL = new TMessageBodyWL();
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ObjectId, m_nCurrX, m_nCurrY, HUtil32.MakeWord(Direction, m_nLight));
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ObjectId, CurrX, CurrY, HUtil32.MakeWord(Direction, m_nLight));
             MessageBodyWL.lParam1 = GetFeatureToLong();
             MessageBodyWL.lParam2 = m_nCharStatus;
             if (m_boAllowGroup)
@@ -669,7 +669,7 @@ namespace GameSvr.Player
             SendSocket(m_DefMsg, EDcode.EncodeBuffer(MessageBodyWL));
             var nRecog = GetFeatureToLong();
             SendDefMessage(Grobal2.SM_FEATURECHANGED, ObjectId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
-            SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)m_btAttatckMode, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0, "");
         }
 
         /// <summary>
@@ -689,16 +689,16 @@ namespace GameSvr.Player
                     {
                         m_Abil.Level = (byte)M2Share.g_Config.nTestLevel;
                     }
-                    if (m_nGold < M2Share.g_Config.nTestGold)
+                    if (Gold < M2Share.g_Config.nTestGold)
                     {
-                        m_nGold = M2Share.g_Config.nTestGold;
+                        Gold = M2Share.g_Config.nTestGold;
                     }
                 }
                 if (M2Share.g_Config.boTestServer || M2Share.g_Config.boServiceMode)
                 {
                     m_nPayMent = 3;
                 }
-                m_dwMapMoveTick = HUtil32.GetTickCount();
+                MapMoveTick = HUtil32.GetTickCount();
                 m_dLogonTime = DateTime.Now;
                 m_dwLogonTick = HUtil32.GetTickCount();
                 Initialize();
@@ -714,7 +714,7 @@ namespace GameSvr.Player
                 {
                     MapRandomMove(m_PEnvir.MapName, 0);
                 }
-                if (M2Share.UserEngine.GetHumPermission(m_sCharName, ref sIPaddr, ref m_btPermission))
+                if (M2Share.UserEngine.GetHumPermission(CharName, ref sIPaddr, ref Permission))
                 {
                     if (M2Share.g_Config.PermissionSystem)
                     {
@@ -726,16 +726,16 @@ namespace GameSvr.Player
                     }
                 }
                 GetStartPoint();
-                for (var i = m_MagicList.Count - 1; i >= 0; i--)
+                for (var i = MagicList.Count - 1; i >= 0; i--)
                 {
-                    CheckSeeHealGauge(m_MagicList[i]);
+                    CheckSeeHealGauge(MagicList[i]);
                 }
                 if (m_boNewHuman)
                 {
                     UserItem = new TUserItem();
                     if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sCandle, ref UserItem))
                     {
-                        m_ItemList.Add(UserItem);
+                        ItemList.Add(UserItem);
                     }
                     else
                     {
@@ -744,7 +744,7 @@ namespace GameSvr.Player
                     UserItem = new TUserItem();
                     if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sBasicDrug, ref UserItem))
                     {
-                        m_ItemList.Add(UserItem);
+                        ItemList.Add(UserItem);
                     }
                     else
                     {
@@ -753,7 +753,7 @@ namespace GameSvr.Player
                     UserItem = new TUserItem();
                     if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sWoodenSword, ref UserItem))
                     {
-                        m_ItemList.Add(UserItem);
+                        ItemList.Add(UserItem);
                     }
                     else
                     {
@@ -765,7 +765,7 @@ namespace GameSvr.Player
                         : M2Share.g_Config.sClothsWoman;
                     if (M2Share.UserEngine.CopyToUserItemFromName(sItem, ref UserItem))
                     {
-                        m_ItemList.Add(UserItem);
+                        ItemList.Add(UserItem);
                     }
                     else
                     {
@@ -773,49 +773,49 @@ namespace GameSvr.Player
                     }
                 }
                 // 检查背包中的物品是否合法
-                for (var i = m_ItemList.Count - 1; i >= 0; i--)
+                for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    UserItem = m_ItemList[i];
+                    UserItem = ItemList[i];
                     if (!string.IsNullOrEmpty(M2Share.UserEngine.GetStdItemName(UserItem.wIndex))) continue;
-                    Dispose(m_ItemList[i]);
-                    m_ItemList.RemoveAt(i);
+                    Dispose(ItemList[i]);
+                    ItemList.RemoveAt(i);
                 }
                 // 检查人物身上的物品是否符合使用规则
                 if (M2Share.g_Config.boCheckUserItemPlace)
                 {
-                    for (var i = 0; i < m_UseItems.Length; i++)
+                    for (var i = 0; i < UseItems.Length; i++)
                     {
-                        if (m_UseItems[i] == null || m_UseItems[i].wIndex <= 0) continue;
-                        var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
+                        if (UseItems[i] == null || UseItems[i].wIndex <= 0) continue;
+                        var StdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
                         if (StdItem != null)
                         {
                             if (!M2Share.CheckUserItems(i, StdItem))
                             {
-                                UserItem = m_UseItems[i];
+                                UserItem = UseItems[i];
                                 if (!AddItemToBag(UserItem))
                                 {
-                                    m_ItemList.Insert(0, UserItem);
+                                    ItemList.Insert(0, UserItem);
                                 }
-                                m_UseItems[i].wIndex = 0;
+                                UseItems[i].wIndex = 0;
                             }
                         }
                         else
                         {
-                            m_UseItems[i].wIndex = 0;
+                            UseItems[i].wIndex = 0;
                         }
                     }
                 }
                 // 检查背包中是否有复制品
-                for (var i = m_ItemList.Count - 1; i >= 0; i--)
+                for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    UserItem = m_ItemList[i];
+                    UserItem = ItemList[i];
                     var sItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
                     for (var j = i - 1; j >= 0; j--)
                     {
-                        var UserItem1 = m_ItemList[j];
+                        var UserItem1 = ItemList[j];
                         if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == sItemName && UserItem.MakeIndex == UserItem1.MakeIndex)
                         {
-                            m_ItemList.RemoveAt(j);
+                            ItemList.RemoveAt(j);
                             break;
                         }
                     }
@@ -835,9 +835,9 @@ namespace GameSvr.Player
                     m_nPkPoint = 0;
                     btB2++;
                 }
-                if (m_nGold > M2Share.g_Config.nHumanMaxGold * 2 && M2Share.g_Config.nHumanMaxGold > 0)
+                if (Gold > M2Share.g_Config.nHumanMaxGold * 2 && M2Share.g_Config.nHumanMaxGold > 0)
                 {
-                    m_nGold = M2Share.g_Config.nHumanMaxGold * 2;
+                    Gold = M2Share.g_Config.nHumanMaxGold * 2;
                 }
                 if (!bo6AB)
                 {
@@ -862,7 +862,7 @@ namespace GameSvr.Player
                             return;
                         }
                     }
-                    switch (m_btAttatckMode)
+                    switch (AttatckMode)
                     {
                         case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
                             SysMsg(M2Share.sAttackModeOfAll, MsgColor.Green, MsgType.Hint);
@@ -893,7 +893,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.UserEngine.PlayObjectCount > M2Share.g_Config.nTestUserLimit)
                     {
-                        if (m_btPermission < 2)
+                        if (Permission < 2)
                         {
                             SysMsg(M2Share.sOnlineUserFull, MsgColor.Red, MsgType.Hint);
                             SysMsg(M2Share.sForceDisConnect, MsgColor.Red, MsgType.Hint);
@@ -910,13 +910,13 @@ namespace GameSvr.Player
                 SendMsg(this, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SENDMYMAGIC, 0, 0, 0, 0, "");
                 // FeatureChanged(); //增加，广播人物骑马信息
-                m_MyGuild = M2Share.GuildManager.MemberOfGuild(m_sCharName);
-                if (m_MyGuild != null)
+                MyGuild = M2Share.GuildManager.MemberOfGuild(CharName);
+                if (MyGuild != null)
                 {
-                    m_sGuildRankName = m_MyGuild.GetRankName(this, ref m_nGuildRankNo);
-                    for (var i = m_MyGuild.GuildWarList.Count - 1; i >= 0; i--)
+                    GuildRankName = MyGuild.GetRankName(this, ref GuildRankNo);
+                    for (var i = MyGuild.GuildWarList.Count - 1; i >= 0; i--)
                     {
-                        SysMsg(m_MyGuild.GuildWarList[i] + " 正在与本行会进行行会战.", MsgColor.Green, MsgType.Hint);
+                        SysMsg(MyGuild.GuildWarList[i] + " 正在与本行会进行行会战.", MsgColor.Green, MsgType.Hint);
                     }
                 }
                 RefShowName();
@@ -926,7 +926,7 @@ namespace GameSvr.Player
                     {
                         SysMsg(M2Share.sYouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
                     }
-                    m_nGoldMax = M2Share.g_Config.nHumanTryModeMaxGold;
+                    GoldMax = M2Share.g_Config.nHumanTryModeMaxGold;
                     if (m_Abil.Level > M2Share.g_Config.nTryModeLevel)
                     {
                         SysMsg("测试状态可以使用到第 " + M2Share.g_Config.nTryModeLevel, MsgColor.Red, MsgType.Hint);
@@ -942,9 +942,9 @@ namespace GameSvr.Player
                 {
                     SysMsg("当前服务器运行于冒险模式.", MsgColor.Green, MsgType.Hint);
                 }
-                if (m_MagicArr[SpellsDef.SKILL_ERGUM] != null && !m_boUseThrusting)
+                if (MagicArr[SpellsDef.SKILL_ERGUM] != null && !UseThrusting)
                 {
-                    m_boUseThrusting = true;
+                    UseThrusting = true;
                     SendSocket("+LNG");
                 }
                 if (m_PEnvir.Flag.boNORECONNECT)
@@ -959,13 +959,13 @@ namespace GameSvr.Player
                 {
                     M2Share.g_ManageNPC.GotoLable(this, "@Login", false);
                 }
-                m_boFixedHideMode = false;
+                FixedHideMode = false;
                 if (!string.IsNullOrEmpty(m_sDearName))
                 {
                     CheckMarry();
                 }
                 CheckMaster();
-                m_boFilterSendMsg = M2Share.GetDisableSendMsgList(m_sCharName);
+                m_boFilterSendMsg = M2Share.GetDisableSendMsgList(CharName);
                 // 密码保护系统
                 if (M2Share.g_Config.boPasswordLockSystem)
                 {
@@ -983,8 +983,8 @@ namespace GameSvr.Player
                         m_boCanHit = !M2Share.g_Config.boLockHitAction;
                         m_boCanSpell = !M2Share.g_Config.boLockSpellAction;
                         m_boCanSendMsg = !M2Share.g_Config.boLockSendMsgAction;
-                        m_boObMode = M2Share.g_Config.boLockInObModeAction;
-                        m_boAdminMode = M2Share.g_Config.boLockInObModeAction;
+                        ObMode = M2Share.g_Config.boLockInObModeAction;
+                        AdminMode = M2Share.g_Config.boLockInObModeAction;
                         SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.LOCKLOGON.sCmd, MsgColor.Red, MsgType.Hint);
                         SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "密码命令: @" + M2Share.g_GameCommand.PASSWORDLOCK.sCmd);
                     }
@@ -1019,12 +1019,12 @@ namespace GameSvr.Player
         /// <returns></returns>
         private bool WeaptonMakeLuck()
         {
-            if (m_UseItems[Grobal2.U_WEAPON] == null && m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (UseItems[Grobal2.U_WEAPON] == null && UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
                 return false;
             }
             var nRand = 0;
-            var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
+            var StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
             if (StdItem != null)
             {
                 nRand = Math.Abs(StdItem.Dc2 - StdItem.Dc) / 5;
@@ -1036,27 +1036,27 @@ namespace GameSvr.Player
             else
             {
                 var boMakeLuck = false;
-                if (m_UseItems[Grobal2.U_WEAPON].btValue[4] > 0)
+                if (UseItems[Grobal2.U_WEAPON].btValue[4] > 0)
                 {
-                    m_UseItems[Grobal2.U_WEAPON].btValue[4] -= 1;
+                    UseItems[Grobal2.U_WEAPON].btValue[4] -= 1;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (m_UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint1)
+                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint1)
                 {
-                    m_UseItems[Grobal2.U_WEAPON].btValue[3]++;
+                    UseItems[Grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (m_UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.g_Config.nWeaponMakeLuckPoint2Rate) == 1)
+                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.g_Config.nWeaponMakeLuckPoint2Rate) == 1)
                 {
-                    m_UseItems[Grobal2.U_WEAPON].btValue[3]++;
+                    UseItems[Grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (m_UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.g_Config.nWeaponMakeLuckPoint3Rate) == 1)
+                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.g_Config.nWeaponMakeLuckPoint3Rate) == 1)
                 {
-                    m_UseItems[Grobal2.U_WEAPON].btValue[3]++;
+                    UseItems[Grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
@@ -1080,11 +1080,11 @@ namespace GameSvr.Player
         /// <returns></returns>
         private bool RepairWeapon()
         {
-            if (m_UseItems[Grobal2.U_WEAPON] == null)
+            if (UseItems[Grobal2.U_WEAPON] == null)
             {
                 return false;
             }
-            var UserItem = m_UseItems[Grobal2.U_WEAPON];
+            var UserItem = UseItems[Grobal2.U_WEAPON];
             if (UserItem.wIndex <= 0 || UserItem.DuraMax <= UserItem.Dura)
             {
                 return false;
@@ -1104,12 +1104,12 @@ namespace GameSvr.Player
         /// <returns></returns>
         private bool SuperRepairWeapon()
         {
-            if (m_UseItems[Grobal2.U_WEAPON] == null && m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (UseItems[Grobal2.U_WEAPON] == null && UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
                 return false;
             }
-            m_UseItems[Grobal2.U_WEAPON].Dura = m_UseItems[Grobal2.U_WEAPON].DuraMax;
-            SendMsg(this, Grobal2.RM_DURACHANGE, 1, m_UseItems[Grobal2.U_WEAPON].Dura, m_UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+            UseItems[Grobal2.U_WEAPON].Dura = UseItems[Grobal2.U_WEAPON].DuraMax;
+            SendMsg(this, Grobal2.RM_DURACHANGE, 1, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             SysMsg(M2Share.g_sWeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
@@ -1224,11 +1224,11 @@ namespace GameSvr.Player
             VisibleBaseObject VisibleBaseObject;
             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)
             {
-                m_boIsVisibleActive = true;// 如果是人物或宝宝则置TRUE
+                IsVisibleActive = true;// 如果是人物或宝宝则置TRUE
             }
-            for (var i = 0; i < m_VisibleActors.Count; i++)
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                VisibleBaseObject = m_VisibleActors[i];
+                VisibleBaseObject = VisibleActors[i];
                 if (VisibleBaseObject.BaseObject == BaseObject)
                 {
                     VisibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
@@ -1245,7 +1245,7 @@ namespace GameSvr.Player
                 VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = BaseObject
             };
-            m_VisibleActors.Add(VisibleBaseObject);
+            VisibleActors.Add(VisibleBaseObject);
             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 SendWhisperMsg(BaseObject as PlayObject);
@@ -1254,22 +1254,22 @@ namespace GameSvr.Player
 
         public override void SearchViewRange()
         {
-            for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
+            for (var i = VisibleItems.Count - 1; i >= 0; i--)
             {
-                m_VisibleItems[i].VisibleFlag = 0;
+                VisibleItems[i].VisibleFlag = 0;
             }
-            for (var i = m_VisibleEvents.Count - 1; i >= 0; i--)
+            for (var i = VisibleEvents.Count - 1; i >= 0; i--)
             {
-                m_VisibleEvents[i].VisibleFlag = 0;
+                VisibleEvents[i].VisibleFlag = 0;
             }
-            for (var i = m_VisibleActors.Count - 1; i >= 0; i--)
+            for (var i = VisibleActors.Count - 1; i >= 0; i--)
             {
-                m_VisibleActors[i].VisibleFlag = 0;
+                VisibleActors[i].VisibleFlag = 0;
             }
-            var nStartX = m_nCurrX - m_nViewRange;
-            var nEndX = m_nCurrX + m_nViewRange;
-            var nStartY = m_nCurrY - m_nViewRange;
-            var nEndY = m_nCurrY + m_nViewRange;
+            var nStartX = CurrX - ViewRange;
+            var nEndX = CurrX + ViewRange;
+            var nStartY = CurrY - ViewRange;
+            var nEndY = CurrY + ViewRange;
             try
             {
                 TBaseObject BaseObject = null;
@@ -1307,9 +1307,9 @@ namespace GameSvr.Player
                                         BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                         if (BaseObject != null && !BaseObject.m_boInvisible)
                                         {
-                                            if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
+                                            if (!BaseObject.Ghost && !BaseObject.FixedHideMode && !BaseObject.ObMode)
                                             {
-                                                if (m_btRaceServer < Grobal2.RC_ANIMAL || m_Master != null || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || BaseObject.m_Master != null && Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3 || BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                                if (m_btRaceServer < Grobal2.RC_ANIMAL || m_Master != null || m_boCrazyMode || m_boNastyMode || WantRefMsg || BaseObject.m_Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     UpdateVisibleGay(BaseObject);
                                                 }
@@ -1343,14 +1343,14 @@ namespace GameSvr.Player
                                                 {
                                                     if (M2Share.ActorMgr.Get(MapItem.OfBaseObject) != null)
                                                     {
-                                                        if (M2Share.ActorMgr.Get(MapItem.OfBaseObject).m_boGhost)
+                                                        if (M2Share.ActorMgr.Get(MapItem.OfBaseObject).Ghost)
                                                         {
                                                             MapItem.OfBaseObject = 0;
                                                         }
                                                     }
                                                     if (M2Share.ActorMgr.Get(MapItem.DropBaseObject) != null)
                                                     {
-                                                        if (M2Share.ActorMgr.Get(MapItem.DropBaseObject).m_boGhost)
+                                                        if (M2Share.ActorMgr.Get(MapItem.DropBaseObject).Ghost)
                                                         {
                                                             MapItem.DropBaseObject = 0;
                                                         }
@@ -1376,22 +1376,22 @@ namespace GameSvr.Player
                 var n18 = 0;
                 while (true)
                 {
-                    if (m_VisibleActors.Count <= n18)
+                    if (VisibleActors.Count <= n18)
                     {
                         break;
                     }
-                    var VisibleBaseObject = m_VisibleActors[n18];
+                    var VisibleBaseObject = VisibleActors[n18];
                     if (VisibleBaseObject.VisibleFlag == 0)
                     {
                         if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
                             BaseObject = VisibleBaseObject.BaseObject;
-                            if (!BaseObject.m_boFixedHideMode && !BaseObject.m_boGhost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
+                            if (!BaseObject.FixedHideMode && !BaseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                             {
                                 SendMsg(BaseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                             }
                         }
-                        m_VisibleActors.RemoveAt(n18);
+                        VisibleActors.RemoveAt(n18);
                         Dispose(VisibleBaseObject);
                         continue;
                     }
@@ -1400,20 +1400,20 @@ namespace GameSvr.Player
                         BaseObject = VisibleBaseObject.BaseObject;
                         if (BaseObject != this)
                         {
-                            if (BaseObject.m_boDeath)
+                            if (BaseObject.Death)
                             {
                                 if (BaseObject.m_boSkeleton)
                                 {
-                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.CurrX, BaseObject.CurrY, 0, "");
                                 }
                                 else
                                 {
-                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.Direction, BaseObject.CurrX, BaseObject.CurrY, 0, "");
                                 }
                             }
                             else
                             {
-                                SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
+                                SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.Direction, BaseObject.CurrX, BaseObject.CurrY, 0, BaseObject.GetShowName());
                             }
                         }
                     }
@@ -1423,15 +1423,15 @@ namespace GameSvr.Player
                 var I = 0;
                 while (true)
                 {
-                    if (m_VisibleItems.Count <= I)
+                    if (VisibleItems.Count <= I)
                     {
                         break;
                     }
-                    var VisibleMapItem = m_VisibleItems[I];
+                    var VisibleMapItem = VisibleItems[I];
                     if (VisibleMapItem.VisibleFlag == 0)
                     {
                         SendMsg(this, Grobal2.RM_ITEMHIDE, 0, VisibleMapItem.MapItem.ObjectId, VisibleMapItem.nX, VisibleMapItem.nY, "");
-                        m_VisibleItems.RemoveAt(I);
+                        VisibleItems.RemoveAt(I);
                         Dispose(VisibleMapItem);
                         continue;
                     }
@@ -1444,15 +1444,15 @@ namespace GameSvr.Player
                 I = 0;
                 while (true)
                 {
-                    if (m_VisibleEvents.Count <= I)
+                    if (VisibleEvents.Count <= I)
                     {
                         break;
                     }
-                    MapEvent = m_VisibleEvents[I];
+                    MapEvent = VisibleEvents[I];
                     if (MapEvent.VisibleFlag == VisibleFlag.Visible)
                     {
                         SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
-                        m_VisibleEvents.RemoveAt(I);
+                        VisibleEvents.RemoveAt(I);
                         continue;
                     }
                     if (MapEvent.VisibleFlag == VisibleFlag.Hidden)
@@ -1484,22 +1484,22 @@ namespace GameSvr.Player
             const string sExceptionMsg = "[Exception] TPlayObject::GetShowName";
             try
             {
-                if (m_MyGuild != null)
+                if (MyGuild != null)
                 {
                     var Castle = M2Share.CastleManager.IsCastleMember(this);
                     if (Castle != null)
                     {
                         sGuildName = M2Share.g_sCastleGuildName.Replace("%castlename", Castle.m_sName);
-                        sGuildName = sGuildName.Replace("%guildname", m_MyGuild.sGuildName);
-                        sGuildName = sGuildName.Replace("%rankname", m_sGuildRankName);
+                        sGuildName = sGuildName.Replace("%guildname", MyGuild.sGuildName);
+                        sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                     }
                     else
                     {
                         Castle = M2Share.CastleManager.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.g_Config.boShowGuildName || Castle != null && Castle.m_boUnderWar || m_boInFreePKArea)
+                        if (M2Share.g_Config.boShowGuildName || Castle != null && Castle.m_boUnderWar || InFreePKArea)
                         {
-                            sGuildName = M2Share.g_sNoCastleGuildName.Replace("%guildname", m_MyGuild.sGuildName);
-                            sGuildName = sGuildName.Replace("%rankname", m_sGuildRankName);
+                            sGuildName = M2Share.g_sNoCastleGuildName.Replace("%guildname", MyGuild.sGuildName);
+                            sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                         }
                     }
                 }
@@ -1507,27 +1507,27 @@ namespace GameSvr.Player
                 {
                     if (m_btReLevel > 0)
                     {
-                        switch (m_btJob)
+                        switch (Job)
                         {
                             case PlayJob.Warrior:
-                                sCharName = M2Share.g_sWarrReNewName.Replace("%chrname", m_sCharName);
+                                sCharName = M2Share.g_sWarrReNewName.Replace("%chrname", CharName);
                                 break;
                             case PlayJob.Wizard:
-                                sCharName = M2Share.g_sWizardReNewName.Replace("%chrname", m_sCharName);
+                                sCharName = M2Share.g_sWizardReNewName.Replace("%chrname", CharName);
                                 break;
                             case PlayJob.Taoist:
-                                sCharName = M2Share.g_sTaosReNewName.Replace("%chrname", m_sCharName);
+                                sCharName = M2Share.g_sTaosReNewName.Replace("%chrname", CharName);
                                 break;
                         }
                     }
                     else
                     {
-                        sCharName = m_sCharName;
+                        sCharName = CharName;
                     }
                 }
                 else
                 {
-                    sCharName = format(m_sRankLevelName, m_sCharName);
+                    sCharName = format(m_sRankLevelName, CharName);
                 }
                 if (!string.IsNullOrEmpty(m_sMasterName))
                 {
@@ -1602,19 +1602,19 @@ namespace GameSvr.Player
                     if (Gender == PlayGender.Man)
                     {
                         sSayMsg = M2Share.g_sManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
-                        sSayMsg = sSayMsg.Replace("%s", m_sCharName);
+                        sSayMsg = sSayMsg.Replace("%s", CharName);
                         sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
-                        sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                        sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                        sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
+                        sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                         m_DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                     }
                     else
                     {
                         sSayMsg = M2Share.g_sWoManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
-                        sSayMsg = sSayMsg.Replace("%s", m_sCharName);
+                        sSayMsg = sSayMsg.Replace("%s", CharName);
                         sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
-                        sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                        sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                        sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
+                        sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                         m_DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                     }
                     m_DearHuman.m_DearHuman = null;
@@ -1627,10 +1627,10 @@ namespace GameSvr.Player
                         for (var i = m_MasterList.Count - 1; i >= 0; i--)
                         {
                             Human = m_MasterList[i];
-                            sSayMsg = M2Share.g_sMasterLongOutMasterListOnlineMsg.Replace("%s", m_sCharName);
+                            sSayMsg = M2Share.g_sMasterLongOutMasterListOnlineMsg.Replace("%s", CharName);
                             sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
-                            sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                            sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                            sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
+                            sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                             Human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                             Human.m_MasterHuman = null;
                         }
@@ -1642,13 +1642,13 @@ namespace GameSvr.Player
                             return;
                         }
                         sSayMsg = M2Share.g_sMasterListLongOutMasterOnlineMsg.Replace("%d", m_sMasterName);
-                        sSayMsg = sSayMsg.Replace("%s", m_sCharName);
+                        sSayMsg = sSayMsg.Replace("%s", CharName);
                         sSayMsg = sSayMsg.Replace("%m", m_PEnvir.MapDesc);
-                        sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                        sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                        sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
+                        sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                         m_MasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         // 如果为大徒弟则将对方的记录清空
-                        if (m_MasterHuman.m_sMasterName == m_sCharName)
+                        if (m_MasterHuman.m_sMasterName == CharName)
                         {
                             m_MasterHuman.m_MasterHuman = null;
                         }
@@ -1677,20 +1677,20 @@ namespace GameSvr.Player
             TUserItem pu;
             const string sExceptionMsg = "[Exception] TPlayObject::ScatterBagItems";
             IList<TDeleteItem> DelList = null;
-            if (m_boAngryRing || m_boNoDropItem || m_PEnvir.Flag.boNODROPITEM)
+            if (AngryRing || NoDropItem || m_PEnvir.Flag.boNODROPITEM)
             {
                 return;// 不死戒指
             }
             var boDropall = M2Share.g_Config.boDieRedScatterBagAll && PKLevel() >= 2;
             try
             {
-                for (var i = m_ItemList.Count - 1; i >= 0; i--)
+                for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
                     if (boDropall || M2Share.RandomNumber.Random(M2Share.g_Config.nDieScatterBagRate) == 0)
                     {
-                        if (DropItemDown(m_ItemList[i], DropWide, true, ItemOfCreat, this))
+                        if (DropItemDown(ItemList[i], DropWide, true, ItemOfCreat, this))
                         {
-                            pu = m_ItemList[i];
+                            pu = ItemList[i];
                             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                             {
                                 if (DelList == null)
@@ -1703,8 +1703,8 @@ namespace GameSvr.Player
                                     MakeIndex = pu.MakeIndex
                                 });
                             }
-                            Dispose(m_ItemList[i]);
-                            m_ItemList.RemoveAt(i);
+                            Dispose(ItemList[i]);
+                            ItemList.RemoveAt(i);
                         }
                     }
                 }

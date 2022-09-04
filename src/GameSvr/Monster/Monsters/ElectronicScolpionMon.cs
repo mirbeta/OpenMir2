@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
             Direction = nDir;
             var WAbil = m_WAbil;
             int nPower = GetAttackPower(HUtil32.LoWord(WAbil.MC), HUtil32.HiWord(WAbil.MC) - HUtil32.LoWord(WAbil.MC));
-            var nDamage = m_TargetCret.GetMagStruckDamage(this, nPower);
+            var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {
                 int btGetBackHP = HUtil32.LoByte(m_WAbil.MP);
@@ -25,15 +25,15 @@ namespace GameSvr.Monster.Monsters
                 {
                     m_WAbil.HP += (ushort)(nDamage / btGetBackHP);
                 }
-                m_TargetCret.StruckDamage(nDamage);
-                m_TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, m_TargetCret.m_WAbil.HP, m_TargetCret.m_WAbil.MaxHP, ObjectId, "", 200);
+                TargetCret.StruckDamage(nDamage);
+                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, TargetCret.m_WAbil.HP, TargetCret.m_WAbil.MaxHP, ObjectId, "", 200);
             }
-            SendRefMsg(Grobal2.RM_LIGHTING, 1, m_nCurrX, m_nCurrY, m_TargetCret.ObjectId, "");
+            SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ObjectId, "");
         }
 
         public override void Run()
         {
-            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (m_WAbil.HP < m_WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
@@ -43,25 +43,25 @@ namespace GameSvr.Monster.Monsters
                 {
                     m_boUseMagic = false;
                 }
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
-                if (m_TargetCret == null)
+                if (TargetCret == null)
                 {
                     return;
                 }
-                var nX = Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX);
-                var nY = Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY);
+                var nX = Math.Abs(CurrX - TargetCret.CurrX);
+                var nY = Math.Abs(CurrY - TargetCret.CurrY);
                 if (nX <= 2 && nY <= 2)
                 {
                     if (m_boUseMagic || nX == 2 || nY == 2)
                     {
-                        if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {
-                            m_dwHitTick = HUtil32.GetTickCount();
-                            int nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+                            AttackTick = HUtil32.GetTickCount();
+                            int nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                             LightingAttack((byte)nAttackDir);
                         }
                     }

@@ -46,13 +46,13 @@ namespace GameSvr.Command.Commands
             if (mon != null)
             {
                 mon.m_Master = PlayObject;
-                mon.m_dwMasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
-                mon.m_btSlaveMakeLevel = 3;
-                mon.m_btSlaveExpLevel = 1;
-                mon.m_btNameColor = (byte)nNameColor;
+                mon.MasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
+                mon.SlaveMakeLevel = 3;
+                mon.SlaveExpLevel = 1;
+                mon.NameColor = (byte)nNameColor;
                 mon.RecalcAbilitys();
                 mon.RefNameColor();
-                PlayObject.m_SlaveList.Add(mon);
+                PlayObject.SlaveList.Add(mon);
             }
         }
     }

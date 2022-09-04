@@ -12,37 +12,37 @@ namespace GameSvr.Monster.Monsters
 
         public StickMonster() : base()
         {
-            this.m_nViewRange = 7;
+            this.ViewRange = 7;
             this.m_nRunTime = 250;
             this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             this.m_dwSearchTick = HUtil32.GetTickCount();
             nComeOutValue = 4;
             nAttackRange = 4;
-            this.m_boFixedHideMode = true;
+            this.FixedHideMode = true;
             this.m_boStickMode = true;
-            this.m_boAnimal = true;
+            this.Animal = true;
         }
 
         protected virtual bool AttackTarget()
         {
             byte btDir = 0;
-            if (this.m_TargetCret == null)
+            if (this.TargetCret == null)
             {
                 return false;
             }
-            if (this.GetAttackDir(this.m_TargetCret, ref btDir))
+            if (this.GetAttackDir(this.TargetCret, ref btDir))
             {
-                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
                 {
-                    this.m_dwHitTick = HUtil32.GetTickCount();
-                    this.m_dwTargetFocusTick = HUtil32.GetTickCount();
-                    this.Attack(this.m_TargetCret, btDir);
+                    this.AttackTick = HUtil32.GetTickCount();
+                    this.TargetFocusTick = HUtil32.GetTickCount();
+                    this.Attack(this.TargetCret, btDir);
                 }
                 return true;
             }
-            if (this.m_TargetCret.m_PEnvir == this.m_PEnvir)
+            if (this.TargetCret.m_PEnvir == this.m_PEnvir)
             {
-                this.SetTargetXY(this.m_TargetCret.m_nCurrX, this.m_TargetCret.m_nCurrY);
+                this.SetTargetXY(this.TargetCret.CurrX, this.TargetCret.CurrY);
             }
             else
             {
@@ -53,37 +53,37 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual void ComeOut()
         {
-            this.m_boFixedHideMode = false;
-            this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.FixedHideMode = false;
+            this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
         }
 
         protected virtual void ComeDown()
         {
-            this.SendRefMsg(Grobal2.RM_DIGDOWN, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
-            for (var i = 0; i < this.m_VisibleActors.Count; i++)
+            this.SendRefMsg(Grobal2.RM_DIGDOWN, this.Direction, this.CurrX, this.CurrY, 0, "");
+            for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                Dispose(m_VisibleActors[i]);
+                Dispose(VisibleActors[i]);
             }
-            this.m_VisibleActors.Clear();
-            this.m_boFixedHideMode = true;
+            this.VisibleActors.Clear();
+            this.FixedHideMode = true;
         }
 
         protected virtual bool CheckComeOut()
         {
             TBaseObject BaseObject;
             var result = false;
-            for (var i = 0; i < this.m_VisibleActors.Count; i++)
+            for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                BaseObject = this.m_VisibleActors[i].BaseObject;
-                if (BaseObject.m_boDeath)
+                BaseObject = this.VisibleActors[i].BaseObject;
+                if (BaseObject.Death)
                 {
                     continue;
                 }
                 if (this.IsProperTarget(BaseObject))
                 {
-                    if (!BaseObject.m_boHideMode || this.m_boCoolEye)
+                    if (!BaseObject.HideMode || this.CoolEye)
                     {
-                        if (Math.Abs(this.m_nCurrX - BaseObject.m_nCurrX) < nComeOutValue && Math.Abs(this.m_nCurrY - BaseObject.m_nCurrY) < nComeOutValue)
+                        if (Math.Abs(this.CurrX - BaseObject.CurrX) < nComeOutValue && Math.Abs(this.CurrY - BaseObject.CurrY) < nComeOutValue)
                         {
                             result = true;
                             break;
@@ -102,12 +102,12 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             bool bo05;
-            if (!this.m_boGhost && !this.m_boDeath && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!this.Ghost && !this.Death && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - this.m_dwWalkTick) > this.m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - this.WalkTick) > this.WalkSpeed)
                 {
-                    this.m_dwWalkTick = HUtil32.GetTickCount();
-                    if (this.m_boFixedHideMode)
+                    this.WalkTick = HUtil32.GetTickCount();
+                    if (this.FixedHideMode)
                     {
                         if (CheckComeOut())
                         {
@@ -116,14 +116,14 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
                         {
                             this.SearchTarget();
                         }
                         bo05 = false;
-                        if (this.m_TargetCret != null)
+                        if (this.TargetCret != null)
                         {
-                            if (Math.Abs(this.m_TargetCret.m_nCurrX - this.m_nCurrX) > nAttackRange || Math.Abs(this.m_TargetCret.m_nCurrY - this.m_nCurrY) > nAttackRange)
+                            if (Math.Abs(this.TargetCret.CurrX - this.CurrX) > nAttackRange || Math.Abs(this.TargetCret.CurrY - this.CurrY) > nAttackRange)
                             {
                                 bo05 = true;
                             }

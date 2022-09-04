@@ -16,7 +16,7 @@ namespace GameSvr.Command.Commands
             }
             var nType = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var nTime = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
-            if (PlayObject.m_btPermission < 6)
+            if (PlayObject.Permission < 6)
             {
                 return;
             }

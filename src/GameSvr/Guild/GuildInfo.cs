@@ -457,7 +457,7 @@ namespace GameSvr.Guild
                         {
                             continue;
                         }
-                        if (BaseObject.m_boBanGuildChat)
+                        if (BaseObject.BanGuildChat)
                         {
                             BaseObject.SendMsg(BaseObject, Grobal2.RM_GUILDMESSAGE, 0, M2Share.g_Config.btGuildMsgFColor, M2Share.g_Config.btGuildMsgBColor, 0, sMsg);
                         }
@@ -499,7 +499,7 @@ namespace GameSvr.Guild
                 GuildRank = m_RankList[i];
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    if (GuildRank.MemberList[j].sMemberName == PlayObject.m_sCharName)
+                    if (GuildRank.MemberList[j].sMemberName == PlayObject.CharName)
                     {
                         GuildRank.MemberList[j].PlayObject = PlayObject;
                         nRankNo = GuildRank.nRankNo;
@@ -549,7 +549,7 @@ namespace GameSvr.Guild
                 var guildRank = m_RankList[i];
                 for (var j = 0; j < guildRank.MemberList.Count; j++)
                 {
-                    if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 1)
+                    if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 1)
                     {
                         guildRank.MemberList[j] = null;
                         return;
@@ -614,7 +614,7 @@ namespace GameSvr.Guild
                     PlayObject = GuildRank.MemberList[j].PlayObject;
                     if (PlayObject != null)
                     {
-                        PlayObject.m_MyGuild = null;
+                        PlayObject.MyGuild = null;
                         PlayObject.RefRankInfo(0, "");
                         PlayObject.RefShowName();
                     }
@@ -659,7 +659,7 @@ namespace GameSvr.Guild
             GuildRank18.MemberList.Add(new TGuildMember()
             {
                 PlayObject = PlayObject,
-                sMemberName = PlayObject.m_sCharName
+                sMemberName = PlayObject.CharName
             });
             UpdateGuildFile();
         }

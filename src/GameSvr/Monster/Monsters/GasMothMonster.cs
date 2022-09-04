@@ -7,13 +7,13 @@ namespace GameSvr.Monster.Monsters
     {
         public GasMothMonster() : base()
         {
-            m_nViewRange = 7;
+            ViewRange = 7;
         }
 
         protected override TBaseObject sub_4A9C78(byte bt05)
         {
             var baseObject = base.sub_4A9C78(bt05);
-            if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.m_boHideMode)
+            if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.HideMode)
             {
                 baseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
             }
@@ -22,11 +22,11 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
+            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     sub_4C959C();
                 }
             }

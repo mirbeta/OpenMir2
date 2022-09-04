@@ -12,15 +12,15 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!m_boDeath && !bo554 && !m_boGhost)
+            if (!Death && !bo554 && !Ghost)
             {
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
-                    if (MagCanHitTarget(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret))
+                    if (MagCanHitTarget(TargetCret.CurrX, TargetCret.CurrY, TargetCret))
                     {
-                        if (IsProperTarget(m_TargetCret))
+                        if (IsProperTarget(TargetCret))
                         {
-                            if (Math.Abs(m_nTargetX - m_nCurrX) <= 8 && Math.Abs(m_nTargetY - m_nCurrY) <= 8)
+                            if (Math.Abs(m_nTargetX - CurrX) <= 8 && Math.Abs(m_nTargetY - CurrY) <= 8)
                             {
                                 var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MC) - HUtil32.LoWord(m_WAbil.MC) + 1) + HUtil32.LoWord(m_WAbil.MC);
                                 if (nPower > 0)
@@ -32,12 +32,12 @@ namespace GameSvr.Monster.Monsters
                                         if (nPower > 0)
                                         {
                                             BaseObject.StruckDamage(nPower);
-                                            if ((HUtil32.GetTickCount() - m_dwSpellTick) > m_nNextHitTime)
+                                            if ((HUtil32.GetTickCount() - m_dwSpellTick) > NextHitTime)
                                             {
                                                 m_dwSpellTick = HUtil32.GetTickCount();
-                                                SendRefMsg(Grobal2.RM_SPELL, 48, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 48, "");
-                                                SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(2, 48), HUtil32.MakeLong(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY), m_TargetCret.ObjectId, "");
-                                                SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY), 2, m_TargetCret.ObjectId, "", 600);
+                                                SendRefMsg(Grobal2.RM_SPELL, 48, TargetCret.CurrX, TargetCret.CurrY, 48, "");
+                                                SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(2, 48), HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), TargetCret.ObjectId, "");
+                                                SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), 2, TargetCret.ObjectId, "", 600);
                                             }
                                         }
                                     }
@@ -49,11 +49,11 @@ namespace GameSvr.Monster.Monsters
                 }
                 else
                 {
-                    m_TargetCret = null;
+                    TargetCret = null;
                 }
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
             }

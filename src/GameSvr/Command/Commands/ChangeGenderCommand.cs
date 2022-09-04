@@ -45,11 +45,11 @@ namespace GameSvr.Command.Commands
                 {
                     m_PlayObject.Gender = playSex;
                     m_PlayObject.FeatureChanged();
-                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别已改变。", MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(m_PlayObject.CharName + " 的性别已改变。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别未改变!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(m_PlayObject.CharName + " 的性别未改变!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else

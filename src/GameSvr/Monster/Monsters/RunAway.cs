@@ -15,17 +15,17 @@ namespace GameSvr.Monster.Monsters
             short nx = 0;
             short ny = 0;
             var borunaway = false;
-            if (!m_boDeath && !bo554 && !m_boGhost)
+            if (!Death && !bo554 && !Ghost)
             {
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
-                    m_nTargetX = m_TargetCret.m_nCurrX;
-                    m_nTargetY = m_TargetCret.m_nCurrY;
+                    m_nTargetX = TargetCret.CurrX;
+                    m_nTargetY = TargetCret.CurrY;
                     if (m_WAbil.HP <= HUtil32.Round(m_WAbil.MaxHP / 2) && borunaway == false)
                     {
                         GetFrontPosition(ref nx, ref ny);
                         SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
-                        SpaceMove(m_sMapName, (short)(nx - 2), (short)(ny - 2), 0);
+                        SpaceMove(MapName, (short)(nx - 2), (short)(ny - 2), 0);
                         borunaway = true;
                     }
                     else
@@ -39,7 +39,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         if ((HUtil32.GetTickCount() - time1) > 5000)
                         {
-                            if (Math.Abs(m_nTargetX - m_nCurrX) == 1 && Math.Abs(m_nTargetY - m_nCurrY) == 1)
+                            if (Math.Abs(m_nTargetX - CurrX) == 1 && Math.Abs(m_nTargetY - CurrY) == 1)
                             {
                                 WalkTo(M2Share.RandomNumber.RandomByte(4), true);
                             }
@@ -54,9 +54,9 @@ namespace GameSvr.Monster.Monsters
                         }
                     }
                 }
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
-                    m_dwSearchEnemyTick = HUtil32.GetTickCount();
+                    SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
             }

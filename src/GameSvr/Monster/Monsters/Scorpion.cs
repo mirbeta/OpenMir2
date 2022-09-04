@@ -4,7 +4,7 @@
     {
         public Scorpion() : base()
         {
-            m_boAnimal = true;
+            Animal = true;
         }
 
     }

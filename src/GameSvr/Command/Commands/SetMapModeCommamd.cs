@@ -19,7 +19,7 @@ namespace GameSvr.Command.Commands
             var sMapMode = @Params.Length > 1 ? @Params[1] : "";
             var sParam1 = @Params.Length > 2 ? @Params[2] : "";
             var sParam2 = @Params.Length > 3 ? @Params[3] : "";
-            if (PlayObject.m_btPermission < 6)
+            if (PlayObject.Permission < 6)
             {
                 return;
             }

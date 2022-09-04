@@ -15,7 +15,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void GuildRecall(PlayObject PlayObject)
         {
-            if (!PlayObject.m_boGuildMove && PlayObject.m_btPermission < 6)
+            if (!PlayObject.GuildMove && PlayObject.Permission < 6)
             {
                 PlayObject.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -39,9 +39,9 @@ namespace GameSvr.Command.Commands
             }
             var nRecallCount = 0;
             var nNoRecallCount = 0;
-            var dwValue = (HUtil32.GetTickCount() - PlayObject.m_dwGroupRcallTick) / 1000;
-            PlayObject.m_dwGroupRcallTick = PlayObject.m_dwGroupRcallTick + dwValue * 1000;
-            if (PlayObject.m_btPermission >= 6)
+            var dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
+            PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
+            if (PlayObject.Permission >= 6)
             {
                 PlayObject.m_wGroupRcallTime = 0;
             }
@@ -59,9 +59,9 @@ namespace GameSvr.Command.Commands
                 return;
             }
             PlayObject m_PlayObject;
-            for (var i = 0; i < PlayObject.m_MyGuild.m_RankList.Count; i++)
+            for (var i = 0; i < PlayObject.MyGuild.m_RankList.Count; i++)
             {
-                GuildRank = PlayObject.m_MyGuild.m_RankList[i];
+                GuildRank = PlayObject.MyGuild.m_RankList[i];
                 if (GuildRank == null)
                 {
                     continue;
@@ -80,24 +80,24 @@ namespace GameSvr.Command.Commands
                         {
                             if (m_PlayObject.m_PEnvir.Flag.boNORECALL)
                             {
-                                PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
+                                PlayObject.SysMsg($"{m_PlayObject.CharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                             }
                             else
                             {
-                                PlayObject.RecallHuman(m_PlayObject.m_sCharName);
+                                PlayObject.RecallHuman(m_PlayObject.CharName);
                                 nRecallCount++;
                             }
                         }
                         else
                         {
                             nNoRecallCount++;
-                            PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 不允许行会合一!!!", MsgColor.Red, MsgType.Hint);
+                            PlayObject.SysMsg($"{m_PlayObject.CharName} 不允许行会合一!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                 }
             }
             PlayObject.SysMsg($"已传送{nRecallCount}个成员，{nNoRecallCount}个成员未被传送。", MsgColor.Green, MsgType.Hint);
-            PlayObject.m_dwGroupRcallTick = HUtil32.GetTickCount();
+            PlayObject.GroupRcallTick = HUtil32.GetTickCount();
             PlayObject.m_wGroupRcallTime = (short)M2Share.g_Config.nGuildRecallTime;
         }
     }

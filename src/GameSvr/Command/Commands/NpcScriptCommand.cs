@@ -43,12 +43,12 @@ namespace GameSvr.Command.Commands
             if (nNPCType == 0)
             {
                 var Merchant = (Merchant)BaseObject;
-                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + ScriptConst.sMarket_Def + Merchant.m_sScript + "-" + Merchant.m_sMapName + ".txt";
+                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + ScriptConst.sMarket_Def + Merchant.m_sScript + "-" + Merchant.MapName + ".txt";
             }
             if (nNPCType == 1)
             {
                 var NormNpc = (NormNpc)BaseObject;
-                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + ScriptConst.sNpc_def + NormNpc.m_sCharName + "-" + NormNpc.m_sMapName + ".txt";
+                sScriptFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + ScriptConst.sNpc_def + NormNpc.CharName + "-" + NormNpc.MapName + ".txt";
             }
             if (File.Exists(sScriptFileName))
             {

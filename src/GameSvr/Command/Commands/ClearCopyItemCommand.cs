@@ -32,41 +32,41 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = TargerObject.m_ItemList.Count - 1; i >= 0; i--)
+            for (var i = TargerObject.ItemList.Count - 1; i >= 0; i--)
             {
-                if (TargerObject.m_ItemList.Count <= 0)
+                if (TargerObject.ItemList.Count <= 0)
                 {
                     break;
                 }
 
-                UserItem = TargerObject.m_ItemList[i];
+                UserItem = TargerObject.ItemList[i];
                 s14 = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
                 for (var j = i - 1; j >= 0; j--)
                 {
-                    UserItem1 = TargerObject.m_ItemList[j];
+                    UserItem1 = TargerObject.ItemList[j];
                     if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14 && UserItem.MakeIndex == UserItem1.MakeIndex)
                     {
-                        PlayObject.m_ItemList.RemoveAt(j);
+                        PlayObject.ItemList.RemoveAt(j);
                         break;
                     }
                 }
             }
 
-            for (var i = TargerObject.m_StorageItemList.Count - 1; i >= 0; i--)
+            for (var i = TargerObject.StorageItemList.Count - 1; i >= 0; i--)
             {
-                if (TargerObject.m_StorageItemList.Count <= 0)
+                if (TargerObject.StorageItemList.Count <= 0)
                 {
                     break;
                 }
-                UserItem = TargerObject.m_StorageItemList[i];
+                UserItem = TargerObject.StorageItemList[i];
                 s14 = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
                 for (var j = i - 1; j >= 0; j--)
                 {
-                    UserItem1 = TargerObject.m_StorageItemList[j];
+                    UserItem1 = TargerObject.StorageItemList[j];
                     if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14 &&
                         UserItem.MakeIndex == UserItem1.MakeIndex)
                     {
-                        PlayObject.m_StorageItemList.RemoveAt(j);
+                        PlayObject.StorageItemList.RemoveAt(j);
                         break;
                     }
                 }

@@ -12,9 +12,9 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ChangeSuperManMode(PlayObject PlayObject)
         {
-            var boFlag = !PlayObject.m_boSuperMan;
-            PlayObject.m_boSuperMan = boFlag;
-            if (PlayObject.m_boSuperMan)
+            var boFlag = !PlayObject.SuperMan;
+            PlayObject.SuperMan = boFlag;
+            if (PlayObject.SuperMan)
             {
                 PlayObject.SysMsg(M2Share.sSupermanMode, MsgColor.Green, MsgType.Hint);
             }

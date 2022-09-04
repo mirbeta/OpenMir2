@@ -149,10 +149,10 @@ namespace GameSvr.Maps
                         };
                         cellInfo.Add(osObject, pRemoveObject);
                         result = pRemoveObject;
-                        if (btType == CellType.MovingObject && !((TBaseObject)pRemoveObject).m_boAddToMaped)
+                        if (btType == CellType.MovingObject && !((TBaseObject)pRemoveObject).AddToMaped)
                         {
-                            ((TBaseObject)pRemoveObject).m_boDelFormMaped = false;
-                            ((TBaseObject)pRemoveObject).m_boAddToMaped = true;
+                            ((TBaseObject)pRemoveObject).DelFormMaped = false;
+                            ((TBaseObject)pRemoveObject).AddToMaped = true;
                             AddObject(pRemoveObject);
                         }
                     }
@@ -232,7 +232,7 @@ namespace GameSvr.Maps
                                     baseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                     if (baseObject != null)
                                     {
-                                        if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
+                                        if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                         {
                                             moveSuccess = false;
                                             break;
@@ -337,7 +337,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                             if (baseObject != null)
                             {
-                                if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
+                                if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -380,7 +380,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                             if (baseObject != null)
                             {
-                                if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
+                                if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -457,7 +457,7 @@ namespace GameSvr.Maps
                                         }
                                     }
                                 }
-                                if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
+                                if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -502,10 +502,10 @@ namespace GameSvr.Maps
                                             cellInfo.Remove(osObject);
                                             result = 1;
                                             // 减地图人物怪物计数
-                                            if (cellType == CellType.MovingObject && !((TBaseObject)pRemoveObject).m_boDelFormMaped)
+                                            if (cellType == CellType.MovingObject && !((TBaseObject)pRemoveObject).DelFormMaped)
                                             {
-                                                ((TBaseObject)pRemoveObject).m_boDelFormMaped = true;
-                                                ((TBaseObject)pRemoveObject).m_boAddToMaped = false;
+                                                ((TBaseObject)pRemoveObject).DelFormMaped = true;
+                                                ((TBaseObject)pRemoveObject).AddToMaped = false;
                                                 DelObjectCount(pRemoveObject);
                                             }
                                             if (cellInfo.Count > 0)
@@ -580,7 +580,7 @@ namespace GameSvr.Maps
                         if (osObject.CellType == CellType.MovingObject)
                         {
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
-                            if (!baseObject.m_boDeath)
+                            if (!baseObject.Death)
                             {
                                 Bo2C = false;
                             }
@@ -928,10 +928,10 @@ namespace GameSvr.Maps
             mapQuest.boGrouped = boGrouped;
             mapMerchant = new Merchant
             {
-                m_sMapName = "0",
-                m_nCurrX = 0,
-                m_nCurrY = 0,
-                m_sCharName = sQuest,
+                MapName = "0",
+                CurrX = 0,
+                CurrY = 0,
+                CharName = sQuest,
                 m_nFlag = 0,
                 m_wAppr = 0,
                 m_sFilePath = "MapQuest_def",
@@ -964,7 +964,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
                         {
-                            if (!baseObject.m_boGhost && baseObject.bo2B9 && !baseObject.m_boDeath && !baseObject.m_boFixedHideMode && !baseObject.m_boObMode)
+                            if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                             {
                                 result++;
                             }
@@ -1100,7 +1100,7 @@ namespace GameSvr.Maps
                     if (osObject.CellType == CellType.MovingObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
-                        if (baseObject != null && !baseObject.m_boGhost && baseObject.bo2B9 && (!boFlag || !baseObject.m_boDeath))
+                        if (baseObject != null && !baseObject.Ghost && baseObject.bo2B9 && (!boFlag || !baseObject.Death))
                         {
                             result = baseObject;
                             break;
@@ -1181,7 +1181,7 @@ namespace GameSvr.Maps
                         if (osObject.CellType == CellType.MovingObject)
                         {
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
-                            if (!baseObject.m_boDeath)
+                            if (!baseObject.Death)
                             {
                                 Bo2C = false;
                             }
@@ -1277,9 +1277,9 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
                         {
-                            if (!baseObject.m_boGhost && baseObject.bo2B9)
+                            if (!baseObject.Ghost && baseObject.bo2B9)
                             {
-                                if (!boFlag || !baseObject.m_boDeath)
+                                if (!boFlag || !baseObject.Death)
                                 {
                                     baseObjectList.Add(baseObject);
                                 }

@@ -17,45 +17,45 @@ namespace GameSvr.Player
                     SysMsg(whostr + M2Share.g_sCanotSendmsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (!PlayObject.m_boHearWhisper || PlayObject.IsBlockWhisper(m_sCharName))
+                if (!PlayObject.HearWhisper || PlayObject.IsBlockWhisper(CharName))
                 {
                     SysMsg(whostr + M2Share.g_sUserDenyWhisperMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (!m_boOffLineFlag && PlayObject.m_boOffLineFlag)
+                if (!OffLineFlag && PlayObject.OffLineFlag)
                 {
                     if (PlayObject.m_sOffLineLeaveword != "")
                     {
-                        PlayObject.Whisper(m_sCharName, PlayObject.m_sOffLineLeaveword);
+                        PlayObject.Whisper(CharName, PlayObject.m_sOffLineLeaveword);
                     }
                     else
                     {
-                        PlayObject.Whisper(m_sCharName, M2Share.g_Config.sServerName + '[' + M2Share.g_Config.sServerIPaddr + "]提示您");
+                        PlayObject.Whisper(CharName, M2Share.g_Config.sServerName + '[' + M2Share.g_Config.sServerIPaddr + "]提示您");
                     }
                     return;
                 }
-                if (m_btPermission > 0)
+                if (Permission > 0)
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
-                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, CharName + "=> " + saystr);
+                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.Ghost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, CharName + "=>" + PlayObject.CharName + ' ' + saystr);
                     }
-                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
+                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.Ghost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, CharName + "=>" + PlayObject.CharName + ' ' + saystr);
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
-                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, CharName + "=> " + saystr);
+                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.Ghost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, CharName + "=>" + PlayObject.CharName + ' ' + saystr);
                     }
-                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
+                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.Ghost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, CharName + "=>" + PlayObject.CharName + ' ' + saystr);
                     }
                 }
             }
@@ -63,7 +63,7 @@ namespace GameSvr.Player
             {
                 if (M2Share.UserEngine.FindOtherServerUser(whostr, ref svidx))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + m_sCharName + "=> " + saystr);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + CharName + "=> " + saystr);
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace GameSvr.Player
         {
             var sendwho = string.Empty;
             HUtil32.GetValidStr3(SayStr, ref sendwho, new string[] { "[", " ", "=", ">" });
-            if (m_boHearWhisper && !IsBlockWhisper(sendwho))
+            if (HearWhisper && !IsBlockWhisper(sendwho))
             {
                 switch (MsgType)
                 {
@@ -133,13 +133,13 @@ namespace GameSvr.Player
                     m_boDisableSayMsg = false;
                 }
                 boDisableSayMsg = m_boDisableSayMsg;
-                if (M2Share.DenySayMsgList.ContainsKey(this.m_sCharName))
+                if (M2Share.DenySayMsgList.ContainsKey(this.CharName))
                 {
                     boDisableSayMsg = true;
                 }
                 if (!(boDisableSayMsg || m_PEnvir.Flag.boNOCHAT))
                 {
-                    M2Share.g_ChatLoggingList.Add('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + m_sCharName + ": " + sData);
+                    M2Share.g_ChatLoggingList.Add('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + CharName + ": " + sData);
                     m_sOldSayMsg = sData;
                     if (sData.StartsWith("@@加速处理"))
                     {
@@ -185,41 +185,41 @@ namespace GameSvr.Player
                                     if (sData[1] == '!') //发送组队消息
                                     {
                                         sC = sData.Substring(3 - 1, sData.Length - 2);
-                                        SendGroupText(m_sCharName + ": " + sC);
-                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_sCharName + "/:" + sC);
+                                        SendGroupText(CharName + ": " + sC);
+                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, CharName + "/:" + sC);
                                         return;
                                     }
-                                    if (sData[1] == '~' && m_MyGuild != null) //发送行会消息
+                                    if (sData[1] == '~' && MyGuild != null) //发送行会消息
                                     {
                                         sC = sData.Substring(2, sData.Length - 2);
-                                        m_MyGuild.SendGuildMsg(m_sCharName + ": " + sC);
-                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_MyGuild.sGuildName + '/' + m_sCharName + '/' + sC);
+                                        MyGuild.SendGuildMsg(CharName + ": " + sC);
+                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, MyGuild.sGuildName + '/' + CharName + '/' + sC);
                                         return;
                                     }
                                 }
                                 if (!m_PEnvir.Flag.boQUIZ)
                                 {
-                                    if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
+                                    if ((HUtil32.GetTickCount() - ShoutMsgTick) > 10 * 1000)
                                     {
                                         if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
                                         {
                                             SysMsg(format(M2Share.g_sYouNeedLevelMsg, M2Share.g_Config.nCanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
                                         }
-                                        m_dwShoutMsgTick = HUtil32.GetTickCount();
+                                        ShoutMsgTick = HUtil32.GetTickCount();
                                         sC = sData.Substring(1, sData.Length - 1);
-                                        sCryCryMsg = "(!)" + m_sCharName + ": " + sC;
+                                        sCryCryMsg = "(!)" + CharName + ": " + sC;
                                         if (m_boFilterSendMsg)
                                         {
                                             SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
                                         }
                                         else
                                         {
-                                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
+                                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, CurrX, CurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
                                         }
                                         return;
                                     }
-                                    SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
                                 SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
@@ -228,7 +228,7 @@ namespace GameSvr.Player
                     }
                     if (m_boFilterSendMsg)
                     {
-                        SendMsg(this, Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);// 如果禁止发信息，则只向自己发信息
+                        SendMsg(this, Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, CharName + ':' + sData);// 如果禁止发信息，则只向自己发信息
                     }
                     else
                     {
@@ -343,8 +343,8 @@ namespace GameSvr.Player
                             }
                             if (M2Share.g_Config.boLockInObModeAction)
                             {
-                                m_boObMode = false;
-                                m_boAdminMode = false;
+                                ObMode = false;
+                                AdminMode = false;
                             }
                             m_boLockLogoned = true;
                             SysMsg(M2Share.g_sPasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
@@ -647,8 +647,8 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWMSG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_boHearWhisper = !m_boHearWhisper;
-                    if (m_boHearWhisper)
+                    HearWhisper = !HearWhisper;
+                    if (HearWhisper)
                     {
                         SysMsg(M2Share.g_sEnableHearWhisper, MsgColor.Green, MsgType.Hint);
                     }
@@ -660,8 +660,8 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.LETSHOUT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_boBanShout = !m_boBanShout;
-                    if (m_boBanShout)
+                    BanShout = !BanShout;
+                    if (BanShout)
                     {
                         SysMsg(M2Share.g_sEnableShoutMsg, MsgColor.Green, MsgType.Hint);
                     }
@@ -673,8 +673,8 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.LETTRADE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_boAllowDeal = !m_boAllowDeal;
-                    if (m_boAllowDeal)
+                    AllowDeal = !AllowDeal;
+                    if (AllowDeal)
                     {
                         SysMsg(M2Share.g_sEnableDealMsg, MsgColor.Green, MsgType.Hint);
                     }
@@ -686,8 +686,8 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.BANGUILDCHAT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_boBanGuildChat = !m_boBanGuildChat;
-                    if (m_boBanGuildChat)
+                    BanGuildChat = !BanGuildChat;
+                    if (BanGuildChat)
                     {
                         SysMsg(M2Share.g_sEnableGuildChat, MsgColor.Green, MsgType.Hint);
                     }
@@ -714,8 +714,8 @@ namespace GameSvr.Player
                 {
                     if (IsGuildMaster())
                     {
-                        m_MyGuild.m_boEnableAuthAlly = !m_MyGuild.m_boEnableAuthAlly;
-                        if (m_MyGuild.m_boEnableAuthAlly)
+                        MyGuild.m_boEnableAuthAlly = !MyGuild.m_boEnableAuthAlly;
+                        if (MyGuild.m_boEnableAuthAlly)
                         {
                             SysMsg(M2Share.g_sEnableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                         }
@@ -760,9 +760,9 @@ namespace GameSvr.Player
                     ShowMapInfo(sParam1, sParam2, sParam3);
                     return;
                 }
-                if (m_btPermission >= 2 && sData.Length > 2)
+                if (Permission >= 2 && sData.Length > 2)
                 {
-                    if (m_btPermission >= 6 && sData[2] == M2Share.g_GMRedMsgCmd)
+                    if (Permission >= 6 && sData[2] == M2Share.g_GMRedMsgCmd)
                     {
                         if (HUtil32.GetTickCount() - m_dwSayMsgTick > 2000)
                         {
@@ -774,7 +774,7 @@ namespace GameSvr.Player
                             }
                             if (M2Share.g_Config.boShutRedMsgShowGMName)
                             {
-                                sC = m_sCharName + ": " + sData;
+                                sC = CharName + ": " + sData;
                             }
                             else
                             {
@@ -785,7 +785,7 @@ namespace GameSvr.Player
                         return;
                     }
                 }
-                if (m_btPermission > 4)
+                if (Permission > 4)
                 {
                     if (string.Compare(sCMD, M2Share.g_GameCommand.SETFLAG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -797,11 +797,11 @@ namespace GameSvr.Player
                             PlayObject.SetQuestFlagStatus(nFlag, nValue);
                             if (PlayObject.GetQuestFalgStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                                SysMsg(PlayObject.CharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                                SysMsg(PlayObject.CharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else
@@ -820,11 +820,11 @@ namespace GameSvr.Player
                             PlayObject.SetQuestUnitOpenStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitOpenStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                                SysMsg(PlayObject.CharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                                SysMsg(PlayObject.CharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else
@@ -843,11 +843,11 @@ namespace GameSvr.Player
                             PlayObject.SetQuestUnitStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                                SysMsg(PlayObject.CharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                                SysMsg(PlayObject.CharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else

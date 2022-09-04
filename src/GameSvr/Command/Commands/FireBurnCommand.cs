@@ -17,7 +17,7 @@ namespace GameSvr.Command.Commands
             var nInt = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var nTime = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             var nN = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
-            if (PlayObject.m_btPermission < 6)
+            if (PlayObject.Permission < 6)
             {
                 return;
             }
@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.m_nCurrX, PlayObject.m_nCurrY, nInt, nTime, nN);
+            var FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.CurrX, PlayObject.CurrY, nInt, nTime, nN);
             M2Share.EventManager.AddEvent(FireBurnEvent);
         }
     }

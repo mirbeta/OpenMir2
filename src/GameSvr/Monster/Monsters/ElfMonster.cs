@@ -11,17 +11,17 @@ namespace GameSvr.Monster.Monsters
 
         public ElfMonster() : base()
         {
-            m_nViewRange = 6;
-            m_boFixedHideMode = true;
+            ViewRange = 6;
+            FixedHideMode = true;
             m_boNoAttackMode = true;
             boIsFirst = true;
         }
 
         public void AppearNow()
         {
-            m_boFixedHideMode = false;
+            FixedHideMode = false;
             RecalcAbilitys();
-            m_dwWalkTick = m_dwWalkTick + 800;
+            WalkTick = WalkTick + 800;
         }
 
         public override void RecalcAbilitys()
@@ -32,8 +32,8 @@ namespace GameSvr.Monster.Monsters
 
         private void ResetElfMon()
         {
-            m_nWalkSpeed = 500 - m_btSlaveMakeLevel * 50;
-            m_dwWalkTick = HUtil32.GetTickCount() + 2000;
+            WalkSpeed = 500 - SlaveMakeLevel * 50;
+            WalkTick = HUtil32.GetTickCount() + 2000;
         }
 
         public override void Run()
@@ -42,24 +42,24 @@ namespace GameSvr.Monster.Monsters
             if (boIsFirst)
             {
                 boIsFirst = false;
-                m_boFixedHideMode = false;
-                SendRefMsg(Grobal2.RM_DIGUP, Direction, m_nCurrX, m_nCurrY, 0, "");
+                FixedHideMode = false;
+                SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
                 ResetElfMon();
             }
-            if (m_boDeath)
+            if (Death)
             {
-                if ((HUtil32.GetTickCount() - m_dwDeathTick) > (2 * 1000))
+                if ((HUtil32.GetTickCount() - DeathTick) > (2 * 1000))
                 {
                     MakeGhost();
                 }
             }
             else
             {
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
                     boChangeFace = true;
                 }
-                if (m_Master != null && (m_Master.m_TargetCret != null || m_Master.m_LastHiter != null))
+                if (m_Master != null && (m_Master.TargetCret != null || m_Master.m_LastHiter != null))
                 {
                     boChangeFace = true;
                 }
@@ -68,7 +68,7 @@ namespace GameSvr.Monster.Monsters
                     var ElfMon = MakeClone(M2Share.g_Config.sDragon1, this);
                     if (ElfMon != null)
                     {
-                        ElfMon.m_boAutoChangeColor = m_boAutoChangeColor;
+                        ElfMon.AutoChangeColor = AutoChangeColor;
                         if (ElfMon is ElfWarriorMonster)
                         {
                             (ElfMon as ElfWarriorMonster).AppearNow();

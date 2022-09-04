@@ -23,7 +23,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                m_PlayObject.m_btHair = (byte)nHair;
+                m_PlayObject.Hair = (byte)nHair;
                 m_PlayObject.FeatureChanged();
                 PlayObject.SysMsg(sHumanName + " 的头发已改变。", MsgColor.Green, MsgType.Hint);
             }

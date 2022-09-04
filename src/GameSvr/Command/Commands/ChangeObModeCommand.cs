@@ -13,13 +13,13 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ChangeObMode(PlayObject PlayObject)
         {
-            var boFlag = !PlayObject.m_boObMode;
+            var boFlag = !PlayObject.ObMode;
             if (boFlag)
             {
                 PlayObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");// 发送刷新数据到客户端，解决隐身有影子问题
             }
-            PlayObject.m_boObMode = boFlag;
-            if (PlayObject.m_boObMode)
+            PlayObject.ObMode = boFlag;
+            if (PlayObject.ObMode)
             {
                 PlayObject.SysMsg(M2Share.sObserverMode, MsgColor.Green, MsgType.Hint);
             }

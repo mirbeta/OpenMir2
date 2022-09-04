@@ -13,11 +13,11 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void GroupRecall(PlayObject PlayObject)
         {
-            if (PlayObject.m_boRecallSuite || PlayObject.m_btPermission >= 6)
+            if (PlayObject.m_boRecallSuite || PlayObject.Permission >= 6)
             {
-                var dwValue = (HUtil32.GetTickCount() - PlayObject.m_dwGroupRcallTick) / 1000;
-                PlayObject.m_dwGroupRcallTick = PlayObject.m_dwGroupRcallTick + dwValue * 1000;
-                if (PlayObject.m_btPermission >= 6)
+                var dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
+                PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
+                if (PlayObject.Permission >= 6)
                 {
                     PlayObject.m_wGroupRcallTime = 0;
                 }
@@ -33,26 +33,26 @@ namespace GameSvr.Command.Commands
                 {
                     if (PlayObject.m_GroupOwner == PlayObject)
                     {
-                        for (var i = 0; i < PlayObject.m_GroupMembers.Count; i++)
+                        for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                         {
-                            var m_PlayObject = PlayObject.m_GroupMembers[i];
+                            var m_PlayObject = PlayObject.GroupMembers[i];
                             if (m_PlayObject.m_boAllowGroupReCall)
                             {
                                 if (m_PlayObject.m_PEnvir.Flag.boNORECALL)
                                 {
-                                    PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
+                                    PlayObject.SysMsg($"{m_PlayObject.CharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                                 }
                                 else
                                 {
-                                    PlayObject.RecallHuman(m_PlayObject.m_sCharName);
+                                    PlayObject.RecallHuman(m_PlayObject.CharName);
                                 }
                             }
                             else
                             {
-                                PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 不允许天地合一!!!", MsgColor.Red, MsgType.Hint);
+                                PlayObject.SysMsg($"{m_PlayObject.CharName} 不允许天地合一!!!", MsgColor.Red, MsgType.Hint);
                             }
                         }
-                        PlayObject.m_dwGroupRcallTick = HUtil32.GetTickCount();
+                        PlayObject.GroupRcallTick = HUtil32.GetTickCount();
                         PlayObject.m_wGroupRcallTime = (short)M2Share.g_Config.nGroupRecallTime;
                     }
                 }

@@ -14,18 +14,18 @@ namespace GameSvr.Monster.Monsters
         public void AppearNow()
         {
             boIsFirst = false;
-            m_boFixedHideMode = false;
-            SendRefMsg(Grobal2.RM_DIGUP, Direction, m_nCurrX, m_nCurrY, 0, "");
+            FixedHideMode = false;
+            SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             RecalcAbilitys();
-            m_dwWalkTick = m_dwWalkTick + 800;
+            WalkTick = WalkTick + 800;
             dwDigDownTick = HUtil32.GetTickCount();
         }
 
         public ElfWarriorMonster()
             : base()
         {
-            m_nViewRange = 6;
-            m_boFixedHideMode = true;
+            ViewRange = 6;
+            FixedHideMode = true;
             boIsFirst = true;
             m_boUsePoison = false;
         }
@@ -38,9 +38,9 @@ namespace GameSvr.Monster.Monsters
 
         private void ResetElfMon()
         {
-            m_nNextHitTime = 1500 - m_btSlaveMakeLevel * 100;
-            m_nWalkSpeed = 500 - m_btSlaveMakeLevel * 50;
-            m_dwWalkTick = HUtil32.GetTickCount() + 2000;
+            NextHitTime = 1500 - SlaveMakeLevel * 100;
+            WalkSpeed = 500 - SlaveMakeLevel * 50;
+            WalkTick = HUtil32.GetTickCount() + 2000;
         }
 
         public override void Run()
@@ -48,13 +48,13 @@ namespace GameSvr.Monster.Monsters
             if (boIsFirst)
             {
                 boIsFirst = false;
-                m_boFixedHideMode = false;
-                SendRefMsg(Grobal2.RM_DIGUP, Direction, m_nCurrX, m_nCurrY, 0, "");
+                FixedHideMode = false;
+                SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
                 ResetElfMon();
             }
-            if (m_boDeath)
+            if (Death)
             {
-                if ((HUtil32.GetTickCount() - m_dwDeathTick) > (2 * 1000))
+                if ((HUtil32.GetTickCount() - DeathTick) > (2 * 1000))
                 {
                     MakeGhost();
                 }
@@ -62,11 +62,11 @@ namespace GameSvr.Monster.Monsters
             else
             {
                 bool boChangeFace = true;
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
                     boChangeFace = false;
                 }
-                if (m_Master != null && (m_Master.m_TargetCret != null || m_Master.m_LastHiter != null))
+                if (m_Master != null && (m_Master.TargetCret != null || m_Master.m_LastHiter != null))
                 {
                     boChangeFace = false;
                 }
@@ -75,7 +75,7 @@ namespace GameSvr.Monster.Monsters
                     if ((HUtil32.GetTickCount() - dwDigDownTick) > (6 * 10 * 1000))
                     {
                         TBaseObject elfMon = null;
-                        var ElfName = m_sCharName;
+                        var ElfName = CharName;
                         if (ElfName[ElfName.Length - 1] == '1')
                         {
                             ElfName = ElfName.Substring(0, ElfName.Length - 1);
@@ -83,9 +83,9 @@ namespace GameSvr.Monster.Monsters
                         }
                         if (elfMon != null)
                         {
-                            SendRefMsg(Grobal2.RM_DIGDOWN, Direction, m_nCurrX, m_nCurrY, 0, "");
+                            SendRefMsg(Grobal2.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
                             SendRefMsg(Grobal2.RM_CHANGEFACE, 0, ObjectId, elfMon.ObjectId, 0, "");
-                            elfMon.m_boAutoChangeColor = m_boAutoChangeColor;
+                            elfMon.AutoChangeColor = AutoChangeColor;
                             if (elfMon is ElfMonster)
                             {
                                 (elfMon as ElfMonster).AppearNow();

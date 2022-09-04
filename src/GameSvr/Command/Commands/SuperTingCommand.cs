@@ -32,13 +32,13 @@ namespace GameSvr.Command.Commands
             if (m_PlayObject != null)
             {
                 HumanList = new List<TBaseObject>();
-                M2Share.UserEngine.GetMapRageHuman(m_PlayObject.m_PEnvir, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, nRange, HumanList);
+                M2Share.UserEngine.GetMapRageHuman(m_PlayObject.m_PEnvir, m_PlayObject.CurrX, m_PlayObject.CurrY, nRange, HumanList);
                 for (var i = 0; i < HumanList.Count; i++)
                 {
                     MoveHuman = HumanList[i] as PlayObject;
                     if (MoveHuman != PlayObject)
                     {
-                        MoveHuman.MapRandomMove(MoveHuman.m_sHomeMap, 0);
+                        MoveHuman.MapRandomMove(MoveHuman.HomeMap, 0);
                     }
                 }
                 HumanList = null;

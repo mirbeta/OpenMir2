@@ -54,7 +54,7 @@ namespace GameSvr.Actor
             _actorsMap.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
-                Debug.WriteLine($"清理死亡对象 名称:[{ghostactor.m_sCharName}] 地图:{ghostactor.m_sMapName} 坐标:{ghostactor.m_nCurrX}:{ghostactor.m_nCurrY}");
+                Debug.WriteLine($"清理死亡对象 名称:[{ghostactor.CharName}] 地图:{ghostactor.MapName} 坐标:{ghostactor.CurrX}:{ghostactor.CurrY}");
             }
         }
 
@@ -89,9 +89,9 @@ namespace GameSvr.Actor
                     {
                         monsterCount++;
                     }
-                    if (actor.m_boGhost && actor.m_dwGhostTick > 0)
+                    if (actor.Ghost && actor.GhostTick > 0)
                     {
-                        if ((HUtil32.GetTickCount() - actor.m_dwDeathTick) > M2Share.g_Config.dwMakeGhostTime) //超过清理时间
+                        if ((HUtil32.GetTickCount() - actor.DeathTick) > M2Share.g_Config.dwMakeGhostTime) //超过清理时间
                         {
                             Remove(actorId);
                         }

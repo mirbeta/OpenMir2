@@ -21,11 +21,11 @@ namespace GameSvr.Command.Commands
             int nOLevel = PlayObject.m_Abil.Level;
             PlayObject.m_Abil.Level = (byte)HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel);
             PlayObject.HasLevelUp(1);// 等级调整记录日志
-            M2Share.AddGameDataLog("17" + "\09" + PlayObject.m_sMapName + "\09" + PlayObject.m_nCurrX + "\09" + PlayObject.m_nCurrY
-                + "\09" + PlayObject.m_sCharName + "\09" + PlayObject.m_Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
+            M2Share.AddGameDataLog("17" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX + "\09" + PlayObject.CurrY
+                + "\09" + PlayObject.CharName + "\09" + PlayObject.m_Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
             if (M2Share.g_Config.boShowMakeItemMsg)
             {
-                M2Share.LogSystem.Warn(string.Format(GameCommandConst.g_sGameCommandLevelConsoleMsg, PlayObject.m_sCharName, nOLevel, PlayObject.m_Abil.Level));
+                M2Share.LogSystem.Warn(string.Format(GameCommandConst.g_sGameCommandLevelConsoleMsg, PlayObject.CharName, nOLevel, PlayObject.m_Abil.Level));
             }
         }
     }

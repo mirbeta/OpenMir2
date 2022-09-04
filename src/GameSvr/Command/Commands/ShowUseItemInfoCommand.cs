@@ -29,9 +29,9 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i < m_PlayObject.m_UseItems.Length; i++)
+            for (var i = 0; i < m_PlayObject.UseItems.Length; i++)
             {
-                var UserItem = m_PlayObject.m_UseItems[i];
+                var UserItem = m_PlayObject.UseItems[i];
                 if (UserItem.wIndex == 0)
                 {
                     continue;

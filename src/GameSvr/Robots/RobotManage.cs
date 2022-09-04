@@ -37,7 +37,7 @@ namespace GameSvr.Robots
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new string[] { " ", "/", "\t" });
                 if (sRobotName == "" || sScriptFileName == "") continue;
                 var RobotHuman = new RobotObject();
-                RobotHuman.m_sCharName = sRobotName;
+                RobotHuman.CharName = sRobotName;
                 RobotHuman.m_sScriptFileName = sScriptFileName;
                 RobotHuman.LoadScript();
                 _robotHumanList.Add(RobotHuman);

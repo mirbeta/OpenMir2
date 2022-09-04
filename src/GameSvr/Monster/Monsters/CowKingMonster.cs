@@ -32,8 +32,8 @@ namespace GameSvr.Monster.Monsters
 
         public override void Initialize()
         {
-            dw56C = m_nNextHitTime;
-            dw570 = m_nWalkSpeed;
+            dw56C = NextHitTime;
+            dw570 = WalkSpeed;
             base.Initialize();
         }
 
@@ -42,12 +42,12 @@ namespace GameSvr.Monster.Monsters
             short n8 = 0;
             short nC = 0;
             int n10;
-            if (!m_boDeath && !bo554 && !m_boGhost && (HUtil32.GetTickCount() - dw558) > (30 * 1000))
+            if (!Death && !bo554 && !Ghost && (HUtil32.GetTickCount() - dw558) > (30 * 1000))
             {
                 dw558 = HUtil32.GetTickCount();
-                if (m_TargetCret != null && sub_4C3538() >= 5)
+                if (TargetCret != null && sub_4C3538() >= 5)
                 {
-                    m_TargetCret.GetBackPosition(ref n8, ref nC);
+                    TargetCret.GetBackPosition(ref n8, ref nC);
                     if (m_PEnvir.CanWalk(n8, nC, false))
                     {
                         SpaceMove(m_PEnvir.MapName, n8, nC, 0);
@@ -67,7 +67,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if ((HUtil32.GetTickCount() - dw564) < 8000)
                     {
-                        m_nNextHitTime = 10000;
+                        NextHitTime = 10000;
                     }
                     else
                     {
@@ -80,14 +80,14 @@ namespace GameSvr.Monster.Monsters
                 {
                     if ((HUtil32.GetTickCount() - dw568) < 8000)
                     {
-                        m_nNextHitTime = 500;
-                        m_nWalkSpeed = 400;
+                        NextHitTime = 500;
+                        WalkSpeed = 400;
                     }
                     else
                     {
                         bo55D = false;
-                        m_nNextHitTime = dw56C;
-                        m_nWalkSpeed = dw570;
+                        NextHitTime = dw56C;
+                        WalkSpeed = dw570;
                     }
                 }
             }
@@ -104,7 +104,7 @@ namespace GameSvr.Monster.Monsters
                 n10 = -1;
                 while (n10 != 2)
                 {
-                    if (!m_PEnvir.CanWalk(m_nCurrX + nC, m_nCurrY + n10, false))
+                    if (!m_PEnvir.CanWalk(CurrX + nC, CurrY + n10, false))
                     {
                         if ((nC != 0) || (n10 != 0))
                         {

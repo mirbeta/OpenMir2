@@ -154,81 +154,81 @@ namespace GameSvr.Npc
             int nCount = 0;
             if (HUtil32.CompareLStr(sItemType, "[NECKLACE]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_NECKLACE].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_NECKLACE];
+                    result = PlayObject.UseItems[Grobal2.U_NECKLACE];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[RING]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_RINGL].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_RINGL].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_RINGL];
+                    result = PlayObject.UseItems[Grobal2.U_RINGL];
                 }
-                if (PlayObject.m_UseItems[Grobal2.U_RINGR].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_RINGR].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_RINGR];
+                    result = PlayObject.UseItems[Grobal2.U_RINGR];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[ARMRING]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_ARMRINGL];
+                    result = PlayObject.UseItems[Grobal2.U_ARMRINGL];
                 }
-                if (PlayObject.m_UseItems[Grobal2.U_ARMRINGR].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_ARMRINGR];
+                    result = PlayObject.UseItems[Grobal2.U_ARMRINGR];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[WEAPON]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_WEAPON].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_WEAPON];
+                    result = PlayObject.UseItems[Grobal2.U_WEAPON];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[HELMET]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_HELMET].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_HELMET].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_HELMET];
+                    result = PlayObject.UseItems[Grobal2.U_HELMET];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[BUJUK]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_BUJUK].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_BUJUK];
+                    result = PlayObject.UseItems[Grobal2.U_BUJUK];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[BELT]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_BELT].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_BELT].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_BELT];
+                    result = PlayObject.UseItems[Grobal2.U_BELT];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[BOOTS]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_BOOTS].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_BOOTS].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_BOOTS];
+                    result = PlayObject.UseItems[Grobal2.U_BOOTS];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[CHARM]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_CHARM].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_CHARM].wIndex > 0)
                 {
-                    result = PlayObject.m_UseItems[Grobal2.U_CHARM];
+                    result = PlayObject.UseItems[Grobal2.U_CHARM];
                 }
                 return result;
             }
@@ -308,7 +308,7 @@ namespace GameSvr.Npc
         private bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
-            if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.m_sCharName == MonName))
+            if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.CharName == MonName))
             {
                 result = true;
             }
@@ -318,7 +318,7 @@ namespace GameSvr.Npc
         private bool GotoLable_QuestCheckCondition_CheckKillMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
-            if ((PlayObject.m_TargetCret != null) && (PlayObject.m_TargetCret.m_sCharName == MonName))
+            if ((PlayObject.TargetCret != null) && (PlayObject.TargetCret.CharName == MonName))
             {
                 result = true;
             }
@@ -403,7 +403,7 @@ namespace GameSvr.Npc
                 switch (QuestConditionInfo.nCmdCode)
                 {
                     case ScriptConst.nCHECKUSERDATE:
-                        result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.m_sCharName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
+                        result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.CharName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
                         break;
                     case ScriptConst.nSC_CHECKRANDOMNO:
                         Console.WriteLine("TODO nSC_CHECKRANDOMNO...");
@@ -533,28 +533,28 @@ namespace GameSvr.Npc
                     case ScriptConst.nCHECKJOB:
                         if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior, ScriptConst.sWarrior.Length))
                         {
-                            if (PlayObject.m_btJob != PlayJob.Warrior)
+                            if (PlayObject.Job != PlayJob.Warrior)
                             {
                                 result = false;
                             }
                         }
                         if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWizard, ScriptConst.sWizard.Length))
                         {
-                            if (PlayObject.m_btJob != PlayJob.Wizard)
+                            if (PlayObject.Job != PlayJob.Wizard)
                             {
                                 result = false;
                             }
                         }
                         if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTaos, ScriptConst.sTaos.Length))
                         {
-                            if (PlayObject.m_btJob != PlayJob.Taoist)
+                            if (PlayObject.Job != PlayJob.Taoist)
                             {
                                 result = false;
                             }
                         }
                         break;
                     case ScriptConst.nCHECKBBCOUNT:
-                        if (PlayObject.m_SlaveList.Count < QuestConditionInfo.nParam1)
+                        if (PlayObject.SlaveList.Count < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
@@ -576,7 +576,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKGOLD:
-                        if (PlayObject.m_nGold < QuestConditionInfo.nParam1)
+                        if (PlayObject.Gold < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
@@ -739,7 +739,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKNAMELIST:
-                        if (!GotoLable_CheckStringList(PlayObject.m_sCharName, m_sPath + QuestConditionInfo.sParam1))
+                        if (!GotoLable_CheckStringList(PlayObject.CharName, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
@@ -766,13 +766,13 @@ namespace GameSvr.Npc
                         result = Smalldata(PlayObject, QuestConditionInfo);
                         break;
                     case ScriptConst.nSC_ISSYSOP:
-                        if (!(PlayObject.m_btPermission >= 4))
+                        if (!(PlayObject.Permission >= 4))
                         {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISADMIN:
-                        if (!(PlayObject.m_btPermission >= 6))
+                        if (!(PlayObject.Permission >= 6))
                         {
                             result = false;
                         }
@@ -976,9 +976,9 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_CHECKGUILDLIST:
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
-                            if (!GotoLable_CheckStringList(PlayObject.m_MyGuild.sGuildName, m_sPath + QuestConditionInfo.sParam1))
+                            if (!GotoLable_CheckStringList(PlayObject.MyGuild.sGuildName, m_sPath + QuestConditionInfo.sParam1))
                             {
                                 result = false;
                             }
@@ -1486,28 +1486,28 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.m_sCharName);
+                    M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.CharName);
                 }
                 return;
             }
-            for (var i = PlayObject.m_ItemList.Count - 1; i >= 0; i--)
+            for (var i = PlayObject.ItemList.Count - 1; i >= 0; i--)
             {
                 if (nItemCount <= 0)
                 {
                     break;
                 }
-                UserItem = PlayObject.m_ItemList[i];
+                UserItem = PlayObject.ItemList[i];
                 if (String.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
+                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
                     }
                     PlayObject.SendDelItems(UserItem);
                     sC = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
                     Dispose(UserItem);
-                    PlayObject.m_ItemList.RemoveAt(i);
+                    PlayObject.ItemList.RemoveAt(i);
                     nItemCount -= 1;
                 }
             }
@@ -1523,7 +1523,7 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.m_sCharName);
+                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.CharName);
                 }
                 return;
             }
@@ -1540,12 +1540,12 @@ namespace GameSvr.Npc
                         UserItem = new TUserItem();
                         if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
-                            PlayObject.m_ItemList.Add(UserItem);
+                            PlayObject.ItemList.Add(UserItem);
                             PlayObject.SendAddItem(UserItem);
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
                             }
                         }
                         else
@@ -1561,7 +1561,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }
@@ -1577,131 +1577,131 @@ namespace GameSvr.Npc
             string sC = string.Empty;
             if (HUtil32.CompareLStr(sItemName, "[NECKLACE]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_NECKLACE].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_NECKLACE]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_NECKLACE].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_NECKLACE].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_NECKLACE]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex);
+                    PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[RING]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_RINGL].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_RINGL].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_RINGL]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGL].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_RINGL].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_RINGL]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].wIndex);
+                    PlayObject.UseItems[Grobal2.U_RINGL].wIndex = 0;
                     return;
                 }
-                if (PlayObject.m_UseItems[Grobal2.U_RINGR].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_RINGR].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_RINGR]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGR].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_RINGR].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_RINGR]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].wIndex);
+                    PlayObject.UseItems[Grobal2.U_RINGR].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[ARMRING]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_ARMRINGL]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_ARMRINGL]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex = 0;
                     return;
                 }
-                if (PlayObject.m_UseItems[Grobal2.U_ARMRINGR].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_ARMRINGR]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGR].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_ARMRINGR].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_ARMRINGR]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex);
+                    PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[WEAPON]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_WEAPON].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_WEAPON]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_WEAPON]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].wIndex);
+                    PlayObject.UseItems[Grobal2.U_WEAPON].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[HELMET]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_HELMET].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_HELMET].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_HELMET]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_HELMET].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_HELMET].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_HELMET]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].wIndex);
+                    PlayObject.UseItems[Grobal2.U_HELMET].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[DRESS]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_DRESS].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_DRESS].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_DRESS]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_DRESS].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_DRESS].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_DRESS]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].wIndex);
+                    PlayObject.UseItems[Grobal2.U_DRESS].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_BUJUK]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_BUJUK].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_BUJUK]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BUJUK]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
+                    PlayObject.UseItems[Grobal2.U_BUJUK].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_BELT]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_BELT].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_BELT].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_BELT]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BELT].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_BELT].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BELT]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].wIndex);
+                    PlayObject.UseItems[Grobal2.U_BELT].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_BOOTS]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_BOOTS].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_BOOTS].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_BOOTS]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BOOTS].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_BOOTS].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BOOTS]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].wIndex);
+                    PlayObject.UseItems[Grobal2.U_BOOTS].wIndex = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_CHARM]", 4))
             {
-                if (PlayObject.m_UseItems[Grobal2.U_CHARM].wIndex > 0)
+                if (PlayObject.UseItems[Grobal2.U_CHARM].wIndex > 0)
                 {
-                    PlayObject.SendDelItems(PlayObject.m_UseItems[Grobal2.U_CHARM]);
-                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_CHARM].wIndex);
-                    PlayObject.m_UseItems[Grobal2.U_CHARM].wIndex = 0;
+                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_CHARM]);
+                    sC = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].wIndex);
+                    PlayObject.UseItems[Grobal2.U_CHARM].wIndex = 0;
                     return;
                 }
             }
-            for (var i = 0; i < PlayObject.m_UseItems.Length; i++)
+            for (var i = 0; i < PlayObject.UseItems.Length; i++)
             {
                 if (nItemCount <= 0)
                 {
                     return;
                 }
-                if (PlayObject.m_UseItems[i].wIndex > 0)
+                if (PlayObject.UseItems[i].wIndex > 0)
                 {
-                    sName = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[i].wIndex);
+                    sName = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[i].wIndex);
                     if (String.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        PlayObject.SendDelItems(PlayObject.m_UseItems[i]);
-                        PlayObject.m_UseItems[i].wIndex = 0;
+                        PlayObject.SendDelItems(PlayObject.UseItems[i]);
+                        PlayObject.UseItems[i].wIndex = 0;
                         nItemCount -= 1;
                     }
                 }
@@ -1778,9 +1778,9 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nTIMERECALL:
                         PlayObject.m_boTimeRecall = true;
-                        PlayObject.m_sMoveMap = PlayObject.m_sMapName;
-                        PlayObject.m_nMoveX = PlayObject.m_nCurrX;
-                        PlayObject.m_nMoveY = PlayObject.m_nCurrY;
+                        PlayObject.m_sMoveMap = PlayObject.MapName;
+                        PlayObject.m_nMoveX = PlayObject.CurrX;
+                        PlayObject.m_nMoveY = PlayObject.CurrY;
                         PlayObject.m_dwTimeRecallTick = HUtil32.GetTickCount() + (QuestActionInfo.nParam1 * 60 * 1000);
                         break;
                     case ScriptConst.nSC_PARAM1:
@@ -1939,7 +1939,7 @@ namespace GameSvr.Npc
                             if (List58.Count > 0)
                             {
                                 User = (PlayObject)List58[0];
-                                User.MapRandomMove(this.m_sMapName, 0);
+                                User.MapRandomMove(this.MapName, 0);
                             }
                             PlayObject.MapRandomMove(QuestActionInfo.sParam1, 0);
                         }
@@ -1957,7 +1957,7 @@ namespace GameSvr.Npc
                             for (var k = 0; k < List58.Count; k++)
                             {
                                 User = (PlayObject)List58[k];
-                                User.MapRandomMove(this.m_sMapName, 0);
+                                User.MapRandomMove(this.MapName, 0);
                                 if (k > 20)
                                 {
                                     break;
@@ -1999,27 +1999,27 @@ namespace GameSvr.Npc
                         bo11 = true;
                         break;
                     case ScriptConst.nADDNAMELIST:
-                        GotoLable_AddList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_AddList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nDELNAMELIST:
-                        GotoLable_DelList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_DelList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nADDUSERDATE:
-                        GotoLable_AddUseDateList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_AddUseDateList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nDELUSERDATE:
-                        GotoLable_DELUseDateList(PlayObject.m_sCharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_DELUseDateList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nADDGUILDLIST:
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
-                            GotoLable_AddList(PlayObject.m_MyGuild.sGuildName, m_sPath + QuestActionInfo.sParam1);
+                            GotoLable_AddList(PlayObject.MyGuild.sGuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
                     case ScriptConst.nDELGUILDLIST:
-                        if (PlayObject.m_MyGuild != null)
+                        if (PlayObject.MyGuild != null)
                         {
-                            GotoLable_DelList(PlayObject.m_MyGuild.sGuildName, m_sPath + QuestActionInfo.sParam1);
+                            GotoLable_DelList(PlayObject.MyGuild.sGuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
                     case ScriptConst.nSC_LINEMSG:
@@ -2048,7 +2048,7 @@ namespace GameSvr.Npc
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
                         {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
-                            M2Share.LogSystem.Error("[脚本死循环] NPC:" + this.m_sCharName + " 位置:" + this.m_sMapName + '(' + this.m_nCurrX + ':' + this.m_nCurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            M2Share.LogSystem.Error("[脚本死循环] NPC:" + this.CharName + " 位置:" + this.MapName + '(' + this.CurrX + ':' + this.CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
                             return result;
                         }
@@ -2398,11 +2398,11 @@ namespace GameSvr.Npc
             PlayObject.GetScriptLabel(sMsg);
             if (boFlag)
             {
-                PlayObject.SendFirstMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + '/' + sMsg);
+                PlayObject.SendFirstMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + '/' + sMsg);
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + '/' + sMsg);
+                PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + '/' + sMsg);
             }
         }
     }

@@ -51,7 +51,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (BaseObject.m_Master == null)
                     {
-                        if (m_Castle.m_MasterGuild == BaseObject.m_MyGuild || m_Castle.m_MasterGuild.IsAllyGuild(BaseObject.m_MyGuild))
+                        if (m_Castle.m_MasterGuild == BaseObject.MyGuild || m_Castle.m_MasterGuild.IsAllyGuild(BaseObject.MyGuild))
                         {
                             if (m_LastHiter != BaseObject)
                             {
@@ -61,7 +61,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (m_Castle.m_MasterGuild == BaseObject.m_Master.m_MyGuild || m_Castle.m_MasterGuild.IsAllyGuild(BaseObject.m_Master.m_MyGuild))
+                        if (m_Castle.m_MasterGuild == BaseObject.m_Master.MyGuild || m_Castle.m_MasterGuild.IsAllyGuild(BaseObject.m_Master.MyGuild))
                         {
                             if (m_LastHiter != BaseObject.m_Master && m_LastHiter != BaseObject)
                             {
@@ -70,7 +70,7 @@ namespace GameSvr.Monster.Monsters
                         }
                     }
                 }
-                if (BaseObject.m_boAdminMode || BaseObject.m_boStoneMode || BaseObject.m_btRaceServer >= Grobal2.RC_NPC && BaseObject.m_btRaceServer < Grobal2.RC_ANIMAL || BaseObject == this || BaseObject.m_Castle == m_Castle)
+                if (BaseObject.AdminMode || BaseObject.StoneMode || BaseObject.m_btRaceServer >= Grobal2.RC_NPC && BaseObject.m_btRaceServer < Grobal2.RC_ANIMAL || BaseObject == this || BaseObject.m_Castle == m_Castle)
                 {
                     result = false;
                 }
@@ -80,7 +80,7 @@ namespace GameSvr.Monster.Monsters
             {
                 result = true;
             }
-            if (BaseObject.m_TargetCret != null && BaseObject.m_TargetCret.m_btRaceServer == 112)
+            if (BaseObject.TargetCret != null && BaseObject.TargetCret.m_btRaceServer == 112)
             {
                 result = true;
             }
@@ -88,7 +88,7 @@ namespace GameSvr.Monster.Monsters
             {
                 result = true;
             }
-            if (BaseObject.m_boAdminMode || BaseObject.m_boStoneMode || BaseObject == this)
+            if (BaseObject.AdminMode || BaseObject.StoneMode || BaseObject == this)
             {
                 result = false;
             }

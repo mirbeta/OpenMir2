@@ -28,11 +28,11 @@ namespace GameSvr.Command.Commands
                 return;
             }
             IList<TDeleteItem> DelList = null;
-            if (m_PlayObject.m_ItemList.Count > 0)
+            if (m_PlayObject.ItemList.Count > 0)
             {
-                for (var i = m_PlayObject.m_ItemList.Count - 1; i >= 0; i--)
+                for (var i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
                 {
-                    var UserItem = m_PlayObject.m_ItemList[i];
+                    var UserItem = m_PlayObject.ItemList[i];
                     if (DelList == null)
                     {
                         DelList = new List<TDeleteItem>();
@@ -43,9 +43,9 @@ namespace GameSvr.Command.Commands
                         MakeIndex = UserItem.MakeIndex
                     });
                     UserItem = null;
-                    m_PlayObject.m_ItemList.RemoveAt(i);
+                    m_PlayObject.ItemList.RemoveAt(i);
                 }
-                m_PlayObject.m_ItemList.Clear();
+                m_PlayObject.ItemList.Clear();
             }
             if (DelList != null)
             {

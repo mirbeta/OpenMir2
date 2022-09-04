@@ -27,10 +27,10 @@ namespace GameSvr.Command.Commands
             var nX = (short)HUtil32.Str_ToInt(sX, 0);
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
             M2Share.g_boMission = true;
-            M2Share.g_sMissionMap = PlayObject.m_sMapName;
+            M2Share.g_sMissionMap = PlayObject.MapName;
             M2Share.g_nMissionX = nX;
             M2Share.g_nMissionY = nY;
-            PlayObject.SysMsg("怪物集中目标已设定为: " + PlayObject.m_sMapName + '(' + M2Share.g_nMissionX + ':' + M2Share.g_nMissionY + ')', MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg("怪物集中目标已设定为: " + PlayObject.MapName + '(' + M2Share.g_nMissionX + ':' + M2Share.g_nMissionY + ')', MsgColor.Green, MsgType.Hint);
         }
     }
 }

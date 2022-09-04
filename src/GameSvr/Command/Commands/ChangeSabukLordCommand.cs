@@ -34,7 +34,7 @@ namespace GameSvr.Command.Commands
             var Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild != null)
             {
-                M2Share.AddGameDataLog("27" + "\09" + Castle.m_sOwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayObject.m_sCharName + "\09" + '0' + "\09" + '1' + "\09" + '0');
+                M2Share.AddGameDataLog("27" + "\09" + Castle.m_sOwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayObject.CharName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 Castle.GetCastle(Guild);
                 if (boFlag)
                 {

@@ -31,19 +31,19 @@ namespace GameSvr.Configs
             TMagic Magic;
             TUserMagic UserMagic;
             StdItem StdItem;
-            playObject.m_boNoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
-            playObject.m_boNoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
+            playObject.NoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
+            playObject.NoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
             playObject.m_nDropUseItemRate = ReadInteger("Info", "DropUseItemRate", 100);// 掉装备机率
-            playObject.m_btJob = (PlayJob)ReadInteger("Info", "Job", 0);
+            playObject.Job = (PlayJob)ReadInteger("Info", "Job", 0);
             playObject.Gender = Enum.Parse<PlayGender>(ReadString("Info", "Gender", "0"));
-            playObject.m_btHair = (byte)ReadInteger("Info", "Hair", 0);
+            playObject.Hair = (byte)ReadInteger("Info", "Hair", 0);
             playObject.m_Abil.Level = (byte)ReadInteger("Info", "Level", 1);
             playObject.m_Abil.MaxExp = playObject.GetLevelExp(playObject.m_Abil.Level);
             playObject.m_boProtectStatus = ReadBool("Info", "ProtectStatus", false);// 是否守护模式
             nAttatckMode = (byte)ReadInteger("Info", "AttatckMode", 6);// 攻击模式
             if (nAttatckMode >= 0 && nAttatckMode <= 6)
             {
-                playObject.m_btAttatckMode = (AttackMode)nAttatckMode;
+                playObject.AttatckMode = (AttackMode)nAttatckMode;
             }
             sLineText = ReadString("Info", "UseSkill", "");
             if (sLineText != "")
@@ -61,7 +61,7 @@ namespace GameSvr.Configs
                             Magic = M2Share.UserEngine.FindMagic(sMagicName);
                             if (Magic != null)
                             {
-                                if (Magic.btJob == 99 || Magic.btJob == (byte)playObject.m_btJob)
+                                if (Magic.btJob == 99 || Magic.btJob == (byte)playObject.Job)
                                 {
                                     UserMagic = new TUserMagic();
                                     UserMagic.MagicInfo = Magic;
@@ -69,7 +69,7 @@ namespace GameSvr.Configs
                                     UserMagic.btLevel = 3;
                                     UserMagic.btKey = 0;
                                     UserMagic.nTranPoint = Magic.MaxTrain[3];
-                                    playObject.m_MagicList.Add(UserMagic);
+                                    playObject.MagicList.Add(UserMagic);
                                 }
                             }
                         }
@@ -162,7 +162,7 @@ namespace GameSvr.Configs
                                 }
                             }
                         }
-                        playObject.m_UseItems[i] = UserItem;
+                        playObject.UseItems[i] = UserItem;
                         UserItem = null;
                     }
                 }
