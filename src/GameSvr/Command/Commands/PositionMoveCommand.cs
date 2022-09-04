@@ -31,7 +31,7 @@ namespace GameSvr.Command.Commands
                 }
                 if (PlayObject.Permission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
                 {
-                    Envir = M2Share.MapManager.FindMap(sMapName);
+                    Envir = M2Share.MapMgr.FindMap(sMapName);
                     if (Envir != null)
                     {
                         var nX = (short)HUtil32.Str_ToInt(sX, 0);

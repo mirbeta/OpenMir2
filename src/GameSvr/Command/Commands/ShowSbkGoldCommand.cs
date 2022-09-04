@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
             if (sCastleName == "")
             {
                 IList<string> List = new List<string>();
-                M2Share.CastleManager.GetCastleGoldInfo(List);
+                M2Share.CastleMgr.GetCastleGoldInfo(List);
                 for (var i = 0; i < List.Count; i++)
                 {
                     PlayObject.SysMsg(List[i], MsgColor.Green, MsgType.Hint);
@@ -36,7 +36,7 @@ namespace GameSvr.Command.Commands
                 List = null;
                 return;
             }
-            var Castle = M2Share.CastleManager.Find(sCastleName);
+            var Castle = M2Share.CastleMgr.Find(sCastleName);
             if (Castle == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);

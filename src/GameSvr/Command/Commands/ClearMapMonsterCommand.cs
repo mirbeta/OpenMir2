@@ -47,9 +47,9 @@ namespace GameSvr.Command.Commands
             IList<TBaseObject> MonList = new List<TBaseObject>();
             try
             {
-                for (var i = 0; i < M2Share.MapManager.Maps.Count; i++)
+                for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)
                 {
-                    Envir = M2Share.MapManager.Maps[i];
+                    Envir = M2Share.MapMgr.Maps[i];
                     if (Envir != null)
                     {
                         if (boKillAllMap || string.Compare(Envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)

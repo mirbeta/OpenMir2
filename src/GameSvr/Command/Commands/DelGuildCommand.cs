@@ -18,7 +18,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sGuildName = @Params.Length > 0 ? @Params[0] : "";
-            if (M2Share.nServerIndex != 0)
+            if (M2Share.ServerIndex != 0)
             {
                 PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -28,9 +28,9 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.GuildManager.DelGuild(sGuildName))
+            if (M2Share.GuildMgr.DelGuild(sGuildName))
             {
-                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.nServerIndex, sGuildName);
+                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, sGuildName);
             }
             else
             {

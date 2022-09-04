@@ -59,7 +59,7 @@ namespace GameSvr.Castle
             TUserCastle castle;
             if (_castleList.Count <= 0)
             {
-                castle = new TUserCastle(M2Share.g_Config.sCastleDir);
+                castle = new TUserCastle(M2Share.Config.sCastleDir);
                 _castleList.Add(castle);
                 castle.Initialize();
                 castle.m_sConfigDir = "0";
@@ -71,7 +71,7 @@ namespace GameSvr.Castle
                 castle.m_EnvirList.Add("0156");
                 for (var i = 0; i < castle.m_EnvirList.Count; i++)
                 {
-                    castle.m_EnvirList[i] = M2Share.MapManager.FindMap(castle.m_EnvirList[i]).MapName;
+                    castle.m_EnvirList[i] = M2Share.MapMgr.FindMap(castle.m_EnvirList[i]).MapName;
                 }
                 Save();
                 return;
@@ -150,7 +150,7 @@ namespace GameSvr.Castle
 
         public void LoadCastleList()
         {
-            var castleFile = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleFile);
+            var castleFile = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleFile);
             if (File.Exists(castleFile))
             {
                 using (var loadList = new StringList())
@@ -176,7 +176,7 @@ namespace GameSvr.Castle
 
         private void SaveCastleList()
         {
-            var castleDirPath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir);
+            var castleDirPath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir);
             if (!Directory.Exists(castleDirPath))
             {
                 Directory.CreateDirectory(castleDirPath);
@@ -186,7 +186,7 @@ namespace GameSvr.Castle
             {
                 loadList.Add(i.ToString());
             }
-            var savePath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleFile);
+            var savePath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleFile);
             loadList.SaveToFile(savePath);
         }
 

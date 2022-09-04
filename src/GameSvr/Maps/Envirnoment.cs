@@ -416,15 +416,15 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                             if (baseObject != null)
                             {
-                                var castle = M2Share.CastleManager.InCastleWarArea(baseObject);
-                                if (M2Share.g_Config.boWarDisHumRun && castle != null && castle.m_boUnderWar)
+                                var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                                if (M2Share.Config.boWarDisHumRun && castle != null && castle.m_boUnderWar)
                                 {
                                 }
                                 else
                                 {
                                     if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                     {
-                                        if (M2Share.g_Config.boRunHuman || Flag.boRUNHUMAN)
+                                        if (M2Share.Config.boRunHuman || Flag.boRUNHUMAN)
                                         {
                                             continue;
                                         }
@@ -433,7 +433,7 @@ namespace GameSvr.Maps
                                     {
                                         if (baseObject.Race == Grobal2.RC_NPC)
                                         {
-                                            if (M2Share.g_Config.boRunNpc)
+                                            if (M2Share.Config.boRunNpc)
                                             {
                                                 continue;
                                             }
@@ -442,14 +442,14 @@ namespace GameSvr.Maps
                                         {
                                             if (baseObject.Race == Grobal2.RC_GUARD || baseObject.Race == Grobal2.RC_ARCHERGUARD)
                                             {
-                                                if (M2Share.g_Config.boRunGuard)
+                                                if (M2Share.Config.boRunGuard)
                                                 {
                                                     continue;
                                                 }
                                             }
                                             else
                                             {
-                                                if (M2Share.g_Config.boRunMon || Flag.boRUNMON)
+                                                if (M2Share.Config.boRunMon || Flag.boRUNMON)
                                                 {
                                                     continue;
                                                 }
@@ -836,7 +836,7 @@ namespace GameSvr.Maps
                     result = true;
                 }
 
-                var pointFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Point", $"{sMapFile}.txt");
+                var pointFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "Point", $"{sMapFile}.txt");
                 if (File.Exists(pointFileName))
                 {
                     var loadList = new StringList();

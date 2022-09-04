@@ -22,7 +22,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Envir = M2Share.MapManager.FindMap(sMapName);
+            var Envir = M2Share.MapMgr.FindMap(sMapName);
             if (Envir == null)
             {
                 PlayObject.SysMsg(GameCommandConst.g_sGameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);

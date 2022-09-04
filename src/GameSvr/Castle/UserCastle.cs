@@ -129,10 +129,10 @@ namespace GameSvr.Castle
         public TUserCastle(string sCastleDir)
         {
             m_MasterGuild = null;
-            m_sHomeMap = M2Share.g_Config.sCastleHomeMap; // '3'
-            m_nHomeX = M2Share.g_Config.nCastleHomeX; // 644
-            m_nHomeY = M2Share.g_Config.nCastleHomeY; // 290
-            m_sName = M2Share.g_Config.sCastleName; // '沙巴克'
+            m_sHomeMap = M2Share.Config.sCastleHomeMap; // '3'
+            m_nHomeX = M2Share.Config.nCastleHomeX; // 644
+            m_nHomeY = M2Share.Config.nCastleHomeY; // 290
+            m_sName = M2Share.Config.sCastleName; // '沙巴克'
             m_sConfigDir = sCastleDir;
             m_sPalaceMap = "0150";
             m_sSecretMap = "D701";
@@ -144,10 +144,10 @@ namespace GameSvr.Castle
             m_AttackWarList = new List<TAttackerInfo>();
             m_AttackGuildList = new List<GuildInfo>();
             m_dwSaveTick = 0;
-            m_nWarRangeX = M2Share.g_Config.nCastleWarRangeX;
-            m_nWarRangeY = M2Share.g_Config.nCastleWarRangeY;
+            m_nWarRangeX = M2Share.Config.nCastleWarRangeX;
+            m_nWarRangeY = M2Share.Config.nCastleWarRangeY;
             m_EnvirList = new List<string>();
-            var filePath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, m_sConfigDir);
+            var filePath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir, m_sConfigDir);
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
@@ -173,13 +173,13 @@ namespace GameSvr.Castle
             TDoorInfo Door;
             LoadConfig();
             LoadAttackSabukWall();
-            if (M2Share.MapManager.GetMapOfServerIndex(m_sMapName) == M2Share.nServerIndex)
+            if (M2Share.MapMgr.GetMapOfServerIndex(m_sMapName) == M2Share.ServerIndex)
             {
-                m_MapPalace = M2Share.MapManager.FindMap(m_sPalaceMap);
+                m_MapPalace = M2Share.MapMgr.FindMap(m_sPalaceMap);
                 if (m_MapPalace == null) _logger.Warn($"皇宫地图{m_sPalaceMap}没找到!!!");
-                m_MapSecret = M2Share.MapManager.FindMap(m_sSecretMap);
+                m_MapSecret = M2Share.MapMgr.FindMap(m_sSecretMap);
                 if (m_MapSecret == null) _logger.Warn($"密道地图{m_sSecretMap}没找到!!!");
-                m_MapCastle = M2Share.MapManager.FindMap(m_sMapName);
+                m_MapCastle = M2Share.MapMgr.FindMap(m_sMapName);
                 if (m_MapCastle != null)
                 {
                     m_MainDoor.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_MainDoor.nX, m_MainDoor.nY, m_MainDoor.sName);
@@ -271,7 +271,7 @@ namespace GameSvr.Castle
         private void LoadConfig()
         {
             castleConf.LoadConfig(this);
-            m_MasterGuild = M2Share.GuildManager.FindGuild(m_sOwnGuild);
+            m_MasterGuild = M2Share.GuildMgr.FindGuild(m_sOwnGuild);
         }
 
         private void SaveConfigFile()
@@ -284,7 +284,7 @@ namespace GameSvr.Castle
         /// </summary>
         private void LoadAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir, m_sConfigDir);
             var guildName = string.Empty;
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
@@ -301,7 +301,7 @@ namespace GameSvr.Castle
             {
                 var sData = loadList[i];
                 var s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { " ", "\t" });
-                var guild = M2Share.GuildManager.FindGuild(guildName);
+                var guild = M2Share.GuildMgr.FindGuild(guildName);
                 if (guild == null) continue;
                 var attackerInfo = new TAttackerInfo();
                 HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
@@ -324,7 +324,7 @@ namespace GameSvr.Castle
         /// </summary>
         private void SaveAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir, m_sConfigDir);
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
             var sFileName = Path.Combine(sabukwallPath, AttackSabukWallList);
@@ -344,7 +344,7 @@ namespace GameSvr.Castle
             const string sExceptionMsg = "[Exception] TUserCastle::Run";
             try
             {
-                if (M2Share.nServerIndex != M2Share.MapManager.GetMapOfServerIndex(m_sMapName)) return;
+                if (M2Share.ServerIndex != M2Share.MapMgr.GetMapOfServerIndex(m_sMapName)) return;
                 var Year = DateTime.Now.Year;
                 var Month = DateTime.Now.Month;
                 var Day = DateTime.Now.Day;
@@ -360,7 +360,7 @@ namespace GameSvr.Castle
                 if (!IsStartWar && !m_boUnderWar)
                 {
                     var hour = DateTime.Now.Hour;
-                    if (hour == M2Share.g_Config.nStartCastlewarTime) // 20
+                    if (hour == M2Share.Config.nStartCastlewarTime) // 20
                     {
                         IsStartWar = true;
                         m_AttackGuildList.Clear();
@@ -386,10 +386,10 @@ namespace GameSvr.Castle
                             m_AttackGuildList.Add(m_MasterGuild);
                             StartWallconquestWar();
                             SaveAttackSabukWall();
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
                             var s20 = string.Format(sWarStartMsg, m_sName);
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
                             _logger.Info(s20);
                             MainDoorControl(true);
                         }
@@ -416,16 +416,16 @@ namespace GameSvr.Castle
                     if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.StoneMode = false;
                     if (!m_boShowOverMsg)
                     {
-                        if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
+                        if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.Config.dwCastleWarTime - M2Share.Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             m_boShowOverMsg = true;
-                            var s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
+                            var s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.Config.dwShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
                             _logger.Warn(s20);
                         }
                     }
-                    if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > M2Share.g_Config.dwCastleWarTime)
+                    if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > M2Share.Config.dwCastleWarTime)
                     {
                         StopWallconquestWar();
                     }
@@ -505,7 +505,7 @@ namespace GameSvr.Castle
 
         public bool CanGetCastle(GuildInfo guild)
         {
-            if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) <= M2Share.g_Config.dwGetCastleTime)
+            if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) <= M2Share.Config.dwGetCastleTime)
             {
                 return false;
             }
@@ -538,7 +538,7 @@ namespace GameSvr.Castle
             Guild.RefMemberName();//刷新新的行会信息
             var s10 = string.Format(sGetCastleMsg, m_sName, m_sOwnGuild);
             M2Share.UserEngine.SendBroadCastMsgExt(s10, MsgType.System);
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s10);
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s10);
             _logger.Info(s10);
         }
 
@@ -575,7 +575,7 @@ namespace GameSvr.Castle
             }
             var s14 = string.Format(sWallWarStop, m_sName);
             M2Share.UserEngine.SendBroadCastMsgExt(s14, MsgType.System);
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s14);
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s14);
             _logger.Info(s14);
         }
 
@@ -687,29 +687,29 @@ namespace GameSvr.Castle
         /// <param name="nGold"></param>
         public void IncRateGold(int nGold)
         {
-            var nInGold = HUtil32.Round(nGold * (M2Share.g_Config.nCastleTaxRate / 100));
-            if (m_nTodayIncome + nInGold <= M2Share.g_Config.nCastleOneDayGold)
+            var nInGold = HUtil32.Round(nGold * (M2Share.Config.nCastleTaxRate / 100));
+            if (m_nTodayIncome + nInGold <= M2Share.Config.nCastleOneDayGold)
             {
                 m_nTodayIncome += nInGold;
             }
             else
             {
-                if (m_nTodayIncome >= M2Share.g_Config.nCastleOneDayGold)
+                if (m_nTodayIncome >= M2Share.Config.nCastleOneDayGold)
                 {
                     nInGold = 0;
                 }
                 else
                 {
-                    nInGold = M2Share.g_Config.nCastleOneDayGold - m_nTodayIncome;
-                    m_nTodayIncome = M2Share.g_Config.nCastleOneDayGold;
+                    nInGold = M2Share.Config.nCastleOneDayGold - m_nTodayIncome;
+                    m_nTodayIncome = M2Share.Config.nCastleOneDayGold;
                 }
             }
             if (nInGold > 0)
             {
-                if (m_nTotalGold + nInGold < M2Share.g_Config.nCastleGoldMax)
+                if (m_nTotalGold + nInGold < M2Share.Config.nCastleGoldMax)
                     m_nTotalGold += nInGold;
                 else
-                    m_nTotalGold = M2Share.g_Config.nCastleGoldMax;
+                    m_nTotalGold = M2Share.Config.nCastleGoldMax;
             }
             if ((HUtil32.GetTickCount() - m_dwSaveTick) > 10 * 60 * 1000)
             {
@@ -774,7 +774,7 @@ namespace GameSvr.Castle
             {
                 if (nGold <= PlayObject.Gold)
                 {
-                    if (m_nTotalGold + nGold <= M2Share.g_Config.nCastleGoldMax)
+                    if (m_nTotalGold + nGold <= M2Share.Config.nCastleGoldMax)
                     {
                         PlayObject.Gold -= nGold;
                         m_nTotalGold += nGold;
@@ -910,12 +910,12 @@ namespace GameSvr.Castle
             var result = false;
             if (InAttackerList(Guild)) return result;
             var AttackerInfo = new TAttackerInfo();
-            AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.g_Config.nStartCastleWarDays);
+            AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.Config.nStartCastleWarDays);
             AttackerInfo.sGuildName = Guild.sGuildName;
             AttackerInfo.Guild = Guild;
             m_AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
             result = true;
             return result;
         }

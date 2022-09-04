@@ -257,7 +257,7 @@ namespace GameSvr.Actor
                                     }
                                     if ((OSObject.CellType == CellType.ItemObject) && !Death && (Race > Grobal2.RC_MONSTER))
                                     {
-                                        if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
+                                        if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.Config.dwClearDropOnFloorItemTime)
                                         {
                                             cellInfo.Remove(OSObject);
                                             if (cellInfo.Count > 0)

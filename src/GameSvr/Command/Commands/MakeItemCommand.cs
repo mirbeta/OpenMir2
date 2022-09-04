@@ -33,7 +33,7 @@ namespace GameSvr.Command.Commands
                     PlayObject.SysMsg(GameCommandConst.g_sGamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (M2Share.CastleManager.InCastleWarArea(PlayObject) != null) // 攻城区域，禁止使用此功能
+                if (M2Share.CastleMgr.InCastleWarArea(PlayObject) != null) // 攻城区域，禁止使用此功能
                 {
                     PlayObject.SysMsg(GameCommandConst.g_sGamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
                     return;
@@ -52,13 +52,13 @@ namespace GameSvr.Command.Commands
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (StdItem.Price >= 15000 && !M2Share.g_Config.boTestServer && PlayObject.Permission < 5)
+                    if (StdItem.Price >= 15000 && !M2Share.Config.boTestServer && PlayObject.Permission < 5)
                     {
                         UserItem = null;
                     }
                     else
                     {
-                        if (M2Share.RandomNumber.Random(M2Share.g_Config.nMakeRandomAddValue) == 0)
+                        if (M2Share.RandomNumber.Random(M2Share.Config.nMakeRandomAddValue) == 0)
                         {
                             StdItem.RandomUpgradeItem(UserItem);
                         }

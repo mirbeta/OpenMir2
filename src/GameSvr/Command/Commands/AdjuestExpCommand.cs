@@ -32,7 +32,7 @@ namespace GameSvr.Command.Commands
                 m_PlayObject.Abil.Exp = dwExp;
                 m_PlayObject.HasLevelUp(m_PlayObject.Abil.Level - 1);
                 PlayObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
-                if (M2Share.g_Config.boShowMakeItemMsg)
+                if (M2Share.Config.boShowMakeItemMsg)
                 {
                     M2Share.LogSystem.Warn("[经验调整] " + PlayObject.CharName + '(' + m_PlayObject.CharName + ' ' + dwOExp + " -> " + m_PlayObject.Abil.Exp + ')');
                 }

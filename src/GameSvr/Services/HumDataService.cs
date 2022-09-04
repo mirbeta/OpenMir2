@@ -100,7 +100,7 @@ namespace GameSvr.Services
                     result = true;
                 }
             }
-            M2Share.g_Config.nLoadDBCount++;
+            M2Share.Config.nLoadDBCount++;
             return result;
         }
 
@@ -110,7 +110,7 @@ namespace GameSvr.Services
         /// <returns></returns>
         public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, THumDataInfo HumanRcd)
         {
-            M2Share.g_Config.nSaveDBCount++;
+            M2Share.Config.nSaveDBCount++;
             return SaveRcd(sAccount, sCharName, nSessionID, HumanRcd);
         }
 
@@ -185,12 +185,12 @@ namespace GameSvr.Services
 
         private static int GetQueryId()
         {
-            M2Share.g_Config.nDBQueryID++;
-            if (M2Share.g_Config.nDBQueryID > int.MaxValue - 1)
+            M2Share.Config.nDBQueryID++;
+            if (M2Share.Config.nDBQueryID > int.MaxValue - 1)
             {
-                M2Share.g_Config.nDBQueryID = 1;
+                M2Share.Config.nDBQueryID = 1;
             }
-            return M2Share.g_Config.nDBQueryID;
+            return M2Share.Config.nDBQueryID;
         }
     }
 }

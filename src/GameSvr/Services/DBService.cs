@@ -26,7 +26,7 @@ namespace GameSvr.Services
 
         public void Start()
         {
-            _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
+            _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
         }
 
         public void Stop()
@@ -44,7 +44,7 @@ namespace GameSvr.Services
             {
                 return;
             }
-            _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
+            _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
         }
 
         public bool SendRequest<T>(int nQueryID, ServerMessagePacket packet, T requet) where T : CmdPacket
@@ -86,13 +86,13 @@ namespace GameSvr.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.Error("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]拒绝链接...");
+                    _logger.Error("数据库服务器[" + M2Share.Config.sDBAddr + ":" + M2Share.Config.nDBPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.Error("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]关闭连接...");
+                    _logger.Error("数据库服务器[" + M2Share.Config.sDBAddr + ":" + M2Share.Config.nDBPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.Error("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]链接超时...");
+                    _logger.Error("数据库服务器[" + M2Share.Config.sDBAddr + ":" + M2Share.Config.nDBPort + "]链接超时...");
                     break;
             }
         }
@@ -163,7 +163,7 @@ namespace GameSvr.Services
                         }
                         else
                         {
-                            M2Share.g_Config.nLoadDBErrorCount++;
+                            M2Share.Config.nLoadDBErrorCount++;
                         }
                     }
                 }

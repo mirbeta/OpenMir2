@@ -103,7 +103,7 @@ namespace GameSvr.GateWay
                             body = protoBuff[..nCheckMsgLen]; //获取整个封包内容,包括消息头和消息体
                             body = body[PacketHeader.PacketSize..];
                         }
-                        //M2Share.GateManager.AddGameGateQueue(_gateIdx, msgHeader, body); //添加到处理队列
+                        //M2Share.GateMgr.AddGameGateQueue(_gateIdx, msgHeader, body); //添加到处理队列
                         ExecGateBuffers(msgHeader, body);
                         nLen -= nCheckMsgLen;
                         if (nLen > 0 && _gameBuffer != null)
@@ -174,9 +174,9 @@ namespace GameSvr.GateWay
             try
             {
                 var nSendBuffLen = buffer.Length;
-                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock * 10)
+                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + nSendBuffLen >= M2Share.Config.nCheckBlock * 10)
                 {
-                    if (GateInfo.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock * 10 <= nSendBuffLen)
+                    if (GateInfo.nSendBlockCount == 0 && M2Share.Config.nCheckBlock * 10 <= nSendBuffLen)
                     {
                         return;
                     }
@@ -191,20 +191,20 @@ namespace GameSvr.GateWay
                 {
                     while (true)
                     {
-                        if (M2Share.g_Config.nSendBlock <= nSendBuffLen)
+                        if (M2Share.Config.nSendBlock <= nSendBuffLen)
                         {
                             if (GateInfo.Socket != null)
                             {
-                                var sendBuff = new byte[M2Share.g_Config.nSendBlock];
-                                Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, M2Share.g_Config.nSendBlock);
+                                var sendBuff = new byte[M2Share.Config.nSendBlock];
+                                Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, M2Share.Config.nSendBlock);
                                 _sendQueue.AddToQueue(sendBuff);
                                 GateInfo.nSendCount++;
-                                GateInfo.nSendBytesCount += M2Share.g_Config.nSendBlock;
+                                GateInfo.nSendBytesCount += M2Share.Config.nSendBlock;
                             }
-                            GateInfo.nSendBlockCount += M2Share.g_Config.nSendBlock;
-                            nSendBuffLen -= M2Share.g_Config.nSendBlock;
+                            GateInfo.nSendBlockCount += M2Share.Config.nSendBlock;
+                            nSendBuffLen -= M2Share.Config.nSendBlock;
                             var tempBuff = new byte[nSendBuffLen];
-                            Buffer.BlockCopy(sendBuffer, M2Share.g_Config.nSendBlock, tempBuff, 0, nSendBuffLen);
+                            Buffer.BlockCopy(sendBuffer, M2Share.Config.nSendBlock, tempBuff, 0, nSendBuffLen);
                             sendBuffer = tempBuff;
                             continue;
                         }

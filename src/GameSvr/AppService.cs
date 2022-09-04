@@ -20,7 +20,7 @@ namespace GameSvr
         {
             if (M2Share.boStartReady)
             {
-                M2Share.GateManager.Start(stoppingToken);
+                M2Share.GateMgr.Start(stoppingToken);
             }
             while (!stoppingToken.IsCancellationRequested)
             {

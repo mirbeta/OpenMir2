@@ -38,7 +38,7 @@ namespace GameSvr.Monster.Monsters
                 n0C = (short)(CurrY + 1);
                 if (Envir.CanWalk(n08, n0C, true))
                 {
-                    BB = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.g_Config.sSpider);
+                    BB = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.sSpider);
                     if (BB != null)
                     {
                         BB.SetTargetCreat(TargetCret);

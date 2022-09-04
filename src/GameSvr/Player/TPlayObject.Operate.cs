@@ -226,12 +226,12 @@ namespace GameSvr.Player
 
         private bool ClientDropGold(int nGold)
         {
-            if (M2Share.g_Config.boInSafeDisableDrop && InSafeZone())
+            if (M2Share.Config.boInSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return false;
             }
-            if (M2Share.g_Config.boControlDropItem && nGold < M2Share.g_Config.nCanDropGold)
+            if (M2Share.Config.boControlDropItem && nGold < M2Share.Config.nCanDropGold)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropGoldMsg);
                 return false;
@@ -268,7 +268,7 @@ namespace GameSvr.Player
                     m_nStep = 0;
                 }
             }
-            if (M2Share.g_Config.boInSafeDisableDrop && InSafeZone())
+            if (M2Share.Config.boInSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return false;
@@ -298,7 +298,7 @@ namespace GameSvr.Player
                         var sUserItemName = ItmUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.g_Config.boControlDropItem && stdItem.Price < M2Share.g_Config.nCanDropPrice)
+                            if (M2Share.Config.boControlDropItem && stdItem.Price < M2Share.Config.nCanDropPrice)
                             {
                                 Dispose(userItem);
                                 ItemList.RemoveAt(i);
@@ -335,12 +335,12 @@ namespace GameSvr.Player
                 return false;
             }
             m_boFilterAction = true;
-            if (!M2Share.g_Config.boSpeedHackCheck)
+            if (!M2Share.Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-                if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
+                if (dwCheckTime < M2Share.Config.dwTurnIntervalTime)
                 {
-                    dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
+                    dwDelayTime = M2Share.Config.dwTurnIntervalTime - dwCheckTime;
                     return false;
                 }
             }
@@ -362,12 +362,12 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            if (!M2Share.g_Config.boSpeedHackCheck)
+            if (!M2Share.Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-                if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
+                if (dwCheckTime < M2Share.Config.dwTurnIntervalTime)
                 {
-                    dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
+                    dwDelayTime = M2Share.Config.dwTurnIntervalTime - dwCheckTime;
                     return false;
                 }
                 m_dwTurnTick = HUtil32.GetTickCount();
@@ -383,7 +383,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var castle = M2Share.CastleManager.IsCastleEnvir(Envir);
+            var castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
             if (castle == null || castle.m_DoorStatus != door.Status || Race != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(CurrX, CurrY, this))
             {
                 M2Share.UserEngine.OpenDoor(Envir, nX, nY);
@@ -720,12 +720,12 @@ namespace GameSvr.Player
         {
             dwDelayTime = 0;
             var baseObject = M2Share.ActorMgr.Get(charId);
-            if (!M2Share.g_Config.boSpeedHackCheck)
+            if (!M2Share.Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-                if (dwCheckTime < HUtil32._MAX(150, M2Share.g_Config.dwTurnIntervalTime - 150))
+                if (dwCheckTime < HUtil32._MAX(150, M2Share.Config.dwTurnIntervalTime - 150))
                 {
-                    dwDelayTime = HUtil32._MAX(150, M2Share.g_Config.dwTurnIntervalTime - 150) - dwCheckTime;
+                    dwDelayTime = HUtil32._MAX(150, M2Share.Config.dwTurnIntervalTime - 150) - dwCheckTime;
                     return false;
                 }
                 m_dwTurnTick = HUtil32.GetTickCount();
@@ -847,7 +847,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
                 return;
             }
-            if (GroupMembers.Count > M2Share.g_Config.nGroupMembersMax)
+            if (GroupMembers.Count > M2Share.Config.nGroupMembersMax)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
                 return;
@@ -905,7 +905,7 @@ namespace GameSvr.Player
 
         private void ClientDealTry(string sHumName)
         {
-            if (M2Share.g_Config.boDisableDeal)
+            if (M2Share.Config.boDisableDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDisableDealItemsMsg);
                 return;
@@ -914,7 +914,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if ((HUtil32.GetTickCount() - DealLastTick) < M2Share.g_Config.dwTryDealTime)
+            if ((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.dwTryDealTime)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
                 return;
@@ -994,7 +994,7 @@ namespace GameSvr.Player
 
         private void ClientDelDealItem(int nItemIdx, string sItemName)
         {
-            if (M2Share.g_Config.boCanNotGetBackDeal)
+            if (M2Share.Config.boCanNotGetBackDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
                 SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
@@ -1042,7 +1042,7 @@ namespace GameSvr.Player
 
         private void ClientChangeDealGold(int nGold)
         {
-            if (DealGolds > 0 && M2Share.g_Config.boCanNotGetBackDeal)// 禁止取回放入交易栏内的金币
+            if (DealGolds > 0 && M2Share.Config.boCanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
                 SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
@@ -1083,7 +1083,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (((HUtil32.GetTickCount() - DealLastTick) < M2Share.g_Config.dwDealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < M2Share.g_Config.dwDealOKTime))
+            if (((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.dwDealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < M2Share.Config.dwDealOKTime))
             {
                 SysMsg(M2Share.g_sDealOKTooFast, MsgColor.Red, MsgType.Hint);
                 DealCancel();
@@ -1318,7 +1318,7 @@ namespace GameSvr.Player
                                 if (playObject.MyGuild == null && MyGuild.m_RankList.Count < 400)
                                 {
                                     MyGuild.AddMember(playObject);
-                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, MyGuild.sGuildName);
+                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                                     playObject.MyGuild = MyGuild;
                                     playObject.GuildRankName = MyGuild.GetRankName(playObject, ref playObject.GuildRankNo);
                                     playObject.RefShowName();
@@ -1379,7 +1379,7 @@ namespace GameSvr.Player
                                 playObject.RefRankInfo(0, "");
                                 playObject.RefShowName();
                             }
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, MyGuild.sGuildName);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                             nC = 0;
                         }
                         else
@@ -1393,8 +1393,8 @@ namespace GameSvr.Player
                         var s14 = MyGuild.sGuildName;
                         if (MyGuild.CancelGuld(sHumName))
                         {
-                            M2Share.GuildManager.DelGuild(s14);
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.nServerIndex, s14);
+                            M2Share.GuildMgr.DelGuild(s14);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, s14);
                             MyGuild = null;
                             RefRankInfo(0, "");
                             RefShowName();
@@ -1432,7 +1432,7 @@ namespace GameSvr.Player
                 MyGuild.NoticeList.Add(sC);
             }
             MyGuild.SaveGuildInfoFile();
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, MyGuild.sGuildName);
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
             ClientOpenGuildDlg();
         }
 
@@ -1445,7 +1445,7 @@ namespace GameSvr.Player
             var nC = MyGuild.UpdateRank(sRankInfo);
             if (nC == 0)
             {
-                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, MyGuild.sGuildName);
+                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                 ClientGuildMemberList();
             }
             else
@@ -1478,8 +1478,8 @@ namespace GameSvr.Player
                                 baseObjectC.MyGuild.SendGuildMsg(MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
                                 MyGuild.RefMemberName();
                                 baseObjectC.MyGuild.RefMemberName();
-                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, MyGuild.sGuildName);
-                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, baseObjectC.MyGuild.sGuildName);
+                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, baseObjectC.MyGuild.sGuildName);
                                 n8 = 0;
                             }
                             else
@@ -1520,7 +1520,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var guild = M2Share.GuildManager.FindGuild(sGuildName);
+            var guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
                 if (MyGuild.IsAllyGuild(guild))
@@ -1531,8 +1531,8 @@ namespace GameSvr.Player
                     guild.SendGuildMsg(MyGuild.sGuildName + " 行会解除了与您行会的联盟!!!");
                     MyGuild.RefMemberName();
                     guild.RefMemberName();
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, MyGuild.sGuildName);
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, guild.sGuildName);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, guild.sGuildName);
                     n10 = 0;
                 }
                 else
@@ -1612,7 +1612,7 @@ namespace GameSvr.Player
             {
                 HUtil32.GetValidStr3(sMsg, ref sMsg, new[] { " " });
             }
-            if (m_nPayMent == 1 && !M2Share.g_Config.boTryModeUseStorage)
+            if (m_nPayMent == 1 && !M2Share.Config.boTryModeUseStorage)
             {
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
@@ -1662,7 +1662,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (m_nPayMent == 1 && !M2Share.g_Config.boTryModeUseStorage)
+            if (m_nPayMent == 1 && !M2Share.Config.boTryModeUseStorage)
             {
                 // '试玩模式不可以使用仓库功能!!!'
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);

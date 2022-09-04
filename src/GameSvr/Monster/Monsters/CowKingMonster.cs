@@ -39,11 +39,11 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            short n8 = 0;
-            short nC = 0;
-            int n10;
             if (!Death && !bo554 && !Ghost && (HUtil32.GetTickCount() - dw558) > (30 * 1000))
             {
+                short n8 = 0;
+                short nC = 0;
+                int n10;
                 dw558 = HUtil32.GetTickCount();
                 if (TargetCret != null && sub_4C3538() >= 5)
                 {

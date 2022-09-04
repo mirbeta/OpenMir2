@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
                     {
-                        M2Share.MagicManager.MagMakePrivateTransparent(this, 180);
+                        M2Share.MagicMgr.MagMakePrivateTransparent(this, 180);
                     }
                 }
                 else

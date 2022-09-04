@@ -141,12 +141,12 @@ namespace GameSvr.Snaps
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::MsgGetUserServerChange";
             int shifttime = HUtil32.GetTickCount();
             string ufilename = Body;
-            if (M2Share.nServerIndex == sNum)
+            if (M2Share.ServerIndex == sNum)
             {
                 try
                 {
                     M2Share.UserEngine.AddSwitchData(new TSwitchDataInfo());
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.nServerIndex, ufilename);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
                 }
                 catch
                 {
@@ -176,7 +176,7 @@ namespace GameSvr.Snaps
         private void MsgGetWhisper(int sNum, string Body)
         {
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -194,7 +194,7 @@ namespace GameSvr.Snaps
         private void MsgGetGMWhisper(int sNum, string Body)
         {
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -212,7 +212,7 @@ namespace GameSvr.Snaps
         private void MsgGetLoverWhisper(int sNum, string Body)
         {
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -236,13 +236,13 @@ namespace GameSvr.Snaps
         {
             var gname = string.Empty;
             var mname = HUtil32.GetValidStr3(Body, ref gname, HUtil32.Backslash);
-            M2Share.GuildManager.AddGuild(gname, mname);
+            M2Share.GuildMgr.AddGuild(gname, mname);
         }
 
         private void MsgGetDelGuild(int sNum, string Body)
         {
             var gname = Body;
-            M2Share.GuildManager.DelGuild(gname);
+            M2Share.GuildMgr.DelGuild(gname);
         }
 
         private void MsgGetReloadGuild(int sNum, string Body)
@@ -251,16 +251,16 @@ namespace GameSvr.Snaps
             GuildInfo guild;
             if (sNum == 0)
             {
-                guild = M2Share.GuildManager.FindGuild(gname);
+                guild = M2Share.GuildMgr.FindGuild(gname);
                 if (guild != null)
                 {
                     guild.LoadGuild();
                     M2Share.UserEngine.GuildMemberReGetRankName(guild);
                 }
             }
-            else if (M2Share.nServerIndex != sNum)
+            else if (M2Share.ServerIndex != sNum)
             {
-                guild = M2Share.GuildManager.FindGuild(gname);
+                guild = M2Share.GuildMgr.FindGuild(gname);
                 if (guild != null)
                 {
                     guild.LoadGuildFile(gname + '.' + sNum);
@@ -277,7 +277,7 @@ namespace GameSvr.Snaps
             Str = HUtil32.GetValidStr3(Str, ref gname, HUtil32.Backslash);
             if (gname != "")
             {
-                var g = M2Share.GuildManager.FindGuild(gname);
+                var g = M2Share.GuildMgr.FindGuild(gname);
                 if (g != null)
                 {
                     g.SendGuildMsg(Str);
@@ -304,8 +304,8 @@ namespace GameSvr.Snaps
                 remaintime = Str;
                 if (gname != "" && warguildname != "")
                 {
-                    g = M2Share.GuildManager.FindGuild(gname);
-                    WarGuild = M2Share.GuildManager.FindGuild(warguildname);
+                    g = M2Share.GuildMgr.FindGuild(gname);
+                    WarGuild = M2Share.GuildMgr.FindGuild(warguildname);
                     if (g != null && WarGuild != null)
                     {
                         int currenttick = HUtil32.GetTickCount();
@@ -358,7 +358,7 @@ namespace GameSvr.Snaps
             if (whostr != "")
             {
                 //PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, minstr);
-                M2Share.CommandSystem.ExecCmd("Shutup", PlayObject);
+                M2Share.CommandMgr.ExecCmd("Shutup", PlayObject);
             }
         }
 
@@ -378,7 +378,7 @@ namespace GameSvr.Snaps
 
         private void MsgGetReloadCastleAttackers(int sNum)
         {
-            M2Share.CastleManager.Initialize();
+            M2Share.CastleMgr.Initialize();
         }
 
         private void MsgGetReloadAdmin()
@@ -410,7 +410,7 @@ namespace GameSvr.Snaps
             var dxstr = string.Empty;
             var dystr = string.Empty;
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -442,7 +442,7 @@ namespace GameSvr.Snaps
             string Str;
             var uname = string.Empty;
             var lovername = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -463,7 +463,7 @@ namespace GameSvr.Snaps
         {
             var uname = string.Empty;
             const string sLoverFindYouMsg = "正在找你...";
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -484,7 +484,7 @@ namespace GameSvr.Snaps
         private void MsgGetLoverKilledMsg(int sNum, string Body)
         {
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -501,7 +501,7 @@ namespace GameSvr.Snaps
             var dxstr = string.Empty;
             var dystr = string.Empty;
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -521,7 +521,7 @@ namespace GameSvr.Snaps
         private void MsgGetRequestRecall(int sNum, string Body)
         {
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
@@ -536,7 +536,7 @@ namespace GameSvr.Snaps
         private void MsgGetRequestLoverRecall(int sNum, string Body)
         {
             var uname = string.Empty;
-            if (sNum == M2Share.nServerIndex)
+            if (sNum == M2Share.ServerIndex)
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);

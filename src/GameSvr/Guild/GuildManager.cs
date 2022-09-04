@@ -74,10 +74,10 @@ namespace GameSvr.Guild
         public void LoadGuildInfo()
         {
             GuildInfo Guild;
-            if (File.Exists(M2Share.g_Config.sGuildFile))
+            if (File.Exists(M2Share.Config.sGuildFile))
             {
                 var LoadList = new StringList();
-                LoadList.LoadFromFile(M2Share.g_Config.sGuildFile);
+                LoadList.LoadFromFile(M2Share.Config.sGuildFile);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var sGuildName = LoadList[i].Trim();
@@ -119,7 +119,7 @@ namespace GameSvr.Guild
 
         private void SaveGuildList()
         {
-            if (M2Share.nServerIndex != 0)
+            if (M2Share.ServerIndex != 0)
             {
                 return;
             }
@@ -130,7 +130,7 @@ namespace GameSvr.Guild
             }
             try
             {
-                SaveList.SaveToFile(M2Share.g_Config.sGuildFile);
+                SaveList.SaveToFile(M2Share.Config.sGuildFile);
             }
             catch
             {

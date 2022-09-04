@@ -28,7 +28,7 @@ namespace GameSvr.Monster.Monsters
             {
                 for (var k = 0; k < 4; k++)
                 {
-                    if (M2Share.g_Config.SpitMap[btDir, i, k] == 1)
+                    if (M2Share.Config.SpitMap[btDir, i, k] == 1)
                     {
                         var nX = (short)(CurrX - 2 + k);
                         var nY = (short)(CurrY - 2 + i);

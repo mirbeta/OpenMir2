@@ -43,11 +43,11 @@ namespace GameSvr.Npc
                 {
                     if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
                     {
-                        M2Share.g_Config.GlobalVal[n14 - 100] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 100] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
                     }
                     else
                     {
-                        M2Share.g_Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
@@ -76,11 +76,11 @@ namespace GameSvr.Npc
                 {
                     if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
                     {
-                        M2Share.g_Config.GlobaDyMval[n14 - 400] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        M2Share.Config.GlobaDyMval[n14 - 400] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
                     }
                     else
                     {
-                        M2Share.g_Config.GlobaDyMval[n14 - 400] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        M2Share.Config.GlobaDyMval[n14 - 400] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
@@ -98,11 +98,11 @@ namespace GameSvr.Npc
                 {
                     if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
                     {
-                        M2Share.g_Config.GlobalVal[n14 - 700] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 700] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
                     }
                     else
                     {
-                        M2Share.g_Config.GlobalVal[n14 - 700] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 700] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                     }
                 }
                 else
@@ -358,11 +358,11 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 100] += n3C;
+                                M2Share.Config.GlobalVal[n14 - 100] += n3C;
                             }
                             else
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 100]++;
+                                M2Share.Config.GlobalVal[n14 - 100]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
@@ -391,11 +391,11 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                M2Share.g_Config.GlobaDyMval[n14 - 400] += n3C;
+                                M2Share.Config.GlobaDyMval[n14 - 400] += n3C;
                             }
                             else
                             {
-                                M2Share.g_Config.GlobaDyMval[n14 - 400]++;
+                                M2Share.Config.GlobaDyMval[n14 - 400]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
@@ -415,22 +415,22 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
-                            M2Share.g_Config.GlobalAVal[n14 - 700] = M2Share.g_Config.GlobalAVal[n14 - 700] + s01;
+                            M2Share.Config.GlobalAVal[n14 - 700] = M2Share.Config.GlobalAVal[n14 - 700] + s01;
                         }
                         else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                         {
                             if (n3C > 1)
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 700] += n3C;
+                                M2Share.Config.GlobalVal[n14 - 700] += n3C;
                             }
                             else
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 700]++;
+                                M2Share.Config.GlobalVal[n14 - 700]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                         {
-                            M2Share.g_Config.GlobalAVal[n14 - 1100] = M2Share.g_Config.GlobalAVal[n14 - 1100] + s01;
+                            M2Share.Config.GlobalAVal[n14 - 1100] = M2Share.Config.GlobalAVal[n14 - 1100] + s01;
                         }
                         else
                         {
@@ -458,7 +458,7 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 100, 199))
                             {
-                                n3C = M2Share.g_Config.GlobalVal[n14 - 100];
+                                n3C = M2Share.Config.GlobalVal[n14 - 100];
                             }
                             else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
@@ -470,7 +470,7 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 400, 499))
                             {
-                                n3C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                                n3C = M2Share.Config.GlobaDyMval[n14 - 400];
                             }
                             else if (HUtil32.RangeInDefined(n14, 500, 599))
                             {
@@ -482,15 +482,15 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 700, 799))
                             {
-                                s01 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                                s01 = M2Share.Config.GlobalAVal[n14 - 700];
                             }
                             else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                             {
-                                n3C = M2Share.g_Config.GlobalVal[n14 - 700];
+                                n3C = M2Share.Config.GlobalVal[n14 - 700];
                             }
                             else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                             {
-                                s01 = M2Share.g_Config.GlobalAVal[n14 - 1100];
+                                s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                             }
                             else
                             {
@@ -559,7 +559,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
                         {
-                            n3C = M2Share.g_Config.GlobalVal[n14 - 100];
+                            n3C = M2Share.Config.GlobalVal[n14 - 100];
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
                         {
@@ -571,7 +571,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
                         {
-                            n3C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                            n3C = M2Share.Config.GlobaDyMval[n14 - 400];
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
                         {
@@ -583,15 +583,15 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
-                            s01 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                            s01 = M2Share.Config.GlobalAVal[n14 - 700];
                         }
                         else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                         {
-                            n3C = M2Share.g_Config.GlobalVal[n14 - 700];
+                            n3C = M2Share.Config.GlobalVal[n14 - 700];
                         }
                         else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                         {
-                            s01 = M2Share.g_Config.GlobalAVal[n14 - 1100];
+                            s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                         }
                         else
                         {
@@ -626,11 +626,11 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 100] += n3C;
+                            M2Share.Config.GlobalVal[n14 - 100] += n3C;
                         }
                         else
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 100]++;
+                            M2Share.Config.GlobalVal[n14 - 100]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
@@ -659,11 +659,11 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            M2Share.g_Config.GlobaDyMval[n14 - 400] += n3C;
+                            M2Share.Config.GlobaDyMval[n14 - 400] += n3C;
                         }
                         else
                         {
-                            M2Share.g_Config.GlobaDyMval[n14 - 400]++;
+                            M2Share.Config.GlobaDyMval[n14 - 400]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
@@ -683,22 +683,22 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        M2Share.g_Config.GlobalAVal[n14 - 700] = M2Share.g_Config.GlobalAVal[n14 - 700] + s01;
+                        M2Share.Config.GlobalAVal[n14 - 700] = M2Share.Config.GlobalAVal[n14 - 700] + s01;
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                     {
                         if (n3C > 1)
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 700] += n3C;
+                            M2Share.Config.GlobalVal[n14 - 700] += n3C;
                         }
                         else
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 700]++;
+                            M2Share.Config.GlobalVal[n14 - 700]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                     {
-                        M2Share.g_Config.GlobalAVal[n14 - 1100] = M2Share.g_Config.GlobalAVal[n14 - 1100] + s01;
+                        M2Share.Config.GlobalAVal[n14 - 1100] = M2Share.Config.GlobalAVal[n14 - 1100] + s01;
                     }
                     else
                     {
@@ -807,11 +807,11 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 100] -= n3C;
+                                M2Share.Config.GlobalVal[n14 - 100] -= n3C;
                             }
                             else
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 100] -= 1;
+                                M2Share.Config.GlobalVal[n14 - 100] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
@@ -840,11 +840,11 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                M2Share.g_Config.GlobaDyMval[n14 - 400] -= n3C;
+                                M2Share.Config.GlobaDyMval[n14 - 400] -= n3C;
                             }
                             else
                             {
-                                M2Share.g_Config.GlobaDyMval[n14 - 400] -= 1;
+                                M2Share.Config.GlobaDyMval[n14 - 400] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
@@ -867,28 +867,28 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
-                            n10 = M2Share.g_Config.GlobalAVal[n14 - 700].IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                            s02 = M2Share.g_Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
-                            s03 = M2Share.g_Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.g_Config.GlobalAVal[n14 - 700].Length);
-                            M2Share.g_Config.GlobalAVal[n14 - 700] = s02 + s03;
+                            n10 = M2Share.Config.GlobalAVal[n14 - 700].IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            s02 = M2Share.Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
+                            s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
+                            M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
                         }
                         else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                         {
                             if (n3C > 1)
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 700] -= n3C;
+                                M2Share.Config.GlobalVal[n14 - 700] -= n3C;
                             }
                             else
                             {
-                                M2Share.g_Config.GlobalVal[n14 - 700] -= 1;
+                                M2Share.Config.GlobalVal[n14 - 700] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                         {
-                            n10 = M2Share.g_Config.GlobalAVal[n14 - 1100].IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                            s02 = M2Share.g_Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
-                            s03 = M2Share.g_Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.g_Config.GlobalAVal[n14 - 1100].Length);
-                            M2Share.g_Config.GlobalAVal[n14 - 1100] = s02 + s03;
+                            n10 = M2Share.Config.GlobalAVal[n14 - 1100].IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            s02 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
+                            s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
+                            M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
                         }
                         else
                         {
@@ -916,7 +916,7 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 100, 199))
                             {
-                                n3C = M2Share.g_Config.GlobalVal[n14 - 100];
+                                n3C = M2Share.Config.GlobalVal[n14 - 100];
                             }
                             else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
@@ -928,7 +928,7 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 400, 499))
                             {
-                                n3C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                                n3C = M2Share.Config.GlobaDyMval[n14 - 400];
                             }
                             else if (HUtil32.RangeInDefined(n14, 500, 599))
                             {
@@ -940,15 +940,15 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 700, 799))
                             {
-                                s01 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                                s01 = M2Share.Config.GlobalAVal[n14 - 700];
                             }
                             else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                             {
-                                n3C = M2Share.g_Config.GlobalVal[n14 - 700];
+                                n3C = M2Share.Config.GlobalVal[n14 - 700];
                             }
                             else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                             {
-                                s01 = M2Share.g_Config.GlobalAVal[n14 - 1100];
+                                s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                             }
                             else
                             {
@@ -1020,7 +1020,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
                         {
-                            n3C = M2Share.g_Config.GlobalVal[n14 - 100];
+                            n3C = M2Share.Config.GlobalVal[n14 - 100];
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
                         {
@@ -1032,7 +1032,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
                         {
-                            n3C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                            n3C = M2Share.Config.GlobaDyMval[n14 - 400];
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
                         {
@@ -1044,15 +1044,15 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
-                            s01 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                            s01 = M2Share.Config.GlobalAVal[n14 - 700];
                         }
                         else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                         {
-                            n3C = M2Share.g_Config.GlobalVal[n14 - 700];
+                            n3C = M2Share.Config.GlobalVal[n14 - 700];
                         }
                         else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                         {
-                            s01 = M2Share.g_Config.GlobalAVal[n14 - 1100];
+                            s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                         }
                         else
                         {
@@ -1087,11 +1087,11 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 100] -= n3C;
+                            M2Share.Config.GlobalVal[n14 - 100] -= n3C;
                         }
                         else
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 100] -= 1;
+                            M2Share.Config.GlobalVal[n14 - 100] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
@@ -1120,11 +1120,11 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            M2Share.g_Config.GlobaDyMval[n14 - 400] -= n3C;
+                            M2Share.Config.GlobaDyMval[n14 - 400] -= n3C;
                         }
                         else
                         {
-                            M2Share.g_Config.GlobaDyMval[n14 - 400] -= 1;
+                            M2Share.Config.GlobaDyMval[n14 - 400] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
@@ -1147,28 +1147,28 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        n10 = M2Share.g_Config.GlobalAVal[n14 - 700].IndexOf(s01);
-                        s02 = M2Share.g_Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
-                        s03 = M2Share.g_Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.g_Config.GlobalAVal[n14 - 700].Length);
-                        M2Share.g_Config.GlobalAVal[n14 - 700] = s02 + s03;
+                        n10 = M2Share.Config.GlobalAVal[n14 - 700].IndexOf(s01);
+                        s02 = M2Share.Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
+                        s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
+                        M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
                     {
                         if (n3C > 1)
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 700] -= n3C;
+                            M2Share.Config.GlobalVal[n14 - 700] -= n3C;
                         }
                         else
                         {
-                            M2Share.g_Config.GlobalVal[n14 - 700] -= 1;
+                            M2Share.Config.GlobalVal[n14 - 700] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                     {
-                        n10 = M2Share.g_Config.GlobalAVal[n14 - 1100].IndexOf(s01);
-                        s02 = M2Share.g_Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
-                        s03 = M2Share.g_Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.g_Config.GlobalAVal[n14 - 1100].Length);
-                        M2Share.g_Config.GlobalAVal[n14 - 1100] = s02 + s03;
+                        n10 = M2Share.Config.GlobalAVal[n14 - 1100].IndexOf(s01);
+                        s02 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
+                        s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
+                        M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
                     }
                     else
                     {
@@ -1204,7 +1204,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
-                        n18 = M2Share.g_Config.GlobalVal[n14 - 100];
+                        n18 = M2Share.Config.GlobalVal[n14 - 100];
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
@@ -1216,7 +1216,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
-                        n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                        n18 = M2Share.Config.GlobaDyMval[n14 - 400];
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
@@ -1224,7 +1224,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
-                        n18 = M2Share.g_Config.GlobalVal[n14 - 700];
+                        n18 = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else
                     {
@@ -1253,7 +1253,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
-                        n1C = M2Share.g_Config.GlobalVal[n14 - 100];
+                        n1C = M2Share.Config.GlobalVal[n14 - 100];
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
@@ -1265,7 +1265,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
-                        n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                        n1C = M2Share.Config.GlobaDyMval[n14 - 400];
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
@@ -1273,7 +1273,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
-                        n1C = M2Share.g_Config.GlobalVal[n14 - 700];
+                        n1C = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else
                     {
@@ -1306,7 +1306,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 100] = n18 / n1C;
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -1318,7 +1318,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    M2Share.g_Config.GlobaDyMval[n14 - 400] = n18 / n1C;
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -1326,7 +1326,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 700] = n18 / n1C;
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 / n1C;
                 }
             }
         }
@@ -1352,7 +1352,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
-                        n18 = M2Share.g_Config.GlobalVal[n14 - 100];
+                        n18 = M2Share.Config.GlobalVal[n14 - 100];
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
@@ -1364,7 +1364,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
-                        n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                        n18 = M2Share.Config.GlobaDyMval[n14 - 400];
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
@@ -1376,15 +1376,15 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        n18 = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 700], 1);
+                        n18 = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//A变量
                     {
-                        n18 = M2Share.g_Config.GlobalVal[n14 - 700];
+                        n18 = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599))//G变量
                     {
-                        n18 = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 1100], 1);
+                        n18 = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else
                     {
@@ -1413,7 +1413,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
-                        n1C = M2Share.g_Config.GlobalVal[n14 - 100];
+                        n1C = M2Share.Config.GlobalVal[n14 - 100];
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
@@ -1425,7 +1425,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
-                        n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                        n1C = M2Share.Config.GlobaDyMval[n14 - 400];
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
@@ -1437,15 +1437,15 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        n1C = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 700], 1);
+                        n1C = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199)) //G变量
                     {
-                        n1C = M2Share.g_Config.GlobalVal[n14 - 700];
+                        n1C = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量
                     {
-                        n1C = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 1100], 1);
+                        n1C = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else
                     {
@@ -1478,7 +1478,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 100] = n18 * n1C;
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -1490,7 +1490,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    M2Share.g_Config.GlobaDyMval[n14 - 400] = n18 * n1C;
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -1502,15 +1502,15 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
-                    M2Share.g_Config.GlobalAVal[n14 - 700] = (n18 * n1C).ToString();
+                    M2Share.Config.GlobalAVal[n14 - 700] = (n18 * n1C).ToString();
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199)) //G变量
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 700] = n18 * n1C;
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量(100-499)
                 {
-                    M2Share.g_Config.GlobalAVal[n14 - 1100] = (n18 * n1C).ToString();
+                    M2Share.Config.GlobalAVal[n14 - 1100] = (n18 * n1C).ToString();
                 }
             }
         }
@@ -1536,7 +1536,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
-                        n18 = M2Share.g_Config.GlobalVal[n14 - 100];
+                        n18 = M2Share.Config.GlobalVal[n14 - 100];
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
@@ -1548,7 +1548,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
-                        n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                        n18 = M2Share.Config.GlobaDyMval[n14 - 400];
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
@@ -1556,7 +1556,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
-                        n18 = M2Share.g_Config.GlobalVal[n14 - 700];
+                        n18 = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else
                     {
@@ -1585,7 +1585,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
-                        n1C = M2Share.g_Config.GlobalVal[n14 - 100];
+                        n1C = M2Share.Config.GlobalVal[n14 - 100];
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
@@ -1597,7 +1597,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
-                        n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                        n1C = M2Share.Config.GlobaDyMval[n14 - 400];
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
@@ -1605,7 +1605,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
-                        n1C = M2Share.g_Config.GlobalVal[n14 - 700];
+                        n1C = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else
                     {
@@ -1638,7 +1638,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 100] = n18 / n1C * 100;
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -1650,7 +1650,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    M2Share.g_Config.GlobaDyMval[n14 - 400] = n18 / n1C * 100;
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -1662,15 +1662,15 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
-                    M2Share.g_Config.GlobalAVal[n14 - 700] = $"{n18 / n1C * 100}%";
+                    M2Share.Config.GlobalAVal[n14 - 700] = $"{n18 / n1C * 100}%";
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 700] = n18 / n1C * 100;
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量
                 {
-                    M2Share.g_Config.GlobalAVal[n14 - 1100] = $"{n18 / n1C * 100}%";
+                    M2Share.Config.GlobalAVal[n14 - 1100] = $"{n18 / n1C * 100}%";
                 }
             }
         }
@@ -1699,7 +1699,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
-                    n18 = M2Share.g_Config.GlobalVal[n14 - 100];
+                    n18 = M2Share.Config.GlobalVal[n14 - 100];
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -1711,7 +1711,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                    n18 = M2Share.Config.GlobaDyMval[n14 - 400];
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -1723,15 +1723,15 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
-                    s44 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                    s44 = M2Share.Config.GlobalAVal[n14 - 700];
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))
                 {
-                    n18 = M2Share.g_Config.GlobalVal[n14 - 700];//G变量
+                    n18 = M2Share.Config.GlobalVal[n14 - 700];//G变量
                 }
                 else if (HUtil32.RangeInDefined(n14, 1200, 1599))
                 {
-                    s44 = M2Share.g_Config.GlobalAVal[n14 - 1100];//A变量
+                    s44 = M2Share.Config.GlobalAVal[n14 - 1100];//A变量
                 }
                 else
                 {
@@ -1760,7 +1760,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
-                    n1C = M2Share.g_Config.GlobalVal[n14 - 100];
+                    n1C = M2Share.Config.GlobalVal[n14 - 100];
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -1772,7 +1772,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                    n1C = M2Share.Config.GlobaDyMval[n14 - 400];
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -1784,15 +1784,15 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
-                    s48 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                    s48 = M2Share.Config.GlobalAVal[n14 - 700];
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))
                 {
-                    n1C = M2Share.g_Config.GlobalVal[n14 - 700];//G变量
+                    n1C = M2Share.Config.GlobalVal[n14 - 700];//G变量
                 }
                 else if (HUtil32.RangeInDefined(n14, 1200, 1599))
                 {
-                    s48 = M2Share.g_Config.GlobalAVal[n14 - 1100];//A变量
+                    s48 = M2Share.Config.GlobalAVal[n14 - 1100];//A变量
                 }
                 else
                 {
@@ -1816,7 +1816,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 100] = n18 + n1C;
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -1828,7 +1828,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    M2Share.g_Config.GlobaDyMval[n14 - 400] = n18 + n1C;
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -1840,15 +1840,15 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
-                    M2Share.g_Config.GlobalAVal[n14 - 700] = s44 + s48;
+                    M2Share.Config.GlobalAVal[n14 - 700] = s44 + s48;
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))
                 {
-                    M2Share.g_Config.GlobalVal[n14 - 700] = n18 + n1C;//G变量
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 + n1C;//G变量
                 }
                 else if (HUtil32.RangeInDefined(n14, 1200, 1599))
                 {
-                    M2Share.g_Config.GlobalAVal[n14 - 1100] = s44 + s48;//A变量
+                    M2Share.Config.GlobalAVal[n14 - 1100] = s44 + s48;//A变量
                 }
             }
         }
@@ -1878,97 +1878,97 @@ namespace GameSvr.Npc
             switch (sVariable)
             {
                 case "$SERVERNAME":
-                    sValue = M2Share.g_Config.sServerName;
+                    sValue = M2Share.Config.sServerName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$SERVERIP":
-                    sValue = M2Share.g_Config.sServerIPaddr;
+                    sValue = M2Share.Config.sServerIPaddr;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEBSITE":
-                    sValue = M2Share.g_Config.sWebSite;
+                    sValue = M2Share.Config.sWebSite;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BBSSITE":
-                    sValue = M2Share.g_Config.sBbsSite;
+                    sValue = M2Share.Config.sBbsSite;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CLIENTDOWNLOAD":
-                    sValue = M2Share.g_Config.sClientDownload;
+                    sValue = M2Share.Config.sClientDownload;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$QQ":
-                    sValue = M2Share.g_Config.sQQ;
+                    sValue = M2Share.Config.sQQ;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$PHONE":
-                    sValue = M2Share.g_Config.sPhone;
+                    sValue = M2Share.Config.sPhone;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT0":
-                    sValue = M2Share.g_Config.sBankAccount0;
+                    sValue = M2Share.Config.sBankAccount0;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT1":
-                    sValue = M2Share.g_Config.sBankAccount1;
+                    sValue = M2Share.Config.sBankAccount1;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT2":
-                    sValue = M2Share.g_Config.sBankAccount2;
+                    sValue = M2Share.Config.sBankAccount2;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT3":
-                    sValue = M2Share.g_Config.sBankAccount3;
+                    sValue = M2Share.Config.sBankAccount3;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT4":
-                    sValue = M2Share.g_Config.sBankAccount4;
+                    sValue = M2Share.Config.sBankAccount4;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT5":
-                    sValue = M2Share.g_Config.sBankAccount5;
+                    sValue = M2Share.Config.sBankAccount5;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT6":
-                    sValue = M2Share.g_Config.sBankAccount6;
+                    sValue = M2Share.Config.sBankAccount6;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT7":
-                    sValue = M2Share.g_Config.sBankAccount7;
+                    sValue = M2Share.Config.sBankAccount7;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT8":
-                    sValue = M2Share.g_Config.sBankAccount8;
+                    sValue = M2Share.Config.sBankAccount8;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT9":
-                    sValue = M2Share.g_Config.sBankAccount9;
+                    sValue = M2Share.Config.sBankAccount9;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$GAMEGOLDNAME":
-                    sValue = M2Share.g_Config.sGameGoldName;
+                    sValue = M2Share.Config.sGameGoldName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$GAMEPOINTNAME":
-                    sValue = M2Share.g_Config.sGamePointName;
+                    sValue = M2Share.Config.sGamePointName;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2007,7 +2007,7 @@ namespace GameSvr.Npc
                         // 申请攻城的日期
                         if (Castle == null)
                         {
-                            Castle = M2Share.CastleManager.GetCastle(0);
+                            Castle = M2Share.CastleMgr.GetCastle(0);
                         }
                         if (Castle != null)
                         {
@@ -2500,7 +2500,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
                         {
-                            M2Share.g_Config.GlobalVal[n100 - 100] = nValue;
+                            M2Share.Config.GlobalVal[n100 - 100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
@@ -2515,7 +2515,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
                         {
-                            M2Share.g_Config.GlobaDyMval[n100 - 400] = nValue;
+                            M2Share.Config.GlobaDyMval[n100 - 400] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
@@ -2530,17 +2530,17 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
                         {
-                            M2Share.g_Config.GlobalAVal[n100 - 700] = (nValue).ToString();
+                            M2Share.Config.GlobalAVal[n100 - 700] = (nValue).ToString();
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
                         {
-                            M2Share.g_Config.GlobalVal[n100 - 700] = nValue;
+                            M2Share.Config.GlobalVal[n100 - 700] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量
                         {
-                            M2Share.g_Config.GlobalAVal[n100 - 1100] = (nValue).ToString();
+                            M2Share.Config.GlobalAVal[n100 - 1100] = (nValue).ToString();
                             result = true;
                         }
                         else
@@ -2556,7 +2556,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
                         {
-                            M2Share.g_Config.GlobalVal[n100 - 100] = HUtil32.Str_ToInt(sValue, 0);
+                            M2Share.Config.GlobalVal[n100 - 100] = HUtil32.Str_ToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
@@ -2571,7 +2571,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
                         {
-                            M2Share.g_Config.GlobaDyMval[n100 - 400] = HUtil32.Str_ToInt(sValue, 0);
+                            M2Share.Config.GlobaDyMval[n100 - 400] = HUtil32.Str_ToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
@@ -2586,17 +2586,17 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
                         {
-                            M2Share.g_Config.GlobalAVal[n100 - 700] = sValue;
+                            M2Share.Config.GlobalAVal[n100 - 700] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
                         {
-                            M2Share.g_Config.GlobalVal[n100 - 700] = HUtil32.Str_ToInt(sValue, 0);
+                            M2Share.Config.GlobalVal[n100 - 700] = HUtil32.Str_ToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量
                         {
-                            M2Share.g_Config.GlobalAVal[n100 - 1100] = sValue;
+                            M2Share.Config.GlobalAVal[n100 - 1100] = sValue;
                             result = true;
                         }
                         else
@@ -2612,7 +2612,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
                         {
-                            M2Share.g_Config.GlobalVal[n100 - 100] = nValue;
+                            M2Share.Config.GlobalVal[n100 - 100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
@@ -2627,7 +2627,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
                         {
-                            M2Share.g_Config.GlobaDyMval[n100 - 400] = nValue;
+                            M2Share.Config.GlobaDyMval[n100 - 400] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
@@ -2642,17 +2642,17 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
                         {
-                            M2Share.g_Config.GlobalAVal[n100 - 700] = sValue;
+                            M2Share.Config.GlobalAVal[n100 - 700] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
                         {
-                            M2Share.g_Config.GlobalVal[n100 - 700] = nValue;
+                            M2Share.Config.GlobalVal[n100 - 700] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量
                         {
-                            M2Share.g_Config.GlobalAVal[n100 - 1100] = sValue;
+                            M2Share.Config.GlobalAVal[n100 - 1100] = sValue;
                             result = true;
                         }
                         else
@@ -2686,7 +2686,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 100, 199))
                 {
-                    nValue = M2Share.g_Config.GlobalVal[n100 - 100];
+                    nValue = M2Share.Config.GlobalVal[n100 - 100];
                     nDataType = 1;
                     result = true;
                 }
@@ -2704,7 +2704,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 400, 499))
                 {
-                    nValue = M2Share.g_Config.GlobaDyMval[n100 - 400];
+                    nValue = M2Share.Config.GlobaDyMval[n100 - 400];
                     nDataType = 1;
                     result = true;
                 }
@@ -2722,19 +2722,19 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 700, 799))
                 {
-                    sValue = M2Share.g_Config.GlobalAVal[n100 - 700];
+                    sValue = M2Share.Config.GlobalAVal[n100 - 700];
                     nDataType = 0;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 800, 1199))//G变量
                 {
-                    nValue = M2Share.g_Config.GlobalVal[n100 - 700];
+                    nValue = M2Share.Config.GlobalVal[n100 - 700];
                     nDataType = 1;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 1200, 1599))//A变量
                 {
-                    sValue = M2Share.g_Config.GlobalAVal[n100 - 1100];
+                    sValue = M2Share.Config.GlobalAVal[n100 - 1100];
                     nDataType = 0;
                     result = true;
                 }

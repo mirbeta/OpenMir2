@@ -26,12 +26,12 @@ namespace GameSvr.Command.Commands
                     return;
                 }
             }
-            if (M2Share.nServerIndex != 0)
+            if (M2Share.ServerIndex != 0)
             {
                 PlayObject.SysMsg(GameCommandConst.g_sGameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Guild = M2Share.GuildManager.FindGuild(sParam1);
+            var Guild = M2Share.GuildMgr.FindGuild(sParam1);
             if (Guild == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);

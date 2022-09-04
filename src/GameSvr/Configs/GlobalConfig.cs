@@ -11,28 +11,28 @@ namespace GameSvr.Configs
 
         public void LoadConfig()
         {
-            for (var i = 0; i < M2Share.g_Config.GlobalVal.Length; i++)
+            for (var i = 0; i < M2Share.Config.GlobalVal.Length; i++)
             {
                 var nLoadInteger = ReadInteger("Integer", "GlobalVal" + i, -1);
                 if (nLoadInteger < 0)
                 {
-                    WriteInteger("Integer", "GlobalVal" + i, M2Share.g_Config.GlobalVal[i]);
+                    WriteInteger("Integer", "GlobalVal" + i, M2Share.Config.GlobalVal[i]);
                 }
                 else
                 {
-                    M2Share.g_Config.GlobalVal[i] = nLoadInteger;
+                    M2Share.Config.GlobalVal[i] = nLoadInteger;
                 }
             }
-            for (var i = 0; i < M2Share.g_Config.GlobalAVal.Length; i++)
+            for (var i = 0; i < M2Share.Config.GlobalAVal.Length; i++)
             {
                 var sLoadString = ReadString("String", "GlobalStrVal" + i, "");
                 if (string.IsNullOrEmpty(sLoadString))
                 {
-                    WriteString("String", "GlobalStrVal" + i, M2Share.g_Config.GlobalAVal[i]);
+                    WriteString("String", "GlobalStrVal" + i, M2Share.Config.GlobalAVal[i]);
                 }
                 else
                 {
-                    M2Share.g_Config.GlobalAVal[i] = sLoadString;
+                    M2Share.Config.GlobalAVal[i] = sLoadString;
                 }
             }
         }

@@ -581,8 +581,14 @@ namespace GameSvr.Configs
         public int nGuildMemberMaxLimit;
         public int nGuildNameLen;
         public int nCastleNameLen;
-        public int nAttackPosionRate;
-        public int nAttackPosionTime;
+        /// <summary>
+        /// 中毒几率
+        /// </summary>
+        public int AttackPosionRate;
+        /// <summary>
+        /// 中毒持续时间
+        /// </summary>
+        public ushort AttackPosionTime;
         /// <summary>
         /// 复活间隔时间
         /// </summary>
@@ -1429,8 +1435,8 @@ namespace GameSvr.Configs
             nGuildRankNameLen = 16;
             nGuildMemberMaxLimit = 200;
             nGuildNameLen = 16;
-            nAttackPosionRate = 5;
-            nAttackPosionTime = 5;
+            AttackPosionRate = 5;
+            AttackPosionTime = 5;
             dwRevivalTime = 60 * 1000; //复活间隔时间
             boUserMoveCanDupObj = false;
             boUserMoveCanOnItem = true;

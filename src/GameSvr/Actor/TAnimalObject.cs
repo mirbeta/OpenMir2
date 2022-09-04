@@ -35,17 +35,11 @@ namespace GameSvr.Actor
 
         protected virtual void GotoTargetXY()
         {
-            byte nDir;
-            int n10;
-            int n14;
-            int n20;
-            int nOldX;
-            int nOldY;
             if (this.CurrX != TargetX || this.CurrY != TargetY)
             {
-                n10 = TargetX;
-                n14 = TargetY;
-                nDir = Grobal2.DR_DOWN;
+                int n10 = TargetX;
+                int n14 = TargetY;
+                byte nDir = Grobal2.DR_DOWN;
                 if (n10 > this.CurrX)
                 {
                     nDir = Grobal2.DR_RIGHT;
@@ -84,10 +78,10 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                nOldX = this.CurrX;
-                nOldY = this.CurrY;
+                int nOldX = this.CurrX;
+                int nOldY = this.CurrY;
                 this.WalkTo(nDir, false);
-                n20 = M2Share.RandomNumber.Random(3);
+                int n20 = M2Share.RandomNumber.Random(3);
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if (nOldX == this.CurrX && nOldY == this.CurrY)
@@ -128,7 +122,7 @@ namespace GameSvr.Actor
                     {
                         this.Master.SetPKFlag(struckObject);
                     }
-                    if (M2Share.g_Config.boMonSayMsg)
+                    if (M2Share.Config.boMonSayMsg)
                     {
                         this.MonsterSayMsg(struckObject, MonStatus.UnderFire);
                     }

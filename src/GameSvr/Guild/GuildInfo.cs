@@ -114,7 +114,7 @@ namespace GameSvr.Guild
             m_nFlourishing = 0;
             m_nChiefItemCount = 0;
             m_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
-            var sFileName = M2Share.g_Config.sGuildDir + sName + ".ini";
+            var sFileName = M2Share.Config.sGuildDir + sName + ".ini";
             _guildConf = new GuildConf(sName, sFileName);
         }
 
@@ -214,7 +214,7 @@ namespace GameSvr.Guild
             TWarGuild GuildWar;
             GuildInfo Guild;
             TGuildRank GuildRank = null;
-            var sFileName = Path.Combine(M2Share.g_Config.sGuildDir, sGuildFileName);
+            var sFileName = Path.Combine(M2Share.Config.sGuildDir, sGuildFileName);
             if (!File.Exists(sFileName))
             {
                 return false;
@@ -241,19 +241,19 @@ namespace GameSvr.Guild
                 }
                 if (s18[0] != '+')
                 {
-                    if (s18 == M2Share.g_Config.sGuildNotice)
+                    if (s18 == M2Share.Config.sGuildNotice)
                     {
                         n28 = 1;
                     }
-                    if (s18 == M2Share.g_Config.sGuildWar)
+                    if (s18 == M2Share.Config.sGuildWar)
                     {
                         n28 = 2;
                     }
-                    if (s18 == M2Share.g_Config.sGuildAll)
+                    if (s18 == M2Share.Config.sGuildAll)
                     {
                         n28 = 3;
                     }
-                    if (s18 == M2Share.g_Config.sGuildMember)
+                    if (s18 == M2Share.Config.sGuildMember)
                     {
                         n28 = 4;
                     }
@@ -283,7 +283,7 @@ namespace GameSvr.Guild
                             }
                             GuildWar = new TWarGuild
                             {
-                                Guild = M2Share.GuildManager.FindGuild(s1C)
+                                Guild = M2Share.GuildMgr.FindGuild(s1C)
                             };
                             if (GuildWar.Guild != null)
                             {
@@ -306,7 +306,7 @@ namespace GameSvr.Guild
                             {
                                 break;
                             }
-                            Guild = M2Share.GuildManager.FindGuild(s1C);
+                            Guild = M2Share.GuildMgr.FindGuild(s1C);
                             if (Guild != null)
                             {
                                 GuildAllList.Add(Guild);
@@ -318,7 +318,7 @@ namespace GameSvr.Guild
                         {
                             if (s24.Length > 30)
                             {
-                                s24 = s24.Substring(0, M2Share.g_Config.nGuildRankNameLen);//限制职倍的长度
+                                s24 = s24.Substring(0, M2Share.Config.nGuildRankNameLen);//限制职倍的长度
                             }
                             if (GuildRank == null)
                             {
@@ -371,14 +371,14 @@ namespace GameSvr.Guild
 
         public void SaveGuildInfoFile()
         {
-            if (M2Share.nServerIndex == 0)
+            if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(M2Share.g_Config.sGuildDir + sGuildName + ".txt");
+                SaveGuildFile(M2Share.Config.sGuildDir + sGuildName + ".txt");
                 SaveGuildConfig();
             }
             else
             {
-                SaveGuildFile(M2Share.g_Config.sGuildDir + sGuildName + '.' + M2Share.nServerIndex);
+                SaveGuildFile(M2Share.Config.sGuildDir + sGuildName + '.' + M2Share.ServerIndex);
             }
         }
 
@@ -390,7 +390,7 @@ namespace GameSvr.Guild
         private void SaveGuildFile(string sFileName)
         {
             StringList SaveList = new StringList();
-            SaveList.Add(M2Share.g_Config.sGuildNotice);
+            SaveList.Add(M2Share.Config.sGuildNotice);
             TWarGuild WarGuild = null;
             long n14 = 0;
             TGuildRank GuildRank = null;
@@ -399,7 +399,7 @@ namespace GameSvr.Guild
                 SaveList.Add("+" + NoticeList[i]);
             }
             SaveList.Add(" ");
-            SaveList.Add(M2Share.g_Config.sGuildWar);
+            SaveList.Add(M2Share.Config.sGuildWar);
             for (var i = 0; i < GuildWarList.Count; i++)
             {
                 WarGuild = GuildWarList[i];
@@ -411,13 +411,13 @@ namespace GameSvr.Guild
                 SaveList.Add("+" + GuildWarList[i].Guild.sGuildName + ' ' + n14);
             }
             SaveList.Add(" ");
-            SaveList.Add(M2Share.g_Config.sGuildAll);
+            SaveList.Add(M2Share.Config.sGuildAll);
             for (var i = 0; i < GuildAllList.Count; i++)
             {
                 SaveList.Add("+" + GuildAllList[i]);
             }
             SaveList.Add(" ");
-            SaveList.Add(M2Share.g_Config.sGuildMember);
+            SaveList.Add(M2Share.Config.sGuildMember);
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
@@ -443,9 +443,9 @@ namespace GameSvr.Guild
             TBaseObject BaseObject;
             try
             {
-                if (M2Share.g_Config.boShowPreFixMsg)
+                if (M2Share.Config.boShowPreFixMsg)
                 {
-                    sMsg = M2Share.g_Config.sGuildMsgPreFix + sMsg;
+                    sMsg = M2Share.Config.sGuildMsgPreFix + sMsg;
                 }
                 for (var i = 0; i < m_RankList.Count; i++)
                 {
@@ -459,7 +459,7 @@ namespace GameSvr.Guild
                         }
                         if (BaseObject.BanGuildChat)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_GUILDMESSAGE, 0, M2Share.g_Config.btGuildMsgFColor, M2Share.g_Config.btGuildMsgBColor, 0, sMsg);
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_GUILDMESSAGE, 0, M2Share.Config.btGuildMsgFColor, M2Share.Config.btGuildMsgBColor, 0, sMsg);
                         }
                     }
                 }
@@ -479,7 +479,7 @@ namespace GameSvr.Guild
                 GuildRank = new TGuildRank
                 {
                     nRankNo = 1,
-                    sRankName = M2Share.g_Config.sGuildChief,
+                    sRankName = M2Share.Config.sGuildChief,
                     MemberList = new List<TGuildMember>()
                 };
                 var playObject = M2Share.UserEngine.GetPlayObject(sChief);
@@ -602,9 +602,9 @@ namespace GameSvr.Guild
         {
             PlayObject PlayObject;
             TGuildRank GuildRank;
-            if (M2Share.nServerIndex == 0)
+            if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(M2Share.g_Config.sGuildDir, sGuildName, '.' + HUtil32.GetTickCount() + ".bak"));
+                SaveGuildFile(Path.Combine(M2Share.Config.sGuildDir, sGuildName, '.' + HUtil32.GetTickCount() + ".bak"));
             }
             for (var i = 0; i < m_RankList.Count; i++)
             {
@@ -651,7 +651,7 @@ namespace GameSvr.Guild
                 GuildRank18 = new TGuildRank
                 {
                     nRankNo = 99,
-                    sRankName = M2Share.g_Config.sGuildMemberRank,
+                    sRankName = M2Share.Config.sGuildMemberRank,
                     MemberList = new List<TGuildMember>()
                 };
                 m_RankList.Add(GuildRank18);
@@ -1046,7 +1046,7 @@ namespace GameSvr.Guild
                         {
                             WarGuild = GuildWarList[i];
                             WarGuild.dwWarTick = HUtil32.GetTickCount();
-                            WarGuild.dwWarTime = M2Share.g_Config.dwGuildWarTime;// 10800000
+                            WarGuild.dwWarTime = M2Share.Config.dwGuildWarTime;// 10800000
                             SendGuildMsg("***" + Guild.sGuildName + "行会战争将持续三个小时。");
                             break;
                         }
@@ -1057,7 +1057,7 @@ namespace GameSvr.Guild
                         {
                             Guild = Guild,
                             dwWarTick = HUtil32.GetTickCount(),
-                            dwWarTime = M2Share.g_Config.dwGuildWarTime// 10800000
+                            dwWarTime = M2Share.Config.dwGuildWarTime// 10800000
                         };
                         GuildWarList.Add(WarGuild);
                         SendGuildMsg("***" + Guild.sGuildName + "行会战争开始(三个小时)");
@@ -1082,7 +1082,7 @@ namespace GameSvr.Guild
 
         private bool GetMemgerIsFull()
         {
-            return Count >= M2Share.g_Config.nGuildMemberMaxLimit;
+            return Count >= M2Share.Config.nGuildMemberMaxLimit;
         }
 
         public void StartTeamFight()

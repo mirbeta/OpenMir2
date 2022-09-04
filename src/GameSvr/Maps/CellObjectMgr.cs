@@ -7,6 +7,7 @@ namespace GameSvr.Maps
 {
     public class CellObjectMgr
     {
+        //todo 从当前地图获取地图对象，而不是统一管理
         private readonly ConcurrentDictionary<int, EntityId> _cellObject = new ConcurrentDictionary<int, EntityId>();
 
         public void Add(int cellId, EntityId cell)

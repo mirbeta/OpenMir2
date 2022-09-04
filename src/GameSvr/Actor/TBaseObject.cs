@@ -691,7 +691,7 @@ namespace GameSvr.Actor
             m_dwIncHealthSpellTick = HUtil32.GetTickCount();
             GreenPoisoningPoint = 0;
             FightZoneDieCount = 0;
-            GoldMax = M2Share.g_Config.nHumanMaxGold;
+            GoldMax = M2Share.Config.nHumanMaxGold;
             CharStatus = 0;
             m_nCharStatusEx = 0;
             m_wStatusTimeArr = new ushort[12];
@@ -1011,8 +1011,8 @@ namespace GameSvr.Actor
             switch (Job)
             {
                 case PlayJob.Taoist:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP + M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
-                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.Config.nLevelValueOfTaosHP + M2Share.Config.nLevelValueOfTaosHPRate) * nLevel));
+                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
                     Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 50 * nLevel));
                     if ((12 + HUtil32.Round((Abil.Level / 13) * Abil.Level)) > 255)
@@ -1032,7 +1032,7 @@ namespace GameSvr.Actor
                     Abil.MAC = HUtil32.MakeLong(n / 2, n + 1);
                     break;
                 case PlayJob.Wizard:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWizardHP + M2Share.g_Config.nLevelValueOfWizardHPRate) * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.Config.nLevelValueOfWizardHP + M2Share.Config.nLevelValueOfWizardHPRate) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5 * nLevel));
                     Abil.MaxWearWeight = (byte)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
@@ -1045,7 +1045,7 @@ namespace GameSvr.Actor
                     Abil.MAC = 0;
                     break;
                 case PlayJob.Warrior:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP + M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.Config.nLevelValueOfWarrHP + M2Share.Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
                     Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 20 * nLevel));
@@ -1207,7 +1207,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public int PKLevel()
+        public int PvpLevel()
         {
             return PkPoint / 100;
         }
@@ -1228,7 +1228,7 @@ namespace GameSvr.Actor
         private int CalcGetExp(int nLevel, int nExp)
         {
             int result;
-            if (M2Share.g_Config.boHighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
+            if (M2Share.Config.boHighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
             {
                 result = nExp;
             }
@@ -1253,13 +1253,13 @@ namespace GameSvr.Actor
             int tCount;
             if (SlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
             {
-                tCount = M2Share.g_Config.MonUpLvNeedKillCount[SlaveExpLevel];
+                tCount = M2Share.Config.MonUpLvNeedKillCount[SlaveExpLevel];
             }
             else
             {
                 tCount = 0;
             }
-            return (Abil.Level * M2Share.g_Config.nMonUpLvRate) - Abil.Level + M2Share.g_Config.nMonUpLvNeedKillBase + tCount;
+            return (Abil.Level * M2Share.Config.nMonUpLvRate) - Abil.Level + M2Share.Config.nMonUpLvNeedKillBase + tCount;
         }
 
         private void GainSlaveExp(int nLevel)
@@ -1283,7 +1283,7 @@ namespace GameSvr.Actor
             int nX = 0;
             int nY = 0;
             string s20;
-            int DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
+            int DropWide = HUtil32._MIN(M2Share.Config.nDropItemRage, 7);
             MapItem MapItem = new MapItem
             {
                 Name = Grobal2.sSTRING_GOLDNAME,
@@ -1360,11 +1360,11 @@ namespace GameSvr.Actor
 
         protected void IncPkPoint(int nPoint)
         {
-            var nOldPKLevel = PKLevel();
+            var nOldPKLevel = PvpLevel();
             PkPoint += nPoint;
-            if (PKLevel() != nOldPKLevel)
+            if (PvpLevel() != nOldPKLevel)
             {
-                if (PKLevel() <= 2)
+                if (PvpLevel() <= 2)
                 {
                     RefNameColor();
                 }
@@ -1373,13 +1373,13 @@ namespace GameSvr.Actor
 
         private void DecPKPoint(int nPoint)
         {
-            int nC = PKLevel();
+            int nC = PvpLevel();
             PkPoint -= nPoint;
             if (PkPoint < 0)
             {
                 PkPoint = 0;
             }
-            if ((PKLevel() != nC) && (nC > 0) && (nC <= 2))
+            if ((PvpLevel() != nC) && (nC > 0) && (nC <= 2))
             {
                 RefNameColor();
             }
@@ -1884,10 +1884,10 @@ namespace GameSvr.Actor
             int nOldX;
             int nOldY;
             bool bo21;
-            Envirnoment Envir = M2Share.MapManager.FindMap(sMap);
+            Envirnoment Envir = M2Share.MapMgr.FindMap(sMap);
             if (Envir != null)
             {
-                if (M2Share.nServerIndex == Envir.ServerIndex)
+                if (M2Share.ServerIndex == Envir.ServerIndex)
                 {
                     Envirnoment OldEnvir = this.Envir;
                     nOldX = CurrX;
@@ -2006,7 +2006,7 @@ namespace GameSvr.Actor
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
-            Envirnoment Envir = M2Share.MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);
             if (Envir != null)
             {
                 if (Envir.Height < 150)
@@ -2287,7 +2287,7 @@ namespace GameSvr.Actor
                     }
                     var nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
                     int nDura = 0;
-                    if (M2Share.g_Config.boDecLampDura)
+                    if (M2Share.Config.boDecLampDura)
                     {
                         nDura = UseItems[Grobal2.U_RIGHTHAND].Dura - 1;
                     }
@@ -2431,7 +2431,7 @@ namespace GameSvr.Actor
                 if ((nX >= 0) && (nX <= 4) && (nY >= 0) && (nY <= 4))
                 {
                     btDir = M2Share.GetNextDirection(CurrX, CurrY, BaseObject.CurrX, BaseObject.CurrY);
-                    if (M2Share.g_Config.SpitMap[btDir, nY, nX] == 1)
+                    if (M2Share.Config.SpitMap[btDir, nY, nX] == 1)
                     {
                         result = true;
                     }
@@ -2469,13 +2469,13 @@ namespace GameSvr.Actor
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    BonusTick = M2Share.g_Config.BonusAbilofWarr;
+                    BonusTick = M2Share.Config.BonusAbilofWarr;
                     break;
                 case PlayJob.Wizard:
-                    BonusTick = M2Share.g_Config.BonusAbilofWizard;
+                    BonusTick = M2Share.Config.BonusAbilofWizard;
                     break;
                 case PlayJob.Taoist:
-                    BonusTick = M2Share.g_Config.BonusAbilofTaos;
+                    BonusTick = M2Share.Config.BonusAbilofTaos;
                     break;
             }
 
@@ -2532,10 +2532,10 @@ namespace GameSvr.Actor
             switch (nIndex)
             {
                 case 1:
-                    Magic = M2Share.UserEngine.FindMagic(M2Share.g_Config.sFireBallSkill);
+                    Magic = M2Share.UserEngine.FindMagic(M2Share.Config.sFireBallSkill);
                     break;
                 case 2:
-                    Magic = M2Share.UserEngine.FindMagic(M2Share.g_Config.sHealSkill);
+                    Magic = M2Share.UserEngine.FindMagic(M2Share.Config.sHealSkill);
                     break;
             }
 
@@ -2584,7 +2584,7 @@ namespace GameSvr.Actor
 
         private void CheckPKStatus()
         {
-            if (PvpFlag && ((HUtil32.GetTickCount() - m_dwPKTick) > M2Share.g_Config.dwPKFlagTime)) // 60 * 1000
+            if (PvpFlag && ((HUtil32.GetTickCount() - m_dwPKTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
             {
                 PvpFlag = false;
                 RefNameColor();
@@ -2649,14 +2649,14 @@ namespace GameSvr.Actor
                 case 1:
                     if (Job != PlayJob.Wizard)
                     {
-                        DelItemSkill_DeleteSkill(M2Share.g_Config.sFireBallSkill);
+                        DelItemSkill_DeleteSkill(M2Share.Config.sFireBallSkill);
                     }
 
                     break;
                 case 2:
                     if (Job != PlayJob.Taoist)
                     {
-                        DelItemSkill_DeleteSkill(M2Share.g_Config.sHealSkill);
+                        DelItemSkill_DeleteSkill(M2Share.Config.sHealSkill);
                     }
 
                     break;
@@ -2744,11 +2744,11 @@ namespace GameSvr.Actor
             byte result = BaseObject.GetNamecolor();
             if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
             {
-                if (BaseObject.PKLevel() < 2)
+                if (BaseObject.PvpLevel() < 2)
                 {
                     if (BaseObject.PvpFlag)
                     {
-                        result = M2Share.g_Config.btPKFlagNameColor;
+                        result = M2Share.Config.btPKFlagNameColor;
                     }
 
                     var n10 = GetGuildRelation(this, BaseObject);
@@ -2756,10 +2756,10 @@ namespace GameSvr.Actor
                     {
                         case 1:
                         case 3:
-                            result = M2Share.g_Config.btAllyAndGuildNameColor;
+                            result = M2Share.Config.btAllyAndGuildNameColor;
                             break;
                         case 2:
-                            result = M2Share.g_Config.btWarGuildNameColor;
+                            result = M2Share.Config.btWarGuildNameColor;
                             break;
                     }
 
@@ -2767,19 +2767,19 @@ namespace GameSvr.Actor
                     {
                         if (MyGuild == BaseObject.MyGuild)
                         {
-                            result = M2Share.g_Config.btAllyAndGuildNameColor;
+                            result = M2Share.Config.btAllyAndGuildNameColor;
                         }
                         else
                         {
-                            result = M2Share.g_Config.btWarGuildNameColor;
+                            result = M2Share.Config.btWarGuildNameColor;
                         }
                     }
                 }
 
-                Castle = M2Share.CastleManager.InCastleWarArea(BaseObject);
+                Castle = M2Share.CastleMgr.InCastleWarArea(BaseObject);
                 if ((Castle != null) && Castle.m_boUnderWar && InFreePKArea && BaseObject.InFreePKArea)
                 {
-                    result = M2Share.g_Config.btInFreePKAreaNameColor;
+                    result = M2Share.Config.btInFreePKAreaNameColor;
                     GuildWarArea = true;
                     if (MyGuild == null)
                     {
@@ -2790,13 +2790,13 @@ namespace GameSvr.Actor
                     {
                         if ((MyGuild == BaseObject.MyGuild) || MyGuild.IsAllyGuild(BaseObject.MyGuild))
                         {
-                            result = M2Share.g_Config.btAllyAndGuildNameColor;
+                            result = M2Share.Config.btAllyAndGuildNameColor;
                         }
                         else
                         {
                             if (Castle.IsAttackGuild(BaseObject.MyGuild))
                             {
-                                result = M2Share.g_Config.btWarGuildNameColor;
+                                result = M2Share.Config.btWarGuildNameColor;
                             }
                         }
                     }
@@ -2806,13 +2806,13 @@ namespace GameSvr.Actor
                         {
                             if ((MyGuild == BaseObject.MyGuild) || MyGuild.IsAllyGuild(BaseObject.MyGuild))
                             {
-                                result = M2Share.g_Config.btAllyAndGuildNameColor;
+                                result = M2Share.Config.btAllyAndGuildNameColor;
                             }
                             else
                             {
                                 if (Castle.IsMember(BaseObject))
                                 {
-                                    result = M2Share.g_Config.btWarGuildNameColor;
+                                    result = M2Share.Config.btWarGuildNameColor;
                                 }
                             }
                         }
@@ -2821,7 +2821,7 @@ namespace GameSvr.Actor
             }
             else if (BaseObject.Race == Grobal2.RC_NPC) //增加NPC名字颜色单独控制
             {
-                result = M2Share.g_Config.NpcNameColor;
+                result = M2Share.Config.NpcNameColor;
                 if (BaseObject.CrazyMode) //疯狂模式(红名)
                 {
                     result = 0xF9;
@@ -2836,7 +2836,7 @@ namespace GameSvr.Actor
             {
                 if (BaseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
                 {
-                    result = M2Share.g_Config.SlaveColor[BaseObject.SlaveExpLevel];
+                    result = M2Share.Config.SlaveColor[BaseObject.SlaveExpLevel];
                 }
                 else
                 {
@@ -2862,11 +2862,11 @@ namespace GameSvr.Actor
             int result;
             if (nLevel <= Grobal2.MaxLevel)
             {
-                result = M2Share.g_Config.dwNeedExps[nLevel];
+                result = M2Share.Config.dwNeedExps[nLevel];
             }
             else
             {
-                result = M2Share.g_Config.dwNeedExps[M2Share.g_Config.dwNeedExps.Length];
+                result = M2Share.Config.dwNeedExps[M2Share.Config.dwNeedExps.Length];
             }
             return result;
         }
@@ -2874,13 +2874,13 @@ namespace GameSvr.Actor
         private byte GetNamecolor()
         {
             byte result = NameColor;
-            if (PKLevel() == 1)
+            if (PvpLevel() == 1)
             {
-                result = M2Share.g_Config.btPKLevel1NameColor;
+                result = M2Share.Config.btPKLevel1NameColor;
             }
-            if (PKLevel() >= 2)
+            if (PvpLevel() >= 2)
             {
-                result = M2Share.g_Config.btPKLevel2NameColor;
+                result = M2Share.Config.btPKLevel2NameColor;
             }
             return result;
         }
@@ -2889,7 +2889,7 @@ namespace GameSvr.Actor
         {
             if (!string.IsNullOrEmpty(sMsg))
             {
-                SendMsg(null, Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0,
+                SendMsg(null, Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0,
                     sMsg);
             }
         }
@@ -3321,10 +3321,10 @@ namespace GameSvr.Actor
                 {
                     SendRefMsgTick = HUtil32.GetTickCount();
                     VisibleHumanList.Clear();
-                    var nLX = (short)(CurrX - M2Share.g_Config.nSendRefMsgRange); // 12
-                    var nHX = (short)(CurrX + M2Share.g_Config.nSendRefMsgRange); // 12
-                    var nLY = (short)(CurrY - M2Share.g_Config.nSendRefMsgRange); // 12
-                    var nHY = (short)(CurrY + M2Share.g_Config.nSendRefMsgRange); // 12
+                    var nLX = (short)(CurrX - M2Share.Config.nSendRefMsgRange); // 12
+                    var nHX = (short)(CurrX + M2Share.Config.nSendRefMsgRange); // 12
+                    var nLY = (short)(CurrY - M2Share.Config.nSendRefMsgRange); // 12
+                    var nHY = (short)(CurrY + M2Share.Config.nSendRefMsgRange); // 12
                     for (var nCX = nLX; nCX <= nHX; nCX++)
                     {
                         for (var nCY = nLY; nCY <= nHY; nCY++)
@@ -3559,7 +3559,7 @@ namespace GameSvr.Actor
             CharStatus = GetCharStatus();
             AddBodyLuck(0);
             LoadSayMsg();
-            if (M2Share.g_Config.boMonSayMsg)
+            if (M2Share.Config.boMonSayMsg)
             {
                 MonsterSayMsg(null, MonStatus.MonGen);
             }
@@ -3604,9 +3604,9 @@ namespace GameSvr.Actor
         {
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
-                MapName = M2Share.g_Config.sHomeMap;
-                CurrX = M2Share.g_Config.nHomeX;
-                CurrY = M2Share.g_Config.nHomeY;
+                MapName = M2Share.Config.sHomeMap;
+                CurrX = M2Share.Config.nHomeX;
+                CurrY = M2Share.Config.nHomeY;
                 PlayObject PlayObject = this as PlayObject;
                 PlayObject.m_boEmergencyClose = true;
             }
@@ -3647,10 +3647,10 @@ namespace GameSvr.Actor
                                         if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                         {
                                             if ((!GateObj.DEnvir.Flag.boNEEDHOLE) ||
-                                                (M2Share.EventManager.GetEvent(Envir, CurrX, CurrY,
+                                                (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY,
                                                     Grobal2.ET_DIGOUTZOMBI) != null))
                                             {
-                                                if (M2Share.nServerIndex == GateObj.DEnvir.ServerIndex)
+                                                if (M2Share.ServerIndex == GateObj.DEnvir.ServerIndex)
                                                 {
                                                     if (!EnterAnotherMap(GateObj.DEnvir, GateObj.nDMapX,
                                                             GateObj.nDMapY))
@@ -3752,7 +3752,7 @@ namespace GameSvr.Actor
                 {
                     return false;
                 }
-                var Castle = M2Share.CastleManager.IsCastlePalaceEnvir(Envir);
+                var Castle = M2Share.CastleMgr.IsCastlePalaceEnvir(Envir);
                 if ((Castle != null) && (Race == Grobal2.RC_PLAYOBJECT))
                 {
                     if (!Castle.CheckInPalace(CurrX, CurrY, this))
@@ -3828,27 +3828,27 @@ namespace GameSvr.Actor
 
         public void SysMsg(string sMsg, MsgColor MsgColor, MsgType MsgType)
         {
-            if (M2Share.g_Config.boShowPreFixMsg)
+            if (M2Share.Config.boShowPreFixMsg)
             {
                 switch (MsgType)
                 {
                     case MsgType.Mon:
-                        sMsg = M2Share.g_Config.sMonSayMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.sMonSayMsgpreFix + sMsg;
                         break;
                     case MsgType.Hint:
-                        sMsg = M2Share.g_Config.sHintMsgPreFix + sMsg;
+                        sMsg = M2Share.Config.sHintMsgPreFix + sMsg;
                         break;
                     case MsgType.GM:
-                        sMsg = M2Share.g_Config.sGMRedMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.sGMRedMsgpreFix + sMsg;
                         break;
                     case MsgType.System:
-                        sMsg = M2Share.g_Config.sSysMsgPreFix + sMsg;
+                        sMsg = M2Share.Config.sSysMsgPreFix + sMsg;
                         break;
                     case MsgType.Cust:
-                        sMsg = M2Share.g_Config.sCustMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.sCustMsgpreFix + sMsg;
                         break;
                     case MsgType.Castle:
-                        sMsg = M2Share.g_Config.sCastleMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.sCastleMsgpreFix + sMsg;
                         break;
                 }
             }
@@ -3863,9 +3863,9 @@ namespace GameSvr.Actor
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
                     BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
-                    if (M2Share.g_Config.boShowPreFixMsg)
+                    if (M2Share.Config.boShowPreFixMsg)
                     {
-                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                        sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
 
                     SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255),
@@ -3875,9 +3875,9 @@ namespace GameSvr.Actor
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
                     BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
-                    if (M2Share.g_Config.boShowPreFixMsg)
+                    if (M2Share.Config.boShowPreFixMsg)
                     {
-                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                        sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
 
                     SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255),
@@ -3889,9 +3889,9 @@ namespace GameSvr.Actor
                     str = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
                     str = HUtil32.GetValidStrCap(str, ref BColor, new string[] { "," });
                     str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { "," });
-                    if (M2Share.g_Config.boShowPreFixMsg)
+                    if (M2Share.Config.boShowPreFixMsg)
                     {
-                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                        sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
 
                     SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(FColor, 255),
@@ -3902,31 +3902,31 @@ namespace GameSvr.Actor
                     switch (MsgColor)
                     {
                         case MsgColor.Red: // 控制公告的颜色
-                            if (M2Share.g_Config.boShowPreFixMsg)
+                            if (M2Share.Config.boShowPreFixMsg)
                             {
-                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
 
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor,
-                                M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btRedMsgFColor,
+                                M2Share.Config.btRedMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Green:
-                            if (M2Share.g_Config.boShowPreFixMsg)
+                            if (M2Share.Config.boShowPreFixMsg)
                             {
-                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
 
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor,
-                                M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btGreenMsgFColor,
+                                M2Share.Config.btGreenMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Blue:
-                            if (M2Share.g_Config.boShowPreFixMsg)
+                            if (M2Share.Config.boShowPreFixMsg)
                             {
-                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
 
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor,
-                                M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btBlueMsgFColor,
+                                M2Share.Config.btBlueMsgBColor, 0, sMsg);
                             break;
                     }
                 }
@@ -3936,23 +3936,23 @@ namespace GameSvr.Actor
                 switch (MsgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor,
-                            M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btGreenMsgFColor,
+                            M2Share.Config.btGreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor,
-                            M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btBlueMsgFColor,
+                            M2Share.Config.btBlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (MsgType == MsgType.Cust)
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor,
-                                M2Share.g_Config.btCustMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btCustMsgFColor,
+                                M2Share.Config.btCustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor,
-                                M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btRedMsgFColor,
+                                M2Share.Config.btRedMsgBColor, 0, sMsg);
                         }
 
                         break;
@@ -4026,13 +4026,13 @@ namespace GameSvr.Actor
 
         public void SendGroupText(string sMsg)
         {
-            sMsg = M2Share.g_Config.sGroupMsgPreFix + sMsg;
+            sMsg = M2Share.Config.sGroupMsgPreFix + sMsg;
             if (m_GroupOwner != null)
             {
                 for (int i = 0; i < m_GroupOwner.GroupMembers.Count; i++)
                 {
-                    m_GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.g_Config.btGroupMsgFColor,
-                        M2Share.g_Config.btGroupMsgBColor, 0, sMsg);
+                    m_GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.Config.btGroupMsgFColor,
+                        M2Share.Config.btGroupMsgBColor, 0, sMsg);
                 }
             }
         }
@@ -4093,10 +4093,10 @@ namespace GameSvr.Actor
                 I = 0;
                 while (true)
                 {
-                    if (Gold > M2Share.g_Config.nMonOneDropGoldCount)
+                    if (Gold > M2Share.Config.nMonOneDropGoldCount)
                     {
-                        nGold = M2Share.g_Config.nMonOneDropGoldCount;
-                        Gold = Gold - M2Share.g_Config.nMonOneDropGoldCount;
+                        nGold = M2Share.Config.nMonOneDropGoldCount;
+                        Gold = Gold - M2Share.Config.nMonOneDropGoldCount;
                     }
                     else
                     {
@@ -4146,7 +4146,7 @@ namespace GameSvr.Actor
 
         public void SetPKFlag(TBaseObject BaseObject)
         {
-            if ((PKLevel() < 2) && (BaseObject.PKLevel() < 2) && (!Envir.Flag.boFightZone) &&
+            if ((PvpLevel() < 2) && (BaseObject.PvpLevel() < 2) && (!Envir.Flag.boFightZone) &&
                 (!Envir.Flag.boFight3Zone) && !PvpFlag)
             {
                 BaseObject.m_dwPKTick = HUtil32.GetTickCount();
@@ -4282,7 +4282,7 @@ namespace GameSvr.Actor
                                 result = true;
                             }
 
-                            if (M2Share.g_Config.boNonPKServer)
+                            if (M2Share.Config.boNonPKServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -4351,7 +4351,7 @@ namespace GameSvr.Actor
                                 }
                             }
 
-                            if (M2Share.g_Config.boNonPKServer)
+                            if (M2Share.Config.boNonPKServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -4383,7 +4383,7 @@ namespace GameSvr.Actor
                                 }
                             }
 
-                            if (M2Share.g_Config.boNonPKServer)
+                            if (M2Share.Config.boNonPKServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -4398,9 +4398,9 @@ namespace GameSvr.Actor
 
                             if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
                             {
-                                if (PKLevel() >= 2)
+                                if (PvpLevel() >= 2)
                                 {
-                                    if (BaseObject.PKLevel() < 2)
+                                    if (BaseObject.PvpLevel() < 2)
                                     {
                                         result = true;
                                     }
@@ -4411,7 +4411,7 @@ namespace GameSvr.Actor
                                 }
                                 else
                                 {
-                                    if (BaseObject.PKLevel() >= 2)
+                                    if (BaseObject.PvpLevel() >= 2)
                                     {
                                         result = true;
                                     }
@@ -4422,7 +4422,7 @@ namespace GameSvr.Actor
                                 }
                             }
 
-                            if (M2Share.g_Config.boNonPKServer)
+                            if (M2Share.Config.boNonPKServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -4494,9 +4494,9 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            if ((Envir.MapName != M2Share.g_Config.sRedHomeMap) ||
-                (Math.Abs(CurrX - M2Share.g_Config.nRedHomeX) > M2Share.g_Config.nSafeZoneSize) ||
-                (Math.Abs(CurrY - M2Share.g_Config.nRedHomeY) > M2Share.g_Config.nSafeZoneSize))
+            if ((Envir.MapName != M2Share.Config.sRedHomeMap) ||
+                (Math.Abs(CurrX - M2Share.Config.nRedHomeX) > M2Share.Config.nSafeZoneSize) ||
+                (Math.Abs(CurrY - M2Share.Config.nRedHomeY) > M2Share.Config.nSafeZoneSize))
             {
                 result = false;
             }
@@ -4512,8 +4512,8 @@ namespace GameSvr.Actor
                     {
                         int nSafeX = M2Share.StartPointList[i].m_nCurrX;
                         int nSafeY = M2Share.StartPointList[i].m_nCurrY;
-                        if ((Math.Abs(CurrX - nSafeX) <= M2Share.g_Config.nSafeZoneSize) &&
-                            (Math.Abs(CurrY - nSafeY) <= M2Share.g_Config.nSafeZoneSize))
+                        if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.nSafeZoneSize) &&
+                            (Math.Abs(CurrY - nSafeY) <= M2Share.Config.nSafeZoneSize))
                         {
                             result = true;
                         }
@@ -4534,9 +4534,9 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            if ((Envir.MapName != M2Share.g_Config.sRedHomeMap) ||
-                (Math.Abs(nX - M2Share.g_Config.nRedHomeX) > M2Share.g_Config.nSafeZoneSize) ||
-                (Math.Abs(nY - M2Share.g_Config.nRedHomeY) > M2Share.g_Config.nSafeZoneSize))
+            if ((Envir.MapName != M2Share.Config.sRedHomeMap) ||
+                (Math.Abs(nX - M2Share.Config.nRedHomeX) > M2Share.Config.nSafeZoneSize) ||
+                (Math.Abs(nY - M2Share.Config.nRedHomeY) > M2Share.Config.nSafeZoneSize))
             {
                 result = false;
             }
@@ -4552,8 +4552,8 @@ namespace GameSvr.Actor
                     {
                         int nSafeX = M2Share.StartPointList[i].m_nCurrX;
                         int nSafeY = M2Share.StartPointList[i].m_nCurrY;
-                        if ((Math.Abs(nX - nSafeX) <= M2Share.g_Config.nSafeZoneSize) &&
-                            (Math.Abs(nY - nSafeY) <= M2Share.g_Config.nSafeZoneSize))
+                        if ((Math.Abs(nX - nSafeX) <= M2Share.Config.nSafeZoneSize) &&
+                            (Math.Abs(nY - nSafeY) <= M2Share.Config.nSafeZoneSize))
                         {
                             result = true;
                         }
@@ -4673,7 +4673,7 @@ namespace GameSvr.Actor
             short nY = 0;
             int nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
-            if (sSlaveName == M2Share.g_Config.sDragon)
+            if (sSlaveName == M2Share.Config.sDragon)
             {
                 nFlag = 1;
             }
@@ -4681,8 +4681,8 @@ namespace GameSvr.Actor
             {
                 if (nFlag == 1)
                 {
-                    if ((SlaveList[i].CharName == M2Share.g_Config.sDragon) ||
-                        (SlaveList[i].CharName == M2Share.g_Config.sDragon1))
+                    if ((SlaveList[i].CharName == M2Share.Config.sDragon) ||
+                        (SlaveList[i].CharName == M2Share.Config.sDragon1))
                     {
                         SlaveList[i].SpaceMove(Envir.MapName, nX, nY, 1);
                         break;
@@ -4762,13 +4762,13 @@ namespace GameSvr.Actor
                 switch (LastHiter.Job)
                 {
                     case PlayJob.Warrior:
-                        nDamage = nDamage * M2Share.g_Config.nWarrMon / 10;
+                        nDamage = nDamage * M2Share.Config.nWarrMon / 10;
                         break;
                     case PlayJob.Wizard:
-                        nDamage = nDamage * M2Share.g_Config.nWizardMon / 10;
+                        nDamage = nDamage * M2Share.Config.nWizardMon / 10;
                         break;
                     case PlayJob.Taoist:
-                        nDamage = nDamage * M2Share.g_Config.nTaosMon / 10;
+                        nDamage = nDamage * M2Share.Config.nTaosMon / 10;
                         break;
                 }
             }
@@ -4776,14 +4776,14 @@ namespace GameSvr.Actor
             if ((Race == Grobal2.RC_PLAYOBJECT) && (LastHiter != null) &&
                 (LastHiter.Master != null)) // 怪物攻击人
             {
-                nDamage = nDamage * M2Share.g_Config.nMonHum / 10;
+                nDamage = nDamage * M2Share.Config.nMonHum / 10;
             }
 
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
             if (m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] > 0)
             {
-                nDam = HUtil32.Round(nDam * (M2Share.g_Config.nPosionDamagarmor / 10)); // 1.2
-                nDamage = HUtil32.Round(nDamage * (M2Share.g_Config.nPosionDamagarmor / 10)); // 1.2
+                nDam = HUtil32.Round(nDam * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
+                nDamage = HUtil32.Round(nDamage * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
             }
 
             bo19 = false;
@@ -4970,7 +4970,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool MakePosion(int nType, int nTime, int nPoint)
+        public bool MakePosion(int nType, ushort nTime, int nPoint)
         {
             bool result = false;
             if (nType < Grobal2.MAX_STATUS_ATTRIBUTE)
@@ -4980,14 +4980,13 @@ namespace GameSvr.Actor
                 {
                     if (m_wStatusTimeArr[nType] < nTime)
                     {
-                        m_wStatusTimeArr[nType] = (ushort)nTime;
+                        m_wStatusTimeArr[nType] = nTime;
                     }
                 }
                 else
                 {
-                    m_wStatusTimeArr[nType] = (ushort)nTime;
+                    m_wStatusTimeArr[nType] = nTime;
                 }
-
                 m_dwStatusArrTick[nType] = HUtil32.GetTickCount();
                 CharStatus = GetCharStatus();
                 GreenPoisoningPoint = (byte)nPoint;
@@ -5000,10 +4999,8 @@ namespace GameSvr.Actor
                 {
                     SysMsg(format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
                 }
-
                 result = true;
             }
-
             return result;
         }
 
@@ -5254,16 +5251,16 @@ namespace GameSvr.Actor
                             result = true;
                         }
 
-                        if (PKLevel() >= 2)
+                        if (PvpLevel() >= 2)
                         {
-                            if (cret.PKLevel() < 2)
+                            if (cret.PvpLevel() < 2)
                             {
                                 result = true;
                             }
                         }
                         else
                         {
-                            if (cret.PKLevel() >= 2)
+                            if (cret.PvpLevel() >= 2)
                             {
                                 result = true;
                             }
@@ -5522,13 +5519,13 @@ namespace GameSvr.Actor
                     if (nCurrY > 1)
                     {
                         if ((Envir.CanWalkEx(nCurrX, nCurrY - 1,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone()))
                             && (Envir.CanWalkEx(nCurrX, nCurrY - 2,
-                                    M2Share.g_Config.boDiableHumanRun ||
-                                    ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                                (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                    M2Share.Config.boDiableHumanRun ||
+                                    ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                                (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5540,13 +5537,13 @@ namespace GameSvr.Actor
                     if (nCurrX < Envir.Width - 2 && nCurrY > 1)
                     {
                         if ((Envir.CanWalkEx(nCurrX + 1, nCurrY - 1,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                             (Envir.CanWalkEx(nCurrX + 2, nCurrY - 2,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5558,13 +5555,13 @@ namespace GameSvr.Actor
                     if (nCurrX < Envir.Width - 2)
                     {
                         if (Envir.CanWalkEx(nCurrX + 1, nCurrY,
-                                M2Share.g_Config.boDiableHumanRun ||
-                                ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                            (M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                                M2Share.Config.boDiableHumanRun ||
+                                ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                            (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                             (Envir.CanWalkEx(nCurrX + 2, nCurrY,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5575,11 +5572,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNRIGHT:
                     if ((nCurrX < Envir.Width - 2) && (nCurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(nCurrX + 1, nCurrY + 1,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                         (Envir.CanWalkEx(nCurrX + 2, nCurrY + 2,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5589,13 +5586,13 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWN:
                     if ((nCurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(nCurrX, nCurrY + 1,
-                             M2Share.g_Config.boDiableHumanRun ||
-                             ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                             M2Share.Config.boDiableHumanRun ||
+                             ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                          (Envir.CanWalkEx(nCurrX, nCurrY + 2,
-                              M2Share.g_Config.boDiableHumanRun ||
-                              ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                          (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))))
+                              M2Share.Config.boDiableHumanRun ||
+                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                          (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
                     {
                         result = true;
                         return result;
@@ -5605,11 +5602,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNLEFT:
                     if ((nCurrX > 1) && (nCurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(nCurrX - 1, nCurrY + 1,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(nCurrX - 2, nCurrY + 2,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5619,11 +5616,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_LEFT:
                     if ((nCurrX > 1) &&
                         (Envir.CanWalkEx(nCurrX - 1, nCurrY,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(nCurrX - 2, nCurrY,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5632,12 +5629,12 @@ namespace GameSvr.Actor
                     break;
                 case Grobal2.DR_UPLEFT:
                     if ((nCurrX > 1) && (nCurrY > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY - 1,
-                                                             M2Share.g_Config.boDiableHumanRun ||
-                                                             ((Permission > 9) && M2Share.g_Config.boGMRunAll))
-                                                         || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                                                             M2Share.Config.boDiableHumanRun ||
+                                                             ((Permission > 9) && M2Share.Config.boGMRunAll))
+                                                         || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(nCurrX - 2, nCurrY - 2,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5659,13 +5656,13 @@ namespace GameSvr.Actor
                     if (CurrY > 1)
                     {
                         if ((Envir.CanWalkEx(CurrX, CurrY - 1,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone()))
                             && (Envir.CanWalkEx(CurrX, CurrY - 2,
-                                    M2Share.g_Config.boDiableHumanRun ||
-                                    ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                                (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                    M2Share.Config.boDiableHumanRun ||
+                                    ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                                (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5677,13 +5674,13 @@ namespace GameSvr.Actor
                     if (CurrX < Envir.Width - 2 && CurrY > 1)
                     {
                         if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                             (Envir.CanWalkEx(CurrX + 2, CurrY - 2,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5695,13 +5692,13 @@ namespace GameSvr.Actor
                     if (CurrX < Envir.Width - 2)
                     {
                         if (Envir.CanWalkEx(CurrX + 1, CurrY,
-                                M2Share.g_Config.boDiableHumanRun ||
-                                ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                            (M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                                M2Share.Config.boDiableHumanRun ||
+                                ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                            (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                             (Envir.CanWalkEx(CurrX + 2, CurrY,
-                                 M2Share.g_Config.boDiableHumanRun ||
-                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                             (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                 M2Share.Config.boDiableHumanRun ||
+                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5712,11 +5709,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNRIGHT:
                     if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(CurrX + 1, CurrY + 1,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                         (Envir.CanWalkEx(CurrX + 2, CurrY + 2,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5726,13 +5723,13 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWN:
                     if ((CurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(CurrX, CurrY + 1,
-                             M2Share.g_Config.boDiableHumanRun ||
-                             ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                             M2Share.Config.boDiableHumanRun ||
+                             ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                          (Envir.CanWalkEx(CurrX, CurrY + 2,
-                              M2Share.g_Config.boDiableHumanRun ||
-                              ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                          (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))))
+                              M2Share.Config.boDiableHumanRun ||
+                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                          (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
                     {
                         result = true;
                         return result;
@@ -5742,11 +5739,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNLEFT:
                     if ((CurrX > 1) && (CurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(CurrX - 1, CurrY + 1,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(CurrX - 2, CurrY + 2,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5756,11 +5753,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_LEFT:
                     if ((CurrX > 1) &&
                         (Envir.CanWalkEx(CurrX - 1, CurrY,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(CurrX - 2, CurrY,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5769,12 +5766,12 @@ namespace GameSvr.Actor
                     break;
                 case Grobal2.DR_UPLEFT:
                     if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1,
-                                                                 M2Share.g_Config.boDiableHumanRun ||
-                                                                 ((Permission > 9) && M2Share.g_Config.boGMRunAll))
-                                                             || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                                                                 M2Share.Config.boDiableHumanRun ||
+                                                                 ((Permission > 9) && M2Share.Config.boGMRunAll))
+                                                             || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(CurrX - 2, CurrY - 2,
-                             M2Share.g_Config.boDiableHumanRun || ((Permission > 9) && M2Share.g_Config.boGMRunAll)) ||
-                         (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -6105,7 +6102,7 @@ namespace GameSvr.Actor
 
             SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
 
-            if (M2Share.g_Config.boMonSayMsg)
+            if (M2Share.Config.boMonSayMsg)
             {
                 MonsterSayMsg(null, MonStatus.MonGen);
             }

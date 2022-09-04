@@ -42,7 +42,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您身上没有" + M2Share.g_Config.sGameGoldName + ",或" + M2Share.g_Config.sGameGoldName + "数不够!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您身上没有" + M2Share.Config.sGameGoldName + ",或" + M2Share.Config.sGameGoldName + "数不够!!!\\ \\<返回/@main>");
                 }
             }
             catch
@@ -284,7 +284,7 @@ namespace GameSvr.Npc
             string sLineText;
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            var sListFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
+            var sListFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
             using var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -329,7 +329,7 @@ namespace GameSvr.Npc
             string sLineText;
             string sHumName = string.Empty;
             string sDate = string.Empty;
-            var sListFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
+            var sListFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
             using var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -385,7 +385,7 @@ namespace GameSvr.Npc
                     PlayObject.MagicList.Add(UserMagic);
                     PlayObject.SendAddMagic(UserMagic);
                     PlayObject.RecalcAbilitys();
-                    if (M2Share.g_Config.boShowScriptActionMsg)
+                    if (M2Share.Config.boShowScriptActionMsg)
                     {
                         PlayObject.SysMsg(Magic.sMagicName + "练习成功。", MsgColor.Green, MsgType.Hint);
                     }
@@ -428,7 +428,7 @@ namespace GameSvr.Npc
             var sMap = QuestActionInfo.sParam4;
             if (sMap != "")
             {
-                Envir = M2Share.MapManager.FindMap(sMap);
+                Envir = M2Share.MapMgr.FindMap(sMap);
             }
             if (nTime <= 0 || nPoint <= 0 || sMap != "" && Envir == null)
             {
@@ -447,7 +447,7 @@ namespace GameSvr.Npc
         private void ActionOfOffLine(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
-            PlayObject.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ObjectId, HUtil32.MakeWord(M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor), 0, 1);
+            PlayObject.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ObjectId, HUtil32.MakeWord(M2Share.Config.btCustMsgFColor, M2Share.Config.btCustMsgBColor), 0, 1);
             PlayObject.SendSocket(PlayObject.m_DefMsg, EDcode.EncodeString(sOffLineStartMsg));
             var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 5);
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 500);
@@ -676,7 +676,7 @@ namespace GameSvr.Npc
         private void ActionOfChangePkPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int nPoint;
-            var nOldPKLevel = PlayObject.PKLevel();
+            var nOldPKLevel = PlayObject.PvpLevel();
             var nPKPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nPKPoint < 0)
             {
@@ -701,7 +701,7 @@ namespace GameSvr.Npc
                     PlayObject.PkPoint = nPoint;
                     break;
             }
-            if (nOldPKLevel != PlayObject.PKLevel())
+            if (nOldPKLevel != PlayObject.PvpLevel())
             {
                 PlayObject.RefNameColor();
             }
@@ -711,7 +711,7 @@ namespace GameSvr.Npc
         {
             TBaseObject Mon;
             IList<TBaseObject> MonList = new List<TBaseObject>();
-            M2Share.UserEngine.GetMapMonster(M2Share.MapManager.FindMap(QuestActionInfo.sParam1), MonList);
+            M2Share.UserEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), MonList);
             for (var i = 0; i < MonList.Count; i++)
             {
                 Mon = MonList[i];
@@ -730,7 +730,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearNameList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var sListFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
+            var sListFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
             using var LoadList = new StringList();
             LoadList.Clear();
             try
@@ -823,7 +823,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.g_Config.sGameGoldName, nGameGold, cMethod, this.CharName));
+                M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGameGoldName, nGameGold, cMethod, this.CharName));
             }
             if (nOldGameGold != PlayObject.m_nGameGold)
             {
@@ -860,7 +860,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGamePoint)
             {
-                M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.g_Config.sGamePointName, nGamePoint, cMethod, this.CharName));
+                M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGamePointName, nGamePoint, cMethod, this.CharName));
             }
             if (nOldGamePoint != PlayObject.m_nGamePoint)
             {
@@ -936,7 +936,7 @@ namespace GameSvr.Npc
                     if (PlayObject.MyGuild != null)
                     {
                         PlayObject.MyGuild.SendGuildMsg(sMsg);
-                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.CharName + "/" + sMsg);
+                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.CharName + "/" + sMsg);
                     }
                     break;
                 default:
@@ -1186,13 +1186,13 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_MOBFIREBURN);
                 return;
             }
-            var Envir = M2Share.MapManager.FindMap(sMap);
+            var Envir = M2Share.MapMgr.FindMap(sMap);
             if (Envir != null)
             {
                 var OldEnvir = PlayObject.Envir;
                 PlayObject.Envir = Envir;
                 var FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
-                M2Share.EventManager.AddEvent(FireBurnEvent);
+                M2Share.EventMgr.AddEvent(FireBurnEvent);
                 PlayObject.Envir = OldEnvir;
                 return;
             }
@@ -1461,7 +1461,7 @@ namespace GameSvr.Npc
             {
                 sFileName = sFileName.Substring(3, sFileName.Length - 3);
             }
-            sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, sFileName);
+            sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, sFileName);
             if (sType == "" || sVarName == "" || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SAVEVAR);
@@ -1646,7 +1646,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var ffile = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, QuestActionInfo.sParam1);
+            var ffile = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, QuestActionInfo.sParam1);
             if (File.Exists(ffile))
             {
                 //myFile = new FileInfo(ffile);
@@ -1700,7 +1700,7 @@ namespace GameSvr.Npc
             bool boFlag = false;
             if (PlayObject.m_GroupOwner != null)
             {
-                var Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
+                var Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                 if (Envir != null)
                 {
                     if (Envir.CanWalk(QuestActionInfo.nParam2, QuestActionInfo.nParam3, true))
@@ -1936,7 +1936,7 @@ namespace GameSvr.Npc
             {
                 sFileName = sFileName.Substring(3, sFileName.Length - 3);
             }
-            sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, sFileName);
+            sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, sFileName);
             if (sType == "" || sVarName == "" || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_LOADVAR);
@@ -2184,7 +2184,7 @@ namespace GameSvr.Npc
             string sMapMode = QuestActionInfo.sParam2;
             string sParam1 = QuestActionInfo.sParam3;
             string sParam2 = QuestActionInfo.sParam4;
-            Envirnoment Envir = M2Share.MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);
             if (Envir == null || sMapMode == "")
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SETMAPMODE);
@@ -2573,7 +2573,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sChangeMemberLevelMsg, new[] { PlayObject.m_nMemberLevel }), MsgColor.Green, MsgType.Hint);
             }
@@ -2608,7 +2608,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sChangeMemberTypeMsg, new[] { PlayObject.m_nMemberType }), MsgColor.Green, MsgType.Hint);
             }
@@ -2746,7 +2746,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sScriptGuildAuraePointMsg, new[] { Guild.Aurae }), MsgColor.Green, MsgType.Hint);
             }
@@ -2793,7 +2793,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sScriptGuildBuildPointMsg, Guild.BuildPoint), MsgColor.Green, MsgType.Hint);
             }
@@ -2840,7 +2840,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sScriptChiefItemCountMsg, Guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
             }
@@ -2887,7 +2887,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sScriptGuildFlourishPointMsg, Guild.Flourishing), MsgColor.Green, MsgType.Hint);
             }
@@ -2934,7 +2934,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sScriptGuildStabilityPointMsg, Guild.Stability), MsgColor.Green, MsgType.Hint);
             }
@@ -2972,7 +2972,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.m_WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
             }
@@ -3010,7 +3010,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.m_WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
             }
@@ -3168,7 +3168,7 @@ namespace GameSvr.Npc
                 {
                     PlayObject.Abil.Level = (byte)nLevel;
                 }
-                if (M2Share.g_Config.boReNewLevelClearExp)
+                if (M2Share.Config.boReNewLevelClearExp)
                 {
                     PlayObject.Abil.Exp = 0;
                 }
@@ -3212,7 +3212,7 @@ namespace GameSvr.Npc
             }
             PlayObject.m_nKillMonExpRate = nRate;
             PlayObject.m_dwKillMonExpRateTime = nTime;
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sChangeKillMonExpRateMsg, PlayObject.m_nKillMonExpRate / 100, PlayObject.m_dwKillMonExpRateTime), MsgColor.Green, MsgType.Hint);
             }
@@ -3285,7 +3285,7 @@ namespace GameSvr.Npc
                         nY == nMaxY)
                     {
                         FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
-                        M2Share.EventManager.AddEvent(FireBurnEvent);
+                        M2Share.EventMgr.AddEvent(FireBurnEvent);
                     }
                 }
             }
@@ -3302,7 +3302,7 @@ namespace GameSvr.Npc
             }
             PlayObject.m_nPowerRate = nRate;
             PlayObject.m_dwPowerRateTime = nTime;
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sChangePowerRateMsg, new object[] { PlayObject.m_nPowerRate / 100, PlayObject.m_dwPowerRateTime }), MsgColor.Green, MsgType.Hint);
             }
@@ -3369,7 +3369,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CHANGEPERMISSION);
                 return;
             }
-            if (M2Share.g_Config.boShowScriptActionMsg)
+            if (M2Share.Config.boShowScriptActionMsg)
             {
                 PlayObject.SysMsg(format(M2Share.g_sChangePermissionMsg, PlayObject.Permission), MsgColor.Green, MsgType.Hint);
             }
@@ -3422,7 +3422,7 @@ namespace GameSvr.Npc
                     ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sTHROWITEM);
                     return;
                 }
-                Envir = M2Share.MapManager.FindMap(sMap); // 查找地图,地图不存在则退出
+                Envir = M2Share.MapMgr.FindMap(sMap); // 查找地图,地图不存在则退出
                 if (Envir == null)
                 {
                     return;

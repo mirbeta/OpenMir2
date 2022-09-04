@@ -27,7 +27,7 @@ namespace GameSvr.Maps
             Merchant QuestNPC;
             string sMapInfoFile;
             var result = -1;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapInfo.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "MapInfo.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();
@@ -344,7 +344,7 @@ namespace GameSvr.Maps
                                 MapFlag.nL = HUtil32.Str_ToInt(s34.Substring(1, s34.Length - 1), 1);
                             }
                         }
-                        if (M2Share.MapManager.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
+                        if (M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
                         {
                             result = -10;
                         }
@@ -370,7 +370,7 @@ namespace GameSvr.Maps
                         n1C = HUtil32.Str_ToInt(s34, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", ";", "\t" });
                         n20 = HUtil32.Str_ToInt(s34, 0);
-                        M2Share.MapManager.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
+                        M2Share.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
                 }
                 LoadList = null;
@@ -383,7 +383,7 @@ namespace GameSvr.Maps
             var sMapNO = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MiniMap.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();
@@ -434,7 +434,7 @@ namespace GameSvr.Maps
         {
             string sFilePatchName;
             StringList LoadMapList;
-            string sFileDir = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapInfo");
+            string sFileDir = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "MapInfo");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);

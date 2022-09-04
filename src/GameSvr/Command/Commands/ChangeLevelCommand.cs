@@ -23,7 +23,7 @@ namespace GameSvr.Command.Commands
             PlayObject.HasLevelUp(1);// 等级调整记录日志
             M2Share.AddGameDataLog("17" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX + "\09" + PlayObject.CurrY
                 + "\09" + PlayObject.CharName + "\09" + PlayObject.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
-            if (M2Share.g_Config.boShowMakeItemMsg)
+            if (M2Share.Config.boShowMakeItemMsg)
             {
                 M2Share.LogSystem.Warn(string.Format(GameCommandConst.g_sGameCommandLevelConsoleMsg, PlayObject.CharName, nOLevel, PlayObject.Abil.Level));
             }

@@ -25,8 +25,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var SrcEnvir = M2Share.MapManager.FindMap(sSrcMap);
-            var DenEnvir = M2Share.MapManager.FindMap(sDenMap);
+            var SrcEnvir = M2Share.MapMgr.FindMap(sSrcMap);
+            var DenEnvir = M2Share.MapMgr.FindMap(sDenMap);
             if (SrcEnvir == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red, MsgType.Hint);

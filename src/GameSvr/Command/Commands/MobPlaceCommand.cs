@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var MEnvir = M2Share.MapManager.FindMap(M2Share.g_sMissionMap);
+            var MEnvir = M2Share.MapMgr.FindMap(M2Share.g_sMissionMap);
             if (!M2Share.g_boMission || MEnvir == null)
             {
                 PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);

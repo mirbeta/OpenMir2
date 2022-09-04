@@ -22,9 +22,9 @@ namespace GameSvr.Npc
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             var LoadList = new StringList();
-            if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
+            if (File.Exists(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
-                LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
+                LoadList.LoadFromFile(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i];
@@ -1113,12 +1113,12 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckIsCastleaGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            return M2Share.CastleManager.IsCastleMember(PlayObject) != null;
+            return M2Share.CastleMgr.IsCastleMember(PlayObject) != null;
         }
 
         private bool ConditionOfCheckIsCastleMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            return PlayObject.IsGuildMaster() && (M2Share.CastleManager.IsCastleMember(PlayObject) != null);
+            return PlayObject.IsGuildMaster() && (M2Share.CastleMgr.IsCastleMember(PlayObject) != null);
         }
 
         private bool ConditionOfCheckIsGuildMaster(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1257,10 +1257,10 @@ namespace GameSvr.Npc
             var result = false;
             var nNamePostion = -1;
             var sCharName = PlayObject.CharName;
-            if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
+            if (File.Exists(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
                 var LoadList = new StringList();
-                LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
+                LoadList.LoadFromFile(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i].Trim();
@@ -1433,9 +1433,9 @@ namespace GameSvr.Npc
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             LoadList = new StringList();
-            if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
+            if (File.Exists(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
-                LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
+                LoadList.LoadFromFile(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i];
@@ -1606,7 +1606,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckServerName(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            return QuestConditionInfo.sParam1 == M2Share.g_Config.sServerName;
+            return QuestConditionInfo.sParam1 == M2Share.Config.sServerName;
         }
 
         private bool ConditionOfCheckSlaveCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1681,7 +1681,7 @@ namespace GameSvr.Npc
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "PetData", PlayObject.CharName + ".txt");
+            string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "PetData", PlayObject.CharName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -1803,7 +1803,7 @@ namespace GameSvr.Npc
             int nRange = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             char cMethod = QuestConditionInfo.sParam5[0];
             int nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam6, -1);
-            Envirnoment Envir = M2Share.MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);
             if ((Envir == null) || (nX < 0) || (nY < 0) || (nRange < 0) || (nCount < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKRANGEMONCOUNT);
@@ -2335,7 +2335,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKNAMEDATELIST);
                 return result;
             }
-            sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestConditionInfo.sParam1;
+            sListFileName = M2Share.Config.sEnvirDir + m_sPath + QuestConditionInfo.sParam1;
             if (File.Exists(sListFileName))
             {
                 LoadList = new StringList();
@@ -2397,7 +2397,7 @@ namespace GameSvr.Npc
                                     break;
                                 // Modify the A .. B: 100 .. 119
                                 case 100:
-                                    M2Share.g_Config.GlobalVal[nValNo - 100] = nDay;
+                                    M2Share.Config.GlobalVal[nValNo - 100] = nDay;
                                     break;
                                 // Modify the A .. B: 200 .. 209
                                 case 200:
@@ -2409,7 +2409,7 @@ namespace GameSvr.Npc
                                     break;
                                 // Modify the A .. B: 400 .. 499
                                 case 400:
-                                    M2Share.g_Config.GlobaDyMval[nValNo - 400] = (short)nDay;
+                                    M2Share.Config.GlobaDyMval[nValNo - 400] = (short)nDay;
                                     break;
                             }
                         }
@@ -2423,7 +2423,7 @@ namespace GameSvr.Npc
                                     break;
                                 // Modify the A .. B: 100 .. 119
                                 case 100:
-                                    M2Share.g_Config.GlobalVal[nValNoDay - 100] = nDayCount - nDay;
+                                    M2Share.Config.GlobalVal[nValNoDay - 100] = nDayCount - nDay;
                                     break;
                                 // Modify the A .. B: 200 .. 209
                                 case 200:
@@ -2509,7 +2509,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
-            var Envir = M2Share.MapManager.FindMap(QuestConditionInfo.sParam1);
+            var Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
             if ((nCount < 0) || (Envir == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMAPMONCOUNT);
@@ -2805,7 +2805,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 100, 199))
                 {
-                    nValue = M2Share.g_Config.GlobalVal[n100 - 100];
+                    nValue = M2Share.Config.GlobalVal[n100 - 100];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 200, 299))
@@ -2820,7 +2820,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 400, 499))
                 {
-                    nValue = M2Share.g_Config.GlobaDyMval[n100 - 400];
+                    nValue = M2Share.Config.GlobaDyMval[n100 - 400];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 500, 599))
@@ -2838,22 +2838,22 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 700, 799))
                 {
-                    if (HUtil32.IsStringNumber(M2Share.g_Config.GlobalAVal[n100 - 700]))
+                    if (HUtil32.IsStringNumber(M2Share.Config.GlobalAVal[n100 - 700]))
                     {
-                        nValue = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n100 - 700], 0);
+                        nValue = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n100 - 700], 0);
                         result = true;
                     }
                 }
                 else if (HUtil32.RangeInDefined(n100, 800, 1199))//G变量
                 {
-                    nValue = M2Share.g_Config.GlobalVal[n100 - 700];
+                    nValue = M2Share.Config.GlobalVal[n100 - 700];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 1200, 1599))//G变量
                 {
-                    if (HUtil32.IsStringNumber(M2Share.g_Config.GlobalAVal[n100 - 1100]))
+                    if (HUtil32.IsStringNumber(M2Share.Config.GlobalAVal[n100 - 1100]))
                     {
-                        nValue = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n100 - 1100], 0);
+                        nValue = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n100 - 1100], 0);
                         result = true;
                     }
                 }

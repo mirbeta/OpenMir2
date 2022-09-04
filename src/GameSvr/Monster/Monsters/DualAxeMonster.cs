@@ -83,9 +83,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            int nAbs;
             int nRage = 9999;
-            TBaseObject BaseObject;
             TBaseObject TargetBaseObject = null;
             if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
@@ -94,7 +92,7 @@ namespace GameSvr.Monster.Monsters
                     SearchEnemyTick = HUtil32.GetTickCount();
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = VisibleActors[i].BaseObject;
+                        TBaseObject BaseObject = VisibleActors[i].BaseObject;
                         if (BaseObject.Death)
                         {
                             continue;
@@ -103,7 +101,7 @@ namespace GameSvr.Monster.Monsters
                         {
                             if (!BaseObject.HideMode || CoolEye)
                             {
-                                nAbs = Math.Abs(CurrX - BaseObject.CurrX) + Math.Abs(CurrY - BaseObject.CurrY);
+                                int nAbs = Math.Abs(CurrX - BaseObject.CurrX) + Math.Abs(CurrY - BaseObject.CurrY);
                                 if (nAbs < nRage)
                                 {
                                     nRage = nAbs;
