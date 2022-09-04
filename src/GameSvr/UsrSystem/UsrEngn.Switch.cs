@@ -106,7 +106,7 @@ namespace GameSvr.UsrSystem
             SwitchData.sMap = PlayObject.MapName;
             SwitchData.wX = PlayObject.CurrX;
             SwitchData.wY = PlayObject.CurrY;
-            SwitchData.Abil = PlayObject.m_Abil;
+            SwitchData.Abil = PlayObject.Abil;
             SwitchData.nCode = PlayObject.m_nSessionID;
             SwitchData.boBanShout = PlayObject.BanShout;
             SwitchData.boHearWhisper = PlayObject.HearWhisper;

@@ -10,8 +10,8 @@ namespace GameSvr.Monster.Monsters
         {
             ViewRange = 5;
             m_nRunTime = 250;
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            m_dwSearchTick = 0;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            SearchTick = 0;
             dw558 = HUtil32.GetTickCount();
         }
 
@@ -63,7 +63,7 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                if (TargetCret.m_PEnvir == m_PEnvir)
+                if (TargetCret.Envir == Envir)
                 {
                     SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                 }

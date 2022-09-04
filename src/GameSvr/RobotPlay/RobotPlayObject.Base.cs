@@ -28,7 +28,7 @@ namespace GameSvr.RobotPlay
                         WalkTick = HUtil32.GetTickCount();
                         if (TargetCret != null)
                         {
-                            if (TargetCret.Death || TargetCret.Ghost || TargetCret.InSafeZone() || TargetCret.m_PEnvir != m_PEnvir || Math.Abs(CurrX - TargetCret.CurrX) > 11 || Math.Abs(CurrY - TargetCret.CurrY) > 11)
+                            if (TargetCret.Death || TargetCret.Ghost || TargetCret.InSafeZone() || TargetCret.Envir != Envir || Math.Abs(CurrX - TargetCret.CurrX) > 11 || Math.Abs(CurrY - TargetCret.CurrY) > 11)
                             {
                                 DelTargetCreat();
                             }
@@ -38,7 +38,7 @@ namespace GameSvr.RobotPlay
                             DelTargetCreat();
                         }
                         SearchTarget();
-                        if (m_ManagedEnvir != m_PEnvir) // 所在地图不是挂机地图则清空目标
+                        if (m_ManagedEnvir != Envir) // 所在地图不是挂机地图则清空目标
                         {
                             DelTargetCreat();
                         }
@@ -105,12 +105,12 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (Job > 0)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && TargetCret.m_WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                                        if (M2Share.g_Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && TargetCret.m_WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
                                         {
                                             // 道法22前是否物理攻击
-                                            if (m_Master != null)
+                                            if (Master != null)
                                             {
-                                                if (Math.Abs(m_Master.CurrX - CurrX) > 6 || Math.Abs(m_Master.CurrY - CurrY) > 6)
+                                                if (Math.Abs(Master.CurrX - CurrX) > 6 || Math.Abs(Master.CurrY - CurrY) > 6)
                                                 {
                                                     base.Run();
                                                     return;
@@ -294,7 +294,7 @@ namespace GameSvr.RobotPlay
                         }
                         if (TargetCret == null)
                         {
-                            if (m_Master != null)
+                            if (Master != null)
                             {
                                 FollowMaster();
                             }
@@ -331,9 +331,9 @@ namespace GameSvr.RobotPlay
                 if (base.IsProperTarget(BaseObject))
                 {
                     result = true;
-                    if (BaseObject.m_Master != null)
+                    if (BaseObject.Master != null)
                     {
-                        if (BaseObject.m_Master == this || BaseObject.m_Master.IsRobot && !InFreePKArea)
+                        if (BaseObject.Master == this || BaseObject.Master.IsRobot && !InFreePKArea)
                         {
                             result = false;
                         }
@@ -342,7 +342,7 @@ namespace GameSvr.RobotPlay
                     {
                         result = false;
                     }
-                    switch (BaseObject.m_btRaceServer)
+                    switch (BaseObject.Race)
                     {
                         case Grobal2.RC_ARCHERGUARD:
                         case 55:// 不主动攻击练功师 弓箭手
@@ -367,7 +367,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (AttatckMode == AttackMode.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
                     {
-                        if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
                         {
                             if (PKLevel() >= 2)
                             {
@@ -394,7 +394,7 @@ namespace GameSvr.RobotPlay
                         }
                         if (IsRobot && !result)
                         {
-                            if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)
+                            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Master != null)
                             {
                                 if (BaseObject.TargetCret != null)
                                 {
@@ -403,30 +403,30 @@ namespace GameSvr.RobotPlay
                                         result = true;
                                     }
                                 }
-                                if (BaseObject.m_LastHiter != null)
+                                if (BaseObject.LastHiter != null)
                                 {
-                                    if (BaseObject.m_LastHiter == this)
+                                    if (BaseObject.LastHiter == this)
                                     {
                                         result = true;
                                     }
                                 }
-                                if (BaseObject.m_ExpHitter != null)
+                                if (BaseObject.ExpHitter != null)
                                 {
-                                    if (BaseObject.m_LastHiter == this)
+                                    if (BaseObject.LastHiter == this)
                                     {
                                         result = true;
                                     }
                                 }
                             }
                         }
-                        if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)// 安全区不能打人物和英雄
+                        if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Master != null)// 安全区不能打人物和英雄
                         {
                             if (BaseObject.InSafeZone() || InSafeZone())
                             {
                                 result = false;
                             }
                         }
-                        if (BaseObject.m_Master == this)
+                        if (BaseObject.Master == this)
                         {
                             result = false;
                         }
@@ -434,7 +434,7 @@ namespace GameSvr.RobotPlay
                         {
                             result = false;
                         }
-                        switch (BaseObject.m_btRaceServer)
+                        switch (BaseObject.Race)
                         {
                             case Grobal2.RC_ARCHERGUARD:
                             case 55:// 不主动攻击练功师 弓箭手
@@ -497,7 +497,7 @@ namespace GameSvr.RobotPlay
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
                         var cellsuccess = false;
-                        cellInfo = m_PEnvir.GetCellInfo(n18, n1C, ref cellsuccess);
+                        cellInfo = Envir.GetCellInfo(n18, n1C, ref cellsuccess);
                         if (cellsuccess && cellInfo.ObjList != null)
                         {
                             nIdx = 0;
@@ -552,7 +552,7 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                     {
-                                                        if (m_btRaceServer < Grobal2.RC_ANIMAL || m_Master != null || m_boCrazyMode || WantRefMsg || baseObject.m_Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                                        if (Race < Grobal2.RC_ANIMAL || Master != null || m_boCrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                         {
                                                             UpdateVisibleGay(baseObject);
                                                         }
@@ -560,7 +560,7 @@ namespace GameSvr.RobotPlay
                                                 }
                                                 break;
                                             case CellType.ItemObject:
-                                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                                if (Race == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                                     {
@@ -610,7 +610,7 @@ namespace GameSvr.RobotPlay
                                                 }
                                                 break;
                                             case CellType.EventObject:
-                                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                                if (Race == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (osObject.CellObjId < 0)
                                                     {
@@ -662,7 +662,7 @@ namespace GameSvr.RobotPlay
                         switch (VisibleBaseObject.VisibleFlag)
                         {
                             case VisibleFlag.Visible:
-                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                if (Race == Grobal2.RC_PLAYOBJECT)
                                 {
                                     baseObject = VisibleBaseObject.BaseObject;
                                     if (baseObject != null)
@@ -680,7 +680,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 continue;
                             case VisibleFlag.Hidden:
-                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                if (Race == Grobal2.RC_PLAYOBJECT)
                                 {
                                     baseObject = VisibleBaseObject.BaseObject;
                                     if (baseObject != null)
@@ -841,9 +841,9 @@ namespace GameSvr.RobotPlay
                 }
                 else
                 {
-                    if (hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT || hiter.m_Master != null && hiter.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                    if (hiter.Race == Grobal2.RC_PLAYOBJECT || hiter.Master != null && hiter.GetMaster().Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        if (TargetCret != null && (TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || TargetCret.m_Master != null && TargetCret.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                        if (TargetCret != null && (TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null && TargetCret.GetMaster().Race == Grobal2.RC_PLAYOBJECT))
                         {
                             if (Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
                             {
@@ -869,7 +869,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                 }
-                if (hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT && !hiter.IsRobot && TargetCret == hiter)
+                if (hiter.Race == Grobal2.RC_PLAYOBJECT && !hiter.IsRobot && TargetCret == hiter)
                 {
                     if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0)
                     {
@@ -899,7 +899,7 @@ namespace GameSvr.RobotPlay
                     m_nMeatQuality = 0;
                 }
             }
-            AttackTick = (ushort)(AttackTick + (150 - HUtil32._MIN(130, m_Abil.Level * 4)));
+            AttackTick = (ushort)(AttackTick + (150 - HUtil32._MIN(130, Abil.Level * 4)));
         }
 
         protected override void SearchTarget()
@@ -907,7 +907,7 @@ namespace GameSvr.RobotPlay
             if ((TargetCret == null || HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000) && m_boAIStart)
             {
                 m_dwSearchTargetTick = HUtil32.GetTickCount();
-                if (TargetCret == null || !(TargetCret != null && TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || TargetCret.m_Master != null && TargetCret.m_Master.m_btRaceServer == Grobal2.RC_PLAYOBJECT || (HUtil32.GetTickCount() - StruckTick) > 15000)
+                if (TargetCret == null || !(TargetCret != null && TargetCret.Race == Grobal2.RC_PLAYOBJECT) || TargetCret.Master != null && TargetCret.Master.Race == Grobal2.RC_PLAYOBJECT || (HUtil32.GetTickCount() - StruckTick) > 15000)
                 {
                     base.SearchTarget();
                 }

@@ -31,7 +31,7 @@ namespace GameSvr.Command.Commands
                     var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                     if (m_PlayObject != null)
                     {
-                        PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.m_PEnvir.MapDesc + '(' + m_PlayObject.m_PEnvir.MapName + ") " + m_PlayObject.CurrX + ':'
+                        PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.Envir.MapDesc + '(' + m_PlayObject.Envir.MapName + ") " + m_PlayObject.CurrX + ':'
                             + PlayObject.CurrY, MsgColor.Blue, MsgType.Hint);
                     }
                     else

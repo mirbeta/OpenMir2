@@ -66,7 +66,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     boChangeFace = false;
                 }
-                if (m_Master != null && (m_Master.TargetCret != null || m_Master.m_LastHiter != null))
+                if (Master != null && (Master.TargetCret != null || Master.LastHiter != null))
                 {
                     boChangeFace = false;
                 }
@@ -90,7 +90,7 @@ namespace GameSvr.Monster.Monsters
                             {
                                 (elfMon as ElfMonster).AppearNow();
                             }
-                            m_Master = null;
+                            Master = null;
                             KickException();
                         }
                     }

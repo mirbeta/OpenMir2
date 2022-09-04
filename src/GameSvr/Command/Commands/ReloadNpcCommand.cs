@@ -37,7 +37,7 @@ namespace GameSvr.Command.Commands
                 TmpMerList = new List<TBaseObject>();
                 try
                 {
-                    if (M2Share.UserEngine.GetMerchantList(PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpMerList) > 0)
+                    if (M2Share.UserEngine.GetMerchantList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpMerList) > 0)
                     {
                         for (var i = 0; i < TmpMerList.Count; i++)
                         {
@@ -52,7 +52,7 @@ namespace GameSvr.Command.Commands
                         PlayObject.SysMsg("附近未发现任何交易NPC!!!", MsgColor.Red, MsgType.Hint);
                     }
                     TmpNorList = new List<TBaseObject>();
-                    if (M2Share.UserEngine.GetNpcList(PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpNorList) > 0)
+                    if (M2Share.UserEngine.GetNpcList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpNorList) > 0)
                     {
                         for (var i = 0; i < TmpNorList.Count; i++)
                         {

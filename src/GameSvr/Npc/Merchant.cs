@@ -472,9 +472,9 @@ namespace GameSvr.Npc
                 User.DecGold(M2Share.g_Config.nUpgradeWeaponPrice);
                 if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
                 {
-                    if (m_Castle != null)
+                    if (Castle != null)
                     {
-                        m_Castle.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
+                        Castle.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
                     }
                     else if (M2Share.g_Config.boGetAllNpcTax)
                     {
@@ -700,7 +700,7 @@ namespace GameSvr.Npc
             int result;
             if (m_boCastle)
             {
-                if (m_Castle != null && m_Castle.IsMasterGuild(PlayObject.MyGuild)) //沙巴克成员修复物品打折
+                if (Castle != null && Castle.IsMasterGuild(PlayObject.MyGuild)) //沙巴克成员修复物品打折
                 {
                     var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.g_Config.nCastleMemberPriceRate / 100)));//80%
                     result = HUtil32.Round(nPrice / 100 * n14);
@@ -833,7 +833,7 @@ namespace GameSvr.Npc
             }
             try
             {
-                if (!m_boCastle || !(m_Castle != null && m_Castle.m_boUnderWar))
+                if (!m_boCastle || !(Castle != null && Castle.m_boUnderWar))
                 {
                     if (!PlayObject.Death && sData != "" && sData[0] == '@')
                     {
@@ -1011,7 +1011,7 @@ namespace GameSvr.Npc
                         SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                     }
                 }
-                if (m_boCastle && m_Castle != null && m_Castle.m_boUnderWar)
+                if (m_boCastle && Castle != null && Castle.m_boUnderWar)
                 {
                     if (!FixedHideMode)
                     {
@@ -1063,7 +1063,7 @@ namespace GameSvr.Npc
 
         public Merchant() : base()
         {
-            m_btRaceImg = Grobal2.RCC_MERCHANT;
+            RaceImg = Grobal2.RCC_MERCHANT;
             m_wAppr = 0;
             m_nPriceRate = 100;
             m_boCastle = false;
@@ -1276,9 +1276,9 @@ namespace GameSvr.Npc
                                             PlayObject.Gold -= nPrice;
                                             if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
                                             {
-                                                if (m_Castle != null)
+                                                if (Castle != null)
                                                 {
-                                                    m_Castle.IncRateGold(nPrice);
+                                                    Castle.IncRateGold(nPrice);
                                                 }
                                                 else if (M2Share.g_Config.boGetAllNpcTax)
                                                 {
@@ -1413,9 +1413,9 @@ namespace GameSvr.Npc
                 {
                     if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
                     {
-                        if (m_Castle != null)
+                        if (Castle != null)
                         {
-                            m_Castle.IncRateGold(nPrice);
+                            Castle.IncRateGold(nPrice);
                         }
                         else if (M2Share.g_Config.boGetAllNpcTax)
                         {
@@ -1683,9 +1683,9 @@ namespace GameSvr.Npc
                     {
                         if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
                         {
-                            if (m_Castle != null)
+                            if (Castle != null)
                             {
-                                m_Castle.IncRateGold(nRepairPrice);
+                                Castle.IncRateGold(nRepairPrice);
                             }
                             else if (M2Share.g_Config.boGetAllNpcTax)
                             {

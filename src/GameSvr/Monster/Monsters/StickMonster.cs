@@ -14,8 +14,8 @@ namespace GameSvr.Monster.Monsters
         {
             this.ViewRange = 7;
             this.m_nRunTime = 250;
-            this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            this.m_dwSearchTick = HUtil32.GetTickCount();
+            this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            this.SearchTick = HUtil32.GetTickCount();
             nComeOutValue = 4;
             nAttackRange = 4;
             this.FixedHideMode = true;
@@ -40,7 +40,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 return true;
             }
-            if (this.TargetCret.m_PEnvir == this.m_PEnvir)
+            if (this.TargetCret.Envir == this.Envir)
             {
                 this.SetTargetXY(this.TargetCret.CurrX, this.TargetCret.CurrY);
             }

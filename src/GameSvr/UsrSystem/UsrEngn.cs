@@ -185,12 +185,12 @@ namespace GameSvr.UsrSystem
             for (var i = MerchantList.Count - 1; i >= 0; i--)
             {
                 merchant = MerchantList[i];
-                merchant.m_PEnvir = M2Share.MapManager.FindMap(merchant.MapName);
-                if (merchant.m_PEnvir != null)
+                merchant.Envir = M2Share.MapManager.FindMap(merchant.MapName);
+                if (merchant.Envir != null)
                 {
                     merchant.OnEnvirnomentChanged();
                     merchant.Initialize();
-                    if (merchant.m_boAddtoMapSuccess && !merchant.m_boIsHide)
+                    if (merchant.AddtoMapSuccess && !merchant.m_boIsHide)
                     {
                         _logger.Warn("Merchant Initalize fail..." + merchant.CharName + ' ' +
                                      merchant.MapName + '(' +
@@ -217,12 +217,12 @@ namespace GameSvr.UsrSystem
             for (var i = QuestNpcList.Count - 1; i >= 0; i--)
             {
                 normNpc = QuestNpcList[i];
-                normNpc.m_PEnvir = M2Share.MapManager.FindMap(normNpc.MapName);
-                if (normNpc.m_PEnvir != null)
+                normNpc.Envir = M2Share.MapManager.FindMap(normNpc.MapName);
+                if (normNpc.Envir != null)
                 {
                     normNpc.OnEnvirnomentChanged();
                     normNpc.Initialize();
-                    if (normNpc.m_boAddtoMapSuccess && !normNpc.m_boIsHide)
+                    if (normNpc.AddtoMapSuccess && !normNpc.m_boIsHide)
                     {
                         _logger.Warn(normNpc.CharName + " Npc Initalize fail... ");
                         QuestNpcList.RemoveAt(i);
@@ -304,16 +304,16 @@ namespace GameSvr.UsrSystem
                 if (switchDataInfo == null)
                 {
                     GetHumData(playObject, ref userOpenInfo.HumanRcd);
-                    playObject.m_btRaceServer = Grobal2.RC_PLAYOBJECT;
+                    playObject.Race = Grobal2.RC_PLAYOBJECT;
                     if (string.IsNullOrEmpty(playObject.HomeMap))
                     {
                         playObject.HomeMap = GetHomeInfo(playObject.Job, ref playObject.HomeX, ref playObject.HomeY);
                         playObject.MapName = playObject.HomeMap;
                         playObject.CurrX = GetRandHomeX(playObject);
                         playObject.CurrY = GetRandHomeY(playObject);
-                        if (playObject.m_Abil.Level == 0)
+                        if (playObject.Abil.Level == 0)
                         {
-                            var abil = playObject.m_Abil;
+                            var abil = playObject.Abil;
                             abil.Level = 1;
                             abil.AC = 0;
                             abil.MAC = 0;
@@ -337,10 +337,10 @@ namespace GameSvr.UsrSystem
                         playObject.MapFileName = envir.MapFileName;
                         if (envir.Flag.boFight3Zone) // 是否在行会战争地图死亡
                         {
-                            if (playObject.m_Abil.HP <= 0 && playObject.FightZoneDieCount < 3)
+                            if (playObject.Abil.HP <= 0 && playObject.FightZoneDieCount < 3)
                             {
-                                playObject.m_Abil.HP = playObject.m_Abil.MaxHP;
-                                playObject.m_Abil.MP = playObject.m_Abil.MaxMP;
+                                playObject.Abil.HP = playObject.Abil.MaxHP;
+                                playObject.Abil.MP = playObject.Abil.MaxMP;
                                 playObject.m_boDieInFight3Zone = true;
                             }
                             else
@@ -370,8 +370,8 @@ namespace GameSvr.UsrSystem
                             }
                         }
                     }
-                    if (M2Share.MapManager.FindMap(playObject.MapName) == null) playObject.m_Abil.HP = 0;
-                    if (playObject.m_Abil.HP <= 0)
+                    if (M2Share.MapManager.FindMap(playObject.MapName) == null) playObject.Abil.HP = 0;
+                    if (playObject.Abil.HP <= 0)
                     {
                         playObject.ClearStatusTime();
                         if (playObject.PKLevel() < 2)
@@ -396,7 +396,7 @@ namespace GameSvr.UsrSystem
                             playObject.CurrX = (short)(M2Share.RandomNumber.Random(13) + M2Share.g_Config.nRedDieHomeX);// 839
                             playObject.CurrY = (short)(M2Share.RandomNumber.Random(13) + M2Share.g_Config.nRedDieHomeY);// 668
                         }
-                        playObject.m_Abil.HP = 14;
+                        playObject.Abil.HP = 14;
                     }
                     playObject.AbilCopyToWAbil();
                     envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, playObject.MapName);//切换其他服务器
@@ -406,9 +406,9 @@ namespace GameSvr.UsrSystem
                         playObject.m_nSocket = userOpenInfo.LoadUser.nSocket;
                         playObject.m_nGateIdx = userOpenInfo.LoadUser.nGateIdx;
                         playObject.m_nGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
-                        playObject.m_WAbil = playObject.m_Abil;
+                        playObject.m_WAbil = playObject.Abil;
                         playObject.m_nServerIndex = M2Share.MapManager.GetMapOfServerIndex(playObject.MapName);
-                        if (playObject.m_Abil.HP != 14)
+                        if (playObject.Abil.HP != 14)
                         {
                             _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.nServerIndex, playObject.m_nServerIndex, playObject.MapName }));
                         }
@@ -436,9 +436,9 @@ namespace GameSvr.UsrSystem
                         playObject.CurrX = M2Share.g_Config.nHomeX;
                         playObject.CurrY = M2Share.g_Config.nHomeY;
                     }
-                    playObject.m_PEnvir = envir;
+                    playObject.Envir = envir;
                     playObject.OnEnvirnomentChanged();
-                    if (playObject.m_PEnvir == null)
+                    if (playObject.Envir == null)
                     {
                         _logger.Error(sErrorEnvirIsNil);
                         goto ReGetMap;
@@ -453,7 +453,7 @@ namespace GameSvr.UsrSystem
                     playObject.MapName = switchDataInfo.sMap;
                     playObject.CurrX = switchDataInfo.wX;
                     playObject.CurrY = switchDataInfo.wY;
-                    playObject.m_Abil = switchDataInfo.Abil;
+                    playObject.Abil = switchDataInfo.Abil;
                     playObject.m_WAbil = switchDataInfo.Abil;
                     LoadSwitchData(switchDataInfo, ref playObject);
                     DelSwitchData(switchDataInfo);
@@ -479,9 +479,9 @@ namespace GameSvr.UsrSystem
                             playObject.CurrY = M2Share.g_Config.nHomeY;
                         }
                         playObject.AbilCopyToWAbil();
-                        playObject.m_PEnvir = envir;
+                        playObject.Envir = envir;
                         playObject.OnEnvirnomentChanged();
-                        if (playObject.m_PEnvir == null)
+                        if (playObject.Envir == null)
                         {
                             _logger.Error(sErrorEnvirIsNil);
                             goto ReGetMap;
@@ -696,9 +696,9 @@ namespace GameSvr.UsrSystem
                                     }
                                     else
                                     {
-                                        if ((HUtil32.GetTickCount() - playObject.m_dwSearchTick) > playObject.m_dwSearchTime)
+                                        if ((HUtil32.GetTickCount() - playObject.SearchTick) > playObject.SearchTime)
                                         {
-                                            playObject.m_dwSearchTick = HUtil32.GetTickCount();
+                                            playObject.SearchTick = HUtil32.GetTickCount();
                                             playObject.SearchViewRange();
                                             playObject.GameTimeChanged();
                                         }
@@ -772,9 +772,9 @@ namespace GameSvr.UsrSystem
                                 }
                                 else
                                 {
-                                    if ((HUtil32.GetTickCount() - playObject.m_dwSearchTick) > playObject.m_dwSearchTime)
+                                    if ((HUtil32.GetTickCount() - playObject.SearchTick) > playObject.SearchTime)
                                     {
-                                        playObject.m_dwSearchTick = HUtil32.GetTickCount();
+                                        playObject.SearchTick = HUtil32.GetTickCount();
                                         playObject.SearchViewRange();//搜索对像
                                         playObject.GameTimeChanged();//游戏时间改变
                                     }
@@ -860,9 +860,9 @@ namespace GameSvr.UsrSystem
                     {
                         if ((dwCurrTick - merchantNpc.m_dwRunTick) > merchantNpc.m_nRunTime)
                         {
-                            if ((HUtil32.GetTickCount() - merchantNpc.m_dwSearchTick) > merchantNpc.m_dwSearchTime)
+                            if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
                             {
-                                merchantNpc.m_dwSearchTick = HUtil32.GetTickCount();
+                                merchantNpc.SearchTick = HUtil32.GetTickCount();
                                 merchantNpc.SearchViewRange();
                             }
                             if ((dwCurrTick - merchantNpc.m_dwRunTick) > merchantNpc.m_nRunTime)
@@ -1034,9 +1034,9 @@ namespace GameSvr.UsrSystem
                                     }
                                     else
                                     {
-                                        if ((dwCurrentTick - monster.m_dwSearchTick) > monster.m_dwSearchTime)
+                                        if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
                                         {
-                                            monster.m_dwSearchTick = HUtil32.GetTickCount();
+                                            monster.SearchTick = HUtil32.GetTickCount();
                                             if (!monster.Death)
                                             {
                                                 monster.SearchViewRange();
@@ -1125,9 +1125,9 @@ namespace GameSvr.UsrSystem
                     {
                         if ((dwCurrTick - npc.m_dwRunTick) > npc.m_nRunTime)
                         {
-                            if ((HUtil32.GetTickCount() - npc.m_dwSearchTick) > npc.m_dwSearchTime)
+                            if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
                             {
-                                npc.m_dwSearchTick = HUtil32.GetTickCount();
+                                npc.SearchTick = HUtil32.GetTickCount();
                                 npc.SearchViewRange();
                             }
                             if ((dwCurrTick - npc.m_dwRunTick) > npc.m_nRunTime)
@@ -1177,7 +1177,7 @@ namespace GameSvr.UsrSystem
                     monGen.CertList.Add(baseObject);
                     monGen.CertCount++;
                 }
-                baseObject.m_PEnvir.AddObject(baseObject);
+                baseObject.Envir.AddObject(baseObject);
                 baseObject.AddToMaped = true;
             }
             result = baseObject;
@@ -1277,7 +1277,7 @@ namespace GameSvr.UsrSystem
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
                 playObject = _PlayObjectList[i];
-                if (!playObject.Ghost && playObject.m_PEnvir == pMap && playObject.BanShout &&
+                if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
                     playObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
             }
@@ -1747,27 +1747,27 @@ namespace GameSvr.UsrSystem
             if (cert != null)
             {
                 MonInitialize(cert, sMonName);
-                cert.m_PEnvir = map;
+                cert.Envir = map;
                 cert.MapName = sMapName;
                 cert.CurrX = nX;
                 cert.CurrY = nY;
                 cert.Direction = M2Share.RandomNumber.RandomByte(8);
                 cert.CharName = sMonName;
-                cert.m_WAbil = cert.m_Abil;
+                cert.m_WAbil = cert.Abil;
                 cert.OnEnvirnomentChanged();
                 if (M2Share.RandomNumber.Random(100) < cert.m_btCoolEye) cert.CoolEye = true;
                 MonGetRandomItems(cert);
                 cert.Initialize();
-                if (cert.m_boAddtoMapSuccess)
+                if (cert.AddtoMapSuccess)
                 {
                     p28 = null;
-                    if (cert.m_PEnvir.Width < 50)
+                    if (cert.Envir.Width < 50)
                         n20 = 2;
                     else
                         n20 = 3;
-                    if (cert.m_PEnvir.Height < 250)
+                    if (cert.Envir.Height < 250)
                     {
-                        if (cert.m_PEnvir.Height < 30)
+                        if (cert.Envir.Height < 30)
                             n24 = 2;
                         else
                             n24 = 20;
@@ -1780,25 +1780,25 @@ namespace GameSvr.UsrSystem
                     n1C = 0;
                     while (true)
                     {
-                        if (!cert.m_PEnvir.CanWalk(cert.CurrX, cert.CurrY, false))
+                        if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
                         {
-                            if (cert.m_PEnvir.Width - n24 - 1 > cert.CurrX)
+                            if (cert.Envir.Width - n24 - 1 > cert.CurrX)
                             {
                                 cert.CurrX += (short)n20;
                             }
                             else
                             {
-                                cert.CurrX = (short)(M2Share.RandomNumber.Random(cert.m_PEnvir.Width / 2) + n24);
-                                if (cert.m_PEnvir.Height - n24 - 1 > cert.CurrY)
+                                cert.CurrX = (short)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
+                                if (cert.Envir.Height - n24 - 1 > cert.CurrY)
                                     cert.CurrY += (short)n20;
                                 else
                                     cert.CurrY =
-                                        (short)(M2Share.RandomNumber.Random(cert.m_PEnvir.Height / 2) + n24);
+                                        (short)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
                             }
                         }
                         else
                         {
-                            p28 = cert.m_PEnvir.AddToMap(cert.CurrX, cert.CurrY, CellType.MovingObject, cert);
+                            p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.MovingObject, cert);
                             break;
                         }
 
@@ -1992,7 +1992,7 @@ namespace GameSvr.UsrSystem
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
                 playObject = _PlayObjectList[i];
-                if (!playObject.Ghost && playObject.m_PEnvir == envir)
+                if (!playObject.Ghost && playObject.Envir == envir)
                 {
                     if (Math.Abs(playObject.CurrX - nX) < nRange && Math.Abs(playObject.CurrY - nY) < nRange)
                     {
@@ -2106,24 +2106,24 @@ namespace GameSvr.UsrSystem
             playObject.Gender = Enum.Parse<PlayGender>(humData.btSex.ToString());
             playObject.Job = (PlayJob)humData.btJob;
             playObject.Gold = humData.nGold;
-            playObject.m_Abil.Level = humData.Abil.Level;
-            playObject.m_Abil.HP = humData.Abil.HP;
-            playObject.m_Abil.MP = humData.Abil.MP;
-            playObject.m_Abil.MaxHP = humData.Abil.MaxHP;
-            playObject.m_Abil.MaxMP = humData.Abil.MaxMP;
-            playObject.m_Abil.Exp = humData.Abil.Exp;
-            playObject.m_Abil.MaxExp = humData.Abil.MaxExp;
-            playObject.m_Abil.Weight = humData.Abil.Weight;
-            playObject.m_Abil.MaxWeight = humData.Abil.MaxWeight;
-            playObject.m_Abil.WearWeight = humData.Abil.WearWeight;
-            playObject.m_Abil.MaxWearWeight = humData.Abil.MaxWearWeight;
-            playObject.m_Abil.HandWeight = humData.Abil.HandWeight;
-            playObject.m_Abil.MaxHandWeight = humData.Abil.MaxHandWeight;
+            playObject.Abil.Level = humData.Abil.Level;
+            playObject.Abil.HP = humData.Abil.HP;
+            playObject.Abil.MP = humData.Abil.MP;
+            playObject.Abil.MaxHP = humData.Abil.MaxHP;
+            playObject.Abil.MaxMP = humData.Abil.MaxMP;
+            playObject.Abil.Exp = humData.Abil.Exp;
+            playObject.Abil.MaxExp = humData.Abil.MaxExp;
+            playObject.Abil.Weight = humData.Abil.Weight;
+            playObject.Abil.MaxWeight = humData.Abil.MaxWeight;
+            playObject.Abil.WearWeight = humData.Abil.WearWeight;
+            playObject.Abil.MaxWearWeight = humData.Abil.MaxWearWeight;
+            playObject.Abil.HandWeight = humData.Abil.HandWeight;
+            playObject.Abil.MaxHandWeight = humData.Abil.MaxHandWeight;
             playObject.m_wStatusTimeArr = humData.wStatusTimeArr;
             playObject.HomeMap = humData.sHomeMap;
             playObject.HomeX = humData.wHomeX;
             playObject.HomeY = humData.wHomeY;
-            playObject.m_BonusAbil = humData.BonusAbil;
+            playObject.BonusAbil = humData.BonusAbil;
             playObject.m_nBonusPoint = humData.nBonusPoint;
             playObject.m_btCreditPoint = humData.btCreditPoint;
             playObject.m_btReLevel = humData.btReLevel;
@@ -2138,19 +2138,19 @@ namespace GameSvr.UsrSystem
             playObject.m_nGameGold = humData.nGameGold;
             playObject.m_nGamePoint = humData.nGamePoint;
             playObject.m_nPayMentPoint = humData.nPayMentPoint;
-            playObject.m_nPkPoint = humData.nPKPoint;
+            playObject.PkPoint = humData.nPKPoint;
             if (humData.btAllowGroup > 0)
             {
-                playObject.m_boAllowGroup = true;
+                playObject.AllowGroup = true;
             }
             else
             {
-                playObject.m_boAllowGroup = false;
+                playObject.AllowGroup = false;
             }
             playObject.btB2 = humData.btF9;
             playObject.AttatckMode = (AttackMode)humData.btAttatckMode;
-            playObject.m_nIncHealth = humData.btIncHealth;
-            playObject.m_nIncSpell = humData.btIncSpell;
+            playObject.IncHealth = humData.btIncHealth;
+            playObject.IncSpell = humData.btIncSpell;
             playObject.m_nIncHealing = humData.btIncHealing;
             playObject.FightZoneDieCount = humData.btFightZoneDieCount;
             playObject.m_sUserID = humData.sAccount;
@@ -2289,24 +2289,24 @@ namespace GameSvr.UsrSystem
                 monster = MonsterList[i];
                 if (string.Compare(monster.sName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    baseObject.m_btRaceServer = monster.btRace;
-                    baseObject.m_btRaceImg = monster.btRaceImg;
+                    baseObject.Race = monster.btRace;
+                    baseObject.RaceImg = monster.btRaceImg;
                     baseObject.m_wAppr = monster.wAppr;
-                    baseObject.m_Abil.Level = (byte)monster.wLevel;
+                    baseObject.Abil.Level = (byte)monster.wLevel;
                     baseObject.m_btLifeAttrib = monster.btLifeAttrib;
                     baseObject.m_btCoolEye = (byte)monster.wCoolEye;
                     baseObject.m_dwFightExp = monster.dwExp;
-                    baseObject.m_Abil.HP = monster.wHP;
-                    baseObject.m_Abil.MaxHP = monster.wHP;
+                    baseObject.Abil.HP = monster.wHP;
+                    baseObject.Abil.MaxHP = monster.wHP;
                     baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
-                    baseObject.m_Abil.MP = 0;
-                    baseObject.m_Abil.MaxMP = monster.wMP;
-                    baseObject.m_Abil.AC = HUtil32.MakeLong(monster.wAC, monster.wAC);
-                    baseObject.m_Abil.MAC = HUtil32.MakeLong(monster.wMAC, monster.wMAC);
-                    baseObject.m_Abil.DC = HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
-                    baseObject.m_Abil.MC = HUtil32.MakeLong(monster.wMC, monster.wMC);
-                    baseObject.m_Abil.SC = HUtil32.MakeLong(monster.wSC, monster.wSC);
-                    baseObject.m_btSpeedPoint = (byte)monster.wSpeed;
+                    baseObject.Abil.MP = 0;
+                    baseObject.Abil.MaxMP = monster.wMP;
+                    baseObject.Abil.AC = HUtil32.MakeLong(monster.wAC, monster.wAC);
+                    baseObject.Abil.MAC = HUtil32.MakeLong(monster.wMAC, monster.wMAC);
+                    baseObject.Abil.DC = HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
+                    baseObject.Abil.MC = HUtil32.MakeLong(monster.wMC, monster.wMC);
+                    baseObject.Abil.SC = HUtil32.MakeLong(monster.wSC, monster.wSC);
+                    baseObject.SpeedPoint = (byte)monster.wSpeed;
                     baseObject.m_btHitPoint = (byte)monster.wHitPoint;
                     baseObject.WalkSpeed = monster.wWalkSpeed;
                     baseObject.WalkStep = monster.wWalkStep;
@@ -2366,7 +2366,7 @@ namespace GameSvr.UsrSystem
                             if (osObject != null && osObject.CellType == CellType.MovingObject)
                             {
                                 var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
-                                if (baseObject != null && !baseObject.Ghost && baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                if (baseObject != null && !baseObject.Ghost && baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
                                 }
@@ -2459,7 +2459,7 @@ namespace GameSvr.UsrSystem
                 for (var j = 0; j < monGen.CertList.Count; j++)
                 {
                     var baseObject = monGen.CertList[j];
-                    if (!baseObject.Death && !baseObject.Ghost && baseObject.m_PEnvir == envir &&
+                    if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir &&
                         Math.Abs(baseObject.CurrX - nX) <= nRange && Math.Abs(baseObject.CurrY - nY) <= nRange)
                     {
                         if (list != null) list.Add(baseObject);
@@ -2481,7 +2481,7 @@ namespace GameSvr.UsrSystem
             for (var i = 0; i < MerchantList.Count; i++)
             {
                 merchant = MerchantList[i];
-                if (merchant.m_PEnvir == envir && Math.Abs(merchant.CurrX - nX) <= nRange &&
+                if (merchant.Envir == envir && Math.Abs(merchant.CurrX - nX) <= nRange &&
                     Math.Abs(merchant.CurrY - nY) <= nRange) tmpList.Add(merchant);
             }
             return tmpList.Count;
@@ -2493,7 +2493,7 @@ namespace GameSvr.UsrSystem
             for (var i = 0; i < QuestNpcList.Count; i++)
             {
                 npc = QuestNpcList[i];
-                if (npc.m_PEnvir == envir && Math.Abs(npc.CurrX - nX) <= nRange &&
+                if (npc.Envir == envir && Math.Abs(npc.CurrX - nX) <= nRange &&
                     Math.Abs(npc.CurrY - nY) <= nRange) tmpList.Add(npc);
             }
             return tmpList.Count;
@@ -2537,7 +2537,7 @@ namespace GameSvr.UsrSystem
                 for (var j = 0; j < monGen.CertList.Count; j++)
                 {
                     baseObject = monGen.CertList[j];
-                    if (!baseObject.Death && !baseObject.Ghost && baseObject.m_PEnvir == envir)
+                    if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir)
                     {
                         if (list != null)
                             list.Add(baseObject);
@@ -2572,7 +2572,7 @@ namespace GameSvr.UsrSystem
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
                 playObject = _PlayObjectList[i];
-                if (!playObject.Death && !playObject.Ghost && playObject.m_PEnvir == envir) result++;
+                if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir) result++;
             }
             return result;
         }
@@ -2584,7 +2584,7 @@ namespace GameSvr.UsrSystem
             for (var i = 0; i < _PlayObjectList.Count; i++)
             {
                 playObject = _PlayObjectList[i];
-                if (!playObject.Death && !playObject.Ghost && playObject.m_PEnvir == envir &&
+                if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir &&
                     Math.Abs(playObject.CurrX - nRageX) <= nRage && Math.Abs(playObject.CurrY - nRageY) <= nRage)
                 {
                     list.Add(playObject);
@@ -2747,13 +2747,13 @@ namespace GameSvr.UsrSystem
                 return null;
             }
             RobotPlayObject cert = new RobotPlayObject();
-            cert.m_PEnvir = envirnoment;
+            cert.Envir = envirnoment;
             cert.MapName = ai.sMapName;
             cert.CurrX = ai.nX;
             cert.CurrY = ai.nY;
             cert.Direction = (byte)M2Share.RandomNumber.Random(8);
             cert.CharName = ai.sCharName;
-            cert.m_WAbil = cert.m_Abil;
+            cert.m_WAbil = cert.Abil;
             if (M2Share.RandomNumber.Random(100) < cert.m_btCoolEye)
             {
                 cert.CoolEye = true;
@@ -2771,10 +2771,10 @@ namespace GameSvr.UsrSystem
             cert.RecalcAbilitys();
             cert.m_WAbil.HP = cert.m_WAbil.MaxHP;
             cert.m_WAbil.MP = cert.m_WAbil.MaxMP;
-            if (cert.m_boAddtoMapSuccess)
+            if (cert.AddtoMapSuccess)
             {
                 p28 = null;
-                if (cert.m_PEnvir.Width < 50)
+                if (cert.Envir.Width < 50)
                 {
                     n20 = 2;
                 }
@@ -2782,9 +2782,9 @@ namespace GameSvr.UsrSystem
                 {
                     n20 = 3;
                 }
-                if ((cert.m_PEnvir.Height < 250))
+                if ((cert.Envir.Height < 250))
                 {
-                    if ((cert.m_PEnvir.Height < 30))
+                    if ((cert.Envir.Height < 30))
                     {
                         n24 = 2;
                     }
@@ -2800,28 +2800,28 @@ namespace GameSvr.UsrSystem
                 n1C = 0;
                 while (true)
                 {
-                    if (!cert.m_PEnvir.CanWalk(cert.CurrX, cert.CurrY, false))
+                    if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
                     {
-                        if ((cert.m_PEnvir.Width - n24 - 1) > cert.CurrX)
+                        if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
                         {
                             cert.CurrX += (short)n20;
                         }
                         else
                         {
-                            cert.CurrX = (byte)((M2Share.RandomNumber.Random(cert.m_PEnvir.Width / 2)) + n24);
-                            if (cert.m_PEnvir.Height - n24 - 1 > cert.CurrY)
+                            cert.CurrX = (byte)((M2Share.RandomNumber.Random(cert.Envir.Width / 2)) + n24);
+                            if (cert.Envir.Height - n24 - 1 > cert.CurrY)
                             {
                                 cert.CurrY += (short)n20;
                             }
                             else
                             {
-                                cert.CurrY = (byte)(M2Share.RandomNumber.Random(cert.m_PEnvir.Height / 2) + n24);
+                                cert.CurrY = (byte)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
                             }
                         }
                     }
                     else
                     {
-                        p28 = cert.m_PEnvir.AddToMap(cert.CurrX, cert.CurrY, CellType.MovingObject, cert);
+                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.MovingObject, cert);
                         break;
                     }
                     n1C++;

@@ -453,7 +453,7 @@ namespace GameSvr.Npc
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 500);
             var nKickOffLine = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 1440 * 15);
             PlayObject.m_boAutoGetExpInSafeZone = true;
-            PlayObject.m_AutoGetExpEnvir = PlayObject.m_PEnvir;
+            PlayObject.m_AutoGetExpEnvir = PlayObject.Envir;
             PlayObject.m_nAutoGetExpTime = nTime * 1000;
             PlayObject.m_nAutoGetExpPoint = nPoint;
             PlayObject.OffLineFlag = true;
@@ -548,26 +548,26 @@ namespace GameSvr.Npc
                 case '=':
                     if (nExp > 0)
                     {
-                        PlayObject.m_Abil.Exp = nExp;
+                        PlayObject.Abil.Exp = nExp;
                         dwInt = nExp;
                     }
                     break;
                 case '-':
-                    if (PlayObject.m_Abil.Exp > nExp)
+                    if (PlayObject.Abil.Exp > nExp)
                     {
-                        PlayObject.m_Abil.Exp -= nExp;
+                        PlayObject.Abil.Exp -= nExp;
                     }
                     else
                     {
-                        PlayObject.m_Abil.Exp = 0;
+                        PlayObject.Abil.Exp = 0;
                     }
                     break;
                 case '+':
-                    if (PlayObject.m_Abil.Exp >= nExp)
+                    if (PlayObject.Abil.Exp >= nExp)
                     {
-                        if (PlayObject.m_Abil.Exp - nExp > long.MaxValue - PlayObject.m_Abil.Exp)
+                        if (PlayObject.Abil.Exp - nExp > long.MaxValue - PlayObject.Abil.Exp)
                         {
-                            dwInt = long.MaxValue - PlayObject.m_Abil.Exp;
+                            dwInt = long.MaxValue - PlayObject.Abil.Exp;
                         }
                         else
                         {
@@ -576,7 +576,7 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        if (nExp - PlayObject.m_Abil.Exp > int.MaxValue - nExp)
+                        if (nExp - PlayObject.Abil.Exp > int.MaxValue - nExp)
                         {
                             dwInt = int.MaxValue - nExp;
                         }
@@ -585,7 +585,7 @@ namespace GameSvr.Npc
                             dwInt = nExp;
                         }
                     }
-                    PlayObject.m_Abil.Exp += dwInt;
+                    PlayObject.Abil.Exp += dwInt;
                     // PlayObject.GetExp(dwInt);
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WINEXP, 0, (int)dwInt, 0, 0, "");
                     break;
@@ -637,7 +637,7 @@ namespace GameSvr.Npc
         {
             int nLv;
             var boChgOK = false;
-            int nOldLevel = PlayObject.m_Abil.Level;
+            int nOldLevel = PlayObject.Abil.Level;
             var nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
@@ -650,20 +650,20 @@ namespace GameSvr.Npc
                 case '=':
                     if (nLevel > 0 && nLevel <= Grobal2.MaxLevel)
                     {
-                        PlayObject.m_Abil.Level = (byte)nLevel;
+                        PlayObject.Abil.Level = (byte)nLevel;
                         boChgOK = true;
                     }
                     break;
                 case '-':
-                    nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level - nLevel);
+                    nLv = HUtil32._MAX(0, PlayObject.Abil.Level - nLevel);
                     nLv = HUtil32._MIN(Grobal2.MaxLevel, nLv);
-                    PlayObject.m_Abil.Level = (byte)nLv;
+                    PlayObject.Abil.Level = (byte)nLv;
                     boChgOK = true;
                     break;
                 case '+':
-                    nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level + nLevel);
+                    nLv = HUtil32._MAX(0, PlayObject.Abil.Level + nLevel);
                     nLv = HUtil32._MIN(Grobal2.MaxLevel, nLv);
-                    PlayObject.m_Abil.Level = (byte)nLv;
+                    PlayObject.Abil.Level = (byte)nLv;
                     boChgOK = true;
                     break;
             }
@@ -689,16 +689,16 @@ namespace GameSvr.Npc
                 case '=':
                     if (nPKPoint >= 0)
                     {
-                        PlayObject.m_nPkPoint = nPKPoint;
+                        PlayObject.PkPoint = nPKPoint;
                     }
                     break;
                 case '-':
-                    nPoint = HUtil32._MAX(0, PlayObject.m_nPkPoint - nPKPoint);
-                    PlayObject.m_nPkPoint = nPoint;
+                    nPoint = HUtil32._MAX(0, PlayObject.PkPoint - nPKPoint);
+                    PlayObject.PkPoint = nPoint;
                     break;
                 case '+':
-                    nPoint = HUtil32._MAX(0, PlayObject.m_nPkPoint + nPKPoint);
-                    PlayObject.m_nPkPoint = nPoint;
+                    nPoint = HUtil32._MAX(0, PlayObject.PkPoint + nPKPoint);
+                    PlayObject.PkPoint = nPoint;
                     break;
             }
             if (nOldPKLevel != PlayObject.PKLevel())
@@ -715,7 +715,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < MonList.Count; i++)
             {
                 Mon = MonList[i];
-                if (Mon.m_Master != null)
+                if (Mon.Master != null)
                 {
                     continue;
                 }
@@ -871,7 +871,7 @@ namespace GameSvr.Npc
         private void ActionOfGetMarry(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var PoseBaseObject = PlayObject.GetPoseCreate();
-            if (PoseBaseObject != null && PoseBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT && PoseBaseObject.Gender != PlayObject.Gender)
+            if (PoseBaseObject != null && PoseBaseObject.Race == Grobal2.RC_PLAYOBJECT && PoseBaseObject.Gender != PlayObject.Gender)
             {
                 PlayObject.m_sDearName = PoseBaseObject.CharName;
                 PlayObject.RefShowName();
@@ -886,7 +886,7 @@ namespace GameSvr.Npc
         private void ActionOfGetMaster(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var PoseBaseObject = PlayObject.GetPoseCreate();
-            if (PoseBaseObject != null && PoseBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT && PoseBaseObject.Gender != PlayObject.Gender)
+            if (PoseBaseObject != null && PoseBaseObject.Race == Grobal2.RC_PLAYOBJECT && PoseBaseObject.Gender != PlayObject.Gender)
             {
                 PlayObject.m_sMasterName = PoseBaseObject.CharName;
                 PlayObject.RefShowName();
@@ -965,7 +965,7 @@ namespace GameSvr.Npc
             }
             if (QuestActionInfo.sParam1 == "")
             {
-                if (PoseHuman.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
                 {
                     GotoLable(PlayObject, "@HumanTypeErr", false);
                     return;
@@ -1084,7 +1084,7 @@ namespace GameSvr.Npc
             }
             if (QuestActionInfo.sParam1 == "")
             {
-                if (PoseHuman.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
                 {
                     GotoLable(PlayObject, "@HumanTypeErr", false);
                     return;
@@ -1189,11 +1189,11 @@ namespace GameSvr.Npc
             var Envir = M2Share.MapManager.FindMap(sMap);
             if (Envir != null)
             {
-                var OldEnvir = PlayObject.m_PEnvir;
-                PlayObject.m_PEnvir = Envir;
+                var OldEnvir = PlayObject.Envir;
+                PlayObject.Envir = Envir;
                 var FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
-                PlayObject.m_PEnvir = OldEnvir;
+                PlayObject.Envir = OldEnvir;
                 return;
             }
             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_MOBFIREBURN);
@@ -1315,18 +1315,18 @@ namespace GameSvr.Npc
         private void ActionOfTakeCastleGold(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nGold = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            if (nGold < 0 || this.m_Castle == null)
+            if (nGold < 0 || this.Castle == null)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_TAKECASTLEGOLD);
                 return;
             }
-            if (nGold <= this.m_Castle.m_nTotalGold)
+            if (nGold <= this.Castle.m_nTotalGold)
             {
-                this.m_Castle.m_nTotalGold -= nGold;
+                this.Castle.m_nTotalGold -= nGold;
             }
             else
             {
-                this.m_Castle.m_nTotalGold = 0;
+                this.Castle.m_nTotalGold = 0;
             }
         }
 
@@ -1346,7 +1346,7 @@ namespace GameSvr.Npc
             {
                 if (QuestActionInfo.sParam1 == "")
                 {
-                    if (PoseHuman.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                    if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
                     {
                         GotoLable(PlayObject, "@UnMarryTypeErr", false);
                         return;
@@ -2096,7 +2096,7 @@ namespace GameSvr.Npc
             {
                 if (QuestActionInfo.sParam1 == "")
                 {
-                    if (PoseHuman.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                    if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
                     {
                         GotoLable(PlayObject, "@UnMasterTypeErr", false);
                         return;
@@ -3091,7 +3091,7 @@ namespace GameSvr.Npc
 
         private void ActionOfRestBonusPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nTotleUsePoint = PlayObject.m_BonusAbil.DC + PlayObject.m_BonusAbil.MC + PlayObject.m_BonusAbil.SC + PlayObject.m_BonusAbil.AC + PlayObject.m_BonusAbil.MAC + PlayObject.m_BonusAbil.HP + PlayObject.m_BonusAbil.MP + PlayObject.m_BonusAbil.Hit + PlayObject.m_BonusAbil.Speed + PlayObject.m_BonusAbil.X2;
+            var nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.X2;
             PlayObject.m_nBonusPoint += nTotleUsePoint;
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             PlayObject.HasLevelUp(0);
@@ -3166,11 +3166,11 @@ namespace GameSvr.Npc
                 PlayObject.m_btReLevel += (byte)nReLevel;
                 if (nLevel > 0)
                 {
-                    PlayObject.m_Abil.Level = (byte)nLevel;
+                    PlayObject.Abil.Level = (byte)nLevel;
                 }
                 if (M2Share.g_Config.boReNewLevelClearExp)
                 {
-                    PlayObject.m_Abil.Exp = 0;
+                    PlayObject.Abil.Exp = 0;
                 }
                 PlayObject.m_nBonusPoint += nBounsuPoint;
                 PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
@@ -3253,7 +3253,7 @@ namespace GameSvr.Npc
                 return;
             }
             PlayObject.GetFrontPosition(ref nX, ref nY);
-            var Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.MapName, nX, nY, sMonName);
+            var Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
             if (Monster == null)
             {
                 return;

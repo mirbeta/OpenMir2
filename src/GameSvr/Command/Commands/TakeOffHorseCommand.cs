@@ -8,11 +8,11 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void TakeOffHorse(PlayObject PlayObject)
         {
-            if (!PlayObject.m_boOnHorse)
+            if (!PlayObject.OnHorse)
             {
                 return;
             }
-            PlayObject.m_boOnHorse = false;
+            PlayObject.OnHorse = false;
             PlayObject.FeatureChanged();
         }
     }

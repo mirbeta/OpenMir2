@@ -137,7 +137,7 @@ namespace GameSvr.Player
                 {
                     boDisableSayMsg = true;
                 }
-                if (!(boDisableSayMsg || m_PEnvir.Flag.boNOCHAT))
+                if (!(boDisableSayMsg || Envir.Flag.boNOCHAT))
                 {
                     M2Share.g_ChatLoggingList.Add('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + CharName + ": " + sData);
                     m_sOldSayMsg = sData;
@@ -197,11 +197,11 @@ namespace GameSvr.Player
                                         return;
                                     }
                                 }
-                                if (!m_PEnvir.Flag.boQUIZ)
+                                if (!Envir.Flag.boQUIZ)
                                 {
                                     if ((HUtil32.GetTickCount() - ShoutMsgTick) > 10 * 1000)
                                     {
-                                        if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
+                                        if (Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
                                         {
                                             SysMsg(format(M2Share.g_sYouNeedLevelMsg, M2Share.g_Config.nCanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
@@ -215,7 +215,7 @@ namespace GameSvr.Player
                                         }
                                         else
                                         {
-                                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, CurrX, CurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
+                                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
                                         }
                                         return;
                                     }
@@ -699,8 +699,8 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.LETGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_boAllowGuild = !m_boAllowGuild;
-                    if (m_boAllowGuild)
+                    AllowGuild = !AllowGuild;
+                    if (AllowGuild)
                     {
                         SysMsg(M2Share.g_sEnableJoinGuild, MsgColor.Green, MsgType.Hint);
                     }

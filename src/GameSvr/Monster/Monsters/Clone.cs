@@ -9,7 +9,7 @@ namespace GameSvr.Monster.Monsters
     {
         public CloneMonster() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
         protected override bool Operate(TProcessMessage ProcessMsg)
@@ -17,19 +17,19 @@ namespace GameSvr.Monster.Monsters
             var result = false;
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK || ProcessMsg.wIdent == Grobal2.RM_SPELL)
             {
-                if (m_Master != null)
+                if (Master != null)
                 {
-                    if (m_Master.m_WAbil.MP <= 0)
+                    if (Master.m_WAbil.MP <= 0)
                     {
                         m_WAbil.HP = 0;
                     }
                     if (ProcessMsg.wIdent == Grobal2.RM_SPELL)
                     {
-                        m_Master.m_WAbil.MP -= (ushort)ProcessMsg.nParam3;
+                        Master.m_WAbil.MP -= (ushort)ProcessMsg.nParam3;
                     }
                     else
                     {
-                        m_Master.m_WAbil.MP -= (ushort)ProcessMsg.wParam;
+                        Master.m_WAbil.MP -= (ushort)ProcessMsg.wParam;
                     }
                 }
             }
@@ -46,9 +46,9 @@ namespace GameSvr.Monster.Monsters
             TAbility WAbil;
             Direction = (byte)nDir;
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ObjectId, "");
-            if (m_PEnvir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
+            if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
             {
-                m_PEnvir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
+                Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
                 WAbil = m_WAbil;
                 nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 MagPassThroughMagic(nSX, nSY, nTX, nTY, nDir, nPwr, true);

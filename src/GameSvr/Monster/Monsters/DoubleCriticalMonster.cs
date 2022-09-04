@@ -28,7 +28,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 return true;
             }
-            if (TargetCret.m_PEnvir == m_PEnvir)
+            if (TargetCret.Envir == Envir)
             {
                 SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
             }
@@ -60,8 +60,8 @@ namespace GameSvr.Monster.Monsters
                     {
                         nX = (short)(CurrX - 2 + k);
                         nY = (short)(CurrY - 2 + i);
-                        BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
-                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint)
+                        BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < m_btHitPoint)
                         {
                             nDamage = BaseObject.GetHitStruckDamage(this, nDamage);
                             if (nDamage > 0)

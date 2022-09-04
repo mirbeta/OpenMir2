@@ -47,8 +47,8 @@ namespace GameSvr.Npc
         public NormNpc() : base()
         {
             this.SuperMan = true;
-            this.m_btRaceServer = Grobal2.RC_NPC;
-            this.m_nLight = 2;
+            this.Race = Grobal2.RC_NPC;
+            this.Light = 2;
             this.m_btAntiPoison = 99;
             this.m_ScriptList = new List<TScript>();
             this.m_boStickMode = true;
@@ -81,16 +81,16 @@ namespace GameSvr.Npc
                     case 0:
                         if (nParam3 >= 0)
                         {
-                            PlayObject.m_Abil.Exp = nParam3;
-                            PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
+                            PlayObject.Abil.Exp = nParam3;
+                            PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         }
                         break;
                     case 1:
-                        if (PlayObject.m_Abil.Exp >= nParam3)
+                        if (PlayObject.Abil.Exp >= nParam3)
                         {
-                            if (PlayObject.m_Abil.Exp - nParam3 > long.MaxValue - PlayObject.m_Abil.Exp)
+                            if (PlayObject.Abil.Exp - nParam3 > long.MaxValue - PlayObject.Abil.Exp)
                             {
-                                dwInt = long.MaxValue - PlayObject.m_Abil.Exp;
+                                dwInt = long.MaxValue - PlayObject.Abil.Exp;
                             }
                             else
                             {
@@ -99,7 +99,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            if (nParam3 - PlayObject.m_Abil.Exp > long.MaxValue - nParam3)
+                            if (nParam3 - PlayObject.Abil.Exp > long.MaxValue - nParam3)
                             {
                                 dwInt = long.MaxValue - nParam3;
                             }
@@ -108,22 +108,22 @@ namespace GameSvr.Npc
                                 dwInt = nParam3;
                             }
                         }
-                        PlayObject.m_Abil.Exp += dwInt;
-                        PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
+                        PlayObject.Abil.Exp += dwInt;
+                        PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         break;
                     case 2:
-                        if (PlayObject.m_Abil.Exp > nParam3)
+                        if (PlayObject.Abil.Exp > nParam3)
                         {
-                            PlayObject.m_Abil.Exp -= nParam3;
+                            PlayObject.Abil.Exp -= nParam3;
                         }
                         else
                         {
-                            PlayObject.m_Abil.Exp = 0;
+                            PlayObject.Abil.Exp = 0;
                         }
-                        PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
+                        PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         break;
                 }
-                PlayObject.SysMsg("您当前经验点数为: " + PlayObject.m_Abil.Exp + '/' + PlayObject.m_Abil.MaxExp, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg("您当前经验点数为: " + PlayObject.Abil.Exp + '/' + PlayObject.Abil.MaxExp, MsgColor.Green, MsgType.Hint);
                 return;
             }
             // ================================================
@@ -140,16 +140,16 @@ namespace GameSvr.Npc
                     case 0:
                         if (nParam3 >= 0)
                         {
-                            PlayObject.m_Abil.Level = (byte)nParam3;
-                            PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
+                            PlayObject.Abil.Level = (byte)nParam3;
+                            PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         }
                         break;
                     case 1:
-                        if (PlayObject.m_Abil.Level >= nParam3)
+                        if (PlayObject.Abil.Level >= nParam3)
                         {
-                            if (PlayObject.m_Abil.Level - nParam3 > short.MaxValue - PlayObject.m_Abil.Level)
+                            if (PlayObject.Abil.Level - nParam3 > short.MaxValue - PlayObject.Abil.Level)
                             {
-                                dwInt = short.MaxValue - PlayObject.m_Abil.Level;
+                                dwInt = short.MaxValue - PlayObject.Abil.Level;
                             }
                             else
                             {
@@ -158,7 +158,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            if (nParam3 - PlayObject.m_Abil.Level > int.MaxValue - nParam3)
+                            if (nParam3 - PlayObject.Abil.Level > int.MaxValue - nParam3)
                             {
                                 dwInt = int.MaxValue - nParam3;
                             }
@@ -167,22 +167,22 @@ namespace GameSvr.Npc
                                 dwInt = nParam3;
                             }
                         }
-                        PlayObject.m_Abil.Level += (byte)dwInt;
-                        PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
+                        PlayObject.Abil.Level += (byte)dwInt;
+                        PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         break;
                     case 2:
-                        if (PlayObject.m_Abil.Level > nParam3)
+                        if (PlayObject.Abil.Level > nParam3)
                         {
-                            PlayObject.m_Abil.Level -= (byte)nParam3;
+                            PlayObject.Abil.Level -= (byte)nParam3;
                         }
                         else
                         {
-                            PlayObject.m_Abil.Level = 0;
+                            PlayObject.Abil.Level = 0;
                         }
-                        PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
+                        PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         break;
                 }
-                PlayObject.SysMsg("您当前等级为: " + PlayObject.m_Abil.Level, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg("您当前等级为: " + PlayObject.Abil.Level, MsgColor.Green, MsgType.Hint);
                 return;
             }
             // ================================================
@@ -429,11 +429,11 @@ namespace GameSvr.Npc
                     return;
                 case "$MONKILLER":
                     {
-                        if (PlayObject.m_LastHiter != null)
+                        if (PlayObject.LastHiter != null)
                         {
-                            if (PlayObject.m_LastHiter.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                            if (PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT)
                             {
-                                sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", PlayObject.m_LastHiter.CharName);
+                                sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", PlayObject.LastHiter.CharName);
                             }
                         }
                         else
@@ -449,11 +449,11 @@ namespace GameSvr.Npc
                     }
                 case "$KILLER":
                     {
-                        if (PlayObject.m_LastHiter != null)
+                        if (PlayObject.LastHiter != null)
                         {
-                            if (PlayObject.m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                            if (PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT)
                             {
-                                sMsg = ReplaceVariableText(sMsg, "<$KILLER>", PlayObject.m_LastHiter.CharName);
+                                sMsg = ReplaceVariableText(sMsg, "<$KILLER>", PlayObject.LastHiter.CharName);
                             }
                         }
                         else
@@ -481,7 +481,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$RANKNAME>", PlayObject.GuildRankName);
                     return;
                 case "$LEVEL":
-                    sText = PlayObject.m_Abil.Level.ToString();
+                    sText = PlayObject.Abil.Level.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$LEVEL>", sText);
                     return;
                 case "$HP":
@@ -541,15 +541,15 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$MAXSC>", sText);
                     return;
                 case "$EXP":
-                    sText = PlayObject.m_Abil.Exp.ToString();
+                    sText = PlayObject.Abil.Exp.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$EXP>", sText);
                     return;
                 case "$MAXEXP":
-                    sText = PlayObject.m_Abil.MaxExp.ToString();
+                    sText = PlayObject.Abil.MaxExp.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXEXP>", sText);
                     return;
                 case "$PKPOINT":
-                    sText = PlayObject.m_nPkPoint.ToString();
+                    sText = PlayObject.PkPoint.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$PKPOINT>", sText);
                     return;
                 case "$CREDITPOINT":
@@ -730,9 +730,9 @@ namespace GameSvr.Npc
                     return;
                 case "$OWNERGUILD":
                     {
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            sText = this.m_Castle.m_sOwnGuild;
+                            sText = this.Castle.m_sOwnGuild;
                             if (sText == "")
                             {
                                 sText = "游戏管理";
@@ -747,9 +747,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLENAME":
                     {
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            sText = this.m_Castle.m_sName;
+                            sText = this.Castle.m_sName;
                         }
                         else
                         {
@@ -760,11 +760,11 @@ namespace GameSvr.Npc
                     }
                 case "$LORD":
                     {
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            if (this.m_Castle.m_MasterGuild != null)
+                            if (this.Castle.m_MasterGuild != null)
                             {
-                                sText = this.m_Castle.m_MasterGuild.GetChiefName();
+                                sText = this.Castle.m_MasterGuild.GetChiefName();
                             }
                             else
                             {
@@ -786,15 +786,15 @@ namespace GameSvr.Npc
                     return;
                 case "$CASTLEWARDATE":
                     {
-                        if (this.m_Castle == null)
+                        if (this.Castle == null)
                         {
-                            this.m_Castle = M2Share.CastleManager.GetCastle(0);
+                            this.Castle = M2Share.CastleManager.GetCastle(0);
                         }
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            if (!this.m_Castle.m_boUnderWar)
+                            if (!this.Castle.m_boUnderWar)
                             {
-                                sText = this.m_Castle.GetWarDate();
+                                sText = this.Castle.GetWarDate();
                                 if (sText != "")
                                 {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sText);
@@ -817,9 +817,9 @@ namespace GameSvr.Npc
                     }
                 case "$LISTOFWAR":
                     {
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            sText = this.m_Castle.GetAttackWarList();
+                            sText = this.Castle.GetAttackWarList();
                         }
                         else
                         {
@@ -837,9 +837,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLECHANGEDATE":
                     {
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            sText = this.m_Castle.m_ChangeDate.ToString();
+                            sText = this.Castle.m_ChangeDate.ToString();
                         }
                         else
                         {
@@ -850,9 +850,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLEWARLASTDATE":
                     {
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            sText = this.m_Castle.m_WarDate.ToString();
+                            sText = this.Castle.m_WarDate.ToString();
                         }
                         else
                         {
@@ -863,9 +863,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLEGETDAYS":
                     {
-                        if (this.m_Castle != null)
+                        if (this.Castle != null)
                         {
-                            sText = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_ChangeDate).ToString();
+                            sText = HUtil32.GetDayCount(DateTime.Now, this.Castle.m_ChangeDate).ToString();
                         }
                         else
                         {
@@ -971,9 +971,9 @@ namespace GameSvr.Npc
                     }
                 case "$BSNAME":// 上次攻击我的名称
                     {
-                        if (PlayObject.m_LastHiter != null)
+                        if (PlayObject.LastHiter != null)
                         {
-                            sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.m_LastHiter.CharName);
+                            sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.LastHiter.CharName);
                         }
                         else
                         {
@@ -1088,7 +1088,7 @@ namespace GameSvr.Npc
                             for (var j = 0; j < MonGen.CertList.Count; j++)
                             {
                                 BaseObject = MonGen.CertList[j];
-                                if (BaseObject.m_Master == null && !BaseObject.Death && !BaseObject.Ghost)
+                                if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost)
                                 {
                                     MonGenCount++;
                                 }
@@ -1107,7 +1107,7 @@ namespace GameSvr.Npc
                             for (var j = 0; j < MonGen.CertList.Count; j++)
                             {
                                 BaseObject = MonGen.CertList[j];
-                                if (BaseObject.m_Master == null && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                if (BaseObject.Master == null && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
                                 {
                                     MonGenCount++;
                                 }
@@ -1133,7 +1133,7 @@ namespace GameSvr.Npc
                                 for (var j = 0; j < MonGen.CertList.Count; j++)
                                 {
                                     BaseObject = MonGen.CertList[j];
-                                    if (BaseObject.m_Master == null && BaseObject.m_PEnvir == Envir && !BaseObject.Death && !BaseObject.Ghost)
+                                    if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost)
                                     {
                                         MonGenCount++;
                                     }
@@ -1152,7 +1152,7 @@ namespace GameSvr.Npc
                                 for (var j = 0; j < MonGen.CertList.Count; j++)
                                 {
                                     BaseObject = MonGen.CertList[j];
-                                    if (BaseObject.m_Master == null && BaseObject.m_PEnvir == Envir && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                    if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
                                     {
                                         MonGenCount++;
                                     }
@@ -1582,9 +1582,9 @@ namespace GameSvr.Npc
 
         public override void Run()
         {
-            if (m_Master != null)// 不允许召唤为宝宝
+            if (Master != null)// 不允许召唤为宝宝
             {
-                this.m_Master = null;
+                this.Master = null;
             }
             base.Run();
         }
@@ -1670,7 +1670,7 @@ namespace GameSvr.Npc
         public override void Initialize()
         {
             base.Initialize();
-            this.m_Castle = M2Share.CastleManager.InCastleWarArea(this);
+            this.Castle = M2Share.CastleManager.InCastleWarArea(this);
         }
 
         private Dictionary<string, TDynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)

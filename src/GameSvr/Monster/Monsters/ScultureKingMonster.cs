@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
 
         public ScultureKingMonster() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             StoneMode = true;
             m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
@@ -23,10 +23,10 @@ namespace GameSvr.Monster.Monsters
         private void MeltStone()
         {
             m_nCharStatusEx = 0;
-            m_nCharStatus = GetCharStatus();
+            CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;
-            var stoneEvent = new MirEvent(m_PEnvir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
+            var stoneEvent = new MirEvent(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
             M2Share.EventManager.AddEvent(stoneEvent);
         }
 

@@ -56,7 +56,7 @@ namespace GameSvr.Command.Commands
                     break;
                 }
             }
-            if (mon?.m_btRaceServer != 136)
+            if (mon?.Race != 136)
             {
                 PlayObject.SysMsg(nCount + " 只 " + sMonName + " 已正在往地图 " + M2Share.g_sMissionMap + " " +
                     M2Share.g_nMissionX + ":" + M2Share.g_nMissionY + " 集中。", MsgColor.Green, MsgType.Hint);

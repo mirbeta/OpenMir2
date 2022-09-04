@@ -35,7 +35,7 @@ namespace GameSvr.Player
                             return result;
                         }
                         m_boFilterAction = true;
-                        int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
+                        int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - HitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
                         int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
                         if (dwCheckTime < dwAttackTime)
                         {
@@ -77,7 +77,7 @@ namespace GameSvr.Player
                     m_dwAttackTick = HUtil32.GetTickCount();
                     if (wIdent == Grobal2.CM_HEAVYHIT && UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
                     {
-                        if (GetFrontPosition(ref n14, ref n18) && !m_PEnvir.CanWalk(n14, n18, false))
+                        if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
                         {
                             StdItem StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
                             if (StdItem != null && StdItem.Shape == 19)
@@ -400,7 +400,7 @@ namespace GameSvr.Player
                             {
                                 if (UserMagic.btLevel < 3)
                                 {
-                                    if (UserMagic.MagicInfo.TrainLevel[UserMagic.btLevel] < m_Abil.Level)
+                                    if (UserMagic.MagicInfo.TrainLevel[UserMagic.btLevel] < Abil.Level)
                                     {
                                         TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
                                         if (!CheckMagicLevelup(UserMagic))

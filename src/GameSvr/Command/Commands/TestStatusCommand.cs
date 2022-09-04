@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
             //}
             PlayObject.m_wStatusTimeArr[nType] = Convert.ToByte(nTime * 1000);
             PlayObject.m_dwStatusArrTick[nType] = HUtil32.GetTickCount();
-            PlayObject.m_nCharStatus = PlayObject.GetCharStatus();
+            PlayObject.CharStatus = PlayObject.GetCharStatus();
             PlayObject.StatusChanged();
             PlayObject.SysMsg(string.Format("状态编号:{0} 时间长度: {1} 秒", nType, nTime), MsgColor.Green, MsgType.Hint);
         }

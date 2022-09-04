@@ -24,9 +24,9 @@ namespace GameSvr.Monster.Monsters
         private void SetMapXYFlag(int nFlag)
         {
             bool bo06;
-            m_PEnvir.SetMapXyFlag(CurrX, CurrY - 2, true);
-            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 1, true);
-            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 2, true);
+            Envir.SetMapXyFlag(CurrX, CurrY - 2, true);
+            Envir.SetMapXyFlag(CurrX + 1, CurrY - 1, true);
+            Envir.SetMapXyFlag(CurrX + 1, CurrY - 2, true);
             if (nFlag == 1)
             {
                 bo06 = false;
@@ -35,20 +35,20 @@ namespace GameSvr.Monster.Monsters
             {
                 bo06 = true;
             }
-            m_PEnvir.SetMapXyFlag(CurrX, CurrY, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX, CurrY - 1, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX, CurrY - 2, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 1, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 2, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX - 1, CurrY, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX - 2, CurrY, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX - 1, CurrY - 1, bo06);
-            m_PEnvir.SetMapXyFlag(CurrX - 1, CurrY + 1, bo06);
+            Envir.SetMapXyFlag(CurrX, CurrY, bo06);
+            Envir.SetMapXyFlag(CurrX, CurrY - 1, bo06);
+            Envir.SetMapXyFlag(CurrX, CurrY - 2, bo06);
+            Envir.SetMapXyFlag(CurrX + 1, CurrY - 1, bo06);
+            Envir.SetMapXyFlag(CurrX + 1, CurrY - 2, bo06);
+            Envir.SetMapXyFlag(CurrX - 1, CurrY, bo06);
+            Envir.SetMapXyFlag(CurrX - 2, CurrY, bo06);
+            Envir.SetMapXyFlag(CurrX - 1, CurrY - 1, bo06);
+            Envir.SetMapXyFlag(CurrX - 1, CurrY + 1, bo06);
             if (nFlag == 0)
             {
-                m_PEnvir.SetMapXyFlag(CurrX, CurrY - 2, false);
-                m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 1, false);
-                m_PEnvir.SetMapXyFlag(CurrX + 1, CurrY - 2, false);
+                Envir.SetMapXyFlag(CurrX, CurrY - 2, false);
+                Envir.SetMapXyFlag(CurrX + 1, CurrY - 1, false);
+                Envir.SetMapXyFlag(CurrX + 1, CurrY - 2, false);
             }
         }
 
@@ -92,7 +92,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (Death && m_Castle != null)
+            if (Death && Castle != null)
             {
                 DeathTick = HUtil32.GetTickCount();
             }

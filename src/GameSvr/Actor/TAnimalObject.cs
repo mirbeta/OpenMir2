@@ -24,7 +24,7 @@ namespace GameSvr.Actor
         {
             m_nNotProcessCount = 0;
             m_nTargetX = -1;
-            this.m_btRaceServer = Grobal2.RC_ANIMAL;
+            this.Race = Grobal2.RC_ANIMAL;
             this.AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.SearchEnemyTick = HUtil32.GetTickCount();
@@ -124,9 +124,9 @@ namespace GameSvr.Actor
                     this.SetLastHiter(struckObject);
                     Struck(struckObject);
                     this.BreakHolySeizeMode();
-                    if (this.m_Master != null && struckObject != this.m_Master && struckObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                    if (this.Master != null && struckObject != this.Master && struckObject.Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        this.m_Master.SetPKFlag(struckObject);
+                        this.Master.SetPKFlag(struckObject);
                     }
                     if (M2Share.g_Config.boMonSayMsg)
                     {
@@ -165,7 +165,7 @@ namespace GameSvr.Actor
                     this.m_nMeatQuality = 0;
                 }
             }
-            this.AttackTick = this.AttackTick + (150 - HUtil32._MIN(130, this.m_Abil.Level * 4));
+            this.AttackTick = this.AttackTick + (150 - HUtil32._MIN(130, this.Abil.Level * 4));
         }
 
         protected void HitMagAttackTarget(TBaseObject TargeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
@@ -174,7 +174,7 @@ namespace GameSvr.Actor
             TBaseObject BaseObject;
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
-            this.m_PEnvir.GetBaseObjects(TargeTBaseObject.CurrX, TargeTBaseObject.CurrY, false, BaseObjectList);
+            this.Envir.GetBaseObjects(TargeTBaseObject.CurrX, TargeTBaseObject.CurrY, false, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 BaseObject = BaseObjectList[i];

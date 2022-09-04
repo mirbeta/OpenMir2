@@ -21,7 +21,7 @@ namespace GameSvr.RobotPlay
                     if (Job > 0 && (m_nSelectMagic == 0 || m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15)))
                     {
                         m_dwAutoAvoidTick = HUtil32.GetTickCount();
-                        if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22) // 22级前道法不躲避
+                        if (M2Share.g_Config.boHeroAttackTarget && Abil.Level < 22) // 22级前道法不躲避
                         {
                             if ((byte)Job == 1)// 法放魔法后要躲
                             {
@@ -46,7 +46,7 @@ namespace GameSvr.RobotPlay
                                 case PlayJob.Taoist:
                                     if (TargetCret != null)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTao && TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪
+                                        if (M2Share.g_Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪
                                         {
                                             if (TargetCret.m_WAbil.MaxHP >= 700)
                                             {
@@ -269,7 +269,7 @@ namespace GameSvr.RobotPlay
                 switch (nDir)
                 {
                     case Grobal2.DR_UP:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY -= 2;
                             break;
@@ -285,7 +285,7 @@ namespace GameSvr.RobotPlay
                             continue;
                         }
                     case Grobal2.DR_UPRIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             nTargetY -= 2;
@@ -303,7 +303,7 @@ namespace GameSvr.RobotPlay
                             continue;
                         }
                     case Grobal2.DR_RIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             break;
@@ -319,7 +319,7 @@ namespace GameSvr.RobotPlay
                             continue;
                         }
                     case Grobal2.DR_DOWNRIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             nTargetY += 2;
@@ -337,7 +337,7 @@ namespace GameSvr.RobotPlay
                             continue;
                         }
                     case Grobal2.DR_DOWN:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY += 2;
                             break;
@@ -353,7 +353,7 @@ namespace GameSvr.RobotPlay
                             continue;
                         }
                     case Grobal2.DR_DOWNLEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             nTargetY += 2;
@@ -371,7 +371,7 @@ namespace GameSvr.RobotPlay
                             continue;
                         }
                     case Grobal2.DR_LEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             break;
@@ -387,7 +387,7 @@ namespace GameSvr.RobotPlay
                             continue;
                         }
                     case Grobal2.DR_UPLEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             nTargetY -= 2;
@@ -449,7 +449,7 @@ namespace GameSvr.RobotPlay
             {
                 byte nDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 nDir = GetBackDir(nDir);
-                m_PEnvir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref m_nTargetX, ref m_nTargetY);
+                Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref m_nTargetX, ref m_nTargetY);
                 result = GotoTargetXY(m_nTargetX, m_nTargetY, 1);
             }
             return result;

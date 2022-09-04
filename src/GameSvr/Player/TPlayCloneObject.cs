@@ -15,10 +15,10 @@ namespace GameSvr.Player
             this.CurrX = PlayObject.CurrX;
             this.CurrY = PlayObject.CurrY;
             this.Direction = this.GetBackDir(PlayObject.Direction);
-            this.m_PEnvir = PlayObject.m_PEnvir;
+            this.Envir = PlayObject.Envir;
             this.Gender = PlayObject.Gender;
             this.Hair = PlayObject.Hair;
-            this.m_PEnvir.AddToMap(this.CurrX, this.CurrY, CellType.MovingObject, this);
+            this.Envir.AddToMap(this.CurrX, this.CurrY, CellType.MovingObject, this);
             this.SendRefMsg(Grobal2.RM_TURN, this.Direction, this.CurrX, this.CurrY, 0, this.CharName);
         }
 

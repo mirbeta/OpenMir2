@@ -124,7 +124,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (npc.m_PEnvir == m_PEnvir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.m_boIsHide)
+            if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.m_boIsHide)
             {
                 npc.UserSelect(this, sMsg.Trim());
             }
@@ -157,7 +157,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (merchant.m_PEnvir == m_PEnvir && merchant.m_boSell && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant.Envir == Envir && merchant.m_boSell && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientQuerySellPrice(this, userItem18);
             }
@@ -174,7 +174,7 @@ namespace GameSvr.Player
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
-                        if (merchant != null && merchant.m_boSell && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+                        if (merchant != null && merchant.m_boSell && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
                         {
                             if (merchant.ClientSellItem(this, userItem))
                             {
@@ -203,7 +203,7 @@ namespace GameSvr.Player
                     return;
                 }
                 var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
-                if (merchant == null || !merchant.m_boBuy || merchant.m_PEnvir != m_PEnvir || Math.Abs(merchant.CurrX - CurrX) > 15 || Math.Abs(merchant.CurrY - CurrY) > 15)
+                if (merchant == null || !merchant.m_boBuy || merchant.Envir != Envir || Math.Abs(merchant.CurrX - CurrX) > 15 || Math.Abs(merchant.CurrY - CurrY) > 15)
                 {
                     return;
                 }
@@ -236,7 +236,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropGoldMsg);
                 return false;
             }
-            if (!m_boCanDrop || m_PEnvir.Flag.boNOTHROWITEM)
+            if (!m_boCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return false;
@@ -273,7 +273,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return false;
             }
-            if (!m_boCanDrop || m_PEnvir.Flag.boNOTHROWITEM)
+            if (!m_boCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return false;
@@ -378,15 +378,15 @@ namespace GameSvr.Player
 
         private void ClientOpenDoor(int nX, int nY)
         {
-            var door = m_PEnvir.GetDoor(nX, nY);
+            var door = Envir.GetDoor(nX, nY);
             if (door == null)
             {
                 return;
             }
-            var castle = M2Share.CastleManager.IsCastleEnvir(m_PEnvir);
-            if (castle == null || castle.m_DoorStatus != door.Status || m_btRaceServer != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(CurrX, CurrY, this))
+            var castle = M2Share.CastleManager.IsCastleEnvir(Envir);
+            if (castle == null || castle.m_DoorStatus != door.Status || Race != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(CurrX, CurrY, this))
             {
-                M2Share.UserEngine.OpenDoor(m_PEnvir, nX, nY);
+                M2Share.UserEngine.OpenDoor(Envir, nX, nY);
             }
         }
 
@@ -600,7 +600,7 @@ namespace GameSvr.Player
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
                     ItemList.Add(userItem);
-                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                    if (Race == Grobal2.RC_PLAYOBJECT)
                     {
                         SendAddItem(userItem);
                     }
@@ -732,7 +732,7 @@ namespace GameSvr.Player
             }
             if (Math.Abs(nX - CurrX) <= 2 && Math.Abs(nY - CurrY) <= 2)
             {
-                if (m_PEnvir.IsValidObject(nX, nY, 2, baseObject))
+                if (Envir.IsValidObject(nX, nY, 2, baseObject))
                 {
                     if (baseObject.Death && !baseObject.m_boSkeleton && baseObject.Animal)
                     {
@@ -746,7 +746,7 @@ namespace GameSvr.Player
                         }
                         if (baseObject.m_nBodyLeathery <= 0)
                         {
-                            if (baseObject.m_btRaceServer >= Grobal2.RC_ANIMAL && baseObject.m_btRaceServer < Grobal2.RC_MONSTER)
+                            if (baseObject.Race >= Grobal2.RC_ANIMAL && baseObject.Race < Grobal2.RC_MONSTER)
                             {
                                 baseObject.m_boSkeleton = true;
                                 ApplyMeatQuality();
@@ -784,13 +784,13 @@ namespace GameSvr.Player
         {
             if (m_GroupOwner == null)
             {
-                m_boAllowGroup = false;
+                AllowGroup = false;
                 return;
             }
             if (m_GroupOwner != this)
             {
                 m_GroupOwner.DelMember(this);
-                m_boAllowGroup = false;
+                AllowGroup = false;
             }
             else
             {
@@ -820,7 +820,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
                 return;
             }
-            if (!playObject.m_boAllowGroup)
+            if (!playObject.AllowGroup)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -4, 0, 0, 0, "");
                 return;
@@ -830,7 +830,7 @@ namespace GameSvr.Player
             this.GroupMembers.Add(playObject);
             JoinGroup(this);
             playObject.JoinGroup(this);
-            m_boAllowGroup = true;
+            AllowGroup = true;
             SendDefMessage(Grobal2.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
             if (M2Share.g_FunctionNPC != null)
@@ -862,7 +862,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
                 return;
             }
-            if (!playObject.m_boAllowGroup)
+            if (!playObject.AllowGroup)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0, "");
                 return;
@@ -929,7 +929,7 @@ namespace GameSvr.Player
             {
                 if (targetPlayObject.GetPoseCreate() == this && !targetPlayObject.Dealing)
                 {
-                    if (targetPlayObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                    if (targetPlayObject.Race == Grobal2.RC_PLAYOBJECT)
                     {
                         if (targetPlayObject.AllowDeal && targetPlayObject.m_boCanDeal)
                         {
@@ -1198,7 +1198,7 @@ namespace GameSvr.Player
 
         private void ClientGetMinMap()
         {
-            var nMinMap = m_PEnvir.MinMap;
+            var nMinMap = Envir.MinMap;
             if (nMinMap > 0)
             {
                 SendDefMessage(Grobal2.SM_READMINIMAP_OK, 0, (short)nMinMap, 0, 0, "");
@@ -1216,7 +1216,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientMakeDrugItem(this, nItemName);
             }
@@ -1311,7 +1311,7 @@ namespace GameSvr.Player
                 {
                     if (playObject.GetPoseCreate() == this)
                     {
-                        if (playObject.m_boAllowGuild)
+                        if (playObject.AllowGuild)
                         {
                             if (!MyGuild.IsMember(sHumName))
                             {
@@ -1464,7 +1464,7 @@ namespace GameSvr.Player
             {
                 var n8 = -1;
                 TBaseObject baseObjectC = GetPoseCreate();
-                if (baseObjectC != null && baseObjectC.MyGuild != null && baseObjectC.m_btRaceServer == Grobal2.RC_PLAYOBJECT && baseObjectC.GetPoseCreate() == this)
+                if (baseObjectC != null && baseObjectC.MyGuild != null && baseObjectC.Race == Grobal2.RC_PLAYOBJECT && baseObjectC.GetPoseCreate() == this)
                 {
                     if (baseObjectC.MyGuild.m_boEnableAuthAlly)
                     {
@@ -1576,7 +1576,7 @@ namespace GameSvr.Player
                 return;
             }
             var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
-            if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientQueryRepairCost(this, userItemA);
             }
@@ -1599,7 +1599,7 @@ namespace GameSvr.Player
                 return;
             }
             Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
-            if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientRepairItem(this, userItem);
             }
@@ -1625,7 +1625,7 @@ namespace GameSvr.Player
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
-                    if (merchant != null && merchant.m_boStorage && (merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
+                    if (merchant != null && merchant.m_boStorage && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
                     {
                         if (StorageItemList.Count < 39)
                         {
@@ -1682,7 +1682,7 @@ namespace GameSvr.Player
                     if (IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(userItem.wIndex)))
                     {
                         // 检查NPC是否允许取物品
-                        if (merchant.m_boGetback && (merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
+                        if (merchant.m_boGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
                         {
                             if (AddItemToBag(userItem))
                             {

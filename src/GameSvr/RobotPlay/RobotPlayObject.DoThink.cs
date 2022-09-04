@@ -39,7 +39,7 @@ namespace GameSvr.RobotPlay
 
         public bool DoThink_TargetNeedRunPos()
         {
-            return TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || TargetCret.m_btRaceServer == 108;
+            return TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Race == 108;
         }
 
         public bool DoThink_CanRunPos(int nAttackCount)
@@ -53,12 +53,12 @@ namespace GameSvr.RobotPlay
             short nTargetX = 0;
             short nTargetY = 0;
             byte btNewDir;
-            if (wMagicID == 27 && m_Master != null && TargetCret != null && AllowUseMagic(27) && TargetCret.m_Abil.Level < m_Abil.Level && HUtil32.GetTickCount() - m_SkillUseTick[27] > 1000 * 10)
+            if (wMagicID == 27 && Master != null && TargetCret != null && AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && HUtil32.GetTickCount() - m_SkillUseTick[27] > 1000 * 10)
             {
-                btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, m_Master.CurrX, m_Master.CurrY);
-                if (m_PEnvir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
+                btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
+                if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                 {
-                    result = m_PEnvir.CanWalk(nTargetX, nTargetY, true);
+                    result = Envir.CanWalk(nTargetX, nTargetY, true);
                 }
             }
             return result;
@@ -71,12 +71,12 @@ namespace GameSvr.RobotPlay
             byte btNewDir;
             short nTargetX = 0;
             short nTargetY = 0;
-            if (TargetCret != null && m_Abil.Level > TargetCret.m_Abil.Level && Math.Abs(CurrX - TargetCret.CurrX) <= 1 && Math.Abs(CurrY - TargetCret.CurrY) <= 1)
+            if (TargetCret != null && Abil.Level > TargetCret.Abil.Level && Math.Abs(CurrX - TargetCret.CurrX) <= 1 && Math.Abs(CurrY - TargetCret.CurrY) <= 1)
             {
                 btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, CurrX, CurrY);
-                if (m_PEnvir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
+                if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                 {
-                    result = m_PEnvir.CanWalk(nTargetX, nTargetY, true);
+                    result = Envir.CanWalk(nTargetX, nTargetY, true);
                 }
                 if (result)
                 {
@@ -92,12 +92,12 @@ namespace GameSvr.RobotPlay
                     {
                         if (!ActorObject.Death && ActorObject != this && IsProperTarget(ActorObject))
                         {
-                            if (m_Abil.Level > ActorObject.m_Abil.Level && !ActorObject.m_boStickMode)
+                            if (Abil.Level > ActorObject.Abil.Level && !ActorObject.m_boStickMode)
                             {
                                 btNewDir = M2Share.GetNextDirection(ActorObject.CurrX, ActorObject.CurrY, CurrX, CurrY);
-                                if (m_PEnvir.GetNextPosition(ActorObject.CurrX, ActorObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
+                                if (Envir.GetNextPosition(ActorObject.CurrX, ActorObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                                 {
-                                    if (m_PEnvir.CanWalk(nTargetX, nTargetY, true))
+                                    if (Envir.CanWalk(nTargetX, nTargetY, true))
                                     {
                                         result = true;
                                         break;

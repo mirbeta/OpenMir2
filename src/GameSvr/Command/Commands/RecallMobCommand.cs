@@ -48,10 +48,10 @@ namespace GameSvr.Command.Commands
                     break;
                 }
                 PlayObject.GetFrontPosition(ref n10, ref n14);
-                mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.MapName, n10, n14, sMonName);
+                mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.Envir.MapName, n10, n14, sMonName);
                 if (mon != null)
                 {
-                    mon.m_Master = PlayObject;
+                    mon.Master = PlayObject;
                     mon.MasterRoyaltyTick = nTick;
                     mon.SlaveMakeLevel = 3;
                     mon.SlaveExpLevel = (byte)nLevel;

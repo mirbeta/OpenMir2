@@ -37,8 +37,8 @@ namespace GameSvr.Configs
             playObject.Job = (PlayJob)ReadInteger("Info", "Job", 0);
             playObject.Gender = Enum.Parse<PlayGender>(ReadString("Info", "Gender", "0"));
             playObject.Hair = (byte)ReadInteger("Info", "Hair", 0);
-            playObject.m_Abil.Level = (byte)ReadInteger("Info", "Level", 1);
-            playObject.m_Abil.MaxExp = playObject.GetLevelExp(playObject.m_Abil.Level);
+            playObject.Abil.Level = (byte)ReadInteger("Info", "Level", 1);
+            playObject.Abil.MaxExp = playObject.GetLevelExp(playObject.Abil.Level);
             playObject.m_boProtectStatus = ReadBool("Info", "ProtectStatus", false);// 是否守护模式
             nAttatckMode = (byte)ReadInteger("Info", "AttatckMode", 6);// 攻击模式
             if (nAttatckMode >= 0 && nAttatckMode <= 6)

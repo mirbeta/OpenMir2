@@ -55,7 +55,7 @@ namespace GameSvr.Monster.Monsters
                     if (Math.Abs(CurrX - BaseObject.CurrX) <= 6 && Math.Abs(CurrX - BaseObject.CurrX) <= 6)
                     {
                         int n14 = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-                        m_PEnvir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, n14, 5, ref m_nTargetX, ref m_nTargetY);
+                        Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, n14, 5, ref m_nTargetX, ref m_nTargetY);
                     }
                 }
             }

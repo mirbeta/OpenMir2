@@ -12,8 +12,8 @@ namespace GameSvr.Monster.Monsters
         {
             ViewRange = 9;
             m_nRunTime = 250;
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            m_dwSearchTick = HUtil32.GetTickCount();
+            SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            SearchTick = HUtil32.GetTickCount();
             m_boStickMode = true;
             BeeList = new List<TBaseObject>();
         }
@@ -32,7 +32,7 @@ namespace GameSvr.Monster.Monsters
         {
             if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                var BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.MapName, CurrX, CurrY, M2Share.g_Config.sBee);
+                var BB = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.g_Config.sBee);
                 if (BB != null)
                 {
                     BB.SetTargetCreat(TargetCret);

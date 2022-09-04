@@ -453,7 +453,7 @@ namespace GameSvr.Snaps
                     int svidx = 0;
                     if (M2Share.UserEngine.FindOtherServerUser(uname, ref svidx))
                     {
-                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.m_PEnvir.MapDesc);
+                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
                     }
                 }
             }
@@ -543,7 +543,7 @@ namespace GameSvr.Snaps
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (!hum.m_PEnvir.Flag.boNORECALL)
+                    if (!hum.Envir.Flag.boNORECALL)
                     {
                         hum.RecallHuman(Str);
                     }

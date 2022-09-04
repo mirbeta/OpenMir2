@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
     {
         public LightingZombi() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
         private void LightingAttack(byte nDir)
@@ -17,9 +17,9 @@ namespace GameSvr.Monster.Monsters
             short nTY = 0;
             Direction = nDir;
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ObjectId, "");
-            if (m_PEnvir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
+            if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
             {
-                m_PEnvir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
+                Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
                 var WAbil = m_WAbil;
                 var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 MagPassThroughMagic(nSX, nSY, nTX, nTY, nDir, nPwr, true);

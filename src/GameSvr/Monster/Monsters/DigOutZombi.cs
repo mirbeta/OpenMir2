@@ -10,14 +10,14 @@ namespace GameSvr.Monster.Monsters
         {
             bo554 = false;
             ViewRange = 7;
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            m_dwSearchTick = HUtil32.GetTickCount();
+            SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            SearchTick = HUtil32.GetTickCount();
             FixedHideMode = true;
         }
 
         private void sub_4AA8DC()
         {
-            var digEvent = new MirEvent(m_PEnvir, CurrX, CurrY, 1, 5 * 60 * 1000, true);
+            var digEvent = new MirEvent(Envir, CurrX, CurrY, 1, 5 * 60 * 1000, true);
             M2Share.EventManager.AddEvent(digEvent);
             FixedHideMode = false;
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, digEvent.Id, "");

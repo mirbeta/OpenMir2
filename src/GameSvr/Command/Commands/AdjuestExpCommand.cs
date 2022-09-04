@@ -28,13 +28,13 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                var dwOExp = PlayObject.m_Abil.Exp;
-                m_PlayObject.m_Abil.Exp = dwExp;
-                m_PlayObject.HasLevelUp(m_PlayObject.m_Abil.Level - 1);
+                var dwOExp = PlayObject.Abil.Exp;
+                m_PlayObject.Abil.Exp = dwExp;
+                m_PlayObject.HasLevelUp(m_PlayObject.Abil.Level - 1);
                 PlayObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
                 {
-                    M2Share.LogSystem.Warn("[经验调整] " + PlayObject.CharName + '(' + m_PlayObject.CharName + ' ' + dwOExp + " -> " + m_PlayObject.m_Abil.Exp + ')');
+                    M2Share.LogSystem.Warn("[经验调整] " + PlayObject.CharName + '(' + m_PlayObject.CharName + ' ' + dwOExp + " -> " + m_PlayObject.Abil.Exp + ')');
                 }
             }
             else

@@ -26,14 +26,14 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                int nOLevel = m_PlayObject.m_Abil.Level;
+                int nOLevel = m_PlayObject.Abil.Level;
                 m_PlayObject.HasLevelUp(1);
                 M2Share.AddGameDataLog("17" + "\09" + m_PlayObject.MapName + "\09" + m_PlayObject.CurrX + "\09" + m_PlayObject.CurrY + "\09"
-                    + m_PlayObject.CharName + "\09" + m_PlayObject.m_Abil.Level + "\09" + PlayObject.CharName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
+                    + m_PlayObject.CharName + "\09" + m_PlayObject.Abil.Level + "\09" + PlayObject.CharName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
                 PlayObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
                 {
-                    M2Share.LogSystem.Warn("[等级调整] " + PlayObject.CharName + "(" + m_PlayObject.CharName + " " + nOLevel + " -> " + m_PlayObject.m_Abil.Level + ")");
+                    M2Share.LogSystem.Warn("[等级调整] " + PlayObject.CharName + "(" + m_PlayObject.CharName + " " + nOLevel + " -> " + m_PlayObject.Abil.Level + ")");
                 }
             }
             else

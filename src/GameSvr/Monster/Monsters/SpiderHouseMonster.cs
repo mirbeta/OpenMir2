@@ -13,8 +13,8 @@ namespace GameSvr.Monster.Monsters
         {
             ViewRange = 9;
             m_nRunTime = 250;
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            m_dwSearchTick = 0;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            SearchTick = 0;
             m_boStickMode = true;
             BBList = new List<TBaseObject>();
         }
@@ -37,9 +37,9 @@ namespace GameSvr.Monster.Monsters
             {
                 n08 = CurrX;
                 n0C = (short)(CurrY + 1);
-                if (m_PEnvir.CanWalk(n08, n0C, true))
+                if (Envir.CanWalk(n08, n0C, true))
                 {
-                    BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.MapName, n08, n0C, M2Share.g_Config.sSpider);
+                    BB = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.g_Config.sSpider);
                     if (BB != null)
                     {
                         BB.SetTargetCreat(TargetCret);

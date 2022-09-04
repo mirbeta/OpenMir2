@@ -308,7 +308,7 @@ namespace GameSvr.Npc
         private bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
-            if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.CharName == MonName))
+            if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.CharName == MonName))
             {
                 result = true;
             }
@@ -525,7 +525,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKLEVEL:
-                        if (PlayObject.m_Abil.Level < QuestConditionInfo.nParam1)
+                        if (PlayObject.Abil.Level < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
@@ -1217,13 +1217,13 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_KILLBYHUM:
-                        if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.m_btRaceServer != Grobal2.RC_PLAYOBJECT))
+                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT))
                         {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_KILLBYMON:
-                        if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT))
                         {
                             result = false;
                         }
@@ -1886,30 +1886,30 @@ namespace GameSvr.Npc
                     case ScriptConst.nPKPOINT:
                         if (QuestActionInfo.nParam1 == 0)
                         {
-                            PlayObject.m_nPkPoint = 0;
+                            PlayObject.PkPoint = 0;
                         }
                         else
                         {
                             if (QuestActionInfo.nParam1 < 0)
                             {
-                                if ((PlayObject.m_nPkPoint + QuestActionInfo.nParam1) >= 0)
+                                if ((PlayObject.PkPoint + QuestActionInfo.nParam1) >= 0)
                                 {
-                                    PlayObject.m_nPkPoint += QuestActionInfo.nParam1;
+                                    PlayObject.PkPoint += QuestActionInfo.nParam1;
                                 }
                                 else
                                 {
-                                    PlayObject.m_nPkPoint = 0;
+                                    PlayObject.PkPoint = 0;
                                 }
                             }
                             else
                             {
-                                if ((PlayObject.m_nPkPoint + QuestActionInfo.nParam1) > 10000)
+                                if ((PlayObject.PkPoint + QuestActionInfo.nParam1) > 10000)
                                 {
-                                    PlayObject.m_nPkPoint = 10000;
+                                    PlayObject.PkPoint = 10000;
                                 }
                                 else
                                 {
-                                    PlayObject.m_nPkPoint += QuestActionInfo.nParam1;
+                                    PlayObject.PkPoint += QuestActionInfo.nParam1;
                                 }
                             }
                         }

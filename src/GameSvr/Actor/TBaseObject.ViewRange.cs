@@ -10,7 +10,7 @@ namespace GameSvr.Actor
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
-            if ((baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (baseObject.m_Master != null))// 如果是人物或宝宝则置TRUE
+            if ((baseObject.Race == Grobal2.RC_PLAYOBJECT) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
             }
@@ -95,7 +95,7 @@ namespace GameSvr.Actor
             for (int i = 0; i < VisibleActors.Count; i++)
             {
                 var visibleBaseObject = VisibleActors[i];
-                if ((visibleBaseObject.BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (visibleBaseObject.BaseObject.m_Master != null))
+                if ((visibleBaseObject.BaseObject.Race == Grobal2.RC_PLAYOBJECT) || (visibleBaseObject.BaseObject.Master != null))
                 {
                     result = true;
                     break;
@@ -107,7 +107,7 @@ namespace GameSvr.Actor
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
-            if (m_PEnvir == null)
+            if (Envir == null)
             {
                 M2Share.LogSystem.Error("SearchViewRange nil PEnvir");
                 return;
@@ -129,7 +129,7 @@ namespace GameSvr.Actor
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
                         var cellsuccess = false;
-                        var cellInfo = m_PEnvir.GetCellInfo(n18, n1C, ref cellsuccess);
+                        var cellInfo = Envir.GetCellInfo(n18, n1C, ref cellsuccess);
                         if (cellsuccess && (cellInfo.ObjList != null))
                         {
                             n24 = 1;
@@ -162,9 +162,9 @@ namespace GameSvr.Actor
                                             {
                                                 if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                 {
-                                                    if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || WantRefMsg || 
-                                                        ((baseObject.m_Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || 
-                                                        (baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || m_boCrazyMode || m_boNastyMode || WantRefMsg || 
+                                                        ((baseObject.Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || 
+                                                        (baseObject.Race == Grobal2.RC_PLAYOBJECT))
                                                     {
                                                         UpdateVisibleGay(baseObject);
                                                     }
@@ -214,7 +214,7 @@ namespace GameSvr.Actor
 
         public void SearchViewRangeDeath()
         {
-            if (m_PEnvir == null)
+            if (Envir == null)
             {
                 return;
             }
@@ -232,7 +232,7 @@ namespace GameSvr.Actor
                 for (var n1C = nStartY; n1C <= nEndY; n1C++)
                 {
                     var cellsuccess = false;
-                    var cellInfo = m_PEnvir.GetCellInfo(n18, n1C, ref cellsuccess);
+                    var cellInfo = Envir.GetCellInfo(n18, n1C, ref cellsuccess);
                     if (cellsuccess && (cellInfo.ObjList != null))
                     {
                         try
@@ -255,7 +255,7 @@ namespace GameSvr.Actor
                                             break;
                                         }
                                     }
-                                    if ((OSObject.CellType == CellType.ItemObject) && !Death && (m_btRaceServer > Grobal2.RC_MONSTER))
+                                    if ((OSObject.CellType == CellType.ItemObject) && !Death && (Race > Grobal2.RC_MONSTER))
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                         {

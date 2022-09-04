@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
 
         public FireMonster() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run()
@@ -26,47 +26,47 @@ namespace GameSvr.Monster.Monsters
                 int nx = CurrX;
                 int ny = CurrY;
                 FireBurnEvent FireBurnEvent;
-                if (m_PEnvir.GetEvent(nx, ny - 1) == null)
+                if (Envir.GetEvent(nx, ny - 1) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny - 1, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx, ny - 2) == null)
+                if (Envir.GetEvent(nx, ny - 2) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny - 2, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx - 1, ny) == null)
+                if (Envir.GetEvent(nx - 1, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx - 1, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx - 2, ny) == null)
+                if (Envir.GetEvent(nx - 2, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx - 2, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx, ny) == null)
+                if (Envir.GetEvent(nx, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx + 1, ny) == null)
+                if (Envir.GetEvent(nx + 1, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx + 1, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx + 2, ny) == null)
+                if (Envir.GetEvent(nx + 2, ny) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx + 2, ny, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx, ny + 1) == null)
+                if (Envir.GetEvent(nx, ny + 1) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny + 1, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);
                 }
-                if (m_PEnvir.GetEvent(nx, ny + 2) == null)
+                if (Envir.GetEvent(nx, ny + 2) == null)
                 {
                     FireBurnEvent = new FireBurnEvent(this, nx, ny + 2, Grobal2.ET_FIRE, FireTime, FireDamage);
                     M2Share.EventManager.AddEvent(FireBurnEvent);

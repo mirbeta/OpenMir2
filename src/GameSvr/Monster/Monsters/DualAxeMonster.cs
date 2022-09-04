@@ -10,7 +10,7 @@ namespace GameSvr.Monster.Monsters
 
         private void FlyAxeAttack(TBaseObject Target)
         {
-            if (m_PEnvir.CanFly(CurrX, CurrY, Target.CurrX, Target.CurrY))
+            if (Envir.CanFly(CurrX, CurrY, Target.CurrX, Target.CurrY))
             {
                 Direction = M2Share.GetNextDirection(CurrX, CurrY, Target.CurrX, Target.CurrY);
                 var WAbil = m_WAbil;
@@ -56,7 +56,7 @@ namespace GameSvr.Monster.Monsters
                     result = true;
                     return result;
                 }
-                if (TargetCret.m_PEnvir == m_PEnvir)
+                if (TargetCret.Envir == Envir)
                 {
                     if (Math.Abs(CurrX - TargetCret.CurrX) <= 11 && Math.Abs(CurrX - TargetCret.CurrX) <= 11)
                     {
@@ -75,10 +75,10 @@ namespace GameSvr.Monster.Monsters
         {
             ViewRange = 5;
             m_nRunTime = 250;
-            m_dwSearchTime = 3000;
+            SearchTime = 3000;
             m_nAttackCount = 0;
             m_nAttackMax = 2;
-            m_dwSearchTick = HUtil32.GetTickCount();
+            SearchTick = HUtil32.GetTickCount();
         }
 
         public override void Run()

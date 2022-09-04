@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandPKPointMsg, sHumanName, m_PlayObject.m_nPkPoint), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandPKPointMsg, sHumanName, m_PlayObject.PkPoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

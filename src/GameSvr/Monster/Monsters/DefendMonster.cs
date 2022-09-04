@@ -7,7 +7,7 @@
         public DefendMonster()
             : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run()

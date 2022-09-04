@@ -67,7 +67,7 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckBonusPoint(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
-            var nTotlePoint = this.m_BonusAbil.DC + this.m_BonusAbil.MC + this.m_BonusAbil.SC + this.m_BonusAbil.AC + this.m_BonusAbil.MAC + this.m_BonusAbil.HP + this.m_BonusAbil.MP + this.m_BonusAbil.Hit + this.m_BonusAbil.Speed + this.m_BonusAbil.X2;
+            var nTotlePoint = this.BonusAbil.DC + this.BonusAbil.MC + this.BonusAbil.SC + this.BonusAbil.AC + this.BonusAbil.MAC + this.BonusAbil.HP + this.BonusAbil.MP + this.BonusAbil.Hit + this.BonusAbil.Speed + this.BonusAbil.X2;
             nTotlePoint += this.m_nBonusPoint;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
@@ -490,25 +490,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_Abil.Exp == dwExp)
+                    if (PlayObject.Abil.Exp == dwExp)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_Abil.Exp > dwExp)
+                    if (PlayObject.Abil.Exp > dwExp)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_Abil.Exp < dwExp)
+                    if (PlayObject.Abil.Exp < dwExp)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_Abil.Exp >= dwExp)
+                    if (PlayObject.Abil.Exp >= dwExp)
                     {
                         result = true;
                     }
@@ -928,7 +928,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckIsAttackGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            if (this.m_Castle == null)
+            if (this.Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISATTACKGUILD);
                 return false;
@@ -937,19 +937,19 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.m_Castle.IsAttackGuild(PlayObject.MyGuild);
+            return this.Castle.IsAttackGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckCastleChageDay(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            if ((nDay < 0) || (this.m_Castle == null))
+            if ((nDay < 0) || (this.Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLECHANGEDAY);
                 return result;
             }
-            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_ChangeDate);
+            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, this.Castle.m_ChangeDate);
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -985,12 +985,12 @@ namespace GameSvr.Npc
         {
             var result = false;
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            if ((nDay < 0) || (this.m_Castle == null))
+            if ((nDay < 0) || (this.Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLEWARDAY);
                 return false;
             }
-            var nWarDay = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_WarDate);
+            var nWarDay = HUtil32.GetDayCount(DateTime.Now, this.Castle.m_WarDate);
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -1039,12 +1039,12 @@ namespace GameSvr.Npc
             {
                 nDoorStatus = 2;
             }
-            if ((nDay < 0) || (this.m_Castle == null) || (nDoorStatus < 0))
+            if ((nDay < 0) || (this.Castle == null) || (nDoorStatus < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCASTLEDOOR);
                 return result;
             }
-            var CastleDoor = (CastleDoor)this.m_Castle.m_MainDoor.BaseObject;
+            var CastleDoor = (CastleDoor)this.Castle.m_MainDoor.BaseObject;
             switch (nDoorStatus)
             {
                 case 0:
@@ -1071,7 +1071,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckIsAttackAllyGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            if (this.m_Castle == null)
+            if (this.Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISATTACKALLYGUILD);
                 return false;
@@ -1080,12 +1080,12 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.m_Castle.IsAttackAllyGuild(PlayObject.MyGuild);
+            return this.Castle.IsAttackAllyGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseAllyGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            if (this.m_Castle == null)
+            if (this.Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISDEFENSEALLYGUILD);
                 return false;
@@ -1094,12 +1094,12 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.m_Castle.IsDefenseAllyGuild(PlayObject.MyGuild);
+            return this.Castle.IsDefenseAllyGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            if (this.m_Castle == null)
+            if (this.Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISDEFENSEGUILD);
                 return false;
@@ -1108,7 +1108,7 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.m_Castle.IsDefenseGuild(PlayObject.MyGuild);
+            return this.Castle.IsDefenseGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsCastleaGuild(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1224,25 +1224,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_Abil.Level == nLevel)
+                    if (PlayObject.Abil.Level == nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_Abil.Level > nLevel)
+                    if (PlayObject.Abil.Level > nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_Abil.Level < nLevel)
+                    if (PlayObject.Abil.Level < nLevel)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_Abil.Level >= nLevel)
+                    if (PlayObject.Abil.Level >= nLevel)
                     {
                         result = true;
                     }
@@ -1463,7 +1463,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == PlayObject) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == PlayObject) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
             {
                 switch (QuestConditionInfo.nParam1)
                 {
@@ -1508,7 +1508,7 @@ namespace GameSvr.Npc
                 btSex = 1;
             }
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
             {
                 if (PoseHuman.Gender == Enum.Parse<PlayGender>(btSex.ToString()))
                 {
@@ -1522,7 +1522,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
             {
                 if ((((PlayObject)PoseHuman).m_sMasterName != "") && ((PlayObject)PoseHuman).m_boMaster)
                 {
@@ -1543,30 +1543,30 @@ namespace GameSvr.Npc
             }
             var cMethod = QuestConditionInfo.sParam1[0];
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
             {
                 switch (cMethod)
                 {
                     case '=':
-                        if (PoseHuman.m_Abil.Level == nLevel)
+                        if (PoseHuman.Abil.Level == nLevel)
                         {
                             result = true;
                         }
                         break;
                     case '>':
-                        if (PoseHuman.m_Abil.Level > nLevel)
+                        if (PoseHuman.Abil.Level > nLevel)
                         {
                             result = true;
                         }
                         break;
                     case '<':
-                        if (PoseHuman.m_Abil.Level < nLevel)
+                        if (PoseHuman.Abil.Level < nLevel)
                         {
                             result = true;
                         }
                         break;
                     default:
-                        if (PoseHuman.m_Abil.Level >= nLevel)
+                        if (PoseHuman.Abil.Level >= nLevel)
                         {
                             result = true;
                         }
@@ -1580,7 +1580,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             TBaseObject PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
             {
                 if (((PlayObject)PoseHuman).m_sDearName != "")
                 {
@@ -1594,7 +1594,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             TBaseObject PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
             {
                 if ((((PlayObject)PoseHuman).m_sMasterName != "") && !((PlayObject)PoseHuman).m_boMaster)
                 {
@@ -1814,7 +1814,7 @@ namespace GameSvr.Npc
             for (var i = MonList.Count - 1; i >= 0; i--)
             {
                 BaseObject = MonList[i];
-                if ((BaseObject.m_btRaceServer < Grobal2.RC_ANIMAL) || (BaseObject.m_btRaceServer == Grobal2.RC_ARCHERGUARD) || (BaseObject.m_Master != null))
+                if ((BaseObject.Race < Grobal2.RC_ANIMAL) || (BaseObject.Race == Grobal2.RC_ARCHERGUARD) || (BaseObject.Master != null))
                 {
                     MonList.RemoveAt(i);
                 }
@@ -1904,9 +1904,9 @@ namespace GameSvr.Npc
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 BaseObject = PlayObject.SlaveList[i];
-                if (BaseObject.m_Abil.Level > nSlaveLevel)
+                if (BaseObject.Abil.Level > nSlaveLevel)
                 {
-                    nSlaveLevel = BaseObject.m_Abil.Level;
+                    nSlaveLevel = BaseObject.Abil.Level;
                 }
             }
             if (nSlaveLevel < 0)
@@ -2037,7 +2037,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
             {
                 if (((PlayObject)PoseHuman).m_sMasterName != "")
                 {
@@ -2051,7 +2051,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var nGold = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            if ((nGold < 0) || (this.m_Castle == null))
+            if ((nGold < 0) || (this.Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCASTLEGOLD);
                 return result;
@@ -2060,25 +2060,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (this.m_Castle.m_nTotalGold == nGold)
+                    if (this.Castle.m_nTotalGold == nGold)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (this.m_Castle.m_nTotalGold > nGold)
+                    if (this.Castle.m_nTotalGold > nGold)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (this.m_Castle.m_nTotalGold < nGold)
+                    if (this.Castle.m_nTotalGold < nGold)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (this.m_Castle.m_nTotalGold >= nGold)
+                    if (this.Castle.m_nTotalGold >= nGold)
                     {
                         result = true;
                     }

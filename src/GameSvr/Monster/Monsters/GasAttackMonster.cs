@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
     {
         public GasAttackMonster() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             Animal = true;
         }
 
@@ -21,7 +21,7 @@ namespace GameSvr.Monster.Monsters
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 var BaseObject = GetPoseCreate();
-                if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint)
+                if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < m_btHitPoint)
                 {
                     n10 = BaseObject.GetMagStruckDamage(this, n10);
                     if (n10 > 0)
@@ -60,7 +60,7 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                if (TargetCret.m_PEnvir == m_PEnvir)
+                if (TargetCret.Envir == Envir)
                 {
                     SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                 }
