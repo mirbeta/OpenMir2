@@ -418,21 +418,17 @@ namespace GameSvr.Actor
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-
         private bool SuperManItem;
-
         /// <summary>
         /// 祈祷
         /// </summary>
         internal bool m_bopirit = false;
-
         public bool NoDropItem = false;
         public bool NoDropUseItem = false;
         internal bool m_boExpItem = false;
         internal bool m_boPowerItem = false;
         internal int ExpItem = 0;
         internal int PowerItem = 0;
-
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
@@ -483,7 +479,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 人物攻击变色标志
         /// </summary>
-        internal bool m_boPKFlag;
+        internal bool PvpFlag;
         /// <summary>
         /// 人物攻击变色时间长度
         /// </summary>
@@ -724,7 +720,7 @@ namespace GameSvr.Actor
             m_boStickMode = false;
             m_boNoAttackMode = false;
             m_boNoTame = false;
-            m_boPKFlag = false;
+            PvpFlag = false;
             m_nMoXieSuite = 0;
             m_nHongMoSuite = 0;
             m_db3B0 = 0;
@@ -918,10 +914,6 @@ namespace GameSvr.Actor
             bool result = false;
             int dx = 0;
             int dy = 0;
-            int idura;
-            MapItem MapItem;
-            MapItem pr;
-            string logcap;
             if (UserItem == null)
             {
                 return false;
@@ -932,7 +924,7 @@ namespace GameSvr.Actor
             {
                 if (StdItem.StdMode == 40)
                 {
-                    idura = UserItem.Dura;
+                    int idura = UserItem.Dura;
                     idura = idura - 2000;
                     if (idura < 0)
                     {
@@ -942,7 +934,7 @@ namespace GameSvr.Actor
                     UserItem.Dura = (ushort)idura;
                 }
 
-                MapItem = new MapItem
+                var MapItem = new MapItem
                 {
                     UserItem = UserItem,
                     Name = ItmUnit.GetItemName(UserItem), // 取自定义物品名称
@@ -960,10 +952,11 @@ namespace GameSvr.Actor
                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
                 MapItem.DropBaseObject = DropCreat.ObjectId;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
-                pr = (MapItem)Envir.AddToMap(dx, dy, CellType.ItemObject, MapItem);
+                var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.ItemObject, MapItem);
                 if (pr == MapItem)
                 {
                     SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, dx, dy, MapItem.Name);
+                    string logcap;
                     if (boDieDrop)
                     {
                         logcap = "15";
@@ -992,7 +985,6 @@ namespace GameSvr.Actor
                     MapItem = null;
                 }
             }
-
             return result;
         }
 
@@ -1015,15 +1007,12 @@ namespace GameSvr.Actor
         public void RecalcLevelAbilitys()
         {
             int n;
-            double nLevel = Abil.Level;
+            ushort nLevel = Abil.Level;
             switch (Job)
             {
                 case PlayJob.Taoist:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue,
-                        14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP +
-                                            M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
-                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue,
-                        13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP + M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
+                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
                     Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 50 * nLevel));
                     if ((12 + HUtil32.Round((Abil.Level / 13) * Abil.Level)) > 255)
@@ -1034,8 +1023,7 @@ namespace GameSvr.Actor
                     {
                         Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 42 * nLevel));
                     }
-
-                    n = (int)(nLevel / 7);
+                    n = nLevel / 7;
                     Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     Abil.MC = 0;
                     Abil.SC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
@@ -1044,16 +1032,12 @@ namespace GameSvr.Actor
                     Abil.MAC = HUtil32.MakeLong(n / 2, n + 1);
                     break;
                 case PlayJob.Wizard:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue,
-                        14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWizardHP +
-                                            M2Share.g_Config.nLevelValueOfWizardHPRate) * nLevel));
-                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue,
-                        13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWizardHP + M2Share.g_Config.nLevelValueOfWizardHPRate) * nLevel));
+                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5 * nLevel));
-                    Abil.MaxWearWeight =
-                        (byte)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
+                    Abil.MaxWearWeight = (byte)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
                     Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 90 * nLevel));
-                    n = (int)(nLevel / 7);
+                    n = nLevel / 7;
                     Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     Abil.MC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     Abil.SC = 0;
@@ -1061,27 +1045,22 @@ namespace GameSvr.Actor
                     Abil.MAC = 0;
                     break;
                 case PlayJob.Warrior:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue,
-                        14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP +
-                                            M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP + M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
                     Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 20 * nLevel));
                     Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 13 * nLevel));
-                    Abil.DC = HUtil32.MakeLong(HUtil32._MAX((int)(nLevel / 5) - 1, 1),
-                        HUtil32._MAX(1, (int)(nLevel / 5)));
+                    Abil.DC = HUtil32.MakeLong(HUtil32._MAX(nLevel / 5 - 1, 1), HUtil32._MAX(1, nLevel / 5));
                     Abil.SC = 0;
                     Abil.MC = 0;
-                    Abil.AC = (ushort)HUtil32.MakeLong(0, nLevel / 7);
+                    Abil.AC = HUtil32.MakeLong(0, nLevel / 7);
                     Abil.MAC = 0;
                     break;
             }
-
             if (Abil.HP > Abil.MaxHP)
             {
                 Abil.HP = Abil.MaxHP;
             }
-
             if (Abil.MP > Abil.MaxMP)
             {
                 Abil.MP = Abil.MaxMP;
@@ -1102,10 +1081,6 @@ namespace GameSvr.Actor
 
         protected bool WalkTo(byte btDir, bool boFlag)
         {
-            short oldX = 0;
-            short oldY = 0;
-            short newX = 0;
-            short newY = 0;
             short n20 = 0;
             short n24 = 0;
             bool bo29;
@@ -1115,14 +1090,13 @@ namespace GameSvr.Actor
             {
                 return result;
             }
-
             try
             {
-                oldX = CurrX;
-                oldY = CurrY;
+                short oldX = CurrX;
+                short oldY = CurrY;
                 Direction = btDir;
-                newX = 0;
-                newY = 0;
+                short newX = 0;
+                short newY = 0;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
@@ -1222,7 +1196,6 @@ namespace GameSvr.Actor
             {
                 return result;
             }
-
             for (int i = 0; i < m_GroupOwner.GroupMembers.Count; i++)
             {
                 if (m_GroupOwner.GroupMembers[i] == target)
@@ -1231,7 +1204,6 @@ namespace GameSvr.Actor
                     break;
                 }
             }
-
             return result;
         }
 
@@ -1264,12 +1236,10 @@ namespace GameSvr.Actor
             {
                 result = nExp - HUtil32.Round(nExp / 15 * (Abil.Level - (nLevel + 10)));
             }
-
             if (result <= 0)
             {
                 result = 1;
             }
-
             return result;
         }
 
@@ -1289,9 +1259,7 @@ namespace GameSvr.Actor
             {
                 tCount = 0;
             }
-
-            return (Abil.Level * M2Share.g_Config.nMonUpLvRate) - Abil.Level +
-                   M2Share.g_Config.nMonUpLvNeedKillBase + tCount;
+            return (Abil.Level * M2Share.g_Config.nMonUpLvRate) - Abil.Level + M2Share.g_Config.nMonUpLvNeedKillBase + tCount;
         }
 
         private void GainSlaveExp(int nLevel)
@@ -1331,10 +1299,8 @@ namespace GameSvr.Actor
             {
                 if (MapItemA != MapItem)
                 {
-                    MapItem = null;
                     MapItem = MapItemA;
                 }
-
                 SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, nX, nY, MapItem.Name);
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
@@ -1346,23 +1312,17 @@ namespace GameSvr.Actor
                     {
                         s20 = "7";
                     }
-
                     if (M2Share.g_boGameLogGold)
                     {
-                        M2Share.AddGameDataLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                               CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" +
-                                               HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" +
-                                               '0');
+                        M2Share.AddGameDataLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                     }
                 }
-
                 result = true;
             }
             else
             {
                 MapItem = null;
             }
-
             return result;
         }
 
@@ -1372,35 +1332,29 @@ namespace GameSvr.Actor
             GuildWarArea = false;
             if ((cert1.MyGuild == null) || (cert2.MyGuild == null))
             {
-                return result;
+                return 0;
             }
-
             if (cert1.InSafeArea() || cert2.InSafeArea())
             {
-                return result;
+                return 0;
             }
-
             if (cert1.MyGuild.GuildWarList.Count <= 0)
             {
-                return result;
+                return 0;
             }
-
             GuildWarArea = true;
             if (cert1.MyGuild.IsWarGuild(cert2.MyGuild) && cert2.MyGuild.IsWarGuild(cert1.MyGuild))
             {
                 result = 2;
             }
-
             if (cert1.MyGuild == cert2.MyGuild)
             {
                 result = 1;
             }
-
             if (cert1.MyGuild.IsAllyGuild(cert2.MyGuild) && cert2.MyGuild.IsAllyGuild(cert1.MyGuild))
             {
                 result = 3;
             }
-
             return result;
         }
 
@@ -1425,7 +1379,6 @@ namespace GameSvr.Actor
             {
                 PkPoint = 0;
             }
-
             if ((PKLevel() != nC) && (nC > 0) && (nC <= 2))
             {
                 RefNameColor();
@@ -1438,23 +1391,19 @@ namespace GameSvr.Actor
             {
                 m_dBodyLuck = m_dBodyLuck + dLuck;
             }
-
             if ((dLuck < 0) && (m_dBodyLuck > -(5 * M2Share.BODYLUCKUNIT)))
             {
                 m_dBodyLuck = m_dBodyLuck + dLuck;
             }
-
             int n = Convert.ToInt32(m_dBodyLuck / M2Share.BODYLUCKUNIT);
             if (n > 5)
             {
                 n = 5;
             }
-
             if (n < -10)
             {
                 n = -10;
             }
-
             m_nBodyLuckLevel = n;
         }
 
@@ -1464,12 +1413,10 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
             if (UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
                 return;
             }
-
             if (UseItems[Grobal2.U_WEAPON].btValue[3] > 0)
             {
                 UseItems[Grobal2.U_WEAPON].btValue[3] -= 1;
@@ -1483,7 +1430,6 @@ namespace GameSvr.Actor
                     SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
             }
-
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
                 RecalcAbilitys();
@@ -1500,7 +1446,6 @@ namespace GameSvr.Actor
             {
                 nPower = 0;
             }
-
             if (m_nLuck > 0)
             {
                 if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, m_nLuck)) == 0)
@@ -1523,7 +1468,6 @@ namespace GameSvr.Actor
                     }
                 }
             }
-
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
                 PlayObject = this as PlayObject;
@@ -1533,17 +1477,14 @@ namespace GameSvr.Actor
                     result = HUtil32.Round(PowerItem * result);
                 }
             }
-
             if (AutoChangeColor)
             {
                 result = result * AutoChangeIdx + 1;
             }
-
             if (FixColor)
             {
                 result = result * FixColorIdx + 1;
             }
-
             return (ushort)result;
         }
 
@@ -1567,11 +1508,9 @@ namespace GameSvr.Actor
                     nSpdam = nSpdam - m_WAbil.MP;
                     m_WAbil.MP = 0;
                 }
-
                 nDamage = HUtil32.Round(nSpdam / 1.5);
                 HealthSpellChanged();
             }
-
             if (nDamage > 0)
             {
                 if ((m_WAbil.HP - nDamage) > 0)
@@ -1666,13 +1605,11 @@ namespace GameSvr.Actor
                     break;
                 }
             }
-
             Direction = nBackDir;
             if (result == 0)
             {
                 Direction = olddir;
             }
-
             return result;
         }
 
@@ -1699,7 +1636,6 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-
                 if (!((Math.Abs(sx - tx) <= 0) && (Math.Abs(sy - ty) <= 0)))
                 {
                     ndir = M2Share.GetNextDirection(sx, sy, tx, ty);
@@ -1713,7 +1649,6 @@ namespace GameSvr.Actor
                     break;
                 }
             }
-
             return tcount;
         }
 
@@ -1742,7 +1677,6 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
             if ((m_WAbil.HP + nHP) >= m_WAbil.MaxHP)
             {
                 m_WAbil.HP = m_WAbil.MaxHP;
@@ -1751,7 +1685,6 @@ namespace GameSvr.Actor
             {
                 m_WAbil.HP += (ushort)nHP;
             }
-
             if ((m_WAbil.MP + nMP) >= m_WAbil.MaxMP)
             {
                 m_WAbil.MP = m_WAbil.MaxMP;
@@ -1760,29 +1693,24 @@ namespace GameSvr.Actor
             {
                 m_WAbil.MP += (ushort)nMP;
             }
-
             HealthSpellChanged();
         }
 
         private void ItemDamageRevivalRing()
         {
-            StdItem pSItem;
-            ushort nDura;
-            ushort tDura;
-            PlayObject PlayObject;
             for (int i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] != null && UseItems[i].wIndex > 0)
                 {
-                    pSItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                    StdItem pSItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
                     if (pSItem != null)
                     {
                         if (new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) ||
                             (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) &&
                              new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.AniCount)))
                         {
-                            nDura = UseItems[i].Dura;
-                            tDura = (ushort)HUtil32.Round(nDura / 1000.0); // 1.03
+                            ushort nDura = UseItems[i].Dura;
+                            ushort tDura = (ushort)HUtil32.Round(nDura / 1000.0);
                             nDura -= 1000;
                             if (nDura <= 0)
                             {
@@ -1790,10 +1718,9 @@ namespace GameSvr.Actor
                                 UseItems[i].Dura = nDura;
                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    PlayObject = this as PlayObject;
+                                    PlayObject PlayObject = this as PlayObject;
                                     PlayObject.SendDelItems(UseItems[i]);
                                 }
-
                                 UseItems[i].wIndex = 0;
                                 RecalcAbilitys();
                             }
@@ -1801,7 +1728,6 @@ namespace GameSvr.Actor
                             {
                                 UseItems[i].Dura = nDura;
                             }
-
                             if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
                             {
                                 SendMsg(this, Grobal2.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
@@ -1958,7 +1884,6 @@ namespace GameSvr.Actor
             int nOldX;
             int nOldY;
             bool bo21;
-            PlayObject PlayObject;
             Envirnoment Envir = M2Share.MapManager.FindMap(sMap);
             if (Envir != null)
             {
@@ -2025,7 +1950,7 @@ namespace GameSvr.Actor
                         {
                             DisappearA();
                             m_bo316 = true;
-                            PlayObject = this as PlayObject;
+                            PlayObject PlayObject = this as PlayObject;
                             PlayObject.m_sSwitchMapName = Envir.MapName;
                             PlayObject.m_nSwitchMapX = nX;
                             PlayObject.m_nSwitchMapY = nY;
@@ -2052,7 +1977,6 @@ namespace GameSvr.Actor
         {
             short nX = 0;
             short nY = 0;
-            TBaseObject result = null;
             if (SlaveList.Count < nMaxMob)
             {
                 GetFrontPosition(ref nX, ref nY);
@@ -2066,17 +1990,14 @@ namespace GameSvr.Actor
                     MonObj.RecalcAbilitys();
                     if (MonObj.m_WAbil.HP < MonObj.m_WAbil.MaxHP)
                     {
-                        MonObj.m_WAbil.HP =
-                            (ushort)(MonObj.m_WAbil.HP + (MonObj.m_WAbil.MaxHP - MonObj.m_WAbil.HP) / 2);
+                        MonObj.m_WAbil.HP = (ushort)(MonObj.m_WAbil.HP + (MonObj.m_WAbil.MaxHP - MonObj.m_WAbil.HP) / 2);
                     }
-
                     MonObj.RefNameColor();
                     SlaveList.Add(MonObj);
-                    result = MonObj;
+                    return MonObj;
                 }
             }
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -2663,9 +2584,9 @@ namespace GameSvr.Actor
 
         private void CheckPKStatus()
         {
-            if (m_boPKFlag && ((HUtil32.GetTickCount() - m_dwPKTick) > M2Share.g_Config.dwPKFlagTime)) // 60 * 1000
+            if (PvpFlag && ((HUtil32.GetTickCount() - m_dwPKTick) > M2Share.g_Config.dwPKFlagTime)) // 60 * 1000
             {
-                m_boPKFlag = false;
+                PvpFlag = false;
                 RefNameColor();
             }
         }
@@ -2825,7 +2746,7 @@ namespace GameSvr.Actor
             {
                 if (BaseObject.PKLevel() < 2)
                 {
-                    if (BaseObject.m_boPKFlag)
+                    if (BaseObject.PvpFlag)
                     {
                         result = M2Share.g_Config.btPKFlagNameColor;
                     }
@@ -4226,12 +4147,12 @@ namespace GameSvr.Actor
         public void SetPKFlag(TBaseObject BaseObject)
         {
             if ((PKLevel() < 2) && (BaseObject.PKLevel() < 2) && (!Envir.Flag.boFightZone) &&
-                (!Envir.Flag.boFight3Zone) && !m_boPKFlag)
+                (!Envir.Flag.boFight3Zone) && !PvpFlag)
             {
                 BaseObject.m_dwPKTick = HUtil32.GetTickCount();
-                if (!BaseObject.m_boPKFlag)
+                if (!BaseObject.PvpFlag)
                 {
-                    BaseObject.m_boPKFlag = true;
+                    BaseObject.PvpFlag = true;
                     BaseObject.RefNameColor();
                 }
             }
@@ -4239,7 +4160,7 @@ namespace GameSvr.Actor
 
         protected bool IsGoodKilling(TBaseObject cert)
         {
-            return cert.m_boPKFlag;
+            return cert.PvpFlag;
         }
 
         private bool IsAttackTarget_sub_4C88E4()

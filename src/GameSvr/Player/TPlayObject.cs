@@ -1276,16 +1276,16 @@ namespace GameSvr.Player
             if (nPoint + nTotleUsePoint == m_nBonusPoint)
             {
                 m_nBonusPoint = nPoint;
-                ((TBaseObject)this).BonusAbil.DC += BonusAbil.DC;
-                ((TBaseObject)this).BonusAbil.MC += BonusAbil.MC;
-                ((TBaseObject)this).BonusAbil.SC += BonusAbil.SC;
-                ((TBaseObject)this).BonusAbil.AC += BonusAbil.AC;
-                ((TBaseObject)this).BonusAbil.MAC += BonusAbil.MAC;
-                ((TBaseObject)this).BonusAbil.HP += BonusAbil.HP;
-                ((TBaseObject)this).BonusAbil.MP += BonusAbil.MP;
-                ((TBaseObject)this).BonusAbil.Hit += BonusAbil.Hit;
-                ((TBaseObject)this).BonusAbil.Speed += BonusAbil.Speed;
-                ((TBaseObject)this).BonusAbil.X2 += BonusAbil.X2;
+                this.BonusAbil.DC += BonusAbil.DC;
+                this.BonusAbil.MC += BonusAbil.MC;
+                this.BonusAbil.SC += BonusAbil.SC;
+                this.BonusAbil.AC += BonusAbil.AC;
+                this.BonusAbil.MAC += BonusAbil.MAC;
+                this.BonusAbil.HP += BonusAbil.HP;
+                this.BonusAbil.MP += BonusAbil.MP;
+                this.BonusAbil.Hit += BonusAbil.Hit;
+                this.BonusAbil.Speed += BonusAbil.Speed;
+                this.BonusAbil.X2 += BonusAbil.X2;
                 RecalcAbilitys();
                 SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
