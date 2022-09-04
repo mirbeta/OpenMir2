@@ -496,18 +496,18 @@ namespace GameSvr.Actor
         /// </summary>
         internal int PoisoningTick;
         /// <summary>
-        /// 减PK值时间
+        /// 减PK值时间`
         /// </summary>
-        internal int m_dwDecPkPointTick;
-        internal int m_DecLightItemDrugTick;
-        internal int m_dwVerifyTick;
-        internal int m_dwCheckRoyaltyTick;
-        internal int m_dwDecHungerPointTick;
+        private int DecPkPointTick;
+        internal int DecLightItemDrugTick;
+        internal int VerifyTick;
+        internal int CheckRoyaltyTick;
+        internal int DecHungerPointTick;
         internal int m_dwHPMPTick;
-        internal IList<SendMessage> MsgList;
-        internal IList<TBaseObject> VisibleHumanList;
-        internal IList<VisibleMapItem> VisibleItems;
-        internal IList<MirEvent> VisibleEvents;
+        internal readonly IList<SendMessage> MsgList;
+        internal readonly IList<TBaseObject> VisibleHumanList;
+        internal readonly IList<VisibleMapItem> VisibleItems;
+        internal readonly IList<MirEvent> VisibleEvents;
         internal int SendRefMsgTick;
         /// <summary>
         /// 是否在开行会战
@@ -528,7 +528,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 可见玩家列表
         /// </summary>
-        public IList<VisibleBaseObject> VisibleActors;
+        public readonly IList<VisibleBaseObject> VisibleActors;
         /// <summary>
         /// 人物背包
         /// </summary>
@@ -549,7 +549,6 @@ namespace GameSvr.Actor
         /// 技能表
         /// </summary>
         public IList<TUserMagic> MagicList;
-
         /// <summary>
         /// 身上物品
         /// </summary>
@@ -588,7 +587,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
-        protected bool DenyRefStatus;
+        private bool DenyRefStatus;
         /// <summary>
         /// 是否增加地图计数
         /// </summary>
@@ -790,12 +789,12 @@ namespace GameSvr.Actor
             m_nRunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(2000) + 2000;
             SearchTick = HUtil32.GetTickCount();
-            m_dwDecPkPointTick = HUtil32.GetTickCount();
-            m_DecLightItemDrugTick = HUtil32.GetTickCount();
+            DecPkPointTick = HUtil32.GetTickCount();
+            DecLightItemDrugTick = HUtil32.GetTickCount();
             PoisoningTick = HUtil32.GetTickCount();
-            m_dwVerifyTick = HUtil32.GetTickCount();
-            m_dwCheckRoyaltyTick = HUtil32.GetTickCount();
-            m_dwDecHungerPointTick = HUtil32.GetTickCount();
+            VerifyTick = HUtil32.GetTickCount();
+            CheckRoyaltyTick = HUtil32.GetTickCount();
+            DecHungerPointTick = HUtil32.GetTickCount();
             m_dwHPMPTick = HUtil32.GetTickCount();
             ShoutMsgTick = 0;
             TeleportTick = 0;
@@ -840,7 +839,11 @@ namespace GameSvr.Actor
             }
         }
 
-        public bool GetDropPosition(int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
+        /// <summary>
+        /// 获取物品掉落位置
+        /// </summary>
+        /// <returns></returns>
+        private bool GetDropPosition(int nOrgX, int nOrgY, int nRange, ref int pX, ref int pY)
         {
             var result = false;
             var nItemCount = 0;
@@ -853,9 +856,9 @@ namespace GameSvr.Actor
                 {
                     for (var iii = -i; iii <= i; iii++)
                     {
-                        nDX = nOrgX + iii;
-                        nDY = nOrgY + ii;
-                        if (Envir.GetItemEx(nDX, nDY, ref nItemCount) == 0)
+                        pX = nOrgX + iii;
+                        pY = nOrgY + ii;
+                        if (Envir.GetItemEx(pX, pY, ref nItemCount) == 0)
                         {
                             if (Envir.Bo2C)
                             {
@@ -868,8 +871,8 @@ namespace GameSvr.Actor
                             if (Envir.Bo2C && n24 > nItemCount)
                             {
                                 n24 = nItemCount;
-                                n28 = nDX;
-                                n2C = nDY;
+                                n28 = pX;
+                                n2C = pY;
                             }
                         }
                     }
@@ -890,13 +893,13 @@ namespace GameSvr.Actor
             {
                 if (n24 < 8)
                 {
-                    nDX = n28;
-                    nDY = n2C;
+                    pX = n28;
+                    pY = n2C;
                 }
                 else
                 {
-                    nDX = nOrgX;
-                    nDY = nOrgY;
+                    pX = nOrgX;
+                    pY = nOrgY;
                 }
             }
 
@@ -1093,10 +1096,10 @@ namespace GameSvr.Actor
 
         protected bool WalkTo(byte btDir, bool boFlag)
         {
-            short nOX = 0;
-            short nOY = 0;
-            short nNX = 0;
-            short nNY = 0;
+            short oldX = 0;
+            short oldY = 0;
+            short newX = 0;
+            short newY = 0;
             short n20 = 0;
             short n24 = 0;
             bool bo29;
@@ -1109,51 +1112,51 @@ namespace GameSvr.Actor
 
             try
             {
-                nOX = CurrX;
-                nOY = CurrY;
+                oldX = CurrX;
+                oldY = CurrY;
                 Direction = btDir;
-                nNX = 0;
-                nNY = 0;
+                newX = 0;
+                newY = 0;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
-                        nNX = CurrX;
-                        nNY = (short)(CurrY - 1);
+                        newX = CurrX;
+                        newY = (short)(CurrY - 1);
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        nNX = (short)(CurrX + 1);
-                        nNY = (short)(CurrY - 1);
+                        newX = (short)(CurrX + 1);
+                        newY = (short)(CurrY - 1);
                         break;
                     case Grobal2.DR_RIGHT:
-                        nNX = (short)(CurrX + 1);
-                        nNY = CurrY;
+                        newX = (short)(CurrX + 1);
+                        newY = CurrY;
                         break;
                     case Grobal2.DR_DOWNRIGHT:
-                        nNX = (short)(CurrX + 1);
-                        nNY = (short)(CurrY + 1);
+                        newX = (short)(CurrX + 1);
+                        newY = (short)(CurrY + 1);
                         break;
                     case Grobal2.DR_DOWN:
-                        nNX = CurrX;
-                        nNY = (short)(CurrY + 1);
+                        newX = CurrX;
+                        newY = (short)(CurrY + 1);
                         break;
                     case Grobal2.DR_DOWNLEFT:
-                        nNX = (short)(CurrX - 1);
-                        nNY = (short)(CurrY + 1);
+                        newX = (short)(CurrX - 1);
+                        newY = (short)(CurrY + 1);
                         break;
                     case Grobal2.DR_LEFT:
-                        nNX = (short)(CurrX - 1);
-                        nNY = CurrY;
+                        newX = (short)(CurrX - 1);
+                        newY = CurrY;
                         break;
                     case Grobal2.DR_UPLEFT:
-                        nNX = (short)(CurrX - 1);
-                        nNY = (short)(CurrY - 1);
+                        newX = (short)(CurrX - 1);
+                        newY = (short)(CurrY - 1);
                         break;
                 }
 
-                if (nNX >= 0 && Envir.Width - 1 >= nNX && nNY >= 0 && Envir.Height - 1 >= nNY)
+                if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
                     bo29 = true;
-                    if (bo2BA && !Envir.CanSafeWalk(nNX, nNY))
+                    if (bo2BA && !Envir.CanSafeWalk(newX, newY))
                     {
                         bo29 = false;
                     }
@@ -1162,7 +1165,7 @@ namespace GameSvr.Actor
                     {
                         Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, 1,
                             ref n20, ref n24);
-                        if (nNX == n20 && nNY == n24)
+                        if (newX == n20 && newY == n24)
                         {
                             bo29 = false;
                         }
@@ -1170,15 +1173,15 @@ namespace GameSvr.Actor
 
                     if (bo29)
                     {
-                        if (Envir.MoveToMovingObject(CurrX, CurrY, this, nNX, nNY, boFlag) > 0)
+                        if (Envir.MoveToMovingObject(CurrX, CurrY, this, newX, newY, boFlag) > 0)
                         {
-                            CurrX = nNX;
-                            CurrY = nNY;
+                            CurrX = newX;
+                            CurrY = newY;
                         }
                     }
                 }
 
-                if (CurrX != nOX || CurrY != nOY)
+                if (CurrX != oldX || CurrY != oldY)
                 {
                     if (Walk(Grobal2.RM_WALK))
                     {
@@ -1192,8 +1195,8 @@ namespace GameSvr.Actor
                     else
                     {
                         Envir.DeleteFromMap(CurrX, CurrY, CellType.MovingObject, this);
-                        CurrX = nOX;
-                        CurrY = nOY;
+                        CurrX = oldX;
+                        CurrY = oldY;
                         Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
                     }
                 }
@@ -2824,16 +2827,13 @@ namespace GameSvr.Actor
                                                '0');
                     }
                 }
-
                 UseItems[Grobal2.U_WEAPON].wIndex = 0;
-                SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0,
-                    "");
+                SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
             else
             {
                 UseItems[Grobal2.U_WEAPON].Dura = (ushort)nDura;
             }
-
             if ((nDura / 1.03) != nDuraPoint)
             {
                 SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura,
@@ -2971,7 +2971,6 @@ namespace GameSvr.Actor
             {
                 result = M2Share.g_Config.dwNeedExps[M2Share.g_Config.dwNeedExps.Length];
             }
-
             return result;
         }
 
@@ -2982,12 +2981,10 @@ namespace GameSvr.Actor
             {
                 result = M2Share.g_Config.btPKLevel1NameColor;
             }
-
             if (PKLevel() >= 2)
             {
                 result = M2Share.g_Config.btPKLevel2NameColor;
             }
-
             return result;
         }
 

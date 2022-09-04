@@ -485,26 +485,26 @@ namespace GameSvr.Actor
             try
             {
                 // 减少PK值开始
-                if ((HUtil32.GetTickCount() - m_dwDecPkPointTick) > M2Share.g_Config.dwDecPkPointTime)// 120000
+                if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.g_Config.dwDecPkPointTime)// 120000
                 {
-                    m_dwDecPkPointTick = HUtil32.GetTickCount();
+                    DecPkPointTick = HUtil32.GetTickCount();
                     if (PkPoint > 0)
                     {
                         DecPKPoint(M2Share.g_Config.nDecPkPointCount);
                     }
                 }
-                if ((HUtil32.GetTickCount() - m_DecLightItemDrugTick) > M2Share.g_Config.dwDecLightItemDrugTime)
+                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.g_Config.dwDecLightItemDrugTime)
                 {
-                    m_DecLightItemDrugTick += M2Share.g_Config.dwDecLightItemDrugTime;
+                    DecLightItemDrugTick += M2Share.g_Config.dwDecLightItemDrugTime;
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
                         UseLamp();
                         CheckPKStatus();
                     }
                 }
-                if ((HUtil32.GetTickCount() - m_dwCheckRoyaltyTick) > 10000)
+                if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
                 {
-                    m_dwCheckRoyaltyTick = HUtil32.GetTickCount();
+                    CheckRoyaltyTick = HUtil32.GetTickCount();
                     if (Master != null)
                     {
                         if ((M2Share.g_dwSpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
@@ -535,9 +535,9 @@ namespace GameSvr.Actor
                     }
                 }
 
-                if ((HUtil32.GetTickCount() - m_dwVerifyTick) > 30 * 1000)
+                if ((HUtil32.GetTickCount() - VerifyTick) > 30 * 1000)
                 {
-                    m_dwVerifyTick = HUtil32.GetTickCount();
+                    VerifyTick = HUtil32.GetTickCount();
                     // 清组队已死亡成员
                     if (m_GroupOwner != null)
                     {

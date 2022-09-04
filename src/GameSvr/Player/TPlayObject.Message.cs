@@ -415,9 +415,9 @@ namespace GameSvr.Player
             // 降饥饿点
             if (M2Share.g_Config.boHungerSystem)
             {
-                if ((HUtil32.GetTickCount() - m_dwDecHungerPointTick) > 1000)
+                if ((HUtil32.GetTickCount() - DecHungerPointTick) > 1000)
                 {
-                    m_dwDecHungerPointTick = HUtil32.GetTickCount();
+                    DecHungerPointTick = HUtil32.GetTickCount();
                     if (m_nHungerStatus > 0)
                     {
                         tObjCount = GetMyStatus();
