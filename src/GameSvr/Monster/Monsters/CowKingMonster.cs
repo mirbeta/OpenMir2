@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
 
         public CowKingMonster() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 500;
             dw558 = HUtil32.GetTickCount();
             bo2BF = true;
             n560 = 0;
@@ -48,12 +48,12 @@ namespace GameSvr.Monster.Monsters
                 if (TargetCret != null && sub_4C3538() >= 5)
                 {
                     TargetCret.GetBackPosition(ref n8, ref nC);
-                    if (m_PEnvir.CanWalk(n8, nC, false))
+                    if (Envir.CanWalk(n8, nC, false))
                     {
-                        SpaceMove(m_PEnvir.MapName, n8, nC, 0);
+                        SpaceMove(Envir.MapName, n8, nC, 0);
                         return;
                     }
-                    MapRandomMove(m_PEnvir.MapName, 0);
+                    MapRandomMove(Envir.MapName, 0);
                     return;
                 }
                 n10 = n560;
@@ -104,7 +104,7 @@ namespace GameSvr.Monster.Monsters
                 n10 = -1;
                 while (n10 != 2)
                 {
-                    if (!m_PEnvir.CanWalk(CurrX + nC, CurrY + n10, false))
+                    if (!Envir.CanWalk(CurrX + nC, CurrY + n10, false))
                     {
                         if ((nC != 0) || (n10 != 0))
                         {

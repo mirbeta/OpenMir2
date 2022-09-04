@@ -2005,15 +2005,15 @@ namespace GameSvr.Npc
                 case "$CASTLEWARDATE":
                     {
                         // 申请攻城的日期
-                        if (m_Castle == null)
+                        if (Castle == null)
                         {
-                            m_Castle = M2Share.CastleManager.GetCastle(0);
+                            Castle = M2Share.CastleManager.GetCastle(0);
                         }
-                        if (m_Castle != null)
+                        if (Castle != null)
                         {
-                            if (!m_Castle.m_boUnderWar)
+                            if (!Castle.m_boUnderWar)
                             {
-                                sValue = m_Castle.GetWarDate();
+                                sValue = Castle.GetWarDate();
                                 if (sValue != "")
                                 {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sValue);
@@ -2043,11 +2043,11 @@ namespace GameSvr.Npc
                     return result;
                 case "$KILLER":// 杀人者变量 
                     {
-                        if (PlayObject.Death && (PlayObject.m_LastHiter != null))
+                        if (PlayObject.Death && (PlayObject.LastHiter != null))
                         {
-                            if ((PlayObject.m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                            if ((PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT))
                             {
-                                sValue = PlayObject.m_LastHiter.CharName;
+                                sValue = PlayObject.LastHiter.CharName;
                             }
                         }
                         else
@@ -2060,11 +2060,11 @@ namespace GameSvr.Npc
                     }
                 case "$MONKILLER":// 杀人的怪物变量 
                     {
-                        if (PlayObject.Death && (PlayObject.m_LastHiter != null))
+                        if (PlayObject.Death && (PlayObject.LastHiter != null))
                         {
-                            if ((PlayObject.m_LastHiter.m_btRaceServer != Grobal2.RC_PLAYOBJECT))
+                            if ((PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT))
                             {
-                                sValue = PlayObject.m_LastHiter.CharName;
+                                sValue = PlayObject.LastHiter.CharName;
                             }
                         }
                         else
@@ -2122,7 +2122,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$MAP":
-                    sValue = PlayObject.m_PEnvir.MapName;
+                    sValue = PlayObject.Envir.MapName;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2151,7 +2151,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$LEVEL":
-                    nValue = PlayObject.m_Abil.Level;
+                    nValue = PlayObject.Abil.Level;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2226,17 +2226,17 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$EXP":
-                    nValue = (int)PlayObject.m_Abil.Exp;
+                    nValue = (int)PlayObject.Abil.Exp;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXEXP":
-                    nValue = (int)PlayObject.m_Abil.MaxExp;
+                    nValue = (int)PlayObject.Abil.MaxExp;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$PKPOINT":
-                    nValue = PlayObject.m_nPkPoint;
+                    nValue = PlayObject.PkPoint;
                     nDataType = 1;
                     result = true;
                     return result;

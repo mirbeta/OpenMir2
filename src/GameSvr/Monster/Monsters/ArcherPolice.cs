@@ -4,7 +4,7 @@
     {
         public ArcherPolice() : base()
         {
-            m_btRaceServer = 20;
+            Race = 20;
         }
     }
 }

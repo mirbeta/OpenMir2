@@ -11,8 +11,8 @@ namespace GameSvr.Monster.Monsters
         public ZilKinZombi() : base()
         {
             this.ViewRange = 6;
-            this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            this.m_dwSearchTick = HUtil32.GetTickCount();
+            this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            this.SearchTick = HUtil32.GetTickCount();
             nZilKillCount = 0;
             if (M2Share.RandomNumber.Random(3) == 0)
             {
@@ -35,10 +35,10 @@ namespace GameSvr.Monster.Monsters
         {
             if (this.Death && !this.Ghost && nZilKillCount >= 0 && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - dw558) >= dw560)
             {
-                this.m_Abil.MaxHP = (ushort)(this.m_Abil.MaxHP >> 1);
+                this.Abil.MaxHP = (ushort)(this.Abil.MaxHP >> 1);
                 this.m_dwFightExp = this.m_dwFightExp / 2;
-                this.m_Abil.HP = this.m_Abil.MaxHP;
-                this.m_WAbil.HP = this.m_Abil.MaxHP;
+                this.Abil.HP = this.Abil.MaxHP;
+                this.m_WAbil.HP = this.Abil.MaxHP;
                 this.ReAlive();
                 this.WalkTick = HUtil32.GetTickCount() + 1000;
             }

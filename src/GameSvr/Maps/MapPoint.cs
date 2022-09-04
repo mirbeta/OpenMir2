@@ -165,7 +165,7 @@ namespace GameSvr.Maps
                 m_btDirection = FBaseObject.Direction;
                 for (var i = 2; i >= 1; i--)
                 {
-                    if (FBaseObject.m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY))
+                    if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY))
                     {
                         if (FBaseObject.CanMove(nMX, nMY, false))
                         {
@@ -184,7 +184,7 @@ namespace GameSvr.Maps
                     btDir = GetPoint_GetNextDir(btDir);
                     for (var i = 2; i >= 1; i--)
                     {
-                        if (FBaseObject.m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
+                        if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
                         {
                             if (FBaseObject.CanMove(nMX, nMY, false))
                             {
@@ -206,9 +206,9 @@ namespace GameSvr.Maps
             {
                 nMX = 0;
                 nMY = 0;
-                if (((PlayObject)FBaseObject).m_PEnvir != m_PEnvir)
+                if (((PlayObject)FBaseObject).Envir != m_PEnvir)
                 {
-                    m_PEnvir = ((PlayObject)FBaseObject).m_PEnvir;
+                    m_PEnvir = ((PlayObject)FBaseObject).Envir;
                     m_nPostion = 0;
                     m_nCurrX = nX;
                     m_nCurrY = nY;
@@ -474,7 +474,7 @@ namespace GameSvr.Maps
                     btDir = GetPoint1_GetNextDir(btDir);
                     for (var i = 2; i >= 1; i--)
                     {
-                        if (((PlayObject)FBaseObject).m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
+                        if (((PlayObject)FBaseObject).Envir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
                         {
                             if (((PlayObject)FBaseObject).CanMove(nMX, nMY, false))
                             {
@@ -496,9 +496,9 @@ namespace GameSvr.Maps
             {
                 nMX = 0;
                 nMY = 0;
-                if (((PlayObject)FBaseObject).m_PEnvir != m_PEnvir)
+                if (((PlayObject)FBaseObject).Envir != m_PEnvir)
                 {
-                    m_PEnvir = ((PlayObject)FBaseObject).m_PEnvir;
+                    m_PEnvir = ((PlayObject)FBaseObject).Envir;
                     m_nPostion = 0;
                     m_nCurrX = nX;
                     m_nCurrY = nY;

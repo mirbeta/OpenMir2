@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
     {
         public ScultureMonster() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 7;
             StoneMode = true;
             m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
         private void MeltStone()
         {
             m_nCharStatusEx = 0;
-            m_nCharStatus = GetCharStatus();
+            CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;
         }
@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
             TBaseObject BaseObject;
             MeltStone();
             IList<TBaseObject> List10 = new List<TBaseObject>();
-            GetMapBaseObjects(m_PEnvir, CurrX, CurrY, 7, List10);
+            GetMapBaseObjects(Envir, CurrX, CurrY, 7, List10);
             for (var i = 0; i < List10.Count; i++)
             {
                 BaseObject = List10[i];

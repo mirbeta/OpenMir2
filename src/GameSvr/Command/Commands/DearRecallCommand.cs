@@ -18,7 +18,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg("你没有结婚!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.m_PEnvir.Flag.boNODEARRECALL)
+            if (PlayObject.Envir.Flag.boNODEARRECALL)
             {
                 PlayObject.SysMsg("本地图禁止夫妻传送!!!", MsgColor.Red, MsgType.Hint);
                 return;

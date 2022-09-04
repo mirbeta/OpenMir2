@@ -38,7 +38,7 @@ namespace GameSvr.Command.Commands
                             var m_PlayObject = PlayObject.GroupMembers[i];
                             if (m_PlayObject.m_boAllowGroupReCall)
                             {
-                                if (m_PlayObject.m_PEnvir.Flag.boNORECALL)
+                                if (m_PlayObject.Envir.Flag.boNORECALL)
                                 {
                                     PlayObject.SysMsg($"{m_PlayObject.CharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                                 }

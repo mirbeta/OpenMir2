@@ -23,9 +23,9 @@ namespace GameSvr.Command.Commands
             {
                 short nX = (short)HUtil32.Str_ToInt(sX, -1);
                 short nY = (short)HUtil32.Str_ToInt(sY, -1);
-                if (!PlayObject.m_PEnvir.Flag.boNOPOSITIONMOVE)
+                if (!PlayObject.Envir.Flag.boNOPOSITIONMOVE)
                 {
-                    if (PlayObject.m_PEnvir.CanWalkOfItem(nX, nY, M2Share.g_Config.boUserMoveCanDupObj, M2Share.g_Config.boUserMoveCanOnItem))
+                    if (PlayObject.Envir.CanWalkOfItem(nX, nY, M2Share.g_Config.boUserMoveCanDupObj, M2Share.g_Config.boUserMoveCanOnItem))
                     {
                         if ((HUtil32.GetTickCount() - PlayObject.TeleportTick) > M2Share.g_Config.dwUserMoveTime * 1000)
                         {

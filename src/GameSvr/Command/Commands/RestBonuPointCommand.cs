@@ -27,8 +27,8 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
-                nTotleUsePoint = m_PlayObject.m_BonusAbil.DC + m_PlayObject.m_BonusAbil.MC + m_PlayObject.m_BonusAbil.SC + m_PlayObject.m_BonusAbil.AC + m_PlayObject.m_BonusAbil.MAC
-                    + m_PlayObject.m_BonusAbil.HP + m_PlayObject.m_BonusAbil.MP + m_PlayObject.m_BonusAbil.Hit + m_PlayObject.m_BonusAbil.Speed + m_PlayObject.m_BonusAbil.X2;
+                nTotleUsePoint = m_PlayObject.BonusAbil.DC + m_PlayObject.BonusAbil.MC + m_PlayObject.BonusAbil.SC + m_PlayObject.BonusAbil.AC + m_PlayObject.BonusAbil.MAC
+                    + m_PlayObject.BonusAbil.HP + m_PlayObject.BonusAbil.MP + m_PlayObject.BonusAbil.Hit + m_PlayObject.BonusAbil.Speed + m_PlayObject.BonusAbil.X2;
                 m_PlayObject.m_nBonusPoint += nTotleUsePoint;
                 m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 m_PlayObject.HasLevelUp(0);

@@ -24,9 +24,9 @@ namespace GameSvr.Monster.Monsters
             var bo0D = false;
             if (n550 > 0)
             {
-                if (m_PEnvir.GetNextPosition(CurrX, CurrY, Direction, 1, ref n08, ref n0C))
+                if (Envir.GetNextPosition(CurrX, CurrY, Direction, 1, ref n08, ref n0C))
                 {
-                    if (m_PEnvir.CanWalk(n08, n0C, bo0D))
+                    if (Envir.CanWalk(n08, n0C, bo0D))
                     {
                         switch (Direction)
                         {
@@ -55,7 +55,7 @@ namespace GameSvr.Monster.Monsters
                                 Direction = 1;
                                 break;
                         }
-                        m_PEnvir.GetNextPosition(CurrX, CurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
+                        Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
                     }
                 }
             }
@@ -83,7 +83,7 @@ namespace GameSvr.Monster.Monsters
             Direction = hiter.Direction;
             n550 = M2Share.RandomNumber.Random(4) + n550 + 4;
             n550 = HUtil32._MIN(20, n550);
-            m_PEnvir.GetNextPosition(CurrX, CurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
+            Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
         }
     }
 }

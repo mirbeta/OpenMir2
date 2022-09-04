@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
     {
         public MagCowMonster() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
         private void sub_4A9F6C(byte btDir)
@@ -53,7 +53,7 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                if (TargetCret.m_PEnvir == m_PEnvir)
+                if (TargetCret.Envir == Envir)
                 {
                     SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                 }

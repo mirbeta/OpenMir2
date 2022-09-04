@@ -39,7 +39,7 @@ namespace GameSvr.Command.Commands
             Merchant Merchant = new Merchant();
             Merchant.CharName = sParam1;
             Merchant.MapName = PlayObject.MapName;
-            Merchant.m_PEnvir = PlayObject.m_PEnvir;
+            Merchant.Envir = PlayObject.Envir;
             Merchant.m_wAppr = (ushort)nAppr;
             Merchant.m_nFlag = 0;
             Merchant.m_boCastle = boIsCastle;

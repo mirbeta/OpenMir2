@@ -422,7 +422,7 @@ namespace GameSvr.Maps
                                 }
                                 else
                                 {
-                                    if (baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                    if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                     {
                                         if (M2Share.g_Config.boRunHuman || Flag.boRUNHUMAN)
                                         {
@@ -431,7 +431,7 @@ namespace GameSvr.Maps
                                     }
                                     else
                                     {
-                                        if (baseObject.m_btRaceServer == Grobal2.RC_NPC)
+                                        if (baseObject.Race == Grobal2.RC_NPC)
                                         {
                                             if (M2Share.g_Config.boRunNpc)
                                             {
@@ -440,7 +440,7 @@ namespace GameSvr.Maps
                                         }
                                         else
                                         {
-                                            if (baseObject.m_btRaceServer == Grobal2.RC_GUARD || baseObject.m_btRaceServer == Grobal2.RC_ARCHERGUARD)
+                                            if (baseObject.Race == Grobal2.RC_GUARD || baseObject.Race == Grobal2.RC_ARCHERGUARD)
                                             {
                                                 if (M2Share.g_Config.boRunGuard)
                                                 {
@@ -1367,7 +1367,7 @@ namespace GameSvr.Maps
                     if (osObject.CellType == CellType.MovingObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
-                        if (baseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                         {
                             result = true;
                             break;
@@ -1408,7 +1408,7 @@ namespace GameSvr.Maps
 
         public void AddObject(object baseObject)
         {
-            var btRaceServer = ((TBaseObject)baseObject).m_btRaceServer;
+            var btRaceServer = ((TBaseObject)baseObject).Race;
             if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 _humCount++;
@@ -1421,7 +1421,7 @@ namespace GameSvr.Maps
 
         public void DelObjectCount(object baseObject)
         {
-            var btRaceServer = ((TBaseObject)baseObject).m_btRaceServer;
+            var btRaceServer = ((TBaseObject)baseObject).Race;
             if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 _humCount--;

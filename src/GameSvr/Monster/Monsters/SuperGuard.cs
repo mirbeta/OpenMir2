@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
             short nOldY;
             byte btOldDir;
             short wHitMode;
-            if (this.TargetCret.m_PEnvir == this.m_PEnvir)
+            if (this.TargetCret.Envir == this.Envir)
             {
                 if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
                 {
@@ -32,7 +32,7 @@ namespace GameSvr.Monster.Monsters
                     wHitMode = 0;
                     this._Attack(ref wHitMode, this.TargetCret);
                     this.TargetCret.SetLastHiter(this);
-                    this.TargetCret.m_ExpHitter = null;
+                    this.TargetCret.ExpHitter = null;
                     this.CurrX = nOldX;
                     this.CurrY = nOldY;
                     this.Direction = btOldDir;
@@ -51,7 +51,7 @@ namespace GameSvr.Monster.Monsters
         public SuperGuard() : base()
         {
             this.ViewRange = 7;
-            this.m_nLight = 4;
+            this.Light = 4;
             m_boAttackPet = true;
         }
 
@@ -63,9 +63,9 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             TBaseObject BaseObject;
-            if (this.m_Master != null)
+            if (this.Master != null)
             {
-                this.m_Master = null;
+                this.Master = null;
             }
             // 不允许召唤为宝宝
             if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
@@ -77,7 +77,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         continue;
                     }
-                    if (BaseObject.PKLevel() >= 2 || BaseObject.m_btRaceServer >= Grobal2.RC_MONSTER && !BaseObject.m_boMission)
+                    if (BaseObject.PKLevel() >= 2 || BaseObject.Race >= Grobal2.RC_MONSTER && !BaseObject.m_boMission)
                     {
                         if (m_boAttackPet)
                         {
@@ -86,7 +86,7 @@ namespace GameSvr.Monster.Monsters
                         }
                         else
                         {
-                            if (BaseObject.m_Master == null)
+                            if (BaseObject.Master == null)
                             {
                                 this.SetTargetCreat(BaseObject);
                                 break;

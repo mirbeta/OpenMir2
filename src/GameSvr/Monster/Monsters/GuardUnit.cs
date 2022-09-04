@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
         public override void Struck(TBaseObject hiter)
         {
             base.Struck(hiter);
-            if (m_Castle != null)
+            if (Castle != null)
             {
                 bo2B0 = true;
                 m_dw2B4Tick = HUtil32.GetTickCount();
@@ -21,9 +21,9 @@ namespace GameSvr.Monster.Monsters
         public override bool IsProperTarget(TBaseObject BaseObject)
         {
             var result = false;
-            if (m_Castle != null)
+            if (Castle != null)
             {
-                if (m_LastHiter == BaseObject)
+                if (LastHiter == BaseObject)
                 {
                     result = true;
                 }
@@ -37,23 +37,23 @@ namespace GameSvr.Monster.Monsters
                     {
                         BaseObject.bo2B0 = false;
                     }
-                    if (BaseObject.m_Castle != null)
+                    if (BaseObject.Castle != null)
                     {
                         BaseObject.bo2B0 = false;
                         result = false;
                     }
                 }
-                if (m_Castle.m_boUnderWar)
+                if (Castle.m_boUnderWar)
                 {
                     result = true;
                 }
-                if (m_Castle.m_MasterGuild != null)
+                if (Castle.m_MasterGuild != null)
                 {
-                    if (BaseObject.m_Master == null)
+                    if (BaseObject.Master == null)
                     {
-                        if (m_Castle.m_MasterGuild == BaseObject.MyGuild || m_Castle.m_MasterGuild.IsAllyGuild(BaseObject.MyGuild))
+                        if (Castle.m_MasterGuild == BaseObject.MyGuild || Castle.m_MasterGuild.IsAllyGuild(BaseObject.MyGuild))
                         {
-                            if (m_LastHiter != BaseObject)
+                            if (LastHiter != BaseObject)
                             {
                                 result = false;
                             }
@@ -61,26 +61,26 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (m_Castle.m_MasterGuild == BaseObject.m_Master.MyGuild || m_Castle.m_MasterGuild.IsAllyGuild(BaseObject.m_Master.MyGuild))
+                        if (Castle.m_MasterGuild == BaseObject.Master.MyGuild || Castle.m_MasterGuild.IsAllyGuild(BaseObject.Master.MyGuild))
                         {
-                            if (m_LastHiter != BaseObject.m_Master && m_LastHiter != BaseObject)
+                            if (LastHiter != BaseObject.Master && LastHiter != BaseObject)
                             {
                                 result = false;
                             }
                         }
                     }
                 }
-                if (BaseObject.AdminMode || BaseObject.StoneMode || BaseObject.m_btRaceServer >= Grobal2.RC_NPC && BaseObject.m_btRaceServer < Grobal2.RC_ANIMAL || BaseObject == this || BaseObject.m_Castle == m_Castle)
+                if (BaseObject.AdminMode || BaseObject.StoneMode || BaseObject.Race >= Grobal2.RC_NPC && BaseObject.Race < Grobal2.RC_ANIMAL || BaseObject == this || BaseObject.Castle == Castle)
                 {
                     result = false;
                 }
                 return result;
             }
-            if (m_LastHiter == BaseObject)
+            if (LastHiter == BaseObject)
             {
                 result = true;
             }
-            if (BaseObject.TargetCret != null && BaseObject.TargetCret.m_btRaceServer == 112)
+            if (BaseObject.TargetCret != null && BaseObject.TargetCret.Race == 112)
             {
                 result = true;
             }

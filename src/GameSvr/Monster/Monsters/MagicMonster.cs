@@ -18,9 +18,9 @@ namespace GameSvr.Monster.Monsters
             m_dwThinkTick = HUtil32.GetTickCount();
             ViewRange = 8;
             m_nRunTime = 250;
-            m_dwSearchTime = 3000 + M2Share.RandomNumber.Random(2000);
-            m_dwSearchTick = HUtil32.GetTickCount();
-            m_btRaceServer = 215;
+            SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
+            SearchTick = HUtil32.GetTickCount();
+            Race = 215;
         }
 
         protected override bool Operate(TProcessMessage ProcessMsg)
@@ -34,7 +34,7 @@ namespace GameSvr.Monster.Monsters
             if ((HUtil32.GetTickCount() - m_dwThinkTick) > (3 * 1000))
             {
                 m_dwThinkTick = HUtil32.GetTickCount();
-                if (m_PEnvir.GetXyObjCount(CurrX, CurrY) >= 2)
+                if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
                 {
                     m_boDupMode = true;
                 }
@@ -63,7 +63,7 @@ namespace GameSvr.Monster.Monsters
             byte bt06 = 0;
             if (TargetCret != null)
             {
-                if (TargetCret == m_Master)
+                if (TargetCret == Master)
                 {
                     TargetCret = null;
                 }
@@ -80,7 +80,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (TargetCret.m_PEnvir == m_PEnvir)
+                        if (TargetCret.Envir == Envir)
                         {
                             SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                         }
@@ -144,18 +144,18 @@ namespace GameSvr.Monster.Monsters
                                 }
                             }
                         }
-                        if (m_Master != null)
+                        if (Master != null)
                         {
                             if (TargetCret == null)
                             {
-                                m_Master.GetBackPosition(ref nX, ref nY);
+                                Master.GetBackPosition(ref nX, ref nY);
                                 if (Math.Abs(m_nTargetX - nX) > 1 || Math.Abs(m_nTargetY - nY) > 1)
                                 {
                                     m_nTargetX = nX;
                                     m_nTargetY = nY;
                                     if (Math.Abs(CurrX - nX) <= 2 && Math.Abs(CurrY - nY) <= 2)
                                     {
-                                        if (m_PEnvir.GetMovingObject(nX, nY, true) != null)
+                                        if (Envir.GetMovingObject(nX, nY, true) != null)
                                         {
                                             m_nTargetX = CurrX;
                                             m_nTargetY = CurrY;
@@ -163,9 +163,9 @@ namespace GameSvr.Monster.Monsters
                                     }
                                 }
                             }
-                            if (!m_Master.SlaveRelax && (m_PEnvir != m_Master.m_PEnvir || Math.Abs(CurrX - m_Master.CurrX) > 20 || Math.Abs(CurrY - m_Master.CurrY) > 20))
+                            if (!Master.SlaveRelax && (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20))
                             {
-                                SpaceMove(m_Master.m_PEnvir.MapName, m_nTargetX, m_nTargetY, 1);
+                                SpaceMove(Master.Envir.MapName, m_nTargetX, m_nTargetY, 1);
                             }
                         }
                     }
@@ -177,7 +177,7 @@ namespace GameSvr.Monster.Monsters
                             m_dwRunAwayTime = 0;
                         }
                     }
-                    if (m_Master != null && m_Master.SlaveRelax)
+                    if (Master != null && Master.SlaveRelax)
                     {
                         base.Run();
                         return;

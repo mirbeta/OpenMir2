@@ -8,7 +8,7 @@ namespace GameSvr.Monster.Monsters
 
         public MagicMonObject() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             m_boUseMagic = false;
         }
 
@@ -34,12 +34,12 @@ namespace GameSvr.Monster.Monsters
                     SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
-                if (m_Master == null)
+                if (Master == null)
                 {
                     return;
                 }
-                var nX = Math.Abs(CurrX - m_Master.CurrX);
-                var nY = Math.Abs(CurrY - m_Master.CurrY);
+                var nX = Math.Abs(CurrX - Master.CurrX);
+                var nY = Math.Abs(CurrY - Master.CurrY);
                 if (nX <= 5 && nY <= 5)
                 {
                     if (m_boUseMagic || nX == 5 || nY == 5)
@@ -47,7 +47,7 @@ namespace GameSvr.Monster.Monsters
                         if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {
                             AttackTick = HUtil32.GetTickCount();
-                            int nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, m_Master.CurrX, m_Master.CurrY);
+                            int nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, Master.CurrX, Master.CurrY);
                             LightingAttack(nAttackDir);
                         }
                     }

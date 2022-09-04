@@ -13,7 +13,7 @@ namespace GameSvr.Event.Events
         /// </summary>
         private int m_fireRunTick = 0;
 
-        public FireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.m_PEnvir, nX, nY, nType, nTime, true)
+        public FireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.Envir, nX, nY, nType, nTime, true)
         {
             Damage = nDamage;
             OwnBaseObject = Creat;

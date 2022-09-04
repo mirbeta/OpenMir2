@@ -1068,8 +1068,8 @@ namespace GameSvr
                         {
                             MapName = sMapName
                         };
-                        Merchant.m_PEnvir = M2Share.MapManager.FindMap(Merchant.MapName);
-                        if (Merchant.m_PEnvir != null)
+                        Merchant.Envir = M2Share.MapManager.FindMap(Merchant.MapName);
+                        if (Merchant.Envir != null)
                         {
                             Merchant.m_sScript = sScript;
                             Merchant.CurrX = (short)nX;

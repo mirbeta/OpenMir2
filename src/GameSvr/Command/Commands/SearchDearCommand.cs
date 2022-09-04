@@ -39,13 +39,13 @@ namespace GameSvr.Command.Commands
             {
                 // '你的老婆现在位于:'
                 PlayObject.SysMsg(M2Share.g_sYourWifeNowLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.SysMsg(PlayObject.m_DearHuman.CharName + ' ' + PlayObject.m_DearHuman.m_PEnvir.MapDesc +
+                PlayObject.SysMsg(PlayObject.m_DearHuman.CharName + ' ' + PlayObject.m_DearHuman.Envir.MapDesc +
                                   '(' + PlayObject.m_DearHuman.CurrX + ':'
                                   + PlayObject.m_DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
 
                 // '你的老公正在找你，他现在位于:'
                 PlayObject.m_DearHuman.SysMsg(M2Share.g_sYourHusbandSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.m_DearHuman.SysMsg(PlayObject.CharName + ' ' + PlayObject.m_PEnvir.MapDesc + '(' +
+                PlayObject.m_DearHuman.SysMsg(PlayObject.CharName + ' ' + PlayObject.Envir.MapDesc + '(' +
                                               PlayObject.CurrX + ':'
                                               + PlayObject.CurrY + ')', MsgColor.Green, MsgType.Hint);
             }
@@ -53,13 +53,13 @@ namespace GameSvr.Command.Commands
             {
                 // '你的老公现在位于:'
                 PlayObject.SysMsg(M2Share.g_sYourHusbandNowLocateMsg, MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(PlayObject.m_DearHuman.CharName + ' ' + PlayObject.m_DearHuman.m_PEnvir.MapDesc +
+                PlayObject.SysMsg(PlayObject.m_DearHuman.CharName + ' ' + PlayObject.m_DearHuman.Envir.MapDesc +
                                   '(' + PlayObject.m_DearHuman.CurrX + ':'
                                   + PlayObject.m_DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
 
                 // '你的老婆正在找你，她现在位于:'
                 PlayObject.m_DearHuman.SysMsg(M2Share.g_sYourWifeSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.m_DearHuman.SysMsg(PlayObject.CharName + ' ' + PlayObject.m_PEnvir.MapDesc + '(' +
+                PlayObject.m_DearHuman.SysMsg(PlayObject.CharName + ' ' + PlayObject.Envir.MapDesc + '(' +
                                               PlayObject.CurrX + ':'
                                               + PlayObject.CurrY + ')', MsgColor.Green, MsgType.Hint);
             }

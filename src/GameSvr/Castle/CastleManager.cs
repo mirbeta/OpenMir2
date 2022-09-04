@@ -34,7 +34,7 @@ namespace GameSvr.Castle
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
-                if (_castleList[i].InCastleWarArea(BaseObject.m_PEnvir, BaseObject.CurrX, BaseObject.CurrY))
+                if (_castleList[i].InCastleWarArea(BaseObject.Envir, BaseObject.CurrX, BaseObject.CurrY))
                 {
                     return _castleList[i];
                 }

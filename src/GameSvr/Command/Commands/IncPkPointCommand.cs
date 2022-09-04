@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject.m_nPkPoint += nPoint;
+            m_PlayObject.PkPoint += nPoint;
             m_PlayObject.RefNameColor();
             if (nPoint > 0)
             {

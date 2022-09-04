@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg("行会掌门人才可以使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.m_PEnvir.Flag.boNOGUILDRECALL)
+            if (PlayObject.Envir.Flag.boNOGUILDRECALL)
             {
                 PlayObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -78,7 +78,7 @@ namespace GameSvr.Command.Commands
                         }
                         if (m_PlayObject.m_boAllowGuildReCall)
                         {
-                            if (m_PlayObject.m_PEnvir.Flag.boNORECALL)
+                            if (m_PlayObject.Envir.Flag.boNORECALL)
                             {
                                 PlayObject.SysMsg($"{m_PlayObject.CharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                             }

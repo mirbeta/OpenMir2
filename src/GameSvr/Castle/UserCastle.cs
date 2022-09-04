@@ -186,7 +186,7 @@ namespace GameSvr.Castle
                     if (m_MainDoor.BaseObject != null)
                     {
                         m_MainDoor.BaseObject.m_WAbil.HP = m_MainDoor.nHP;
-                        m_MainDoor.BaseObject.m_Castle = this;
+                        m_MainDoor.BaseObject.Castle = this;
                         if (m_MainDoor.nStatus)
                         {
                             ((CastleDoor)m_MainDoor.BaseObject).Open();
@@ -200,7 +200,7 @@ namespace GameSvr.Castle
                     if (m_LeftWall.BaseObject != null)
                     {
                         m_LeftWall.BaseObject.m_WAbil.HP = m_LeftWall.nHP;
-                        m_LeftWall.BaseObject.m_Castle = this;
+                        m_LeftWall.BaseObject.Castle = this;
                     }
                     else
                     {
@@ -210,7 +210,7 @@ namespace GameSvr.Castle
                     if (m_CenterWall.BaseObject != null)
                     {
                         m_CenterWall.BaseObject.m_WAbil.HP = m_CenterWall.nHP;
-                        m_CenterWall.BaseObject.m_Castle = this;
+                        m_CenterWall.BaseObject.Castle = this;
                     }
                     else
                     {
@@ -220,7 +220,7 @@ namespace GameSvr.Castle
                     if (m_RightWall.BaseObject != null)
                     {
                         m_RightWall.BaseObject.m_WAbil.HP = m_RightWall.nHP;
-                        m_RightWall.BaseObject.m_Castle = this;
+                        m_RightWall.BaseObject.Castle = this;
                     }
                     else
                     {
@@ -234,7 +234,7 @@ namespace GameSvr.Castle
                         if (ObjUnit.BaseObject != null)
                         {
                             ObjUnit.BaseObject.m_WAbil.HP = Archer[i].nHP;
-                            ObjUnit.BaseObject.m_Castle = this;
+                            ObjUnit.BaseObject.Castle = this;
                             ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
                             ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
                             ((GuardUnit)ObjUnit.BaseObject).Direction = 3;

@@ -9,7 +9,7 @@ namespace GameSvr.Monster.Monsters
 
         public SpitSpider() : base()
         {
-            m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             Animal = true;
             m_boUsePoison = true;
         }
@@ -32,8 +32,8 @@ namespace GameSvr.Monster.Monsters
                     {
                         var nX = (short)(CurrX - 2 + k);
                         var nY = (short)(CurrY - 2 + i);
-                        var BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
-                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint)
+                        var BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < m_btHitPoint)
                         {
                             nDamage = BaseObject.GetMagStruckDamage(this, nDamage);
                             if (nDamage > 0)
@@ -72,7 +72,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 return true;
             }
-            if (TargetCret.m_PEnvir == m_PEnvir)
+            if (TargetCret.Envir == Envir)
             {
                 SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
             }

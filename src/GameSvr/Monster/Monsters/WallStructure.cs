@@ -55,7 +55,7 @@ namespace GameSvr.Monster.Monsters
                 this.DeathTick = HUtil32.GetTickCount();
                 if (boSetMapFlaged)
                 {
-                    this.m_PEnvir.SetMapXyFlag(this.CurrX, this.CurrY, true);
+                    this.Envir.SetMapXyFlag(this.CurrX, this.CurrY, true);
                     boSetMapFlaged = false;
                 }
             }
@@ -64,7 +64,7 @@ namespace GameSvr.Monster.Monsters
                 this.m_nHealthTick = 0;
                 if (!boSetMapFlaged)
                 {
-                    this.m_PEnvir.SetMapXyFlag(this.CurrX, this.CurrY, false);
+                    this.Envir.SetMapXyFlag(this.CurrX, this.CurrY, false);
                     boSetMapFlaged = true;
                 }
             }

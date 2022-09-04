@@ -14,7 +14,7 @@ namespace GameSvr.Npc
     {
         public TGuildOfficial() : base()
         {
-            this.m_btRaceImg = Grobal2.RCC_MERCHANT;
+            this.RaceImg = Grobal2.RCC_MERCHANT;
             this.m_wAppr = 8;
         }
 

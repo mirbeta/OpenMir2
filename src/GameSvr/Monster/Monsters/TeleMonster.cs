@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
     {
         public TeleMonster() : base()
         {
-            this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            this.SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run()

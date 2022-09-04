@@ -37,8 +37,8 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sMsg = string.Format("未分配点数:{0} 已分配点数:(DC:{1} MC:{2} SC:{3} AC:{4} MAC:{5} HP:{6} MP:{7} HIT:{8} SPEED:{9})", m_PlayObject.m_nBonusPoint,
-                m_PlayObject.m_BonusAbil.DC, m_PlayObject.m_BonusAbil.MC, m_PlayObject.m_BonusAbil.SC, m_PlayObject.m_BonusAbil.AC,
-                m_PlayObject.m_BonusAbil.MAC, m_PlayObject.m_BonusAbil.HP, m_PlayObject.m_BonusAbil.MP, m_PlayObject.m_BonusAbil.Hit, m_PlayObject.m_BonusAbil.Speed);
+                m_PlayObject.BonusAbil.DC, m_PlayObject.BonusAbil.MC, m_PlayObject.BonusAbil.SC, m_PlayObject.BonusAbil.AC,
+                m_PlayObject.BonusAbil.MAC, m_PlayObject.BonusAbil.HP, m_PlayObject.BonusAbil.MP, m_PlayObject.BonusAbil.Hit, m_PlayObject.BonusAbil.Speed);
             PlayObject.SysMsg(string.Format("{0}的属性点数为:{1}", sHumName, sMsg), MsgColor.Red, MsgType.Hint);
         }
     }

@@ -5,7 +5,7 @@ namespace GameSvr.Monster.Monsters
         public PetSuperGuard() : base()
         {
             ViewRange = 7;
-            m_nLight = 4;
+            Light = 4;
             m_boAttackPet = false;
         }
     }
