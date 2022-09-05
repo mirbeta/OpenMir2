@@ -31,7 +31,7 @@ namespace GameSvr.Configs
             {
                 WriteInteger("Server", "ServerIndex", M2Share.ServerIndex);
             }
-            M2Share.ServerIndex = ReadInteger("Server", "ServerIndex", M2Share.ServerIndex);
+            M2Share.ServerIndex = (byte)ReadInteger("Server", "ServerIndex", M2Share.ServerIndex);
             if (ReadString("Server", "ServerName", "") == "")
             {
                 WriteString("Server", "ServerName", M2Share.Config.sServerName);

@@ -3830,11 +3830,11 @@ namespace GameSvr.Player
         /// <summary>
         /// 转移到指定服务器
         /// </summary>
-        /// <param name="sIPaddr"></param>
-        /// <param name="nPort"></param>
-        public void ChangeSnapsServer(string sIPaddr, int nPort)
+        /// <param name="serveraddr"></param>
+        /// <param name="gamePort"></param>
+        public void ChangeSnapsServer(string serveraddr, int gamePort)
         {
-            this.SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + nPort);
+            this.SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, serveraddr + '/' + gamePort);
         }
     }
 }

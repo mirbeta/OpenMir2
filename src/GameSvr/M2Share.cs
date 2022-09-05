@@ -89,7 +89,7 @@ namespace GameSvr
         /// <summary>
         /// 服务器编号
         /// </summary>
-        public static int ServerIndex = 0;
+        public static byte ServerIndex = 0;
         /// <summary>
         /// 服务器启动时间
         /// </summary>
@@ -605,28 +605,27 @@ namespace GameSvr
         /// <summary>
         /// 随机获取其他服务器
         /// </summary>
-        /// <param name="btServerIndex"></param>
+        /// <param name="serverIndex"></param>
         /// <param name="sIPaddr"></param>
         /// <param name="nPort"></param>
         /// <returns></returns>
-        public static bool GetMultiServerAddrPort(byte btServerIndex, ref string sIPaddr, ref int nPort)
+        public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort)
         {
-            TRouteInfo RouteInfo;
             var result = false;
             for (var i = 0; i < ServerTableList.Length; i++)
             {
-                RouteInfo = ServerTableList[i];
-                if (RouteInfo == null)
+                var routeInfo = ServerTableList[i];
+                if (routeInfo == null)
                 {
                     continue;
                 }
-                if (RouteInfo.nGateCount <= 0)
+                if (routeInfo.nGateCount <= 0)
                 {
                     continue;
                 }
-                if (RouteInfo.nServerIdx == btServerIndex)
+                if (routeInfo.nServerIdx == serverIndex)
                 {
-                    sIPaddr = GetRandpmRoute(RouteInfo, ref nPort);
+                    sIPaddr = GetRandpmRoute(routeInfo, ref nPort);
                     result = true;
                     break;
                 }
