@@ -2174,7 +2174,7 @@ namespace GameSvr.UsrSystem
             playObject.AttatckMode = (AttackMode)humData.btAttatckMode;
             playObject.IncHealth = humData.btIncHealth;
             playObject.IncSpell = humData.btIncSpell;
-            playObject.MNIncHealing = humData.btIncHealing;
+            playObject.IncHealing = humData.btIncHealing;
             playObject.FightZoneDieCount = humData.btFightZoneDieCount;
             playObject.m_sUserID = humData.sAccount;
             playObject.m_boLockLogon = humData.boLockLogon;
