@@ -4,11 +4,12 @@ using SystemModule.Data;
 
 namespace GameSvr
 {
-    public class AppService : BackgroundService
+    public class AppService : IHostedService, IDisposable
     {
         private readonly ILogger<AppService> _logger;
         private readonly GameApp _mirApp;
         private readonly TimeSpan DelayTime = TimeSpan.FromMilliseconds(10);
+        private Timer _timer;
 
         public AppService(GameApp serverApp, ILogger<AppService> logger)
         {
@@ -16,20 +17,7 @@ namespace GameSvr
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            if (M2Share.boStartReady)
-            {
-                M2Share.GateMgr.Start(stoppingToken);
-            }
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _mirApp.Run();
-                await Task.Delay(DelayTime, stoppingToken);
-            }
-        }
-
-        public override Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("正在读取配置信息...");
             _mirApp.InitializeServer();
@@ -37,31 +25,43 @@ namespace GameSvr
             _mirApp.Initialize();
             _mirApp.StartEngine();
             _mirApp.StartService();
-            return base.StartAsync(cancellationToken);
+            if (M2Share.boStartReady)
+            {
+                M2Share.GateMgr.Start(stoppingToken);
+            }
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, DelayTime);
+            return Task.CompletedTask;
         }
 
-        public override async Task StopAsync(CancellationToken cancellationToken)
+        private void DoWork(object state)
+        {
+            _mirApp.Run();
+        }
+
+        public async Task StopAsync(CancellationToken stoppingToken)
         {
             if (M2Share.UserEngine.PlayObjectCount > 0)
             {
-                _logger.LogDebug("开始玩家数据保存");
+                _logger.LogInformation("保存玩家数据");
                 foreach (var item in M2Share.UserEngine.PlayObjects)
                 {
                     M2Share.UserEngine.SaveHumanRcd(item);
                 }
-                _logger.LogDebug("玩家数据保存完毕.");
+                _logger.LogInformation("数据保存完毕.");
             }
 
+            _logger.LogInformation("检查是否有其他可用服务器.");
             //如果有多机负载转移在线玩家到新服务器
             var sIPaddr = string.Empty;
             var nPort = 0;
             var isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort); //如果有可用服务器，那就切换过去
             if (isMultiServer)
             {
+                _logger.LogInformation($"转移到新服务器[{sIPaddr}:{nPort}]");
                 var playerCount = M2Share.UserEngine.PlayObjects.Count();
                 if (playerCount > 0)
                 {
-                    await Task.Run(async () =>
+                    await Task.Factory.StartNew(async () =>
                     {
                         var shutdownSeconds = 120;
                         while (playerCount > 0)
@@ -94,14 +94,21 @@ namespace GameSvr
                         }
                         M2Share.boStartReady = false;
                         _mirApp.Stop();
-                    }, cancellationToken);
+                    }, stoppingToken);
                 }
             }
             else
             {
+                _logger.LogInformation("没有可用服务器，即将关闭游戏服务器.");
                 M2Share.boStartReady = false;
                 _mirApp.Stop();
             }
+            _timer?.Change(Timeout.Infinite, 0);
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
     }
 }

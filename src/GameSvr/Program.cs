@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
@@ -8,8 +9,6 @@ using Spectre.Console;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
-using SystemModule;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -17,6 +16,7 @@ namespace GameSvr
     {
         private static PeriodicTimer _timer;
         private static Logger _logger;
+        private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         static async Task Main(string[] args)
@@ -31,16 +31,21 @@ namespace GameSvr
                 .GetCurrentClassLogger();
 
             PrintUsage();
-            Console.CancelKeyPress += delegate
-            {
-                //GateShare.ShowLog = true;
-                if (_timer != null)
-                {
-                    _timer.Dispose();
-                }
-                AnsiConsole.Reset();
-            };
+            //Console.CancelKeyPress += delegate
+            //{
+            //    //GateShare.ShowLog = true;
+            //    if (_timer != null)
+            //    {
+            //        _timer.Dispose();
+            //    }
+            //    AnsiConsole.Reset();
+            //};
             var builder = new HostBuilder()
+                .UseConsoleLifetime()
+                .ConfigureHostOptions(options =>
+                 {
+                      options.ShutdownTimeout = TimeSpan.FromSeconds(30);
+                 })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<GameApp>();
@@ -53,7 +58,7 @@ namespace GameSvr
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                     logging.AddNLog(config);
                 });
-            await builder.StartAsync(cts.Token);
+            _host = await builder.StartAsync(cts.Token);
             await ProcessLoopAsync();
             Stop();
         }
@@ -79,8 +84,6 @@ namespace GameSvr
 
                 if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
                 {
-                    //todo 要通知游戏网关停止新玩家进入
-                    cts.CancelAfter(TimeSpan.FromMinutes(5));//延时5分钟关闭游戏服务.
                     return;
                 }
 
@@ -103,7 +106,16 @@ namespace GameSvr
 
         private static Task Exit()
         {
-            Environment.Exit(Environment.ExitCode);
+            if (AnsiConsole.Confirm("Do you really want to exit?"))
+            {
+                cts.Token.Register(() =>
+                {
+                    var app = (IHostApplicationLifetime)_host.Services.GetService(typeof(IHostApplicationLifetime));
+                    app.StopApplication();
+                });
+
+                cts.CancelAfter(TimeSpan.FromMinutes(1));//延时5分钟关闭游戏服务.
+            }
             return Task.CompletedTask;
         }
 
