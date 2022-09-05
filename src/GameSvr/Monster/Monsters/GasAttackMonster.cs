@@ -11,23 +11,23 @@ namespace GameSvr.Monster.Monsters
             Animal = true;
         }
 
-        protected virtual TBaseObject sub_4A9C78(byte bt05)
+        protected virtual BaseObject sub_4A9C78(byte bt05)
         {
-            TBaseObject result = null;
+            BaseObject result = null;
             Direction = bt05;
-            var WAbil = m_WAbil;
+            var WAbil = MWAbil;
             var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (n10 > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 var BaseObject = GetPoseCreate();
-                if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < m_btHitPoint)
+                if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < MBtHitPoint)
                 {
                     n10 = BaseObject.GetMagStruckDamage(this, n10);
                     if (n10 > 0)
                     {
                         BaseObject.StruckDamage(n10);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ObjectId, "", 300);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 300);
                         if (M2Share.RandomNumber.Random(BaseObject.AntiPoison + 20) == 0)
                         {
                             BaseObject.MakePosion(Grobal2.POISON_STONE, 5, 0);

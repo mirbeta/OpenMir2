@@ -51,7 +51,7 @@ namespace GameSvr.Npc
             this.Light = 2;
             this.AntiPoison = 99;
             this.m_ScriptList = new List<TScript>();
-            this.m_boStickMode = true;
+            this.MBoStickMode = true;
             this.m_sFilePath = "";
             this.m_boIsHide = false;
             this.m_boIsQuest = true;
@@ -198,7 +198,7 @@ namespace GameSvr.Npc
                 switch (nInt1)
                 {
                     case 1:
-                        PlayObject.m_boNoItem = true;
+                        PlayObject.MBoNoItem = true;
                         PlayObject.Die();
                         break;
                     case 2:
@@ -206,7 +206,7 @@ namespace GameSvr.Npc
                         PlayObject.Die();
                         break;
                     case 3:
-                        PlayObject.m_boNoItem = true;
+                        PlayObject.MBoNoItem = true;
                         PlayObject.SetLastHiter(this);
                         PlayObject.Die();
                         break;
@@ -332,7 +332,7 @@ namespace GameSvr.Npc
                     var wHour = nSecond / 3600;
                     var wMinute = nSecond / 60 % 60;
                     var wSecond = nSecond % 60;
-                    sText = format("{0}:{1}:{2}", wHour, wMinute, wSecond);
+                    sText = Format("{0}:{1}:{2}", wHour, wMinute, wSecond);
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", sText);
                     return;
                 case "$DATETIME":
@@ -485,59 +485,59 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$LEVEL>", sText);
                     return;
                 case "$HP":
-                    sText = PlayObject.m_WAbil.HP.ToString();
+                    sText = PlayObject.MWAbil.HP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$HP>", sText);
                     return;
                 case "$MAXHP":
-                    sText = PlayObject.m_WAbil.MaxHP.ToString();
+                    sText = PlayObject.MWAbil.MaxHP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXHP>", sText);
                     return;
                 case "$MP":
-                    sText = PlayObject.m_WAbil.MP.ToString();
+                    sText = PlayObject.MWAbil.MP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MP>", sText);
                     return;
                 case "$MAXMP":
-                    sText = PlayObject.m_WAbil.MaxMP.ToString();
+                    sText = PlayObject.MWAbil.MaxMP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMP>", sText);
                     return;
                 case "$AC":
-                    sText = HUtil32.LoWord(PlayObject.m_WAbil.AC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.MWAbil.AC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$AC>", sText);
                     return;
                 case "$MAXAC":
-                    sText = HUtil32.HiWord(PlayObject.m_WAbil.AC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.MWAbil.AC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXAC>", sText);
                     return;
                 case "$MAC":
-                    sText = HUtil32.LoWord(PlayObject.m_WAbil.MAC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.MWAbil.MAC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAC>", sText);
                     return;
                 case "$MAXMAC":
-                    sText = HUtil32.HiWord(PlayObject.m_WAbil.MAC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.MWAbil.MAC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMAC>", sText);
                     return;
                 case "$DC":
-                    sText = HUtil32.LoWord(PlayObject.m_WAbil.DC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.MWAbil.DC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$DC>", sText);
                     return;
                 case "$MAXDC":
-                    sText = HUtil32.HiWord(PlayObject.m_WAbil.DC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.MWAbil.DC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXDC>", sText);
                     return;
                 case "$MC":
-                    sText = HUtil32.LoWord(PlayObject.m_WAbil.MC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.MWAbil.MC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MC>", sText);
                     return;
                 case "$MAXMC":
-                    sText = HUtil32.HiWord(PlayObject.m_WAbil.MC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.MWAbil.MC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMC>", sText);
                     return;
                 case "$SC":
-                    sText = HUtil32.LoWord(PlayObject.m_WAbil.SC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.MWAbil.SC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$SC>", sText);
                     return;
                 case "$MAXSC":
-                    sText = HUtil32.HiWord(PlayObject.m_WAbil.SC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.MWAbil.SC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXSC>", sText);
                     return;
                 case "$EXP":
@@ -557,27 +557,27 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$CREDITPOINT>", sText);
                     return;
                 case "$HW":
-                    sText = PlayObject.m_WAbil.HandWeight.ToString();
+                    sText = PlayObject.MWAbil.HandWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$HW>", sText);
                     return;
                 case "$MAXHW":
-                    sText = PlayObject.m_WAbil.MaxHandWeight.ToString();
+                    sText = PlayObject.MWAbil.MaxHandWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXHW>", sText);
                     return;
                 case "$BW":
-                    sText = PlayObject.m_WAbil.Weight.ToString();
+                    sText = PlayObject.MWAbil.Weight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$BW>", sText);
                     return;
                 case "$MAXBW":
-                    sText = PlayObject.m_WAbil.MaxWeight.ToString();
+                    sText = PlayObject.MWAbil.MaxWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXBW>", sText);
                     return;
                 case "$WW":
-                    sText = PlayObject.m_WAbil.WearWeight.ToString();
+                    sText = PlayObject.MWAbil.WearWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$WW>", sText);
                     return;
                 case "$MAXWW":
-                    sText = PlayObject.m_WAbil.MaxWearWeight.ToString();
+                    sText = PlayObject.MWAbil.MaxWearWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXWW>", sText);
                     return;
                 case "$GOLDCOUNT":
@@ -1061,7 +1061,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[", "$MAPMONSTERCOUNT[".Length)) // 地图怪物数量
             {
                 MonGenInfo MonGen = null;
-                TBaseObject BaseObject = null;
+                BaseObject BaseObject = null;
                 int MonGenCount = 0;
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 var MapName = HUtil32.GetValidStr3(s14, ref s14, new string[] { "/" });
@@ -1387,7 +1387,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$LUCKY")// 幸运  增加人物暴击
             {
-                sText = PlayObject.m_nLuck.ToString();
+                sText = PlayObject.MNLuck.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$LUCKY>", sText);
                 return;
             }
@@ -1592,7 +1592,7 @@ namespace GameSvr.Npc
         private void ScriptActionError(PlayObject PlayObject, string sErrMsg, TQuestActionInfo QuestActionInfo, string sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
-            string sMsg = format(sOutMessage, sErrMsg, sCmd, this.CharName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            string sMsg = Format(sOutMessage, sErrMsg, sCmd, this.CharName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.Log.Error(sMsg);
         }
 

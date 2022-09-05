@@ -72,7 +72,7 @@ namespace GameSvr.Monster.Monsters
             base.Run();
         }
 
-        public override void Struck(TBaseObject hiter)
+        public override void Struck(BaseObject hiter)
         {
             if (hiter == null)
             {

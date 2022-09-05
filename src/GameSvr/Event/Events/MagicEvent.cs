@@ -4,7 +4,7 @@ namespace GameSvr.Event.Events
 {
     public class MagicEvent
     {
-        public IList<TBaseObject> BaseObjectList;
+        public IList<BaseObject> BaseObjectList;
         public int dwStartTick;
         public int dwTime;
         public MirEvent[] Events;

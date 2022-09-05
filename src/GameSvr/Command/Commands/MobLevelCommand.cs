@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void MobLevel(PlayObject PlayObject)
         {
-            IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
+            IList<BaseObject> BaseObjectList = new List<BaseObject>();
             PlayObject.Envir.GetRangeBaseObject(PlayObject.CurrX, PlayObject.CurrY, 2, true, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {

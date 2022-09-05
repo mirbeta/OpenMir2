@@ -37,7 +37,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            IList<TBaseObject> HumanList = new List<TBaseObject>();
+            IList<BaseObject> HumanList = new List<BaseObject>();
             M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.Width / 2, SrcEnvir.Height / 2, 1000, HumanList);
             for (var i = 0; i < HumanList.Count; i++)
             {

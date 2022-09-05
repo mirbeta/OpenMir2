@@ -19,17 +19,17 @@ namespace GameSvr.Monster.Monsters
             {
                 if (Master != null)
                 {
-                    if (Master.m_WAbil.MP <= 0)
+                    if (Master.MWAbil.MP <= 0)
                     {
-                        m_WAbil.HP = 0;
+                        MWAbil.HP = 0;
                     }
                     if (ProcessMsg.wIdent == Grobal2.RM_SPELL)
                     {
-                        Master.m_WAbil.MP -= (ushort)ProcessMsg.nParam3;
+                        Master.MWAbil.MP -= (ushort)ProcessMsg.nParam3;
                     }
                     else
                     {
-                        Master.m_WAbil.MP -= (ushort)ProcessMsg.wParam;
+                        Master.MWAbil.MP -= (ushort)ProcessMsg.wParam;
                     }
                 }
             }
@@ -47,14 +47,14 @@ namespace GameSvr.Monster.Monsters
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
-                var WAbil = m_WAbil;
+                var WAbil = MWAbil;
                 var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 MagPassThroughMagic(nSX, nSY, nTX, nTY, nDir, nPwr, true);
             }
             BreakHolySeizeMode();
         }
 
-        public override void Struck(TBaseObject hiter)
+        public override void Struck(BaseObject hiter)
         {
             if (hiter == null)
             {
@@ -64,7 +64,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - SearchEnemyTick > 8000)
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - SearchEnemyTick > 8000)
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {

@@ -14,10 +14,10 @@ namespace GameSvr.Monster.Monsters
             Direction = 0;
         }
 
-        private void sub_4A6B30(TBaseObject TargeTBaseObject)
+        private void sub_4A6B30(BaseObject TargeTBaseObject)
         {
             Direction = M2Share.GetNextDirection(CurrX, CurrY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
-            TAbility WAbil = m_WAbil;
+            TAbility WAbil = MWAbil;
             var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (nPower > 0)
             {
@@ -28,7 +28,7 @@ namespace GameSvr.Monster.Monsters
                 TargeTBaseObject.SetLastHiter(this);
                 TargeTBaseObject.ExpHitter = null;
                 TargeTBaseObject.StruckDamage(nPower);
-                TargeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nPower, TargeTBaseObject.m_WAbil.HP, TargeTBaseObject.m_WAbil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - TargeTBaseObject.CurrX), Math.Abs(CurrY - TargeTBaseObject.CurrY)) * 50 + 600);
+                TargeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nPower, TargeTBaseObject.MWAbil.HP, TargeTBaseObject.MWAbil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - TargeTBaseObject.CurrX), Math.Abs(CurrY - TargeTBaseObject.CurrY)) * 50 + 600);
             }
             SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, TargeTBaseObject.ObjectId, "");
         }
@@ -36,8 +36,8 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             int nRage = 9999;
-            TBaseObject TargetBaseObject = null;
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            BaseObject TargetBaseObject = null;
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {

@@ -14,7 +14,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Actor
 {
-    public partial class TBaseObject : EntityId
+    public partial class BaseObject : EntityId
     {
         public string MapName;
         public string MapFileName;
@@ -72,7 +72,7 @@ namespace GameSvr.Actor
         public short HomeY = 0;
         public bool OnHorse;
         public byte HorseType;
-        private byte DressEffType;
+        private byte _dressEffType;
         /// <summary>
         /// 人物的PK值
         /// </summary>
@@ -85,43 +85,43 @@ namespace GameSvr.Actor
         /// 允许加入行会
         /// </summary>        
         protected bool AllowGuild;
-        public byte btB2;
+        public byte BtB2;
         public int IncHealth;
         public int IncSpell;
-        public int m_nIncHealing;
-        protected int m_nIncHPStoneTime;
-        protected int m_nIncMPStoneTime;
+        public int MNIncHealing;
+        protected int MNIncHpStoneTime;
+        protected int MNIncMpStoneTime;
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
         public int FightZoneDieCount;
         public TNakedAbility BonusAbil;
         protected TNakedAbility CurBonusAbil;
-        public int m_nBonusPoint = 0;
-        public int m_nHungerStatus = 0;
-        public bool m_boAllowGuildReCall = false;
-        public double m_dBodyLuck;
-        public int m_nBodyLuckLevel;
-        public short m_wGroupRcallTime;
-        public bool m_boAllowGroupReCall;
-        public byte[] m_QuestUnitOpen;
-        public byte[] m_QuestUnit;
-        public byte[] m_QuestFlag;
+        public int MNBonusPoint = 0;
+        public int MNHungerStatus = 0;
+        public bool MBoAllowGuildReCall = false;
+        public double MDBodyLuck;
+        public int MNBodyLuckLevel;
+        public short MWGroupRcallTime;
+        public bool MBoAllowGroupReCall;
+        public byte[] MQuestUnitOpen;
+        public byte[] MQuestUnit;
+        public byte[] MQuestFlag;
         protected long CharStatusEx;
         /// <summary>
         /// 怪物经验值
         /// </summary>
-        public int m_dwFightExp = 0;
-        public TAbility m_WAbil;
-        private TAddAbility m_AddAbil;
+        public int MDwFightExp = 0;
+        public TAbility MWAbil;
+        private TAddAbility _mAddAbil;
         /// <summary>
         /// 视觉范围大小
         /// </summary>
         protected byte ViewRange;
-        public ushort[] m_wStatusTimeArr = new ushort[12];
-        public int[] m_dwStatusArrTick = new int[12];
-        public ushort[] m_wStatusArrValue;
-        public int[] m_dwStatusArrTimeOutTick;
+        public ushort[] MWStatusTimeArr = new ushort[12];
+        public int[] MDwStatusArrTick = new int[12];
+        public ushort[] MWStatusArrValue;
+        public int[] MDwStatusArrTimeOutTick;
         /// <summary>
         /// 外观代码
         /// </summary>
@@ -137,9 +137,9 @@ namespace GameSvr.Actor
         /// <summary>
         /// 人物攻击准确度
         /// </summary>
-        public byte m_btHitPoint;
-        private ushort m_nHitPlus;
-        private ushort m_nHitDouble;
+        public byte MBtHitPoint;
+        private ushort _mNHitPlus;
+        private ushort _mNHitDouble;
         /// <summary>
         /// 记忆使用间隔
         /// </summary>
@@ -147,26 +147,26 @@ namespace GameSvr.Actor
         /// <summary>
         /// 记忆全套
         /// </summary>
-        public bool m_boRecallSuite;
+        public bool MBoRecallSuite;
 
-        public bool m_boRaceImg;
-        public ushort m_nHealthRecover;
-        public ushort m_nSpellRecover;
+        public bool MBoRaceImg;
+        public ushort MNHealthRecover;
+        public ushort MNSpellRecover;
         public byte AntiPoison;
         public ushort PoisonRecover;
         public ushort AntiMagic;
         /// <summary>
         /// 人物的幸运值
         /// </summary>
-        public int m_nLuck;
-        public int m_nPerHealth;
-        public int m_nPerHealing;
-        public int m_nPerSpell;
-        public int m_dwIncHealthSpellTick;
+        public int MNLuck;
+        public int MNPerHealth;
+        public int MNPerHealing;
+        public int MNPerSpell;
+        public int MDwIncHealthSpellTick;
         /// <summary>
         /// 中绿毒降HP点数
         /// </summary>
-        private byte GreenPoisoningPoint;
+        private byte _greenPoisoningPoint;
         /// <summary>
         /// 人物身上最多可带金币数
         /// </summary>
@@ -183,9 +183,9 @@ namespace GameSvr.Actor
         /// 攻击速度
         /// </summary>
         protected ushort HitSpeed;
-        public byte m_btLifeAttrib;
-        public byte m_btCoolEye = 0;
-        public TBaseObject m_GroupOwner;
+        public byte MBtLifeAttrib;
+        public byte MBtCoolEye = 0;
+        public BaseObject MGroupOwner;
         /// <summary>
         /// 组成员
         /// </summary>
@@ -209,12 +209,12 @@ namespace GameSvr.Actor
         /// <summary>
         /// 禁止私聊人员列表
         /// </summary>
-        public IList<string> m_BlockWhisperList;
+        public IList<string> MBlockWhisperList;
         protected int ShoutMsgTick;
         /// <summary>
         /// 是否被召唤(主人)
         /// </summary>
-        public TBaseObject Master;
+        public BaseObject Master;
         /// <summary>
         /// 怪物叛变时间
         /// </summary>
@@ -235,7 +235,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 下属列表
         /// </summary>        
-        internal IList<TBaseObject> SlaveList;
+        internal IList<BaseObject> SlaveList;
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -255,52 +255,52 @@ namespace GameSvr.Actor
         /// <summary>
         /// 行会占争范围
         /// </summary>
-        private bool GuildWarArea;
+        private bool _guildWarArea;
         /// <summary>
         /// 所属城堡
         /// </summary>
         public TUserCastle Castle;
-        public bool bo2B0;
-        public int m_dw2B4Tick = 0;
+        public bool Bo2B0;
+        public int MDw2B4Tick = 0;
         /// <summary>
         /// 无敌模式
         /// </summary>
         public bool SuperMan;
-        public bool bo2B9;
-        public bool bo2BA;
+        public bool Bo2B9;
+        public bool Bo2Ba;
         public bool Animal;
-        public bool m_boNoItem;
+        public bool MBoNoItem;
         public bool FixedHideMode;
-        public bool m_boStickMode;
-        public bool bo2BF;
-        public bool m_boNoAttackMode;
-        public bool m_boNoTame;
-        public bool m_boSkeleton;
-        public ushort m_nMeatQuality;
-        public int m_nBodyLeathery;
-        public bool m_boHolySeize;
-        public int m_dwHolySeizeTick;
-        public int m_dwHolySeizeInterval;
+        public bool MBoStickMode;
+        public bool Bo2Bf;
+        public bool MBoNoAttackMode;
+        public bool MBoNoTame;
+        public bool MBoSkeleton;
+        public ushort MNMeatQuality;
+        public int MNBodyLeathery;
+        public bool MBoHolySeize;
+        public int MDwHolySeizeTick;
+        public int MDwHolySeizeInterval;
         /// <summary>
         /// 狂暴模式
         /// </summary>
         public bool CrazyMode;
-        private int CrazyModeTick;
+        private int _crazyModeTick;
         /// <summary>
         /// 狂暴间隔
         /// </summary>
         public int CrazyModeInterval;
-        public bool m_boShowHP;
+        public bool MBoShowHp;
         /// <summary>
         /// 心灵启示检查时间
         /// </summary>
-        public int m_dwShowHPTick = 0;
+        public int MDwShowHpTick = 0;
         /// <summary>
         /// 心灵启示有效时长
         /// </summary>
-        public int m_dwShowHPInterval = 0;
-        public bool bo2F0;
-        public int m_dwDupObjTick = 0;
+        public int MDwShowHpInterval = 0;
+        public bool Bo2F0;
+        public int MDwDupObjTick = 0;
         public Envirnoment Envir;
         public bool Ghost;
         public int GhostTick;
@@ -320,7 +320,7 @@ namespace GameSvr.Actor
         public int StruckTick = 0;
         protected bool WantRefMsg;
         public bool AddtoMapSuccess;
-        public bool m_bo316;
+        public bool MBo316;
         /// <summary>
         /// 正在交易
         /// </summary>
@@ -332,16 +332,16 @@ namespace GameSvr.Actor
         /// <summary>
         /// 交易对象
         /// </summary>
-        protected TBaseObject DealCreat;
+        protected BaseObject DealCreat;
         public GuildInfo MyGuild;
         public int GuildRankNo;
         public string GuildRankName = string.Empty;
         public string ScriptLable = string.Empty;
         protected byte AttackSkillCount;
         protected byte AttackSkillPointCount;
-        public bool m_boMission;
-        public short m_nMissionX = 0;
-        public short m_nMissionY = 0;
+        public bool MBoMission;
+        public short MNMissionX = 0;
+        public short MNMissionY = 0;
         /// <summary>
         /// 隐身戒指
         /// </summary>
@@ -424,25 +424,25 @@ namespace GameSvr.Actor
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-        private bool SuperManItem;
+        private bool _superManItem;
         /// <summary>
         /// 祈祷
         /// </summary>
-        internal bool m_bopirit = false;
+        internal bool MBopirit = false;
         public bool NoDropItem = false;
         public bool NoDropUseItem = false;
-        internal bool m_boExpItem = false;
-        internal bool m_boPowerItem = false;
+        internal bool MBoExpItem = false;
+        internal bool MBoPowerItem = false;
         internal int ExpItem = 0;
         internal int PowerItem = 0;
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
-        internal int m_dwPKDieLostExp;
+        internal int MDwPkDieLostExp;
         /// <summary>
         /// PK 死亡掉等级
         /// </summary>
-        internal int m_nPKDieLostLevel;
+        internal int MNPkDieLostLevel;
         /// <summary>
         /// 心灵启示
         /// </summary>
@@ -454,24 +454,24 @@ namespace GameSvr.Actor
         /// <summary>
         /// 魔法盾等级
         /// </summary>
-        private byte MagBubbleDefenceLevel;
+        private byte _magBubbleDefenceLevel;
         public int SearchTime;
         public int SearchTick;
         /// <summary>
         /// 上次运行时间
         /// </summary>
-        public int m_dwRunTick;
-        public int m_nRunTime;
-        internal int m_nHealthTick;
-        internal int m_nSpellTick;
-        public TBaseObject TargetCret;
+        public int MDwRunTick;
+        public int MNRunTime;
+        internal int MNHealthTick;
+        internal int MNSpellTick;
+        public BaseObject TargetCret;
         public int TargetFocusTick = 0;
         /// <summary>
         /// 人物被对方杀害时对方指针
         /// </summary>
-        public TBaseObject LastHiter;
+        public BaseObject LastHiter;
         public int LastHiterTick;
-        public TBaseObject ExpHitter;
+        public BaseObject ExpHitter;
         internal int ExpHitterTick;
         /// <summary>
         /// 传送戒指使用间隔
@@ -489,16 +489,16 @@ namespace GameSvr.Actor
         /// <summary>
         /// 人物攻击变色时间长度
         /// </summary>
-        internal int m_dwPKTick;
+        internal int MDwPkTick;
         /// <summary>
         /// 魔血一套
         /// </summary>
-        internal int m_nMoXieSuite;
+        internal int MNMoXieSuite;
         /// <summary>
         /// 虹魔一套
         /// </summary>
-        internal int m_nHongMoSuite;
-        public double m_db3B0;
+        internal int MNHongMoSuite;
+        public double MDb3B0;
         /// <summary>
         /// 中毒处理间隔时间
         /// </summary>
@@ -506,21 +506,21 @@ namespace GameSvr.Actor
         /// <summary>
         /// 减PK值时间`
         /// </summary>
-        private int DecPkPointTick;
+        private int _decPkPointTick;
         internal int DecLightItemDrugTick;
         internal int VerifyTick;
         internal int CheckRoyaltyTick;
         internal int DecHungerPointTick;
-        internal int m_dwHPMPTick;
+        internal int MDwHpmpTick;
         internal readonly IList<SendMessage> MsgList;
-        internal readonly IList<TBaseObject> VisibleHumanList;
+        internal readonly IList<BaseObject> VisibleHumanList;
         internal readonly IList<VisibleMapItem> VisibleItems;
         internal readonly IList<MirEvent> VisibleEvents;
         internal int SendRefMsgTick;
         /// <summary>
         /// 是否在开行会战
         /// </summary>
-        protected bool InFreePKArea;
+        protected bool InFreePkArea;
         protected int AttackTick = 0;
         protected int WalkTick;
         protected int SearchEnemyTick = 0;
@@ -586,16 +586,16 @@ namespace GameSvr.Actor
         protected bool RedUseHalfMoon;
         protected bool FireHitSkill;
         protected bool CrsHitkill = false;
-        public bool m_bo41kill = false;
-        public bool m_boTwinHitSkill;
-        public bool m_bo43kill = false;
-        public int m_dwLatestFireHitTick = 0;
-        public int m_dwDoMotaeboTick = 0;
-        public int m_dwLatestTwinHitTick = 0;
+        public bool MBo41Kill = false;
+        public bool MBoTwinHitSkill;
+        public bool MBo43Kill = false;
+        public int MDwLatestFireHitTick = 0;
+        public int MDwDoMotaeboTick = 0;
+        public int MDwLatestTwinHitTick = 0;
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
-        private bool DenyRefStatus;
+        private bool _denyRefStatus;
         /// <summary>
         /// 是否增加地图计数
         /// </summary>
@@ -626,22 +626,22 @@ namespace GameSvr.Actor
         protected bool FiveStringSet = false;
         public bool OffLineFlag = false;
         // 挂机
-        public string m_sOffLineLeaveword = string.Empty;
+        public string MSOffLineLeaveword = string.Empty;
         // 挂机字符
-        public int m_dwKickOffLineTick = 0;
+        public int MDwKickOffLineTick = 0;
         public bool NastyMode;
         /// <summary>
         /// 气血石
         /// </summary>
-        public int m_nAutoAddHPMPMode = 0;
-        public int m_dwCheckHPMPTick = 0;
-        public long dwTick3F4 = 0;
+        public int MNAutoAddHpmpMode = 0;
+        public int MDwCheckHpmpTick = 0;
+        public long DwTick3F4 = 0;
         /// <summary>
         /// 是否机器人
         /// </summary>
         public bool IsRobot;
 
-        public TBaseObject()
+        public BaseObject()
         {
             Ghost = false;
             GhostTick = 0;
@@ -655,84 +655,84 @@ namespace GameSvr.Actor
             Job = PlayJob.Warrior;
             Gold = 0;
             Appr = 0;
-            bo2B9 = true;
+            Bo2B9 = true;
             ViewRange = 5;
             HomeMap = "0";
             Permission = 0;
             Light = 0;
             NameColor = 255;
-            m_nHitPlus = 0;
-            m_nHitDouble = 0;
-            m_dBodyLuck = 0;
-            m_wGroupRcallTime = 0;
+            _mNHitPlus = 0;
+            _mNHitDouble = 0;
+            MDBodyLuck = 0;
+            MWGroupRcallTime = 0;
             GroupRcallTick = HUtil32.GetTickCount();
-            m_boRecallSuite = false;
-            m_boRaceImg = false;
-            bo2BA = false;
+            MBoRecallSuite = false;
+            MBoRaceImg = false;
+            Bo2Ba = false;
             AbilSeeHealGauge = false;
             PowerHit = false;
             UseThrusting = false;
             UseHalfMoon = false;
             RedUseHalfMoon = false;
             FireHitSkill = false;
-            m_boTwinHitSkill = false;
-            m_btHitPoint = 5;
+            MBoTwinHitSkill = false;
+            MBtHitPoint = 5;
             SpeedPoint = 15;
             HitSpeed = 0;
-            m_btLifeAttrib = 0;
+            MBtLifeAttrib = 0;
             AntiPoison = 0;
             PoisonRecover = 0;
-            m_nHealthRecover = 0;
-            m_nSpellRecover = 0;
+            MNHealthRecover = 0;
+            MNSpellRecover = 0;
             AntiMagic = 0;
-            m_nLuck = 0;
+            MNLuck = 0;
             IncSpell = 0;
             IncHealth = 0;
-            m_nIncHealing = 0;
-            m_nIncHPStoneTime = HUtil32.GetTickCount();
-            m_nIncMPStoneTime = HUtil32.GetTickCount();
-            m_nPerHealth = 5;
-            m_nPerHealing = 5;
-            m_nPerSpell = 5;
-            m_dwIncHealthSpellTick = HUtil32.GetTickCount();
-            GreenPoisoningPoint = 0;
+            MNIncHealing = 0;
+            MNIncHpStoneTime = HUtil32.GetTickCount();
+            MNIncMpStoneTime = HUtil32.GetTickCount();
+            MNPerHealth = 5;
+            MNPerHealing = 5;
+            MNPerSpell = 5;
+            MDwIncHealthSpellTick = HUtil32.GetTickCount();
+            _greenPoisoningPoint = 0;
             FightZoneDieCount = 0;
             GoldMax = M2Share.Config.nHumanMaxGold;
             CharStatus = 0;
             CharStatusEx = 0;
-            m_wStatusTimeArr = new ushort[12];
+            MWStatusTimeArr = new ushort[12];
             BonusAbil = new TNakedAbility();
             CurBonusAbil = new TNakedAbility();
-            m_wStatusArrValue = new ushort[6];
-            m_dwStatusArrTimeOutTick = new int[6];
+            MWStatusArrValue = new ushort[6];
+            MDwStatusArrTimeOutTick = new int[6];
             AllowGroup = false;
             AllowGuild = false;
-            btB2 = 0;
+            BtB2 = 0;
             AttatckMode = 0;
-            InFreePKArea = false;
-            GuildWarArea = false;
-            bo2B0 = false;
+            InFreePkArea = false;
+            _guildWarArea = false;
+            Bo2B0 = false;
             SuperMan = false;
-            m_boSkeleton = false;
-            bo2BF = false;
-            m_boHolySeize = false;
+            MBoSkeleton = false;
+            Bo2Bf = false;
+            MBoHolySeize = false;
             CrazyMode = false;
-            m_boShowHP = false;
-            bo2F0 = false;
+            MBoShowHp = false;
+            Bo2F0 = false;
             Animal = false;
-            m_boNoItem = false;
-            m_nBodyLeathery = 50;
+            MBoNoItem = false;
+            MNBodyLeathery = 50;
             FixedHideMode = false;
-            m_boStickMode = false;
-            m_boNoAttackMode = false;
-            m_boNoTame = false;
+            MBoStickMode = false;
+            MBoNoAttackMode = false;
+            MBoNoTame = false;
             PvpFlag = false;
-            m_nMoXieSuite = 0;
-            m_nHongMoSuite = 0;
-            m_db3B0 = 0;
-            m_AddAbil = new TAddAbility();
+            MNMoXieSuite = 0;
+            MNHongMoSuite = 0;
+            MDb3B0 = 0;
+            _mAddAbil = new TAddAbility();
             MsgList = new List<SendMessage>();
-            VisibleHumanList = new List<TBaseObject>();
+            VisibleHumanList = new List<BaseObject>();
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
             VisibleEvents = new List<MirEvent>();
@@ -744,7 +744,7 @@ namespace GameSvr.Actor
             MagicList = new List<TUserMagic>();
             StorageItemList = new List<TUserItem>();
             UseItems = new TUserItem[13];
-            m_GroupOwner = null;
+            MGroupOwner = null;
             Castle = null;
             Master = null;
             KillMonCount = 0;
@@ -754,13 +754,13 @@ namespace GameSvr.Actor
             BanShout = true;
             BanGuildChat = true;
             AllowDeal = true;
-            m_boAllowGroupReCall = false;
-            m_BlockWhisperList = new List<string>();
-            SlaveList = new List<TBaseObject>();
-            m_WAbil = new TAbility();
-            m_QuestUnitOpen = new byte[128];
-            m_QuestUnit = new byte[128];
-            m_QuestFlag = new byte[128];
+            MBoAllowGroupReCall = false;
+            MBlockWhisperList = new List<string>();
+            SlaveList = new List<BaseObject>();
+            MWAbil = new TAbility();
+            MQuestUnitOpen = new byte[128];
+            MQuestUnit = new byte[128];
+            MQuestFlag = new byte[128];
             Abil = new TAbility
             {
                 Level = 1,
@@ -785,7 +785,7 @@ namespace GameSvr.Actor
             GuildRankNo = 0;
             GuildRankName = "";
             ScriptLable = "";
-            m_boMission = false;
+            MBoMission = false;
             HideMode = false;
             StoneMode = false;
             CoolEye = false;
@@ -793,17 +793,17 @@ namespace GameSvr.Actor
             Transparent = false;
             AdminMode = false;
             ObMode = false;
-            m_dwRunTick = HUtil32.GetTickCount() + M2Share.RandomNumber.Random(1500);
-            m_nRunTime = 250;
+            MDwRunTick = HUtil32.GetTickCount() + M2Share.RandomNumber.Random(1500);
+            MNRunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(2000) + 2000;
             SearchTick = HUtil32.GetTickCount();
-            DecPkPointTick = HUtil32.GetTickCount();
+            _decPkPointTick = HUtil32.GetTickCount();
             DecLightItemDrugTick = HUtil32.GetTickCount();
             PoisoningTick = HUtil32.GetTickCount();
             VerifyTick = HUtil32.GetTickCount();
             CheckRoyaltyTick = HUtil32.GetTickCount();
             DecHungerPointTick = HUtil32.GetTickCount();
-            m_dwHPMPTick = HUtil32.GetTickCount();
+            MDwHpmpTick = HUtil32.GetTickCount();
             ShoutMsgTick = 0;
             TeleportTick = 0;
             ProbeTick = 0;
@@ -814,17 +814,17 @@ namespace GameSvr.Actor
             WalkCount = 0;
             WalkWaitTick = HUtil32.GetTickCount();
             WalkWaitLocked = false;
-            m_nHealthTick = 0;
-            m_nSpellTick = 0;
+            MNHealthTick = 0;
+            MNSpellTick = 0;
             TargetCret = null;
             LastHiter = null;
             ExpHitter = null;
             SayMsgList = null;
-            DenyRefStatus = false;
+            _denyRefStatus = false;
             HorseType = 0;
-            DressEffType = 0;
-            m_dwPKDieLostExp = 0;
-            m_nPKDieLostLevel = 0;
+            _dressEffType = 0;
+            MDwPkDieLostExp = 0;
+            MNPkDieLostLevel = 0;
             AddToMaped = true;
             AutoChangeColor = false;
             AutoChangeColorTick = HUtil32.GetTickCount();
@@ -838,11 +838,11 @@ namespace GameSvr.Actor
             M2Share.ActorMgr.Add(ObjectId, this);
         }
 
-        public void ChangePKStatus(bool boWarFlag)
+        public void ChangePkStatus(bool boWarFlag)
         {
-            if (InFreePKArea != boWarFlag)
+            if (InFreePkArea != boWarFlag)
             {
-                InFreePKArea = boWarFlag;
+                InFreePkArea = boWarFlag;
                 NameColorChanged = true;
             }
         }
@@ -914,54 +914,54 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool DropItemDown(TUserItem UserItem, int nScatterRange, bool boDieDrop, TBaseObject ItemOfCreat,
-            TBaseObject DropCreat)
+        public bool DropItemDown(TUserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat,
+            BaseObject dropCreat)
         {
-            bool result = false;
-            int dx = 0;
-            int dy = 0;
-            if (UserItem == null)
+            var result = false;
+            var dx = 0;
+            var dy = 0;
+            if (userItem == null)
             {
                 return false;
             }
 
-            StdItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-            if (StdItem != null)
+            var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+            if (stdItem != null)
             {
-                if (StdItem.StdMode == 40)
+                if (stdItem.StdMode == 40)
                 {
-                    int idura = UserItem.Dura;
+                    int idura = userItem.Dura;
                     idura = idura - 2000;
                     if (idura < 0)
                     {
                         idura = 0;
                     }
 
-                    UserItem.Dura = (ushort)idura;
+                    userItem.Dura = (ushort)idura;
                 }
 
-                var MapItem = new MapItem
+                var mapItem = new MapItem
                 {
-                    UserItem = UserItem,
-                    Name = ItemUnit.GetItemName(UserItem), // 取自定义物品名称
-                    Looks = StdItem.Looks
+                    UserItem = userItem,
+                    Name = ItemUnit.GetItemName(userItem), // 取自定义物品名称
+                    Looks = stdItem.Looks
                 };
-                if (StdItem.StdMode == 45)
+                if (stdItem.StdMode == 45)
                 {
-                    MapItem.Looks = (ushort)M2Share.GetRandomLook(MapItem.Looks, StdItem.Shape);
+                    mapItem.Looks = (ushort)M2Share.GetRandomLook(mapItem.Looks, stdItem.Shape);
                 }
 
-                MapItem.AniCount = StdItem.AniCount;
-                MapItem.Reserved = 0;
-                MapItem.Count = 1;
-                MapItem.OfBaseObject = ItemOfCreat.ObjectId;
-                MapItem.CanPickUpTick = HUtil32.GetTickCount();
-                MapItem.DropBaseObject = DropCreat.ObjectId;
+                mapItem.AniCount = stdItem.AniCount;
+                mapItem.Reserved = 0;
+                mapItem.Count = 1;
+                mapItem.OfBaseObject = itemOfCreat.ObjectId;
+                mapItem.CanPickUpTick = HUtil32.GetTickCount();
+                mapItem.DropBaseObject = dropCreat.ObjectId;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
-                var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.ItemObject, MapItem);
-                if (pr == MapItem)
+                var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.ItemObject, mapItem);
+                if (pr == mapItem)
                 {
-                    SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, dx, dy, MapItem.Name);
+                    SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ObjectId, dx, dy, mapItem.Name);
                     string logcap;
                     if (boDieDrop)
                     {
@@ -972,13 +972,13 @@ namespace GameSvr.Actor
                         logcap = "7";
                     }
 
-                    if (!M2Share.IsCheapStuff(StdItem.StdMode))
+                    if (!M2Share.IsCheapStuff(stdItem.StdMode))
                     {
-                        if (StdItem.NeedIdentify == 1)
+                        if (stdItem.NeedIdentify == 1)
                         {
                             M2Share.AddGameDataLog(logcap + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
-                                                   "\t" + CharName + "\t" + StdItem.Name + "\t" +
-                                                   UserItem.MakeIndex + "\t" +
+                                                   "\t" + CharName + "\t" + stdItem.Name + "\t" +
+                                                   userItem.MakeIndex + "\t" +
                                                    HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
                                                    "\t" + '0');
                         }
@@ -988,7 +988,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    MapItem = null;
+                    mapItem = null;
                 }
             }
             return result;
@@ -1013,7 +1013,7 @@ namespace GameSvr.Actor
         public void RecalcLevelAbilitys()
         {
             int n;
-            ushort nLevel = Abil.Level;
+            var nLevel = Abil.Level;
             switch (Job)
             {
                 case PlayJob.Taoist:
@@ -1062,6 +1062,10 @@ namespace GameSvr.Actor
                     Abil.AC = HUtil32.MakeLong(0, nLevel / 7);
                     Abil.MAC = 0;
                     break;
+                case PlayJob.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             if (Abil.HP > Abil.MaxHP)
             {
@@ -1091,15 +1095,15 @@ namespace GameSvr.Actor
             short n24 = 0;
             bool bo29;
             const string sExceptionMsg = "[Exception] TBaseObject::WalkTo";
-            bool result = false;
-            if (m_boHolySeize)
+            var result = false;
+            if (MBoHolySeize)
             {
                 return result;
             }
             try
             {
-                short oldX = CurrX;
-                short oldY = CurrY;
+                var oldX = CurrX;
+                var oldY = CurrY;
                 Direction = btDir;
                 short newX = 0;
                 short newY = 0;
@@ -1138,15 +1142,13 @@ namespace GameSvr.Actor
                         newY = (short)(CurrY - 1);
                         break;
                 }
-
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
                     bo29 = true;
-                    if (bo2BA && !Envir.CanSafeWalk(newX, newY))
+                    if (Bo2Ba && !Envir.CanSafeWalk(newX, newY))
                     {
                         bo29 = false;
                     }
-
                     if (Master != null)
                     {
                         Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, 1,
@@ -1156,7 +1158,6 @@ namespace GameSvr.Actor
                             bo29 = false;
                         }
                     }
-
                     if (bo29)
                     {
                         if (Envir.MoveToMovingObject(CurrX, CurrY, this, newX, newY, boFlag) > 0)
@@ -1166,16 +1167,14 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-
                 if (CurrX != oldX || CurrY != oldY)
                 {
                     if (Walk(Grobal2.RM_WALK))
                     {
                         if (Transparent && HideMode)
                         {
-                            m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                            MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                         }
-
                         result = true;
                     }
                     else
@@ -1196,16 +1195,16 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool IsGroupMember(TBaseObject target)
+        protected bool IsGroupMember(BaseObject target)
         {
-            bool result = false;
-            if (m_GroupOwner == null)
+            var result = false;
+            if (MGroupOwner == null)
             {
                 return result;
             }
-            for (int i = 0; i < m_GroupOwner.GroupMembers.Count; i++)
+            for (var i = 0; i < MGroupOwner.GroupMembers.Count; i++)
             {
-                if (m_GroupOwner.GroupMembers[i] == target)
+                if (MGroupOwner.GroupMembers[i] == target)
                 {
                     result = true;
                     break;
@@ -1226,7 +1225,7 @@ namespace GameSvr.Actor
                 SendUpdateMsg(this, Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
 
-            if (m_boShowHP)
+            if (MBoShowHp)
             {
                 SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
@@ -1284,31 +1283,31 @@ namespace GameSvr.Actor
             }
         }
 
-        protected bool DropGoldDown(int nGold, bool boFalg, TBaseObject GoldOfCreat, TBaseObject DropGoldCreat)
+        protected bool DropGoldDown(int nGold, bool boFalg, BaseObject goldOfCreat, BaseObject dropGoldCreat)
         {
-            bool result = false;
-            int nX = 0;
-            int nY = 0;
+            var result = false;
+            var nX = 0;
+            var nY = 0;
             string s20;
-            int DropWide = HUtil32._MIN(M2Share.Config.nDropItemRage, 7);
-            MapItem MapItem = new MapItem
+            var dropWide = HUtil32._MIN(M2Share.Config.nDropItemRage, 7);
+            var mapItem = new MapItem
             {
                 Name = Grobal2.sSTRING_GOLDNAME,
                 Count = nGold,
                 Looks = M2Share.GetGoldShape(nGold),
-                OfBaseObject = GoldOfCreat.ObjectId,
+                OfBaseObject = goldOfCreat.ObjectId,
                 CanPickUpTick = HUtil32.GetTickCount(),
-                DropBaseObject = DropGoldCreat.ObjectId
+                DropBaseObject = dropGoldCreat.ObjectId
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
-            MapItem MapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.ItemObject, MapItem);
-            if (MapItemA != null)
+            var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.ItemObject, mapItem);
+            if (mapItemA != null)
             {
-                if (MapItemA != MapItem)
+                if (mapItemA != mapItem)
                 {
-                    MapItem = MapItemA;
+                    mapItem = mapItemA;
                 }
-                SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, nX, nY, MapItem.Name);
+                SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ObjectId, nX, nY, mapItem.Name);
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
                     if (boFalg)
@@ -1328,15 +1327,15 @@ namespace GameSvr.Actor
             }
             else
             {
-                MapItem = null;
+                mapItem = null;
             }
             return result;
         }
 
-        private int GetGuildRelation(TBaseObject cert1, TBaseObject cert2)
+        private int GetGuildRelation(BaseObject cert1, BaseObject cert2)
         {
-            int result = 0;
-            GuildWarArea = false;
+            var result = 0;
+            _guildWarArea = false;
             if ((cert1.MyGuild == null) || (cert2.MyGuild == null))
             {
                 return 0;
@@ -1349,7 +1348,7 @@ namespace GameSvr.Actor
             {
                 return 0;
             }
-            GuildWarArea = true;
+            _guildWarArea = true;
             if (cert1.MyGuild.IsWarGuild(cert2.MyGuild) && cert2.MyGuild.IsWarGuild(cert1.MyGuild))
             {
                 result = 2;
@@ -1367,9 +1366,9 @@ namespace GameSvr.Actor
 
         protected void IncPkPoint(int nPoint)
         {
-            var nOldPKLevel = PvpLevel();
+            var oldPvpLevel = PvpLevel();
             PkPoint += nPoint;
-            if (PvpLevel() != nOldPKLevel)
+            if (PvpLevel() != oldPvpLevel)
             {
                 if (PvpLevel() <= 2)
                 {
@@ -1378,15 +1377,15 @@ namespace GameSvr.Actor
             }
         }
 
-        private void DecPKPoint(int nPoint)
+        private void DecPkPoint(int nPoint)
         {
-            int nC = PvpLevel();
+            var pvpLevel = PvpLevel();
             PkPoint -= nPoint;
             if (PkPoint < 0)
             {
                 PkPoint = 0;
             }
-            if ((PvpLevel() != nC) && (nC > 0) && (nC <= 2))
+            if ((PvpLevel() != pvpLevel) && (pvpLevel > 0) && (pvpLevel <= 2))
             {
                 RefNameColor();
             }
@@ -1394,15 +1393,15 @@ namespace GameSvr.Actor
 
         protected void AddBodyLuck(double dLuck)
         {
-            if ((dLuck > 0) && (m_dBodyLuck < 5 * M2Share.BODYLUCKUNIT))
+            if ((dLuck > 0) && (MDBodyLuck < 5 * M2Share.BODYLUCKUNIT))
             {
-                m_dBodyLuck = m_dBodyLuck + dLuck;
+                MDBodyLuck = MDBodyLuck + dLuck;
             }
-            if ((dLuck < 0) && (m_dBodyLuck > -(5 * M2Share.BODYLUCKUNIT)))
+            if ((dLuck < 0) && (MDBodyLuck > -(5 * M2Share.BODYLUCKUNIT)))
             {
-                m_dBodyLuck = m_dBodyLuck + dLuck;
+                MDBodyLuck = MDBodyLuck + dLuck;
             }
-            int n = Convert.ToInt32(m_dBodyLuck / M2Share.BODYLUCKUNIT);
+            var n = Convert.ToInt32(MDBodyLuck / M2Share.BODYLUCKUNIT);
             if (n > 5)
             {
                 n = 5;
@@ -1411,7 +1410,7 @@ namespace GameSvr.Actor
             {
                 n = -10;
             }
-            m_nBodyLuckLevel = n;
+            MNBodyLuckLevel = n;
         }
 
         protected void MakeWeaponUnlock()
@@ -1448,14 +1447,14 @@ namespace GameSvr.Actor
         public ushort GetAttackPower(int nBasePower, int nPower)
         {
             int result;
-            PlayObject PlayObject;
+            PlayObject playObject;
             if (nPower < 0)
             {
                 nPower = 0;
             }
-            if (m_nLuck > 0)
+            if (MNLuck > 0)
             {
-                if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, m_nLuck)) == 0)
+                if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, MNLuck)) == 0)
                 {
                     result = nBasePower + nPower;
                 }
@@ -1467,9 +1466,9 @@ namespace GameSvr.Actor
             else
             {
                 result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
-                if (m_nLuck < 0)
+                if (MNLuck < 0)
                 {
-                    if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -m_nLuck)) == 0)
+                    if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -MNLuck)) == 0)
                     {
                         result = nBasePower;
                     }
@@ -1477,9 +1476,9 @@ namespace GameSvr.Actor
             }
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
-                PlayObject = this as PlayObject;
-                result = HUtil32.Round(result * (PlayObject.m_nPowerRate / 100));
-                if (PlayObject.m_boPowerItem)
+                playObject = this as PlayObject;
+                result = HUtil32.Round(result * (playObject.m_nPowerRate / 100));
+                if (playObject.MBoPowerItem)
                 {
                     result = HUtil32.Round(PowerItem * result);
                 }
@@ -1502,42 +1501,42 @@ namespace GameSvr.Actor
         private void DamageHealth(int nDamage)
         {
             if (((LastHiter == null) || !LastHiter.UnMagicShield) && MagicShield && (nDamage > 0) &&
-                (m_WAbil.MP > 0))
+                (MWAbil.MP > 0))
             {
                 var nSpdam = HUtil32.Round(nDamage * 1.5);
-                if (m_WAbil.MP >= nSpdam)
+                if (MWAbil.MP >= nSpdam)
                 {
-                    m_WAbil.MP = (ushort)(m_WAbil.MP - nSpdam);
+                    MWAbil.MP = (ushort)(MWAbil.MP - nSpdam);
                     nSpdam = 0;
                 }
                 else
                 {
-                    nSpdam = nSpdam - m_WAbil.MP;
-                    m_WAbil.MP = 0;
+                    nSpdam = nSpdam - MWAbil.MP;
+                    MWAbil.MP = 0;
                 }
                 nDamage = HUtil32.Round(nSpdam / 1.5);
                 HealthSpellChanged();
             }
             if (nDamage > 0)
             {
-                if ((m_WAbil.HP - nDamage) > 0)
+                if ((MWAbil.HP - nDamage) > 0)
                 {
-                    m_WAbil.HP = (ushort)(m_WAbil.HP - nDamage);
+                    MWAbil.HP = (ushort)(MWAbil.HP - nDamage);
                 }
                 else
                 {
-                    m_WAbil.HP = 0;
+                    MWAbil.HP = 0;
                 }
             }
             else
             {
-                if ((m_WAbil.HP - nDamage) < m_WAbil.MaxHP)
+                if ((MWAbil.HP - nDamage) < MWAbil.MaxHP)
                 {
-                    m_WAbil.HP = (ushort)(m_WAbil.HP - nDamage);
+                    MWAbil.HP = (ushort)(MWAbil.HP - nDamage);
                 }
                 else
                 {
-                    m_WAbil.HP = m_WAbil.MaxHP;
+                    MWAbil.HP = MWAbil.MaxHP;
                 }
             }
         }
@@ -1580,12 +1579,12 @@ namespace GameSvr.Actor
         {
             short nx = 0;
             short ny = 0;
-            int result = 0;
-            byte olddir = Direction;
+            var result = 0;
+            var olddir = Direction;
             int oldx = CurrX;
             int oldy = CurrY;
             Direction = nDir;
-            byte nBackDir = GetBackDir(nDir);
+            var nBackDir = GetBackDir(nDir);
             for (var i = 0; i < nPushCount; i++)
             {
                 GetFrontPosition(ref nx, ref ny);
@@ -1622,23 +1621,22 @@ namespace GameSvr.Actor
 
         public int MagPassThroughMagic(short sx, short sy, short tx, short ty, int ndir, int magpwr, bool undeadattack)
         {
-            TBaseObject BaseObject;
-            int tcount = 0;
-            for (int i = 0; i < 12; i++)
+            BaseObject baseObject;
+            var tcount = 0;
+            for (var i = 0; i < 12; i++)
             {
-                BaseObject = Envir.GetMovingObject(sx, sy, true) as TBaseObject;
-                if (BaseObject != null)
+                baseObject = Envir.GetMovingObject(sx, sy, true) as BaseObject;
+                if (baseObject != null)
                 {
-                    if (IsProperTarget(BaseObject))
+                    if (IsProperTarget(baseObject))
                     {
-                        if (M2Share.RandomNumber.Random(10) >= BaseObject.AntiMagic)
+                        if (M2Share.RandomNumber.Random(10) >= baseObject.AntiMagic)
                         {
                             if (undeadattack)
                             {
                                 magpwr = HUtil32.Round(magpwr * 1.5);
                             }
-
-                            BaseObject.SendDelayMsg(this, Grobal2.RM_MAGSTRUCK, 0, magpwr, 0, 0, "", 600);
+                            baseObject.SendDelayMsg(this, Grobal2.RM_MAGSTRUCK, 0, magpwr, 0, 0, "", 600);
                             tcount++;
                         }
                     }
@@ -1661,9 +1659,9 @@ namespace GameSvr.Actor
 
         private void BreakOpenHealth()
         {
-            if (m_boShowHP)
+            if (MBoShowHp)
             {
-                m_boShowHP = false;
+                MBoShowHp = false;
                 CharStatusEx = CharStatusEx ^ Grobal2.STATE_OPENHEATH;
                 CharStatus = GetCharStatus();
                 SendRefMsg(Grobal2.RM_CLOSEHEALTH, 0, 0, 0, 0, "");
@@ -1672,52 +1670,52 @@ namespace GameSvr.Actor
 
         private void MakeOpenHealth()
         {
-            m_boShowHP = true;
+            MBoShowHp = true;
             CharStatusEx = CharStatusEx | Grobal2.STATE_OPENHEATH;
             CharStatus = GetCharStatus();
-            SendRefMsg(Grobal2.RM_OPENHEALTH, 0, m_WAbil.HP, m_WAbil.MaxHP, 0, "");
+            SendRefMsg(Grobal2.RM_OPENHEALTH, 0, MWAbil.HP, MWAbil.MaxHP, 0, "");
         }
 
-        protected void IncHealthSpell(int nHP, int nMP)
+        protected void IncHealthSpell(int nHp, int nMp)
         {
-            if ((nHP < 0) || (nMP < 0))
+            if ((nHp < 0) || (nMp < 0))
             {
                 return;
             }
-            if ((m_WAbil.HP + nHP) >= m_WAbil.MaxHP)
+            if ((MWAbil.HP + nHp) >= MWAbil.MaxHP)
             {
-                m_WAbil.HP = m_WAbil.MaxHP;
+                MWAbil.HP = MWAbil.MaxHP;
             }
             else
             {
-                m_WAbil.HP += (ushort)nHP;
+                MWAbil.HP += (ushort)nHp;
             }
-            if ((m_WAbil.MP + nMP) >= m_WAbil.MaxMP)
+            if ((MWAbil.MP + nMp) >= MWAbil.MaxMP)
             {
-                m_WAbil.MP = m_WAbil.MaxMP;
+                MWAbil.MP = MWAbil.MaxMP;
             }
             else
             {
-                m_WAbil.MP += (ushort)nMP;
+                MWAbil.MP += (ushort)nMp;
             }
             HealthSpellChanged();
         }
 
         private void ItemDamageRevivalRing()
         {
-            for (int i = 0; i < UseItems.Length; i++)
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] != null && UseItems[i].wIndex > 0)
                 {
-                    StdItem pSItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                    var pSItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
                     if (pSItem != null)
                     {
                         if (new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) ||
                             (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) &&
                              new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.AniCount)))
                         {
-                            ushort nDura = UseItems[i].Dura;
-                            ushort tDura = (ushort)HUtil32.Round(nDura / 1000.0);
+                            var nDura = UseItems[i].Dura;
+                            var tDura = (ushort)HUtil32.Round(nDura / 1000.0);
                             nDura -= 1000;
                             if (nDura <= 0)
                             {
@@ -1725,8 +1723,8 @@ namespace GameSvr.Actor
                                 UseItems[i].Dura = nDura;
                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    PlayObject PlayObject = this as PlayObject;
-                                    PlayObject.SendDelItems(UseItems[i]);
+                                    var playObject = this as PlayObject;
+                                    playObject.SendDelItems(UseItems[i]);
                                 }
                                 UseItems[i].wIndex = 0;
                                 RecalcAbilitys();
@@ -1747,8 +1745,7 @@ namespace GameSvr.Actor
 
         public bool GetFrontPosition(ref short nX, ref short nY)
         {
-            bool result;
-            Envirnoment Envir = this.Envir;
+            var envir = this.Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Direction)
@@ -1758,52 +1755,45 @@ namespace GameSvr.Actor
                     {
                         nY -= 1;
                     }
-
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    if ((nX < (Envir.Width - 1)) && (nY > 0))
+                    if ((nX < (envir.Width - 1)) && (nY > 0))
                     {
                         nX++;
                         nY -= 1;
                     }
-
                     break;
                 case Grobal2.DR_RIGHT:
-                    if (nX < (Envir.Width - 1))
+                    if (nX < (envir.Width - 1))
                     {
                         nX++;
                     }
-
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    if ((nX < (Envir.Width - 1)) && (nY < (Envir.Height - 1)))
+                    if ((nX < (envir.Width - 1)) && (nY < (envir.Height - 1)))
                     {
                         nX++;
                         nY++;
                     }
-
                     break;
                 case Grobal2.DR_DOWN:
-                    if (nY < (Envir.Height - 1))
+                    if (nY < (envir.Height - 1))
                     {
                         nY++;
                     }
-
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    if ((nX > 0) && (nY < (Envir.Height - 1)))
+                    if ((nX > 0) && (nY < (envir.Height - 1)))
                     {
                         nX -= 1;
                         nY++;
                     }
-
                     break;
                 case Grobal2.DR_LEFT:
                     if (nX > 0)
                     {
                         nX -= 1;
                     }
-
                     break;
                 case Grobal2.DR_UPLEFT:
                     if ((nX > 0) && (nY > 0))
@@ -1811,21 +1801,18 @@ namespace GameSvr.Actor
                         nX -= 1;
                         nY -= 1;
                     }
-
                     break;
             }
-
-            result = true;
-            return result;
+            return true;
         }
 
-        private bool SpaceMove_GetRandXY(Envirnoment Envir, ref short nX, ref short nY)
+        private bool SpaceMove_GetRandXY(Envirnoment envir, ref short nX, ref short nY)
         {
             int n14;
             short n18;
             int n1C;
-            bool result = false;
-            if (Envir.Width < 80)
+            var result = false;
+            if (envir.Width < 80)
             {
                 n18 = 3;
             }
@@ -1833,10 +1820,9 @@ namespace GameSvr.Actor
             {
                 n18 = 10;
             }
-
-            if (Envir.Height < 150)
+            if (envir.Height < 150)
             {
-                if (Envir.Height < 50)
+                if (envir.Height < 50)
                 {
                     n1C = 2;
                 }
@@ -1849,40 +1835,37 @@ namespace GameSvr.Actor
             {
                 n1C = 50;
             }
-
             n14 = 0;
             while (true)
             {
-                if (Envir.CanWalk(nX, nY, true))
+                if (envir.CanWalk(nX, nY, true))
                 {
                     result = true;
                     break;
                 }
 
-                if (nX < (Envir.Width - n1C - 1))
+                if (nX < (envir.Width - n1C - 1))
                 {
                     nX += n18;
                 }
                 else
                 {
-                    nX = (short)M2Share.RandomNumber.Random(Envir.Width);
-                    if (nY < (Envir.Height - n1C - 1))
+                    nX = (short)M2Share.RandomNumber.Random(envir.Width);
+                    if (nY < (envir.Height - n1C - 1))
                     {
                         nY += n18;
                     }
                     else
                     {
-                        nY = (short)M2Share.RandomNumber.Random(Envir.Height);
+                        nY = (short)M2Share.RandomNumber.Random(envir.Height);
                     }
                 }
-
                 n14++;
                 if (n14 >= 201)
                 {
                     break;
                 }
             }
-
             return result;
         }
 
@@ -1891,33 +1874,31 @@ namespace GameSvr.Actor
             int nOldX;
             int nOldY;
             bool bo21;
-            Envirnoment Envir = M2Share.MapMgr.FindMap(sMap);
-            if (Envir != null)
+            var envir = M2Share.MapMgr.FindMap(sMap);
+            if (envir != null)
             {
-                if (M2Share.ServerIndex == Envir.ServerIndex)
+                if (M2Share.ServerIndex == envir.ServerIndex)
                 {
-                    Envirnoment OldEnvir = this.Envir;
+                    var oldEnvir = this.Envir;
                     nOldX = CurrX;
                     nOldY = CurrY;
                     bo21 = false;
                     this.Envir.DeleteFromMap(CurrX, CurrY, CellType.MovingObject, this);
                     VisibleHumanList.Clear();
-                    for (int i = 0; i < VisibleItems.Count; i++)
+                    for (var i = 0; i < VisibleItems.Count; i++)
                     {
                         VisibleItems[i] = null;
                     }
-
                     VisibleItems.Clear();
-                    for (int i = 0; i < VisibleActors.Count; i++)
+                    for (var i = 0; i < VisibleActors.Count; i++)
                     {
                         VisibleActors[i] = null;
                     }
-
                     VisibleActors.Clear();
                     VisibleEvents.Clear();
-                    this.Envir = Envir;
-                    MapName = Envir.MapName;
-                    MapFileName = Envir.MapFileName;
+                    this.Envir = envir;
+                    MapName = envir.MapName;
+                    MapFileName = envir.MapFileName;
                     CurrX = nX;
                     CurrY = nY;
                     if (SpaceMove_GetRandXY(this.Envir, ref CurrX, ref CurrY))
@@ -1933,38 +1914,35 @@ namespace GameSvr.Actor
                         {
                             SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW, Direction, CurrX, CurrY, 0, "");
                         }
-
                         MapMoveTick = HUtil32.GetTickCount();
-                        m_bo316 = true;
+                        MBo316 = true;
                         bo21 = true;
                     }
-
                     if (!bo21)
                     {
-                        this.Envir = OldEnvir;
+                        this.Envir = oldEnvir;
                         CurrX = (short)nOldX;
                         CurrY = (short)nOldY;
                         this.Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
                     }
-
                     OnEnvirnomentChanged();
                 }
                 else
                 {
-                    if (SpaceMove_GetRandXY(Envir, ref nX, ref nY))
+                    if (SpaceMove_GetRandXY(envir, ref nX, ref nY))
                     {
                         if (Race == Grobal2.RC_PLAYOBJECT)
                         {
                             DisappearA();
-                            m_bo316 = true;
-                            PlayObject PlayObject = this as PlayObject;
-                            PlayObject.m_sSwitchMapName = Envir.MapName;
-                            PlayObject.m_nSwitchMapX = nX;
-                            PlayObject.m_nSwitchMapY = nY;
-                            PlayObject.m_boSwitchData = true;
-                            PlayObject.m_nServerIndex = Envir.ServerIndex;
-                            PlayObject.m_boEmergencyClose = true;
-                            PlayObject.m_boReconnection = true;
+                            MBo316 = true;
+                            var playObject = this as PlayObject;
+                            playObject.m_sSwitchMapName = envir.MapName;
+                            playObject.m_nSwitchMapX = nX;
+                            playObject.m_nSwitchMapY = nY;
+                            playObject.m_boSwitchData = true;
+                            playObject.m_nServerIndex = envir.ServerIndex;
+                            playObject.m_boEmergencyClose = true;
+                            playObject.m_boReconnection = true;
                         }
                         else
                         {
@@ -1980,28 +1958,28 @@ namespace GameSvr.Actor
             SendRefMsg(Grobal2.RM_USERNAME, 0, 0, 0, 0, GetShowName());
         }
 
-        public TBaseObject MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec)
+        public BaseObject MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec)
         {
             short nX = 0;
             short nY = 0;
             if (SlaveList.Count < nMaxMob)
             {
                 GetFrontPosition(ref nX, ref nY);
-                var MonObj = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
-                if (MonObj != null)
+                var monObj = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                if (monObj != null)
                 {
-                    MonObj.Master = this;
-                    MonObj.MasterRoyaltyTick = HUtil32.GetTickCount() + (dwRoyaltySec * 1000);
-                    MonObj.SlaveMakeLevel = (byte)nMakeLevel;
-                    MonObj.SlaveExpLevel = (byte)nExpLevel;
-                    MonObj.RecalcAbilitys();
-                    if (MonObj.m_WAbil.HP < MonObj.m_WAbil.MaxHP)
+                    monObj.Master = this;
+                    monObj.MasterRoyaltyTick = HUtil32.GetTickCount() + (dwRoyaltySec * 1000);
+                    monObj.SlaveMakeLevel = (byte)nMakeLevel;
+                    monObj.SlaveExpLevel = (byte)nExpLevel;
+                    monObj.RecalcAbilitys();
+                    if (monObj.MWAbil.HP < monObj.MWAbil.MaxHP)
                     {
-                        MonObj.m_WAbil.HP = (ushort)(MonObj.m_WAbil.HP + (MonObj.m_WAbil.MaxHP - MonObj.m_WAbil.HP) / 2);
+                        monObj.MWAbil.HP = (ushort)(monObj.MWAbil.HP + (monObj.MWAbil.MaxHP - monObj.MWAbil.HP) / 2);
                     }
-                    MonObj.RefNameColor();
-                    SlaveList.Add(MonObj);
-                    return MonObj;
+                    monObj.RefNameColor();
+                    SlaveList.Add(monObj);
+                    return monObj;
                 }
             }
             return null;
@@ -2013,12 +1991,12 @@ namespace GameSvr.Actor
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
-            Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);
-            if (Envir != null)
+            var envir = M2Share.MapMgr.FindMap(sMapName);
+            if (envir != null)
             {
-                if (Envir.Height < 150)
+                if (envir.Height < 150)
                 {
-                    if (Envir.Height < 30)
+                    if (envir.Height < 30)
                     {
                         nEgdey = 2;
                     }
@@ -2032,33 +2010,32 @@ namespace GameSvr.Actor
                     nEgdey = 50;
                 }
 
-                short nX = (short)(M2Share.RandomNumber.Random(Envir.Width - nEgdey - 1) + nEgdey);
-                short nY = (short)(M2Share.RandomNumber.Random(Envir.Height - nEgdey - 1) + nEgdey);
+                var nX = (short)(M2Share.RandomNumber.Random(envir.Width - nEgdey - 1) + nEgdey);
+                var nY = (short)(M2Share.RandomNumber.Random(envir.Height - nEgdey - 1) + nEgdey);
                 SpaceMove(sMapName, nX, nY, nInt);
             }
         }
 
-        public bool AddItemToBag(TUserItem UserItem)
+        public bool AddItemToBag(TUserItem userItem)
         {
-            bool result = false;
+            var result = false;
             if (ItemList.Count < Grobal2.MAXBAGITEM)
             {
-                ItemList.Add(UserItem);
+                ItemList.Add(userItem);
                 WeightChanged();
                 result = true;
             }
-
             return result;
         }
 
         /// <summary>
         /// 检查心灵启示
         /// </summary>
-        protected void CheckSeeHealGauge(TUserMagic Magic)
+        protected void CheckSeeHealGauge(TUserMagic magic)
         {
-            if (Magic.MagicInfo.wMagicID == 28)
+            if (magic.MagicInfo.wMagicID == 28)
             {
-                if (Magic.btLevel >= 2)
+                if (magic.btLevel >= 2)
                 {
                     AbilSeeHealGauge = true;
                 }
@@ -2067,17 +2044,17 @@ namespace GameSvr.Actor
 
         public int GetQuestFalgStatus(int nFlag)
         {
-            int result = 0;
+            var result = 0;
             nFlag -= 1;
             if (nFlag < 0)
             {
                 return result;
             }
-            int n10 = nFlag / 8;
-            int n14 = nFlag % 8;
-            if ((n10 - m_QuestFlag.Length) < 0)
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - MQuestFlag.Length) < 0)
             {
-                if (((128 >> n14) & m_QuestFlag[n10]) != 0)
+                if (((128 >> n14) & MQuestFlag[n10]) != 0)
                 {
                     result = 1;
                 }
@@ -2086,7 +2063,6 @@ namespace GameSvr.Actor
                     result = 0;
                 }
             }
-
             return result;
         }
 
@@ -2097,19 +2073,18 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
-            int n10 = nFlag / 8;
-            int n14 = nFlag % 8;
-            if ((n10 - m_QuestFlag.Length) < 0)
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - MQuestFlag.Length) < 0)
             {
-                byte bt15 = m_QuestFlag[n10];
+                var bt15 = MQuestFlag[n10];
                 if (nValue == 0)
                 {
-                    m_QuestFlag[n10] = (byte)((~(128 >> n14)) & bt15);
+                    MQuestFlag[n10] = (byte)((~(128 >> n14)) & bt15);
                 }
                 else
                 {
-                    m_QuestFlag[n10] = (byte)((128 >> n14) | bt15);
+                    MQuestFlag[n10] = (byte)((128 >> n14) | bt15);
                 }
             }
         }
@@ -2122,12 +2097,11 @@ namespace GameSvr.Actor
             {
                 return result;
             }
-
             var n10 = nFlag / 8;
             var n14 = nFlag % 8;
-            if ((n10 - m_QuestUnitOpen.Length) < 0)
+            if ((n10 - MQuestUnitOpen.Length) < 0)
             {
-                if (((128 >> n14) & m_QuestUnitOpen[n10]) != 0)
+                if (((128 >> n14) & MQuestUnitOpen[n10]) != 0)
                 {
                     result = 1;
                 }
@@ -2136,7 +2110,6 @@ namespace GameSvr.Actor
                     result = 0;
                 }
             }
-
             return result;
         }
 
@@ -2147,37 +2120,35 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
             var n10 = nFlag / 8;
             var n14 = nFlag % 8;
-            if ((n10 - m_QuestUnitOpen.Length) < 0)
+            if ((n10 - MQuestUnitOpen.Length) < 0)
             {
-                var bt15 = m_QuestUnitOpen[n10];
+                var bt15 = MQuestUnitOpen[n10];
                 if (nValue == 0)
                 {
-                    m_QuestUnitOpen[n10] = (byte)((~(128 >> n14)) & bt15);
+                    MQuestUnitOpen[n10] = (byte)((~(128 >> n14)) & bt15);
                 }
                 else
                 {
-                    m_QuestUnitOpen[n10] = (byte)((128 >> n14) | bt15);
+                    MQuestUnitOpen[n10] = (byte)((128 >> n14) | bt15);
                 }
             }
         }
 
         public int GetQuestUnitStatus(int nFlag)
         {
-            int result = 0;
+            var result = 0;
             nFlag -= 1;
             if (nFlag < 0)
             {
                 return result;
             }
-
-            int n10 = nFlag / 8;
-            int n14 = nFlag % 8;
-            if ((n10 - m_QuestUnit.Length) < 0)
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - MQuestUnit.Length) < 0)
             {
-                if (((128 >> n14) & m_QuestUnit[n10]) != 0)
+                if (((128 >> n14) & MQuestUnit[n10]) != 0)
                 {
                     result = 1;
                 }
@@ -2186,7 +2157,6 @@ namespace GameSvr.Actor
                     result = 0;
                 }
             }
-
             return result;
         }
 
@@ -2197,19 +2167,18 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
             var n10 = nFlag / 8;
             var n14 = nFlag % 8;
-            if ((n10 - m_QuestUnit.Length) < 0)
+            if ((n10 - MQuestUnit.Length) < 0)
             {
-                var bt15 = m_QuestUnit[n10];
+                var bt15 = MQuestUnit[n10];
                 if (nValue == 0)
                 {
-                    m_QuestUnit[n10] = (byte)((~(128 >> n14)) & bt15);
+                    MQuestUnit[n10] = (byte)((~(128 >> n14)) & bt15);
                 }
                 else
                 {
-                    m_QuestUnit[n10] = (byte)((128 >> n14) | bt15);
+                    MQuestUnit[n10] = (byte)((128 >> n14) | bt15);
                 }
             }
         }
@@ -2217,7 +2186,7 @@ namespace GameSvr.Actor
         private bool KillFunc()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::KillFunc";
-            bool result = false;
+            var result = false;
             try
             {
                 if ((M2Share.g_FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
@@ -2273,7 +2242,6 @@ namespace GameSvr.Actor
                 M2Share.Log.Error(sExceptionMsg);
                 M2Share.Log.Error(e.Message);
             }
-
             return result;
         }
 
@@ -2293,7 +2261,7 @@ namespace GameSvr.Actor
                         return;
                     }
                     var nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
-                    int nDura = 0;
+                    var nDura = 0;
                     if (M2Share.Config.boDecLampDura)
                     {
                         nDura = UseItems[Grobal2.U_RIGHTHAND].Dura - 1;
@@ -2307,8 +2275,8 @@ namespace GameSvr.Actor
                         UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
                         if (Race == Grobal2.RC_PLAYOBJECT)
                         {
-                            var PlayObject = this as PlayObject;
-                            PlayObject.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
+                            var playObject = this as PlayObject;
+                            playObject.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
                         }
                         UseItems[Grobal2.U_RIGHTHAND].wIndex = 0;
                         Light = 0;
@@ -2332,69 +2300,68 @@ namespace GameSvr.Actor
             }
         }
 
-        public TBaseObject GetPoseCreate()
+        public BaseObject GetPoseCreate()
         {
             short nX = 0;
             short nY = 0;
-            TBaseObject result = null;
             if (GetFrontPosition(ref nX, ref nY))
             {
-                result = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+               return (BaseObject)Envir.GetMovingObject(nX, nY, true);
             }
-            return result;
+            return null;
         }
 
-        protected bool GetAttackDir(TBaseObject BaseObject, ref byte btDir)
+        protected bool GetAttackDir(BaseObject baseObject, ref byte btDir)
         {
-            bool result = false;
-            if ((CurrX - 1 <= BaseObject.CurrX) && (CurrX + 1 >= BaseObject.CurrX) &&
-                (CurrY - 1 <= BaseObject.CurrY) && (CurrY + 1 >= BaseObject.CurrY) &&
-                ((CurrX != BaseObject.CurrX) || (CurrY != BaseObject.CurrY)))
+            var result = false;
+            if ((CurrX - 1 <= baseObject.CurrX) && (CurrX + 1 >= baseObject.CurrX) &&
+                (CurrY - 1 <= baseObject.CurrY) && (CurrY + 1 >= baseObject.CurrY) &&
+                ((CurrX != baseObject.CurrX) || (CurrY != baseObject.CurrY)))
             {
                 result = true;
-                if (((CurrX - 1) == BaseObject.CurrX) && (CurrY == BaseObject.CurrY))
+                if (((CurrX - 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_LEFT;
                     return result;
                 }
 
-                if (((CurrX + 1) == BaseObject.CurrX) && (CurrY == BaseObject.CurrY))
+                if (((CurrX + 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_RIGHT;
                     return result;
                 }
 
-                if ((CurrX == BaseObject.CurrX) && ((CurrY - 1) == BaseObject.CurrY))
+                if ((CurrX == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_UP;
                     return result;
                 }
 
-                if ((CurrX == BaseObject.CurrX) && ((CurrY + 1) == BaseObject.CurrY))
+                if ((CurrX == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_DOWN;
                     return result;
                 }
 
-                if (((CurrX - 1) == BaseObject.CurrX) && ((CurrY - 1) == BaseObject.CurrY))
+                if (((CurrX - 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_UPLEFT;
                     return result;
                 }
 
-                if (((CurrX + 1) == BaseObject.CurrX) && ((CurrY - 1) == BaseObject.CurrY))
+                if (((CurrX + 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_UPRIGHT;
                     return result;
                 }
 
-                if (((CurrX - 1) == BaseObject.CurrX) && ((CurrY + 1) == BaseObject.CurrY))
+                if (((CurrX - 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_DOWNLEFT;
                     return result;
                 }
 
-                if (((CurrX + 1) == BaseObject.CurrX) && ((CurrY + 1) == BaseObject.CurrY))
+                if (((CurrX + 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_DOWNRIGHT;
                     return result;
@@ -2406,29 +2373,29 @@ namespace GameSvr.Actor
             return result;
         }
 
-        protected bool GetAttackDir(TBaseObject BaseObject, int nRange, ref byte btDir)
+        protected bool GetAttackDir(BaseObject baseObject, int nRange, ref byte btDir)
         {
             short nX = 0;
             short nY = 0;
-            btDir = M2Share.GetNextDirection(CurrX, CurrY, BaseObject.CurrX, BaseObject.CurrY);
+            btDir = M2Share.GetNextDirection(CurrX, CurrY, baseObject.CurrX, baseObject.CurrY);
             if (Envir.GetNextPosition(CurrX, CurrY, btDir, nRange, ref nX, ref nY))
             {
-                return BaseObject == (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+                return baseObject == (BaseObject)Envir.GetMovingObject(nX, nY, true);
             }
 
             return false;
         }
 
-        protected bool TargetInSpitRange(TBaseObject BaseObject, ref byte btDir)
+        protected bool TargetInSpitRange(BaseObject baseObject, ref byte btDir)
         {
-            bool result = false;
-            if ((Math.Abs(BaseObject.CurrX - CurrX) <= 2) && (Math.Abs(BaseObject.CurrY - CurrY) <= 2))
+            var result = false;
+            if ((Math.Abs(baseObject.CurrX - CurrX) <= 2) && (Math.Abs(baseObject.CurrY - CurrY) <= 2))
             {
-                int nX = BaseObject.CurrX - CurrX;
-                int nY = BaseObject.CurrY - CurrY;
+                var nX = baseObject.CurrX - CurrX;
+                var nY = baseObject.CurrY - CurrY;
                 if ((Math.Abs(nX) <= 1) && (Math.Abs(nY) <= 1))
                 {
-                    GetAttackDir(BaseObject, ref btDir);
+                    GetAttackDir(baseObject, ref btDir);
                     result = true;
                     return result;
                 }
@@ -2437,7 +2404,7 @@ namespace GameSvr.Actor
                 nY += 2;
                 if ((nX >= 0) && (nX <= 4) && (nY >= 0) && (nY <= 4))
                 {
-                    btDir = M2Share.GetNextDirection(CurrX, CurrY, BaseObject.CurrX, BaseObject.CurrY);
+                    btDir = M2Share.GetNextDirection(CurrX, CurrY, baseObject.CurrX, baseObject.CurrY);
                     if (M2Share.Config.SpitMap[btDir, nY, nX] == 1)
                     {
                         result = true;
@@ -2455,13 +2422,13 @@ namespace GameSvr.Actor
         protected ushort RecalcBagWeight()
         {
             ushort result = 0;
-            for (int i = 0; i < ItemList.Count; i++)
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                var UserItem = ItemList[i];
-                var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (StdItem != null)
+                var userItem = ItemList[i];
+                var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                if (stdItem != null)
                 {
-                    result += StdItem.Weight;
+                    result += stdItem.Weight;
                 }
             }
             return result;
@@ -2472,62 +2439,62 @@ namespace GameSvr.Actor
         /// </summary>
         private void RecalcHitSpeed()
         {
-            TNakedAbility BonusTick = null;
+            TNakedAbility bonusTick = null;
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    BonusTick = M2Share.Config.BonusAbilofWarr;
+                    bonusTick = M2Share.Config.BonusAbilofWarr;
                     break;
                 case PlayJob.Wizard:
-                    BonusTick = M2Share.Config.BonusAbilofWizard;
+                    bonusTick = M2Share.Config.BonusAbilofWizard;
                     break;
                 case PlayJob.Taoist:
-                    BonusTick = M2Share.Config.BonusAbilofTaos;
+                    bonusTick = M2Share.Config.BonusAbilofTaos;
                     break;
             }
 
-            m_btHitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / BonusTick.Hit);
+            MBtHitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
             switch (Job)
             {
                 case PlayJob.Taoist:
-                    SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / BonusTick.Speed + 3);
+                    SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
                     break;
                 default:
-                    SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / BonusTick.Speed);
+                    SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
                     break;
             }
 
-            m_nHitPlus = 0;
-            m_nHitDouble = 0;
-            for (int i = 0; i < MagicList.Count; i++)
+            _mNHitPlus = 0;
+            _mNHitDouble = 0;
+            for (var i = 0; i < MagicList.Count; i++)
             {
-                var UserMagic = MagicList[i];
-                MagicArr[UserMagic.wMagIdx] = UserMagic;
-                switch (UserMagic.wMagIdx)
+                var userMagic = MagicList[i];
+                MagicArr[userMagic.wMagIdx] = userMagic;
+                switch (userMagic.wMagIdx)
                 {
                     case SpellsDef.SKILL_ONESWORD: // 基本剑法
-                        if (UserMagic.btLevel > 0)
+                        if (userMagic.btLevel > 0)
                         {
-                            m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(9 / 3 * UserMagic.btLevel));
+                            MBtHitPoint = (byte)(MBtHitPoint + HUtil32.Round(9 / 3 * userMagic.btLevel));
                         }
                         break;
                     case SpellsDef.SKILL_ILKWANG: // 精神力战法
-                        if (UserMagic.btLevel > 0)
+                        if (userMagic.btLevel > 0)
                         {
-                            m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(8 / 3 * UserMagic.btLevel));
+                            MBtHitPoint = (byte)(MBtHitPoint + HUtil32.Round(8 / 3 * userMagic.btLevel));
                         }
                         break;
                     case SpellsDef.SKILL_YEDO: // 攻杀剑法
-                        if (UserMagic.btLevel > 0)
+                        if (userMagic.btLevel > 0)
                         {
-                            m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(3 / 3 * UserMagic.btLevel));
+                            MBtHitPoint = (byte)(MBtHitPoint + HUtil32.Round(3 / 3 * userMagic.btLevel));
                         }
-                        m_nHitPlus = (byte)(M2Share.DEFHIT + UserMagic.btLevel);
-                        AttackSkillCount = (byte)(7 - UserMagic.btLevel);
+                        _mNHitPlus = (byte)(M2Share.DEFHIT + userMagic.btLevel);
+                        AttackSkillCount = (byte)(7 - userMagic.btLevel);
                         AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         break;
                     case SpellsDef.SKILL_FIRESWORD: // 烈火剑法
-                        m_nHitDouble = (byte)(4 + UserMagic.btLevel * 4);
+                        _mNHitDouble = (byte)(4 + userMagic.btLevel * 4);
                         break;
                 }
             }
@@ -2535,33 +2502,33 @@ namespace GameSvr.Actor
 
         private void AddItemSkill(int nIndex)
         {
-            TMagic Magic = null;
+            TMagic magic = null;
             switch (nIndex)
             {
                 case 1:
-                    Magic = M2Share.UserEngine.FindMagic(M2Share.Config.sFireBallSkill);
+                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.sFireBallSkill);
                     break;
                 case 2:
-                    Magic = M2Share.UserEngine.FindMagic(M2Share.Config.sHealSkill);
+                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.sHealSkill);
                     break;
             }
 
-            if (Magic != null)
+            if (magic != null)
             {
-                if (!IsTrainingSkill(Magic.wMagicID))
+                if (!IsTrainingSkill(magic.wMagicID))
                 {
-                    var UserMagic = new TUserMagic
+                    var userMagic = new TUserMagic
                     {
-                        MagicInfo = Magic,
-                        wMagIdx = Magic.wMagicID,
+                        MagicInfo = magic,
+                        wMagIdx = magic.wMagicID,
                         btKey = 0,
                         btLevel = 1,
                         nTranPoint = 0
                     };
-                    MagicList.Add(UserMagic);
+                    MagicList.Add(userMagic);
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        (this as PlayObject).SendAddMagic(UserMagic);
+                        (this as PlayObject).SendAddMagic(userMagic);
                     }
                 }
             }
@@ -2581,17 +2548,17 @@ namespace GameSvr.Actor
         /// <summary>
         /// 计算施法魔法值
         /// </summary>
-        /// <param name="UserMagic"></param>
+        /// <param name="userMagic"></param>
         /// <returns></returns>
-        private short GetMagicSpell(TUserMagic UserMagic)
+        private short GetMagicSpell(TUserMagic userMagic)
         {
-            return (short)HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) *
-                                        (UserMagic.btLevel + 1));
+            return (short)HUtil32.Round(userMagic.MagicInfo.wSpell / (userMagic.MagicInfo.btTrainLv + 1) *
+                                        (userMagic.btLevel + 1));
         }
 
-        private void CheckPKStatus()
+        private void CheckPkStatus()
         {
-            if (PvpFlag && ((HUtil32.GetTickCount() - m_dwPKTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
+            if (PvpFlag && ((HUtil32.GetTickCount() - MDwPkTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
             {
                 PvpFlag = false;
                 RefNameColor();
@@ -2606,38 +2573,38 @@ namespace GameSvr.Actor
         {
             if (nSpellPoint > 0)
             {
-                if ((m_WAbil.MP - nSpellPoint) > 0)
+                if ((MWAbil.MP - nSpellPoint) > 0)
                 {
-                    m_WAbil.MP -= nSpellPoint;
+                    MWAbil.MP -= nSpellPoint;
                 }
                 else
                 {
-                    m_WAbil.MP = 0;
+                    MWAbil.MP = 0;
                 }
             }
             else
             {
-                if ((m_WAbil.MP - nSpellPoint) < m_WAbil.MaxMP)
+                if ((MWAbil.MP - nSpellPoint) < MWAbil.MaxMP)
                 {
-                    m_WAbil.MP -= nSpellPoint;
+                    MWAbil.MP -= nSpellPoint;
                 }
                 else
                 {
-                    m_WAbil.MP = m_WAbil.MaxMP;
+                    MWAbil.MP = MWAbil.MaxMP;
                 }
             }
         }
 
         private void DelItemSkill_DeleteSkill(string sSkillName)
         {
-            for (int i = 0; i < MagicList.Count; i++)
+            for (var i = 0; i < MagicList.Count; i++)
             {
-                var UserMagic = MagicList[i];
-                if (UserMagic.MagicInfo.sMagicName == sSkillName)
+                var userMagic = MagicList[i];
+                if (userMagic.MagicInfo.sMagicName == sSkillName)
                 {
-                    var PlayObject = this as PlayObject;
-                    PlayObject.SendDelMagic(UserMagic);
-                    UserMagic = null;
+                    var playObject = this as PlayObject;
+                    playObject.SendDelMagic(userMagic);
+                    userMagic = null;
                     MagicList.RemoveAt(i);
                     break;
                 }
@@ -2670,15 +2637,15 @@ namespace GameSvr.Actor
             }
         }
 
-        public void DelMember(TBaseObject BaseObject)
+        public void DelMember(BaseObject baseObject)
         {
-            if (m_GroupOwner != BaseObject)
+            if (MGroupOwner != baseObject)
             {
-                for (int i = 0; i < GroupMembers.Count; i++)
+                for (var i = 0; i < GroupMembers.Count; i++)
                 {
-                    if (GroupMembers[i] == BaseObject)
+                    if (GroupMembers[i] == baseObject)
                     {
-                        BaseObject.LeaveGroup();
+                        baseObject.LeaveGroup();
                         GroupMembers.RemoveAt(i);
                         break;
                     }
@@ -2686,20 +2653,20 @@ namespace GameSvr.Actor
             }
             else
             {
-                for (int i = GroupMembers.Count - 1; i >= 0; i--)
+                for (var i = GroupMembers.Count - 1; i >= 0; i--)
                 {
                     GroupMembers[i].LeaveGroup();
                     GroupMembers.RemoveAt(i);
                 }
             }
-            var PlayObject = this as PlayObject;
-            if (!PlayObject.CancelGroup())
+            var playObject = this as PlayObject;
+            if (!playObject.CancelGroup())
             {
-                PlayObject.SendDefMessage(Grobal2.SM_GROUPCANCEL, 0, 0, 0, 0, "");
+                playObject.SendDefMessage(Grobal2.SM_GROUPCANCEL, 0, 0, 0, 0, "");
             }
             else
             {
-                PlayObject.SendGroupMembers();
+                playObject.SendGroupMembers();
             }
         }
 
@@ -2719,13 +2686,13 @@ namespace GameSvr.Actor
                 UseItems[Grobal2.U_WEAPON].Dura = (ushort)nDura;
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
-                    var PlayObject = this as PlayObject;
-                    PlayObject.SendDelItems(UseItems[Grobal2.U_WEAPON]);
-                    var StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
-                    if (StdItem.NeedIdentify == 1)
+                    var playObject = this as PlayObject;
+                    playObject.SendDelItems(UseItems[Grobal2.U_WEAPON]);
+                    var stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                    if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                               CharName + "\t" + StdItem.Name + "\t" +
+                                               CharName + "\t" + stdItem.Name + "\t" +
                                                UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" +
                                                HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" +
                                                '0');
@@ -2745,20 +2712,20 @@ namespace GameSvr.Actor
             }
         }
 
-        protected byte GetCharColor(TBaseObject BaseObject)
+        protected byte GetCharColor(BaseObject baseObject)
         {
-            TUserCastle Castle;
-            byte result = BaseObject.GetNamecolor();
-            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+            TUserCastle castle;
+            var result = baseObject.GetNamecolor();
+            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
             {
-                if (BaseObject.PvpLevel() < 2)
+                if (baseObject.PvpLevel() < 2)
                 {
-                    if (BaseObject.PvpFlag)
+                    if (baseObject.PvpFlag)
                     {
                         result = M2Share.Config.btPKFlagNameColor;
                     }
 
-                    var n10 = GetGuildRelation(this, BaseObject);
+                    var n10 = GetGuildRelation(this, baseObject);
                     switch (n10)
                     {
                         case 1:
@@ -2770,9 +2737,9 @@ namespace GameSvr.Actor
                             break;
                     }
 
-                    if (BaseObject.Envir.Flag.boFight3Zone)
+                    if (baseObject.Envir.Flag.boFight3Zone)
                     {
-                        if (MyGuild == BaseObject.MyGuild)
+                        if (MyGuild == baseObject.MyGuild)
                         {
                             result = M2Share.Config.btAllyAndGuildNameColor;
                         }
@@ -2783,25 +2750,25 @@ namespace GameSvr.Actor
                     }
                 }
 
-                Castle = M2Share.CastleMgr.InCastleWarArea(BaseObject);
-                if ((Castle != null) && Castle.m_boUnderWar && InFreePKArea && BaseObject.InFreePKArea)
+                castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                if ((castle != null) && castle.m_boUnderWar && InFreePkArea && baseObject.InFreePkArea)
                 {
                     result = M2Share.Config.btInFreePKAreaNameColor;
-                    GuildWarArea = true;
+                    _guildWarArea = true;
                     if (MyGuild == null)
                     {
                         return result;
                     }
 
-                    if (Castle.IsMasterGuild(MyGuild))
+                    if (castle.IsMasterGuild(MyGuild))
                     {
-                        if ((MyGuild == BaseObject.MyGuild) || MyGuild.IsAllyGuild(BaseObject.MyGuild))
+                        if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
                         {
                             result = M2Share.Config.btAllyAndGuildNameColor;
                         }
                         else
                         {
-                            if (Castle.IsAttackGuild(BaseObject.MyGuild))
+                            if (castle.IsAttackGuild(baseObject.MyGuild))
                             {
                                 result = M2Share.Config.btWarGuildNameColor;
                             }
@@ -2809,15 +2776,15 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        if (Castle.IsAttackGuild(MyGuild))
+                        if (castle.IsAttackGuild(MyGuild))
                         {
-                            if ((MyGuild == BaseObject.MyGuild) || MyGuild.IsAllyGuild(BaseObject.MyGuild))
+                            if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
                             {
                                 result = M2Share.Config.btAllyAndGuildNameColor;
                             }
                             else
                             {
-                                if (Castle.IsMember(BaseObject))
+                                if (castle.IsMember(baseObject))
                                 {
                                     result = M2Share.Config.btWarGuildNameColor;
                                 }
@@ -2826,36 +2793,36 @@ namespace GameSvr.Actor
                     }
                 }
             }
-            else if (BaseObject.Race == Grobal2.RC_NPC) //增加NPC名字颜色单独控制
+            else if (baseObject.Race == Grobal2.RC_NPC) //增加NPC名字颜色单独控制
             {
                 result = M2Share.Config.NpcNameColor;
-                if (BaseObject.CrazyMode) //疯狂模式(红名)
+                if (baseObject.CrazyMode) //疯狂模式(红名)
                 {
                     result = 0xF9;
                 }
 
-                if (BaseObject.m_boHolySeize) //不能走动模式(困魔咒)
+                if (baseObject.MBoHolySeize) //不能走动模式(困魔咒)
                 {
                     result = 0x7D;
                 }
             }
             else
             {
-                if (BaseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
+                if (baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
                 {
-                    result = M2Share.Config.SlaveColor[BaseObject.SlaveExpLevel];
+                    result = M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
                 }
                 else
                 {
                     result = 255;
                 }
 
-                if (BaseObject.CrazyMode)
+                if (baseObject.CrazyMode)
                 {
                     result = 0xF9;
                 }
 
-                if (BaseObject.m_boHolySeize)
+                if (baseObject.MBoHolySeize)
                 {
                     result = 0x7D;
                 }
@@ -2880,7 +2847,7 @@ namespace GameSvr.Actor
 
         private byte GetNamecolor()
         {
-            byte result = NameColor;
+            var result = NameColor;
             if (PvpLevel() == 1)
             {
                 result = M2Share.Config.btPKLevel1NameColor;
@@ -2907,7 +2874,7 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            bool result = Envir.Flag.boSAFE;
+            var result = Envir.Flag.boSAFE;
             if (result)
             {
                 return true;
@@ -2932,36 +2899,36 @@ namespace GameSvr.Actor
 
         private void MonsterRecalcAbilitys()
         {
-            m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(Abil.DC));
-            int n8 = 0;
+            MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(Abil.DC));
+            var n8 = 0;
             if ((Race == MonsterConst.MONSTER_WHITESKELETON) ||
                 (Race == MonsterConst.MONSTER_ELFMONSTER) ||
                 (Race == MonsterConst.MONSTER_ELFWARRIOR))
             {
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC),
-                    HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(m_WAbil.DC)));
+                MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.DC),
+                    HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(MWAbil.DC)));
                 n8 = n8 + HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * Abil.MaxHP) * SlaveExpLevel;
                 n8 = n8 + Abil.MaxHP;
                 if (SlaveExpLevel > 0)
                 {
-                    m_WAbil.MaxHP = (ushort)n8;
+                    MWAbil.MaxHP = (ushort)n8;
                 }
                 else
                 {
-                    m_WAbil.MaxHP = Abil.MaxHP;
+                    MWAbil.MaxHP = Abil.MaxHP;
                 }
             }
             else
             {
                 n8 = Abil.MaxHP;
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC),
-                    HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(m_WAbil.DC)));
+                MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.DC),
+                    HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(MWAbil.DC)));
                 n8 = n8 + HUtil32.Round(Abil.MaxHP * 0.15) * SlaveExpLevel;
-                m_WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(Abil.MaxHP + SlaveExpLevel * 60), n8);
+                MWAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(Abil.MaxHP + SlaveExpLevel * 60), n8);
             }
         }
 
-        public void SendFirstMsg(TBaseObject BaseObject, short wIdent, short wParam, int lParam1, int lParam2,
+        public void SendFirstMsg(BaseObject baseObject, short wIdent, short wParam, int lParam1, int lParam2,
             int lParam3, string sMsg)
         {
             try
@@ -2969,7 +2936,7 @@ namespace GameSvr.Actor
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!Ghost)
                 {
-                    var SendMessage = new SendMessage
+                    var sendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -2977,14 +2944,14 @@ namespace GameSvr.Actor
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         DeliveryTime = 0,
-                        BaseObject = BaseObject.ObjectId
+                        BaseObject = baseObject.ObjectId
                     };
                     if (!string.IsNullOrEmpty(sMsg))
                     {
-                        SendMessage.Buff = sMsg;
+                        sendMessage.Buff = sMsg;
                     }
 
-                    MsgList.Insert(0, SendMessage);
+                    MsgList.Insert(0, sendMessage);
                 }
             }
             finally
@@ -2993,7 +2960,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public void SendMsg(TBaseObject BaseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3,
+        public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3,
             string sMsg)
         {
             try
@@ -3007,7 +2974,7 @@ namespace GameSvr.Actor
                     nParam2 = nParam2,
                     nParam3 = nParam3,
                     DeliveryTime = 0,
-                    BaseObject = BaseObject.ObjectId,
+                    BaseObject = baseObject.ObjectId,
                     LateDelivery = false
                 };
                 if (!Ghost)
@@ -3029,7 +2996,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 发送延时消息
         /// </summary>
-        public void SendDelayMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
+        public void SendDelayMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
             string sMsg, int dwDelay)
         {
             try
@@ -3045,7 +3012,7 @@ namespace GameSvr.Actor
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         DeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        BaseObject = BaseObject.ObjectId,
+                        BaseObject = baseObject.ObjectId,
                         LateDelivery = true
                     };
                     if (!string.IsNullOrEmpty(sMsg))
@@ -3065,7 +3032,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 发送延时消息
         /// </summary>
-        public void SendDelayMsg(int BaseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3,
+        public void SendDelayMsg(int baseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3,
             string sMsg, int dwDelay)
         {
             try
@@ -3073,7 +3040,7 @@ namespace GameSvr.Actor
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!Ghost)
                 {
-                    var SendMessage = new SendMessage
+                    var sendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -3083,21 +3050,21 @@ namespace GameSvr.Actor
                         DeliveryTime = HUtil32.GetTickCount() + dwDelay,
                         LateDelivery = true
                     };
-                    if (BaseObject == Grobal2.RM_STRUCK)
+                    if (baseObject == Grobal2.RM_STRUCK)
                     {
-                        SendMessage.BaseObject = Grobal2.RM_STRUCK;
+                        sendMessage.BaseObject = Grobal2.RM_STRUCK;
                     }
                     else
                     {
-                        SendMessage.BaseObject = BaseObject;
+                        sendMessage.BaseObject = baseObject;
                     }
 
                     if (!string.IsNullOrEmpty(sMsg))
                     {
-                        SendMessage.Buff = sMsg;
+                        sendMessage.Buff = sMsg;
                     }
 
-                    MsgList.Add(SendMessage);
+                    MsgList.Add(sendMessage);
                 }
             }
             finally
@@ -3106,7 +3073,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private void SendUpdateDelayMsg(TBaseObject BaseObject, short wIdent, short wParam, int lParam1, int lParam2,
+        private void SendUpdateDelayMsg(BaseObject baseObject, short wIdent, short wParam, int lParam1, int lParam2,
             int lParam3, string sMsg, int dwDelay)
         {
             int i;
@@ -3120,11 +3087,11 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    var SendMessage = MsgList[i];
-                    if ((SendMessage.wIdent == wIdent) && (SendMessage.nParam1 == lParam1))
+                    var sendMessage = MsgList[i];
+                    if ((sendMessage.wIdent == wIdent) && (sendMessage.nParam1 == lParam1))
                     {
                         MsgList.RemoveAt(i);
-                        Dispose(SendMessage);
+                        Dispose(sendMessage);
                         continue;
                     }
                     i++;
@@ -3135,10 +3102,10 @@ namespace GameSvr.Actor
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
 
-            SendDelayMsg(BaseObject.ObjectId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
+            SendDelayMsg(baseObject.ObjectId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
         }
 
-        public void SendUpdateMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
+        public void SendUpdateMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
             string sMsg)
         {
             int i;
@@ -3153,11 +3120,11 @@ namespace GameSvr.Actor
                         break;
                     }
 
-                    var SendMessage = MsgList[i];
-                    if (SendMessage.wIdent == wIdent)
+                    var sendMessage = MsgList[i];
+                    if (sendMessage.wIdent == wIdent)
                     {
                         MsgList.RemoveAt(i);
-                        Dispose(SendMessage);
+                        Dispose(sendMessage);
                         continue;
                     }
 
@@ -3170,10 +3137,10 @@ namespace GameSvr.Actor
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
 
-            SendMsg(BaseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
+            SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        public void SendActionMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
+        public void SendActionMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
             string sMsg)
         {
             int i;
@@ -3187,16 +3154,16 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    var SendMessage = MsgList[i];
-                    if ((SendMessage.wIdent == Grobal2.CM_TURN) || (SendMessage.wIdent == Grobal2.CM_WALK) ||
-                        (SendMessage.wIdent == Grobal2.CM_SITDOWN) || (SendMessage.wIdent == Grobal2.CM_HORSERUN) ||
-                        (SendMessage.wIdent == Grobal2.CM_RUN) || (SendMessage.wIdent == Grobal2.CM_HIT) ||
-                        (SendMessage.wIdent == Grobal2.CM_HEAVYHIT) || (SendMessage.wIdent == Grobal2.CM_BIGHIT) ||
-                        (SendMessage.wIdent == Grobal2.CM_POWERHIT) || (SendMessage.wIdent == Grobal2.CM_LONGHIT) ||
-                        (SendMessage.wIdent == Grobal2.CM_WIDEHIT) || (SendMessage.wIdent == Grobal2.CM_FIREHIT))
+                    var sendMessage = MsgList[i];
+                    if ((sendMessage.wIdent == Grobal2.CM_TURN) || (sendMessage.wIdent == Grobal2.CM_WALK) ||
+                        (sendMessage.wIdent == Grobal2.CM_SITDOWN) || (sendMessage.wIdent == Grobal2.CM_HORSERUN) ||
+                        (sendMessage.wIdent == Grobal2.CM_RUN) || (sendMessage.wIdent == Grobal2.CM_HIT) ||
+                        (sendMessage.wIdent == Grobal2.CM_HEAVYHIT) || (sendMessage.wIdent == Grobal2.CM_BIGHIT) ||
+                        (sendMessage.wIdent == Grobal2.CM_POWERHIT) || (sendMessage.wIdent == Grobal2.CM_LONGHIT) ||
+                        (sendMessage.wIdent == Grobal2.CM_WIDEHIT) || (sendMessage.wIdent == Grobal2.CM_FIREHIT))
                     {
                         MsgList.RemoveAt(i);
-                        Dispose(SendMessage);
+                        Dispose(sendMessage);
                         continue;
                     }
                     i++;
@@ -3207,12 +3174,12 @@ namespace GameSvr.Actor
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
 
-            SendMsg(BaseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
+            SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        protected virtual bool GetMessage(ref TProcessMessage Msg)
+        protected virtual bool GetMessage(ref TProcessMessage msg)
         {
-            bool result = false;
+            var result = false;
             int I;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
@@ -3231,19 +3198,19 @@ namespace GameSvr.Actor
                         continue;
                     }
                     MsgList.RemoveAt(I);
-                    Msg = new TProcessMessage();
-                    Msg.wIdent = sendMessage.wIdent;
-                    Msg.wParam = sendMessage.wParam;
-                    Msg.nParam1 = sendMessage.nParam1;
-                    Msg.nParam2 = sendMessage.nParam2;
-                    Msg.nParam3 = sendMessage.nParam3;
+                    msg = new TProcessMessage();
+                    msg.wIdent = sendMessage.wIdent;
+                    msg.wParam = sendMessage.wParam;
+                    msg.nParam1 = sendMessage.nParam1;
+                    msg.nParam2 = sendMessage.nParam2;
+                    msg.nParam3 = sendMessage.nParam3;
                     if (sendMessage.BaseObject > 0)
                     {
-                        Msg.BaseObject = sendMessage.BaseObject;
+                        msg.BaseObject = sendMessage.BaseObject;
                     }
-                    Msg.DeliveryTime = sendMessage.DeliveryTime;
-                    Msg.LateDelivery = sendMessage.LateDelivery;
-                    Msg.Msg = !string.IsNullOrEmpty(sendMessage.Buff) ? sendMessage.Buff : string.Empty;
+                    msg.DeliveryTime = sendMessage.DeliveryTime;
+                    msg.LateDelivery = sendMessage.LateDelivery;
+                    msg.Msg = !string.IsNullOrEmpty(sendMessage.Buff) ? sendMessage.Buff : string.Empty;
                     result = true;
                     break;
                 }
@@ -3256,11 +3223,11 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool GetMapBaseObjects(Envirnoment tEnvir, int nX, int nY, int nRage, IList<TBaseObject> rList)
+        public bool GetMapBaseObjects(Envirnoment tEnvir, int nX, int nY, int nRage, IList<BaseObject> rList)
         {
             MapCellInfo cellInfo;
-            CellObject OSObject;
-            TBaseObject BaseObject;
+            CellObject osObject;
+            BaseObject baseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
             if (rList == null)
             {
@@ -3269,10 +3236,10 @@ namespace GameSvr.Actor
 
             try
             {
-                int nStartX = nX - nRage;
-                int nEndX = nX + nRage;
-                int nStartY = nY - nRage;
-                int nEndY = nY + nRage;
+                var nStartX = nX - nRage;
+                var nEndX = nX + nRage;
+                var nStartY = nY - nRage;
+                var nEndY = nY + nRage;
                 for (var x = nStartX; x <= nEndX; x++)
                 {
                     for (var y = nStartY; y <= nEndY; y++)
@@ -3283,13 +3250,13 @@ namespace GameSvr.Actor
                         {
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
-                                OSObject = cellInfo.ObjList[i];
-                                if ((OSObject != null) && (OSObject.CellType == CellType.MovingObject))
+                                osObject = cellInfo.ObjList[i];
+                                if ((osObject != null) && (osObject.CellType == CellType.MovingObject))
                                 {
-                                    BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
-                                    if ((BaseObject != null) && (!BaseObject.Death) && (!BaseObject.Ghost))
+                                    baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                    if ((baseObject != null) && (!baseObject.Death) && (!baseObject.Ghost))
                                     {
-                                        rList.Add(BaseObject);
+                                        rList.Add(baseObject);
                                     }
                                 }
                             }
@@ -3323,35 +3290,35 @@ namespace GameSvr.Actor
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                TBaseObject BaseObject;
+                BaseObject baseObject;
                 if (((HUtil32.GetTickCount() - SendRefMsgTick) >= 500) || (VisibleHumanList.Count == 0))
                 {
                     SendRefMsgTick = HUtil32.GetTickCount();
                     VisibleHumanList.Clear();
-                    var nLX = (short)(CurrX - M2Share.Config.nSendRefMsgRange); // 12
-                    var nHX = (short)(CurrX + M2Share.Config.nSendRefMsgRange); // 12
-                    var nLY = (short)(CurrY - M2Share.Config.nSendRefMsgRange); // 12
-                    var nHY = (short)(CurrY + M2Share.Config.nSendRefMsgRange); // 12
-                    for (var nCX = nLX; nCX <= nHX; nCX++)
+                    var nLx = (short)(CurrX - M2Share.Config.nSendRefMsgRange); // 12
+                    var nHx = (short)(CurrX + M2Share.Config.nSendRefMsgRange); // 12
+                    var nLy = (short)(CurrY - M2Share.Config.nSendRefMsgRange); // 12
+                    var nHy = (short)(CurrY + M2Share.Config.nSendRefMsgRange); // 12
+                    for (var nCx = nLx; nCx <= nHx; nCx++)
                     {
-                        for (var nCY = nLY; nCY <= nHY; nCY++)
+                        for (var nCy = nLy; nCy <= nHy; nCy++)
                         {
                             var cellsuccess = false;
-                            var cellInfo = Envir.GetCellInfo(nCX, nCY, ref cellsuccess);
+                            var cellInfo = Envir.GetCellInfo(nCx, nCy, ref cellsuccess);
                             if (cellsuccess)
                             {
                                 if (cellInfo.ObjList != null)
                                 {
                                     for (var i = 0; i < cellInfo.Count; i++)
                                     {
-                                        var OSObject = cellInfo.ObjList[i];
-                                        if (OSObject != null)
+                                        var osObject = cellInfo.ObjList[i];
+                                        if (osObject != null)
                                         {
-                                            if (OSObject.CellType == CellType.MovingObject)
+                                            if (osObject.CellType == CellType.MovingObject)
                                             {
-                                                if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
+                                                if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                                 {
-                                                    cellInfo.Remove(OSObject);
+                                                    cellInfo.Remove(osObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Dispose();
@@ -3362,37 +3329,37 @@ namespace GameSvr.Actor
                                                 {
                                                     try
                                                     {
-                                                        BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
-                                                        if ((BaseObject != null) && !BaseObject.Ghost)
+                                                        baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                                        if ((baseObject != null) && !baseObject.Ghost)
                                                         {
-                                                            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                             {
-                                                                BaseObject.SendMsg(this, wIdent, wParam, nParam1,
+                                                                baseObject.SendMsg(this, wIdent, wParam, nParam1,
                                                                     nParam2, nParam3, sMsg);
-                                                                VisibleHumanList.Add(BaseObject);
+                                                                VisibleHumanList.Add(baseObject);
                                                             }
-                                                            else if (BaseObject.WantRefMsg)
+                                                            else if (baseObject.WantRefMsg)
                                                             {
                                                                 if ((wIdent == Grobal2.RM_STRUCK) ||
                                                                     (wIdent == Grobal2.RM_HEAR) ||
                                                                     (wIdent == Grobal2.RM_DEATH))
                                                                 {
-                                                                    BaseObject.SendMsg(this, wIdent, wParam, nParam1,
+                                                                    baseObject.SendMsg(this, wIdent, wParam, nParam1,
                                                                         nParam2, nParam3, sMsg);
-                                                                    VisibleHumanList.Add(BaseObject);
+                                                                    VisibleHumanList.Add(baseObject);
                                                                 }
                                                             }
                                                         }
                                                     }
                                                     catch (Exception e)
                                                     {
-                                                        cellInfo.Remove(OSObject);
+                                                        cellInfo.Remove(osObject);
                                                         if (cellInfo.Count <= 0)
                                                         {
                                                             cellInfo.Dispose();
                                                         }
 
-                                                        M2Share.Log.Error(format(sExceptionMsg, CharName));
+                                                        M2Share.Log.Error(Format(sExceptionMsg, CharName));
                                                         M2Share.Log.Error(e.Message);
                                                     }
                                                 }
@@ -3409,25 +3376,25 @@ namespace GameSvr.Actor
 
                 for (var nC = 0; nC < VisibleHumanList.Count; nC++)
                 {
-                    BaseObject = VisibleHumanList[nC];
-                    if (BaseObject.Ghost)
+                    baseObject = VisibleHumanList[nC];
+                    if (baseObject.Ghost)
                     {
                         continue;
                     }
 
-                    if ((BaseObject.Envir == Envir) && (Math.Abs(BaseObject.CurrX - CurrX) < 11) &&
-                        (Math.Abs(BaseObject.CurrY - CurrY) < 11))
+                    if ((baseObject.Envir == Envir) && (Math.Abs(baseObject.CurrX - CurrX) < 11) &&
+                        (Math.Abs(baseObject.CurrY - CurrY) < 11))
                     {
-                        if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                        if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                         {
-                            BaseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                            baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                         }
-                        else if (BaseObject.WantRefMsg)
+                        else if (baseObject.WantRefMsg)
                         {
                             if ((wIdent == Grobal2.RM_STRUCK) || (wIdent == Grobal2.RM_HEAR) ||
                                 (wIdent == Grobal2.RM_DEATH))
                             {
-                                BaseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                                baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                             }
                         }
                     }
@@ -3449,28 +3416,28 @@ namespace GameSvr.Actor
             ushort result;
             if (OnHorse)
             {
-                result = HUtil32.MakeWord(HorseType, DressEffType);
+                result = HUtil32.MakeWord(HorseType, _dressEffType);
             }
             else
             {
-                result = HUtil32.MakeWord(0, DressEffType);
+                result = HUtil32.MakeWord(0, _dressEffType);
             }
 
             return result;
         }
 
-        public int GetFeature(TBaseObject BaseObject)
+        public int GetFeature(BaseObject baseObject)
         {
-            StdItem StdItem;
+            StdItem stdItem;
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
                 byte nDress = 0;
                 if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0) // 衣服
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
-                    if (StdItem != null)
+                    stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
+                    if (stdItem != null)
                     {
-                        nDress = (byte)(StdItem.Shape * 2);
+                        nDress = (byte)(stdItem.Shape * 2);
                     }
                 }
 
@@ -3478,23 +3445,23 @@ namespace GameSvr.Actor
                 byte nWeapon = 0;
                 if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].wIndex > 0) // 武器
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
-                    if (StdItem != null)
+                    stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                    if (stdItem != null)
                     {
-                        nWeapon = (byte)(StdItem.Shape * 2);
+                        nWeapon = (byte)(stdItem.Shape * 2);
                     }
                 }
 
                 nWeapon += (byte)Gender;
-                byte nHair = (byte)(Hair * 2 + (byte)Gender);
+                var nHair = (byte)(Hair * 2 + (byte)Gender);
                 return Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
             }
 
-            var bo25 = BaseObject != null && BaseObject.m_boRaceImg;
+            var bo25 = baseObject != null && baseObject.MBoRaceImg;
             if (bo25)
             {
-                byte nRaceImg = RaceImg;
-                byte nAppr = (byte)Appr;
+                var nRaceImg = RaceImg;
+                var nAppr = (byte)Appr;
                 switch (nAppr)
                 {
                     case 0:
@@ -3532,9 +3499,9 @@ namespace GameSvr.Actor
         public int GetCharStatus()
         {
             long nStatus = 0;
-            for (int i = 0; i < m_wStatusTimeArr.Length; i++)
+            for (var i = 0; i < MWStatusTimeArr.Length; i++)
             {
-                if (m_wStatusTimeArr[i] > 0)
+                if (MWStatusTimeArr[i] > 0)
                 {
                     nStatus = (0x80000000 >> i) | nStatus;
                 }
@@ -3545,7 +3512,7 @@ namespace GameSvr.Actor
 
         public void AbilCopyToWAbil()
         {
-            m_WAbil = Abil;
+            MWAbil = Abil;
         }
 
         public virtual void Initialize()
@@ -3614,8 +3581,8 @@ namespace GameSvr.Actor
                 MapName = M2Share.Config.sHomeMap;
                 CurrX = M2Share.Config.nHomeX;
                 CurrY = M2Share.Config.nHomeY;
-                PlayObject PlayObject = this as PlayObject;
-                PlayObject.m_boEmergencyClose = true;
+                var playObject = this as PlayObject;
+                playObject.m_boEmergencyClose = true;
             }
             else
             {
@@ -3628,7 +3595,7 @@ namespace GameSvr.Actor
         protected bool Walk(int nIdent)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::Walk {0} {1} {2}:{3}";
-            bool result = true;
+            var result = true;
             if (Envir == null)
             {
                 M2Share.Log.Error("Walk nil PEnvir");
@@ -3636,31 +3603,31 @@ namespace GameSvr.Actor
             }
             try
             {
-                bool cellsuccess = false;
+                var cellsuccess = false;
                 var cellInfo = Envir.GetCellInfo(CurrX, CurrY, ref cellsuccess);
                 if (cellsuccess && (cellInfo.ObjList != null))
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
-                        var OSObject = cellInfo.ObjList[i];
-                        switch (OSObject.CellType)
+                        var osObject = cellInfo.ObjList[i];
+                        switch (osObject.CellType)
                         {
                             case CellType.GateObject:
-                                var GateObj = (GateObject)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
-                                if ((GateObj != null))
+                                var gateObj = (GateObject)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                if ((gateObj != null))
                                 {
                                     if (Race == Grobal2.RC_PLAYOBJECT)
                                     {
                                         if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                         {
-                                            if ((!GateObj.DEnvir.Flag.boNEEDHOLE) ||
+                                            if ((!gateObj.DEnvir.Flag.boNEEDHOLE) ||
                                                 (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY,
                                                     Grobal2.ET_DIGOUTZOMBI) != null))
                                             {
-                                                if (M2Share.ServerIndex == GateObj.DEnvir.ServerIndex)
+                                                if (M2Share.ServerIndex == gateObj.DEnvir.ServerIndex)
                                                 {
-                                                    if (!EnterAnotherMap(GateObj.DEnvir, GateObj.nDMapX,
-                                                            GateObj.nDMapY))
+                                                    if (!EnterAnotherMap(gateObj.DEnvir, gateObj.nDMapX,
+                                                            gateObj.nDMapY))
                                                     {
                                                         result = false;
                                                     }
@@ -3668,15 +3635,15 @@ namespace GameSvr.Actor
                                                 else
                                                 {
                                                     DisappearA();
-                                                    m_bo316 = true;
-                                                    var PlayObject = this as PlayObject;
-                                                    PlayObject.m_sSwitchMapName = GateObj.DEnvir.MapName;
-                                                    PlayObject.m_nSwitchMapX = GateObj.nDMapX;
-                                                    PlayObject.m_nSwitchMapY = GateObj.nDMapY;
-                                                    PlayObject.m_boSwitchData = true;
-                                                    PlayObject.m_nServerIndex = GateObj.DEnvir.ServerIndex;
-                                                    PlayObject.m_boEmergencyClose = true;
-                                                    PlayObject.m_boReconnection = true;
+                                                    MBo316 = true;
+                                                    var playObject = this as PlayObject;
+                                                    playObject.m_sSwitchMapName = gateObj.DEnvir.MapName;
+                                                    playObject.m_nSwitchMapX = gateObj.nDMapX;
+                                                    playObject.m_nSwitchMapY = gateObj.nDMapY;
+                                                    playObject.m_boSwitchData = true;
+                                                    playObject.m_nServerIndex = gateObj.DEnvir.ServerIndex;
+                                                    playObject.m_boEmergencyClose = true;
+                                                    playObject.m_boReconnection = true;
                                                 }
                                             }
                                         }
@@ -3691,10 +3658,10 @@ namespace GameSvr.Actor
                             case CellType.EventObject:
                             {
                                 MirEvent mapEvent = null;
-                                var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
+                                var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                 if (owinEvent.OwnBaseObject != null)
                                 {
-                                    mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);
+                                    mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                 }
                                 if (mapEvent != null)
                                 {
@@ -3722,7 +3689,7 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(format(sExceptionMsg, CharName, MapName, CurrX, CurrY));
+                M2Share.Log.Error(Format(sExceptionMsg, CharName, MapName, CurrX, CurrY));
                 M2Share.Log.Error(e.Message);
             }
             return result;
@@ -3731,49 +3698,49 @@ namespace GameSvr.Actor
         /// <summary>
         /// 切换地图
         /// </summary>
-        private bool EnterAnotherMap(Envirnoment Envir, short nDMapX, short nDMapY)
+        private bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
         {
-            bool result = false;
+            var result = false;
             const string sExceptionMsg7 = "[Exception] TBaseObject::EnterAnotherMap";
             try
             {
-                if (Abil.Level < Envir.RequestLevel)
+                if (Abil.Level < envir.RequestLevel)
                 {
-                    SysMsg($"需要 {Envir.Flag.nL - 1} 级以上才能进入 {Envir.MapDesc}", MsgColor.Red, MsgType.Hint);
+                    SysMsg($"需要 {envir.Flag.nL - 1} 级以上才能进入 {envir.MapDesc}", MsgColor.Red, MsgType.Hint);
                     return false;
                 }
-                if (Envir.QuestNpc != null)
+                if (envir.QuestNpc != null)
                 {
-                    Envir.QuestNpc.Click(this as PlayObject);
+                    envir.QuestNpc.Click(this as PlayObject);
                 }
-                if (Envir.Flag.nNEEDSETONFlag >= 0)
+                if (envir.Flag.nNEEDSETONFlag >= 0)
                 {
-                    if (GetQuestFalgStatus(Envir.Flag.nNEEDSETONFlag) != Envir.Flag.nNeedONOFF)
+                    if (GetQuestFalgStatus(envir.Flag.nNEEDSETONFlag) != envir.Flag.nNeedONOFF)
                     {
                         return false;
                     }
                 }
                 var cellsuccess = false;
-                Envir.GetCellInfo(nDMapX, nDMapY, ref cellsuccess);
+                envir.GetCellInfo(nDMapX, nDMapY, ref cellsuccess);
                 if (!cellsuccess)
                 {
                     return false;
                 }
-                var Castle = M2Share.CastleMgr.IsCastlePalaceEnvir(Envir);
-                if ((Castle != null) && (Race == Grobal2.RC_PLAYOBJECT))
+                var castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
+                if ((castle != null) && (Race == Grobal2.RC_PLAYOBJECT))
                 {
-                    if (!Castle.CheckInPalace(CurrX, CurrY, this))
+                    if (!castle.CheckInPalace(CurrX, CurrY, this))
                     {
                         return false;
                     }
                 }
-                if (Envir.Flag.boNOHORSE)
+                if (envir.Flag.boNOHORSE)
                 {
                     OnHorse = false;
                 }
-                var OldEnvir = this.Envir;
-                short nOldX = CurrX;
-                short nOldY = CurrY;
+                var oldEnvir = this.Envir;
+                var nOldX = CurrX;
+                var nOldY = CurrY;
                 DisappearA();
                 VisibleHumanList.Clear();
                 for (var i = 0; i < VisibleItems.Count; i++)
@@ -3788,21 +3755,21 @@ namespace GameSvr.Actor
                 }
                 VisibleActors.Clear();
                 SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
-                this.Envir = Envir;
-                MapName = Envir.MapName;
-                MapFileName = Envir.MapFileName;
+                this.Envir = envir;
+                MapName = envir.MapName;
+                MapFileName = envir.MapFileName;
                 CurrX = nDMapX;
                 CurrY = nDMapY;
-                SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, Envir.MapFileName);
+                SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
                 if (AddToMap())
                 {
                     MapMoveTick = HUtil32.GetTickCount();
-                    m_bo316 = true;
+                    MBo316 = true;
                     result = true;
                 }
                 else
                 {
-                    this.Envir = OldEnvir;
+                    this.Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
                     this.Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
@@ -3814,7 +3781,7 @@ namespace GameSvr.Actor
                     (this as PlayObject).m_dwIncGameGoldTick = HUtil32.GetTickCount();
                     (this as PlayObject).m_dwAutoGetExpTick = HUtil32.GetTickCount();
                 }
-                if (this.Envir.Flag.boFight3Zone && (this.Envir.Flag.boFight3Zone != OldEnvir.Flag.boFight3Zone))
+                if (this.Envir.Flag.boFight3Zone && (this.Envir.Flag.boFight3Zone != oldEnvir.Flag.boFight3Zone))
                 {
                     RefShowName();
                 }
@@ -3833,11 +3800,11 @@ namespace GameSvr.Actor
             SendRefMsg(Grobal2.RM_TURN, nDir, CurrX, CurrY, 0, "");
         }
 
-        public void SysMsg(string sMsg, MsgColor MsgColor, MsgType MsgType)
+        public void SysMsg(string sMsg, MsgColor msgColor, MsgType msgType)
         {
             if (M2Share.Config.boShowPreFixMsg)
             {
-                switch (MsgType)
+                switch (msgType)
                 {
                     case MsgType.Mon:
                         sMsg = M2Share.Config.sMonSayMsgpreFix + sMsg;
@@ -3860,53 +3827,53 @@ namespace GameSvr.Actor
                 }
             }
 
-            if (MsgType == MsgType.Notice) // 如果发的是公告
+            if (msgType == MsgType.Notice) // 如果发的是公告
             {
-                string str = string.Empty;
-                string FColor = string.Empty;
-                string BColor = string.Empty;
-                string nTime = string.Empty;
+                var str = string.Empty;
+                var fColor = string.Empty;
+                var bColor = string.Empty;
+                var nTime = string.Empty;
                 if (sMsg[0] == '[') // 顶部滚动公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
-                    BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
+                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
                     if (M2Share.Config.boShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
 
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255),
-                        HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255),
+                        HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
                 }
                 else if (sMsg[0] == '<') // 聊天框彩色公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
-                    BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
+                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
                     if (M2Share.Config.boShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
 
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255),
-                        HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
+                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255),
+                        HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
                 }
                 else if (sMsg[0] == '{') // 屏幕居中公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "{", "}", ref str);
-                    str = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
-                    str = HUtil32.GetValidStrCap(str, ref BColor, new string[] { "," });
+                    str = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
+                    str = HUtil32.GetValidStrCap(str, ref bColor, new string[] { "," });
                     str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { "," });
                     if (M2Share.Config.boShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
 
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(FColor, 255),
-                        HUtil32.Str_ToInt(BColor, 255), HUtil32.Str_ToInt(nTime, 0), sMsg);
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(fColor, 255),
+                        HUtil32.Str_ToInt(bColor, 255), HUtil32.Str_ToInt(nTime, 0), sMsg);
                 }
                 else
                 {
-                    switch (MsgColor)
+                    switch (msgColor)
                     {
                         case MsgColor.Red: // 控制公告的颜色
                             if (M2Share.Config.boShowPreFixMsg)
@@ -3940,7 +3907,7 @@ namespace GameSvr.Actor
             }
             else
             {
-                switch (MsgColor)
+                switch (msgColor)
                 {
                     case MsgColor.Green:
                         SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btGreenMsgFColor,
@@ -3951,7 +3918,7 @@ namespace GameSvr.Actor
                             M2Share.Config.btBlueMsgBColor, 0, sMsg);
                         break;
                     default:
-                        if (MsgType == MsgType.Cust)
+                        if (msgType == MsgType.Cust)
                         {
                             SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btCustMsgFColor,
                                 M2Share.Config.btCustMsgBColor, 0, sMsg);
@@ -3970,9 +3937,9 @@ namespace GameSvr.Actor
         /// <summary>
         /// 怪物说话
         /// </summary>
-        /// <param name="AttackBaseObject"></param>
-        /// <param name="MonStatus"></param>
-        protected void MonsterSayMsg(TBaseObject AttackBaseObject, MonStatus MonStatus)
+        /// <param name="attackBaseObject"></param>
+        /// <param name="monStatus"></param>
+        protected void MonsterSayMsg(BaseObject attackBaseObject, MonStatus monStatus)
         {
             if (SayMsgList == null)
             {
@@ -3984,46 +3951,46 @@ namespace GameSvr.Actor
                 return;
             }
 
-            string sAttackName = string.Empty;
-            if (AttackBaseObject != null)
+            var sAttackName = string.Empty;
+            if (attackBaseObject != null)
             {
-                if ((AttackBaseObject.Race != Grobal2.RC_PLAYOBJECT) && (AttackBaseObject.Master == null))
+                if ((attackBaseObject.Race != Grobal2.RC_PLAYOBJECT) && (attackBaseObject.Master == null))
                 {
                     return;
                 }
 
-                if (AttackBaseObject.Master != null)
+                if (attackBaseObject.Master != null)
                 {
-                    sAttackName = AttackBaseObject.Master.CharName;
+                    sAttackName = attackBaseObject.Master.CharName;
                 }
                 else
                 {
-                    sAttackName = AttackBaseObject.CharName;
+                    sAttackName = attackBaseObject.CharName;
                 }
             }
 
-            TMonSayMsg MonSayMsg = null;
-            string sMsg = string.Empty;
+            TMonSayMsg monSayMsg = null;
+            var sMsg = string.Empty;
             for (var i = 0; i < SayMsgList.Count; i++)
             {
-                MonSayMsg = SayMsgList[i];
-                sMsg = MonSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(CharName));
+                monSayMsg = SayMsgList[i];
+                sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(CharName));
                 sMsg = sMsg.Replace("%d", sAttackName);
-                if ((MonSayMsg.State == MonStatus) && (M2Share.RandomNumber.Random(MonSayMsg.nRate) == 0))
+                if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))
                 {
-                    if (MonStatus == MonStatus.MonGen)
+                    if (monStatus == MonStatus.MonGen)
                     {
                         M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
                         break;
                     }
 
-                    if (MonSayMsg.Color == MsgColor.White)
+                    if (monSayMsg.Color == MsgColor.White)
                     {
                         ProcessSayMsg(sMsg);
                     }
                     else
                     {
-                        AttackBaseObject.SysMsg(sMsg, MonSayMsg.Color, MsgType.Mon);
+                        attackBaseObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
                     }
 
                     break;
@@ -4034,11 +4001,11 @@ namespace GameSvr.Actor
         public void SendGroupText(string sMsg)
         {
             sMsg = M2Share.Config.sGroupMsgPreFix + sMsg;
-            if (m_GroupOwner != null)
+            if (MGroupOwner != null)
             {
-                for (int i = 0; i < m_GroupOwner.GroupMembers.Count; i++)
+                for (var i = 0; i < MGroupOwner.GroupMembers.Count; i++)
                 {
-                    m_GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.Config.btGroupMsgFColor,
+                    MGroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.Config.btGroupMsgFColor,
                         M2Share.Config.btGroupMsgBColor, 0, sMsg);
                 }
             }
@@ -4051,38 +4018,38 @@ namespace GameSvr.Actor
         {
             for (var i = 0; i < ItemList.Count; i++)
             {
-                var StdItem = M2Share.UserEngine.GetStdItem(ItemList[i].wIndex);
-                if (StdItem != null)
+                var stdItem = M2Share.UserEngine.GetStdItem(ItemList[i].wIndex);
+                if (stdItem != null)
                 {
-                    if (StdItem.StdMode == 40)
+                    if (stdItem.StdMode == 40)
                     {
-                        ItemList[i].Dura = m_nMeatQuality;
+                        ItemList[i].Dura = MNMeatQuality;
                     }
                 }
             }
         }
 
-        protected bool TakeBagItems(TBaseObject BaseObject)
+        protected bool TakeBagItems(BaseObject baseObject)
         {
-            bool result = false;
+            var result = false;
             while (true)
             {
-                if (BaseObject.ItemList.Count <= 0)
+                if (baseObject.ItemList.Count <= 0)
                 {
                     break;
                 }
-                var UserItem = BaseObject.ItemList[0];
-                if (!AddItemToBag(UserItem))
+                var userItem = baseObject.ItemList[0];
+                if (!AddItemToBag(userItem))
                 {
                     break;
                 }
                 if (this is PlayObject)
                 {
-                    var PlayObject = this as PlayObject;
-                    PlayObject.SendAddItem(UserItem);
+                    var playObject = this as PlayObject;
+                    playObject.SendAddItem(userItem);
                     result = true;
                 }
-                BaseObject.ItemList.RemoveAt(0);
+                baseObject.ItemList.RemoveAt(0);
             }
             return result;
         }
@@ -4090,8 +4057,8 @@ namespace GameSvr.Actor
         /// <summary>
         /// 散落金币
         /// </summary>
-        /// <param name="GoldOfCreat"></param>
-        private void ScatterGolds(TBaseObject GoldOfCreat)
+        /// <param name="goldOfCreat"></param>
+        private void ScatterGolds(BaseObject goldOfCreat)
         {
             int I;
             int nGold;
@@ -4112,7 +4079,7 @@ namespace GameSvr.Actor
                     }
                     if (nGold > 0)
                     {
-                        if (!DropGoldDown(nGold, true, GoldOfCreat, this))
+                        if (!DropGoldDown(nGold, true, goldOfCreat, this))
                         {
                             Gold = Gold + nGold;
                             break;
@@ -4133,39 +4100,39 @@ namespace GameSvr.Actor
             }
         }
 
-        public void SetLastHiter(TBaseObject BaseObject)
+        public void SetLastHiter(BaseObject baseObject)
         {
-            LastHiter = BaseObject;
+            LastHiter = baseObject;
             LastHiterTick = HUtil32.GetTickCount();
             if (ExpHitter == null)
             {
-                ExpHitter = BaseObject;
+                ExpHitter = baseObject;
                 ExpHitterTick = HUtil32.GetTickCount();
             }
             else
             {
-                if (ExpHitter == BaseObject)
+                if (ExpHitter == baseObject)
                 {
                     ExpHitterTick = HUtil32.GetTickCount();
                 }
             }
         }
 
-        public void SetPKFlag(TBaseObject BaseObject)
+        public void SetPkFlag(BaseObject baseObject)
         {
-            if ((PvpLevel() < 2) && (BaseObject.PvpLevel() < 2) && (!Envir.Flag.boFightZone) &&
+            if ((PvpLevel() < 2) && (baseObject.PvpLevel() < 2) && (!Envir.Flag.boFightZone) &&
                 (!Envir.Flag.boFight3Zone) && !PvpFlag)
             {
-                BaseObject.m_dwPKTick = HUtil32.GetTickCount();
-                if (!BaseObject.PvpFlag)
+                baseObject.MDwPkTick = HUtil32.GetTickCount();
+                if (!baseObject.PvpFlag)
                 {
-                    BaseObject.PvpFlag = true;
-                    BaseObject.RefNameColor();
+                    baseObject.PvpFlag = true;
+                    baseObject.RefNameColor();
                 }
             }
         }
 
-        protected bool IsGoodKilling(TBaseObject cert)
+        protected bool IsGoodKilling(BaseObject cert)
         {
             return cert.PvpFlag;
         }
@@ -4178,12 +4145,12 @@ namespace GameSvr.Actor
         /// <summary>
         /// 是否可以攻击的目标
         /// </summary>
-        /// <param name="BaseObject"></param>
+        /// <param name="baseObject"></param>
         /// <returns></returns>
-        protected virtual bool IsAttackTarget(TBaseObject BaseObject)
+        protected virtual bool IsAttackTarget(BaseObject baseObject)
         {
-            bool result = false;
-            if ((BaseObject == null) || (BaseObject == this))
+            var result = false;
+            if ((baseObject == null) || (baseObject == this))
             {
                 return false;
             }
@@ -4192,41 +4159,41 @@ namespace GameSvr.Actor
             {
                 if (Master != null)
                 {
-                    if ((Master.LastHiter == BaseObject) || (Master.ExpHitter == BaseObject) ||
-                        (Master.TargetCret == BaseObject))
+                    if ((Master.LastHiter == baseObject) || (Master.ExpHitter == baseObject) ||
+                        (Master.TargetCret == baseObject))
                     {
                         result = true;
                     }
 
-                    if (BaseObject.TargetCret != null)
+                    if (baseObject.TargetCret != null)
                     {
-                        if ((BaseObject.TargetCret == Master) || (BaseObject.TargetCret.Master == Master) &&
-                            (BaseObject.Race != Grobal2.RC_PLAYOBJECT))
+                        if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) &&
+                            (baseObject.Race != Grobal2.RC_PLAYOBJECT))
                         {
                             result = true;
                         }
                     }
 
-                    if ((BaseObject.TargetCret == this) && (BaseObject.Race >= Grobal2.RC_ANIMAL))
+                    if ((baseObject.TargetCret == this) && (baseObject.Race >= Grobal2.RC_ANIMAL))
                     {
                         result = true;
                     }
 
-                    if (BaseObject.Master != null)
+                    if (baseObject.Master != null)
                     {
-                        if ((BaseObject.Master == Master.LastHiter) ||
-                            (BaseObject.Master == Master.TargetCret))
+                        if ((baseObject.Master == Master.LastHiter) ||
+                            (baseObject.Master == Master.TargetCret))
                         {
                             result = true;
                         }
                     }
 
-                    if (BaseObject.Master == Master)
+                    if (baseObject.Master == Master)
                     {
                         result = false;
                     }
 
-                    if (BaseObject.m_boHolySeize)
+                    if (baseObject.MBoHolySeize)
                     {
                         result = false;
                     }
@@ -4236,9 +4203,9 @@ namespace GameSvr.Actor
                         result = false;
                     }
 
-                    if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                    if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        if (BaseObject.InSafeZone())
+                        if (baseObject.InSafeZone())
                         {
                             result = false;
                         }
@@ -4248,7 +4215,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                    if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                     {
                         result = true;
                     }
@@ -4258,20 +4225,20 @@ namespace GameSvr.Actor
                         result = true;
                     }
 
-                    if (BaseObject.Master != null)
+                    if (baseObject.Master != null)
                     {
                         result = true;
                     }
                 }
 
-                if (CrazyMode && ((BaseObject.Race == Grobal2.RC_PLAYOBJECT) ||
-                                      (BaseObject.Race > Grobal2.RC_PEACENPC)))
+                if (CrazyMode && ((baseObject.Race == Grobal2.RC_PLAYOBJECT) ||
+                                      (baseObject.Race > Grobal2.RC_PEACENPC)))
                 {
                     result = true;
                 }
 
-                if (NastyMode && ((BaseObject.Race < Grobal2.RC_NPC) ||
-                                      (BaseObject.Race > Grobal2.RC_PEACENPC)))
+                if (NastyMode && ((baseObject.Race < Grobal2.RC_NPC) ||
+                                      (baseObject.Race > Grobal2.RC_PEACENPC)))
                 {
                     result = true;
                 }
@@ -4283,8 +4250,8 @@ namespace GameSvr.Actor
                     switch (AttatckMode)
                     {
                         case AttackMode.HAM_ALL:
-                            if ((BaseObject.Race < Grobal2.RC_NPC) ||
-                                (BaseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < Grobal2.RC_NPC) ||
+                                (baseObject.Race > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
                             }
@@ -4296,28 +4263,28 @@ namespace GameSvr.Actor
 
                             break;
                         case AttackMode.HAM_PEACE:
-                            if (BaseObject.Race >= Grobal2.RC_ANIMAL)
+                            if (baseObject.Race >= Grobal2.RC_ANIMAL)
                             {
                                 result = true;
                             }
 
                             break;
                         case AttackMode.HAM_DEAR:
-                            if (BaseObject != (this as PlayObject).m_DearHuman)
+                            if (baseObject != (this as PlayObject).m_DearHuman)
                             {
                                 result = true;
                             }
 
                             break;
                         case AttackMode.HAM_MASTER:
-                            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                             {
                                 result = true;
                                 if ((this as PlayObject).m_boMaster)
                                 {
                                     for (var i = 0; i < (this as PlayObject).m_MasterList.Count; i++)
                                     {
-                                        if ((this as PlayObject).m_MasterList[i] == BaseObject)
+                                        if ((this as PlayObject).m_MasterList[i] == baseObject)
                                         {
                                             result = false;
                                             break;
@@ -4325,11 +4292,11 @@ namespace GameSvr.Actor
                                     }
                                 }
 
-                                if ((BaseObject as PlayObject).m_boMaster)
+                                if ((baseObject as PlayObject).m_boMaster)
                                 {
-                                    for (var i = 0; i < (BaseObject as PlayObject).m_MasterList.Count; i++)
+                                    for (var i = 0; i < (baseObject as PlayObject).m_MasterList.Count; i++)
                                     {
-                                        if ((BaseObject as PlayObject).m_MasterList[i] == this)
+                                        if ((baseObject as PlayObject).m_MasterList[i] == this)
                                         {
                                             result = false;
                                             break;
@@ -4344,15 +4311,15 @@ namespace GameSvr.Actor
 
                             break;
                         case AttackMode.HAM_GROUP:
-                            if ((BaseObject.Race < Grobal2.RC_NPC) ||
-                                (BaseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < Grobal2.RC_NPC) ||
+                                (baseObject.Race > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
                             }
 
-                            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                             {
-                                if (IsGroupMember(BaseObject))
+                                if (IsGroupMember(baseObject))
                                 {
                                     result = false;
                                 }
@@ -4365,24 +4332,24 @@ namespace GameSvr.Actor
 
                             break;
                         case AttackMode.HAM_GUILD:
-                            if ((BaseObject.Race < Grobal2.RC_NPC) ||
-                                (BaseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < Grobal2.RC_NPC) ||
+                                (baseObject.Race > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
                             }
 
-                            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                             {
                                 if (MyGuild != null)
                                 {
-                                    if (MyGuild.IsMember(BaseObject.CharName))
+                                    if (MyGuild.IsMember(baseObject.CharName))
                                     {
                                         result = false;
                                     }
 
-                                    if (GuildWarArea && (BaseObject.MyGuild != null))
+                                    if (_guildWarArea && (baseObject.MyGuild != null))
                                     {
-                                        if (MyGuild.IsAllyGuild(BaseObject.MyGuild))
+                                        if (MyGuild.IsAllyGuild(baseObject.MyGuild))
                                         {
                                             result = false;
                                         }
@@ -4397,17 +4364,17 @@ namespace GameSvr.Actor
 
                             break;
                         case AttackMode.HAM_PKATTACK:
-                            if ((BaseObject.Race < Grobal2.RC_NPC) ||
-                                (BaseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < Grobal2.RC_NPC) ||
+                                (baseObject.Race > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
                             }
 
-                            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                             {
                                 if (PvpLevel() >= 2)
                                 {
-                                    if (BaseObject.PvpLevel() < 2)
+                                    if (baseObject.PvpLevel() < 2)
                                     {
                                         result = true;
                                     }
@@ -4418,7 +4385,7 @@ namespace GameSvr.Actor
                                 }
                                 else
                                 {
-                                    if (BaseObject.PvpLevel() >= 2)
+                                    if (baseObject.PvpLevel() >= 2)
                                     {
                                         result = true;
                                     }
@@ -4443,7 +4410,7 @@ namespace GameSvr.Actor
                 }
             }
 
-            if (BaseObject.AdminMode || BaseObject.StoneMode)
+            if (baseObject.AdminMode || baseObject.StoneMode)
             {
                 result = false;
             }
@@ -4451,21 +4418,21 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public virtual bool IsProperTarget(TBaseObject BaseObject)
+        public virtual bool IsProperTarget(BaseObject baseObject)
         {
-            bool result = IsAttackTarget(BaseObject);
+            var result = IsAttackTarget(baseObject);
             if (result)
             {
-                if ((Race == Grobal2.RC_PLAYOBJECT) && (BaseObject.Race == Grobal2.RC_PLAYOBJECT))
+                if ((Race == Grobal2.RC_PLAYOBJECT) && (baseObject.Race == Grobal2.RC_PLAYOBJECT))
                 {
-                    result = IsProtectTarget(BaseObject);
+                    result = IsProtectTarget(baseObject);
                 }
             }
 
-            if ((BaseObject != null) && (Race == Grobal2.RC_PLAYOBJECT) && (BaseObject.Master != null) &&
-                (BaseObject.Race != Grobal2.RC_PLAYOBJECT))
+            if ((baseObject != null) && (Race == Grobal2.RC_PLAYOBJECT) && (baseObject.Master != null) &&
+                (baseObject.Race != Grobal2.RC_PLAYOBJECT))
             {
-                if (BaseObject.Master == this)
+                if (baseObject.Master == this)
                 {
                     if (AttatckMode != AttackMode.HAM_ALL)
                     {
@@ -4474,8 +4441,8 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    result = IsAttackTarget(BaseObject.Master);
-                    if (InSafeZone() || BaseObject.InSafeZone())
+                    result = IsAttackTarget(baseObject.Master);
+                    if (InSafeZone() || baseObject.InSafeZone())
                     {
                         result = false;
                     }
@@ -4486,7 +4453,7 @@ namespace GameSvr.Actor
 
         protected void WeightChanged()
         {
-            m_WAbil.Weight = RecalcBagWeight();
+            MWAbil.Weight = RecalcBagWeight();
             SendUpdateMsg(this, Grobal2.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
         }
 
@@ -4530,18 +4497,18 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool InSafeZone(Envirnoment Envir, int nX, int nY)
+        public bool InSafeZone(Envirnoment envir, int nX, int nY)
         {
             if (this.Envir == null)
             {
                 return true;
             }
-            bool result = this.Envir.Flag.boSAFE;
+            var result = this.Envir.Flag.boSAFE;
             if (result)
             {
                 return true;
             }
-            if ((Envir.MapName != M2Share.Config.sRedHomeMap) ||
+            if ((envir.MapName != M2Share.Config.sRedHomeMap) ||
                 (Math.Abs(nX - M2Share.Config.nRedHomeX) > M2Share.Config.nSafeZoneSize) ||
                 (Math.Abs(nY - M2Share.Config.nRedHomeY) > M2Share.Config.nSafeZoneSize))
             {
@@ -4551,9 +4518,9 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i].m_sMapName == Envir.MapName)
+                if (M2Share.StartPointList[i].m_sMapName == envir.MapName)
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
@@ -4572,22 +4539,22 @@ namespace GameSvr.Actor
 
         public void OpenHolySeizeMode(int dwInterval)
         {
-            m_boHolySeize = true;
-            m_dwHolySeizeTick = HUtil32.GetTickCount();
-            m_dwHolySeizeInterval = dwInterval;
+            MBoHolySeize = true;
+            MDwHolySeizeTick = HUtil32.GetTickCount();
+            MDwHolySeizeInterval = dwInterval;
             RefNameColor();
         }
 
         public void BreakHolySeizeMode()
         {
-            m_boHolySeize = false;
+            MBoHolySeize = false;
             RefNameColor();
         }
 
         public void OpenCrazyMode(int nTime)
         {
             CrazyMode = true;
-            CrazyModeTick = HUtil32.GetTickCount();
+            _crazyModeTick = HUtil32.GetTickCount();
             CrazyModeInterval = nTime * 1000;
             RefNameColor();
         }
@@ -4604,21 +4571,21 @@ namespace GameSvr.Actor
         private void LeaveGroup()
         {
             const string sExitGropMsg = "{0} 已经退出了本组.";
-            SendGroupText(format(sExitGropMsg, CharName));
-            m_GroupOwner = null;
+            SendGroupText(Format(sExitGropMsg, CharName));
+            MGroupOwner = null;
             SendMsg(this, Grobal2.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
 
-        protected TUserMagic GetMagicInfo(int nMagicID)
+        protected TUserMagic GetMagicInfo(int nMagicId)
         {
             TUserMagic result = null;
-            TUserMagic UserMagic;
-            for (int i = 0; i < MagicList.Count; i++)
+            TUserMagic userMagic;
+            for (var i = 0; i < MagicList.Count; i++)
             {
-                UserMagic = MagicList[i];
-                if (UserMagic.MagicInfo.wMagicID == nMagicID)
+                userMagic = MagicList[i];
+                if (userMagic.MagicInfo.wMagicID == nMagicId)
                 {
-                    result = UserMagic;
+                    result = userMagic;
                     break;
                 }
             }
@@ -4626,42 +4593,42 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public void TrainSkill(TUserMagic UserMagic, int nTranPoint)
+        public void TrainSkill(TUserMagic userMagic, int nTranPoint)
         {
             if (FastTrain)
             {
                 nTranPoint = nTranPoint * 3;
             }
-            UserMagic.nTranPoint += nTranPoint;
+            userMagic.nTranPoint += nTranPoint;
         }
 
-        public bool CheckMagicLevelup(TUserMagic UserMagic)
+        public bool CheckMagicLevelup(TUserMagic userMagic)
         {
-            bool result = false;
+            var result = false;
             int nLevel;
-            if ((UserMagic.btLevel < 4) && (UserMagic.MagicInfo.btTrainLv >= UserMagic.btLevel))
+            if ((userMagic.btLevel < 4) && (userMagic.MagicInfo.btTrainLv >= userMagic.btLevel))
             {
-                nLevel = UserMagic.btLevel;
+                nLevel = userMagic.btLevel;
             }
             else
             {
                 nLevel = 0;
             }
 
-            if ((UserMagic.MagicInfo.btTrainLv > UserMagic.btLevel) &&
-                (UserMagic.MagicInfo.MaxTrain[nLevel] <= UserMagic.nTranPoint))
+            if ((userMagic.MagicInfo.btTrainLv > userMagic.btLevel) &&
+                (userMagic.MagicInfo.MaxTrain[nLevel] <= userMagic.nTranPoint))
             {
-                if (UserMagic.MagicInfo.btTrainLv > UserMagic.btLevel)
+                if (userMagic.MagicInfo.btTrainLv > userMagic.btLevel)
                 {
-                    UserMagic.nTranPoint -= UserMagic.MagicInfo.MaxTrain[nLevel];
-                    UserMagic.btLevel++;
-                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel,
-                        UserMagic.nTranPoint, "", 800);
-                    CheckSeeHealGauge(UserMagic);
+                    userMagic.nTranPoint -= userMagic.MagicInfo.MaxTrain[nLevel];
+                    userMagic.btLevel++;
+                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, userMagic.MagicInfo.wMagicID, userMagic.btLevel,
+                        userMagic.nTranPoint, "", 800);
+                    CheckSeeHealGauge(userMagic);
                 }
                 else
                 {
-                    UserMagic.nTranPoint = UserMagic.MagicInfo.MaxTrain[nLevel];
+                    userMagic.nTranPoint = userMagic.MagicInfo.MaxTrain[nLevel];
                 }
 
                 result = true;
@@ -4678,13 +4645,13 @@ namespace GameSvr.Actor
         {
             short nX = 0;
             short nY = 0;
-            int nFlag = -1;
+            var nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
             if (sSlaveName == M2Share.Config.sDragon)
             {
                 nFlag = 1;
             }
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
+            for (var i = SlaveList.Count - 1; i >= 0; i--)
             {
                 if (nFlag == 1)
                 {
@@ -4703,47 +4670,47 @@ namespace GameSvr.Actor
             }
         }
 
-        public ushort GetHitStruckDamage(TBaseObject Target, int nDamage)
+        public ushort GetHitStruckDamage(BaseObject target, int nDamage)
         {
             int nArmor;
-            var nRnd = HUtil32.HiWord(m_WAbil.AC) - HUtil32.LoWord(m_WAbil.AC) + 1;
+            var nRnd = HUtil32.HiWord(MWAbil.AC) - HUtil32.LoWord(MWAbil.AC) + 1;
             if (nRnd > 0)
             {
-                nArmor = HUtil32.LoWord(m_WAbil.AC) + M2Share.RandomNumber.Random(nRnd);
+                nArmor = HUtil32.LoWord(MWAbil.AC) + M2Share.RandomNumber.Random(nRnd);
             }
             else
             {
-                nArmor = HUtil32.LoWord(m_WAbil.AC);
+                nArmor = HUtil32.LoWord(MWAbil.AC);
             }
             nDamage = HUtil32._MAX(0, nDamage - nArmor);
             if (nDamage > 0)
             {
-                if ((m_btLifeAttrib == Grobal2.LA_UNDEAD) && (Target != null))
+                if ((MBtLifeAttrib == Grobal2.LA_UNDEAD) && (target != null))
                 {
-                    nDamage += Target.m_AddAbil.btUndead;
+                    nDamage += target._mAddAbil.btUndead;
                 }
                 if (AbilMagBubbleDefence)
                 {
-                    nDamage = HUtil32.Round(nDamage / 100 * (MagBubbleDefenceLevel + 2) * 8);
+                    nDamage = HUtil32.Round(nDamage / 100 * (_magBubbleDefenceLevel + 2) * 8);
                     DamageBubbleDefence(nDamage);
                 }
             }
             return (ushort)nDamage;
         }
 
-        public int GetMagStruckDamage(TBaseObject BaseObject, int nDamage)
+        public int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            int n14 = HUtil32.LoWord(m_WAbil.MAC) +
-                      M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MAC) - HUtil32.LoWord(m_WAbil.MAC) + 1);
+            var n14 = HUtil32.LoWord(MWAbil.MAC) +
+                      M2Share.RandomNumber.Random(HUtil32.HiWord(MWAbil.MAC) - HUtil32.LoWord(MWAbil.MAC) + 1);
             nDamage = HUtil32._MAX(0, nDamage - n14);
-            if ((m_btLifeAttrib == Grobal2.LA_UNDEAD) && (BaseObject != null))
+            if ((MBtLifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
-                nDamage += m_AddAbil.btUndead;
+                nDamage += _mAddAbil.btUndead;
             }
 
             if ((nDamage > 0) && AbilMagBubbleDefence)
             {
-                nDamage = HUtil32.Round(nDamage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);
+                nDamage = HUtil32.Round(nDamage / 1.0e2 * (_magBubbleDefenceLevel + 2) * 8.0);
                 DamageBubbleDefence(nDamage);
             }
 
@@ -4755,8 +4722,8 @@ namespace GameSvr.Actor
             int nDam;
             int nDura;
             int nOldDura;
-            PlayObject PlayObject;
-            StdItem StdItem;
+            PlayObject playObject;
+            StdItem stdItem;
             bool bo19;
             if (nDamage <= 0)
             {
@@ -4787,7 +4754,7 @@ namespace GameSvr.Actor
             }
 
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
-            if (m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] > 0)
+            if (MWStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] > 0)
             {
                 nDam = HUtil32.Round(nDam * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
                 nDamage = HUtil32.Round(nDamage * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
@@ -4803,13 +4770,13 @@ namespace GameSvr.Actor
                 {
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        PlayObject = this as PlayObject;
-                        PlayObject.SendDelItems(UseItems[Grobal2.U_DRESS]);
-                        StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
-                        if (StdItem.NeedIdentify == 1)
+                        playObject = this as PlayObject;
+                        playObject.SendDelItems(UseItems[Grobal2.U_DRESS]);
+                        stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
+                        if (stdItem.NeedIdentify == 1)
                         {
                             M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                                   CharName + "\t" + StdItem.Name + "\t" +
+                                                   CharName + "\t" + stdItem.Name + "\t" +
                                                    UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
                                                    + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
                                                    "\t" + '0');
@@ -4846,13 +4813,13 @@ namespace GameSvr.Actor
                     {
                         if (Race == Grobal2.RC_PLAYOBJECT)
                         {
-                            PlayObject = this as PlayObject;
-                            PlayObject.SendDelItems(UseItems[i]);
-                            StdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
-                            if (StdItem.NeedIdentify == 1)
+                            playObject = this as PlayObject;
+                            playObject.SendDelItems(UseItems[i]);
+                            stdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                            if (stdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
-                                                       "\t" + CharName + "\t" + StdItem.Name + "\t" +
+                                                       "\t" + CharName + "\t" + stdItem.Name + "\t" +
                                                        UseItems[i].MakeIndex + "\t"
                                                        + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
                                                        "\t" + '0');
@@ -4888,31 +4855,31 @@ namespace GameSvr.Actor
 
         public virtual string GeTBaseObjectInfo()
         {
-            string result = CharName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
-                            '/' + CurrY + ' ' + "等级:" + Abil.Level + ' ' + "经验:" + Abil.Exp + ' '
-                            + "生命值: " + m_WAbil.HP + '-' + m_WAbil.MaxHP + ' ' + "魔法值: " + m_WAbil.MP + '-' +
-                            m_WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC) + '-' +
-                            HUtil32.HiWord(m_WAbil.DC) + ' '
-                            + "魔法力: " + HUtil32.LoWord(m_WAbil.MC) + '-' + HUtil32.HiWord(m_WAbil.MC) + ' ' + "道术: " +
-                            HUtil32.LoWord(m_WAbil.SC) + '-' + HUtil32.HiWord(m_WAbil.SC) + ' '
-                            + "防御力: " + HUtil32.LoWord(m_WAbil.AC) + '-' + HUtil32.HiWord(m_WAbil.AC) + ' ' + "魔防力: " +
-                            HUtil32.LoWord(m_WAbil.MAC) + '-' + HUtil32.HiWord(m_WAbil.MAC) + ' ' + "准确:" +
-                            m_btHitPoint + ' '
-                            + "敏捷:" + SpeedPoint;
+            var result = CharName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
+                         '/' + CurrY + ' ' + "等级:" + Abil.Level + ' ' + "经验:" + Abil.Exp + ' '
+                         + "生命值: " + MWAbil.HP + '-' + MWAbil.MaxHP + ' ' + "魔法值: " + MWAbil.MP + '-' +
+                         MWAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(MWAbil.DC) + '-' +
+                         HUtil32.HiWord(MWAbil.DC) + ' '
+                         + "魔法力: " + HUtil32.LoWord(MWAbil.MC) + '-' + HUtil32.HiWord(MWAbil.MC) + ' ' + "道术: " +
+                         HUtil32.LoWord(MWAbil.SC) + '-' + HUtil32.HiWord(MWAbil.SC) + ' '
+                         + "防御力: " + HUtil32.LoWord(MWAbil.AC) + '-' + HUtil32.HiWord(MWAbil.AC) + ' ' + "魔防力: " +
+                         HUtil32.LoWord(MWAbil.MAC) + '-' + HUtil32.HiWord(MWAbil.MAC) + ' ' + "准确:" +
+                         MBtHitPoint + ' '
+                         + "敏捷:" + SpeedPoint;
             return result;
         }
 
         public bool GetBackPosition(ref short nX, ref short nY)
         {
             bool result;
-            Envirnoment Envir;
-            Envir = this.Envir;
+            Envirnoment envir;
+            envir = this.Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Direction)
             {
                 case Grobal2.DR_UP:
-                    if (nY < (Envir.Height - 1))
+                    if (nY < (envir.Height - 1))
                     {
                         nY++;
                     }
@@ -4926,7 +4893,7 @@ namespace GameSvr.Actor
 
                     break;
                 case Grobal2.DR_LEFT:
-                    if (nX < (Envir.Width - 1))
+                    if (nX < (envir.Width - 1))
                     {
                         nX++;
                     }
@@ -4940,7 +4907,7 @@ namespace GameSvr.Actor
 
                     break;
                 case Grobal2.DR_UPLEFT:
-                    if ((nX < (Envir.Width - 1)) && (nY < (Envir.Height - 1)))
+                    if ((nX < (envir.Width - 1)) && (nY < (envir.Height - 1)))
                     {
                         nX++;
                         nY++;
@@ -4948,7 +4915,7 @@ namespace GameSvr.Actor
 
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    if ((nX < (Envir.Width - 1)) && (nY > 0))
+                    if ((nX < (envir.Width - 1)) && (nY > 0))
                     {
                         nX -= 1;
                         nY++;
@@ -4956,7 +4923,7 @@ namespace GameSvr.Actor
 
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    if ((nX > 0) && (nY < (Envir.Height - 1)))
+                    if ((nX > 0) && (nY < (envir.Height - 1)))
                     {
                         nX++;
                         nY -= 1;
@@ -4979,24 +4946,24 @@ namespace GameSvr.Actor
 
         public bool MakePosion(int nType, ushort nTime, int nPoint)
         {
-            bool result = false;
+            var result = false;
             if (nType < Grobal2.MAX_STATUS_ATTRIBUTE)
             {
                 var nOldCharStatus = CharStatus;
-                if (m_wStatusTimeArr[nType] > 0)
+                if (MWStatusTimeArr[nType] > 0)
                 {
-                    if (m_wStatusTimeArr[nType] < nTime)
+                    if (MWStatusTimeArr[nType] < nTime)
                     {
-                        m_wStatusTimeArr[nType] = nTime;
+                        MWStatusTimeArr[nType] = nTime;
                     }
                 }
                 else
                 {
-                    m_wStatusTimeArr[nType] = nTime;
+                    MWStatusTimeArr[nType] = nTime;
                 }
-                m_dwStatusArrTick[nType] = HUtil32.GetTickCount();
+                MDwStatusArrTick[nType] = HUtil32.GetTickCount();
                 CharStatus = GetCharStatus();
-                GreenPoisoningPoint = (byte)nPoint;
+                _greenPoisoningPoint = (byte)nPoint;
                 if (nOldCharStatus != CharStatus)
                 {
                     StatusChanged();
@@ -5004,7 +4971,7 @@ namespace GameSvr.Actor
 
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
-                    SysMsg(format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
+                    SysMsg(Format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
                 }
                 result = true;
             }
@@ -5017,7 +4984,7 @@ namespace GameSvr.Actor
         /// <returns></returns>
         public bool CheckServerMakeSlave()
         {
-            bool result = false;
+            var result = false;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
@@ -5038,27 +5005,27 @@ namespace GameSvr.Actor
             return result;
         }
 
-        protected bool GetRecallXY(short nX, short nY, int nRange, ref short nDX, ref short nDY)
+        protected bool GetRecallXy(short nX, short nY, int nRange, ref short nDx, ref short nDy)
         {
-            bool result = false;
+            var result = false;
             if (Envir.GetMovingObject(nX, nY, true) == null)
             {
                 result = true;
-                nDX = nX;
-                nDY = nY;
+                nDx = nX;
+                nDy = nY;
             }
 
             if (!result)
             {
-                for (int i = 0; i < nRange; i++)
+                for (var i = 0; i < nRange; i++)
                 {
-                    for (int j = -i; j <= i; j++)
+                    for (var j = -i; j <= i; j++)
                     {
-                        for (int k = -i; k <= i; k++)
+                        for (var k = -i; k <= i; k++)
                         {
-                            nDX = (short)(nX + k);
-                            nDY = (short)(nY + j);
-                            if (Envir.GetMovingObject(nDX, nDY, true) == null)
+                            nDx = (short)(nX + k);
+                            nDy = (short)(nY + j);
+                            if (Envir.GetMovingObject(nDx, nDy, true) == null)
                             {
                                 result = true;
                                 break;
@@ -5080,8 +5047,8 @@ namespace GameSvr.Actor
 
             if (!result)
             {
-                nDX = nX;
-                nDY = nY;
+                nDx = nX;
+                nDy = nY;
             }
 
             return result;
@@ -5089,12 +5056,12 @@ namespace GameSvr.Actor
 
         public bool IsTrainingSkill(int nIndex)
         {
-            bool result = false;
-            TUserMagic UserMagic;
-            for (int i = 0; i < MagicList.Count; i++)
+            var result = false;
+            TUserMagic userMagic;
+            for (var i = 0; i < MagicList.Count; i++)
             {
-                UserMagic = MagicList[i];
-                if ((UserMagic != null) && (UserMagic.wMagIdx == nIndex))
+                userMagic = MagicList[i];
+                if ((userMagic != null) && (userMagic.wMagIdx == nIndex))
                 {
                     result = true;
                     break;
@@ -5106,15 +5073,15 @@ namespace GameSvr.Actor
 
         private void DamageBubbleDefence(int nInt)
         {
-            if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 0)
+            if (MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 0)
             {
-                if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 3)
+                if (MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 3)
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] -= 3;
+                    MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] -= 3;
                 }
                 else
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] = 1;
+                    MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] = 1;
                 }
             }
         }
@@ -5124,30 +5091,30 @@ namespace GameSvr.Actor
             return (MyGuild != null) && (GuildRankNo == 1);
         }
 
-        public bool MagCanHitTarget(short nX, short nY, TBaseObject TargeTBaseObject)
+        public bool MagCanHitTarget(short nX, short nY, BaseObject targeTBaseObject)
         {
-            bool result = false;
+            var result = false;
             int n18;
-            if (TargeTBaseObject == null)
+            if (targeTBaseObject == null)
             {
                 return result;
             }
 
-            int n20 = Math.Abs(nX - TargeTBaseObject.CurrX) + Math.Abs(nY - TargeTBaseObject.CurrY);
-            int n14 = 0;
+            var n20 = Math.Abs(nX - targeTBaseObject.CurrX) + Math.Abs(nY - targeTBaseObject.CurrY);
+            var n14 = 0;
             while (n14 < 13)
             {
-                n18 = M2Share.GetNextDirection(nX, nY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
+                n18 = M2Share.GetNextDirection(nX, nY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
                 if (Envir.GetNextPosition(nX, nY, n18, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
                 {
-                    if ((nX == TargeTBaseObject.CurrX) && (nY == TargeTBaseObject.CurrY))
+                    if ((nX == targeTBaseObject.CurrX) && (nY == targeTBaseObject.CurrY))
                     {
                         result = true;
                         break;
                     }
                     else
                     {
-                        int n1C = Math.Abs(nX - TargeTBaseObject.CurrX) + Math.Abs(nY - TargeTBaseObject.CurrY);
+                        var n1C = Math.Abs(nX - targeTBaseObject.CurrX) + Math.Abs(nY - targeTBaseObject.CurrY);
                         if (n1C > n20)
                         {
                             result = true;
@@ -5168,9 +5135,9 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private bool IsProperFriend_IsFriend(TBaseObject cret)
+        private bool IsProperFriend_IsFriend(BaseObject cret)
         {
-            bool result = false;
+            var result = false;
             if (cret.Race == Grobal2.RC_PLAYOBJECT)
             {
                 switch (AttatckMode)
@@ -5195,7 +5162,7 @@ namespace GameSvr.Actor
                         }
                         else if ((this as PlayObject).m_boMaster)
                         {
-                            for (int i = 0; i < (this as PlayObject).m_MasterList.Count; i++)
+                            for (var i = 0; i < (this as PlayObject).m_MasterList.Count; i++)
                             {
                                 if ((this as PlayObject).m_MasterList[i] == cret)
                                 {
@@ -5206,7 +5173,7 @@ namespace GameSvr.Actor
                         }
                         else if ((cret as PlayObject).m_boMaster)
                         {
-                            for (int i = 0; i < (cret as PlayObject).m_MasterList.Count; i++)
+                            for (var i = 0; i < (cret as PlayObject).m_MasterList.Count; i++)
                             {
                                 if ((cret as PlayObject).m_MasterList[i] == this)
                                 {
@@ -5242,7 +5209,7 @@ namespace GameSvr.Actor
                                 result = true;
                             }
 
-                            if (GuildWarArea && (cret.MyGuild != null))
+                            if (_guildWarArea && (cret.MyGuild != null))
                             {
                                 if (MyGuild.IsAllyGuild(cret.MyGuild))
                                 {
@@ -5282,14 +5249,14 @@ namespace GameSvr.Actor
 
         public int MagMakeDefenceArea(int nX, int nY, int nRange, ushort nSec, byte btState)
         {
-            int result = 0;
-            int nStartX = nX - nRange;
-            int nEndX = nX + nRange;
-            int nStartY = nY - nRange;
-            int nEndY = nY + nRange;
-            for (int i = nStartX; i <= nEndX; i++)
+            var result = 0;
+            var nStartX = nX - nRange;
+            var nEndX = nX + nRange;
+            var nStartY = nY - nRange;
+            var nEndY = nY + nRange;
+            for (var i = nStartX; i <= nEndX; i++)
             {
-                for (int j = nStartY; j <= nEndY; j++)
+                for (var j = nStartY; j <= nEndY; j++)
                 {
                     var cellsuccess = false;
                     var cellInfo = Envir.GetCellInfo(i, j, ref cellsuccess);
@@ -5297,22 +5264,22 @@ namespace GameSvr.Actor
                     {
                         for (var k = 0; k < cellInfo.Count; k++)
                         {
-                            var OSObject = cellInfo.ObjList[k];
-                            if ((OSObject != null) && (OSObject.CellType == CellType.MovingObject))
+                            var osObject = cellInfo.ObjList[k];
+                            if ((osObject != null) && (osObject.CellType == CellType.MovingObject))
                             {
-                                var BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
+                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                 ;
-                                if ((BaseObject != null) && (!BaseObject.Ghost))
+                                if ((baseObject != null) && (!baseObject.Ghost))
                                 {
-                                    if (IsProperFriend(BaseObject))
+                                    if (IsProperFriend(baseObject))
                                     {
                                         if (btState == 0)
                                         {
-                                            BaseObject.DefenceUp(nSec);
+                                            baseObject.DefenceUp(nSec);
                                         }
                                         else
                                         {
-                                            BaseObject.MagDefenceUp(nSec);
+                                            baseObject.MagDefenceUp(nSec);
                                         }
 
                                         result++;
@@ -5329,23 +5296,23 @@ namespace GameSvr.Actor
 
         private bool DefenceUp(ushort nSec)
         {
-            bool result = false;
-            if (m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
+            var result = false;
+            if (MWStatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
             {
-                if (m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] < nSec)
+                if (MWStatusTimeArr[Grobal2.STATE_DEFENCEUP] < nSec)
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
+                    MWStatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
+                MWStatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
                 result = true;
             }
 
-            m_dwStatusArrTick[Grobal2.STATE_DEFENCEUP] = HUtil32.GetTickCount();
-            SysMsg(format(M2Share.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
+            MDwStatusArrTick[Grobal2.STATE_DEFENCEUP] = HUtil32.GetTickCount();
+            SysMsg(Format(M2Share.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
@@ -5353,11 +5320,11 @@ namespace GameSvr.Actor
 
         public bool AttPowerUp(int nPower, int nTime)
         {
-            m_wStatusArrValue[0] = (ushort)nPower;
-            m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + nTime * 1000;
-            int nMin = nTime / 60;
-            int nSec = nTime % 60;
-            SysMsg(format(M2Share.g_sAttPowerUpTime, nMin, nSec), MsgColor.Green, MsgType.Hint);
+            MWStatusArrValue[0] = (ushort)nPower;
+            MDwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + nTime * 1000;
+            var nMin = nTime / 60;
+            var nSec = nTime % 60;
+            SysMsg(Format(M2Share.g_sAttPowerUpTime, nMin, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return true;
@@ -5365,23 +5332,23 @@ namespace GameSvr.Actor
 
         private bool MagDefenceUp(ushort nSec)
         {
-            bool result = false;
-            if (m_wStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
+            var result = false;
+            if (MWStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
             {
-                if (m_wStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] < nSec)
+                if (MWStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] < nSec)
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
+                    MWStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                m_wStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
+                MWStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
                 result = true;
             }
 
-            m_dwStatusArrTick[Grobal2.STATE_MAGDEFENCEUP] = HUtil32.GetTickCount();
-            SysMsg(format(M2Share.g_sMagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
+            MDwStatusArrTick[Grobal2.STATE_MAGDEFENCEUP] = HUtil32.GetTickCount();
+            SysMsg(Format(M2Share.g_sMagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
@@ -5393,14 +5360,14 @@ namespace GameSvr.Actor
         /// <returns></returns>
         public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
         {
-            if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] != 0)
+            if (MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] != 0)
             {
                 return false;
             }
 
             var nOldStatus = CharStatus;
-            m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] = nSec;
-            m_dwStatusArrTick[Grobal2.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
+            MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] = nSec;
+            MDwStatusArrTick[Grobal2.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
             if (nOldStatus != CharStatus)
             {
@@ -5408,7 +5375,7 @@ namespace GameSvr.Actor
             }
 
             AbilMagBubbleDefence = true;
-            MagBubbleDefenceLevel = nLevel;
+            _magBubbleDefenceLevel = nLevel;
             return true;
         }
 
@@ -5416,7 +5383,7 @@ namespace GameSvr.Actor
         {
             TUserItem result = null;
             nCount = 0;
-            for (int i = 0; i < UseItems.Length; i++)
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] == null)
                 {
@@ -5437,19 +5404,19 @@ namespace GameSvr.Actor
         public TUserItem CheckItems(string sItemName)
         {
             TUserItem result = null;
-            TUserItem UserItem;
-            for (int i = 0; i < ItemList.Count; i++)
+            TUserItem userItem;
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                UserItem = ItemList[i];
-                if (UserItem == null)
+                userItem = ItemList[i];
+                if (userItem == null)
                 {
                     continue;
                 }
 
-                if (string.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName,
+                if (string.Compare(M2Share.UserEngine.GetStdItemName(userItem.wIndex), sItemName,
                         StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    result = UserItem;
+                    result = userItem;
                     break;
                 }
             }
@@ -5470,16 +5437,16 @@ namespace GameSvr.Actor
 
         public bool DelBagItem(int nItemIndex, string sItemName)
         {
-            TUserItem UserItem;
-            bool result = false;
-            for (int i = 0; i < ItemList.Count; i++)
+            TUserItem userItem;
+            var result = false;
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                UserItem = ItemList[i];
-                if ((UserItem.MakeIndex == nItemIndex) &&
-                    string.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName,
+                userItem = ItemList[i];
+                if ((userItem.MakeIndex == nItemIndex) &&
+                    string.Compare(M2Share.UserEngine.GetStdItemName(userItem.wIndex), sItemName,
                         StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    Dispose(UserItem);
+                    Dispose(userItem);
                     ItemList.RemoveAt(i);
                     result = true;
                     break;
@@ -5790,18 +5757,18 @@ namespace GameSvr.Actor
             return false;
         }
 
-        public TBaseObject GetMaster()
+        public BaseObject GetMaster()
         {
             if (Race != Grobal2.RC_PLAYOBJECT)
             {
-                TBaseObject MasterObject = Master;
-                if (MasterObject != null)
+                var masterObject = Master;
+                if (masterObject != null)
                 {
                     while (true)
                     {
-                        if (MasterObject.Master != null)
+                        if (masterObject.Master != null)
                         {
-                            MasterObject = MasterObject.Master;
+                            masterObject = masterObject.Master;
                         }
                         else
                         {
@@ -5810,30 +5777,30 @@ namespace GameSvr.Actor
                     }
                 }
 
-                return MasterObject;
+                return masterObject;
             }
 
             return null;
         }
 
-        public bool ReAliveEx(MonGenInfo MonGen)
+        public bool ReAliveEx(MonGenInfo monGen)
         {
-            m_WAbil = Abil;
+            MWAbil = Abil;
             Gold = 0;
             //m_boStrike = false;
-            m_boNoItem = false;
+            MBoNoItem = false;
             StoneMode = false;
-            m_boSkeleton = false;
-            m_boHolySeize = false;
+            MBoSkeleton = false;
+            MBoHolySeize = false;
             CrazyMode = false;
-            m_boShowHP = false;
+            MBoShowHp = false;
             //m_boPlayerDupMode = false;
             FixedHideMode = false;
 
             if (this is CastleDoor)
             {
                 ((CastleDoor)(this)).m_boOpened = false;
-                this.m_boStickMode = true;
+                this.MBoStickMode = true;
             }
 
             if (this is MagicMonster)
@@ -5900,7 +5867,7 @@ namespace GameSvr.Actor
             if (this is ElfMonster)
             {
                 this.FixedHideMode = true;
-                this.m_boNoAttackMode = true;
+                this.MBoNoAttackMode = true;
                 ((ElfMonster)(this)).boIsFirst = true;
             }
 
@@ -5926,10 +5893,10 @@ namespace GameSvr.Actor
             {
                 this.SearchTick = HUtil32.GetTickCount();
                 this.FixedHideMode = true;
-                this.m_boStickMode = true;
+                this.MBoStickMode = true;
             }
 
-            m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+            MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
             //m_nBodyLeathery = m_nPerBodyLeathery;
             ProcessRunCount = 0;
             //m_nPushedCount = 0;
@@ -5938,25 +5905,25 @@ namespace GameSvr.Actor
             switch (this.Race)
             {
                 case 51:
-                    m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
-                    m_nBodyLeathery = 50;
+                    MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+                    MNBodyLeathery = 50;
                     break;
                 case 52:
                     if (M2Share.RandomNumber.Random(30) == 0)
                     {
-                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
-                        m_nBodyLeathery = 150;
+                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
+                        MNBodyLeathery = 150;
                     }
                     else
                     {
-                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
-                        m_nBodyLeathery = 150;
+                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                        MNBodyLeathery = 150;
                     }
 
                     break;
                 case 53:
-                    m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
-                    m_nBodyLeathery = 150;
+                    MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                    MNBodyLeathery = 150;
                     break;
                 case 54:
                     Animal = true;
@@ -5983,15 +5950,15 @@ namespace GameSvr.Actor
 
                     break;
                 case 169:
-                    m_boStickMode = false;
+                    MBoStickMode = false;
                     break;
                 case 170:
-                    m_boStickMode = true;
+                    MBoStickMode = true;
                     break;
             }
 
             UseItems = new TUserItem[8];
-            for (int i = 0; i < ItemList.Count; i++)
+            for (var i = 0; i < ItemList.Count; i++)
             {
                 ItemList[i] = null;
             }
@@ -6006,22 +5973,22 @@ namespace GameSvr.Actor
                 return false;
             }
 
-            var nX = (MonGen.nX - MonGen.nRange) + M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1);
-            var nY = (MonGen.nY - MonGen.nRange) + M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1);
-            var m_boErrorOnInit = true;
+            var nX = (monGen.nX - monGen.nRange) + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
+            var nY = (monGen.nY - monGen.nRange) + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
+            var mBoErrorOnInit = true;
             if (Envir.CanWalk(nX, nY, true))
             {
                 CurrX = (short)nX;
                 CurrY = (short)nY;
                 if (AddToMap())
                 {
-                    m_boErrorOnInit = false;
+                    mBoErrorOnInit = false;
                 }
             }
 
             var nRange = 0;
             var nRange2 = 0;
-            if (m_boErrorOnInit)
+            if (mBoErrorOnInit)
             {
                 if (Envir.Width < 50)
                 {
@@ -6099,8 +6066,8 @@ namespace GameSvr.Actor
 
             Abil.HP = Abil.MaxHP;
             Abil.MP = Abil.MaxMP;
-            m_WAbil.HP = m_WAbil.MaxHP;
-            m_WAbil.MP = m_WAbil.MaxMP;
+            MWAbil.HP = MWAbil.MaxHP;
+            MWAbil.MP = MWAbil.MaxMP;
 
             RecalcAbilitys();
 
@@ -6184,7 +6151,7 @@ namespace GameSvr.Actor
             obj = null;
         }
 
-        internal string format(string str, params object[] par)
+        internal string Format(string str, params object[] par)
         {
             return string.Format(str, par);
         }

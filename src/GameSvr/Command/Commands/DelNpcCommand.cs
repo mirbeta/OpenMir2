@@ -15,7 +15,7 @@ namespace GameSvr.Command.Commands
         public void DelNpc(PlayObject PlayObject)
         {
             const string sDelOK = "删除NPC成功...";
-            TBaseObject BaseObject = PlayObject.GetPoseCreate();
+            BaseObject BaseObject = PlayObject.GetPoseCreate();
             if (BaseObject != null)
             {
                 for (var i = 0; i < M2Share.UserEngine.MerchantList.Count; i++)

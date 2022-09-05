@@ -457,7 +457,7 @@ namespace GameSvr.Npc
             PlayObject.m_nAutoGetExpTime = nTime * 1000;
             PlayObject.m_nAutoGetExpPoint = nPoint;
             PlayObject.OffLineFlag = true;
-            PlayObject.m_dwKickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
+            PlayObject.MDwKickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
             IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.m_sUserID, PlayObject.m_nSessionID);
             PlayObject.SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
         }
@@ -709,8 +709,8 @@ namespace GameSvr.Npc
 
         private void ActionOfClearMapMon(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TBaseObject Mon;
-            IList<TBaseObject> MonList = new List<TBaseObject>();
+            BaseObject Mon;
+            IList<BaseObject> MonList = new List<BaseObject>();
             M2Share.UserEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), MonList);
             for (var i = 0; i < MonList.Count; i++)
             {
@@ -723,7 +723,7 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                Mon.m_boNoItem = true;
+                Mon.MBoNoItem = true;
                 Mon.MakeGhost();
             }
         }
@@ -823,7 +823,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGameGoldName, nGameGold, cMethod, this.CharName));
+                M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGameGoldName, nGameGold, cMethod, this.CharName));
             }
             if (nOldGameGold != PlayObject.m_nGameGold)
             {
@@ -860,7 +860,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGamePoint)
             {
-                M2Share.AddGameDataLog(format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGamePointName, nGamePoint, cMethod, this.CharName));
+                M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGamePointName, nGamePoint, cMethod, this.CharName));
             }
             if (nOldGamePoint != PlayObject.m_nGamePoint)
             {
@@ -1203,7 +1203,7 @@ namespace GameSvr.Npc
         {
             short nRandX;
             short nRandY;
-            TBaseObject Mon;
+            BaseObject Mon;
             for (var i = 0; i < nCount; i++)
             {
                 nRandX = (short)(M2Share.RandomNumber.Random(nRange * 2 + 1) + (nX - nRange));
@@ -1211,9 +1211,9 @@ namespace GameSvr.Npc
                 Mon = M2Share.UserEngine.RegenMonsterByName(M2Share.g_sMissionMap, nRandX, nRandY, QuestActionInfo.sParam1);
                 if (Mon != null)
                 {
-                    Mon.m_boMission = true;
-                    Mon.m_nMissionX = M2Share.g_nMissionX;
-                    Mon.m_nMissionY = M2Share.g_nMissionY;
+                    Mon.MBoMission = true;
+                    Mon.MNMissionX = M2Share.g_nMissionX;
+                    Mon.MNMissionY = M2Share.g_nMissionY;
                 }
                 else
                 {
@@ -1472,7 +1472,7 @@ namespace GameSvr.Npc
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_VAR);
+                ScriptActionError(PlayObject, Format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_VAR);
                 return;
             }
             if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
@@ -1493,7 +1493,7 @@ namespace GameSvr.Npc
             }
             if (!boFoundVar)
             {
-                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_SAVEVAR);
+                ScriptActionError(PlayObject, Format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_SAVEVAR);
             }
         }
 
@@ -1573,7 +1573,7 @@ namespace GameSvr.Npc
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_CALCVAR);
+                ScriptActionError(PlayObject, Format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_CALCVAR);
                 return;
             }
 
@@ -1619,7 +1619,7 @@ namespace GameSvr.Npc
             }
             if (!boFoundVar)
             {
-                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_CALCVAR);
+                ScriptActionError(PlayObject, Format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_CALCVAR);
             }
         }
 
@@ -1634,7 +1634,7 @@ namespace GameSvr.Npc
         private void ActionOfGroupAddList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string ffile = QuestActionInfo.sParam1;
-            if (PlayObject.m_GroupOwner != null)
+            if (PlayObject.MGroupOwner != null)
             {
                 for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {
@@ -1657,7 +1657,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGroupRecall(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            if (PlayObject.m_GroupOwner != null)
+            if (PlayObject.MGroupOwner != null)
             {
                 // PlayObject.GroupRecall('GroupRecall');
             }
@@ -1698,7 +1698,7 @@ namespace GameSvr.Npc
         {
             PlayObject PlayObjectEx;
             bool boFlag = false;
-            if (PlayObject.m_GroupOwner != null)
+            if (PlayObject.MGroupOwner != null)
             {
                 var Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                 if (Envir != null)
@@ -1891,7 +1891,7 @@ namespace GameSvr.Npc
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_VAR);
+                ScriptActionError(PlayObject, Format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_VAR);
                 return;
             }
             if (DynamicVarList.ContainsKey(sVarName))
@@ -1904,7 +1904,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_VAR);
+                ScriptActionError(PlayObject, Format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_VAR);
             }
         }
 
@@ -1947,7 +1947,7 @@ namespace GameSvr.Npc
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_VAR);
+                ScriptActionError(PlayObject, Format(sVarTypeError, sType), QuestActionInfo, ScriptConst.sSC_VAR);
                 return;
             }
             if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
@@ -1986,7 +1986,7 @@ namespace GameSvr.Npc
             }
             if (!boFoundVar)
             {
-                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_LOADVAR);
+                ScriptActionError(PlayObject, Format(sVarFound, sVarName, sType), QuestActionInfo, ScriptConst.sSC_LOADVAR);
             }
         }
 
@@ -2575,7 +2575,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sChangeMemberLevelMsg, new[] { PlayObject.m_nMemberLevel }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberLevelMsg, new[] { PlayObject.m_nMemberLevel }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2610,7 +2610,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sChangeMemberTypeMsg, new[] { PlayObject.m_nMemberType }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberTypeMsg, new[] { PlayObject.m_nMemberType }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2692,7 +2692,7 @@ namespace GameSvr.Npc
             {
                 sParam2 = PlayObject.CharName;
             }
-            string sData = format("@{0} {1} {2} {3} {4} {5}", sParam1, sParam2, sParam3, sParam4, sParam5, sParam6);
+            string sData = Format("@{0} {1} {2} {3} {4} {5}", sParam1, sParam2, sParam3, sParam4, sParam5, sParam6);
             byte btOldPermission = PlayObject.Permission;
             try
             {
@@ -2748,7 +2748,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildAuraePointMsg, new[] { Guild.Aurae }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildAuraePointMsg, new[] { Guild.Aurae }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2795,7 +2795,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildBuildPointMsg, Guild.BuildPoint), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildBuildPointMsg, Guild.BuildPoint), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2842,7 +2842,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptChiefItemCountMsg, Guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptChiefItemCountMsg, Guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2889,7 +2889,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildFlourishPointMsg, Guild.Flourishing), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildFlourishPointMsg, Guild.Flourishing), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2936,7 +2936,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildStabilityPointMsg, Guild.Stability), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildStabilityPointMsg, Guild.Stability), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2952,29 +2952,29 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.m_WAbil.HP = (ushort)nHP;
+                    PlayObject.MWAbil.HP = (ushort)nHP;
                     break;
                 case '-':
-                    if (PlayObject.m_WAbil.HP >= nHP)
+                    if (PlayObject.MWAbil.HP >= nHP)
                     {
-                        PlayObject.m_WAbil.HP -= (ushort)nHP;
+                        PlayObject.MWAbil.HP -= (ushort)nHP;
                     }
                     else
                     {
-                        PlayObject.m_WAbil.HP = 0;
+                        PlayObject.MWAbil.HP = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.m_WAbil.HP += (ushort)nHP;
-                    if (PlayObject.m_WAbil.HP > PlayObject.m_WAbil.MaxHP)
+                    PlayObject.MWAbil.HP += (ushort)nHP;
+                    if (PlayObject.MWAbil.HP > PlayObject.MWAbil.MaxHP)
                     {
-                        PlayObject.m_WAbil.HP = PlayObject.m_WAbil.MaxHP;
+                        PlayObject.MWAbil.HP = PlayObject.MWAbil.MaxHP;
                     }
                     break;
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.m_WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.MWAbil.MaxHP), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2990,29 +2990,29 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.m_WAbil.MP = (ushort)nMP;
+                    PlayObject.MWAbil.MP = (ushort)nMP;
                     break;
                 case '-':
-                    if (PlayObject.m_WAbil.MP >= nMP)
+                    if (PlayObject.MWAbil.MP >= nMP)
                     {
-                        PlayObject.m_WAbil.MP -= (ushort)nMP;
+                        PlayObject.MWAbil.MP -= (ushort)nMP;
                     }
                     else
                     {
-                        PlayObject.m_WAbil.MP = 0;
+                        PlayObject.MWAbil.MP = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.m_WAbil.MP += (ushort)nMP;
-                    if (PlayObject.m_WAbil.MP > PlayObject.m_WAbil.MaxMP)
+                    PlayObject.MWAbil.MP += (ushort)nMP;
+                    if (PlayObject.MWAbil.MP > PlayObject.MWAbil.MaxMP)
                     {
-                        PlayObject.m_WAbil.MP = PlayObject.m_WAbil.MaxMP;
+                        PlayObject.MWAbil.MP = PlayObject.MWAbil.MaxMP;
                     }
                     break;
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.m_WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.MWAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3029,7 +3029,7 @@ namespace GameSvr.Npc
                 switch (nMode)
                 {
                     case 1:
-                        PlayObject.m_boNoItem = true;
+                        PlayObject.MBoNoItem = true;
                         PlayObject.Die();
                         break;
                     case 2:
@@ -3037,7 +3037,7 @@ namespace GameSvr.Npc
                         PlayObject.Die();
                         break;
                     case 3:
-                        PlayObject.m_boNoItem = true;
+                        PlayObject.MBoNoItem = true;
                         PlayObject.SetLastHiter(this);
                         PlayObject.Die();
                         break;
@@ -3065,13 +3065,13 @@ namespace GameSvr.Npc
             {
                 case '=':
                     PlayObject.HasLevelUp(0);
-                    PlayObject.m_nBonusPoint = nBonusPoint;
+                    PlayObject.MNBonusPoint = nBonusPoint;
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
                 case '-':
                     break;
                 case '+':
-                    PlayObject.m_nBonusPoint += nBonusPoint;
+                    PlayObject.MNBonusPoint += nBonusPoint;
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
             }
@@ -3092,7 +3092,7 @@ namespace GameSvr.Npc
         private void ActionOfRestBonusPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.X2;
-            PlayObject.m_nBonusPoint += nTotleUsePoint;
+            PlayObject.MNBonusPoint += nTotleUsePoint;
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             PlayObject.HasLevelUp(0);
             PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
@@ -3128,7 +3128,7 @@ namespace GameSvr.Npc
         // 变色为0 时固定颜色才起作用
         private void ActionOfRecallmob(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TBaseObject Mon;
+            BaseObject Mon;
             if (QuestActionInfo.nParam3 <= 1)
             {
                 Mon = PlayObject.MakeSlave(QuestActionInfo.sParam1, 3, HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0), 100, 10 * 24 * 60 * 60);
@@ -3172,7 +3172,7 @@ namespace GameSvr.Npc
                 {
                     PlayObject.Abil.Exp = 0;
                 }
-                PlayObject.m_nBonusPoint += nBounsuPoint;
+                PlayObject.MNBonusPoint += nBounsuPoint;
                 PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 PlayObject.HasLevelUp(0);
                 PlayObject.RefShowName();
@@ -3193,11 +3193,11 @@ namespace GameSvr.Npc
 
         private void ActionOfKillSlave(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TBaseObject Slave;
+            BaseObject Slave;
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 Slave = PlayObject.SlaveList[i];
-                Slave.m_WAbil.HP = 0;
+                Slave.MWAbil.HP = 0;
             }
         }
 
@@ -3214,7 +3214,7 @@ namespace GameSvr.Npc
             PlayObject.m_dwKillMonExpRateTime = nTime;
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sChangeKillMonExpRateMsg, PlayObject.m_nKillMonExpRate / 100, PlayObject.m_dwKillMonExpRateTime), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangeKillMonExpRateMsg, PlayObject.m_nKillMonExpRate / 100, PlayObject.m_dwKillMonExpRateTime), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3304,7 +3304,7 @@ namespace GameSvr.Npc
             PlayObject.m_dwPowerRateTime = nTime;
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sChangePowerRateMsg, new object[] { PlayObject.m_nPowerRate / 100, PlayObject.m_dwPowerRateTime }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangePowerRateMsg, new object[] { PlayObject.m_nPowerRate / 100, PlayObject.m_dwPowerRateTime }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3371,7 +3371,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sChangePermissionMsg, PlayObject.Permission), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangePermissionMsg, PlayObject.Permission), MsgColor.Green, MsgType.Hint);
             }
         }
 

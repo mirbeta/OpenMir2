@@ -6,16 +6,16 @@ namespace GameSvr.Monster.Monsters
 {
     public class BeeQueen : AnimalObject
     {
-        private readonly IList<TBaseObject> BeeList;
+        private readonly IList<BaseObject> BeeList;
 
         public BeeQueen() : base()
         {
             ViewRange = 9;
-            m_nRunTime = 250;
+            MNRunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = HUtil32.GetTickCount();
-            m_boStickMode = true;
-            BeeList = new List<TBaseObject>();
+            MBoStickMode = true;
+            BeeList = new List<BaseObject>();
         }
 
         private void MakeChildBee()
@@ -44,7 +44,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {

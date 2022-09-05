@@ -694,7 +694,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKLUCKYPOINT:
-                        if (PlayObject.m_nBodyLuckLevel < QuestConditionInfo.nParam1)
+                        if (PlayObject.MNBodyLuckLevel < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
@@ -1265,9 +1265,9 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_ISGROUPMASTER:
-                        if (PlayObject.m_GroupOwner != null)
+                        if (PlayObject.MGroupOwner != null)
                         {
-                            if (PlayObject.m_GroupOwner != PlayObject)
+                            if (PlayObject.MGroupOwner != PlayObject)
                             {
                                 result = false;
                             }
@@ -1722,7 +1722,7 @@ namespace GameSvr.Npc
             string s44 = string.Empty;
             string s48 = string.Empty;
             Envirnoment Envir;
-            IList<TBaseObject> List58;
+            IList<BaseObject> List58;
             PlayObject User;
             var n18 = 0;
             var n34 = 0;
@@ -1833,12 +1833,12 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nMONCLEAR:
-                        List58 = new List<TBaseObject>();
+                        List58 = new List<BaseObject>();
                         M2Share.UserEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), List58);
                         for (var k = 0; k < List58.Count; k++)
                         {
-                            List58[k].m_boNoItem = true;
-                            List58[k].m_WAbil.HP = 0;
+                            List58[k].MBoNoItem = true;
+                            List58[k].MWAbil.HP = 0;
                         }
                         //List58.Free;
                         break;
@@ -1934,7 +1934,7 @@ namespace GameSvr.Npc
                         Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
-                            List58 = new List<TBaseObject>();
+                            List58 = new List<BaseObject>();
                             M2Share.UserEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
                             if (List58.Count > 0)
                             {
@@ -1952,7 +1952,7 @@ namespace GameSvr.Npc
                         Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
-                            List58 = new List<TBaseObject>();
+                            List58 = new List<BaseObject>();
                             M2Share.UserEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
                             for (var k = 0; k < List58.Count; k++)
                             {

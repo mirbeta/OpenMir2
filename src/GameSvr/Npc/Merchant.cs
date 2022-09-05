@@ -235,7 +235,7 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(format(sExceptionMsg, CharName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
+                M2Share.Log.Error(Format(sExceptionMsg, CharName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
             }
         }
 
@@ -605,7 +605,7 @@ namespace GameSvr.Npc
                 if (UpgradeInfo.btDc >= UpgradeInfo.btMc && (UpgradeInfo.btDc >= UpgradeInfo.btSc) || (n1C == 0))
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
-                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.MNBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponDCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 10;
@@ -626,7 +626,7 @@ namespace GameSvr.Npc
                 if (UpgradeInfo.btMc >= UpgradeInfo.btDc && UpgradeInfo.btMc >= UpgradeInfo.btSc || n1C == 1)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
-                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.MNBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponMCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 20;
@@ -647,7 +647,7 @@ namespace GameSvr.Npc
                 if (UpgradeInfo.btSc >= UpgradeInfo.btMc && UpgradeInfo.btSc >= UpgradeInfo.btDc || n1C == 2)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
-                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.MNBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponSCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 30;
@@ -981,7 +981,7 @@ namespace GameSvr.Npc
             }
             catch (Exception ex)
             {
-                M2Share.Log.Error(format(sExceptionMsg, sData));
+                M2Share.Log.Error(Format(sExceptionMsg, sData));
                 M2Share.Log.Error(ex.StackTrace);
             }
         }
@@ -1762,7 +1762,7 @@ namespace GameSvr.Npc
         /// <param name="sMsg"></param>
         protected void SetOffLineMsg(PlayObject PlayObject, string sMsg)
         {
-            PlayObject.m_sOffLineLeaveword = sMsg;
+            PlayObject.MSOffLineLeaveword = sMsg;
         }
 
         protected override void SendCustemMsg(PlayObject PlayObject, string sMsg)
@@ -1820,7 +1820,7 @@ namespace GameSvr.Npc
                 var UserItem = PlayObject.UseItems[btWhere];
                 if (UserItem.wIndex == 0)
                 {
-                    var sMsg = format(M2Share.g_sYourUseItemIsNul, M2Share.GetUseItemName(btWhere));
+                    var sMsg = Format(M2Share.g_sYourUseItemIsNul, M2Share.GetUseItemName(btWhere));
                     PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, sMsg);
                     return;
                 }

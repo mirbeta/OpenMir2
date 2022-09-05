@@ -182,7 +182,7 @@ namespace GameSvr.Player
         public int m_DelayCallNPC;
         public string m_sDelayCallLabel = string.Empty;
         public TScript m_Script;
-        public TBaseObject m_NPC = null;
+        public BaseObject m_NPC = null;
         /// <summary>
         /// 玩家的变量P
         /// </summary>
@@ -320,7 +320,7 @@ namespace GameSvr.Player
         public bool m_boLockLogoned;
         public string m_sTempPwd;
         public string m_sStoragePwd;
-        public TBaseObject m_PoseBaseObject = null;
+        public BaseObject m_PoseBaseObject = null;
         public bool m_boStartMarry = false;
         public bool m_boStartMaster = false;
         public bool m_boStartUnMarry = false;
@@ -411,7 +411,7 @@ namespace GameSvr.Player
         public bool m_boTimeGoto;
         public int m_dwTimeGotoTick;
         public string m_sTimeGotoLable;
-        public TBaseObject m_TimeGotoNPC;
+        public BaseObject m_TimeGotoNPC;
         /// <summary>
         /// 个人定时器
         /// </summary>
@@ -461,8 +461,8 @@ namespace GameSvr.Player
             m_sMoveMap = "";
             m_nMoveX = 0;
             m_nMoveY = 0;
-            m_dwRunTick = HUtil32.GetTickCount();
-            m_nRunTime = 250;
+            MDwRunTick = HUtil32.GetTickCount();
+            MNRunTime = 250;
             SearchTime = 1000;
             SearchTick = HUtil32.GetTickCount();
             ViewRange = 12;
@@ -820,20 +820,20 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                for (var i = 0; i < m_dwStatusArrTick.Length; i++)
+                for (var i = 0; i < MDwStatusArrTick.Length; i++)
                 {
-                    if (m_wStatusTimeArr[i] > 0)
+                    if (MWStatusTimeArr[i] > 0)
                     {
-                        m_dwStatusArrTick[i] = HUtil32.GetTickCount();
+                        MDwStatusArrTick[i] = HUtil32.GetTickCount();
                     }
                 }
                 CharStatus = GetCharStatus();
                 RecalcLevelAbilitys();
                 RecalcAbilitys();
-                if (btB2 == 0)
+                if (BtB2 == 0)
                 {
                     PkPoint = 0;
-                    btB2++;
+                    BtB2++;
                 }
                 if (Gold > M2Share.Config.nHumanMaxGold * 2 && M2Share.Config.nHumanMaxGold > 0)
                 {
@@ -990,11 +990,11 @@ namespace GameSvr.Player
                     }
                     if (!m_boPasswordLocked)
                     {
-                        SysMsg(format(M2Share.g_sPasswordNotSetMsg, M2Share.g_GameCommand.PASSWORDLOCK.sCmd), MsgColor.Red, MsgType.Hint);
+                        SysMsg(Format(M2Share.g_sPasswordNotSetMsg, M2Share.g_GameCommand.PASSWORDLOCK.sCmd), MsgColor.Red, MsgType.Hint);
                     }
                     if (!m_boLockLogon && m_boPasswordLocked)
                     {
-                        SysMsg(format(M2Share.g_sNotPasswordProtectMode, M2Share.g_GameCommand.LOCKLOGON.sCmd), MsgColor.Red, MsgType.Hint);
+                        SysMsg(Format(M2Share.g_sNotPasswordProtectMode, M2Share.g_GameCommand.LOCKLOGON.sCmd), MsgColor.Red, MsgType.Hint);
                     }
                     SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd, MsgColor.Red, MsgType.Hint);
                     SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd + '\\' + "加锁命令: @" + M2Share.g_GameCommand.__LOCK.sCmd + '\\' + "设置密码命令: @" + M2Share.g_GameCommand.SETPASSWORD.sCmd + '\\' + "修改密码命令: @" + M2Share.g_GameCommand.CHGPASSWORD.sCmd);
@@ -1218,7 +1218,7 @@ namespace GameSvr.Player
             RecalcAdjusBonus();
         }
 
-        protected override void UpdateVisibleGay(TBaseObject BaseObject)
+        protected override void UpdateVisibleGay(BaseObject BaseObject)
         {
             var boIsVisible = false;
             VisibleBaseObject VisibleBaseObject;
@@ -1272,7 +1272,7 @@ namespace GameSvr.Player
             var nEndY = CurrY + ViewRange;
             try
             {
-                TBaseObject BaseObject = null;
+                BaseObject BaseObject = null;
                 MirEvent MapEvent = null;
                 for (var n20 = nStartX; n20 <= nEndX; n20++)
                 {
@@ -1402,7 +1402,7 @@ namespace GameSvr.Player
                         {
                             if (BaseObject.Death)
                             {
-                                if (BaseObject.m_boSkeleton)
+                                if (BaseObject.MBoSkeleton)
                                 {
                                     SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.CurrX, BaseObject.CurrY, 0, "");
                                 }
@@ -1496,7 +1496,7 @@ namespace GameSvr.Player
                     else
                     {
                         Castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.Config.boShowGuildName || Castle != null && Castle.m_boUnderWar || InFreePKArea)
+                        if (M2Share.Config.boShowGuildName || Castle != null && Castle.m_boUnderWar || InFreePkArea)
                         {
                             sGuildName = M2Share.g_sNoCastleGuildName.Replace("%guildname", MyGuild.sGuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);
@@ -1527,28 +1527,28 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    sCharName = format(m_sRankLevelName, CharName);
+                    sCharName = Format(m_sRankLevelName, CharName);
                 }
                 if (!string.IsNullOrEmpty(m_sMasterName))
                 {
                     if (m_boMaster)
                     {
-                        sMasterName = format(M2Share.g_sMasterName, m_sMasterName);
+                        sMasterName = Format(M2Share.g_sMasterName, m_sMasterName);
                     }
                     else
                     {
-                        sMasterName = format(M2Share.g_sNoMasterName, m_sMasterName);
+                        sMasterName = Format(M2Share.g_sNoMasterName, m_sMasterName);
                     }
                 }
                 if (!string.IsNullOrEmpty(m_sDearName))
                 {
                     if (Gender == PlayGender.Man)
                     {
-                        sDearName = format(M2Share.g_sManDearName, m_sDearName);
+                        sDearName = Format(M2Share.g_sManDearName, m_sDearName);
                     }
                     else
                     {
-                        sDearName = format(M2Share.g_sWoManDearName, m_sDearName);
+                        sDearName = Format(M2Share.g_sWoManDearName, m_sDearName);
                     }
                 }
                 sShowName = M2Share.g_sHumanShowName.Replace("%chrname", sCharName);
@@ -1671,7 +1671,7 @@ namespace GameSvr.Player
             base.MakeGhost();
         }
 
-        protected override void ScatterBagItems(TBaseObject ItemOfCreat)
+        protected override void ScatterBagItems(BaseObject ItemOfCreat)
         {
             const int DropWide = 2;
             TUserItem pu;

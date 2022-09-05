@@ -9,7 +9,7 @@ namespace GameSvr.RobotPlay
     {
         public int DoThink_CheckTargetXYCount(int nX, int nY, int nRange)
         {
-            TBaseObject BaseObject;
+            BaseObject BaseObject;
             int nC;
             int n10 = nRange;
             int result = 0;
@@ -67,7 +67,7 @@ namespace GameSvr.RobotPlay
         public bool DoThink_MagPushArround(int MagicID, short wMagicID)
         {
             bool result = false;
-            TBaseObject ActorObject;
+            BaseObject ActorObject;
             byte btNewDir;
             short nTargetX = 0;
             short nTargetY = 0;
@@ -92,7 +92,7 @@ namespace GameSvr.RobotPlay
                     {
                         if (!ActorObject.Death && ActorObject != this && IsProperTarget(ActorObject))
                         {
-                            if (Abil.Level > ActorObject.Abil.Level && !ActorObject.m_boStickMode)
+                            if (Abil.Level > ActorObject.Abil.Level && !ActorObject.MBoStickMode)
                             {
                                 btNewDir = M2Share.GetNextDirection(ActorObject.CurrX, ActorObject.CurrY, CurrX, CurrY);
                                 if (Envir.GetNextPosition(ActorObject.CurrX, ActorObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))

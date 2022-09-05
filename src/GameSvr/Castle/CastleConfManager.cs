@@ -131,23 +131,23 @@ namespace GameSvr.Castle
             if (userCastle.m_MainDoor.BaseObject != null)
             {
                 WriteBool("Defense", "MainDoorOpen", userCastle.m_MainDoor.nStatus);
-                WriteInteger("Defense", "MainDoorHP", userCastle.m_MainDoor.BaseObject.m_WAbil.HP);
+                WriteInteger("Defense", "MainDoorHP", userCastle.m_MainDoor.BaseObject.MWAbil.HP);
             }
             if (userCastle.m_LeftWall.nX != 0) WriteInteger("Defense", "LeftWallX", userCastle.m_LeftWall.nX);
             if (userCastle.m_LeftWall.nY != 0) WriteInteger("Defense", "LeftWallY", userCastle.m_LeftWall.nY);
             if (userCastle.m_LeftWall.sName != "") WriteString("Defense", "LeftWallName", userCastle.m_LeftWall.sName);
             if (userCastle.m_LeftWall.BaseObject != null)
-                WriteInteger("Defense", "LeftWallHP", userCastle.m_LeftWall.BaseObject.m_WAbil.HP);
+                WriteInteger("Defense", "LeftWallHP", userCastle.m_LeftWall.BaseObject.MWAbil.HP);
             if (userCastle.m_CenterWall.nX != 0) WriteInteger("Defense", "CenterWallX", userCastle.m_CenterWall.nX);
             if (userCastle.m_CenterWall.nY != 0) WriteInteger("Defense", "CenterWallY", userCastle.m_CenterWall.nY);
             if (userCastle.m_CenterWall.sName != "") WriteString("Defense", "CenterWallName", userCastle.m_CenterWall.sName);
             if (userCastle.m_CenterWall.BaseObject != null)
-                WriteInteger("Defense", "CenterWallHP", userCastle.m_CenterWall.BaseObject.m_WAbil.HP);
+                WriteInteger("Defense", "CenterWallHP", userCastle.m_CenterWall.BaseObject.MWAbil.HP);
             if (userCastle.m_RightWall.nX != 0) WriteInteger("Defense", "RightWallX", userCastle.m_RightWall.nX);
             if (userCastle.m_RightWall.nY != 0) WriteInteger("Defense", "RightWallY", userCastle.m_RightWall.nY);
             if (userCastle.m_RightWall.sName != "") WriteString("Defense", "RightWallName", userCastle.m_RightWall.sName);
             if (userCastle.m_RightWall.BaseObject != null)
-                WriteInteger("Defense", "RightWallHP", userCastle.m_RightWall.BaseObject.m_WAbil.HP);
+                WriteInteger("Defense", "RightWallHP", userCastle.m_RightWall.BaseObject.MWAbil.HP);
             TObjUnit objUnit;
             for (var i = 0; i < userCastle.Archer.Length; i++)
             {
@@ -157,7 +157,7 @@ namespace GameSvr.Castle
                 if (objUnit.sName != "")
                     WriteString("Defense", "Archer_" + (i + 1) + "_Name", objUnit.sName);
                 if (objUnit.BaseObject != null)
-                    WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", objUnit.BaseObject.m_WAbil.HP);
+                    WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", objUnit.BaseObject.MWAbil.HP);
                 else
                     WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", 0);
             }
@@ -169,7 +169,7 @@ namespace GameSvr.Castle
                 if (objUnit.nY != 0) WriteInteger("Defense", "Guard_" + (i + 1) + "_Y", objUnit.nY);
                 if (objUnit.sName != "") WriteString("Defense", "Guard_" + (i + 1) + "_Name", objUnit.sName);
                 if (objUnit.BaseObject != null)
-                    WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", objUnit.BaseObject.m_WAbil.HP);
+                    WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", objUnit.BaseObject.MWAbil.HP);
                 else
                     WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", 0);
             }

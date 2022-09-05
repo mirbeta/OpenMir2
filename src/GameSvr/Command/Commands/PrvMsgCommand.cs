@@ -22,9 +22,9 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = PlayObject.m_BlockWhisperList.Count - 1; i >= 0; i--)
+            for (var i = PlayObject.MBlockWhisperList.Count - 1; i >= 0; i--)
             {
-                if (PlayObject.m_BlockWhisperList.Count <= 0)
+                if (PlayObject.MBlockWhisperList.Count <= 0)
                 {
                     break;
                 }
@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
                 //    return;
                 //}
             }
-            PlayObject.m_BlockWhisperList.Add(sHumanName);
+            PlayObject.MBlockWhisperList.Add(sHumanName);
             PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandPrvMsgLimitMsg, sHumanName), MsgColor.Green, MsgType.Hint);
         }
     }

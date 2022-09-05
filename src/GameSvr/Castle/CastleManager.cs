@@ -30,7 +30,7 @@ namespace GameSvr.Castle
         }
 
         // 取得角色所在座标的城堡
-        public TUserCastle InCastleWarArea(TBaseObject BaseObject)
+        public TUserCastle InCastleWarArea(BaseObject BaseObject)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -109,7 +109,7 @@ namespace GameSvr.Castle
             return null;
         }
 
-        public TUserCastle IsCastleMember(TBaseObject BaseObject)
+        public TUserCastle IsCastleMember(BaseObject BaseObject)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {

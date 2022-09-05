@@ -11,12 +11,12 @@ namespace GameSvr.Monster.Monsters
         /// </summary>
         protected int AttackMax;
 
-        private void FlyAxeAttack(TBaseObject Target)
+        private void FlyAxeAttack(BaseObject Target)
         {
             if (Envir.CanFly(CurrX, CurrY, Target.CurrX, Target.CurrY))
             {
                 Direction = M2Share.GetNextDirection(CurrX, CurrY, Target.CurrX, Target.CurrY);
-                var WAbil = m_WAbil;
+                var WAbil = MWAbil;
                 var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 if (nDamage > 0)
                 {
@@ -25,7 +25,7 @@ namespace GameSvr.Monster.Monsters
                 if (nDamage > 0)
                 {
                     Target.StruckDamage(nDamage);
-                    Target.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Target.m_WAbil.HP, Target.m_WAbil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - Target.CurrX), Math.Abs(CurrY - Target.CurrY)) * 50 + 600);
+                    Target.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Target.MWAbil.HP, Target.MWAbil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - Target.CurrX), Math.Abs(CurrY - Target.CurrY)) * 50 + 600);
                 }
                 SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, Target.ObjectId, "");
             }
@@ -75,7 +75,7 @@ namespace GameSvr.Monster.Monsters
         public DualAxeMonster() : base()
         {
             ViewRange = 5;
-            m_nRunTime = 250;
+            MNRunTime = 250;
             SearchTime = 3000;
             m_nAttackCount = 0;
             AttackMax = 2;
@@ -85,15 +85,15 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             int nRage = 9999;
-            TBaseObject TargetBaseObject = null;
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            BaseObject TargetBaseObject = null;
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) >= 5000)
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        TBaseObject BaseObject = VisibleActors[i].BaseObject;
+                        BaseObject BaseObject = VisibleActors[i].BaseObject;
                         if (BaseObject.Death)
                         {
                             continue;

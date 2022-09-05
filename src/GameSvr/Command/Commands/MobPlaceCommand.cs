@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
             var nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
             var nX = (short)HUtil32.Str_ToInt(sX, 0);
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
-            TBaseObject mon = null;
+            BaseObject mon = null;
             nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
             nX = (short)HUtil32.Str_ToInt(sX, 0);
             nY = (short)HUtil32.Str_ToInt(sY, 0);
@@ -47,9 +47,9 @@ namespace GameSvr.Command.Commands
                 mon = M2Share.UserEngine.RegenMonsterByName(M2Share.g_sMissionMap, nX, nY, sMonName);
                 if (mon != null)
                 {
-                    mon.m_boMission = true;
-                    mon.m_nMissionX = M2Share.g_nMissionX;
-                    mon.m_nMissionY = M2Share.g_nMissionY;
+                    mon.MBoMission = true;
+                    mon.MNMissionX = M2Share.g_nMissionX;
+                    mon.MNMissionY = M2Share.g_nMissionY;
                 }
                 else
                 {

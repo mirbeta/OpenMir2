@@ -149,10 +149,10 @@ namespace GameSvr.Maps
                         };
                         cellInfo.Add(osObject, pRemoveObject);
                         result = pRemoveObject;
-                        if (btType == CellType.MovingObject && !((TBaseObject)pRemoveObject).AddToMaped)
+                        if (btType == CellType.MovingObject && !((BaseObject)pRemoveObject).AddToMaped)
                         {
-                            ((TBaseObject)pRemoveObject).DelFormMaped = false;
-                            ((TBaseObject)pRemoveObject).AddToMaped = true;
+                            ((BaseObject)pRemoveObject).DelFormMaped = false;
+                            ((BaseObject)pRemoveObject).AddToMaped = true;
                             AddObject(pRemoveObject);
                         }
                     }
@@ -206,10 +206,10 @@ namespace GameSvr.Maps
             return null;
         }
 
-        public int MoveToMovingObject(int nCx, int nCy, TBaseObject cert, int nX, int nY, bool boFlag)
+        public int MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
         {
             bool cellsuccess = false;
-            TBaseObject baseObject;
+            BaseObject baseObject;
             CellObject osObject;
             bool moveSuccess;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
@@ -232,7 +232,7 @@ namespace GameSvr.Maps
                                     baseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                     if (baseObject != null)
                                     {
-                                        if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                        if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                         {
                                             moveSuccess = false;
                                             break;
@@ -337,7 +337,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                             if (baseObject != null)
                             {
-                                if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -380,7 +380,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                             if (baseObject != null)
                             {
-                                if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -457,7 +457,7 @@ namespace GameSvr.Maps
                                         }
                                     }
                                 }
-                                if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -502,10 +502,10 @@ namespace GameSvr.Maps
                                             cellInfo.Remove(osObject);
                                             result = 1;
                                             // 减地图人物怪物计数
-                                            if (cellType == CellType.MovingObject && !((TBaseObject)pRemoveObject).DelFormMaped)
+                                            if (cellType == CellType.MovingObject && !((BaseObject)pRemoveObject).DelFormMaped)
                                             {
-                                                ((TBaseObject)pRemoveObject).DelFormMaped = true;
-                                                ((TBaseObject)pRemoveObject).AddToMaped = false;
+                                                ((BaseObject)pRemoveObject).DelFormMaped = true;
+                                                ((BaseObject)pRemoveObject).AddToMaped = false;
                                                 DelObjectCount(pRemoveObject);
                                             }
                                             if (cellInfo.Count > 0)
@@ -703,7 +703,7 @@ namespace GameSvr.Maps
         /// <param name="nX"></param>
         /// <param name="nY"></param>
         /// <param name="baseObject"></param>
-        public void VerifyMapTime(int nX, int nY, TBaseObject baseObject)
+        public void VerifyMapTime(int nX, int nY, BaseObject baseObject)
         {
             CellObject osObject;
             bool boVerify;
@@ -964,7 +964,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
                         {
-                            if (!baseObject.Ghost && baseObject.bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                            if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                             {
                                 result++;
                             }
@@ -1100,7 +1100,7 @@ namespace GameSvr.Maps
                     if (osObject.CellType == CellType.MovingObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
-                        if (baseObject != null && !baseObject.Ghost && baseObject.bo2B9 && (!boFlag || !baseObject.Death))
+                        if (baseObject != null && !baseObject.Ghost && baseObject.Bo2B9 && (!boFlag || !baseObject.Death))
                         {
                             result = baseObject;
                             break;
@@ -1111,7 +1111,7 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public Merchant GetQuestNpc(TBaseObject baseObject, string sCharName, string sItem, bool boFlag)
+        public Merchant GetQuestNpc(BaseObject baseObject, string sCharName, string sItem, bool boFlag)
         {
             bool bo1D;
             for (var i = 0; i < _questList.Count; i++)
@@ -1205,7 +1205,7 @@ namespace GameSvr.Maps
             return null;
         }
 
-        public bool IsValidObject(int nX, int nY, int nRage, TBaseObject baseObject)
+        public bool IsValidObject(int nX, int nY, int nRage, BaseObject baseObject)
         {
             for (var nXx = nX - nRage; nXx <= nX + nRage; nXx++)
             {
@@ -1229,7 +1229,7 @@ namespace GameSvr.Maps
             return false;
         }
 
-        public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<TBaseObject> baseObjectList)
+        public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<BaseObject> baseObjectList)
         {
             for (var nXx = nX - nRage; nXx <= nX + nRage; nXx++)
             {
@@ -1241,7 +1241,7 @@ namespace GameSvr.Maps
             return baseObjectList.Count;
         }
 
-        public bool GetMapBaseObjects(short nX, short nY, int nRage, IList<TBaseObject> baseObjectList, CellType btType = CellType.MovingObject)
+        public bool GetMapBaseObjects(short nX, short nY, int nRage, IList<BaseObject> baseObjectList, CellType btType = CellType.MovingObject)
         {
             if (baseObjectList.Count == 0)
             {
@@ -1263,7 +1263,7 @@ namespace GameSvr.Maps
         /// <param name="boFlag">是否包括死亡对象 FALSE 包括死亡对象 TRUE  不包括死亡对象</param>
         /// <param name="baseObjectList"></param>
         /// <returns></returns>
-        public int GetBaseObjects(int nX, int nY, bool boFlag, IList<TBaseObject> baseObjectList)
+        public int GetBaseObjects(int nX, int nY, bool boFlag, IList<BaseObject> baseObjectList)
         {
             var cellsuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
@@ -1277,7 +1277,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
                         {
-                            if (!baseObject.Ghost && baseObject.bo2B9)
+                            if (!baseObject.Ghost && baseObject.Bo2B9)
                             {
                                 if (!boFlag || !baseObject.Death)
                                 {
@@ -1408,7 +1408,7 @@ namespace GameSvr.Maps
 
         public void AddObject(object baseObject)
         {
-            var btRaceServer = ((TBaseObject)baseObject).Race;
+            var btRaceServer = ((BaseObject)baseObject).Race;
             if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 _humCount++;
@@ -1421,7 +1421,7 @@ namespace GameSvr.Maps
 
         public void DelObjectCount(object baseObject)
         {
-            var btRaceServer = ((TBaseObject)baseObject).Race;
+            var btRaceServer = ((BaseObject)baseObject).Race;
             if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 _humCount--;

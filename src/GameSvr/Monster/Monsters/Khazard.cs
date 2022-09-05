@@ -13,7 +13,7 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 var time1 = M2Share.RandomNumber.Random(2);
                 if (TargetCret != null)
@@ -35,7 +35,7 @@ namespace GameSvr.Monster.Monsters
                         }
                         else
                         {
-                            if (TargetCret.m_WAbil.HP <= TargetCret.m_WAbil.MaxHP / 2)
+                            if (TargetCret.MWAbil.HP <= TargetCret.MWAbil.MaxHP / 2)
                             {
                                 GetFrontPosition(ref nX, ref nY);
                             }

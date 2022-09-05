@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
             var targerPlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (targerPlayObject != null)
             {
-                targerPlayObject.m_nBonusPoint = 0;
+                targerPlayObject.MNBonusPoint = 0;
                 targerPlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 targerPlayObject.HasLevelUp(0);
                 targerPlayObject.SysMsg("分配点数已清除!!!", MsgColor.Red, MsgType.Hint);

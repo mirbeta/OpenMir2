@@ -12,9 +12,9 @@ namespace GameSvr.Monster.Monsters
 
         private void sub_4A9F6C(byte btDir)
         {
-            TBaseObject BaseObject;
+            BaseObject BaseObject;
             Direction = btDir;
-            var WAbil = m_WAbil;
+            var WAbil = MWAbil;
             var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (n10 > 0)
             {
@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
                     if (n10 > 0)
                     {
                         BaseObject.StruckDamage(n10);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ObjectId, "", 300);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 300);
                     }
                 }
             }

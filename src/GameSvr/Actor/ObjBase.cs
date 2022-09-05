@@ -21,7 +21,7 @@ namespace GameSvr.Actor
     /// </summary>
     public class VisibleBaseObject
     {
-        public TBaseObject BaseObject;
+        public BaseObject BaseObject;
         public VisibleFlag VisibleFlag;
     }
 

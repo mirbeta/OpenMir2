@@ -33,7 +33,7 @@ namespace GameSvr.Command.Commands
             }
             if (sCtr == "")
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandLuckPointMsg, sHumanName, mPlayObject.m_nBodyLuckLevel, mPlayObject.m_dBodyLuck, mPlayObject.m_nLuck), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandLuckPointMsg, sHumanName, mPlayObject.MNBodyLuckLevel, mPlayObject.MDBodyLuck, mPlayObject.MNLuck), MsgColor.Green, MsgType.Hint);
                 return;
             }
             var nPoint = HUtil32.Str_ToInt(sPoint, 0);
@@ -41,20 +41,20 @@ namespace GameSvr.Command.Commands
             switch (cMethod)
             {
                 case '=':
-                    mPlayObject.m_nLuck = nPoint;
+                    mPlayObject.MNLuck = nPoint;
                     break;
                 case '-':
-                    if (mPlayObject.m_nLuck >= nPoint)
+                    if (mPlayObject.MNLuck >= nPoint)
                     {
-                        mPlayObject.m_nLuck -= nPoint;
+                        mPlayObject.MNLuck -= nPoint;
                     }
                     else
                     {
-                        mPlayObject.m_nLuck = 0;
+                        mPlayObject.MNLuck = 0;
                     }
                     break;
                 case '+':
-                    mPlayObject.m_nLuck += nPoint;
+                    mPlayObject.MNLuck += nPoint;
                     break;
             }
         }

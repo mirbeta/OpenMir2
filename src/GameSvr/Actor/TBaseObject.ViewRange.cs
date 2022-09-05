@@ -4,9 +4,9 @@ using SystemModule;
 
 namespace GameSvr.Actor
 {
-    public partial class TBaseObject
+    public partial class BaseObject
     {
-        protected virtual void UpdateVisibleGay(TBaseObject baseObject)
+        protected virtual void UpdateVisibleGay(BaseObject baseObject)
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
@@ -181,7 +181,7 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(format(sExceptionMsg, n24, CharName, MapName, CurrX, CurrY));
+                M2Share.Log.Error(Format(sExceptionMsg, n24, CharName, MapName, CurrX, CurrY));
                 M2Share.Log.Error(e.Message);
                 KickException();
             }
@@ -207,7 +207,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.Error(format(sExceptionMsg, n24, CharName, MapName, CurrX, CurrY));
+                M2Share.Log.Error(Format(sExceptionMsg, n24, CharName, MapName, CurrX, CurrY));
                 KickException();
             }
         }

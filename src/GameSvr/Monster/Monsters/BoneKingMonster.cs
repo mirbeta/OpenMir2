@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
     public class BoneKingMonster : MonsterObject
     {
         private short DangerLevel;
-        private readonly IList<TBaseObject> SlaveObjectList;
+        private readonly IList<BaseObject> SlaveObjectList;
 
         public BoneKingMonster() : base()
         {
@@ -14,7 +14,7 @@ namespace GameSvr.Monster.Monsters
             ViewRange = 8;
             Direction = 5;
             DangerLevel = 5;
-            SlaveObjectList = new List<TBaseObject>();
+            SlaveObjectList = new List<BaseObject>();
         }
 
         private void CallSlave()
@@ -38,27 +38,27 @@ namespace GameSvr.Monster.Monsters
             }
         }
 
-        public override void Attack(TBaseObject TargeTBaseObject, byte nDir)
+        public override void Attack(BaseObject TargeTBaseObject, byte nDir)
         {
-            var WAbil = m_WAbil;
+            var WAbil = MWAbil;
             var nPower = GetAttackPower(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC));
             HitMagAttackTarget(TargeTBaseObject, 0, nPower, true);
         }
 
         public override void Run()
         {
-            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - WalkTick >= WalkSpeed)
+            if (!Ghost && !Death && MWStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - WalkTick >= WalkSpeed)
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
-                    if (DangerLevel > m_WAbil.HP / m_WAbil.MaxHP * 5 && DangerLevel > 0)
+                    if (DangerLevel > MWAbil.HP / MWAbil.MaxHP * 5 && DangerLevel > 0)
                     {
                         DangerLevel -= 1;
                         CallSlave();
                     }
-                    if (m_WAbil.HP == m_WAbil.MaxHP)
+                    if (MWAbil.HP == MWAbil.MaxHP)
                     {
                         DangerLevel = 5;
                     }

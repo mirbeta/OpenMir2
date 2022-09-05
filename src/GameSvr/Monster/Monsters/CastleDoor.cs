@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
         public CastleDoor() : base()
         {
             Animal = false;
-            m_boStickMode = true;
+            MBoStickMode = true;
             m_boOpened = false;
             AntiPoison = 200;
         }
@@ -59,7 +59,7 @@ namespace GameSvr.Monster.Monsters
             m_boOpened = true;
             StoneMode = true;
             SetMapXYFlag(0);
-            bo2B9 = false;
+            Bo2B9 = false;
         }
 
         public void Close()
@@ -68,7 +68,7 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            Direction = (byte)(3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3));
+            Direction = (byte)(3 - HUtil32.Round(MWAbil.HP / MWAbil.MaxHP * 3));
             if (Direction - 3 >= 0)
             {
                 Direction = 0;
@@ -77,7 +77,7 @@ namespace GameSvr.Monster.Monsters
             m_boOpened = false;
             StoneMode = false;
             SetMapXYFlag(1);
-            bo2B9 = true;
+            Bo2B9 = true;
         }
 
         public override void Die()
@@ -94,11 +94,11 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                m_nHealthTick = 0;
+                MNHealthTick = 0;
             }
             if (!m_boOpened)
             {
-                int n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3);
+                int n08 = 3 - HUtil32.Round(MWAbil.HP / MWAbil.MaxHP * 3);
                 if (Direction != n08 && n08 < 3)
                 {
                     Direction = (byte)n08;
@@ -110,7 +110,7 @@ namespace GameSvr.Monster.Monsters
 
         public void RefStatus()
         {
-            var n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3);
+            var n08 = 3 - HUtil32.Round(MWAbil.HP / MWAbil.MaxHP * 3);
             if (n08 - 3 >= 0)
             {
                 n08 = 0;

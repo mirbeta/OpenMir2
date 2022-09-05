@@ -185,7 +185,7 @@ namespace GameSvr.Castle
                     m_MainDoor.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_MainDoor.nX, m_MainDoor.nY, m_MainDoor.sName);
                     if (m_MainDoor.BaseObject != null)
                     {
-                        m_MainDoor.BaseObject.m_WAbil.HP = m_MainDoor.nHP;
+                        m_MainDoor.BaseObject.MWAbil.HP = m_MainDoor.nHP;
                         m_MainDoor.BaseObject.Castle = this;
                         if (m_MainDoor.nStatus)
                         {
@@ -199,7 +199,7 @@ namespace GameSvr.Castle
                     m_LeftWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_LeftWall.nX, m_LeftWall.nY, m_LeftWall.sName);
                     if (m_LeftWall.BaseObject != null)
                     {
-                        m_LeftWall.BaseObject.m_WAbil.HP = m_LeftWall.nHP;
+                        m_LeftWall.BaseObject.MWAbil.HP = m_LeftWall.nHP;
                         m_LeftWall.BaseObject.Castle = this;
                     }
                     else
@@ -209,7 +209,7 @@ namespace GameSvr.Castle
                     m_CenterWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_CenterWall.nX, m_CenterWall.nY, m_CenterWall.sName);
                     if (m_CenterWall.BaseObject != null)
                     {
-                        m_CenterWall.BaseObject.m_WAbil.HP = m_CenterWall.nHP;
+                        m_CenterWall.BaseObject.MWAbil.HP = m_CenterWall.nHP;
                         m_CenterWall.BaseObject.Castle = this;
                     }
                     else
@@ -219,7 +219,7 @@ namespace GameSvr.Castle
                     m_RightWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_RightWall.nX, m_RightWall.nY, m_RightWall.sName);
                     if (m_RightWall.BaseObject != null)
                     {
-                        m_RightWall.BaseObject.m_WAbil.HP = m_RightWall.nHP;
+                        m_RightWall.BaseObject.MWAbil.HP = m_RightWall.nHP;
                         m_RightWall.BaseObject.Castle = this;
                     }
                     else
@@ -233,7 +233,7 @@ namespace GameSvr.Castle
                         ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                         {
-                            ObjUnit.BaseObject.m_WAbil.HP = Archer[i].nHP;
+                            ObjUnit.BaseObject.MWAbil.HP = Archer[i].nHP;
                             ObjUnit.BaseObject.Castle = this;
                             ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
                         }
@@ -248,7 +248,7 @@ namespace GameSvr.Castle
                         if (ObjUnit.nHP <= 0) continue;
                         ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
-                            ObjUnit.BaseObject.m_WAbil.HP = m_Guard[i].nHP;
+                            ObjUnit.BaseObject.MWAbil.HP = m_Guard[i].nHP;
                         else
                             _logger.Warn("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
                     }
@@ -464,7 +464,7 @@ namespace GameSvr.Castle
             return false;
         }
 
-        public bool IsMember(TBaseObject cert)
+        public bool IsMember(BaseObject cert)
         {
             return IsMasterGuild(cert.MyGuild);
         }
@@ -509,7 +509,7 @@ namespace GameSvr.Castle
             {
                 return false;
             }
-            var playPbjectList = new List<TBaseObject>();
+            var playPbjectList = new List<BaseObject>();
             M2Share.UserEngine.GetMapRageHuman(m_MapPalace, 0, 0, 1000, playPbjectList);
             var result = true;
             for (var i = 0; i < playPbjectList.Count; i++)
@@ -545,7 +545,7 @@ namespace GameSvr.Castle
         public void StartWallconquestWar()
         {
             PlayObject PlayObject;
-            var ListC = new List<TBaseObject>();
+            var ListC = new List<BaseObject>();
             M2Share.UserEngine.GetMapRageHuman(m_MapPalace, m_nHomeX, m_nHomeY, 100, ListC);
             for (var i = 0; i < ListC.Count; i++)
             {
@@ -567,7 +567,7 @@ namespace GameSvr.Castle
             for (var i = 0; i < ListC.Count; i++)
             {
                 var PlayObject = ListC[i];
-                PlayObject.ChangePKStatus(false);
+                PlayObject.ChangePkStatus(false);
                 if (PlayObject.MyGuild != m_MasterGuild)
                 {
                     PlayObject.MapRandomMove(PlayObject.HomeMap, 0);
@@ -617,7 +617,7 @@ namespace GameSvr.Castle
             return m_sMapName;
         }
 
-        public bool CheckInPalace(int nX, int nY, TBaseObject cert)
+        public bool CheckInPalace(int nX, int nY, BaseObject cert)
         {
             TObjUnit ObjUnit;
             var result = IsMasterGuild(cert.MyGuild);
@@ -831,7 +831,7 @@ namespace GameSvr.Castle
         {
             var result = false;
             var CastleDoor = m_MainDoor;
-            if (CastleDoor.BaseObject == null || m_boUnderWar || CastleDoor.BaseObject.m_WAbil.HP >= CastleDoor.BaseObject.m_WAbil.MaxHP)
+            if (CastleDoor.BaseObject == null || m_boUnderWar || CastleDoor.BaseObject.MWAbil.HP >= CastleDoor.BaseObject.MWAbil.MaxHP)
             {
                 return result;
             }
@@ -839,7 +839,7 @@ namespace GameSvr.Castle
             {
                 if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.StruckTick) > 60 * 1000)
                 {
-                    CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
+                    CastleDoor.BaseObject.MWAbil.HP = CastleDoor.BaseObject.MWAbil.MaxHP;
                     ((CastleDoor)CastleDoor.BaseObject).RefStatus();
                     result = true;
                 }
@@ -848,7 +848,7 @@ namespace GameSvr.Castle
             {
                 if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.StruckTick) > 60 * 1000)
                 {
-                    CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
+                    CastleDoor.BaseObject.MWAbil.HP = CastleDoor.BaseObject.MWAbil.MaxHP;
                     CastleDoor.BaseObject.Death = false;
                     ((CastleDoor)CastleDoor.BaseObject).m_boOpened = false;
                     ((CastleDoor)CastleDoor.BaseObject).RefStatus();
@@ -866,7 +866,7 @@ namespace GameSvr.Castle
         public bool RepairWall(int nWallIndex)
         {
             var result = false;
-            TBaseObject Wall = null;
+            BaseObject Wall = null;
             switch (nWallIndex)
             {
                 case 1:
@@ -879,7 +879,7 @@ namespace GameSvr.Castle
                     Wall = m_RightWall.BaseObject;
                     break;
             }
-            if (Wall == null || m_boUnderWar || Wall.m_WAbil.HP >= Wall.m_WAbil.MaxHP)
+            if (Wall == null || m_boUnderWar || Wall.MWAbil.HP >= Wall.MWAbil.MaxHP)
             {
                 return result;
             }
@@ -887,7 +887,7 @@ namespace GameSvr.Castle
             {
                 if ((HUtil32.GetTickCount() - Wall.StruckTick) > 60 * 1000)
                 {
-                    Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
+                    Wall.MWAbil.HP = Wall.MWAbil.MaxHP;
                     ((WallStructure)Wall).RefStatus();
                     result = true;
                 }
@@ -896,7 +896,7 @@ namespace GameSvr.Castle
             {
                 if ((HUtil32.GetTickCount() - Wall.StruckTick) > 60 * 1000)
                 {
-                    Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
+                    Wall.MWAbil.HP = Wall.MWAbil.MaxHP;
                     Wall.Death = false;
                     ((WallStructure)Wall).RefStatus();
                     result = true;

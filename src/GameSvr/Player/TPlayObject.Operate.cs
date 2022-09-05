@@ -66,7 +66,7 @@ namespace GameSvr.Player
                 return;
             }
             m_nClientFlagMode = processMsg.wParam;
-            M2Share.Log.Debug(format("OK:{0}", m_nClientFlagMode));
+            M2Share.Log.Debug(Format("OK:{0}", m_nClientFlagMode));
         }
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)
@@ -325,7 +325,7 @@ namespace GameSvr.Player
 
         private bool ClientChangeDir(short wIdent, int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
+            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
             {
                 return false;
             }
@@ -358,7 +358,7 @@ namespace GameSvr.Player
 
         private bool ClientSitDownHit(int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
+            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
             {
                 return false;
             }
@@ -734,21 +734,21 @@ namespace GameSvr.Player
             {
                 if (Envir.IsValidObject(nX, nY, 2, baseObject))
                 {
-                    if (baseObject.Death && !baseObject.m_boSkeleton && baseObject.Animal)
+                    if (baseObject.Death && !baseObject.MBoSkeleton && baseObject.Animal)
                     {
                         var n10 = M2Share.RandomNumber.Random(16) + 5;
                         var n14 = (ushort)(M2Share.RandomNumber.Random(201) + 100);
-                        baseObject.m_nBodyLeathery -= n10;
-                        baseObject.m_nMeatQuality -= n14;
-                        if (baseObject.m_nMeatQuality < 0)
+                        baseObject.MNBodyLeathery -= n10;
+                        baseObject.MNMeatQuality -= n14;
+                        if (baseObject.MNMeatQuality < 0)
                         {
-                            baseObject.m_nMeatQuality = 0;
+                            baseObject.MNMeatQuality = 0;
                         }
-                        if (baseObject.m_nBodyLeathery <= 0)
+                        if (baseObject.MNBodyLeathery <= 0)
                         {
                             if (baseObject.Race >= Grobal2.RC_ANIMAL && baseObject.Race < Grobal2.RC_MONSTER)
                             {
-                                baseObject.m_boSkeleton = true;
+                                baseObject.MBoSkeleton = true;
                                 ApplyMeatQuality();
                                 baseObject.SendRefMsg(Grobal2.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                             }
@@ -756,7 +756,7 @@ namespace GameSvr.Player
                             {
                                 SysMsg(M2Share.sYouFoundNothing, MsgColor.Red, MsgType.Hint);
                             }
-                            baseObject.m_nBodyLeathery = 50;
+                            baseObject.MNBodyLeathery = 50;
                         }
                         DeathTick = HUtil32.GetTickCount();
                     }
@@ -782,14 +782,14 @@ namespace GameSvr.Player
 
         private void ClientGroupClose()
         {
-            if (m_GroupOwner == null)
+            if (MGroupOwner == null)
             {
                 AllowGroup = false;
                 return;
             }
-            if (m_GroupOwner != this)
+            if (MGroupOwner != this)
             {
-                m_GroupOwner.DelMember(this);
+                MGroupOwner.DelMember(this);
                 AllowGroup = false;
             }
             else
@@ -805,7 +805,7 @@ namespace GameSvr.Player
         private void ClientCreateGroup(string sHumName)
         {
             var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
-            if (m_GroupOwner != null)
+            if (MGroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
                 return;
@@ -815,7 +815,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (playObject.m_GroupOwner != null)
+            if (playObject.MGroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
                 return;
@@ -842,7 +842,7 @@ namespace GameSvr.Player
         private void ClientAddGroupMember(string sHumName)
         {
             var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
-            if (m_GroupOwner != this)
+            if (MGroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
                 return;
@@ -857,7 +857,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (playObject.m_GroupOwner != null)
+            if (playObject.MGroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
                 return;
@@ -880,7 +880,7 @@ namespace GameSvr.Player
         private void ClientDelGroupMember(string sHumName)
         {
             var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
-            if (m_GroupOwner != this)
+            if (MGroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
                 return;
@@ -1463,7 +1463,7 @@ namespace GameSvr.Player
             try
             {
                 var n8 = -1;
-                TBaseObject baseObjectC = GetPoseCreate();
+                BaseObject baseObjectC = GetPoseCreate();
                 if (baseObjectC != null && baseObjectC.MyGuild != null && baseObjectC.Race == Grobal2.RC_PLAYOBJECT && baseObjectC.GetPoseCreate() == this)
                 {
                     if (baseObjectC.MyGuild.m_boEnableAuthAlly)

@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
         private void MeltStoneAll()
         {
             MeltStone();
-            IList<TBaseObject> List10 = new List<TBaseObject>();
+            IList<BaseObject> List10 = new List<BaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 7, List10);
             for (var i = 0; i < List10.Count; i++)
             {
@@ -41,7 +41,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
+            if (!Ghost && !Death && MWStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
                 if (StoneMode)
                 {

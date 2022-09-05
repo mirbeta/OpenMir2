@@ -421,7 +421,7 @@ namespace GameSvr.Snaps
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (hum.m_boAllowGuildReCall)
+                    if (hum.MBoAllowGuildReCall)
                     {
                         hum.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         hum.SpaceMove(Str, dx, dy, 0);

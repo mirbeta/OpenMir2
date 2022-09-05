@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace GameSvr.Actor
 {
-    public class AnimalObject : TBaseObject
+    public class AnimalObject : BaseObject
     {
         /// <summary>
         /// 未被处理次数，用于怪物处理循环
@@ -15,7 +15,7 @@ namespace GameSvr.Actor
         public int m_dwRunAwayStart;
         public int m_dwRunAwayTime;
 
-        public virtual void Attack(TBaseObject TargeTBaseObject, byte nDir)
+        public virtual void Attack(BaseObject TargeTBaseObject, byte nDir)
         {
             base.AttackDir(TargeTBaseObject, 0, nDir);
         }
@@ -120,7 +120,7 @@ namespace GameSvr.Actor
                     this.BreakHolySeizeMode();
                     if (this.Master != null && struckObject != this.Master && struckObject.Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        this.Master.SetPKFlag(struckObject);
+                        this.Master.SetPkFlag(struckObject);
                     }
                     if (M2Share.Config.boMonSayMsg)
                     {
@@ -137,7 +137,7 @@ namespace GameSvr.Actor
             base.Run();
         }
 
-        public virtual void Struck(TBaseObject Hiter)
+        public virtual void Struck(BaseObject Hiter)
         {
             byte btDir = 0;
             this.StruckTick = HUtil32.GetTickCount();
@@ -153,18 +153,18 @@ namespace GameSvr.Actor
             }
             if (this.Animal)
             {
-                this.m_nMeatQuality = (ushort)(this.m_nMeatQuality - M2Share.RandomNumber.Random(300));
-                if (this.m_nMeatQuality < 0)
+                this.MNMeatQuality = (ushort)(this.MNMeatQuality - M2Share.RandomNumber.Random(300));
+                if (this.MNMeatQuality < 0)
                 {
-                    this.m_nMeatQuality = 0;
+                    this.MNMeatQuality = 0;
                 }
             }
             this.AttackTick = this.AttackTick + (150 - HUtil32._MIN(130, this.Abil.Level * 4));
         }
 
-        protected void HitMagAttackTarget(TBaseObject TargeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
+        protected void HitMagAttackTarget(BaseObject TargeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
         {
-            IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
+            IList<BaseObject> BaseObjectList = new List<BaseObject>();
             this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
             this.Envir.GetBaseObjects(TargeTBaseObject.CurrX, TargeTBaseObject.CurrY, false, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
@@ -178,7 +178,7 @@ namespace GameSvr.Actor
                     if (nDamage > 0)
                     {
                         BaseObject.StruckDamage(nDamage);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (ushort)nDamage, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, this.ObjectId, "", 200);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (ushort)nDamage, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, this.ObjectId, "", 200);
                     }
                 }
             }
@@ -196,7 +196,7 @@ namespace GameSvr.Actor
 
         protected virtual void SearchTarget()
         {
-            TBaseObject BaseObject18 = null;
+            BaseObject BaseObject18 = null;
             var n10 = 999;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
@@ -222,7 +222,7 @@ namespace GameSvr.Actor
 
         protected void sub_4C959C()
         {
-            TBaseObject Creat = null;
+            BaseObject Creat = null;
             var n10 = 999;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
