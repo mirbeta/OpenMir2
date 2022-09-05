@@ -112,8 +112,8 @@ namespace GameSvr.Configs
         public byte[] SlaveColor;
         public int[] dwNeedExps;
         public byte[] WideAttack;
-        public int[] CrsAttack;
-        public int[,,] SpitMap;
+        public byte[] CrsAttack;
+        public byte[,,] SpitMap;
         public string sHomeMap;
         public short nHomeX;
         public short nHomeY;
@@ -1042,9 +1042,9 @@ namespace GameSvr.Configs
             MonUpLvNeedKillCount = new int[] { 0, 0, 50, 100, 200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800, 153600 };
             SlaveColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 249, 250, 250, 250, 250, 250, 250 };
             dwNeedExps = new int[Grobal2.MaxChangeLevel];
-            WideAttack = new int[] { 7, 1, 2 };
-            CrsAttack = new int[] { 7, 1, 2, 3, 4, 5, 6 };
-            SpitMap = new int[,,]{
+            WideAttack = new byte[] { 7, 1, 2 };
+            CrsAttack = new byte[] { 7, 1, 2, 3, 4, 5, 6 };
+            SpitMap = new byte[,,]{
                 {{0, 0, 1, 0, 0}, //DR_UP
                 {0, 0, 1, 0, 0},
                 {0, 0, 0, 0, 0},

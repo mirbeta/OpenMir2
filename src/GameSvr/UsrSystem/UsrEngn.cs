@@ -2604,17 +2604,17 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        public int GetStdItemIdx(string sItemName)
+        public ushort GetStdItemIdx(string sItemName)
         {
             StdItem stdItem;
-            var result = -1;
+            ushort result = 0;
             if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 stdItem = StdItemList[i];
                 if (stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase))
                 {
-                    result = i + 1;
+                    result = (ushort)(i + 1);
                     break;
                 }
             }

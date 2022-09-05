@@ -18,7 +18,7 @@ namespace GameSvr.Npc
 
     public struct TItemPrice
     {
-        public short wIndex;
+        public ushort wIndex;
         public double nPrice;
     }
 
