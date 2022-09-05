@@ -1779,7 +1779,7 @@ namespace GameSvr.UsrSystem
                 cert.CharName = sMonName;
                 cert.MWAbil = cert.Abil;
                 cert.OnEnvirnomentChanged();
-                if (M2Share.RandomNumber.Random(100) < cert.MBtCoolEye) cert.CoolEye = true;
+                if (M2Share.RandomNumber.Random(100) < cert.CoolEye) cert.CoolEye = true;
                 MonGetRandomItems(cert);
                 cert.Initialize();
                 if (cert.AddtoMapSuccess)
@@ -2142,12 +2142,12 @@ namespace GameSvr.UsrSystem
             playObject.Abil.MaxWearWeight = humData.Abil.MaxWearWeight;
             playObject.Abil.HandWeight = humData.Abil.HandWeight;
             playObject.Abil.MaxHandWeight = humData.Abil.MaxHandWeight;
-            playObject.MWStatusTimeArr = humData.wStatusTimeArr;
+            playObject.StatusTimeArr = humData.wStatusTimeArr;
             playObject.HomeMap = humData.sHomeMap;
             playObject.HomeX = humData.wHomeX;
             playObject.HomeY = humData.wHomeY;
             playObject.BonusAbil = humData.BonusAbil;
-            playObject.MNBonusPoint = humData.nBonusPoint;
+            playObject.BonusPoint = humData.nBonusPoint;
             playObject.m_btCreditPoint = humData.btCreditPoint;
             playObject.m_btReLevel = humData.btReLevel;
             playObject.m_sMasterName = humData.sMasterName;
@@ -2179,14 +2179,14 @@ namespace GameSvr.UsrSystem
             playObject.m_sUserID = humData.sAccount;
             playObject.m_boLockLogon = humData.boLockLogon;
             playObject.m_wContribution = humData.wContribution;
-            playObject.MNHungerStatus = humData.nHungerStatus;
-            playObject.MBoAllowGuildReCall = humData.boAllowGuildReCall;
-            playObject.MWGroupRcallTime = humData.wGroupRcallTime;
-            playObject.MDBodyLuck = humData.dBodyLuck;
-            playObject.MBoAllowGroupReCall = humData.boAllowGroupReCall;
-            playObject.MQuestUnitOpen = humData.QuestUnitOpen;
-            playObject.MQuestUnit = humData.QuestUnit;
-            playObject.MQuestFlag = humData.QuestFlag;
+            playObject.HungerStatus = humData.nHungerStatus;
+            playObject.AllowGuildReCall = humData.boAllowGuildReCall;
+            playObject.GroupRcallTime = humData.wGroupRcallTime;
+            playObject.BodyLuck = humData.dBodyLuck;
+            playObject.AllowGroupReCall = humData.boAllowGroupReCall;
+            playObject.QuestUnitOpen = humData.QuestUnitOpen;
+            playObject.QuestUnit = humData.QuestUnit;
+            playObject.QuestFlag = humData.QuestFlag;
             humItems = humanRcd.Data.HumItems;
             playObject.UseItems[Grobal2.U_DRESS] = humItems[Grobal2.U_DRESS];
             playObject.UseItems[Grobal2.U_WEAPON] = humItems[Grobal2.U_WEAPON];
@@ -2314,8 +2314,8 @@ namespace GameSvr.UsrSystem
                     baseObject.RaceImg = monster.btRaceImg;
                     baseObject.Appr = monster.wAppr;
                     baseObject.Abil.Level = (byte)monster.wLevel;
-                    baseObject.MBtLifeAttrib = monster.btLifeAttrib;
-                    baseObject.MBtCoolEye = (byte)monster.wCoolEye;
+                    baseObject.LifeAttrib = monster.btLifeAttrib;
+                    baseObject.CoolEye = (byte)monster.wCoolEye;
                     baseObject.MDwFightExp = monster.dwExp;
                     baseObject.Abil.HP = monster.wHP;
                     baseObject.Abil.MaxHP = monster.wHP;
@@ -2328,7 +2328,7 @@ namespace GameSvr.UsrSystem
                     baseObject.Abil.MC = HUtil32.MakeLong(monster.wMC, monster.wMC);
                     baseObject.Abil.SC = HUtil32.MakeLong(monster.wSC, monster.wSC);
                     baseObject.SpeedPoint = (byte)monster.wSpeed;
-                    baseObject.MBtHitPoint = (byte)monster.wHitPoint;
+                    baseObject.HitPoint = (byte)monster.wHitPoint;
                     baseObject.WalkSpeed = monster.wWalkSpeed;
                     baseObject.WalkStep = monster.wWalkStep;
                     baseObject.WalkWait = monster.wWalkWait;
@@ -2733,7 +2733,7 @@ namespace GameSvr.UsrSystem
             cert.Direction = (byte)M2Share.RandomNumber.Random(8);
             cert.CharName = ai.sCharName;
             cert.MWAbil = cert.Abil;
-            if (M2Share.RandomNumber.Random(100) < cert.MBtCoolEye)
+            if (M2Share.RandomNumber.Random(100) < cert.CoolEye)
             {
                 cert.CoolEye = true;
             }

@@ -325,7 +325,7 @@ namespace GameSvr.Player
 
         private bool ClientChangeDir(short wIdent, int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
+            if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
             {
                 return false;
             }
@@ -358,7 +358,7 @@ namespace GameSvr.Player
 
         private bool ClientSitDownHit(int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
+            if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
             {
                 return false;
             }
@@ -782,14 +782,14 @@ namespace GameSvr.Player
 
         private void ClientGroupClose()
         {
-            if (MGroupOwner == null)
+            if (GroupOwner == null)
             {
                 AllowGroup = false;
                 return;
             }
-            if (MGroupOwner != this)
+            if (GroupOwner != this)
             {
-                MGroupOwner.DelMember(this);
+                GroupOwner.DelMember(this);
                 AllowGroup = false;
             }
             else
@@ -805,7 +805,7 @@ namespace GameSvr.Player
         private void ClientCreateGroup(string sHumName)
         {
             var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
-            if (MGroupOwner != null)
+            if (GroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
                 return;
@@ -815,7 +815,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (playObject.MGroupOwner != null)
+            if (playObject.GroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
                 return;
@@ -842,7 +842,7 @@ namespace GameSvr.Player
         private void ClientAddGroupMember(string sHumName)
         {
             var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
-            if (MGroupOwner != this)
+            if (GroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
                 return;
@@ -857,7 +857,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (playObject.MGroupOwner != null)
+            if (playObject.GroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
                 return;
@@ -880,7 +880,7 @@ namespace GameSvr.Player
         private void ClientDelGroupMember(string sHumName)
         {
             var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
-            if (MGroupOwner != this)
+            if (GroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
                 return;

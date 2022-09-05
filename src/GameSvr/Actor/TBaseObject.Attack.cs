@@ -229,7 +229,7 @@ namespace GameSvr.Actor
             {
                 if (IsProperTarget(BaseObject))
                 {
-                    if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < MBtHitPoint)
+                    if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
                     {
                         BaseObject.StruckDamage(nSecPwr);
                         BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 500);
@@ -372,21 +372,21 @@ namespace GameSvr.Actor
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
-                        nPower += _mNHitPlus;
+                        nPower += HitPlus;
                         bo21 = true;
                     }
                     if ((wHitMode == 7) && FireHitSkill) // 烈火剑法
                     {
                         FireHitSkill = false;
                         MDwLatestFireHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
-                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10)));
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * (HitDouble * 10)));
                         bo21 = true;
                     }
                     if ((wHitMode == 9) && MBoTwinHitSkill) // 烈火剑法
                     {
                         MBoTwinHitSkill = false;
                         MDwLatestTwinHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
-                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10)));
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * (HitDouble * 10)));
                         bo21 = true;
                     }
                 }
@@ -396,7 +396,7 @@ namespace GameSvr.Actor
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
-                        nPower += _mNHitPlus;
+                        nPower += HitPlus;
                         bo21 = true;
                     }
                     // Jacky 防止砍空刀刀烈火
@@ -489,9 +489,9 @@ namespace GameSvr.Actor
                 }
                 if (IsProperTarget(AttackTarget))
                 {
-                    if (AttackTarget.MBtHitPoint > 0)
+                    if (AttackTarget.HitPoint > 0)
                     {
-                        if (MBtHitPoint < M2Share.RandomNumber.RandomByte(AttackTarget.SpeedPoint))
+                        if (HitPoint < M2Share.RandomNumber.RandomByte(AttackTarget.SpeedPoint))
                         {
                             nPower = 0;
                         }

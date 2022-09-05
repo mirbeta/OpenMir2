@@ -21,7 +21,7 @@ namespace GameSvr.Monster.Monsters
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 var BaseObject = GetPoseCreate();
-                if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < MBtHitPoint)
+                if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < HitPoint)
                 {
                     n10 = BaseObject.GetMagStruckDamage(this, n10);
                     if (n10 > 0)

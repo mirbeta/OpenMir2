@@ -1387,7 +1387,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$LUCKY")// 幸运  增加人物暴击
             {
-                sText = PlayObject.MNLuck.ToString();
+                sText = PlayObject.Luck.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$LUCKY>", sText);
                 return;
             }

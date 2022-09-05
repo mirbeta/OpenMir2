@@ -605,7 +605,7 @@ namespace GameSvr.Npc
                 if (UpgradeInfo.btDc >= UpgradeInfo.btMc && (UpgradeInfo.btDc >= UpgradeInfo.btSc) || (n1C == 0))
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
-                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.MNBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.BodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponDCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 10;
@@ -626,7 +626,7 @@ namespace GameSvr.Npc
                 if (UpgradeInfo.btMc >= UpgradeInfo.btDc && UpgradeInfo.btMc >= UpgradeInfo.btSc || n1C == 1)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
-                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.MNBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.BodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponMCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 20;
@@ -647,7 +647,7 @@ namespace GameSvr.Npc
                 if (UpgradeInfo.btSc >= UpgradeInfo.btMc && UpgradeInfo.btSc >= UpgradeInfo.btDc || n1C == 2)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
-                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.MNBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.BodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.nUpgradeWeaponSCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[ItemAttr.WeaponUpgrade] = 30;

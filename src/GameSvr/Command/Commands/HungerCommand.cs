@@ -31,7 +31,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                m_PlayObject.MNHungerStatus = nHungerPoint;
+                m_PlayObject.HungerStatus = nHungerPoint;
                 m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_MYSTATUS, 0, 0, 0, 0, "");
                 m_PlayObject.RefMyStatus();
                 PlayObject.SysMsg(sHumanName + " 的能量值已改变。", MsgColor.Green, MsgType.Hint);

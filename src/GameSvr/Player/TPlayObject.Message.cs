@@ -418,10 +418,10 @@ namespace GameSvr.Player
                 if ((HUtil32.GetTickCount() - DecHungerPointTick) > 1000)
                 {
                     DecHungerPointTick = HUtil32.GetTickCount();
-                    if (MNHungerStatus > 0)
+                    if (HungerStatus > 0)
                     {
                         tObjCount = GetMyStatus();
-                        MNHungerStatus -= 1;
+                        HungerStatus -= 1;
                         if (tObjCount != GetMyStatus())
                         {
                             RefMyStatus();
@@ -435,8 +435,8 @@ namespace GameSvr.Player
                             MNHealthTick -= 60;
                             MNSpellTick -= 10;
                             MNSpellTick = HUtil32._MAX(0, MNSpellTick);
-                            MNPerHealth -= 1;
-                            MNPerSpell -= 1;
+                            PerHealth -= 1;
+                            PerSpell -= 1;
                             if (MWAbil.HP > MWAbil.HP / 100)
                             {
                                 MWAbil.HP -= (ushort)HUtil32._MAX(1, MWAbil.HP / 100);
@@ -1479,8 +1479,8 @@ namespace GameSvr.Player
                             }
                             MNHealthTick = 0;
                             MNSpellTick = 0;
-                            MNPerHealth -= 1;
-                            MNPerSpell -= 1;
+                            PerHealth -= 1;
+                            PerSpell -= 1;
                             StruckTick = HUtil32.GetTickCount();
                         }
                         if (ProcessMsg.BaseObject != 0)
@@ -1554,7 +1554,7 @@ namespace GameSvr.Player
                     SendSocket(m_DefMsg);
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(MWAbil));
-                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(MBtHitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(MNHealthRecover, MNSpellRecover), "");
+                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
                 case Grobal2.RM_CHANGENAMECOLOR:
                     SendDefMessage(Grobal2.SM_CHANGENAMECOLOR, ProcessMsg.BaseObject, GetCharColor(BaseObject), 0, 0, "");
@@ -1814,7 +1814,7 @@ namespace GameSvr.Player
                     SendChangeGuildName();
                     break;
                 case Grobal2.RM_SUBABILITY:
-                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(MBtHitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(MNHealthRecover, MNSpellRecover), "");
+                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
                 case Grobal2.RM_BUILDGUILD_OK:
                     SendDefMessage(Grobal2.SM_BUILDGUILD_OK, 0, 0, 0, 0, "");
@@ -2004,11 +2004,11 @@ namespace GameSvr.Player
             }
             if (Transparent && HideMode)
             {
-                MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
+                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
             }
-            if (MGroupOwner != null)
+            if (GroupOwner != null)
             {
-                MGroupOwner.DelMember(this);
+                GroupOwner.DelMember(this);
             }
             if (MyGuild != null)
             {

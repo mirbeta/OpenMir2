@@ -1634,7 +1634,7 @@ namespace GameSvr.Npc
         private void ActionOfGroupAddList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string ffile = QuestActionInfo.sParam1;
-            if (PlayObject.MGroupOwner != null)
+            if (PlayObject.GroupOwner != null)
             {
                 for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {
@@ -1657,7 +1657,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGroupRecall(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            if (PlayObject.MGroupOwner != null)
+            if (PlayObject.GroupOwner != null)
             {
                 // PlayObject.GroupRecall('GroupRecall');
             }
@@ -1698,7 +1698,7 @@ namespace GameSvr.Npc
         {
             PlayObject PlayObjectEx;
             bool boFlag = false;
-            if (PlayObject.MGroupOwner != null)
+            if (PlayObject.GroupOwner != null)
             {
                 var Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                 if (Envir != null)
@@ -3065,13 +3065,13 @@ namespace GameSvr.Npc
             {
                 case '=':
                     PlayObject.HasLevelUp(0);
-                    PlayObject.MNBonusPoint = nBonusPoint;
+                    PlayObject.BonusPoint = nBonusPoint;
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
                 case '-':
                     break;
                 case '+':
-                    PlayObject.MNBonusPoint += nBonusPoint;
+                    PlayObject.BonusPoint += nBonusPoint;
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
             }
@@ -3092,7 +3092,7 @@ namespace GameSvr.Npc
         private void ActionOfRestBonusPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.X2;
-            PlayObject.MNBonusPoint += nTotleUsePoint;
+            PlayObject.BonusPoint += nTotleUsePoint;
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             PlayObject.HasLevelUp(0);
             PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
@@ -3172,7 +3172,7 @@ namespace GameSvr.Npc
                 {
                     PlayObject.Abil.Exp = 0;
                 }
-                PlayObject.MNBonusPoint += nBounsuPoint;
+                PlayObject.BonusPoint += nBounsuPoint;
                 PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 PlayObject.HasLevelUp(0);
                 PlayObject.RefShowName();

@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             int n10 = 9999;
             BaseObject BaseObject1C = null;
             BaseObject BaseObject = null;
-            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
