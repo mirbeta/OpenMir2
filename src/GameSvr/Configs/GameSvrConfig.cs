@@ -111,7 +111,7 @@ namespace GameSvr.Configs
         public int[] MonUpLvNeedKillCount;
         public byte[] SlaveColor;
         public int[] dwNeedExps;
-        public int[] WideAttack;
+        public byte[] WideAttack;
         public int[] CrsAttack;
         public int[,,] SpitMap;
         public string sHomeMap;

@@ -132,6 +132,15 @@ namespace SystemModule
         /// 判断数值是否在范围之内
         /// </summary>
         /// <returns></returns>
+        public static bool RangeInDefined(byte values, int min, int max)
+        {
+            return Math.Max(min, values) == Math.Min(values, max);
+        }
+        
+        /// <summary>
+        /// 判断数值是否在范围之内
+        /// </summary>
+        /// <returns></returns>
         public static bool RangeInDefined(int values, int min, int max)
         {
             return Math.Max(min, values) == Math.Min(values, max);

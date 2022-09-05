@@ -1235,7 +1235,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public StdItem GetStdItem(int nItemIdx)
+        public StdItem GetStdItem(ushort nItemIdx)
         {
             StdItem result = null;
             nItemIdx -= 1;
