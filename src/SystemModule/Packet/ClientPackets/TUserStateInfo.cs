@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SystemModule.Extensions;
 
 namespace SystemModule.Packet.ClientPackets
 {
@@ -30,25 +31,10 @@ namespace SystemModule.Packet.ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(Feature);
-
-            var StrLen = 0;
-            var NameBuff = HUtil32.StringToByteAry(UserName, out StrLen);
-            NameBuff[0] = (byte)StrLen;
-            Array.Resize(ref NameBuff, PacketConst.UserNameLen);
-            writer.Write(NameBuff, 0, NameBuff.Length);
-
+            writer.Write(UserName, PacketConst.UserNameLen);
             writer.Write(NameColor);
-
-            NameBuff = HUtil32.StringToByteAry(GuildName, out StrLen);
-            NameBuff[0] = (byte)StrLen;
-            Array.Resize(ref NameBuff, PacketConst.GuildNameLen);
-            writer.Write(NameBuff, 0, NameBuff.Length);
-
-            NameBuff = HUtil32.StringToByteAry(GuildRankName, out StrLen);
-            NameBuff[0] = (byte)StrLen;
-            Array.Resize(ref NameBuff, PacketConst.UserNameLen);
-            writer.Write(NameBuff, 0, NameBuff.Length);
-
+            writer.Write(GuildName, PacketConst.GuildNameLen);
+            writer.Write(GuildRankName, PacketConst.UserNameLen);
             for (var i = 0; i < UseItems.Length; i++)
             {
                 writer.Write(UseItems[i].GetBuffer());
