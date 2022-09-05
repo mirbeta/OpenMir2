@@ -41,7 +41,7 @@ namespace GameSvr.UsrSystem
             while (true)
             {
                 if (SwitchData.BlockWhisperArr[nCount] == "") break;
-                PlayObject.m_BlockWhisperList.Add(SwitchData.BlockWhisperArr[nCount]);
+                PlayObject.MBlockWhisperList.Add(SwitchData.BlockWhisperArr[nCount]);
                 nCount++;
                 if (nCount >= SwitchData.BlockWhisperArr.Count) break;
             }
@@ -60,8 +60,8 @@ namespace GameSvr.UsrSystem
             nCount = 0;
             while (true)
             {
-                PlayObject.m_wStatusArrValue[nCount] = SwitchData.StatusValue[nCount];
-                PlayObject.m_dwStatusArrTimeOutTick[nCount] = SwitchData.StatusTimeOut[nCount];
+                PlayObject.MWStatusArrValue[nCount] = SwitchData.StatusValue[nCount];
+                PlayObject.MDwStatusArrTimeOutTick[nCount] = SwitchData.StatusTimeOut[nCount];
                 nCount++;
                 if (nCount >= 6) break;
             }
@@ -114,11 +114,11 @@ namespace GameSvr.UsrSystem
             SwitchData.boBanGuildChat = PlayObject.BanGuildChat;
             SwitchData.boAdminMode = PlayObject.AdminMode;
             SwitchData.boObMode = PlayObject.ObMode;
-            for (var i = 0; i < PlayObject.m_BlockWhisperList.Count; i++)
+            for (var i = 0; i < PlayObject.MBlockWhisperList.Count; i++)
             {
-                SwitchData.BlockWhisperArr.Add(PlayObject.m_BlockWhisperList[i]);
+                SwitchData.BlockWhisperArr.Add(PlayObject.MBlockWhisperList[i]);
             }
-            TBaseObject BaseObject = null;
+            BaseObject BaseObject = null;
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 BaseObject = PlayObject.SlaveList[i];
@@ -129,16 +129,16 @@ namespace GameSvr.UsrSystem
                     SwitchData.SlaveArr[i].SalveLevel = BaseObject.SlaveMakeLevel;
                     SwitchData.SlaveArr[i].SlaveExpLevel = BaseObject.SlaveExpLevel;
                     SwitchData.SlaveArr[i].RoyaltySec = (BaseObject.MasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
-                    SwitchData.SlaveArr[i].nHP = BaseObject.m_WAbil.HP;
-                    SwitchData.SlaveArr[i].nMP = BaseObject.m_WAbil.MP;
+                    SwitchData.SlaveArr[i].nHP = BaseObject.MWAbil.HP;
+                    SwitchData.SlaveArr[i].nMP = BaseObject.MWAbil.MP;
                 }
             }
-            for (var i = 0; i < PlayObject.m_wStatusArrValue.Length; i++)
+            for (var i = 0; i < PlayObject.MWStatusArrValue.Length; i++)
             {
-                if (PlayObject.m_wStatusArrValue[i] > 0)
+                if (PlayObject.MWStatusArrValue[i] > 0)
                 {
-                    SwitchData.StatusValue[i] = PlayObject.m_wStatusArrValue[i];
-                    SwitchData.StatusTimeOut[i] = PlayObject.m_dwStatusArrTimeOutTick[i];
+                    SwitchData.StatusValue[i] = PlayObject.MWStatusArrValue[i];
+                    SwitchData.StatusTimeOut[i] = PlayObject.MDwStatusArrTimeOutTick[i];
                 }
             }
         }

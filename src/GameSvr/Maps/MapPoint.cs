@@ -80,10 +80,10 @@ namespace GameSvr.Maps
         public int m_nTurnCount;
         public Envirnoment m_PEnvir;
         private readonly ArrayList FPointList;
-        private readonly TBaseObject FBaseObject;
+        private readonly BaseObject FBaseObject;
         private TPathType FPathType;
 
-        public TPointManager(TBaseObject ABaseObject)
+        public TPointManager(BaseObject ABaseObject)
         {
             m_nCurrX = -1;
             m_nCurrY = -1;

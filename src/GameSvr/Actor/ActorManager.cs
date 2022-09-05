@@ -12,13 +12,13 @@ namespace GameSvr.Actor
         /// <summary>
         /// 精灵对象列表
         /// </summary>
-        private readonly ConcurrentDictionary<int, TBaseObject> _actorsMap = new ConcurrentDictionary<int, TBaseObject>();
+        private readonly ConcurrentDictionary<int, BaseObject> _actorsMap = new ConcurrentDictionary<int, BaseObject>();
         /// <summary>
         /// 其他对象
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
 
-        public void Add(int actorId, TBaseObject actor)
+        public void Add(int actorId, BaseObject actor)
         {
             _actorsMap.TryAdd(actorId, actor);
         }
@@ -38,9 +38,9 @@ namespace GameSvr.Actor
             return null;
         }
 
-        public TBaseObject Get(int actorId)
+        public BaseObject Get(int actorId)
         {
-            TBaseObject actor = null;
+            BaseObject actor = null;
             if (_actorsMap.TryGetValue(actorId, out actor))
             {
                 return actor;
@@ -50,7 +50,7 @@ namespace GameSvr.Actor
 
         public void Remove(int actorId)
         {
-            TBaseObject ghostactor = null;
+            BaseObject ghostactor = null;
             _actorsMap.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
@@ -74,7 +74,7 @@ namespace GameSvr.Actor
         public void ClearObject()
         {
             var actorIds = _actorsMap.Keys;
-            TBaseObject actor = null;
+            BaseObject actor = null;
             var playCount = 0;
             var monsterCount = 0;
             foreach (var actorId in actorIds)

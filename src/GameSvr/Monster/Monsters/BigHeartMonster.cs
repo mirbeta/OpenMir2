@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-                var WAbil = m_WAbil;
+                var WAbil = MWAbil;
                 var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
@@ -43,7 +43,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (VisibleActors.Count > 0)
                 {

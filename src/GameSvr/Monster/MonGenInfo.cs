@@ -13,12 +13,12 @@ namespace GameSvr.Monster
         public int nActiveCount;
         public int dwZenTime;
         public int nMissionGenRate;
-        public IList<TBaseObject> CertList;
+        public IList<BaseObject> CertList;
         public int CertCount;
         public object Envir;
         public int nRace;
         /// <summary>
-        /// 开始刷新时间
+        /// 锟斤拷始刷锟斤拷时锟斤拷
         /// </summary>
         public int dwStartTick;
     }

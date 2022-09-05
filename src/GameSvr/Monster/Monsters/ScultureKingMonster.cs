@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
     public class ScultureKingMonster : MonsterObject
     {
         private int m_nDangerLevel;
-        private readonly IList<TBaseObject> m_SlaveObjectList;
+        private readonly IList<BaseObject> m_SlaveObjectList;
 
         public ScultureKingMonster() : base()
         {
@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
             CharStatusEx = Grobal2.STATE_STONE_MODE;
             Direction = 5;
             m_nDangerLevel = 5;
-            m_SlaveObjectList = new List<TBaseObject>();
+            m_SlaveObjectList = new List<BaseObject>();
         }
 
         private void MeltStone()
@@ -50,17 +50,17 @@ namespace GameSvr.Monster.Monsters
             }
         }
 
-        public override void Attack(TBaseObject TargeTBaseObject, byte nDir)
+        public override void Attack(BaseObject TargeTBaseObject, byte nDir)
         {
-            int nPower = GetAttackPower(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC));
+            int nPower = GetAttackPower(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC));
             HitMagAttackTarget(TargeTBaseObject, 0, nPower, true);
         }
 
         public override void Run()
         {
-            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
+            if (!Ghost && !Death && MWStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
-                TBaseObject BaseObject;
+                BaseObject BaseObject;
                 if (StoneMode)
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)
@@ -89,12 +89,12 @@ namespace GameSvr.Monster.Monsters
                     {
                         SearchEnemyTick = HUtil32.GetTickCount();
                         SearchTarget();
-                        if (m_nDangerLevel > m_WAbil.HP / m_WAbil.MaxHP * 5 && m_nDangerLevel > 0)
+                        if (m_nDangerLevel > MWAbil.HP / MWAbil.MaxHP * 5 && m_nDangerLevel > 0)
                         {
                             m_nDangerLevel -= 1;
                             CallSlave();
                         }
-                        if (m_WAbil.HP == m_WAbil.MaxHP)
+                        if (MWAbil.HP == MWAbil.MaxHP)
                         {
                             m_nDangerLevel = 5;
                         }

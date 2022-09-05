@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
+            if (!Ghost && !Death && MWStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
             {
                 if (FixedHideMode)
                 {

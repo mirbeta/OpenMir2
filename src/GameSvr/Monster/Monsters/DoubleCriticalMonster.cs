@@ -42,7 +42,7 @@ namespace GameSvr.Monster.Monsters
         private void DoubleAttack(byte btDir)
         {
             Direction = btDir;
-            var WAbil = m_WAbil;
+            var WAbil = MWAbil;
             var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (nDamage <= 0)
             {
@@ -57,14 +57,14 @@ namespace GameSvr.Monster.Monsters
                     {
                         var nX = (short)(CurrX - 2 + k);
                         var nY = (short)(CurrY - 2 + i);
-                        var BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
-                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < m_btHitPoint)
+                        var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < MBtHitPoint)
                         {
                             nDamage = BaseObject.GetHitStruckDamage(this, nDamage);
                             if (nDamage > 0)
                             {
                                 BaseObject.StruckDamage(nDamage);
-                                BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ObjectId, "", 300);
+                                BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, MWAbil.HP, MWAbil.MaxHP, ObjectId, "", 300);
                             }
                         }
                     }

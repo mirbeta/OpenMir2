@@ -26,8 +26,8 @@ namespace GameSvr.Command.Commands
             //    this.SysMsg("命令格式: @" + sCmd + " 类型(0..11) 时长", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
-            PlayObject.m_wStatusTimeArr[nType] = Convert.ToByte(nTime * 1000);
-            PlayObject.m_dwStatusArrTick[nType] = HUtil32.GetTickCount();
+            PlayObject.MWStatusTimeArr[nType] = Convert.ToByte(nTime * 1000);
+            PlayObject.MDwStatusArrTick[nType] = HUtil32.GetTickCount();
             PlayObject.CharStatus = PlayObject.GetCharStatus();
             PlayObject.StatusChanged();
             PlayObject.SysMsg(string.Format("状态编号:{0} 时间长度: {1} 秒", nType, nTime), MsgColor.Green, MsgType.Hint);

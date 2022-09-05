@@ -567,7 +567,7 @@ namespace GameSvr
                         if (!string.IsNullOrEmpty(MonGenInfo.sMapName) && !string.IsNullOrEmpty(MonGenInfo.sMonName) && MonGenInfo.dwZenTime != 0 && 
                             M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, MonGenInfo.sMapName) != null)
                         {
-                            MonGenInfo.CertList = new List<TBaseObject>();
+                            MonGenInfo.CertList = new List<BaseObject>();
                             MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.sMapName);
                             if (MonGenInfo.Envir != null)
                             {

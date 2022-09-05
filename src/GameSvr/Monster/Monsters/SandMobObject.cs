@@ -20,14 +20,14 @@ namespace GameSvr.Monster.Monsters
                     WalkTick = HUtil32.GetTickCount();
                     if (FixedHideMode)
                     {
-                        if (m_WAbil.HP > m_WAbil.MaxHP / 20 && CheckComeOut())
+                        if (MWAbil.HP > MWAbil.MaxHP / 20 && CheckComeOut())
                         {
                             m_dwAppearStart = HUtil32.GetTickCount();
                         }
                     }
                     else
                     {
-                        if (m_WAbil.HP > 0 && m_WAbil.HP < m_WAbil.MaxHP / 20 && (HUtil32.GetTickCount() - m_dwAppearStart) > 3000)
+                        if (MWAbil.HP > 0 && MWAbil.HP < MWAbil.MaxHP / 20 && (HUtil32.GetTickCount() - m_dwAppearStart) > 3000)
                         {
                             ComeDown();
                         }

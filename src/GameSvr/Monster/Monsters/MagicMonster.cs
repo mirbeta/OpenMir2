@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             m_boDupMode = false;
             m_dwThinkTick = HUtil32.GetTickCount();
             ViewRange = 8;
-            m_nRunTime = 250;
+            MNRunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
             Race = 215;
@@ -96,7 +96,7 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (!Ghost && !Death && !FixedHideMode && !StoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && !FixedHideMode && !StoneMode && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (Think())
                 {
@@ -122,7 +122,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     if (!m_boRunAwayMode)
                     {
-                        if (!m_boNoAttackMode)
+                        if (!MBoNoAttackMode)
                         {
                             if (TargetCret != null)
                             {
@@ -135,10 +135,10 @@ namespace GameSvr.Monster.Monsters
                             else
                             {
                                 TargetX = -1;
-                                if (m_boMission)
+                                if (MBoMission)
                                 {
-                                    TargetX = m_nMissionX;
-                                    TargetY = m_nMissionY;
+                                    TargetX = MNMissionX;
+                                    TargetY = MNMissionY;
                                 }
                             }
                         }

@@ -13,30 +13,30 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void GroupRecall(PlayObject PlayObject)
         {
-            if (PlayObject.m_boRecallSuite || PlayObject.Permission >= 6)
+            if (PlayObject.MBoRecallSuite || PlayObject.Permission >= 6)
             {
                 var dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
                 PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
                 if (PlayObject.Permission >= 6)
                 {
-                    PlayObject.m_wGroupRcallTime = 0;
+                    PlayObject.MWGroupRcallTime = 0;
                 }
-                if (PlayObject.m_wGroupRcallTime > dwValue)
+                if (PlayObject.MWGroupRcallTime > dwValue)
                 {
-                    PlayObject.m_wGroupRcallTime -= (short)dwValue;
+                    PlayObject.MWGroupRcallTime -= (short)dwValue;
                 }
                 else
                 {
-                    PlayObject.m_wGroupRcallTime = 0;
+                    PlayObject.MWGroupRcallTime = 0;
                 }
-                if (PlayObject.m_wGroupRcallTime == 0)
+                if (PlayObject.MWGroupRcallTime == 0)
                 {
-                    if (PlayObject.m_GroupOwner == PlayObject)
+                    if (PlayObject.MGroupOwner == PlayObject)
                     {
                         for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                         {
                             var m_PlayObject = PlayObject.GroupMembers[i];
-                            if (m_PlayObject.m_boAllowGroupReCall)
+                            if (m_PlayObject.MBoAllowGroupReCall)
                             {
                                 if (m_PlayObject.Envir.Flag.boNORECALL)
                                 {
@@ -53,12 +53,12 @@ namespace GameSvr.Command.Commands
                             }
                         }
                         PlayObject.GroupRcallTick = HUtil32.GetTickCount();
-                        PlayObject.m_wGroupRcallTime = (short)M2Share.Config.nGroupRecallTime;
+                        PlayObject.MWGroupRcallTime = (short)M2Share.Config.nGroupRecallTime;
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg($"{PlayObject.m_wGroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg($"{PlayObject.MWGroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else

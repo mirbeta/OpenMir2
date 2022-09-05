@@ -354,7 +354,7 @@ namespace GameSvr.Guild
         public void RefMemberName()
         {
             TGuildRank GuildRank;
-            TBaseObject BaseObject;
+            BaseObject BaseObject;
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
@@ -440,7 +440,7 @@ namespace GameSvr.Guild
         public void SendGuildMsg(string sMsg)
         {
             TGuildRank GuildRank;
-            TBaseObject BaseObject;
+            BaseObject BaseObject;
             try
             {
                 if (M2Share.Config.boShowPreFixMsg)

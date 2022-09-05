@@ -18,7 +18,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            TBaseObject BaseObject;
+            BaseObject BaseObject;
             if (!string.IsNullOrEmpty(sHumanName))
             {
                 BaseObject = M2Share.UserEngine.GetPlayObject(sHumanName);

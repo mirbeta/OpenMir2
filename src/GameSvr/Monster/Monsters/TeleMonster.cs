@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!this.Death && !this.Ghost && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!this.Death && !this.Ghost && this.MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (this.TargetCret != null)
                 {

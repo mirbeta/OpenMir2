@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
         {
             short wHitMode = 0;
             GetAttackDir(TargetCret, ref Direction);
-            IList<TBaseObject> xTargetList = new List<TBaseObject>();
+            IList<BaseObject> xTargetList = new List<BaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 1, xTargetList);
             if (xTargetList.Count > 0)
             {
@@ -34,7 +34,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {

@@ -18,15 +18,15 @@ namespace GameSvr.Monster.Monsters
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 500;
             dw558 = HUtil32.GetTickCount();
-            bo2BF = true;
+            Bo2Bf = true;
             n560 = 0;
             bo55C = false;
             bo55D = false;
         }
 
-        public override void Attack(TBaseObject TargeTBaseObject, byte nDir)
+        public override void Attack(BaseObject TargeTBaseObject, byte nDir)
         {
-            var nPower = GetAttackPower(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC));
+            var nPower = GetAttackPower(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC));
             HitMagAttackTarget(TargeTBaseObject, nPower / 2, nPower / 2, true);
         }
 
@@ -57,7 +57,7 @@ namespace GameSvr.Monster.Monsters
                     return;
                 }
                 n10 = n560;
-                n560 = 7 - m_WAbil.HP / (m_WAbil.MaxHP / 7);
+                n560 = 7 - MWAbil.HP / (MWAbil.MaxHP / 7);
                 if (n560 >= 2 && n560 != n10)
                 {
                     bo55C = true;

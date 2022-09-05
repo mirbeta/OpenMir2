@@ -6,16 +6,16 @@ namespace GameSvr.Monster.Monsters
 {
     public class SpiderHouseMonster : AnimalObject
     {
-        private readonly IList<TBaseObject> BBList;
+        private readonly IList<BaseObject> BBList;
 
         public SpiderHouseMonster() : base()
         {
             ViewRange = 9;
-            m_nRunTime = 250;
+            MNRunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
-            m_boStickMode = true;
-            BBList = new List<TBaseObject>();
+            MBoStickMode = true;
+            BBList = new List<BaseObject>();
         }
 
         private void GenBB()
@@ -29,7 +29,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool Operate(TProcessMessage ProcessMsg)
         {
-            TBaseObject BB;
+            BaseObject BB;
             short n08 = 0;
             short n0C = 0;
             if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
@@ -51,7 +51,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {

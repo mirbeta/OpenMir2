@@ -14,14 +14,14 @@ namespace GameSvr.Monster
             m_boDupMode = false;
             m_dwThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
-            m_nRunTime = 250;
+            MNRunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
         }
 
-        protected TBaseObject MakeClone(string sMonName, TBaseObject OldMon)
+        protected BaseObject MakeClone(string sMonName, BaseObject OldMon)
         {
-            TBaseObject result = null;
+            BaseObject result = null;
             var ElfMon = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
@@ -35,8 +35,8 @@ namespace GameSvr.Monster
                 {
                     OldMon.Master.SlaveList.Add(ElfMon);
                 }
-                ElfMon.m_WAbil = OldMon.m_WAbil;
-                ElfMon.m_wStatusTimeArr = OldMon.m_wStatusTimeArr;
+                ElfMon.MWAbil = OldMon.MWAbil;
+                ElfMon.MWStatusTimeArr = OldMon.MWStatusTimeArr;
                 ElfMon.TargetCret = OldMon.TargetCret;
                 ElfMon.TargetFocusTick = OldMon.TargetFocusTick;
                 ElfMon.LastHiter = OldMon.LastHiter;
@@ -115,7 +115,7 @@ namespace GameSvr.Monster
 
         public override void Run()
         {
-            if (!Ghost && !Death && !FixedHideMode && !StoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && !FixedHideMode && !StoneMode && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (Think())
                 {
@@ -141,7 +141,7 @@ namespace GameSvr.Monster
                     }
                     if (!m_boRunAwayMode)
                     {
-                        if (!m_boNoAttackMode)
+                        if (!MBoNoAttackMode)
                         {
                             if (TargetCret != null)
                             {
@@ -154,10 +154,10 @@ namespace GameSvr.Monster
                             else
                             {
                                 TargetX = -1;
-                                if (m_boMission)
+                                if (MBoMission)
                                 {
-                                    TargetX = m_nMissionX;
-                                    TargetY = m_nMissionY;
+                                    TargetX = MNMissionX;
+                                    TargetY = MNMissionY;
                                 }
                             }
                         }

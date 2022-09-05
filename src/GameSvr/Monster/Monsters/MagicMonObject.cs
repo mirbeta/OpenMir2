@@ -19,9 +19,9 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (m_WAbil.HP < m_WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
+                if (MWAbil.HP < MWAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
                     m_boUseMagic = true;
                 }

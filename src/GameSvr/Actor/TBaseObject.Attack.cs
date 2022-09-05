@@ -8,17 +8,17 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Actor
 {
-    public partial class TBaseObject
+    public partial class BaseObject
     {
-        protected virtual void AttackDir(TBaseObject TargeTBaseObject, short wHitMode, byte nDir)
+        protected virtual void AttackDir(BaseObject TargeTBaseObject, short wHitMode, byte nDir)
         {
-            TBaseObject AttackTarget;
+            BaseObject AttackTarget;
             const string sExceptionMsg = "[Exception] TBaseObject::AttackDir";
             try
             {
                 if ((wHitMode == 5) && (MagicArr[SpellsDef.SKILL_BANWOL] != null)) // 半月
                 {
-                    if (m_WAbil.MP > 0)
+                    if (MWAbil.MP > 0)
                     {
                         DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_BANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_BANWOL])));
                         HealthSpellChanged();
@@ -30,7 +30,7 @@ namespace GameSvr.Actor
                 }
                 if ((wHitMode == 12) && (MagicArr[SpellsDef.SKILL_REDBANWOL] != null))
                 {
-                    if (m_WAbil.MP > 0)
+                    if (MWAbil.MP > 0)
                     {
                         DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_REDBANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_REDBANWOL])));
                         HealthSpellChanged();
@@ -42,7 +42,7 @@ namespace GameSvr.Actor
                 }
                 if ((wHitMode == 8) && (MagicArr[SpellsDef.SKILL_CROSSMOON] != null))
                 {
-                    if (m_WAbil.MP > 0)
+                    if (MWAbil.MP > 0)
                     {
                         DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_CROSSMOON].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_CROSSMOON])));
                         HealthSpellChanged();
@@ -70,8 +70,8 @@ namespace GameSvr.Actor
                 }
                 var boPowerHit = PowerHit;
                 var boFireHit = FireHitSkill;
-                var bo41 = m_bo41kill;
-                var boTwinHit = m_boTwinHitSkill;
+                var bo41 = MBo41Kill;
+                var boTwinHit = MBoTwinHitSkill;
                 if (_Attack(ref wHitMode, AttackTarget))
                 {
                     SetTargetCreat(AttackTarget);
@@ -222,20 +222,20 @@ namespace GameSvr.Actor
         }
 
         // 攻击角色
-        private bool _Attack_DirectAttack(TBaseObject BaseObject, int nSecPwr)
+        private bool _Attack_DirectAttack(BaseObject BaseObject, int nSecPwr)
         {
             bool result = false;
             if ((Race == Grobal2.RC_PLAYOBJECT) || (BaseObject.Race == Grobal2.RC_PLAYOBJECT) || !(InSafeZone() && BaseObject.InSafeZone()))
             {
                 if (IsProperTarget(BaseObject))
                 {
-                    if (M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < m_btHitPoint)
+                    if (M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < MBtHitPoint)
                     {
                         BaseObject.StruckDamage(nSecPwr);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nSecPwr, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ObjectId, "", 500);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 500);
                         if (BaseObject.Race != Grobal2.RC_PLAYOBJECT)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, (short)nSecPwr, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ObjectId, "");
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, (short)nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "");
                         }
                         result = true;
                     }
@@ -257,7 +257,7 @@ namespace GameSvr.Actor
             nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.nSwordLongPowerRate / 100);
             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
             {
-                TBaseObject BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+                BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                 if (BaseObject != null)
                 {
                     if ((nSecPwr > 0) && IsProperTarget(BaseObject))
@@ -287,7 +287,7 @@ namespace GameSvr.Actor
                 var n10 = (Direction + M2Share.Config.WideAttack[nC]) % 8;
                 if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
                 {
-                    var BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
                     {
                         result = _Attack_DirectAttack(BaseObject, nSecPwr);
@@ -315,7 +315,7 @@ namespace GameSvr.Actor
                 n10 = (Direction + M2Share.Config.CrsAttack[nC]) % 8;
                 if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
                 {
-                    var BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
                     {
                         result = _Attack_DirectAttack(BaseObject, nSecPwr);
@@ -331,11 +331,11 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private void _Attack_sub_4C1E5C_sub_4C1DC0(ref TBaseObject BaseObject, byte btDir, ref short nX, ref short nY, int nSecPwr)
+        private void _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject BaseObject, byte btDir, ref short nX, ref short nY, int nSecPwr)
         {
             if (Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY))
             {
-                BaseObject = (TBaseObject)Envir.GetMovingObject(nX, nY, true);
+                BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                 if ((nSecPwr > 0) && (BaseObject != null))
                 {
                     _Attack_DirectAttack(BaseObject, nSecPwr);
@@ -347,7 +347,7 @@ namespace GameSvr.Actor
         {
             short nX = 0;
             short nY = 0;
-            TBaseObject BaseObject = null;
+            BaseObject BaseObject = null;
             byte btDir = Direction;
             Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY);
             _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
@@ -357,7 +357,7 @@ namespace GameSvr.Actor
             _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
         }
 
-        protected bool _Attack(ref short wHitMode, TBaseObject AttackTarget)
+        protected bool _Attack(ref short wHitMode, BaseObject AttackTarget)
         {
             int n20;
             bool result = false;
@@ -369,47 +369,47 @@ namespace GameSvr.Actor
                 int nSecPwr = 0;
                 if (AttackTarget != null)
                 {
-                    nPower = GetAttackPower(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC));
+                    nPower = GetAttackPower(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC));
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
-                        nPower += m_nHitPlus;
+                        nPower += _mNHitPlus;
                         bo21 = true;
                     }
                     if ((wHitMode == 7) && FireHitSkill) // 烈火剑法
                     {
                         FireHitSkill = false;
-                        m_dwLatestFireHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
-                        nPower = nPower + HUtil32.Round(nPower / 100 * (m_nHitDouble * 10));
+                        MDwLatestFireHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
+                        nPower = nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10));
                         bo21 = true;
                     }
-                    if ((wHitMode == 9) && m_boTwinHitSkill) // 烈火剑法
+                    if ((wHitMode == 9) && MBoTwinHitSkill) // 烈火剑法
                     {
-                        m_boTwinHitSkill = false;
-                        m_dwLatestTwinHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
-                        nPower = nPower + HUtil32.Round(nPower / 100 * (m_nHitDouble * 10));
+                        MBoTwinHitSkill = false;
+                        MDwLatestTwinHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
+                        nPower = nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10));
                         bo21 = true;
                     }
                 }
                 else
                 {
-                    nPower = GetAttackPower(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC));
+                    nPower = GetAttackPower(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC));
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
-                        nPower += m_nHitPlus;
+                        nPower += _mNHitPlus;
                         bo21 = true;
                     }
                     // Jacky 防止砍空刀刀烈火
                     if ((wHitMode == 7) && FireHitSkill)
                     {
                         FireHitSkill = false;
-                        m_dwLatestFireHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
+                        MDwLatestFireHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
                     }
-                    if ((wHitMode == 9) && m_boTwinHitSkill)
+                    if ((wHitMode == 9) && MBoTwinHitSkill)
                     {
-                        m_boTwinHitSkill = false;
-                        m_dwLatestTwinHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
+                        MBoTwinHitSkill = false;
+                        MDwLatestTwinHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
                     }
                 }
                 if (wHitMode == 4)
@@ -490,9 +490,9 @@ namespace GameSvr.Actor
                 }
                 if (IsProperTarget(AttackTarget))
                 {
-                    if (AttackTarget.m_btHitPoint > 0)
+                    if (AttackTarget.MBtHitPoint > 0)
                     {
-                        if (m_btHitPoint < M2Share.RandomNumber.Random(AttackTarget.SpeedPoint))
+                        if (MBtHitPoint < M2Share.RandomNumber.Random(AttackTarget.SpeedPoint))
                         {
                             nPower = 0;
                         }
@@ -505,23 +505,23 @@ namespace GameSvr.Actor
                 if (nPower > 0)
                 {
                     nPower = AttackTarget.GetHitStruckDamage(this, nPower);
-                    nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - m_AddAbil.btWeaponStrong;
+                    nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - _mAddAbil.btWeaponStrong;
                 }
                 if (nPower > 0)
                 {
                     AttackTarget.StruckDamage(nPower);
-                    AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.m_WAbil.HP, AttackTarget.m_WAbil.MaxHP, ObjectId, "", 200);
+                    AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.MWAbil.HP, AttackTarget.MWAbil.MaxHP, ObjectId, "", 200);
                     if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
                     {
                         AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.Config.AttackPosionTime, 0);
                     }
-                    if (m_nHongMoSuite > 0)// 虹魔，吸血
+                    if (MNHongMoSuite > 0)// 虹魔，吸血
                     {
-                        m_db3B0 = nPower / 100 * m_nHongMoSuite;
-                        if (m_db3B0 >= 2.0)
+                        MDb3B0 = nPower / 100 * MNHongMoSuite;
+                        if (MDb3B0 >= 2.0)
                         {
-                            n20 = Convert.ToInt32(m_db3B0);
-                            m_db3B0 = n20;
+                            n20 = Convert.ToInt32(MDb3B0);
+                            MDb3B0 = n20;
                             DamageHealth(-n20);
                         }
                     }
@@ -647,7 +647,7 @@ namespace GameSvr.Actor
                         {
                             if (this.IsRobot)
                             {
-                                if ((this as RobotPlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if ((this as RobotPlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                     {
@@ -657,7 +657,7 @@ namespace GameSvr.Actor
                             }
                             else
                             {
-                                if ((this as PlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if ((this as PlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                     {
@@ -672,7 +672,7 @@ namespace GameSvr.Actor
                             {
                                 if (Master.IsRobot)
                                 {
-                                    if ((Master as RobotPlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if ((Master as RobotPlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
@@ -682,7 +682,7 @@ namespace GameSvr.Actor
                                 }
                                 else
                                 {
-                                    if ((Master as PlayObject).m_WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if ((Master as PlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
@@ -704,7 +704,7 @@ namespace GameSvr.Actor
                 }
                 if (AttackTarget.Race != Grobal2.RC_PLAYOBJECT)
                 {
-                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.m_WAbil.HP, AttackTarget.m_WAbil.MaxHP, ObjectId, "");
+                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.MWAbil.HP, AttackTarget.MWAbil.MaxHP, ObjectId, "");
                 }
             }
             catch (Exception e)

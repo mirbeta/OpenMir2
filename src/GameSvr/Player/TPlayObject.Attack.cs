@@ -21,7 +21,7 @@ namespace GameSvr.Player
                 {
                     return result;
                 }
-                if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanHit)// 防麻
+                if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanHit)// 防麻
                 {
                     return result;
                 }
@@ -86,11 +86,11 @@ namespace GameSvr.Player
                                 {
                                     SendSocket("=DIG");
                                 }
-                                m_nHealthTick -= 30;
-                                m_nSpellTick -= 50;
-                                m_nSpellTick = HUtil32._MAX(0, m_nSpellTick);
-                                m_nPerHealth -= 2;
-                                m_nPerSpell -= 2;
+                                MNHealthTick -= 30;
+                                MNSpellTick -= 50;
+                                MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                                MNPerHealth -= 2;
+                                MNPerSpell -= 2;
                                 return result;
                             }
                         }
@@ -143,11 +143,11 @@ namespace GameSvr.Player
                             AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         }
                     }
-                    m_nHealthTick -= 30;
-                    m_nSpellTick -= 100;
-                    m_nSpellTick = HUtil32._MAX(0, m_nSpellTick);
-                    m_nPerHealth -= 2;
-                    m_nPerSpell -= 2;
+                    MNHealthTick -= 30;
+                    MNSpellTick -= 100;
+                    MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                    MNPerHealth -= 2;
+                    MNPerSpell -= 2;
                 }
             }
             catch (Exception e)
@@ -168,7 +168,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)// 防麻
+            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)// 防麻
             {
                 return result;
             }
@@ -217,7 +217,7 @@ namespace GameSvr.Player
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
-            m_bo316 = false;
+            MBo316 = false;
 #if Debug
             Debug.WriteLine(format("当前X:{0} 当前Y:{1} 目标X:{2} 目标Y:{3}", new object[] {this.m_nCurrX, this.m_nCurrY, nX, nY}), TMsgColor.c_Green, TMsgType.t_Hint);
 #endif
@@ -226,17 +226,17 @@ namespace GameSvr.Player
             {
                 if (Transparent && HideMode)
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                    MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
-                if (m_bo316 || CurrX == nX && CurrY == nY)
+                if (MBo316 || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }
-                m_nHealthTick -= 60;
-                m_nSpellTick -= 10;
-                m_nSpellTick = HUtil32._MAX(0, m_nSpellTick);
-                m_nPerHealth -= 1;
-                m_nPerSpell -= 1;
+                MNHealthTick -= 60;
+                MNSpellTick -= 10;
+                MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                MNPerHealth -= 1;
+                MNPerSpell -= 1;
             }
             else
             {
@@ -246,7 +246,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientSpellXY(short wIdent, int nKey, int nTargetX, int nTargetY, TBaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientSpellXY(short wIdent, int nKey, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
         {
             var result = false;
             dwDelayTime = 0;
@@ -254,7 +254,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)// 防麻
+            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)// 防麻
             {
                 return result;
             }
@@ -305,8 +305,8 @@ namespace GameSvr.Player
                     }
                 }
             }
-            m_nSpellTick -= 450;
-            m_nSpellTick = HUtil32._MAX(0, m_nSpellTick);
+            MNSpellTick -= 450;
+            MNSpellTick = HUtil32._MAX(0, MNSpellTick);
             if (!boIsWarrSkill)
             {
                 m_dwMagicAttackInterval = UserMagic.MagicInfo.dwDelayTime + M2Share.Config.dwMagicHitIntervalTime;
@@ -369,7 +369,7 @@ namespace GameSvr.Player
                         if (AllowFireHitSkill())
                         {
                             nSpellPoint = GetSpellPoint(UserMagic);
-                            if (m_WAbil.MP >= nSpellPoint)
+                            if (MWAbil.MP >= nSpellPoint)
                             {
                                 if (nSpellPoint > 0)
                                 {
@@ -384,12 +384,12 @@ namespace GameSvr.Player
                     break;
                 case SpellsDef.SKILL_MOOTEBO:
                     result = true;
-                    if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3 * 1000)
+                    if ((HUtil32.GetTickCount() - MDwDoMotaeboTick) > 3 * 1000)
                     {
-                        m_dwDoMotaeboTick = HUtil32.GetTickCount();
+                        MDwDoMotaeboTick = HUtil32.GetTickCount();
                         Direction = (byte)nTargetX;
                         nSpellPoint = GetSpellPoint(UserMagic);
-                        if (m_WAbil.MP >= nSpellPoint)
+                        if (MWAbil.MP >= nSpellPoint)
                         {
                             if (nSpellPoint > 0)
                             {
@@ -435,7 +435,7 @@ namespace GameSvr.Player
                         if (AllowTwinHitSkill())
                         {
                             nSpellPoint = GetSpellPoint(UserMagic);
-                            if (m_WAbil.MP >= nSpellPoint)
+                            if (MWAbil.MP >= nSpellPoint)
                             {
                                 if (nSpellPoint > 0)
                                 {
@@ -451,7 +451,7 @@ namespace GameSvr.Player
                 case SpellsDef.SKILL_43:// 破空剑
                     if (MagicArr[SpellsDef.SKILL_43] != null)
                     {
-                        if (!m_bo43kill)
+                        if (!MBo43Kill)
                         {
                             Skill43OnOff(true);
                             SendSocket("+CID");
@@ -466,7 +466,7 @@ namespace GameSvr.Player
                     break;
                 default:
                     Direction = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
-                    TBaseObject BaseObject = null;
+                    BaseObject BaseObject = null;
                     if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {
                         BaseObject = TargeTBaseObject;
@@ -492,7 +492,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
+            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
             {
                 return result;
             }
@@ -538,23 +538,23 @@ namespace GameSvr.Player
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
-            m_bo316 = false;
+            MBo316 = false;
             nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (RunTo(nDir, false, nX, nY))
             {
                 if (Transparent && HideMode)
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                    MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
-                if (m_bo316 || CurrX == nX && CurrY == nY)
+                if (MBo316 || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }
-                m_nHealthTick -= 60;
-                m_nSpellTick -= 10;
-                m_nSpellTick = HUtil32._MAX(0, m_nSpellTick);
-                m_nPerHealth -= 1;
-                m_nPerSpell -= 1;
+                MNHealthTick -= 60;
+                MNSpellTick -= 10;
+                MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                MNPerHealth -= 1;
+                MNPerSpell -= 1;
             }
             else
             {
@@ -575,7 +575,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanWalk)
+            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanWalk)
             {
                 return result; // 防麻
             }
@@ -621,7 +621,7 @@ namespace GameSvr.Player
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
-            m_bo316 = false;
+            MBo316 = false;
             n18 = CurrX;
             n1C = CurrY;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
@@ -673,11 +673,11 @@ namespace GameSvr.Player
             }
             if (WalkTo((byte)n14, false))
             {
-                if (m_bo316 || CurrX == nX && CurrY == nY)
+                if (MBo316 || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }
-                m_nHealthTick -= 10;
+                MNHealthTick -= 10;
             }
             else
             {

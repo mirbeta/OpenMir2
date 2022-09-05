@@ -9,7 +9,7 @@ namespace GameSvr.Monster.Monsters
         public WallStructure() : base()
         {
             this.Animal = false;
-            this.m_boStickMode = true;
+            this.MBoStickMode = true;
             SetMapFlaged = false;
             this.AntiPoison = 200;
         }
@@ -23,9 +23,9 @@ namespace GameSvr.Monster.Monsters
         public void RefStatus()
         {
             byte n08;
-            if (this.m_WAbil.HP > 0)
+            if (this.MWAbil.HP > 0)
             {
-                n08 = (byte)(3 - HUtil32.Round(this.m_WAbil.HP / this.m_WAbil.MaxHP * 3));
+                n08 = (byte)(3 - HUtil32.Round(this.MWAbil.HP / this.MWAbil.MaxHP * 3));
             }
             else
             {
@@ -58,16 +58,16 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                this.m_nHealthTick = 0;
+                this.MNHealthTick = 0;
                 if (!SetMapFlaged)
                 {
                     this.Envir.SetMapXyFlag(this.CurrX, this.CurrY, false);
                     SetMapFlaged = true;
                 }
             }
-            if (this.m_WAbil.HP > 0)
+            if (this.MWAbil.HP > 0)
             {
-                n08 = 3 - HUtil32.Round(this.m_WAbil.HP / this.m_WAbil.MaxHP * 3);
+                n08 = 3 - HUtil32.Round(this.MWAbil.HP / this.MWAbil.MaxHP * 3);
             }
             else
             {

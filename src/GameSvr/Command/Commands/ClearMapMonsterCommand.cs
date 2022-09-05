@@ -44,7 +44,7 @@ namespace GameSvr.Command.Commands
             {
                 boNotItem = false;
             }
-            IList<TBaseObject> MonList = new List<TBaseObject>();
+            IList<BaseObject> MonList = new List<BaseObject>();
             try
             {
                 for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)
@@ -71,8 +71,8 @@ namespace GameSvr.Command.Commands
                                         }
                                         if (boKillAll || string.Compare(sMonName, BaseObject.CharName, StringComparison.OrdinalIgnoreCase) == 0)
                                         {
-                                            BaseObject.m_boNoItem = boNotItem;
-                                            BaseObject.m_WAbil.HP = 0;
+                                            BaseObject.MBoNoItem = boNotItem;
+                                            BaseObject.MWAbil.HP = 0;
                                             nMonCount++;
                                         }
                                     }

@@ -21,7 +21,7 @@ namespace GameSvr.RobotPlay
             bool boFind = false;
             try
             {
-                if (!Ghost && !Death && !FixedHideMode && !StoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+                if (!Ghost && !Death && !FixedHideMode && !StoneMode && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
                 {
                     if (HUtil32.GetTickCount() - WalkTick > WalkSpeed)
                     {
@@ -105,7 +105,7 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (Job > 0)
                                     {
-                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.m_WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.MWAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
                                         {
                                             // 道法22前是否物理攻击
                                             if (Master != null)
@@ -133,7 +133,7 @@ namespace GameSvr.RobotPlay
                         {
                             if (M2Share.Config.boHPAutoMoveMap)
                             {
-                                if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
+                                if (MWAbil.HP <= Math.Round(MWAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
                                     m_dwHPToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
@@ -252,30 +252,30 @@ namespace GameSvr.RobotPlay
                                 if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000)
                                 {
                                     m_dwAutoAddHealthTick = HUtil32.GetTickCount();
-                                    nPercent = m_WAbil.HP * 100 / m_WAbil.MaxHP;
-                                    nValue = m_WAbil.MaxHP / 10;
+                                    nPercent = MWAbil.HP * 100 / MWAbil.MaxHP;
+                                    nValue = MWAbil.MaxHP / 10;
                                     if (nPercent < M2Share.Config.nRenewPercent)
                                     {
-                                        if (m_WAbil.HP + nValue >= m_WAbil.MaxHP)
+                                        if (MWAbil.HP + nValue >= MWAbil.MaxHP)
                                         {
-                                            m_WAbil.HP = m_WAbil.MaxHP;
+                                            MWAbil.HP = MWAbil.MaxHP;
                                         }
                                         else
                                         {
-                                            m_WAbil.HP += (ushort)nValue;
+                                            MWAbil.HP += (ushort)nValue;
                                         }
                                     }
-                                    nValue = m_WAbil.MaxMP / 10;
-                                    nPercent = m_WAbil.MP * 100 / m_WAbil.MaxMP;
+                                    nValue = MWAbil.MaxMP / 10;
+                                    nPercent = MWAbil.MP * 100 / MWAbil.MaxMP;
                                     if (nPercent < M2Share.Config.nRenewPercent)
                                     {
-                                        if (m_WAbil.MP + nValue >= m_WAbil.MaxMP)
+                                        if (MWAbil.MP + nValue >= MWAbil.MaxMP)
                                         {
-                                            m_WAbil.MP = m_WAbil.MaxMP;
+                                            MWAbil.MP = MWAbil.MaxMP;
                                         }
                                         else
                                         {
-                                            m_WAbil.MP += (ushort)nValue;
+                                            MWAbil.MP += (ushort)nValue;
                                         }
                                     }
                                 }
@@ -283,7 +283,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
 
-                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
                     {
                         if (m_boProtectStatus && TargetCret == null)// 守护状态
                         {
@@ -313,17 +313,17 @@ namespace GameSvr.RobotPlay
             base.Run();
         }
 
-        protected override bool IsProtectTarget(TBaseObject BaseObject)
+        protected override bool IsProtectTarget(BaseObject BaseObject)
         {
             return base.IsProtectTarget(BaseObject);
         }
 
-        protected override bool IsAttackTarget(TBaseObject BaseObject)
+        protected override bool IsAttackTarget(BaseObject BaseObject)
         {
             return base.IsAttackTarget(BaseObject);
         }
 
-        public override bool IsProperTarget(TBaseObject BaseObject)
+        public override bool IsProperTarget(BaseObject BaseObject)
         {
             bool result = false;
             if (BaseObject != null)
@@ -333,12 +333,12 @@ namespace GameSvr.RobotPlay
                     result = true;
                     if (BaseObject.Master != null)
                     {
-                        if (BaseObject.Master == this || BaseObject.Master.IsRobot && !InFreePKArea)
+                        if (BaseObject.Master == this || BaseObject.Master.IsRobot && !InFreePkArea)
                         {
                             result = false;
                         }
                     }
-                    if (BaseObject.IsRobot && !InFreePKArea)// 假人不攻击假人,行会战除外
+                    if (BaseObject.IsRobot && !InFreePkArea)// 假人不攻击假人,行会战除外
                     {
                         result = false;
                     }
@@ -430,7 +430,7 @@ namespace GameSvr.RobotPlay
                         {
                             result = false;
                         }
-                        if (BaseObject.IsRobot && (!InFreePKArea || BaseObject.PvpLevel() < 2))// 假人不攻击假人,行会战除外
+                        if (BaseObject.IsRobot && (!InFreePkArea || BaseObject.PvpLevel() < 2))// 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }
@@ -460,7 +460,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public override bool IsProperFriend(TBaseObject BaseObject)
+        public override bool IsProperFriend(BaseObject BaseObject)
         {
             return base.IsProperFriend(BaseObject);
         }
@@ -470,7 +470,7 @@ namespace GameSvr.RobotPlay
             int nIdx;
             MapCellInfo cellInfo;
             CellObject osObject = null;
-            TBaseObject baseObject;
+            BaseObject baseObject;
             MirEvent MapEvent;
             VisibleFlag nVisibleFlag;
             const string sExceptionMsg = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
@@ -630,7 +630,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.Error(format(sExceptionMsg, new object[] { CharName, MapName, CurrX, CurrY }));
+                M2Share.Log.Error(Format(sExceptionMsg, new object[] { CharName, MapName, CurrX, CurrY }));
                 KickException();
             }
             try
@@ -689,7 +689,7 @@ namespace GameSvr.RobotPlay
                                         {
                                             if (baseObject.Death)
                                             {
-                                                if (baseObject.m_boSkeleton)
+                                                if (baseObject.MBoSkeleton)
                                                 {
                                                     SendMsg(baseObject, Grobal2.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                                 }
@@ -724,7 +724,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.Error(format(sExceptionMsg, new object[] { CharName, MapName, CurrX, CurrY }));
+                M2Share.Log.Error(Format(sExceptionMsg, new object[] { CharName, MapName, CurrX, CurrY }));
                 KickException();
             }
             try
@@ -830,7 +830,7 @@ namespace GameSvr.RobotPlay
             }
         }
 
-        public override void Struck(TBaseObject hiter)
+        public override void Struck(BaseObject hiter)
         {
             StruckTick = HUtil32.GetTickCount();
             if (hiter != null)
@@ -893,10 +893,10 @@ namespace GameSvr.RobotPlay
             }
             if (Animal)
             {
-                m_nMeatQuality = (ushort)(m_nMeatQuality - M2Share.RandomNumber.Random(300));
-                if (m_nMeatQuality < 0)
+                MNMeatQuality = (ushort)(MNMeatQuality - M2Share.RandomNumber.Random(300));
+                if (MNMeatQuality < 0)
                 {
-                    m_nMeatQuality = 0;
+                    MNMeatQuality = 0;
                 }
             }
             AttackTick = (ushort)(AttackTick + (150 - HUtil32._MIN(130, Abil.Level * 4)));

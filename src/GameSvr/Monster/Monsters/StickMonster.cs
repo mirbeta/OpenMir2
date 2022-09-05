@@ -12,13 +12,13 @@ namespace GameSvr.Monster.Monsters
         public StickMonster() : base()
         {
             this.ViewRange = 7;
-            this.m_nRunTime = 250;
+            this.MNRunTime = 250;
             this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             this.SearchTick = HUtil32.GetTickCount();
             nComeOutValue = 4;
             nAttackRange = 4;
             this.FixedHideMode = true;
-            this.m_boStickMode = true;
+            this.MBoStickMode = true;
             this.Animal = true;
         }
 
@@ -69,7 +69,7 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual bool CheckComeOut()
         {
-            TBaseObject BaseObject;
+            BaseObject BaseObject;
             var result = false;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
@@ -100,7 +100,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!this.Ghost && !this.Death && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!this.Ghost && !this.Death && this.MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - this.WalkTick) > this.WalkSpeed)
                 {

@@ -24,7 +24,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             PlayObject.SysMsg("开始行会争霸赛。", MsgColor.Red, MsgType.Hint);
-            IList<TBaseObject> List10 = new List<TBaseObject>();
+            IList<BaseObject> List10 = new List<BaseObject>();
             IList<PlayObject> List14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
             M2Share.UserEngine.GetMapRageHuman(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, List10);

@@ -13,7 +13,7 @@ namespace GameSvr.Event.Events
         /// </summary>
         private int m_fireRunTick;
 
-        public FireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.Envir, nX, nY, nType, nTime, true)
+        public FireBurnEvent(BaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.Envir, nX, nY, nType, nTime, true)
         {
             Damage = nDamage;
             OwnBaseObject = Creat;
@@ -24,7 +24,7 @@ namespace GameSvr.Event.Events
             if ((HUtil32.GetTickCount() - m_fireRunTick) > 3000)
             {
                 m_fireRunTick = HUtil32.GetTickCount();
-                IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
+                IList<BaseObject> BaseObjectList = new List<BaseObject>();
                 if (m_Envir != null)
                 {
                     m_Envir.GetBaseObjects(m_nX, m_nY, true, BaseObjectList);

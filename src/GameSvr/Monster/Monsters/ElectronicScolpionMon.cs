@@ -15,27 +15,27 @@ namespace GameSvr.Monster.Monsters
         private void LightingAttack(byte nDir)
         {
             Direction = nDir;
-            var WAbil = m_WAbil;
+            var WAbil = MWAbil;
             int nPower = GetAttackPower(HUtil32.LoWord(WAbil.MC), HUtil32.HiWord(WAbil.MC) - HUtil32.LoWord(WAbil.MC));
             var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {
-                int btGetBackHP = HUtil32.LoByte(m_WAbil.MP);
+                int btGetBackHP = HUtil32.LoByte(MWAbil.MP);
                 if (btGetBackHP != 0)
                 {
-                    m_WAbil.HP += (ushort)(nDamage / btGetBackHP);
+                    MWAbil.HP += (ushort)(nDamage / btGetBackHP);
                 }
                 TargetCret.StruckDamage(nDamage);
-                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, TargetCret.m_WAbil.HP, TargetCret.m_WAbil.MaxHP, ObjectId, "", 200);
+                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, TargetCret.MWAbil.HP, TargetCret.MWAbil.MaxHP, ObjectId, "", 200);
             }
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ObjectId, "");
         }
 
         public override void Run()
         {
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (m_WAbil.HP < m_WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
+                if (MWAbil.HP < MWAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
                     m_boUseMagic = true;
                 }

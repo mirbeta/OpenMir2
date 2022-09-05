@@ -24,9 +24,9 @@ namespace GameSvr.Player
                 }
                 if (!OffLineFlag && PlayObject.OffLineFlag)
                 {
-                    if (PlayObject.m_sOffLineLeaveword != "")
+                    if (PlayObject.MSOffLineLeaveword != "")
                     {
-                        PlayObject.Whisper(CharName, PlayObject.m_sOffLineLeaveword);
+                        PlayObject.Whisper(CharName, PlayObject.MSOffLineLeaveword);
                     }
                     else
                     {
@@ -120,7 +120,7 @@ namespace GameSvr.Player
                     {
                         m_boDisableSayMsg = true;
                         m_dwDisableSayMsgTick = HUtil32.GetTickCount() + M2Share.Config.dwDisableSayMsgTime;// 60 * 1000
-                        SysMsg(format(M2Share.g_sDisableSayMsg, M2Share.Config.dwDisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
+                        SysMsg(Format(M2Share.g_sDisableSayMsg, M2Share.Config.dwDisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
@@ -203,7 +203,7 @@ namespace GameSvr.Player
                                     {
                                         if (Abil.Level <= M2Share.Config.nCanShoutMsgLevel)
                                         {
-                                            SysMsg(format(M2Share.g_sYouNeedLevelMsg, M2Share.Config.nCanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                            SysMsg(Format(M2Share.g_sYouNeedLevelMsg, M2Share.Config.nCanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
@@ -219,7 +219,7 @@ namespace GameSvr.Player
                                         }
                                         return;
                                     }
-                                    SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
                                 SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
@@ -240,7 +240,7 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(format(sExceptionMsg, sData));
+                M2Share.Log.Error(Format(sExceptionMsg, sData));
                 M2Share.Log.Error(e.StackTrace);
             }
         }
@@ -728,8 +728,8 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWGUILDRECALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_boAllowGuildReCall = !m_boAllowGuildReCall;
-                    if (m_boAllowGuildReCall)
+                    MBoAllowGuildReCall = !MBoAllowGuildReCall;
+                    if (MBoAllowGuildReCall)
                     {
                         SysMsg(M2Share.g_sEnableGuildRecall, MsgColor.Green, MsgType.Hint);
                     }
@@ -861,7 +861,7 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(format(sExceptionMsg, sData));
+                M2Share.Log.Error(Format(sExceptionMsg, sData));
                 M2Share.Log.Error(e.Message);
             }
         }

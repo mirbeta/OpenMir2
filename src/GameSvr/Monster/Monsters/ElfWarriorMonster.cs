@@ -70,7 +70,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if ((HUtil32.GetTickCount() - dwDigDownTick) > (6 * 10 * 1000))
                     {
-                        TBaseObject elfMon = null;
+                        BaseObject elfMon = null;
                         var elfName = CharName;
                         if (elfName[^1] == '1')
                         {

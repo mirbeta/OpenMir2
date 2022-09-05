@@ -27,7 +27,7 @@ namespace GameSvr.Command.Commands
 
             short n10 = 0;
             short n14 = 0;
-            TBaseObject mon;
+            BaseObject mon;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (TargetCret != null)
                 {
@@ -19,7 +19,7 @@ namespace GameSvr.Monster.Monsters
                     TargetY = TargetCret.CurrY;
                     if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1)
                     {
-                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0)
+                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.MWStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0)
                         {
                             TargetCret.MakePosion(Grobal2.POISON_DECHEALTH, 30, 1);
                         }

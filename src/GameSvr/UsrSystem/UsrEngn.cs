@@ -432,7 +432,7 @@ namespace GameSvr.UsrSystem
                         playObject.m_nSocket = userOpenInfo.LoadUser.nSocket;
                         playObject.m_nGateIdx = userOpenInfo.LoadUser.nGateIdx;
                         playObject.m_nGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
-                        playObject.m_WAbil = playObject.Abil;
+                        playObject.MWAbil = playObject.Abil;
                         playObject.m_nServerIndex = M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
@@ -480,7 +480,7 @@ namespace GameSvr.UsrSystem
                     playObject.CurrX = switchDataInfo.wX;
                     playObject.CurrY = switchDataInfo.wY;
                     playObject.Abil = switchDataInfo.Abil;
-                    playObject.m_WAbil = switchDataInfo.Abil;
+                    playObject.MWAbil = switchDataInfo.Abil;
                     LoadSwitchData(switchDataInfo, ref playObject);
                     DelSwitchData(switchDataInfo);
                     Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
@@ -704,9 +704,9 @@ namespace GameSvr.UsrSystem
                     {
                         if (BotPlayObjectList.Count <= nIdx) break;
                         var playObject = BotPlayObjectList[nIdx];
-                        if (dwCurTick - playObject.m_dwRunTick > playObject.m_nRunTime)
+                        if (dwCurTick - playObject.MDwRunTick > playObject.MNRunTime)
                         {
-                            playObject.m_dwRunTick = dwCurTick;
+                            playObject.MDwRunTick = dwCurTick;
                             if (!playObject.Ghost)
                             {
                                 if (!playObject.m_boLoginNoticeOK)
@@ -780,9 +780,9 @@ namespace GameSvr.UsrSystem
                     {
                         continue;
                     }
-                    if ((dwCurTick - playObject.m_dwRunTick) > playObject.m_nRunTime)
+                    if ((dwCurTick - playObject.MDwRunTick) > playObject.MNRunTime)
                     {
-                        playObject.m_dwRunTick = dwCurTick;
+                        playObject.MDwRunTick = dwCurTick;
                         if (!playObject.Ghost)
                         {
                             if (!playObject.m_boLoginNoticeOK)
@@ -884,16 +884,16 @@ namespace GameSvr.UsrSystem
                     var merchantNpc = MerchantList[i];
                     if (!merchantNpc.Ghost)
                     {
-                        if ((dwCurrTick - merchantNpc.m_dwRunTick) > merchantNpc.m_nRunTime)
+                        if ((dwCurrTick - merchantNpc.MDwRunTick) > merchantNpc.MNRunTime)
                         {
                             if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
                             {
                                 merchantNpc.SearchTick = HUtil32.GetTickCount();
                                 merchantNpc.SearchViewRange();
                             }
-                            if ((dwCurrTick - merchantNpc.m_dwRunTick) > merchantNpc.m_nRunTime)
+                            if ((dwCurrTick - merchantNpc.MDwRunTick) > merchantNpc.MNRunTime)
                             {
-                                merchantNpc.m_dwRunTick = dwCurrTick;
+                                merchantNpc.MDwRunTick = dwCurrTick;
                                 merchantNpc.Run();
                             }
                         }
@@ -1045,9 +1045,9 @@ namespace GameSvr.UsrSystem
                         {
                             if (!monster.Ghost)
                             {
-                                if ((dwCurrentTick - monster.m_dwRunTick) > monster.m_nRunTime)
+                                if ((dwCurrentTick - monster.MDwRunTick) > monster.MNRunTime)
                                 {
-                                    monster.m_dwRunTick = dwRunTick;
+                                    monster.MDwRunTick = dwRunTick;
                                     if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
                                     {
                                         if ((HUtil32.GetTickCount() - monster.ReAliveTick) > M2Share.UserEngine.ProcessMonsters_GetZenTime(monster.MonGen.dwZenTime))
@@ -1130,7 +1130,7 @@ namespace GameSvr.UsrSystem
             var nCount = 0;
             for (var i = 0; i < monGen.CertList.Count; i++)
             {
-                TBaseObject baseObject = monGen.CertList[i];
+                BaseObject baseObject = monGen.CertList[i];
                 if (!baseObject.Death && !baseObject.Ghost)
                 {
                     nCount++;
@@ -1151,16 +1151,16 @@ namespace GameSvr.UsrSystem
                     NormNpc npc = QuestNpcList[i];
                     if (!npc.Ghost)
                     {
-                        if ((dwCurrTick - npc.m_dwRunTick) > npc.m_nRunTime)
+                        if ((dwCurrTick - npc.MDwRunTick) > npc.MNRunTime)
                         {
                             if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
                             {
                                 npc.SearchTick = HUtil32.GetTickCount();
                                 npc.SearchViewRange();
                             }
-                            if ((dwCurrTick - npc.m_dwRunTick) > npc.m_nRunTime)
+                            if ((dwCurrTick - npc.MDwRunTick) > npc.MNRunTime)
                             {
-                                npc.m_dwRunTick = dwCurrTick;
+                                npc.MDwRunTick = dwCurrTick;
                                 npc.Run();
                             }
                         }
@@ -1190,7 +1190,7 @@ namespace GameSvr.UsrSystem
             if (DwProcessNpcTimeMin > DwProcessNpcTimeMax) DwProcessNpcTimeMax = DwProcessNpcTimeMin;
         }
 
-        public TBaseObject RegenMonsterByName(string sMap, short nX, short nY, string sMonName)
+        public BaseObject RegenMonsterByName(string sMap, short nX, short nY, string sMonName)
         {
             var nRace = GetMonRace(sMonName);
             var baseObject = AddBaseObject(sMap, nX, nY, nRace, sMonName);
@@ -1313,7 +1313,7 @@ namespace GameSvr.UsrSystem
         /// 即创建怪物对象的时候已经算好要掉落的物品和属性
         /// </summary>
         /// <returns></returns>
-        private void MonGetRandomItems(TBaseObject mon)
+        private void MonGetRandomItems(BaseObject mon)
         {
             IList<TMonItem> itemList = null;
             var itemName = string.Empty;
@@ -1490,7 +1490,7 @@ namespace GameSvr.UsrSystem
                 case Grobal2.CM_FIREHIT:
                 case Grobal2.CM_CRSHIT:
                 case Grobal2.CM_TWINHIT:
-                    playObject.m_dwRunTick -= 100;
+                    playObject.MDwRunTick -= 100;
                     break;
             }
         }
@@ -1551,10 +1551,10 @@ namespace GameSvr.UsrSystem
         /// 创建对象
         /// </summary>
         /// <returns></returns>
-        private TBaseObject AddBaseObject(string sMapName, short nX, short nY, int nMonRace, string sMonName)
+        private BaseObject AddBaseObject(string sMapName, short nX, short nY, int nMonRace, string sMonName)
         {
-            TBaseObject result = null;
-            TBaseObject cert = null;
+            BaseObject result = null;
+            BaseObject cert = null;
             int n1C;
             int n20;
             int n24;
@@ -1576,8 +1576,8 @@ namespace GameSvr.UsrSystem
                     cert = new MonsterObject
                     {
                         Animal = true,
-                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000),
-                        m_nBodyLeathery = 50
+                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000),
+                        MNBodyLeathery = 50
                     };
                     break;
                 case MonsterConst.ANIMAL_DEER:
@@ -1585,23 +1585,23 @@ namespace GameSvr.UsrSystem
                         cert = new ChickenDeer
                         {
                             Animal = true,
-                            m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
-                            m_nBodyLeathery = 150
+                            MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
+                            MNBodyLeathery = 150
                         };
                     else
                         cert = new MonsterObject()
                         {
                             Animal = true,
-                            m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
-                            m_nBodyLeathery = 150
+                            MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
+                            MNBodyLeathery = 150
                         };
                     break;
                 case MonsterConst.ANIMAL_WOLF:
                     cert = new AtMonster
                     {
                         Animal = true,
-                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
-                        m_nBodyLeathery = 150
+                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
+                        MNBodyLeathery = 150
                     };
                     break;
                 case MonsterConst.TRAINER:
@@ -1654,15 +1654,15 @@ namespace GameSvr.UsrSystem
                     break;
                 case MonsterConst.MONSTER_DIGOUTZOMBI:
                     cert = new DigOutZombi();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.bo2BA = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) cert.Bo2Ba = true;
                     break;
                 case MonsterConst.MONSTER_ZILKINZOMBI:
                     cert = new ZilKinZombi();
-                    if (M2Share.RandomNumber.Random(4) == 0) cert.bo2BA = true;
+                    if (M2Share.RandomNumber.Random(4) == 0) cert.Bo2Ba = true;
                     break;
                 case 97:
                     cert = new TCowMonster();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.bo2BA = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) cert.Bo2Ba = true;
                     break;
                 case MonsterConst.MONSTER_WHITESKELETON:
                     cert = new WhiteSkeleton();
@@ -1670,7 +1670,7 @@ namespace GameSvr.UsrSystem
                 case MonsterConst.MONSTER_SCULTURE:
                     cert = new ScultureMonster
                     {
-                        bo2BA = true
+                        Bo2Ba = true
                     };
                     break;
                 case MonsterConst.MONSTER_SCULTUREKING:
@@ -1777,9 +1777,9 @@ namespace GameSvr.UsrSystem
                 cert.CurrY = nY;
                 cert.Direction = M2Share.RandomNumber.RandomByte(8);
                 cert.CharName = sMonName;
-                cert.m_WAbil = cert.Abil;
+                cert.MWAbil = cert.Abil;
                 cert.OnEnvirnomentChanged();
-                if (M2Share.RandomNumber.Random(100) < cert.m_btCoolEye) cert.CoolEye = true;
+                if (M2Share.RandomNumber.Random(100) < cert.MBtCoolEye) cert.CoolEye = true;
                 MonGetRandomItems(cert);
                 cert.Initialize();
                 if (cert.AddtoMapSuccess)
@@ -1847,7 +1847,7 @@ namespace GameSvr.UsrSystem
         /// <returns></returns>
         private bool RegenMonsters(MonGenInfo monGen, int nCount)
         {
-            TBaseObject cert;
+            BaseObject cert;
             const string sExceptionMsg = "[Exception] TUserEngine::RegenMonsters";
             var result = true;
             var dwStartTick = HUtil32.GetTickCount();
@@ -2142,12 +2142,12 @@ namespace GameSvr.UsrSystem
             playObject.Abil.MaxWearWeight = humData.Abil.MaxWearWeight;
             playObject.Abil.HandWeight = humData.Abil.HandWeight;
             playObject.Abil.MaxHandWeight = humData.Abil.MaxHandWeight;
-            playObject.m_wStatusTimeArr = humData.wStatusTimeArr;
+            playObject.MWStatusTimeArr = humData.wStatusTimeArr;
             playObject.HomeMap = humData.sHomeMap;
             playObject.HomeX = humData.wHomeX;
             playObject.HomeY = humData.wHomeY;
             playObject.BonusAbil = humData.BonusAbil;
-            playObject.m_nBonusPoint = humData.nBonusPoint;
+            playObject.MNBonusPoint = humData.nBonusPoint;
             playObject.m_btCreditPoint = humData.btCreditPoint;
             playObject.m_btReLevel = humData.btReLevel;
             playObject.m_sMasterName = humData.sMasterName;
@@ -2170,23 +2170,23 @@ namespace GameSvr.UsrSystem
             {
                 playObject.AllowGroup = false;
             }
-            playObject.btB2 = humData.btF9;
+            playObject.BtB2 = humData.btF9;
             playObject.AttatckMode = (AttackMode)humData.btAttatckMode;
             playObject.IncHealth = humData.btIncHealth;
             playObject.IncSpell = humData.btIncSpell;
-            playObject.m_nIncHealing = humData.btIncHealing;
+            playObject.MNIncHealing = humData.btIncHealing;
             playObject.FightZoneDieCount = humData.btFightZoneDieCount;
             playObject.m_sUserID = humData.sAccount;
             playObject.m_boLockLogon = humData.boLockLogon;
             playObject.m_wContribution = humData.wContribution;
-            playObject.m_nHungerStatus = humData.nHungerStatus;
-            playObject.m_boAllowGuildReCall = humData.boAllowGuildReCall;
-            playObject.m_wGroupRcallTime = humData.wGroupRcallTime;
-            playObject.m_dBodyLuck = humData.dBodyLuck;
-            playObject.m_boAllowGroupReCall = humData.boAllowGroupReCall;
-            playObject.m_QuestUnitOpen = humData.QuestUnitOpen;
-            playObject.m_QuestUnit = humData.QuestUnit;
-            playObject.m_QuestFlag = humData.QuestFlag;
+            playObject.MNHungerStatus = humData.nHungerStatus;
+            playObject.MBoAllowGuildReCall = humData.boAllowGuildReCall;
+            playObject.MWGroupRcallTime = humData.wGroupRcallTime;
+            playObject.MDBodyLuck = humData.dBodyLuck;
+            playObject.MBoAllowGroupReCall = humData.boAllowGroupReCall;
+            playObject.MQuestUnitOpen = humData.QuestUnitOpen;
+            playObject.MQuestUnit = humData.QuestUnit;
+            playObject.MQuestFlag = humData.QuestFlag;
             humItems = humanRcd.Data.HumItems;
             playObject.UseItems[Grobal2.U_DRESS] = humItems[Grobal2.U_DRESS];
             playObject.UseItems[Grobal2.U_WEAPON] = humItems[Grobal2.U_WEAPON];
@@ -2303,7 +2303,7 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        private void MonInitialize(TBaseObject baseObject, string sMonName)
+        private void MonInitialize(BaseObject baseObject, string sMonName)
         {
             for (var i = 0; i < MonsterList.Count; i++)
             {
@@ -2314,9 +2314,9 @@ namespace GameSvr.UsrSystem
                     baseObject.RaceImg = monster.btRaceImg;
                     baseObject.Appr = monster.wAppr;
                     baseObject.Abil.Level = (byte)monster.wLevel;
-                    baseObject.m_btLifeAttrib = monster.btLifeAttrib;
-                    baseObject.m_btCoolEye = (byte)monster.wCoolEye;
-                    baseObject.m_dwFightExp = monster.dwExp;
+                    baseObject.MBtLifeAttrib = monster.btLifeAttrib;
+                    baseObject.MBtCoolEye = (byte)monster.wCoolEye;
+                    baseObject.MDwFightExp = monster.dwExp;
                     baseObject.Abil.HP = monster.wHP;
                     baseObject.Abil.MaxHP = monster.wHP;
                     baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
@@ -2328,13 +2328,13 @@ namespace GameSvr.UsrSystem
                     baseObject.Abil.MC = HUtil32.MakeLong(monster.wMC, monster.wMC);
                     baseObject.Abil.SC = HUtil32.MakeLong(monster.wSC, monster.wSC);
                     baseObject.SpeedPoint = (byte)monster.wSpeed;
-                    baseObject.m_btHitPoint = (byte)monster.wHitPoint;
+                    baseObject.MBtHitPoint = (byte)monster.wHitPoint;
                     baseObject.WalkSpeed = monster.wWalkSpeed;
                     baseObject.WalkStep = monster.wWalkStep;
                     baseObject.WalkWait = monster.wWalkWait;
                     baseObject.NextHitTime = monster.wAttackSpeed;
                     baseObject.NastyMode = monster.boAggro;
-                    baseObject.m_boNoTame = monster.boTame;
+                    baseObject.MBoNoTame = monster.boTame;
                     break;
                 }
             }
@@ -2428,8 +2428,8 @@ namespace GameSvr.UsrSystem
                 {
                     for (var j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--)
                     {
-                        TBaseObject baseObject = magicEvent.BaseObjectList[j];
-                        if (baseObject.Death || baseObject.Ghost || !baseObject.m_boHolySeize)
+                        BaseObject baseObject = magicEvent.BaseObjectList[j];
+                        if (baseObject.Death || baseObject.Ghost || !baseObject.MBoHolySeize)
                             magicEvent.BaseObjectList.RemoveAt(j);
                     }
                     if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.dwStartTick) > magicEvent.dwTime ||
@@ -2464,7 +2464,7 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<TBaseObject> list)
+        public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> list)
         {
             var result = 0;
             if (envir == null) return result;
@@ -2492,7 +2492,7 @@ namespace GameSvr.UsrSystem
             M2Share.UserEngine.MerchantList.Add(merchant);
         }
 
-        public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<TBaseObject> tmpList)
+        public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
         {
             Merchant merchant;
             for (var i = 0; i < MerchantList.Count; i++)
@@ -2504,7 +2504,7 @@ namespace GameSvr.UsrSystem
             return tmpList.Count;
         }
 
-        public int GetNpcList(Envirnoment envir, int nX, int nY, int nRange, IList<TBaseObject> tmpList)
+        public int GetNpcList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
         {
             NormNpc npc;
             for (var i = 0; i < QuestNpcList.Count; i++)
@@ -2539,7 +2539,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public int GetMapMonster(Envirnoment envir, IList<TBaseObject> list)
+        public int GetMapMonster(Envirnoment envir, IList<BaseObject> list)
         {
             var result = 0;
             if (envir == null) return result;
@@ -2549,7 +2549,7 @@ namespace GameSvr.UsrSystem
                 if (monGen == null) continue;
                 for (var j = 0; j < monGen.CertList.Count; j++)
                 {
-                    TBaseObject baseObject = monGen.CertList[j];
+                    BaseObject baseObject = monGen.CertList[j];
                     if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir)
                     {
                         if (list != null)
@@ -2588,7 +2588,7 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        public int GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, IList<TBaseObject> list)
+        public int GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, IList<BaseObject> list)
         {
             var result = 0;
             for (var i = 0; i < PlayObjectList.Count; i++)
@@ -2660,7 +2660,7 @@ namespace GameSvr.UsrSystem
                 MonGenInfo monGen = MonGenList[i];
                 for (var j = 0; j < monGen.CertList.Count; j++)
                 {
-                    TBaseObject monBaseObject = monGen.CertList[j];
+                    BaseObject monBaseObject = monGen.CertList[j];
                     monBaseObject.SayMsgList = null;
                 }
             }
@@ -2732,8 +2732,8 @@ namespace GameSvr.UsrSystem
             cert.CurrY = ai.nY;
             cert.Direction = (byte)M2Share.RandomNumber.Random(8);
             cert.CharName = ai.sCharName;
-            cert.m_WAbil = cert.Abil;
-            if (M2Share.RandomNumber.Random(100) < cert.m_btCoolEye)
+            cert.MWAbil = cert.Abil;
+            if (M2Share.RandomNumber.Random(100) < cert.MBtCoolEye)
             {
                 cert.CoolEye = true;
             }
@@ -2747,8 +2747,8 @@ namespace GameSvr.UsrSystem
             cert.Initialize();
             cert.RecalcLevelAbilitys();
             cert.RecalcAbilitys();
-            cert.m_WAbil.HP = cert.m_WAbil.MaxHP;
-            cert.m_WAbil.MP = cert.m_WAbil.MaxMP;
+            cert.MWAbil.HP = cert.MWAbil.MaxHP;
+            cert.MWAbil.MP = cert.MWAbil.MaxMP;
             if (cert.AddtoMapSuccess)
             {
                 p28 = null;

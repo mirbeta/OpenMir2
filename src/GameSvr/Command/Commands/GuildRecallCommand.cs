@@ -43,19 +43,19 @@ namespace GameSvr.Command.Commands
             PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
             if (PlayObject.Permission >= 6)
             {
-                PlayObject.m_wGroupRcallTime = 0;
+                PlayObject.MWGroupRcallTime = 0;
             }
-            if (PlayObject.m_wGroupRcallTime > dwValue)
+            if (PlayObject.MWGroupRcallTime > dwValue)
             {
-                PlayObject.m_wGroupRcallTime -= (short)dwValue;
+                PlayObject.MWGroupRcallTime -= (short)dwValue;
             }
             else
             {
-                PlayObject.m_wGroupRcallTime = 0;
+                PlayObject.MWGroupRcallTime = 0;
             }
-            if (PlayObject.m_wGroupRcallTime > 0)
+            if (PlayObject.MWGroupRcallTime > 0)
             {
-                PlayObject.SysMsg($"{PlayObject.m_wGroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg($"{PlayObject.MWGroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject;
@@ -76,7 +76,7 @@ namespace GameSvr.Command.Commands
                             // Inc(nNoRecallCount);
                             continue;
                         }
-                        if (m_PlayObject.m_boAllowGuildReCall)
+                        if (m_PlayObject.MBoAllowGuildReCall)
                         {
                             if (m_PlayObject.Envir.Flag.boNORECALL)
                             {
@@ -98,7 +98,7 @@ namespace GameSvr.Command.Commands
             }
             PlayObject.SysMsg($"已传送{nRecallCount}个成员，{nNoRecallCount}个成员未被传送。", MsgColor.Green, MsgType.Hint);
             PlayObject.GroupRcallTick = HUtil32.GetTickCount();
-            PlayObject.m_wGroupRcallTime = (short)M2Share.Config.nGuildRecallTime;
+            PlayObject.MWGroupRcallTime = (short)M2Share.Config.nGuildRecallTime;
         }
     }
 }

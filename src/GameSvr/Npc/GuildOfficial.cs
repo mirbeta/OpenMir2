@@ -33,7 +33,7 @@ namespace GameSvr.Npc
                 M2Share.CastleMgr.GetCastleNameList(List);
                 for (var i = 0; i < List.Count; i++)
                 {
-                    sText = sText + format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i.ToString(), sText);
+                    sText = sText + Format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i.ToString(), sText);
                 }
                 sText = sText + "\\ \\";
                 sMsg = this.ReplaceVariableText(sMsg, "<$REQUESTCASTLELIST>", sText);

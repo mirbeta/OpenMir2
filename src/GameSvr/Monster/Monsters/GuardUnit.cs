@@ -5,17 +5,17 @@ namespace GameSvr.Monster.Monsters
 {
     public class GuardUnit : AnimalObject
     {
-        public override void Struck(TBaseObject hiter)
+        public override void Struck(BaseObject hiter)
         {
             base.Struck(hiter);
             if (Castle != null)
             {
-                bo2B0 = true;
-                m_dw2B4Tick = HUtil32.GetTickCount();
+                Bo2B0 = true;
+                MDw2B4Tick = HUtil32.GetTickCount();
             }
         }
 
-        public override bool IsProperTarget(TBaseObject BaseObject)
+        public override bool IsProperTarget(BaseObject BaseObject)
         {
             var result = false;
             if (Castle != null)
@@ -24,19 +24,19 @@ namespace GameSvr.Monster.Monsters
                 {
                     result = true;
                 }
-                if (BaseObject.bo2B0)
+                if (BaseObject.Bo2B0)
                 {
-                    if ((HUtil32.GetTickCount() - BaseObject.m_dw2B4Tick) < (2 * 60 * 1000))
+                    if ((HUtil32.GetTickCount() - BaseObject.MDw2B4Tick) < (2 * 60 * 1000))
                     {
                         result = true;
                     }
                     else
                     {
-                        BaseObject.bo2B0 = false;
+                        BaseObject.Bo2B0 = false;
                     }
                     if (BaseObject.Castle != null)
                     {
-                        BaseObject.bo2B0 = false;
+                        BaseObject.Bo2B0 = false;
                         result = false;
                     }
                 }

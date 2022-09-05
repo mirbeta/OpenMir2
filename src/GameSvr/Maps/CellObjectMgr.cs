@@ -50,7 +50,7 @@ namespace GameSvr.Maps
         public void ClearObject()
         {
             var actorIds = _cellObject.Keys;
-            TBaseObject actor = null;
+            BaseObject actor = null;
             var playCount = 0;
             var monsterCount = 0;
 

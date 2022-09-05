@@ -26,7 +26,7 @@ namespace GameSvr.Event
         /// </summary>
         public int CloseTick;
         public int Damage;
-        public TBaseObject OwnBaseObject;
+        public BaseObject OwnBaseObject;
         /// <summary>
         /// 开始运行时间
         /// </summary>

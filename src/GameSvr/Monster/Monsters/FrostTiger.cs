@@ -11,18 +11,18 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (TargetCret == null)
                 {
-                    if (m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
+                    if (MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
                     {
                         M2Share.MagicMgr.MagMakePrivateTransparent(this, 180);
                     }
                 }
                 else
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
+                    MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
