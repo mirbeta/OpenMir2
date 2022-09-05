@@ -694,7 +694,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKLUCKYPOINT:
-                        if (PlayObject.MNBodyLuckLevel < QuestConditionInfo.nParam1)
+                        if (PlayObject.BodyLuckLevel < QuestConditionInfo.nParam1)
                         {
                             result = false;
                         }
@@ -1265,9 +1265,9 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_ISGROUPMASTER:
-                        if (PlayObject.MGroupOwner != null)
+                        if (PlayObject.GroupOwner != null)
                         {
-                            if (PlayObject.MGroupOwner != PlayObject)
+                            if (PlayObject.GroupOwner != PlayObject)
                             {
                                 result = false;
                             }

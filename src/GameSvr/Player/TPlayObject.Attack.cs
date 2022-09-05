@@ -21,7 +21,7 @@ namespace GameSvr.Player
                 {
                     return result;
                 }
-                if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanHit)// 防麻
+                if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanHit)// 防麻
                 {
                     return result;
                 }
@@ -89,8 +89,8 @@ namespace GameSvr.Player
                                 MNHealthTick -= 30;
                                 MNSpellTick -= 50;
                                 MNSpellTick = HUtil32._MAX(0, MNSpellTick);
-                                MNPerHealth -= 2;
-                                MNPerSpell -= 2;
+                                PerHealth -= 2;
+                                PerSpell -= 2;
                                 return result;
                             }
                         }
@@ -146,8 +146,8 @@ namespace GameSvr.Player
                     MNHealthTick -= 30;
                     MNSpellTick -= 100;
                     MNSpellTick = HUtil32._MAX(0, MNSpellTick);
-                    MNPerHealth -= 2;
-                    MNPerSpell -= 2;
+                    PerHealth -= 2;
+                    PerSpell -= 2;
                 }
             }
             catch (Exception e)
@@ -168,7 +168,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)// 防麻
+            if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)// 防麻
             {
                 return result;
             }
@@ -226,7 +226,7 @@ namespace GameSvr.Player
             {
                 if (Transparent && HideMode)
                 {
-                    MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                    StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
                 if (MBo316 || CurrX == nX && CurrY == nY)
                 {
@@ -235,8 +235,8 @@ namespace GameSvr.Player
                 MNHealthTick -= 60;
                 MNSpellTick -= 10;
                 MNSpellTick = HUtil32._MAX(0, MNSpellTick);
-                MNPerHealth -= 1;
-                MNPerSpell -= 1;
+                PerHealth -= 1;
+                PerSpell -= 1;
             }
             else
             {
@@ -254,7 +254,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)// 防麻
+            if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)// 防麻
             {
                 return result;
             }
@@ -492,7 +492,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
+            if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
             {
                 return result;
             }
@@ -544,7 +544,7 @@ namespace GameSvr.Player
             {
                 if (Transparent && HideMode)
                 {
-                    MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                    StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
                 if (MBo316 || CurrX == nX && CurrY == nY)
                 {
@@ -553,8 +553,8 @@ namespace GameSvr.Player
                 MNHealthTick -= 60;
                 MNSpellTick -= 10;
                 MNSpellTick = HUtil32._MAX(0, MNSpellTick);
-                MNPerHealth -= 1;
-                MNPerSpell -= 1;
+                PerHealth -= 1;
+                PerSpell -= 1;
             }
             else
             {
@@ -575,7 +575,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanWalk)
+            if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanWalk)
             {
                 return result; // 防麻
             }

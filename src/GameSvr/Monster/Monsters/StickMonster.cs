@@ -100,7 +100,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!this.Ghost && !this.Death && this.MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!this.Ghost && !this.Death && this.StatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - this.WalkTick) > this.WalkSpeed)
                 {

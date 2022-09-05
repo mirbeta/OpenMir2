@@ -132,59 +132,59 @@ namespace GameSvr.Actor
                 if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (MNIncHealing > 0)))
                 {
                     int dwInChsTime = 600 - HUtil32._MIN(400, Abil.Level * 10);
-                    if (((HUtil32.GetTickCount() - MDwIncHealthSpellTick) >= dwInChsTime) && !Death)
+                    if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
                     {
-                        int dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - MDwIncHealthSpellTick - dwInChsTime);
-                        MDwIncHealthSpellTick = HUtil32.GetTickCount() + dwC;
-                        if ((IncSpell > 0) || (IncHealth > 0) || (MNPerHealing > 0))
+                        int dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
+                        IncHealthSpellTick = HUtil32.GetTickCount() + dwC;
+                        if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
                         {
-                            if (MNPerHealth <= 0)
+                            if (PerHealth <= 0)
                             {
-                                MNPerHealth = 1;
+                                PerHealth = 1;
                             }
-                            if (MNPerSpell <= 0)
+                            if (PerSpell <= 0)
                             {
-                                MNPerSpell = 1;
+                                PerSpell = 1;
                             }
-                            if (MNPerHealing <= 0)
+                            if (PerHealing <= 0)
                             {
-                                MNPerHealing = 1;
+                                PerHealing = 1;
                             }
                             int nHP;
-                            if (IncHealth < MNPerHealth)
+                            if (IncHealth < PerHealth)
                             {
                                 nHP = IncHealth;
                                 IncHealth = 0;
                             }
                             else
                             {
-                                nHP = MNPerHealth;
-                                IncHealth -= MNPerHealth;
+                                nHP = PerHealth;
+                                IncHealth -= PerHealth;
                             }
                             int nMP;
-                            if (IncSpell < MNPerSpell)
+                            if (IncSpell < PerSpell)
                             {
                                 nMP = IncSpell;
                                 IncSpell = 0;
                             }
                             else
                             {
-                                nMP = MNPerSpell;
-                                IncSpell -= MNPerSpell;
+                                nMP = PerSpell;
+                                IncSpell -= PerSpell;
                             }
-                            if (MNIncHealing < MNPerHealing)
+                            if (MNIncHealing < PerHealing)
                             {
                                 nHP += MNIncHealing;
                                 MNIncHealing = 0;
                             }
                             else
                             {
-                                nHP += MNPerHealing;
-                                MNIncHealing -= MNPerHealing;
+                                nHP += PerHealing;
+                                MNIncHealing -= PerHealing;
                             }
-                            MNPerHealth = Abil.Level / 10 + 5;
-                            MNPerSpell = Abil.Level / 10 + 5;
-                            MNPerHealing = 5;
+                            PerHealth = Abil.Level / 10 + 5;
+                            PerSpell = Abil.Level / 10 + 5;
+                            PerHealing = 5;
                             IncHealthSpell(nHP, nMP);
                             if (MWAbil.HP == MWAbil.MaxHP)
                             {
@@ -200,7 +200,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    MDwIncHealthSpellTick = HUtil32.GetTickCount();
+                    IncHealthSpellTick = HUtil32.GetTickCount();
                 }
                 if ((MNHealthTick < -M2Share.Config.nHealthFillTime) && (MWAbil.HP > 1))
                 {
@@ -539,15 +539,15 @@ namespace GameSvr.Actor
                 {
                     VerifyTick = HUtil32.GetTickCount();
                     // 清组队已死亡成员
-                    if (MGroupOwner != null)
+                    if (GroupOwner != null)
                     {
-                        if (MGroupOwner.Death || MGroupOwner.Ghost)
+                        if (GroupOwner.Death || GroupOwner.Ghost)
                         {
-                            MGroupOwner = null;
+                            GroupOwner = null;
                         }
                     }
 
-                    if (MGroupOwner == this)
+                    if (GroupOwner == this)
                     {
                         for (var i = GroupMembers.Count - 1; i >= 0; i--)
                         {
@@ -578,15 +578,15 @@ namespace GameSvr.Actor
             {
                 bool boChg = false;
                 bool boNeedRecalc = false;
-                for (var i = 0; i < MDwStatusArrTick.Length; i++)
+                for (var i = 0; i < StatusArrTick.Length; i++)
                 {
-                    if ((MWStatusTimeArr[i] > 0) && (MWStatusTimeArr[i] < 60000))
+                    if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
                     {
-                        if ((HUtil32.GetTickCount() - MDwStatusArrTick[i]) > 1000)
+                        if ((HUtil32.GetTickCount() - StatusArrTick[i]) > 1000)
                         {
-                            MWStatusTimeArr[i] -= 1;
-                            MDwStatusArrTick[i] += 1000;
-                            if (MWStatusTimeArr[i] == 0)
+                            StatusTimeArr[i] -= 1;
+                            StatusArrTick[i] += 1000;
+                            if (StatusTimeArr[i] == 0)
                             {
                                 boChg = true;
                                 switch (i)
@@ -610,13 +610,13 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                for (var i = 0; i < MWStatusArrValue.Length; i++)
+                for (var i = 0; i < StatusArrValue.Length; i++)
                 {
-                    if (MWStatusArrValue[i] > 0)
+                    if (StatusArrValue[i] > 0)
                     {
-                        if (HUtil32.GetTickCount() > MDwStatusArrTimeOutTick[i])
+                        if (HUtil32.GetTickCount() > StatusArrTimeOutTick[i])
                         {
-                            MWStatusArrValue[i] = 0;
+                            StatusArrValue[i] = 0;
                             boNeedRecalc = true;
                             switch (i)
                             {
@@ -665,13 +665,13 @@ namespace GameSvr.Actor
                 if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.dwPosionDecHealthTime)
                 {
                     PoisoningTick = HUtil32.GetTickCount();
-                    if (MWStatusTimeArr[Grobal2.POISON_DECHEALTH] > 0)
+                    if (StatusTimeArr[Grobal2.POISON_DECHEALTH] > 0)
                     {
                         if (Animal)
                         {
                             MNMeatQuality -= 1000;
                         }
-                        DamageHealth(_greenPoisoningPoint + 1);
+                        DamageHealth(GreenPoisoningPoint + 1);
                         MNHealthTick = 0;
                         MNSpellTick = 0;
                         HealthSpellChanged();
@@ -761,11 +761,11 @@ namespace GameSvr.Actor
                             if (Envir.IsCheapStuff())
                             {
                                 Merchant QuestNPC;
-                                if (ExpHitter.MGroupOwner != null)
+                                if (ExpHitter.GroupOwner != null)
                                 {
-                                    for (var i = 0; i < ExpHitter.MGroupOwner.GroupMembers.Count; i++)
+                                    for (var i = 0; i < ExpHitter.GroupOwner.GroupMembers.Count; i++)
                                     {
-                                        PlayObject GroupHuman = ExpHitter.MGroupOwner.GroupMembers[i];
+                                        PlayObject GroupHuman = ExpHitter.GroupOwner.GroupMembers[i];
                                         if (!GroupHuman.Death && ExpHitter.Envir == GroupHuman.Envir && Math.Abs(ExpHitter.CurrX - GroupHuman.CurrX) <= 12 && Math.Abs(ExpHitter.CurrX - GroupHuman.CurrX) <= 12 && ExpHitter == GroupHuman)
                                         {
                                             tCheck = false;
@@ -1006,9 +1006,9 @@ namespace GameSvr.Actor
                 }
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
-                    if (MGroupOwner != null)
+                    if (GroupOwner != null)
                     {
-                        MGroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
+                        GroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
                     }
                     if (LastHiter != null)
                     {
@@ -1434,7 +1434,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            MWStatusTimeArr[Grobal2.POISON_STONE] = 1;
+                            StatusTimeArr[Grobal2.POISON_STONE] = 1;
                             FastParalysis = false;
                         }
                         break;
@@ -1444,12 +1444,12 @@ namespace GameSvr.Actor
                             if (Race == Grobal2.RC_PLAYOBJECT)
                             {
                                 MNIncHealing += ProcessMsg.nParam1;
-                                MNPerHealing = 5;
+                                PerHealing = 5;
                             }
                             else
                             {
                                 MNIncHealing += ProcessMsg.nParam1;
-                                MNPerHealing = 5;
+                                PerHealing = 5;
                             }
                         }
                         else
@@ -1465,7 +1465,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            MWStatusTimeArr[Grobal2.POISON_STONE] = 1;
+                            StatusTimeArr[Grobal2.POISON_STONE] = 1;
                             FastParalysis = false;
                         }
                         break;
@@ -1571,10 +1571,10 @@ namespace GameSvr.Actor
             MWAbil.HandWeight = 0;
             AntiPoison = 0;
             PoisonRecover = 0;
-            MNHealthRecover = 0;
-            MNSpellRecover = 0;
+            HealthRecover = 0;
+            SpellRecover = 0;
             AntiMagic = 1;
-            MNLuck = 0;
+            Luck = 0;
             HitSpeed = 0;
             MBoExpItem = false;
             ExpItem = 0;
@@ -1681,7 +1681,7 @@ namespace GameSvr.Actor
                     }
                     if (StdItem.AniCount == 111)
                     {
-                        MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
+                        StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
                         HideMode = true;
                     }
                     if (StdItem.AniCount == 112)
@@ -2098,7 +2098,7 @@ namespace GameSvr.Actor
                 }
                 if (StdItem.Shape == 111)
                 {
-                    MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
+                    StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
                     HideMode = true;
                 }
                 if (StdItem.Shape == 112)
@@ -2295,7 +2295,7 @@ namespace GameSvr.Actor
                 FiveStringSet = true;
             }
             MWAbil.Weight = RecalcBagWeight();
-            if (Transparent && (MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0))
+            if (Transparent && (StatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0))
             {
                 HideMode = true;
             }
@@ -2311,7 +2311,7 @@ namespace GameSvr.Actor
             {
                 if (boOldHideMode)
                 {
-                    MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
+                    StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
                     CharStatus = GetCharStatus();
                     StatusChanged();
                 }
@@ -2334,14 +2334,14 @@ namespace GameSvr.Actor
                 SendRefMsg(Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
             }
             SpeedPoint += (byte)_mAddAbil.wSpeedPoint;
-            MBtHitPoint += (byte)_mAddAbil.wHitPoint;
+            HitPoint += (byte)_mAddAbil.wHitPoint;
             AntiPoison += (byte)_mAddAbil.wAntiPoison;
             PoisonRecover += _mAddAbil.wPoisonRecover;
-            MNHealthRecover += _mAddAbil.wHealthRecover;
-            MNSpellRecover += _mAddAbil.wSpellRecover;
+            HealthRecover += _mAddAbil.wHealthRecover;
+            SpellRecover += _mAddAbil.wSpellRecover;
             AntiMagic += _mAddAbil.wAntiMagic;
-            MNLuck += _mAddAbil.btLuck;
-            MNLuck -= _mAddAbil.btUnLuck;
+            Luck += _mAddAbil.btLuck;
+            Luck -= _mAddAbil.btUnLuck;
             HitSpeed = _mAddAbil.nHitSpeed;
             MWAbil.MaxWeight += _mAddAbil.Weight;
             MWAbil.MaxWearWeight += (byte)_mAddAbil.WearWeight;
@@ -2353,37 +2353,37 @@ namespace GameSvr.Actor
             MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(_mAddAbil.wDC) + HUtil32.LoWord(Abil.DC), HUtil32.HiWord(_mAddAbil.wDC) + HUtil32.HiWord(Abil.DC));
             MWAbil.MC = HUtil32.MakeLong(HUtil32.LoWord(_mAddAbil.wMC) + HUtil32.LoWord(Abil.MC), HUtil32.HiWord(_mAddAbil.wMC) + HUtil32.HiWord(Abil.MC));
             MWAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(_mAddAbil.wSC) + HUtil32.LoWord(Abil.SC), HUtil32.HiWord(_mAddAbil.wSC) + HUtil32.HiWord(Abil.SC));
-            if (MWStatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
+            if (StatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
             {
                 MWAbil.AC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.AC), HUtil32.HiWord(MWAbil.AC) + 2 + (Abil.Level / 7));
             }
-            if (MWStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
+            if (StatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
             {
                 MWAbil.MAC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.MAC), HUtil32.HiWord(MWAbil.MAC) + 2 + (Abil.Level / 7));
             }
-            if (MWStatusArrValue[0] > 0)
+            if (StatusArrValue[0] > 0)
             {
-                MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) + 2 + MWStatusArrValue[0]);
+                MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) + 2 + StatusArrValue[0]);
             }
-            if (MWStatusArrValue[1] > 0)
+            if (StatusArrValue[1] > 0)
             {
-                MWAbil.MC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.MC), HUtil32.HiWord(MWAbil.MC) + 2 + MWStatusArrValue[1]);
+                MWAbil.MC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.MC), HUtil32.HiWord(MWAbil.MC) + 2 + StatusArrValue[1]);
             }
-            if (MWStatusArrValue[2] > 0)
+            if (StatusArrValue[2] > 0)
             {
-                MWAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.SC), HUtil32.HiWord(MWAbil.SC) + 2 + MWStatusArrValue[2]);
+                MWAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.SC), HUtil32.HiWord(MWAbil.SC) + 2 + StatusArrValue[2]);
             }
-            if (MWStatusArrValue[3] > 0)
+            if (StatusArrValue[3] > 0)
             {
-                HitSpeed += MWStatusArrValue[3];
+                HitSpeed += StatusArrValue[3];
             }
-            if (MWStatusArrValue[4] > 0)
+            if (StatusArrValue[4] > 0)
             {
-                MWAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, MWAbil.MaxHP + MWStatusArrValue[4]);
+                MWAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, MWAbil.MaxHP + StatusArrValue[4]);
             }
-            if (MWStatusArrValue[5] > 0)
+            if (StatusArrValue[5] > 0)
             {
-                MWAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, MWAbil.MaxMP + MWStatusArrValue[5]);
+                MWAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, MWAbil.MaxMP + StatusArrValue[5]);
             }
             if (FlameRing)
             {
@@ -2462,7 +2462,7 @@ namespace GameSvr.Actor
             {
                 // Bonus of Hp +30%, Ac+2
                 MWAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, MWAbil.MaxHP / 100 * 30);
-                MBtHitPoint += 2;
+                HitPoint += 2;
             }
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
@@ -2480,25 +2480,25 @@ namespace GameSvr.Actor
             MWAbil.SC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(MWAbil.SC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(MWAbil.SC)));
             if (M2Share.Config.boHungerSystem && M2Share.Config.boHungerDecPower)
             {
-                if (HUtil32.RangeInDefined(MNHungerStatus, 0, 999))
+                if (HUtil32.RangeInDefined(HungerStatus, 0, 999))
                 {
                     MWAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.DC) * 0.2), HUtil32.Round(HUtil32.HiWord(MWAbil.DC) * 0.2));
                     MWAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.MC) * 0.2), HUtil32.Round(HUtil32.HiWord(MWAbil.MC) * 0.2));
                     MWAbil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.SC) * 0.2), HUtil32.Round(HUtil32.HiWord(MWAbil.SC) * 0.2));
                 }
-                else if (HUtil32.RangeInDefined(MNHungerStatus, 1000, 1999))
+                else if (HUtil32.RangeInDefined(HungerStatus, 1000, 1999))
                 {
                     MWAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.DC) * 0.4), HUtil32.Round(HUtil32.HiWord(MWAbil.DC) * 0.4));
                     MWAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.MC) * 0.4), HUtil32.Round(HUtil32.HiWord(MWAbil.MC) * 0.4));
                     MWAbil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.SC) * 0.4), HUtil32.Round(HUtil32.HiWord(MWAbil.SC) * 0.4));
                 }
-                else if (HUtil32.RangeInDefined(MNHungerStatus, 2000, 2999))
+                else if (HUtil32.RangeInDefined(HungerStatus, 2000, 2999))
                 {
                     MWAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.DC) * 0.6), HUtil32.Round(HUtil32.HiWord(MWAbil.DC) * 0.6));
                     MWAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.MC) * 0.6), HUtil32.Round(HUtil32.HiWord(MWAbil.MC) * 0.6));
                     MWAbil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.SC) * 0.6), HUtil32.Round(HUtil32.HiWord(MWAbil.SC) * 0.6));
                 }
-                else if (HUtil32.RangeInDefined(MNHungerStatus, 3000, 3000))
+                else if (HUtil32.RangeInDefined(HungerStatus, 3000, 3000))
                 {
                     MWAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.DC) * 0.9), HUtil32.Round(HUtil32.HiWord(MWAbil.DC) * 0.9));
                     MWAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(MWAbil.MC) * 0.9), HUtil32.Round(HUtil32.HiWord(MWAbil.MC) * 0.9));

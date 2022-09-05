@@ -68,7 +68,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var nTotlePoint = this.BonusAbil.DC + this.BonusAbil.MC + this.BonusAbil.SC + this.BonusAbil.AC + this.BonusAbil.MAC + this.BonusAbil.HP + this.BonusAbil.MP + this.BonusAbil.Hit + this.BonusAbil.Speed + this.BonusAbil.X2;
-            nTotlePoint += this.MNBonusPoint;
+            nTotlePoint += this.BonusPoint;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -825,7 +825,7 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckGroupCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
-            if (PlayObject.MGroupOwner == null)
+            if (PlayObject.GroupOwner == null)
             {
                 return false;
             }
@@ -839,25 +839,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MGroupOwner.GroupMembers.Count == nCount)
+                    if (PlayObject.GroupOwner.GroupMembers.Count == nCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MGroupOwner.GroupMembers.Count > nCount)
+                    if (PlayObject.GroupOwner.GroupMembers.Count > nCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MGroupOwner.GroupMembers.Count < nCount)
+                    if (PlayObject.GroupOwner.GroupMembers.Count < nCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MGroupOwner.GroupMembers.Count >= nCount)
+                    if (PlayObject.GroupOwner.GroupMembers.Count >= nCount)
                     {
                         result = true;
                     }
@@ -1751,7 +1751,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHANGEJOB);
                 return result;
             }
-            if (PlayObject.MGroupOwner != null)
+            if (PlayObject.GroupOwner != null)
             {
                 for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {

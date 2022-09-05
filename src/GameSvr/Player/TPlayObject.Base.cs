@@ -820,11 +820,11 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                for (var i = 0; i < MDwStatusArrTick.Length; i++)
+                for (var i = 0; i < StatusArrTick.Length; i++)
                 {
-                    if (MWStatusTimeArr[i] > 0)
+                    if (StatusTimeArr[i] > 0)
                     {
-                        MDwStatusArrTick[i] = HUtil32.GetTickCount();
+                        StatusArrTick[i] = HUtil32.GetTickCount();
                     }
                 }
                 CharStatus = GetCharStatus();

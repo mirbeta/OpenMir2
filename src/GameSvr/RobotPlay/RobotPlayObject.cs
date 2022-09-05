@@ -864,9 +864,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || MWStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || MWStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动 
             }
@@ -1083,7 +1083,7 @@ namespace GameSvr.RobotPlay
         {
             short nX = 0;
             short nY = 0;
-            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 nX = CurrX;
                 nY = CurrY;
@@ -1349,8 +1349,8 @@ namespace GameSvr.RobotPlay
                         }
                         MNHealthTick = 0;
                         MNSpellTick = 0;
-                        MNPerHealth -= 1;
-                        MNPerSpell -= 1;
+                        PerHealth -= 1;
+                        PerSpell -= 1;
                         StruckTick = HUtil32.GetTickCount();
                     }
                     result = true;
@@ -1924,11 +1924,11 @@ namespace GameSvr.RobotPlay
             {
                 return result;
             }
-            if (Death || MWStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (Death || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result; // 防麻
             }
-            if (MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)
+            if (StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)
             {
                 return result;// 防麻
             }
@@ -2492,9 +2492,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (MWStatusTimeArr[Grobal2.POISON_STONE] > 0 && !M2Share.Config.ClientConf.boParalyCanSpell || MWStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || MWStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
+            if (StatusTimeArr[Grobal2.POISON_STONE] > 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
             {
                 return result; // 麻痹不能跑动 
             }
@@ -2656,9 +2656,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (MWStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || MWStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || MWStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动
             }
@@ -2768,7 +2768,7 @@ namespace GameSvr.RobotPlay
                 case 0:// 正常模式
                     if (Math.Abs(CurrX - nTargetX) > 2 || Math.Abs(CurrY - nTargetY) > 2)
                     {
-                        if (MWStatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
+                        if (StatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -2785,7 +2785,7 @@ namespace GameSvr.RobotPlay
                 case 1:// 躲避模式
                     if (Math.Abs(CurrX - nTargetX) > 1 || Math.Abs(CurrY - nTargetY) > 1)
                     {
-                        if (MWStatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
+                        if (StatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -3158,7 +3158,7 @@ namespace GameSvr.RobotPlay
                     }
                     break;
                 case PlayJob.Wizard: // 法师
-                    if (MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
+                    if (StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
@@ -3230,7 +3230,7 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.nMagTurnUndeadLevel && TargetCret.MBtLifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
+                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.nMagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
                     {
                         // 目标为不死系
                         m_SkillUseTick[32] = HUtil32.GetTickCount();
@@ -3781,7 +3781,7 @@ namespace GameSvr.RobotPlay
                         result = 33;
                         return result;
                     }
-                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.nMagTurnUndeadLevel && TargetCret.MBtLifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
+                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.nMagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
                     {
                         // 目标为不死系
                         result = 32;// 圣言术
@@ -3858,7 +3858,7 @@ namespace GameSvr.RobotPlay
                         }
                         return result;
                     }
-                    if (MWStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
+                    if (StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
                     {
                         if (AllowUseMagic(73)) // 道力盾
                         {
@@ -3887,7 +3887,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     // 绿毒
-                    if (TargetCret.MWStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
+                    if (TargetCret.StatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
                         || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(TargetCret.Race))
                     {
@@ -3943,7 +3943,7 @@ namespace GameSvr.RobotPlay
                                 break;
                         }
                     }
-                    if (TargetCret.MWStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
+                    if (TargetCret.StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
                         || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(TargetCret.Race))
                     {
@@ -4029,14 +4029,14 @@ namespace GameSvr.RobotPlay
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && TargetCret.MWStatusArrValue[(byte)TargetCret.Job + 6] == 0) // 诅咒术
+                                if (AllowUseMagic(52) && TargetCret.StatusArrValue[(byte)TargetCret.Job + 6] == 0) // 诅咒术
                                 {
                                     result = 52;// 英雄诅咒术
                                     return result;
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(52) && TargetCret.MWStatusArrValue[(byte)TargetCret.Job + 6] == 0) // 诅咒术
+                                if (AllowUseMagic(52) && TargetCret.StatusArrValue[(byte)TargetCret.Job + 6] == 0) // 诅咒术
                                 {
                                     result = 52;
                                     return result;
@@ -4075,7 +4075,7 @@ namespace GameSvr.RobotPlay
                                     result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && TargetCret.MWStatusArrValue[(byte)TargetCret.Job + 6] == 0)// 诅咒术
+                                if (AllowUseMagic(52) && TargetCret.StatusArrValue[(byte)TargetCret.Job + 6] == 0)// 诅咒术
                                 {
                                     result = 52;
                                     return result;
@@ -4113,7 +4113,7 @@ namespace GameSvr.RobotPlay
                             result = 13;
                             return result;
                         }
-                        if (AllowUseMagic(52) && TargetCret.MWStatusArrValue[(byte)TargetCret.Job + 6] == 0)// 诅咒术
+                        if (AllowUseMagic(52) && TargetCret.StatusArrValue[(byte)TargetCret.Job + 6] == 0)// 诅咒术
                         {
                             result = 52;
                             return result;

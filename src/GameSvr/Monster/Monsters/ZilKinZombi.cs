@@ -33,7 +33,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (this.Death && !this.Ghost && ZilKillCount >= 0 && this.MWStatusTimeArr[Grobal2.POISON_STONE] == 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - dw558) >= dw560)
+            if (this.Death && !this.Ghost && ZilKillCount >= 0 && this.StatusTimeArr[Grobal2.POISON_STONE] == 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - dw558) >= dw560)
             {
                 this.Abil.MaxHP = (ushort)(this.Abil.MaxHP >> 1);
                 this.MDwFightExp = this.MDwFightExp / 2;

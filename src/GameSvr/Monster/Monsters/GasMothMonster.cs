@@ -15,14 +15,14 @@ namespace GameSvr.Monster.Monsters
             var baseObject = base.sub_4A9C78(bt05);
             if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.HideMode)
             {
-                baseObject.MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                baseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
             }
             return baseObject;
         }
 
         public override void Run()
         {
-            if (!Death && !Ghost && MWStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
+            if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {

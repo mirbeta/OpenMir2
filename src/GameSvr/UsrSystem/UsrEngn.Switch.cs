@@ -41,7 +41,7 @@ namespace GameSvr.UsrSystem
             while (true)
             {
                 if (SwitchData.BlockWhisperArr[nCount] == "") break;
-                PlayObject.MBlockWhisperList.Add(SwitchData.BlockWhisperArr[nCount]);
+                PlayObject.LockWhisperList.Add(SwitchData.BlockWhisperArr[nCount]);
                 nCount++;
                 if (nCount >= SwitchData.BlockWhisperArr.Count) break;
             }
@@ -60,8 +60,8 @@ namespace GameSvr.UsrSystem
             nCount = 0;
             while (true)
             {
-                PlayObject.MWStatusArrValue[nCount] = SwitchData.StatusValue[nCount];
-                PlayObject.MDwStatusArrTimeOutTick[nCount] = SwitchData.StatusTimeOut[nCount];
+                PlayObject.StatusArrValue[nCount] = SwitchData.StatusValue[nCount];
+                PlayObject.StatusArrTimeOutTick[nCount] = SwitchData.StatusTimeOut[nCount];
                 nCount++;
                 if (nCount >= 6) break;
             }
@@ -114,9 +114,9 @@ namespace GameSvr.UsrSystem
             SwitchData.boBanGuildChat = PlayObject.BanGuildChat;
             SwitchData.boAdminMode = PlayObject.AdminMode;
             SwitchData.boObMode = PlayObject.ObMode;
-            for (var i = 0; i < PlayObject.MBlockWhisperList.Count; i++)
+            for (var i = 0; i < PlayObject.LockWhisperList.Count; i++)
             {
-                SwitchData.BlockWhisperArr.Add(PlayObject.MBlockWhisperList[i]);
+                SwitchData.BlockWhisperArr.Add(PlayObject.LockWhisperList[i]);
             }
             BaseObject BaseObject = null;
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
@@ -133,12 +133,12 @@ namespace GameSvr.UsrSystem
                     SwitchData.SlaveArr[i].nMP = BaseObject.MWAbil.MP;
                 }
             }
-            for (var i = 0; i < PlayObject.MWStatusArrValue.Length; i++)
+            for (var i = 0; i < PlayObject.StatusArrValue.Length; i++)
             {
-                if (PlayObject.MWStatusArrValue[i] > 0)
+                if (PlayObject.StatusArrValue[i] > 0)
                 {
-                    SwitchData.StatusValue[i] = PlayObject.MWStatusArrValue[i];
-                    SwitchData.StatusTimeOut[i] = PlayObject.MDwStatusArrTimeOutTick[i];
+                    SwitchData.StatusValue[i] = PlayObject.StatusArrValue[i];
+                    SwitchData.StatusTimeOut[i] = PlayObject.StatusArrTimeOutTick[i];
                 }
             }
         }

@@ -12,8 +12,8 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void AllowGroupReCall(PlayObject PlayObject)
         {
-            PlayObject.MBoAllowGroupReCall = !PlayObject.MBoAllowGroupReCall;
-            if (PlayObject.MBoAllowGroupReCall)
+            PlayObject.AllowGroupReCall = !PlayObject.AllowGroupReCall;
+            if (PlayObject.AllowGroupReCall)
             {
                 PlayObject.SysMsg(M2Share.g_sEnableGroupRecall, MsgColor.Green, MsgType.Hint);
             }

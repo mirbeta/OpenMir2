@@ -728,8 +728,8 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWGUILDRECALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    MBoAllowGuildReCall = !MBoAllowGuildReCall;
-                    if (MBoAllowGuildReCall)
+                    AllowGuildReCall = !AllowGuildReCall;
+                    if (AllowGuildReCall)
                     {
                         SysMsg(M2Share.g_sEnableGuildRecall, MsgColor.Green, MsgType.Hint);
                     }

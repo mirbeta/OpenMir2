@@ -19,24 +19,24 @@ namespace GameSvr.Command.Commands
                 PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
                 if (PlayObject.Permission >= 6)
                 {
-                    PlayObject.MWGroupRcallTime = 0;
+                    PlayObject.GroupRcallTime = 0;
                 }
-                if (PlayObject.MWGroupRcallTime > dwValue)
+                if (PlayObject.GroupRcallTime > dwValue)
                 {
-                    PlayObject.MWGroupRcallTime -= (short)dwValue;
+                    PlayObject.GroupRcallTime -= (short)dwValue;
                 }
                 else
                 {
-                    PlayObject.MWGroupRcallTime = 0;
+                    PlayObject.GroupRcallTime = 0;
                 }
-                if (PlayObject.MWGroupRcallTime == 0)
+                if (PlayObject.GroupRcallTime == 0)
                 {
-                    if (PlayObject.MGroupOwner == PlayObject)
+                    if (PlayObject.GroupOwner == PlayObject)
                     {
                         for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                         {
                             var m_PlayObject = PlayObject.GroupMembers[i];
-                            if (m_PlayObject.MBoAllowGroupReCall)
+                            if (m_PlayObject.AllowGroupReCall)
                             {
                                 if (m_PlayObject.Envir.Flag.boNORECALL)
                                 {
@@ -53,12 +53,12 @@ namespace GameSvr.Command.Commands
                             }
                         }
                         PlayObject.GroupRcallTick = HUtil32.GetTickCount();
-                        PlayObject.MWGroupRcallTime = (short)M2Share.Config.nGroupRecallTime;
+                        PlayObject.GroupRcallTime = (short)M2Share.Config.nGroupRecallTime;
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg($"{PlayObject.MWGroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg($"{PlayObject.GroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else

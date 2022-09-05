@@ -282,7 +282,7 @@ namespace GameSvr.Magic
                         if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.AntiMagic)
                         {
                             nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1);
-                            if (TargeTBaseObject.MBtLifeAttrib == Grobal2.LA_UNDEAD)
+                            if (TargeTBaseObject.LifeAttrib == Grobal2.LA_UNDEAD)
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
@@ -493,19 +493,19 @@ namespace GameSvr.Magic
                     {
                         if (M2Share.RandomNumber.Random(7) - (UserMagic.btLevel + 1) < 0)
                         {
-                            if (TargeTBaseObject.MWStatusTimeArr[Grobal2.POISON_DECHEALTH] != 0)
+                            if (TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DECHEALTH] != 0)
                             {
-                                TargeTBaseObject.MWStatusTimeArr[Grobal2.POISON_DECHEALTH] = 1;
+                                TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DECHEALTH] = 1;
                                 boTrain = true;
                             }
-                            if (TargeTBaseObject.MWStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] != 0)
+                            if (TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] != 0)
                             {
-                                TargeTBaseObject.MWStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] = 1;
+                                TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] = 1;
                                 boTrain = true;
                             }
-                            if (TargeTBaseObject.MWStatusTimeArr[Grobal2.POISON_STONE] != 0)
+                            if (TargeTBaseObject.StatusTimeArr[Grobal2.POISON_STONE] != 0)
                             {
-                                TargeTBaseObject.MWStatusTimeArr[Grobal2.POISON_STONE] = 1;
+                                TargeTBaseObject.StatusTimeArr[Grobal2.POISON_STONE] = 1;
                                 boTrain = true;
                             }
                         }
@@ -556,7 +556,7 @@ namespace GameSvr.Magic
                         if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.AntiMagic)
                         {
                             nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1);
-                            if (TargeTBaseObject.MBtLifeAttrib == Grobal2.LA_UNDEAD)
+                            if (TargeTBaseObject.LifeAttrib == Grobal2.LA_UNDEAD)
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
@@ -664,7 +664,7 @@ namespace GameSvr.Magic
 
         public bool MagMakePrivateTransparent(BaseObject BaseObject, ushort nHTime)
         {
-            if (BaseObject.MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0)
+            if (BaseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0)
             {
                 return false;
             }
@@ -683,7 +683,7 @@ namespace GameSvr.Magic
             }
             BaseObjectList.Clear();
             BaseObjectList = null;
-            BaseObject.MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] = nHTime;
+            BaseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] = nHTime;
             BaseObject.CharStatus = BaseObject.GetCharStatus();
             BaseObject.StatusChanged();
             BaseObject.HideMode = true;
@@ -712,7 +712,7 @@ namespace GameSvr.Magic
                             {
                                 if (M2Share.RandomNumber.Random(BaseObject.Abil.Level + 20 + nMagicLevel * 5) > TargeTBaseObject.Abil.Level + M2Share.Config.nMagTammingTargetLevel)
                                 {
-                                    if (!TargeTBaseObject.MBoNoTame && TargeTBaseObject.MBtLifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.nMagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.nMagTammingCount)
+                                    if (!TargeTBaseObject.MBoNoTame && TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.nMagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.nMagTammingCount)
                                     {
                                         int n14 = TargeTBaseObject.MWAbil.MaxHP / M2Share.Config.nMagTammingHPRate;
                                         if (n14 <= 2)
@@ -775,7 +775,7 @@ namespace GameSvr.Magic
                                     }
                                     else
                                     {
-                                        if (TargeTBaseObject.MBtLifeAttrib == Grobal2.LA_UNDEAD && M2Share.RandomNumber.Random(20) == 0)
+                                        if (TargeTBaseObject.LifeAttrib == Grobal2.LA_UNDEAD && M2Share.RandomNumber.Random(20) == 0)
                                         {
                                             TargeTBaseObject.MWAbil.HP = 0;
                                         }
@@ -783,7 +783,7 @@ namespace GameSvr.Magic
                                 }
                                 else
                                 {
-                                    if (TargeTBaseObject.MBtLifeAttrib != Grobal2.LA_UNDEAD && M2Share.RandomNumber.Random(20) == 0)
+                                    if (TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && M2Share.RandomNumber.Random(20) == 0)
                                     {
                                         TargeTBaseObject.OpenCrazyMode(M2Share.RandomNumber.Random(20) + 10);
                                     }
@@ -791,7 +791,7 @@ namespace GameSvr.Magic
                             }
                             else
                             {
-                                if (TargeTBaseObject.MBtLifeAttrib != Grobal2.LA_UNDEAD)
+                                if (TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD)
                                 {
                                     TargeTBaseObject.OpenCrazyMode(M2Share.RandomNumber.Random(20) + 10);// 变红
                                 }
@@ -818,7 +818,7 @@ namespace GameSvr.Magic
         private bool MagTurnUndead(BaseObject BaseObject, BaseObject TargeTBaseObject, int nTargetX, int nTargetY, int nLevel)
         {
             var result = false;
-            if (TargeTBaseObject.SuperMan || TargeTBaseObject.MBtLifeAttrib != Grobal2.LA_UNDEAD)
+            if (TargeTBaseObject.SuperMan || TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD)
             {
                 return result;
             }
@@ -951,7 +951,7 @@ namespace GameSvr.Magic
                 if (PlayObject.IsProperTarget(BaseObject))
                 {
                     var nPower = PlayObject.GetAttackPower(HUtil32.LoWord(PlayObject.MWAbil.DC), HUtil32.HiWord(PlayObject.MWAbil.DC) - HUtil32.LoWord(PlayObject.MWAbil.DC));
-                    if (M2Share.RandomNumber.Random(BaseObject.SpeedPoint) >= PlayObject.MBtHitPoint)
+                    if (M2Share.RandomNumber.Random(BaseObject.SpeedPoint) >= PlayObject.HitPoint)
                     {
                         nPower = 0;
                     }
@@ -995,7 +995,7 @@ namespace GameSvr.Magic
                     if (M2Share.RandomNumber.Random(10) >= BaseObject.AntiMagic)
                     {
                         var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1);
-                        if (BaseObject.MBtLifeAttrib == Grobal2.LA_UNDEAD)
+                        if (BaseObject.LifeAttrib == Grobal2.LA_UNDEAD)
                         {
                             nPower = (ushort)HUtil32.Round(nPower * 1.5);
                         }
@@ -1125,7 +1125,7 @@ namespace GameSvr.Magic
             {
                 var TargeTBaseObject = BaseObjectList[i];
                 int nPowerPoint;
-                if (TargeTBaseObject.MBtLifeAttrib != Grobal2.LA_UNDEAD)
+                if (TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD)
                 {
                     nPowerPoint = nPower / 10;
                 }
@@ -1224,7 +1224,7 @@ namespace GameSvr.Magic
                 var TargeTBaseObject = BaseObjectList[i];
                 if (BaseObject.IsProperFriend(TargeTBaseObject))
                 {
-                    if (TargeTBaseObject.MWStatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
+                    if (TargeTBaseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
                     {
                         TargeTBaseObject.SendDelayMsg(TargeTBaseObject, Grobal2.RM_TRANSPARENT, 0, nHTime, 0, 0, "", 800);
                         result = true;

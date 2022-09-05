@@ -21,7 +21,7 @@ namespace GameSvr.RobotPlay
             bool boFind = false;
             try
             {
-                if (!Ghost && !Death && !FixedHideMode && !StoneMode && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
+                if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[Grobal2.POISON_STONE] == 0)
                 {
                     if (HUtil32.GetTickCount() - WalkTick > WalkSpeed)
                     {
@@ -283,7 +283,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
 
-                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && MWStatusTimeArr[Grobal2.POISON_STONE] == 0)
+                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[Grobal2.POISON_STONE] == 0)
                     {
                         if (m_boProtectStatus && TargetCret == null)// 守护状态
                         {
