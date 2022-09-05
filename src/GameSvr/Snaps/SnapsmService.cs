@@ -32,7 +32,7 @@ namespace GameSvr.Snaps
         public void StartSnapsServer()
         {
             _msgServer.Start(M2Share.Config.sMsgSrvAddr, M2Share.Config.nMsgSrvPort);
-            M2Share.LogSystem.Info($"节点数据服务[{M2Share.Config.sMsgSrvAddr}:{M2Share.Config.nMsgSrvPort}]已启动.");
+            M2Share.Log.Info($"节点数据服务[{M2Share.Config.sMsgSrvAddr}:{M2Share.Config.nMsgSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)
@@ -94,7 +94,7 @@ namespace GameSvr.Snaps
             }
             catch (Exception ex)
             {
-                M2Share.LogSystem.Error(ex.StackTrace);
+                M2Share.Log.Error(ex.StackTrace);
             }
         }
 
@@ -140,7 +140,7 @@ namespace GameSvr.Snaps
                     ServerMsgInfo.Socket = e.Socket;
                     ServerMsgInfo.SocData = "";
                     ServerMsgInfo.SocketId = e.ConnectionId;
-                    M2Share.LogSystem.Info("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")链接成功...");
+                    M2Share.Log.Info("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")链接成功...");
                     m_SrvArray[i] = ServerMsgInfo;
                     break;
                 }
@@ -161,7 +161,7 @@ namespace GameSvr.Snaps
                 {
                     ServerMsgInfo.Socket = null;
                     ServerMsgInfo.SocData = "";
-                    M2Share.LogSystem.Error("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")断开连接...");
+                    M2Share.Log.Error("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")断开连接...");
                     m_SrvArray[i] = null;
                     break;
                 }
@@ -208,7 +208,7 @@ namespace GameSvr.Snaps
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
     }

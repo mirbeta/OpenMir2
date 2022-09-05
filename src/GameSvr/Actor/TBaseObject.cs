@@ -1187,9 +1187,10 @@ namespace GameSvr.Actor
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(ex.StackTrace);
             }
 
             return result;
@@ -2269,8 +2270,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
 
             return result;
@@ -2327,7 +2328,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
 
@@ -3298,7 +3299,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
 
             return true;
@@ -3309,7 +3310,7 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (Envir == null)
             {
-                M2Share.LogSystem.Error(CharName + " SendRefMsg nil PEnvir ");
+                M2Share.Log.Error(CharName + " SendRefMsg nil PEnvir ");
                 return;
             }
 
@@ -3391,8 +3392,8 @@ namespace GameSvr.Actor
                                                             cellInfo.Dispose();
                                                         }
 
-                                                        M2Share.LogSystem.Error(format(sExceptionMsg, CharName));
-                                                        M2Share.LogSystem.Error(e.Message);
+                                                        M2Share.Log.Error(format(sExceptionMsg, CharName));
+                                                        M2Share.Log.Error(e.Message);
                                                     }
                                                 }
                                             }
@@ -3630,7 +3631,7 @@ namespace GameSvr.Actor
             bool result = true;
             if (Envir == null)
             {
-                M2Share.LogSystem.Error("Walk nil PEnvir");
+                M2Share.Log.Error("Walk nil PEnvir");
                 return true;
             }
             try
@@ -3721,8 +3722,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(format(sExceptionMsg, CharName, MapName, CurrX, CurrY));
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(format(sExceptionMsg, CharName, MapName, CurrX, CurrY));
+                M2Share.Log.Error(e.Message);
             }
             return result;
         }
@@ -3820,7 +3821,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg7);
+                M2Share.Log.Error(sExceptionMsg7);
             }
 
             return result;

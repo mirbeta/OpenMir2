@@ -39,14 +39,14 @@ namespace GameSvr.UsrSystem
         /// <summary>
         /// 从DB读取人物数据
         /// </summary>
-        private readonly IList<TUserOpenInfo> _LoadPlayList;
-        private readonly object LoadPlaySection;
+        protected readonly IList<TUserOpenInfo> LoadPlayList;
+        protected readonly object LoadPlaySection;
         public readonly IList<MagicEvent> MagicEventList;
         public IList<TMagic> MagicList;
         public readonly IList<Merchant> MerchantList;
         public readonly IList<MonGenInfo> MonGenList;
         private int _currMonGenIdx;
-        private readonly IList<PlayObject> NewHumanList;
+        protected readonly IList<PlayObject> NewHumanList;
         /// <summary>
         /// 当前怪物列表刷新位置索引
         /// </summary>
@@ -54,11 +54,11 @@ namespace GameSvr.UsrSystem
         private int _monGenListPosition;
         private int _procHumIdx;
         private int _procBotHubIdx;
-        private readonly IList<PlayObject> _PlayObjectFreeList;
-        private readonly Dictionary<string, ServerGruopInfo> _OtherUserNameList;
-        private readonly IList<PlayObject> _PlayObjectList;
-        private readonly IList<PlayObject> _BotPlayObjectList;
-        public readonly IList<TMonInfo> MonsterList;
+        protected readonly IList<PlayObject> PlayObjectFreeList;
+        protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
+        protected readonly IList<PlayObject> PlayObjectList;
+        protected readonly IList<PlayObject> BotPlayObjectList;
+        internal readonly IList<TMonInfo> MonsterList;
         /// <summary>
         /// 交易NPC处理位置
         /// </summary>
@@ -94,9 +94,9 @@ namespace GameSvr.UsrSystem
         public UserEngine()
         {
             LoadPlaySection = new object();
-            _LoadPlayList = new List<TUserOpenInfo>();
-            _PlayObjectList = new List<PlayObject>();
-            _PlayObjectFreeList = new List<PlayObject>();
+            LoadPlayList = new List<TUserOpenInfo>();
+            PlayObjectList = new List<PlayObject>();
+            PlayObjectFreeList = new List<PlayObject>();
             _mChangeHumanDbGoldList = new List<TGoldChangeInfo>();
             _dwShowOnlineTick = HUtil32.GetTickCount();
             _dwSendOnlineHumTime = HUtil32.GetTickCount();
@@ -129,9 +129,9 @@ namespace GameSvr.UsrSystem
             _mListOfGateIdx = new List<int>();
             _mListOfSocket = new List<int>();
             _oldMagicList = new ArrayList();
-            _OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
+            OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
             _mUserLogonList = new List<RoBotLogon>();
-            _BotPlayObjectList = new List<PlayObject>();
+            BotPlayObjectList = new List<PlayObject>();
         }
 
         public int MonsterCount => _monsterCount;
@@ -139,7 +139,7 @@ namespace GameSvr.UsrSystem
         public int PlayObjectCount => GetUserCount();
         public int LoadPlayCount => GetLoadPlayCount();
 
-        public IEnumerable<PlayObject> PlayObjects => _PlayObjectList;
+        public IEnumerable<PlayObject> PlayObjects => PlayObjectList;
 
         public void Start()
         {
@@ -268,17 +268,17 @@ namespace GameSvr.UsrSystem
 
         private int GetLoadPlayCount()
         {
-            return _LoadPlayList.Count;
+            return LoadPlayList.Count;
         }
 
         private int GetOnlineHumCount()
         {
-            return _PlayObjectList.Count + _BotPlayObjectList.Count;
+            return PlayObjectList.Count + BotPlayObjectList.Count;
         }
 
         private int GetUserCount()
         {
-            return _PlayObjectList.Count + _BotPlayObjectList.Count;
+            return PlayObjectList.Count + BotPlayObjectList.Count;
         }
 
         private bool ProcessHumansIsLogined(string sChrName)
@@ -290,9 +290,9 @@ namespace GameSvr.UsrSystem
             }
             else
             {
-                for (var i = 0; i < _PlayObjectList.Count; i++)
+                for (var i = 0; i < PlayObjectList.Count; i++)
                 {
-                    if (string.Compare(_PlayObjectList[i].CharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(PlayObjectList[i].CharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                         break;
@@ -557,22 +557,22 @@ namespace GameSvr.UsrSystem
                     HUtil32.EnterCriticalSection(LoadPlaySection);
                     try
                     {
-                        for (var i = 0; i < _LoadPlayList.Count; i++)
+                        for (var i = 0; i < LoadPlayList.Count; i++)
                         {
                             TUserOpenInfo userOpenInfo;
-                            if (!M2Share.FrontEngine.IsFull() && !ProcessHumansIsLogined(_LoadPlayList[i].sChrName))
+                            if (!M2Share.FrontEngine.IsFull() && !ProcessHumansIsLogined(LoadPlayList[i].sChrName))
                             {
-                                userOpenInfo = _LoadPlayList[i];
+                                userOpenInfo = LoadPlayList[i];
                                 playObject = ProcessHumans_MakeNewHuman(userOpenInfo);
                                 if (playObject != null)
                                 {
                                     if (playObject.IsRobot)
                                     {
-                                        _BotPlayObjectList.Add(playObject);
+                                        BotPlayObjectList.Add(playObject);
                                     }
                                     else
                                     {
-                                        _PlayObjectList.Add(playObject);
+                                        PlayObjectList.Add(playObject);
                                     }
                                     NewHumanList.Add(playObject);
                                     SendServerGroupMsg(Grobal2.ISM_USERLOGON, M2Share.ServerIndex, playObject.CharName);
@@ -580,14 +580,14 @@ namespace GameSvr.UsrSystem
                             }
                             else
                             {
-                                KickOnlineUser(_LoadPlayList[i].sChrName);
-                                userOpenInfo = _LoadPlayList[i];
+                                KickOnlineUser(LoadPlayList[i].sChrName);
+                                userOpenInfo = LoadPlayList[i];
                                 _mListOfGateIdx.Add(userOpenInfo.LoadUser.nGateIdx);
                                 _mListOfSocket.Add(userOpenInfo.LoadUser.nSocket);
                             }
-                            _LoadPlayList[i] = null;
+                            LoadPlayList[i] = null;
                         }
-                        _LoadPlayList.Clear();
+                        LoadPlayList.Clear();
                         for (var i = 0; i < _mChangeHumanDbGoldList.Count; i++)
                         {
                             var goldChangeInfo = _mChangeHumanDbGoldList[i];
@@ -639,13 +639,13 @@ namespace GameSvr.UsrSystem
 
             try
             {
-                for (var i = 0; i < _PlayObjectFreeList.Count; i++)
+                for (var i = 0; i < PlayObjectFreeList.Count; i++)
                 {
-                    playObject = _PlayObjectFreeList[i];
+                    playObject = PlayObjectFreeList[i];
                     if ((HUtil32.GetTickCount() - playObject.GhostTick) > M2Share.Config.dwHumanFreeDelayTime)// 5 * 60 * 1000
                     {
-                        _PlayObjectFreeList[i] = null;
-                        _PlayObjectFreeList.RemoveAt(i);
+                        PlayObjectFreeList[i] = null;
+                        PlayObjectFreeList.RemoveAt(i);
                         break;
                     }
                     if (playObject.m_boSwitchData && playObject.m_boRcdSaved)
@@ -702,8 +702,8 @@ namespace GameSvr.UsrSystem
                     var dwCheckTime = HUtil32.GetTickCount();
                     while (true)
                     {
-                        if (_BotPlayObjectList.Count <= nIdx) break;
-                        var playObject = _BotPlayObjectList[nIdx];
+                        if (BotPlayObjectList.Count <= nIdx) break;
+                        var playObject = BotPlayObjectList[nIdx];
                         if (dwCurTick - playObject.m_dwRunTick > playObject.m_nRunTime)
                         {
                             playObject.m_dwRunTick = dwCurTick;
@@ -734,7 +734,7 @@ namespace GameSvr.UsrSystem
                             }
                             else
                             {
-                                _BotPlayObjectList.Remove(playObject);
+                                BotPlayObjectList.Remove(playObject);
                                 playObject.Disappear();
                                 AddToHumanFreeList(playObject);
                                 playObject.DealCancelA();
@@ -774,8 +774,8 @@ namespace GameSvr.UsrSystem
                 var dwCheckTime = HUtil32.GetTickCount();
                 while (true)
                 {
-                    if (_PlayObjectList.Count <= nIdx) break;
-                    var playObject = _PlayObjectList[nIdx];
+                    if (PlayObjectList.Count <= nIdx) break;
+                    var playObject = PlayObjectList[nIdx];
                     if (playObject == null)
                     {
                         continue;
@@ -844,7 +844,7 @@ namespace GameSvr.UsrSystem
                         }
                         else
                         {
-                            _PlayObjectList.Remove(playObject);
+                            PlayObjectList.Remove(playObject);
                             playObject.Disappear();
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
@@ -1287,7 +1287,7 @@ namespace GameSvr.UsrSystem
 
         public bool FindOtherServerUser(string sName, ref int nServerIndex)
         {
-            if (_OtherUserNameList.TryGetValue(sName, out var groupServer))
+            if (OtherUserNameList.TryGetValue(sName, out var groupServer))
             {
                 nServerIndex = groupServer.nServerIdx;
                 Console.WriteLine($"玩家在[{nServerIndex}]服务器上.");
@@ -1299,9 +1299,9 @@ namespace GameSvr.UsrSystem
         public void CryCry(short wIdent, Envirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
             PlayObject playObject;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
                     playObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
@@ -1509,9 +1509,9 @@ namespace GameSvr.UsrSystem
 
         public void GetIsmChangeServerReceive(string flName)
         {
-            for (var i = 0; i < _PlayObjectFreeList.Count; i++)
+            for (var i = 0; i < PlayObjectFreeList.Count; i++)
             {
-                PlayObject hum = _PlayObjectFreeList[i];
+                PlayObject hum = PlayObjectFreeList[i];
                 if (hum.m_sSwitchDataTempFile == flName)
                 {
                     hum.m_boSwitchDataOK = true;
@@ -1524,8 +1524,8 @@ namespace GameSvr.UsrSystem
         {
             var name = string.Empty;
             var apmode = HUtil32.GetValidStr3(uname, ref name, ":");
-            _OtherUserNameList.Remove(name);
-            _OtherUserNameList.Add(name, new ServerGruopInfo()
+            OtherUserNameList.Remove(name);
+            OtherUserNameList.Add(name, new ServerGruopInfo()
             {
                 nServerIdx = sNum,
                 sCharName = uname
@@ -1536,7 +1536,7 @@ namespace GameSvr.UsrSystem
         {
             var name = string.Empty;
             var apmode = HUtil32.GetValidStr3(uname, ref name, ":");
-            _OtherUserNameList.Remove(name);
+            OtherUserNameList.Remove(name);
             // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             // {
             //     if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.OrdinalIgnoreCase) == 0 && m_OtherUserNameList[i].nServerIdx == sNum)
@@ -1914,11 +1914,11 @@ namespace GameSvr.UsrSystem
         public PlayObject GetPlayObject(string sName)
         {
             PlayObject result = null;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                if (string.Compare(_PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    PlayObject playObject = _PlayObjectList[i];
+                    PlayObject playObject = PlayObjectList[i];
                     if (!playObject.Ghost)
                     {
                         if (!(playObject.m_boPasswordLocked && playObject.ObMode && playObject.AdminMode))
@@ -1938,11 +1938,11 @@ namespace GameSvr.UsrSystem
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                for (var i = 0; i < _PlayObjectList.Count; i++)
+                for (var i = 0; i < PlayObjectList.Count; i++)
                 {
-                    if (string.Compare(_PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        playObject = _PlayObjectList[i];
+                        playObject = PlayObjectList[i];
                         playObject.m_boEmergencyClose = true;
                         break;
                     }
@@ -1960,11 +1960,11 @@ namespace GameSvr.UsrSystem
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                for (var i = 0; i < _PlayObjectList.Count; i++)
+                for (var i = 0; i < PlayObjectList.Count; i++)
                 {
-                    if (string.Compare(_PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        result = _PlayObjectList[i];
+                        result = PlayObjectList[i];
                         break;
                     }
                 }
@@ -2013,9 +2013,9 @@ namespace GameSvr.UsrSystem
         {
             var result = 0;
             PlayObject playObject;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == envir)
                 {
                     if (Math.Abs(playObject.CurrX - nX) < nRange && Math.Abs(playObject.CurrY - nY) < nRange)
@@ -2050,7 +2050,7 @@ namespace GameSvr.UsrSystem
             HUtil32.EnterCriticalSection(LoadPlaySection);
             try
             {
-                _LoadPlayList.Add(userOpenInfo);
+                LoadPlayList.Add(userOpenInfo);
             }
             finally
             {
@@ -2061,9 +2061,9 @@ namespace GameSvr.UsrSystem
         private void KickOnlineUser(string sChrName)
         {
             PlayObject playObject;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                playObject = PlayObjectList[i];
                 if (string.Compare(playObject.CharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.m_boKickFlag = true;
@@ -2106,7 +2106,7 @@ namespace GameSvr.UsrSystem
         private void AddToHumanFreeList(PlayObject playObject)
         {
             playObject.GhostTick = HUtil32.GetTickCount();
-            _PlayObjectFreeList.Add(playObject);
+            PlayObjectFreeList.Add(playObject);
         }
 
         private void GetHumData(PlayObject playObject, ref THumDataInfo humanRcd)
@@ -2564,9 +2564,9 @@ namespace GameSvr.UsrSystem
         public void HumanExpire(string sAccount)
         {
             if (!M2Share.Config.boKickExpireHuman) return;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                PlayObject playObject = _PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (string.Compare(playObject.m_sUserID, sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.m_boExpire = true;
@@ -2580,9 +2580,9 @@ namespace GameSvr.UsrSystem
             var result = 0;
             var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null) return result;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                PlayObject playObject = _PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir) result++;
             }
             return result;
@@ -2591,9 +2591,9 @@ namespace GameSvr.UsrSystem
         public int GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, IList<TBaseObject> list)
         {
             var result = 0;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                PlayObject playObject = _PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir &&
                     Math.Abs(playObject.CurrX - nRageX) <= nRage && Math.Abs(playObject.CurrY - nRageY) <= nRage)
                 {
@@ -2626,9 +2626,9 @@ namespace GameSvr.UsrSystem
         /// </summary>
         public void SendBroadCastMsgExt(string sMsg, MsgType msgType)
         {
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                PlayObject playObject = _PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Ghost)
                     playObject.SysMsg(sMsg, MsgColor.Red, msgType);
             }
@@ -2636,9 +2636,9 @@ namespace GameSvr.UsrSystem
 
         public void SendBroadCastMsg(string sMsg, MsgType msgType)
         {
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                PlayObject playObject = _PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Ghost)
                 {
                     playObject.SysMsg(sMsg, MsgColor.Red, msgType);
@@ -2708,7 +2708,7 @@ namespace GameSvr.UsrSystem
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
                 playObject.m_sUserID = "假人" + ai.sCharName;
                 playObject.Start(TPathType.t_Dynamic);
-                _BotPlayObjectList.Add(playObject);
+                BotPlayObjectList.Add(playObject);
                 return true;
             }
             return false;
@@ -2819,9 +2819,9 @@ namespace GameSvr.UsrSystem
         public void SendQuestMsg(string sQuestName)
         {
             PlayObject playObject;
-            for (var i = 0; i < _PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = _PlayObjectList[i];
+                playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
                     M2Share.g_ManageNPC.GotoLable(playObject, sQuestName, false);
             }
@@ -2853,11 +2853,11 @@ namespace GameSvr.UsrSystem
         public void GuildMemberReGetRankName(GuildInfo guild)
         {
             var nRankNo = 0;
-            for (int i = 0; i < _PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                if (_PlayObjectList[i].MyGuild == guild)
+                if (PlayObjectList[i].MyGuild == guild)
                 {
-                    guild.GetRankName(_PlayObjectList[i], ref nRankNo);
+                    guild.GetRankName(PlayObjectList[i], ref nRankNo);
                 }
             }
         }

@@ -487,7 +487,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.LogSystem.Error(format(sExceptionMsg, new object[] { sData }));
+                M2Share.Log.Error(format(sExceptionMsg, new object[] { sData }));
             }
         }
 
@@ -844,7 +844,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.LogSystem.Error(" TAIPlayObject.SearchPickUpItem");
+                M2Share.Log.Error(" TAIPlayObject.SearchPickUpItem");
             }
             return result;
         }
@@ -1362,7 +1362,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception ex)
             {
-                M2Share.LogSystem.Error(ex.Message);
+                M2Share.Log.Error(ex.Message);
             }
             return result;
         }
@@ -2078,7 +2078,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.LogSystem.Error(format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
+                M2Share.Log.Error(format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
             }
             return result;
         }
@@ -2139,7 +2139,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.LogSystem.Error("TAIPlayObject.Thinking");
+                M2Share.Log.Error("TAIPlayObject.Thinking");
             }
             return result;
         }
@@ -2635,7 +2635,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return result;
         }
@@ -4343,7 +4343,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.LogSystem.Error("TAIPlayObject.CheckHeroAmulet");
+                M2Share.Log.Error("TAIPlayObject.CheckHeroAmulet");
             }
             return result;
         }

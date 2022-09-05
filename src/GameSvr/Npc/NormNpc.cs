@@ -1593,13 +1593,13 @@ namespace GameSvr.Npc
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             string sMsg = format(sOutMessage, sErrMsg, sCmd, this.CharName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
-            M2Share.LogSystem.Error(sMsg);
+            M2Share.Log.Error(sMsg);
         }
 
         private void ScriptConditionError(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, string sCmd)
         {
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + this.CharName + " 地图:" + this.MapName + " 座标:" + this.CurrX + ':' + this.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
-            M2Share.LogSystem.Error("[脚本参数不正确] " + sMsg);
+            M2Share.Log.Error("[脚本参数不正确] " + sMsg);
         }
 
         protected void SendMsgToUser(PlayObject PlayObject, string sMsg)
@@ -1814,7 +1814,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.LogSystem.Error("{异常} TNormNpc.GetValValue2");
+                M2Share.Log.Error("{异常} TNormNpc.GetValValue2");
             }
             return result;
         }
@@ -1876,7 +1876,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.LogSystem.Error("{异常} TNormNpc.SetValValue1");
+                M2Share.Log.Error("{异常} TNormNpc.SetValValue1");
             }
             return result;
         }
@@ -1913,7 +1913,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.LogSystem.Error("{异常} TNormNpc.SetValValue2");
+                M2Share.Log.Error("{异常} TNormNpc.SetValValue2");
             }
             return result;
         }

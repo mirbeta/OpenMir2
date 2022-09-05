@@ -138,8 +138,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
         }
 
@@ -709,7 +709,7 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(e.Message);
             }
             return result;
         }

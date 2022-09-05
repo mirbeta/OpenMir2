@@ -538,7 +538,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return result;
         }
@@ -625,7 +625,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return result;
         }
@@ -877,7 +877,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
 
@@ -1097,7 +1097,7 @@ namespace GameSvr.Player
             TBaseObject BaseObject;
             if (Envir == null)
             {
-                M2Share.LogSystem.Error("CretInNearXY nil PEnvir");
+                M2Share.Log.Error("CretInNearXY nil PEnvir");
                 return false;
             }
             for (var nCX = nX - 1; nCX <= nX + 1; nCX++)
@@ -1674,8 +1674,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
+                M2Share.Log.Error(e.Message);
             }
             return result;
         }

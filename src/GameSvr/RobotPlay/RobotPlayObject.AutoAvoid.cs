@@ -82,7 +82,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.LogSystem.Error("TAIPlayObject.IsNeedAvoid");
+                M2Share.Log.Error("TAIPlayObject.IsNeedAvoid");
             }
             return result;
         }

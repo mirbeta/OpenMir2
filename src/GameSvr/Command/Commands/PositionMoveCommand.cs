@@ -53,8 +53,8 @@ namespace GameSvr.Command.Commands
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error("[Exceptioin] TPlayObject.CmdPositionMove");
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error("[Exceptioin] TPlayObject.CmdPositionMove");
+                M2Share.Log.Error(e.Message);
             }
         }
     }

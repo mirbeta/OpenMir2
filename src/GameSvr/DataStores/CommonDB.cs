@@ -109,7 +109,7 @@ namespace GameSvr.DataStores
                         }
                         else
                         {
-                            M2Share.LogSystem.Error(string.Format("加载物品(Idx:{0} Name:{1})数据失败!!!", new object[] { Idx, Item.Name }));
+                            M2Share.Log.Error(string.Format("加载物品(Idx:{0} Name:{1})数据失败!!!", new object[] { Idx, Item.Name }));
                             result = -100;
                             return result;
                         }
@@ -281,7 +281,7 @@ namespace GameSvr.DataStores
         {
             if (!Open())
             {
-                M2Share.LogSystem.Error("读取物品寄售列表失败.");
+                M2Share.Log.Error("读取物品寄售列表失败.");
                 return;
             }
             try
@@ -329,7 +329,7 @@ namespace GameSvr.DataStores
         {
             if (!Open())
             {
-                M2Share.LogSystem.Error("保存物品寄售数据失败.");
+                M2Share.Log.Error("保存物品寄售数据失败.");
                 return;
             }
             TDealOffInfo DealOffInfo;
