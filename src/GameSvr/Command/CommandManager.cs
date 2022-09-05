@@ -28,7 +28,6 @@ namespace GameSvr.Command
         /// </summary>
         private void RegisterCommandGroups()
         {
-            var cmdName = string.Empty;
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
                 if (!type.IsSubclassOf(typeof(BaseCommond))) continue;//只有继承BaseCommond，才能添加到命令对象中
@@ -42,7 +41,7 @@ namespace GameSvr.Command
                     M2Share.LogSystem.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
 
-                if (CustomCommands.TryGetValue(groupAttribute.Name, out cmdName))
+                if (CustomCommands.TryGetValue(groupAttribute.Name, out string cmdName))
                 {
                     groupAttribute.Command = groupAttribute.Command;
                     groupAttribute.Name = cmdName;
@@ -107,13 +106,14 @@ namespace GameSvr.Command
         /// <returns><see cref="bool"/></returns>
         public bool ExecCmd(string line, PlayObject playObject)
         {
+            if (playObject == null)
+                throw new ArgumentException("PlayObject");
+
             var output = string.Empty;
             string command;
             string parameters;
             var found = false;
 
-            if (playObject == null)
-                throw new ArgumentException("PlayObject");
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return found;
 

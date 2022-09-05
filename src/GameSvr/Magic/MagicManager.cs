@@ -366,7 +366,7 @@ namespace GameSvr.Magic
                                 }
                                 break;
                             case SpellsDef.SKILL_CLOAK:
-                                if (MagMakePrivateTransparent(PlayObject, DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 3))
+                                if (MagMakePrivateTransparent(PlayObject, (ushort)(DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 3)))
                                 {
                                     boTrain = true;
                                 }
@@ -400,7 +400,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case SpellsDef.SKILL_EARTHFIRE:
-                    if (MagMakeFireCross(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), DoSpell_GetPower(UserMagic, 10) + (DoSpell_GetRPow(PlayObject.m_WAbil.MC) >> 1), nTargetX, nTargetY) > 0)
+                    if (MagMakeFireCross(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), (ushort)(DoSpell_GetPower(UserMagic, 10) + (DoSpell_GetRPow(PlayObject.m_WAbil.MC) >> 1)), nTargetX, nTargetY))
                     {
                         boTrain = true;
                     }
@@ -662,7 +662,7 @@ namespace GameSvr.Magic
             return true;
         }
 
-        public bool MagMakePrivateTransparent(TBaseObject BaseObject, int nHTime)
+        public bool MagMakePrivateTransparent(TBaseObject BaseObject, ushort nHTime)
         {
             if (BaseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0)
             {
@@ -683,7 +683,7 @@ namespace GameSvr.Magic
             }
             BaseObjectList.Clear();
             BaseObjectList = null;
-            BaseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = (ushort)nHTime;
+            BaseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = nHTime;
             BaseObject.CharStatus = BaseObject.GetCharStatus();
             BaseObject.StatusChanged();
             BaseObject.HideMode = true;
@@ -1016,7 +1016,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagHbFireBall(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, ref TBaseObject TargetBaseObject)
+        private bool MagHbFireBall(PlayObject PlayObject, TUserMagic UserMagic, short nTargetX, short nTargetY, ref TBaseObject TargetBaseObject)
         {
             var result = false;
             if (!PlayObject.MagCanHitTarget(PlayObject.CurrX, PlayObject.CurrY, TargetBaseObject))
@@ -1048,8 +1048,8 @@ namespace GameSvr.Magic
                     var push = M2Share.RandomNumber.Random(UserMagic.btLevel) - 1;
                     if (push > 0)
                     {
-                        int nDir = M2Share.GetNextDirection(PlayObject.CurrX, PlayObject.CurrY, TargetBaseObject.CurrX, TargetBaseObject.CurrY);
-                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYPUSHED, (short)nDir, HUtil32.MakeLong(nTargetX, nTargetY), push, TargetBaseObject.ObjectId, "", 600);
+                        byte nDir = M2Share.GetNextDirection(PlayObject.CurrX, PlayObject.CurrY, TargetBaseObject.CurrX, TargetBaseObject.CurrY);
+                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYPUSHED, nDir, HUtil32.MakeLong(nTargetX, nTargetY), push, TargetBaseObject.ObjectId, "", 600);
                     }
                 }
             }
@@ -1060,40 +1060,40 @@ namespace GameSvr.Magic
         /// 火墙
         /// </summary>
         /// <returns></returns>
-        private int MagMakeFireCross(PlayObject PlayObject, int nDamage, int nHTime, int nX, int nY)
+        private bool MagMakeFireCross(PlayObject PlayObject, int nDamage, ushort time, short nX, short nY)
         {
             const string sDisableInSafeZoneFireCross = "安全区不允许使用...";
             if (M2Share.Config.boDisableInSafeZoneFireCross && PlayObject.InSafeZone(PlayObject.Envir, nX, nY))
             {
                 PlayObject.SysMsg(sDisableInSafeZoneFireCross, MsgColor.Red, MsgType.Notice);
-                return 0;
+                return false;
             }
             if (PlayObject.Envir.GetEvent(nX, nY - 1) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             if (PlayObject.Envir.GetEvent(nX - 1, nY) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             if (PlayObject.Envir.GetEvent(nX, nY) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             if (PlayObject.Envir.GetEvent(nX + 1, nY) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             if (PlayObject.Envir.GetEvent(nX, nY + 1) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
-            return 1;
+            return true;
         }
 
         private bool MagBigExplosion(TBaseObject BaseObject, int nPower, int nX, int nY, int nRage)
@@ -1292,10 +1292,8 @@ namespace GameSvr.Magic
             if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.Config.sDragon;
-                int nMakelevel = UserMagic.btLevel;
                 int nExpLevel = UserMagic.btLevel;
                 var nCount = M2Share.Config.nDragonCount;
-                const int dwRoyaltySec = 10 * 24 * 60 * 60;
                 for (var i = 0; i < M2Share.Config.DragonArray.Length; i++)
                 {
                     if (M2Share.Config.DragonArray[i].nHumLevel == 0)
@@ -1309,7 +1307,7 @@ namespace GameSvr.Magic
                         nCount = M2Share.Config.DragonArray[i].nCount;
                     }
                 }
-                if (PlayObject.MakeSlave(sMonName, nMakelevel, nExpLevel, nCount, dwRoyaltySec) != null)
+                if (PlayObject.MakeSlave(sMonName, UserMagic.btLevel, nExpLevel, nCount, dwRoyaltySec) != null)
                 {
                     result = true;
                 }
@@ -1321,16 +1319,19 @@ namespace GameSvr.Magic
             return result;
         }
 
+        /// <summary>
+        /// 宠物叛变时间
+        /// </summary>
+        const int dwRoyaltySec = 10 * 24 * 60 * 60;
+
         private bool MagMakeSlave(PlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.Config.sSkeleton;
-                int nMakeLevel = UserMagic.btLevel;
                 int nExpLevel = UserMagic.btLevel;
                 var nCount = M2Share.Config.nSkeletonCount;
-                const int dwRoyaltySec = 10 * 24 * 60 * 60;//叛变时间
                 for (var i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
                 {
                     if (M2Share.Config.SkeletonArray[i].nHumLevel == 0)
@@ -1344,7 +1345,7 @@ namespace GameSvr.Magic
                         nCount = M2Share.Config.SkeletonArray[i].nCount;
                     }
                 }
-                if (PlayObject.MakeSlave(sMonName, nMakeLevel, nExpLevel, nCount, dwRoyaltySec) != null)
+                if (PlayObject.MakeSlave(sMonName, UserMagic.btLevel, nExpLevel, nCount, dwRoyaltySec) != null)
                 {
                     result = true;
                 }
@@ -1364,10 +1365,7 @@ namespace GameSvr.Magic
             if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.Config.sAngel;
-                int nMakeLevel = UserMagic.btLevel;
-                int nExpLevel = UserMagic.btLevel;
-                var dwRoyaltySec = 10 * 24 * 60 * 60;
-                if (PlayObject.MakeSlave(sMonName, nMakeLevel, nExpLevel, 1, dwRoyaltySec) != null)
+                if (PlayObject.MakeSlave(sMonName, UserMagic.btLevel, UserMagic.btLevel, 1, dwRoyaltySec) != null)
                 {
                     result = true;
                 }
@@ -1376,4 +1374,3 @@ namespace GameSvr.Magic
         }
     }
 }
-

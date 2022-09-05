@@ -2312,7 +2312,7 @@ namespace GameSvr.UsrSystem
                 {
                     baseObject.Race = monster.btRace;
                     baseObject.RaceImg = monster.btRaceImg;
-                    baseObject.m_wAppr = monster.wAppr;
+                    baseObject.Appr = monster.wAppr;
                     baseObject.Abil.Level = (byte)monster.wLevel;
                     baseObject.m_btLifeAttrib = monster.btLifeAttrib;
                     baseObject.m_btCoolEye = (byte)monster.wCoolEye;

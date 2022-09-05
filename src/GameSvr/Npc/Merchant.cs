@@ -1064,7 +1064,7 @@ namespace GameSvr.Npc
         public Merchant() : base()
         {
             RaceImg = Grobal2.RCC_MERCHANT;
-            m_wAppr = 0;
+            Appr = 0;
             m_nPriceRate = 100;
             m_boCastle = false;
             m_ItemTypeList = new List<int>();

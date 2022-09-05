@@ -38,7 +38,7 @@ namespace GameSvr.Monster.Monsters
             byte btDir = 0;
             if (TargetCret == null)
             {
-                return result;
+                return false;
             }
             if (GetAttackDir(TargetCret, ref btDir))
             {
