@@ -1223,7 +1223,7 @@ namespace GameSvr
             return result;
         }
 
-        public static bool IsAccessory(int nIndex)
+        public static bool IsAccessory(ushort nIndex)
         {
             bool result;
             var item = UserEngine.GetStdItem(nIndex);

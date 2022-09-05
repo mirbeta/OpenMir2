@@ -284,8 +284,8 @@ namespace GameSvr.Actor
             short nY = 0;
             while (true)
             {
-                var n10 = (Direction + M2Share.Config.WideAttack[nC]) % 8;
-                if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
+                var nDir = (byte)((Direction + M2Share.Config.WideAttack[nC]) % 8);
+                if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
                     var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
@@ -307,13 +307,12 @@ namespace GameSvr.Actor
         {
             bool result = false;
             int nC = 0;
-            int n10 = 0;
             short nX = 0;
             short nY = 0;
             while (true)
             {
-                n10 = (Direction + M2Share.Config.CrsAttack[nC]) % 8;
-                if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
+                byte nDir = (byte)((Direction + M2Share.Config.CrsAttack[nC]) % 8);
+                if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
                     var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
@@ -365,7 +364,7 @@ namespace GameSvr.Actor
             {
                 bool bo21 = false;
                 int nWeaponDamage = 0;
-                int nPower = 0;
+                ushort nPower = 0;
                 int nSecPwr = 0;
                 if (AttackTarget != null)
                 {
@@ -380,14 +379,14 @@ namespace GameSvr.Actor
                     {
                         FireHitSkill = false;
                         MDwLatestFireHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
-                        nPower = nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10));
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10)));
                         bo21 = true;
                     }
                     if ((wHitMode == 9) && MBoTwinHitSkill) // 烈火剑法
                     {
                         MBoTwinHitSkill = false;
                         MDwLatestTwinHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
-                        nPower = nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10));
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * (_mNHitDouble * 10)));
                         bo21 = true;
                     }
                 }
@@ -492,7 +491,7 @@ namespace GameSvr.Actor
                 {
                     if (AttackTarget.MBtHitPoint > 0)
                     {
-                        if (MBtHitPoint < M2Share.RandomNumber.Random(AttackTarget.SpeedPoint))
+                        if (MBtHitPoint < M2Share.RandomNumber.RandomByte(AttackTarget.SpeedPoint))
                         {
                             nPower = 0;
                         }

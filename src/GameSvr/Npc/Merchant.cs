@@ -64,19 +64,19 @@ namespace GameSvr.Npc
         public bool m_boOffLineMsg = false;
         public bool m_boYBDeal = false;
 
-        private void AddItemPrice(int nIndex, int nPrice)
+        private void AddItemPrice(ushort nIndex, double nPrice)
         {
             TItemPrice ItemPrice;
             ItemPrice = new TItemPrice
             {
-                wIndex = (short)nIndex,
+                wIndex = nIndex,
                 nPrice = nPrice
             };
             m_ItemPriceList.Add(ItemPrice);
             M2Share.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
         }
 
-        private void CheckItemPrice(int nIndex)
+        private void CheckItemPrice(ushort nIndex)
         {
             TItemPrice ItemPrice;
             double n10;
@@ -167,7 +167,6 @@ namespace GameSvr.Npc
         private void RefillGoods()
         {
             TGoods Goods;
-            int nIndex;
             int nRefillCount;
             IList<TUserItem> RefillList;
             IList<TUserItem> RefillList20;
@@ -175,6 +174,7 @@ namespace GameSvr.Npc
             const string sExceptionMsg = "[Exception] TMerchant::RefillGoods {0}/{1}:{2} [{3}] Code:{4}";
             try
             {
+                ushort nIndex;
                 for (var i = 0; i < m_RefillGoodsList.Count; i++)
                 {
                     Goods = m_RefillGoodsList[i];
@@ -253,7 +253,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private double GetItemPrice(int nIndex)
+        private double GetItemPrice(ushort nIndex)
         {
             double result = -1;
             TItemPrice ItemPrice;

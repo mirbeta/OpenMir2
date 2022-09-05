@@ -4700,20 +4700,17 @@ namespace GameSvr.Actor
 
         public int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            var n14 = HUtil32.LoWord(MWAbil.MAC) +
-                      M2Share.RandomNumber.Random(HUtil32.HiWord(MWAbil.MAC) - HUtil32.LoWord(MWAbil.MAC) + 1);
+            var n14 = HUtil32.LoWord(MWAbil.MAC) + M2Share.RandomNumber.Random(HUtil32.HiWord(MWAbil.MAC) - HUtil32.LoWord(MWAbil.MAC) + 1);
             nDamage = HUtil32._MAX(0, nDamage - n14);
             if ((MBtLifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
                 nDamage += _mAddAbil.btUndead;
             }
-
             if ((nDamage > 0) && AbilMagBubbleDefence)
             {
                 nDamage = HUtil32.Round(nDamage / 1.0e2 * (_magBubbleDefenceLevel + 2) * 8.0);
                 DamageBubbleDefence(nDamage);
             }
-
             return nDamage;
         }
 
@@ -4729,9 +4726,7 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
-            if ((Race >= 50) && (LastHiter != null) &&
-                (LastHiter.Race == Grobal2.RC_PLAYOBJECT)) // 人攻击怪物
+            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == Grobal2.RC_PLAYOBJECT)) // 人攻击怪物
             {
                 switch (LastHiter.Job)
                 {
@@ -4746,20 +4741,16 @@ namespace GameSvr.Actor
                         break;
                 }
             }
-
-            if ((Race == Grobal2.RC_PLAYOBJECT) && (LastHiter != null) &&
-                (LastHiter.Master != null)) // 怪物攻击人
+            if ((Race == Grobal2.RC_PLAYOBJECT) && (LastHiter != null) && (LastHiter.Master != null)) // 怪物攻击人
             {
                 nDamage = nDamage * M2Share.Config.nMonHum / 10;
             }
-
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
             if (MWStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] > 0)
             {
                 nDam = HUtil32.Round(nDam * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
                 nDamage = HUtil32.Round(nDamage * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
             }
-
             bo19 = false;
             if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0)
             {
@@ -4781,11 +4772,9 @@ namespace GameSvr.Actor
                                                    + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
                                                    "\t" + '0');
                         }
-
                         UseItems[Grobal2.U_DRESS].wIndex = 0;
                         FeatureChanged();
                     }
-
                     UseItems[Grobal2.U_DRESS].wIndex = 0;
                     UseItems[Grobal2.U_DRESS].Dura = 0;
                     bo19 = true;
@@ -4824,11 +4813,9 @@ namespace GameSvr.Actor
                                                        + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
                                                        "\t" + '0');
                             }
-
                             UseItems[i].wIndex = 0;
                             FeatureChanged();
                         }
-
                         UseItems[i].wIndex = 0;
                         UseItems[i].Dura = 0;
                         bo19 = true;
@@ -4837,19 +4824,16 @@ namespace GameSvr.Actor
                     {
                         UseItems[i].Dura = (ushort)nDura;
                     }
-
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
                         SendMsg(this, Grobal2.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
                     }
                 }
             }
-
             if (bo19)
             {
                 RecalcAbilitys();
             }
-
             DamageHealth(nDamage);
         }
 
