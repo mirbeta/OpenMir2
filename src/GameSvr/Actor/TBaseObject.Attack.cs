@@ -143,7 +143,7 @@ namespace GameSvr.Actor
             }
         }
 
-        protected void SendAttackMsg(short wIdent, byte btDir, int nX, int nY)
+        protected void SendAttackMsg(short wIdent, byte btDir, short nX, short nY)
         {
             SendRefMsg(wIdent, btDir, nX, nY, 0, "");
         }
@@ -229,13 +229,13 @@ namespace GameSvr.Actor
             {
                 if (IsProperTarget(BaseObject))
                 {
-                    if (M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < MBtHitPoint)
+                    if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < MBtHitPoint)
                     {
                         BaseObject.StruckDamage(nSecPwr);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 500);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 500);
                         if (BaseObject.Race != Grobal2.RC_PLAYOBJECT)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, (short)nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "");
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "");
                         }
                         result = true;
                     }
@@ -279,7 +279,7 @@ namespace GameSvr.Actor
         private bool SwordWideAttack(ref int nSecPwr)
         {
             bool result = false;
-            int nC = 0;
+            byte nC = 0;
             short nX = 0;
             short nY = 0;
             while (true)

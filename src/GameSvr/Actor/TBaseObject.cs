@@ -2550,10 +2550,10 @@ namespace GameSvr.Actor
         /// </summary>
         /// <param name="userMagic"></param>
         /// <returns></returns>
-        private short GetMagicSpell(TUserMagic userMagic)
+        private ushort GetMagicSpell(TUserMagic userMagic)
         {
-            return (short)HUtil32.Round(userMagic.MagicInfo.wSpell / (userMagic.MagicInfo.btTrainLv + 1) *
-                                        (userMagic.btLevel + 1));
+            return (ushort)HUtil32.Round(userMagic.MagicInfo.wSpell / (userMagic.MagicInfo.btTrainLv + 1) *
+                                         (userMagic.btLevel + 1));
         }
 
         private void CheckPkStatus()
