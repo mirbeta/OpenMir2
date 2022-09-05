@@ -21,40 +21,40 @@ namespace GameSvr.RobotPlay
         /// <summary>
         /// 假人启动
         /// </summary>
-        public bool m_boAIStart = false;
+        public bool m_boAIStart;
         /// <summary>
         /// 挂机地图
         /// </summary>
-        public Envirnoment m_ManagedEnvir = null;
-        public TPointManager m_PointManager = null;
+        public Envirnoment m_ManagedEnvir;
+        public TPointManager m_PointManager;
         public PointInfo[] m_Path;
-        public int m_nPostion = 0;
-        public int m_nMoveFailCount = 0;
+        public int m_nPostion;
+        public int m_nMoveFailCount;
         public string m_sConfigListFileName = string.Empty;
         public string m_sHeroConfigListFileName = string.Empty;
         public string m_sFilePath = string.Empty;
         public string m_sConfigFileName = string.Empty;
         public string m_sHeroConfigFileName = string.Empty;
-        public IList<string> m_BagItemNames = null;
+        public IList<string> m_BagItemNames;
         public string[] m_UseItemNames;
-        public TRunPos m_RunPos = null;
+        public TRunPos m_RunPos;
         /// <summary>
         /// 魔法使用间隔
         /// </summary>
         public long[] m_SkillUseTick;
-        public int m_nSelItemType = 0;
-        public int m_nIncSelfHealthCount = 0;
-        public int m_nIncMasterHealthCount = 0;
+        public int m_nSelItemType;
+        public int m_nIncSelfHealthCount;
+        public int m_nIncMasterHealthCount;
         /// <summary>
         /// 攻击方式
         /// </summary>
-        public short m_wHitMode = 0;
-        public bool m_boSelSelf = false;
-        public byte m_btTaoistUseItemType = 0;
-        public long m_dwAutoRepairItemTick = 0;
-        public long m_dwAutoAddHealthTick = 0;
-        public long m_dwThinkTick = 0;
-        public bool m_boDupMode = false;
+        public short m_wHitMode;
+        public bool m_boSelSelf;
+        public byte m_btTaoistUseItemType;
+        public long m_dwAutoRepairItemTick;
+        public long m_dwAutoAddHealthTick;
+        public long m_dwThinkTick;
+        public bool m_boDupMode;
         public long m_dwSearchMagic = 0;
         /// <summary>
         /// 低血回城间隔
@@ -63,58 +63,58 @@ namespace GameSvr.RobotPlay
         /// <summary>
         /// 守护模式
         /// </summary>
-        public bool m_boProtectStatus = false;
-        public short m_nProtectTargetX = 0;
-        public short m_nProtectTargetY = 0;
+        public bool m_boProtectStatus;
+        public short m_nProtectTargetX;
+        public short m_nProtectTargetY;
         /// <summary>
         /// 到达守护坐标
         /// </summary>
-        public bool m_boProtectOK = false;
+        public bool m_boProtectOK;
         /// <summary>
         /// 是向守护坐标的累计数
         /// </summary>
-        public int m_nGotoProtectXYCount = 0;
-        public long m_dwPickUpItemTick = 0;
-        public MapItem m_SelMapItem = null;
+        public int m_nGotoProtectXYCount;
+        public long m_dwPickUpItemTick;
+        public MapItem m_SelMapItem;
         /// <summary>
         /// 跑步计时
         /// </summary>
-        public long dwTick5F4 = 0;
+        public long dwTick5F4;
         /// <summary>
         /// 受攻击说话列表
         /// </summary>
-        public ArrayList m_AISayMsgList = null;
+        public ArrayList m_AISayMsgList;
         /// <summary>
         /// 绿红毒标识
         /// </summary>
-        public byte n_AmuletIndx = 0;
-        public bool m_boCanPickIng = false;
+        public byte n_AmuletIndx;
+        public bool m_boCanPickIng;
         /// <summary>
         /// 查询魔法
         /// </summary>
-        public short m_nSelectMagic = 0;
+        public short m_nSelectMagic;
         /// <summary>
         /// 是否可以使用的魔法(True才可能躲避)
         /// </summary>
-        public bool m_boIsUseMagic = false;
+        public bool m_boIsUseMagic;
         /// <summary>
         /// 是否可以使用的攻击魔法
         /// </summary>
-        public bool m_boIsUseAttackMagic = false;
+        public bool m_boIsUseAttackMagic;
         /// <summary>
         /// 最后的方向
         /// </summary>
-        public byte m_btLastDirection = 0;
+        public byte m_btLastDirection;
         /// <summary>
         /// 自动躲避间隔
         /// </summary>
-        public long m_dwAutoAvoidTick = 0;
-        public bool m_boIsNeedAvoid = false;
+        public long m_dwAutoAvoidTick;
+        public bool m_boIsNeedAvoid;
         /// <summary>
         /// 假人掉装备机率
         /// </summary>
         public int m_nDropUseItemRate;
-        private readonly AIObjectConf _conf = null;
+        private readonly AIObjectConf _conf;
 
         public RobotPlayObject() : base()
         {

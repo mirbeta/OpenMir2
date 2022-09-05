@@ -11,7 +11,7 @@ namespace GameSvr.Event.Events
         /// <summary>
         /// 火墙运行时间
         /// </summary>
-        private int m_fireRunTick = 0;
+        private int m_fireRunTick;
 
         public FireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.Envir, nX, nY, nType, nTime, true)
         {

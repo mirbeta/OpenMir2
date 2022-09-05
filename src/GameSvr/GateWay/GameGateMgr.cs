@@ -17,8 +17,8 @@ namespace GameSvr.GateWay
     public class GameGateMgr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly SocketServer _gateSocket = null;
-        private readonly object m_RunSocketSection = null;
+        private readonly SocketServer _gateSocket;
+        private readonly object m_RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;
         private readonly ConcurrentDictionary<int, GameGate> _gameGates;
 

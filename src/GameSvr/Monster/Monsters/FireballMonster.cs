@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !bo554 && !Ghost)
+            if (!Death && !Ghost)
             {
                 if (TargetCret != null)
                 {

@@ -16,7 +16,7 @@ namespace GameSvr.Snaps
         private readonly ClientScoket _msgClient;
         private readonly SpapsMessage _groupMessageHandle;
 
-        private static SnapsmClient instance = null;
+        private static SnapsmClient instance;
 
         public static SnapsmClient Instance
         {

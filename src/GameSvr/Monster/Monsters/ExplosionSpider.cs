@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class ExplosionSpider : MonsterObject
     {
-        public int dw558 = 0;
+        public int dw558;
 
         public ExplosionSpider() : base()
         {

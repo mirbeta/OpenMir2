@@ -6,15 +6,13 @@ namespace GameSvr.Monster.Monsters
 {
     public class MagicMonster : AnimalObject
     {
-        public int m_dwThinkTick = 0;
+        public int m_dwThinkTick;
         public int m_dwSpellTick = 0;
-        public bool bo554 = false;
-        public bool m_boDupMode = false;
+        public bool m_boDupMode;
 
         public MagicMonster() : base()
         {
             m_boDupMode = false;
-            bo554 = false;
             m_dwThinkTick = HUtil32.GetTickCount();
             ViewRange = 8;
             m_nRunTime = 250;

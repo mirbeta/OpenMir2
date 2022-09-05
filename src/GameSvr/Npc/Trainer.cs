@@ -8,15 +8,15 @@ namespace GameSvr.Npc
     /// </summary>
     public class Trainer : NormNpc
     {
-        private int AttackTick = 0;
-        private int AttackPower = 0;
-        private int AttackCount = 0;
+        //private int AttackTick;
+        private int _attackPower;
+        private int _attackCount;
 
         public Trainer() : base()
         {
             AttackTick = HUtil32.GetTickCount();
-            AttackPower = 0;
-            AttackCount = 0;
+            _attackPower = 0;
+            _attackCount = 0;
         }
 
         protected override bool Operate(TProcessMessage ProcessMsg)
@@ -26,10 +26,10 @@ namespace GameSvr.Npc
             {
                 if (ProcessMsg.BaseObject == this.ObjectId)
                 {
-                    AttackPower += ProcessMsg.wParam;
+                    _attackPower += ProcessMsg.wParam;
                     AttackTick = HUtil32.GetTickCount();
-                    AttackCount++;
-                    this.ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + AttackPower / AttackCount);
+                    _attackCount++;
+                    this.ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + _attackPower / _attackCount);
                 }
             }
             if (ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
@@ -41,13 +41,13 @@ namespace GameSvr.Npc
 
         public override void Run()
         {
-            if (AttackCount > 0)
+            if (_attackCount > 0)
             {
                 if ((HUtil32.GetTickCount() - AttackTick) > 3 * 1000)
                 {
-                    this.ProcessSayMsg("总破坏力为  " + AttackPower + ",平均值为 " + AttackPower / AttackCount);
-                    AttackCount = 0;
-                    AttackPower = 0;
+                    this.ProcessSayMsg("总破坏力为  " + _attackPower + ",平均值为 " + _attackPower / _attackCount);
+                    _attackCount = 0;
+                    _attackPower = 0;
                 }
             }
             base.Run();

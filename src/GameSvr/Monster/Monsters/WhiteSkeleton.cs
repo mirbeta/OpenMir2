@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class WhiteSkeleton : AtMonster
     {
-        public bool m_boIsFirst = false;
+        public bool m_boIsFirst;
 
         public WhiteSkeleton() : base()
         {
@@ -16,7 +16,9 @@ namespace GameSvr.Monster.Monsters
         public override void RecalcAbilitys()
         {
             base.RecalcAbilitys();
-            sub_4AAD54();
+            this.NextHitTime = 3000 - this.SlaveMakeLevel * 600;
+            this.WalkSpeed = 1200 - this.SlaveMakeLevel * 250;
+            this.WalkTick = HUtil32.GetTickCount() + 2000;
         }
 
         public override void Run()
@@ -29,13 +31,6 @@ namespace GameSvr.Monster.Monsters
                 this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
             }
             base.Run();
-        }
-
-        private void sub_4AAD54()
-        {
-            this.NextHitTime = 3000 - this.SlaveMakeLevel * 600;
-            this.WalkSpeed = 1200 - this.SlaveMakeLevel * 250;
-            this.WalkTick = HUtil32.GetTickCount() + 2000;
         }
     }
 }

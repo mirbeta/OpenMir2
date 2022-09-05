@@ -4,7 +4,7 @@
     {
         public ThornDarkMonster() : base()
         {
-            this.m_nAttackMax = 3;
+            this.AttackMax = 3;
         }
     }
 }

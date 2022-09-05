@@ -36,21 +36,19 @@ namespace GameSvr.Monster.Monsters
             return result;
         }
 
-        private void LightingAttack(int nDir)
+        private void LightingAttack(byte nDir)
         {
             short nSX = 0;
             short nSY = 0;
             short nTX = 0;
             short nTY = 0;
-            int nPwr;
-            TAbility WAbil;
-            Direction = (byte)nDir;
+            Direction = nDir;
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ObjectId, "");
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
-                WAbil = m_WAbil;
-                nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+                var WAbil = m_WAbil;
+                var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 MagPassThroughMagic(nSX, nSY, nTX, nTY, nDir, nPwr, true);
             }
             BreakHolySeizeMode();
@@ -66,7 +64,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - SearchEnemyTick > 8000)
+            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - SearchEnemyTick > 8000)
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
@@ -85,7 +83,7 @@ namespace GameSvr.Monster.Monsters
                 if (TargetCret != null && Math.Abs(CurrX - TargetCret.CurrX) < 6 && Math.Abs(CurrY - TargetCret.CurrY) < 6 && (HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                 {
                     AttackTick = HUtil32.GetTickCount();
-                    int nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                    byte nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                     LightingAttack(nAttackDir);
                 }
             }

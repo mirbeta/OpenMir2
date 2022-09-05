@@ -5,10 +5,10 @@ namespace GameSvr.Event.Events
 {
     public class StoneMineEvent : MirEvent
     {
-        private readonly int _addStoneCount = 0;
-        public int MineCount = 0;
-        public int AddStoneMineTick = 0;
-        public bool AddToMap = false;
+        private readonly int _addStoneCount;
+        public int MineCount;
+        public int AddStoneMineTick;
+        public bool AddToMap;
 
         public StoneMineEvent(Envirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, 0, false)
         {

@@ -13,7 +13,7 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 var time1 = M2Share.RandomNumber.Random(2);
                 if (TargetCret != null)

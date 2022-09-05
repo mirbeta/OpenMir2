@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
     /// </summary>
     public class ElfMonster : MonsterObject
     {
-        public bool boIsFirst = false;
+        public bool boIsFirst;
 
         public ElfMonster() : base()
         {

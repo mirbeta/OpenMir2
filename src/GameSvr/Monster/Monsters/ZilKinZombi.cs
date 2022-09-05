@@ -4,36 +4,36 @@ namespace GameSvr.Monster.Monsters
 {
     public class ZilKinZombi : AtMonster
     {
-        private int dw558 = 0;
-        private int nZilKillCount = 0;
-        private int dw560 = 0;
+        private int dw558;
+        private int ZilKillCount;
+        private int dw560;
 
         public ZilKinZombi() : base()
         {
             this.ViewRange = 6;
             this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             this.SearchTick = HUtil32.GetTickCount();
-            nZilKillCount = 0;
+            this.ZilKillCount = 0;
             if (M2Share.RandomNumber.Random(3) == 0)
             {
-                nZilKillCount = M2Share.RandomNumber.Random(3) + 1;
+                ZilKillCount = M2Share.RandomNumber.Random(3) + 1;
             }
         }
 
         public override void Die()
         {
             base.Die();
-            if (nZilKillCount > 0)
+            if (ZilKillCount > 0)
             {
                 dw558 = HUtil32.GetTickCount();
                 dw560 = (M2Share.RandomNumber.Random(20) + 4) * 1000;
             }
-            nZilKillCount -= 1;
+            ZilKillCount -= 1;
         }
 
         public override void Run()
         {
-            if (this.Death && !this.Ghost && nZilKillCount >= 0 && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - dw558) >= dw560)
+            if (this.Death && !this.Ghost && ZilKillCount >= 0 && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - dw558) >= dw560)
             {
                 this.Abil.MaxHP = (ushort)(this.Abil.MaxHP >> 1);
                 this.m_dwFightExp = this.m_dwFightExp / 2;

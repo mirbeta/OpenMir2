@@ -50,21 +50,21 @@ namespace GameSvr.Maps
         /// <summary>
         /// 地图高(X最大值)
         /// </summary>
-        protected int Height = 0;
+        protected int Height;
         /// <summary>
         /// 地图宽(Y最大值)
         /// </summary>        
-        protected int Width = 0;
-        private readonly GetCostFunc _getCostFunc = null;
-        protected TRect ClientRect = null;
+        protected int Width;
+        private readonly GetCostFunc _getCostFunc;
+        protected TRect ClientRect;
         /// <summary>
         /// 寻找范围
         /// </summary>
-        private int _scopeValue = 0;
+        private int _scopeValue;
         /// <summary>
         /// 开始寻路
         /// </summary>
-        protected bool StartFind = false;
+        protected bool StartFind;
 
         public PathMap() : base()
         {
@@ -564,11 +564,11 @@ namespace GameSvr.Maps
         }
         
         private PointInfo[] _path;
-        private Envirnoment _pathEnvir = null;
-        public int BeginX = 0;
-        public int BeginY = 0;
-        public int EndX = 0;
-        public int EndY = 0;
+        private Envirnoment _pathEnvir;
+        public int BeginX;
+        public int BeginY;
+        public int EndX;
+        public int EndY;
 
         public FindPath() : base()
         {
@@ -669,9 +669,9 @@ namespace GameSvr.Maps
         public int MinCost => _fMinCost;
 
         private WaveCell[] _fData = new WaveCell[0];
-        private int _fPos = 0;
-        private int _fCount = 0;
-        private int _fMinCost = 0;
+        private int _fPos;
+        private int _fCount;
+        private int _fMinCost;
 
         public Wave()
         {

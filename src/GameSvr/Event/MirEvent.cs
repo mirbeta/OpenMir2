@@ -11,42 +11,42 @@ namespace GameSvr.Event
         /// </summary>
         public readonly int Id;
         public VisibleFlag VisibleFlag = 0;
-        public Envirnoment m_Envir = null;
-        public int m_nX = 0;
-        public int m_nY = 0;
-        public int EventType = 0;
-        public int m_nEventParam = 0;
-        protected int m_dwOpenStartTick = 0;
+        public Envirnoment m_Envir;
+        public int m_nX;
+        public int m_nY;
+        public int EventType;
+        public int m_nEventParam;
+        protected int m_dwOpenStartTick;
         /// <summary>
         /// 持续时间
         /// </summary>
-        private readonly int ContinueTime = 0;
+        private readonly int ContinueTime;
         /// <summary>
         /// 关闭时间
         /// </summary>
-        public int CloseTick = 0;
-        public int Damage = 0;
-        public TBaseObject OwnBaseObject = null;
+        public int CloseTick;
+        public int Damage;
+        public TBaseObject OwnBaseObject;
         /// <summary>
         /// 开始运行时间
         /// </summary>
-        public int m_dwRunStart = 0;
+        public int m_dwRunStart;
         /// <summary>
         /// 运行间隔
         /// </summary>
-        public int m_dwRunTick = 0;
+        public int m_dwRunTick;
         /// <summary>
         /// 是否关闭
         /// </summary>
-        public bool Closed = false;
+        public bool Closed;
         /// <summary>
         /// 是否可见
         /// </summary>
-        public bool Visible = false;
+        public bool Visible;
         /// <summary>
         /// 是否激活
         /// </summary>
-        public bool Active = false;
+        public bool Active;
 
         public MirEvent(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
         {

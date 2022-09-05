@@ -10,8 +10,8 @@ namespace GameSvr.Services
     public class AccountService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private int _dwClearEmptySessionTick = 0;
-        private readonly IList<TSessInfo> _sessionList = null;
+        private int _dwClearEmptySessionTick;
+        private readonly IList<TSessInfo> _sessionList;
         private readonly ClientScoket _clientScoket;
 
         public AccountService()
@@ -417,7 +417,7 @@ namespace GameSvr.Services
 
     public class IdSrvClient
     {
-        private static AccountService instance = null;
+        private static AccountService instance;
 
         public static AccountService Instance
         {

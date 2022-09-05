@@ -7,7 +7,7 @@ namespace GameSvr.Items
 {
     public class ItemUnit
     {
-        private IList<TItemName> _mItemNameList = null;
+        private IList<TItemName> _mItemNameList;
 
         public ItemUnit()
         {
@@ -39,14 +39,13 @@ namespace GameSvr.Items
 
         public bool AddCustomItemName(int nMakeIndex, int nItemIndex, string sItemName)
         {
-            var result = false;
             TItemName itemName;
             for (var i = _mItemNameList.Count - 1; i >= 0; i--)
             {
                 itemName = _mItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
                 {
-                    return result;
+                    return false;
                 }
             }
             itemName = new TItemName();
@@ -54,8 +53,7 @@ namespace GameSvr.Items
             itemName.nItemIndex = nItemIndex;
             itemName.sItemName = sItemName;
             _mItemNameList.Add(itemName);
-            result = true;
-            return result;
+            return true;
         }
 
         public void DelCustomItemName(int nMakeIndex, int nItemIndex)
@@ -73,7 +71,7 @@ namespace GameSvr.Items
         }
 
         /// <summary>
-        /// 加载自定义物品名称
+        /// 读取自定义物品名称
         /// </summary>
         public void LoadCustomItemName()
         {
@@ -110,6 +108,25 @@ namespace GameSvr.Items
             loadList = null;
         }
 
+        /// <summary>
+        /// 获取自定义装备名称
+        /// </summary>
+        /// <param name="userItem"></param>
+        /// <returns></returns>
+        public static string GetItemName(TUserItem userItem)
+        {
+            var result = string.Empty;
+            if (userItem.btValue[13] == 1)
+            {
+                result = M2Share.ItemUnit.GetCustomItemName(userItem.MakeIndex, userItem.wIndex);
+            }
+            if (string.IsNullOrEmpty(result))
+            {
+                result = M2Share.UserEngine.GetStdItemName(userItem.wIndex);
+            }
+            return result;
+        }
+        
         /// <summary>
         /// 保存自定义物品名称
         /// </summary>
@@ -224,29 +241,6 @@ namespace GameSvr.Items
             //         }
             //     }
             // }
-            return result;
-        }
-
-    }
-
-    public class ItmUnit
-    {
-        /// <summary>
-        /// 获取自定义装备名称
-        /// </summary>
-        /// <param name="userItem"></param>
-        /// <returns></returns>
-        public static string GetItemName(TUserItem userItem)
-        {
-            var result = string.Empty;
-            if (userItem.btValue[13] == 1)
-            {
-                result = M2Share.ItemUnit.GetCustomItemName(userItem.MakeIndex, userItem.wIndex);
-            }
-            if (string.IsNullOrEmpty(result))
-            {
-                result = M2Share.UserEngine.GetStdItemName(userItem.wIndex);
-            }
             return result;
         }
     }

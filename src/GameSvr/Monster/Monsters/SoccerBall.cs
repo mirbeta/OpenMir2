@@ -5,9 +5,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class SoccerBall : AnimalObject
     {
-        public int n548 = 0;
-        public int n54C = 0;
-        public int n550 = 0;
+        public int n550;
 
         public SoccerBall() : base()
         {

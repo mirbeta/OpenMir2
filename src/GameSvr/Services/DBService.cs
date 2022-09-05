@@ -10,9 +10,9 @@ namespace GameSvr.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ClientScoket _clientScoket;
-        private static int _packetLen = 0;
+        private static int _packetLen;
         private byte[] _recvBuff;
-        private bool _socketWorking = false;
+        private bool _socketWorking;
 
         public DBService()
         {

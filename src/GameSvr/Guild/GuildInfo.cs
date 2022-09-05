@@ -53,37 +53,37 @@ namespace GameSvr.Guild
         /// <summary>
         /// 行会公告
         /// </summary>
-        public ArrayList NoticeList = null;
-        public IList<TWarGuild> GuildWarList = null;
-        public IList<GuildInfo> GuildAllList = null;
+        public ArrayList NoticeList;
+        public IList<TWarGuild> GuildWarList;
+        public IList<GuildInfo> GuildAllList;
         /// <summary>
         /// 职位列表
         /// </summary>
-        public IList<TGuildRank> m_RankList = null;
-        public int nContestPoint = 0;
-        public bool boTeamFight = false;
-        public ArrayList TeamFightDeadList = null;
-        public bool m_boEnableAuthAlly = false;
-        public int dwSaveTick = 0;
-        public bool boChanged = false;
-        public Dictionary<string, TDynamicVar> m_DynamicVarList = null;
+        public IList<TGuildRank> m_RankList;
+        public int nContestPoint;
+        public bool boTeamFight;
+        public ArrayList TeamFightDeadList;
+        public bool m_boEnableAuthAlly;
+        public int dwSaveTick;
+        public bool boChanged;
+        public Dictionary<string, TDynamicVar> m_DynamicVarList;
         /// <summary>
         /// 建筑度
         /// </summary>
-        public int m_nBuildPoint = 0;
+        public int m_nBuildPoint;
         /// <summary>
         /// 人气度
         /// </summary>        
-        public int m_nAurae = 0;
+        public int m_nAurae;
         /// <summary>
         /// 安定度
         /// </summary>        
-        public int m_nStability = 0;
+        public int m_nStability;
         /// <summary>
         /// 繁荣度
         /// </summary>        
-        public int m_nFlourishing = 0;
-        public int m_nChiefItemCount = 0;
+        public int m_nFlourishing;
+        public int m_nChiefItemCount;
         private readonly GuildConf _guildConf;
 
         private void ClearRank()

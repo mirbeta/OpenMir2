@@ -209,7 +209,7 @@ namespace GameSvr.Player
             TClientItem ClientItem = new TClientItem();
             Item.GetStandardItem(ref ClientItem.Item);
             Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-            ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+            ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
             ClientItem.MakeIndex = UserItem.MakeIndex;
             ClientItem.Dura = UserItem.Dura;
             ClientItem.DuraMax = UserItem.DuraMax;
@@ -1142,7 +1142,7 @@ namespace GameSvr.Player
                         TClientItem ClientItem = new TClientItem();
                         Item.GetStandardItem(ref ClientItem.Item);
                         Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
-                        ClientItem.Item.Name = ItmUnit.GetItemName(UseItems[i]);
+                        ClientItem.Item.Name = ItemUnit.GetItemName(UseItems[i]);
                         ClientItem.Dura = UseItems[i].Dura;
                         ClientItem.DuraMax = UseItems[i].DuraMax;
                         ClientItem.MakeIndex = UseItems[i].MakeIndex;
@@ -1753,7 +1753,7 @@ namespace GameSvr.Player
                 {
                     Item.GetStandardItem(ref ClientItem.Item);
                     Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                    ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     ClientItem.MakeIndex = UserItem.MakeIndex;
@@ -1795,7 +1795,7 @@ namespace GameSvr.Player
                 TClientItem ClientItem = new TClientItem();
                 StdItem.GetStandardItem(ref ClientItem.Item);
                 StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
                 ClientItem.MakeIndex = UserItem.MakeIndex;
                 ClientItem.Dura = UserItem.Dura;
                 ClientItem.DuraMax = UserItem.DuraMax;
@@ -1816,7 +1816,7 @@ namespace GameSvr.Player
                 TClientItem ClientItem = new TClientItem();
                 StdItem.GetStandardItem(ref ClientItem.Item);
                 StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
                 ClientItem.MakeIndex = UserItem.MakeIndex;
                 ClientItem.Dura = UserItem.Dura;
                 ClientItem.DuraMax = UserItem.DuraMax;
@@ -2475,7 +2475,7 @@ namespace GameSvr.Player
                 {
                     TClientItem ClientItem = new TClientItem();
                     pStdItem.GetStandardItem(ref ClientItem.Item);
-                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                    ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
                     ClientItem.MakeIndex = UserItem.MakeIndex;
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
@@ -2503,7 +2503,7 @@ namespace GameSvr.Player
                     var ClientItem = new TClientItem();
                     StdItem.GetStandardItem(ref ClientItem.Item);
                     StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                    ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
                     ClientItem.MakeIndex = UserItem.MakeIndex;
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;

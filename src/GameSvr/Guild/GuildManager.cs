@@ -7,7 +7,7 @@ namespace GameSvr.Guild
     public class GuildManager
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<GuildInfo> GuildList = null;
+        private readonly IList<GuildInfo> GuildList;
 
         public bool AddGuild(string sGuildName, string sChief)
         {

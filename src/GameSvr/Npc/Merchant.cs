@@ -17,50 +17,50 @@ namespace GameSvr.Npc
         /// <summary>
         /// 物品价格倍率 默认为 100%
         /// </summary>
-        public int m_nPriceRate = 0;
-        public bool m_boCastle = false;
-        public int dwRefillGoodsTick = 0;
-        public int dwClearExpreUpgradeTick = 0;
+        public int m_nPriceRate;
+        public bool m_boCastle;
+        public int dwRefillGoodsTick;
+        public int dwClearExpreUpgradeTick;
         /// <summary>
         /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
         /// </summary>
-        public IList<int> m_ItemTypeList = null;
-        public IList<TGoods> m_RefillGoodsList = null;
+        public IList<int> m_ItemTypeList;
+        public IList<TGoods> m_RefillGoodsList;
         /// <summary>
         /// 商品列表
         /// </summary>
-        private readonly IList<IList<TUserItem>> m_GoodsList = null;
+        private readonly IList<IList<TUserItem>> m_GoodsList;
         /// <summary>
         /// 物品价格列表
         /// </summary>
-        private readonly IList<TItemPrice> m_ItemPriceList = null;
+        private readonly IList<TItemPrice> m_ItemPriceList;
         /// <summary>
         /// 物品升级列表
         /// </summary>
-        private readonly IList<TUpgradeInfo> m_UpgradeWeaponList = null;
+        private readonly IList<TUpgradeInfo> m_UpgradeWeaponList;
         public bool m_boCanMove = false;
         public int m_dwMoveTime = 0;
-        public int m_dwMoveTick = 0;
+        public int m_dwMoveTick;
         /// <summary>
         /// 是否购买物品
         /// </summary>
-        public bool m_boBuy = false;
+        public bool m_boBuy;
         /// <summary>
         /// 是否交易物品
         /// </summary>
-        public bool m_boSell = false;
-        public bool m_boMakeDrug = false;
-        public bool m_boPrices = false;
-        public bool m_boStorage = false;
-        public bool m_boGetback = false;
-        public bool m_boUpgradenow = false;
-        public bool m_boGetBackupgnow = false;
-        public bool m_boRepair = false;
-        public bool m_boS_repair = false;
+        public bool m_boSell;
+        public bool m_boMakeDrug;
+        public bool m_boPrices;
+        public bool m_boStorage;
+        public bool m_boGetback;
+        public bool m_boUpgradenow;
+        public bool m_boGetBackupgnow;
+        public bool m_boRepair;
+        public bool m_boS_repair;
         public bool m_boSendmsg = false;
-        public bool m_boGetMarry = false;
-        public bool m_boGetMaster = false;
-        public bool m_boUseItemName = false;
+        public bool m_boGetMarry;
+        public bool m_boGetMaster;
+        public bool m_boUseItemName;
         public bool m_boOffLineMsg = false;
         public bool m_boYBDeal = false;
 
@@ -733,7 +733,7 @@ namespace GameSvr.Npc
                 var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    var sName = ItmUnit.GetItemName(UserItem);
+                    var sName = ItemUnit.GetItemName(UserItem);
                     var nPrice = GetUserPrice(User, GetItemPrice(UserItem.wIndex));
                     var nStock = List14.Count;
                     short nSubMenu;
@@ -1258,7 +1258,7 @@ namespace GameSvr.Npc
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    sUserItemName = ItmUnit.GetItemName(UserItem);
+                    sUserItemName = ItemUnit.GetItemName(UserItem);
                     if (PlayObject.IsAddWeightAvailable(StdItem.Weight))
                     {
                         if (sUserItemName == sItemName)

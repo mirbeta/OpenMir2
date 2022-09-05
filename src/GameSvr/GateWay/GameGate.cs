@@ -591,7 +591,7 @@ namespace GameSvr.GateWay
 
         private class GateSendQueue
         {
-            private readonly Channel<byte[]> _sendQueue = null;
+            private readonly Channel<byte[]> _sendQueue;
             private readonly Socket _sendSocket;
             private readonly GameGateInfo _gameGate;
 

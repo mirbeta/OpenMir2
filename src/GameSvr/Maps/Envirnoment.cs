@@ -28,26 +28,26 @@ namespace GameSvr.Maps
         public string MapDesc = string.Empty;
         private Memory<MapCellInfo> _cellArray;
         private readonly MemoryPool<MapCellInfo> _cellPool;
-        public int MinMap = 0;
-        public int ServerIndex = 0;
+        public int MinMap;
+        public int ServerIndex;
         /// <summary>
         /// 进入本地图所需等级
         /// </summary>
         public readonly int RequestLevel = 0;
-        public TMapFlag Flag = null;
-        public bool Bo2C = false;
+        public TMapFlag Flag;
+        public bool Bo2C;
         /// <summary>
         /// 门
         /// </summary>
-        public readonly IList<TDoorInfo> DoorList = null;
+        public readonly IList<TDoorInfo> DoorList;
         public Merchant QuestNpc = null;
         /// <summary>
         /// 任务
         /// </summary>
-        private readonly IList<TMapQuestInfo> _questList = null;
-        private int WhisperTick = 0;
-        private int _monCount = 0;
-        private int _humCount = 0;
+        private readonly IList<TMapQuestInfo> _questList;
+        private int WhisperTick;
+        private int _monCount;
+        private int _humCount;
         public readonly IList<PointInfo> PointList;
 
         public Envirnoment()

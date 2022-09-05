@@ -18,16 +18,16 @@ namespace GameSvr.Npc
         /// </summary>
         public short m_nFlag = 0;
         public int[] FGotoLable;
-        public IList<TScript> m_ScriptList = null;
+        public IList<TScript> m_ScriptList;
         public string m_sFilePath = string.Empty;
         /// <summary>
         /// 此NPC是否是隐藏的，不显示在地图中
         /// </summary>
-        public bool m_boIsHide = false;
+        public bool m_boIsHide;
         /// <summary>
         /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
-        public bool m_boIsQuest = false;
+        public bool m_boIsQuest;
         protected string m_sPath = string.Empty;
         private IList<TScriptParams> BatchParamsList;
 

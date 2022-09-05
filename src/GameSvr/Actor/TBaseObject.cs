@@ -943,7 +943,7 @@ namespace GameSvr.Actor
                 var MapItem = new MapItem
                 {
                     UserItem = UserItem,
-                    Name = ItmUnit.GetItemName(UserItem), // 取自定义物品名称
+                    Name = ItemUnit.GetItemName(UserItem), // 取自定义物品名称
                     Looks = StdItem.Looks
                 };
                 if (StdItem.StdMode == 45)
@@ -5852,7 +5852,7 @@ namespace GameSvr.Actor
 
             if (this is WallStructure)
             {
-                ((WallStructure)(this)).boSetMapFlaged = false;
+                ((WallStructure)(this)).SetMapFlaged = false;
             }
 
             if (this is SoccerBall)

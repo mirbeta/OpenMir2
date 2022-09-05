@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
         {
             ViewRange = 7;
             Light = 4;
-            m_boAttackPet = false;
+            AttackPet = false;
         }
     }
 }

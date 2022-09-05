@@ -14,7 +14,7 @@ namespace GameSvr.Snaps
         private readonly SocketServer _msgServer;
         private readonly SpapsMessage _groupMessageHandle;
 
-        private static SnapsmService instance = null;
+        private static SnapsmService instance;
 
         public static SnapsmService Instance => instance ??= new SnapsmService();
 
