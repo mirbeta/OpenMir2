@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             short nx = 0;
             short ny = 0;
             var borunaway = false;
-            if (!Death && !bo554 && !Ghost)
+            if (!Death && !Ghost)
             {
                 if (TargetCret != null)
                 {

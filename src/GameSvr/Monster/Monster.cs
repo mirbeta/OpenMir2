@@ -7,13 +7,11 @@ namespace GameSvr.Monster
     public class MonsterObject : AnimalObject
     {
         private int m_dwThinkTick;
-        protected bool bo554;
         private bool m_boDupMode;
 
         public MonsterObject() : base()
         {
             m_boDupMode = false;
-            bo554 = false;
             m_dwThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
             m_nRunTime = 250;

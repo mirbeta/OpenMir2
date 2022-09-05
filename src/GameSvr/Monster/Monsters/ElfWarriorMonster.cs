@@ -8,8 +8,8 @@ namespace GameSvr.Monster.Monsters
     /// </summary>
     public class ElfWarriorMonster : SpitSpider
     {
-        public bool boIsFirst = false;
-        private int dwDigDownTick = 0;
+        public bool boIsFirst;
+        private int dwDigDownTick;
 
         public void AppearNow()
         {

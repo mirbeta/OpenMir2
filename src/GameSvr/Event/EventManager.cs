@@ -5,8 +5,8 @@ namespace GameSvr.Event
 {
     public class EventManager
     {
-        private readonly IList<MirEvent> _eventList = null;
-        private readonly IList<MirEvent> _closedEventList = null;
+        private readonly IList<MirEvent> _eventList;
+        private readonly IList<MirEvent> _closedEventList;
         
         public EventManager()
         {

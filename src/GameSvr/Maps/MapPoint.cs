@@ -41,9 +41,9 @@ namespace GameSvr.Maps
                 FThrough = value;
             }
         }
-        private int FX = 0;
-        private int FY = 0;
-        private bool FThrough = false;
+        private int FX;
+        private int FY;
+        private bool FThrough;
 
         public TMapPoint(int nX, int nY)
         {
@@ -73,14 +73,14 @@ namespace GameSvr.Maps
                 FPathType = value;
             }
         }
-        public short m_nCurrX = 0;
-        public short m_nCurrY = 0;
-        public int m_nPostion = 0;
-        public byte m_btDirection = 0;
-        public int m_nTurnCount = 0;
-        public Envirnoment m_PEnvir = null;
-        private readonly ArrayList FPointList = null;
-        private readonly TBaseObject FBaseObject = null;
+        public short m_nCurrX;
+        public short m_nCurrY;
+        public int m_nPostion;
+        public byte m_btDirection;
+        public int m_nTurnCount;
+        public Envirnoment m_PEnvir;
+        private readonly ArrayList FPointList;
+        private readonly TBaseObject FBaseObject;
         private TPathType FPathType;
 
         public TPointManager(TBaseObject ABaseObject)

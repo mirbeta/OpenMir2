@@ -6,8 +6,8 @@ namespace GameSvr.Monster.Monsters
 {
     public class ScultureKingMonster : MonsterObject
     {
-        private int m_nDangerLevel = 0;
-        private readonly IList<TBaseObject> m_SlaveObjectList = null;
+        private int m_nDangerLevel;
+        private readonly IList<TBaseObject> m_SlaveObjectList;
 
         public ScultureKingMonster() : base()
         {

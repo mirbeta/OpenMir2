@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class ElectronicScolpionMon : MonsterObject
     {
-        public bool m_boUseMagic = false;
+        public bool m_boUseMagic;
 
         public ElectronicScolpionMon() : base()
         {
@@ -33,7 +33,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !bo554 && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Death && !Ghost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (m_WAbil.HP < m_WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {

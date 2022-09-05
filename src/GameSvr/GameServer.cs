@@ -11,7 +11,7 @@ namespace GameSvr
         /// <summary>
         /// 运行时间
         /// </summary>
-        private int _runTimeTick = 0;
+        private int _runTimeTick;
         protected readonly ILogger<ServerBase> _logger;
 
         protected ServerBase(ILogger<ServerBase> logger)

@@ -39,7 +39,7 @@ namespace GameSvr.Player
                     TClientItem clientItem = new TClientItem();
                     item.GetStandardItem(ref clientItem.Item);
                     item.GetItemAddValue(userItem, ref clientItem.Item);
-                    clientItem.Item.Name = ItmUnit.GetItemName(userItem);
+                    clientItem.Item.Name = ItemUnit.GetItemName(userItem);
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
                     clientItem.MakeIndex = userItem.MakeIndex;
@@ -98,7 +98,7 @@ namespace GameSvr.Player
                     TClientItem clientItem = new TClientItem();
                     stdItem.GetStandardItem(ref clientItem.Item);
                     stdItem.GetItemAddValue(playObject.UseItems[i], ref clientItem.Item);
-                    clientItem.Item.Name = ItmUnit.GetItemName(playObject.UseItems[i]);
+                    clientItem.Item.Name = ItemUnit.GetItemName(playObject.UseItems[i]);
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
                     clientItem.DuraMax = playObject.UseItems[i].DuraMax;
@@ -140,7 +140,7 @@ namespace GameSvr.Player
                 userItem = ItemList[i];
                 if (userItem.MakeIndex == nMakeIndex)
                 {
-                    sUserItemName = ItmUnit.GetItemName(userItem); // 取自定义物品名称
+                    sUserItemName = ItemUnit.GetItemName(userItem); // 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         userItem18 = userItem;
@@ -170,7 +170,7 @@ namespace GameSvr.Player
                 var userItem = ItemList[i];
                 if (userItem != null && userItem.MakeIndex == nMakeIndex)
                 {
-                    var sUserItemName = ItmUnit.GetItemName(userItem);
+                    var sUserItemName = ItemUnit.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
@@ -295,7 +295,7 @@ namespace GameSvr.Player
                         {
                             continue;
                         }
-                        var sUserItemName = ItmUnit.GetItemName(userItem);
+                        var sUserItemName = ItemUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.Config.boControlDropItem && stdItem.Price < M2Share.Config.nCanDropPrice)
@@ -403,7 +403,7 @@ namespace GameSvr.Player
                 if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
                     stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
-                    var sUserItemName = ItmUnit.GetItemName(userItem);
+                    var sUserItemName = ItemUnit.GetItemName(userItem);
                     if (stdItem != null)
                     {
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -421,7 +421,7 @@ namespace GameSvr.Player
                 {
                     stdItem.GetStandardItem(ref stdItem58);
                     stdItem.GetItemAddValue(userItem, ref stdItem58);
-                    stdItem58.Name = ItmUnit.GetItemName(userItem);
+                    stdItem58.Name = ItemUnit.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref stdItem58) && CheckItemBindUse(userItem))
                     {
                         TUserItem takeOffItem = null;
@@ -539,7 +539,7 @@ namespace GameSvr.Player
                             goto FailExit;
                         }
                         // 取自定义物品名称
-                        var sUserItemName = ItmUnit.GetItemName(UseItems[btWhere]);
+                        var sUserItemName = ItemUnit.GetItemName(UseItems[btWhere]);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             var userItem = UseItems[btWhere];
@@ -974,7 +974,7 @@ namespace GameSvr.Player
                     var userItem = ItemList[i];
                     if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = ItmUnit.GetItemName(userItem);
+                        var sUserItemName = ItemUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && DealItemList.Count < 12)
                         {
                             DealItemList.Add(userItem);
@@ -1017,7 +1017,7 @@ namespace GameSvr.Player
                     var userItem = DealItemList[i];
                     if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = ItmUnit.GetItemName(userItem);
+                        var sUserItemName = ItemUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             ItemList.Add(userItem);
@@ -1563,7 +1563,7 @@ namespace GameSvr.Player
                 var userItem = ItemList[i];
                 if (userItem.MakeIndex == nInt)
                 {
-                    sUserItemName = ItmUnit.GetItemName(userItem); // 取自定义物品名称
+                    sUserItemName = ItemUnit.GetItemName(userItem); // 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         userItemA = userItem;
@@ -1588,7 +1588,7 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
-                var sUserItemName = ItmUnit.GetItemName(userItem);
+                var sUserItemName = ItemUnit.GetItemName(userItem);
                 if (userItem.MakeIndex == nInt && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     break;
@@ -1621,7 +1621,7 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
-                var sUserItemName = ItmUnit.GetItemName(userItem);// 取自定义物品名称
+                var sUserItemName = ItemUnit.GetItemName(userItem);// 取自定义物品名称
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
@@ -1676,7 +1676,7 @@ namespace GameSvr.Player
             for (var i = 0; i < StorageItemList.Count; i++)
             {
                 var userItem = StorageItemList[i];
-                var sUserItemName = ItmUnit.GetItemName(userItem);
+                var sUserItemName = ItemUnit.GetItemName(userItem);
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(userItem.wIndex)))

@@ -7,7 +7,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class SuperGuard : NormNpc
     {
-        protected bool m_boAttackPet = false;
+        protected bool AttackPet;
 
         private bool AttackTarget()
         {
@@ -47,7 +47,7 @@ namespace GameSvr.Monster.Monsters
         {
             this.ViewRange = 7;
             this.Light = 4;
-            m_boAttackPet = true;
+            AttackPet = true;
         }
 
         protected override bool Operate(TProcessMessage ProcessMsg)
@@ -73,26 +73,20 @@ namespace GameSvr.Monster.Monsters
                     }
                     if (BaseObject.PvpLevel() >= 2 || BaseObject.Race >= Grobal2.RC_MONSTER && !BaseObject.m_boMission)
                     {
-                        if (m_boAttackPet)
+                        if (AttackPet)
                         {
                             this.SetTargetCreat(BaseObject);
                             break;
                         }
-                        else
+                        if (BaseObject.Master == null)
                         {
-                            if (BaseObject.Master == null)
-                            {
-                                this.SetTargetCreat(BaseObject);
-                                break;
-                            }
-                            else
-                            {
-                                if (BaseObject.TargetCret == this)
-                                {
-                                    this.SetTargetCreat(BaseObject);
-                                    break;
-                                }
-                            }
+                            this.SetTargetCreat(BaseObject);
+                            break;
+                        }
+                        if (BaseObject.TargetCret == this)
+                        {
+                            this.SetTargetCreat(BaseObject);
+                            break;
                         }
                     }
                 }

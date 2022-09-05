@@ -22,8 +22,7 @@ namespace GameSvr.Monster.Monsters
             string[] sMonName = { "BoneCaptain", "BoneArcher", "BoneSpearman" };
             short n10 = 0;
             short n14 = 0;
-            TBaseObject BaseObject;
-            int nC = M2Share.RandomNumber.Random(6) + 6;
+            var nC = M2Share.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref n10, ref n14);
             for (var i = 0; i < nC; i++)
             {
@@ -31,7 +30,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     break;
                 }
-                BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
+                var BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
                 if (BaseObject != null)
                 {
                     SlaveObjectList.Add(BaseObject);

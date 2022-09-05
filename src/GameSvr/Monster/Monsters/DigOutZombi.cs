@@ -8,7 +8,6 @@ namespace GameSvr.Monster.Monsters
     {
         public DigOutZombi() : base()
         {
-            bo554 = false;
             ViewRange = 7;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = HUtil32.GetTickCount();
@@ -25,14 +24,13 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            TBaseObject BaseObject;
             if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
             {
                 if (FixedHideMode)
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = VisibleActors[i].BaseObject;
+                        var BaseObject = VisibleActors[i].BaseObject;
                         if (BaseObject.Death)
                         {
                             continue;

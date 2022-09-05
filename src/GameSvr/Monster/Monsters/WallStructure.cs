@@ -4,13 +4,13 @@ namespace GameSvr.Monster.Monsters
 {
     public class WallStructure : GuardUnit
     {
-        public bool boSetMapFlaged = false;
+        internal bool SetMapFlaged;
 
         public WallStructure() : base()
         {
             this.Animal = false;
             this.m_boStickMode = true;
-            boSetMapFlaged = false;
+            SetMapFlaged = false;
             this.AntiPoison = 200;
         }
 
@@ -50,19 +50,19 @@ namespace GameSvr.Monster.Monsters
             if (this.Death)
             {
                 this.DeathTick = HUtil32.GetTickCount();
-                if (boSetMapFlaged)
+                if (SetMapFlaged)
                 {
                     this.Envir.SetMapXyFlag(this.CurrX, this.CurrY, true);
-                    boSetMapFlaged = false;
+                    SetMapFlaged = false;
                 }
             }
             else
             {
                 this.m_nHealthTick = 0;
-                if (!boSetMapFlaged)
+                if (!SetMapFlaged)
                 {
                     this.Envir.SetMapXyFlag(this.CurrX, this.CurrY, false);
-                    boSetMapFlaged = true;
+                    SetMapFlaged = true;
                 }
             }
             if (this.m_WAbil.HP > 0)

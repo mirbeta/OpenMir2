@@ -6,8 +6,8 @@ namespace GameSvr.Monster.Monsters
 {
     public class PercentMonster : AnimalObject
     {
-        public int m_dwThinkTick = 0;
-        public bool m_boDupMode = false;
+        public int m_dwThinkTick;
+        public bool m_boDupMode;
 
         public PercentMonster() : base()
         {

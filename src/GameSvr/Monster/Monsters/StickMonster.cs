@@ -6,8 +6,8 @@ namespace GameSvr.Monster.Monsters
 {
     public class StickMonster : AnimalObject
     {
-        protected int nComeOutValue = 0;
-        protected int nAttackRange = 0;
+        protected int nComeOutValue;
+        protected int nAttackRange;
 
         public StickMonster() : base()
         {

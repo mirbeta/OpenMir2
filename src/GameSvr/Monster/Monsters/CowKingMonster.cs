@@ -5,14 +5,14 @@ namespace GameSvr.Monster.Monsters
 {
     public class CowKingMonster : AtMonster
     {
-        private int dw558 = 0;
-        private bool bo55C = false;
-        private bool bo55D = false;
-        private int n560 = 0;
-        private int dw564 = 0;
-        private int dw568 = 0;
-        private int dw56C = 0;
-        private int dw570 = 0;
+        private int dw558;
+        private bool bo55C;
+        private bool bo55D;
+        private int n560;
+        private int dw564;
+        private int dw568;
+        private int dw56C;
+        private int dw570;
 
         public CowKingMonster() : base()
         {
@@ -39,7 +39,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Death && !bo554 && !Ghost && (HUtil32.GetTickCount() - dw558) > (30 * 1000))
+            if (!Death && !Ghost && (HUtil32.GetTickCount() - dw558) > (30 * 1000))
             {
                 short n8 = 0;
                 short nC = 0;

@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class CentipedeKingMonster : StickMonster
     {
-        private int m_dwAttickTick = 0;
+        private int m_dwAttickTick;
 
         public CentipedeKingMonster() : base()
         {

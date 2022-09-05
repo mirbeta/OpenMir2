@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
     {
         public ArcherMonster() : base()
         {
-            m_nAttackMax = 6;
+            AttackMax = 6;
         }
     }
 }

@@ -8,12 +8,12 @@ namespace GameSvr.Actor
         /// <summary>
         /// 未被处理次数，用于怪物处理循环
         /// </summary>
-        public int m_nNotProcessCount = 0;
-        internal short TargetX = 0;
-        internal short TargetY = 0;
-        public bool m_boRunAwayMode = false;
-        public int m_dwRunAwayStart = 0;
-        public int m_dwRunAwayTime = 0;
+        public int m_nNotProcessCount;
+        internal short TargetX;
+        internal short TargetY;
+        public bool m_boRunAwayMode;
+        public int m_dwRunAwayStart;
+        public int m_dwRunAwayTime;
 
         public virtual void Attack(TBaseObject TargeTBaseObject, byte nDir)
         {

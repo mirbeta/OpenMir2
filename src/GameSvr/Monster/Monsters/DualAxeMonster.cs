@@ -5,8 +5,11 @@ namespace GameSvr.Monster.Monsters
 {
     public class DualAxeMonster : MonsterObject
     {
-        private int m_nAttackCount = 0;
-        protected int m_nAttackMax = 0;
+        private int m_nAttackCount;
+        /// <summary>
+        /// 最大攻击目标数量
+        /// </summary>
+        protected int AttackMax;
 
         private void FlyAxeAttack(TBaseObject Target)
         {
@@ -30,17 +33,16 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool AttackTarget()
         {
-            var result = false;
             if (TargetCret == null)
             {
-                return result;
+                return false;
             }
             if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
             {
                 AttackTick = HUtil32.GetTickCount();
                 if (Math.Abs(CurrX - TargetCret.CurrX) <= 7 && Math.Abs(CurrX - TargetCret.CurrX) <= 7)
                 {
-                    if (m_nAttackMax - 1 > m_nAttackCount)
+                    if (AttackMax - 1 > m_nAttackCount)
                     {
                         m_nAttackCount++;
                         TargetFocusTick = HUtil32.GetTickCount();
@@ -53,8 +55,7 @@ namespace GameSvr.Monster.Monsters
                             m_nAttackCount = 0;
                         }
                     }
-                    result = true;
-                    return result;
+                    return true;
                 }
                 if (TargetCret.Envir == Envir)
                 {
@@ -68,7 +69,7 @@ namespace GameSvr.Monster.Monsters
                     DelTargetCreat();
                 }
             }
-            return result;
+            return false;
         }
 
         public DualAxeMonster() : base()
@@ -77,7 +78,7 @@ namespace GameSvr.Monster.Monsters
             m_nRunTime = 250;
             SearchTime = 3000;
             m_nAttackCount = 0;
-            m_nAttackMax = 2;
+            AttackMax = 2;
             SearchTick = HUtil32.GetTickCount();
         }
 

@@ -70,7 +70,7 @@ namespace GameSvr.UsrSystem
         /// <summary>
         /// 处理怪物数，用于统计处理怪物个数
         /// </summary>
-        private int MonsterProcessCount = 0;
+        private int MonsterProcessCount;
         /// <summary>
         /// 处理怪物总数位置，用于计算怪物总数
         /// </summary>

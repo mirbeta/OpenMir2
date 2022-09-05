@@ -8,7 +8,7 @@ namespace GameSvr.Robots
     public class RobotObject : PlayObject
     {
         public string m_sScriptFileName = string.Empty;
-        private IList<AutoRunInfo> _autoRunList = null;
+        private IList<AutoRunInfo> _autoRunList;
 
         private void AutoRun(AutoRunInfo AutoRunInfo)
         {

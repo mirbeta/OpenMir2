@@ -7,7 +7,7 @@ namespace GameSvr.Robots
     public class RobotManage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private IList<RobotObject> _robotHumanList = null;
+        private IList<RobotObject> _robotHumanList;
 
         public RobotManage()
         {

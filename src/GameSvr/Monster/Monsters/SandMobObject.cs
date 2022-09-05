@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class SandMobObject : StickMonster
     {
-        private int m_dwAppearStart = 0;
+        private int m_dwAppearStart;
 
         public SandMobObject() : base()
         {
