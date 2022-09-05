@@ -22,7 +22,7 @@ namespace GameSvr.Player
             this.SendRefMsg(Grobal2.RM_TURN, this.Direction, this.CurrX, this.CurrY, 0, this.CharName);
         }
 
-        protected override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage ProcessMsg)
         {
             return base.Operate(ProcessMsg);
         }

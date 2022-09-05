@@ -5,13 +5,13 @@ namespace GameSvr.Monster.Monsters
 {
     public class SpitSpider : AtMonster
     {
-        public bool m_boUsePoison;
+        public bool UsePoison;
 
         public SpitSpider() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             Animal = true;
-            m_boUsePoison = true;
+            UsePoison = true;
         }
 
         private void SpitAttack(byte btDir)
@@ -40,7 +40,7 @@ namespace GameSvr.Monster.Monsters
                             {
                                 BaseObject.StruckDamage(nDamage);
                                 BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, MWAbil.HP, MWAbil.MaxHP, ObjectId, "", 300);
-                                if (m_boUsePoison)
+                                if (UsePoison)
                                 {
                                     if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0)
                                     {

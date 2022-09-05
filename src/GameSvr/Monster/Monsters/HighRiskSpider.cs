@@ -5,7 +5,7 @@
         public HighRiskSpider() : base()
         {
             Animal = false;
-            m_boUsePoison = false;
+            UsePoison = false;
         }
     }
 }

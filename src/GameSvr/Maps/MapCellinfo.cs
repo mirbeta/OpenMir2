@@ -1,3 +1,4 @@
+using Collections.Pooled;
 using SystemModule;
 
 namespace GameSvr.Maps
@@ -16,7 +17,7 @@ namespace GameSvr.Maps
         /// <summary>
         /// 地图对象列表
         /// </summary>
-        public IList<CellObject> ObjList;
+        public PooledList<CellObject> ObjList;
 
         public void Add(CellObject cell, EntityId entityId)
         {
@@ -39,11 +40,12 @@ namespace GameSvr.Maps
         public void Dispose()
         {
             ObjList.Clear();
+            ObjList.Dispose();
         }
 
         public MapCellInfo()
         {
-            ObjList = new List<CellObject>();
+            ObjList = new PooledList<CellObject>();
             Attribute = CellAttribute.Walk;
         }
     }

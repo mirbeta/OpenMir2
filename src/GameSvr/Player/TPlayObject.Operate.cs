@@ -57,7 +57,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void ClientQueryUserSet(TProcessMessage processMsg)
+        private void ClientQueryUserSet(ProcessMessage processMsg)
         {
             var sPassword = processMsg.Msg;
             if (sPassword != EDcode.DeCodeString("NbA_VsaSTRucMbAjUl"))

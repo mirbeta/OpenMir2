@@ -5,7 +5,7 @@
         public BigPoisionSpider() : base()
         {
             Animal = false;
-            m_boUsePoison = true;
+            UsePoison = true;
         }
     }
 }

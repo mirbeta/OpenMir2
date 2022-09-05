@@ -21,7 +21,7 @@ namespace GameSvr.Monster.Monsters
             Race = 215;
         }
 
-        protected override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage ProcessMsg)
         {
             return base.Operate(ProcessMsg);
         }

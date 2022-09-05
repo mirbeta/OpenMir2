@@ -15,7 +15,7 @@ namespace GameSvr.Player
         {
             int tObjCount;
             int nInteger;
-            TProcessMessage ProcessMsg = null;
+            ProcessMessage ProcessMsg = null;
             const string sPayMentExpire = "您的帐户充值时间已到期!!!";
             const string sDisConnectMsg = "游戏被强行中断!!!";
             const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
@@ -661,7 +661,7 @@ namespace GameSvr.Player
             base.Run();
         }
 
-        protected override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage ProcessMsg)
         {
             TCharDesc CharDesc;
             int nObjCount;

@@ -27,7 +27,7 @@ namespace GameSvr.Monster.Monsters
             ViewRange = 6;
             FixedHideMode = true;
             boIsFirst = true;
-            m_boUsePoison = false;
+            UsePoison = false;
         }
 
         public override void RecalcAbilitys()

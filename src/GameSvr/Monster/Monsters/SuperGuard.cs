@@ -50,7 +50,7 @@ namespace GameSvr.Monster.Monsters
             AttackPet = true;
         }
 
-        protected override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage ProcessMsg)
         {
             return base.Operate(ProcessMsg);
         }

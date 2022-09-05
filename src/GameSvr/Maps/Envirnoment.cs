@@ -1,4 +1,5 @@
-﻿using GameSvr.Actor;
+﻿using Collections.Pooled;
+using GameSvr.Actor;
 using GameSvr.Castle;
 using GameSvr.Event;
 using GameSvr.Event.Events;
@@ -101,7 +102,7 @@ namespace GameSvr.Maps
                     CellObject osObject;
                     if (cellInfo.ObjList == null)
                     {
-                        cellInfo.ObjList = new List<CellObject>();
+                        cellInfo.ObjList = new PooledList<CellObject>();
                     }
                     else
                     {
@@ -286,7 +287,7 @@ namespace GameSvr.Maps
                         {
                             if (cellInfo.ObjList == null)
                             {
-                                cellInfo.ObjList = new List<CellObject>();
+                                cellInfo.ObjList = new PooledList<CellObject>();
                             }
                             osObject = new CellObject
                             {
@@ -614,7 +615,7 @@ namespace GameSvr.Maps
             {
                 if (cellInfo.ObjList == null)
                 {
-                    cellInfo.ObjList = new List<CellObject>();
+                    cellInfo.ObjList = new PooledList<CellObject>();
                 }
                 if (nType == CellType.EventObject)
                 {
@@ -674,7 +675,7 @@ namespace GameSvr.Maps
                     {
                         if (cellInfo.ObjList == null)
                         {
-                            cellInfo.ObjList = new List<CellObject>();
+                            cellInfo.ObjList = new PooledList<CellObject>();
                         }
                         if (!bo1A)
                         {
