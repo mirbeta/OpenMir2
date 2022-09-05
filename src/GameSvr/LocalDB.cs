@@ -232,7 +232,7 @@ namespace GameSvr
                         CurrY = 0,
                         CharName = "QFunction",
                         m_nFlag = 0,
-                        m_wAppr = 0,
+                        Appr = 0,
                         m_sFilePath = ScriptConst.sMarket_Def,
                         m_sScript = "QFunction",
                         m_boIsHide = true,
@@ -290,7 +290,7 @@ namespace GameSvr
                         CurrY = 0,
                         CharName = "QManage",
                         m_nFlag = 0,
-                        m_wAppr = 0,
+                        Appr = 0,
                         m_sFilePath = "MapQuest_def",
                         m_boIsHide = true,
                         m_boIsQuest = false
@@ -334,7 +334,7 @@ namespace GameSvr
                         CurrY = 0,
                         CharName = "RobotManage",
                         m_nFlag = 0,
-                        m_wAppr = 0,
+                        Appr = 0,
                         m_sFilePath = "Robot_def",
                         m_boIsHide = true,
                         m_boIsQuest = false
@@ -473,7 +473,7 @@ namespace GameSvr
                                 CurrY = (short)HUtil32.Str_ToInt(sY, 0),
                                 CharName = sName,
                                 m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0),
-                                m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0),
+                                Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0),
                                 m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0)
                             };
                             if (HUtil32.Str_ToInt(sIsCalste, 0) != 0)
@@ -707,7 +707,7 @@ namespace GameSvr
                                 NPC.CurrY = (short)HUtil32.Str_ToInt(cY, 0);
                                 NPC.CharName = charName;
                                 NPC.m_nFlag = (short)HUtil32.Str_ToInt(flag, 0);
-                                NPC.m_wAppr = (ushort)HUtil32.Str_ToInt(appr, 0);
+                                NPC.Appr = (ushort)HUtil32.Str_ToInt(appr, 0);
                                 M2Share.UserEngine.QuestNpcList.Add(NPC);
                             }
                         }
@@ -1045,7 +1045,7 @@ namespace GameSvr
                             Merchant.m_sScript = sScript;
                             Merchant.CharName = sCharName;
                             Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                            Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
+                            Merchant.Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
                             if (HUtil32.Str_ToInt(sCastle, 0) != 1)
                             {
@@ -1076,7 +1076,7 @@ namespace GameSvr
                             Merchant.CurrY = (short)nY;
                             Merchant.CharName = sCharName;
                             Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                            Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
+                            Merchant.Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
                             if (HUtil32.Str_ToInt(sCastle, 0) != 1)
                             {

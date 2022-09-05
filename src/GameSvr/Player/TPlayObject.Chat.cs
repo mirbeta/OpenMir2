@@ -111,7 +111,7 @@ namespace GameSvr.Player
             {
                 if (sData.Length > M2Share.Config.nSayMsgMaxLen)
                 {
-                    sData = sData.Substring(0, M2Share.Config.nSayMsgMaxLen); // 3 * 1000
+                    sData = sData[..M2Share.Config.nSayMsgMaxLen]; // 3 * 1000
                 }
                 if ((HUtil32.GetTickCount() - m_dwSayMsgTick) < M2Share.Config.dwSayMsgTime)
                 {
@@ -780,7 +780,7 @@ namespace GameSvr.Player
                             {
                                 sC = sData;
                             }
-                            M2Share.UserEngine.SendBroadCastMsg(sC, MsgType.GM);
+                            M2Share.UserEngine.SendBroadCastMsg(sC, MsgType.GameManger);
                         }
                         return;
                     }

@@ -50,6 +50,9 @@ namespace GameSvr.Actor
         /// 人物金币数
         /// </summary>
         public int Gold;
+        /// <summary>
+        /// 基本属性
+        /// </summary>
         public TAbility Abil;
         /// <summary>
         /// 状态值
@@ -69,7 +72,7 @@ namespace GameSvr.Actor
         public short HomeY = 0;
         public bool OnHorse;
         public byte HorseType;
-        protected byte DressEffType;
+        private byte DressEffType;
         /// <summary>
         /// 人物的PK值
         /// </summary>
@@ -104,7 +107,7 @@ namespace GameSvr.Actor
         public byte[] m_QuestUnitOpen;
         public byte[] m_QuestUnit;
         public byte[] m_QuestFlag;
-        protected long m_nCharStatusEx;
+        protected long CharStatusEx;
         /// <summary>
         /// 怪物经验值
         /// </summary>
@@ -119,7 +122,10 @@ namespace GameSvr.Actor
         public int[] m_dwStatusArrTick = new int[12];
         public ushort[] m_wStatusArrValue;
         public int[] m_dwStatusArrTimeOutTick;
-        public ushort m_wAppr;
+        /// <summary>
+        /// 外观代码
+        /// </summary>
+        public ushort Appr;
         /// <summary>
         /// 角色类型
         /// </summary>
@@ -648,7 +654,7 @@ namespace GameSvr.Actor
             Hair = 0;
             Job = PlayJob.Warrior;
             Gold = 0;
-            m_wAppr = 0;
+            Appr = 0;
             bo2B9 = true;
             ViewRange = 5;
             HomeMap = "0";
@@ -693,7 +699,7 @@ namespace GameSvr.Actor
             FightZoneDieCount = 0;
             GoldMax = M2Share.Config.nHumanMaxGold;
             CharStatus = 0;
-            m_nCharStatusEx = 0;
+            CharStatusEx = 0;
             m_wStatusTimeArr = new ushort[12];
             BonusAbil = new TNakedAbility();
             CurBonusAbil = new TNakedAbility();
@@ -1657,7 +1663,7 @@ namespace GameSvr.Actor
             if (m_boShowHP)
             {
                 m_boShowHP = false;
-                m_nCharStatusEx = m_nCharStatusEx ^ Grobal2.STATE_OPENHEATH;
+                CharStatusEx = CharStatusEx ^ Grobal2.STATE_OPENHEATH;
                 CharStatus = GetCharStatus();
                 SendRefMsg(Grobal2.RM_CLOSEHEALTH, 0, 0, 0, 0, "");
             }
@@ -1666,7 +1672,7 @@ namespace GameSvr.Actor
         private void MakeOpenHealth()
         {
             m_boShowHP = true;
-            m_nCharStatusEx = m_nCharStatusEx | Grobal2.STATE_OPENHEATH;
+            CharStatusEx = CharStatusEx | Grobal2.STATE_OPENHEATH;
             CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_OPENHEALTH, 0, m_WAbil.HP, m_WAbil.MaxHP, 0, "");
         }
@@ -3487,7 +3493,7 @@ namespace GameSvr.Actor
             if (bo25)
             {
                 byte nRaceImg = RaceImg;
-                byte nAppr = (byte)m_wAppr;
+                byte nAppr = (byte)Appr;
                 switch (nAppr)
                 {
                     case 0:
@@ -3519,7 +3525,7 @@ namespace GameSvr.Actor
                 return Grobal2.MakeMonsterFeature(nRaceImg, MonsterWeapon, nAppr);
             }
 
-            return Grobal2.MakeMonsterFeature(RaceImg, MonsterWeapon, m_wAppr);
+            return Grobal2.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
         }
 
         public int GetCharStatus()
@@ -3532,7 +3538,7 @@ namespace GameSvr.Actor
                     nStatus = (0x80000000 >> i) | nStatus;
                 }
             }
-            var status = (m_nCharStatusEx & 0x0000FFFF) | nStatus;
+            var status = (CharStatusEx & 0x0000FFFF) | nStatus;
             return status >= int.MaxValue ? 0 : (int)status;
         }
 
@@ -3838,7 +3844,7 @@ namespace GameSvr.Actor
                     case MsgType.Hint:
                         sMsg = M2Share.Config.sHintMsgPreFix + sMsg;
                         break;
-                    case MsgType.GM:
+                    case MsgType.GameManger:
                         sMsg = M2Share.Config.sGMRedMsgpreFix + sMsg;
                         break;
                     case MsgType.System:
@@ -5887,7 +5893,7 @@ namespace GameSvr.Actor
             if (this is ScultureKingMonster)
             {
                 this.StoneMode = true;
-                this.m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
+                this.CharStatusEx = Grobal2.STATE_STONE_MODE;
             }
 
             if (this is ElfMonster)

@@ -933,7 +933,7 @@ namespace GameSvr.Maps
                 CurrY = 0,
                 CharName = sQuest,
                 m_nFlag = 0,
-                m_wAppr = 0,
+                Appr = 0,
                 m_sFilePath = "MapQuest_def",
                 m_boIsHide = true,
                 m_boIsQuest = false

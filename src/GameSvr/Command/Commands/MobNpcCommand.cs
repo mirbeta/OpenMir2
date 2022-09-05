@@ -40,7 +40,7 @@ namespace GameSvr.Command.Commands
             Merchant.CharName = sParam1;
             Merchant.MapName = PlayObject.MapName;
             Merchant.Envir = PlayObject.Envir;
-            Merchant.m_wAppr = (ushort)nAppr;
+            Merchant.Appr = (ushort)nAppr;
             Merchant.m_nFlag = 0;
             Merchant.m_boCastle = boIsCastle;
             Merchant.m_sScript = sParam2;

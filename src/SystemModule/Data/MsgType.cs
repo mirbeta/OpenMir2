@@ -1,13 +1,14 @@
-﻿namespace SystemModule.Data;
-
-public enum MsgType
+﻿namespace SystemModule.Data
 {
-    System,
-    Notice,
-    Hint,
-    Say,
-    Castle,
-    Cust,
-    GM,
-    Mon
+    public enum MsgType
+    {
+        System,
+        Notice,
+        Hint,
+        Say,
+        Castle,
+        Cust,
+        GameManger,
+        Mon
+    }
 }

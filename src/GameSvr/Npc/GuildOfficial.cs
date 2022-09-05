@@ -15,7 +15,7 @@ namespace GameSvr.Npc
         public TGuildOfficial() : base()
         {
             this.RaceImg = Grobal2.RCC_MERCHANT;
-            this.m_wAppr = 8;
+            this.Appr = 8;
         }
 
         public override void Click(PlayObject PlayObject)

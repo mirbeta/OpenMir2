@@ -14,7 +14,7 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             StoneMode = true;
-            m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
+            CharStatusEx = Grobal2.STATE_STONE_MODE;
             Direction = 5;
             m_nDangerLevel = 5;
             m_SlaveObjectList = new List<TBaseObject>();
@@ -22,7 +22,7 @@ namespace GameSvr.Monster.Monsters
 
         private void MeltStone()
         {
-            m_nCharStatusEx = 0;
+            CharStatusEx = 0;
             CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;

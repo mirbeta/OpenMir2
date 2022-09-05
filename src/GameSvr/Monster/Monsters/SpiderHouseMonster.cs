@@ -51,7 +51,6 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            TBaseObject BB;
             if (!Ghost && !Death && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
@@ -68,7 +67,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     for (var i = BBList.Count - 1; i >= 0; i--)
                     {
-                        BB = BBList[i];
+                        var BB = BBList[i];
                         if (BB.Death || BB.Ghost)
                         {
                             BBList.RemoveAt(i);

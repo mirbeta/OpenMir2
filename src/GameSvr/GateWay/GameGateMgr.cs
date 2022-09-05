@@ -17,14 +17,12 @@ namespace GameSvr.GateWay
     public class GameGateMgr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private static readonly GameGateMgr instance = new GameGateMgr();
-        public static GameGateMgr Instance => instance;
         private readonly SocketServer _gateSocket = null;
         private readonly object m_RunSocketSection = null;
         private readonly Channel<ReceiveData> _receiveQueue;
         private readonly ConcurrentDictionary<int, GameGate> _gameGates;
 
-        private GameGateMgr()
+        public GameGateMgr()
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();

@@ -397,7 +397,7 @@ namespace GameSvr.Actor
                                 break;
                         }
                         AutoChangeIdx++;
-                        CharStatus = (int)((m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
+                        CharStatus = (int)((CharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
                         StatusChanged();
                     }
                     if (FixColor && (FixStatus != CharStatus))
@@ -430,7 +430,7 @@ namespace GameSvr.Actor
                                 nInteger = Grobal2.STATE_TRANSPARENT;
                                 break;
                         }
-                        CharStatus = (int)((m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
+                        CharStatus = (int)((CharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
                         FixStatus = CharStatus;
                         StatusChanged();
                     }
@@ -1523,7 +1523,7 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_TRANSPARENT:
-                        M2Share.MagicMgr.MagMakePrivateTransparent(this, ProcessMsg.nParam1);
+                        M2Share.MagicMgr.MagMakePrivateTransparent(this, (ushort)ProcessMsg.nParam1);
                         break;
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
