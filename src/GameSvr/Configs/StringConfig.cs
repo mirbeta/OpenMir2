@@ -2341,14 +2341,14 @@ namespace GameSvr.Configs
             {
                 M2Share.g_sYouKilledByMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouProtectedByLawOfDefense", "");
+            LoadString = ReadString("String", "YouprotectedByLawOfDefense", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouProtectedByLawOfDefense", M2Share.g_sYouProtectedByLawOfDefense);
+                WriteString("String", "YouprotectedByLawOfDefense", M2Share.g_sYouprotectedByLawOfDefense);
             }
             else
             {
-                M2Share.g_sYouProtectedByLawOfDefense = LoadString;
+                M2Share.g_sYouprotectedByLawOfDefense = LoadString;
             }
         }
 

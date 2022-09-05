@@ -75,7 +75,7 @@ namespace GameSvr.Monster.Monsters
         public DualAxeMonster() : base()
         {
             ViewRange = 5;
-            MNRunTime = 250;
+            RunTime = 250;
             SearchTime = 3000;
             m_nAttackCount = 0;
             AttackMax = 2;

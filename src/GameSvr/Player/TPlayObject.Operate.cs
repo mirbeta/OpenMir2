@@ -734,21 +734,21 @@ namespace GameSvr.Player
             {
                 if (Envir.IsValidObject(nX, nY, 2, baseObject))
                 {
-                    if (baseObject.Death && !baseObject.MBoSkeleton && baseObject.Animal)
+                    if (baseObject.Death && !baseObject.Skeleton && baseObject.Animal)
                     {
                         var n10 = M2Share.RandomNumber.Random(16) + 5;
                         var n14 = (ushort)(M2Share.RandomNumber.Random(201) + 100);
-                        baseObject.MNBodyLeathery -= n10;
-                        baseObject.MNMeatQuality -= n14;
-                        if (baseObject.MNMeatQuality < 0)
+                        baseObject.BodyLeathery -= n10;
+                        baseObject.MeatQuality -= n14;
+                        if (baseObject.MeatQuality < 0)
                         {
-                            baseObject.MNMeatQuality = 0;
+                            baseObject.MeatQuality = 0;
                         }
-                        if (baseObject.MNBodyLeathery <= 0)
+                        if (baseObject.BodyLeathery <= 0)
                         {
                             if (baseObject.Race >= Grobal2.RC_ANIMAL && baseObject.Race < Grobal2.RC_MONSTER)
                             {
-                                baseObject.MBoSkeleton = true;
+                                baseObject.Skeleton = true;
                                 ApplyMeatQuality();
                                 baseObject.SendRefMsg(Grobal2.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                             }
@@ -756,7 +756,7 @@ namespace GameSvr.Player
                             {
                                 SysMsg(M2Share.sYouFoundNothing, MsgColor.Red, MsgType.Hint);
                             }
-                            baseObject.MNBodyLeathery = 50;
+                            baseObject.BodyLeathery = 50;
                         }
                         DeathTick = HUtil32.GetTickCount();
                     }

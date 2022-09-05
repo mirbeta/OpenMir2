@@ -10,13 +10,13 @@ namespace SystemModule.RandomSelector
     /// <typeparam name="T"></typeparam>
     public class WeightedSelector<T> : IEnumerable<T>
     {
-        internal readonly List<WeightedItem<T>> Items = new List<WeightedItem<T>>();
-        internal readonly SelectorOption Option;
+        public readonly List<WeightedItem<T>> Items = new List<WeightedItem<T>>();
+        public readonly SelectorOption Option;
 
         /// <summary>
         /// 累计权重集
         /// </summary>
-        internal int[] CumulativeWeights;
+        public int[] CumulativeWeights;
 
         /// <summary>
         /// 是否是已经添加过的权重值

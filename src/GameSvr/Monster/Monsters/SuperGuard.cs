@@ -71,7 +71,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         continue;
                     }
-                    if (BaseObject.PvpLevel() >= 2 || BaseObject.Race >= Grobal2.RC_MONSTER && !BaseObject.MBoMission)
+                    if (BaseObject.PvpLevel() >= 2 || BaseObject.Race >= Grobal2.RC_MONSTER && !BaseObject.Mission)
                     {
                         if (AttackPet)
                         {

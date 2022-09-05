@@ -92,7 +92,7 @@ namespace GameSvr.RobotPlay
                     {
                         if (!ActorObject.Death && ActorObject != this && IsProperTarget(ActorObject))
                         {
-                            if (Abil.Level > ActorObject.Abil.Level && !ActorObject.MBoStickMode)
+                            if (Abil.Level > ActorObject.Abil.Level && !ActorObject.StickMode)
                             {
                                 btNewDir = M2Share.GetNextDirection(ActorObject.CurrX, ActorObject.CurrY, CurrX, CurrY);
                                 if (Envir.GetNextPosition(ActorObject.CurrX, ActorObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))

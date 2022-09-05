@@ -689,7 +689,7 @@ namespace GameSvr.RobotPlay
                                         {
                                             if (baseObject.Death)
                                             {
-                                                if (baseObject.MBoSkeleton)
+                                                if (baseObject.Skeleton)
                                                 {
                                                     SendMsg(baseObject, Grobal2.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                                 }
@@ -893,10 +893,10 @@ namespace GameSvr.RobotPlay
             }
             if (Animal)
             {
-                MNMeatQuality = (ushort)(MNMeatQuality - M2Share.RandomNumber.Random(300));
-                if (MNMeatQuality < 0)
+                MeatQuality = (ushort)(MeatQuality - M2Share.RandomNumber.Random(300));
+                if (MeatQuality < 0)
                 {
-                    MNMeatQuality = 0;
+                    MeatQuality = 0;
                 }
             }
             AttackTick = (ushort)(AttackTick + (150 - HUtil32._MIN(130, Abil.Level * 4)));

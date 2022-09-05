@@ -2322,7 +2322,7 @@ namespace GameSvr.Script
         /// 初始化脚本处理方法
         /// </summary>
         /// <returns></returns>
-        internal string InitializeProcedure(string sMsg)
+        protected string InitializeProcedure(string sMsg)
         {
             var nC = 0;
             var sCmd = string.Empty;

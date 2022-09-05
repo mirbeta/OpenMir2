@@ -47,9 +47,9 @@ namespace GameSvr.Command.Commands
                 mon = M2Share.UserEngine.RegenMonsterByName(M2Share.g_sMissionMap, nX, nY, sMonName);
                 if (mon != null)
                 {
-                    mon.MBoMission = true;
-                    mon.MNMissionX = M2Share.g_nMissionX;
-                    mon.MNMissionY = M2Share.g_nMissionY;
+                    mon.Mission = true;
+                    mon.MissionX = M2Share.g_nMissionX;
+                    mon.MissionY = M2Share.g_nMissionY;
                 }
                 else
                 {

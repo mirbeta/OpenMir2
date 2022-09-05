@@ -314,7 +314,7 @@ namespace GameSvr.RobotPlay
                 {
                     dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp); // 地图上指定杀怪经验倍数
                 }
-                if (MBoExpItem) // 物品经验倍数
+                if (BoExpItem) // 物品经验倍数
                 {
                     dwExp = HUtil32.Round(ExpItem * dwExp);
                 }
@@ -1347,8 +1347,8 @@ namespace GameSvr.RobotPlay
                             AttackBaseObject.Bo2B0 = true;
                             AttackBaseObject.MDw2B4Tick = HUtil32.GetTickCount();
                         }
-                        MNHealthTick = 0;
-                        MNSpellTick = 0;
+                        HealthTick = 0;
+                        SpellTick = 0;
                         PerHealth -= 1;
                         PerSpell -= 1;
                         StruckTick = HUtil32.GetTickCount();
@@ -1940,8 +1940,8 @@ namespace GameSvr.RobotPlay
                 }
             }
             boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx); // 是否是战士技能
-            MNSpellTick -= 450;
-            MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+            SpellTick -= 450;
+            SpellTick = HUtil32._MAX(0, SpellTick);
             switch (UserMagic.wMagIdx)
             {
                 case SpellsDef.SKILL_ERGUM:

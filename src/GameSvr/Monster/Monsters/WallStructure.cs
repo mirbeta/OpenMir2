@@ -9,7 +9,7 @@ namespace GameSvr.Monster.Monsters
         public WallStructure() : base()
         {
             this.Animal = false;
-            this.MBoStickMode = true;
+            this.StickMode = true;
             SetMapFlaged = false;
             this.AntiPoison = 200;
         }
@@ -58,7 +58,7 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                this.MNHealthTick = 0;
+                this.HealthTick = 0;
                 if (!SetMapFlaged)
                 {
                     this.Envir.SetMapXyFlag(this.CurrX, this.CurrY, false);

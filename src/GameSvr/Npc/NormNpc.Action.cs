@@ -1211,9 +1211,9 @@ namespace GameSvr.Npc
                 Mon = M2Share.UserEngine.RegenMonsterByName(M2Share.g_sMissionMap, nRandX, nRandY, QuestActionInfo.sParam1);
                 if (Mon != null)
                 {
-                    Mon.MBoMission = true;
-                    Mon.MNMissionX = M2Share.g_nMissionX;
-                    Mon.MNMissionY = M2Share.g_nMissionY;
+                    Mon.Mission = true;
+                    Mon.MissionX = M2Share.g_nMissionX;
+                    Mon.MissionY = M2Share.g_nMissionY;
                 }
                 else
                 {

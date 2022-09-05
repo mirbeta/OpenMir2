@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace SystemModule.RandomSelector
 {
-    internal abstract class SelectorBase<T>
+    public abstract class SelectorBase<T>
     {
         protected readonly WeightedSelector<T> WeightedSelector;
 
-        internal SelectorBase(WeightedSelector<T> weightedSelector)
+        protected SelectorBase(WeightedSelector<T> weightedSelector)
         {
             WeightedSelector = weightedSelector;
         }
@@ -16,7 +16,7 @@ namespace SystemModule.RandomSelector
         /// <summary>
         /// 执行二进制筛选
         /// </summary>
-        internal WeightedItem<T> BinarySelect(List<WeightedItem<T>> items)
+        protected WeightedItem<T> BinarySelect(List<WeightedItem<T>> items)
         {
             if (items.Count == 0)
             {
@@ -38,7 +38,7 @@ namespace SystemModule.RandomSelector
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        internal WeightedItem<T> LinearSelect(List<WeightedItem<T>> items)
+        protected WeightedItem<T> LinearSelect(List<WeightedItem<T>> items)
         {
             // 只对具有允许重复项的多选功能有用，它会随着时间从列表中删除项目。 在这些条件下没有消耗更多性能让二进制搜索起作用。
             if (!items.Any())

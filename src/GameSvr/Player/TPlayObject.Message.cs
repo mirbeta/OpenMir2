@@ -106,15 +106,15 @@ namespace GameSvr.Player
                         if (!Bo2F0)
                         {
                             Bo2F0 = true;
-                            MDwDupObjTick = HUtil32.GetTickCount();
+                            DupObjTick = HUtil32.GetTickCount();
                         }
                     }
                     else
                     {
                         Bo2F0 = false;
                     }
-                    if ((tObjCount >= 3 && ((HUtil32.GetTickCount() - MDwDupObjTick) > 3000) || tObjCount == 2
-                        && ((HUtil32.GetTickCount() - MDwDupObjTick) > 10000)) && ((HUtil32.GetTickCount() - MDwDupObjTick) < 20000))
+                    if ((tObjCount >= 3 && ((HUtil32.GetTickCount() - DupObjTick) > 3000) || tObjCount == 2
+                        && ((HUtil32.GetTickCount() - DupObjTick) > 10000)) && ((HUtil32.GetTickCount() - DupObjTick) < 20000))
                     {
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
@@ -432,9 +432,9 @@ namespace GameSvr.Player
                         if (M2Share.Config.boHungerDecHP)
                         {
                             // 减少涨HP，MP
-                            MNHealthTick -= 60;
-                            MNSpellTick -= 10;
-                            MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                            HealthTick -= 60;
+                            SpellTick -= 10;
+                            SpellTick = HUtil32._MAX(0, SpellTick);
                             PerHealth -= 1;
                             PerSpell -= 1;
                             if (MWAbil.HP > MWAbil.HP / 100)
@@ -1477,8 +1477,8 @@ namespace GameSvr.Player
                                 M2Share.ActorMgr.Get(ProcessMsg.nParam3).Bo2B0 = true;
                                 M2Share.ActorMgr.Get(ProcessMsg.nParam3).MDw2B4Tick = HUtil32.GetTickCount();
                             }
-                            MNHealthTick = 0;
-                            MNSpellTick = 0;
+                            HealthTick = 0;
+                            SpellTick = 0;
                             PerHealth -= 1;
                             PerSpell -= 1;
                             StruckTick = HUtil32.GetTickCount();
