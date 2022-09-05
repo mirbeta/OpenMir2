@@ -11,10 +11,10 @@ namespace GameSvr.Monster.Monsters
         public BeeQueen() : base()
         {
             ViewRange = 9;
-            MNRunTime = 250;
+            RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = HUtil32.GetTickCount();
-            MBoStickMode = true;
+            StickMode = true;
             BeeList = new List<BaseObject>();
         }
 

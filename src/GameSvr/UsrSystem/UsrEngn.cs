@@ -704,7 +704,7 @@ namespace GameSvr.UsrSystem
                     {
                         if (BotPlayObjectList.Count <= nIdx) break;
                         var playObject = BotPlayObjectList[nIdx];
-                        if (dwCurTick - playObject.MDwRunTick > playObject.MNRunTime)
+                        if (dwCurTick - playObject.MDwRunTick > playObject.RunTime)
                         {
                             playObject.MDwRunTick = dwCurTick;
                             if (!playObject.Ghost)
@@ -780,7 +780,7 @@ namespace GameSvr.UsrSystem
                     {
                         continue;
                     }
-                    if ((dwCurTick - playObject.MDwRunTick) > playObject.MNRunTime)
+                    if ((dwCurTick - playObject.MDwRunTick) > playObject.RunTime)
                     {
                         playObject.MDwRunTick = dwCurTick;
                         if (!playObject.Ghost)
@@ -884,14 +884,14 @@ namespace GameSvr.UsrSystem
                     var merchantNpc = MerchantList[i];
                     if (!merchantNpc.Ghost)
                     {
-                        if ((dwCurrTick - merchantNpc.MDwRunTick) > merchantNpc.MNRunTime)
+                        if ((dwCurrTick - merchantNpc.MDwRunTick) > merchantNpc.RunTime)
                         {
                             if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
                             {
                                 merchantNpc.SearchTick = HUtil32.GetTickCount();
                                 merchantNpc.SearchViewRange();
                             }
-                            if ((dwCurrTick - merchantNpc.MDwRunTick) > merchantNpc.MNRunTime)
+                            if ((dwCurrTick - merchantNpc.MDwRunTick) > merchantNpc.RunTime)
                             {
                                 merchantNpc.MDwRunTick = dwCurrTick;
                                 merchantNpc.Run();
@@ -1045,7 +1045,7 @@ namespace GameSvr.UsrSystem
                         {
                             if (!monster.Ghost)
                             {
-                                if ((dwCurrentTick - monster.MDwRunTick) > monster.MNRunTime)
+                                if ((dwCurrentTick - monster.MDwRunTick) > monster.RunTime)
                                 {
                                     monster.MDwRunTick = dwRunTick;
                                     if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
@@ -1151,14 +1151,14 @@ namespace GameSvr.UsrSystem
                     NormNpc npc = QuestNpcList[i];
                     if (!npc.Ghost)
                     {
-                        if ((dwCurrTick - npc.MDwRunTick) > npc.MNRunTime)
+                        if ((dwCurrTick - npc.MDwRunTick) > npc.RunTime)
                         {
                             if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
                             {
                                 npc.SearchTick = HUtil32.GetTickCount();
                                 npc.SearchViewRange();
                             }
-                            if ((dwCurrTick - npc.MDwRunTick) > npc.MNRunTime)
+                            if ((dwCurrTick - npc.MDwRunTick) > npc.RunTime)
                             {
                                 npc.MDwRunTick = dwCurrTick;
                                 npc.Run();
@@ -1576,8 +1576,8 @@ namespace GameSvr.UsrSystem
                     cert = new MonsterObject
                     {
                         Animal = true,
-                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000),
-                        MNBodyLeathery = 50
+                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000),
+                        BodyLeathery = 50
                     };
                     break;
                 case MonsterConst.ANIMAL_DEER:
@@ -1585,23 +1585,23 @@ namespace GameSvr.UsrSystem
                         cert = new ChickenDeer
                         {
                             Animal = true,
-                            MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
-                            MNBodyLeathery = 150
+                            MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
+                            BodyLeathery = 150
                         };
                     else
                         cert = new MonsterObject()
                         {
                             Animal = true,
-                            MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
-                            MNBodyLeathery = 150
+                            MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
+                            BodyLeathery = 150
                         };
                     break;
                 case MonsterConst.ANIMAL_WOLF:
                     cert = new AtMonster
                     {
                         Animal = true,
-                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
-                        MNBodyLeathery = 150
+                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
+                        BodyLeathery = 150
                     };
                     break;
                 case MonsterConst.TRAINER:
@@ -1779,7 +1779,7 @@ namespace GameSvr.UsrSystem
                 cert.CharName = sMonName;
                 cert.MWAbil = cert.Abil;
                 cert.OnEnvirnomentChanged();
-                if (M2Share.RandomNumber.Random(100) < cert.CoolEye) cert.CoolEye = true;
+                if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
                 MonGetRandomItems(cert);
                 cert.Initialize();
                 if (cert.AddtoMapSuccess)
@@ -2315,7 +2315,7 @@ namespace GameSvr.UsrSystem
                     baseObject.Appr = monster.wAppr;
                     baseObject.Abil.Level = (byte)monster.wLevel;
                     baseObject.LifeAttrib = monster.btLifeAttrib;
-                    baseObject.CoolEye = (byte)monster.wCoolEye;
+                    baseObject.CoolEyeCode = (byte)monster.wCoolEye;
                     baseObject.MDwFightExp = monster.dwExp;
                     baseObject.Abil.HP = monster.wHP;
                     baseObject.Abil.MaxHP = monster.wHP;
@@ -2334,7 +2334,7 @@ namespace GameSvr.UsrSystem
                     baseObject.WalkWait = monster.wWalkWait;
                     baseObject.NextHitTime = monster.wAttackSpeed;
                     baseObject.NastyMode = monster.boAggro;
-                    baseObject.MBoNoTame = monster.boTame;
+                    baseObject.NoTame = monster.boTame;
                     break;
                 }
             }
@@ -2429,7 +2429,7 @@ namespace GameSvr.UsrSystem
                     for (var j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--)
                     {
                         BaseObject baseObject = magicEvent.BaseObjectList[j];
-                        if (baseObject.Death || baseObject.Ghost || !baseObject.MBoHolySeize)
+                        if (baseObject.Death || baseObject.Ghost || !baseObject.HolySeize)
                             magicEvent.BaseObjectList.RemoveAt(j);
                     }
                     if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.dwStartTick) > magicEvent.dwTime ||
@@ -2733,7 +2733,7 @@ namespace GameSvr.UsrSystem
             cert.Direction = (byte)M2Share.RandomNumber.Random(8);
             cert.CharName = ai.sCharName;
             cert.MWAbil = cert.Abil;
-            if (M2Share.RandomNumber.Random(100) < cert.CoolEye)
+            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)
             {
                 cert.CoolEye = true;
             }

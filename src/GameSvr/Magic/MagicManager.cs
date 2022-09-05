@@ -19,7 +19,7 @@ namespace GameSvr.Magic
                 {
                     if (!BaseObject.Death && BaseObject != PlayObject)
                     {
-                        if (PlayObject.Abil.Level > BaseObject.Abil.Level && !BaseObject.MBoStickMode)
+                        if (PlayObject.Abil.Level > BaseObject.Abil.Level && !BaseObject.StickMode)
                         {
                             var levelgap = PlayObject.Abil.Level - BaseObject.Abil.Level;
                             if (M2Share.RandomNumber.Random(20) < 6 + nPushLevel * 3 + levelgap)
@@ -419,12 +419,12 @@ namespace GameSvr.Magic
                     }
                     break;
                 case SpellsDef.SKILL_SHOWHP:
-                    if (TargeTBaseObject != null && !TargeTBaseObject.MBoShowHp)
+                    if (TargeTBaseObject != null && !TargeTBaseObject.ShowHp)
                     {
                         if (M2Share.RandomNumber.Random(6) <= UserMagic.btLevel + 3)
                         {
-                            TargeTBaseObject.MDwShowHpTick = HUtil32.GetTickCount();
-                            TargeTBaseObject.MDwShowHpInterval = DoSpell_GetPower13(UserMagic, DoSpell_GetRPow(PlayObject.MWAbil.SC) * 2 + 30) * 1000;
+                            TargeTBaseObject.ShowHpTick = HUtil32.GetTickCount();
+                            TargeTBaseObject.ShowHpInterval = DoSpell_GetPower13(UserMagic, DoSpell_GetRPow(PlayObject.MWAbil.SC) * 2 + 30) * 1000;
                             TargeTBaseObject.SendDelayMsg(TargeTBaseObject, Grobal2.RM_DOOPENHEALTH, 0, 0, 0, 0, "", 1500);
                             boTrain = true;
                         }
@@ -712,7 +712,7 @@ namespace GameSvr.Magic
                             {
                                 if (M2Share.RandomNumber.Random(BaseObject.Abil.Level + 20 + nMagicLevel * 5) > TargeTBaseObject.Abil.Level + M2Share.Config.nMagTammingTargetLevel)
                                 {
-                                    if (!TargeTBaseObject.MBoNoTame && TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.nMagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.nMagTammingCount)
+                                    if (!TargeTBaseObject.NoTame && TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.nMagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.nMagTammingCount)
                                     {
                                         int n14 = TargeTBaseObject.MWAbil.MaxHP / M2Share.Config.nMagTammingHPRate;
                                         if (n14 <= 2)
@@ -850,7 +850,7 @@ namespace GameSvr.Magic
         {
             var result = false;
             var PoseBaseObject = PlayObject.GetPoseCreate();
-            if (PoseBaseObject != null && PoseBaseObject != PlayObject && !PoseBaseObject.Death && !PoseBaseObject.Ghost && PlayObject.IsProperTarget(PoseBaseObject) && !PoseBaseObject.MBoStickMode)
+            if (PoseBaseObject != null && PoseBaseObject != PlayObject && !PoseBaseObject.Death && !PoseBaseObject.Ghost && PlayObject.IsProperTarget(PoseBaseObject) && !PoseBaseObject.StickMode)
             {
                 if (Math.Abs(PlayObject.CurrX - PoseBaseObject.CurrX) <= 1 && Math.Abs(PlayObject.CurrY - PoseBaseObject.CurrY) <= 1 && PlayObject.Abil.Level > PoseBaseObject.Abil.Level)
                 {
@@ -1040,7 +1040,7 @@ namespace GameSvr.Magic
             {
                 result = true;
             }
-            if (PlayObject.Abil.Level > TargetBaseObject.Abil.Level && !TargetBaseObject.MBoStickMode)
+            if (PlayObject.Abil.Level > TargetBaseObject.Abil.Level && !TargetBaseObject.StickMode)
             {
                 var levelgap = PlayObject.Abil.Level - TargetBaseObject.Abil.Level;
                 if (M2Share.RandomNumber.Random(20) < 6 + UserMagic.btLevel * 3 + levelgap)

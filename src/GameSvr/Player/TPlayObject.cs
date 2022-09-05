@@ -142,7 +142,7 @@ namespace GameSvr.Player
                 {
                     dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp);// 地图上指定杀怪经验倍数
                 }
-                if (MBoExpItem) // 物品经验倍数
+                if (BoExpItem) // 物品经验倍数
                 {
                     dwExp = HUtil32.Round(ExpItem * dwExp);
                 }
@@ -247,7 +247,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private void SendSocket(string sMsg)
+        internal void SendSocket(string sMsg)
         {
             if (OffLineFlag)
             {
@@ -280,7 +280,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendSocket(ClientPacket DefMsg)
+        internal void SendSocket(ClientPacket DefMsg)
         {
             SendSocket(DefMsg, "");
         }
@@ -1410,7 +1410,7 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    PlayObject.SysMsg(M2Share.g_sYouProtectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(M2Share.g_sYouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
@@ -1514,7 +1514,7 @@ namespace GameSvr.Player
             }
         }
 
-        internal ushort GetSpellPoint(TUserMagic UserMagic)
+        protected ushort GetSpellPoint(TUserMagic UserMagic)
         {
             return (ushort)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
         }
@@ -1522,7 +1522,7 @@ namespace GameSvr.Player
         public bool DoMotaebo_CanMotaebo(BaseObject BaseObject, int nMagicLevel)
         {
             var result = true;
-            if (Abil.Level > BaseObject.Abil.Level && !BaseObject.MBoStickMode)
+            if (Abil.Level > BaseObject.Abil.Level && !BaseObject.StickMode)
             {
                 var nC = Abil.Level - BaseObject.Abil.Level;
                 if (M2Share.RandomNumber.Random(20) < nMagicLevel * 4 + 6 + nC)
@@ -2407,7 +2407,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        internal void MoveToHome()
+        protected void MoveToHome()
         {
             SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             BaseObjectMove(HomeMap, HomeX, HomeY);

@@ -3,7 +3,7 @@
 namespace GameSvr.Command.Commands
 {
     [GameCommand("MemberFunction", "", help: "打开会员功能窗口", 0)]
-    internal class MemberFunctionCommand : BaseCommond
+    public class MemberFunctionCommand : BaseCommond
     {
         [DefaultCommand]
         public void MemberFunction(PlayObject PlayObject)

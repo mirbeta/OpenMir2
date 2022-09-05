@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
         public CastleDoor() : base()
         {
             Animal = false;
-            MBoStickMode = true;
+            StickMode = true;
             m_boOpened = false;
             AntiPoison = 200;
         }
@@ -94,7 +94,7 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                MNHealthTick = 0;
+                HealthTick = 0;
             }
             if (!m_boOpened)
             {

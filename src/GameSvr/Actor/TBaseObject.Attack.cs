@@ -514,9 +514,9 @@ namespace GameSvr.Actor
                     {
                         AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.Config.AttackPosionTime, 0);
                     }
-                    if (MNHongMoSuite > 0)// 虹魔，吸血
+                    if (HongMoSuite > 0)// 虹魔，吸血
                     {
-                        MDb3B0 = nPower / 100 * MNHongMoSuite;
+                        MDb3B0 = nPower / 100 * HongMoSuite;
                         if (MDb3B0 >= 2.0)
                         {
                             n20 = Convert.ToInt32(MDb3B0);

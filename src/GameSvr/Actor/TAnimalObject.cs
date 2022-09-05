@@ -153,10 +153,10 @@ namespace GameSvr.Actor
             }
             if (this.Animal)
             {
-                this.MNMeatQuality = (ushort)(this.MNMeatQuality - M2Share.RandomNumber.Random(300));
-                if (this.MNMeatQuality < 0)
+                this.MeatQuality = (ushort)(this.MeatQuality - M2Share.RandomNumber.Random(300));
+                if (this.MeatQuality < 0)
                 {
-                    this.MNMeatQuality = 0;
+                    this.MeatQuality = 0;
                 }
             }
             this.AttackTick = this.AttackTick + (150 - HUtil32._MIN(130, this.Abil.Level * 4));

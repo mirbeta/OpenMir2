@@ -13,7 +13,7 @@ namespace GameSvr.Monster.Monsters
         {
             ViewRange = 6;
             FixedHideMode = true;
-            MBoNoAttackMode = true;
+            NoAttackMode = true;
             boIsFirst = true;
         }
 

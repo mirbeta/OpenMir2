@@ -9,7 +9,7 @@ namespace GameSvr.Monster.Monsters
         public ExplosionSpider() : base()
         {
             ViewRange = 5;
-            MNRunTime = 250;
+            RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
             dw558 = HUtil32.GetTickCount();

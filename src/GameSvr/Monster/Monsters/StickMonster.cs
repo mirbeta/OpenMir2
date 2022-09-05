@@ -12,13 +12,13 @@ namespace GameSvr.Monster.Monsters
         public StickMonster() : base()
         {
             this.ViewRange = 7;
-            this.MNRunTime = 250;
+            this.RunTime = 250;
             this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             this.SearchTick = HUtil32.GetTickCount();
             nComeOutValue = 4;
             nAttackRange = 4;
             this.FixedHideMode = true;
-            this.MBoStickMode = true;
+            this.StickMode = true;
             this.Animal = true;
         }
 

@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void GroupRecall(PlayObject PlayObject)
         {
-            if (PlayObject.MBoRecallSuite || PlayObject.Permission >= 6)
+            if (PlayObject.RecallSuite || PlayObject.Permission >= 6)
             {
                 var dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
                 PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;

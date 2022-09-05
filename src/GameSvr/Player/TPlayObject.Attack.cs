@@ -86,9 +86,9 @@ namespace GameSvr.Player
                                 {
                                     SendSocket("=DIG");
                                 }
-                                MNHealthTick -= 30;
-                                MNSpellTick -= 50;
-                                MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                                HealthTick -= 30;
+                                SpellTick -= 50;
+                                SpellTick = HUtil32._MAX(0, SpellTick);
                                 PerHealth -= 2;
                                 PerSpell -= 2;
                                 return result;
@@ -143,9 +143,9 @@ namespace GameSvr.Player
                             AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         }
                     }
-                    MNHealthTick -= 30;
-                    MNSpellTick -= 100;
-                    MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                    HealthTick -= 30;
+                    SpellTick -= 100;
+                    SpellTick = HUtil32._MAX(0, SpellTick);
                     PerHealth -= 2;
                     PerSpell -= 2;
                 }
@@ -232,9 +232,9 @@ namespace GameSvr.Player
                 {
                     result = true;
                 }
-                MNHealthTick -= 60;
-                MNSpellTick -= 10;
-                MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                HealthTick -= 60;
+                SpellTick -= 10;
+                SpellTick = HUtil32._MAX(0, SpellTick);
                 PerHealth -= 1;
                 PerSpell -= 1;
             }
@@ -305,8 +305,8 @@ namespace GameSvr.Player
                     }
                 }
             }
-            MNSpellTick -= 450;
-            MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+            SpellTick -= 450;
+            SpellTick = HUtil32._MAX(0, SpellTick);
             if (!boIsWarrSkill)
             {
                 m_dwMagicAttackInterval = UserMagic.MagicInfo.dwDelayTime + M2Share.Config.dwMagicHitIntervalTime;
@@ -550,9 +550,9 @@ namespace GameSvr.Player
                 {
                     result = true;
                 }
-                MNHealthTick -= 60;
-                MNSpellTick -= 10;
-                MNSpellTick = HUtil32._MAX(0, MNSpellTick);
+                HealthTick -= 60;
+                SpellTick -= 10;
+                SpellTick = HUtil32._MAX(0, SpellTick);
                 PerHealth -= 1;
                 PerSpell -= 1;
             }
@@ -677,7 +677,7 @@ namespace GameSvr.Player
                 {
                     result = true;
                 }
-                MNHealthTick -= 10;
+                HealthTick -= 10;
             }
             else
             {

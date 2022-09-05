@@ -11,10 +11,10 @@ namespace GameSvr.Monster.Monsters
         public SpiderHouseMonster() : base()
         {
             ViewRange = 9;
-            MNRunTime = 250;
+            RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
-            MBoStickMode = true;
+            StickMode = true;
             BBList = new List<BaseObject>();
         }
 

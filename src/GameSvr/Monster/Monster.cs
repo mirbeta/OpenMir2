@@ -14,7 +14,7 @@ namespace GameSvr.Monster
             m_boDupMode = false;
             m_dwThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
-            MNRunTime = 250;
+            RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
         }
@@ -141,7 +141,7 @@ namespace GameSvr.Monster
                     }
                     if (!m_boRunAwayMode)
                     {
-                        if (!MBoNoAttackMode)
+                        if (!NoAttackMode)
                         {
                             if (TargetCret != null)
                             {
@@ -154,10 +154,10 @@ namespace GameSvr.Monster
                             else
                             {
                                 TargetX = -1;
-                                if (MBoMission)
+                                if (Mission)
                                 {
-                                    TargetX = MNMissionX;
-                                    TargetY = MNMissionY;
+                                    TargetX = MissionX;
+                                    TargetY = MissionY;
                                 }
                             }
                         }

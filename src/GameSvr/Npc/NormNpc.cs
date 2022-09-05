@@ -51,7 +51,7 @@ namespace GameSvr.Npc
             this.Light = 2;
             this.AntiPoison = 99;
             this.m_ScriptList = new List<TScript>();
-            this.MBoStickMode = true;
+            this.StickMode = true;
             this.m_sFilePath = "";
             this.m_boIsHide = false;
             this.m_boIsQuest = true;

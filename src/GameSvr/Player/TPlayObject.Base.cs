@@ -462,7 +462,7 @@ namespace GameSvr.Player
             m_nMoveX = 0;
             m_nMoveY = 0;
             MDwRunTick = HUtil32.GetTickCount();
-            MNRunTime = 250;
+            RunTime = 250;
             SearchTime = 1000;
             SearchTick = HUtil32.GetTickCount();
             ViewRange = 12;
@@ -1402,7 +1402,7 @@ namespace GameSvr.Player
                         {
                             if (BaseObject.Death)
                             {
-                                if (BaseObject.MBoSkeleton)
+                                if (BaseObject.Skeleton)
                                 {
                                     SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.CurrX, BaseObject.CurrY, 0, "");
                                 }

@@ -147,8 +147,8 @@ namespace GameSvr.Actor
         /// <summary>
         /// 记忆全套
         /// </summary>
-        public bool MBoRecallSuite;
-        public bool BoRaceImg;
+        public bool RecallSuite;
+        public bool BoRace;
         public ushort HealthRecover;
         public ushort SpellRecover;
         public byte AntiPoison;
@@ -183,7 +183,11 @@ namespace GameSvr.Actor
         /// </summary>
         protected ushort HitSpeed;
         public byte LifeAttrib;
-        public byte CoolEye = 0;
+        public byte CoolEyeCode = 0;
+        /// <summary>
+        /// 是否可以看到隐身人物
+        /// </summary>
+        public bool CoolEye;
         public BaseObject GroupOwner;
         /// <summary>
         /// 组成员
@@ -242,7 +246,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 下属攻击状态
         /// </summary>
-        public AttackMode AttatckMode = 0;
+        public AttackMode AttatckMode;
         /// <summary>
         /// 人物名字的颜色
         /// </summary>        
@@ -254,7 +258,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 行会占争范围
         /// </summary>
-        private bool _guildWarArea;
+        protected bool GuildWarArea;
         /// <summary>
         /// 所属城堡
         /// </summary>
@@ -270,36 +274,36 @@ namespace GameSvr.Actor
         public bool Animal;
         public bool MBoNoItem;
         public bool FixedHideMode;
-        public bool MBoStickMode;
+        public bool StickMode;
         public bool Bo2Bf;
-        public bool MBoNoAttackMode;
-        public bool MBoNoTame;
-        public bool MBoSkeleton;
-        public ushort MNMeatQuality;
-        public int MNBodyLeathery;
-        public bool MBoHolySeize;
-        public int MDwHolySeizeTick;
-        public int MDwHolySeizeInterval;
+        public bool NoAttackMode;
+        public bool NoTame;
+        public bool Skeleton;
+        public ushort MeatQuality;
+        public int BodyLeathery;
+        public bool HolySeize;
+        public int HolySeizeTick;
+        public int HolySeizeInterval;
         /// <summary>
         /// 狂暴模式
         /// </summary>
         public bool CrazyMode;
-        private int _crazyModeTick;
+        private int CrazyModeTick;
         /// <summary>
         /// 狂暴间隔
         /// </summary>
         public int CrazyModeInterval;
-        public bool MBoShowHp;
+        public bool ShowHp;
         /// <summary>
         /// 心灵启示检查时间
         /// </summary>
-        public int MDwShowHpTick = 0;
+        public int ShowHpTick = 0;
         /// <summary>
         /// 心灵启示有效时长
         /// </summary>
-        public int MDwShowHpInterval = 0;
+        public int ShowHpInterval = 0;
         public bool Bo2F0;
-        public int MDwDupObjTick = 0;
+        public int DupObjTick = 0;
         public Envirnoment Envir;
         public bool Ghost;
         public int GhostTick;
@@ -338,18 +342,14 @@ namespace GameSvr.Actor
         public string ScriptLable = string.Empty;
         protected byte AttackSkillCount;
         protected byte AttackSkillPointCount;
-        public bool MBoMission;
-        public short MNMissionX = 0;
-        public short MNMissionY = 0;
+        public bool Mission;
+        public short MissionX = 0;
+        public short MissionY = 0;
         /// <summary>
         /// 隐身戒指
         /// </summary>
         public bool HideMode;
         public bool StoneMode;
-        /// <summary>
-        /// 是否可以看到隐身人物
-        /// </summary>
-        public bool CoolEye;
         /// <summary>
         /// 是否用了神水
         /// </summary>
@@ -373,28 +373,28 @@ namespace GameSvr.Actor
         /// <summary>
         /// 麻痹戒指
         /// </summary>
-        internal bool Paralysis = false;
+        protected bool Paralysis = false;
         internal bool UnParalysis = false;
         /// <summary>
         /// 复活戒指
         /// </summary>
-        internal bool Revival = false;
+        protected bool Revival = false;
         /// <summary>
         /// 防复活
         /// </summary>
-        internal bool UnRevival = false;
+        protected bool UnRevival = false;
         /// <summary>
         /// 复活戒指使用间隔计数
         /// </summary>
-        internal int RevivalTick = 0;
+        protected int RevivalTick = 0;
         /// <summary>
         /// 火焰戒指
         /// </summary>
-        internal bool FlameRing = false;
+        protected bool FlameRing = false;
         /// <summary>
         /// 治愈戒指
         /// </summary>
-        internal bool RecoveryRing;
+        protected bool RecoveryRing;
         /// <summary>
         /// 未知戒指
         /// </summary>
@@ -402,19 +402,19 @@ namespace GameSvr.Actor
         /// <summary>
         /// 护身戒指
         /// </summary>
-        internal bool MagicShield = false;
+        protected bool MagicShield = false;
         /// <summary>
         /// 防护身
         /// </summary>
-        internal bool UnMagicShield = false;
+        protected bool UnMagicShield = false;
         /// <summary>
         /// 活力戒指
         /// </summary>
-        internal bool MuscleRing = false;
+        protected bool MuscleRing = false;
         /// <summary>
         /// 技巧项链
         /// </summary>
-        internal bool FastTrain = false;
+        protected bool FastTrain = false;
         /// <summary>
         /// 探测项链
         /// </summary>
@@ -423,25 +423,25 @@ namespace GameSvr.Actor
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-        private bool _superManItem;
+        protected bool SuperManItem;
         /// <summary>
         /// 祈祷
         /// </summary>
-        internal bool MBopirit = false;
+        protected bool MBopirit = false;
         public bool NoDropItem = false;
         public bool NoDropUseItem = false;
-        internal bool MBoExpItem = false;
-        internal bool MBoPowerItem = false;
-        internal int ExpItem = 0;
-        internal int PowerItem = 0;
+        protected bool BoExpItem = false;
+        protected bool BoPowerItem = false;
+        protected int ExpItem = 0;
+        protected int PowerItem = 0;
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
-        internal int MDwPkDieLostExp;
+        protected int PkDieLostExp;
         /// <summary>
         /// PK 死亡掉等级
         /// </summary>
-        internal int MNPkDieLostLevel;
+        protected int PkDieLostLevel;
         /// <summary>
         /// 心灵启示
         /// </summary>
@@ -449,20 +449,20 @@ namespace GameSvr.Actor
         /// <summary>
         /// 魔法盾
         /// </summary>
-        internal bool AbilMagBubbleDefence;
+        protected bool AbilMagBubbleDefence;
         /// <summary>
         /// 魔法盾等级
         /// </summary>
-        private byte _magBubbleDefenceLevel;
+        protected byte MagBubbleDefenceLevel;
         public int SearchTime;
         public int SearchTick;
         /// <summary>
         /// 上次运行时间
         /// </summary>
         public int MDwRunTick;
-        public int MNRunTime;
-        internal int MNHealthTick;
-        internal int MNSpellTick;
+        public int RunTime;
+        protected int HealthTick;
+        protected int SpellTick;
         public BaseObject TargetCret;
         public int TargetFocusTick = 0;
         /// <summary>
@@ -471,7 +471,7 @@ namespace GameSvr.Actor
         public BaseObject LastHiter;
         public int LastHiterTick;
         public BaseObject ExpHitter;
-        internal int ExpHitterTick;
+        protected int ExpHitterTick;
         /// <summary>
         /// 传送戒指使用间隔
         /// </summary>
@@ -484,38 +484,38 @@ namespace GameSvr.Actor
         /// <summary>
         /// 人物攻击变色标志
         /// </summary>
-        internal bool PvpFlag;
+        protected bool PvpFlag;
         /// <summary>
         /// 人物攻击变色时间长度
         /// </summary>
-        internal int MDwPkTick;
+        protected int MDwPkTick;
         /// <summary>
         /// 魔血一套
         /// </summary>
-        internal int MNMoXieSuite;
+        protected int MoXieSuite;
         /// <summary>
         /// 虹魔一套
         /// </summary>
-        internal int MNHongMoSuite;
-        public double MDb3B0;
+        protected int HongMoSuite;
+        protected double MDb3B0;
         /// <summary>
         /// 中毒处理间隔时间
         /// </summary>
-        internal int PoisoningTick;
+        protected int PoisoningTick;
         /// <summary>
         /// 减PK值时间`
         /// </summary>
         private int _decPkPointTick;
-        internal int DecLightItemDrugTick;
-        internal int VerifyTick;
-        internal int CheckRoyaltyTick;
-        internal int DecHungerPointTick;
-        internal int MDwHpmpTick;
-        internal readonly IList<SendMessage> MsgList;
-        internal readonly IList<BaseObject> VisibleHumanList;
-        internal readonly IList<VisibleMapItem> VisibleItems;
-        internal readonly IList<MirEvent> VisibleEvents;
-        internal int SendRefMsgTick;
+        protected int DecLightItemDrugTick;
+        protected int VerifyTick;
+        protected int CheckRoyaltyTick;
+        protected int DecHungerPointTick;
+        protected int MDwHpmpTick;
+        protected readonly IList<SendMessage> MsgList;
+        protected readonly IList<BaseObject> VisibleHumanList;
+        protected readonly IList<VisibleMapItem> VisibleItems;
+        protected readonly IList<MirEvent> VisibleEvents;
+        protected int SendRefMsgTick;
         /// <summary>
         /// 是否在开行会战
         /// </summary>
@@ -555,7 +555,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 技能表
         /// </summary>
-        public IList<TUserMagic> MagicList;
+        public readonly IList<TUserMagic> MagicList;
         /// <summary>
         /// 身上物品
         /// </summary>
@@ -564,7 +564,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 仓库物品列表
         /// </summary>
-        internal IList<TUserItem> StorageItemList;
+        internal readonly IList<TUserItem> StorageItemList;
         /// <summary>
         /// 走路速度
         /// </summary>
@@ -594,7 +594,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
-        private bool _denyRefStatus;
+        protected readonly bool DenyRefStatus;
         /// <summary>
         /// 是否增加地图计数
         /// </summary>
@@ -632,8 +632,8 @@ namespace GameSvr.Actor
         /// <summary>
         /// 气血石
         /// </summary>
-        public int MNAutoAddHpmpMode = 0;
-        public int MDwCheckHpmpTick = 0;
+        protected int AutoAddHpmpMode = 0;
+        public int CheckHpmpTick = 0;
         public long DwTick3F4 = 0;
         /// <summary>
         /// 是否机器人
@@ -665,8 +665,8 @@ namespace GameSvr.Actor
             BodyLuck = 0;
             GroupRcallTime = 0;
             GroupRcallTick = HUtil32.GetTickCount();
-            MBoRecallSuite = false;
-            BoRaceImg = false;
+            RecallSuite = false;
+            BoRace = false;
             Bo2Ba = false;
             AbilSeeHealGauge = false;
             PowerHit = false;
@@ -709,25 +709,25 @@ namespace GameSvr.Actor
             BtB2 = 0;
             AttatckMode = 0;
             InFreePkArea = false;
-            _guildWarArea = false;
+            GuildWarArea = false;
             Bo2B0 = false;
             SuperMan = false;
-            MBoSkeleton = false;
+            Skeleton = false;
             Bo2Bf = false;
-            MBoHolySeize = false;
+            HolySeize = false;
             CrazyMode = false;
-            MBoShowHp = false;
+            ShowHp = false;
             Bo2F0 = false;
             Animal = false;
             MBoNoItem = false;
-            MNBodyLeathery = 50;
+            BodyLeathery = 50;
             FixedHideMode = false;
-            MBoStickMode = false;
-            MBoNoAttackMode = false;
-            MBoNoTame = false;
+            StickMode = false;
+            NoAttackMode = false;
+            NoTame = false;
             PvpFlag = false;
-            MNMoXieSuite = 0;
-            MNHongMoSuite = 0;
+            MoXieSuite = 0;
+            HongMoSuite = 0;
             MDb3B0 = 0;
             _mAddAbil = new TAddAbility();
             MsgList = new List<SendMessage>();
@@ -784,7 +784,7 @@ namespace GameSvr.Actor
             GuildRankNo = 0;
             GuildRankName = "";
             ScriptLable = "";
-            MBoMission = false;
+            Mission = false;
             HideMode = false;
             StoneMode = false;
             CoolEye = false;
@@ -793,7 +793,7 @@ namespace GameSvr.Actor
             AdminMode = false;
             ObMode = false;
             MDwRunTick = HUtil32.GetTickCount() + M2Share.RandomNumber.Random(1500);
-            MNRunTime = 250;
+            RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(2000) + 2000;
             SearchTick = HUtil32.GetTickCount();
             _decPkPointTick = HUtil32.GetTickCount();
@@ -813,17 +813,17 @@ namespace GameSvr.Actor
             WalkCount = 0;
             WalkWaitTick = HUtil32.GetTickCount();
             WalkWaitLocked = false;
-            MNHealthTick = 0;
-            MNSpellTick = 0;
+            HealthTick = 0;
+            SpellTick = 0;
             TargetCret = null;
             LastHiter = null;
             ExpHitter = null;
             SayMsgList = null;
-            _denyRefStatus = false;
+            DenyRefStatus = false;
             HorseType = 0;
             _dressEffType = 0;
-            MDwPkDieLostExp = 0;
-            MNPkDieLostLevel = 0;
+            PkDieLostExp = 0;
+            PkDieLostLevel = 0;
             AddToMaped = true;
             AutoChangeColor = false;
             AutoChangeColorTick = HUtil32.GetTickCount();
@@ -1095,7 +1095,7 @@ namespace GameSvr.Actor
             bool bo29;
             const string sExceptionMsg = "[Exception] TBaseObject::WalkTo";
             var result = false;
-            if (MBoHolySeize)
+            if (HolySeize)
             {
                 return result;
             }
@@ -1224,7 +1224,7 @@ namespace GameSvr.Actor
                 SendUpdateMsg(this, Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
 
-            if (MBoShowHp)
+            if (ShowHp)
             {
                 SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
@@ -1334,7 +1334,7 @@ namespace GameSvr.Actor
         private int GetGuildRelation(BaseObject cert1, BaseObject cert2)
         {
             var result = 0;
-            _guildWarArea = false;
+            GuildWarArea = false;
             if ((cert1.MyGuild == null) || (cert2.MyGuild == null))
             {
                 return 0;
@@ -1347,7 +1347,7 @@ namespace GameSvr.Actor
             {
                 return 0;
             }
-            _guildWarArea = true;
+            GuildWarArea = true;
             if (cert1.MyGuild.IsWarGuild(cert2.MyGuild) && cert2.MyGuild.IsWarGuild(cert1.MyGuild))
             {
                 result = 2;
@@ -1477,7 +1477,7 @@ namespace GameSvr.Actor
             {
                 playObject = this as PlayObject;
                 result = HUtil32.Round(result * (playObject.m_nPowerRate / 100));
-                if (playObject.MBoPowerItem)
+                if (playObject.BoPowerItem)
                 {
                     result = HUtil32.Round(PowerItem * result);
                 }
@@ -1658,9 +1658,9 @@ namespace GameSvr.Actor
 
         private void BreakOpenHealth()
         {
-            if (MBoShowHp)
+            if (ShowHp)
             {
-                MBoShowHp = false;
+                ShowHp = false;
                 CharStatusEx = CharStatusEx ^ Grobal2.STATE_OPENHEATH;
                 CharStatus = GetCharStatus();
                 SendRefMsg(Grobal2.RM_CLOSEHEALTH, 0, 0, 0, 0, "");
@@ -1669,7 +1669,7 @@ namespace GameSvr.Actor
 
         private void MakeOpenHealth()
         {
-            MBoShowHp = true;
+            ShowHp = true;
             CharStatusEx = CharStatusEx | Grobal2.STATE_OPENHEATH;
             CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_OPENHEALTH, 0, MWAbil.HP, MWAbil.MaxHP, 0, "");
@@ -2753,7 +2753,7 @@ namespace GameSvr.Actor
                 if ((castle != null) && castle.m_boUnderWar && InFreePkArea && baseObject.InFreePkArea)
                 {
                     result = M2Share.Config.btInFreePKAreaNameColor;
-                    _guildWarArea = true;
+                    GuildWarArea = true;
                     if (MyGuild == null)
                     {
                         return result;
@@ -2800,7 +2800,7 @@ namespace GameSvr.Actor
                     result = 0xF9;
                 }
 
-                if (baseObject.MBoHolySeize) //不能走动模式(困魔咒)
+                if (baseObject.HolySeize) //不能走动模式(困魔咒)
                 {
                     result = 0x7D;
                 }
@@ -2821,7 +2821,7 @@ namespace GameSvr.Actor
                     result = 0xF9;
                 }
 
-                if (baseObject.MBoHolySeize)
+                if (baseObject.HolySeize)
                 {
                     result = 0x7D;
                 }
@@ -3456,7 +3456,7 @@ namespace GameSvr.Actor
                 return Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
             }
 
-            var bo25 = baseObject != null && baseObject.BoRaceImg;
+            var bo25 = baseObject != null && baseObject.BoRace;
             if (bo25)
             {
                 var nRaceImg = RaceImg;
@@ -4022,7 +4022,7 @@ namespace GameSvr.Actor
                 {
                     if (stdItem.StdMode == 40)
                     {
-                        ItemList[i].Dura = MNMeatQuality;
+                        ItemList[i].Dura = MeatQuality;
                     }
                 }
             }
@@ -4192,7 +4192,7 @@ namespace GameSvr.Actor
                         result = false;
                     }
 
-                    if (baseObject.MBoHolySeize)
+                    if (baseObject.HolySeize)
                     {
                         result = false;
                     }
@@ -4346,7 +4346,7 @@ namespace GameSvr.Actor
                                         result = false;
                                     }
 
-                                    if (_guildWarArea && (baseObject.MyGuild != null))
+                                    if (GuildWarArea && (baseObject.MyGuild != null))
                                     {
                                         if (MyGuild.IsAllyGuild(baseObject.MyGuild))
                                         {
@@ -4538,22 +4538,22 @@ namespace GameSvr.Actor
 
         public void OpenHolySeizeMode(int dwInterval)
         {
-            MBoHolySeize = true;
-            MDwHolySeizeTick = HUtil32.GetTickCount();
-            MDwHolySeizeInterval = dwInterval;
+            HolySeize = true;
+            HolySeizeTick = HUtil32.GetTickCount();
+            HolySeizeInterval = dwInterval;
             RefNameColor();
         }
 
         public void BreakHolySeizeMode()
         {
-            MBoHolySeize = false;
+            HolySeize = false;
             RefNameColor();
         }
 
         public void OpenCrazyMode(int nTime)
         {
             CrazyMode = true;
-            _crazyModeTick = HUtil32.GetTickCount();
+            CrazyModeTick = HUtil32.GetTickCount();
             CrazyModeInterval = nTime * 1000;
             RefNameColor();
         }
@@ -4690,7 +4690,7 @@ namespace GameSvr.Actor
                 }
                 if (AbilMagBubbleDefence)
                 {
-                    nDamage = HUtil32.Round(nDamage / 100 * (_magBubbleDefenceLevel + 2) * 8);
+                    nDamage = HUtil32.Round(nDamage / 100 * (MagBubbleDefenceLevel + 2) * 8);
                     DamageBubbleDefence(nDamage);
                 }
             }
@@ -4707,7 +4707,7 @@ namespace GameSvr.Actor
             }
             if ((nDamage > 0) && AbilMagBubbleDefence)
             {
-                nDamage = HUtil32.Round(nDamage / 1.0e2 * (_magBubbleDefenceLevel + 2) * 8.0);
+                nDamage = HUtil32.Round(nDamage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);
                 DamageBubbleDefence(nDamage);
             }
             return nDamage;
@@ -5192,7 +5192,7 @@ namespace GameSvr.Actor
                                 result = true;
                             }
 
-                            if (_guildWarArea && (cret.MyGuild != null))
+                            if (GuildWarArea && (cret.MyGuild != null))
                             {
                                 if (MyGuild.IsAllyGuild(cret.MyGuild))
                                 {
@@ -5358,7 +5358,7 @@ namespace GameSvr.Actor
             }
 
             AbilMagBubbleDefence = true;
-            _magBubbleDefenceLevel = nLevel;
+            MagBubbleDefenceLevel = nLevel;
             return true;
         }
 
@@ -5773,17 +5773,17 @@ namespace GameSvr.Actor
             //m_boStrike = false;
             MBoNoItem = false;
             StoneMode = false;
-            MBoSkeleton = false;
-            MBoHolySeize = false;
+            Skeleton = false;
+            HolySeize = false;
             CrazyMode = false;
-            MBoShowHp = false;
+            ShowHp = false;
             //m_boPlayerDupMode = false;
             FixedHideMode = false;
 
             if (this is CastleDoor)
             {
                 ((CastleDoor)(this)).m_boOpened = false;
-                this.MBoStickMode = true;
+                this.StickMode = true;
             }
 
             if (this is MagicMonster)
@@ -5850,7 +5850,7 @@ namespace GameSvr.Actor
             if (this is ElfMonster)
             {
                 this.FixedHideMode = true;
-                this.MBoNoAttackMode = true;
+                this.NoAttackMode = true;
                 ((ElfMonster)(this)).boIsFirst = true;
             }
 
@@ -5876,10 +5876,10 @@ namespace GameSvr.Actor
             {
                 this.SearchTick = HUtil32.GetTickCount();
                 this.FixedHideMode = true;
-                this.MBoStickMode = true;
+                this.StickMode = true;
             }
 
-            MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+            MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
             //m_nBodyLeathery = m_nPerBodyLeathery;
             ProcessRunCount = 0;
             //m_nPushedCount = 0;
@@ -5888,25 +5888,25 @@ namespace GameSvr.Actor
             switch (this.Race)
             {
                 case 51:
-                    MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
-                    MNBodyLeathery = 50;
+                    MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+                    BodyLeathery = 50;
                     break;
                 case 52:
                     if (M2Share.RandomNumber.Random(30) == 0)
                     {
-                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
-                        MNBodyLeathery = 150;
+                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
+                        BodyLeathery = 150;
                     }
                     else
                     {
-                        MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
-                        MNBodyLeathery = 150;
+                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                        BodyLeathery = 150;
                     }
 
                     break;
                 case 53:
-                    MNMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
-                    MNBodyLeathery = 150;
+                    MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                    BodyLeathery = 150;
                     break;
                 case 54:
                     Animal = true;
@@ -5933,10 +5933,10 @@ namespace GameSvr.Actor
 
                     break;
                 case 169:
-                    MBoStickMode = false;
+                    StickMode = false;
                     break;
                 case 170:
-                    MBoStickMode = true;
+                    StickMode = true;
                     break;
             }
 
@@ -6067,7 +6067,7 @@ namespace GameSvr.Actor
             return true;
         }
 
-        internal void OnEnvirnomentChanged()
+        public void OnEnvirnomentChanged()
         {
             if (CanReAlive)
             {
@@ -6104,7 +6104,7 @@ namespace GameSvr.Actor
             //                }
             //                ((TPlayObject)(this)).m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
             //                ((TPlayObject)(this)).SendSocket(((TPlayObject)(this)).m_DefMsg, sSENDMSG);
-            //                ((TPlayObject)(this)).InternalPowerPointChanged();
+            //                ((TPlayObject)(this)).protectedPowerPointChanged();
             //                SendUpdateMsg(this, Grobal2.RM_USERNAME, 0, 0, 0, 0, GetShowName());
             //            }
             //            HealthSpellChanged();
@@ -6129,12 +6129,12 @@ namespace GameSvr.Actor
             //}
         }
 
-        internal void Dispose(object obj)
+        protected void Dispose(object obj)
         {
             obj = null;
         }
 
-        internal string Format(string str, params object[] par)
+        protected string Format(string str, params object[] par)
         {
             return string.Format(str, par);
         }
