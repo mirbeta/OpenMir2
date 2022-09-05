@@ -88,15 +88,15 @@ namespace GameSvr.Actor
         public byte BtB2;
         public int IncHealth;
         public int IncSpell;
-        public int MNIncHealing;
-        protected int MNIncHpStoneTime;
-        protected int MNIncMpStoneTime;
+        public int IncHealing;
+        private int IncHpStoneTime;
+        private int IncMpStoneTime;
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
         public int FightZoneDieCount;
         public TNakedAbility BonusAbil;
-        protected TNakedAbility CurBonusAbil;
+        private TNakedAbility CurBonusAbil;
         public int BonusPoint = 0;
         public int HungerStatus = 0;
         public bool AllowGuildReCall = false;
@@ -118,10 +118,10 @@ namespace GameSvr.Actor
         /// 视觉范围大小
         /// </summary>
         protected byte ViewRange;
-        public ushort[] StatusTimeArr = new ushort[12];
-        public int[] StatusArrTick = new int[12];
-        public ushort[] StatusArrValue;
-        public int[] StatusArrTimeOutTick;
+        internal ushort[] StatusTimeArr;
+        internal int[] StatusArrTick;
+        internal ushort[] StatusArrValue;
+        internal int[] StatusArrTimeOutTick;
         /// <summary>
         /// 外观代码
         /// </summary>
@@ -687,9 +687,9 @@ namespace GameSvr.Actor
             Luck = 0;
             IncSpell = 0;
             IncHealth = 0;
-            MNIncHealing = 0;
-            MNIncHpStoneTime = HUtil32.GetTickCount();
-            MNIncMpStoneTime = HUtil32.GetTickCount();
+            IncHealing = 0;
+            IncHpStoneTime = HUtil32.GetTickCount();
+            IncMpStoneTime = HUtil32.GetTickCount();
             PerHealth = 5;
             PerHealing = 5;
             PerSpell = 5;
@@ -700,10 +700,11 @@ namespace GameSvr.Actor
             CharStatus = 0;
             CharStatusEx = 0;
             StatusTimeArr = new ushort[12];
-            BonusAbil = new TNakedAbility();
-            CurBonusAbil = new TNakedAbility();
+            StatusArrTick = new int[12];
             StatusArrValue = new ushort[6];
             StatusArrTimeOutTick = new int[6];
+            BonusAbil = new TNakedAbility();
+            CurBonusAbil = new TNakedAbility();
             AllowGroup = false;
             AllowGuild = false;
             BtB2 = 0;

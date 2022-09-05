@@ -129,7 +129,7 @@ namespace GameSvr.Actor
             }
             try
             {
-                if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (MNIncHealing > 0)))
+                if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
                 {
                     int dwInChsTime = 600 - HUtil32._MIN(400, Abil.Level * 10);
                     if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
@@ -172,15 +172,15 @@ namespace GameSvr.Actor
                                 nMP = PerSpell;
                                 IncSpell -= PerSpell;
                             }
-                            if (MNIncHealing < PerHealing)
+                            if (IncHealing < PerHealing)
                             {
-                                nHP += MNIncHealing;
-                                MNIncHealing = 0;
+                                nHP += IncHealing;
+                                IncHealing = 0;
                             }
                             else
                             {
                                 nHP += PerHealing;
-                                MNIncHealing -= PerHealing;
+                                IncHealing -= PerHealing;
                             }
                             PerHealth = Abil.Level / 10 + 5;
                             PerSpell = Abil.Level / 10 + 5;
@@ -189,7 +189,7 @@ namespace GameSvr.Actor
                             if (MWAbil.HP == MWAbil.MaxHP)
                             {
                                 IncHealth = 0;
-                                MNIncHealing = 0;
+                                IncHealing = 0;
                             }
                             if (MWAbil.MP == MWAbil.MaxMP)
                             {
@@ -241,9 +241,9 @@ namespace GameSvr.Actor
                         int bCount;
                         StdItem StdItem;
                         // 加HP
-                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - MNIncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((MWAbil.HP / MWAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
+                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((MWAbil.HP / MWAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
                         {
-                            MNIncHpStoneTime = HUtil32.GetTickCount();
+                            IncHpStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
                             if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 1, 3 }).Contains(StdItem.Shape))
                             {
@@ -284,9 +284,9 @@ namespace GameSvr.Actor
                             }
                         }
                         // 加MP
-                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - MNIncMpStoneTime) > M2Share.Config.MPStoneIntervalTime) && ((MWAbil.MP / MWAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
+                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MPStoneIntervalTime) && ((MWAbil.MP / MWAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
                         {
-                            MNIncMpStoneTime = HUtil32.GetTickCount();
+                            IncMpStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
                             if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 2, 3 }).Contains(StdItem.Shape))
                             {
@@ -727,7 +727,7 @@ namespace GameSvr.Actor
 
             IncSpell = 0;
             IncHealth = 0;
-            MNIncHealing = 0;
+            IncHealing = 0;
             KillFunc();
             try
             {
@@ -1439,22 +1439,22 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_MAGHEALING:
-                        if ((MNIncHealing + ProcessMsg.nParam1) < 300)
+                        if ((IncHealing + ProcessMsg.nParam1) < 300)
                         {
                             if (Race == Grobal2.RC_PLAYOBJECT)
                             {
-                                MNIncHealing += ProcessMsg.nParam1;
+                                IncHealing += ProcessMsg.nParam1;
                                 PerHealing = 5;
                             }
                             else
                             {
-                                MNIncHealing += ProcessMsg.nParam1;
+                                IncHealing += ProcessMsg.nParam1;
                                 PerHealing = 5;
                             }
                         }
                         else
                         {
-                            MNIncHealing = 300;
+                            IncHealing = 300;
                         }
                         break;
                     case Grobal2.RM_10101:

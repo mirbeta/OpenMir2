@@ -738,7 +738,7 @@ namespace GameSvr.Castle
             {
                 if (nGold <= m_nTotalGold)
                 {
-                    if (PlayObject.Gold + nGold <= PlayObject.GoldMax)
+                    if (PlayObject.Gold + nGold <= M2Share.Config.nHumanMaxGold)
                     {
                         m_nTotalGold -= nGold;
                         PlayObject.IncGold(nGold);

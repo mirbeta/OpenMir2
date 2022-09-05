@@ -2818,7 +2818,7 @@ namespace GameSvr.Player
             HumData.btAttatckMode = (byte)AttatckMode;
             HumData.btIncHealth = (byte)IncHealth;
             HumData.btIncSpell = (byte)IncSpell;
-            HumData.btIncHealing = (byte)MNIncHealing;
+            HumData.btIncHealing = (byte)IncHealing;
             HumData.btFightZoneDieCount = (byte)FightZoneDieCount;
             HumData.sAccount = m_sUserID;
             HumData.boLockLogon = m_boLockLogon;
