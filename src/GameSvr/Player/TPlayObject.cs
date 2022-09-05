@@ -3603,7 +3603,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private void ProcessClientPassword(TProcessMessage ProcessMsg)
+        private void ProcessClientPassword(ProcessMessage ProcessMsg)
         {
             if (ProcessMsg.wParam == 0)
             {

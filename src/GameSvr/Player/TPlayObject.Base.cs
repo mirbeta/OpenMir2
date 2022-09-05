@@ -607,7 +607,7 @@ namespace GameSvr.Player
 
         public void RunNotice()
         {
-            TProcessMessage Msg = null;
+            ProcessMessage Msg = null;
             const string sExceptionMsg = "[Exception] TPlayObject::RunNotice";
             if (m_boEmergencyClose || m_boKickFlag || m_boSoftClose)
             {

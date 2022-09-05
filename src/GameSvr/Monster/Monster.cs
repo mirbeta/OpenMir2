@@ -47,7 +47,7 @@ namespace GameSvr.Monster
             return result;
         }
 
-        protected override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage ProcessMsg)
         {
             return base.Operate(ProcessMsg);
         }

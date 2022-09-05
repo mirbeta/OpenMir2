@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class TProcessMessage
+    public class ProcessMessage
     {
         public int wIdent;
         public int wParam;

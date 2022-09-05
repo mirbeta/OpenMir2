@@ -28,7 +28,7 @@ namespace GameSvr.Monster.Monsters
             SendDelayMsg(this, Grobal2.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 
-        protected override bool Operate(TProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage ProcessMsg)
         {
             if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {

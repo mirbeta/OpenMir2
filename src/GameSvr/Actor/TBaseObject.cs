@@ -3177,7 +3177,7 @@ namespace GameSvr.Actor
             SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        protected virtual bool GetMessage(ref TProcessMessage msg)
+        protected virtual bool GetMessage(ref ProcessMessage msg)
         {
             var result = false;
             int I;
@@ -3198,7 +3198,7 @@ namespace GameSvr.Actor
                         continue;
                     }
                     MsgList.RemoveAt(I);
-                    msg = new TProcessMessage();
+                    msg = new ProcessMessage();
                     msg.wIdent = sendMessage.wIdent;
                     msg.wParam = sendMessage.wParam;
                     msg.nParam1 = sendMessage.nParam1;
@@ -5859,7 +5859,7 @@ namespace GameSvr.Actor
             {
                 this.FixedHideMode = true;
                 ((ElfWarriorMonster)(this)).boIsFirst = true;
-                ((ElfWarriorMonster)(this)).m_boUsePoison = false;
+                ((ElfWarriorMonster)(this)).UsePoison = false;
             }
 
             if (this is ElectronicScolpionMon)

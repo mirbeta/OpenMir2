@@ -25,12 +25,6 @@ namespace GameSvr
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-
-            TStdItem aa = new TStdItem();
-            aa.Name = "布衣(男)";
-            aa.StdMode = 9;
-
-            aa.GetBuffer();
             
             var config = new ConfigurationBuilder().Build();
 

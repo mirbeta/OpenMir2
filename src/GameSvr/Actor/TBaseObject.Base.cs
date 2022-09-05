@@ -13,7 +13,7 @@ namespace GameSvr.Actor
     {
         public virtual void Run()
         {
-            TProcessMessage ProcessMsg = null;
+            ProcessMessage ProcessMsg = null;
             const string sExceptionMsg0 = "[Exception] TBaseObject::Run 0";
             const string sExceptionMsg1 = "[Exception] TBaseObject::Run 1";
             const string sExceptionMsg2 = "[Exception] TBaseObject::Run 2";
@@ -1356,7 +1356,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        protected virtual bool Operate(TProcessMessage ProcessMsg)
+        protected virtual bool Operate(ProcessMessage ProcessMsg)
         {
             int nDamage;
             int nTargetX;
