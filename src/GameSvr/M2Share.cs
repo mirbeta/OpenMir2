@@ -116,7 +116,7 @@ namespace GameSvr
         public static CellObjectMgr CellObjectSystem;
         public static LocalDB LocalDB = null;
         public static CommonDB CommonDB = null;
-        public static MirLog LogSystem;
+        public static MirLog Log;
         public static RandomNumber RandomNumber;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
@@ -665,7 +665,7 @@ namespace GameSvr
             StringConf = new StringConfig(Path.Combine(sConfigPath, ConfConst.sStringFileName));
             ExpConf = new ExpsConfig(Path.Combine(sConfigPath, ConfConst.sExpConfigFileName));
             GlobalConf = new GlobalConfig(Path.Combine(sConfigPath, ConfConst.sGlobalConfigFileName));
-            LogSystem = new MirLog();
+            Log = new MirLog();
             Config = new GameSvrConfig();
             RandomNumber = RandomNumber.GetInstance();
         }

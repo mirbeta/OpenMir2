@@ -254,7 +254,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.LogSystem.Error("loading fail.... => " + sListFileName);
+                    M2Share.Log.Error("loading fail.... => " + sListFileName);
                 }
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -268,7 +268,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                M2Share.LogSystem.Error("file not found => " + sListFileName);
+                M2Share.Log.Error("file not found => " + sListFileName);
             }
             return result;
         }
@@ -348,7 +348,7 @@ namespace GameSvr.Npc
                     }
                     catch
                     {
-                        M2Share.LogSystem.Error("loading fail.... => " + sListFileName);
+                        M2Share.Log.Error("loading fail.... => " + sListFileName);
                     }
                 }
                 var nDay = HUtil32.Str_ToInt(sDay, 0);
@@ -1345,7 +1345,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.LogSystem.Error("loading fail.... => " + sListFileName);
+                    M2Share.Log.Error("loading fail.... => " + sListFileName);
                 }
             }
             bo15 = false;
@@ -1369,7 +1369,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.LogSystem.Error("saving fail.... => " + sListFileName);
+                    M2Share.Log.Error("saving fail.... => " + sListFileName);
                 }
             }
         }
@@ -1387,7 +1387,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.LogSystem.Error("loading fail.... => " + sListFileName);
+                    M2Share.Log.Error("loading fail.... => " + sListFileName);
                 }
             }
             var bo15 = false;
@@ -1409,7 +1409,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.LogSystem.Error("saving fail.... => " + sListFileName);
+                    M2Share.Log.Error("saving fail.... => " + sListFileName);
                 }
             }
         }
@@ -1456,7 +1456,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.LogSystem.Error("loading fail.... => " + sListFileName);
+                    M2Share.Log.Error("loading fail.... => " + sListFileName);
                 }
             }
             bo15 = false;
@@ -2048,7 +2048,7 @@ namespace GameSvr.Npc
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
                         {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
-                            M2Share.LogSystem.Error("[脚本死循环] NPC:" + this.CharName + " 位置:" + this.MapName + '(' + this.CurrX + ':' + this.CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            M2Share.Log.Error("[脚本死循环] NPC:" + this.CharName + " 位置:" + this.MapName + '(' + this.CurrX + ':' + this.CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
                             return result;
                         }

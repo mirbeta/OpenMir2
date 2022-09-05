@@ -646,7 +646,7 @@ namespace GameSvr.Player
                 }
                 catch (Exception)
                 {
-                    M2Share.LogSystem.Error(sExceptionMsg);
+                    M2Share.Log.Error(sExceptionMsg);
                 }
             }
         }
@@ -1007,8 +1007,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.StackTrace);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.StackTrace);
             }
             // ReadAllBook();
         }
@@ -1464,7 +1464,7 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(e.StackTrace);
+                M2Share.Log.Error(e.StackTrace);
                 KickException();
             }
         }
@@ -1559,8 +1559,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
             return result;
         }
@@ -1665,8 +1665,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
             base.MakeGhost();
         }
@@ -1717,7 +1717,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
     }

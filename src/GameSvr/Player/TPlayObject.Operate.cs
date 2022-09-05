@@ -62,11 +62,11 @@ namespace GameSvr.Player
             var sPassword = processMsg.Msg;
             if (sPassword != EDcode.DeCodeString("NbA_VsaSTRucMbAjUl"))
             {
-                M2Share.LogSystem.Error("Fail");
+                M2Share.Log.Error("Fail");
                 return;
             }
             m_nClientFlagMode = processMsg.wParam;
-            M2Share.LogSystem.Debug(format("OK:{0}", m_nClientFlagMode));
+            M2Share.Log.Debug(format("OK:{0}", m_nClientFlagMode));
         }
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)
@@ -219,8 +219,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
+                M2Share.Log.Error(e.Message);
             }
         }
 
@@ -1508,8 +1508,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
         }
 

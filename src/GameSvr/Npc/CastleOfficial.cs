@@ -259,7 +259,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
 

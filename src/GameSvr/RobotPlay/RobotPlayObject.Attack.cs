@@ -47,7 +47,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.LogSystem.Error("TAIPlayObject.WarrAttackTarget");
+                M2Share.Log.Error("TAIPlayObject.WarrAttackTarget");
             }
             return result;
         }
@@ -203,7 +203,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.LogSystem.Error("TAIPlayObject.WizardAttackTarget");
+                M2Share.Log.Error("TAIPlayObject.WizardAttackTarget");
             }
             return result;
         }
@@ -502,7 +502,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.LogSystem.Error("TAIPlayObject.AttackTarget");
+                M2Share.Log.Error("TAIPlayObject.AttackTarget");
             }
             return result;
         }

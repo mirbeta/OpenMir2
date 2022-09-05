@@ -235,7 +235,7 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(format(sExceptionMsg, CharName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
+                M2Share.Log.Error(format(sExceptionMsg, CharName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
             }
         }
 
@@ -289,7 +289,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.LogSystem.Error("Failure in saving upgradinglist - " + CharName);
+                M2Share.Log.Error("Failure in saving upgradinglist - " + CharName);
             }
         }
 
@@ -981,8 +981,8 @@ namespace GameSvr.Npc
             }
             catch (Exception ex)
             {
-                M2Share.LogSystem.Error(format(sExceptionMsg, sData));
-                M2Share.LogSystem.Error(ex.StackTrace);
+                M2Share.Log.Error(format(sExceptionMsg, sData));
+                M2Share.Log.Error(ex.StackTrace);
             }
         }
 
@@ -1036,7 +1036,7 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(e.Message);
             }
             base.Run();
         }
@@ -1751,7 +1751,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.LogSystem.Error("Failure in loading upgradinglist - " + CharName);
+                M2Share.Log.Error("Failure in loading upgradinglist - " + CharName);
             }
         }
 
@@ -1801,8 +1801,8 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
         }
 

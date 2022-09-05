@@ -160,7 +160,7 @@ namespace GameSvr.Maps
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return result;
         }
@@ -302,8 +302,8 @@ namespace GameSvr.Maps
             }
             catch (Exception e)
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
-                M2Share.LogSystem.Error(e.StackTrace);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.StackTrace);
             }
             return result;
         }
@@ -536,7 +536,7 @@ namespace GameSvr.Maps
                         catch
                         {
                             osObject = null;
-                            M2Share.LogSystem.Error(string.Format(sExceptionMsg1, cellType));
+                            M2Share.Log.Error(string.Format(sExceptionMsg1, cellType));
                         }
                     }
                     else
@@ -551,7 +551,7 @@ namespace GameSvr.Maps
             }
             catch
             {
-                M2Share.LogSystem.Error(string.Format(sExceptionMsg2, cellType));
+                M2Share.Log.Error(string.Format(sExceptionMsg2, cellType));
             }
             return result;
         }
@@ -692,7 +692,7 @@ namespace GameSvr.Maps
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return null;
         }
@@ -733,7 +733,7 @@ namespace GameSvr.Maps
             }
             catch
             {
-                M2Share.LogSystem.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
 
@@ -863,7 +863,7 @@ namespace GameSvr.Maps
             }
             catch (Exception)
             {
-                M2Share.LogSystem.Error("[Exception] TEnvirnoment.LoadMapData");
+                M2Share.Log.Error("[Exception] TEnvirnoment.LoadMapData");
             }
             return result;
         }
