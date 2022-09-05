@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using SystemModule.Packet.ClientPackets;
@@ -619,6 +620,15 @@ namespace SystemModule
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 字符串转Byte字节数组
+        /// </summary>
+        /// <returns></returns>
+        public static byte[] StringToByte(string str)
+        {
+            return Encoding.GetEncoding("GB2312").GetBytes(str);
+        }
+        
         /// <summary>
         /// 字符串转Byte字节数组
         /// </summary>

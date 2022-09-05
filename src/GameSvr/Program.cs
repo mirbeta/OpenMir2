@@ -9,6 +9,8 @@ using Spectre.Console;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
+using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -24,6 +26,12 @@ namespace GameSvr
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
+            TStdItem aa = new TStdItem();
+            aa.Name = "布衣(男)";
+            aa.StdMode = 9;
+
+            aa.GetBuffer();
+            
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()
@@ -73,7 +81,7 @@ namespace GameSvr
 
         static async Task ProcessLoopAsync()
         {
-            string? input = null;
+            string input = null;
             do
             {
                 input = Console.ReadLine();
@@ -108,12 +116,6 @@ namespace GameSvr
         {
             if (AnsiConsole.Confirm("Do you really want to exit?"))
             {
-                cts.Token.Register(() =>
-                {
-                    var app = (IHostApplicationLifetime)_host.Services.GetService(typeof(IHostApplicationLifetime));
-                    app.StopApplication();
-                });
-
                 cts.CancelAfter(TimeSpan.FromMinutes(1));//延时5分钟关闭游戏服务.
             }
             return Task.CompletedTask;

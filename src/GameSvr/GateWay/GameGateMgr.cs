@@ -91,7 +91,10 @@ namespace GameSvr.GateWay
             else
             {
                 _logger.Error(string.Format(sKickGate, e.EndPoint));
-                e.Socket.Close();
+                if (e.Socket != null)
+                {
+                    e.Socket.Close();
+                }
             }
         }
 

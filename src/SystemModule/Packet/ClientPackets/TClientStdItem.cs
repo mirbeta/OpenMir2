@@ -1,9 +1,9 @@
-using System;
 using System.IO;
+using SystemModule.Extensions;
 
 namespace SystemModule.Packet.ClientPackets
 {
-    public class PacketConst
+    public static class PacketConst
     {
         /// <summary>
         /// 物品名称长度
@@ -67,10 +67,7 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            var nameBuff = HUtil32.StringToByteAry(Name, out int nameLen);
-            nameBuff[0] = (byte)nameLen;
-            Array.Resize(ref nameBuff, PacketConst.ItemNameLen);
-            writer.Write(nameBuff);
+            writer.Write(Name, PacketConst.ItemNameLen);
             writer.Write(StdMode);
             writer.Write(Shape);
             writer.Write(Weight);

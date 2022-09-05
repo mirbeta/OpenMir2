@@ -11,23 +11,25 @@ namespace SystemModule.Extensions
         /// <returns></returns>
         public static void Write(this BinaryWriter binaryWriter, string value, int defaultSize)
         {
-            var buffer = HUtil32.StringToByteAry(value, out int strLen);
-            var reSize = value.Length + 1;
+            if (binaryWriter == null)
+                throw new ArgumentNullException(nameof(binaryWriter));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (defaultSize == 0)
+                throw new ArgumentNullException(nameof(defaultSize));
+
+            var buffer = HUtil32.StringToByte(value);
+            var reSize = buffer.Length + 1;
             var tempSize = defaultSize + 1;
-            if (string.IsNullOrEmpty(value))
+            if (reSize < tempSize)
             {
-                buffer[0] = (byte)defaultSize;
                 reSize = tempSize;
             }
-            else
+            binaryWriter.Write((byte)buffer.Length);
+            if (buffer.Length != reSize)
             {
-                buffer[0] = (byte)strLen;
-                if (reSize < tempSize)
-                {
-                    reSize = tempSize;
-                }
+                Array.Resize(ref buffer, reSize);
             }
-            Array.Resize(ref buffer, reSize);
             binaryWriter.Write(buffer, 0, buffer.Length);
         }
     }
