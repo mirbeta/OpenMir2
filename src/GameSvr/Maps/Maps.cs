@@ -27,7 +27,7 @@ namespace GameSvr.Maps
             Merchant QuestNPC;
             string sMapInfoFile;
             var result = -1;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, "MapInfo.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapInfo.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();
@@ -383,7 +383,7 @@ namespace GameSvr.Maps
             var sMapNO = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, "MiniMap.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();
@@ -434,7 +434,7 @@ namespace GameSvr.Maps
         {
             string sFilePatchName;
             StringList LoadMapList;
-            string sFileDir = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, "MapInfo");
+            string sFileDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapInfo");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);

@@ -196,7 +196,7 @@ namespace GameSvr.Player
             try
             {
                 m_dwGetMsgTick = HUtil32.GetTickCount();
-                while (((HUtil32.GetTickCount() - m_dwGetMsgTick) < M2Share.Config.dwHumanGetMsgTime) && GetMessage(ref ProcessMsg))
+                while (((HUtil32.GetTickCount() - m_dwGetMsgTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(ref ProcessMsg))
                 {
                     if (!Operate(ProcessMsg))
                     {
@@ -295,7 +295,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.g_boGameLogGameGold)
                 {
-                    M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '-', "Auto"));
+                    M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (m_boIncGameGold && (HUtil32.GetTickCount() - m_dwIncGameGoldTick) > m_dwIncGameGoldTime)
@@ -314,7 +314,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.g_boGameLogGameGold)
                 {
-                    M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '-', "Auto"));
+                    M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (!m_boDecGameGold && Envir.Flag.boDECGAMEGOLD)
@@ -336,7 +336,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGameGold)
                     {
-                        M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '-', "Map"));
+                        M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.GameGoldName, nInteger, '-', "Map"));
                     }
                 }
             }
@@ -357,7 +357,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGameGold)
                     {
-                        M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.sGameGoldName, nInteger, '+', "Map"));
+                        M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, CharName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -382,7 +382,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGamePoint)
                     {
-                        M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, MapName, CurrX, CurrY, CharName, M2Share.Config.sGamePointName, nInteger, '+', "Map"));
+                        M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, MapName, CurrX, CurrY, CharName, M2Share.Config.GamePointName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -731,12 +731,12 @@ namespace GameSvr.Player
                         if (dwDelayTime != 0)
                         {
                             nMsgCount = GetDigUpMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxDigUpMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxDigUpMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -750,7 +750,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.Config.dwDropOverSpeed)
+                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     if (m_boTestSpeedMode)
                                     {
@@ -919,12 +919,12 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetTurnMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxTurnMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxTurnMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -938,7 +938,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.Config.dwDropOverSpeed)
+                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (m_boTestSpeedMode)
@@ -970,12 +970,12 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetWalkMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxWalkMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxWalkMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -993,7 +993,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
@@ -1029,12 +1029,12 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxRunMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -1077,12 +1077,12 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxRunMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -1096,7 +1096,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
@@ -1140,12 +1140,12 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetHitMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxHitMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxHitMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -1159,7 +1159,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (m_boTestSpeedMode)
@@ -1195,12 +1195,12 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetSiteDownMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxSitDonwMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxSitDonwMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -1214,7 +1214,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.Config.dwDropOverSpeed)
+                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (m_boTestSpeedMode)
@@ -1250,12 +1250,12 @@ namespace GameSvr.Player
                         else
                         {
                             nMsgCount = GetSpellMsgCount();
-                            if (nMsgCount >= M2Share.Config.nMaxSpellMsgCount)
+                            if (nMsgCount >= M2Share.Config.MaxSpellMsgCount)
                             {
                                 m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.nOverSpeedKickCount)
+                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.boKickOverSpeed)
+                                    if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
@@ -1269,7 +1269,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.dwDropOverSpeed && M2Share.Config.btSpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
@@ -1485,7 +1485,7 @@ namespace GameSvr.Player
                         }
                         if (ProcessMsg.BaseObject != 0)
                         {
-                            if (ProcessMsg.BaseObject == ObjectId && M2Share.Config.boDisableSelfStruck || BaseObject.Race == Grobal2.RC_PLAYOBJECT && M2Share.Config.boDisableStruck)
+                            if (ProcessMsg.BaseObject == ObjectId && M2Share.Config.DisableSelfStruck || BaseObject.Race == Grobal2.RC_PLAYOBJECT && M2Share.Config.DisableStruck)
                             {
                                 BaseObject.SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
                             }

@@ -314,10 +314,10 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT9>", M2Share.Config.sBankAccount9);
                     return;
                 case "$GAMEGOLDNAME":
-                    sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLDNAME>", M2Share.Config.sGameGoldName);
+                    sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLDNAME>", M2Share.Config.GameGoldName);
                     return;
                 case "$GAMEPOINTNAME":
-                    sMsg = ReplaceVariableText(sMsg, "<$GAMEPOINTNAME>", M2Share.Config.sGamePointName);
+                    sMsg = ReplaceVariableText(sMsg, "<$GAMEPOINTNAME>", M2Share.Config.GamePointName);
                     return;
                 case "$USERCOUNT":
                     sText = M2Share.UserEngine.PlayObjectCount.ToString();
@@ -717,15 +717,15 @@ namespace GameSvr.Npc
                         return;
                     }
                 case "$REQUESTCASTLEWARITEM":
-                    sText = M2Share.Config.sZumaPiece;
+                    sText = M2Share.Config.ZumaPiece;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", sText);
                     return;
                 case "$REQUESTCASTLEWARDAY":
-                    sText = M2Share.Config.sZumaPiece;
+                    sText = M2Share.Config.ZumaPiece;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARDAY>", sText);
                     return;
                 case "$REQUESTBUILDGUILDITEM":
-                    sText = M2Share.Config.sWomaHorn;
+                    sText = M2Share.Config.WomaHorn;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", sText);
                     return;
                 case "$OWNERGUILD":
@@ -1399,7 +1399,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$REQUESTCASTLEWARITEM") // 祖玛头像
             {
-                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", M2Share.Config.sZumaPiece);
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", M2Share.Config.ZumaPiece);
                 return;
             }
             if (sVariable == "$REQUESTCASTLEWARDAY")// 几天后开始攻城
@@ -1410,7 +1410,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$REQUESTBUILDGUILDITEM")// 沃玛号角
             {
-                sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", M2Share.Config.sWomaHorn);
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", M2Share.Config.WomaHorn);
                 return;
             }
             if (sVariable == "$GUILDWARFEE") // 行会战金币数

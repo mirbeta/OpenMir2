@@ -41,13 +41,13 @@ namespace GameSvr.Player
                         {
                             m_dwAttackCount++;
                             dwDelayTime = dwAttackTime - dwCheckTime;
-                            if (dwDelayTime > M2Share.Config.dwDropOverSpeed)
+                            if (dwDelayTime > M2Share.Config.DropOverSpeed)
                             {
                                 if (m_dwAttackCount >= 4)
                                 {
                                     m_dwAttackTick = HUtil32.GetTickCount();
                                     m_dwAttackCount = 0;
-                                    dwDelayTime = M2Share.Config.dwDropOverSpeed;
+                                    dwDelayTime = M2Share.Config.DropOverSpeed;
                                     if (m_boTestSpeedMode)
                                     {
                                         SysMsg("攻击攻击忙复位忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
@@ -187,13 +187,13 @@ namespace GameSvr.Player
                     {
                         m_dwMoveCount++;
                         dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
-                        if (dwDelayTime > M2Share.Config.dwDropOverSpeed)
+                        if (dwDelayTime > M2Share.Config.DropOverSpeed)
                         {
                             if (m_dwMoveCount >= 4)
                             {
                                 m_dwMoveTick = HUtil32.GetTickCount();
                                 m_dwMoveCount = 0;
-                                dwDelayTime = M2Share.Config.dwDropOverSpeed;
+                                dwDelayTime = M2Share.Config.DropOverSpeed;
                                 if (m_boTestSpeedMode)
                                 {
                                     SysMsg("马跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);

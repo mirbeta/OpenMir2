@@ -228,11 +228,11 @@ namespace GameSvr.Magic
                                     {
                                         case 1:
                                             nPower = (ushort)(DoSpell_GetPower13(UserMagic, 40) + DoSpell_GetRPow(PlayObject.MWAbil.SC) * 2);// 中毒类型 - 绿毒
-                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.nAmyOunsulPoint)), "", 1000);
+                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                         case 2:
                                             nPower = (ushort)(DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.MWAbil.SC) * 2);// 中毒类型 - 红毒
-                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.nAmyOunsulPoint)), "", 1000);
+                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                     }
                                     if (TargeTBaseObject.Race == Grobal2.RC_PLAYOBJECT || TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
@@ -406,7 +406,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case SpellsDef.SKILL_FIREBOOM:
-                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.nFireBoomRage))
+                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.FireBoomRage))
                     {
                         boTrain = true;
                     }
@@ -477,7 +477,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case SpellsDef.SKILL_SNOWWIND:
-                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.nSnowWindRange))
+                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.SnowWindRange))
                     {
                         boTrain = true;
                     }
@@ -583,7 +583,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case SpellsDef.SKILL_47:
-                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.nFireBoomRage))
+                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.MWAbil.MC), HUtil32.HiWord(PlayObject.MWAbil.MC) - HUtil32.LoWord(PlayObject.MWAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.FireBoomRage))
                     {
                         boTrain = true;
                     }
@@ -712,7 +712,7 @@ namespace GameSvr.Magic
                             {
                                 if (M2Share.RandomNumber.Random(BaseObject.Abil.Level + 20 + nMagicLevel * 5) > TargeTBaseObject.Abil.Level + M2Share.Config.MagTammingTargetLevel)
                                 {
-                                    if (!TargeTBaseObject.NoTame && TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.MagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.nMagTammingCount)
+                                    if (!TargeTBaseObject.NoTame && TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.MagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.MagTammingCount)
                                     {
                                         int n14 = TargeTBaseObject.MWAbil.MaxHP / M2Share.Config.MagTammingHPRate;
                                         if (n14 <= 2)
@@ -913,11 +913,11 @@ namespace GameSvr.Magic
                                 {
                                     case 1:
                                         nPower = MagicBase.GetPower13(40, UserMagic) + MagicBase.GetRPow(PlayObject.MWAbil.SC) * 2;// 中毒类型 - 绿毒
-                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.nAmyOunsulPoint)), "", 1000);
+                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                     case 2:
                                         nPower = MagicBase.GetPower13(30, UserMagic) + MagicBase.GetRPow(PlayObject.MWAbil.SC) * 2;// 中毒类型 - 红毒
-                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.nAmyOunsulPoint)), "", 1000);
+                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                 }
                                 if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Race >= Grobal2.RC_ANIMAL)
@@ -1063,7 +1063,7 @@ namespace GameSvr.Magic
         private bool MagMakeFireCross(PlayObject PlayObject, int nDamage, ushort time, short nX, short nY)
         {
             const string sDisableInSafeZoneFireCross = "安全区不允许使用...";
-            if (M2Share.Config.boDisableInSafeZoneFireCross && PlayObject.InSafeZone(PlayObject.Envir, nX, nY))
+            if (M2Share.Config.DisableInSafeZoneFireCross && PlayObject.InSafeZone(PlayObject.Envir, nX, nY))
             {
                 PlayObject.SysMsg(sDisableInSafeZoneFireCross, MsgColor.Red, MsgType.Notice);
                 return false;
@@ -1120,7 +1120,7 @@ namespace GameSvr.Magic
         {
             var result = false;
             IList<BaseObject> BaseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(BaseObject.Envir, BaseObject.CurrX, BaseObject.CurrY, M2Share.Config.nElecBlizzardRange, BaseObjectList);
+            BaseObject.GetMapBaseObjects(BaseObject.Envir, BaseObject.CurrX, BaseObject.CurrY, M2Share.Config.ElecBlizzardRange, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 var TargeTBaseObject = BaseObjectList[i];
@@ -1259,9 +1259,9 @@ namespace GameSvr.Magic
                         if (M2Share.RandomNumber.Random(2) + (BaseObject.Abil.Level - 1) > TargeTBaseObject.Abil.Level)
                         {
                             var nLv = BaseObject.Abil.Level - TargeTBaseObject.Abil.Level;
-                            if (M2Share.RandomNumber.Random(M2Share.Config.nMabMabeHitRandRate) < HUtil32._MAX(M2Share.Config.nMabMabeHitMinLvLimit, nLevel * 8 - nLevel + 15 + nLv))
+                            if (M2Share.RandomNumber.Random(M2Share.Config.MabMabeHitRandRate) < HUtil32._MAX(M2Share.Config.MabMabeHitMinLvLimit, nLevel * 8 - nLevel + 15 + nLv))
                             {
-                                if (M2Share.RandomNumber.Random(M2Share.Config.nMabMabeHitSucessRate) < nLevel * 2 + 4)
+                                if (M2Share.RandomNumber.Random(M2Share.Config.MabMabeHitSucessRate) < nLevel * 2 + 4)
                                 {
                                     if (TargeTBaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                     {
@@ -1274,7 +1274,7 @@ namespace GameSvr.Magic
                                     if (!TargeTBaseObject.UnParalysis)
                                     {
                                         // 中毒类型 - 麻痹
-                                        TargeTBaseObject.SendDelayMsg(BaseObject, Grobal2.RM_POISON, Grobal2.POISON_STONE, nPower / M2Share.Config.nMabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), BaseObject.ObjectId, nLevel, "", 650);
+                                        TargeTBaseObject.SendDelayMsg(BaseObject, Grobal2.RM_POISON, Grobal2.POISON_STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), BaseObject.ObjectId, nLevel, "", 650);
                                     }
                                     result = true;
                                 }
@@ -1291,9 +1291,9 @@ namespace GameSvr.Magic
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
             {
-                var sMonName = M2Share.Config.sDragon;
+                var sMonName = M2Share.Config.Dragon;
                 int nExpLevel = UserMagic.btLevel;
-                var nCount = M2Share.Config.nDragonCount;
+                var nCount = M2Share.Config.DragonCount;
                 for (var i = 0; i < M2Share.Config.DragonArray.Length; i++)
                 {
                     if (M2Share.Config.DragonArray[i].nHumLevel == 0)
@@ -1329,9 +1329,9 @@ namespace GameSvr.Magic
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
             {
-                var sMonName = M2Share.Config.sSkeleton;
+                var sMonName = M2Share.Config.Skeleton;
                 int nExpLevel = UserMagic.btLevel;
-                var nCount = M2Share.Config.nSkeletonCount;
+                var nCount = M2Share.Config.SkeletonCount;
                 for (var i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
                 {
                     if (M2Share.Config.SkeletonArray[i].nHumLevel == 0)
@@ -1364,7 +1364,7 @@ namespace GameSvr.Magic
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
             {
-                var sMonName = M2Share.Config.sAngel;
+                var sMonName = M2Share.Config.Angel;
                 if (PlayObject.MakeSlave(sMonName, UserMagic.btLevel, UserMagic.btLevel, 1, dwRoyaltySec) != null)
                 {
                     result = true;

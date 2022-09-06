@@ -254,7 +254,7 @@ namespace GameSvr.Actor
             bool result = false;
             short nX = 0;
             short nY = 0;
-            nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.nSwordLongPowerRate / 100);
+            nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.SwordLongPowerRate / 100);
             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
             {
                 BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
@@ -424,7 +424,7 @@ namespace GameSvr.Actor
                     }
                     if (nSecPwr > 0)
                     {
-                        if (!SwordLongAttack(ref nSecPwr) && M2Share.Config.boLimitSwordLong)
+                        if (!SwordLongAttack(ref nSecPwr) && M2Share.Config.LimitSwordLong)
                         {
                             wHitMode = 0;
                         }
@@ -640,7 +640,7 @@ namespace GameSvr.Actor
                         }
                     }
                     result = true;
-                    if (M2Share.Config.boMonDelHptoExp)
+                    if (M2Share.Config.MonDelHptoExp)
                     {
                         if (Race == Grobal2.RC_PLAYOBJECT)
                         {

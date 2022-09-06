@@ -1234,7 +1234,7 @@ namespace GameSvr.Actor
         private int CalcGetExp(int nLevel, int nExp)
         {
             int result;
-            if (M2Share.Config.boHighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
+            if (M2Share.Config.HighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
             {
                 result = nExp;
             }
@@ -1265,7 +1265,7 @@ namespace GameSvr.Actor
             {
                 tCount = 0;
             }
-            return (Abil.Level * M2Share.Config.nMonUpLvRate) - Abil.Level + M2Share.Config.nMonUpLvNeedKillBase + tCount;
+            return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
         }
 
         private void GainSlaveExp(int nLevel)
@@ -1289,7 +1289,7 @@ namespace GameSvr.Actor
             var nX = 0;
             var nY = 0;
             string s20;
-            var dropWide = HUtil32._MIN(M2Share.Config.nDropItemRage, 7);
+            var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
             var mapItem = new MapItem
             {
                 Name = Grobal2.sSTRING_GOLDNAME,
@@ -2733,7 +2733,7 @@ namespace GameSvr.Actor
                             result = M2Share.Config.btAllyAndGuildNameColor;
                             break;
                         case 2:
-                            result = M2Share.Config.btWarGuildNameColor;
+                            result = M2Share.Config.WarGuildNameColor;
                             break;
                     }
 
@@ -2745,7 +2745,7 @@ namespace GameSvr.Actor
                         }
                         else
                         {
-                            result = M2Share.Config.btWarGuildNameColor;
+                            result = M2Share.Config.WarGuildNameColor;
                         }
                     }
                 }
@@ -2753,7 +2753,7 @@ namespace GameSvr.Actor
                 castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
                 if ((castle != null) && castle.m_boUnderWar && InFreePkArea && baseObject.InFreePkArea)
                 {
-                    result = M2Share.Config.btInFreePKAreaNameColor;
+                    result = M2Share.Config.InFreePKAreaNameColor;
                     GuildWarArea = true;
                     if (MyGuild == null)
                     {
@@ -2770,7 +2770,7 @@ namespace GameSvr.Actor
                         {
                             if (castle.IsAttackGuild(baseObject.MyGuild))
                             {
-                                result = M2Share.Config.btWarGuildNameColor;
+                                result = M2Share.Config.WarGuildNameColor;
                             }
                         }
                     }
@@ -2786,7 +2786,7 @@ namespace GameSvr.Actor
                             {
                                 if (castle.IsMember(baseObject))
                                 {
-                                    result = M2Share.Config.btWarGuildNameColor;
+                                    result = M2Share.Config.WarGuildNameColor;
                                 }
                             }
                         }
@@ -2836,11 +2836,11 @@ namespace GameSvr.Actor
             int result;
             if (nLevel <= Grobal2.MaxLevel)
             {
-                result = M2Share.Config.dwNeedExps[nLevel];
+                result = M2Share.Config.NeedExps[nLevel];
             }
             else
             {
-                result = M2Share.Config.dwNeedExps[M2Share.Config.dwNeedExps.Length];
+                result = M2Share.Config.NeedExps[M2Share.Config.NeedExps.Length];
             }
             return result;
         }
@@ -3802,7 +3802,7 @@ namespace GameSvr.Actor
 
         public void SysMsg(string sMsg, MsgColor msgColor, MsgType msgType)
         {
-            if (M2Share.Config.boShowPreFixMsg)
+            if (M2Share.Config.ShowPreFixMsg)
             {
                 switch (msgType)
                 {
@@ -3837,7 +3837,7 @@ namespace GameSvr.Actor
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
                     bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
-                    if (M2Share.Config.boShowPreFixMsg)
+                    if (M2Share.Config.ShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
@@ -3849,7 +3849,7 @@ namespace GameSvr.Actor
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
                     bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
-                    if (M2Share.Config.boShowPreFixMsg)
+                    if (M2Share.Config.ShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
@@ -3863,7 +3863,7 @@ namespace GameSvr.Actor
                     str = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
                     str = HUtil32.GetValidStrCap(str, ref bColor, new string[] { "," });
                     str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { "," });
-                    if (M2Share.Config.boShowPreFixMsg)
+                    if (M2Share.Config.ShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                     }
@@ -3876,7 +3876,7 @@ namespace GameSvr.Actor
                     switch (msgColor)
                     {
                         case MsgColor.Red: // 控制公告的颜色
-                            if (M2Share.Config.boShowPreFixMsg)
+                            if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
@@ -3885,7 +3885,7 @@ namespace GameSvr.Actor
                                 M2Share.Config.btRedMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Green:
-                            if (M2Share.Config.boShowPreFixMsg)
+                            if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
@@ -3894,7 +3894,7 @@ namespace GameSvr.Actor
                                 M2Share.Config.btGreenMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Blue:
-                            if (M2Share.Config.boShowPreFixMsg)
+                            if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
@@ -4647,7 +4647,7 @@ namespace GameSvr.Actor
             short nY = 0;
             var nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
-            if (sSlaveName == M2Share.Config.sDragon)
+            if (sSlaveName == M2Share.Config.Dragon)
             {
                 nFlag = 1;
             }
@@ -4655,8 +4655,8 @@ namespace GameSvr.Actor
             {
                 if (nFlag == 1)
                 {
-                    if ((SlaveList[i].CharName == M2Share.Config.sDragon) ||
-                        (SlaveList[i].CharName == M2Share.Config.sDragon1))
+                    if ((SlaveList[i].CharName == M2Share.Config.Dragon) ||
+                        (SlaveList[i].CharName == M2Share.Config.Dragon1))
                     {
                         SlaveList[i].SpaceMove(Envir.MapName, nX, nY, 1);
                         break;
@@ -4748,8 +4748,8 @@ namespace GameSvr.Actor
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
             if (StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] > 0)
             {
-                nDam = HUtil32.Round(nDam * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
-                nDamage = HUtil32.Round(nDamage * (M2Share.Config.nPosionDamagarmor / 10)); // 1.2
+                nDam = HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
+                nDamage = HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
             }
             bo19 = false;
             if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0)

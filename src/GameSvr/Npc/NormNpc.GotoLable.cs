@@ -244,7 +244,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             StringList LoadList;
-            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.EnvirDir + sListFileName;
             if (File.Exists(sListFileName))
             {
                 LoadList = new StringList();
@@ -336,7 +336,7 @@ namespace GameSvr.Npc
             string Name = string.Empty;
             string ssDay = string.Empty;
             var result = false;
-            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
             try
             {
@@ -1335,7 +1335,7 @@ namespace GameSvr.Npc
             string s10 = string.Empty;
             string sText;
             bool bo15;
-            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.EnvirDir + sListFileName;
             LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1377,7 +1377,7 @@ namespace GameSvr.Npc
         private void GotoLable_AddList(string sHumName, string sListFileName)
         {
             string s10 = string.Empty;
-            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1418,7 +1418,7 @@ namespace GameSvr.Npc
         {
             string s10 = string.Empty;
             string sText;
-            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1446,7 +1446,7 @@ namespace GameSvr.Npc
         {
             string s10 = string.Empty;
             bool bo15;
-            sListFileName = M2Share.Config.sEnvirDir + sListFileName;
+            sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {

@@ -1963,12 +1963,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$GAMEGOLDNAME":
-                    sValue = M2Share.Config.sGameGoldName;
+                    sValue = M2Share.Config.GameGoldName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$GAMEPOINTNAME":
-                    sValue = M2Share.Config.sGamePointName;
+                    sValue = M2Share.Config.GamePointName;
                     nDataType = 0;
                     result = true;
                     return result;
