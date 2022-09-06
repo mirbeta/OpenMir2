@@ -1837,8 +1837,8 @@ namespace GameSvr.Npc
                         M2Share.UserEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), List58);
                         for (var k = 0; k < List58.Count; k++)
                         {
-                            List58[k].MBoNoItem = true;
-                            List58[k].MWAbil.HP = 0;
+                            List58[k].NoItem = true;
+                            List58[k].Abil.HP = 0;
                         }
                         //List58.Free;
                         break;

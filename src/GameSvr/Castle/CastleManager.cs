@@ -21,7 +21,7 @@ namespace GameSvr.Castle
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
-                if (string.Compare(_castleList[i].m_sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(_castleList[i].sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return _castleList[i];
                 }
@@ -62,16 +62,16 @@ namespace GameSvr.Castle
                 castle = new TUserCastle(M2Share.Config.CastleDir);
                 _castleList.Add(castle);
                 castle.Initialize();
-                castle.m_sConfigDir = "0";
-                castle.m_EnvirList.Add("0151");
-                castle.m_EnvirList.Add("0152");
-                castle.m_EnvirList.Add("0153");
-                castle.m_EnvirList.Add("0154");
-                castle.m_EnvirList.Add("0155");
-                castle.m_EnvirList.Add("0156");
-                for (var i = 0; i < castle.m_EnvirList.Count; i++)
+                castle.ConfigDir = "0";
+                castle.EnvirList.Add("0151");
+                castle.EnvirList.Add("0152");
+                castle.EnvirList.Add("0153");
+                castle.EnvirList.Add("0154");
+                castle.EnvirList.Add("0155");
+                castle.EnvirList.Add("0156");
+                for (var i = 0; i < castle.EnvirList.Count; i++)
                 {
-                    castle.m_EnvirList[i] = M2Share.MapMgr.FindMap(castle.m_EnvirList[i]).MapName;
+                    castle.EnvirList[i] = M2Share.MapMgr.FindMap(castle.EnvirList[i]).MapName;
                 }
                 Save();
                 return;
@@ -88,7 +88,7 @@ namespace GameSvr.Castle
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
-                if (_castleList[i].m_MapPalace == Envir)
+                if (_castleList[i].PalaceEnvir == Envir)
                 {
                     return _castleList[i];
                 }
@@ -101,7 +101,7 @@ namespace GameSvr.Castle
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
-                if (_castleList[i].m_MapCastle == Envir)
+                if (_castleList[i].CastleEnvir == Envir)
                 {
                     return _castleList[i];
                 }
@@ -134,7 +134,7 @@ namespace GameSvr.Castle
             for (var i = 0; i < _castleList.Count; i++)
             {
                 var castle = _castleList[i];
-                List.Add(string.Format(GameCommandConst.g_sGameCommandSbkGoldShowMsg, castle.m_sName, castle.m_nTotalGold, castle.m_nTodayIncome));
+                List.Add(string.Format(GameCommandConst.g_sGameCommandSbkGoldShowMsg, castle.sName, castle.TotalGold, castle.TodayIncome));
             }
         }
 
@@ -203,7 +203,7 @@ namespace GameSvr.Castle
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
-                List.Add(_castleList[i].m_sName);
+                List.Add(_castleList[i].sName);
             }
         }
 

@@ -19,17 +19,17 @@ namespace GameSvr.Monster.Monsters
             {
                 if (Master != null)
                 {
-                    if (Master.MWAbil.MP <= 0)
+                    if (Master.Abil.MP <= 0)
                     {
-                        MWAbil.HP = 0;
+                        Abil.HP = 0;
                     }
                     if (ProcessMsg.wIdent == Grobal2.RM_SPELL)
                     {
-                        Master.MWAbil.MP -= (ushort)ProcessMsg.nParam3;
+                        Master.Abil.MP -= (ushort)ProcessMsg.nParam3;
                     }
                     else
                     {
-                        Master.MWAbil.MP -= (ushort)ProcessMsg.wParam;
+                        Master.Abil.MP -= (ushort)ProcessMsg.wParam;
                     }
                 }
             }
@@ -47,7 +47,7 @@ namespace GameSvr.Monster.Monsters
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
-                var WAbil = MWAbil;
+                var WAbil = Abil;
                 var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 MagPassThroughMagic(nSX, nSY, nTX, nTY, nDir, nPwr, true);
             }

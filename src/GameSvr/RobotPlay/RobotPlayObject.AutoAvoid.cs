@@ -18,7 +18,7 @@ namespace GameSvr.RobotPlay
                 if (HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100 && m_boIsUseMagic && !Death)
                 {
                     // 血低于15%时,必定要躲 20080711
-                    if (Job > 0 && (m_nSelectMagic == 0 || MWAbil.HP <= Math.Round(MWAbil.MaxHP * 0.15)))
+                    if (Job > 0 && (m_nSelectMagic == 0 || Abil.HP <= Math.Round(Abil.MaxHP * 0.15)))
                     {
                         m_dwAutoAvoidTick = HUtil32.GetTickCount();
                         if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22) // 22级前道法不躲避
@@ -48,7 +48,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪
                                         {
-                                            if (TargetCret.MWAbil.MaxHP >= 700)
+                                            if (TargetCret.Abil.MaxHP >= 700)
                                             {
                                                 if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                                 {

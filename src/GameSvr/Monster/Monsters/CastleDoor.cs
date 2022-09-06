@@ -68,7 +68,7 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            Direction = (byte)(3 - HUtil32.Round(MWAbil.HP / MWAbil.MaxHP * 3));
+            Direction = (byte)(3 - HUtil32.Round(Abil.HP / Abil.MaxHP * 3));
             if (Direction - 3 >= 0)
             {
                 Direction = 0;
@@ -98,7 +98,7 @@ namespace GameSvr.Monster.Monsters
             }
             if (!m_boOpened)
             {
-                int n08 = 3 - HUtil32.Round(MWAbil.HP / MWAbil.MaxHP * 3);
+                int n08 = 3 - HUtil32.Round(Abil.HP / Abil.MaxHP * 3);
                 if (Direction != n08 && n08 < 3)
                 {
                     Direction = (byte)n08;
@@ -110,7 +110,7 @@ namespace GameSvr.Monster.Monsters
 
         public void RefStatus()
         {
-            var n08 = 3 - HUtil32.Round(MWAbil.HP / MWAbil.MaxHP * 3);
+            var n08 = 3 - HUtil32.Round(Abil.HP / Abil.MaxHP * 3);
             if (n08 - 3 >= 0)
             {
                 n08 = 0;

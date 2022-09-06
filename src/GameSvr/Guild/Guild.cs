@@ -6,16 +6,16 @@ namespace GameSvr.Guild
     {
         public int nRankNo;
         public string sRankName;
-        public IList<TGuildMember> MemberList;
+        public IList<GuildMember> MemberList;
     }
 
-    public class TGuildMember
+    public class GuildMember
     {
         public string sMemberName;
         public PlayObject PlayObject;
     }
 
-    public class TWarGuild
+    public class WarGuild
     {
         public GuildInfo Guild;
         public int dwWarTick;

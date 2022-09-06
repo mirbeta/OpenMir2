@@ -6,6 +6,7 @@ namespace SystemModule.Packet.ClientPackets
     {
         public int Feature;
         public int Status;
+        public int StatusEx;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -16,6 +17,7 @@ namespace SystemModule.Packet.ClientPackets
         {
             writer.Write(Feature);
             writer.Write(Status);
+            writer.Write(StatusEx);
         }
     }
 }

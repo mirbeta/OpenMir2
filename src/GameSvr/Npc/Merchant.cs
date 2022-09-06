@@ -833,7 +833,7 @@ namespace GameSvr.Npc
             }
             try
             {
-                if (!m_boCastle || !(Castle != null && Castle.m_boUnderWar))
+                if (!m_boCastle || !(Castle != null && Castle.UnderWar))
                 {
                     if (!PlayObject.Death && sData != "" && sData[0] == '@')
                     {
@@ -1011,7 +1011,7 @@ namespace GameSvr.Npc
                         SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                     }
                 }
-                if (m_boCastle && Castle != null && Castle.m_boUnderWar)
+                if (m_boCastle && Castle != null && Castle.UnderWar)
                 {
                     if (!FixedHideMode)
                     {

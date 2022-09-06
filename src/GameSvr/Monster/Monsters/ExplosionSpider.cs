@@ -17,8 +17,8 @@ namespace GameSvr.Monster.Monsters
 
         private void sub_4A65C4()
         {
-            MWAbil.HP = 0;
-            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC) + 1) + HUtil32.LoWord(MWAbil.DC);
+            Abil.HP = 0;
+            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC) + 1) + HUtil32.LoWord(Abil.DC);
             for (var i = 0; i < VisibleActors.Count; i++)
             {
                 var BaseObject = VisibleActors[i].BaseObject;
@@ -36,7 +36,7 @@ namespace GameSvr.Monster.Monsters
                         if (damage > 0)
                         {
                             BaseObject.StruckDamage(damage);
-                            BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)damage, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 700);
+                            BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)damage, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ObjectId, "", 700);
                         }
                     }
                 }

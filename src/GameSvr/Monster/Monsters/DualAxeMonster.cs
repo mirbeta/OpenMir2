@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
             if (Envir.CanFly(CurrX, CurrY, Target.CurrX, Target.CurrY))
             {
                 Direction = M2Share.GetNextDirection(CurrX, CurrY, Target.CurrX, Target.CurrY);
-                var WAbil = MWAbil;
+                var WAbil = Abil;
                 var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 if (nDamage > 0)
                 {
@@ -25,7 +25,7 @@ namespace GameSvr.Monster.Monsters
                 if (nDamage > 0)
                 {
                     Target.StruckDamage(nDamage);
-                    Target.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Target.MWAbil.HP, Target.MWAbil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - Target.CurrX), Math.Abs(CurrY - Target.CurrY)) * 50 + 600);
+                    Target.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Target.Abil.HP, Target.Abil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - Target.CurrX), Math.Abs(CurrY - Target.CurrY)) * 50 + 600);
                 }
                 SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, Target.ObjectId, "");
             }

@@ -71,8 +71,8 @@ namespace GameSvr.Command.Commands
                                         }
                                         if (boKillAll || string.Compare(sMonName, BaseObject.CharName, StringComparison.OrdinalIgnoreCase) == 0)
                                         {
-                                            BaseObject.MBoNoItem = boNotItem;
-                                            BaseObject.MWAbil.HP = 0;
+                                            BaseObject.NoItem = boNotItem;
+                                            BaseObject.Abil.HP = 0;
                                             nMonCount++;
                                         }
                                     }

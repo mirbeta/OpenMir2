@@ -44,19 +44,19 @@ namespace SystemModule
             return (int)lowPart | ((int)highPart << 16);
         }
         
-        public static ushort MakeLong(ushort lowPart, int highPart)
+        public static int MakeLong(ushort lowPart, int highPart)
         {
-            return (ushort)(lowPart | highPart << 16);
+            return (int)(lowPart | (uint)(highPart << 16));
         }
 
         public static int MakeLong(short lowPart, int highPart)
         {
-            return (ushort)lowPart | ((short)highPart << 16);
+            return (int)(((ushort)lowPart) | (uint)(highPart << 16));
         }
 
         public static int MakeLong(short lowPart, short highPart)
         {
-            return (ushort)lowPart | (highPart << 16);
+            return (int)(((ushort)lowPart) | (uint)(highPart << 16));
         }
 
         public static int MakeLong(short lowPart, ushort highPart)

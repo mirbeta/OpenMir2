@@ -105,7 +105,7 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (Job > 0)
                                     {
-                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.MWAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.Abil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
                                         {
                                             // 道法22前是否物理攻击
                                             if (Master != null)
@@ -133,7 +133,7 @@ namespace GameSvr.RobotPlay
                         {
                             if (M2Share.Config.boHPAutoMoveMap)
                             {
-                                if (MWAbil.HP <= Math.Round(MWAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
+                                if (Abil.HP <= Math.Round(Abil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
                                     m_dwHPToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
@@ -252,30 +252,30 @@ namespace GameSvr.RobotPlay
                                 if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000)
                                 {
                                     m_dwAutoAddHealthTick = HUtil32.GetTickCount();
-                                    nPercent = MWAbil.HP * 100 / MWAbil.MaxHP;
-                                    nValue = MWAbil.MaxHP / 10;
+                                    nPercent = Abil.HP * 100 / Abil.MaxHP;
+                                    nValue = Abil.MaxHP / 10;
                                     if (nPercent < M2Share.Config.nRenewPercent)
                                     {
-                                        if (MWAbil.HP + nValue >= MWAbil.MaxHP)
+                                        if (Abil.HP + nValue >= Abil.MaxHP)
                                         {
-                                            MWAbil.HP = MWAbil.MaxHP;
+                                            Abil.HP = Abil.MaxHP;
                                         }
                                         else
                                         {
-                                            MWAbil.HP += (ushort)nValue;
+                                            Abil.HP += (ushort)nValue;
                                         }
                                     }
-                                    nValue = MWAbil.MaxMP / 10;
-                                    nPercent = MWAbil.MP * 100 / MWAbil.MaxMP;
+                                    nValue = Abil.MaxMP / 10;
+                                    nPercent = Abil.MP * 100 / Abil.MaxMP;
                                     if (nPercent < M2Share.Config.nRenewPercent)
                                     {
-                                        if (MWAbil.MP + nValue >= MWAbil.MaxMP)
+                                        if (Abil.MP + nValue >= Abil.MaxMP)
                                         {
-                                            MWAbil.MP = MWAbil.MaxMP;
+                                            Abil.MP = Abil.MaxMP;
                                         }
                                         else
                                         {
-                                            MWAbil.MP += (ushort)nValue;
+                                            Abil.MP += (ushort)nValue;
                                         }
                                     }
                                 }
@@ -487,17 +487,17 @@ namespace GameSvr.RobotPlay
             }
             try
             {
-                var nStartX = CurrX - ViewRange;
-                var nEndX = CurrX + ViewRange;
-                var nStartY = CurrY - ViewRange;
-                var nEndY = CurrY + ViewRange;
+                var nStartX = (short)(CurrX - ViewRange);
+                var nEndX = (short)(CurrX + ViewRange);
+                var nStartY = (short)(CurrY - ViewRange);
+                var nEndY = (short)(CurrY + ViewRange);
                 var dwRunTick = HUtil32.GetTickCount();
-                for (var n18 = nStartX; n18 <= nEndX; n18++)
+                for (var nX = nStartX; nX <= nEndX; nX++)
                 {
-                    for (var n1C = nStartY; n1C <= nEndY; n1C++)
+                    for (var nY = nStartY; nY <= nEndY; nY++)
                     {
                         var cellsuccess = false;
-                        cellInfo = Envir.GetCellInfo(n18, n1C, ref cellsuccess);
+                        cellInfo = Envir.GetCellInfo(nX, nY, ref cellsuccess);
                         if (cellsuccess && cellInfo.ObjList != null)
                         {
                             nIdx = 0;
@@ -581,7 +581,7 @@ namespace GameSvr.RobotPlay
                                                         continue;
                                                     }
                                                     var MapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);
-                                                    UpdateVisibleItem(n18, n1C, MapItem);
+                                                    UpdateVisibleItem(nX, nY, MapItem);
                                                     if (MapItem.OfBaseObject != 0 || MapItem.DropBaseObject != 0)
                                                     {
                                                         if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
@@ -615,7 +615,7 @@ namespace GameSvr.RobotPlay
                                                     if (osObject.CellObjId < 0)
                                                     {
                                                         MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
-                                                        UpdateVisibleEvent(n18, n1C, MapEvent);
+                                                        UpdateVisibleEvent(nX, nY, MapEvent);
                                                     }
                                                 }
                                                 break;

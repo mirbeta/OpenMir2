@@ -35,7 +35,7 @@ namespace GameSvr.Monster.Monsters
                         }
                         else
                         {
-                            if (TargetCret.MWAbil.HP <= TargetCret.MWAbil.MaxHP / 2)
+                            if (TargetCret.Abil.HP <= TargetCret.Abil.MaxHP / 2)
                             {
                                 GetFrontPosition(ref nX, ref nY);
                             }

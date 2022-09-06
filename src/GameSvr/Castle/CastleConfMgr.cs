@@ -13,13 +13,13 @@ namespace GameSvr.Castle
         public void LoadConfig(TUserCastle userCastle)
         {
             var mapSplit = new[] { ',' };
-            userCastle.m_sName = ReadString("Setup", "CastleName", userCastle.m_sName);
-            userCastle.m_sOwnGuild = ReadString("Setup", "OwnGuild", "");
-            userCastle.m_ChangeDate = ReadDateTime("Setup", "ChangeDate", DateTime.Now);
+            userCastle.sName = ReadString("Setup", "CastleName", userCastle.sName);
+            userCastle.OwnGuild = ReadString("Setup", "OwnGuild", "");
+            userCastle.ChangeDate = ReadDateTime("Setup", "ChangeDate", DateTime.Now);
             userCastle.m_WarDate = ReadDateTime("Setup", "WarDate", DateTime.Now);
-            userCastle.m_IncomeToday = ReadDateTime("Setup", "IncomeToday", DateTime.Now);
-            userCastle.m_nTotalGold = ReadInteger("Setup", "TotalGold", 0);
-            userCastle.m_nTodayIncome = ReadInteger("Setup", "TodayIncome", 0);
+            userCastle.IncomeToday = ReadDateTime("Setup", "IncomeToday", DateTime.Now);
+            userCastle.TotalGold = ReadInteger("Setup", "TotalGold", 0);
+            userCastle.TodayIncome = ReadInteger("Setup", "TodayIncome", 0);
             var sMapList = ReadString("Defense", "CastleMapList", "");
             var sMap = string.Empty;
             if (!string.IsNullOrEmpty(sMapList))
@@ -28,62 +28,61 @@ namespace GameSvr.Castle
                 {
                     sMapList = HUtil32.GetValidStr3(sMapList, ref sMap, mapSplit);
                     if (sMap == "") break;
-                    userCastle.m_EnvirList.Add(sMap);
+                    userCastle.EnvirList.Add(sMap);
                 }
             }
-            for (var i = 0; i < userCastle.m_EnvirList.Count; i++)
+            for (var i = 0; i < userCastle.EnvirList.Count; i++)
             {
-                userCastle.m_EnvirList[i] = M2Share.MapMgr.FindMap(userCastle.m_EnvirList[i]).MapName;
+                userCastle.EnvirList[i] = M2Share.MapMgr.FindMap(userCastle.EnvirList[i]).MapName;
             }
-            userCastle.m_sMapName = ReadString("Defense", "CastleMap", "3");
-            userCastle.m_sHomeMap = ReadString("Defense", "CastleHomeMap", userCastle.m_sHomeMap);
-            userCastle.m_nHomeX = ReadInteger("Defense", "CastleHomeX", userCastle.m_nHomeX);
-            userCastle.m_nHomeY = ReadInteger("Defense", "CastleHomeY", userCastle.m_nHomeY);
-            userCastle.m_nWarRangeX = ReadInteger("Defense", "CastleWarRangeX", userCastle.m_nWarRangeX);
-            userCastle.m_nWarRangeY = ReadInteger("Defense", "CastleWarRangeY", userCastle.m_nWarRangeY);
-            userCastle.m_sPalaceMap = ReadString("Defense", "CastlePlaceMap", userCastle.m_sPalaceMap);
-            userCastle.m_sSecretMap = ReadString("Defense", "CastleSecretMap", userCastle.m_sSecretMap);
-            userCastle.m_nPalaceDoorX = ReadInteger("Defense", "CastlePalaceDoorX", 631);
-            userCastle.m_nPalaceDoorY = ReadInteger("Defense", "CastlePalaceDoorY", 274);
-            userCastle.m_MainDoor = new TObjUnit();
-            userCastle.m_MainDoor.nX = Read<short>("Defense", "MainDoorX", (short)672);
-            userCastle.m_MainDoor.nY = Read<short>("Defense", "MainDoorY", (short)330);
-            userCastle.m_MainDoor.sName = ReadString("Defense", "MainDoorName", "MainDoor");
-            userCastle.m_MainDoor.nStatus = ReadBool("Defense", "MainDoorOpen", true);
-            userCastle.m_MainDoor.nHP = Read<ushort>("Defense", "MainDoorHP", (short)2000);
-            userCastle.m_MainDoor.BaseObject = null;
-            userCastle.m_LeftWall = new TObjUnit();
-            userCastle.m_LeftWall.nX = Read<short>("Defense", "LeftWallX", (short)624);
-            userCastle.m_LeftWall.nY = Read<short>("Defense", "LeftWallY", (short)278);
-            userCastle.m_LeftWall.sName = ReadString("Defense", "LeftWallName", "LeftWall");
-            userCastle.m_LeftWall.nHP = Read<ushort>("Defense", "LeftWallHP", (short)2000);
-            userCastle.m_LeftWall.BaseObject = null;
-            userCastle.m_CenterWall = new TObjUnit();
-            userCastle.m_CenterWall.nX = Read<short>("Defense", "CenterWallX", (short)627);
-            userCastle.m_CenterWall.nY = Read<short>("Defense", "CenterWallY", (short)278);
-            userCastle.m_CenterWall.sName = ReadString("Defense", "CenterWallName", "CenterWall");
-            userCastle.m_CenterWall.nHP = Read<ushort>("Defense", "CenterWallHP", (short)2000);
-            userCastle.m_CenterWall.BaseObject = null;
-            userCastle.m_RightWall = new TObjUnit();
-            userCastle.m_RightWall.nX = Read<short>("Defense", "RightWallX", (short)634);
-            userCastle.m_RightWall.nY = Read<short>("Defense", "RightWallY", (short)271);
-            userCastle.m_RightWall.sName = ReadString("Defense", "RightWallName", "RightWall");
-            userCastle.m_RightWall.nHP = Read<ushort>("Defense", "RightWallHP", (short)2000);
-            userCastle.m_RightWall.BaseObject = null;
-            for (var i = 0; i < userCastle.Archer.Length; i++)
+            userCastle.MapName = ReadString("Defense", "CastleMap", "3");
+            userCastle.HomeMap = ReadString("Defense", "CastleHomeMap", userCastle.HomeMap);
+            userCastle.HomeX = ReadInteger("Defense", "CastleHomeX", userCastle.HomeX);
+            userCastle.HomeY = ReadInteger("Defense", "CastleHomeY", userCastle.HomeY);
+            userCastle.WarRangeX = ReadInteger("Defense", "CastleWarRangeX", userCastle.WarRangeX);
+            userCastle.WarRangeY = ReadInteger("Defense", "CastleWarRangeY", userCastle.WarRangeY);
+            userCastle.PalaceMap = ReadString("Defense", "CastlePlaceMap", userCastle.PalaceMap);
+            userCastle.SecretMap = ReadString("Defense", "CastleSecretMap", userCastle.SecretMap);
+            userCastle.PalaceDoorX = ReadInteger("Defense", "CastlePalaceDoorX", 631);
+            userCastle.PalaceDoorY = ReadInteger("Defense", "CastlePalaceDoorY", 274);
+            userCastle.MainDoor = new ArcherUnit();
+            userCastle.MainDoor.nX = Read<short>("Defense", "MainDoorX", (short)672);
+            userCastle.MainDoor.nY = Read<short>("Defense", "MainDoorY", (short)330);
+            userCastle.MainDoor.sName = ReadString("Defense", "MainDoorName", "MainDoor");
+            userCastle.MainDoor.nStatus = ReadBool("Defense", "MainDoorOpen", true);
+            userCastle.MainDoor.nHP = Read<ushort>("Defense", "MainDoorHP", (short)2000);
+            userCastle.MainDoor.BaseObject = null;
+            userCastle.LeftWall = new ArcherUnit();
+            userCastle.LeftWall.nX = Read<short>("Defense", "LeftWallX", (short)624);
+            userCastle.LeftWall.nY = Read<short>("Defense", "LeftWallY", (short)278);
+            userCastle.LeftWall.sName = ReadString("Defense", "LeftWallName", "LeftWall");
+            userCastle.LeftWall.nHP = Read<ushort>("Defense", "LeftWallHP", (short)2000);
+            userCastle.LeftWall.BaseObject = null;
+            userCastle.CenterWall = new ArcherUnit();
+            userCastle.CenterWall.nX = Read<short>("Defense", "CenterWallX", (short)627);
+            userCastle.CenterWall.nY = Read<short>("Defense", "CenterWallY", (short)278);
+            userCastle.CenterWall.sName = ReadString("Defense", "CenterWallName", "CenterWall");
+            userCastle.CenterWall.nHP = Read<ushort>("Defense", "CenterWallHP", (short)2000);
+            userCastle.CenterWall.BaseObject = null;
+            userCastle.RightWall = new ArcherUnit();
+            userCastle.RightWall.nX = Read<short>("Defense", "RightWallX", (short)634);
+            userCastle.RightWall.nY = Read<short>("Defense", "RightWallY", (short)271);
+            userCastle.RightWall.sName = ReadString("Defense", "RightWallName", "RightWall");
+            userCastle.RightWall.nHP = Read<ushort>("Defense", "RightWallHP", (short)2000);
+            userCastle.RightWall.BaseObject = null;
+            for (var i = 0; i < userCastle.Archers.Length; i++)
             {
-                var objUnit = new TObjUnit();
+                var objUnit = new ArcherUnit();
                 objUnit.nX = Read<short>("Defense", "Archer_" + i + 1 + "_X", (short)0);
                 objUnit.nY = Read<short>("Defense", "Archer_" + i + 1 + "_Y", (short)0);
                 objUnit.sName = ReadString("Defense", "Archer_" + i + 1 + "_Name", "弓箭手");
                 objUnit.nHP = Read<ushort>("Defense", "Archer_" + i + 1 + "_HP", (short)2000);
                 objUnit.BaseObject = null;
-                userCastle.Archer[i] = objUnit;
+                userCastle.Archers[i] = objUnit;
             }
-
             for (var i = 0; i < userCastle.m_Guard.Length; i++)
             {
-                var objUnit = new TObjUnit();
+                var objUnit = new ArcherUnit();
                 objUnit.nX = Read<short>("Defense", "Guard_" + i + 1 + "_X", (short)0);
                 objUnit.nY = Read<short>("Defense", "Guard_" + i + 1 + "_Y", (short)0);
                 objUnit.sName = ReadString("Defense", "Guard_" + i + 1 + "_Name", "守卫");
@@ -95,69 +94,69 @@ namespace GameSvr.Castle
 
         public void SaveConfig(TUserCastle userCastle)
         {
-            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, userCastle.m_sConfigDir);
+            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, userCastle.ConfigDir);
             var sMapList = string.Empty;
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
-            if (M2Share.MapMgr.GetMapOfServerIndex(userCastle.m_sMapName) != M2Share.ServerIndex) return;
-            if (!string.IsNullOrEmpty(userCastle.m_sName))
+            if (M2Share.MapMgr.GetMapOfServerIndex(userCastle.MapName) != M2Share.ServerIndex) return;
+            if (!string.IsNullOrEmpty(userCastle.sName))
             {
-                WriteString("Setup", "CastleName", userCastle.m_sName);
+                WriteString("Setup", "CastleName", userCastle.sName);
             }
-            if (!string.IsNullOrEmpty(userCastle.m_sOwnGuild))
+            if (!string.IsNullOrEmpty(userCastle.OwnGuild))
             {
-                WriteString("Setup", "OwnGuild", userCastle.m_sOwnGuild);
+                WriteString("Setup", "OwnGuild", userCastle.OwnGuild);
             }
-            WriteDateTime("Setup", "ChangeDate", userCastle.m_ChangeDate);
+            WriteDateTime("Setup", "ChangeDate", userCastle.ChangeDate);
             WriteDateTime("Setup", "WarDate", userCastle.m_WarDate);
-            WriteDateTime("Setup", "IncomeToday", userCastle.m_IncomeToday);
-            if (userCastle.m_nTotalGold != 0) WriteInteger("Setup", "TotalGold", userCastle.m_nTotalGold);
-            if (userCastle.m_nTodayIncome != 0) WriteInteger("Setup", "TodayIncome", userCastle.m_nTodayIncome);
-            for (var i = 0; i < userCastle.m_EnvirList.Count; i++) sMapList = sMapList + userCastle.m_EnvirList[i] + ',';
+            WriteDateTime("Setup", "IncomeToday", userCastle.IncomeToday);
+            if (userCastle.TotalGold != 0) WriteInteger("Setup", "TotalGold", userCastle.TotalGold);
+            if (userCastle.TodayIncome != 0) WriteInteger("Setup", "TodayIncome", userCastle.TodayIncome);
+            for (var i = 0; i < userCastle.EnvirList.Count; i++) sMapList = sMapList + userCastle.EnvirList[i] + ',';
             if (!string.IsNullOrEmpty(sMapList)) WriteString("Defense", "CastleMapList", sMapList);
-            if (userCastle.m_sMapName != "") WriteString("Defense", "CastleMap", userCastle.m_sMapName);
-            if (userCastle.m_sHomeMap != "") WriteString("Defense", "CastleHomeMap", userCastle.m_sHomeMap);
-            if (userCastle.m_nHomeX != 0) WriteInteger("Defense", "CastleHomeX", userCastle.m_nHomeX);
-            if (userCastle.m_nHomeY != 0) WriteInteger("Defense", "CastleHomeY", userCastle.m_nHomeY);
-            if (userCastle.m_nWarRangeX != 0) WriteInteger("Defense", "CastleWarRangeX", userCastle.m_nWarRangeX);
-            if (userCastle.m_nWarRangeY != 0) WriteInteger("Defense", "CastleWarRangeY", userCastle.m_nWarRangeY);
-            if (userCastle.m_sPalaceMap != "") WriteString("Defense", "CastlePlaceMap", userCastle.m_sPalaceMap);
-            if (userCastle.m_sSecretMap != "") WriteString("Defense", "CastleSecretMap", userCastle.m_sSecretMap);
-            if (userCastle.m_nPalaceDoorX != 0) WriteInteger("Defense", "CastlePalaceDoorX", userCastle.m_nPalaceDoorX);
-            if (userCastle.m_nPalaceDoorY != 0) WriteInteger("Defense", "CastlePalaceDoorY", userCastle.m_nPalaceDoorY);
-            if (userCastle.m_MainDoor.nX != 0) WriteInteger("Defense", "MainDoorX", userCastle.m_MainDoor.nX);
-            if (userCastle.m_MainDoor.nY != 0) WriteInteger("Defense", "MainDoorY", userCastle.m_MainDoor.nY);
-            if (userCastle.m_MainDoor.sName != "") WriteString("Defense", "MainDoorName", userCastle.m_MainDoor.sName);
-            if (userCastle.m_MainDoor.BaseObject != null)
+            if (userCastle.MapName != "") WriteString("Defense", "CastleMap", userCastle.MapName);
+            if (userCastle.HomeMap != "") WriteString("Defense", "CastleHomeMap", userCastle.HomeMap);
+            if (userCastle.HomeX != 0) WriteInteger("Defense", "CastleHomeX", userCastle.HomeX);
+            if (userCastle.HomeY != 0) WriteInteger("Defense", "CastleHomeY", userCastle.HomeY);
+            if (userCastle.WarRangeX != 0) WriteInteger("Defense", "CastleWarRangeX", userCastle.WarRangeX);
+            if (userCastle.WarRangeY != 0) WriteInteger("Defense", "CastleWarRangeY", userCastle.WarRangeY);
+            if (userCastle.PalaceMap != "") WriteString("Defense", "CastlePlaceMap", userCastle.PalaceMap);
+            if (userCastle.SecretMap != "") WriteString("Defense", "CastleSecretMap", userCastle.SecretMap);
+            if (userCastle.PalaceDoorX != 0) WriteInteger("Defense", "CastlePalaceDoorX", userCastle.PalaceDoorX);
+            if (userCastle.PalaceDoorY != 0) WriteInteger("Defense", "CastlePalaceDoorY", userCastle.PalaceDoorY);
+            if (userCastle.MainDoor.nX != 0) WriteInteger("Defense", "MainDoorX", userCastle.MainDoor.nX);
+            if (userCastle.MainDoor.nY != 0) WriteInteger("Defense", "MainDoorY", userCastle.MainDoor.nY);
+            if (userCastle.MainDoor.sName != "") WriteString("Defense", "MainDoorName", userCastle.MainDoor.sName);
+            if (userCastle.MainDoor.BaseObject != null)
             {
-                WriteBool("Defense", "MainDoorOpen", userCastle.m_MainDoor.nStatus);
-                WriteInteger("Defense", "MainDoorHP", userCastle.m_MainDoor.BaseObject.MWAbil.HP);
+                WriteBool("Defense", "MainDoorOpen", userCastle.MainDoor.nStatus);
+                WriteInteger("Defense", "MainDoorHP", userCastle.MainDoor.BaseObject.WAbil.HP);
             }
-            if (userCastle.m_LeftWall.nX != 0) WriteInteger("Defense", "LeftWallX", userCastle.m_LeftWall.nX);
-            if (userCastle.m_LeftWall.nY != 0) WriteInteger("Defense", "LeftWallY", userCastle.m_LeftWall.nY);
-            if (userCastle.m_LeftWall.sName != "") WriteString("Defense", "LeftWallName", userCastle.m_LeftWall.sName);
-            if (userCastle.m_LeftWall.BaseObject != null)
-                WriteInteger("Defense", "LeftWallHP", userCastle.m_LeftWall.BaseObject.MWAbil.HP);
-            if (userCastle.m_CenterWall.nX != 0) WriteInteger("Defense", "CenterWallX", userCastle.m_CenterWall.nX);
-            if (userCastle.m_CenterWall.nY != 0) WriteInteger("Defense", "CenterWallY", userCastle.m_CenterWall.nY);
-            if (userCastle.m_CenterWall.sName != "") WriteString("Defense", "CenterWallName", userCastle.m_CenterWall.sName);
-            if (userCastle.m_CenterWall.BaseObject != null)
-                WriteInteger("Defense", "CenterWallHP", userCastle.m_CenterWall.BaseObject.MWAbil.HP);
-            if (userCastle.m_RightWall.nX != 0) WriteInteger("Defense", "RightWallX", userCastle.m_RightWall.nX);
-            if (userCastle.m_RightWall.nY != 0) WriteInteger("Defense", "RightWallY", userCastle.m_RightWall.nY);
-            if (userCastle.m_RightWall.sName != "") WriteString("Defense", "RightWallName", userCastle.m_RightWall.sName);
-            if (userCastle.m_RightWall.BaseObject != null)
-                WriteInteger("Defense", "RightWallHP", userCastle.m_RightWall.BaseObject.MWAbil.HP);
-            TObjUnit objUnit;
-            for (var i = 0; i < userCastle.Archer.Length; i++)
+            if (userCastle.LeftWall.nX != 0) WriteInteger("Defense", "LeftWallX", userCastle.LeftWall.nX);
+            if (userCastle.LeftWall.nY != 0) WriteInteger("Defense", "LeftWallY", userCastle.LeftWall.nY);
+            if (userCastle.LeftWall.sName != "") WriteString("Defense", "LeftWallName", userCastle.LeftWall.sName);
+            if (userCastle.LeftWall.BaseObject != null)
+                WriteInteger("Defense", "LeftWallHP", userCastle.LeftWall.BaseObject.WAbil.HP);
+            if (userCastle.CenterWall.nX != 0) WriteInteger("Defense", "CenterWallX", userCastle.CenterWall.nX);
+            if (userCastle.CenterWall.nY != 0) WriteInteger("Defense", "CenterWallY", userCastle.CenterWall.nY);
+            if (userCastle.CenterWall.sName != "") WriteString("Defense", "CenterWallName", userCastle.CenterWall.sName);
+            if (userCastle.CenterWall.BaseObject != null)
+                WriteInteger("Defense", "CenterWallHP", userCastle.CenterWall.BaseObject.WAbil.HP);
+            if (userCastle.RightWall.nX != 0) WriteInteger("Defense", "RightWallX", userCastle.RightWall.nX);
+            if (userCastle.RightWall.nY != 0) WriteInteger("Defense", "RightWallY", userCastle.RightWall.nY);
+            if (userCastle.RightWall.sName != "") WriteString("Defense", "RightWallName", userCastle.RightWall.sName);
+            if (userCastle.RightWall.BaseObject != null)
+                WriteInteger("Defense", "RightWallHP", userCastle.RightWall.BaseObject.WAbil.HP);
+            ArcherUnit objUnit;
+            for (var i = 0; i < userCastle.Archers.Length; i++)
             {
-                objUnit = userCastle.Archer[i];
+                objUnit = userCastle.Archers[i];
                 if (objUnit.nX != 0) WriteInteger("Defense", "Archer_" + (i + 1) + "_X", objUnit.nX);
                 if (objUnit.nY != 0) WriteInteger("Defense", "Archer_" + (i + 1) + "_Y", objUnit.nY);
                 if (objUnit.sName != "")
                     WriteString("Defense", "Archer_" + (i + 1) + "_Name", objUnit.sName);
                 if (objUnit.BaseObject != null)
-                    WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", objUnit.BaseObject.MWAbil.HP);
+                    WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", objUnit.BaseObject.WAbil.HP);
                 else
                     WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", 0);
             }
@@ -169,7 +168,7 @@ namespace GameSvr.Castle
                 if (objUnit.nY != 0) WriteInteger("Defense", "Guard_" + (i + 1) + "_Y", objUnit.nY);
                 if (objUnit.sName != "") WriteString("Defense", "Guard_" + (i + 1) + "_Name", objUnit.sName);
                 if (objUnit.BaseObject != null)
-                    WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", objUnit.BaseObject.MWAbil.HP);
+                    WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", objUnit.BaseObject.WAbil.HP);
                 else
                     WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", 0);
             }

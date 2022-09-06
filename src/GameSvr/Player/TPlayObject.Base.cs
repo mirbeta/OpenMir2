@@ -1266,20 +1266,20 @@ namespace GameSvr.Player
             {
                 VisibleActors[i].VisibleFlag = 0;
             }
-            var nStartX = CurrX - ViewRange;
-            var nEndX = CurrX + ViewRange;
-            var nStartY = CurrY - ViewRange;
-            var nEndY = CurrY + ViewRange;
+            var nStartX = (short)(CurrX - ViewRange);
+            var nEndX = (short)(CurrX + ViewRange);
+            var nStartY = (short)(CurrY - ViewRange);
+            var nEndY = (short)(CurrY + ViewRange);
             try
             {
                 BaseObject BaseObject = null;
                 MirEvent MapEvent = null;
-                for (var n20 = nStartX; n20 <= nEndX; n20++)
+                for (var nX = nStartX; nX <= nEndX; nX++)
                 {
-                    for (var n1C = nStartY; n1C <= nEndY; n1C++)
+                    for (var nY = nStartY; nY <= nEndY; nY++)
                     {
                         var cellsuccess = false;
-                        var cellInfo = Envir.GetCellInfo(n20, n1C, ref cellsuccess);
+                        var cellInfo = Envir.GetCellInfo(nX, nY, ref cellsuccess);
                         if (cellsuccess && cellInfo.ObjList != null)
                         {
                             var nIdx = 0;
@@ -1331,7 +1331,7 @@ namespace GameSvr.Player
                                                 break;
                                             }
                                             var MapItem = (MapItem)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
-                                            UpdateVisibleItem(n20, n1C, MapItem);
+                                            UpdateVisibleItem(nX, nY, MapItem);
                                             if (MapItem.OfBaseObject > 0 || MapItem.DropBaseObject > 0)
                                             {
                                                 if ((HUtil32.GetTickCount() - MapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime) // 2 * 60 * 1000
@@ -1363,7 +1363,7 @@ namespace GameSvr.Player
                                             MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
                                             if (MapEvent.Visible)
                                             {
-                                                UpdateVisibleEvent(n20, n1C, MapEvent);
+                                                UpdateVisibleEvent(nX, nY, MapEvent);
                                             }
                                         }
                                     }
@@ -1489,14 +1489,14 @@ namespace GameSvr.Player
                     var Castle = M2Share.CastleMgr.IsCastleMember(this);
                     if (Castle != null)
                     {
-                        sGuildName = M2Share.g_sCastleGuildName.Replace("%castlename", Castle.m_sName);
+                        sGuildName = M2Share.g_sCastleGuildName.Replace("%castlename", Castle.sName);
                         sGuildName = sGuildName.Replace("%guildname", MyGuild.sGuildName);
                         sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                     }
                     else
                     {
                         Castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.Config.ShowGuildName || Castle != null && Castle.m_boUnderWar || InFreePkArea)
+                        if (M2Share.Config.ShowGuildName || Castle != null && Castle.UnderWar || InFreePkArea)
                         {
                             sGuildName = M2Share.g_sNoCastleGuildName.Replace("%guildname", MyGuild.sGuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);

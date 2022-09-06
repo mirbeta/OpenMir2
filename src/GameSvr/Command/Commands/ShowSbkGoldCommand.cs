@@ -52,18 +52,18 @@ namespace GameSvr.Command.Commands
             switch (Ctr)
             {
                 case '=':
-                    Castle.m_nTotalGold = nGold;
+                    Castle.TotalGold = nGold;
                     break;
                 case '-':
-                    Castle.m_nTotalGold -= 1;
+                    Castle.TotalGold -= 1;
                     break;
                 case '+':
-                    Castle.m_nTotalGold += nGold;
+                    Castle.TotalGold += nGold;
                     break;
             }
-            if (Castle.m_nTotalGold < 0)
+            if (Castle.TotalGold < 0)
             {
-                Castle.m_nTotalGold = 0;
+                Castle.TotalGold = 0;
             }
         }
     }

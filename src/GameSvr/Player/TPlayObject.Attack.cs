@@ -369,7 +369,7 @@ namespace GameSvr.Player
                         if (AllowFireHitSkill())
                         {
                             nSpellPoint = GetSpellPoint(UserMagic);
-                            if (MWAbil.MP >= nSpellPoint)
+                            if (Abil.MP >= nSpellPoint)
                             {
                                 if (nSpellPoint > 0)
                                 {
@@ -389,7 +389,7 @@ namespace GameSvr.Player
                         MDwDoMotaeboTick = HUtil32.GetTickCount();
                         Direction = (byte)nTargetX;
                         nSpellPoint = GetSpellPoint(UserMagic);
-                        if (MWAbil.MP >= nSpellPoint)
+                        if (Abil.MP >= nSpellPoint)
                         {
                             if (nSpellPoint > 0)
                             {
@@ -435,7 +435,7 @@ namespace GameSvr.Player
                         if (AllowTwinHitSkill())
                         {
                             nSpellPoint = GetSpellPoint(UserMagic);
-                            if (MWAbil.MP >= nSpellPoint)
+                            if (Abil.MP >= nSpellPoint)
                             {
                                 if (nSpellPoint > 0)
                                 {

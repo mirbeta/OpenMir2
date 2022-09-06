@@ -692,7 +692,7 @@ namespace GameSvr.RobotPlay
                             {
                                 SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.ObjectId, nX, nY, "");
                                 this.SendAddItem(UserItem);
-                                MWAbil.Weight = RecalcBagWeight();
+                                Abil.Weight = RecalcBagWeight();
                                 result = true;
                                 SearchPickUpItem_SetHideItem(MapItem);
                                 Dispose(MapItem);
@@ -1855,7 +1855,7 @@ namespace GameSvr.RobotPlay
                             case SpellsDef.SKILL_GROUPLIGHTENING:
                             case SpellsDef.SKILL_47:
                             case SpellsDef.SKILL_58:
-                                if (GetSpellPoint(UserMagic) <= MWAbil.MP)
+                                if (GetSpellPoint(UserMagic) <= Abil.MP)
                                 {
                                     result = true;
                                     break;
@@ -2065,7 +2065,7 @@ namespace GameSvr.RobotPlay
             {
                 if (BaseObject != null)
                 {
-                    if (BaseObject.Ghost || BaseObject.Death || BaseObject.MWAbil.HP <= 0)
+                    if (BaseObject.Ghost || BaseObject.Death || BaseObject.Abil.HP <= 0)
                     {
                         return result;
                     }
@@ -2190,7 +2190,7 @@ namespace GameSvr.RobotPlay
                     {
                         return true;
                     }
-                    if ((M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.MWAbil.MaxHP < 700 && 
+                    if ((M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.Abil.MaxHP < 700 && 
                         TargetCret.Race != Grobal2.RC_PLAYOBJECT && Job == PlayJob.Taoist) && (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
                     {
                         return true;
@@ -2850,7 +2850,7 @@ namespace GameSvr.RobotPlay
                     else
                     {
                         // 打怪使用 
-                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 10000 && TargetCret.Abil.Level < Abil.Level && MWAbil.HP <= Math.Round(MWAbil.MaxHP * 0.85))
+                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 10000 && TargetCret.Abil.Level < Abil.Level && Abil.HP <= Math.Round(Abil.MaxHP * 0.85))
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
@@ -3131,7 +3131,7 @@ namespace GameSvr.RobotPlay
                         result = 7;
                         return result;
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && MWAbil.HP <= Math.Round(MWAbil.MaxHP * 0.6))
+                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && Abil.HP <= Math.Round(Abil.MaxHP * 0.6))
                     {
                         // PK时,使用野蛮冲撞
                         if (AllowUseMagic(27) && (HUtil32.GetTickCount() - m_SkillUseTick[27]) > 3000)
@@ -3143,7 +3143,7 @@ namespace GameSvr.RobotPlay
                     }
                     else
                     {
-                        if (AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && MWAbil.HP <= Math.Round(MWAbil.MaxHP * 0.6) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000)
+                        if (AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && Abil.HP <= Math.Round(Abil.MaxHP * 0.6) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000)
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
@@ -3171,7 +3171,7 @@ namespace GameSvr.RobotPlay
                             return result;
                         }
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.MWAbil.Level < MWAbil.Level)
+                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
                     {
                         // PK时,旁边有人贴身,使用抗拒火环
                         if (AllowUseMagic(8) && HUtil32.GetTickCount() - m_SkillUseTick[8] > 3000)
@@ -3184,7 +3184,7 @@ namespace GameSvr.RobotPlay
                     else
                     {
                         // 打怪,怪级低于自己,并且有怪包围自己就用 抗拒火环
-                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - m_SkillUseTick[8] > 3000 && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.MWAbil.Level < MWAbil.Level)
+                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - m_SkillUseTick[8] > 3000 && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
                         {
                             m_SkillUseTick[8] = HUtil32.GetTickCount();
                             result = 8;
@@ -3230,7 +3230,7 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
+                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)
                     {
                         // 目标为不死系
                         m_SkillUseTick[32] = HUtil32.GetTickCount();
@@ -3781,7 +3781,7 @@ namespace GameSvr.RobotPlay
                         result = 33;
                         return result;
                     }
-                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
+                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)
                     {
                         // 目标为不死系
                         result = 32;// 圣言术
@@ -3837,7 +3837,7 @@ namespace GameSvr.RobotPlay
                     }
                     break;
                 case PlayJob.Taoist:// 道士
-                    if (SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - m_SkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && MWAbil.MP > 20)
+                    if (SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - m_SkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && Abil.MP > 20)
                     {
                         m_SkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低
                         if (AllowUseMagic(104)) // 召唤火灵
@@ -3866,7 +3866,7 @@ namespace GameSvr.RobotPlay
                             return result;
                         }
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.MWAbil.Level <= MWAbil.Level)
+                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
                     {
                         // PK时,旁边有人贴身,使用气功波
                         if (AllowUseMagic(48) && HUtil32.GetTickCount() - m_SkillUseTick[48] > 3000)
@@ -3879,7 +3879,7 @@ namespace GameSvr.RobotPlay
                     else
                     {
                         // 打怪,怪级低于自己,并且有怪包围自己就用 气功波
-                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - m_SkillUseTick[48] > 5000 && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.MWAbil.Level <= MWAbil.Level)
+                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - m_SkillUseTick[48] > 5000 && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
                         {
                             m_SkillUseTick[48] = HUtil32.GetTickCount();
                             result = 48;

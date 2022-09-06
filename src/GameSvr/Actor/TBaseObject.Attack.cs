@@ -18,7 +18,7 @@ namespace GameSvr.Actor
             {
                 if ((wHitMode == 5) && (MagicArr[SpellsDef.SKILL_BANWOL] != null)) // 半月
                 {
-                    if (MWAbil.MP > 0)
+                    if (Abil.MP > 0)
                     {
                         DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_BANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_BANWOL])));
                         HealthSpellChanged();
@@ -30,7 +30,7 @@ namespace GameSvr.Actor
                 }
                 if ((wHitMode == 12) && (MagicArr[SpellsDef.SKILL_REDBANWOL] != null))
                 {
-                    if (MWAbil.MP > 0)
+                    if (Abil.MP > 0)
                     {
                         DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_REDBANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_REDBANWOL])));
                         HealthSpellChanged();
@@ -42,7 +42,7 @@ namespace GameSvr.Actor
                 }
                 if ((wHitMode == 8) && (MagicArr[SpellsDef.SKILL_CROSSMOON] != null))
                 {
-                    if (MWAbil.MP > 0)
+                    if (Abil.MP > 0)
                     {
                         DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_CROSSMOON].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_CROSSMOON])));
                         HealthSpellChanged();
@@ -232,10 +232,10 @@ namespace GameSvr.Actor
                     if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
                     {
                         BaseObject.StruckDamage(nSecPwr);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "", 500);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ObjectId, "", 500);
                         if (BaseObject.Race != Grobal2.RC_PLAYOBJECT)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ObjectId, "");
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ObjectId, "");
                         }
                         result = true;
                     }
@@ -368,7 +368,7 @@ namespace GameSvr.Actor
                 int nSecPwr = 0;
                 if (AttackTarget != null)
                 {
-                    nPower = GetAttackPower(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC));
+                    nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
@@ -392,7 +392,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    nPower = GetAttackPower(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC));
+                    nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
@@ -504,12 +504,12 @@ namespace GameSvr.Actor
                 if (nPower > 0)
                 {
                     nPower = AttackTarget.GetHitStruckDamage(this, nPower);
-                    nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - _mAddAbil.btWeaponStrong;
+                    nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - AddAbil.btWeaponStrong;
                 }
                 if (nPower > 0)
                 {
                     AttackTarget.StruckDamage(nPower);
-                    AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.MWAbil.HP, AttackTarget.MWAbil.MaxHP, ObjectId, "", 200);
+                    AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.Abil.HP, AttackTarget.Abil.MaxHP, ObjectId, "", 200);
                     if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
                     {
                         AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.Config.AttackPosionTime, 0);
@@ -646,7 +646,7 @@ namespace GameSvr.Actor
                         {
                             if (this.IsRobot)
                             {
-                                if ((this as RobotPlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if ((this as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                     {
@@ -656,7 +656,7 @@ namespace GameSvr.Actor
                             }
                             else
                             {
-                                if ((this as PlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if ((this as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                     {
@@ -671,7 +671,7 @@ namespace GameSvr.Actor
                             {
                                 if (Master.IsRobot)
                                 {
-                                    if ((Master as RobotPlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if ((Master as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
@@ -681,7 +681,7 @@ namespace GameSvr.Actor
                                 }
                                 else
                                 {
-                                    if ((Master as PlayObject).MWAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if ((Master as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
@@ -703,7 +703,7 @@ namespace GameSvr.Actor
                 }
                 if (AttackTarget.Race != Grobal2.RC_PLAYOBJECT)
                 {
-                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.MWAbil.HP, AttackTarget.MWAbil.MaxHP, ObjectId, "");
+                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.Abil.HP, AttackTarget.Abil.MaxHP, ObjectId, "");
                 }
             }
             catch (Exception e)

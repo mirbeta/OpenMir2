@@ -36,7 +36,7 @@ namespace GameSvr.Actor
             VisibleActors.Add(visibleBaseObject);
         }
 
-        protected void UpdateVisibleItem(int wX, int wY, MapItem MapItem)
+        protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem)
         {
             VisibleMapItem visibleMapItem;
             bool boIsVisible = false;
@@ -66,7 +66,7 @@ namespace GameSvr.Actor
             VisibleItems.Add(visibleMapItem);
         }
 
-        protected void UpdateVisibleEvent(int wX, int wY, MirEvent MapEvent)
+        protected void UpdateVisibleEvent(short wX, short wY, MirEvent MapEvent)
         {
             bool boIsVisible = false;
             for (var i = 0; i < VisibleEvents.Count; i++)

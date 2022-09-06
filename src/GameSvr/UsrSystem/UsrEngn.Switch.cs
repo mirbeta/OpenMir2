@@ -129,8 +129,8 @@ namespace GameSvr.UsrSystem
                     SwitchData.SlaveArr[i].SalveLevel = BaseObject.SlaveMakeLevel;
                     SwitchData.SlaveArr[i].SlaveExpLevel = BaseObject.SlaveExpLevel;
                     SwitchData.SlaveArr[i].RoyaltySec = (BaseObject.MasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
-                    SwitchData.SlaveArr[i].nHP = BaseObject.MWAbil.HP;
-                    SwitchData.SlaveArr[i].nMP = BaseObject.MWAbil.MP;
+                    SwitchData.SlaveArr[i].nHP = BaseObject.Abil.HP;
+                    SwitchData.SlaveArr[i].nMP = BaseObject.Abil.MP;
                 }
             }
             for (var i = 0; i < PlayObject.StatusArrValue.Length; i++)

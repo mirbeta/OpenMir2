@@ -21,7 +21,7 @@ namespace GameSvr.Monster.Monsters
         {
             if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (MWAbil.HP < MWAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
+                if (Abil.HP < Abil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
                     m_boUseMagic = true;
                 }

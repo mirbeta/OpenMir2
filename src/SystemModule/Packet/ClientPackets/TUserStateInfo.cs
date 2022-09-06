@@ -31,10 +31,10 @@ namespace SystemModule.Packet.ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(Feature);
-            writer.Write(UserName, PacketConst.UserNameLen);
+            writer.WriteAsciiString(UserName, 15);
             writer.Write(NameColor);
-            writer.Write(GuildName, PacketConst.GuildNameLen);
-            writer.Write(GuildRankName, PacketConst.UserNameLen);
+            writer.WriteAsciiString(GuildName, 14);
+            writer.WriteAsciiString(GuildRankName, 15);
             for (var i = 0; i < UseItems.Length; i++)
             {
                 writer.Write(UseItems[i].GetBuffer());

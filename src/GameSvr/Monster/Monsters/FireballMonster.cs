@@ -22,7 +22,7 @@ namespace GameSvr.Monster.Monsters
                         {
                             if (Math.Abs(TargetX - CurrX) <= 8 && Math.Abs(TargetY - CurrY) <= 8)
                             {
-                                var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(MWAbil.MC) - HUtil32.LoWord(MWAbil.MC) + 1) + HUtil32.LoWord(MWAbil.MC);
+                                var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(Abil.MC) - HUtil32.LoWord(Abil.MC) + 1) + HUtil32.LoWord(Abil.MC);
                                 if (nPower > 0)
                                 {
                                     var BaseObject = GetPoseCreate();

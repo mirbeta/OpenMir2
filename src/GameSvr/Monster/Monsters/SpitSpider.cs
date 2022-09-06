@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
         private void SpitAttack(byte btDir)
         {
             Direction = btDir;
-            var WAbil = MWAbil;
+            var WAbil = Abil;
             var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (nDamage <= 0)
             {
@@ -39,7 +39,7 @@ namespace GameSvr.Monster.Monsters
                             if (nDamage > 0)
                             {
                                 BaseObject.StruckDamage(nDamage);
-                                BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, MWAbil.HP, MWAbil.MaxHP, ObjectId, "", 300);
+                                BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Abil.HP, Abil.MaxHP, ObjectId, "", 300);
                                 if (UsePoison)
                                 {
                                     if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0)

@@ -20,7 +20,7 @@ namespace GameSvr.Monster.Monsters
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
-                var WAbil = MWAbil;
+                var WAbil = Abil;
                 var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 MagPassThroughMagic(nSX, nSY, nTX, nTY, nDir, nPwr, true);
                 BreakHolySeizeMode();

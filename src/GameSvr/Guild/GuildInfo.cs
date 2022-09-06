@@ -54,7 +54,7 @@ namespace GameSvr.Guild
         /// 行会公告
         /// </summary>
         public ArrayList NoticeList;
-        public IList<TWarGuild> GuildWarList;
+        public IList<WarGuild> GuildWarList;
         public IList<GuildInfo> GuildAllList;
         /// <summary>
         /// 职位列表
@@ -99,7 +99,7 @@ namespace GameSvr.Guild
         {
             sGuildName = sName;
             NoticeList = new ArrayList();
-            GuildWarList = new List<TWarGuild>();
+            GuildWarList = new List<WarGuild>();
             GuildAllList = new List<GuildInfo>();
             m_RankList = new List<TGuildRank>();
             TeamFightDeadList = new ArrayList();
@@ -211,7 +211,7 @@ namespace GameSvr.Guild
             var s24 = string.Empty;
             int n28;
             int n2C;
-            TWarGuild GuildWar;
+            WarGuild GuildWar;
             GuildInfo Guild;
             TGuildRank GuildRank = null;
             var sFileName = Path.Combine(M2Share.Config.GuildDir, sGuildFileName);
@@ -281,7 +281,7 @@ namespace GameSvr.Guild
                             {
                                 break;
                             }
-                            GuildWar = new TWarGuild
+                            GuildWar = new WarGuild
                             {
                                 Guild = M2Share.GuildMgr.FindGuild(s1C)
                             };
@@ -326,7 +326,7 @@ namespace GameSvr.Guild
                                 {
                                     nRankNo = n2C,
                                     sRankName = s24,
-                                    MemberList = new List<TGuildMember>()
+                                    MemberList = new List<GuildMember>()
                                 };
                                 m_RankList.Add(GuildRank);
                             }
@@ -338,7 +338,7 @@ namespace GameSvr.Guild
                                     break;
                                 }
                                 var playObject = M2Share.UserEngine.GetPlayObject(s1C);
-                                GuildRank.MemberList.Add(new TGuildMember()
+                                GuildRank.MemberList.Add(new GuildMember()
                                 {
                                     sMemberName = s1C,
                                     PlayObject = playObject
@@ -351,6 +351,9 @@ namespace GameSvr.Guild
             return true;
         }
 
+        /// <summary>
+        /// 刷新封号名称
+        /// </summary>
         public void RefMemberName()
         {
             TGuildRank GuildRank;
@@ -391,7 +394,7 @@ namespace GameSvr.Guild
         {
             StringList SaveList = new StringList();
             SaveList.Add(M2Share.Config.GuildNotice);
-            TWarGuild WarGuild = null;
+            WarGuild WarGuild = null;
             long n14 = 0;
             TGuildRank GuildRank = null;
             for (var i = 0; i < NoticeList.Count; i++)
@@ -480,10 +483,10 @@ namespace GameSvr.Guild
                 {
                     nRankNo = 1,
                     sRankName = M2Share.Config.GuildChief,
-                    MemberList = new List<TGuildMember>()
+                    MemberList = new List<GuildMember>()
                 };
                 var playObject = M2Share.UserEngine.GetPlayObject(sChief);
-                GuildRank.MemberList.Add(new TGuildMember() { sMemberName = sChief, PlayObject = playObject });
+                GuildRank.MemberList.Add(new GuildMember() { sMemberName = sChief, PlayObject = playObject });
                 m_RankList.Add(GuildRank);
                 SaveGuildInfoFile();
             }
@@ -652,11 +655,11 @@ namespace GameSvr.Guild
                 {
                     nRankNo = 99,
                     sRankName = M2Share.Config.GuildMemberRank,
-                    MemberList = new List<TGuildMember>()
+                    MemberList = new List<GuildMember>()
                 };
                 m_RankList.Add(GuildRank18);
             }
-            GuildRank18.MemberList.Add(new TGuildMember()
+            GuildRank18.MemberList.Add(new GuildMember()
             {
                 PlayObject = PlayObject,
                 sMemberName = PlayObject.CharName
@@ -767,7 +770,7 @@ namespace GameSvr.Guild
                     {
                         nRankNo = HUtil32.Str_ToInt(sRankNo, 99),
                         sRankName = sRankName.Trim(),
-                        MemberList = new List<TGuildMember>()
+                        MemberList = new List<GuildMember>()
                     };
                     continue;
                 }
@@ -786,7 +789,7 @@ namespace GameSvr.Guild
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sMemberName, new char[] { ' ', ',' });
                     if (sMemberName != "")
                     {
-                        GuildRank.MemberList.Add(new TGuildMember()
+                        GuildRank.MemberList.Add(new GuildMember()
                         {
                             PlayObject = M2Share.UserEngine.GetPlayObject(sMemberName),
                             sMemberName = sMemberName
@@ -1031,10 +1034,10 @@ namespace GameSvr.Guild
             SaveGuildInfoFile();
         }
 
-        public TWarGuild AddWarGuild(GuildInfo Guild)
+        public WarGuild AddWarGuild(GuildInfo Guild)
         {
-            TWarGuild result = null;
-            TWarGuild WarGuild;
+            WarGuild result = null;
+            WarGuild WarGuild;
             if (Guild != null)
             {
                 if (!IsAllyGuild(Guild))
@@ -1053,7 +1056,7 @@ namespace GameSvr.Guild
                     }
                     if (WarGuild == null)
                     {
-                        WarGuild = new TWarGuild
+                        WarGuild = new WarGuild
                         {
                             Guild = Guild,
                             dwWarTick = HUtil32.GetTickCount(),
