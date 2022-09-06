@@ -131,7 +131,7 @@ namespace GameSvr.Player
                     var wMin = DateTime.Now.Minute;
                     var wSec = DateTime.Now.Second;
                     var wMSec = DateTime.Now.Millisecond;
-                    if (M2Share.Config.boDiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
+                    if (M2Share.Config.DiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
                     {
                         if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - m_dwLogonTick) > 60000)
                         {

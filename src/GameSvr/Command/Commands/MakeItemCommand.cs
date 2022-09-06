@@ -58,7 +58,7 @@ namespace GameSvr.Command.Commands
                     }
                     else
                     {
-                        if (M2Share.RandomNumber.Random(M2Share.Config.nMakeRandomAddValue) == 0)
+                        if (M2Share.RandomNumber.Random(M2Share.Config.MakeRandomAddValue) == 0)
                         {
                             StdItem.RandomUpgradeItem(UserItem);
                         }

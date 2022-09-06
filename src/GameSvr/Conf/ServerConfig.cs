@@ -92,20 +92,20 @@ namespace GameSvr.Conf
                 WriteInteger("Server", "IDSPort", M2Share.Config.nIDSPort);
             M2Share.Config.nIDSPort = ReadInteger("Server", "IDSPort", M2Share.Config.nIDSPort);
             if (ReadString("Server", "MsgSrvAddr", "") == "")
-                WriteString("Server", "MsgSrvAddr", M2Share.Config.sMsgSrvAddr);
-            M2Share.Config.sMsgSrvAddr = ReadString("Server", "MsgSrvAddr", M2Share.Config.sMsgSrvAddr);
+                WriteString("Server", "MsgSrvAddr", M2Share.Config.MsgSrvAddr);
+            M2Share.Config.MsgSrvAddr = ReadString("Server", "MsgSrvAddr", M2Share.Config.MsgSrvAddr);
             if (ReadInteger("Server", "MsgSrvPort", -1) < 0)
-                WriteInteger("Server", "MsgSrvPort", M2Share.Config.nMsgSrvPort);
-            M2Share.Config.nMsgSrvPort = ReadInteger("Server", "MsgSrvPort", M2Share.Config.nMsgSrvPort);
+                WriteInteger("Server", "MsgSrvPort", M2Share.Config.MsgSrvPort);
+            M2Share.Config.MsgSrvPort = ReadInteger("Server", "MsgSrvPort", M2Share.Config.MsgSrvPort);
             if (ReadString("Server", "LogServerAddr", "") == "")
-                WriteString("Server", "LogServerAddr", M2Share.Config.sLogServerAddr);
-            M2Share.Config.sLogServerAddr = ReadString("Server", "LogServerAddr", M2Share.Config.sLogServerAddr);
+                WriteString("Server", "LogServerAddr", M2Share.Config.LogServerAddr);
+            M2Share.Config.LogServerAddr = ReadString("Server", "LogServerAddr", M2Share.Config.LogServerAddr);
             if (ReadInteger("Server", "LogServerPort", -1) < 0)
-                WriteInteger("Server", "LogServerPort", M2Share.Config.nLogServerPort);
-            M2Share.Config.nLogServerPort = ReadInteger("Server", "LogServerPort", M2Share.Config.nLogServerPort);
+                WriteInteger("Server", "LogServerPort", M2Share.Config.LogServerPort);
+            M2Share.Config.LogServerPort = ReadInteger("Server", "LogServerPort", M2Share.Config.LogServerPort);
             if (ReadString("Server", "DiscountForNightTime", "") == "")
-                WriteString("Server", "DiscountForNightTime", HUtil32.BoolToStr(M2Share.Config.boDiscountForNightTime));
-            M2Share.Config.boDiscountForNightTime = ReadString("Server", "DiscountForNightTime", "FALSE").CompareTo("TRUE".ToLower()) == 0;
+                WriteString("Server", "DiscountForNightTime", HUtil32.BoolToStr(M2Share.Config.DiscountForNightTime));
+            M2Share.Config.DiscountForNightTime = ReadString("Server", "DiscountForNightTime", "FALSE").CompareTo("TRUE".ToLower()) == 0;
             if (ReadInteger("Server", "HalfFeeStart", -1) < 0)
                 WriteInteger("Server", "HalfFeeStart", M2Share.Config.HalfFeeStart);
             M2Share.Config.HalfFeeStart = ReadInteger("Server", "HalfFeeStart", M2Share.Config.HalfFeeStart);
@@ -206,11 +206,11 @@ namespace GameSvr.Conf
             // ============================================================================
             // 名称设置
             if (ReadString("Names", "HealSkill", "") == "")
-                WriteString("Names", "HealSkill", M2Share.Config.sHealSkill);
-            M2Share.Config.sHealSkill = ReadString("Names", "HealSkill", M2Share.Config.sHealSkill);
+                WriteString("Names", "HealSkill", M2Share.Config.HealSkill);
+            M2Share.Config.HealSkill = ReadString("Names", "HealSkill", M2Share.Config.HealSkill);
             if (ReadString("Names", "FireBallSkill", "") == "")
-                WriteString("Names", "FireBallSkill", M2Share.Config.sFireBallSkill);
-            M2Share.Config.sFireBallSkill = ReadString("Names", "FireBallSkill", M2Share.Config.sFireBallSkill);
+                WriteString("Names", "FireBallSkill", M2Share.Config.FireBallSkill);
+            M2Share.Config.FireBallSkill = ReadString("Names", "FireBallSkill", M2Share.Config.FireBallSkill);
             if (ReadString("Names", "ClothsMan", "") == "")
                 WriteString("Names", "ClothsMan", M2Share.Config.ClothsMan);
             M2Share.Config.ClothsMan = ReadString("Names", "ClothsMan", M2Share.Config.ClothsMan);
@@ -315,14 +315,14 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "ItemNumberEx", M2Share.Config.ItemNumberEx);
             M2Share.Config.ItemNumberEx = ReadInteger("Setup", "ItemNumberEx", M2Share.Config.ItemNumberEx);
             if (ReadString("Setup", "ClientFile1", "") == "")
-                WriteString("Setup", "ClientFile1", M2Share.Config.sClientFile1);
-            M2Share.Config.sClientFile1 = ReadString("Setup", "ClientFile1", M2Share.Config.sClientFile1);
+                WriteString("Setup", "ClientFile1", M2Share.Config.ClientFile1);
+            M2Share.Config.ClientFile1 = ReadString("Setup", "ClientFile1", M2Share.Config.ClientFile1);
             if (ReadString("Setup", "ClientFile2", "") == "")
-                WriteString("Setup", "ClientFile2", M2Share.Config.sClientFile2);
-            M2Share.Config.sClientFile2 = ReadString("Setup", "ClientFile2", M2Share.Config.sClientFile2);
+                WriteString("Setup", "ClientFile2", M2Share.Config.ClientFile2);
+            M2Share.Config.ClientFile2 = ReadString("Setup", "ClientFile2", M2Share.Config.ClientFile2);
             if (ReadString("Setup", "ClientFile3", "") == "")
-                WriteString("Setup", "ClientFile3", M2Share.Config.sClientFile3);
-            M2Share.Config.sClientFile3 = ReadString("Setup", "ClientFile3", M2Share.Config.sClientFile3);
+                WriteString("Setup", "ClientFile3", M2Share.Config.ClientFile3);
+            M2Share.Config.ClientFile3 = ReadString("Setup", "ClientFile3", M2Share.Config.ClientFile3);
             if (ReadInteger("Setup", "MonUpLvNeedKillBase", -1) < 0)
                 WriteInteger("Setup", "MonUpLvNeedKillBase", M2Share.Config.MonUpLvNeedKillBase);
             M2Share.Config.MonUpLvNeedKillBase = ReadInteger("Setup", "MonUpLvNeedKillBase", M2Share.Config.MonUpLvNeedKillBase);
@@ -434,14 +434,14 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "PKFlagTime", M2Share.Config.dwPKFlagTime);
             M2Share.Config.dwPKFlagTime = ReadInteger("Setup", "PKFlagTime", M2Share.Config.dwPKFlagTime);
             if (ReadInteger("Setup", "KillHumanAddPKPoint", -1) < 0)
-                WriteInteger("Setup", "KillHumanAddPKPoint", M2Share.Config.nKillHumanAddPKPoint);
-            M2Share.Config.nKillHumanAddPKPoint = ReadInteger("Setup", "KillHumanAddPKPoint", M2Share.Config.nKillHumanAddPKPoint);
+                WriteInteger("Setup", "KillHumanAddPKPoint", M2Share.Config.KillHumanAddPKPoint);
+            M2Share.Config.KillHumanAddPKPoint = ReadInteger("Setup", "KillHumanAddPKPoint", M2Share.Config.KillHumanAddPKPoint);
             if (ReadInteger("Setup", "KillHumanDecLuckPoint", -1) < 0)
-                WriteInteger("Setup", "KillHumanDecLuckPoint", M2Share.Config.nKillHumanDecLuckPoint);
-            M2Share.Config.nKillHumanDecLuckPoint = ReadInteger("Setup", "KillHumanDecLuckPoint", M2Share.Config.nKillHumanDecLuckPoint);
+                WriteInteger("Setup", "KillHumanDecLuckPoint", M2Share.Config.KillHumanDecLuckPoint);
+            M2Share.Config.KillHumanDecLuckPoint = ReadInteger("Setup", "KillHumanDecLuckPoint", M2Share.Config.KillHumanDecLuckPoint);
             if (ReadInteger("Setup", "DecLightItemDrugTime", -1) < 0)
-                WriteInteger("Setup", "DecLightItemDrugTime", M2Share.Config.dwDecLightItemDrugTime);
-            M2Share.Config.dwDecLightItemDrugTime = ReadInteger("Setup", "DecLightItemDrugTime", M2Share.Config.dwDecLightItemDrugTime);
+                WriteInteger("Setup", "DecLightItemDrugTime", M2Share.Config.DecLightItemDrugTime);
+            M2Share.Config.DecLightItemDrugTime = ReadInteger("Setup", "DecLightItemDrugTime", M2Share.Config.DecLightItemDrugTime);
             if (ReadInteger("Setup", "SafeZoneSize", -1) < 0)
                 WriteInteger("Setup", "SafeZoneSize", M2Share.Config.SafeZoneSize);
             M2Share.Config.SafeZoneSize =
@@ -939,11 +939,11 @@ namespace GameSvr.Conf
                 WriteBool("Setup", "DisableDeal", M2Share.Config.DisableDeal);
             M2Share.Config.DisableDeal = ReadBool("Setup", "DisableDeal", M2Share.Config.DisableDeal);
             if (ReadInteger("Setup", "MasterOKLevel", -1) < 0)
-                WriteInteger("Setup", "MasterOKLevel", M2Share.Config.nMasterOKLevel);
-            M2Share.Config.nMasterOKLevel = ReadInteger("Setup", "MasterOKLevel", M2Share.Config.nMasterOKLevel);
+                WriteInteger("Setup", "MasterOKLevel", M2Share.Config.MasterOKLevel);
+            M2Share.Config.MasterOKLevel = ReadInteger("Setup", "MasterOKLevel", M2Share.Config.MasterOKLevel);
             if (ReadInteger("Setup", "MasterOKCreditPoint", -1) < 0)
-                WriteInteger("Setup", "MasterOKCreditPoint", M2Share.Config.nMasterOKCreditPoint);
-            M2Share.Config.nMasterOKCreditPoint = ReadInteger("Setup", "MasterOKCreditPoint", M2Share.Config.nMasterOKCreditPoint);
+                WriteInteger("Setup", "MasterOKCreditPoint", M2Share.Config.MasterOKCreditPoint);
+            M2Share.Config.MasterOKCreditPoint = ReadInteger("Setup", "MasterOKCreditPoint", M2Share.Config.MasterOKCreditPoint);
             if (ReadInteger("Setup", "MasterOKBonusPoint", -1) < 0)
                 WriteInteger("Setup", "MasterOKBonusPoint", M2Share.Config.nMasterOKBonusPoint);
             M2Share.Config.nMasterOKBonusPoint = ReadInteger("Setup", "MasterOKBonusPoint", M2Share.Config.nMasterOKBonusPoint);
@@ -957,11 +957,11 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "RedPKProtectLevel", M2Share.Config.nRedPKProtectLevel);
             M2Share.Config.nRedPKProtectLevel = ReadInteger("Setup", "RedPKProtectLevel", M2Share.Config.nRedPKProtectLevel);
             if (ReadInteger("Setup", "ItemPowerRate", -1) < 0)
-                WriteInteger("Setup", "ItemPowerRate", M2Share.Config.nItemPowerRate);
-            M2Share.Config.nItemPowerRate = ReadInteger("Setup", "ItemPowerRate", M2Share.Config.nItemPowerRate);
+                WriteInteger("Setup", "ItemPowerRate", M2Share.Config.ItemPowerRate);
+            M2Share.Config.ItemPowerRate = ReadInteger("Setup", "ItemPowerRate", M2Share.Config.ItemPowerRate);
             if (ReadInteger("Setup", "ItemExpRate", -1) < 0)
-                WriteInteger("Setup", "ItemExpRate", M2Share.Config.nItemExpRate);
-            M2Share.Config.nItemExpRate = ReadInteger("Setup", "ItemExpRate", M2Share.Config.nItemExpRate);
+                WriteInteger("Setup", "ItemExpRate", M2Share.Config.ItemExpRate);
+            M2Share.Config.ItemExpRate = ReadInteger("Setup", "ItemExpRate", M2Share.Config.ItemExpRate);
             if (ReadInteger("Setup", "ScriptGotoCountLimit", -1) < 0)
                 WriteInteger("Setup", "ScriptGotoCountLimit", M2Share.Config.nScriptGotoCountLimit);
             M2Share.Config.nScriptGotoCountLimit = ReadInteger("Setup", "ScriptGotoCountLimit", M2Share.Config.nScriptGotoCountLimit);
@@ -984,421 +984,421 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "GMWhisperMsgBColor", M2Share.Config.btGMWhisperMsgBColor);
             M2Share.Config.btGMWhisperMsgBColor = Read<byte>("Setup", "GMWhisperMsgBColor", M2Share.Config.btGMWhisperMsgBColor);
             if (ReadInteger("Setup", "CryMsgFColor", -1) < 0)
-                WriteInteger("Setup", "CryMsgFColor", M2Share.Config.btCryMsgFColor);
-            M2Share.Config.btCryMsgFColor = Read<byte>("Setup", "CryMsgFColor", M2Share.Config.btCryMsgFColor);
+                WriteInteger("Setup", "CryMsgFColor", M2Share.Config.CryMsgFColor);
+            M2Share.Config.CryMsgFColor = Read<byte>("Setup", "CryMsgFColor", M2Share.Config.CryMsgFColor);
             if (ReadInteger("Setup", "CryMsgBColor", -1) < 0)
-                WriteInteger("Setup", "CryMsgBColor", M2Share.Config.btCryMsgBColor);
-            M2Share.Config.btCryMsgBColor = Read<byte>("Setup", "CryMsgBColor", M2Share.Config.btCryMsgBColor);
+                WriteInteger("Setup", "CryMsgBColor", M2Share.Config.CryMsgBColor);
+            M2Share.Config.CryMsgBColor = Read<byte>("Setup", "CryMsgBColor", M2Share.Config.CryMsgBColor);
             if (ReadInteger("Setup", "GreenMsgFColor", -1) < 0)
-                WriteInteger("Setup", "GreenMsgFColor", M2Share.Config.btGreenMsgFColor);
-            M2Share.Config.btGreenMsgFColor = Read<byte>("Setup", "GreenMsgFColor", M2Share.Config.btGreenMsgFColor);
+                WriteInteger("Setup", "GreenMsgFColor", M2Share.Config.GreenMsgFColor);
+            M2Share.Config.GreenMsgFColor = Read<byte>("Setup", "GreenMsgFColor", M2Share.Config.GreenMsgFColor);
             if (ReadInteger("Setup", "GreenMsgBColor", -1) < 0)
-                WriteInteger("Setup", "GreenMsgBColor", M2Share.Config.btGreenMsgBColor);
-            M2Share.Config.btGreenMsgBColor = Read<byte>("Setup", "GreenMsgBColor", M2Share.Config.btGreenMsgBColor);
+                WriteInteger("Setup", "GreenMsgBColor", M2Share.Config.GreenMsgBColor);
+            M2Share.Config.GreenMsgBColor = Read<byte>("Setup", "GreenMsgBColor", M2Share.Config.GreenMsgBColor);
             if (ReadInteger("Setup", "BlueMsgFColor", -1) < 0)
-                WriteInteger("Setup", "BlueMsgFColor", M2Share.Config.btBlueMsgFColor);
-            M2Share.Config.btBlueMsgFColor = Read<byte>("Setup", "BlueMsgFColor", M2Share.Config.btBlueMsgFColor);
+                WriteInteger("Setup", "BlueMsgFColor", M2Share.Config.BlueMsgFColor);
+            M2Share.Config.BlueMsgFColor = Read<byte>("Setup", "BlueMsgFColor", M2Share.Config.BlueMsgFColor);
             if (ReadInteger("Setup", "BlueMsgBColor", -1) < 0)
-                WriteInteger("Setup", "BlueMsgBColor", M2Share.Config.btBlueMsgBColor);
-            M2Share.Config.btBlueMsgBColor = Read<byte>("Setup", "BlueMsgBColor", M2Share.Config.btBlueMsgBColor);
+                WriteInteger("Setup", "BlueMsgBColor", M2Share.Config.BlueMsgBColor);
+            M2Share.Config.BlueMsgBColor = Read<byte>("Setup", "BlueMsgBColor", M2Share.Config.BlueMsgBColor);
             if (ReadInteger("Setup", "RedMsgFColor", -1) < 0)
-                WriteInteger("Setup", "RedMsgFColor", M2Share.Config.btRedMsgFColor);
-            M2Share.Config.btRedMsgFColor = Read<byte>("Setup", "RedMsgFColor", M2Share.Config.btRedMsgFColor);
+                WriteInteger("Setup", "RedMsgFColor", M2Share.Config.RedMsgFColor);
+            M2Share.Config.RedMsgFColor = Read<byte>("Setup", "RedMsgFColor", M2Share.Config.RedMsgFColor);
             if (ReadInteger("Setup", "RedMsgBColor", -1) < 0)
-                WriteInteger("Setup", "RedMsgBColor", M2Share.Config.btRedMsgBColor);
-            M2Share.Config.btRedMsgBColor = Read<byte>("Setup", "RedMsgBColor", M2Share.Config.btRedMsgBColor);
+                WriteInteger("Setup", "RedMsgBColor", M2Share.Config.RedMsgBColor);
+            M2Share.Config.RedMsgBColor = Read<byte>("Setup", "RedMsgBColor", M2Share.Config.RedMsgBColor);
             if (ReadInteger("Setup", "GuildMsgFColor", -1) < 0)
-                WriteInteger("Setup", "GuildMsgFColor", M2Share.Config.btGuildMsgFColor);
-            M2Share.Config.btGuildMsgFColor = Read<byte>("Setup", "GuildMsgFColor", M2Share.Config.btGuildMsgFColor);
+                WriteInteger("Setup", "GuildMsgFColor", M2Share.Config.GuildMsgFColor);
+            M2Share.Config.GuildMsgFColor = Read<byte>("Setup", "GuildMsgFColor", M2Share.Config.GuildMsgFColor);
             if (ReadInteger("Setup", "GuildMsgBColor", -1) < 0)
-                WriteInteger("Setup", "GuildMsgBColor", M2Share.Config.btGuildMsgBColor);
-            M2Share.Config.btGuildMsgBColor = Read<byte>("Setup", "GuildMsgBColor", M2Share.Config.btGuildMsgBColor);
+                WriteInteger("Setup", "GuildMsgBColor", M2Share.Config.GuildMsgBColor);
+            M2Share.Config.GuildMsgBColor = Read<byte>("Setup", "GuildMsgBColor", M2Share.Config.GuildMsgBColor);
             if (ReadInteger("Setup", "GroupMsgFColor", -1) < 0)
-                WriteInteger("Setup", "GroupMsgFColor", M2Share.Config.btGroupMsgFColor);
-            M2Share.Config.btGroupMsgFColor = Read<byte>("Setup", "GroupMsgFColor", M2Share.Config.btGroupMsgFColor);
+                WriteInteger("Setup", "GroupMsgFColor", M2Share.Config.GroupMsgFColor);
+            M2Share.Config.GroupMsgFColor = Read<byte>("Setup", "GroupMsgFColor", M2Share.Config.GroupMsgFColor);
             if (ReadInteger("Setup", "GroupMsgBColor", -1) < 0)
-                WriteInteger("Setup", "GroupMsgBColor", M2Share.Config.btGroupMsgBColor);
-            M2Share.Config.btGroupMsgBColor = Read<byte>("Setup", "GroupMsgBColor", M2Share.Config.btGroupMsgBColor);
+                WriteInteger("Setup", "GroupMsgBColor", M2Share.Config.GroupMsgBColor);
+            M2Share.Config.GroupMsgBColor = Read<byte>("Setup", "GroupMsgBColor", M2Share.Config.GroupMsgBColor);
             if (ReadInteger("Setup", "CustMsgFColor", -1) < 0)
-                WriteInteger("Setup", "CustMsgFColor", M2Share.Config.btCustMsgFColor);
-            M2Share.Config.btCustMsgFColor = Read<byte>("Setup", "CustMsgFColor", M2Share.Config.btCustMsgFColor);
+                WriteInteger("Setup", "CustMsgFColor", M2Share.Config.CustMsgFColor);
+            M2Share.Config.CustMsgFColor = Read<byte>("Setup", "CustMsgFColor", M2Share.Config.CustMsgFColor);
             if (ReadInteger("Setup", "CustMsgBColor", -1) < 0)
-                WriteInteger("Setup", "CustMsgBColor", M2Share.Config.btCustMsgBColor);
-            M2Share.Config.btCustMsgBColor = Read<byte>("Setup", "CustMsgBColor", M2Share.Config.btCustMsgBColor);
+                WriteInteger("Setup", "CustMsgBColor", M2Share.Config.CustMsgBColor);
+            M2Share.Config.CustMsgBColor = Read<byte>("Setup", "CustMsgBColor", M2Share.Config.CustMsgBColor);
             if (ReadInteger("Setup", "MonRandomAddValue", -1) < 0)
-                WriteInteger("Setup", "MonRandomAddValue", M2Share.Config.nMonRandomAddValue);
-            M2Share.Config.nMonRandomAddValue = ReadInteger("Setup", "MonRandomAddValue", M2Share.Config.nMonRandomAddValue);
+                WriteInteger("Setup", "MonRandomAddValue", M2Share.Config.MonRandomAddValue);
+            M2Share.Config.MonRandomAddValue = ReadInteger("Setup", "MonRandomAddValue", M2Share.Config.MonRandomAddValue);
             if (ReadInteger("Setup", "MakeRandomAddValue", -1) < 0)
-                WriteInteger("Setup", "MakeRandomAddValue", M2Share.Config.nMakeRandomAddValue);
-            M2Share.Config.nMakeRandomAddValue = ReadInteger("Setup", "MakeRandomAddValue", M2Share.Config.nMakeRandomAddValue);
+                WriteInteger("Setup", "MakeRandomAddValue", M2Share.Config.MakeRandomAddValue);
+            M2Share.Config.MakeRandomAddValue = ReadInteger("Setup", "MakeRandomAddValue", M2Share.Config.MakeRandomAddValue);
             if (ReadInteger("Setup", "WeaponDCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "WeaponDCAddValueMaxLimit", M2Share.Config.nWeaponDCAddValueMaxLimit);
-            M2Share.Config.nWeaponDCAddValueMaxLimit = ReadInteger("Setup", "WeaponDCAddValueMaxLimit", M2Share.Config.nWeaponDCAddValueMaxLimit);
+                WriteInteger("Setup", "WeaponDCAddValueMaxLimit", M2Share.Config.WeaponDCAddValueMaxLimit);
+            M2Share.Config.WeaponDCAddValueMaxLimit = ReadInteger("Setup", "WeaponDCAddValueMaxLimit", M2Share.Config.WeaponDCAddValueMaxLimit);
             if (ReadInteger("Setup", "WeaponDCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "WeaponDCAddValueRate", M2Share.Config.nWeaponDCAddValueRate);
-            M2Share.Config.nWeaponDCAddValueRate = ReadInteger("Setup", "WeaponDCAddValueRate", M2Share.Config.nWeaponDCAddValueRate);
+                WriteInteger("Setup", "WeaponDCAddValueRate", M2Share.Config.WeaponDCAddValueRate);
+            M2Share.Config.WeaponDCAddValueRate = ReadInteger("Setup", "WeaponDCAddValueRate", M2Share.Config.WeaponDCAddValueRate);
             if (ReadInteger("Setup", "WeaponMCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "WeaponMCAddValueMaxLimit", M2Share.Config.nWeaponMCAddValueMaxLimit);
-            M2Share.Config.nWeaponMCAddValueMaxLimit = ReadInteger("Setup", "WeaponMCAddValueMaxLimit", M2Share.Config.nWeaponMCAddValueMaxLimit);
+                WriteInteger("Setup", "WeaponMCAddValueMaxLimit", M2Share.Config.WeaponMCAddValueMaxLimit);
+            M2Share.Config.WeaponMCAddValueMaxLimit = ReadInteger("Setup", "WeaponMCAddValueMaxLimit", M2Share.Config.WeaponMCAddValueMaxLimit);
             if (ReadInteger("Setup", "WeaponMCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "WeaponMCAddValueRate", M2Share.Config.nWeaponMCAddValueRate);
-            M2Share.Config.nWeaponMCAddValueRate = ReadInteger("Setup", "WeaponMCAddValueRate", M2Share.Config.nWeaponMCAddValueRate);
+                WriteInteger("Setup", "WeaponMCAddValueRate", M2Share.Config.WeaponMCAddValueRate);
+            M2Share.Config.WeaponMCAddValueRate = ReadInteger("Setup", "WeaponMCAddValueRate", M2Share.Config.WeaponMCAddValueRate);
             if (ReadInteger("Setup", "WeaponSCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "WeaponSCAddValueMaxLimit", M2Share.Config.nWeaponSCAddValueMaxLimit);
-            M2Share.Config.nWeaponSCAddValueMaxLimit = ReadInteger("Setup", "WeaponSCAddValueMaxLimit", M2Share.Config.nWeaponSCAddValueMaxLimit);
+                WriteInteger("Setup", "WeaponSCAddValueMaxLimit", M2Share.Config.WeaponSCAddValueMaxLimit);
+            M2Share.Config.WeaponSCAddValueMaxLimit = ReadInteger("Setup", "WeaponSCAddValueMaxLimit", M2Share.Config.WeaponSCAddValueMaxLimit);
             if (ReadInteger("Setup", "WeaponSCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "WeaponSCAddValueRate", M2Share.Config.nWeaponSCAddValueRate);
-            M2Share.Config.nWeaponSCAddValueRate = ReadInteger("Setup", "WeaponSCAddValueRate", M2Share.Config.nWeaponSCAddValueRate);
+                WriteInteger("Setup", "WeaponSCAddValueRate", M2Share.Config.WeaponSCAddValueRate);
+            M2Share.Config.WeaponSCAddValueRate = ReadInteger("Setup", "WeaponSCAddValueRate", M2Share.Config.WeaponSCAddValueRate);
             if (ReadInteger("Setup", "DressDCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "DressDCAddValueMaxLimit", M2Share.Config.nDressDCAddValueMaxLimit);
-            M2Share.Config.nDressDCAddValueMaxLimit = ReadInteger("Setup", "DressDCAddValueMaxLimit", M2Share.Config.nDressDCAddValueMaxLimit);
+                WriteInteger("Setup", "DressDCAddValueMaxLimit", M2Share.Config.DressDCAddValueMaxLimit);
+            M2Share.Config.DressDCAddValueMaxLimit = ReadInteger("Setup", "DressDCAddValueMaxLimit", M2Share.Config.DressDCAddValueMaxLimit);
             if (ReadInteger("Setup", "DressDCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "DressDCAddValueRate", M2Share.Config.nDressDCAddValueRate);
-            M2Share.Config.nDressDCAddValueRate = ReadInteger("Setup", "DressDCAddValueRate", M2Share.Config.nDressDCAddValueRate);
+                WriteInteger("Setup", "DressDCAddValueRate", M2Share.Config.DressDCAddValueRate);
+            M2Share.Config.DressDCAddValueRate = ReadInteger("Setup", "DressDCAddValueRate", M2Share.Config.DressDCAddValueRate);
             if (ReadInteger("Setup", "DressDCAddRate", -1) < 0)
-                WriteInteger("Setup", "DressDCAddRate", M2Share.Config.nDressDCAddRate);
-            M2Share.Config.nDressDCAddRate = ReadInteger("Setup", "DressDCAddRate", M2Share.Config.nDressDCAddRate);
+                WriteInteger("Setup", "DressDCAddRate", M2Share.Config.DressDCAddRate);
+            M2Share.Config.DressDCAddRate = ReadInteger("Setup", "DressDCAddRate", M2Share.Config.DressDCAddRate);
             if (ReadInteger("Setup", "DressMCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "DressMCAddValueMaxLimit", M2Share.Config.nDressMCAddValueMaxLimit);
-            M2Share.Config.nDressMCAddValueMaxLimit = ReadInteger("Setup", "DressMCAddValueMaxLimit", M2Share.Config.nDressMCAddValueMaxLimit);
+                WriteInteger("Setup", "DressMCAddValueMaxLimit", M2Share.Config.DressMCAddValueMaxLimit);
+            M2Share.Config.DressMCAddValueMaxLimit = ReadInteger("Setup", "DressMCAddValueMaxLimit", M2Share.Config.DressMCAddValueMaxLimit);
             if (ReadInteger("Setup", "DressMCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "DressMCAddValueRate", M2Share.Config.nDressMCAddValueRate);
-            M2Share.Config.nDressMCAddValueRate = ReadInteger("Setup", "DressMCAddValueRate", M2Share.Config.nDressMCAddValueRate);
+                WriteInteger("Setup", "DressMCAddValueRate", M2Share.Config.DressMCAddValueRate);
+            M2Share.Config.DressMCAddValueRate = ReadInteger("Setup", "DressMCAddValueRate", M2Share.Config.DressMCAddValueRate);
             if (ReadInteger("Setup", "DressMCAddRate", -1) < 0)
-                WriteInteger("Setup", "DressMCAddRate", M2Share.Config.nDressMCAddRate);
-            M2Share.Config.nDressMCAddRate = ReadInteger("Setup", "DressMCAddRate", M2Share.Config.nDressMCAddRate);
+                WriteInteger("Setup", "DressMCAddRate", M2Share.Config.DressMCAddRate);
+            M2Share.Config.DressMCAddRate = ReadInteger("Setup", "DressMCAddRate", M2Share.Config.DressMCAddRate);
             if (ReadInteger("Setup", "DressSCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "DressSCAddValueMaxLimit", M2Share.Config.nDressSCAddValueMaxLimit);
-            M2Share.Config.nDressSCAddValueMaxLimit = ReadInteger("Setup", "DressSCAddValueMaxLimit", M2Share.Config.nDressSCAddValueMaxLimit);
+                WriteInteger("Setup", "DressSCAddValueMaxLimit", M2Share.Config.DressSCAddValueMaxLimit);
+            M2Share.Config.DressSCAddValueMaxLimit = ReadInteger("Setup", "DressSCAddValueMaxLimit", M2Share.Config.DressSCAddValueMaxLimit);
             if (ReadInteger("Setup", "DressSCAddValueRate", -1) < 0)
                 WriteInteger("Setup", "DressSCAddValueRate", M2Share.Config.nDressSCAddValueRate);
             M2Share.Config.nDressSCAddValueRate = ReadInteger("Setup", "DressSCAddValueRate", M2Share.Config.nDressSCAddValueRate);
             if (ReadInteger("Setup", "DressSCAddRate", -1) < 0)
-                WriteInteger("Setup", "DressSCAddRate", M2Share.Config.nDressSCAddRate);
-            M2Share.Config.nDressSCAddRate = ReadInteger("Setup", "DressSCAddRate", M2Share.Config.nDressSCAddRate);
+                WriteInteger("Setup", "DressSCAddRate", M2Share.Config.DressSCAddRate);
+            M2Share.Config.DressSCAddRate = ReadInteger("Setup", "DressSCAddRate", M2Share.Config.DressSCAddRate);
             if (ReadInteger("Setup", "NeckLace19DCAddValueMaxLimit", -1) < 0)
             {
-                WriteInteger("Setup", "NeckLace19DCAddValueMaxLimit", M2Share.Config.nNeckLace19DCAddValueMaxLimit);
+                WriteInteger("Setup", "NeckLace19DCAddValueMaxLimit", M2Share.Config.NeckLace19DCAddValueMaxLimit);
             }
-            M2Share.Config.nNeckLace19DCAddValueMaxLimit = ReadInteger("Setup", "NeckLace19DCAddValueMaxLimit", M2Share.Config.nNeckLace19DCAddValueMaxLimit);
+            M2Share.Config.NeckLace19DCAddValueMaxLimit = ReadInteger("Setup", "NeckLace19DCAddValueMaxLimit", M2Share.Config.NeckLace19DCAddValueMaxLimit);
             if (ReadInteger("Setup", "NeckLace19DCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace19DCAddValueRate", M2Share.Config.nNeckLace19DCAddValueRate);
-            M2Share.Config.nNeckLace19DCAddValueRate = ReadInteger("Setup", "NeckLace19DCAddValueRate", M2Share.Config.nNeckLace19DCAddValueRate);
+                WriteInteger("Setup", "NeckLace19DCAddValueRate", M2Share.Config.NeckLace19DCAddValueRate);
+            M2Share.Config.NeckLace19DCAddValueRate = ReadInteger("Setup", "NeckLace19DCAddValueRate", M2Share.Config.NeckLace19DCAddValueRate);
             if (ReadInteger("Setup", "NeckLace19DCAddRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace19DCAddRate", M2Share.Config.nNeckLace19DCAddRate);
-            M2Share.Config.nNeckLace19DCAddRate = ReadInteger("Setup", "NeckLace19DCAddRate", M2Share.Config.nNeckLace19DCAddRate);
+                WriteInteger("Setup", "NeckLace19DCAddRate", M2Share.Config.NeckLace19DCAddRate);
+            M2Share.Config.NeckLace19DCAddRate = ReadInteger("Setup", "NeckLace19DCAddRate", M2Share.Config.NeckLace19DCAddRate);
             if (ReadInteger("Setup", "NeckLace19MCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "NeckLace19MCAddValueMaxLimit", M2Share.Config.nNeckLace19MCAddValueMaxLimit);
-            M2Share.Config.nNeckLace19MCAddValueMaxLimit = ReadInteger("Setup", "NeckLace19MCAddValueMaxLimit", M2Share.Config.nNeckLace19MCAddValueMaxLimit);
+                WriteInteger("Setup", "NeckLace19MCAddValueMaxLimit", M2Share.Config.NeckLace19MCAddValueMaxLimit);
+            M2Share.Config.NeckLace19MCAddValueMaxLimit = ReadInteger("Setup", "NeckLace19MCAddValueMaxLimit", M2Share.Config.NeckLace19MCAddValueMaxLimit);
             if (ReadInteger("Setup", "NeckLace19MCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace19MCAddValueRate", M2Share.Config.nNeckLace19MCAddValueRate);
-            M2Share.Config.nNeckLace19MCAddValueRate = ReadInteger("Setup", "NeckLace19MCAddValueRate", M2Share.Config.nNeckLace19MCAddValueRate);
+                WriteInteger("Setup", "NeckLace19MCAddValueRate", M2Share.Config.NeckLace19MCAddValueRate);
+            M2Share.Config.NeckLace19MCAddValueRate = ReadInteger("Setup", "NeckLace19MCAddValueRate", M2Share.Config.NeckLace19MCAddValueRate);
             if (ReadInteger("Setup", "NeckLace19MCAddRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace19MCAddRate", M2Share.Config.nNeckLace19MCAddRate);
-            M2Share.Config.nNeckLace19MCAddRate = ReadInteger("Setup", "NeckLace19MCAddRate", M2Share.Config.nNeckLace19MCAddRate);
+                WriteInteger("Setup", "NeckLace19MCAddRate", M2Share.Config.NeckLace19MCAddRate);
+            M2Share.Config.NeckLace19MCAddRate = ReadInteger("Setup", "NeckLace19MCAddRate", M2Share.Config.NeckLace19MCAddRate);
             if (ReadInteger("Setup", "NeckLace19SCAddValueMaxLimit", -1) < 0)
             {
-                WriteInteger("Setup", "NeckLace19SCAddValueMaxLimit", M2Share.Config.nNeckLace19SCAddValueMaxLimit);
+                WriteInteger("Setup", "NeckLace19SCAddValueMaxLimit", M2Share.Config.NeckLace19SCAddValueMaxLimit);
             }
-            M2Share.Config.nNeckLace19SCAddValueMaxLimit = ReadInteger("Setup", "NeckLace19SCAddValueMaxLimit", M2Share.Config.nNeckLace19SCAddValueMaxLimit);
+            M2Share.Config.NeckLace19SCAddValueMaxLimit = ReadInteger("Setup", "NeckLace19SCAddValueMaxLimit", M2Share.Config.NeckLace19SCAddValueMaxLimit);
             if (ReadInteger("Setup", "NeckLace19SCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace19SCAddValueRate", M2Share.Config.nNeckLace19SCAddValueRate);
-            M2Share.Config.nNeckLace19SCAddValueRate = ReadInteger("Setup", "NeckLace19SCAddValueRate", M2Share.Config.nNeckLace19SCAddValueRate);
+                WriteInteger("Setup", "NeckLace19SCAddValueRate", M2Share.Config.NeckLace19SCAddValueRate);
+            M2Share.Config.NeckLace19SCAddValueRate = ReadInteger("Setup", "NeckLace19SCAddValueRate", M2Share.Config.NeckLace19SCAddValueRate);
             if (ReadInteger("Setup", "NeckLace19SCAddRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace19SCAddRate", M2Share.Config.nNeckLace19SCAddRate);
-            M2Share.Config.nNeckLace19SCAddRate = ReadInteger("Setup", "NeckLace19SCAddRate", M2Share.Config.nNeckLace19SCAddRate);
+                WriteInteger("Setup", "NeckLace19SCAddRate", M2Share.Config.NeckLace19SCAddRate);
+            M2Share.Config.NeckLace19SCAddRate = ReadInteger("Setup", "NeckLace19SCAddRate", M2Share.Config.NeckLace19SCAddRate);
             if (ReadInteger("Setup", "NeckLace202124DCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124DCAddValueMaxLimit", M2Share.Config.nNeckLace202124DCAddValueMaxLimit);
-            M2Share.Config.nNeckLace202124DCAddValueMaxLimit = ReadInteger("Setup", "NeckLace202124DCAddValueMaxLimit", M2Share.Config.nNeckLace202124DCAddValueMaxLimit);
+                WriteInteger("Setup", "NeckLace202124DCAddValueMaxLimit", M2Share.Config.NeckLace202124DCAddValueMaxLimit);
+            M2Share.Config.NeckLace202124DCAddValueMaxLimit = ReadInteger("Setup", "NeckLace202124DCAddValueMaxLimit", M2Share.Config.NeckLace202124DCAddValueMaxLimit);
             if (ReadInteger("Setup", "NeckLace202124DCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124DCAddValueRate", M2Share.Config.nNeckLace202124DCAddValueRate);
-            M2Share.Config.nNeckLace202124DCAddValueRate = ReadInteger("Setup", "NeckLace202124DCAddValueRate", M2Share.Config.nNeckLace202124DCAddValueRate);
+                WriteInteger("Setup", "NeckLace202124DCAddValueRate", M2Share.Config.NeckLace202124DCAddValueRate);
+            M2Share.Config.NeckLace202124DCAddValueRate = ReadInteger("Setup", "NeckLace202124DCAddValueRate", M2Share.Config.NeckLace202124DCAddValueRate);
             if (ReadInteger("Setup", "NeckLace202124DCAddRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124DCAddRate", M2Share.Config.nNeckLace202124DCAddRate);
-            M2Share.Config.nNeckLace202124DCAddRate = ReadInteger("Setup", "NeckLace202124DCAddRate", M2Share.Config.nNeckLace202124DCAddRate);
+                WriteInteger("Setup", "NeckLace202124DCAddRate", M2Share.Config.NeckLace202124DCAddRate);
+            M2Share.Config.NeckLace202124DCAddRate = ReadInteger("Setup", "NeckLace202124DCAddRate", M2Share.Config.NeckLace202124DCAddRate);
             if (ReadInteger("Setup", "NeckLace202124MCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124MCAddValueMaxLimit", M2Share.Config.nNeckLace202124MCAddValueMaxLimit);
-            M2Share.Config.nNeckLace202124MCAddValueMaxLimit = ReadInteger("Setup", "NeckLace202124MCAddValueMaxLimit", M2Share.Config.nNeckLace202124MCAddValueMaxLimit);
+                WriteInteger("Setup", "NeckLace202124MCAddValueMaxLimit", M2Share.Config.NeckLace202124MCAddValueMaxLimit);
+            M2Share.Config.NeckLace202124MCAddValueMaxLimit = ReadInteger("Setup", "NeckLace202124MCAddValueMaxLimit", M2Share.Config.NeckLace202124MCAddValueMaxLimit);
             if (ReadInteger("Setup", "NeckLace202124MCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124MCAddValueRate", M2Share.Config.nNeckLace202124MCAddValueRate);
-            M2Share.Config.nNeckLace202124MCAddValueRate = ReadInteger("Setup", "NeckLace202124MCAddValueRate", M2Share.Config.nNeckLace202124MCAddValueRate);
+                WriteInteger("Setup", "NeckLace202124MCAddValueRate", M2Share.Config.NeckLace202124MCAddValueRate);
+            M2Share.Config.NeckLace202124MCAddValueRate = ReadInteger("Setup", "NeckLace202124MCAddValueRate", M2Share.Config.NeckLace202124MCAddValueRate);
             if (ReadInteger("Setup", "NeckLace202124MCAddRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124MCAddRate", M2Share.Config.nNeckLace202124MCAddRate);
-            M2Share.Config.nNeckLace202124MCAddRate = ReadInteger("Setup", "NeckLace202124MCAddRate", M2Share.Config.nNeckLace202124MCAddRate);
+                WriteInteger("Setup", "NeckLace202124MCAddRate", M2Share.Config.NeckLace202124MCAddRate);
+            M2Share.Config.NeckLace202124MCAddRate = ReadInteger("Setup", "NeckLace202124MCAddRate", M2Share.Config.NeckLace202124MCAddRate);
             if (ReadInteger("Setup", "NeckLace202124SCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124SCAddValueMaxLimit", M2Share.Config.nNeckLace202124SCAddValueMaxLimit);
-            M2Share.Config.nNeckLace202124SCAddValueMaxLimit = ReadInteger("Setup", "NeckLace202124SCAddValueMaxLimit", M2Share.Config.nNeckLace202124SCAddValueMaxLimit);
+                WriteInteger("Setup", "NeckLace202124SCAddValueMaxLimit", M2Share.Config.NeckLace202124SCAddValueMaxLimit);
+            M2Share.Config.NeckLace202124SCAddValueMaxLimit = ReadInteger("Setup", "NeckLace202124SCAddValueMaxLimit", M2Share.Config.NeckLace202124SCAddValueMaxLimit);
             if (ReadInteger("Setup", "NeckLace202124SCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124SCAddValueRate", M2Share.Config.nNeckLace202124SCAddValueRate);
-            M2Share.Config.nNeckLace202124SCAddValueRate = ReadInteger("Setup", "NeckLace202124SCAddValueRate", M2Share.Config.nNeckLace202124SCAddValueRate);
+                WriteInteger("Setup", "NeckLace202124SCAddValueRate", M2Share.Config.NeckLace202124SCAddValueRate);
+            M2Share.Config.NeckLace202124SCAddValueRate = ReadInteger("Setup", "NeckLace202124SCAddValueRate", M2Share.Config.NeckLace202124SCAddValueRate);
             if (ReadInteger("Setup", "NeckLace202124SCAddRate", -1) < 0)
-                WriteInteger("Setup", "NeckLace202124SCAddRate", M2Share.Config.nNeckLace202124SCAddRate);
-            M2Share.Config.nNeckLace202124SCAddRate = ReadInteger("Setup", "NeckLace202124SCAddRate", M2Share.Config.nNeckLace202124SCAddRate);
+                WriteInteger("Setup", "NeckLace202124SCAddRate", M2Share.Config.NeckLace202124SCAddRate);
+            M2Share.Config.NeckLace202124SCAddRate = ReadInteger("Setup", "NeckLace202124SCAddRate", M2Share.Config.NeckLace202124SCAddRate);
             if (ReadInteger("Setup", "ArmRing26DCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "ArmRing26DCAddValueMaxLimit", M2Share.Config.nArmRing26DCAddValueMaxLimit);
-            M2Share.Config.nArmRing26DCAddValueMaxLimit = ReadInteger("Setup", "ArmRing26DCAddValueMaxLimit", M2Share.Config.nArmRing26DCAddValueMaxLimit);
+                WriteInteger("Setup", "ArmRing26DCAddValueMaxLimit", M2Share.Config.ArmRing26DCAddValueMaxLimit);
+            M2Share.Config.ArmRing26DCAddValueMaxLimit = ReadInteger("Setup", "ArmRing26DCAddValueMaxLimit", M2Share.Config.ArmRing26DCAddValueMaxLimit);
             if (ReadInteger("Setup", "ArmRing26DCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "ArmRing26DCAddValueRate", M2Share.Config.nArmRing26DCAddValueRate);
-            M2Share.Config.nArmRing26DCAddValueRate = ReadInteger("Setup", "ArmRing26DCAddValueRate", M2Share.Config.nArmRing26DCAddValueRate);
+                WriteInteger("Setup", "ArmRing26DCAddValueRate", M2Share.Config.ArmRing26DCAddValueRate);
+            M2Share.Config.ArmRing26DCAddValueRate = ReadInteger("Setup", "ArmRing26DCAddValueRate", M2Share.Config.ArmRing26DCAddValueRate);
             if (ReadInteger("Setup", "ArmRing26DCAddRate", -1) < 0)
-                WriteInteger("Setup", "ArmRing26DCAddRate", M2Share.Config.nArmRing26DCAddRate);
-            M2Share.Config.nArmRing26DCAddRate = ReadInteger("Setup", "ArmRing26DCAddRate", M2Share.Config.nArmRing26DCAddRate);
+                WriteInteger("Setup", "ArmRing26DCAddRate", M2Share.Config.ArmRing26DCAddRate);
+            M2Share.Config.ArmRing26DCAddRate = ReadInteger("Setup", "ArmRing26DCAddRate", M2Share.Config.ArmRing26DCAddRate);
             if (ReadInteger("Setup", "ArmRing26MCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "ArmRing26MCAddValueMaxLimit", M2Share.Config.nArmRing26MCAddValueMaxLimit);
-            M2Share.Config.nArmRing26MCAddValueMaxLimit = ReadInteger("Setup", "ArmRing26MCAddValueMaxLimit", M2Share.Config.nArmRing26MCAddValueMaxLimit);
+                WriteInteger("Setup", "ArmRing26MCAddValueMaxLimit", M2Share.Config.ArmRing26MCAddValueMaxLimit);
+            M2Share.Config.ArmRing26MCAddValueMaxLimit = ReadInteger("Setup", "ArmRing26MCAddValueMaxLimit", M2Share.Config.ArmRing26MCAddValueMaxLimit);
             if (ReadInteger("Setup", "ArmRing26MCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "ArmRing26MCAddValueRate", M2Share.Config.nArmRing26MCAddValueRate);
-            M2Share.Config.nArmRing26MCAddValueRate = ReadInteger("Setup", "ArmRing26MCAddValueRate", M2Share.Config.nArmRing26MCAddValueRate);
+                WriteInteger("Setup", "ArmRing26MCAddValueRate", M2Share.Config.ArmRing26MCAddValueRate);
+            M2Share.Config.ArmRing26MCAddValueRate = ReadInteger("Setup", "ArmRing26MCAddValueRate", M2Share.Config.ArmRing26MCAddValueRate);
             if (ReadInteger("Setup", "ArmRing26MCAddRate", -1) < 0)
-                WriteInteger("Setup", "ArmRing26MCAddRate", M2Share.Config.nArmRing26MCAddRate);
-            M2Share.Config.nArmRing26MCAddRate = ReadInteger("Setup", "ArmRing26MCAddRate", M2Share.Config.nArmRing26MCAddRate);
+                WriteInteger("Setup", "ArmRing26MCAddRate", M2Share.Config.ArmRing26MCAddRate);
+            M2Share.Config.ArmRing26MCAddRate = ReadInteger("Setup", "ArmRing26MCAddRate", M2Share.Config.ArmRing26MCAddRate);
             if (ReadInteger("Setup", "ArmRing26SCAddValueMaxLimit", -1) < 0)
             {
-                WriteInteger("Setup", "ArmRing26SCAddValueMaxLimit", M2Share.Config.nArmRing26SCAddValueMaxLimit);
+                WriteInteger("Setup", "ArmRing26SCAddValueMaxLimit", M2Share.Config.ArmRing26SCAddValueMaxLimit);
             }
-            M2Share.Config.nArmRing26SCAddValueMaxLimit = ReadInteger("Setup", "ArmRing26SCAddValueMaxLimit", M2Share.Config.nArmRing26SCAddValueMaxLimit);
+            M2Share.Config.ArmRing26SCAddValueMaxLimit = ReadInteger("Setup", "ArmRing26SCAddValueMaxLimit", M2Share.Config.ArmRing26SCAddValueMaxLimit);
             if (ReadInteger("Setup", "ArmRing26SCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "ArmRing26SCAddValueRate", M2Share.Config.nArmRing26SCAddValueRate);
-            M2Share.Config.nArmRing26SCAddValueRate = ReadInteger("Setup", "ArmRing26SCAddValueRate", M2Share.Config.nArmRing26SCAddValueRate);
+                WriteInteger("Setup", "ArmRing26SCAddValueRate", M2Share.Config.ArmRing26SCAddValueRate);
+            M2Share.Config.ArmRing26SCAddValueRate = ReadInteger("Setup", "ArmRing26SCAddValueRate", M2Share.Config.ArmRing26SCAddValueRate);
             if (ReadInteger("Setup", "ArmRing26SCAddRate", -1) < 0)
-                WriteInteger("Setup", "ArmRing26SCAddRate", M2Share.Config.nArmRing26SCAddRate);
-            M2Share.Config.nArmRing26SCAddRate = ReadInteger("Setup", "ArmRing26SCAddRate", M2Share.Config.nArmRing26SCAddRate);
+                WriteInteger("Setup", "ArmRing26SCAddRate", M2Share.Config.ArmRing26SCAddRate);
+            M2Share.Config.ArmRing26SCAddRate = ReadInteger("Setup", "ArmRing26SCAddRate", M2Share.Config.ArmRing26SCAddRate);
             if (ReadInteger("Setup", "Ring22DCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "Ring22DCAddValueMaxLimit", M2Share.Config.nRing22DCAddValueMaxLimit);
-            M2Share.Config.nRing22DCAddValueMaxLimit = ReadInteger("Setup", "Ring22DCAddValueMaxLimit", M2Share.Config.nRing22DCAddValueMaxLimit);
+                WriteInteger("Setup", "Ring22DCAddValueMaxLimit", M2Share.Config.Ring22DCAddValueMaxLimit);
+            M2Share.Config.Ring22DCAddValueMaxLimit = ReadInteger("Setup", "Ring22DCAddValueMaxLimit", M2Share.Config.Ring22DCAddValueMaxLimit);
             if (ReadInteger("Setup", "Ring22DCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "Ring22DCAddValueRate", M2Share.Config.nRing22DCAddValueRate);
-            M2Share.Config.nRing22DCAddValueRate = ReadInteger("Setup", "Ring22DCAddValueRate", M2Share.Config.nRing22DCAddValueRate);
+                WriteInteger("Setup", "Ring22DCAddValueRate", M2Share.Config.Ring22DCAddValueRate);
+            M2Share.Config.Ring22DCAddValueRate = ReadInteger("Setup", "Ring22DCAddValueRate", M2Share.Config.Ring22DCAddValueRate);
             if (ReadInteger("Setup", "Ring22DCAddRate", -1) < 0)
-                WriteInteger("Setup", "Ring22DCAddRate", M2Share.Config.nRing22DCAddRate);
-            M2Share.Config.nRing22DCAddRate = ReadInteger("Setup", "Ring22DCAddRate", M2Share.Config.nRing22DCAddRate);
+                WriteInteger("Setup", "Ring22DCAddRate", M2Share.Config.Ring22DCAddRate);
+            M2Share.Config.Ring22DCAddRate = ReadInteger("Setup", "Ring22DCAddRate", M2Share.Config.Ring22DCAddRate);
             if (ReadInteger("Setup", "Ring22MCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "Ring22MCAddValueMaxLimit", M2Share.Config.nRing22MCAddValueMaxLimit);
-            M2Share.Config.nRing22MCAddValueMaxLimit = ReadInteger("Setup", "Ring22MCAddValueMaxLimit", M2Share.Config.nRing22MCAddValueMaxLimit);
+                WriteInteger("Setup", "Ring22MCAddValueMaxLimit", M2Share.Config.Ring22MCAddValueMaxLimit);
+            M2Share.Config.Ring22MCAddValueMaxLimit = ReadInteger("Setup", "Ring22MCAddValueMaxLimit", M2Share.Config.Ring22MCAddValueMaxLimit);
             if (ReadInteger("Setup", "Ring22MCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "Ring22MCAddValueRate", M2Share.Config.nRing22MCAddValueRate);
-            M2Share.Config.nRing22MCAddValueRate = ReadInteger("Setup", "Ring22MCAddValueRate", M2Share.Config.nRing22MCAddValueRate);
+                WriteInteger("Setup", "Ring22MCAddValueRate", M2Share.Config.Ring22MCAddValueRate);
+            M2Share.Config.Ring22MCAddValueRate = ReadInteger("Setup", "Ring22MCAddValueRate", M2Share.Config.Ring22MCAddValueRate);
             if (ReadInteger("Setup", "Ring22MCAddRate", -1) < 0)
-                WriteInteger("Setup", "Ring22MCAddRate", M2Share.Config.nRing22MCAddRate);
-            M2Share.Config.nRing22MCAddRate = ReadInteger("Setup", "Ring22MCAddRate", M2Share.Config.nRing22MCAddRate);
+                WriteInteger("Setup", "Ring22MCAddRate", M2Share.Config.Ring22MCAddRate);
+            M2Share.Config.Ring22MCAddRate = ReadInteger("Setup", "Ring22MCAddRate", M2Share.Config.Ring22MCAddRate);
             if (ReadInteger("Setup", "Ring22SCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "Ring22SCAddValueMaxLimit", M2Share.Config.nRing22SCAddValueMaxLimit);
-            M2Share.Config.nRing22SCAddValueMaxLimit = ReadInteger("Setup", "Ring22SCAddValueMaxLimit", M2Share.Config.nRing22SCAddValueMaxLimit);
+                WriteInteger("Setup", "Ring22SCAddValueMaxLimit", M2Share.Config.Ring22SCAddValueMaxLimit);
+            M2Share.Config.Ring22SCAddValueMaxLimit = ReadInteger("Setup", "Ring22SCAddValueMaxLimit", M2Share.Config.Ring22SCAddValueMaxLimit);
             if (ReadInteger("Setup", "Ring22SCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "Ring22SCAddValueRate", M2Share.Config.nRing22SCAddValueRate);
-            M2Share.Config.nRing22SCAddValueRate = ReadInteger("Setup", "Ring22SCAddValueRate", M2Share.Config.nRing22SCAddValueRate);
+                WriteInteger("Setup", "Ring22SCAddValueRate", M2Share.Config.Ring22SCAddValueRate);
+            M2Share.Config.Ring22SCAddValueRate = ReadInteger("Setup", "Ring22SCAddValueRate", M2Share.Config.Ring22SCAddValueRate);
             if (ReadInteger("Setup", "Ring22SCAddRate", -1) < 0)
-                WriteInteger("Setup", "Ring22SCAddRate", M2Share.Config.nRing22SCAddRate);
-            M2Share.Config.nRing22SCAddRate = ReadInteger("Setup", "Ring22SCAddRate", M2Share.Config.nRing22SCAddRate);
+                WriteInteger("Setup", "Ring22SCAddRate", M2Share.Config.Ring22SCAddRate);
+            M2Share.Config.Ring22SCAddRate = ReadInteger("Setup", "Ring22SCAddRate", M2Share.Config.Ring22SCAddRate);
             if (ReadInteger("Setup", "Ring23DCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "Ring23DCAddValueMaxLimit", M2Share.Config.nRing23DCAddValueMaxLimit);
-            M2Share.Config.nRing23DCAddValueMaxLimit = ReadInteger("Setup", "Ring23DCAddValueMaxLimit", M2Share.Config.nRing23DCAddValueMaxLimit);
+                WriteInteger("Setup", "Ring23DCAddValueMaxLimit", M2Share.Config.Ring23DCAddValueMaxLimit);
+            M2Share.Config.Ring23DCAddValueMaxLimit = ReadInteger("Setup", "Ring23DCAddValueMaxLimit", M2Share.Config.Ring23DCAddValueMaxLimit);
             if (ReadInteger("Setup", "Ring23DCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "Ring23DCAddValueRate", M2Share.Config.nRing23DCAddValueRate);
-            M2Share.Config.nRing23DCAddValueRate = ReadInteger("Setup", "Ring23DCAddValueRate", M2Share.Config.nRing23DCAddValueRate);
+                WriteInteger("Setup", "Ring23DCAddValueRate", M2Share.Config.Ring23DCAddValueRate);
+            M2Share.Config.Ring23DCAddValueRate = ReadInteger("Setup", "Ring23DCAddValueRate", M2Share.Config.Ring23DCAddValueRate);
             if (ReadInteger("Setup", "Ring23DCAddRate", -1) < 0)
-                WriteInteger("Setup", "Ring23DCAddRate", M2Share.Config.nRing23DCAddRate);
-            M2Share.Config.nRing23DCAddRate = ReadInteger("Setup", "Ring23DCAddRate", M2Share.Config.nRing23DCAddRate);
+                WriteInteger("Setup", "Ring23DCAddRate", M2Share.Config.Ring23DCAddRate);
+            M2Share.Config.Ring23DCAddRate = ReadInteger("Setup", "Ring23DCAddRate", M2Share.Config.Ring23DCAddRate);
             if (ReadInteger("Setup", "Ring23MCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "Ring23MCAddValueMaxLimit", M2Share.Config.nRing23MCAddValueMaxLimit);
-            M2Share.Config.nRing23MCAddValueMaxLimit = ReadInteger("Setup", "Ring23MCAddValueMaxLimit", M2Share.Config.nRing23MCAddValueMaxLimit);
+                WriteInteger("Setup", "Ring23MCAddValueMaxLimit", M2Share.Config.Ring23MCAddValueMaxLimit);
+            M2Share.Config.Ring23MCAddValueMaxLimit = ReadInteger("Setup", "Ring23MCAddValueMaxLimit", M2Share.Config.Ring23MCAddValueMaxLimit);
             if (ReadInteger("Setup", "Ring23MCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "Ring23MCAddValueRate", M2Share.Config.nRing23MCAddValueRate);
-            M2Share.Config.nRing23MCAddValueRate = ReadInteger("Setup", "Ring23MCAddValueRate", M2Share.Config.nRing23MCAddValueRate);
+                WriteInteger("Setup", "Ring23MCAddValueRate", M2Share.Config.Ring23MCAddValueRate);
+            M2Share.Config.Ring23MCAddValueRate = ReadInteger("Setup", "Ring23MCAddValueRate", M2Share.Config.Ring23MCAddValueRate);
             if (ReadInteger("Setup", "Ring23MCAddRate", -1) < 0)
-                WriteInteger("Setup", "Ring23MCAddRate", M2Share.Config.nRing23MCAddRate);
-            M2Share.Config.nRing23MCAddRate = ReadInteger("Setup", "Ring23MCAddRate", M2Share.Config.nRing23MCAddRate);
+                WriteInteger("Setup", "Ring23MCAddRate", M2Share.Config.Ring23MCAddRate);
+            M2Share.Config.Ring23MCAddRate = ReadInteger("Setup", "Ring23MCAddRate", M2Share.Config.Ring23MCAddRate);
             if (ReadInteger("Setup", "Ring23SCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "Ring23SCAddValueMaxLimit", M2Share.Config.nRing23SCAddValueMaxLimit);
-            M2Share.Config.nRing23SCAddValueMaxLimit = ReadInteger("Setup", "Ring23SCAddValueMaxLimit", M2Share.Config.nRing23SCAddValueMaxLimit);
+                WriteInteger("Setup", "Ring23SCAddValueMaxLimit", M2Share.Config.Ring23SCAddValueMaxLimit);
+            M2Share.Config.Ring23SCAddValueMaxLimit = ReadInteger("Setup", "Ring23SCAddValueMaxLimit", M2Share.Config.Ring23SCAddValueMaxLimit);
             if (ReadInteger("Setup", "Ring23SCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "Ring23SCAddValueRate", M2Share.Config.nRing23SCAddValueRate);
-            M2Share.Config.nRing23SCAddValueRate = ReadInteger("Setup", "Ring23SCAddValueRate", M2Share.Config.nRing23SCAddValueRate);
+                WriteInteger("Setup", "Ring23SCAddValueRate", M2Share.Config.Ring23SCAddValueRate);
+            M2Share.Config.Ring23SCAddValueRate = ReadInteger("Setup", "Ring23SCAddValueRate", M2Share.Config.Ring23SCAddValueRate);
             if (ReadInteger("Setup", "Ring23SCAddRate", -1) < 0)
-                WriteInteger("Setup", "Ring23SCAddRate", M2Share.Config.nRing23SCAddRate);
-            M2Share.Config.nRing23SCAddRate = ReadInteger("Setup", "Ring23SCAddRate", M2Share.Config.nRing23SCAddRate);
+                WriteInteger("Setup", "Ring23SCAddRate", M2Share.Config.Ring23SCAddRate);
+            M2Share.Config.Ring23SCAddRate = ReadInteger("Setup", "Ring23SCAddRate", M2Share.Config.Ring23SCAddRate);
             if (ReadInteger("Setup", "HelMetDCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "HelMetDCAddValueMaxLimit", M2Share.Config.nHelMetDCAddValueMaxLimit);
-            M2Share.Config.nHelMetDCAddValueMaxLimit = ReadInteger("Setup", "HelMetDCAddValueMaxLimit", M2Share.Config.nHelMetDCAddValueMaxLimit);
+                WriteInteger("Setup", "HelMetDCAddValueMaxLimit", M2Share.Config.HelMetDCAddValueMaxLimit);
+            M2Share.Config.HelMetDCAddValueMaxLimit = ReadInteger("Setup", "HelMetDCAddValueMaxLimit", M2Share.Config.HelMetDCAddValueMaxLimit);
             if (ReadInteger("Setup", "HelMetDCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "HelMetDCAddValueRate", M2Share.Config.nHelMetDCAddValueRate);
-            M2Share.Config.nHelMetDCAddValueRate = ReadInteger("Setup", "HelMetDCAddValueRate", M2Share.Config.nHelMetDCAddValueRate);
+                WriteInteger("Setup", "HelMetDCAddValueRate", M2Share.Config.HelMetDCAddValueRate);
+            M2Share.Config.HelMetDCAddValueRate = ReadInteger("Setup", "HelMetDCAddValueRate", M2Share.Config.HelMetDCAddValueRate);
             if (ReadInteger("Setup", "HelMetDCAddRate", -1) < 0)
-                WriteInteger("Setup", "HelMetDCAddRate", M2Share.Config.nHelMetDCAddRate);
-            M2Share.Config.nHelMetDCAddRate = ReadInteger("Setup", "HelMetDCAddRate", M2Share.Config.nHelMetDCAddRate);
+                WriteInteger("Setup", "HelMetDCAddRate", M2Share.Config.HelMetDCAddRate);
+            M2Share.Config.HelMetDCAddRate = ReadInteger("Setup", "HelMetDCAddRate", M2Share.Config.HelMetDCAddRate);
             if (ReadInteger("Setup", "HelMetMCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "HelMetMCAddValueMaxLimit", M2Share.Config.nHelMetMCAddValueMaxLimit);
-            M2Share.Config.nHelMetMCAddValueMaxLimit = ReadInteger("Setup", "HelMetMCAddValueMaxLimit", M2Share.Config.nHelMetMCAddValueMaxLimit);
+                WriteInteger("Setup", "HelMetMCAddValueMaxLimit", M2Share.Config.HelMetMCAddValueMaxLimit);
+            M2Share.Config.HelMetMCAddValueMaxLimit = ReadInteger("Setup", "HelMetMCAddValueMaxLimit", M2Share.Config.HelMetMCAddValueMaxLimit);
             if (ReadInteger("Setup", "HelMetMCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "HelMetMCAddValueRate", M2Share.Config.nHelMetMCAddValueRate);
-            M2Share.Config.nHelMetMCAddValueRate = ReadInteger("Setup", "HelMetMCAddValueRate", M2Share.Config.nHelMetMCAddValueRate);
+                WriteInteger("Setup", "HelMetMCAddValueRate", M2Share.Config.HelMetMCAddValueRate);
+            M2Share.Config.HelMetMCAddValueRate = ReadInteger("Setup", "HelMetMCAddValueRate", M2Share.Config.HelMetMCAddValueRate);
             if (ReadInteger("Setup", "HelMetMCAddRate", -1) < 0)
-                WriteInteger("Setup", "HelMetMCAddRate", M2Share.Config.nHelMetMCAddRate);
-            M2Share.Config.nHelMetMCAddRate = ReadInteger("Setup", "HelMetMCAddRate", M2Share.Config.nHelMetMCAddRate);
+                WriteInteger("Setup", "HelMetMCAddRate", M2Share.Config.HelMetMCAddRate);
+            M2Share.Config.HelMetMCAddRate = ReadInteger("Setup", "HelMetMCAddRate", M2Share.Config.HelMetMCAddRate);
             if (ReadInteger("Setup", "HelMetSCAddValueMaxLimit", -1) < 0)
-                WriteInteger("Setup", "HelMetSCAddValueMaxLimit", M2Share.Config.nHelMetSCAddValueMaxLimit);
-            M2Share.Config.nHelMetSCAddValueMaxLimit = ReadInteger("Setup", "HelMetSCAddValueMaxLimit", M2Share.Config.nHelMetSCAddValueMaxLimit);
+                WriteInteger("Setup", "HelMetSCAddValueMaxLimit", M2Share.Config.HelMetSCAddValueMaxLimit);
+            M2Share.Config.HelMetSCAddValueMaxLimit = ReadInteger("Setup", "HelMetSCAddValueMaxLimit", M2Share.Config.HelMetSCAddValueMaxLimit);
             if (ReadInteger("Setup", "HelMetSCAddValueRate", -1) < 0)
-                WriteInteger("Setup", "HelMetSCAddValueRate", M2Share.Config.nHelMetSCAddValueRate);
-            M2Share.Config.nHelMetSCAddValueRate = ReadInteger("Setup", "HelMetSCAddValueRate", M2Share.Config.nHelMetSCAddValueRate);
+                WriteInteger("Setup", "HelMetSCAddValueRate", M2Share.Config.HelMetSCAddValueRate);
+            M2Share.Config.HelMetSCAddValueRate = ReadInteger("Setup", "HelMetSCAddValueRate", M2Share.Config.HelMetSCAddValueRate);
             if (ReadInteger("Setup", "HelMetSCAddRate", -1) < 0)
-                WriteInteger("Setup", "HelMetSCAddRate", M2Share.Config.nHelMetSCAddRate);
-            M2Share.Config.nHelMetSCAddRate = ReadInteger("Setup", "HelMetSCAddRate", M2Share.Config.nHelMetSCAddRate);
+                WriteInteger("Setup", "HelMetSCAddRate", M2Share.Config.HelMetSCAddRate);
+            M2Share.Config.HelMetSCAddRate = ReadInteger("Setup", "HelMetSCAddRate", M2Share.Config.HelMetSCAddRate);
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetACAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetACAddRate", M2Share.Config.nUnknowHelMetACAddRate);
+                WriteInteger("Setup", "UnknowHelMetACAddRate", M2Share.Config.UnknowHelMetACAddRate);
             else
-                M2Share.Config.nUnknowHelMetACAddRate = nLoadInteger;
+                M2Share.Config.UnknowHelMetACAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetACAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetACAddValueMaxLimit", M2Share.Config.nUnknowHelMetACAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowHelMetACAddValueMaxLimit", M2Share.Config.UnknowHelMetACAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowHelMetACAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowHelMetACAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetMACAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetMACAddRate", M2Share.Config.nUnknowHelMetMACAddRate);
+                WriteInteger("Setup", "UnknowHelMetMACAddRate", M2Share.Config.UnknowHelMetMACAddRate);
             else
-                M2Share.Config.nUnknowHelMetMACAddRate = nLoadInteger;
+                M2Share.Config.UnknowHelMetMACAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetMACAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetMACAddValueMaxLimit", M2Share.Config.nUnknowHelMetMACAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowHelMetMACAddValueMaxLimit", M2Share.Config.UnknowHelMetMACAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowHelMetMACAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowHelMetMACAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetDCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetDCAddRate", M2Share.Config.nUnknowHelMetDCAddRate);
+                WriteInteger("Setup", "UnknowHelMetDCAddRate", M2Share.Config.UnknowHelMetDCAddRate);
             else
-                M2Share.Config.nUnknowHelMetDCAddRate = nLoadInteger;
+                M2Share.Config.UnknowHelMetDCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetDCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetDCAddValueMaxLimit", M2Share.Config.nUnknowHelMetDCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowHelMetDCAddValueMaxLimit", M2Share.Config.UnknowHelMetDCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowHelMetDCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowHelMetDCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetMCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetMCAddRate", M2Share.Config.nUnknowHelMetMCAddRate);
+                WriteInteger("Setup", "UnknowHelMetMCAddRate", M2Share.Config.UnknowHelMetMCAddRate);
             else
-                M2Share.Config.nUnknowHelMetMCAddRate = nLoadInteger;
+                M2Share.Config.UnknowHelMetMCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetMCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetMCAddValueMaxLimit", M2Share.Config.nUnknowHelMetMCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowHelMetMCAddValueMaxLimit", M2Share.Config.UnknowHelMetMCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowHelMetMCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowHelMetMCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetSCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetSCAddRate", M2Share.Config.nUnknowHelMetSCAddRate);
+                WriteInteger("Setup", "UnknowHelMetSCAddRate", M2Share.Config.UnknowHelMetSCAddRate);
             else
-                M2Share.Config.nUnknowHelMetSCAddRate = nLoadInteger;
+                M2Share.Config.UnknowHelMetSCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowHelMetSCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowHelMetSCAddValueMaxLimit", M2Share.Config.nUnknowHelMetSCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowHelMetSCAddValueMaxLimit", M2Share.Config.UnknowHelMetSCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowHelMetSCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowHelMetSCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceACAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceACAddRate", M2Share.Config.nUnknowNecklaceACAddRate);
+                WriteInteger("Setup", "UnknowNecklaceACAddRate", M2Share.Config.UnknowNecklaceACAddRate);
             else
-                M2Share.Config.nUnknowNecklaceACAddRate = nLoadInteger;
+                M2Share.Config.UnknowNecklaceACAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceACAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceACAddValueMaxLimit", M2Share.Config.nUnknowNecklaceACAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowNecklaceACAddValueMaxLimit", M2Share.Config.UnknowNecklaceACAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowNecklaceACAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowNecklaceACAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceMACAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceMACAddRate", M2Share.Config.nUnknowNecklaceMACAddRate);
+                WriteInteger("Setup", "UnknowNecklaceMACAddRate", M2Share.Config.UnknowNecklaceMACAddRate);
             else
-                M2Share.Config.nUnknowNecklaceMACAddRate = nLoadInteger;
+                M2Share.Config.UnknowNecklaceMACAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceMACAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceMACAddValueMaxLimit", M2Share.Config.nUnknowNecklaceMACAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowNecklaceMACAddValueMaxLimit", M2Share.Config.UnknowNecklaceMACAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowNecklaceMACAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowNecklaceMACAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceDCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceDCAddRate", M2Share.Config.nUnknowNecklaceDCAddRate);
+                WriteInteger("Setup", "UnknowNecklaceDCAddRate", M2Share.Config.UnknowNecklaceDCAddRate);
             else
-                M2Share.Config.nUnknowNecklaceDCAddRate = nLoadInteger;
+                M2Share.Config.UnknowNecklaceDCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceDCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceDCAddValueMaxLimit", M2Share.Config.nUnknowNecklaceDCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowNecklaceDCAddValueMaxLimit", M2Share.Config.UnknowNecklaceDCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowNecklaceDCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowNecklaceDCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceMCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceMCAddRate", M2Share.Config.nUnknowNecklaceMCAddRate);
+                WriteInteger("Setup", "UnknowNecklaceMCAddRate", M2Share.Config.UnknowNecklaceMCAddRate);
             else
-                M2Share.Config.nUnknowNecklaceMCAddRate = nLoadInteger;
+                M2Share.Config.UnknowNecklaceMCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceMCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceMCAddValueMaxLimit", M2Share.Config.nUnknowNecklaceMCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowNecklaceMCAddValueMaxLimit", M2Share.Config.UnknowNecklaceMCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowNecklaceMCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowNecklaceMCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceSCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceSCAddRate", M2Share.Config.nUnknowNecklaceSCAddRate);
+                WriteInteger("Setup", "UnknowNecklaceSCAddRate", M2Share.Config.UnknowNecklaceSCAddRate);
             else
-                M2Share.Config.nUnknowNecklaceSCAddRate = nLoadInteger;
+                M2Share.Config.UnknowNecklaceSCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowNecklaceSCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowNecklaceSCAddValueMaxLimit", M2Share.Config.nUnknowNecklaceSCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowNecklaceSCAddValueMaxLimit", M2Share.Config.UnknowNecklaceSCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowNecklaceSCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowNecklaceSCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingACAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingACAddRate", M2Share.Config.nUnknowRingACAddRate);
+                WriteInteger("Setup", "UnknowRingACAddRate", M2Share.Config.UnknowRingACAddRate);
             else
-                M2Share.Config.nUnknowRingACAddRate = nLoadInteger;
+                M2Share.Config.UnknowRingACAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingACAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingACAddValueMaxLimit", M2Share.Config.nUnknowRingACAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowRingACAddValueMaxLimit", M2Share.Config.UnknowRingACAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowRingACAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowRingACAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingMACAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingMACAddRate", M2Share.Config.nUnknowRingMACAddRate);
+                WriteInteger("Setup", "UnknowRingMACAddRate", M2Share.Config.UnknowRingMACAddRate);
             else
-                M2Share.Config.nUnknowRingMACAddRate = nLoadInteger;
+                M2Share.Config.UnknowRingMACAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingMACAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingMACAddValueMaxLimit", M2Share.Config.nUnknowRingMACAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowRingMACAddValueMaxLimit", M2Share.Config.UnknowRingMACAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowRingMACAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowRingMACAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingDCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingDCAddRate", M2Share.Config.nUnknowRingDCAddRate);
+                WriteInteger("Setup", "UnknowRingDCAddRate", M2Share.Config.UnknowRingDCAddRate);
             else
-                M2Share.Config.nUnknowRingDCAddRate = nLoadInteger;
+                M2Share.Config.UnknowRingDCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingDCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingDCAddValueMaxLimit", M2Share.Config.nUnknowRingDCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowRingDCAddValueMaxLimit", M2Share.Config.UnknowRingDCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowRingDCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowRingDCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingMCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingMCAddRate", M2Share.Config.nUnknowRingMCAddRate);
+                WriteInteger("Setup", "UnknowRingMCAddRate", M2Share.Config.UnknowRingMCAddRate);
             else
-                M2Share.Config.nUnknowRingMCAddRate = nLoadInteger;
+                M2Share.Config.UnknowRingMCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingMCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingMCAddValueMaxLimit", M2Share.Config.nUnknowRingMCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowRingMCAddValueMaxLimit", M2Share.Config.UnknowRingMCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowRingMCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowRingMCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingSCAddRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingSCAddRate", M2Share.Config.nUnknowRingSCAddRate);
+                WriteInteger("Setup", "UnknowRingSCAddRate", M2Share.Config.UnknowRingSCAddRate);
             else
-                M2Share.Config.nUnknowRingSCAddRate = nLoadInteger;
+                M2Share.Config.UnknowRingSCAddRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "UnknowRingSCAddValueMaxLimit", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "UnknowRingSCAddValueMaxLimit", M2Share.Config.nUnknowRingSCAddValueMaxLimit);
+                WriteInteger("Setup", "UnknowRingSCAddValueMaxLimit", M2Share.Config.UnknowRingSCAddValueMaxLimit);
             else
-                M2Share.Config.nUnknowRingSCAddValueMaxLimit = nLoadInteger;
+                M2Share.Config.UnknowRingSCAddValueMaxLimit = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "MonOneDropGoldCount", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "MonOneDropGoldCount", M2Share.Config.nMonOneDropGoldCount);
+                WriteInteger("Setup", "MonOneDropGoldCount", M2Share.Config.MonOneDropGoldCount);
             else
-                M2Share.Config.nMonOneDropGoldCount = nLoadInteger;
+                M2Share.Config.MonOneDropGoldCount = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "SendCurTickCount", -1);
             if (nLoadInteger < 0)
                 WriteBool("Setup", "SendCurTickCount", M2Share.Config.SendCurTickCount);

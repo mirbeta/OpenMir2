@@ -241,7 +241,7 @@ namespace GameSvr
             else
             {
                 SnapsmClient.Instance.ConnectMsgServer();
-                _logger.LogInformation($"当前运行从节点模式...[{M2Share.Config.sMsgSrvAddr}:{M2Share.Config.nMsgSrvPort}]");
+                _logger.LogInformation($"当前运行从节点模式...[{M2Share.Config.MsgSrvAddr}:{M2Share.Config.MsgSrvPort}]");
             }
         }
 

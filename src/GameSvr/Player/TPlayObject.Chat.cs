@@ -89,8 +89,8 @@ namespace GameSvr.Player
                             M2Share.Config.btWhisperMsgBColor, 0, SayStr);
                         break;
                     case 2:
-                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.Config.btPurpleMsgFColor,
-                            M2Share.Config.btPurpleMsgBColor, 0, SayStr);
+                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.Config.PurpleMsgFColor,
+                            M2Share.Config.PurpleMsgBColor, 0, SayStr);
                         break;
                 }
             }
@@ -215,7 +215,7 @@ namespace GameSvr.Player
                                         }
                                         else
                                         {
-                                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.btCryMsgFColor, M2Share.Config.btCryMsgBColor, sCryCryMsg);
+                                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, sCryCryMsg);
                                         }
                                         return;
                                     }

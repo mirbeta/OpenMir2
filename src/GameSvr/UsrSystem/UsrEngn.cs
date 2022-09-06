@@ -1347,7 +1347,7 @@ namespace GameSvr.UsrSystem
                                 userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
                                 var stdItem = GetStdItem(userItem.wIndex);
                                 if (stdItem == null) continue;
-                                if (M2Share.RandomNumber.Random(M2Share.Config.nMonRandomAddValue) == 0) //极品掉落几率
+                                if (M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率
                                 {
                                     stdItem.RandomUpgradeItem(userItem);
                                 }

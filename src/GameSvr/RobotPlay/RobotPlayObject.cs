@@ -469,7 +469,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 else
                                 {
-                                    M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.btCryMsgFColor, M2Share.Config.btCryMsgBColor, sCryCryMsg);
+                                    M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, sCryCryMsg);
                                 }
                                 return;
                             }
