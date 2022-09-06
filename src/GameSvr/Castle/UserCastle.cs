@@ -116,7 +116,7 @@ namespace GameSvr.Castle
         public string m_sPalaceMap = string.Empty;
         public string m_sSecretMap = string.Empty;
         public DateTime m_WarDate;
-        private readonly CastleConfManager castleConf;
+        private readonly CastleConfMgr castleConf;
         /// <summary>
         /// 沙巴克战役列表
         /// </summary>
@@ -152,7 +152,7 @@ namespace GameSvr.Castle
             {
                 Directory.CreateDirectory(filePath);
             }
-            castleConf = new CastleConfManager(Path.Combine(filePath, SabukWFileName));
+            castleConf = new CastleConfMgr(Path.Combine(filePath, SabukWFileName));
         }
 
         public int nTechLevel

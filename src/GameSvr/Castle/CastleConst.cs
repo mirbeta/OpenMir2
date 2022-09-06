@@ -36,7 +36,7 @@ namespace GameSvr.Castle
         public BaseObject Archer;
     }
 
-    public class TObjUnit
+    public class TArcherUnit
     {
         public short nX;
         public short nY;

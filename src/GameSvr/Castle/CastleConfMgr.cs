@@ -3,9 +3,9 @@ using SystemModule.Common;
 
 namespace GameSvr.Castle
 {
-    public class CastleConfManager : IniFile
+    public class CastleConfMgr : IniFile
     {
-        public CastleConfManager(string fileName) : base(fileName)
+        public CastleConfMgr(string fileName) : base(fileName)
         {
 
         }
