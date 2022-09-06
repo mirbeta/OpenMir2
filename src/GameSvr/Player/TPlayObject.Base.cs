@@ -176,6 +176,8 @@ namespace GameSvr.Player
         public int m_nOverSpeedCount;
         public bool m_boDieInFight3Zone;
         public string m_sGotoNpcLabel = string.Empty;
+        public bool TakeDlgItem = false;
+        public int DlgItemIndex = 0;
         public int m_nDelayCall;
         public int m_dwDelayCallTick = 0;
         public bool m_boDelayCall;

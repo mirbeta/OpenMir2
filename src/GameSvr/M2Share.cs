@@ -96,6 +96,7 @@ namespace GameSvr
         public static int g_dwStartTick = 0;
         public static int ShareFileNameNum = 0;
         public static int g_nServerTickDifference = 0;
+        public static readonly ReaderWriterLockWrapper syncLock = new ReaderWriterLockWrapper();
         public static ActorMgr ActorMgr = null;
         public static ServerConfig ServerConf;
         private static StringConfig StringConf;

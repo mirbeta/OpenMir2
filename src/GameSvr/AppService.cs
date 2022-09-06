@@ -8,8 +8,6 @@ namespace GameSvr
     {
         private readonly ILogger<AppService> _logger;
         private readonly GameApp _mirApp;
-        private readonly TimeSpan DelayTime = TimeSpan.FromMilliseconds(10);
-        private Timer _timer;
 
         public AppService(GameApp serverApp, ILogger<AppService> logger)
         {
@@ -22,19 +20,15 @@ namespace GameSvr
             _logger.LogInformation("正在读取配置信息...");
             _mirApp.Initialize();
             _logger.LogInformation("读取配置信息完成...");
-            _mirApp.StartEngine();
+            _mirApp.StartEngine(stoppingToken);
             _mirApp.StartService();
             if (M2Share.boStartReady)
             {
+                _mirApp.Start(stoppingToken);
+                M2Share.UserEngine.Start(stoppingToken);
                 M2Share.GateMgr.Start(stoppingToken);
             }
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, DelayTime);
             return Task.CompletedTask;
-        }
-
-        private void DoWork(object state)
-        {
-            _mirApp.Run();
         }
 
         public async Task StopAsync(CancellationToken stoppingToken)
@@ -102,12 +96,11 @@ namespace GameSvr
                 M2Share.boStartReady = false;
                 _mirApp.Stop();
             }
-            _timer?.Change(Timeout.Infinite, 0);
         }
 
         public void Dispose()
         {
-            _timer?.Dispose();
+
         }
     }
 }

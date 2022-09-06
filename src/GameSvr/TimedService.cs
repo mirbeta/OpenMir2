@@ -25,7 +25,7 @@ namespace GameSvr
             while (!stoppingToken.IsCancellationRequested)
             {
                 ServiceTimer();
-                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(1000), stoppingToken);
             }
         }
 

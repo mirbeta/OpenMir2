@@ -1299,6 +1299,9 @@ namespace GameSvr.Player
                 case Grobal2.CM_PASSWORD:
                     ProcessClientPassword(ProcessMsg);
                     break;
+                case Grobal2.CM_QUERYVAL:
+                    ProcessQueryValue(ProcessMsg.nParam1, ProcessMsg.Msg);
+                    break;
                 case Grobal2.RM_WALK:
                     if (ProcessMsg.BaseObject != this.ObjectId)
                     {
