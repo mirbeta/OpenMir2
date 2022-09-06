@@ -241,19 +241,19 @@ namespace GameSvr.Guild
                 }
                 if (s18[0] != '+')
                 {
-                    if (s18 == M2Share.Config.sGuildNotice)
+                    if (s18 == M2Share.Config.GuildNotice)
                     {
                         n28 = 1;
                     }
-                    if (s18 == M2Share.Config.sGuildWar)
+                    if (s18 == M2Share.Config.GuildWar)
                     {
                         n28 = 2;
                     }
-                    if (s18 == M2Share.Config.sGuildAll)
+                    if (s18 == M2Share.Config.GuildAll)
                     {
                         n28 = 3;
                     }
-                    if (s18 == M2Share.Config.sGuildMember)
+                    if (s18 == M2Share.Config.GuildMember)
                     {
                         n28 = 4;
                     }
@@ -390,7 +390,7 @@ namespace GameSvr.Guild
         private void SaveGuildFile(string sFileName)
         {
             StringList SaveList = new StringList();
-            SaveList.Add(M2Share.Config.sGuildNotice);
+            SaveList.Add(M2Share.Config.GuildNotice);
             TWarGuild WarGuild = null;
             long n14 = 0;
             TGuildRank GuildRank = null;
@@ -399,7 +399,7 @@ namespace GameSvr.Guild
                 SaveList.Add("+" + NoticeList[i]);
             }
             SaveList.Add(" ");
-            SaveList.Add(M2Share.Config.sGuildWar);
+            SaveList.Add(M2Share.Config.GuildWar);
             for (var i = 0; i < GuildWarList.Count; i++)
             {
                 WarGuild = GuildWarList[i];
@@ -411,13 +411,13 @@ namespace GameSvr.Guild
                 SaveList.Add("+" + GuildWarList[i].Guild.sGuildName + ' ' + n14);
             }
             SaveList.Add(" ");
-            SaveList.Add(M2Share.Config.sGuildAll);
+            SaveList.Add(M2Share.Config.GuildAll);
             for (var i = 0; i < GuildAllList.Count; i++)
             {
                 SaveList.Add("+" + GuildAllList[i]);
             }
             SaveList.Add(" ");
-            SaveList.Add(M2Share.Config.sGuildMember);
+            SaveList.Add(M2Share.Config.GuildMember);
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
@@ -443,7 +443,7 @@ namespace GameSvr.Guild
             BaseObject BaseObject;
             try
             {
-                if (M2Share.Config.boShowPreFixMsg)
+                if (M2Share.Config.ShowPreFixMsg)
                 {
                     sMsg = M2Share.Config.sGuildMsgPreFix + sMsg;
                 }
@@ -479,7 +479,7 @@ namespace GameSvr.Guild
                 GuildRank = new TGuildRank
                 {
                     nRankNo = 1,
-                    sRankName = M2Share.Config.sGuildChief,
+                    sRankName = M2Share.Config.GuildChief,
                     MemberList = new List<TGuildMember>()
                 };
                 var playObject = M2Share.UserEngine.GetPlayObject(sChief);
@@ -651,7 +651,7 @@ namespace GameSvr.Guild
                 GuildRank18 = new TGuildRank
                 {
                     nRankNo = 99,
-                    sRankName = M2Share.Config.sGuildMemberRank,
+                    sRankName = M2Share.Config.GuildMemberRank,
                     MemberList = new List<TGuildMember>()
                 };
                 m_RankList.Add(GuildRank18);

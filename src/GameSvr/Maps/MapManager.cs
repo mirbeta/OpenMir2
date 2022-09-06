@@ -100,7 +100,7 @@ namespace GameSvr.Maps
             {
                 envirnoment.MinMap = minMap;
             }
-            if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.sMapDir, sMapFileName + ".map")))
+            if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.MapDir, sMapFileName + ".map")))
             {
                 if (!m_MapList.ContainsKey(sMapName))
                 {
@@ -113,7 +113,7 @@ namespace GameSvr.Maps
             }
             else
             {
-                M2Share.Log.Error("地图文件: " + M2Share.Config.sMapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
+                M2Share.Log.Error("地图文件: " + M2Share.Config.MapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
             }
             return envirnoment;
         }

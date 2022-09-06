@@ -128,7 +128,7 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.Gold >= M2Share.Config.BuildGuildPrice)
                 {
-                    UserItem = PlayObject.CheckItems(M2Share.Config.sWomaHorn);
+                    UserItem = PlayObject.CheckItems(M2Share.Config.WomaHorn);
                     if (UserItem == null)
                     {
                         result = -3;// '你没有准备好需要的全部物品。'
@@ -149,7 +149,7 @@ namespace GameSvr.Npc
                 {
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.CharName);
                     PlayObject.SendDelItems(UserItem);
-                    PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.sWomaHorn);
+                    PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.WomaHorn);
                     PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
                     PlayObject.GoldChanged();
                     PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.CharName);
@@ -217,13 +217,13 @@ namespace GameSvr.Npc
             var Castle = M2Share.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
             {
-                var UserItem = PlayObject.CheckItems(M2Share.Config.sZumaPiece);
+                var UserItem = PlayObject.CheckItems(M2Share.Config.ZumaPiece);
                 if (UserItem != null)
                 {
                     if (Castle.AddAttackerInfo(PlayObject.MyGuild))
                     {
                         PlayObject.SendDelItems(UserItem);
-                        PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.sZumaPiece);
+                        PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.ZumaPiece);
                         this.GotoLable(PlayObject, "~@request_ok", false);
                     }
                     else
@@ -233,7 +233,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SysMsg("你没有" + M2Share.Config.sZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg("你没有" + M2Share.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else

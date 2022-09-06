@@ -95,7 +95,7 @@ namespace GameSvr.Castle
 
         public void SaveConfig(TUserCastle userCastle)
         {
-            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir, userCastle.m_sConfigDir);
+            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, userCastle.m_sConfigDir);
             var sMapList = string.Empty;
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);

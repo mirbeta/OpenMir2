@@ -69,19 +69,19 @@ namespace GameSvr.Npc
                         break;
                     }
                 case "$REPAIRDOORGOLD":
-                    sText = M2Share.Config.nRepairDoorPrice.ToString();
+                    sText = M2Share.Config.RepairDoorPrice.ToString();
                     sMsg = this.ReplaceVariableText(sMsg, "<$REPAIRDOORGOLD>", sText);
                     break;
                 case "$REPAIRWALLGOLD":
-                    sText = M2Share.Config.nRepairWallPrice.ToString();
+                    sText = M2Share.Config.RepairWallPrice.ToString();
                     sMsg = this.ReplaceVariableText(sMsg, "<$REPAIRWALLGOLD>", sText);
                     break;
                 case "$GUARDFEE":
-                    sText = M2Share.Config.nHireGuardPrice.ToString();
+                    sText = M2Share.Config.HireGuardPrice.ToString();
                     sMsg = this.ReplaceVariableText(sMsg, "<$GUARDFEE>", sText);
                     break;
                 case "$ARCHERFEE":
-                    sText = M2Share.Config.nHireArcherPrice.ToString();
+                    sText = M2Share.Config.HireArcherPrice.ToString();
                     sMsg = this.ReplaceVariableText(sMsg, "<$ARCHERFEE>", sText);
                     break;
                 case "$GUARDRULE":
@@ -270,7 +270,7 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.m_nTotalGold >= M2Share.Config.nHireGuardPrice)
+            if (this.Castle.m_nTotalGold >= M2Share.Config.HireGuardPrice)
             {
                 var n10 = HUtil32.Str_ToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCalsteGuard)
@@ -283,7 +283,7 @@ namespace GameSvr.Npc
                             ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(this.Castle.m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
-                                this.Castle.m_nTotalGold -= M2Share.Config.nHireGuardPrice;
+                                this.Castle.m_nTotalGold -= M2Share.Config.HireGuardPrice;
                                 ObjUnit.BaseObject.Castle = this.Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
@@ -317,7 +317,7 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.m_nTotalGold >= M2Share.Config.nHireArcherPrice)
+            if (this.Castle.m_nTotalGold >= M2Share.Config.HireArcherPrice)
             {
                 var n10 = HUtil32.Str_ToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCastleArcher)
@@ -330,7 +330,7 @@ namespace GameSvr.Npc
                             ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(this.Castle.m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
-                                this.Castle.m_nTotalGold -= M2Share.Config.nHireArcherPrice;
+                                this.Castle.m_nTotalGold -= M2Share.Config.HireArcherPrice;
                                 ObjUnit.BaseObject.Castle = this.Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
@@ -364,11 +364,11 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.m_nTotalGold >= M2Share.Config.nRepairDoorPrice)
+            if (this.Castle.m_nTotalGold >= M2Share.Config.RepairDoorPrice)
             {
                 if (this.Castle.RepairDoor())
                 {
-                    this.Castle.m_nTotalGold -= M2Share.Config.nRepairDoorPrice;
+                    this.Castle.m_nTotalGold -= M2Share.Config.RepairDoorPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
@@ -389,11 +389,11 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.m_nTotalGold >= M2Share.Config.nRepairWallPrice)
+            if (this.Castle.m_nTotalGold >= M2Share.Config.RepairWallPrice)
             {
                 if (this.Castle.RepairWall(nWallIndex))
                 {
-                    this.Castle.m_nTotalGold -= M2Share.Config.nRepairWallPrice;
+                    this.Castle.m_nTotalGold -= M2Share.Config.RepairWallPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else

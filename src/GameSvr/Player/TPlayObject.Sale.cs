@@ -333,10 +333,10 @@ namespace GameSvr.Player
                                         dealOffInfo.N = 2; // 交易结束
                                         PlayObject.m_nGameGold += dealOffInfo.nSellGold;
                                         PlayObject.GameGoldChanged();
-                                        PlayObject.SysMsg(string.Format(GameCommandConst.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.sGameGoldName }), MsgColor.Red, MsgType.Hint);
+                                        PlayObject.SysMsg(string.Format(GameCommandConst.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                                         if (M2Share.g_boGameLogGameGold)
                                         {
-                                            M2Share.AddGameDataLog(string.Format(GameCommandConst.g_sGameLogMsg1, new object[] { Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGameGoldName, PlayObject.m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.CharName }));
+                                            M2Share.AddGameDataLog(string.Format(GameCommandConst.g_sGameLogMsg1, new object[] { Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.GameGoldName, PlayObject.m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.CharName }));
                                         }
                                     }
                                 }
@@ -420,11 +420,11 @@ namespace GameSvr.Player
                             // sSellOffItemList.Add(DealOffInfo);
                             m_nGameGold += dealOffInfo.nSellGold;
                             this.GameGoldChanged();
-                            this.SysMsg(string.Format(GameCommandConst.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.sGameGoldName }), MsgColor.Red, MsgType.Hint);
+                            this.SysMsg(string.Format(GameCommandConst.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                             if (M2Share.g_boGameLogGameGold)
                             {
                                 M2Share.AddGameDataLog(string.Format(GameCommandConst.g_sGameLogMsg1, new object[] { Grobal2.LOG_GAMEGOLD, this.MapName, this.CurrX, this.CurrY,
-                                        this.CharName, M2Share.Config.sGameGoldName, m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyCharName }));
+                                        this.CharName, M2Share.Config.GameGoldName, m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyCharName }));
                             }
                             break;
                         }
@@ -451,7 +451,7 @@ namespace GameSvr.Player
         /// <returns></returns>
         public string SelectSellDate()
         {
-            var result = "您未开通" + M2Share.Config.sGameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
+            var result = "您未开通" + M2Share.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
             if (bo_YBDEAL)
             {
                 // 已开通元宝服务
@@ -464,12 +464,12 @@ namespace GameSvr.Player
                         {
                             if (string.Compare(dealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.N == 2)
                             {
-                                result = "最后一笔出售记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sBuyCharName + "交易成功,获得了" + dealOffInfo.nSellGold + '个' + M2Share.Config.sGameGoldName + "。\\ \\<返回/@main>";
+                                result = "最后一笔出售记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sBuyCharName + "交易成功,获得了" + dealOffInfo.nSellGold + '个' + M2Share.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
                             }
                             else if (string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.N == 1 || dealOffInfo.N == 2))
                             {
-                                result = "最后一笔购买记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sDealCharName + "交易成功,支付了" + dealOffInfo.nSellGold + '个' + M2Share.Config.sGameGoldName + "。\\ \\<返回/@main>";
+                                result = "最后一笔购买记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sDealCharName + "交易成功,支付了" + dealOffInfo.nSellGold + '个' + M2Share.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
                             }
                         }

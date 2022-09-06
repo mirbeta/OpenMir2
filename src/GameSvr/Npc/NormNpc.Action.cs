@@ -42,7 +42,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您身上没有" + M2Share.Config.sGameGoldName + ",或" + M2Share.Config.sGameGoldName + "数不够!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您身上没有" + M2Share.Config.GameGoldName + ",或" + M2Share.Config.GameGoldName + "数不够!!!\\ \\<返回/@main>");
                 }
             }
             catch
@@ -284,7 +284,7 @@ namespace GameSvr.Npc
             string sLineText;
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            var sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
+            var sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, m_sPath, QuestActionInfo.sParam1);
             using var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -329,7 +329,7 @@ namespace GameSvr.Npc
             string sLineText;
             string sHumName = string.Empty;
             string sDate = string.Empty;
-            var sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
+            var sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, m_sPath, QuestActionInfo.sParam1);
             using var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -730,7 +730,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearNameList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
+            var sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, m_sPath, QuestActionInfo.sParam1);
             using var LoadList = new StringList();
             LoadList.Clear();
             try
@@ -823,7 +823,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGameGoldName, nGameGold, cMethod, this.CharName));
+                M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.GameGoldName, nGameGold, cMethod, this.CharName));
             }
             if (nOldGameGold != PlayObject.m_nGameGold)
             {
@@ -860,7 +860,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGamePoint)
             {
-                M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.sGamePointName, nGamePoint, cMethod, this.CharName));
+                M2Share.AddGameDataLog(Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.GamePointName, nGamePoint, cMethod, this.CharName));
             }
             if (nOldGamePoint != PlayObject.m_nGamePoint)
             {
@@ -1461,7 +1461,7 @@ namespace GameSvr.Npc
             {
                 sFileName = sFileName.Substring(3, sFileName.Length - 3);
             }
-            sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, sFileName);
+            sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sFileName);
             if (sType == "" || sVarName == "" || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SAVEVAR);
@@ -1646,7 +1646,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var ffile = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, QuestActionInfo.sParam1);
+            var ffile = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, QuestActionInfo.sParam1);
             if (File.Exists(ffile))
             {
                 //myFile = new FileInfo(ffile);
@@ -1936,7 +1936,7 @@ namespace GameSvr.Npc
             {
                 sFileName = sFileName.Substring(3, sFileName.Length - 3);
             }
-            sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, sFileName);
+            sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sFileName);
             if (sType == "" || sVarName == "" || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_LOADVAR);

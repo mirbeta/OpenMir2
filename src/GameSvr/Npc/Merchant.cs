@@ -314,7 +314,7 @@ namespace GameSvr.Npc
             for (var i = ItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = ItemList[i];
-                if (M2Share.UserEngine.GetStdItemName(UserItem.wIndex) == M2Share.Config.sBlackStone)
+                if (M2Share.UserEngine.GetStdItemName(UserItem.wIndex) == M2Share.Config.BlackStone)
                 {
                     DuraList.Add(Math.Round(UserItem.Dura / 1.0e3));
                     if (DelItemList == null)
@@ -324,7 +324,7 @@ namespace GameSvr.Npc
                     DelItemList.Add(new TDeleteItem()
                     {
                         MakeIndex = UserItem.MakeIndex,
-                        sItemName = M2Share.Config.sBlackStone
+                        sItemName = M2Share.Config.BlackStone
                     });
                     DisPose(UserItem);
                     ItemList.RemoveAt(i);
@@ -467,16 +467,16 @@ namespace GameSvr.Npc
                 }
             }
             if (User.UseItems[Grobal2.U_WEAPON] != null && User.UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.Gold >= M2Share.Config.UpgradeWeaponPrice
-                && User.CheckItems(M2Share.Config.sBlackStone) != null)
+                && User.CheckItems(M2Share.Config.BlackStone) != null)
             {
                 User.DecGold(M2Share.Config.UpgradeWeaponPrice);
-                if (m_boCastle || M2Share.Config.boGetAllNpcTax)
+                if (m_boCastle || M2Share.Config.GetAllNpcTax)
                 {
                     if (Castle != null)
                     {
                         Castle.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
                     }
-                    else if (M2Share.Config.boGetAllNpcTax)
+                    else if (M2Share.Config.GetAllNpcTax)
                     {
                         M2Share.CastleMgr.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
                     }
@@ -702,7 +702,7 @@ namespace GameSvr.Npc
             {
                 if (Castle != null && Castle.IsMasterGuild(PlayObject.MyGuild)) //沙巴克成员修复物品打折
                 {
-                    var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.Config.nCastleMemberPriceRate / 100)));//80%
+                    var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.Config.CastleMemberPriceRate / 100)));//80%
                     result = HUtil32.Round(nPrice / 100 * n14);
                 }
                 else
@@ -1274,13 +1274,13 @@ namespace GameSvr.Npc
                                         if (PlayObject.AddItemToBag(UserItem))
                                         {
                                             PlayObject.Gold -= nPrice;
-                                            if (m_boCastle || M2Share.Config.boGetAllNpcTax)
+                                            if (m_boCastle || M2Share.Config.GetAllNpcTax)
                                             {
                                                 if (Castle != null)
                                                 {
                                                     Castle.IncRateGold(nPrice);
                                                 }
-                                                else if (M2Share.Config.boGetAllNpcTax)
+                                                else if (M2Share.Config.GetAllNpcTax)
                                                 {
                                                     M2Share.CastleMgr.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
                                                 }
@@ -1411,13 +1411,13 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.IncGold(nPrice))
                 {
-                    if (m_boCastle || M2Share.Config.boGetAllNpcTax)
+                    if (m_boCastle || M2Share.Config.GetAllNpcTax)
                     {
                         if (Castle != null)
                         {
                             Castle.IncRateGold(nPrice);
                         }
-                        else if (M2Share.Config.boGetAllNpcTax)
+                        else if (M2Share.Config.GetAllNpcTax)
                         {
                             M2Share.CastleMgr.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
                         }
@@ -1681,13 +1681,13 @@ namespace GameSvr.Npc
                     }
                     if (PlayObject.DecGold(nRepairPrice))
                     {
-                        if (m_boCastle || M2Share.Config.boGetAllNpcTax)
+                        if (m_boCastle || M2Share.Config.GetAllNpcTax)
                         {
                             if (Castle != null)
                             {
                                 Castle.IncRateGold(nRepairPrice);
                             }
-                            else if (M2Share.Config.boGetAllNpcTax)
+                            else if (M2Share.Config.GetAllNpcTax)
                             {
                                 M2Share.CastleMgr.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
                             }

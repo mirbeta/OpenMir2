@@ -94,34 +94,34 @@ namespace GameSvr.Conf
             M2Share.Config.sBankAccount9 = ReadString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
             if (ReadString("Guild", "GuildNotice", "") == "")
             {
-                WriteString("Guild", "GuildNotice", M2Share.Config.sGuildNotice);
+                WriteString("Guild", "GuildNotice", M2Share.Config.GuildNotice);
             }
-            M2Share.Config.sGuildNotice = ReadString("Guild", "GuildNotice", M2Share.Config.sGuildNotice);
+            M2Share.Config.GuildNotice = ReadString("Guild", "GuildNotice", M2Share.Config.GuildNotice);
             if (ReadString("Guild", "GuildWar", "") == "")
             {
-                WriteString("Guild", "GuildWar", M2Share.Config.sGuildWar);
+                WriteString("Guild", "GuildWar", M2Share.Config.GuildWar);
             }
-            M2Share.Config.sGuildWar = ReadString("Guild", "GuildWar", M2Share.Config.sGuildWar);
+            M2Share.Config.GuildWar = ReadString("Guild", "GuildWar", M2Share.Config.GuildWar);
             if (ReadString("Guild", "GuildAll", "") == "")
             {
-                WriteString("Guild", "GuildAll", M2Share.Config.sGuildAll);
+                WriteString("Guild", "GuildAll", M2Share.Config.GuildAll);
             }
-            M2Share.Config.sGuildAll = ReadString("Guild", "GuildAll", M2Share.Config.sGuildAll);
+            M2Share.Config.GuildAll = ReadString("Guild", "GuildAll", M2Share.Config.GuildAll);
             if (ReadString("Guild", "GuildMember", "") == "")
             {
-                WriteString("Guild", "GuildMember", M2Share.Config.sGuildMember);
+                WriteString("Guild", "GuildMember", M2Share.Config.GuildMember);
             }
-            M2Share.Config.sGuildMember = ReadString("Guild", "GuildMember", M2Share.Config.sGuildMember);
+            M2Share.Config.GuildMember = ReadString("Guild", "GuildMember", M2Share.Config.GuildMember);
             if (ReadString("Guild", "GuildMemberRank", "") == "")
             {
-                WriteString("Guild", "GuildMemberRank", M2Share.Config.sGuildMemberRank);
+                WriteString("Guild", "GuildMemberRank", M2Share.Config.GuildMemberRank);
             }
-            M2Share.Config.sGuildMemberRank = ReadString("Guild", "GuildMemberRank", M2Share.Config.sGuildMemberRank);
+            M2Share.Config.GuildMemberRank = ReadString("Guild", "GuildMemberRank", M2Share.Config.GuildMemberRank);
             if (ReadString("Guild", "GuildChief", "") == "")
             {
-                WriteString("Guild", "GuildChief", M2Share.Config.sGuildChief);
+                WriteString("Guild", "GuildChief", M2Share.Config.GuildChief);
             }
-            M2Share.Config.sGuildChief = ReadString("Guild", "GuildChief", M2Share.Config.sGuildChief);
+            M2Share.Config.GuildChief = ReadString("Guild", "GuildChief", M2Share.Config.GuildChief);
             LoadString = ReadString("String", "ClientSoftVersionError", "");
             if (LoadString == "")
             {

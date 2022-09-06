@@ -69,48 +69,48 @@ namespace GameSvr.Conf
         public bool ViewAdmissionFailure;
         public string BaseDir;
         public string GuildDir;
-        public string sGuildFile;
-        public string sVentureDir;
-        public string sConLogDir;
-        public string sCastleDir;
-        public string sCastleFile;
-        public string sEnvirDir;
-        public string sMapDir;
-        public string sNoticeDir;
-        public string sLogDir;
+        public string GuildFile;
+        public string VentureDir;
+        public string ConLogDir;
+        public string CastleDir;
+        public string CastleFile;
+        public string EnvirDir;
+        public string MapDir;
+        public string NoticeDir;
+        public string LogDir;
         public string sClientFile1;
         public string sClientFile2;
         public string sClientFile3;
-        public string sClothsMan;
-        public string sClothsWoman;
-        public string sWoodenSword;
-        public string sCandle;
-        public string sBasicDrug;
-        public string sGoldStone;
-        public string sSilverStone;
-        public string sSteelStone;
-        public string sCopperStone;
-        public string sBlackStone;
-        public string sGemStone1;
-        public string sGemStone2;
-        public string sGemStone3;
-        public string sGemStone4;
-        public string[] sZuma;
-        public string sBee;
-        public string sSpider;
-        public string sWomaHorn;
-        public string sZumaPiece;
-        public string sGameGoldName;
-        public string sGamePointName;
-        public string sPayMentPointName;
+        public string ClothsMan;
+        public string ClothsWoman;
+        public string WoodenSword;
+        public string Candle;
+        public string BasicDrug;
+        public string GoldStone;
+        public string SilverStone;
+        public string SteelStone;
+        public string CopperStone;
+        public string BlackStone;
+        public string GemStone1;
+        public string GemStone2;
+        public string GemStone3;
+        public string GemStone4;
+        public string[] Zuma;
+        public string Bee;
+        public string Spider;
+        public string WomaHorn;
+        public string ZumaPiece;
+        public string GameGoldName;
+        public string GamePointName;
+        public string PayMentPointName;
         public int DBSocket;
-        public int nHealthFillTime;
-        public int nSpellFillTime;
-        public int nMonUpLvNeedKillBase;
-        public int nMonUpLvRate;
+        public int HealthFillTime;
+        public int SpellFillTime;
+        public int MonUpLvNeedKillBase;
+        public int MonUpLvRate;
         public int[] MonUpLvNeedKillCount;
         public byte[] SlaveColor;
-        public int[] dwNeedExps;
+        public int[] NeedExps;
         public byte[] WideAttack;
         public byte[] CrsAttack;
         public byte[,,] SpitMap;
@@ -144,7 +144,7 @@ namespace GameSvr.Conf
         /// </summary>
         public int SafeZoneSize;
         public int StartPointSize;
-        public int dwHumanGetMsgTime;
+        public int HumanGetMsgTime;
         public int GroupMembersMax;
         public int WarrMon;
         public int WizardMon;
@@ -608,23 +608,23 @@ namespace GameSvr.Conf
         public byte btPKLevel1NameColor;
         public byte btPKLevel2NameColor;
         public byte btAllyAndGuildNameColor;
-        public byte btWarGuildNameColor;
-        public byte btInFreePKAreaNameColor;
-        public bool boSpiritMutiny;
-        public int dwSpiritMutinyTime;
-        public int nSpiritPowerRate;
-        public bool boMasterDieMutiny;
-        public int nMasterDieMutinyRate;
-        public int nMasterDieMutinyPower;
-        public int nMasterDieMutinySpeed;
+        public byte WarGuildNameColor;
+        public byte InFreePKAreaNameColor;
+        public bool SpiritMutiny;
+        public int SpiritMutinyTime;
+        public int SpiritPowerRate;
+        public bool MasterDieMutiny;
+        public int MasterDieMutinyRate;
+        public int MasterDieMutinyPower;
+        public int MasterDieMutinySpeed;
         public bool boBBMonAutoChangeColor;
         public int dwBBMonAutoChangeColorTime;
         public bool boOldClientShowHiLevel;
         public bool boShowScriptActionMsg;
         public int nRunSocketDieLoopLimit;
-        public bool boThreadRun;
-        public bool boShowExceptionMsg;
-        public bool boShowPreFixMsg;
+        public bool ThreadRun;
+        public bool ShowExceptionMsg;
+        public bool ShowPreFixMsg;
         /// <summary>
         /// 魔法锁定范围
         /// </summary>
@@ -633,28 +633,28 @@ namespace GameSvr.Conf
         /// <summary>
         /// 物品掉落范围
         /// </summary>
-        public int nDropItemRage;
-        public string sSkeleton;
-        public int nSkeletonCount;
+        public int DropItemRage;
+        public string Skeleton;
+        public int SkeletonCount;
         public TRecallMigic[] SkeletonArray;
-        public string sDragon;
-        public string sDragon1;
-        public int nDragonCount;
+        public string Dragon;
+        public string Dragon1;
+        public int DragonCount;
         public TRecallMigic[] DragonArray;
-        public string sAngel;
-        public int nAmyOunsulPoint;
-        public bool boDisableInSafeZoneFireCross;
-        public bool boGroupMbAttackPlayObject;
-        public int dwPosionDecHealthTime;
+        public string Angel;
+        public int AmyOunsulPoint;
+        public bool DisableInSafeZoneFireCross;
+        public bool GroupMbAttackPlayObject;
+        public int PosionDecHealthTime;
         /// <summary>
         /// 中红毒着持久及减防量（实际大小为 12 / 10）
         /// </summary>
-        public int nPosionDamagarmor;
-        public bool boLimitSwordLong;
-        public int nSwordLongPowerRate;
-        public int nFireBoomRage;
-        public int nSnowWindRange;
-        public int nElecBlizzardRange;
+        public int PosionDamagarmor;
+        public bool LimitSwordLong;
+        public int SwordLongPowerRate;
+        public int FireBoomRage;
+        public int SnowWindRange;
+        public int ElecBlizzardRange;
         /// <summary>
         /// 圣言怪物等级限制
         /// </summary>
@@ -671,39 +671,39 @@ namespace GameSvr.Conf
         /// 成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
         /// </summary>        
         public int MagTammingHPRate;
-        public int nMagTammingCount;
-        public int nMabMabeHitRandRate;
-        public int nMabMabeHitMinLvLimit;
-        public int nMabMabeHitSucessRate;
-        public int nMabMabeHitMabeTimeRate;
-        public string sCastleName;
-        public string sCastleHomeMap;
-        public int nCastleHomeX;
-        public int nCastleHomeY;
-        public int nCastleWarRangeX;
-        public int nCastleWarRangeY;
-        public int nCastleTaxRate;
-        public bool boGetAllNpcTax;
-        public int nHireGuardPrice;
-        public int nHireArcherPrice;
-        public int nCastleGoldMax;
-        public int nCastleOneDayGold;
-        public int nRepairDoorPrice;
-        public int nRepairWallPrice;
-        public int nCastleMemberPriceRate;
-        public int nMaxHitMsgCount;
-        public int nMaxSpellMsgCount;
-        public int nMaxRunMsgCount;
-        public int nMaxWalkMsgCount;
-        public int nMaxTurnMsgCount;
-        public int nMaxSitDonwMsgCount;
-        public int nMaxDigUpMsgCount;
-        public bool boSpellSendUpdateMsg;
-        public bool boActionSendActionMsg;
-        public bool boKickOverSpeed;
-        public int btSpeedControlMode;
-        public int nOverSpeedKickCount;
-        public int dwDropOverSpeed;
+        public int MagTammingCount;
+        public int MabMabeHitRandRate;
+        public int MabMabeHitMinLvLimit;
+        public int MabMabeHitSucessRate;
+        public int MabMabeHitMabeTimeRate;
+        public string CastleName;
+        public string CastleHomeMap;
+        public int CastleHomeX;
+        public int CastleHomeY;
+        public int CastleWarRangeX;
+        public int CastleWarRangeY;
+        public int CastleTaxRate;
+        public bool GetAllNpcTax;
+        public int HireGuardPrice;
+        public int HireArcherPrice;
+        public int CastleGoldMax;
+        public int CastleOneDayGold;
+        public int RepairDoorPrice;
+        public int RepairWallPrice;
+        public int CastleMemberPriceRate;
+        public int MaxHitMsgCount;
+        public int MaxSpellMsgCount;
+        public int MaxRunMsgCount;
+        public int MaxWalkMsgCount;
+        public int MaxTurnMsgCount;
+        public int MaxSitDonwMsgCount;
+        public int MaxDigUpMsgCount;
+        public bool SpellSendUpdateMsg;
+        public bool ActionSendActionMsg;
+        public bool KickOverSpeed;
+        public int SpeedControlMode;
+        public int OverSpeedKickCount;
+        public int DropOverSpeed;
         /// <summary>
         /// 攻击间隔(ms)
         /// </summary>
@@ -732,50 +732,50 @@ namespace GameSvr.Conf
         /// <summary>
         /// 组合操作间隔
         /// </summary>
-        public int dwActionIntervalTime;
+        public int ActionIntervalTime;
         /// <summary>
         /// 跑位刺杀间隔
         /// </summary>        
-        public int dwRunLongHitIntervalTime;
+        public int RunLongHitIntervalTime;
         /// <summary>
         /// 跑位攻击间隔
         /// </summary>        
-        public int dwRunHitIntervalTime;
+        public int RunHitIntervalTime;
         /// <summary>
         /// 走位攻击间隔
         /// </summary>        
-        public int dwWalkHitIntervalTime;
+        public int WalkHitIntervalTime;
         /// <summary>
         /// 跑位魔法间隔
         /// </summary>        
-        public int dwRunMagicIntervalTime;
+        public int RunMagicIntervalTime;
         /// <summary>
         /// 不显示人物弯腰动作
         /// </summary>        
-        public bool boDisableStruck;
+        public bool DisableStruck;
         /// <summary>
         /// 自己不显示人物弯腰动作
         /// </summary>        
-        public bool boDisableSelfStruck;
+        public bool DisableSelfStruck;
         /// <summary>
         /// 人物弯腰停留时间
         /// </summary>        
-        public int dwStruckTime;
+        public int StruckTime;
         /// <summary>
         /// 杀怪经验倍数
         /// </summary>        
-        public int dwKillMonExpMultiple;
-        public int dwRequestVersion;
-        public bool boHighLevelKillMonFixExp;
-        public bool boHighLevelGroupFixExp;
-        public bool boMonDelHptoExp;
+        public int KillMonExpMultiple;
+        public int RequestVersion;
+        public bool HighLevelKillMonFixExp;
+        public bool HighLevelGroupFixExp;
+        public bool MonDelHptoExp;
         public int MonHptoExpLevel;
         public int MonHptoExpmax;
-        public bool boUseFixExp;
+        public bool UseFixExp;
         public int BaseExp;
         public int nAddExp;
-        public int nLimitExpLevel;
-        public int nLimitExpValue;
+        public int LimitExpLevel;
+        public int LimitExpValue;
         public bool boAddUserItemNewValue;
         public string sLineNoticePreFix;
         public string sSysMsgPreFix;
@@ -786,14 +786,14 @@ namespace GameSvr.Conf
         public string sMonSayMsgpreFix;
         public string sCustMsgpreFix;
         public string sCastleMsgpreFix;
-        public string sGuildNotice;
-        public string sGuildWar;
-        public string sGuildAll;
-        public string sGuildMember;
-        public string sGuildMemberRank;
-        public string sGuildChief;
+        public string GuildNotice;
+        public string GuildWar;
+        public string GuildAll;
+        public string GuildMember;
+        public string GuildMemberRank;
+        public string GuildChief;
         public bool boKickAllUser;
-        public bool boTestSpeedMode;
+        public bool TestSpeedMode;
         /// <summary>
         /// 气血石
         /// </summary>
@@ -809,7 +809,7 @@ namespace GameSvr.Conf
         /// <summary>
         /// 魔血石
         /// </summary>        
-        public int MPStoneIntervalTime;
+        public int MpStoneIntervalTime;
         /// <summary>
         /// 气血石
         /// </summary>        
@@ -827,13 +827,13 @@ namespace GameSvr.Conf
         /// </summary>        
         public int MPStoneDecDura;
         public TClientConf ClientConf;
-        public int nWeaponMakeUnLuckRate;
-        public int nWeaponMakeLuckPoint1;
-        public int nWeaponMakeLuckPoint2;
-        public int nWeaponMakeLuckPoint3;
-        public int nWeaponMakeLuckPoint2Rate;
-        public int nWeaponMakeLuckPoint3Rate;
-        public bool boCheckUserItemPlace;
+        public int WeaponMakeUnLuckRate;
+        public int WeaponMakeLuckPoint1;
+        public int WeaponMakeLuckPoint2;
+        public int WeaponMakeLuckPoint3;
+        public int WeaponMakeLuckPoint2Rate;
+        public int WeaponMakeLuckPoint3Rate;
+        public bool CheckUserItemPlace;
         public int nClientKey;
         public int nLevelValueOfTaosHP;
         public double nLevelValueOfTaosHPRate;
@@ -1006,48 +1006,48 @@ namespace GameSvr.Conf
             ViewAdmissionFailure = false;
             BaseDir = ".\\Share\\";
             GuildDir = ".\\GuildBase\\Guilds\\";
-            sGuildFile = ".\\GuildBase\\GuildList.txt";
-            sVentureDir = ".\\ShareV\\";
-            sConLogDir = ".\\ConLog\\";
-            sCastleDir = ".\\Envir\\Castle\\";
-            sCastleFile = ".\\Envir\\Castle\\List.txt";
-            sEnvirDir = ".\\Envir\\";
-            sMapDir = ".\\Map\\";
-            sNoticeDir = ".\\Notice\\";
-            sLogDir = ".\\Log\\";
+            GuildFile = ".\\GuildBase\\GuildList.txt";
+            VentureDir = ".\\ShareV\\";
+            ConLogDir = ".\\ConLog\\";
+            CastleDir = ".\\Envir\\Castle\\";
+            CastleFile = ".\\Envir\\Castle\\List.txt";
+            EnvirDir = ".\\Envir\\";
+            MapDir = ".\\Map\\";
+            NoticeDir = ".\\Notice\\";
+            LogDir = ".\\Log\\";
             sClientFile1 = "mir.1";
             sClientFile2 = "mir.Dat";
             sClientFile3 = "mir.3";
-            sClothsMan = "布衣(男)";
-            sClothsWoman = "布衣(女)";
-            sWoodenSword = "木剑";
-            sCandle = "蜡烛";
-            sBasicDrug = "金创药(小量)";
-            sGoldStone = "金矿";
-            sSilverStone = "银矿";
-            sSteelStone = "铁矿";
-            sCopperStone = "铜矿";
-            sBlackStone = "黑铁矿";
-            sGemStone1 = "金刚石矿";
-            sGemStone2 = "绿宝石矿";
-            sGemStone3 = "红宝石矿";
-            sGemStone4 = "白宝石矿";
-            sZuma = new string[] { "祖玛卫士", "祖玛雕像", "祖玛弓箭手", "楔蛾" };
-            sBee = "蝙蝠";
-            sSpider = "爆裂蜘蛛";
-            sWomaHorn = "沃玛号角";
-            sZumaPiece = "祖玛头像";
-            sGameGoldName = "元宝";
-            sGamePointName = "游戏点";
-            sPayMentPointName = "荣誉值";
+            ClothsMan = "布衣(男)";
+            ClothsWoman = "布衣(女)";
+            WoodenSword = "木剑";
+            Candle = "蜡烛";
+            BasicDrug = "金创药(小量)";
+            GoldStone = "金矿";
+            SilverStone = "银矿";
+            SteelStone = "铁矿";
+            CopperStone = "铜矿";
+            BlackStone = "黑铁矿";
+            GemStone1 = "金刚石矿";
+            GemStone2 = "绿宝石矿";
+            GemStone3 = "红宝石矿";
+            GemStone4 = "白宝石矿";
+            Zuma = new string[] { "祖玛卫士", "祖玛雕像", "祖玛弓箭手", "楔蛾" };
+            Bee = "蝙蝠";
+            Spider = "爆裂蜘蛛";
+            WomaHorn = "沃玛号角";
+            ZumaPiece = "祖玛头像";
+            GameGoldName = "元宝";
+            GamePointName = "游戏点";
+            PayMentPointName = "荣誉值";
             DBSocket = 0;
-            nHealthFillTime = 300;
-            nSpellFillTime = 800;
-            nMonUpLvNeedKillBase = 100;
-            nMonUpLvRate = 16;
+            HealthFillTime = 300;
+            SpellFillTime = 800;
+            MonUpLvNeedKillBase = 100;
+            MonUpLvRate = 16;
             MonUpLvNeedKillCount = new int[] { 0, 0, 50, 100, 200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800, 153600 };
             SlaveColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 249, 250, 250, 250, 250, 250, 250 };
-            dwNeedExps = new int[Grobal2.MaxChangeLevel];
+            NeedExps = new int[Grobal2.MaxChangeLevel];
             WideAttack = new byte[] { 7, 1, 2 };
             CrsAttack = new byte[] { 7, 1, 2, 3, 4, 5, 6 };
             SpitMap = new byte[,,]{
@@ -1119,7 +1119,7 @@ namespace GameSvr.Conf
             dwDecLightItemDrugTime = 500;
             SafeZoneSize = 10;
             StartPointSize = 2;
-            dwHumanGetMsgTime = 200;
+            HumanGetMsgTime = 200;
             GroupMembersMax = 10;
             WarrMon = 10;
             WizardMon = 10;
@@ -1453,81 +1453,81 @@ namespace GameSvr.Conf
             btPKLevel1NameColor = 0xFB;
             btPKLevel2NameColor = 0xF9;
             btAllyAndGuildNameColor = 0xB4;
-            btWarGuildNameColor = 0x45;
-            btInFreePKAreaNameColor = 0xDD;
-            boSpiritMutiny = false;
-            dwSpiritMutinyTime = 30 * 60 * 1000;
-            nSpiritPowerRate = 2;
-            boMasterDieMutiny = false;
-            nMasterDieMutinyRate = 5;
-            nMasterDieMutinyPower = 10;
-            nMasterDieMutinySpeed = 5;
+            WarGuildNameColor = 0x45;
+            InFreePKAreaNameColor = 0xDD;
+            SpiritMutiny = false;
+            SpiritMutinyTime = 30 * 60 * 1000;
+            SpiritPowerRate = 2;
+            MasterDieMutiny = false;
+            MasterDieMutinyRate = 5;
+            MasterDieMutinyPower = 10;
+            MasterDieMutinySpeed = 5;
             boBBMonAutoChangeColor = false;
             dwBBMonAutoChangeColorTime = 3000;
             boOldClientShowHiLevel = true;
             boShowScriptActionMsg = true;
             nRunSocketDieLoopLimit = 100;
-            boThreadRun = false;
-            boShowExceptionMsg = false;
-            boShowPreFixMsg = false;
+            ThreadRun = false;
+            ShowExceptionMsg = false;
+            ShowPreFixMsg = false;
             MagicAttackRage = 8; //魔法锁定范围
             nBoBoall = true;
-            nDropItemRage = 3; //爆物范围
-            sSkeleton = "变异骷髅";
-            nSkeletonCount = 1;
+            DropItemRage = 3; //爆物范围
+            Skeleton = "变异骷髅";
+            SkeletonCount = 1;
             SkeletonArray = new TRecallMigic[10];
-            sDragon = "神兽";
-            sDragon1 = "神兽1";
-            nDragonCount = 1;
+            Dragon = "神兽";
+            Dragon1 = "神兽1";
+            DragonCount = 1;
             DragonArray = new TRecallMigic[10];
-            sAngel = "精灵";
-            nAmyOunsulPoint = 10;
-            boDisableInSafeZoneFireCross = false;
-            boGroupMbAttackPlayObject = false;
-            dwPosionDecHealthTime = 2500;
-            nPosionDamagarmor = 12;//中红毒着持久及减防量（实际大小为 12 / 10）
-            boLimitSwordLong = false;
-            nSwordLongPowerRate = 100;
-            nFireBoomRage = 1;
-            nSnowWindRange = 1;
-            nElecBlizzardRange = 2;
+            Angel = "精灵";
+            AmyOunsulPoint = 10;
+            DisableInSafeZoneFireCross = false;
+            GroupMbAttackPlayObject = false;
+            PosionDecHealthTime = 2500;
+            PosionDamagarmor = 12;//中红毒着持久及减防量（实际大小为 12 / 10）
+            LimitSwordLong = false;
+            SwordLongPowerRate = 100;
+            FireBoomRage = 1;
+            SnowWindRange = 1;
+            ElecBlizzardRange = 2;
             MagTurnUndeadLevel = 50; //圣言怪物等级限制
             MagTammingLevel = 50; //诱惑之光怪物等级限制
             MagTammingTargetLevel = 10; //诱惑怪物相差等级机率，此数字越小机率越大；
             MagTammingHPRate = 100; //成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
-            nMagTammingCount = 5;
-            nMabMabeHitRandRate = 100;
-            nMabMabeHitMinLvLimit = 10;
-            nMabMabeHitSucessRate = 21;
-            nMabMabeHitMabeTimeRate = 20;
-            sCastleName = "沙巴克";
-            sCastleHomeMap = "3";
-            nCastleHomeX = 644;
-            nCastleHomeY = 290;
-            nCastleWarRangeX = 100;
-            nCastleWarRangeY = 100;
-            nCastleTaxRate = 5;
-            boGetAllNpcTax = false;
-            nHireGuardPrice = 300000;
-            nHireArcherPrice = 300000;
-            nCastleGoldMax = 10000000;
-            nCastleOneDayGold = 2000000;
-            nRepairDoorPrice = 2000000;
-            nRepairWallPrice = 500000;
-            nCastleMemberPriceRate = 80;
-            nMaxHitMsgCount = 1;
-            nMaxSpellMsgCount = 1;
-            nMaxRunMsgCount = 1;
-            nMaxWalkMsgCount = 1;
-            nMaxTurnMsgCount = 1;
-            nMaxSitDonwMsgCount = 1;
-            nMaxDigUpMsgCount = 1;
-            boSpellSendUpdateMsg = true;
-            boActionSendActionMsg = true;
-            boKickOverSpeed = false;
-            btSpeedControlMode = 0;
-            nOverSpeedKickCount = 4;
-            dwDropOverSpeed = 10;
+            MagTammingCount = 5;
+            MabMabeHitRandRate = 100;
+            MabMabeHitMinLvLimit = 10;
+            MabMabeHitSucessRate = 21;
+            MabMabeHitMabeTimeRate = 20;
+            CastleName = "沙巴克";
+            CastleHomeMap = "3";
+            CastleHomeX = 644;
+            CastleHomeY = 290;
+            CastleWarRangeX = 100;
+            CastleWarRangeY = 100;
+            CastleTaxRate = 5;
+            GetAllNpcTax = false;
+            HireGuardPrice = 300000;
+            HireArcherPrice = 300000;
+            CastleGoldMax = 10000000;
+            CastleOneDayGold = 2000000;
+            RepairDoorPrice = 2000000;
+            RepairWallPrice = 500000;
+            CastleMemberPriceRate = 80;
+            MaxHitMsgCount = 1;
+            MaxSpellMsgCount = 1;
+            MaxRunMsgCount = 1;
+            MaxWalkMsgCount = 1;
+            MaxTurnMsgCount = 1;
+            MaxSitDonwMsgCount = 1;
+            MaxDigUpMsgCount = 1;
+            SpellSendUpdateMsg = true;
+            ActionSendActionMsg = true;
+            KickOverSpeed = false;
+            SpeedControlMode = 0;
+            OverSpeedKickCount = 4;
+            DropOverSpeed = 10;
             HitIntervalTime = 900; //攻击间隔
             MagicHitIntervalTime = 800; //魔法间隔
             RunIntervalTime = 600; //跑步间隔
@@ -1538,26 +1538,26 @@ namespace GameSvr.Conf
             boControlRunLongHit = true;
             boControlRunHit = true;
             boControlRunMagic = true;
-            dwActionIntervalTime = 350; //组合操作间隔
-            dwRunLongHitIntervalTime = 800; //跑位刺杀间隔
-            dwRunHitIntervalTime = 800; //跑位攻击间隔
-            dwWalkHitIntervalTime = 800; //走位攻击间隔
-            dwRunMagicIntervalTime = 900; //跑位魔法间隔
-            boDisableStruck = false; //不显示人物弯腰动作
-            boDisableSelfStruck = false; //自己不显示人物弯腰动作
-            dwStruckTime = 100; //人物弯腰停留时间
-            dwKillMonExpMultiple = 1; //杀怪经验倍数
-            dwRequestVersion = 98;
-            boHighLevelKillMonFixExp = false;
-            boHighLevelGroupFixExp = true;
-            boMonDelHptoExp = false;
+            ActionIntervalTime = 350; //组合操作间隔
+            RunLongHitIntervalTime = 800; //跑位刺杀间隔
+            RunHitIntervalTime = 800; //跑位攻击间隔
+            WalkHitIntervalTime = 800; //走位攻击间隔
+            RunMagicIntervalTime = 900; //跑位魔法间隔
+            DisableStruck = false; //不显示人物弯腰动作
+            DisableSelfStruck = false; //自己不显示人物弯腰动作
+            StruckTime = 100; //人物弯腰停留时间
+            KillMonExpMultiple = 1; //杀怪经验倍数
+            RequestVersion = 98;
+            HighLevelKillMonFixExp = false;
+            HighLevelGroupFixExp = true;
+            MonDelHptoExp = false;
             MonHptoExpLevel = 100;
             MonHptoExpmax = 1;
-            boUseFixExp = true;
+            UseFixExp = true;
             BaseExp = 100000000;
             nAddExp = 1000000;
-            nLimitExpLevel = 1000;
-            nLimitExpValue = 1;
+            LimitExpLevel = 1000;
+            LimitExpValue = 1;
             boAddUserItemNewValue = true;
             sLineNoticePreFix = "〖公告〗";
             sSysMsgPreFix = "〖系统〗";
@@ -1568,18 +1568,18 @@ namespace GameSvr.Conf
             sMonSayMsgpreFix = "〖怪物〗";
             sCustMsgpreFix = "〖祝福〗";
             sCastleMsgpreFix = "〖城主〗";
-            sGuildNotice = "公告";
-            sGuildWar = "敌对行会";
-            sGuildAll = "联盟行会";
-            sGuildMember = "行会成员";
-            sGuildMemberRank = "行会成员";
-            sGuildChief = "掌门人";
+            GuildNotice = "公告";
+            GuildWar = "敌对行会";
+            GuildAll = "联盟行会";
+            GuildMember = "行会成员";
+            GuildMemberRank = "行会成员";
+            GuildChief = "掌门人";
             boKickAllUser = false;
-            boTestSpeedMode = false;
+            TestSpeedMode = false;
             HPStoneStartRate = 80; //气血石
             MPStoneStartRate = 80; //魔血石
             HPStoneIntervalTime = 1000; //气血石
-            MPStoneIntervalTime = 1000; //魔血石
+            MpStoneIntervalTime = 1000; //魔血石
             HPStoneAddRate = 10; //气血石
             MPStoneAddRate = 10; //魔血石
             HPStoneDecDura = 1000; //气血石
@@ -1608,13 +1608,13 @@ namespace GameSvr.Conf
                 boMagicLock = false,
                 boAutoPuckUpItem = false
             };
-            nWeaponMakeUnLuckRate = 20;
-            nWeaponMakeLuckPoint1 = 1;
-            nWeaponMakeLuckPoint2 = 3;
-            nWeaponMakeLuckPoint3 = 7;
-            nWeaponMakeLuckPoint2Rate = 6;
-            nWeaponMakeLuckPoint3Rate = 10 + 30;
-            boCheckUserItemPlace = true;
+            WeaponMakeUnLuckRate = 20;
+            WeaponMakeLuckPoint1 = 1;
+            WeaponMakeLuckPoint2 = 3;
+            WeaponMakeLuckPoint3 = 7;
+            WeaponMakeLuckPoint2Rate = 6;
+            WeaponMakeLuckPoint3Rate = 10 + 30;
+            CheckUserItemPlace = true;
             nClientKey = 6534;
             nClientKey = 500;
             nLevelValueOfTaosHP = 6;

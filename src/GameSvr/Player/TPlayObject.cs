@@ -128,14 +128,14 @@ namespace GameSvr.Player
 
         private void WinExp(int dwExp)
         {
-            if (Abil.Level > M2Share.Config.nLimitExpLevel)
+            if (Abil.Level > M2Share.Config.LimitExpLevel)
             {
-                dwExp = M2Share.Config.nLimitExpValue;
+                dwExp = M2Share.Config.LimitExpValue;
                 GetExp(dwExp);
             }
             else if (dwExp > 0)
             {
-                dwExp = M2Share.Config.dwKillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
+                dwExp = M2Share.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
                 dwExp = m_nKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
                 dwExp = HUtil32.Round(m_nKillMonExpRate / 100 * dwExp);// 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
@@ -406,7 +406,7 @@ namespace GameSvr.Player
         {
             StdItem StdItem;
             TUserItem UseItem;
-            if (!M2Share.Config.boSpiritMutiny || !MBopirit)
+            if (!M2Share.Config.SpiritMutiny || !MBopirit)
             {
                 return;
             }
@@ -433,7 +433,7 @@ namespace GameSvr.Player
                 }
             }
             RecalcAbilitys();
-            M2Share.g_dwSpiritMutinyTick = HUtil32.GetTickCount() + M2Share.Config.dwSpiritMutinyTime;
+            M2Share.g_dwSpiritMutinyTick = HUtil32.GetTickCount() + M2Share.Config.SpiritMutinyTime;
             M2Share.UserEngine.SendBroadCastMsg("神之祈祷，天地震怒，尸横遍野...", MsgType.System);
             SysMsg("祈祷发出强烈的宇宙效应", MsgColor.Green, MsgType.Hint);
         }
@@ -854,7 +854,7 @@ namespace GameSvr.Player
                             PlayObject = GroupOwner.GroupMembers[i];
                             if (!PlayObject.Death && Envir == PlayObject.Envir && Math.Abs(CurrX - PlayObject.CurrX) <= 12 && Math.Abs(CurrX - PlayObject.CurrX) <= 12)
                             {
-                                if (M2Share.Config.boHighLevelKillMonFixExp)
+                                if (M2Share.Config.HighLevelKillMonFixExp)
                                 {
                                     PlayObject.WinExp(HUtil32.Round(dwExp / n)); // 在高等级经验不变时，把组队的经验平均分配
                                 }
@@ -916,8 +916,8 @@ namespace GameSvr.Player
                 + " 防御力: " + HUtil32.LoWord(this.MWAbil.AC) + '-' + HUtil32.HiWord(this.MWAbil.AC) + " 魔防力: " + HUtil32.LoWord(this.MWAbil.MAC)
                 + '-' + HUtil32.HiWord(this.MWAbil.MAC) + " 准确:" + this.HitPoint + " 敏捷:" + this.SpeedPoint + " 速度:" + this.HitSpeed
                 + " 仓库密码:" + m_sStoragePwd + " 登录IP:" + m_sIPaddr + '(' + m_sIPLocal + ')' + " 登录帐号:" + m_sUserID + " 登录时间:" + m_dLogonTime
-                + " 在线时长(分钟):" + ((HUtil32.GetTickCount() - m_dwLogonTick) / 60000) + " 登录模式:" + m_nPayMent + ' ' + M2Share.Config.sGameGoldName + ':' + m_nGameGold
-                + ' ' + M2Share.Config.sGamePointName + ':' + m_nGamePoint + ' ' + M2Share.Config.sPayMentPointName + ':' + m_nPayMentPoint + " 会员类型:" + m_nMemberType
+                + " 在线时长(分钟):" + ((HUtil32.GetTickCount() - m_dwLogonTick) / 60000) + " 登录模式:" + m_nPayMent + ' ' + M2Share.Config.GameGoldName + ':' + m_nGameGold
+                + ' ' + M2Share.Config.GamePointName + ':' + m_nGamePoint + ' ' + M2Share.Config.PayMentPointName + ':' + m_nPayMentPoint + " 会员类型:" + m_nMemberType
                 + " 会员等级:" + m_nMemberLevel + " 经验倍数:" + (m_nKillMonExpRate / 100) + " 攻击倍数:" + (m_nPowerRate / 100) + " 声望值:" + m_btCreditPoint;
         }
 
@@ -1024,7 +1024,7 @@ namespace GameSvr.Player
             }
             if (boSendName)
             {
-                sMsg = M2Share.Config.sGameGoldName + '\r' + M2Share.Config.sGamePointName;
+                sMsg = M2Share.Config.GameGoldName + '\r' + M2Share.Config.GamePointName;
             }
             SendDefMessage(Grobal2.SM_GAMEGOLDNAME, m_nGameGold, HUtil32.LoWord(m_nGamePoint), HUtil32.HiWord(m_nGamePoint), 0, sMsg);
         }
@@ -2558,7 +2558,7 @@ namespace GameSvr.Player
             if (nRandom >= M2Share.Config.GoldStoneMin && nRandom <= M2Share.Config.GoldStoneMax)
             {
                 UserItem = new TUserItem();
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sGoldStone, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.GoldStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(UserItem);
@@ -2574,7 +2574,7 @@ namespace GameSvr.Player
             if (nRandom >= M2Share.Config.SilverStoneMin && nRandom <= M2Share.Config.SilverStoneMax)
             {
                 UserItem = new TUserItem();
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sSilverStone, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.SilverStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(UserItem);
@@ -2590,7 +2590,7 @@ namespace GameSvr.Player
             if (nRandom >= M2Share.Config.nSteelStoneMin && nRandom <= M2Share.Config.nSteelStoneMax)
             {
                 UserItem = new TUserItem();
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sSteelStone, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.SteelStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(UserItem);
@@ -2606,7 +2606,7 @@ namespace GameSvr.Player
             if (nRandom >= M2Share.Config.nBlackStoneMin && nRandom <= M2Share.Config.nBlackStoneMax)
             {
                 UserItem = new TUserItem();
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sBlackStone, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.BlackStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(UserItem);
@@ -2620,7 +2620,7 @@ namespace GameSvr.Player
                 return;
             }
             UserItem = new TUserItem();
-            if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sCopperStone, ref UserItem))
+            if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.CopperStone, ref UserItem))
             {
                 UserItem.Dura = MakeMineRandomDrua();
                 ItemList.Add(UserItem);
@@ -2646,7 +2646,7 @@ namespace GameSvr.Player
             var mineRate = M2Share.RandomNumber.Random(120);
             if (HUtil32.RangeInDefined(mineRate, 1, 2))
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sGemStone1, ref mineItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.GemStone1, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2660,7 +2660,7 @@ namespace GameSvr.Player
             }
             else if (HUtil32.RangeInDefined(mineRate, 3, 20))
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sGemStone2, ref mineItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.GemStone2, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2674,7 +2674,7 @@ namespace GameSvr.Player
             }
             else if (HUtil32.RangeInDefined(mineRate, 21, 45))
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sGemStone3, ref mineItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.GemStone3, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2688,7 +2688,7 @@ namespace GameSvr.Player
             }
             else
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sGemStone4, ref mineItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.GemStone4, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -3081,12 +3081,12 @@ namespace GameSvr.Player
                 return true;
             }
             int dwCheckTime;
-            if (!M2Share.Config.boDisableStruck) // 检查人物弯腰停留时间
+            if (!M2Share.Config.DisableStruck) // 检查人物弯腰停留时间
             {
                 dwCheckTime = HUtil32.GetTickCount() - StruckTick;
-                if (M2Share.Config.dwStruckTime > dwCheckTime)
+                if (M2Share.Config.StruckTime > dwCheckTime)
                 {
-                    dwDelayTime = M2Share.Config.dwStruckTime - dwCheckTime;
+                    dwDelayTime = M2Share.Config.StruckTime - dwCheckTime;
                     m_btOldDir = Direction;
                     return false;
                 }
@@ -3298,7 +3298,7 @@ namespace GameSvr.Player
             StringList LoadList;
             string sSayMsg;
             var boIsfound = false;
-            var sUnMarryFileName = M2Share.BasePath + M2Share.Config.sEnvirDir + "UnMarry.txt";
+            var sUnMarryFileName = M2Share.BasePath + M2Share.Config.EnvirDir + "UnMarry.txt";
             if (File.Exists(sUnMarryFileName))
             {
                 LoadList = new StringList();

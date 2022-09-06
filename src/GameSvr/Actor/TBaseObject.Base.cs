@@ -49,7 +49,7 @@ namespace GameSvr.Actor
                 if (!Death)
                 {
                     ushort n18;
-                    if ((MWAbil.HP < MWAbil.MaxHP) && (HealthTick >= M2Share.Config.nHealthFillTime))
+                    if ((MWAbil.HP < MWAbil.MaxHP) && (HealthTick >= M2Share.Config.HealthFillTime))
                     {
                         n18 = (ushort)((MWAbil.MaxHP / 75) + 1);
                         if ((MWAbil.HP + n18) < MWAbil.MaxHP)
@@ -62,7 +62,7 @@ namespace GameSvr.Actor
                         }
                         HealthSpellChanged();
                     }
-                    if ((MWAbil.MP < MWAbil.MaxMP) && (SpellTick >= M2Share.Config.nSpellFillTime))
+                    if ((MWAbil.MP < MWAbil.MaxMP) && (SpellTick >= M2Share.Config.SpellFillTime))
                     {
                         n18 = (ushort)((MWAbil.MaxMP / 18) + 1);
                         if ((MWAbil.MP + n18) < MWAbil.MaxMP)
@@ -90,11 +90,11 @@ namespace GameSvr.Actor
                             Die();
                         }
                     }
-                    if (HealthTick >= M2Share.Config.nHealthFillTime)
+                    if (HealthTick >= M2Share.Config.HealthFillTime)
                     {
                         HealthTick = 0;
                     }
-                    if (SpellTick >= M2Share.Config.nSpellFillTime)
+                    if (SpellTick >= M2Share.Config.SpellFillTime)
                     {
                         SpellTick = 0;
                     }
@@ -202,10 +202,10 @@ namespace GameSvr.Actor
                 {
                     IncHealthSpellTick = HUtil32.GetTickCount();
                 }
-                if ((HealthTick < -M2Share.Config.nHealthFillTime) && (MWAbil.HP > 1))
+                if ((HealthTick < -M2Share.Config.HealthFillTime) && (MWAbil.HP > 1))
                 {
                     MWAbil.HP -= 1;
-                    HealthTick += M2Share.Config.nHealthFillTime;
+                    HealthTick += M2Share.Config.HealthFillTime;
                     HealthSpellChanged();
                 }
                 // 检查HP/MP值是否大于最大值，大于则降低到正常大小
@@ -284,7 +284,7 @@ namespace GameSvr.Actor
                             }
                         }
                         // 加MP
-                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MPStoneIntervalTime) && ((MWAbil.MP / MWAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
+                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((MWAbil.MP / MWAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
                         {
                             IncMpStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
@@ -437,13 +437,13 @@ namespace GameSvr.Actor
                     // 宝宝在主人死亡后死亡处理
                     if (Master.Death && ((HUtil32.GetTickCount() - Master.DeathTick) > 1000))
                     {
-                        if (M2Share.Config.boMasterDieMutiny && (Master.LastHiter != null) && (M2Share.RandomNumber.Random(M2Share.Config.nMasterDieMutinyRate) == 0))
+                        if (M2Share.Config.MasterDieMutiny && (Master.LastHiter != null) && (M2Share.RandomNumber.Random(M2Share.Config.MasterDieMutinyRate) == 0))
                         {
                             Master = null;
                             SlaveExpLevel = (byte)M2Share.Config.SlaveColor.Length;
                             RecalcAbilitys();
-                            MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.DC) * M2Share.Config.nMasterDieMutinyPower, HUtil32.HiWord(MWAbil.DC) * M2Share.Config.nMasterDieMutinyPower);
-                            WalkSpeed = WalkSpeed / M2Share.Config.nMasterDieMutinySpeed;
+                            MWAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(MWAbil.DC) * M2Share.Config.MasterDieMutinyPower, HUtil32.HiWord(MWAbil.DC) * M2Share.Config.MasterDieMutinyPower);
+                            WalkSpeed = WalkSpeed / M2Share.Config.MasterDieMutinySpeed;
                             RefNameColor();
                             RefShowName();
                         }
@@ -662,7 +662,7 @@ namespace GameSvr.Actor
             }
             try
             {
-                if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.dwPosionDecHealthTime)
+                if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
                 {
                     PoisoningTick = HUtil32.GetTickCount();
                     if (StatusTimeArr[Grobal2.POISON_DECHEALTH] > 0)
@@ -1146,7 +1146,7 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
-                var DropWide = HUtil32._MIN(M2Share.Config.nDropItemRage, 7);
+                var DropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
                 if ((Race == Grobal2.RC_PLAYCLONE) && (Master != null))
                 {
                     return;
@@ -1383,7 +1383,7 @@ namespace GameSvr.Actor
                             HealthSpellChanged();
                             SendRefMsg(Grobal2.RM_STRUCK_MAG, (short)nDamage, MWAbil.HP, MWAbil.MaxHP, ProcessMsg.BaseObject, "");
                             TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.BaseObject);
-                            if (M2Share.Config.boMonDelHptoExp)
+                            if (M2Share.Config.MonDelHptoExp)
                             {
                                 if (TargetBaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                 {

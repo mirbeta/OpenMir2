@@ -129,10 +129,10 @@ namespace GameSvr.Castle
         public TUserCastle(string sCastleDir)
         {
             m_MasterGuild = null;
-            m_sHomeMap = M2Share.Config.sCastleHomeMap; // '3'
-            m_nHomeX = M2Share.Config.nCastleHomeX; // 644
-            m_nHomeY = M2Share.Config.nCastleHomeY; // 290
-            m_sName = M2Share.Config.sCastleName; // '沙巴克'
+            m_sHomeMap = M2Share.Config.CastleHomeMap; // '3'
+            m_nHomeX = M2Share.Config.CastleHomeX; // 644
+            m_nHomeY = M2Share.Config.CastleHomeY; // 290
+            m_sName = M2Share.Config.CastleName; // '沙巴克'
             m_sConfigDir = sCastleDir;
             m_sPalaceMap = "0150";
             m_sSecretMap = "D701";
@@ -144,10 +144,10 @@ namespace GameSvr.Castle
             m_AttackWarList = new List<TAttackerInfo>();
             m_AttackGuildList = new List<GuildInfo>();
             m_dwSaveTick = 0;
-            m_nWarRangeX = M2Share.Config.nCastleWarRangeX;
-            m_nWarRangeY = M2Share.Config.nCastleWarRangeY;
+            m_nWarRangeX = M2Share.Config.CastleWarRangeX;
+            m_nWarRangeY = M2Share.Config.CastleWarRangeY;
             m_EnvirList = new List<string>();
-            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir, m_sConfigDir);
+            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, m_sConfigDir);
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
@@ -284,7 +284,7 @@ namespace GameSvr.Castle
         /// </summary>
         private void LoadAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, m_sConfigDir);
             var guildName = string.Empty;
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
@@ -324,7 +324,7 @@ namespace GameSvr.Castle
         /// </summary>
         private void SaveAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, m_sConfigDir);
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
             var sFileName = Path.Combine(sabukwallPath, AttackSabukWallList);
@@ -687,29 +687,29 @@ namespace GameSvr.Castle
         /// <param name="nGold"></param>
         public void IncRateGold(int nGold)
         {
-            var nInGold = HUtil32.Round(nGold * (M2Share.Config.nCastleTaxRate / 100));
-            if (m_nTodayIncome + nInGold <= M2Share.Config.nCastleOneDayGold)
+            var nInGold = HUtil32.Round(nGold * (M2Share.Config.CastleTaxRate / 100));
+            if (m_nTodayIncome + nInGold <= M2Share.Config.CastleOneDayGold)
             {
                 m_nTodayIncome += nInGold;
             }
             else
             {
-                if (m_nTodayIncome >= M2Share.Config.nCastleOneDayGold)
+                if (m_nTodayIncome >= M2Share.Config.CastleOneDayGold)
                 {
                     nInGold = 0;
                 }
                 else
                 {
-                    nInGold = M2Share.Config.nCastleOneDayGold - m_nTodayIncome;
-                    m_nTodayIncome = M2Share.Config.nCastleOneDayGold;
+                    nInGold = M2Share.Config.CastleOneDayGold - m_nTodayIncome;
+                    m_nTodayIncome = M2Share.Config.CastleOneDayGold;
                 }
             }
             if (nInGold > 0)
             {
-                if (m_nTotalGold + nInGold < M2Share.Config.nCastleGoldMax)
+                if (m_nTotalGold + nInGold < M2Share.Config.CastleGoldMax)
                     m_nTotalGold += nInGold;
                 else
-                    m_nTotalGold = M2Share.Config.nCastleGoldMax;
+                    m_nTotalGold = M2Share.Config.CastleGoldMax;
             }
             if ((HUtil32.GetTickCount() - m_dwSaveTick) > 10 * 60 * 1000)
             {
@@ -774,7 +774,7 @@ namespace GameSvr.Castle
             {
                 if (nGold <= PlayObject.Gold)
                 {
-                    if (m_nTotalGold + nGold <= M2Share.Config.nCastleGoldMax)
+                    if (m_nTotalGold + nGold <= M2Share.Config.CastleGoldMax)
                     {
                         PlayObject.Gold -= nGold;
                         m_nTotalGold += nGold;

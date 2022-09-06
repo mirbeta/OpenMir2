@@ -54,11 +54,11 @@ namespace GameSvr.Command.Commands
             if (M2Share.g_boGameLogGameGold)
             {
                 M2Share.AddGameDataLog(string.Format(GameCommandConst.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
-                    m_PlayObject.CharName, M2Share.Config.sGameGoldName, nGold, sCtr[1], PlayObject.CharName));
+                    m_PlayObject.CharName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayObject.CharName));
             }
             PlayObject.GameGoldChanged();
-            m_PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandGameGoldHumanMsg, M2Share.Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandGameGoldGMMsg, sHumanName, M2Share.Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandGameGoldHumanMsg, M2Share.Config.GameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandGameGoldGMMsg, sHumanName, M2Share.Config.GameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

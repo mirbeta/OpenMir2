@@ -570,11 +570,11 @@ namespace GameSvr.Player
             m_dwRunIntervalTime = M2Share.Config.RunIntervalTime;// 走路间隔
             m_dwWalkIntervalTime = M2Share.Config.WalkIntervalTime;// 走路间隔
             m_dwTurnIntervalTime = M2Share.Config.TurnIntervalTime;// 换方向间隔
-            m_dwActionIntervalTime = M2Share.Config.dwActionIntervalTime;// 组合操作间隔
-            m_dwRunLongHitIntervalTime = M2Share.Config.dwRunLongHitIntervalTime;// 组合操作间隔
-            m_dwRunHitIntervalTime = M2Share.Config.dwRunHitIntervalTime;// 组合操作间隔
-            m_dwWalkHitIntervalTime = M2Share.Config.dwWalkHitIntervalTime;// 组合操作间隔
-            m_dwRunMagicIntervalTime = M2Share.Config.dwRunMagicIntervalTime;// 跑位魔法间隔
+            m_dwActionIntervalTime = M2Share.Config.ActionIntervalTime;// 组合操作间隔
+            m_dwRunLongHitIntervalTime = M2Share.Config.RunLongHitIntervalTime;// 组合操作间隔
+            m_dwRunHitIntervalTime = M2Share.Config.RunHitIntervalTime;// 组合操作间隔
+            m_dwWalkHitIntervalTime = M2Share.Config.WalkHitIntervalTime;// 组合操作间隔
+            m_dwRunMagicIntervalTime = M2Share.Config.RunMagicIntervalTime;// 跑位魔法间隔
             m_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
             m_SessInfo = null;
             m_boTestSpeedMode = false;
@@ -733,7 +733,7 @@ namespace GameSvr.Player
                 if (m_boNewHuman)
                 {
                     UserItem = new TUserItem();
-                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sCandle, ref UserItem))
+                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref UserItem))
                     {
                         ItemList.Add(UserItem);
                     }
@@ -742,7 +742,7 @@ namespace GameSvr.Player
                         Dispose(UserItem);
                     }
                     UserItem = new TUserItem();
-                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sBasicDrug, ref UserItem))
+                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref UserItem))
                     {
                         ItemList.Add(UserItem);
                     }
@@ -751,7 +751,7 @@ namespace GameSvr.Player
                         Dispose(UserItem);
                     }
                     UserItem = new TUserItem();
-                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.sWoodenSword, ref UserItem))
+                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref UserItem))
                     {
                         ItemList.Add(UserItem);
                     }
@@ -761,8 +761,8 @@ namespace GameSvr.Player
                     }
                     UserItem = new TUserItem();
                     var sItem = Gender == PlayGender.Man
-                        ? M2Share.Config.sClothsMan
-                        : M2Share.Config.sClothsWoman;
+                        ? M2Share.Config.ClothsMan
+                        : M2Share.Config.ClothsWoman;
                     if (M2Share.UserEngine.CopyToUserItemFromName(sItem, ref UserItem))
                     {
                         ItemList.Add(UserItem);
@@ -781,7 +781,7 @@ namespace GameSvr.Player
                     ItemList.RemoveAt(i);
                 }
                 // 检查人物身上的物品是否符合使用规则
-                if (M2Share.Config.boCheckUserItemPlace)
+                if (M2Share.Config.CheckUserItemPlace)
                 {
                     for (var i = 0; i < UseItems.Length; i++)
                     {
@@ -1029,7 +1029,7 @@ namespace GameSvr.Player
             {
                 nRand = Math.Abs(StdItem.Dc2 - StdItem.Dc) / 5;
             }
-            if (M2Share.RandomNumber.Random(M2Share.Config.nWeaponMakeUnLuckRate) == 1)
+            if (M2Share.RandomNumber.Random(M2Share.Config.WeaponMakeUnLuckRate) == 1)
             {
                 MakeWeaponUnlock();
             }
@@ -1042,19 +1042,19 @@ namespace GameSvr.Player
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.nWeaponMakeLuckPoint1)
+                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.WeaponMakeLuckPoint1)
                 {
                     UseItems[Grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.nWeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.nWeaponMakeLuckPoint2Rate) == 1)
+                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1)
                 {
                     UseItems[Grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.nWeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.nWeaponMakeLuckPoint3Rate) == 1)
+                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1)
                 {
                     UseItems[Grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);

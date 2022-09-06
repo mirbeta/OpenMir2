@@ -22,9 +22,9 @@ namespace GameSvr.Npc
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             var LoadList = new StringList();
-            if (File.Exists(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1))
+            if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
-                LoadList.LoadFromFile(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1);
+                LoadList.LoadFromFile(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i];
@@ -1257,10 +1257,10 @@ namespace GameSvr.Npc
             var result = false;
             var nNamePostion = -1;
             var sCharName = PlayObject.CharName;
-            if (File.Exists(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1))
+            if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
                 var LoadList = new StringList();
-                LoadList.LoadFromFile(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1);
+                LoadList.LoadFromFile(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i].Trim();
@@ -1433,9 +1433,9 @@ namespace GameSvr.Npc
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             LoadList = new StringList();
-            if (File.Exists(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1))
+            if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
-                LoadList.LoadFromFile(M2Share.Config.sEnvirDir + QuestConditionInfo.sParam1);
+                LoadList.LoadFromFile(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i];
@@ -1681,7 +1681,7 @@ namespace GameSvr.Npc
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, "PetData", PlayObject.CharName + ".txt");
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "PetData", PlayObject.CharName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -2335,7 +2335,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKNAMEDATELIST);
                 return result;
             }
-            sListFileName = M2Share.Config.sEnvirDir + m_sPath + QuestConditionInfo.sParam1;
+            sListFileName = M2Share.Config.EnvirDir + m_sPath + QuestConditionInfo.sParam1;
             if (File.Exists(sListFileName))
             {
                 LoadList = new StringList();

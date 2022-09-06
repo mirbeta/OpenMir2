@@ -1391,7 +1391,7 @@ namespace GameSvr.UsrSystem
             switch (defMsg.Ident)
             {
                 case Grobal2.CM_SPELL:
-                    if (M2Share.Config.boSpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (M2Share.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendUpdateMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog),
                             HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series), "");
@@ -1456,7 +1456,7 @@ namespace GameSvr.UsrSystem
                 case Grobal2.CM_TWINHIT:
                 case Grobal2.CM_WIDEHIT:
                 case Grobal2.CM_FIREHIT:
-                    if (M2Share.Config.boActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (M2Share.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendActionMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog),
                             HUtil32.HiWord(defMsg.Recog), 0, "");
