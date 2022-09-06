@@ -294,7 +294,7 @@ namespace GameSvr.Snaps
             var remaintime = string.Empty;
             GuildInfo g;
             GuildInfo WarGuild;
-            TWarGuild pgw;
+            WarGuild pgw;
             if (sNum == 0)
             {
                 Str = Body;
@@ -333,7 +333,7 @@ namespace GameSvr.Snaps
                         {
                             if (!g.GuildWarList.Select(x => x.Guild).Contains(WarGuild))
                             {
-                                pgw = new TWarGuild();
+                                pgw = new WarGuild();
                                 pgw.Guild = WarGuild;
                                 pgw.dwWarTick = int.Parse(StartTime) - M2Share.g_nServerTickDifference;
                                 pgw.dwWarTime = int.Parse(remaintime);

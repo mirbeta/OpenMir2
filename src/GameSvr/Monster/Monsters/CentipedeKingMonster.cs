@@ -49,7 +49,7 @@ namespace GameSvr.Monster.Monsters
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
-                var WAbil = MWAbil;
+                var WAbil = Abil;
                 var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
@@ -86,7 +86,7 @@ namespace GameSvr.Monster.Monsters
         protected override void ComeOut()
         {
             base.ComeOut();
-            MWAbil.HP = MWAbil.MaxHP;
+            Abil.HP = Abil.MaxHP;
         }
 
         public override void Run()

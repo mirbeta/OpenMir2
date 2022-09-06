@@ -78,7 +78,7 @@ namespace GameSvr.Player
                     }
                 }
                 // 增加挂机
-                if (OffLineFlag && HUtil32.GetTickCount() > MDwKickOffLineTick)
+                if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick)
                 {
                     OffLineFlag = false;
                     m_boSoftClose = true;
@@ -120,7 +120,7 @@ namespace GameSvr.Player
                     }
                 }
                 var castle = M2Share.CastleMgr.InCastleWarArea(this);
-                if (castle != null && castle.m_boUnderWar)
+                if (castle != null && castle.UnderWar)
                 {
                     ChangePkStatus(true);
                 }
@@ -152,9 +152,9 @@ namespace GameSvr.Player
                             }
                         }
                     }
-                    if (castle != null && castle.m_boUnderWar)
+                    if (castle != null && castle.UnderWar)
                     {
-                        if (Envir == castle.m_MapPalace && MyGuild != null)
+                        if (Envir == castle.PalaceEnvir && MyGuild != null)
                         {
                             if (!castle.IsMember(this))
                             {
@@ -389,26 +389,26 @@ namespace GameSvr.Player
             if (Envir.Flag.boDECHP && (HUtil32.GetTickCount() - m_dwDecHPTick) > (Envir.Flag.nDECHPTIME * 1000))
             {
                 m_dwDecHPTick = HUtil32.GetTickCount();
-                if (MWAbil.HP > Envir.Flag.nDECHPPOINT)
+                if (Abil.HP > Envir.Flag.nDECHPPOINT)
                 {
-                    MWAbil.HP -= (ushort)Envir.Flag.nDECHPPOINT;
+                    Abil.HP -= (ushort)Envir.Flag.nDECHPPOINT;
                 }
                 else
                 {
-                    MWAbil.HP = 0;
+                    Abil.HP = 0;
                 }
                 HealthSpellChanged();
             }
             if (Envir.Flag.boINCHP && (HUtil32.GetTickCount() - m_dwIncHPTick) > (Envir.Flag.nINCHPTIME * 1000))
             {
                 m_dwIncHPTick = HUtil32.GetTickCount();
-                if (MWAbil.HP + Envir.Flag.nDECHPPOINT < MWAbil.MaxHP)
+                if (Abil.HP + Envir.Flag.nDECHPPOINT < Abil.MaxHP)
                 {
-                    MWAbil.HP += (ushort)Envir.Flag.nDECHPPOINT;
+                    Abil.HP += (ushort)Envir.Flag.nDECHPPOINT;
                 }
                 else
                 {
-                    MWAbil.HP = MWAbil.MaxHP;
+                    Abil.HP = Abil.MaxHP;
                 }
                 HealthSpellChanged();
             }
@@ -437,15 +437,15 @@ namespace GameSvr.Player
                             SpellTick = HUtil32._MAX(0, SpellTick);
                             PerHealth -= 1;
                             PerSpell -= 1;
-                            if (MWAbil.HP > MWAbil.HP / 100)
+                            if (Abil.HP > Abil.HP / 100)
                             {
-                                MWAbil.HP -= (ushort)HUtil32._MAX(1, MWAbil.HP / 100);
+                                Abil.HP -= (ushort)HUtil32._MAX(1, Abil.HP / 100);
                             }
                             else
                             {
-                                if (MWAbil.HP <= 2)
+                                if (Abil.HP <= 2)
                                 {
-                                    MWAbil.HP = 0;
+                                    Abil.HP = 0;
                                 }
                             }
                             HealthSpellChanged();
@@ -537,7 +537,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        if (HUtil32.HiWord(MWAbil.DC) > HUtil32.HiWord((M2Share.g_HighDCHuman as PlayObject).MWAbil.DC))
+                        if (HUtil32.HiWord(Abil.DC) > HUtil32.HiWord((M2Share.g_HighDCHuman as PlayObject).Abil.DC))
                         {
                             M2Share.g_HighDCHuman = this;
                         }
@@ -549,7 +549,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        if (HUtil32.HiWord(MWAbil.MC) > HUtil32.HiWord((M2Share.g_HighMCHuman as PlayObject).MWAbil.MC))
+                        if (HUtil32.HiWord(Abil.MC) > HUtil32.HiWord((M2Share.g_HighMCHuman as PlayObject).Abil.MC))
                         {
                             M2Share.g_HighMCHuman = this;
                         }
@@ -561,7 +561,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        if (HUtil32.HiWord(MWAbil.SC) > HUtil32.HiWord((M2Share.g_HighSCHuman as PlayObject).MWAbil.SC))
+                        if (HUtil32.HiWord(Abil.SC) > HUtil32.HiWord((M2Share.g_HighSCHuman as PlayObject).Abil.SC))
                         {
                             M2Share.g_HighSCHuman = this;
                         }
@@ -1491,7 +1491,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, ProcessMsg.BaseObject, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, ProcessMsg.wParam);
+                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, ProcessMsg.BaseObject, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ProcessMsg.wParam);
                                 MessageBodyWL = new TMessageBodyWL();
                                 MessageBodyWL.lParam1 = BaseObject.GetFeature(this);
                                 MessageBodyWL.lParam2 = BaseObject.CharStatus;
@@ -1553,7 +1553,7 @@ namespace GameSvr.Player
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, (int)Abil.Exp, Abil.Level, 0, 0);
                     SendSocket(m_DefMsg);
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(MWAbil));
+                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(Abil));
                     SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
                 case Grobal2.RM_CHANGENAMECOLOR:
@@ -1613,10 +1613,10 @@ namespace GameSvr.Player
                     break;
                 case Grobal2.RM_ABILITY:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(MWAbil));
+                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(Abil));
                     break;
                 case Grobal2.RM_HEALTHSPELLCHANGED:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEALTHSPELLCHANGED, ProcessMsg.BaseObject, BaseObject.MWAbil.HP, BaseObject.MWAbil.MP, BaseObject.MWAbil.MaxHP);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEALTHSPELLCHANGED, ProcessMsg.BaseObject, BaseObject.Abil.HP, BaseObject.Abil.MP, BaseObject.Abil.MaxHP);
                     SendSocket(m_DefMsg);
                     break;
                 case Grobal2.RM_DAYCHANGING:
@@ -1639,7 +1639,7 @@ namespace GameSvr.Player
                     SendUseitems();
                     break;
                 case Grobal2.RM_WEIGHTCHANGED:
-                    SendDefMessage(Grobal2.SM_WEIGHTCHANGED, MWAbil.Weight, MWAbil.WearWeight, MWAbil.HandWeight, 0, "");
+                    SendDefMessage(Grobal2.SM_WEIGHTCHANGED, Abil.Weight, Abil.WearWeight, Abil.HandWeight, 0, "");
                     break;
                 case Grobal2.RM_FEATURECHANGED:
                     SendDefMessage(Grobal2.SM_FEATURECHANGED, ProcessMsg.BaseObject, HUtil32.LoWord(ProcessMsg.nParam1), HUtil32.HiWord(ProcessMsg.nParam1), ProcessMsg.wParam, "");
@@ -1888,7 +1888,7 @@ namespace GameSvr.Player
                     ChangeServerMakeSlave((TSlaveInfo)M2Share.ActorMgr.GetOhter(ProcessMsg.nParam1));
                     break;
                 case Grobal2.RM_OPENHEALTH:
-                    SendDefMessage(Grobal2.SM_OPENHEALTH, ProcessMsg.BaseObject, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, 0, "");
+                    SendDefMessage(Grobal2.SM_OPENHEALTH, ProcessMsg.BaseObject, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, 0, "");
                     break;
                 case Grobal2.RM_CLOSEHEALTH:
                     SendDefMessage(Grobal2.SM_CLOSEHEALTH, ProcessMsg.BaseObject, 0, 0, 0, "");
@@ -1897,7 +1897,7 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_BREAKWEAPON, ProcessMsg.BaseObject, 0, 0, 0, "");
                     break;
                 case Grobal2.RM_10414:
-                    SendDefMessage(Grobal2.SM_INSTANCEHEALGUAGE, ProcessMsg.BaseObject, BaseObject.MWAbil.HP, BaseObject.MWAbil.MaxHP, 0, "");
+                    SendDefMessage(Grobal2.SM_INSTANCEHEALGUAGE, ProcessMsg.BaseObject, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, 0, "");
                     break;
                 case Grobal2.RM_CHANGEFACE:
                     if (ProcessMsg.nParam1 != 0 && ProcessMsg.nParam2 != 0)

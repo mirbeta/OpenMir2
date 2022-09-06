@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Attack(BaseObject TargeTBaseObject, byte nDir)
         {
-            var nPower = GetAttackPower(HUtil32.LoWord(MWAbil.DC), HUtil32.HiWord(MWAbil.DC) - HUtil32.LoWord(MWAbil.DC));
+            var nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
             HitMagAttackTarget(TargeTBaseObject, nPower / 2, nPower / 2, true);
         }
 
@@ -57,7 +57,7 @@ namespace GameSvr.Monster.Monsters
                     return;
                 }
                 n10 = n560;
-                n560 = 7 - MWAbil.HP / (MWAbil.MaxHP / 7);
+                n560 = 7 - Abil.HP / (Abil.MaxHP / 7);
                 if (n560 >= 2 && n560 != n10)
                 {
                     bo55C = true;

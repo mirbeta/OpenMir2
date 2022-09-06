@@ -418,7 +418,7 @@ namespace GameSvr.Maps
                             if (baseObject != null)
                             {
                                 var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
-                                if (M2Share.Config.boWarDisHumRun && castle != null && castle.m_boUnderWar)
+                                if (M2Share.Config.boWarDisHumRun && castle != null && castle.UnderWar)
                                 {
                                 }
                                 else

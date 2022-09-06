@@ -106,25 +106,25 @@ namespace GameSvr.Npc
             switch (cMethodMax)
             {
                 case '=':
-                    if (PlayObject.MWAbil.MaxHP == nMax)
+                    if (PlayObject.Abil.MaxHP == nMax)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MWAbil.MaxHP > nMax)
+                    if (PlayObject.Abil.MaxHP > nMax)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MWAbil.MaxHP < nMax)
+                    if (PlayObject.Abil.MaxHP < nMax)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MWAbil.MaxHP >= nMax)
+                    if (PlayObject.Abil.MaxHP >= nMax)
                     {
                         result = true;
                     }
@@ -148,25 +148,25 @@ namespace GameSvr.Npc
             switch (cMethodMin)
             {
                 case '=':
-                    if (this.MWAbil.HP == nMin)
+                    if (this.Abil.HP == nMin)
                     {
                         result = ConditionOfCheckHP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '>':
-                    if (PlayObject.MWAbil.HP > nMin)
+                    if (PlayObject.Abil.HP > nMin)
                     {
                         result = ConditionOfCheckHP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '<':
-                    if (PlayObject.MWAbil.HP < nMin)
+                    if (PlayObject.Abil.HP < nMin)
                     {
                         result = ConditionOfCheckHP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 default:
-                    if (PlayObject.MWAbil.HP >= nMin)
+                    if (PlayObject.Abil.HP >= nMin)
                     {
                         result = ConditionOfCheckHP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
@@ -181,25 +181,25 @@ namespace GameSvr.Npc
             switch (cMethodMax)
             {
                 case '=':
-                    if (PlayObject.MWAbil.MaxMP == nMax)
+                    if (PlayObject.Abil.MaxMP == nMax)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MWAbil.MaxMP > nMax)
+                    if (PlayObject.Abil.MaxMP > nMax)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MWAbil.MaxMP < nMax)
+                    if (PlayObject.Abil.MaxMP < nMax)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MWAbil.MaxMP >= nMax)
+                    if (PlayObject.Abil.MaxMP >= nMax)
                     {
                         result = true;
                     }
@@ -223,25 +223,25 @@ namespace GameSvr.Npc
             switch (cMethodMin)
             {
                 case '=':
-                    if (this.MWAbil.MP == nMin)
+                    if (this.Abil.MP == nMin)
                     {
                         result = ConditionOfCheckMP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '>':
-                    if (PlayObject.MWAbil.MP > nMin)
+                    if (PlayObject.Abil.MP > nMin)
                     {
                         result = ConditionOfCheckMP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '<':
-                    if (PlayObject.MWAbil.MP < nMin)
+                    if (PlayObject.Abil.MP < nMin)
                     {
                         result = ConditionOfCheckMP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 default:
-                    if (PlayObject.MWAbil.MP >= nMin)
+                    if (PlayObject.Abil.MP >= nMin)
                     {
                         result = ConditionOfCheckMP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
@@ -257,26 +257,26 @@ namespace GameSvr.Npc
             {
                 case '=':
 
-                    if (HUtil32.HiWord(PlayObject.MWAbil.DC) == nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.DC) == nMax)
                     {
                         result = true;
                     }
                     break;
                 case '>':
 
-                    if (HUtil32.HiWord(PlayObject.MWAbil.DC) > nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.DC) > nMax)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (HUtil32.HiWord(PlayObject.MWAbil.DC) < nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.DC) < nMax)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (HUtil32.HiWord(PlayObject.MWAbil.DC) >= nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.DC) >= nMax)
                     {
                         result = true;
                     }
@@ -300,25 +300,25 @@ namespace GameSvr.Npc
             switch (cMethodMin)
             {
                 case '=':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.DC) == nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.DC) == nMin)
                     {
                         result = ConditionOfCheckDC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '>':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.DC) > nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.DC) > nMin)
                     {
                         result = ConditionOfCheckDC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '<':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.DC) < nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.DC) < nMin)
                     {
                         result = ConditionOfCheckDC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 default:
-                    if (HUtil32.LoWord(PlayObject.MWAbil.DC) >= nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.DC) >= nMin)
                     {
                         result = ConditionOfCheckDC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
@@ -333,25 +333,25 @@ namespace GameSvr.Npc
             switch (cMethodMax)
             {
                 case '=':
-                    if (HUtil32.HiWord(PlayObject.MWAbil.MC) == nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.MC) == nMax)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (HUtil32.HiWord(PlayObject.MWAbil.MC) > nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.MC) > nMax)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (HUtil32.HiWord(PlayObject.MWAbil.MC) < nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.MC) < nMax)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (HUtil32.HiWord(PlayObject.MWAbil.MC) >= nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.MC) >= nMax)
                     {
                         result = true;
                     }
@@ -375,25 +375,25 @@ namespace GameSvr.Npc
             switch (cMethodMin)
             {
                 case '=':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.MC) == nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.MC) == nMin)
                     {
                         result = ConditionOfCheckMC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '>':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.MC) > nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.MC) > nMin)
                     {
                         result = ConditionOfCheckMC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '<':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.MC) < nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.MC) < nMin)
                     {
                         result = ConditionOfCheckMC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 default:
-                    if (HUtil32.LoWord(PlayObject.MWAbil.MC) >= nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.MC) >= nMin)
                     {
                         result = ConditionOfCheckMC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
@@ -408,25 +408,25 @@ namespace GameSvr.Npc
             switch (cMethodMax)
             {
                 case '=':
-                    if (HUtil32.HiWord(PlayObject.MWAbil.SC) == nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.SC) == nMax)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (HUtil32.HiWord(PlayObject.MWAbil.SC) > nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.SC) > nMax)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (HUtil32.HiWord(PlayObject.MWAbil.SC) < nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.SC) < nMax)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (HUtil32.HiWord(PlayObject.MWAbil.SC) >= nMax)
+                    if (HUtil32.HiWord(PlayObject.Abil.SC) >= nMax)
                     {
                         result = true;
                     }
@@ -450,25 +450,25 @@ namespace GameSvr.Npc
             switch (cMethodMin)
             {
                 case '=':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.SC) == nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.SC) == nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '>':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.SC) > nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.SC) > nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '<':
-                    if (HUtil32.LoWord(PlayObject.MWAbil.SC) < nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.SC) < nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 default:
-                    if (HUtil32.LoWord(PlayObject.MWAbil.SC) >= nMin)
+                    if (HUtil32.LoWord(PlayObject.Abil.SC) >= nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
@@ -949,7 +949,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLECHANGEDAY);
                 return result;
             }
-            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, this.Castle.m_ChangeDate);
+            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, this.Castle.ChangeDate);
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -1044,7 +1044,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCASTLEDOOR);
                 return result;
             }
-            var CastleDoor = (CastleDoor)this.Castle.m_MainDoor.BaseObject;
+            var CastleDoor = (CastleDoor)this.Castle.MainDoor.BaseObject;
             switch (nDoorStatus)
             {
                 case 0:
@@ -2060,25 +2060,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (this.Castle.m_nTotalGold == nGold)
+                    if (this.Castle.TotalGold == nGold)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (this.Castle.m_nTotalGold > nGold)
+                    if (this.Castle.TotalGold > nGold)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (this.Castle.m_nTotalGold < nGold)
+                    if (this.Castle.TotalGold < nGold)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (this.Castle.m_nTotalGold >= nGold)
+                    if (this.Castle.TotalGold >= nGold)
                     {
                         result = true;
                     }

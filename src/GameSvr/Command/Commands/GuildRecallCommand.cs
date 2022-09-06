@@ -32,7 +32,7 @@ namespace GameSvr.Command.Commands
             }
             TGuildRank GuildRank;
             var m_Castle = M2Share.CastleMgr.InCastleWarArea(PlayObject);
-            if (m_Castle != null && m_Castle.m_boUnderWar)
+            if (m_Castle != null && m_Castle.UnderWar)
             {
                 PlayObject.SysMsg("攻城区域不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;

@@ -177,10 +177,10 @@ namespace SystemModule
             ii(ref d, a, b, c, Block[11], 10, 0xBD3AF235);
             ii(ref c, d, a, b, Block[2], 15, 0x2AD7D2BB);
             ii(ref b, c, d, a, Block[9], 21, 0xEB86D391);
-            State[0] += (uint)a;
-            State[1] += (uint)b;
-            State[2] += (uint)c;
-            State[3] += (uint)d;
+            State[0] += a;
+            State[1] += b;
+            State[2] += c;
+            State[3] += d;
         }
 
         private static void MD5Init(ref MD5Context Context)
@@ -221,7 +221,7 @@ namespace SystemModule
             {
                 i = 0;
             }
-            Array.Copy(Input, 0, Context.Buffer, 0, (int)PartLen);
+            Array.Copy(Input, 0, Context.Buffer, 0, PartLen);
         }
 
         private static void MD5Final(ref MD5Context Context, ref byte[] Digest)

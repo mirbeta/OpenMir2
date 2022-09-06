@@ -59,21 +59,21 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UserEntry.sAccount, 10);
-            writer.Write(UserEntry.sPassword, 10);
-            writer.Write(UserEntry.sUserName, 20);
-            writer.Write(UserEntry.sSSNo, 14);
-            writer.Write(UserEntry.sPhone, 14);
-            writer.Write(UserEntry.sQuiz, 20);
-            writer.Write(UserEntry.sAnswer, 12);
-            writer.Write(UserEntry.sEMail, 40);
+            writer.WriteAsciiString(UserEntry.sAccount, 10);
+            writer.WriteAsciiString(UserEntry.sPassword, 10);
+            writer.WriteAsciiString(UserEntry.sUserName, 20);
+            writer.WriteAsciiString(UserEntry.sSSNo, 14);
+            writer.WriteAsciiString(UserEntry.sPhone, 14);
+            writer.WriteAsciiString(UserEntry.sQuiz, 20);
+            writer.WriteAsciiString(UserEntry.sAnswer, 12);
+            writer.WriteAsciiString(UserEntry.sEMail, 40);
 
-            writer.Write(UserEntryAdd.sQuiz2, 20);
-            writer.Write(UserEntryAdd.sAnswer2, 12);
-            writer.Write(UserEntryAdd.sBirthDay, 10);
-            writer.Write(UserEntryAdd.sMobilePhone, 13);
-            writer.Write(UserEntryAdd.sMemo, 20);
-            writer.Write(UserEntryAdd.sMemo2, 20);
+            writer.WriteAsciiString(UserEntryAdd.sQuiz2, 20);
+            writer.WriteAsciiString(UserEntryAdd.sAnswer2, 12);
+            writer.WriteAsciiString(UserEntryAdd.sBirthDay, 10);
+            writer.WriteAsciiString(UserEntryAdd.sMobilePhone, 13);
+            writer.WriteAsciiString(UserEntryAdd.sMemo, 20);
+            writer.WriteAsciiString(UserEntryAdd.sMemo2, 20);
         }
     }
 }

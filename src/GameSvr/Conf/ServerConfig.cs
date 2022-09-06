@@ -1654,20 +1654,20 @@ namespace GameSvr.Conf
             M2Share.Config.MasterDieMutinySpeed = ReadInteger("Setup", "MasterDieMutinyPower", M2Share.Config.MasterDieMutinySpeed);
             nLoadInteger = ReadInteger("Setup", "BBMonAutoChangeColor", -1);
             if (nLoadInteger < 0)
-                WriteBool("Setup", "BBMonAutoChangeColor", M2Share.Config.boBBMonAutoChangeColor);
+                WriteBool("Setup", "BBMonAutoChangeColor", M2Share.Config.BBMonAutoChangeColor);
             else
-                M2Share.Config.boBBMonAutoChangeColor = nLoadInteger == 1;
+                M2Share.Config.BBMonAutoChangeColor = nLoadInteger == 1;
             nLoadInteger = ReadInteger("Setup", "BBMonAutoChangeColorTime", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "BBMonAutoChangeColorTime", M2Share.Config.dwBBMonAutoChangeColorTime);
+                WriteInteger("Setup", "BBMonAutoChangeColorTime", M2Share.Config.BBMonAutoChangeColorTime);
             else
-                M2Share.Config.dwBBMonAutoChangeColorTime = nLoadInteger;
+                M2Share.Config.BBMonAutoChangeColorTime = nLoadInteger;
             if (ReadInteger("Setup", "OldClientShowHiLevel", -1) < 0)
                 WriteBool("Setup", "OldClientShowHiLevel", M2Share.Config.boOldClientShowHiLevel);
             M2Share.Config.boOldClientShowHiLevel = ReadBool("Setup", "OldClientShowHiLevel", M2Share.Config.boOldClientShowHiLevel);
             if (ReadInteger("Setup", "ShowScriptActionMsg", -1) < 0)
-                WriteBool("Setup", "ShowScriptActionMsg", M2Share.Config.boShowScriptActionMsg);
-            M2Share.Config.boShowScriptActionMsg = ReadBool("Setup", "ShowScriptActionMsg", M2Share.Config.boShowScriptActionMsg);
+                WriteBool("Setup", "ShowScriptActionMsg", M2Share.Config.ShowScriptActionMsg);
+            M2Share.Config.ShowScriptActionMsg = ReadBool("Setup", "ShowScriptActionMsg", M2Share.Config.ShowScriptActionMsg);
             if (ReadInteger("Setup", "RunSocketDieLoopLimit", -1) < 0)
                 WriteInteger("Setup", "RunSocketDieLoopLimit", M2Share.Config.nRunSocketDieLoopLimit);
             M2Share.Config.nRunSocketDieLoopLimit = ReadInteger("Setup", "RunSocketDieLoopLimit", M2Share.Config.nRunSocketDieLoopLimit);

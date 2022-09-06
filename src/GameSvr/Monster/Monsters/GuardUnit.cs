@@ -40,15 +40,15 @@ namespace GameSvr.Monster.Monsters
                         result = false;
                     }
                 }
-                if (Castle.m_boUnderWar)
+                if (Castle.UnderWar)
                 {
                     result = true;
                 }
-                if (Castle.m_MasterGuild != null)
+                if (Castle.MasterGuild != null)
                 {
                     if (BaseObject.Master == null)
                     {
-                        if (Castle.m_MasterGuild == BaseObject.MyGuild || Castle.m_MasterGuild.IsAllyGuild(BaseObject.MyGuild))
+                        if (Castle.MasterGuild == BaseObject.MyGuild || Castle.MasterGuild.IsAllyGuild(BaseObject.MyGuild))
                         {
                             if (LastHiter != BaseObject)
                             {
@@ -58,7 +58,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (Castle.m_MasterGuild == BaseObject.Master.MyGuild || Castle.m_MasterGuild.IsAllyGuild(BaseObject.Master.MyGuild))
+                        if (Castle.MasterGuild == BaseObject.Master.MyGuild || Castle.MasterGuild.IsAllyGuild(BaseObject.Master.MyGuild))
                         {
                             if (LastHiter != BaseObject.Master && LastHiter != BaseObject)
                             {

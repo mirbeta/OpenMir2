@@ -6,10 +6,10 @@ namespace SystemModule.Extensions
     public static class BinaryWriterExtension
     {
         /// <summary>
-        /// 字符串转Byte数组
+        /// 写入Ascii字符串
         /// </summary>
         /// <returns></returns>
-        public static void Write(this BinaryWriter binaryWriter, string value, int defaultSize)
+        public static void WriteAsciiString(this BinaryWriter binaryWriter, string value, int defaultSize)
         {
             if (binaryWriter == null)
                 throw new ArgumentNullException(nameof(binaryWriter));
@@ -20,7 +20,7 @@ namespace SystemModule.Extensions
 
             var buffer = HUtil32.StringToByte(value);
             var reSize = buffer.Length + 1;
-            var tempSize = defaultSize + 1;
+            var tempSize = defaultSize;
             if (reSize < tempSize)
             {
                 reSize = tempSize;

@@ -49,7 +49,7 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Name, PacketConst.ItemNameLen);
+            writer.WriteAsciiString(Name, PacketConst.ItemNameLen);
             writer.Write(StdMode);
             writer.Write(Shape);
             writer.Write(Weight);

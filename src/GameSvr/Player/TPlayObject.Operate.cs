@@ -384,7 +384,7 @@ namespace GameSvr.Player
                 return;
             }
             var castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
-            if (castle == null || castle.m_DoorStatus != door.Status || Race != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(CurrX, CurrY, this))
+            if (castle == null || castle.DoorStatus != door.Status || Race != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(CurrX, CurrY, this))
             {
                 M2Share.UserEngine.OpenDoor(Envir, nX, nY);
             }

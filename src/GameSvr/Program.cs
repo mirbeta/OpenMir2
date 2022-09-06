@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
@@ -9,7 +8,6 @@ using Spectre.Console;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
-using SystemModule;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
@@ -25,7 +23,7 @@ namespace GameSvr
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-            
+
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()

@@ -7,21 +7,20 @@ namespace SystemModule.Packet.ClientPackets
     {
         /// <summary>
         /// 物品名称长度
-        /// 默认20字符+1个网络字节占位符
         /// </summary>
-        public const int ItemNameLen = 21;
-
+        public const int ItemNameLen = 20;
         /// <summary>
         /// 玩家名字长度
-        /// 默认15字符串+1个网络字节占位符
         /// </summary>
-        public const int UserNameLen = 16;
-
+        public const int ActorNameLen = 14;
+        /// <summary>
+        /// 地图名称长度
+        /// </summary>
+        public const int MapNameLen = 16;
         /// <summary>
         /// 行会名称长度
-        /// 默认14个字符串+1个网络字节占位符
         /// </summary>
-        public const int GuildNameLen = 15;
+        public const int GuildNameLen = 20;
     }
 
     public class TClientStdItem : Packets
@@ -30,8 +29,8 @@ namespace SystemModule.Packet.ClientPackets
         public byte StdMode;
         public byte Shape;
         public byte Weight;
-        public byte AniCount;
-        public short Source;
+        public ushort AniCount;
+        public sbyte Source;
         public byte Reserved;
         public byte NeedIdentify;
         public ushort Looks;
@@ -47,7 +46,7 @@ namespace SystemModule.Packet.ClientPackets
         public byte UniqueItem;
         public byte Overlap;
         public byte ItemType;
-        public short ItemSet;
+        public ushort ItemSet;
         public byte Binded;
         public byte[] Reserve;
         public byte[] AddOn;
@@ -67,7 +66,7 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Name, PacketConst.ItemNameLen);
+            writer.WriteAsciiString(Name, PacketConst.ItemNameLen);
             writer.Write(StdMode);
             writer.Write(Shape);
             writer.Write(Weight);

@@ -28,20 +28,26 @@ namespace SystemModule.Packet.ClientPackets
         /// </summary>
         [ProtoMember(8)]
         public ushort MP;
+        /// <summary>
+        /// 最大血量
+        /// </summary>
         [ProtoMember(9)]
         public ushort MaxHP;
+        /// <summary>
+        /// 最大魔法值
+        /// </summary>
         [ProtoMember(10)]
         public ushort MaxMP;
         /// <summary>
         /// 当前经验
         /// </summary>
         [ProtoMember(11)]
-        public long Exp;
+        public int Exp;
         /// <summary>
         /// 最大经验
         /// </summary>
         [ProtoMember(12)]
-        public long MaxExp;
+        public int MaxExp;
         /// <summary>
         /// 背包重
         /// </summary>
@@ -77,12 +83,12 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Level = reader.ReadByte();
-            AC = reader.ReadUInt16();
-            MAC = reader.ReadUInt16();
-            DC = reader.ReadUInt16();
-            MC = reader.ReadUInt16();
-            SC = reader.ReadUInt16();
+            Level = reader.ReadUInt16();
+            AC = reader.ReadInt32();
+            MAC = reader.ReadInt32();
+            DC = reader.ReadInt32();
+            MC = reader.ReadInt32();
+            SC = reader.ReadInt32();
             HP = reader.ReadUInt16();
             MP = reader.ReadUInt16();
             MaxHP = reader.ReadUInt16();
@@ -91,10 +97,10 @@ namespace SystemModule.Packet.ClientPackets
             MaxExp = reader.ReadInt32();
             Weight = reader.ReadUInt16();
             MaxWeight = reader.ReadUInt16();
-            WearWeight = reader.ReadByte();
-            MaxWearWeight = reader.ReadByte();
-            HandWeight = reader.ReadByte();
-            MaxHandWeight = reader.ReadByte();
+            WearWeight = reader.ReadInt16();
+            MaxWearWeight = reader.ReadInt16();
+            HandWeight = reader.ReadInt16();
+            MaxHandWeight = reader.ReadInt16();
         }
 
         protected override void WritePacket(BinaryWriter writer)

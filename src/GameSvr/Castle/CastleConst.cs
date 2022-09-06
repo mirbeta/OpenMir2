@@ -13,6 +13,14 @@ namespace GameSvr.Castle
         /// 最大城堡守卫
         /// </summary>
         public const int MaxCalsteGuard = 4;
+        /// <summary>
+        /// 沙巴克战役列表
+        /// </summary>
+        public const string AttackSabukWallList = "AttackSabukWall.txt";
+        /// <summary>
+        /// 沙巴克配置文件
+        /// </summary>
+        public const string SabukWFileName = "SabukW.txt";
     }
 
     public class TAttackerInfo
@@ -22,7 +30,7 @@ namespace GameSvr.Castle
         public GuildInfo Guild;
     }
 
-    public struct TDefenseUnit
+    public struct DefenseUnit
     {
         public int nMainDoorX;
         public int nMainDoorY;
@@ -36,7 +44,10 @@ namespace GameSvr.Castle
         public BaseObject Archer;
     }
 
-    public class TArcherUnit
+    /// <summary>
+    /// 守卫
+    /// </summary>
+    public struct ArcherUnit
     {
         public short nX;
         public short nY;

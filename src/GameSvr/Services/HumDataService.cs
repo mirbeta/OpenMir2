@@ -1,3 +1,4 @@
+using NLog;
 using System.Collections.Concurrent;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
@@ -6,6 +7,7 @@ namespace GameSvr.Services
 {
     public class HumDataService
     {
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly ConcurrentDictionary<int, RequestServerPacket> ReceivedMap = new ConcurrentDictionary<int, RequestServerPacket>();
 
         public static bool DBSocketConnected()
@@ -25,12 +27,12 @@ namespace GameSvr.Services
             RequestServerPacket respPack = null;
             const string sLoadDBTimeOut = "[RunDB] 读取人物数据超时...";
             const string sSaveDBTimeOut = "[RunDB] 保存人物数据超时...";
-            var dwTimeOutTick = HUtil32.GetTickCount();
+            var timeOutTick = HUtil32.GetTickCount();
             while (true)
             {
-                if ((HUtil32.GetTickCount() - dwTimeOutTick) > dwTimeOut)
+                if ((HUtil32.GetTickCount() - timeOutTick) > dwTimeOut)
                 {
-                    Console.WriteLine("获取DBServer消息超时...");
+                    _logger.Debug("获取DBServer消息超时...");
                     break;
                 }
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
@@ -74,9 +76,9 @@ namespace GameSvr.Services
             {
                 M2Share.Log.Error(boLoadRcd ? sLoadDBTimeOut : sSaveDBTimeOut);
             }
-            if ((HUtil32.GetTickCount() - dwTimeOutTick) > M2Share.dwRunDBTimeMax)
+            if ((HUtil32.GetTickCount() - timeOutTick) > M2Share.dwRunDBTimeMax)
             {
-                M2Share.dwRunDBTimeMax = HUtil32.GetTickCount() - dwTimeOutTick;
+                M2Share.dwRunDBTimeMax = HUtil32.GetTickCount() - timeOutTick;
             }
             return result;
         }
@@ -136,13 +138,13 @@ namespace GameSvr.Services
                     }
                     else
                     {
-                        M2Share.Log.Error($"[RunDB] 保存人物({sCharName})数据失败");
+                        _logger.Error($"[RunDB] 保存人物({sCharName})数据失败");
                     }
                 }
             }
             else
             {
-                Console.WriteLine("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+                _logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             }
             return result;
         }
@@ -178,7 +180,7 @@ namespace GameSvr.Services
             }
             else
             {
-                Console.WriteLine("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+                _logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             }
             return result;
         }

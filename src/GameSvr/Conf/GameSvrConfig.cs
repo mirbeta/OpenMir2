@@ -617,10 +617,10 @@ namespace GameSvr.Conf
         public int MasterDieMutinyRate;
         public int MasterDieMutinyPower;
         public int MasterDieMutinySpeed;
-        public bool boBBMonAutoChangeColor;
-        public int dwBBMonAutoChangeColorTime;
+        public bool BBMonAutoChangeColor;
+        public int BBMonAutoChangeColorTime;
         public bool boOldClientShowHiLevel;
-        public bool boShowScriptActionMsg;
+        public bool ShowScriptActionMsg;
         public int nRunSocketDieLoopLimit;
         public bool ThreadRun;
         public bool ShowExceptionMsg;
@@ -1462,10 +1462,10 @@ namespace GameSvr.Conf
             MasterDieMutinyRate = 5;
             MasterDieMutinyPower = 10;
             MasterDieMutinySpeed = 5;
-            boBBMonAutoChangeColor = false;
-            dwBBMonAutoChangeColorTime = 3000;
+            BBMonAutoChangeColor = false;
+            BBMonAutoChangeColorTime = 3000;
             boOldClientShowHiLevel = true;
-            boShowScriptActionMsg = true;
+            ShowScriptActionMsg = true;
             nRunSocketDieLoopLimit = 100;
             ThreadRun = false;
             ShowExceptionMsg = false;

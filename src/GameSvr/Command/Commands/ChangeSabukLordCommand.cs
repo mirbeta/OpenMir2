@@ -34,13 +34,13 @@ namespace GameSvr.Command.Commands
             var Guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (Guild != null)
             {
-                M2Share.AddGameDataLog("27" + "\09" + Castle.m_sOwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayObject.CharName + "\09" + '0' + "\09" + '1' + "\09" + '0');
+                M2Share.AddGameDataLog("27" + "\09" + Castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayObject.CharName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 Castle.GetCastle(Guild);
                 if (boFlag)
                 {
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, sGuildName);
                 }
-                PlayObject.SysMsg(Castle.m_sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Castle.sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
             }
             else
             {

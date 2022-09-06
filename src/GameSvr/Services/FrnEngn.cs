@@ -13,7 +13,7 @@ namespace GameSvr.Services
         private readonly IList<TGoldChangeInfo> m_ChangeGoldList;
         private IList<TLoadDBInfo> m_LoadRcdTempList;
         private readonly IList<TSaveRcd> m_SaveRcdTempList;
-        private Timer _frontEngineThread;
+        private Thread _frontEngineThread;
 
         public TFrontEngine()
         {
@@ -27,7 +27,9 @@ namespace GameSvr.Services
 
         public void Start()
         {
-            _frontEngineThread = new Timer(Execute, null, 1000, 200);
+            _frontEngineThread = new Thread(Execute);
+            _frontEngineThread.IsBackground = true;
+            _frontEngineThread.Start();
         }
 
         private void Execute(object  obj)
@@ -35,8 +37,12 @@ namespace GameSvr.Services
             const string sExceptionMsg = "[Exception] TFrontEngine::Execute";
             try
             {
-                ProcessGameDate();
-                GetGameTime();
+                while (true)
+                {
+                    ProcessGameDate();
+                    GetGameTime();
+                    Thread.Sleep(200);
+                }
             }
             catch (Exception ex)
             {

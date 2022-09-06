@@ -383,7 +383,7 @@ namespace GameSvr.UsrSystem
                     }
                     playObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(playObject.CharName);
                     var userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
-                    if (envir != null && userCastle != null && (userCastle.m_MapPalace == envir || userCastle.m_boUnderWar))
+                    if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar))
                     {
                         userCastle = M2Share.CastleMgr.IsCastleMember(playObject);
                         if (userCastle == null)
@@ -394,7 +394,7 @@ namespace GameSvr.UsrSystem
                         }
                         else
                         {
-                            if (userCastle.m_MapPalace == envir)
+                            if (userCastle.PalaceEnvir == envir)
                             {
                                 playObject.MapName = userCastle.GetMapName();
                                 playObject.CurrX = userCastle.GetHomeX();
@@ -409,9 +409,9 @@ namespace GameSvr.UsrSystem
                         if (playObject.PvpLevel() < 2)
                         {
                             userCastle = M2Share.CastleMgr.IsCastleMember(playObject);
-                            if (userCastle != null && userCastle.m_boUnderWar)
+                            if (userCastle != null && userCastle.UnderWar)
                             {
-                                playObject.MapName = userCastle.m_sHomeMap;
+                                playObject.MapName = userCastle.HomeMap;
                                 playObject.CurrX = userCastle.GetHomeX();
                                 playObject.CurrY = userCastle.GetHomeY();
                             }
@@ -438,7 +438,7 @@ namespace GameSvr.UsrSystem
                         playObject.m_nSocket = userOpenInfo.LoadUser.nSocket;
                         playObject.m_nGateIdx = userOpenInfo.LoadUser.nGateIdx;
                         playObject.m_nGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
-                        playObject.MWAbil = playObject.Abil;
+                        playObject.WAbil = playObject.Abil;
                         playObject.m_nServerIndex = M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
@@ -486,7 +486,7 @@ namespace GameSvr.UsrSystem
                     playObject.CurrX = switchDataInfo.wX;
                     playObject.CurrY = switchDataInfo.wY;
                     playObject.Abil = switchDataInfo.Abil;
-                    playObject.MWAbil = switchDataInfo.Abil;
+                    playObject.Abil = switchDataInfo.Abil;
                     LoadSwitchData(switchDataInfo, ref playObject);
                     DelSwitchData(switchDataInfo);
                     Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
@@ -1778,7 +1778,7 @@ namespace GameSvr.UsrSystem
                 cert.CurrY = nY;
                 cert.Direction = M2Share.RandomNumber.RandomByte(8);
                 cert.CharName = sMonName;
-                cert.MWAbil = cert.Abil;
+                cert.WAbil = cert.Abil;
                 cert.OnEnvirnomentChanged();
                 if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
                 MonGetRandomItems(cert);
@@ -2317,7 +2317,7 @@ namespace GameSvr.UsrSystem
                     baseObject.Abil.Level = (byte)monster.wLevel;
                     baseObject.LifeAttrib = monster.btLifeAttrib;
                     baseObject.CoolEyeCode = (byte)monster.wCoolEye;
-                    baseObject.MDwFightExp = monster.dwExp;
+                    baseObject.FightExp = monster.dwExp;
                     baseObject.Abil.HP = monster.wHP;
                     baseObject.Abil.MaxHP = monster.wHP;
                     baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
@@ -2733,7 +2733,7 @@ namespace GameSvr.UsrSystem
             cert.CurrY = ai.nY;
             cert.Direction = (byte)M2Share.RandomNumber.Random(8);
             cert.CharName = ai.sCharName;
-            cert.MWAbil = cert.Abil;
+            cert.WAbil = cert.Abil;
             if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)
             {
                 cert.CoolEye = true;
@@ -2748,8 +2748,8 @@ namespace GameSvr.UsrSystem
             cert.Initialize();
             cert.RecalcLevelAbilitys();
             cert.RecalcAbilitys();
-            cert.MWAbil.HP = cert.MWAbil.MaxHP;
-            cert.MWAbil.MP = cert.MWAbil.MaxMP;
+            cert.Abil.HP = cert.Abil.MaxHP;
+            cert.Abil.MP = cert.Abil.MaxMP;
             if (cert.AddtoMapSuccess)
             {
                 p28 = null;

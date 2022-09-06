@@ -66,7 +66,7 @@ namespace GameSvr.Npc
         private void ExeAction(PlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3)
         {
             int nInt1;
-            long dwInt;
+            int dwInt;
             // ================================================
             // 更改人物当前经验值
             // EXEACTION CHANGEEXP 0 经验数  设置为指定经验值
@@ -88,9 +88,9 @@ namespace GameSvr.Npc
                     case 1:
                         if (PlayObject.Abil.Exp >= nParam3)
                         {
-                            if (PlayObject.Abil.Exp - nParam3 > long.MaxValue - PlayObject.Abil.Exp)
+                            if (PlayObject.Abil.Exp - nParam3 > int.MaxValue - PlayObject.Abil.Exp)
                             {
-                                dwInt = long.MaxValue - PlayObject.Abil.Exp;
+                                dwInt = int.MaxValue - PlayObject.Abil.Exp;
                             }
                             else
                             {
@@ -99,9 +99,9 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            if (nParam3 - PlayObject.Abil.Exp > long.MaxValue - nParam3)
+                            if (nParam3 - PlayObject.Abil.Exp > int.MaxValue - nParam3)
                             {
-                                dwInt = long.MaxValue - nParam3;
+                                dwInt = int.MaxValue - nParam3;
                             }
                             else
                             {
@@ -198,7 +198,7 @@ namespace GameSvr.Npc
                 switch (nInt1)
                 {
                     case 1:
-                        PlayObject.MBoNoItem = true;
+                        PlayObject.NoItem = true;
                         PlayObject.Die();
                         break;
                     case 2:
@@ -206,7 +206,7 @@ namespace GameSvr.Npc
                         PlayObject.Die();
                         break;
                     case 3:
-                        PlayObject.MBoNoItem = true;
+                        PlayObject.NoItem = true;
                         PlayObject.SetLastHiter(this);
                         PlayObject.Die();
                         break;
@@ -485,59 +485,59 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$LEVEL>", sText);
                     return;
                 case "$HP":
-                    sText = PlayObject.MWAbil.HP.ToString();
+                    sText = PlayObject.Abil.HP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$HP>", sText);
                     return;
                 case "$MAXHP":
-                    sText = PlayObject.MWAbil.MaxHP.ToString();
+                    sText = PlayObject.Abil.MaxHP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXHP>", sText);
                     return;
                 case "$MP":
-                    sText = PlayObject.MWAbil.MP.ToString();
+                    sText = PlayObject.Abil.MP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MP>", sText);
                     return;
                 case "$MAXMP":
-                    sText = PlayObject.MWAbil.MaxMP.ToString();
+                    sText = PlayObject.Abil.MaxMP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMP>", sText);
                     return;
                 case "$AC":
-                    sText = HUtil32.LoWord(PlayObject.MWAbil.AC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.Abil.AC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$AC>", sText);
                     return;
                 case "$MAXAC":
-                    sText = HUtil32.HiWord(PlayObject.MWAbil.AC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.Abil.AC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXAC>", sText);
                     return;
                 case "$MAC":
-                    sText = HUtil32.LoWord(PlayObject.MWAbil.MAC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.Abil.MAC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAC>", sText);
                     return;
                 case "$MAXMAC":
-                    sText = HUtil32.HiWord(PlayObject.MWAbil.MAC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.Abil.MAC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMAC>", sText);
                     return;
                 case "$DC":
-                    sText = HUtil32.LoWord(PlayObject.MWAbil.DC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.Abil.DC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$DC>", sText);
                     return;
                 case "$MAXDC":
-                    sText = HUtil32.HiWord(PlayObject.MWAbil.DC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.Abil.DC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXDC>", sText);
                     return;
                 case "$MC":
-                    sText = HUtil32.LoWord(PlayObject.MWAbil.MC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.Abil.MC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MC>", sText);
                     return;
                 case "$MAXMC":
-                    sText = HUtil32.HiWord(PlayObject.MWAbil.MC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.Abil.MC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMC>", sText);
                     return;
                 case "$SC":
-                    sText = HUtil32.LoWord(PlayObject.MWAbil.SC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.Abil.SC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$SC>", sText);
                     return;
                 case "$MAXSC":
-                    sText = HUtil32.HiWord(PlayObject.MWAbil.SC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.Abil.SC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXSC>", sText);
                     return;
                 case "$EXP":
@@ -557,27 +557,27 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$CREDITPOINT>", sText);
                     return;
                 case "$HW":
-                    sText = PlayObject.MWAbil.HandWeight.ToString();
+                    sText = PlayObject.Abil.HandWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$HW>", sText);
                     return;
                 case "$MAXHW":
-                    sText = PlayObject.MWAbil.MaxHandWeight.ToString();
+                    sText = PlayObject.Abil.MaxHandWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXHW>", sText);
                     return;
                 case "$BW":
-                    sText = PlayObject.MWAbil.Weight.ToString();
+                    sText = PlayObject.Abil.Weight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$BW>", sText);
                     return;
                 case "$MAXBW":
-                    sText = PlayObject.MWAbil.MaxWeight.ToString();
+                    sText = PlayObject.Abil.MaxWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXBW>", sText);
                     return;
                 case "$WW":
-                    sText = PlayObject.MWAbil.WearWeight.ToString();
+                    sText = PlayObject.Abil.WearWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$WW>", sText);
                     return;
                 case "$MAXWW":
-                    sText = PlayObject.MWAbil.MaxWearWeight.ToString();
+                    sText = PlayObject.Abil.MaxWearWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXWW>", sText);
                     return;
                 case "$GOLDCOUNT":
@@ -732,7 +732,7 @@ namespace GameSvr.Npc
                     {
                         if (this.Castle != null)
                         {
-                            sText = this.Castle.m_sOwnGuild;
+                            sText = this.Castle.OwnGuild;
                             if (sText == "")
                             {
                                 sText = "游戏管理";
@@ -749,7 +749,7 @@ namespace GameSvr.Npc
                     {
                         if (this.Castle != null)
                         {
-                            sText = this.Castle.m_sName;
+                            sText = this.Castle.sName;
                         }
                         else
                         {
@@ -762,9 +762,9 @@ namespace GameSvr.Npc
                     {
                         if (this.Castle != null)
                         {
-                            if (this.Castle.m_MasterGuild != null)
+                            if (this.Castle.MasterGuild != null)
                             {
-                                sText = this.Castle.m_MasterGuild.GetChiefName();
+                                sText = this.Castle.MasterGuild.GetChiefName();
                             }
                             else
                             {
@@ -792,7 +792,7 @@ namespace GameSvr.Npc
                         }
                         if (this.Castle != null)
                         {
-                            if (!this.Castle.m_boUnderWar)
+                            if (!this.Castle.UnderWar)
                             {
                                 sText = this.Castle.GetWarDate();
                                 if (sText != "")
@@ -839,7 +839,7 @@ namespace GameSvr.Npc
                     {
                         if (this.Castle != null)
                         {
-                            sText = this.Castle.m_ChangeDate.ToString();
+                            sText = this.Castle.ChangeDate.ToString();
                         }
                         else
                         {
@@ -865,7 +865,7 @@ namespace GameSvr.Npc
                     {
                         if (this.Castle != null)
                         {
-                            sText = HUtil32.GetDayCount(DateTime.Now, this.Castle.m_ChangeDate).ToString();
+                            sText = HUtil32.GetDayCount(DateTime.Now, this.Castle.ChangeDate).ToString();
                         }
                         else
                         {

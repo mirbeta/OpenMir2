@@ -35,7 +35,7 @@ namespace GameSvr.Monster
                 {
                     OldMon.Master.SlaveList.Add(ElfMon);
                 }
-                ElfMon.MWAbil = OldMon.MWAbil;
+                ElfMon.Abil = OldMon.Abil;
                 ElfMon.StatusTimeArr = OldMon.StatusTimeArr;
                 ElfMon.TargetCret = OldMon.TargetCret;
                 ElfMon.TargetFocusTick = OldMon.TargetFocusTick;

@@ -385,7 +385,7 @@ namespace GameSvr.Npc
                     PlayObject.MagicList.Add(UserMagic);
                     PlayObject.SendAddMagic(UserMagic);
                     PlayObject.RecalcAbilitys();
-                    if (M2Share.Config.boShowScriptActionMsg)
+                    if (M2Share.Config.ShowScriptActionMsg)
                     {
                         PlayObject.SysMsg(Magic.sMagicName + "练习成功。", MsgColor.Green, MsgType.Hint);
                     }
@@ -457,7 +457,7 @@ namespace GameSvr.Npc
             PlayObject.m_nAutoGetExpTime = nTime * 1000;
             PlayObject.m_nAutoGetExpPoint = nPoint;
             PlayObject.OffLineFlag = true;
-            PlayObject.MDwKickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
+            PlayObject.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
             IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.m_sUserID, PlayObject.m_nSessionID);
             PlayObject.SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
         }
@@ -535,7 +535,7 @@ namespace GameSvr.Npc
 
         private void ActionOfChangeExp(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            long dwInt;
+            int dwInt;
             var nExp = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nExp < 0)
             {
@@ -565,9 +565,9 @@ namespace GameSvr.Npc
                 case '+':
                     if (PlayObject.Abil.Exp >= nExp)
                     {
-                        if (PlayObject.Abil.Exp - nExp > long.MaxValue - PlayObject.Abil.Exp)
+                        if (PlayObject.Abil.Exp - nExp > int.MaxValue - PlayObject.Abil.Exp)
                         {
-                            dwInt = long.MaxValue - PlayObject.Abil.Exp;
+                            dwInt = int.MaxValue - PlayObject.Abil.Exp;
                         }
                         else
                         {
@@ -587,7 +587,7 @@ namespace GameSvr.Npc
                     }
                     PlayObject.Abil.Exp += dwInt;
                     // PlayObject.GetExp(dwInt);
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WINEXP, 0, (int)dwInt, 0, 0, "");
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WINEXP, 0, dwInt, 0, 0, "");
                     break;
             }
         }
@@ -723,7 +723,7 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                Mon.MBoNoItem = true;
+                Mon.NoItem = true;
                 Mon.MakeGhost();
             }
         }
@@ -1320,13 +1320,13 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_TAKECASTLEGOLD);
                 return;
             }
-            if (nGold <= this.Castle.m_nTotalGold)
+            if (nGold <= this.Castle.TotalGold)
             {
-                this.Castle.m_nTotalGold -= nGold;
+                this.Castle.TotalGold -= nGold;
             }
             else
             {
-                this.Castle.m_nTotalGold = 0;
+                this.Castle.TotalGold = 0;
             }
         }
 
@@ -2573,7 +2573,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sChangeMemberLevelMsg, new[] { PlayObject.m_nMemberLevel }), MsgColor.Green, MsgType.Hint);
             }
@@ -2608,7 +2608,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sChangeMemberTypeMsg, new[] { PlayObject.m_nMemberType }), MsgColor.Green, MsgType.Hint);
             }
@@ -2746,7 +2746,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sScriptGuildAuraePointMsg, new[] { Guild.Aurae }), MsgColor.Green, MsgType.Hint);
             }
@@ -2793,7 +2793,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sScriptGuildBuildPointMsg, Guild.BuildPoint), MsgColor.Green, MsgType.Hint);
             }
@@ -2840,7 +2840,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sScriptChiefItemCountMsg, Guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
             }
@@ -2887,7 +2887,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sScriptGuildFlourishPointMsg, Guild.Flourishing), MsgColor.Green, MsgType.Hint);
             }
@@ -2934,7 +2934,7 @@ namespace GameSvr.Npc
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sScriptGuildStabilityPointMsg, Guild.Stability), MsgColor.Green, MsgType.Hint);
             }
@@ -2952,29 +2952,29 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.MWAbil.HP = (ushort)nHP;
+                    PlayObject.Abil.HP = (ushort)nHP;
                     break;
                 case '-':
-                    if (PlayObject.MWAbil.HP >= nHP)
+                    if (PlayObject.Abil.HP >= nHP)
                     {
-                        PlayObject.MWAbil.HP -= (ushort)nHP;
+                        PlayObject.Abil.HP -= (ushort)nHP;
                     }
                     else
                     {
-                        PlayObject.MWAbil.HP = 0;
+                        PlayObject.Abil.HP = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.MWAbil.HP += (ushort)nHP;
-                    if (PlayObject.MWAbil.HP > PlayObject.MWAbil.MaxHP)
+                    PlayObject.Abil.HP += (ushort)nHP;
+                    if (PlayObject.Abil.HP > PlayObject.Abil.MaxHP)
                     {
-                        PlayObject.MWAbil.HP = PlayObject.MWAbil.MaxHP;
+                        PlayObject.Abil.HP = PlayObject.Abil.MaxHP;
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.MWAbil.MaxHP), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.Abil.MaxHP), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2990,29 +2990,29 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.MWAbil.MP = (ushort)nMP;
+                    PlayObject.Abil.MP = (ushort)nMP;
                     break;
                 case '-':
-                    if (PlayObject.MWAbil.MP >= nMP)
+                    if (PlayObject.Abil.MP >= nMP)
                     {
-                        PlayObject.MWAbil.MP -= (ushort)nMP;
+                        PlayObject.Abil.MP -= (ushort)nMP;
                     }
                     else
                     {
-                        PlayObject.MWAbil.MP = 0;
+                        PlayObject.Abil.MP = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.MWAbil.MP += (ushort)nMP;
-                    if (PlayObject.MWAbil.MP > PlayObject.MWAbil.MaxMP)
+                    PlayObject.Abil.MP += (ushort)nMP;
+                    if (PlayObject.Abil.MP > PlayObject.Abil.MaxMP)
                     {
-                        PlayObject.MWAbil.MP = PlayObject.MWAbil.MaxMP;
+                        PlayObject.Abil.MP = PlayObject.Abil.MaxMP;
                     }
                     break;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.MWAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.Abil.MaxMP }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3029,7 +3029,7 @@ namespace GameSvr.Npc
                 switch (nMode)
                 {
                     case 1:
-                        PlayObject.MBoNoItem = true;
+                        PlayObject.NoItem = true;
                         PlayObject.Die();
                         break;
                     case 2:
@@ -3037,7 +3037,7 @@ namespace GameSvr.Npc
                         PlayObject.Die();
                         break;
                     case 3:
-                        PlayObject.MBoNoItem = true;
+                        PlayObject.NoItem = true;
                         PlayObject.SetLastHiter(this);
                         PlayObject.Die();
                         break;
@@ -3197,7 +3197,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 Slave = PlayObject.SlaveList[i];
-                Slave.MWAbil.HP = 0;
+                Slave.Abil.HP = 0;
             }
         }
 
@@ -3212,7 +3212,7 @@ namespace GameSvr.Npc
             }
             PlayObject.m_nKillMonExpRate = nRate;
             PlayObject.m_dwKillMonExpRateTime = nTime;
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sChangeKillMonExpRateMsg, PlayObject.m_nKillMonExpRate / 100, PlayObject.m_dwKillMonExpRateTime), MsgColor.Green, MsgType.Hint);
             }
@@ -3302,7 +3302,7 @@ namespace GameSvr.Npc
             }
             PlayObject.m_nPowerRate = nRate;
             PlayObject.m_dwPowerRateTime = nTime;
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sChangePowerRateMsg, new object[] { PlayObject.m_nPowerRate / 100, PlayObject.m_dwPowerRateTime }), MsgColor.Green, MsgType.Hint);
             }
@@ -3369,7 +3369,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CHANGEPERMISSION);
                 return;
             }
-            if (M2Share.Config.boShowScriptActionMsg)
+            if (M2Share.Config.ShowScriptActionMsg)
             {
                 PlayObject.SysMsg(Format(M2Share.g_sChangePermissionMsg, PlayObject.Permission), MsgColor.Green, MsgType.Hint);
             }
