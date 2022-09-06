@@ -3,6 +3,7 @@ using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Player;
 using GameSvr.Script;
+using GameSvr.UsrSystem;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -400,6 +401,126 @@ namespace GameSvr.Npc
             for (var i = 0; i < ConditionList.Count; i++)
             {
                 QuestConditionInfo = ConditionList[i];
+
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam1))
+                {
+                    if ((QuestConditionInfo.sParam1[0] == '$'))
+                    {
+                        var s50 = QuestConditionInfo.sParam1;
+                        QuestConditionInfo.sParam1 = '<' + QuestConditionInfo.sParam1 + '>';
+                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam1, s50);
+                    }
+                    else if (QuestConditionInfo.sParam1.IndexOf(">") > -1)
+                    {
+                        QuestConditionInfo.sParam1 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);
+                    }
+                }
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam2))
+                {
+                    if ((QuestConditionInfo.sParam2[0] == '$'))
+                    {
+                        var s50 = QuestConditionInfo.sParam2;
+                        QuestConditionInfo.sParam2 = '<' + QuestConditionInfo.sParam2 + '>';
+                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam2, s50);
+                    }
+                    else if (QuestConditionInfo.sParam2.IndexOf(">") > -1)
+                    {
+                        QuestConditionInfo.sParam2 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam2);
+                    }
+                }
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam3))
+                {
+                    if ((QuestConditionInfo.sParam3[0] == '$'))
+                    {
+                        var s50 = QuestConditionInfo.sParam3;
+                        QuestConditionInfo.sParam3 = '<' + QuestConditionInfo.sParam3 + '>';
+                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam3, s50);
+                    }
+                    else if (QuestConditionInfo.sParam3.IndexOf(">") > -1)
+                    {
+                        QuestConditionInfo.sParam3 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam3);
+                    }
+                }
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam4))
+                {
+                    if ((QuestConditionInfo.sParam4[0] == '$'))
+                    {
+                        var s50 = QuestConditionInfo.sParam4;
+                        QuestConditionInfo.sParam4 = '<' + QuestConditionInfo.sParam4 + '>';
+                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam4, s50);
+                    }
+                    else if (QuestConditionInfo.sParam4.IndexOf(">") > -1)
+                    {
+                        QuestConditionInfo.sParam4 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam4);
+                    }
+                }
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam5))
+                {
+                    if ((QuestConditionInfo.sParam5[0] == '$'))
+                    {
+                        var s50 = QuestConditionInfo.sParam5;
+                        QuestConditionInfo.sParam5 = '<' + QuestConditionInfo.sParam5 + '>';
+                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam5, s50);
+                    }
+                    else if (QuestConditionInfo.sParam5.IndexOf(">") > -1)
+                    {
+                        QuestConditionInfo.sParam5 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam5);
+                    }
+                }
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam6))
+                {
+                    if ((QuestConditionInfo.sParam6[0] == '$'))
+                    {
+                        var s50 = QuestConditionInfo.sParam6;
+                        QuestConditionInfo.sParam6 = '<' + QuestConditionInfo.sParam6 + '>';
+                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam6, s50);
+                    }
+                    else if (QuestConditionInfo.sParam6.IndexOf(">") > -1)
+                    {
+                        QuestConditionInfo.sParam6 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam6);
+                    }
+                }
+
+                //参数变量解释以主执行人物为依据
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sOpName))
+                {
+                    if (QuestConditionInfo.sOpName.Length > 2)
+                    {
+                        if (QuestConditionInfo.sOpName[1] == '$')
+                        {
+                            var s50 = QuestConditionInfo.sOpName;
+                            QuestConditionInfo.sOpName = '<' + QuestConditionInfo.sOpName + '>';
+                            GetVariableText(PlayObject, ref QuestConditionInfo.sOpName, s50);
+                        }
+                        else if (QuestConditionInfo.sOpName.IndexOf(">") > -1)
+                        {
+                            QuestConditionInfo.sOpName = GetLineVariableText(PlayObject, QuestConditionInfo.sOpName);
+                        }
+                    }
+                    var Human = M2Share.UserEngine.GetPlayObject(QuestConditionInfo.sOpName);
+                    if (Human != null)
+                    {
+                        PlayObject = Human;
+                        if (!string.IsNullOrEmpty(QuestConditionInfo.sOpHName) && string.Compare(QuestConditionInfo.sOpHName, "H", true) == 0)
+                        { 
+                            //todo 待支持英雄
+                        }
+                    }
+                }
+
+                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam1))
+                    QuestConditionInfo.nParam1 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
+                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam2))
+                    QuestConditionInfo.nParam2= HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 1);
+                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam3))
+                    QuestConditionInfo.nParam3= HUtil32.Str_ToInt(QuestConditionInfo.sParam3, 1);
+                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam4))
+                    QuestConditionInfo.nParam4= HUtil32.Str_ToInt(QuestConditionInfo.sParam4, 0);
+                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam5))
+                    QuestConditionInfo.nParam5= HUtil32.Str_ToInt(QuestConditionInfo.sParam5, 0);
+                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam6)) 
+                    QuestConditionInfo.nParam6= HUtil32.Str_ToInt(QuestConditionInfo.sParam6, 0);
+
                 switch (QuestConditionInfo.nCmdCode)
                 {
                     case ScriptConst.nCHECKUSERDATE:
@@ -1838,9 +1959,11 @@ namespace GameSvr.Npc
                         for (var k = 0; k < List58.Count; k++)
                         {
                             List58[k].NoItem = true;
-                            List58[k].Abil.HP = 0;
+                            List58[k].WAbil.HP = 0;
+                            List58[k].MakeGhost();
                         }
-                        //List58.Free;
+                        List58.Clear();
+                        List58 = null;
                         break;
                     case ScriptConst.nMOV:
                         MovData(PlayObject, QuestActionInfo);
@@ -2371,9 +2494,103 @@ namespace GameSvr.Npc
                         PlayObject.m_sTimeGotoLable = "";
                         PlayObject.m_TimeGotoNPC = null;
                         break;
+                    case ScriptConst.nSC_QUERYVALUE:
+                        ActionOfQueryValue(PlayObject, QuestActionInfo);
+                        break;
+                    case ScriptConst.nSC_KILLSLAVENAME:
+                        ActionOfKillSlaveName(PlayObject, QuestActionInfo);
+                        break;
+                    case ScriptConst.nSC_QUERYITEMDLG:
+                        ActionOfQueryItemDlg(PlayObject, QuestActionInfo);
+                        break;
+                    case ScriptConst.nSC_UPGRADEDLGITEM:
+                        ActionOfUpgradeDlgItem(PlayObject, QuestActionInfo);
+                        break;
+                    case ScriptConst.nSC_GETDLGITEMVALUE:
+
+                        break;
+                    case ScriptConst.nSC_TAKEDLGITEM:
+
+                        break;
                 }
             }
             return result;
+        }
+
+        private void ActionOfUpgradeDlgItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        { 
+            
+        }
+
+        private void ActionOfQueryItemDlg(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        {
+            PlayObject.TakeDlgItem = QuestActionInfo.nParam3 != 0;
+            PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam2;
+            var sHint = QuestActionInfo.sParam1;
+            if (string.IsNullOrEmpty(sHint)) sHint = "请输入:";
+            PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, this.ObjectId, 0, 0, 0, sHint);
+        }
+
+        private void ActionOfKillSlaveName(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        {
+            var sSlaveName = QuestActionInfo.sParam1;
+            if (string.IsNullOrEmpty(sSlaveName))
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_KILLSLAVENAME);
+                return;
+            }
+            if (sSlaveName.Equals("*") || string.Compare(sSlaveName, "ALL", true) == 0)
+            {
+                for (int i = 0; i < PlayObject.SlaveList.Count; i++)
+                {
+                    PlayObject.SlaveList[i].WAbil.HP = 0;
+                }
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < PlayObject.SlaveList.Count; i++)
+                {
+                    var BaseObject = PlayObject.SlaveList[i];
+                    if (!Death && (string.Compare(sSlaveName, BaseObject.CharName, true) == 0))
+                    {
+                        BaseObject.WAbil.HP = 0;
+                    }
+                }
+            }
+        }
+
+        private void ActionOfQueryValue(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        {
+            var btStrLabel = QuestActionInfo.nParam1;
+            if (btStrLabel < 100)
+            {
+                btStrLabel = 0;
+            }
+            PlayObject.m_btValLabel = (byte)btStrLabel;
+            var btType = QuestActionInfo.nParam2;
+            if (btType > 3)
+            {
+                btType = 0;
+            }
+            PlayObject.m_btValType = (byte)btType;
+            var btLen = HUtil32._MAX(1, QuestActionInfo.nParam3);
+            PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam4;
+            var sHint = QuestActionInfo.sParam5;
+            PlayObject.m_btValNPCType = 0;
+            if (string.Compare(QuestActionInfo.sParam6, "QF", true) == 0)
+            {
+                PlayObject.m_btValNPCType = 1;
+            }
+            else if (string.Compare(QuestActionInfo.sParam6, "QM", true) == 0)
+            {
+                PlayObject.m_btValNPCType = 2;
+            }
+            if (string.IsNullOrEmpty(sHint))
+            {
+                sHint = "请输入：";
+            }
+            PlayObject.SendDefMessage(Grobal2.SM_QUERYVALUE, 0, HUtil32.MakeWord(btType, btLen), 0, 0, sHint);
         }
 
         private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag)

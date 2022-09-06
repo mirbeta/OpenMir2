@@ -724,6 +724,7 @@ namespace GameSvr.Npc
                     continue;
                 }
                 Mon.NoItem = true;
+                Mon.WAbil.HP = 0;
                 Mon.MakeGhost();
             }
         }
@@ -2952,29 +2953,29 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.Abil.HP = (ushort)nHP;
+                    PlayObject.WAbil.HP = (ushort)nHP;
                     break;
                 case '-':
-                    if (PlayObject.Abil.HP >= nHP)
+                    if (PlayObject.WAbil.HP >= nHP)
                     {
-                        PlayObject.Abil.HP -= (ushort)nHP;
+                        PlayObject.WAbil.HP -= (ushort)nHP;
                     }
                     else
                     {
-                        PlayObject.Abil.HP = 0;
+                        PlayObject.WAbil.HP = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.Abil.HP += (ushort)nHP;
-                    if (PlayObject.Abil.HP > PlayObject.Abil.MaxHP)
+                    PlayObject.WAbil.HP += (ushort)nHP;
+                    if (PlayObject.WAbil.HP > PlayObject.WAbil.MaxHP)
                     {
-                        PlayObject.Abil.HP = PlayObject.Abil.MaxHP;
+                        PlayObject.WAbil.HP = PlayObject.WAbil.MaxHP;
                     }
                     break;
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.Abil.MaxHP), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2990,29 +2991,29 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.Abil.MP = (ushort)nMP;
+                    PlayObject.WAbil.MP = (ushort)nMP;
                     break;
                 case '-':
-                    if (PlayObject.Abil.MP >= nMP)
+                    if (PlayObject.WAbil.MP >= nMP)
                     {
-                        PlayObject.Abil.MP -= (ushort)nMP;
+                        PlayObject.WAbil.MP -= (ushort)nMP;
                     }
                     else
                     {
-                        PlayObject.Abil.MP = 0;
+                        PlayObject.WAbil.MP = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.Abil.MP += (ushort)nMP;
-                    if (PlayObject.Abil.MP > PlayObject.Abil.MaxMP)
+                    PlayObject.WAbil.MP += (ushort)nMP;
+                    if (PlayObject.WAbil.MP > PlayObject.WAbil.MaxMP)
                     {
-                        PlayObject.Abil.MP = PlayObject.Abil.MaxMP;
+                        PlayObject.WAbil.MP = PlayObject.WAbil.MaxMP;
                     }
                     break;
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.Abil.MaxMP }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3197,7 +3198,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 Slave = PlayObject.SlaveList[i];
-                Slave.Abil.HP = 0;
+                Slave.WAbil.HP = 0;
             }
         }
 

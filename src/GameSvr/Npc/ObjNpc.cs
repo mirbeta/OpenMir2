@@ -45,6 +45,8 @@ namespace GameSvr.Npc
         public int nParam5;
         public string sParam6;
         public int nParam6;
+        public string sOpName;
+        public string sOpHName;
     }
 
     public class TQuestConditionInfo
@@ -62,6 +64,8 @@ namespace GameSvr.Npc
         public int nParam5;
         public string sParam6;
         public int nParam6;
+        public string sOpName;
+        public string sOpHName;
     }
 
     public class TSayingProcedure

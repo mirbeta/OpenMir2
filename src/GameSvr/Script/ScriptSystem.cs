@@ -21,7 +21,7 @@ namespace GameSvr.Script
             return LoadScriptFile(NPC, sPatch, sScritpName, false); ;
         }
 
-        private bool LoadScriptFile_LoadCallScript(string sFileName, string sLabel, StringList List)
+        private bool LoadScriptFileCallScript(string sFileName, string sLabel, StringList List)
         {
             bool result = false;
             if (File.Exists(sFileName))
@@ -122,7 +122,7 @@ namespace GameSvr.Script
                         callList.InsertText(i + 1, "goto " + s18);
                         break;
                     }
-                    if (LoadScriptFile_LoadCallScript(sFileName, s18, callList))
+                    if (LoadScriptFileCallScript(sFileName, s18, callList))
                     {
                         callList[i] = "#ACT";
                         callList.InsertText(i + 1, "goto " + s18);
@@ -209,7 +209,7 @@ namespace GameSvr.Script
             return ScriptInfo;
         }
 
-        private bool LoadScriptFile_QuestCondition(string sText, TQuestConditionInfo QuestConditionInfo)
+        private bool LoadScriptFileQuestCondition(string sText, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var sCmd = string.Empty;
@@ -227,6 +227,25 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
+
+            if (sCmd.IndexOf(".") > -1) //支持脚本变量
+            {
+                var sActName = string.Empty;
+                sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                if (!string.IsNullOrEmpty(sActName))
+                {
+                    QuestConditionInfo.sOpName = sActName;
+                    if (sCmd.IndexOf(".") > -1)
+                    {
+                        sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                        if (string.Compare(sActName, "H", true) == 0)
+                        {
+                            QuestConditionInfo.sOpHName = "H";
+                        }
+                    }
+                }
+            }
+
             sCmd = sCmd.ToUpper();
             switch (sCmd)
             {
@@ -475,6 +494,12 @@ namespace GameSvr.Script
                     goto L001;
                 case ScriptConst.sCHECKBBCOUNT:
                     nCMDCode = ScriptConst.nCHECKBBCOUNT;
+                    goto L001;
+                case ScriptConst.sSC_CHECKDLGITEMTYPE:
+                    nCMDCode = ScriptConst.nSC_CHECKDLGITEMTYPE;
+                    goto L001;
+                case ScriptConst.sSC_CHECKDLGITEMNAME:
+                    nCMDCode = ScriptConst.nSC_CHECKDLGITEMNAME;
                     goto L001;
             }
 
@@ -811,7 +836,7 @@ namespace GameSvr.Script
             return result;
         }
 
-        private bool LoadScriptFile_QuestAction(string sText, TQuestActionInfo QuestActionInfo)
+        private bool LoadScriptFileQuestAction(string sText, TQuestActionInfo QuestActionInfo)
         {
             var sCmd = string.Empty;
             var sParam1 = string.Empty;
@@ -829,6 +854,23 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
+            if (sCmd.IndexOf(".") > -1) //支持脚本变量
+            {
+                var sActName = string.Empty;
+                sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                if (!string.IsNullOrEmpty(sActName))
+                {
+                    QuestActionInfo.sOpName = sActName;
+                    if (sCmd.IndexOf(".") > -1)
+                    {
+                        sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                        if (string.Compare(sActName, "H", true) == 0)
+                        {
+                            QuestActionInfo.sOpHName = "H";
+                        }
+                    }
+                }
+            }
             sCmd = sCmd.ToUpper();
             nCMDCode = 0;
             switch (sCmd)
@@ -1362,6 +1404,21 @@ namespace GameSvr.Script
                 case ScriptConst.sCLEARDELAYGOTO:
                     nCMDCode = ScriptConst.nCLEARDELAYGOTO;
                     goto L001;
+                case ScriptConst.sSC_QUERYVALUE:
+                    nCMDCode = ScriptConst.nSC_QUERYVALUE;
+                    goto L001;
+                case ScriptConst.sSC_QUERYITEMDLG:
+                    nCMDCode = ScriptConst.nSC_QUERYITEMDLG;
+                    goto L001;
+                case ScriptConst.sSC_UPGRADEDLGITEM:
+                    nCMDCode = ScriptConst.nSC_UPGRADEDLGITEM;
+                    goto L001;
+                case ScriptConst.sSC_GETDLGITEMVALUE:
+                    nCMDCode = ScriptConst.nSC_GETDLGITEMVALUE;
+                    goto L001;
+                case ScriptConst.sSC_TAKEDLGITEM:
+                    nCMDCode = ScriptConst.nSC_TAKEDLGITEM;
+                    goto L001;
             }
         L001:
             if (nCMDCode > 0)
@@ -1438,10 +1495,6 @@ namespace GameSvr.Script
         /// <summary>
         /// 加载NPC脚本
         /// </summary>
-        /// <param name="NPC"></param>
-        /// <param name="sPatch"></param>
-        /// <param name="sScritpName"></param>
-        /// <param name="boFlag"></param>
         /// <returns></returns>
         public int LoadScriptFile(NormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
@@ -1784,7 +1837,7 @@ namespace GameSvr.Script
                         if (n6C == 11)
                         {
                             QuestConditionInfo = new TQuestConditionInfo();
-                            if (LoadScriptFile_QuestCondition(sScript.Trim(), QuestConditionInfo))
+                            if (LoadScriptFileQuestCondition(sScript.Trim(), QuestConditionInfo))
                             {
                                 SayingProcedure.ConditionList.Add(QuestConditionInfo);
                             }
@@ -1797,7 +1850,7 @@ namespace GameSvr.Script
                         if (n6C == 12)
                         {
                             QuestActionInfo = new TQuestActionInfo();
-                            if (LoadScriptFile_QuestAction(sScript.Trim(), QuestActionInfo))
+                            if (LoadScriptFileQuestAction(sScript.Trim(), QuestActionInfo))
                             {
                                 SayingProcedure.ActionList.Add(QuestActionInfo);
                             }
@@ -1810,7 +1863,7 @@ namespace GameSvr.Script
                         if (n6C == 13)
                         {
                             QuestActionInfo = new TQuestActionInfo();
-                            if (LoadScriptFile_QuestAction(sScript.Trim(), QuestActionInfo))
+                            if (LoadScriptFileQuestAction(sScript.Trim(), QuestActionInfo))
                             {
                                 SayingProcedure.ElseActionList.Add(QuestActionInfo);
                             }

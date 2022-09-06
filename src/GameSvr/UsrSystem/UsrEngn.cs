@@ -94,8 +94,6 @@ namespace GameSvr.UsrSystem
         /// 假人列表
         /// </summary>
         private readonly IList<RoBotLogon> RobotLogonList;
-        private Timer _userEngineTimer;
-        private Timer _processRobotTimer;
 
         public UserEngine()
         {
@@ -147,16 +145,22 @@ namespace GameSvr.UsrSystem
 
         public IEnumerable<PlayObject> PlayObjects => PlayObjectList;
 
-        public void Start()
+        public void Start(CancellationToken stoppingToken)
         {
-            _userEngineTimer = new Timer(PrcocessData, null, 1000, 20);
-            //_processRobotTimer = new Timer(ProcessRobotPlayData, null, 1000, 20);
+            Task.Factory.StartNew(async () =>
+            {
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    Execute();
+                    await Task.Delay(20);
+                }
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        public void Stop()
+        private void Execute()
         {
-            _userEngineTimer?.Dispose();
-            _processRobotTimer?.Dispose();
+            PrcocessData();
+            ProcessRobotPlayData();
         }
 
         public void Initialize()
@@ -172,7 +176,7 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        private void PrcocessData(object state)
+        private void PrcocessData()
         {
             try
             {
@@ -695,7 +699,7 @@ namespace GameSvr.UsrSystem
             if (M2Share.g_nHumCountMax < M2Share.g_nHumCountMin) M2Share.g_nHumCountMax = M2Share.g_nHumCountMin;
         }
 
-        private void ProcessRobotPlayData(object obj)
+        private void ProcessRobotPlayData()
         {
             const string sExceptionMsg = "[Exception] TUserEngine::ProcessRobotPlayData";
             try

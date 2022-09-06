@@ -7,6 +7,7 @@ using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Services;
+using GameSvr.UsrSystem;
 using System.Collections;
 using System.Text.RegularExpressions;
 using SystemModule;
@@ -1113,7 +1114,7 @@ namespace GameSvr.Player
                             OSObject = cellInfo.ObjList[i];
                             if (OSObject.CellType == CellType.MovingObject)
                             {
-                                BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);;
+                                BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId); ;
                                 if (BaseObject != null)
                                 {
                                     if (!BaseObject.Ghost && BaseObject == TargeTBaseObject)
@@ -3835,6 +3836,122 @@ namespace GameSvr.Player
         public void ChangeSnapsServer(string serveraddr, int gamePort)
         {
             this.SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, serveraddr + '/' + gamePort);
+        }
+
+        public void ProcessQueryValue(int Npc, string sData)
+        {
+            const string sIsInQVFilterListMsg = "你输入的文本中包含了非法字符，请重新出入";
+            NormNpc NormNpc;
+            string sRefMsg = string.Empty;
+            if (!Ghost && !string.IsNullOrEmpty(m_sGotoNpcLabel))
+            {
+                sRefMsg = EDcode.DeCodeString(sData);
+                //if (IsInGuildRankNameFilterList(sRefMsg))
+                //{
+                //    SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, sIsInQVFilterListMsg);
+                //    return;
+                //}
+            }
+            switch (m_btValType)
+            {
+                case 0:
+                    m_nSval[m_btValLabel] = sRefMsg;
+                    break;
+                case 1:
+                    m_nMval[m_btValLabel] = HUtil32.Str_ToInt(sRefMsg, 0);
+                    break;
+            }
+            switch (m_btValNPCType)
+            {
+                case 0:
+                    NormNpc = (NormNpc)M2Share.UserEngine.FindMerchant(Npc);
+                    if (NormNpc == null)
+                    {
+                        NormNpc = (NormNpc)M2Share.UserEngine.FindNpc(Npc);
+                    }
+                    if (NormNpc != null)
+                    {
+                        if (NormNpc.Envir == Envir && Math.Abs(NormNpc.CurrX - CurrX) <= 15 && Math.Abs(NormNpc.CurrY - CurrY) <= 15)
+                        {
+                            NormNpc.GotoLable(this, m_sGotoNpcLabel, false);
+                        }
+                    }
+                    break;
+                case 1:
+                    if (M2Share.g_FunctionNPC != null)
+                    {
+                        M2Share.g_FunctionNPC.GotoLable(this, m_sGotoNpcLabel, false);
+                    }
+                    break;
+                case 2:
+                    if (M2Share.g_ManageNPC != null)
+                    {
+                        M2Share.g_ManageNPC.GotoLable(this, m_sGotoNpcLabel, false);
+                    }
+                    break;
+            }
+            m_sGotoNpcLabel = string.Empty;
+        }
+
+        private void ClientMerchantItemDlgSelect(int nParam1, int nParam2, int nParam3)
+        {
+            DlgItemIndex = 0;
+            if (!Death && !Ghost)
+            {
+                NormNpc Npc = null;
+                if (nParam1 == 0)
+                {
+                    return;
+                }
+                Npc = (NormNpc)M2Share.UserEngine.FindMerchant(nParam1);
+                if (Npc == null)
+                {
+                    Npc = (NormNpc)M2Share.UserEngine.FindNpc(nParam1);
+                }
+                if (Npc != null)
+                {
+                    //LastNPC = Npc;
+                }
+                if (Npc == null)
+                {
+                    return;
+                }
+                if (((Npc.Envir == Envir) && (Math.Abs(Npc.CurrX - CurrX) < 15)) && (Math.Abs(Npc.CurrY - CurrY) < 15) || (Npc.m_boIsHide))
+                {
+                    DlgItemIndex = HUtil32.MakeLong(nParam2, nParam3);
+                    var nTemp = 0;
+                    if (TakeDlgItem && DlgItemIndex > 0)
+                    {
+                        nTemp = 255;
+                        for (int i = 0; i < ItemList.Count; i++)
+                        {
+                            var UserItem = ItemList[i];
+                            if (UserItem.wIndex == DlgItemIndex)
+                            {
+                                var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                                if (StdItem != null)
+                                {
+                                    if (StdItem.NeedIdentify == 1)
+                                    {
+                                        // M2Share.AddGameDataLog('10' + #9 + m_sMapName + #9 +inttostr(m_nCurrX) + #9 + inttostr(m_nCurrY) + #9 +m_sCharName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sCharName);
+                                        SendDelItems(UserItem);
+                                        UserItem = null;
+                                        ItemList.RemoveAt(i);
+                                        DlgItemIndex = 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        nTemp = 0;
+                    }
+                    SendDefMessage(Grobal2.SM_ITEMDLGSELECT, 1, nTemp, 0, 0, "");
+                    //Npc.m_OprCount = 0;
+                    Npc.GotoLable(this, m_sGotoNpcLabel, false);
+                    m_sGotoNpcLabel = string.Empty;
+                }
+            }
         }
     }
 }

@@ -6,7 +6,9 @@ using GameSvr.Magic;
 using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
+using GameSvr.Npc;
 using GameSvr.Player;
+using GameSvr.UsrSystem;
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;
@@ -811,6 +813,9 @@ namespace GameSvr.Actor
         protected int AutoAddHpmpMode = 0;
         public int CheckHpmpTick = 0;
         public long DwTick3F4 = 0;
+        public byte m_btValNPCType;
+        public byte m_btValType;
+        public byte m_btValLabel;
         /// <summary>
         /// 是否机器人
         /// </summary>
@@ -6227,14 +6232,11 @@ namespace GameSvr.Actor
                 CurrY = nY2;
                 Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
             }
-
             Abil.HP = Abil.MaxHP;
             Abil.MP = Abil.MaxMP;
-            Abil.HP = Abil.MaxHP;
-            Abil.MP = Abil.MaxMP;
-
+            WAbil.HP = WAbil.MaxHP;
+            WAbil.MP = WAbil.MaxMP;
             RecalcAbilitys();
-
             Death = false;
             Invisible = false;
 

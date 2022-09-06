@@ -245,7 +245,7 @@ namespace GameSvr
             }
         }
 
-        public void StartEngine()
+        public void StartEngine(CancellationToken stoppingToken)
         {
             try
             {
@@ -271,7 +271,7 @@ namespace GameSvr
                 _logger.LogInformation("正在初始安全区光圈...");
                 M2Share.MapMgr.MakeSafePkZone();
                 _logger.LogInformation("安全区光圈初始化成功...");
-                M2Share.FrontEngine.Start();
+                M2Share.FrontEngine.Start(stoppingToken);
                 _logger.LogInformation("人物数据引擎启动成功...");
                 M2Share.UserEngine.Initialize();
                 _logger.LogInformation("游戏处理引擎初始化成功...");

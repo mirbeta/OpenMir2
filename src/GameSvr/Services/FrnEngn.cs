@@ -13,7 +13,6 @@ namespace GameSvr.Services
         private readonly IList<TGoldChangeInfo> m_ChangeGoldList;
         private IList<TLoadDBInfo> m_LoadRcdTempList;
         private readonly IList<TSaveRcd> m_SaveRcdTempList;
-        private Thread _frontEngineThread;
 
         public TFrontEngine()
         {
@@ -25,24 +24,25 @@ namespace GameSvr.Services
             m_SaveRcdTempList = new List<TSaveRcd>();
         }
 
-        public void Start()
+        public void Start(CancellationToken stoppingToken)
         {
-            _frontEngineThread = new Thread(Execute);
-            _frontEngineThread.IsBackground = true;
-            _frontEngineThread.Start();
+            Task.Factory.StartNew(async () =>
+            {
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    Execute();
+                    await Task.Delay(20);
+                }
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        private void Execute(object  obj)
+        private void Execute()
         {
             const string sExceptionMsg = "[Exception] TFrontEngine::Execute";
             try
             {
-                while (true)
-                {
-                    ProcessGameDate();
-                    GetGameTime();
-                    Thread.Sleep(200);
-                }
+                ProcessGameDate();
+                GetGameTime();
             }
             catch (Exception ex)
             {

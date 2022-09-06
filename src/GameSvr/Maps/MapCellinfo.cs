@@ -12,8 +12,8 @@ namespace GameSvr.Maps
         /// <summary>
         /// 对象数量
         /// </summary>
-        public int Count;
-    
+        public int Count => ObjList.Count;
+
         /// <summary>
         /// 地图对象列表
         /// </summary>
@@ -21,20 +21,24 @@ namespace GameSvr.Maps
 
         public void Add(CellObject cell, EntityId entityId)
         {
-            ObjList.Add(cell);
-            M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);
-            Interlocked.Increment(ref Count);
+            using (M2Share.syncLock.EnterWriteLock())
+            {
+                ObjList.Add(cell);
+                M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);
+            }
         }
 
         public void Remove(CellObject cell)
         {
-            if (ObjList != null && cell != null)
+            using (M2Share.syncLock.EnterReadLock())
             {
-                ObjList.Remove(cell);
-                M2Share.CellObjectSystem.Remove(cell.CellObjId);
-                cell = null;
+                if (ObjList != null && cell != null)
+                {
+                    ObjList.Remove(cell);
+                    M2Share.CellObjectSystem.Remove(cell.CellObjId);
+                    cell = null;
+                }
             }
-            Interlocked.Decrement(ref Count);
         }
 
         public void Dispose()

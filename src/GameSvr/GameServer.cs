@@ -22,19 +22,26 @@ namespace GameSvr
 
         public void StartService()
         {
-            M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
             M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
+        }
+
+        public void Start(CancellationToken stoppingToken)
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                Execute();
+                await Task.Delay(20);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
         public void Stop()
         {
             M2Share.DataServer.Stop();
             M2Share.GateMgr.Stop();
-            M2Share.UserEngine.Stop();
         }
 
-        public void Run()
+        private void Execute()
         {
             M2Share.GateMgr.Run();
             IdSrvClient.Instance.Run();

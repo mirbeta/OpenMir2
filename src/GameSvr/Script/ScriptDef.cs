@@ -345,6 +345,23 @@
         public const string sSC_ISGROUPMASTER = "ISGROUPMASTER";
         // 检测是否组长
         public const int nSC_ISGROUPMASTER = 217;
+
+        /// <summary>
+        /// 检查放入装备指定的属性点
+        /// </summary>
+        public const string sSC_CHECKDLGITEMADDVALUE = "CHECKDLGITEMADDVALUE";
+        public const int nSC_CHECKDLGITEMADDVALUE = 218;
+        /// <summary>
+        /// 检查放入装备的类型
+        /// </summary>
+        public const string sSC_CHECKDLGITEMTYPE = "CHECKDLGITEMTYPE";
+        public const int nSC_CHECKDLGITEMTYPE = 219;
+        /// <summary>
+        /// 检查放入装备名称特征字符
+        /// </summary>
+        public const string sSC_CHECKDLGITEMNAME = "CHECKDLGITEMNAME";
+        public const int nSC_CHECKDLGITEMNAME = 220;
+
         // Action
         public const string sSET = "SET";
         public const int nSET = 1;
@@ -917,6 +934,36 @@
         /// </summary>
         public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
         public const int nSCHECKDEATHPLAYMON = 257;
+        /// <summary>
+        /// 获取客户端输入值
+        /// </summary>
+        public const string sSC_QUERYVALUE = "QUERYVALUE";
+        public const int nSC_QUERYVALUE = 258;
+        /// <summary>
+        /// 杀死所有宠物
+        /// </summary>
+        public const string sSC_KILLSLAVENAME = "KILLSLAVENAME";
+        public const int nSC_KILLSLAVENAME = 259;
+        /// <summary>
+        /// 查询物品信息
+        /// </summary>
+        public const string sSC_QUERYITEMDLG = "QUERYITEMDLG";
+        public const int nSC_QUERYITEMDLG = 261;
+        /// <summary>
+        /// 升级对话框中的物品
+        /// </summary>
+        public const string sSC_UPGRADEDLGITEM = "UPGRADEDLGITEM";
+        public const int nSC_UPGRADEDLGITEM = 262;
+        /// <summary>
+        /// 获取装备指定属性到变量中
+        /// </summary>
+        public const string sSC_GETDLGITEMVALUE = "GETDLGITEMVALUE";
+        public const int nSC_GETDLGITEMVALUE = 263;
+        /// <summary>
+        /// 回收对话框中的物品
+        /// </summary>
+        public const string sSC_TAKEDLGITEM = "TAKEDLGITEM";
+        public const int nSC_TAKEDLGITEM = 264;
 
         // =================================================================
         /// <summary>

@@ -344,6 +344,8 @@ namespace SystemModule
         public const int SM_SENDMYMAGIC = 211;
         public const int SM_DELMAGIC = 212;
         public const int SM_ATTACKMODE = 213;
+        public const int SM_QUERYVALUE = 215;
+
         public const int CM_CHECKTIME = 15999;
         /// <summary>
         /// 攻击模式成功
@@ -404,6 +406,9 @@ namespace SystemModule
         public const int SM_TAKEOFF_FAIL = 620;
         public const int SM_SENDUSEITEMS = 621;
         public const int SM_WEIGHTCHANGED = 622;
+        public const int SM_QUERYITEMDLG = 623;
+        public const int SM_ITEMDLGSELECT = 624;
+
         public const int SM_CLEAROBJECTS = 633;
         public const int SM_CHANGEMAP = 634;
         public const int SM_EAT_OK = 635;
@@ -594,6 +599,8 @@ namespace SystemModule
         public const int GM_TEST = 20;
         public const int GROUPMAX = 11;
         public const int CM_42HIT = 42;
+
+        public const int CM_QUERYVAL = 1065;
         public const int CM_PASSWORD = 2001;
         public const int CM_CHGPASSWORD = 2002;
         public const int CM_SETPASSWORD = 2004;
