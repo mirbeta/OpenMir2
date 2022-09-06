@@ -2506,10 +2506,10 @@ namespace GameSvr.Actor
             switch (nIndex)
             {
                 case 1:
-                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.sFireBallSkill);
+                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.FireBallSkill);
                     break;
                 case 2:
-                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.sHealSkill);
+                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.HealSkill);
                     break;
             }
 
@@ -2623,14 +2623,14 @@ namespace GameSvr.Actor
                 case 1:
                     if (Job != PlayJob.Wizard)
                     {
-                        DelItemSkill_DeleteSkill(M2Share.Config.sFireBallSkill);
+                        DelItemSkill_DeleteSkill(M2Share.Config.FireBallSkill);
                     }
 
                     break;
                 case 2:
                     if (Job != PlayJob.Taoist)
                     {
-                        DelItemSkill_DeleteSkill(M2Share.Config.sHealSkill);
+                        DelItemSkill_DeleteSkill(M2Share.Config.HealSkill);
                     }
 
                     break;
@@ -3881,8 +3881,8 @@ namespace GameSvr.Actor
                                 sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
 
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btRedMsgFColor,
-                                M2Share.Config.btRedMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor,
+                                M2Share.Config.RedMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Green:
                             if (M2Share.Config.ShowPreFixMsg)
@@ -3890,8 +3890,8 @@ namespace GameSvr.Actor
                                 sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
 
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btGreenMsgFColor,
-                                M2Share.Config.btGreenMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor,
+                                M2Share.Config.GreenMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Blue:
                             if (M2Share.Config.ShowPreFixMsg)
@@ -3899,8 +3899,8 @@ namespace GameSvr.Actor
                                 sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
                             }
 
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btBlueMsgFColor,
-                                M2Share.Config.btBlueMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor,
+                                M2Share.Config.BlueMsgBColor, 0, sMsg);
                             break;
                     }
                 }
@@ -3910,23 +3910,23 @@ namespace GameSvr.Actor
                 switch (msgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btGreenMsgFColor,
-                            M2Share.Config.btGreenMsgBColor, 0, sMsg);
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor,
+                            M2Share.Config.GreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btBlueMsgFColor,
-                            M2Share.Config.btBlueMsgBColor, 0, sMsg);
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor,
+                            M2Share.Config.BlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (msgType == MsgType.Cust)
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btCustMsgFColor,
-                                M2Share.Config.btCustMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor,
+                                M2Share.Config.CustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.btRedMsgFColor,
-                                M2Share.Config.btRedMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor,
+                                M2Share.Config.RedMsgBColor, 0, sMsg);
                         }
 
                         break;
@@ -4005,8 +4005,8 @@ namespace GameSvr.Actor
             {
                 for (var i = 0; i < GroupOwner.GroupMembers.Count; i++)
                 {
-                    GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.Config.btGroupMsgFColor,
-                        M2Share.Config.btGroupMsgBColor, 0, sMsg);
+                    GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.Config.GroupMsgFColor,
+                        M2Share.Config.GroupMsgBColor, 0, sMsg);
                 }
             }
         }
@@ -4067,10 +4067,10 @@ namespace GameSvr.Actor
                 I = 0;
                 while (true)
                 {
-                    if (Gold > M2Share.Config.nMonOneDropGoldCount)
+                    if (Gold > M2Share.Config.MonOneDropGoldCount)
                     {
-                        nGold = M2Share.Config.nMonOneDropGoldCount;
-                        Gold = Gold - M2Share.Config.nMonOneDropGoldCount;
+                        nGold = M2Share.Config.MonOneDropGoldCount;
+                        Gold = Gold - M2Share.Config.MonOneDropGoldCount;
                     }
                     else
                     {

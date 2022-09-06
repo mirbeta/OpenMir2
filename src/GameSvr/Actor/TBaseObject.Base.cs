@@ -493,9 +493,9 @@ namespace GameSvr.Actor
                         DecPkPoint(M2Share.Config.DecPkPointCount);
                     }
                 }
-                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.dwDecLightItemDrugTime)
+                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
                 {
-                    DecLightItemDrugTick += M2Share.Config.dwDecLightItemDrugTime;
+                    DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
                         UseLamp();
@@ -888,10 +888,10 @@ namespace GameSvr.Actor
                         {
                             if (!LastHiter.IsGoodKilling(this))
                             {
-                                LastHiter.IncPkPoint(M2Share.Config.nKillHumanAddPKPoint);
+                                LastHiter.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
                                 LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
                                 SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.CharName), MsgColor.Red, MsgType.Hint);
-                                LastHiter.AddBodyLuck(-M2Share.Config.nKillHumanDecLuckPoint);
+                                LastHiter.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
                                 if (PvpLevel() < 1)
                                 {
                                     if (M2Share.RandomNumber.Random(5) == 0)
@@ -1000,7 +1000,7 @@ namespace GameSvr.Actor
                         {
                             LastHiter.MyGuild.TeamFightWhoWinPoint(LastHiter.CharName, 100);
                             tStr = LastHiter.MyGuild.sGuildName + ':' + LastHiter.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
-                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.btCryMsgFColor, M2Share.Config.btCryMsgBColor, "- " + tStr);
+                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                         }
                     }
                 }
@@ -1736,22 +1736,22 @@ namespace GameSvr.Actor
                     if (StdItem.AniCount == 141)
                     {
                         BoExpItem = true;
-                        ExpItem = ExpItem + (UseItems[i].Dura / M2Share.Config.nItemExpRate);
+                        ExpItem = ExpItem + (UseItems[i].Dura / M2Share.Config.ItemExpRate);
                     }
                     if (StdItem.AniCount == 142)
                     {
                         BoPowerItem = true;
-                        PowerItem = PowerItem + (UseItems[i].Dura / M2Share.Config.nItemPowerRate);
+                        PowerItem = PowerItem + (UseItems[i].Dura / M2Share.Config.ItemPowerRate);
                     }
                     if (StdItem.AniCount == 182)
                     {
                         BoExpItem = true;
-                        ExpItem = ExpItem + (UseItems[i].DuraMax / M2Share.Config.nItemExpRate);
+                        ExpItem = ExpItem + (UseItems[i].DuraMax / M2Share.Config.ItemExpRate);
                     }
                     if (StdItem.AniCount == 183)
                     {
                         BoPowerItem = true;
-                        PowerItem = PowerItem + (UseItems[i].DuraMax / M2Share.Config.nItemPowerRate);
+                        PowerItem = PowerItem + (UseItems[i].DuraMax / M2Share.Config.ItemPowerRate);
                     }
                     if (StdItem.AniCount == 143)
                     {
@@ -1924,22 +1924,22 @@ namespace GameSvr.Actor
                 if (StdItem.Shape == 141)
                 {
                     BoExpItem = true;
-                    ExpItem = ExpItem + (UseItems[i].Dura / M2Share.Config.nItemExpRate);
+                    ExpItem = ExpItem + (UseItems[i].Dura / M2Share.Config.ItemExpRate);
                 }
                 if (StdItem.Shape == 142)
                 {
                     BoPowerItem = true;
-                    PowerItem = PowerItem + (UseItems[i].Dura / M2Share.Config.nItemPowerRate);
+                    PowerItem = PowerItem + (UseItems[i].Dura / M2Share.Config.ItemPowerRate);
                 }
                 if (StdItem.Shape == 182)
                 {
                     BoExpItem = true;
-                    ExpItem = ExpItem + (UseItems[i].DuraMax / M2Share.Config.nItemExpRate);
+                    ExpItem = ExpItem + (UseItems[i].DuraMax / M2Share.Config.ItemExpRate);
                 }
                 if (StdItem.Shape == 183)
                 {
                     BoPowerItem = true;
-                    PowerItem = PowerItem + (UseItems[i].DuraMax / M2Share.Config.nItemPowerRate);
+                    PowerItem = PowerItem + (UseItems[i].DuraMax / M2Share.Config.ItemPowerRate);
                 }
                 if (StdItem.Shape == 143)
                 {

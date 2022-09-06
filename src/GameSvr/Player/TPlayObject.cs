@@ -1391,10 +1391,10 @@ namespace GameSvr.Player
             {
                 if (!PlayObject.IsGoodKilling(this))
                 {
-                    PlayObject.IncPkPoint(M2Share.Config.nKillHumanAddPKPoint);
+                    PlayObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
                     PlayObject.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
                     SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.CharName), MsgColor.Red, MsgType.Hint);
-                    PlayObject.AddBodyLuck(-M2Share.Config.nKillHumanDecLuckPoint);
+                    PlayObject.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
                     if (PvpLevel() < 1)
                     {
                         if (M2Share.RandomNumber.Random(5) == 0)
@@ -3393,7 +3393,7 @@ namespace GameSvr.Player
             }
             if (!string.IsNullOrEmpty(m_sMasterName) && !m_boMaster)
             {
-                if (Abil.Level >= M2Share.Config.nMasterOKLevel)
+                if (Abil.Level >= M2Share.Config.MasterOKLevel)
                 {
                     Human = M2Share.UserEngine.GetPlayObject(m_sMasterName);
                     if (Human != null && !Human.Death && !Human.Ghost)
@@ -3416,9 +3416,9 @@ namespace GameSvr.Player
                         }
                         m_sMasterName = "";
                         RefShowName();
-                        if (Human.m_btCreditPoint + M2Share.Config.nMasterOKCreditPoint <= byte.MaxValue)
+                        if (Human.m_btCreditPoint + M2Share.Config.MasterOKCreditPoint <= byte.MaxValue)
                         {
-                            Human.m_btCreditPoint += (byte)M2Share.Config.nMasterOKCreditPoint;
+                            Human.m_btCreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                         }
                         Human.BonusPoint += M2Share.Config.nMasterOKBonusPoint;
                         Human.SendMsg(Human, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
@@ -3466,9 +3466,9 @@ namespace GameSvr.Player
                 SysMsg(M2Share.g_sUnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
                 m_sMasterName = "";
                 RefShowName();
-                if (m_btCreditPoint + M2Share.Config.nMasterOKCreditPoint <= byte.MaxValue)
+                if (m_btCreditPoint + M2Share.Config.MasterOKCreditPoint <= byte.MaxValue)
                 {
-                    m_btCreditPoint += (byte)M2Share.Config.nMasterOKCreditPoint;
+                    m_btCreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                 }
                 BonusPoint += M2Share.Config.nMasterOKBonusPoint;
                 SendMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");

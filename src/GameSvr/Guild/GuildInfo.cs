@@ -459,7 +459,7 @@ namespace GameSvr.Guild
                         }
                         if (BaseObject.BanGuildChat)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_GUILDMESSAGE, 0, M2Share.Config.btGuildMsgFColor, M2Share.Config.btGuildMsgBColor, 0, sMsg);
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_GUILDMESSAGE, 0, M2Share.Config.GuildMsgFColor, M2Share.Config.GuildMsgBColor, 0, sMsg);
                         }
                     }
                 }
