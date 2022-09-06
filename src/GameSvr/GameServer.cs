@@ -52,10 +52,10 @@ namespace GameSvr
 
         private void ProcessGameNotice()
         {
-            if (M2Share.Config.boSendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.Config.dwSendOnlineTime)
+            if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.Config.SendOnlineTime)
             {
                 M2Share.g_dwSendOnlineTick = HUtil32.GetTickCount();
-                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.Config.nSendOnlineCountRate / 10)));
+                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
                 M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }

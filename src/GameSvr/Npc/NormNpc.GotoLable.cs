@@ -2316,7 +2316,7 @@ namespace GameSvr.Npc
                         ActionOfRepairAllItem(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_QUERYBAGITEMS:// 刷新包裹
-                        if ((HUtil32.GetTickCount() - PlayObject.m_dwQueryBagItemsTick) > M2Share.Config.dwQueryBagItemsTick)
+                        if ((HUtil32.GetTickCount() - PlayObject.m_dwQueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
                         {
                             PlayObject.m_dwQueryBagItemsTick = HUtil32.GetTickCount();
                             PlayObject.ClientQueryBagItems();

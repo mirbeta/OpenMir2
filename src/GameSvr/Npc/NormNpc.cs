@@ -263,10 +263,10 @@ namespace GameSvr.Npc
             switch (sVariable)
             {
                 case "$SERVERNAME":
-                    sMsg = ReplaceVariableText(sMsg, "<$SERVERNAME>", M2Share.Config.sServerName);
+                    sMsg = ReplaceVariableText(sMsg, "<$SERVERNAME>", M2Share.Config.ServerName);
                     return;
                 case "$SERVERIP":
-                    sMsg = ReplaceVariableText(sMsg, "<$SERVERIP>", M2Share.Config.sServerIPaddr);
+                    sMsg = ReplaceVariableText(sMsg, "<$SERVERIP>", M2Share.Config.ServerIPaddr);
                     return;
                 case "$WEBSITE":
                     sMsg = ReplaceVariableText(sMsg, "<$WEBSITE>", M2Share.Config.sWebSite);
@@ -779,10 +779,10 @@ namespace GameSvr.Npc
                         return;
                     }
                 case "$GUILDWARFEE":
-                    sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", M2Share.Config.nGuildWarPrice.ToString());
+                    sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", M2Share.Config.GuildWarPrice.ToString());
                     return;
                 case "$BUILDGUILDFEE":
-                    sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.nBuildGuildPrice.ToString());
+                    sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.BuildGuildPrice.ToString());
                     return;
                 case "$CASTLEWARDATE":
                     {
@@ -1404,7 +1404,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$REQUESTCASTLEWARDAY")// 几天后开始攻城
             {
-                sText = M2Share.Config.nStartCastleWarDays.ToString();
+                sText = M2Share.Config.StartCastleWarDays.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARDAY>", sText);
                 return;
             }
@@ -1415,12 +1415,12 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$GUILDWARFEE") // 行会战金币数
             {
-                sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", M2Share.Config.nGuildWarPrice.ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", M2Share.Config.GuildWarPrice.ToString());
                 return;
             }
             if (sVariable == "$BUILDGUILDFEE")// 建立行会所需的金币数
             {
-                sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.nBuildGuildPrice.ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.BuildGuildPrice.ToString());
                 return;
             }
             if (HUtil32.CompareLStr(sVariable, "$HUMAN(", "$HUMAN(".Length))

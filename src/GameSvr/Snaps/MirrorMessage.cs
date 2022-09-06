@@ -383,7 +383,7 @@ namespace GameSvr.Snaps
 
         private void MsgGetReloadAdmin()
         {
-            M2Share.LocalDB.LoadAdminList();
+            M2Share.LocalDb.LoadAdminList();
         }
 
         private void MsgGetReloadChatLog()
@@ -402,7 +402,7 @@ namespace GameSvr.Snaps
         private void MsgGetReloadMakeItemList()
         {
             //M2Share.LocalDB.LoadMakeItemList();
-            M2Share.LocalDB.LoadMakeItem();
+            M2Share.LocalDb.LoadMakeItem();
         }
 
         private void MsgGetGuildMemberRecall(int sNum, string Body)

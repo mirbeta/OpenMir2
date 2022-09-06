@@ -24,7 +24,7 @@ namespace GameSvr.Notices
                 {
                     continue;
                 }
-                var fileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sNoticeDir, $"{NoticeList[i].sMsg}.txt");
+                var fileName = Path.Combine(M2Share.BasePath, M2Share.Config.sNoticeDir, $"{NoticeList[i].sMsg}.txt");
                 if (!File.Exists(fileName)) continue;
                 try
                 {
@@ -64,7 +64,7 @@ namespace GameSvr.Notices
             {
                 if (string.IsNullOrEmpty(NoticeList[i].sMsg))
                 {
-                    var fileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sNoticeDir, sStr + ".txt");
+                    var fileName = Path.Combine(M2Share.BasePath, M2Share.Config.sNoticeDir, sStr + ".txt");
                     if (File.Exists(fileName))
                     {
                         try

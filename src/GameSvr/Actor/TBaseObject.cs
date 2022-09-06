@@ -72,7 +72,7 @@ namespace GameSvr.Actor
         public short HomeY = 0;
         public bool OnHorse;
         public byte HorseType;
-        private byte _dressEffType;
+        private byte DressEffType;
         /// <summary>
         /// 人物的PK值
         /// </summary>
@@ -131,7 +131,7 @@ namespace GameSvr.Actor
         /// </summary>
         public byte Race;
         /// <summary>
-        /// 角色外形
+        /// 种族图片
         /// </summary>
         public byte RaceImg;
         /// <summary>
@@ -292,7 +292,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 狂暴间隔
         /// </summary>
-        public int CrazyModeInterval;
+        private int CrazyModeInterval;
         public bool ShowHp;
         /// <summary>
         /// 心灵启示检查时间
@@ -378,23 +378,23 @@ namespace GameSvr.Actor
         /// <summary>
         /// 复活戒指
         /// </summary>
-        protected bool Revival = false;
+        private bool Revival = false;
         /// <summary>
         /// 防复活
         /// </summary>
-        protected bool UnRevival = false;
+        private bool UnRevival = false;
         /// <summary>
         /// 复活戒指使用间隔计数
         /// </summary>
-        protected int RevivalTick = 0;
+        private int RevivalTick = 0;
         /// <summary>
         /// 火焰戒指
         /// </summary>
-        protected bool FlameRing = false;
+        private bool FlameRing = false;
         /// <summary>
         /// 治愈戒指
         /// </summary>
-        protected bool RecoveryRing;
+        private bool RecoveryRing;
         /// <summary>
         /// 未知戒指
         /// </summary>
@@ -402,19 +402,19 @@ namespace GameSvr.Actor
         /// <summary>
         /// 护身戒指
         /// </summary>
-        protected bool MagicShield = false;
+        private bool MagicShield = false;
         /// <summary>
         /// 防护身
         /// </summary>
-        protected bool UnMagicShield = false;
+        private bool UnMagicShield = false;
         /// <summary>
         /// 活力戒指
         /// </summary>
-        protected bool MuscleRing = false;
+        private bool MuscleRing = false;
         /// <summary>
         /// 技巧项链
         /// </summary>
-        protected bool FastTrain = false;
+        private bool FastTrain = false;
         /// <summary>
         /// 探测项链
         /// </summary>
@@ -459,7 +459,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 上次运行时间
         /// </summary>
-        public int MDwRunTick;
+        public int RunTick;
         public int RunTime;
         protected int HealthTick;
         protected int SpellTick;
@@ -505,14 +505,14 @@ namespace GameSvr.Actor
         /// <summary>
         /// 减PK值时间`
         /// </summary>
-        private int _decPkPointTick;
+        private int DecPkPointTick;
         protected int DecLightItemDrugTick;
         protected int VerifyTick;
         protected int CheckRoyaltyTick;
         protected int DecHungerPointTick;
         protected int MDwHpmpTick;
         protected readonly IList<SendMessage> MsgList;
-        protected readonly IList<BaseObject> VisibleHumanList;
+        private readonly IList<BaseObject> VisibleHumanList;
         protected readonly IList<VisibleMapItem> VisibleItems;
         protected readonly IList<MirEvent> VisibleEvents;
         protected int SendRefMsgTick;
@@ -640,7 +640,7 @@ namespace GameSvr.Actor
         /// </summary>
         public bool IsRobot;
 
-        public BaseObject()
+        protected BaseObject()
         {
             Ghost = false;
             GhostTick = 0;
@@ -696,7 +696,7 @@ namespace GameSvr.Actor
             IncHealthSpellTick = HUtil32.GetTickCount();
             GreenPoisoningPoint = 0;
             FightZoneDieCount = 0;
-            GoldMax = M2Share.Config.nHumanMaxGold;
+            GoldMax = M2Share.Config.HumanMaxGold;
             CharStatus = 0;
             CharStatusEx = 0;
             StatusTimeArr = new ushort[12];
@@ -793,11 +793,11 @@ namespace GameSvr.Actor
             Transparent = false;
             AdminMode = false;
             ObMode = false;
-            MDwRunTick = HUtil32.GetTickCount() + M2Share.RandomNumber.Random(1500);
+            RunTick = HUtil32.GetTickCount() + M2Share.RandomNumber.Random(1500);
             RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(2000) + 2000;
             SearchTick = HUtil32.GetTickCount();
-            _decPkPointTick = HUtil32.GetTickCount();
+            DecPkPointTick = HUtil32.GetTickCount();
             DecLightItemDrugTick = HUtil32.GetTickCount();
             PoisoningTick = HUtil32.GetTickCount();
             VerifyTick = HUtil32.GetTickCount();
@@ -822,7 +822,7 @@ namespace GameSvr.Actor
             SayMsgList = null;
             DenyRefStatus = false;
             HorseType = 0;
-            _dressEffType = 0;
+            DressEffType = 0;
             PkDieLostExp = 0;
             PkDieLostLevel = 0;
             AddToMaped = true;
@@ -3295,10 +3295,10 @@ namespace GameSvr.Actor
                 {
                     SendRefMsgTick = HUtil32.GetTickCount();
                     VisibleHumanList.Clear();
-                    var nLx = (short)(CurrX - M2Share.Config.nSendRefMsgRange); // 12
-                    var nHx = (short)(CurrX + M2Share.Config.nSendRefMsgRange); // 12
-                    var nLy = (short)(CurrY - M2Share.Config.nSendRefMsgRange); // 12
-                    var nHy = (short)(CurrY + M2Share.Config.nSendRefMsgRange); // 12
+                    var nLx = (short)(CurrX - M2Share.Config.SendRefMsgRange); // 12
+                    var nHx = (short)(CurrX + M2Share.Config.SendRefMsgRange); // 12
+                    var nLy = (short)(CurrY - M2Share.Config.SendRefMsgRange); // 12
+                    var nHy = (short)(CurrY + M2Share.Config.SendRefMsgRange); // 12
                     for (var nCx = nLx; nCx <= nHx; nCx++)
                     {
                         for (var nCy = nLy; nCy <= nHy; nCy++)
@@ -3416,11 +3416,11 @@ namespace GameSvr.Actor
             ushort result;
             if (OnHorse)
             {
-                result = HUtil32.MakeWord(HorseType, _dressEffType);
+                result = HUtil32.MakeWord(HorseType, DressEffType);
             }
             else
             {
-                result = HUtil32.MakeWord(0, _dressEffType);
+                result = HUtil32.MakeWord(0, DressEffType);
             }
 
             return result;
@@ -3533,7 +3533,7 @@ namespace GameSvr.Actor
             CharStatus = GetCharStatus();
             AddBodyLuck(0);
             LoadSayMsg();
-            if (M2Share.Config.boMonSayMsg)
+            if (M2Share.Config.MonSayMsg)
             {
                 MonsterSayMsg(null, MonStatus.MonGen);
             }
@@ -3578,9 +3578,9 @@ namespace GameSvr.Actor
         {
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
-                MapName = M2Share.Config.sHomeMap;
-                CurrX = M2Share.Config.nHomeX;
-                CurrY = M2Share.Config.nHomeY;
+                MapName = M2Share.Config.HomeMap;
+                CurrX = M2Share.Config.HomeX;
+                CurrY = M2Share.Config.HomeY;
                 var playObject = this as PlayObject;
                 playObject.m_boEmergencyClose = true;
             }
@@ -4468,9 +4468,9 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            if ((Envir.MapName != M2Share.Config.sRedHomeMap) ||
-                (Math.Abs(CurrX - M2Share.Config.nRedHomeX) > M2Share.Config.nSafeZoneSize) ||
-                (Math.Abs(CurrY - M2Share.Config.nRedHomeY) > M2Share.Config.nSafeZoneSize))
+            if ((Envir.MapName != M2Share.Config.RedHomeMap) ||
+                (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.nSafeZoneSize) ||
+                (Math.Abs(CurrY - M2Share.Config.RedHomeY) > M2Share.Config.nSafeZoneSize))
             {
                 result = false;
             }
@@ -4508,9 +4508,9 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            if ((envir.MapName != M2Share.Config.sRedHomeMap) ||
-                (Math.Abs(nX - M2Share.Config.nRedHomeX) > M2Share.Config.nSafeZoneSize) ||
-                (Math.Abs(nY - M2Share.Config.nRedHomeY) > M2Share.Config.nSafeZoneSize))
+            if ((envir.MapName != M2Share.Config.RedHomeMap) ||
+                (Math.Abs(nX - M2Share.Config.RedHomeX) > M2Share.Config.nSafeZoneSize) ||
+                (Math.Abs(nY - M2Share.Config.RedHomeY) > M2Share.Config.nSafeZoneSize))
             {
                 result = false;
             }
@@ -4731,19 +4731,19 @@ namespace GameSvr.Actor
                 switch (LastHiter.Job)
                 {
                     case PlayJob.Warrior:
-                        nDamage = nDamage * M2Share.Config.nWarrMon / 10;
+                        nDamage = nDamage * M2Share.Config.WarrMon / 10;
                         break;
                     case PlayJob.Wizard:
-                        nDamage = nDamage * M2Share.Config.nWizardMon / 10;
+                        nDamage = nDamage * M2Share.Config.WizardMon / 10;
                         break;
                     case PlayJob.Taoist:
-                        nDamage = nDamage * M2Share.Config.nTaosMon / 10;
+                        nDamage = nDamage * M2Share.Config.TaosMon / 10;
                         break;
                 }
             }
             if ((Race == Grobal2.RC_PLAYOBJECT) && (LastHiter != null) && (LastHiter.Master != null)) // 怪物攻击人
             {
-                nDamage = nDamage * M2Share.Config.nMonHum / 10;
+                nDamage = nDamage * M2Share.Config.MonHum / 10;
             }
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
             if (StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] > 0)
@@ -5477,11 +5477,11 @@ namespace GameSvr.Actor
                     if (nCurrY > 1)
                     {
                         if ((Envir.CanWalkEx(nCurrX, nCurrY - 1,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone()))
                             && (Envir.CanWalkEx(nCurrX, nCurrY - 2,
-                                    M2Share.Config.boDiableHumanRun ||
+                                    M2Share.Config.DiableHumanRun ||
                                     ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                                 (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
@@ -5495,11 +5495,11 @@ namespace GameSvr.Actor
                     if (nCurrX < Envir.Width - 2 && nCurrY > 1)
                     {
                         if ((Envir.CanWalkEx(nCurrX + 1, nCurrY - 1,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                             (Envir.CanWalkEx(nCurrX + 2, nCurrY - 2,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
@@ -5513,11 +5513,11 @@ namespace GameSvr.Actor
                     if (nCurrX < Envir.Width - 2)
                     {
                         if (Envir.CanWalkEx(nCurrX + 1, nCurrY,
-                                M2Share.Config.boDiableHumanRun ||
+                                M2Share.Config.DiableHumanRun ||
                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                             (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                             (Envir.CanWalkEx(nCurrX + 2, nCurrY,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
@@ -5530,10 +5530,10 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNRIGHT:
                     if ((nCurrX < Envir.Width - 2) && (nCurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(nCurrX + 1, nCurrY + 1,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                         (Envir.CanWalkEx(nCurrX + 2, nCurrY + 2,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -5544,11 +5544,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWN:
                     if ((nCurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(nCurrX, nCurrY + 1,
-                             M2Share.Config.boDiableHumanRun ||
+                             M2Share.Config.DiableHumanRun ||
                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                          (Envir.CanWalkEx(nCurrX, nCurrY + 2,
-                              M2Share.Config.boDiableHumanRun ||
+                              M2Share.Config.DiableHumanRun ||
                               ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                           (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
                     {
@@ -5560,10 +5560,10 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNLEFT:
                     if ((nCurrX > 1) && (nCurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(nCurrX - 1, nCurrY + 1,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(nCurrX - 2, nCurrY + 2,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -5574,10 +5574,10 @@ namespace GameSvr.Actor
                 case Grobal2.DR_LEFT:
                     if ((nCurrX > 1) &&
                         (Envir.CanWalkEx(nCurrX - 1, nCurrY,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(nCurrX - 2, nCurrY,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -5587,11 +5587,11 @@ namespace GameSvr.Actor
                     break;
                 case Grobal2.DR_UPLEFT:
                     if ((nCurrX > 1) && (nCurrY > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY - 1,
-                                                             M2Share.Config.boDiableHumanRun ||
+                                                             M2Share.Config.DiableHumanRun ||
                                                              ((Permission > 9) && M2Share.Config.boGMRunAll))
                                                          || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(nCurrX - 2, nCurrY - 2,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -5614,11 +5614,11 @@ namespace GameSvr.Actor
                     if (CurrY > 1)
                     {
                         if ((Envir.CanWalkEx(CurrX, CurrY - 1,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone()))
                             && (Envir.CanWalkEx(CurrX, CurrY - 2,
-                                    M2Share.Config.boDiableHumanRun ||
+                                    M2Share.Config.DiableHumanRun ||
                                     ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                                 (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
@@ -5632,11 +5632,11 @@ namespace GameSvr.Actor
                     if (CurrX < Envir.Width - 2 && CurrY > 1)
                     {
                         if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                             (Envir.CanWalkEx(CurrX + 2, CurrY - 2,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
@@ -5650,11 +5650,11 @@ namespace GameSvr.Actor
                     if (CurrX < Envir.Width - 2)
                     {
                         if (Envir.CanWalkEx(CurrX + 1, CurrY,
-                                M2Share.Config.boDiableHumanRun ||
+                                M2Share.Config.DiableHumanRun ||
                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                             (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                             (Envir.CanWalkEx(CurrX + 2, CurrY,
-                                 M2Share.Config.boDiableHumanRun ||
+                                 M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                              (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
@@ -5667,10 +5667,10 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNRIGHT:
                     if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(CurrX + 1, CurrY + 1,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                         (Envir.CanWalkEx(CurrX + 2, CurrY + 2,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -5681,11 +5681,11 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWN:
                     if ((CurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(CurrX, CurrY + 1,
-                             M2Share.Config.boDiableHumanRun ||
+                             M2Share.Config.DiableHumanRun ||
                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                          (Envir.CanWalkEx(CurrX, CurrY + 2,
-                              M2Share.Config.boDiableHumanRun ||
+                              M2Share.Config.DiableHumanRun ||
                               ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                           (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
                     {
@@ -5697,10 +5697,10 @@ namespace GameSvr.Actor
                 case Grobal2.DR_DOWNLEFT:
                     if ((CurrX > 1) && (CurrY < Envir.Height - 2) &&
                         (Envir.CanWalkEx(CurrX - 1, CurrY + 1,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(CurrX - 2, CurrY + 2,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -5711,10 +5711,10 @@ namespace GameSvr.Actor
                 case Grobal2.DR_LEFT:
                     if ((CurrX > 1) &&
                         (Envir.CanWalkEx(CurrX - 1, CurrY,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(CurrX - 2, CurrY,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -5724,11 +5724,11 @@ namespace GameSvr.Actor
                     break;
                 case Grobal2.DR_UPLEFT:
                     if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1,
-                                                                 M2Share.Config.boDiableHumanRun ||
+                                                                 M2Share.Config.DiableHumanRun ||
                                                                  ((Permission > 9) && M2Share.Config.boGMRunAll))
                                                              || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
                         (Envir.CanWalkEx(CurrX - 2, CurrY - 2,
-                             M2Share.Config.boDiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
+                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
                          (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
@@ -6060,7 +6060,7 @@ namespace GameSvr.Actor
 
             SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
 
-            if (M2Share.Config.boMonSayMsg)
+            if (M2Share.Config.MonSayMsg)
             {
                 MonsterSayMsg(null, MonStatus.MonGen);
             }

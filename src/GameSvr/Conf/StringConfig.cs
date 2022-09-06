@@ -1,6 +1,6 @@
 ﻿using SystemModule.Common;
 
-namespace GameSvr.Configs
+namespace GameSvr.Conf
 {
     public class StringConfig : IniFile
     {
@@ -14,9 +14,9 @@ namespace GameSvr.Configs
             string LoadString;
             if (ReadString("Server", "ServerIP", "") == "")
             {
-                WriteString("Server", "ServerIP", M2Share.Config.sServerIPaddr);
+                WriteString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
             }
-            M2Share.Config.sServerIPaddr = ReadString("Server", "ServerIP", M2Share.Config.sServerIPaddr);
+            M2Share.Config.ServerIPaddr = ReadString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
             if (ReadString("Server", "WebSite", "") == "")
             {
                 WriteString("Server", "WebSite", M2Share.Config.sWebSite);

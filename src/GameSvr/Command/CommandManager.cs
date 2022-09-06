@@ -1,4 +1,5 @@
-﻿using GameSvr.Player;
+﻿using GameSvr.Conf;
+using GameSvr.Player;
 using System.Reflection;
 using SystemModule.Data;
 
@@ -11,15 +12,16 @@ namespace GameSvr.Command
         /// 自定义游戏命令列表
         /// </summary>
         private static readonly Dictionary<string, string> CustomCommands = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        public GameCmdConfig CommandConf;
 
         public CommandManager()
         {
-
+            CommandConf = new GameCmdConfig(Path.Combine(M2Share.BasePath, ConfConst.sCommandFileName));
         }
 
         public void RegisterCommand()
         {
-            M2Share.CommandConf.LoadConfig();
+            CommandConf.LoadConfig();
             RegisterCommandGroups();
         }
 

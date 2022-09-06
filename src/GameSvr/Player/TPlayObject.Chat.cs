@@ -30,7 +30,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        PlayObject.Whisper(CharName, M2Share.Config.sServerName + '[' + M2Share.Config.sServerIPaddr + "]提示您");
+                        PlayObject.Whisper(CharName, M2Share.Config.ServerName + '[' + M2Share.Config.ServerIPaddr + "]提示您");
                     }
                     return;
                 }
@@ -109,18 +109,18 @@ namespace GameSvr.Player
             const string sExceptionMsg = "[Exception] TPlayObject.ProcessSayMsg Msg = {0}";
             try
             {
-                if (sData.Length > M2Share.Config.nSayMsgMaxLen)
+                if (sData.Length > M2Share.Config.SayMsgMaxLen)
                 {
-                    sData = sData[..M2Share.Config.nSayMsgMaxLen]; // 3 * 1000
+                    sData = sData[..M2Share.Config.SayMsgMaxLen]; // 3 * 1000
                 }
-                if ((HUtil32.GetTickCount() - m_dwSayMsgTick) < M2Share.Config.dwSayMsgTime)
+                if ((HUtil32.GetTickCount() - m_dwSayMsgTick) < M2Share.Config.SayMsgTime)
                 {
                     m_nSayMsgCount++;// 2
-                    if (m_nSayMsgCount >= M2Share.Config.nSayMsgCount)
+                    if (m_nSayMsgCount >= M2Share.Config.SayMsgCount)
                     {
                         m_boDisableSayMsg = true;
-                        m_dwDisableSayMsgTick = HUtil32.GetTickCount() + M2Share.Config.dwDisableSayMsgTime;// 60 * 1000
-                        SysMsg(Format(M2Share.g_sDisableSayMsg, M2Share.Config.dwDisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
+                        m_dwDisableSayMsgTick = HUtil32.GetTickCount() + M2Share.Config.DisableSayMsgTime;// 60 * 1000
+                        SysMsg(Format(M2Share.g_sDisableSayMsg, M2Share.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
@@ -201,9 +201,9 @@ namespace GameSvr.Player
                                 {
                                     if ((HUtil32.GetTickCount() - ShoutMsgTick) > 10 * 1000)
                                     {
-                                        if (Abil.Level <= M2Share.Config.nCanShoutMsgLevel)
+                                        if (Abil.Level <= M2Share.Config.CanShoutMsgLevel)
                                         {
-                                            SysMsg(Format(M2Share.g_sYouNeedLevelMsg, M2Share.Config.nCanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                            SysMsg(Format(M2Share.g_sYouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
@@ -309,39 +309,39 @@ namespace GameSvr.Player
                         m_boPasswordLocked = false;
                         if (m_boUnLockPwd)
                         {
-                            if (M2Share.Config.boLockDealAction)
+                            if (M2Share.Config.LockDealAction)
                             {
                                 m_boCanDeal = true;
                             }
-                            if (M2Share.Config.boLockDropAction)
+                            if (M2Share.Config.LockDropAction)
                             {
                                 m_boCanDrop = true;
                             }
-                            if (M2Share.Config.boLockWalkAction)
+                            if (M2Share.Config.LockWalkAction)
                             {
                                 m_boCanWalk = true;
                             }
-                            if (M2Share.Config.boLockRunAction)
+                            if (M2Share.Config.LockRunAction)
                             {
                                 m_boCanRun = true;
                             }
-                            if (M2Share.Config.boLockHitAction)
+                            if (M2Share.Config.LockHitAction)
                             {
                                 m_boCanHit = true;
                             }
-                            if (M2Share.Config.boLockSpellAction)
+                            if (M2Share.Config.LockSpellAction)
                             {
                                 m_boCanSpell = true;
                             }
-                            if (M2Share.Config.boLockSendMsgAction)
+                            if (M2Share.Config.LockSendMsgAction)
                             {
                                 m_boCanSendMsg = true;
                             }
-                            if (M2Share.Config.boLockUserItemAction)
+                            if (M2Share.Config.LockUserItemAction)
                             {
                                 m_boCanUseItem = true;
                             }
-                            if (M2Share.Config.boLockInObModeAction)
+                            if (M2Share.Config.LockInObModeAction)
                             {
                                 ObMode = false;
                                 AdminMode = false;
@@ -351,7 +351,7 @@ namespace GameSvr.Player
                         }
                         if (m_boUnLockStoragePwd)
                         {
-                            if (M2Share.Config.boLockGetBackItemAction)
+                            if (M2Share.Config.LockGetBackItemAction)
                             {
                                 m_boCanGetBackItem = true;
                             }
@@ -430,7 +430,7 @@ namespace GameSvr.Player
                 // 新密码命令
                 if (string.Compare(sCMD, M2Share.g_GameCommand.PASSWORDLOCK.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (!M2Share.Config.boPasswordLockSystem)
+                    if (!M2Share.Config.PasswordLockSystem)
                     {
                         SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
@@ -464,7 +464,7 @@ namespace GameSvr.Player
                 // 新密码命令
                 if (string.Compare(sCMD, M2Share.g_GameCommand.SETPASSWORD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (!M2Share.Config.boPasswordLockSystem)
+                    if (!M2Share.Config.PasswordLockSystem)
                     {
                         SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
@@ -483,7 +483,7 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.UNPASSWORD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (!M2Share.Config.boPasswordLockSystem)
+                    if (!M2Share.Config.PasswordLockSystem)
                     {
                         SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
@@ -501,7 +501,7 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.CHGPASSWORD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (!M2Share.Config.boPasswordLockSystem)
+                    if (!M2Share.Config.PasswordLockSystem)
                     {
                         SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
@@ -526,12 +526,12 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.UNLOCKSTORAGE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (!M2Share.Config.boPasswordLockSystem)
+                    if (!M2Share.Config.PasswordLockSystem)
                     {
                         SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
-                    if (m_btPwdFailCount > M2Share.Config.nPasswordErrorCountLock)
+                    if (m_btPwdFailCount > M2Share.Config.PasswordErrorCountLock)
                     {
                         SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         m_boPasswordLocked = true;
@@ -558,12 +558,12 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.UNLOCK.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (!M2Share.Config.boPasswordLockSystem)
+                    if (!M2Share.Config.PasswordLockSystem)
                     {
                         SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
-                    if (m_btPwdFailCount > M2Share.Config.nPasswordErrorCountLock)
+                    if (m_btPwdFailCount > M2Share.Config.PasswordErrorCountLock)
                     {
                         SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         m_boPasswordLocked = true;
@@ -590,7 +590,7 @@ namespace GameSvr.Player
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.__LOCK.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (!M2Share.Config.boPasswordLockSystem)
+                    if (!M2Share.Config.PasswordLockSystem)
                     {
                         SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
@@ -768,11 +768,11 @@ namespace GameSvr.Player
                         {
                             m_dwSayMsgTick = HUtil32.GetTickCount();
                             sData = sData.Substring(2, sData.Length - 2);
-                            if (sData.Length > M2Share.Config.nSayRedMsgMaxLen)
+                            if (sData.Length > M2Share.Config.SayRedMsgMaxLen)
                             {
-                                sData = sData.Substring(0, M2Share.Config.nSayRedMsgMaxLen);
+                                sData = sData.Substring(0, M2Share.Config.SayRedMsgMaxLen);
                             }
-                            if (M2Share.Config.boShutRedMsgShowGMName)
+                            if (M2Share.Config.ShutRedMsgShowGMName)
                             {
                                 sC = CharName + ": " + sData;
                             }

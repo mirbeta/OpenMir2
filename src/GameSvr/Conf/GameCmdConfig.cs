@@ -1,6 +1,6 @@
 ﻿using SystemModule.Common;
 
-namespace GameSvr.Configs
+namespace GameSvr.Conf
 {
     public class GameCmdConfig : IniFile
     {

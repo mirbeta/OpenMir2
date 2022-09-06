@@ -413,7 +413,7 @@ namespace GameSvr.Player
                 HealthSpellChanged();
             }
             // 降饥饿点
-            if (M2Share.Config.boHungerSystem)
+            if (M2Share.Config.HungerSystem)
             {
                 if ((HUtil32.GetTickCount() - DecHungerPointTick) > 1000)
                 {
@@ -429,7 +429,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        if (M2Share.Config.boHungerDecHP)
+                        if (M2Share.Config.HungerDecHP)
                         {
                             // 减少涨HP，MP
                             HealthTick -= 60;

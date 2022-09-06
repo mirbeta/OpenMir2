@@ -461,7 +461,7 @@ namespace GameSvr.Player
             m_sMoveMap = "";
             m_nMoveX = 0;
             m_nMoveY = 0;
-            MDwRunTick = HUtil32.GetTickCount();
+            RunTick = HUtil32.GetTickCount();
             RunTime = 250;
             SearchTime = 1000;
             SearchTick = HUtil32.GetTickCount();
@@ -835,13 +835,13 @@ namespace GameSvr.Player
                     PkPoint = 0;
                     BtB2++;
                 }
-                if (Gold > M2Share.Config.nHumanMaxGold * 2 && M2Share.Config.nHumanMaxGold > 0)
+                if (Gold > M2Share.Config.HumanMaxGold * 2 && M2Share.Config.HumanMaxGold > 0)
                 {
-                    Gold = M2Share.Config.nHumanMaxGold * 2;
+                    Gold = M2Share.Config.HumanMaxGold * 2;
                 }
                 if (!bo6AB)
                 {
-                    if (m_nSoftVersionDate < M2Share.Config.nSoftVersionDate) //登录版本号验证
+                    if (m_nSoftVersionDate < M2Share.Config.SoftVersionDate) //登录版本号验证
                     {
                         SysMsg(M2Share.sClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                         SysMsg(M2Share.sDownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
@@ -926,10 +926,10 @@ namespace GameSvr.Player
                     {
                         SysMsg(M2Share.sYouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
                     }
-                    GoldMax = M2Share.Config.nHumanTryModeMaxGold;
-                    if (Abil.Level > M2Share.Config.nTryModeLevel)
+                    GoldMax = M2Share.Config.HumanTryModeMaxGold;
+                    if (Abil.Level > M2Share.Config.TryModeLevel)
                     {
-                        SysMsg("测试状态可以使用到第 " + M2Share.Config.nTryModeLevel, MsgColor.Red, MsgType.Hint);
+                        SysMsg("测试状态可以使用到第 " + M2Share.Config.TryModeLevel, MsgColor.Red, MsgType.Hint);
                         SysMsg("链接中断，请到以下地址获得收费相关信息。(http://www.mir2.com)", MsgColor.Red, MsgType.Hint);
                         m_boEmergencyClose = true;
                     }
@@ -967,24 +967,24 @@ namespace GameSvr.Player
                 CheckMaster();
                 m_boFilterSendMsg = M2Share.GetDisableSendMsgList(CharName);
                 // 密码保护系统
-                if (M2Share.Config.boPasswordLockSystem)
+                if (M2Share.Config.PasswordLockSystem)
                 {
                     if (m_boPasswordLocked)
                     {
-                        m_boCanGetBackItem = !M2Share.Config.boLockGetBackItemAction;
+                        m_boCanGetBackItem = !M2Share.Config.LockGetBackItemAction;
                     }
-                    if (M2Share.Config.boLockHumanLogin && m_boLockLogon && m_boPasswordLocked)
+                    if (M2Share.Config.LockHumanLogin && m_boLockLogon && m_boPasswordLocked)
                     {
-                        m_boCanDeal = !M2Share.Config.boLockDealAction;
-                        m_boCanDrop = !M2Share.Config.boLockDropAction;
-                        m_boCanUseItem = !M2Share.Config.boLockUserItemAction;
-                        m_boCanWalk = !M2Share.Config.boLockWalkAction;
-                        m_boCanRun = !M2Share.Config.boLockRunAction;
-                        m_boCanHit = !M2Share.Config.boLockHitAction;
-                        m_boCanSpell = !M2Share.Config.boLockSpellAction;
-                        m_boCanSendMsg = !M2Share.Config.boLockSendMsgAction;
-                        ObMode = M2Share.Config.boLockInObModeAction;
-                        AdminMode = M2Share.Config.boLockInObModeAction;
+                        m_boCanDeal = !M2Share.Config.LockDealAction;
+                        m_boCanDrop = !M2Share.Config.LockDropAction;
+                        m_boCanUseItem = !M2Share.Config.LockUserItemAction;
+                        m_boCanWalk = !M2Share.Config.LockWalkAction;
+                        m_boCanRun = !M2Share.Config.LockRunAction;
+                        m_boCanHit = !M2Share.Config.LockHitAction;
+                        m_boCanSpell = !M2Share.Config.LockSpellAction;
+                        m_boCanSendMsg = !M2Share.Config.LockSendMsgAction;
+                        ObMode = M2Share.Config.LockInObModeAction;
+                        AdminMode = M2Share.Config.LockInObModeAction;
                         SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.LOCKLOGON.sCmd, MsgColor.Red, MsgType.Hint);
                         SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "密码命令: @" + M2Share.g_GameCommand.PASSWORDLOCK.sCmd);
                     }
@@ -1320,7 +1320,7 @@ namespace GameSvr.Player
                                     {
                                         if (OSObject.CellType == CellType.ItemObject)
                                         {
-                                            if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
+                                            if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
                                                 cellInfo.Remove(OSObject);
                                                 if (cellInfo.Count > 0)
@@ -1334,7 +1334,7 @@ namespace GameSvr.Player
                                             UpdateVisibleItem(n20, n1C, MapItem);
                                             if (MapItem.OfBaseObject > 0 || MapItem.DropBaseObject > 0)
                                             {
-                                                if ((HUtil32.GetTickCount() - MapItem.CanPickUpTick) > M2Share.Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
+                                                if ((HUtil32.GetTickCount() - MapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime) // 2 * 60 * 1000
                                                 {
                                                     MapItem.OfBaseObject = 0;
                                                     MapItem.DropBaseObject = 0;
@@ -1496,14 +1496,14 @@ namespace GameSvr.Player
                     else
                     {
                         Castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.Config.boShowGuildName || Castle != null && Castle.m_boUnderWar || InFreePkArea)
+                        if (M2Share.Config.ShowGuildName || Castle != null && Castle.m_boUnderWar || InFreePkArea)
                         {
                             sGuildName = M2Share.g_sNoCastleGuildName.Replace("%guildname", MyGuild.sGuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                         }
                     }
                 }
-                if (!M2Share.Config.boShowRankLevelName)
+                if (!M2Share.Config.ShowRankLevelName)
                 {
                     if (m_btReLevel > 0)
                     {

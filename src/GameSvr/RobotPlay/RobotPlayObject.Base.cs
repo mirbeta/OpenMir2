@@ -562,7 +562,7 @@ namespace GameSvr.RobotPlay
                                             case CellType.ItemObject:
                                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.Config.dwClearDropOnFloorItemTime)
+                                                    if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
                                                     {
                                                         if (osObject.CellObjId > 0)
                                                         {
@@ -584,7 +584,7 @@ namespace GameSvr.RobotPlay
                                                     UpdateVisibleItem(n18, n1C, MapItem);
                                                     if (MapItem.OfBaseObject != 0 || MapItem.DropBaseObject != 0)
                                                     {
-                                                        if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.Config.dwFloorItemCanPickUpTime)
+                                                        if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
                                                         {
                                                             MapItem.OfBaseObject = 0;
                                                             MapItem.DropBaseObject = 0;

@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Common;
 
-namespace GameSvr.Configs
+namespace GameSvr.Conf
 {
     public class ServerConfig : IniFile
     {
@@ -17,9 +17,9 @@ namespace GameSvr.Configs
             //数据库设置
             if (ReadString("DataBase", "ConnctionString", "") == "")
             {
-                WriteString("DataBase", "ConnctionString", M2Share.Config.sConnctionString);
+                WriteString("DataBase", "ConnctionString", M2Share.Config.ConnctionString);
             }
-            M2Share.Config.sConnctionString = ReadString("DataBase", "ConnctionString", M2Share.Config.sConnctionString);
+            M2Share.Config.ConnctionString = ReadString("DataBase", "ConnctionString", M2Share.Config.ConnctionString);
             //数据库类型设置
             if (ReadString("DataBase", "DbType", "") == "")
             {
@@ -34,9 +34,9 @@ namespace GameSvr.Configs
             M2Share.ServerIndex = (byte)ReadInteger("Server", "ServerIndex", M2Share.ServerIndex);
             if (ReadString("Server", "ServerName", "") == "")
             {
-                WriteString("Server", "ServerName", M2Share.Config.sServerName);
+                WriteString("Server", "ServerName", M2Share.Config.ServerName);
             }
-            M2Share.Config.sServerName = ReadString("Server", "ServerName", M2Share.Config.sServerName);
+            M2Share.Config.ServerName = ReadString("Server", "ServerName", M2Share.Config.ServerName);
             if (ReadInteger("Server", "ServerNumber", -1) < 0)
                 WriteInteger("Server", "ServerNumber", M2Share.Config.nServerNumber);
             M2Share.Config.nServerNumber = ReadInteger("Server", "ServerNumber", M2Share.Config.nServerNumber);
@@ -146,11 +146,11 @@ namespace GameSvr.Configs
                 WriteInteger("Server", "GateLoad", M2Share.Config.nGateLoad);
             M2Share.Config.nGateLoad = ReadInteger("Server", "GateLoad", M2Share.Config.nGateLoad);
             if (ReadInteger("Server", "UserFull", -1) < 0)
-                WriteInteger("Server", "UserFull", M2Share.Config.nUserFull);
-            M2Share.Config.nUserFull = ReadInteger("Server", "UserFull", M2Share.Config.nUserFull);
+                WriteInteger("Server", "UserFull", M2Share.Config.UserFull);
+            M2Share.Config.UserFull = ReadInteger("Server", "UserFull", M2Share.Config.UserFull);
             if (ReadInteger("Server", "ZenFastStep", -1) < 0)
-                WriteInteger("Server", "ZenFastStep", M2Share.Config.nZenFastStep);
-            M2Share.Config.nZenFastStep = ReadInteger("Server", "ZenFastStep", M2Share.Config.nZenFastStep);
+                WriteInteger("Server", "ZenFastStep", M2Share.Config.ZenFastStep);
+            M2Share.Config.ZenFastStep = ReadInteger("Server", "ZenFastStep", M2Share.Config.ZenFastStep);
             if (ReadInteger("Server", "ProcessMonstersTime", -1) < 0)
                 WriteInteger("Server", "ProcessMonstersTime", M2Share.Config.dwProcessMonstersTime);
             M2Share.Config.dwProcessMonstersTime = ReadInteger("Server", "ProcessMonstersTime", M2Share.Config.dwProcessMonstersTime);
@@ -349,71 +349,71 @@ namespace GameSvr.Configs
             }
             if (ReadString("Setup", "HomeMap", "") == "")
             {
-                WriteString("Setup", "HomeMap", M2Share.Config.sHomeMap);
+                WriteString("Setup", "HomeMap", M2Share.Config.HomeMap);
             }
-            M2Share.Config.sHomeMap = ReadString("Setup", "HomeMap", M2Share.Config.sHomeMap);
+            M2Share.Config.HomeMap = ReadString("Setup", "HomeMap", M2Share.Config.HomeMap);
             if (ReadInteger("Setup", "HomeX", -1) < 0)
             {
-                WriteInteger("Setup", "HomeX", M2Share.Config.nHomeX);
+                WriteInteger("Setup", "HomeX", M2Share.Config.HomeX);
             }
-            M2Share.Config.nHomeX = Read<short>("Setup", "HomeX", M2Share.Config.nHomeX);
+            M2Share.Config.HomeX = Read<short>("Setup", "HomeX", M2Share.Config.HomeX);
             if (ReadInteger("Setup", "HomeY", -1) < 0)
             {
-                WriteInteger("Setup", "HomeY", M2Share.Config.nHomeY);
+                WriteInteger("Setup", "HomeY", M2Share.Config.HomeY);
             }
-            M2Share.Config.nHomeY = Read<short>("Setup", "HomeY", M2Share.Config.nHomeY);
+            M2Share.Config.HomeY = Read<short>("Setup", "HomeY", M2Share.Config.HomeY);
             if (ReadString("Setup", "RedHomeMap", "") == "")
             {
-                WriteString("Setup", "RedHomeMap", M2Share.Config.sRedHomeMap);
+                WriteString("Setup", "RedHomeMap", M2Share.Config.RedHomeMap);
             }
-            M2Share.Config.sRedHomeMap = ReadString("Setup", "RedHomeMap", M2Share.Config.sRedHomeMap);
+            M2Share.Config.RedHomeMap = ReadString("Setup", "RedHomeMap", M2Share.Config.RedHomeMap);
             if (ReadInteger("Setup", "RedHomeX", -1) < 0)
             {
-                WriteInteger("Setup", "RedHomeX", M2Share.Config.nRedHomeX);
+                WriteInteger("Setup", "RedHomeX", M2Share.Config.RedHomeX);
             }
-            M2Share.Config.nRedHomeX = Read<short>("Setup", "RedHomeX", M2Share.Config.nRedHomeX);
+            M2Share.Config.RedHomeX = Read<short>("Setup", "RedHomeX", M2Share.Config.RedHomeX);
             if (ReadInteger("Setup", "RedHomeY", -1) < 0)
-                WriteInteger("Setup", "RedHomeY", M2Share.Config.nRedHomeY);
-            M2Share.Config.nRedHomeY = Read<short>("Setup", "RedHomeY", M2Share.Config.nRedHomeY);
+                WriteInteger("Setup", "RedHomeY", M2Share.Config.RedHomeY);
+            M2Share.Config.RedHomeY = Read<short>("Setup", "RedHomeY", M2Share.Config.RedHomeY);
             if (ReadString("Setup", "RedDieHomeMap", "") == "")
-                WriteString("Setup", "RedDieHomeMap", M2Share.Config.sRedDieHomeMap);
-            M2Share.Config.sRedDieHomeMap = ReadString("Setup", "RedDieHomeMap", M2Share.Config.sRedDieHomeMap);
+                WriteString("Setup", "RedDieHomeMap", M2Share.Config.RedDieHomeMap);
+            M2Share.Config.RedDieHomeMap = ReadString("Setup", "RedDieHomeMap", M2Share.Config.RedDieHomeMap);
             if (ReadInteger("Setup", "RedDieHomeX", -1) < 0)
-                WriteInteger("Setup", "RedDieHomeX", M2Share.Config.nRedDieHomeX);
-            M2Share.Config.nRedDieHomeX = Read<short>("Setup", "RedDieHomeX", M2Share.Config.nRedDieHomeX);
+                WriteInteger("Setup", "RedDieHomeX", M2Share.Config.RedDieHomeX);
+            M2Share.Config.RedDieHomeX = Read<short>("Setup", "RedDieHomeX", M2Share.Config.RedDieHomeX);
             if (ReadInteger("Setup", "RedDieHomeY", -1) < 0)
-                WriteInteger("Setup", "RedDieHomeY", M2Share.Config.nRedDieHomeY);
-            M2Share.Config.nRedDieHomeY = Read<short>("Setup", "RedDieHomeY", M2Share.Config.nRedDieHomeY);
+                WriteInteger("Setup", "RedDieHomeY", M2Share.Config.RedDieHomeY);
+            M2Share.Config.RedDieHomeY = Read<short>("Setup", "RedDieHomeY", M2Share.Config.RedDieHomeY);
             if (ReadInteger("Setup", "JobHomePointSystem", -1) < 0)
-                WriteBool("Setup", "JobHomePointSystem", M2Share.Config.boJobHomePoint);
-            M2Share.Config.boJobHomePoint = ReadBool("Setup", "JobHomePointSystem", M2Share.Config.boJobHomePoint);
+                WriteBool("Setup", "JobHomePointSystem", M2Share.Config.JobHomePoint);
+            M2Share.Config.JobHomePoint = ReadBool("Setup", "JobHomePointSystem", M2Share.Config.JobHomePoint);
             if (ReadString("Setup", "WarriorHomeMap", "") == "")
-                WriteString("Setup", "WarriorHomeMap", M2Share.Config.sWarriorHomeMap);
-            M2Share.Config.sWarriorHomeMap = ReadString("Setup", "WarriorHomeMap", M2Share.Config.sWarriorHomeMap);
+                WriteString("Setup", "WarriorHomeMap", M2Share.Config.WarriorHomeMap);
+            M2Share.Config.WarriorHomeMap = ReadString("Setup", "WarriorHomeMap", M2Share.Config.WarriorHomeMap);
             if (ReadInteger("Setup", "WarriorHomeX", -1) < 0)
-                WriteInteger("Setup", "WarriorHomeX", M2Share.Config.nWarriorHomeX);
-            M2Share.Config.nWarriorHomeX = Read<short>("Setup", "WarriorHomeX", M2Share.Config.nWarriorHomeX);
+                WriteInteger("Setup", "WarriorHomeX", M2Share.Config.WarriorHomeX);
+            M2Share.Config.WarriorHomeX = Read<short>("Setup", "WarriorHomeX", M2Share.Config.WarriorHomeX);
             if (ReadInteger("Setup", "WarriorHomeY", -1) < 0)
-                WriteInteger("Setup", "WarriorHomeY", M2Share.Config.nWarriorHomeY);
-            M2Share.Config.nWarriorHomeY = Read<short>("Setup", "WarriorHomeY", M2Share.Config.nWarriorHomeY);
+                WriteInteger("Setup", "WarriorHomeY", M2Share.Config.WarriorHomeY);
+            M2Share.Config.WarriorHomeY = Read<short>("Setup", "WarriorHomeY", M2Share.Config.WarriorHomeY);
             if (ReadString("Setup", "WizardHomeMap", "") == "")
-                WriteString("Setup", "WizardHomeMap", M2Share.Config.sWizardHomeMap);
-            M2Share.Config.sWizardHomeMap = ReadString("Setup", "WizardHomeMap", M2Share.Config.sWizardHomeMap);
+                WriteString("Setup", "WizardHomeMap", M2Share.Config.WizardHomeMap);
+            M2Share.Config.WizardHomeMap = ReadString("Setup", "WizardHomeMap", M2Share.Config.WizardHomeMap);
             if (ReadInteger("Setup", "WizardHomeX", -1) < 0)
-                WriteInteger("Setup", "WizardHomeX", M2Share.Config.nWizardHomeX);
-            M2Share.Config.nWizardHomeX = Read<short>("Setup", "WizardHomeX", M2Share.Config.nWizardHomeX);
+                WriteInteger("Setup", "WizardHomeX", M2Share.Config.WizardHomeX);
+            M2Share.Config.WizardHomeX = Read<short>("Setup", "WizardHomeX", M2Share.Config.WizardHomeX);
             if (ReadInteger("Setup", "WizardHomeY", -1) < 0)
-                WriteInteger("Setup", "WizardHomeY", M2Share.Config.nWizardHomeY);
-            M2Share.Config.nWizardHomeY = Read<short>("Setup", "WizardHomeY", M2Share.Config.nWizardHomeY);
+                WriteInteger("Setup", "WizardHomeY", M2Share.Config.WizardHomeY);
+            M2Share.Config.WizardHomeY = Read<short>("Setup", "WizardHomeY", M2Share.Config.WizardHomeY);
             if (ReadString("Setup", "TaoistHomeMap", "") == "")
-                WriteString("Setup", "TaoistHomeMap", M2Share.Config.sTaoistHomeMap);
-            M2Share.Config.sTaoistHomeMap = ReadString("Setup", "TaoistHomeMap", M2Share.Config.sTaoistHomeMap);
+                WriteString("Setup", "TaoistHomeMap", M2Share.Config.TaoistHomeMap);
+            M2Share.Config.TaoistHomeMap = ReadString("Setup", "TaoistHomeMap", M2Share.Config.TaoistHomeMap);
             if (ReadInteger("Setup", "TaoistHomeX", -1) < 0)
-                WriteInteger("Setup", "TaoistHomeX", M2Share.Config.nTaoistHomeX);
-            M2Share.Config.nTaoistHomeX = Read<short>("Setup", "TaoistHomeX", M2Share.Config.nTaoistHomeX);
+                WriteInteger("Setup", "TaoistHomeX", M2Share.Config.TaoistHomeX);
+            M2Share.Config.TaoistHomeX = Read<short>("Setup", "TaoistHomeX", M2Share.Config.TaoistHomeX);
             if (ReadInteger("Setup", "TaoistHomeY", -1) < 0)
-                WriteInteger("Setup", "TaoistHomeY", M2Share.Config.nTaoistHomeY);
-            M2Share.Config.nTaoistHomeY = Read<short>("Setup", "TaoistHomeY", M2Share.Config.nTaoistHomeY);
+                WriteInteger("Setup", "TaoistHomeY", M2Share.Config.TaoistHomeY);
+            M2Share.Config.TaoistHomeY = Read<short>("Setup", "TaoistHomeY", M2Share.Config.TaoistHomeY);
             nLoadInteger = ReadInteger("Setup", "HealthFillTime", -1);
             if (nLoadInteger < 0)
                 WriteInteger("Setup", "HealthFillTime", M2Share.Config.nHealthFillTime);
@@ -425,11 +425,11 @@ namespace GameSvr.Configs
             else
                 M2Share.Config.nSpellFillTime = nLoadInteger;
             if (ReadInteger("Setup", "DecPkPointTime", -1) < 0)
-                WriteInteger("Setup", "DecPkPointTime", M2Share.Config.dwDecPkPointTime);
-            M2Share.Config.dwDecPkPointTime = ReadInteger("Setup", "DecPkPointTime", M2Share.Config.dwDecPkPointTime);
+                WriteInteger("Setup", "DecPkPointTime", M2Share.Config.DecPkPointTime);
+            M2Share.Config.DecPkPointTime = ReadInteger("Setup", "DecPkPointTime", M2Share.Config.DecPkPointTime);
             if (ReadInteger("Setup", "DecPkPointCount", -1) < 0)
-                WriteInteger("Setup", "DecPkPointCount", M2Share.Config.nDecPkPointCount);
-            M2Share.Config.nDecPkPointCount = ReadInteger("Setup", "DecPkPointCount", M2Share.Config.nDecPkPointCount);
+                WriteInteger("Setup", "DecPkPointCount", M2Share.Config.DecPkPointCount);
+            M2Share.Config.DecPkPointCount = ReadInteger("Setup", "DecPkPointCount", M2Share.Config.DecPkPointCount);
             if (ReadInteger("Setup", "PKFlagTime", -1) < 0)
                 WriteInteger("Setup", "PKFlagTime", M2Share.Config.dwPKFlagTime);
             M2Share.Config.dwPKFlagTime = ReadInteger("Setup", "PKFlagTime", M2Share.Config.dwPKFlagTime);
@@ -651,78 +651,77 @@ namespace GameSvr.Configs
                 WriteInteger("Setup", "GroupMembersMax", M2Share.Config.nGroupMembersMax);
             M2Share.Config.nGroupMembersMax = ReadInteger("Setup", "GroupMembersMax", M2Share.Config.nGroupMembersMax);
             if (ReadInteger("Setup", "WarrAttackMon", -1) < 0)
-                WriteInteger("Setup", "WarrAttackMon", M2Share.Config.nWarrMon);
-            M2Share.Config.nWarrMon = ReadInteger("Setup", "WarrAttackMon", M2Share.Config.nWarrMon);
+                WriteInteger("Setup", "WarrAttackMon", M2Share.Config.WarrMon);
+            M2Share.Config.WarrMon = ReadInteger("Setup", "WarrAttackMon", M2Share.Config.WarrMon);
             if (ReadInteger("Setup", "WizardAttackMon", -1) < 0)
-                WriteInteger("Setup", "WizardAttackMon", M2Share.Config.nWizardMon);
-            M2Share.Config.nWizardMon = ReadInteger("Setup", "WizardAttackMon", M2Share.Config.nWizardMon);
+                WriteInteger("Setup", "WizardAttackMon", M2Share.Config.WizardMon);
+            M2Share.Config.WizardMon = ReadInteger("Setup", "WizardAttackMon", M2Share.Config.WizardMon);
             if (ReadInteger("Setup", "TaosAttackMon", -1) < 0)
-                WriteInteger("Setup", "TaosAttackMon", M2Share.Config.nTaosMon);
-            M2Share.Config.nTaosMon = ReadInteger("Setup", "TaosAttackMon", M2Share.Config.nTaosMon);
+                WriteInteger("Setup", "TaosAttackMon", M2Share.Config.TaosMon);
+            M2Share.Config.TaosMon = ReadInteger("Setup", "TaosAttackMon", M2Share.Config.TaosMon);
             if (ReadInteger("Setup", "MonAttackHum", -1) < 0)
-                WriteInteger("Setup", "MonAttackHum", M2Share.Config.nMonHum);
-            M2Share.Config.nMonHum = ReadInteger("Setup", "MonAttackHum", M2Share.Config.nMonHum);
+                WriteInteger("Setup", "MonAttackHum", M2Share.Config.MonHum);
+            M2Share.Config.MonHum = ReadInteger("Setup", "MonAttackHum", M2Share.Config.MonHum);
             if (ReadInteger("Setup", "UPgradeWeaponGetBackTime", -1) < 0)
             {
-                WriteInteger("Setup", "UPgradeWeaponGetBackTime", M2Share.Config.dwUPgradeWeaponGetBackTime);
+                WriteInteger("Setup", "UPgradeWeaponGetBackTime", M2Share.Config.UPgradeWeaponGetBackTime);
             }
-            M2Share.Config.dwUPgradeWeaponGetBackTime = ReadInteger("Setup", "UPgradeWeaponGetBackTime", M2Share.Config.dwUPgradeWeaponGetBackTime);
+            M2Share.Config.UPgradeWeaponGetBackTime = ReadInteger("Setup", "UPgradeWeaponGetBackTime", M2Share.Config.UPgradeWeaponGetBackTime);
             if (ReadInteger("Setup", "ClearExpireUpgradeWeaponDays", -1) < 0)
             {
-                WriteInteger("Setup", "ClearExpireUpgradeWeaponDays", M2Share.Config.nClearExpireUpgradeWeaponDays);
+                WriteInteger("Setup", "ClearExpireUpgradeWeaponDays", M2Share.Config.ClearExpireUpgradeWeaponDays);
             }
-            M2Share.Config.nClearExpireUpgradeWeaponDays = ReadInteger("Setup", "ClearExpireUpgradeWeaponDays", M2Share.Config.nClearExpireUpgradeWeaponDays);
+            M2Share.Config.ClearExpireUpgradeWeaponDays = ReadInteger("Setup", "ClearExpireUpgradeWeaponDays", M2Share.Config.ClearExpireUpgradeWeaponDays);
             if (ReadInteger("Setup", "UpgradeWeaponPrice", -1) < 0)
-                WriteInteger("Setup", "UpgradeWeaponPrice", M2Share.Config.nUpgradeWeaponPrice);
-            M2Share.Config.nUpgradeWeaponPrice = ReadInteger("Setup", "UpgradeWeaponPrice", M2Share.Config.nUpgradeWeaponPrice);
+                WriteInteger("Setup", "UpgradeWeaponPrice", M2Share.Config.UpgradeWeaponPrice);
+            M2Share.Config.UpgradeWeaponPrice = ReadInteger("Setup", "UpgradeWeaponPrice", M2Share.Config.UpgradeWeaponPrice);
             if (ReadInteger("Setup", "UpgradeWeaponMaxPoint", -1) < 0)
-                WriteInteger("Setup", "UpgradeWeaponMaxPoint", M2Share.Config.nUpgradeWeaponMaxPoint);
-            M2Share.Config.nUpgradeWeaponMaxPoint = ReadInteger("Setup", "UpgradeWeaponMaxPoint", M2Share.Config.nUpgradeWeaponMaxPoint);
+                WriteInteger("Setup", "UpgradeWeaponMaxPoint", M2Share.Config.UpgradeWeaponMaxPoint);
+            M2Share.Config.UpgradeWeaponMaxPoint = ReadInteger("Setup", "UpgradeWeaponMaxPoint", M2Share.Config.UpgradeWeaponMaxPoint);
             if (ReadInteger("Setup", "UpgradeWeaponDCRate", -1) < 0)
-                WriteInteger("Setup", "UpgradeWeaponDCRate", M2Share.Config.nUpgradeWeaponDCRate);
-            M2Share.Config.nUpgradeWeaponDCRate = ReadInteger("Setup", "UpgradeWeaponDCRate", M2Share.Config.nUpgradeWeaponDCRate);
+                WriteInteger("Setup", "UpgradeWeaponDCRate", M2Share.Config.UpgradeWeaponDCRate);
+            M2Share.Config.UpgradeWeaponDCRate = ReadInteger("Setup", "UpgradeWeaponDCRate", M2Share.Config.UpgradeWeaponDCRate);
             if (ReadInteger("Setup", "UpgradeWeaponDCTwoPointRate", -1) < 0)
-                WriteInteger("Setup", "UpgradeWeaponDCTwoPointRate", M2Share.Config.nUpgradeWeaponDCTwoPointRate);
-            M2Share.Config.nUpgradeWeaponDCTwoPointRate = ReadInteger("Setup", "UpgradeWeaponDCTwoPointRate", M2Share.Config.nUpgradeWeaponDCTwoPointRate);
+                WriteInteger("Setup", "UpgradeWeaponDCTwoPointRate", M2Share.Config.UpgradeWeaponDCTwoPointRate);
+            M2Share.Config.UpgradeWeaponDCTwoPointRate = ReadInteger("Setup", "UpgradeWeaponDCTwoPointRate", M2Share.Config.UpgradeWeaponDCTwoPointRate);
             if (ReadInteger("Setup", "UpgradeWeaponDCThreePointRate", -1) < 0)
             {
-                WriteInteger("Setup", "UpgradeWeaponDCThreePointRate", M2Share.Config.nUpgradeWeaponDCThreePointRate);
+                WriteInteger("Setup", "UpgradeWeaponDCThreePointRate", M2Share.Config.UpgradeWeaponDCThreePointRate);
             }
-            M2Share.Config.nUpgradeWeaponDCThreePointRate = ReadInteger("Setup", "UpgradeWeaponDCThreePointRate", M2Share.Config.nUpgradeWeaponDCThreePointRate);
+            M2Share.Config.UpgradeWeaponDCThreePointRate = ReadInteger("Setup", "UpgradeWeaponDCThreePointRate", M2Share.Config.UpgradeWeaponDCThreePointRate);
             if (ReadInteger("Setup", "UpgradeWeaponMCRate", -1) < 0)
             {
-                WriteInteger("Setup", "UpgradeWeaponMCRate", M2Share.Config.nUpgradeWeaponMCRate);
+                WriteInteger("Setup", "UpgradeWeaponMCRate", M2Share.Config.UpgradeWeaponMCRate);
             }
-            M2Share.Config.nUpgradeWeaponMCRate = ReadInteger("Setup", "UpgradeWeaponMCRate", M2Share.Config.nUpgradeWeaponMCRate);
+            M2Share.Config.UpgradeWeaponMCRate = ReadInteger("Setup", "UpgradeWeaponMCRate", M2Share.Config.UpgradeWeaponMCRate);
             if (ReadInteger("Setup", "UpgradeWeaponMCTwoPointRate", -1) < 0)
             {
-                WriteInteger("Setup", "UpgradeWeaponMCTwoPointRate", M2Share.Config.nUpgradeWeaponMCTwoPointRate);
+                WriteInteger("Setup", "UpgradeWeaponMCTwoPointRate", M2Share.Config.UpgradeWeaponMCTwoPointRate);
             }
-            M2Share.Config.nUpgradeWeaponMCTwoPointRate = ReadInteger("Setup", "UpgradeWeaponMCTwoPointRate", M2Share.Config.nUpgradeWeaponMCTwoPointRate);
+            M2Share.Config.UpgradeWeaponMCTwoPointRate = ReadInteger("Setup", "UpgradeWeaponMCTwoPointRate", M2Share.Config.UpgradeWeaponMCTwoPointRate);
             if (ReadInteger("Setup", "UpgradeWeaponMCThreePointRate", -1) < 0)
-                WriteInteger("Setup", "UpgradeWeaponMCThreePointRate", M2Share.Config.nUpgradeWeaponMCThreePointRate);
-            M2Share.Config.nUpgradeWeaponMCThreePointRate = ReadInteger("Setup", "UpgradeWeaponMCThreePointRate", M2Share.Config.nUpgradeWeaponMCThreePointRate);
+                WriteInteger("Setup", "UpgradeWeaponMCThreePointRate", M2Share.Config.UpgradeWeaponMCThreePointRate);
+            M2Share.Config.UpgradeWeaponMCThreePointRate = ReadInteger("Setup", "UpgradeWeaponMCThreePointRate", M2Share.Config.UpgradeWeaponMCThreePointRate);
             if (ReadInteger("Setup", "UpgradeWeaponSCRate", -1) < 0)
-                WriteInteger("Setup", "UpgradeWeaponSCRate", M2Share.Config.nUpgradeWeaponSCRate);
-            M2Share.Config.nUpgradeWeaponSCRate =
-                ReadInteger("Setup", "UpgradeWeaponSCRate", M2Share.Config.nUpgradeWeaponSCRate);
+                WriteInteger("Setup", "UpgradeWeaponSCRate", M2Share.Config.UpgradeWeaponSCRate);
+            M2Share.Config.UpgradeWeaponSCRate = ReadInteger("Setup", "UpgradeWeaponSCRate", M2Share.Config.UpgradeWeaponSCRate);
             if (ReadInteger("Setup", "UpgradeWeaponSCTwoPointRate", -1) < 0)
-                WriteInteger("Setup", "UpgradeWeaponSCTwoPointRate", M2Share.Config.nUpgradeWeaponSCTwoPointRate);
-            M2Share.Config.nUpgradeWeaponSCTwoPointRate = ReadInteger("Setup", "UpgradeWeaponSCTwoPointRate", M2Share.Config.nUpgradeWeaponSCTwoPointRate);
+                WriteInteger("Setup", "UpgradeWeaponSCTwoPointRate", M2Share.Config.UpgradeWeaponSCTwoPointRate);
+            M2Share.Config.UpgradeWeaponSCTwoPointRate = ReadInteger("Setup", "UpgradeWeaponSCTwoPointRate", M2Share.Config.UpgradeWeaponSCTwoPointRate);
             if (ReadInteger("Setup", "UpgradeWeaponSCThreePointRate", -1) < 0)
             {
-                WriteInteger("Setup", "UpgradeWeaponSCThreePointRate", M2Share.Config.nUpgradeWeaponSCThreePointRate);
+                WriteInteger("Setup", "UpgradeWeaponSCThreePointRate", M2Share.Config.UpgradeWeaponSCThreePointRate);
             }
-            M2Share.Config.nUpgradeWeaponSCThreePointRate = ReadInteger("Setup", "UpgradeWeaponSCThreePointRate", M2Share.Config.nUpgradeWeaponSCThreePointRate);
+            M2Share.Config.UpgradeWeaponSCThreePointRate = ReadInteger("Setup", "UpgradeWeaponSCThreePointRate", M2Share.Config.UpgradeWeaponSCThreePointRate);
             if (ReadInteger("Setup", "BuildGuild", -1) < 0)
-                WriteInteger("Setup", "BuildGuild", M2Share.Config.nBuildGuildPrice);
-            M2Share.Config.nBuildGuildPrice = ReadInteger("Setup", "BuildGuild", M2Share.Config.nBuildGuildPrice);
+                WriteInteger("Setup", "BuildGuild", M2Share.Config.BuildGuildPrice);
+            M2Share.Config.BuildGuildPrice = ReadInteger("Setup", "BuildGuild", M2Share.Config.BuildGuildPrice);
             if (ReadInteger("Setup", "MakeDurg", -1) < 0)
-                WriteInteger("Setup", "MakeDurg", M2Share.Config.nMakeDurgPrice);
-            M2Share.Config.nMakeDurgPrice = ReadInteger("Setup", "MakeDurg", M2Share.Config.nMakeDurgPrice);
+                WriteInteger("Setup", "MakeDurg", M2Share.Config.MakeDurgPrice);
+            M2Share.Config.MakeDurgPrice = ReadInteger("Setup", "MakeDurg", M2Share.Config.MakeDurgPrice);
             if (ReadInteger("Setup", "GuildWarFee", -1) < 0)
-                WriteInteger("Setup", "GuildWarFee", M2Share.Config.nGuildWarPrice);
-            M2Share.Config.nGuildWarPrice = ReadInteger("Setup", "GuildWarFee", M2Share.Config.nGuildWarPrice);
+                WriteInteger("Setup", "GuildWarFee", M2Share.Config.GuildWarPrice);
+            M2Share.Config.GuildWarPrice = ReadInteger("Setup", "GuildWarFee", M2Share.Config.GuildWarPrice);
             if (ReadInteger("Setup", "HireGuard", -1) < 0)
                 WriteInteger("Setup", "HireGuard", M2Share.Config.nHireGuardPrice);
             M2Share.Config.nHireGuardPrice = ReadInteger("Setup", "HireGuard", M2Share.Config.nHireGuardPrice);
@@ -775,80 +774,80 @@ namespace GameSvr.Configs
                 M2Share.Config.nMonGenRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "ProcessMonRandRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "ProcessMonRandRate", M2Share.Config.nProcessMonRandRate);
+                WriteInteger("Setup", "ProcessMonRandRate", M2Share.Config.ProcessMonRandRate);
             else
-                M2Share.Config.nProcessMonRandRate = nLoadInteger;
+                M2Share.Config.ProcessMonRandRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "ProcessMonLimitCount", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "ProcessMonLimitCount", M2Share.Config.nProcessMonLimitCount);
+                WriteInteger("Setup", "ProcessMonLimitCount", M2Share.Config.ProcessMonLimitCount);
             else
-                M2Share.Config.nProcessMonLimitCount = nLoadInteger;
+                M2Share.Config.ProcessMonLimitCount = nLoadInteger;
             if (ReadInteger("Setup", "HumanMaxGold", -1) < 0)
-                WriteInteger("Setup", "HumanMaxGold", M2Share.Config.nHumanMaxGold);
-            M2Share.Config.nHumanMaxGold = ReadInteger("Setup", "HumanMaxGold", M2Share.Config.nHumanMaxGold);
+                WriteInteger("Setup", "HumanMaxGold", M2Share.Config.HumanMaxGold);
+            M2Share.Config.HumanMaxGold = ReadInteger("Setup", "HumanMaxGold", M2Share.Config.HumanMaxGold);
             if (ReadInteger("Setup", "HumanTryModeMaxGold", -1) < 0)
-                WriteInteger("Setup", "HumanTryModeMaxGold", M2Share.Config.nHumanTryModeMaxGold);
-            M2Share.Config.nHumanTryModeMaxGold = ReadInteger("Setup", "HumanTryModeMaxGold", M2Share.Config.nHumanTryModeMaxGold);
+                WriteInteger("Setup", "HumanTryModeMaxGold", M2Share.Config.HumanTryModeMaxGold);
+            M2Share.Config.HumanTryModeMaxGold = ReadInteger("Setup", "HumanTryModeMaxGold", M2Share.Config.HumanTryModeMaxGold);
             if (ReadInteger("Setup", "TryModeLevel", -1) < 0)
-                WriteInteger("Setup", "TryModeLevel", M2Share.Config.nTryModeLevel);
-            M2Share.Config.nTryModeLevel = ReadInteger("Setup", "TryModeLevel", M2Share.Config.nTryModeLevel);
+                WriteInteger("Setup", "TryModeLevel", M2Share.Config.TryModeLevel);
+            M2Share.Config.TryModeLevel = ReadInteger("Setup", "TryModeLevel", M2Share.Config.TryModeLevel);
             if (ReadInteger("Setup", "TryModeUseStorage", -1) < 0)
-                WriteBool("Setup", "TryModeUseStorage", M2Share.Config.boTryModeUseStorage);
-            M2Share.Config.boTryModeUseStorage = ReadBool("Setup", "TryModeUseStorage", M2Share.Config.boTryModeUseStorage);
+                WriteBool("Setup", "TryModeUseStorage", M2Share.Config.TryModeUseStorage);
+            M2Share.Config.TryModeUseStorage = ReadBool("Setup", "TryModeUseStorage", M2Share.Config.TryModeUseStorage);
             if (ReadInteger("Setup", "ShutRedMsgShowGMName", -1) < 0)
-                WriteBool("Setup", "ShutRedMsgShowGMName", M2Share.Config.boShutRedMsgShowGMName);
-            M2Share.Config.boShutRedMsgShowGMName = ReadBool("Setup", "ShutRedMsgShowGMName", M2Share.Config.boShutRedMsgShowGMName);
+                WriteBool("Setup", "ShutRedMsgShowGMName", M2Share.Config.ShutRedMsgShowGMName);
+            M2Share.Config.ShutRedMsgShowGMName = ReadBool("Setup", "ShutRedMsgShowGMName", M2Share.Config.ShutRedMsgShowGMName);
             if (ReadInteger("Setup", "ShowMakeItemMsg", -1) < 0)
-                WriteBool("Setup", "ShowMakeItemMsg", M2Share.Config.boShowMakeItemMsg);
-            M2Share.Config.boShowMakeItemMsg = ReadBool("Setup", "ShowMakeItemMsg", M2Share.Config.boShowMakeItemMsg);
+                WriteBool("Setup", "ShowMakeItemMsg", M2Share.Config.ShowMakeItemMsg);
+            M2Share.Config.ShowMakeItemMsg = ReadBool("Setup", "ShowMakeItemMsg", M2Share.Config.ShowMakeItemMsg);
             if (ReadInteger("Setup", "ShowGuildName", -1) < 0)
-                WriteBool("Setup", "ShowGuildName", M2Share.Config.boShowGuildName);
-            M2Share.Config.boShowGuildName = ReadBool("Setup", "ShowGuildName", M2Share.Config.boShowGuildName);
+                WriteBool("Setup", "ShowGuildName", M2Share.Config.ShowGuildName);
+            M2Share.Config.ShowGuildName = ReadBool("Setup", "ShowGuildName", M2Share.Config.ShowGuildName);
             if (ReadInteger("Setup", "ShowRankLevelName", -1) < 0)
-                WriteBool("Setup", "ShowRankLevelName", M2Share.Config.boShowRankLevelName);
-            M2Share.Config.boShowRankLevelName = ReadBool("Setup", "ShowRankLevelName", M2Share.Config.boShowRankLevelName);
+                WriteBool("Setup", "ShowRankLevelName", M2Share.Config.ShowRankLevelName);
+            M2Share.Config.ShowRankLevelName = ReadBool("Setup", "ShowRankLevelName", M2Share.Config.ShowRankLevelName);
             if (ReadInteger("Setup", "MonSayMsg", -1) < 0)
-                WriteBool("Setup", "MonSayMsg", M2Share.Config.boMonSayMsg);
-            M2Share.Config.boMonSayMsg = ReadBool("Setup", "MonSayMsg", M2Share.Config.boMonSayMsg);
+                WriteBool("Setup", "MonSayMsg", M2Share.Config.MonSayMsg);
+            M2Share.Config.MonSayMsg = ReadBool("Setup", "MonSayMsg", M2Share.Config.MonSayMsg);
             if (ReadInteger("Setup", "SayMsgMaxLen", -1) < 0)
-                WriteInteger("Setup", "SayMsgMaxLen", M2Share.Config.nSayMsgMaxLen);
-            M2Share.Config.nSayMsgMaxLen = ReadInteger("Setup", "SayMsgMaxLen", M2Share.Config.nSayMsgMaxLen);
+                WriteInteger("Setup", "SayMsgMaxLen", M2Share.Config.SayMsgMaxLen);
+            M2Share.Config.SayMsgMaxLen = ReadInteger("Setup", "SayMsgMaxLen", M2Share.Config.SayMsgMaxLen);
             if (ReadInteger("Setup", "SayMsgTime", -1) < 0)
-                WriteInteger("Setup", "SayMsgTime", M2Share.Config.dwSayMsgTime);
-            M2Share.Config.dwSayMsgTime = ReadInteger("Setup", "SayMsgTime", M2Share.Config.dwSayMsgTime);
+                WriteInteger("Setup", "SayMsgTime", M2Share.Config.SayMsgTime);
+            M2Share.Config.SayMsgTime = ReadInteger("Setup", "SayMsgTime", M2Share.Config.SayMsgTime);
             if (ReadInteger("Setup", "SayMsgCount", -1) < 0)
-                WriteInteger("Setup", "SayMsgCount", M2Share.Config.nSayMsgCount);
-            M2Share.Config.nSayMsgCount = ReadInteger("Setup", "SayMsgCount", M2Share.Config.nSayMsgCount);
+                WriteInteger("Setup", "SayMsgCount", M2Share.Config.SayMsgCount);
+            M2Share.Config.SayMsgCount = ReadInteger("Setup", "SayMsgCount", M2Share.Config.SayMsgCount);
             if (ReadInteger("Setup", "DisableSayMsgTime", -1) < 0)
-                WriteInteger("Setup", "DisableSayMsgTime", M2Share.Config.dwDisableSayMsgTime);
-            M2Share.Config.dwDisableSayMsgTime = ReadInteger("Setup", "DisableSayMsgTime", M2Share.Config.dwDisableSayMsgTime);
+                WriteInteger("Setup", "DisableSayMsgTime", M2Share.Config.DisableSayMsgTime);
+            M2Share.Config.DisableSayMsgTime = ReadInteger("Setup", "DisableSayMsgTime", M2Share.Config.DisableSayMsgTime);
             if (ReadInteger("Setup", "SayRedMsgMaxLen", -1) < 0)
-                WriteInteger("Setup", "SayRedMsgMaxLen", M2Share.Config.nSayRedMsgMaxLen);
-            M2Share.Config.nSayRedMsgMaxLen = ReadInteger("Setup", "SayRedMsgMaxLen", M2Share.Config.nSayRedMsgMaxLen);
+                WriteInteger("Setup", "SayRedMsgMaxLen", M2Share.Config.SayRedMsgMaxLen);
+            M2Share.Config.SayRedMsgMaxLen = ReadInteger("Setup", "SayRedMsgMaxLen", M2Share.Config.SayRedMsgMaxLen);
             if (ReadInteger("Setup", "CanShoutMsgLevel", -1) < 0)
-                WriteInteger("Setup", "CanShoutMsgLevel", M2Share.Config.nCanShoutMsgLevel);
-            M2Share.Config.nCanShoutMsgLevel = ReadInteger("Setup", "CanShoutMsgLevel", M2Share.Config.nCanShoutMsgLevel);
+                WriteInteger("Setup", "CanShoutMsgLevel", M2Share.Config.CanShoutMsgLevel);
+            M2Share.Config.CanShoutMsgLevel = ReadInteger("Setup", "CanShoutMsgLevel", M2Share.Config.CanShoutMsgLevel);
             if (ReadInteger("Setup", "StartPermission", -1) < 0)
-                WriteInteger("Setup", "StartPermission", M2Share.Config.nStartPermission);
-            M2Share.Config.nStartPermission = ReadInteger("Setup", "StartPermission", M2Share.Config.nStartPermission);
+                WriteInteger("Setup", "StartPermission", M2Share.Config.StartPermission);
+            M2Share.Config.StartPermission = ReadInteger("Setup", "StartPermission", M2Share.Config.StartPermission);
             if (ReadInteger("Setup", "SendRefMsgRange", -1) < 0)
-                WriteInteger("Setup", "SendRefMsgRange", M2Share.Config.nSendRefMsgRange);
-            M2Share.Config.nSendRefMsgRange = (byte)ReadInteger("Setup", "SendRefMsgRange", M2Share.Config.nSendRefMsgRange);
+                WriteInteger("Setup", "SendRefMsgRange", M2Share.Config.SendRefMsgRange);
+            M2Share.Config.SendRefMsgRange = (byte)ReadInteger("Setup", "SendRefMsgRange", M2Share.Config.SendRefMsgRange);
             if (ReadInteger("Setup", "DecLampDura", -1) < 0)
                 WriteBool("Setup", "DecLampDura", M2Share.Config.boDecLampDura);
             M2Share.Config.boDecLampDura = ReadBool("Setup", "DecLampDura", M2Share.Config.boDecLampDura);
             if (ReadInteger("Setup", "HungerSystem", -1) < 0)
-                WriteBool("Setup", "HungerSystem", M2Share.Config.boHungerSystem);
-            M2Share.Config.boHungerSystem = ReadBool("Setup", "HungerSystem", M2Share.Config.boHungerSystem);
+                WriteBool("Setup", "HungerSystem", M2Share.Config.HungerSystem);
+            M2Share.Config.HungerSystem = ReadBool("Setup", "HungerSystem", M2Share.Config.HungerSystem);
             if (ReadInteger("Setup", "HungerDecHP", -1) < 0)
-                WriteBool("Setup", "HungerDecHP", M2Share.Config.boHungerDecHP);
-            M2Share.Config.boHungerDecHP = ReadBool("Setup", "HungerDecHP", M2Share.Config.boHungerDecHP);
+                WriteBool("Setup", "HungerDecHP", M2Share.Config.HungerDecHP);
+            M2Share.Config.HungerDecHP = ReadBool("Setup", "HungerDecHP", M2Share.Config.HungerDecHP);
             if (ReadInteger("Setup", "HungerDecPower", -1) < 0)
-                WriteBool("Setup", "HungerDecPower", M2Share.Config.boHungerDecPower);
-            M2Share.Config.boHungerDecPower = ReadBool("Setup", "HungerDecPower", M2Share.Config.boHungerDecPower);
+                WriteBool("Setup", "HungerDecPower", M2Share.Config.HungerDecPower);
+            M2Share.Config.HungerDecPower = ReadBool("Setup", "HungerDecPower", M2Share.Config.HungerDecPower);
             if (ReadInteger("Setup", "DiableHumanRun", -1) < 0)
-                WriteBool("Setup", "DiableHumanRun", M2Share.Config.boDiableHumanRun);
-            M2Share.Config.boDiableHumanRun = ReadBool("Setup", "DiableHumanRun", M2Share.Config.boDiableHumanRun);
+                WriteBool("Setup", "DiableHumanRun", M2Share.Config.DiableHumanRun);
+            M2Share.Config.DiableHumanRun = ReadBool("Setup", "DiableHumanRun", M2Share.Config.DiableHumanRun);
             if (ReadInteger("Setup", "RunHuman", -1) < 0)
                 WriteBool("Setup", "RunHuman", M2Share.Config.boRunHuman);
             M2Share.Config.boRunHuman = ReadBool("Setup", "RunHuman", M2Share.Config.boRunHuman);
@@ -1402,33 +1401,33 @@ namespace GameSvr.Configs
                 M2Share.Config.nMonOneDropGoldCount = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "SendCurTickCount", -1);
             if (nLoadInteger < 0)
-                WriteBool("Setup", "SendCurTickCount", M2Share.Config.boSendCurTickCount);
+                WriteBool("Setup", "SendCurTickCount", M2Share.Config.SendCurTickCount);
             else
-                M2Share.Config.boSendCurTickCount = nLoadInteger == 1;
+                M2Share.Config.SendCurTickCount = nLoadInteger == 1;
             if (ReadInteger("Setup", "MakeMineHitRate", -1) < 0)
-                WriteInteger("Setup", "MakeMineHitRate", M2Share.Config.nMakeMineHitRate);
-            M2Share.Config.nMakeMineHitRate = ReadInteger("Setup", "MakeMineHitRate", M2Share.Config.nMakeMineHitRate);
+                WriteInteger("Setup", "MakeMineHitRate", M2Share.Config.MakeMineHitRate);
+            M2Share.Config.MakeMineHitRate = ReadInteger("Setup", "MakeMineHitRate", M2Share.Config.MakeMineHitRate);
             if (ReadInteger("Setup", "MakeMineRate", -1) < 0)
-                WriteInteger("Setup", "MakeMineRate", M2Share.Config.nMakeMineRate);
-            M2Share.Config.nMakeMineRate = ReadInteger("Setup", "MakeMineRate", M2Share.Config.nMakeMineRate);
+                WriteInteger("Setup", "MakeMineRate", M2Share.Config.MakeMineRate);
+            M2Share.Config.MakeMineRate = ReadInteger("Setup", "MakeMineRate", M2Share.Config.MakeMineRate);
             if (ReadInteger("Setup", "StoneTypeRate", -1) < 0)
-                WriteInteger("Setup", "StoneTypeRate", M2Share.Config.nStoneTypeRate);
-            M2Share.Config.nStoneTypeRate = ReadInteger("Setup", "StoneTypeRate", M2Share.Config.nStoneTypeRate);
+                WriteInteger("Setup", "StoneTypeRate", M2Share.Config.StoneTypeRate);
+            M2Share.Config.StoneTypeRate = ReadInteger("Setup", "StoneTypeRate", M2Share.Config.StoneTypeRate);
             if (ReadInteger("Setup", "StoneTypeRateMin", -1) < 0)
-                WriteInteger("Setup", "StoneTypeRateMin", M2Share.Config.nStoneTypeRateMin);
-            M2Share.Config.nStoneTypeRateMin = ReadInteger("Setup", "StoneTypeRateMin", M2Share.Config.nStoneTypeRateMin);
+                WriteInteger("Setup", "StoneTypeRateMin", M2Share.Config.StoneTypeRateMin);
+            M2Share.Config.StoneTypeRateMin = ReadInteger("Setup", "StoneTypeRateMin", M2Share.Config.StoneTypeRateMin);
             if (ReadInteger("Setup", "GoldStoneMin", -1) < 0)
-                WriteInteger("Setup", "GoldStoneMin", M2Share.Config.nGoldStoneMin);
-            M2Share.Config.nGoldStoneMin = ReadInteger("Setup", "GoldStoneMin", M2Share.Config.nGoldStoneMin);
+                WriteInteger("Setup", "GoldStoneMin", M2Share.Config.GoldStoneMin);
+            M2Share.Config.GoldStoneMin = ReadInteger("Setup", "GoldStoneMin", M2Share.Config.GoldStoneMin);
             if (ReadInteger("Setup", "GoldStoneMax", -1) < 0)
-                WriteInteger("Setup", "GoldStoneMax", M2Share.Config.nGoldStoneMax);
-            M2Share.Config.nGoldStoneMax = ReadInteger("Setup", "GoldStoneMax", M2Share.Config.nGoldStoneMax);
+                WriteInteger("Setup", "GoldStoneMax", M2Share.Config.GoldStoneMax);
+            M2Share.Config.GoldStoneMax = ReadInteger("Setup", "GoldStoneMax", M2Share.Config.GoldStoneMax);
             if (ReadInteger("Setup", "SilverStoneMin", -1) < 0)
-                WriteInteger("Setup", "SilverStoneMin", M2Share.Config.nSilverStoneMin);
-            M2Share.Config.nSilverStoneMin = ReadInteger("Setup", "SilverStoneMin", M2Share.Config.nSilverStoneMin);
+                WriteInteger("Setup", "SilverStoneMin", M2Share.Config.SilverStoneMin);
+            M2Share.Config.SilverStoneMin = ReadInteger("Setup", "SilverStoneMin", M2Share.Config.SilverStoneMin);
             if (ReadInteger("Setup", "SilverStoneMax", -1) < 0)
-                WriteInteger("Setup", "SilverStoneMax", M2Share.Config.nSilverStoneMax);
-            M2Share.Config.nSilverStoneMax = ReadInteger("Setup", "SilverStoneMax", M2Share.Config.nSilverStoneMax);
+                WriteInteger("Setup", "SilverStoneMax", M2Share.Config.SilverStoneMax);
+            M2Share.Config.SilverStoneMax = ReadInteger("Setup", "SilverStoneMax", M2Share.Config.SilverStoneMax);
             if (ReadInteger("Setup", "SteelStoneMin", -1) < 0)
                 WriteInteger("Setup", "SteelStoneMin", M2Share.Config.nSteelStoneMin);
             M2Share.Config.nSteelStoneMin = ReadInteger("Setup", "SteelStoneMin", M2Share.Config.nSteelStoneMin);
@@ -1697,23 +1696,23 @@ namespace GameSvr.Configs
                 WriteBool("Setup", "ShowPreFixMsg", M2Share.Config.boShowPreFixMsg);
             M2Share.Config.boShowPreFixMsg = ReadBool("Setup", "ShowPreFixMsg", M2Share.Config.boShowPreFixMsg);
             if (ReadInteger("Setup", "MagTurnUndeadLevel", -1) < 0)
-                WriteInteger("Setup", "MagTurnUndeadLevel", M2Share.Config.nMagTurnUndeadLevel);
-            M2Share.Config.nMagTurnUndeadLevel = ReadInteger("Setup", "MagTurnUndeadLevel", M2Share.Config.nMagTurnUndeadLevel);
+                WriteInteger("Setup", "MagTurnUndeadLevel", M2Share.Config.MagTurnUndeadLevel);
+            M2Share.Config.MagTurnUndeadLevel = ReadInteger("Setup", "MagTurnUndeadLevel", M2Share.Config.MagTurnUndeadLevel);
             nLoadInteger = ReadInteger("Setup", "MagTammingLevel", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "MagTammingLevel", M2Share.Config.nMagTammingLevel);
+                WriteInteger("Setup", "MagTammingLevel", M2Share.Config.MagTammingLevel);
             else
-                M2Share.Config.nMagTammingLevel = nLoadInteger;
+                M2Share.Config.MagTammingLevel = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "MagTammingTargetLevel", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "MagTammingTargetLevel", M2Share.Config.nMagTammingTargetLevel);
+                WriteInteger("Setup", "MagTammingTargetLevel", M2Share.Config.MagTammingTargetLevel);
             else
-                M2Share.Config.nMagTammingTargetLevel = nLoadInteger;
+                M2Share.Config.MagTammingTargetLevel = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "MagTammingTargetHPRate", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "MagTammingTargetHPRate", M2Share.Config.nMagTammingHPRate);
+                WriteInteger("Setup", "MagTammingTargetHPRate", M2Share.Config.MagTammingHPRate);
             else
-                M2Share.Config.nMagTammingHPRate = nLoadInteger;
+                M2Share.Config.MagTammingHPRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "MagTammingCount", -1);
             if (nLoadInteger < 0)
                 WriteInteger("Setup", "MagTammingCount", M2Share.Config.nMagTammingCount);
@@ -1741,9 +1740,9 @@ namespace GameSvr.Configs
                 M2Share.Config.nMabMabeHitMabeTimeRate = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "MagicAttackRage", -1);
             if (nLoadInteger < 0)
-                WriteInteger("Setup", "MagicAttackRage", M2Share.Config.nMagicAttackRage);
+                WriteInteger("Setup", "MagicAttackRage", M2Share.Config.MagicAttackRage);
             else
-                M2Share.Config.nMagicAttackRage = nLoadInteger;
+                M2Share.Config.MagicAttackRage = nLoadInteger;
             nLoadInteger = ReadInteger("Setup", "DropItemRage", -1);
             if (nLoadInteger < 0)
                 WriteInteger("Setup", "DropItemRage", M2Share.Config.nDropItemRage);
@@ -1834,87 +1833,87 @@ namespace GameSvr.Configs
                 WriteInteger("Setup", "ItemsACPowerRate", M2Share.Config.nItemsACPowerRate);
             M2Share.Config.nItemsACPowerRate = ReadInteger("Setup", "ItemsACPowerRate", M2Share.Config.nItemsACPowerRate);
             if (ReadInteger("Setup", "SendOnlineCount", -1) < 0)
-                WriteBool("Setup", "SendOnlineCount", M2Share.Config.boSendOnlineCount);
-            M2Share.Config.boSendOnlineCount = ReadBool("Setup", "SendOnlineCount", M2Share.Config.boSendOnlineCount);
+                WriteBool("Setup", "SendOnlineCount", M2Share.Config.SendOnlineCount);
+            M2Share.Config.SendOnlineCount = ReadBool("Setup", "SendOnlineCount", M2Share.Config.SendOnlineCount);
             if (ReadInteger("Setup", "SendOnlineCountRate", -1) < 0)
-                WriteInteger("Setup", "SendOnlineCountRate", M2Share.Config.nSendOnlineCountRate);
-            M2Share.Config.nSendOnlineCountRate = ReadInteger("Setup", "SendOnlineCountRate", M2Share.Config.nSendOnlineCountRate);
+                WriteInteger("Setup", "SendOnlineCountRate", M2Share.Config.SendOnlineCountRate);
+            M2Share.Config.SendOnlineCountRate = ReadInteger("Setup", "SendOnlineCountRate", M2Share.Config.SendOnlineCountRate);
             if (ReadInteger("Setup", "SendOnlineTime", -1) < 0)
-                WriteInteger("Setup", "SendOnlineTime", M2Share.Config.dwSendOnlineTime);
-            M2Share.Config.dwSendOnlineTime = ReadInteger("Setup", "SendOnlineTime", M2Share.Config.dwSendOnlineTime);
+                WriteInteger("Setup", "SendOnlineTime", M2Share.Config.SendOnlineTime);
+            M2Share.Config.SendOnlineTime = ReadInteger("Setup", "SendOnlineTime", M2Share.Config.SendOnlineTime);
             if (ReadInteger("Setup", "SaveHumanRcdTime", -1) < 0)
-                WriteInteger("Setup", "SaveHumanRcdTime", M2Share.Config.dwSaveHumanRcdTime);
-            M2Share.Config.dwSaveHumanRcdTime = ReadInteger("Setup", "SaveHumanRcdTime", M2Share.Config.dwSaveHumanRcdTime);
+                WriteInteger("Setup", "SaveHumanRcdTime", M2Share.Config.SaveHumanRcdTime);
+            M2Share.Config.SaveHumanRcdTime = ReadInteger("Setup", "SaveHumanRcdTime", M2Share.Config.SaveHumanRcdTime);
             if (ReadInteger("Setup", "HumanFreeDelayTime", -1) < 0)
-                WriteInteger("Setup", "HumanFreeDelayTime", M2Share.Config.dwHumanFreeDelayTime);
+                WriteInteger("Setup", "HumanFreeDelayTime", M2Share.Config.HumanFreeDelayTime);
             if (ReadInteger("Setup", "MakeGhostTime", -1) < 0)
-                WriteInteger("Setup", "MakeGhostTime", M2Share.Config.dwMakeGhostTime);
-            M2Share.Config.dwMakeGhostTime = ReadInteger("Setup", "MakeGhostTime", M2Share.Config.dwMakeGhostTime);
+                WriteInteger("Setup", "MakeGhostTime", M2Share.Config.MakeGhostTime);
+            M2Share.Config.MakeGhostTime = ReadInteger("Setup", "MakeGhostTime", M2Share.Config.MakeGhostTime);
             if (ReadInteger("Setup", "ClearDropOnFloorItemTime", -1) < 0)
-                WriteInteger("Setup", "ClearDropOnFloorItemTime", M2Share.Config.dwClearDropOnFloorItemTime);
-            M2Share.Config.dwClearDropOnFloorItemTime = ReadInteger("Setup", "ClearDropOnFloorItemTime", M2Share.Config.dwClearDropOnFloorItemTime);
+                WriteInteger("Setup", "ClearDropOnFloorItemTime", M2Share.Config.ClearDropOnFloorItemTime);
+            M2Share.Config.ClearDropOnFloorItemTime = ReadInteger("Setup", "ClearDropOnFloorItemTime", M2Share.Config.ClearDropOnFloorItemTime);
             if (ReadInteger("Setup", "FloorItemCanPickUpTime", -1) < 0)
-                WriteInteger("Setup", "FloorItemCanPickUpTime", M2Share.Config.dwFloorItemCanPickUpTime);
-            M2Share.Config.dwFloorItemCanPickUpTime = ReadInteger("Setup", "FloorItemCanPickUpTime", M2Share.Config.dwFloorItemCanPickUpTime);
+                WriteInteger("Setup", "FloorItemCanPickUpTime", M2Share.Config.FloorItemCanPickUpTime);
+            M2Share.Config.FloorItemCanPickUpTime = ReadInteger("Setup", "FloorItemCanPickUpTime", M2Share.Config.FloorItemCanPickUpTime);
             if (ReadInteger("Setup", "PasswordLockSystem", -1) < 0)
-                WriteBool("Setup", "PasswordLockSystem", M2Share.Config.boPasswordLockSystem);
-            M2Share.Config.boPasswordLockSystem = ReadBool("Setup", "PasswordLockSystem", M2Share.Config.boPasswordLockSystem);
+                WriteBool("Setup", "PasswordLockSystem", M2Share.Config.PasswordLockSystem);
+            M2Share.Config.PasswordLockSystem = ReadBool("Setup", "PasswordLockSystem", M2Share.Config.PasswordLockSystem);
             if (ReadInteger("Setup", "PasswordLockDealAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockDealAction", M2Share.Config.boLockDealAction);
-            M2Share.Config.boLockDealAction = ReadBool("Setup", "PasswordLockDealAction", M2Share.Config.boLockDealAction);
+                WriteBool("Setup", "PasswordLockDealAction", M2Share.Config.LockDealAction);
+            M2Share.Config.LockDealAction = ReadBool("Setup", "PasswordLockDealAction", M2Share.Config.LockDealAction);
             if (ReadInteger("Setup", "PasswordLockDropAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockDropAction", M2Share.Config.boLockDropAction);
-            M2Share.Config.boLockDropAction = ReadBool("Setup", "PasswordLockDropAction", M2Share.Config.boLockDropAction);
+                WriteBool("Setup", "PasswordLockDropAction", M2Share.Config.LockDropAction);
+            M2Share.Config.LockDropAction = ReadBool("Setup", "PasswordLockDropAction", M2Share.Config.LockDropAction);
             if (ReadInteger("Setup", "PasswordLockGetBackItemAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockGetBackItemAction", M2Share.Config.boLockGetBackItemAction);
-            M2Share.Config.boLockGetBackItemAction = ReadBool("Setup", "PasswordLockGetBackItemAction", M2Share.Config.boLockGetBackItemAction);
+                WriteBool("Setup", "PasswordLockGetBackItemAction", M2Share.Config.LockGetBackItemAction);
+            M2Share.Config.LockGetBackItemAction = ReadBool("Setup", "PasswordLockGetBackItemAction", M2Share.Config.LockGetBackItemAction);
             if (ReadInteger("Setup", "PasswordLockHumanLogin", -1) < 0)
-                WriteBool("Setup", "PasswordLockHumanLogin", M2Share.Config.boLockHumanLogin);
-            M2Share.Config.boLockHumanLogin = ReadBool("Setup", "PasswordLockHumanLogin", M2Share.Config.boLockHumanLogin);
+                WriteBool("Setup", "PasswordLockHumanLogin", M2Share.Config.LockHumanLogin);
+            M2Share.Config.LockHumanLogin = ReadBool("Setup", "PasswordLockHumanLogin", M2Share.Config.LockHumanLogin);
             if (ReadInteger("Setup", "PasswordLockWalkAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockWalkAction", M2Share.Config.boLockWalkAction);
-            M2Share.Config.boLockWalkAction = ReadBool("Setup", "PasswordLockWalkAction", M2Share.Config.boLockWalkAction);
+                WriteBool("Setup", "PasswordLockWalkAction", M2Share.Config.LockWalkAction);
+            M2Share.Config.LockWalkAction = ReadBool("Setup", "PasswordLockWalkAction", M2Share.Config.LockWalkAction);
             if (ReadInteger("Setup", "PasswordLockRunAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockRunAction", M2Share.Config.boLockRunAction);
-            M2Share.Config.boLockRunAction = ReadBool("Setup", "PasswordLockRunAction", M2Share.Config.boLockRunAction);
+                WriteBool("Setup", "PasswordLockRunAction", M2Share.Config.LockRunAction);
+            M2Share.Config.LockRunAction = ReadBool("Setup", "PasswordLockRunAction", M2Share.Config.LockRunAction);
             if (ReadInteger("Setup", "PasswordLockHitAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockHitAction", M2Share.Config.boLockHitAction);
-            M2Share.Config.boLockHitAction = ReadBool("Setup", "PasswordLockHitAction", M2Share.Config.boLockHitAction);
+                WriteBool("Setup", "PasswordLockHitAction", M2Share.Config.LockHitAction);
+            M2Share.Config.LockHitAction = ReadBool("Setup", "PasswordLockHitAction", M2Share.Config.LockHitAction);
             if (ReadInteger("Setup", "PasswordLockSpellAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockSpellAction", M2Share.Config.boLockSpellAction);
-            M2Share.Config.boLockSpellAction = ReadBool("Setup", "PasswordLockSpellAction", M2Share.Config.boLockSpellAction);
+                WriteBool("Setup", "PasswordLockSpellAction", M2Share.Config.LockSpellAction);
+            M2Share.Config.LockSpellAction = ReadBool("Setup", "PasswordLockSpellAction", M2Share.Config.LockSpellAction);
             if (ReadInteger("Setup", "PasswordLockSendMsgAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockSendMsgAction", M2Share.Config.boLockSendMsgAction);
-            M2Share.Config.boLockSendMsgAction = ReadBool("Setup", "PasswordLockSendMsgAction", M2Share.Config.boLockSendMsgAction);
+                WriteBool("Setup", "PasswordLockSendMsgAction", M2Share.Config.LockSendMsgAction);
+            M2Share.Config.LockSendMsgAction = ReadBool("Setup", "PasswordLockSendMsgAction", M2Share.Config.LockSendMsgAction);
             if (ReadInteger("Setup", "PasswordLockUserItemAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockUserItemAction", M2Share.Config.boLockUserItemAction);
-            M2Share.Config.boLockUserItemAction = ReadBool("Setup", "PasswordLockUserItemAction", M2Share.Config.boLockUserItemAction);
+                WriteBool("Setup", "PasswordLockUserItemAction", M2Share.Config.LockUserItemAction);
+            M2Share.Config.LockUserItemAction = ReadBool("Setup", "PasswordLockUserItemAction", M2Share.Config.LockUserItemAction);
             if (ReadInteger("Setup", "PasswordLockInObModeAction", -1) < 0)
-                WriteBool("Setup", "PasswordLockInObModeAction", M2Share.Config.boLockInObModeAction);
-            M2Share.Config.boLockInObModeAction = ReadBool("Setup", "PasswordLockInObModeAction", M2Share.Config.boLockInObModeAction);
+                WriteBool("Setup", "PasswordLockInObModeAction", M2Share.Config.LockInObModeAction);
+            M2Share.Config.LockInObModeAction = ReadBool("Setup", "PasswordLockInObModeAction", M2Share.Config.LockInObModeAction);
             if (ReadInteger("Setup", "PasswordErrorKick", -1) < 0)
-                WriteBool("Setup", "PasswordErrorKick", M2Share.Config.boPasswordErrorKick);
-            M2Share.Config.boPasswordErrorKick = ReadBool("Setup", "PasswordErrorKick", M2Share.Config.boPasswordErrorKick);
+                WriteBool("Setup", "PasswordErrorKick", M2Share.Config.PasswordErrorKick);
+            M2Share.Config.PasswordErrorKick = ReadBool("Setup", "PasswordErrorKick", M2Share.Config.PasswordErrorKick);
             if (ReadInteger("Setup", "PasswordErrorCountLock", -1) < 0)
-                WriteInteger("Setup", "PasswordErrorCountLock", M2Share.Config.nPasswordErrorCountLock);
-            M2Share.Config.nPasswordErrorCountLock = ReadInteger("Setup", "PasswordErrorCountLock", M2Share.Config.nPasswordErrorCountLock);
+                WriteInteger("Setup", "PasswordErrorCountLock", M2Share.Config.PasswordErrorCountLock);
+            M2Share.Config.PasswordErrorCountLock = ReadInteger("Setup", "PasswordErrorCountLock", M2Share.Config.PasswordErrorCountLock);
             if (ReadInteger("Setup", "SoftVersionDate", -1) < 0)
-                WriteInteger("Setup", "SoftVersionDate", M2Share.Config.nSoftVersionDate);
-            M2Share.Config.nSoftVersionDate = ReadInteger("Setup", "SoftVersionDate", M2Share.Config.nSoftVersionDate);
+                WriteInteger("Setup", "SoftVersionDate", M2Share.Config.SoftVersionDate);
+            M2Share.Config.SoftVersionDate = ReadInteger("Setup", "SoftVersionDate", M2Share.Config.SoftVersionDate);
             nLoadInteger = ReadInteger("Setup", "CanOldClientLogon", -1);
             if (nLoadInteger < 0)
                 WriteBool("Setup", "CanOldClientLogon", M2Share.Config.boCanOldClientLogon);
             else
                 M2Share.Config.boCanOldClientLogon = nLoadInteger == 1;
             if (ReadInteger("Setup", "ConsoleShowUserCountTime", -1) < 0)
-                WriteInteger("Setup", "ConsoleShowUserCountTime", M2Share.Config.dwConsoleShowUserCountTime);
-            M2Share.Config.dwConsoleShowUserCountTime = ReadInteger("Setup", "ConsoleShowUserCountTime", M2Share.Config.dwConsoleShowUserCountTime);
+                WriteInteger("Setup", "ConsoleShowUserCountTime", M2Share.Config.ConsoleShowUserCountTime);
+            M2Share.Config.ConsoleShowUserCountTime = ReadInteger("Setup", "ConsoleShowUserCountTime", M2Share.Config.ConsoleShowUserCountTime);
             if (ReadInteger("Setup", "ShowLineNoticeTime", -1) < 0)
-                WriteInteger("Setup", "ShowLineNoticeTime", M2Share.Config.dwShowLineNoticeTime);
-            M2Share.Config.dwShowLineNoticeTime = ReadInteger("Setup", "ShowLineNoticeTime", M2Share.Config.dwShowLineNoticeTime);
+                WriteInteger("Setup", "ShowLineNoticeTime", M2Share.Config.ShowLineNoticeTime);
+            M2Share.Config.ShowLineNoticeTime = ReadInteger("Setup", "ShowLineNoticeTime", M2Share.Config.ShowLineNoticeTime);
             if (ReadInteger("Setup", "LineNoticeColor", -1) < 0)
-                WriteInteger("Setup", "LineNoticeColor", M2Share.Config.nLineNoticeColor);
-            M2Share.Config.nLineNoticeColor = ReadInteger("Setup", "LineNoticeColor", M2Share.Config.nLineNoticeColor);
+                WriteInteger("Setup", "LineNoticeColor", M2Share.Config.LineNoticeColor);
+            M2Share.Config.LineNoticeColor = ReadInteger("Setup", "LineNoticeColor", M2Share.Config.LineNoticeColor);
             if (ReadInteger("Setup", "ItemSpeedTime", -1) < 0)
                 WriteInteger("Setup", "ItemSpeedTime", M2Share.Config.ClientConf.btItemSpeed);
             M2Share.Config.ClientConf.btItemSpeed = Read<byte>("Setup", "ItemSpeedTime", M2Share.Config.ClientConf.btItemSpeed);
@@ -2238,46 +2237,46 @@ namespace GameSvr.Configs
             }
             if (ReadInteger("Setup", "StartCastleWarDays", -1) < 0)
             {
-                WriteInteger("Setup", "StartCastleWarDays", M2Share.Config.nStartCastleWarDays);
+                WriteInteger("Setup", "StartCastleWarDays", M2Share.Config.StartCastleWarDays);
             }
-            M2Share.Config.nStartCastleWarDays = ReadInteger("Setup", "StartCastleWarDays", M2Share.Config.nStartCastleWarDays);
+            M2Share.Config.StartCastleWarDays = ReadInteger("Setup", "StartCastleWarDays", M2Share.Config.StartCastleWarDays);
             if (ReadInteger("Setup", "StartCastlewarTime", -1) < 0)
             {
-                WriteInteger("Setup", "StartCastlewarTime", M2Share.Config.nStartCastlewarTime);
+                WriteInteger("Setup", "StartCastlewarTime", M2Share.Config.StartCastlewarTime);
             }
-            M2Share.Config.nStartCastlewarTime = ReadInteger("Setup", "StartCastlewarTime", M2Share.Config.nStartCastlewarTime);
+            M2Share.Config.StartCastlewarTime = ReadInteger("Setup", "StartCastlewarTime", M2Share.Config.StartCastlewarTime);
             if (ReadInteger("Setup", "ShowCastleWarEndMsgTime", -1) < 0)
             {
-                WriteInteger("Setup", "ShowCastleWarEndMsgTime", M2Share.Config.dwShowCastleWarEndMsgTime);
+                WriteInteger("Setup", "ShowCastleWarEndMsgTime", M2Share.Config.ShowCastleWarEndMsgTime);
             }
-            M2Share.Config.dwShowCastleWarEndMsgTime = ReadInteger("Setup", "ShowCastleWarEndMsgTime", M2Share.Config.dwShowCastleWarEndMsgTime);
+            M2Share.Config.ShowCastleWarEndMsgTime = ReadInteger("Setup", "ShowCastleWarEndMsgTime", M2Share.Config.ShowCastleWarEndMsgTime);
             if (ReadInteger("Server", "ClickNPCTime", -1) < 0)
             {
-                WriteInteger("Server", "ClickNPCTime", M2Share.Config.dwClickNpcTime);
+                WriteInteger("Server", "ClickNPCTime", M2Share.Config.ClickNpcTime);
             }
-            M2Share.Config.dwClickNpcTime = ReadInteger("Server", "ClickNPCTime", M2Share.Config.dwClickNpcTime);
+            M2Share.Config.ClickNpcTime = ReadInteger("Server", "ClickNPCTime", M2Share.Config.ClickNpcTime);
             if (ReadInteger("Setup", "CastleWarTime", -1) < 0)
             {
-                WriteInteger("Setup", "CastleWarTime", M2Share.Config.dwCastleWarTime);
+                WriteInteger("Setup", "CastleWarTime", M2Share.Config.CastleWarTime);
             }
-            M2Share.Config.dwCastleWarTime = ReadInteger("Setup", "CastleWarTime", M2Share.Config.dwCastleWarTime);
+            M2Share.Config.CastleWarTime = ReadInteger("Setup", "CastleWarTime", M2Share.Config.CastleWarTime);
             nLoadInteger = ReadInteger("Setup", "GetCastleTime", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "GetCastleTime", M2Share.Config.dwGetCastleTime);
+                WriteInteger("Setup", "GetCastleTime", M2Share.Config.GetCastleTime);
             }
             else
             {
-                M2Share.Config.dwGetCastleTime = nLoadInteger;
+                M2Share.Config.GetCastleTime = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "GuildWarTime", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "GuildWarTime", M2Share.Config.dwGuildWarTime);
+                WriteInteger("Setup", "GuildWarTime", M2Share.Config.GuildWarTime);
             }
             else
             {
-                M2Share.Config.dwGuildWarTime = nLoadInteger;
+                M2Share.Config.GuildWarTime = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "WinLotteryCount", -1);
             if (nLoadInteger < 0)

@@ -122,7 +122,7 @@ namespace GameSvr.Actor
                     {
                         this.Master.SetPkFlag(struckObject);
                     }
-                    if (M2Share.Config.boMonSayMsg)
+                    if (M2Share.Config.MonSayMsg)
                     {
                         this.MonsterSayMsg(struckObject, MonStatus.UnderFire);
                     }
