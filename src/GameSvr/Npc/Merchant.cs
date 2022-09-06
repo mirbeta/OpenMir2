@@ -1614,7 +1614,7 @@ namespace GameSvr.Npc
                 {
                     if (m_boS_repair)
                     {
-                        nRepairPrice = nRepairPrice * M2Share.Config.nSuperRepairPriceRate;
+                        nRepairPrice = nRepairPrice * M2Share.Config.SuperRepairPriceRate;
                     }
                     else
                     {
@@ -1664,7 +1664,7 @@ namespace GameSvr.Npc
             var nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
             if (PlayObject.ScriptLable == ScriptConst.sSUPERREPAIR)
             {
-                nPrice = nPrice * M2Share.Config.nSuperRepairPriceRate;
+                nPrice = nPrice * M2Share.Config.SuperRepairPriceRate;
             }
             StdItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
@@ -1700,7 +1700,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.Config.nRepairItemDecDura);
+                            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.Config.RepairItemDecDura);
                             UserItem.Dura = UserItem.DuraMax;
                             PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.Gold, UserItem.Dura, UserItem.DuraMax, "");
                             GotoLable(PlayObject, ScriptConst.sREPAIROK, false);

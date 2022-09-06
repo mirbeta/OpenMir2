@@ -30,14 +30,14 @@ namespace GameSvr.Conf
         public bool boTestServer;
         public bool boServiceMode;
         public bool boNonPKServer;
-        public int nTestLevel;
-        public int nTestGold;
-        public int nTestUserLimit;
-        public int nSendBlock;
-        public int nCheckBlock;
+        public int TestLevel;
+        public int TestGold;
+        public int TestUserLimit;
+        public int SendBlock;
+        public int CheckBlock;
         public bool boDropLargeBlock;
-        public int nAvailableBlock;
-        public int nGateLoad;
+        public int AvailableBlock;
+        public int GateLoad;
         /// <summary>
         /// 服务器上线人数（默认1000）
         /// </summary>
@@ -63,12 +63,12 @@ namespace GameSvr.Conf
         public string sLogServerAddr;
         public int nLogServerPort;
         public bool boDiscountForNightTime;
-        public int nHalfFeeStart;
-        public int nHalfFeeEnd;
-        public bool boViewHackMessage;
-        public bool boViewAdmissionFailure;
-        public string sBaseDir;
-        public string sGuildDir;
+        public int HalfFeeStart;
+        public int HalfFeeEnd;
+        public bool ViewHackMessage;
+        public bool ViewAdmissionFailure;
+        public string BaseDir;
+        public string GuildDir;
         public string sGuildFile;
         public string sVentureDir;
         public string sConLogDir;
@@ -139,10 +139,13 @@ namespace GameSvr.Conf
         public int nKillHumanAddPKPoint;
         public int nKillHumanDecLuckPoint;
         public int dwDecLightItemDrugTime;
-        public int nSafeZoneSize;
-        public int nStartPointSize;
+        /// <summary>
+        /// 安全区范围大小
+        /// </summary>
+        public int SafeZoneSize;
+        public int StartPointSize;
         public int dwHumanGetMsgTime;
-        public int nGroupMembersMax;
+        public int GroupMembersMax;
         public int WarrMon;
         public int WizardMon;
         public int TaosMon;
@@ -151,9 +154,9 @@ namespace GameSvr.Conf
         public string sHealSkill;
         public string sRingSkill;
         public byte[] ReNewNameColor;
-        public int dwReNewNameColorTime;
-        public bool boReNewChangeColor;
-        public bool boReNewLevelClearExp;
+        public int ReNewNameColorTime;
+        public bool ReNewChangeColor;
+        public bool ReNewLevelClearExp;
         public TNakedAbility BonusAbilofWarr;
         public TNakedAbility BonusAbilofWizard;
         public TNakedAbility BonusAbilofTaos;
@@ -212,13 +215,13 @@ namespace GameSvr.Conf
         /// 武器升级魔法成功几率
         /// </summary>
         public int UpgradeWeaponMCThreePointRate;
-        public int dwProcessMonstersTime;
-        public int dwRegenMonstersTime;
-        public int nMonGenRate;
+        public int ProcessMonstersTime;
+        public int RegenMonstersTime;
+        public int MonGenRate;
         public int ProcessMonRandRate;
         public int ProcessMonLimitCount;
         public int SoftVersionDate;
-        public bool boCanOldClientLogon;
+        public bool CanOldClientLogon;
         public int ConsoleShowUserCountTime;
         public int ShowLineNoticeTime;
         public int LineNoticeColor;
@@ -250,18 +253,18 @@ namespace GameSvr.Conf
         public bool ShowRankLevelName;
         public bool MonSayMsg;
         public int StartPermission;
-        public bool boKillHumanWinLevel;
-        public bool boKilledLostLevel;
-        public bool boKillHumanWinExp;
-        public bool boKilledLostExp;
-        public int nKillHumanWinLevel;
-        public int nKilledLostLevel;
-        public int nKillHumanWinExp;
-        public int nKillHumanLostExp;
-        public int nHumanLevelDiffer;
-        public int nMonsterPowerRate;
-        public int nItemsPowerRate;
-        public int nItemsACPowerRate;
+        public bool IsKillHumanWinLevel;
+        public bool IsKilledLostLevel;
+        public bool IsKillHumanWinExp;
+        public bool IsKilledLostExp;
+        public int KillHumanWinLevel;
+        public int KilledLostLevel;
+        public int KillHumanWinExp;
+        public int KillHumanLostExp;
+        public int HumanLevelDiffer;
+        public int MonsterPowerRate;
+        public int ItemsPowerRate;
+        public int ItemsACPowerRate;
         /// <summary>
         /// 是否显示在线人数
         /// </summary>
@@ -303,7 +306,7 @@ namespace GameSvr.Conf
         /// <summary>
         /// 是否锁定取仓库操作
         /// </summary>
-        private bool LockGetBackItemAction;
+        public bool LockGetBackItemAction;
         /// <summary>
         /// 是否锁定走操作
         /// </summary>
@@ -360,10 +363,13 @@ namespace GameSvr.Conf
         public bool boWarDisHumRun;
         public bool boGMRunAll;
         public bool boSafeZoneRunAll;
-        public int dwTryDealTime;
-        public int dwDealOKTime;
-        public bool boCanNotGetBackDeal;
-        public bool boDisableDeal;
+        public int TryDealTime;
+        public int DealOKTime;
+        /// <summary>
+        /// 是否禁止取回交易物品
+        /// </summary>
+        public bool CanNotGetBackDeal;
+        public bool DisableDeal;
         public int nMasterOKLevel;
         public int nMasterOKCreditPoint;
         public int nMasterOKBonusPoint;
@@ -550,36 +556,36 @@ namespace GameSvr.Conf
         public int nWinLotteryLevel4;
         public int nWinLotteryLevel5;
         public int nWinLotteryLevel6;
-        public int nItemNumber;
-        public int nItemNumberEx;
-        public int nGuildRecallTime;
-        public int nGroupRecallTime;
-        public bool boControlDropItem;
-        public bool boInSafeDisableDrop;
-        public int nCanDropGold;
-        public int nCanDropPrice;
-        public bool boSendCustemMsg;
-        public bool boSubkMasterSendMsg;
+        public int ItemNumber;
+        public int ItemNumberEx;
+        public int GuildRecallTime;
+        public int GroupRecallTime;
+        public bool ControlDropItem;
+        public bool InSafeDisableDrop;
+        public int CanDropGold;
+        public int CanDropPrice;
+        public bool SendCustemMsg;
+        public bool SubkMasterSendMsg;
         /// <summary>
         /// 特修价格倍数
         /// </summary>
-        public int nSuperRepairPriceRate;
+        public int SuperRepairPriceRate;
         /// <summary>
         /// 普通修理掉持久数(特持久上限减下限再除以此数为减的数值)
         /// </summary>        
-        public int nRepairItemDecDura;
-        public bool boDieScatterBag;
-        public int nDieScatterBagRate;
-        public bool boDieRedScatterBagAll;
-        public int nDieDropUseItemRate;
-        public int nDieRedDropUseItemRate;
-        public bool boDieDropGold;
+        public int RepairItemDecDura;
+        public bool DieScatterBag;
+        public int DieScatterBagRate;
+        public bool DieRedScatterBagAll;
+        public int DieDropUseItemRate;
+        public int DieRedDropUseItemRate;
+        public bool DieDropGold;
         public bool boKillByHumanDropUseItem;
         public bool boKillByMonstDropUseItem;
         public bool boKickExpireHuman;
-        public int nGuildRankNameLen;
-        public int nGuildMemberMaxLimit;
-        public int nGuildNameLen;
+        public int GuildRankNameLen;
+        public int GuildMemberMaxLimit;
+        public int GuildNameLen;
         public int nCastleNameLen;
         /// <summary>
         /// 中毒几率
@@ -701,23 +707,23 @@ namespace GameSvr.Conf
         /// <summary>
         /// 攻击间隔(ms)
         /// </summary>
-        public int dwHitIntervalTime;
+        public int HitIntervalTime;
         /// <summary>
         /// 魔法间隔(ms)
         /// </summary>        
-        public int dwMagicHitIntervalTime;
+        public int MagicHitIntervalTime;
         /// <summary>
         /// 跑步间隔(ms)
         /// </summary>        
-        public int dwRunIntervalTime;
+        public int RunIntervalTime;
         /// <summary>
         /// 走路间隔(ms)
         /// </summary>        
-        public int dwWalkIntervalTime;
+        public int WalkIntervalTime;
         /// <summary>
         /// 换方向间隔(ms)
         /// </summary>        
-        public int dwTurnIntervalTime;
+        public int TurnIntervalTime;
         public bool boControlActionInterval;
         public bool boControlWalkHit;
         public bool boControlRunLongHit;
@@ -766,7 +772,7 @@ namespace GameSvr.Conf
         public int MonHptoExpLevel;
         public int MonHptoExpmax;
         public bool boUseFixExp;
-        public int nBaseExp;
+        public int BaseExp;
         public int nAddExp;
         public int nLimitExpLevel;
         public int nLimitExpValue;
@@ -839,7 +845,7 @@ namespace GameSvr.Conf
         /// <summary>
         /// 怪物刷新间隔
         /// </summary>
-        public int nProcessMonsterInterval;
+        public int ProcessMonsterInterval;
         public bool boCheckFail;
         public int nAppIconCrc;
         public bool boIDSocketConnected;
@@ -940,11 +946,11 @@ namespace GameSvr.Conf
         /// <summary>
         /// 寄售系统每次扣多少金币(默认10000金币)
         /// </summary>
-        public int nDecUserGameGold;
+        public int DecUserGameGold;
         /// <summary>
         /// 关闭游戏引擎的加速控制
         /// </summary>
-        public bool boSpeedHackCheck;
+        public bool CloseSpeedHackCheck;
         /// <summary>
         /// NPC名字颜色控制(0-255)
         /// </summary>
@@ -974,13 +980,13 @@ namespace GameSvr.Conf
             boTestServer = true;
             boServiceMode = false;
             boNonPKServer = false;
-            nTestLevel = 1;
-            nTestGold = 0;
-            nTestUserLimit = 1000;
-            nSendBlock = 1024;
-            nCheckBlock = 4069;
-            nAvailableBlock = 8000;
-            nGateLoad = 0;
+            TestLevel = 1;
+            TestGold = 0;
+            TestUserLimit = 1000;
+            SendBlock = 1024;
+            CheckBlock = 4069;
+            AvailableBlock = 8000;
+            GateLoad = 0;
             UserFull = 1000;
             ZenFastStep = 300;
             sGateAddr = "127.0.0.1";
@@ -994,12 +1000,12 @@ namespace GameSvr.Conf
             sLogServerAddr = "127.0.0.1";
             nLogServerPort = 10000;
             boDiscountForNightTime = false;
-            nHalfFeeStart = 2;
-            nHalfFeeEnd = 10;
-            boViewHackMessage = false;
-            boViewAdmissionFailure = false;
-            sBaseDir = ".\\Share\\";
-            sGuildDir = ".\\GuildBase\\Guilds\\";
+            HalfFeeStart = 2;
+            HalfFeeEnd = 10;
+            ViewHackMessage = false;
+            ViewAdmissionFailure = false;
+            BaseDir = ".\\Share\\";
+            GuildDir = ".\\GuildBase\\Guilds\\";
             sGuildFile = ".\\GuildBase\\GuildList.txt";
             sVentureDir = ".\\ShareV\\";
             sConLogDir = ".\\ConLog\\";
@@ -1111,10 +1117,10 @@ namespace GameSvr.Conf
             nKillHumanAddPKPoint = 100;
             nKillHumanDecLuckPoint = 500;
             dwDecLightItemDrugTime = 500;
-            nSafeZoneSize = 10;
-            nStartPointSize = 2;
+            SafeZoneSize = 10;
+            StartPointSize = 2;
             dwHumanGetMsgTime = 200;
-            nGroupMembersMax = 10;
+            GroupMembersMax = 10;
             WarrMon = 10;
             WizardMon = 10;
             TaosMon = 10;
@@ -1122,9 +1128,9 @@ namespace GameSvr.Conf
             sFireBallSkill = "火球术";
             sHealSkill = "治愈术";
             ReNewNameColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 0xB4, 0xFC };
-            dwReNewNameColorTime = 2000;
-            boReNewChangeColor = true;
-            boReNewLevelClearExp = true;
+            ReNewNameColorTime = 2000;
+            ReNewChangeColor = true;
+            ReNewLevelClearExp = true;
             BonusAbilofWarr = new TNakedAbility { DC = 17, MC = 20, SC = 20, AC = 20, MAC = 20, HP = 1, MP = 3, Hit = 20, Speed = 35, X2 = 0 };
             BonusAbilofWizard = new TNakedAbility { DC = 17, MC = 25, SC = 30, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 25, Speed = 35, X2 = 0 };
             BonusAbilofTaos = new TNakedAbility { DC = 20, MC = 30, SC = 17, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 30, Speed = 30, X2 = 0 };
@@ -1144,13 +1150,13 @@ namespace GameSvr.Conf
             UpgradeWeaponMCRate = 100;
             UpgradeWeaponMCTwoPointRate = 30;
             UpgradeWeaponMCThreePointRate = 200;
-            dwProcessMonstersTime = 10;
-            dwRegenMonstersTime = 200;
-            nMonGenRate = 10;
+            ProcessMonstersTime = 10;
+            RegenMonstersTime = 200;
+            MonGenRate = 10;
             ProcessMonRandRate = 5;
             ProcessMonLimitCount = 5;
             SoftVersionDate = 20020522;
-            boCanOldClientLogon = true;
+            CanOldClientLogon = true;
             ConsoleShowUserCountTime = 10 * 60 * 1000;
             ShowLineNoticeTime = 5 * 60 * 1000;
             LineNoticeColor = 2;
@@ -1179,18 +1185,18 @@ namespace GameSvr.Conf
             ShowRankLevelName = false;
             MonSayMsg = false;
             StartPermission = 0;
-            boKillHumanWinLevel = false;
-            boKilledLostLevel = false;
-            boKillHumanWinExp = false;
-            boKilledLostExp = false;
-            nKillHumanWinLevel = 1;
-            nKilledLostLevel = 1;
-            nKillHumanWinExp = 100000;
-            nKillHumanLostExp = 100000;
-            nHumanLevelDiffer = 10;
-            nMonsterPowerRate = 10;
-            nItemsPowerRate = 10;
-            nItemsACPowerRate = 10;
+            IsKillHumanWinLevel = false;
+            IsKilledLostLevel = false;
+            IsKillHumanWinExp = false;
+            IsKilledLostExp = false;
+            KillHumanWinLevel = 1;
+            KilledLostLevel = 1;
+            KillHumanWinExp = 100000;
+            KillHumanLostExp = 100000;
+            HumanLevelDiffer = 10;
+            MonsterPowerRate = 10;
+            ItemsPowerRate = 10;
+            ItemsACPowerRate = 10;
             SendOnlineCount = true;
             SendOnlineCountRate = 10;
             ClickNpcTime = 1000;  //NPC点击间隔
@@ -1227,10 +1233,10 @@ namespace GameSvr.Conf
             boRunGuard = false;
             boWarDisHumRun = false;
             boGMRunAll = true;
-            dwTryDealTime = 3000;
-            dwDealOKTime = 1000;
-            boCanNotGetBackDeal = true;
-            boDisableDeal = false;
+            TryDealTime = 3000;
+            DealOKTime = 1000;
+            CanNotGetBackDeal = true;
+            DisableDeal = false;
             nMasterOKLevel = 500;
             nMasterOKCreditPoint = 0;
             nMasterOKBonusPoint = 0;
@@ -1411,30 +1417,30 @@ namespace GameSvr.Conf
             GlobalVal = new int[500];
             GlobaDyMval = new int[500];
             GlobalAVal = new string[500];
-            nItemNumber = 0;
-            nItemNumberEx = int.MaxValue / 2;
-            nGuildRecallTime = 180;
-            nGroupRecallTime = 180;
-            boControlDropItem = false;
-            boInSafeDisableDrop = false;
-            nCanDropGold = 1000;
-            nCanDropPrice = 500;
-            boSendCustemMsg = true;
-            boSubkMasterSendMsg = true;
-            nSuperRepairPriceRate = 3; //特修价格倍数
-            nRepairItemDecDura = 30; //普通修理掉持久数(特持久上限减下限再除以此数为减的数值)
-            boDieScatterBag = true;
-            nDieScatterBagRate = 3;
-            boDieRedScatterBagAll = true;
-            nDieDropUseItemRate = 30;
-            nDieRedDropUseItemRate = 15;
-            boDieDropGold = false;
+            ItemNumber = 0;
+            ItemNumberEx = int.MaxValue / 2;
+            GuildRecallTime = 180;
+            GroupRecallTime = 180;
+            ControlDropItem = false;
+            InSafeDisableDrop = false;
+            CanDropGold = 1000;
+            CanDropPrice = 500;
+            SendCustemMsg = true;
+            SubkMasterSendMsg = true;
+            SuperRepairPriceRate = 3; //特修价格倍数
+            RepairItemDecDura = 30; //普通修理掉持久数(特持久上限减下限再除以此数为减的数值)
+            DieScatterBag = true;
+            DieScatterBagRate = 3;
+            DieRedScatterBagAll = true;
+            DieDropUseItemRate = 30;
+            DieRedDropUseItemRate = 15;
+            DieDropGold = false;
             boKillByHumanDropUseItem = false;
             boKillByMonstDropUseItem = true;
             boKickExpireHuman = false;
-            nGuildRankNameLen = 16;
-            nGuildMemberMaxLimit = 200;
-            nGuildNameLen = 16;
+            GuildRankNameLen = 16;
+            GuildMemberMaxLimit = 200;
+            GuildNameLen = 16;
             AttackPosionRate = 5;
             AttackPosionTime = 5;
             dwRevivalTime = 60 * 1000; //复活间隔时间
@@ -1522,11 +1528,11 @@ namespace GameSvr.Conf
             btSpeedControlMode = 0;
             nOverSpeedKickCount = 4;
             dwDropOverSpeed = 10;
-            dwHitIntervalTime = 900; //攻击间隔
-            dwMagicHitIntervalTime = 800; //魔法间隔
-            dwRunIntervalTime = 600; //跑步间隔
-            dwWalkIntervalTime = 600; //走路间隔
-            dwTurnIntervalTime = 600; //换方向间隔
+            HitIntervalTime = 900; //攻击间隔
+            MagicHitIntervalTime = 800; //魔法间隔
+            RunIntervalTime = 600; //跑步间隔
+            WalkIntervalTime = 600; //走路间隔
+            TurnIntervalTime = 600; //换方向间隔
             boControlActionInterval = true;
             boControlWalkHit = true;
             boControlRunLongHit = true;
@@ -1548,7 +1554,7 @@ namespace GameSvr.Conf
             MonHptoExpLevel = 100;
             MonHptoExpmax = 1;
             boUseFixExp = true;
-            nBaseExp = 100000000;
+            BaseExp = 100000000;
             nAddExp = 1000000;
             nLimitExpLevel = 1000;
             nLimitExpValue = 1;
@@ -1618,7 +1624,7 @@ namespace GameSvr.Conf
             nLevelValueOfWizardHPRate = 1.8;
             nLevelValueOfWarrHP = 4;
             nLevelValueOfWarrHPRate = 4.5;
-            nProcessMonsterInterval = 2;
+            ProcessMonsterInterval = 2;
             nDBSocketSendLen = 0;
             PermissionSystem = false;
             nRenewPercent = 60;
@@ -1641,8 +1647,8 @@ namespace GameSvr.Conf
             sAIConfigListFileName = @"D:\SystemModule\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             sHeroAIConfigListFileName = @"D:\SystemModule\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             boHeroAttackTarget = true;
-            nDecUserGameGold = 10000;
-            boSpeedHackCheck = true;
+            DecUserGameGold = 10000;
+            CloseSpeedHackCheck = true;
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
             sDBType = "MySQL";
             NpcNameColor = 255;

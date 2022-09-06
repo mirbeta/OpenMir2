@@ -98,7 +98,7 @@ namespace GameSvr.Command.Commands
             }
             PlayObject.SysMsg($"已传送{nRecallCount}个成员，{nNoRecallCount}个成员未被传送。", MsgColor.Green, MsgType.Hint);
             PlayObject.GroupRcallTick = HUtil32.GetTickCount();
-            PlayObject.GroupRcallTime = (short)M2Share.Config.nGuildRecallTime;
+            PlayObject.GroupRcallTime = (short)M2Share.Config.GuildRecallTime;
         }
     }
 }

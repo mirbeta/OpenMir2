@@ -409,7 +409,7 @@ namespace GameSvr.Npc
 
         protected override void SendCustemMsg(PlayObject PlayObject, string sMsg)
         {
-            if (!M2Share.Config.boSubkMasterSendMsg)
+            if (!M2Share.Config.SubkMasterSendMsg)
             {
                 PlayObject.SysMsg(M2Share.g_sSubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;

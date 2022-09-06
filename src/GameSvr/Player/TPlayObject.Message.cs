@@ -131,7 +131,7 @@ namespace GameSvr.Player
                     var wMin = DateTime.Now.Minute;
                     var wSec = DateTime.Now.Second;
                     var wMSec = DateTime.Now.Millisecond;
-                    if (M2Share.Config.boDiscountForNightTime && (wHour == M2Share.Config.nHalfFeeStart || wHour == M2Share.Config.nHalfFeeEnd))
+                    if (M2Share.Config.boDiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
                     {
                         if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - m_dwLogonTick) > 60000)
                         {
@@ -584,7 +584,7 @@ namespace GameSvr.Player
             {
                 M2Share.Log.Error(sExceptionMsg3);
             }
-            if (M2Share.Config.boReNewChangeColor && m_btReLevel > 0 && (HUtil32.GetTickCount() - m_dwReColorTick) > M2Share.Config.dwReNewNameColorTime)
+            if (M2Share.Config.ReNewChangeColor && m_btReLevel > 0 && (HUtil32.GetTickCount() - m_dwReColorTick) > M2Share.Config.ReNewNameColorTime)
             {
                 m_dwReColorTick = HUtil32.GetTickCount();
                 m_btReColorIdx++;
@@ -642,7 +642,7 @@ namespace GameSvr.Player
             {
                 if (m_nClientFlagMode == 1)
                 {
-                    M2Share.Config.nTestLevel = M2Share.RandomNumber.Random(M2Share.MAXUPLEVEL + 1);
+                    M2Share.Config.TestLevel = M2Share.RandomNumber.Random(M2Share.MAXUPLEVEL + 1);
                 }
                 else
                 {
@@ -741,7 +741,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sBunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -929,7 +929,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sBunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -980,7 +980,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sWalkOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1039,7 +1039,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sRunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1087,7 +1087,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sRunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1150,7 +1150,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sHitOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1205,7 +1205,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sBunOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -1260,7 +1260,7 @@ namespace GameSvr.Player
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.boViewHackMessage)
+                                    if (M2Share.Config.ViewHackMessage)
                                     {
                                         M2Share.Log.Warn(Format(GameCommandConst.g_sSpellOverSpeed, CharName, dwDelayTime, nMsgCount));
                                     }
@@ -2053,7 +2053,7 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                var nRate = PvpLevel() > 2 ? M2Share.Config.nDieRedDropUseItemRate : M2Share.Config.nDieDropUseItemRate;
+                var nRate = PvpLevel() > 2 ? M2Share.Config.DieRedDropUseItemRate : M2Share.Config.DieDropUseItemRate;
                 for (var i = 0; i < UseItems.Length; i++)
                 {
                     if (M2Share.RandomNumber.Random(nRate) != 0)

@@ -46,8 +46,8 @@ namespace GameSvr
             M2Share.Config.nLoadDBCount = 0;
             M2Share.Config.nSaveDBCount = 0;
             M2Share.Config.nDBQueryID = 0;
-            M2Share.Config.nItemNumber = 0;
-            M2Share.Config.nItemNumberEx = int.MaxValue / 2;
+            M2Share.Config.ItemNumber = 0;
+            M2Share.Config.ItemNumberEx = int.MaxValue / 2;
             M2Share.boStartReady = false;
             M2Share.boFilterWord = true;
             M2Share.Config.nWinLotteryCount = 0;
@@ -317,7 +317,7 @@ namespace GameSvr
             var sMapName = string.Empty;
             var sMapInfo = string.Empty;
             var sServerIndex = string.Empty;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sBaseDir, "!servertable.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();

@@ -25,7 +25,7 @@ namespace GameSvr.Player
                 {
                     return result;
                 }
-                if (!M2Share.Config.boSpeedHackCheck)
+                if (!M2Share.Config.CloseSpeedHackCheck)
                 {
                     if (!boLateDelivery)
                     {
@@ -35,7 +35,7 @@ namespace GameSvr.Player
                             return result;
                         }
                         m_boFilterAction = true;
-                        int dwAttackTime = HUtil32._MAX(0, M2Share.Config.dwHitIntervalTime - HitSpeed * M2Share.Config.ClientConf.btItemSpeed);
+                        int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ClientConf.btItemSpeed);
                         int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
                         if (dwCheckTime < dwAttackTime)
                         {
@@ -172,7 +172,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (!M2Share.Config.boSpeedHackCheck)
+            if (!M2Share.Config.CloseSpeedHackCheck)
             {
                 if (!boLateDelivery)
                 {
@@ -183,10 +183,10 @@ namespace GameSvr.Player
                     }
                     m_boFilterAction = true;
                     dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
-                    if (dwCheckTime < M2Share.Config.dwRunIntervalTime)
+                    if (dwCheckTime < M2Share.Config.RunIntervalTime)
                     {
                         m_dwMoveCount++;
-                        dwDelayTime = M2Share.Config.dwRunIntervalTime - dwCheckTime;
+                        dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
                         if (dwDelayTime > M2Share.Config.dwDropOverSpeed)
                         {
                             if (m_dwMoveCount >= 4)
@@ -264,7 +264,7 @@ namespace GameSvr.Player
                 return result;
             }
             var boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx);
-            if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.boSpeedHackCheck))
+            if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
@@ -277,13 +277,13 @@ namespace GameSvr.Player
                 {
                     m_dwMagicAttackCount++;
                     dwDelayTime = m_dwMagicAttackInterval - dwCheckTime;
-                    if (dwDelayTime > M2Share.Config.dwMagicHitIntervalTime / 3)
+                    if (dwDelayTime > M2Share.Config.MagicHitIntervalTime / 3)
                     {
                         if (m_dwMagicAttackCount >= 4)
                         {
                             m_dwMagicAttackTick = HUtil32.GetTickCount();
                             m_dwMagicAttackCount = 0;
-                            dwDelayTime = M2Share.Config.dwMagicHitIntervalTime / 3;
+                            dwDelayTime = M2Share.Config.MagicHitIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
                                 SysMsg("魔法忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
@@ -309,7 +309,7 @@ namespace GameSvr.Player
             SpellTick = HUtil32._MAX(0, SpellTick);
             if (!boIsWarrSkill)
             {
-                m_dwMagicAttackInterval = UserMagic.MagicInfo.dwDelayTime + M2Share.Config.dwMagicHitIntervalTime;
+                m_dwMagicAttackInterval = UserMagic.MagicInfo.dwDelayTime + M2Share.Config.MagicHitIntervalTime;
             }
             m_dwMagicAttackTick = HUtil32.GetTickCount();
             ushort nSpellPoint;
@@ -496,7 +496,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (nFlag != wIdent && (!M2Share.Config.boSpeedHackCheck))
+            if (nFlag != wIdent && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
@@ -505,17 +505,17 @@ namespace GameSvr.Player
                 }
                 m_boFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
-                if (dwCheckTime < M2Share.Config.dwRunIntervalTime)
+                if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
                     m_dwMoveCount++;
-                    dwDelayTime = M2Share.Config.dwRunIntervalTime - dwCheckTime;
-                    if (dwDelayTime > M2Share.Config.dwRunIntervalTime / 3)
+                    dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
+                    if (dwDelayTime > M2Share.Config.RunIntervalTime / 3)
                     {
                         if (m_dwMoveCount >= 4)
                         {
                             m_dwMoveTick = HUtil32.GetTickCount();
                             m_dwMoveCount = 0;
-                            dwDelayTime = M2Share.Config.dwRunIntervalTime / 3;
+                            dwDelayTime = M2Share.Config.RunIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
                                 SysMsg("跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
@@ -579,7 +579,7 @@ namespace GameSvr.Player
             {
                 return result; // 防麻
             }
-            if (!boLateDelivery && (!M2Share.Config.boSpeedHackCheck))
+            if (!boLateDelivery && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
@@ -588,17 +588,17 @@ namespace GameSvr.Player
                 }
                 m_boFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
-                if (dwCheckTime < M2Share.Config.dwWalkIntervalTime)
+                if (dwCheckTime < M2Share.Config.WalkIntervalTime)
                 {
                     m_dwMoveCount++;
-                    dwDelayTime = M2Share.Config.dwWalkIntervalTime - dwCheckTime;
-                    if (dwDelayTime > M2Share.Config.dwWalkIntervalTime / 3)
+                    dwDelayTime = M2Share.Config.WalkIntervalTime - dwCheckTime;
+                    if (dwDelayTime > M2Share.Config.WalkIntervalTime / 3)
                     {
                         if (m_dwMoveCount >= 4)
                         {
                             m_dwMoveTick = HUtil32.GetTickCount();
                             m_dwMoveCount = 0;
-                            dwDelayTime = M2Share.Config.dwWalkIntervalTime / 3;
+                            dwDelayTime = M2Share.Config.WalkIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
                                 SysMsg("走路忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);

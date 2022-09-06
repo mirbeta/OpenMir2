@@ -99,11 +99,11 @@ namespace GameSvr.Conf
             LoadInteger = ReadInteger("Exp", "BaseExp", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "BaseExp", M2Share.Config.nBaseExp);
+                WriteInteger("Exp", "BaseExp", M2Share.Config.BaseExp);
             }
             else
             {
-                M2Share.Config.nBaseExp = LoadInteger;
+                M2Share.Config.BaseExp = LoadInteger;
             }
             LoadInteger = ReadInteger("Exp", "AddExp", -1);
             if (LoadInteger < 0)

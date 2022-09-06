@@ -978,7 +978,7 @@ namespace GameSvr.UsrSystem
                 var dwCurrentTick = HUtil32.GetTickCount();
                 MonGenInfo monGen = null;
                 // 刷新怪物开始
-                if ((HUtil32.GetTickCount() - RegenMonstersTick) > M2Share.Config.dwRegenMonstersTime)
+                if ((HUtil32.GetTickCount() - RegenMonstersTick) > M2Share.Config.RegenMonstersTime)
                 {
                     RegenMonstersTick = HUtil32.GetTickCount();
                     if (CurrMonGenIdx < MonGenList.Count)
@@ -1004,7 +1004,7 @@ namespace GameSvr.UsrSystem
                         {
                             var nGenCount = monGen.nActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var nGenModCount = (monGen.nCount / M2Share.Config.nMonGenRate) * 10;
+                            var nGenModCount = (monGen.nCount / M2Share.Config.MonGenRate) * 10;
                             var map = M2Share.MapMgr.FindMap(monGen.sMapName);
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 boCanCreate = false;
@@ -1059,7 +1059,7 @@ namespace GameSvr.UsrSystem
                                             }
                                         }
                                     }
-                                    if (!monster.IsVisibleActive && (monster.ProcessRunCount < M2Share.Config.nProcessMonsterInterval))
+                                    if (!monster.IsVisibleActive && (monster.ProcessRunCount < M2Share.Config.ProcessMonsterInterval))
                                     {
                                         monster.ProcessRunCount++;
                                     }
@@ -2264,8 +2264,8 @@ namespace GameSvr.UsrSystem
             int I;
             if (M2Share.StartPointList.Count > 0)
             {
-                if (M2Share.StartPointList.Count > M2Share.Config.nStartPointSize)
-                    I = M2Share.RandomNumber.Random(M2Share.Config.nStartPointSize);
+                if (M2Share.StartPointList.Count > M2Share.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(M2Share.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
@@ -2673,8 +2673,8 @@ namespace GameSvr.UsrSystem
             if (M2Share.StartPointList.Count > 0)
             {
                 int I;
-                if (M2Share.StartPointList.Count > M2Share.Config.nStartPointSize)
-                    I = M2Share.RandomNumber.Random(M2Share.Config.nStartPointSize);
+                if (M2Share.StartPointList.Count > M2Share.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(M2Share.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);

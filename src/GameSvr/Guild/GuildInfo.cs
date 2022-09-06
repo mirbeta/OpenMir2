@@ -114,7 +114,7 @@ namespace GameSvr.Guild
             m_nFlourishing = 0;
             m_nChiefItemCount = 0;
             m_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
-            var sFileName = M2Share.Config.sGuildDir + sName + ".ini";
+            var sFileName = M2Share.Config.GuildDir + sName + ".ini";
             _guildConf = new GuildConf(sName, sFileName);
         }
 
@@ -214,7 +214,7 @@ namespace GameSvr.Guild
             TWarGuild GuildWar;
             GuildInfo Guild;
             TGuildRank GuildRank = null;
-            var sFileName = Path.Combine(M2Share.Config.sGuildDir, sGuildFileName);
+            var sFileName = Path.Combine(M2Share.Config.GuildDir, sGuildFileName);
             if (!File.Exists(sFileName))
             {
                 return false;
@@ -318,7 +318,7 @@ namespace GameSvr.Guild
                         {
                             if (s24.Length > 30)
                             {
-                                s24 = s24.Substring(0, M2Share.Config.nGuildRankNameLen);//限制职倍的长度
+                                s24 = s24.Substring(0, M2Share.Config.GuildRankNameLen);//限制职倍的长度
                             }
                             if (GuildRank == null)
                             {
@@ -373,12 +373,12 @@ namespace GameSvr.Guild
         {
             if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(M2Share.Config.sGuildDir + sGuildName + ".txt");
+                SaveGuildFile(M2Share.Config.GuildDir + sGuildName + ".txt");
                 SaveGuildConfig();
             }
             else
             {
-                SaveGuildFile(M2Share.Config.sGuildDir + sGuildName + '.' + M2Share.ServerIndex);
+                SaveGuildFile(M2Share.Config.GuildDir + sGuildName + '.' + M2Share.ServerIndex);
             }
         }
 
@@ -604,7 +604,7 @@ namespace GameSvr.Guild
             TGuildRank GuildRank;
             if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(M2Share.Config.sGuildDir, sGuildName, '.' + HUtil32.GetTickCount() + ".bak"));
+                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, sGuildName, '.' + HUtil32.GetTickCount() + ".bak"));
             }
             for (var i = 0; i < m_RankList.Count; i++)
             {
@@ -1082,7 +1082,7 @@ namespace GameSvr.Guild
 
         private bool GetMemgerIsFull()
         {
-            return Count >= M2Share.Config.nGuildMemberMaxLimit;
+            return Count >= M2Share.Config.GuildMemberMaxLimit;
         }
 
         public void StartTeamFight()

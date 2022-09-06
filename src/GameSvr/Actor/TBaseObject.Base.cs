@@ -880,7 +880,7 @@ namespace GameSvr.Actor
                     }
                     if (!guildwarkill)
                     {
-                        if ((M2Share.Config.boKillHumanWinLevel || M2Share.Config.boKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP) && LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                        if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP) && LastHiter.Race == Grobal2.RC_PLAYOBJECT)
                         {
                             (this as PlayObject).PKDie(LastHiter as PlayObject);
                         }
@@ -974,11 +974,11 @@ namespace GameSvr.Actor
                             {
                                 DropUseItems(null);
                             }
-                            if (M2Share.Config.boDieScatterBag)
+                            if (M2Share.Config.DieScatterBag)
                             {
                                 ScatterBagItems(null);
                             }
-                            if (M2Share.Config.boDieDropGold)
+                            if (M2Share.Config.DieDropGold)
                             {
                                 ScatterGolds(null);
                             }
