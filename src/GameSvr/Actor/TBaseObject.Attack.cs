@@ -154,7 +154,7 @@ namespace GameSvr.Actor
         /// <param name="UserItem"></param>
         private void CheckWeaponUpgradeStatus(ref TUserItem UserItem)
         {
-            if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.Config.nUpgradeWeaponMaxPoint)
+            if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
             {
                 if (UserItem.btValue[ItemAttr.WeaponUpgrade] == 1)
                 {

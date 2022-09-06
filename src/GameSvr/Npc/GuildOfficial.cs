@@ -126,7 +126,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                if (PlayObject.Gold >= M2Share.Config.nBuildGuildPrice)
+                if (PlayObject.Gold >= M2Share.Config.BuildGuildPrice)
                 {
                     UserItem = PlayObject.CheckItems(M2Share.Config.sWomaHorn);
                     if (UserItem == null)
@@ -150,7 +150,7 @@ namespace GameSvr.Npc
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.CharName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.sWomaHorn);
-                    PlayObject.DecGold(M2Share.Config.nBuildGuildPrice);
+                    PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
                     PlayObject.GoldChanged();
                     PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.CharName);
                     if (PlayObject.MyGuild != null)
@@ -185,9 +185,9 @@ namespace GameSvr.Npc
         {
             if (M2Share.GuildMgr.FindGuild(sGuildName) != null)
             {
-                if (PlayObject.Gold >= M2Share.Config.nGuildWarPrice)
+                if (PlayObject.Gold >= M2Share.Config.GuildWarPrice)
                 {
-                    PlayObject.DecGold(M2Share.Config.nGuildWarPrice);
+                    PlayObject.DecGold(M2Share.Config.GuildWarPrice);
                     PlayObject.GoldChanged();
                     PlayObject.ReQuestGuildWar(sGuildName);
                 }

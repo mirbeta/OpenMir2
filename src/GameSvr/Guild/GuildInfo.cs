@@ -1046,7 +1046,7 @@ namespace GameSvr.Guild
                         {
                             WarGuild = GuildWarList[i];
                             WarGuild.dwWarTick = HUtil32.GetTickCount();
-                            WarGuild.dwWarTime = M2Share.Config.dwGuildWarTime;// 10800000
+                            WarGuild.dwWarTime = M2Share.Config.GuildWarTime;// 10800000
                             SendGuildMsg("***" + Guild.sGuildName + "行会战争将持续三个小时。");
                             break;
                         }
@@ -1057,7 +1057,7 @@ namespace GameSvr.Guild
                         {
                             Guild = Guild,
                             dwWarTick = HUtil32.GetTickCount(),
-                            dwWarTime = M2Share.Config.dwGuildWarTime// 10800000
+                            dwWarTime = M2Share.Config.GuildWarTime// 10800000
                         };
                         GuildWarList.Add(WarGuild);
                         SendGuildMsg("***" + Guild.sGuildName + "行会战争开始(三个小时)");

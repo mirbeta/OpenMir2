@@ -150,7 +150,7 @@ namespace GameSvr.Castle
 
         public void LoadCastleList()
         {
-            var castleFile = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleFile);
+            var castleFile = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleFile);
             if (File.Exists(castleFile))
             {
                 using (var loadList = new StringList())
@@ -176,7 +176,7 @@ namespace GameSvr.Castle
 
         private void SaveCastleList()
         {
-            var castleDirPath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir);
+            var castleDirPath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir);
             if (!Directory.Exists(castleDirPath))
             {
                 Directory.CreateDirectory(castleDirPath);
@@ -186,7 +186,7 @@ namespace GameSvr.Castle
             {
                 loadList.Add(i.ToString());
             }
-            var savePath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleFile);
+            var savePath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleFile);
             loadList.SaveToFile(savePath);
         }
 

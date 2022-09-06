@@ -29,8 +29,8 @@ namespace GameSvr
     {
         public GameApp(ILogger<ServerBase> logger) : base(logger)
         {
-            M2Share.LocalDB = new LocalDB();
-            M2Share.CommonDB = new CommonDB();
+            M2Share.LocalDb = new LocalDB();
+            M2Share.CommonDb = new CommonDB();
             M2Share.g_nSockCountMax = 0;
             M2Share.g_nHumCountMax = 0;
             M2Share.dwUsrRotCountMin = 0;
@@ -65,7 +65,7 @@ namespace GameSvr
             M2Share.FindPath = new FindPath();
             M2Share.CommandMgr = new CommandManager();
             M2Share.CellObjectSystem = new CellObjectMgr();
-            M2Share.DataLogQueue = new();
+            M2Share.ItemLogQueue = new();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapMgr = new MapManager();
             M2Share.ItemUnit = new ItemUnit();
@@ -114,23 +114,19 @@ namespace GameSvr
             M2Share.sSellOffItemList = new List<TDealOffInfo>();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
         }
-        public void InitializeServer()
+
+        public void Initialize()
         {
             M2Share.LoadConfig();
             LoadServerTable();
             M2Share.CommandMgr.RegisterCommand();
-        }
-
-        public void Initialize()
-        {
-            int nCode;
             M2Share.LoadGameLogItemNameList();
             M2Share.LoadDenyIPAddrList();
             M2Share.LoadDenyAccountList();
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
             _logger.LogInformation("正在加载物品数据库...");
-            nCode = M2Share.CommonDB.LoadItemsDB();
+            var nCode = M2Share.CommonDb.LoadItemsDB();
             if (nCode < 0)
             {
                 _logger.LogInformation("物品数据库加载失败!!!" + "Code: " + nCode);
@@ -154,7 +150,7 @@ namespace GameSvr
             }
             _logger.LogInformation($"地图数据加载成功({M2Share.MapMgr.Maps.Count})...");
             _logger.LogInformation("正在加载怪物数据库...");
-            nCode = M2Share.CommonDB.LoadMonsterDB();
+            nCode = M2Share.CommonDb.LoadMonsterDB();
             if (nCode < 0)
             {
                 _logger.LogInformation("加载怪物数据库失败!!!" + "Code: " + nCode);
@@ -162,7 +158,7 @@ namespace GameSvr
             }
             _logger.LogInformation($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
             _logger.LogInformation("正在加载技能数据库...");
-            nCode = M2Share.CommonDB.LoadMagicDB();
+            nCode = M2Share.CommonDb.LoadMagicDB();
             if (nCode < 0)
             {
                 _logger.LogInformation("加载技能数据库失败!!!" + "Code: " + nCode);
@@ -170,7 +166,7 @@ namespace GameSvr
             }
             _logger.LogInformation($"加载技能数据库成功({M2Share.UserEngine.MagicList.Count})...");
             _logger.LogInformation("正在加载怪物刷新配置信息...");
-            nCode = M2Share.LocalDB.LoadMonGen();
+            nCode = M2Share.LocalDb.LoadMonGen();
             if (nCode < 0)
             {
                 _logger.LogInformation("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
@@ -194,7 +190,7 @@ namespace GameSvr
             M2Share.LoadUnMasterList();
             M2Share.LoadUnForceMasterList();
             _logger.LogInformation("正在加载捆装物品信息...");
-            nCode = M2Share.LocalDB.LoadUnbindList();
+            nCode = M2Share.LocalDb.LoadUnbindList();
             if (nCode < 0)
             {
                 _logger.LogInformation("加载捆装物品信息失败!!!" + "Code: " + nCode);
@@ -202,9 +198,9 @@ namespace GameSvr
             }
             _logger.LogInformation("加载捆装物品信息成功...");
             _logger.LogInformation("加载物品寄售系统...");
-            M2Share.CommonDB.LoadSellOffItemList();
+            M2Share.CommonDb.LoadSellOffItemList();
             _logger.LogInformation("正在加载任务地图信息...");
-            nCode = M2Share.LocalDB.LoadMapQuest();
+            nCode = M2Share.LocalDb.LoadMapQuest();
             if (nCode < 0)
             {
                 _logger.LogInformation("加载任务地图信息失败!!!");
@@ -212,7 +208,7 @@ namespace GameSvr
             }
             _logger.LogInformation("加载任务地图信息成功...");
             _logger.LogInformation("正在加载任务说明信息...");
-            nCode = M2Share.LocalDB.LoadQuestDiary();
+            nCode = M2Share.LocalDb.LoadQuestDiary();
             if (nCode < 0)
             {
                 _logger.LogInformation("加载任务说明信息失败!!!");
@@ -224,12 +220,12 @@ namespace GameSvr
                 _logger.LogInformation("加载文字过滤信息成功...");
             }
             _logger.LogInformation("正在加载公告提示信息...");
-            if (!M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.Config.sNoticeDir, "LineNotice.txt")))
+            if (!M2Share.LoadLineNotice(Path.Combine(M2Share.BasePath, M2Share.Config.sNoticeDir, "LineNotice.txt")))
             {
                 _logger.LogInformation("加载公告提示信息失败!!!");
             }
             _logger.LogInformation("加载公告提示信息成功...");
-            M2Share.LocalDB.LoadAdminList();
+            M2Share.LocalDb.LoadAdminList();
             _logger.LogInformation("管理员列表加载成功...");
             M2Share.GuildMgr.LoadGuildInfo();
             _logger.LogInformation("行会列表加载成功...");
@@ -259,18 +255,18 @@ namespace GameSvr
                 _logger.LogInformation("地图环境加载成功...");
                 MakeStoneMines();
                 _logger.LogInformation("矿物数据初始成功...");
-                M2Share.LocalDB.LoadMerchant();
+                M2Share.LocalDb.LoadMerchant();
                 _logger.LogInformation("交易NPC列表加载成功...");
                 if (!M2Share.Config.boVentureServer)
                 {
-                    M2Share.LocalDB.LoadGuardList();
+                    M2Share.LocalDb.LoadGuardList();
                     _logger.LogInformation("守卫列表加载成功...");
                 }
-                M2Share.LocalDB.LoadNpcs();
+                M2Share.LocalDb.LoadNpcs();
                 _logger.LogInformation("管理NPC列表加载成功...");
-                M2Share.LocalDB.LoadMakeItem();
+                M2Share.LocalDb.LoadMakeItem();
                 _logger.LogInformation("炼制物品信息加载成功...");
-                M2Share.LocalDB.LoadStartPoint();
+                M2Share.LocalDb.LoadStartPoint();
                 _logger.LogInformation("回城点配置加载成功...");
                 _logger.LogInformation("正在初始安全区光圈...");
                 M2Share.MapMgr.MakeSafePkZone();
@@ -291,12 +287,10 @@ namespace GameSvr
 
         private void MakeStoneMines()
         {
-            Envirnoment Envir;
-            var stoneList = new List<StoneMineEvent>();
             var mineMapList = M2Share.MapMgr.GetMineMaps();
             for (var i = 0; i < mineMapList.Count; i++)
             {
-                Envir = mineMapList[i];
+                var Envir = mineMapList[i];
                 for (var nW = 0; nW < Envir.Width; nW++)
                 {
                     for (var nH = 0; nH < Envir.Height; nH++)
@@ -305,10 +299,6 @@ namespace GameSvr
                         if (!mine.AddToMap)
                         {
                             mine.Dispose();
-                        }
-                        else
-                        {
-                            stoneList.Add(mine);
                         }
                     }
                 }
@@ -327,7 +317,7 @@ namespace GameSvr
             var sMapName = string.Empty;
             var sMapInfo = string.Empty;
             var sServerIndex = string.Empty;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sBaseDir, "!servertable.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sBaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();

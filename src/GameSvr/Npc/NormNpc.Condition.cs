@@ -1606,7 +1606,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckServerName(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            return QuestConditionInfo.sParam1 == M2Share.Config.sServerName;
+            return QuestConditionInfo.sParam1 == M2Share.Config.ServerName;
         }
 
         private bool ConditionOfCheckSlaveCount(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1681,7 +1681,7 @@ namespace GameSvr.Npc
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "PetData", PlayObject.CharName + ".txt");
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, "PetData", PlayObject.CharName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();

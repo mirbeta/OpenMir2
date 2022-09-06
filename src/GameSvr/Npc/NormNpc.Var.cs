@@ -1878,12 +1878,12 @@ namespace GameSvr.Npc
             switch (sVariable)
             {
                 case "$SERVERNAME":
-                    sValue = M2Share.Config.sServerName;
+                    sValue = M2Share.Config.ServerName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$SERVERIP":
-                    sValue = M2Share.Config.sServerIPaddr;
+                    sValue = M2Share.Config.ServerIPaddr;
                     nDataType = 0;
                     result = true;
                     return result;

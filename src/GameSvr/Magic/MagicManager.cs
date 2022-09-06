@@ -143,7 +143,7 @@ namespace GameSvr.Magic
             {
                 return false;
             }
-            if ((Math.Abs(PlayObject.CurrX - nTargetX) > M2Share.Config.nMagicAttackRage) || (Math.Abs(PlayObject.CurrY - nTargetY) > M2Share.Config.nMagicAttackRage))
+            if ((Math.Abs(PlayObject.CurrX - nTargetX) > M2Share.Config.MagicAttackRage) || (Math.Abs(PlayObject.CurrY - nTargetY) > M2Share.Config.MagicAttackRage))
             {
                 return false;
             }
@@ -710,11 +710,11 @@ namespace GameSvr.Magic
                         {
                             if (M2Share.RandomNumber.Random(3) == 0)
                             {
-                                if (M2Share.RandomNumber.Random(BaseObject.Abil.Level + 20 + nMagicLevel * 5) > TargeTBaseObject.Abil.Level + M2Share.Config.nMagTammingTargetLevel)
+                                if (M2Share.RandomNumber.Random(BaseObject.Abil.Level + 20 + nMagicLevel * 5) > TargeTBaseObject.Abil.Level + M2Share.Config.MagTammingTargetLevel)
                                 {
-                                    if (!TargeTBaseObject.NoTame && TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.nMagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.nMagTammingCount)
+                                    if (!TargeTBaseObject.NoTame && TargeTBaseObject.LifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.Abil.Level < M2Share.Config.MagTammingLevel && BaseObject.SlaveList.Count < M2Share.Config.nMagTammingCount)
                                     {
-                                        int n14 = TargeTBaseObject.MWAbil.MaxHP / M2Share.Config.nMagTammingHPRate;
+                                        int n14 = TargeTBaseObject.MWAbil.MaxHP / M2Share.Config.MagTammingHPRate;
                                         if (n14 <= 2)
                                         {
                                             n14 = 2;
@@ -832,7 +832,7 @@ namespace GameSvr.Magic
             BaseObject.SetTargetCreat(TargeTBaseObject);
             if (M2Share.RandomNumber.Random(2) + (BaseObject.Abil.Level - 1) > TargeTBaseObject.Abil.Level)
             {
-                if (TargeTBaseObject.Abil.Level < M2Share.Config.nMagTurnUndeadLevel)
+                if (TargeTBaseObject.Abil.Level < M2Share.Config.MagTurnUndeadLevel)
                 {
                     var n14 = BaseObject.Abil.Level - TargeTBaseObject.Abil.Level;
                     if (M2Share.RandomNumber.Random(100) < (nLevel << 3) - nLevel + 15 + n14)

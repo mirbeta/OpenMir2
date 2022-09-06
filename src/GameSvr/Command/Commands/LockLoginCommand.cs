@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void LockLogin(PlayObject PlayObject)
         {
-            if (!M2Share.Config.boLockHumanLogin)
+            if (!M2Share.Config.LockHumanLogin)
             {
                 PlayObject.SysMsg("本服务器还没有启用登录锁功能!!!", MsgColor.Red, MsgType.Hint);
                 return;

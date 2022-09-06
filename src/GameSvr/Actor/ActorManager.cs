@@ -91,7 +91,7 @@ namespace GameSvr.Actor
                     }
                     if (actor.Ghost && actor.GhostTick > 0)
                     {
-                        if ((HUtil32.GetTickCount() - actor.DeathTick) > M2Share.Config.dwMakeGhostTime) //超过清理时间
+                        if ((HUtil32.GetTickCount() - actor.DeathTick) > M2Share.Config.MakeGhostTime) //超过清理时间
                         {
                             Remove(actorId);
                         }

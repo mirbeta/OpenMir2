@@ -120,7 +120,7 @@ namespace GameSvr.Services
         public void SendOnlineHumCountMsg(int nCount)
         {
             const string sFormatMsg = "({0}/{1}/{2}/{3})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.sServerName, M2Share.ServerIndex, nCount));
+            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount));
         }
 
         public void Run()

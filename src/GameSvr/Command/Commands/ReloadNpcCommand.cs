@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
             NormNpc NPC;
             if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0)
             {
-                M2Share.LocalDB.ReLoadMerchants();
+                M2Share.LocalDb.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
                 PlayObject.SysMsg("交易NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
                 M2Share.UserEngine.ReloadNpcList();

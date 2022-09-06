@@ -115,7 +115,7 @@ namespace GameSvr.Script
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
                     var sCallScriptFile = GetCallScriptPath(sLable.Trim());
                     var s18 = sLine.Trim();
-                    var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "QuestDiary", sCallScriptFile);
+                    var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, "QuestDiary", sCallScriptFile);
                     if (sCallScriptDict.ContainsKey(sFileName))
                     {
                         callList[i] = "#ACT";
@@ -180,7 +180,7 @@ namespace GameSvr.Script
                     if (HUtil32.CompareLStr(s14, "#INCLUDE", "#INCLUDE".Length))
                     {
                         s28 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
-                        s28 = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, "Defines", s28);
+                        s28 = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, "Defines", s28);
                         if (File.Exists(s28))
                         {
                             StringList LoadStrList = new StringList();
@@ -1473,7 +1473,7 @@ namespace GameSvr.Script
             List<TQuestActionInfo> PlayDiceList = null;
             var n6C = 0;
             var n70 = 0;
-            var sScritpFileName = Path.Combine(M2Share.sConfigPath, M2Share.Config.sEnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
+            var sScritpFileName = Path.Combine(M2Share.BasePath, M2Share.Config.sEnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
             if (File.Exists(sScritpFileName))
             {
                 sCallScriptDict.Clear();

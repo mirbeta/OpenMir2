@@ -32,7 +32,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.Config.boShowMakeItemMsg)
+            if (M2Share.Config.ShowMakeItemMsg)
             {
                 M2Share.Log.Warn(string.Format(sOutFormatMsg, PlayObject.CharName, m_PlayObject.CharName, m_PlayObject.Permission, nPerission));
             }

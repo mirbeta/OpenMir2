@@ -2,14 +2,14 @@
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Configs
+namespace GameSvr.Conf
 {
     public class GameSvrConfig
     {
         public string sDBType;
-        public string sConnctionString;
-        public string sServerName;
-        public string sServerIPaddr;
+        public string ConnctionString;
+        public string ServerName;
+        public string ServerIPaddr;
         public string sWebSite;
         public string sBbsSite;
         public string sClientDownload;
@@ -41,11 +41,11 @@ namespace GameSvr.Configs
         /// <summary>
         /// 服务器上线人数（默认1000）
         /// </summary>
-        public int nUserFull;
+        public int UserFull;
         /// <summary>
         /// 怪物行动速度(默认300)
         /// </summary>
-        public int nZenFastStep;
+        public int ZenFastStep;
         public string sGateAddr;
         public int nGatePort;
         public string sDBAddr;
@@ -114,27 +114,27 @@ namespace GameSvr.Configs
         public byte[] WideAttack;
         public byte[] CrsAttack;
         public byte[,,] SpitMap;
-        public string sHomeMap;
-        public short nHomeX;
-        public short nHomeY;
-        public string sRedHomeMap;
-        public short nRedHomeX;
-        public short nRedHomeY;
-        public string sRedDieHomeMap;
-        public short nRedDieHomeX;
-        public short nRedDieHomeY;
-        public bool boJobHomePoint;
-        public string sWarriorHomeMap;
-        public short nWarriorHomeX;
-        public short nWarriorHomeY;
-        public string sWizardHomeMap;
-        public short nWizardHomeX;
-        public short nWizardHomeY;
-        public string sTaoistHomeMap;
-        public short nTaoistHomeX;
-        public short nTaoistHomeY;
-        public int dwDecPkPointTime;
-        public int nDecPkPointCount;
+        public string HomeMap;
+        public short HomeX;
+        public short HomeY;
+        public string RedHomeMap;
+        public short RedHomeX;
+        public short RedHomeY;
+        public string RedDieHomeMap;
+        public short RedDieHomeX;
+        public short RedDieHomeY;
+        public bool JobHomePoint;
+        public string WarriorHomeMap;
+        public short WarriorHomeX;
+        public short WarriorHomeY;
+        public string WizardHomeMap;
+        public short WizardHomeX;
+        public short WizardHomeY;
+        public string TaoistHomeMap;
+        public short TaoistHomeX;
+        public short TaoistHomeY;
+        public int DecPkPointTime;
+        public int DecPkPointCount;
         public int dwPKFlagTime;
         public int nKillHumanAddPKPoint;
         public int nKillHumanDecLuckPoint;
@@ -143,10 +143,10 @@ namespace GameSvr.Configs
         public int nStartPointSize;
         public int dwHumanGetMsgTime;
         public int nGroupMembersMax;
-        public int nWarrMon;
-        public int nWizardMon;
-        public int nTaosMon;
-        public int nMonHum;
+        public int WarrMon;
+        public int WizardMon;
+        public int TaosMon;
+        public int MonHum;
         public string sFireBallSkill;
         public string sHealSkill;
         public string sRingSkill;
@@ -163,93 +163,93 @@ namespace GameSvr.Configs
         /// <summary>
         /// 武器升级做高点数
         /// </summary>
-        public int nUpgradeWeaponMaxPoint;
+        public int UpgradeWeaponMaxPoint;
         /// <summary>
         /// 武器升级价格
         /// </summary>
-        public int nUpgradeWeaponPrice;
+        public int UpgradeWeaponPrice;
         /// <summary>
         /// 武器升级所需时间（秒）
         /// </summary>
-        public int dwUPgradeWeaponGetBackTime;
+        public int UPgradeWeaponGetBackTime;
         /// <summary>
         /// 清理多少天内没取走的升级数据
         /// </summary>
-        public int nClearExpireUpgradeWeaponDays;
+        public int ClearExpireUpgradeWeaponDays;
         /// <summary>
         /// 武器升级攻击力成功几率
         /// </summary>
-        public int nUpgradeWeaponDCRate;
+        public int UpgradeWeaponDCRate;
         /// <summary>
         /// 武器升级攻击力成功几率
         /// </summary>
-        public int nUpgradeWeaponDCTwoPointRate;
+        public int UpgradeWeaponDCTwoPointRate;
         /// <summary>
         /// 武器升级攻击力成功几率
         /// </summary>
-        public int nUpgradeWeaponDCThreePointRate;
+        public int UpgradeWeaponDCThreePointRate;
         /// <summary>
         /// 武器升级道术成功几率
         /// </summary>
-        public int nUpgradeWeaponSCRate;
+        public int UpgradeWeaponSCRate;
         /// <summary>
         /// 武器升级道术成功几率
         /// </summary>
-        public int nUpgradeWeaponSCTwoPointRate;
+        public int UpgradeWeaponSCTwoPointRate;
         /// <summary>
         /// 武器升级道术成功几率
         /// </summary>
-        public int nUpgradeWeaponSCThreePointRate;
+        public int UpgradeWeaponSCThreePointRate;
         /// <summary>
         /// 武器升级魔法成功几率
         /// </summary>
-        public int nUpgradeWeaponMCRate;
+        public int UpgradeWeaponMCRate;
         /// <summary>
         /// 武器升级魔法成功几率
         /// </summary>
-        public int nUpgradeWeaponMCTwoPointRate;
+        public int UpgradeWeaponMCTwoPointRate;
         /// <summary>
         /// 武器升级魔法成功几率
         /// </summary>
-        public int nUpgradeWeaponMCThreePointRate;
+        public int UpgradeWeaponMCThreePointRate;
         public int dwProcessMonstersTime;
         public int dwRegenMonstersTime;
         public int nMonGenRate;
-        public int nProcessMonRandRate;
-        public int nProcessMonLimitCount;
-        public int nSoftVersionDate;
+        public int ProcessMonRandRate;
+        public int ProcessMonLimitCount;
+        public int SoftVersionDate;
         public bool boCanOldClientLogon;
-        public int dwConsoleShowUserCountTime;
-        public int dwShowLineNoticeTime;
-        public int nLineNoticeColor;
-        public int nStartCastleWarDays;
-        public int nStartCastlewarTime;
-        public int dwShowCastleWarEndMsgTime;
-        public int dwCastleWarTime;
-        public int dwGetCastleTime;
-        public int dwGuildWarTime;
-        public int nBuildGuildPrice;
-        public int nGuildWarPrice;
-        public int nMakeDurgPrice;
+        public int ConsoleShowUserCountTime;
+        public int ShowLineNoticeTime;
+        public int LineNoticeColor;
+        public int StartCastleWarDays;
+        public int StartCastlewarTime;
+        public int ShowCastleWarEndMsgTime;
+        public int CastleWarTime;
+        public int GetCastleTime;
+        public int GuildWarTime;
+        public int BuildGuildPrice;
+        public int GuildWarPrice;
+        public int MakeDurgPrice;
         /// <summary>
         /// 玩家最大金币上限
         /// </summary>
-        public int nHumanMaxGold;
-        public int nHumanTryModeMaxGold;
-        public int nTryModeLevel;
-        public bool boTryModeUseStorage;
-        public int nCanShoutMsgLevel;
-        public bool boShowMakeItemMsg;
-        public bool boShutRedMsgShowGMName;
-        public int nSayMsgMaxLen;
-        public int dwSayMsgTime;
-        public int nSayMsgCount;
-        public int dwDisableSayMsgTime;
-        public int nSayRedMsgMaxLen;
-        public bool boShowGuildName;
-        public bool boShowRankLevelName;
-        public bool boMonSayMsg;
-        public int nStartPermission;
+        public int HumanMaxGold;
+        public int HumanTryModeMaxGold;
+        public int TryModeLevel;
+        public bool TryModeUseStorage;
+        public int CanShoutMsgLevel;
+        public bool ShowMakeItemMsg;
+        public bool ShutRedMsgShowGMName;
+        public int SayMsgMaxLen;
+        public int SayMsgTime;
+        public int SayMsgCount;
+        public int DisableSayMsgTime;
+        public int SayRedMsgMaxLen;
+        public bool ShowGuildName;
+        public bool ShowRankLevelName;
+        public bool MonSayMsg;
+        public int StartPermission;
         public bool boKillHumanWinLevel;
         public bool boKilledLostLevel;
         public bool boKillHumanWinExp;
@@ -265,94 +265,94 @@ namespace GameSvr.Configs
         /// <summary>
         /// 是否显示在线人数
         /// </summary>
-        public bool boSendOnlineCount;
-        public int nSendOnlineCountRate;
+        public bool SendOnlineCount;
+        public int SendOnlineCountRate;
         /// <summary>
         /// NPC点击间隔
         /// </summary>
-        public int dwClickNpcTime;
+        public int ClickNpcTime;
         /// <summary>
         /// 踢出未登陆人物
         /// </summary>
-        public int dwthcHumanTime;
+        public int ThcHumanTime;
         /// <summary>
         /// 包裹刷新间隔
         /// </summary>
-        public int dwQueryBagItemsTick;
+        public int QueryBagItemsTick;
         /// <summary>
         /// 发送在线人数间隔时间
         /// </summary>
-        public int dwSendOnlineTime;
-        public int dwSaveHumanRcdTime;
-        public int dwHumanFreeDelayTime;
-        public int dwMakeGhostTime;
-        public int dwClearDropOnFloorItemTime;
-        public int dwFloorItemCanPickUpTime;
+        public int SendOnlineTime;
+        public int SaveHumanRcdTime;
+        public int HumanFreeDelayTime;
+        public int MakeGhostTime;
+        public int ClearDropOnFloorItemTime;
+        public int FloorItemCanPickUpTime;
         /// <summary>
         /// 是否启用密码保护系统
         /// </summary>
-        public bool boPasswordLockSystem;
+        public bool PasswordLockSystem;
         /// <summary>
         /// 是否锁定交易操作
         /// </summary>
-        public bool boLockDealAction;
+        public bool LockDealAction;
         /// <summary>
         /// 是否锁定扔物品操作
         /// </summary>
-        public bool boLockDropAction;
+        public bool LockDropAction;
         /// <summary>
         /// 是否锁定取仓库操作
         /// </summary>
-        public bool boLockGetBackItemAction;
+        private bool LockGetBackItemAction;
         /// <summary>
         /// 是否锁定走操作
         /// </summary>
-        public bool boLockHumanLogin;
+        public bool LockHumanLogin;
         /// <summary>
         /// 是否锁定走操作
         /// </summary>
-        public bool boLockWalkAction;
+        public bool LockWalkAction;
         /// <summary>
         /// 是否锁定跑操作
         /// </summary>
-        public bool boLockRunAction;
+        public bool LockRunAction;
         /// <summary>
         /// 是否锁定攻击操作
         /// </summary>
-        public bool boLockHitAction;
+        public bool LockHitAction;
         /// <summary>
         /// 是否锁定魔法操作
         /// </summary>
-        public bool boLockSpellAction;
+        public bool LockSpellAction;
         /// <summary>
         /// 是否锁定发信息操作
         /// </summary>
-        public bool boLockSendMsgAction;
+        public bool LockSendMsgAction;
         /// <summary>
         /// 是否锁定使用物品操作
         /// </summary>
-        public bool boLockUserItemAction;
+        public bool LockUserItemAction;
         /// <summary>
         /// 锁定时进入隐身状态
         /// </summary>
-        public bool boLockInObModeAction;
+        public bool LockInObModeAction;
         /// <summary>
         /// 输入密码错误超过 指定次数则锁定密码
         /// </summary>
-        public int nPasswordErrorCountLock;
+        public int PasswordErrorCountLock;
         /// <summary>
         /// 输入密码错误超过限制则踢下线
         /// </summary>
-        public bool boPasswordErrorKick;
+        public bool PasswordErrorKick;
         /// <summary>
         /// 消息发送范围
         /// </summary>
-        public byte nSendRefMsgRange;
+        public byte SendRefMsgRange;
         public bool boDecLampDura;
-        public bool boHungerSystem;
-        public bool boHungerDecHP;
-        public bool boHungerDecPower;
-        public bool boDiableHumanRun;
+        public bool HungerSystem;
+        public bool HungerDecHP;
+        public bool HungerDecPower;
+        public bool DiableHumanRun;
         public bool boRunHuman;
         public bool boRunMon;
         public bool boRunNpc;
@@ -500,21 +500,21 @@ namespace GameSvr.Configs
         /// <summary>
         /// 客户端时间
         /// </summary>
-        public bool boSendCurTickCount;
+        public bool SendCurTickCount;
         /// <summary>
         /// 挖矿命中率
         /// </summary>        
-        public int nMakeMineHitRate;
+        public int MakeMineHitRate;
         /// <summary>
         /// 挖矿率
         /// </summary>        
-        public int nMakeMineRate;
-        public int nStoneTypeRate;
-        public int nStoneTypeRateMin;
-        public int nGoldStoneMin;
-        public int nGoldStoneMax;
-        public int nSilverStoneMin;
-        public int nSilverStoneMax;
+        public int MakeMineRate;
+        public int StoneTypeRate;
+        public int StoneTypeRateMin;
+        public int GoldStoneMin;
+        public int GoldStoneMax;
+        public int SilverStoneMin;
+        public int SilverStoneMax;
         public int nSteelStoneMin;
         public int nSteelStoneMax;
         public int nBlackStoneMin;
@@ -622,7 +622,7 @@ namespace GameSvr.Configs
         /// <summary>
         /// 魔法锁定范围
         /// </summary>
-        public int nMagicAttackRage;
+        public int MagicAttackRage;
         public bool nBoBoall;
         /// <summary>
         /// 物品掉落范围
@@ -652,19 +652,19 @@ namespace GameSvr.Configs
         /// <summary>
         /// 圣言怪物等级限制
         /// </summary>
-        public int nMagTurnUndeadLevel;
+        public int MagTurnUndeadLevel;
         /// <summary>
         /// 诱惑之光怪物等级限制
         /// </summary>        
-        public int nMagTammingLevel;
+        public int MagTammingLevel;
         /// <summary>
         /// 诱惑怪物相差等级机率，此数字越小机率越大；
         /// </summary>        
-        public int nMagTammingTargetLevel;
+        public int MagTammingTargetLevel;
         /// <summary>
         /// 成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
         /// </summary>        
-        public int nMagTammingHPRate;
+        public int MagTammingHPRate;
         public int nMagTammingCount;
         public int nMabMabeHitRandRate;
         public int nMabMabeHitMinLvLimit;
@@ -952,8 +952,8 @@ namespace GameSvr.Configs
 
         public GameSvrConfig()
         {
-            sServerName = "SKY引擎";
-            sServerIPaddr = "127.0.0.1";
+            ServerName = "SKY引擎";
+            ServerIPaddr = "127.0.0.1";
             sWebSite = "http=//www.jsym2.com";
             sBbsSite = "http=//bbs.jsym2.com";
             sClientDownload = "http=//www.jsym2.com";
@@ -981,8 +981,8 @@ namespace GameSvr.Configs
             nCheckBlock = 4069;
             nAvailableBlock = 8000;
             nGateLoad = 0;
-            nUserFull = 1000;
-            nZenFastStep = 300;
+            UserFull = 1000;
+            ZenFastStep = 300;
             sGateAddr = "127.0.0.1";
             nGatePort = 5000;
             sDBAddr = "127.0.0.1";
@@ -1086,27 +1086,27 @@ namespace GameSvr.Configs
                 {0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0}}
                 };
-            sHomeMap = "0";
-            nHomeX = 289;
-            nHomeY = 618;
-            sRedHomeMap = "3";
-            nRedHomeX = 845;
-            nRedHomeY = 674;
-            sRedDieHomeMap = "3";
-            nRedDieHomeX = 839;
-            nRedDieHomeY = 668;
-            boJobHomePoint = false;
-            sWarriorHomeMap = "0";
-            nWarriorHomeX = 289;
-            nWarriorHomeY = 618;
-            sWizardHomeMap = "0";
-            nWizardHomeX = 650;
-            nWizardHomeY = 631;
-            sTaoistHomeMap = "0";
-            nTaoistHomeX = 334;
-            nTaoistHomeY = 266;
-            dwDecPkPointTime = 2 * 60 * 1000;
-            nDecPkPointCount = 1;
+            HomeMap = "0";
+            HomeX = 289;
+            HomeY = 618;
+            RedHomeMap = "3";
+            RedHomeX = 845;
+            RedHomeY = 674;
+            RedDieHomeMap = "3";
+            RedDieHomeX = 839;
+            RedDieHomeY = 668;
+            JobHomePoint = false;
+            WarriorHomeMap = "0";
+            WarriorHomeX = 289;
+            WarriorHomeY = 618;
+            WizardHomeMap = "0";
+            WizardHomeX = 650;
+            WizardHomeY = 631;
+            TaoistHomeMap = "0";
+            TaoistHomeX = 334;
+            TaoistHomeY = 266;
+            DecPkPointTime = 2 * 60 * 1000;
+            DecPkPointCount = 1;
             dwPKFlagTime = 60 * 1000;
             nKillHumanAddPKPoint = 100;
             nKillHumanDecLuckPoint = 500;
@@ -1115,10 +1115,10 @@ namespace GameSvr.Configs
             nStartPointSize = 2;
             dwHumanGetMsgTime = 200;
             nGroupMembersMax = 10;
-            nWarrMon = 10;
-            nWizardMon = 10;
-            nTaosMon = 10;
-            nMonHum = 10;
+            WarrMon = 10;
+            WizardMon = 10;
+            TaosMon = 10;
+            MonHum = 10;
             sFireBallSkill = "火球术";
             sHealSkill = "治愈术";
             ReNewNameColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 0xB4, 0xFC };
@@ -1131,54 +1131,54 @@ namespace GameSvr.Configs
             NakedAbilofWarr = new TNakedAbility { DC = 512, MC = 2560, SC = 20, AC = 768, MAC = 1280, HP = 0, MP = 0, Hit = 0, Speed = 0, X2 = 0 };
             NakedAbilofWizard = new TNakedAbility { DC = 512, MC = 512, SC = 2560, AC = 1280, MAC = 768, HP = 0, MP = 0, Hit = 5, Speed = 0, X2 = 0 };
             NakedAbilofTaos = new TNakedAbility { DC = 20, MC = 30, SC = 17, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 30, Speed = 30, X2 = 0 };
-            nUpgradeWeaponMaxPoint = 20;
-            nUpgradeWeaponPrice = 10000;
-            dwUPgradeWeaponGetBackTime = 60 * 60 * 1000;
-            nClearExpireUpgradeWeaponDays = 8;
-            nUpgradeWeaponDCRate = 100;
-            nUpgradeWeaponDCTwoPointRate = 30;
-            nUpgradeWeaponDCThreePointRate = 200;
-            nUpgradeWeaponSCRate = 100;
-            nUpgradeWeaponSCTwoPointRate = 30;
-            nUpgradeWeaponSCThreePointRate = 200;
-            nUpgradeWeaponMCRate = 100;
-            nUpgradeWeaponMCTwoPointRate = 30;
-            nUpgradeWeaponMCThreePointRate = 200;
+            UpgradeWeaponMaxPoint = 20;
+            UpgradeWeaponPrice = 10000;
+            UPgradeWeaponGetBackTime = 60 * 60 * 1000;
+            ClearExpireUpgradeWeaponDays = 8;
+            UpgradeWeaponDCRate = 100;
+            UpgradeWeaponDCTwoPointRate = 30;
+            UpgradeWeaponDCThreePointRate = 200;
+            UpgradeWeaponSCRate = 100;
+            UpgradeWeaponSCTwoPointRate = 30;
+            UpgradeWeaponSCThreePointRate = 200;
+            UpgradeWeaponMCRate = 100;
+            UpgradeWeaponMCTwoPointRate = 30;
+            UpgradeWeaponMCThreePointRate = 200;
             dwProcessMonstersTime = 10;
             dwRegenMonstersTime = 200;
             nMonGenRate = 10;
-            nProcessMonRandRate = 5;
-            nProcessMonLimitCount = 5;
-            nSoftVersionDate = 20020522;
+            ProcessMonRandRate = 5;
+            ProcessMonLimitCount = 5;
+            SoftVersionDate = 20020522;
             boCanOldClientLogon = true;
-            dwConsoleShowUserCountTime = 10 * 60 * 1000;
-            dwShowLineNoticeTime = 5 * 60 * 1000;
-            nLineNoticeColor = 2;
-            nStartCastleWarDays = 4;
-            nStartCastlewarTime = 20;
-            dwShowCastleWarEndMsgTime = 10 * 60 * 1000;
-            dwCastleWarTime = 3 * 60 * 60 * 1000;
-            dwGetCastleTime = 10 * 60 * 1000;
-            dwGuildWarTime = 3 * 60 * 60 * 1000;
-            nBuildGuildPrice = 1000000;
-            nGuildWarPrice = 30000;
-            nMakeDurgPrice = 100;
-            nHumanMaxGold = 10000000;
-            nHumanTryModeMaxGold = 100000;
-            nTryModeLevel = 7;
-            boTryModeUseStorage = false;
-            nCanShoutMsgLevel = 7;
-            boShowMakeItemMsg = false;
-            boShutRedMsgShowGMName = false;
-            nSayMsgMaxLen = 80;
-            dwSayMsgTime = 3 * 1000;
-            nSayMsgCount = 2;
-            dwDisableSayMsgTime = 60 * 1000;
-            nSayRedMsgMaxLen = 255;
-            boShowGuildName = true;
-            boShowRankLevelName = false;
-            boMonSayMsg = false;
-            nStartPermission = 0;
+            ConsoleShowUserCountTime = 10 * 60 * 1000;
+            ShowLineNoticeTime = 5 * 60 * 1000;
+            LineNoticeColor = 2;
+            StartCastleWarDays = 4;
+            StartCastlewarTime = 20;
+            ShowCastleWarEndMsgTime = 10 * 60 * 1000;
+            CastleWarTime = 3 * 60 * 60 * 1000;
+            GetCastleTime = 10 * 60 * 1000;
+            GuildWarTime = 3 * 60 * 60 * 1000;
+            BuildGuildPrice = 1000000;
+            GuildWarPrice = 30000;
+            MakeDurgPrice = 100;
+            HumanMaxGold = 10000000;
+            HumanTryModeMaxGold = 100000;
+            TryModeLevel = 7;
+            TryModeUseStorage = false;
+            CanShoutMsgLevel = 7;
+            ShowMakeItemMsg = false;
+            ShutRedMsgShowGMName = false;
+            SayMsgMaxLen = 80;
+            SayMsgTime = 3 * 1000;
+            SayMsgCount = 2;
+            DisableSayMsgTime = 60 * 1000;
+            SayRedMsgMaxLen = 255;
+            ShowGuildName = true;
+            ShowRankLevelName = false;
+            MonSayMsg = false;
+            StartPermission = 0;
             boKillHumanWinLevel = false;
             boKilledLostLevel = false;
             boKillHumanWinExp = false;
@@ -1191,36 +1191,36 @@ namespace GameSvr.Configs
             nMonsterPowerRate = 10;
             nItemsPowerRate = 10;
             nItemsACPowerRate = 10;
-            boSendOnlineCount = true;
-            nSendOnlineCountRate = 10;
-            dwClickNpcTime = 1000;  //NPC点击间隔
-            dwQueryBagItemsTick = 2 * 60 * 1000;  //包裹刷新间隔
-            dwSendOnlineTime = 5 * 60 * 1000;
-            dwSaveHumanRcdTime = 10 * 60 * 1000;
-            dwHumanFreeDelayTime = 5 * 60 * 1000;
-            dwMakeGhostTime = 3 * 60 * 1000;
-            dwClearDropOnFloorItemTime = 60 * 60 * 1000;
-            dwFloorItemCanPickUpTime = 2 * 60 * 1000;
-            boPasswordLockSystem = false;  //是否启用密码保护系统
-            boLockDealAction = false;  //是否锁定交易操作
-            boLockDropAction = false;  //是否锁定扔物品操作
-            boLockGetBackItemAction = false;  //是否锁定取仓库操作
-            boLockHumanLogin = false;  //是否锁定走操作
-            boLockWalkAction = false;  //是否锁定走操作
-            boLockRunAction = false;  //是否锁定跑操作
-            boLockHitAction = false;  //是否锁定攻击操作
-            boLockSpellAction = false;  //是否锁定魔法操作
-            boLockSendMsgAction = false;  //是否锁定发信息操作
-            boLockUserItemAction = false;  //是否锁定使用物品操作
-            boLockInObModeAction = false;  //锁定时进入隐身状态
-            nPasswordErrorCountLock = 3; //输入密码错误超过 指定次数则锁定密码
-            boPasswordErrorKick = false; //输入密码错误超过限制则踢下线
-            nSendRefMsgRange = 12;
+            SendOnlineCount = true;
+            SendOnlineCountRate = 10;
+            ClickNpcTime = 1000;  //NPC点击间隔
+            QueryBagItemsTick = 2 * 60 * 1000;  //包裹刷新间隔
+            SendOnlineTime = 5 * 60 * 1000;
+            SaveHumanRcdTime = 10 * 60 * 1000;
+            HumanFreeDelayTime = 5 * 60 * 1000;
+            MakeGhostTime = 3 * 60 * 1000;
+            ClearDropOnFloorItemTime = 60 * 60 * 1000;
+            FloorItemCanPickUpTime = 2 * 60 * 1000;
+            PasswordLockSystem = false;  //是否启用密码保护系统
+            LockDealAction = false;  //是否锁定交易操作
+            LockDropAction = false;  //是否锁定扔物品操作
+            LockGetBackItemAction = false;  //是否锁定取仓库操作
+            LockHumanLogin = false;  //是否锁定走操作
+            LockWalkAction = false;  //是否锁定走操作
+            LockRunAction = false;  //是否锁定跑操作
+            LockHitAction = false;  //是否锁定攻击操作
+            LockSpellAction = false;  //是否锁定魔法操作
+            LockSendMsgAction = false;  //是否锁定发信息操作
+            LockUserItemAction = false;  //是否锁定使用物品操作
+            LockInObModeAction = false;  //锁定时进入隐身状态
+            PasswordErrorCountLock = 3; //输入密码错误超过 指定次数则锁定密码
+            PasswordErrorKick = false; //输入密码错误超过限制则踢下线
+            SendRefMsgRange = 12;
             boDecLampDura = true;
-            boHungerSystem = false;
-            boHungerDecHP = false;
-            boHungerDecPower = false;
-            boDiableHumanRun = false;
+            HungerSystem = false;
+            HungerDecHP = false;
+            HungerDecPower = false;
+            DiableHumanRun = false;
             boRunHuman = false;
             boRunMon = false;
             boRunNpc = false;
@@ -1364,15 +1364,15 @@ namespace GameSvr.Configs
             nUnknowNecklaceSCAddRate = 30;
             nUnknowNecklaceSCAddValueMaxLimit = 5;
             nMonOneDropGoldCount = 2000;
-            boSendCurTickCount = true;  //客户端时间
-            nMakeMineHitRate = 4; //挖矿命中率
-            nMakeMineRate = 12; //挖矿率
-            nStoneTypeRate = 120;
-            nStoneTypeRateMin = 56;
-            nGoldStoneMin = 1;
-            nGoldStoneMax = 2;
-            nSilverStoneMin = 3;
-            nSilverStoneMax = 20;
+            SendCurTickCount = true;  //客户端时间
+            MakeMineHitRate = 4; //挖矿命中率
+            MakeMineRate = 12; //挖矿率
+            StoneTypeRate = 120;
+            StoneTypeRateMin = 56;
+            GoldStoneMin = 1;
+            GoldStoneMax = 2;
+            SilverStoneMin = 3;
+            SilverStoneMax = 20;
             nSteelStoneMin = 21;
             nSteelStoneMax = 45;
             nBlackStoneMin = 46;
@@ -1464,7 +1464,7 @@ namespace GameSvr.Configs
             boThreadRun = false;
             boShowExceptionMsg = false;
             boShowPreFixMsg = false;
-            nMagicAttackRage = 8; //魔法锁定范围
+            MagicAttackRage = 8; //魔法锁定范围
             nBoBoall = true;
             nDropItemRage = 3; //爆物范围
             sSkeleton = "变异骷髅";
@@ -1485,10 +1485,10 @@ namespace GameSvr.Configs
             nFireBoomRage = 1;
             nSnowWindRange = 1;
             nElecBlizzardRange = 2;
-            nMagTurnUndeadLevel = 50; //圣言怪物等级限制
-            nMagTammingLevel = 50; //诱惑之光怪物等级限制
-            nMagTammingTargetLevel = 10; //诱惑怪物相差等级机率，此数字越小机率越大；
-            nMagTammingHPRate = 100; //成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
+            MagTurnUndeadLevel = 50; //圣言怪物等级限制
+            MagTammingLevel = 50; //诱惑之光怪物等级限制
+            MagTammingTargetLevel = 10; //诱惑怪物相差等级机率，此数字越小机率越大；
+            MagTammingHPRate = 100; //成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
             nMagTammingCount = 5;
             nMabMabeHitRandRate = 100;
             nMabMabeHitMinLvLimit = 10;
@@ -1643,7 +1643,7 @@ namespace GameSvr.Configs
             boHeroAttackTarget = true;
             nDecUserGameGold = 10000;
             boSpeedHackCheck = true;
-            sConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
+            ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
             sDBType = "MySQL";
             NpcNameColor = 255;
         }

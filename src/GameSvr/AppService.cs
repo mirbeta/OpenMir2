@@ -20,9 +20,8 @@ namespace GameSvr
         public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("正在读取配置信息...");
-            _mirApp.InitializeServer();
-            _logger.LogInformation("读取配置信息完成...");
             _mirApp.Initialize();
+            _logger.LogInformation("读取配置信息完成...");
             _mirApp.StartEngine();
             _mirApp.StartService();
             if (M2Share.boStartReady)

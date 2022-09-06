@@ -1,5 +1,5 @@
 using GameSvr.Actor;
-using GameSvr.Configs;
+using GameSvr.Conf;
 using GameSvr.Items;
 using GameSvr.Magic;
 using GameSvr.Maps;
@@ -403,9 +403,9 @@ namespace GameSvr.RobotPlay
             try
             {
                 var sParam1 = string.Empty;
-                if (sData.Length > M2Share.Config.nSayMsgMaxLen)
+                if (sData.Length > M2Share.Config.SayMsgMaxLen)
                 {
-                    sData = sData.Substring(0, M2Share.Config.nSayMsgMaxLen);
+                    sData = sData.Substring(0, M2Share.Config.SayMsgMaxLen);
                 }
                 if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
                 {
@@ -455,9 +455,9 @@ namespace GameSvr.RobotPlay
                         {
                             if ((HUtil32.GetTickCount() - ShoutMsgTick) > 10 * 1000)
                             {
-                                if (Abil.Level <= M2Share.Config.nCanShoutMsgLevel)
+                                if (Abil.Level <= M2Share.Config.CanShoutMsgLevel)
                                 {
-                                    SysMsg(Format(M2Share.g_sYouNeedLevelMsg, M2Share.Config.nCanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(M2Share.g_sYouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
@@ -2540,8 +2540,8 @@ namespace GameSvr.RobotPlay
                 {
                     case Grobal2.DR_UP:
                         if (CurrY > 1 &&
-                          (Envir.CanWalkEx(CurrX, CurrY - 1, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        (Envir.CanWalkEx(CurrX, CurrY - 2, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                          (Envir.CanWalkEx(CurrX, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                        (Envir.CanWalkEx(CurrX, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                         Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true) > 0)
                         {
                             CurrY -= 2;
@@ -2550,8 +2550,8 @@ namespace GameSvr.RobotPlay
                     case Grobal2.DR_UPRIGHT:
                         if (CurrX < Envir.Width - 2 &&
                           CurrY > 1 &&
-                          (Envir.CanWalkEx(CurrX + 1, CurrY - 1, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        (Envir.CanWalkEx(CurrX + 2, CurrY - 2, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                          (Envir.CanWalkEx(CurrX + 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                        (Envir.CanWalkEx(CurrX + 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
                         Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true) > 0)
                         {
                             CurrX += 2;
@@ -2560,8 +2560,8 @@ namespace GameSvr.RobotPlay
                         break;
                     case Grobal2.DR_RIGHT:
                         if (CurrX < Envir.Width - 2 &&
-  (Envir.CanWalkEx(CurrX + 1, CurrY, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX + 2, CurrY, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX + 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX + 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
     Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true) > 0)
                         {
                             CurrX += 2;
@@ -2570,8 +2570,8 @@ namespace GameSvr.RobotPlay
                     case Grobal2.DR_DOWNRIGHT:
                         if (CurrX < Envir.Width - 2 &&
   CurrY < Envir.Height - 2 &&
-  (Envir.CanWalkEx(CurrX + 1, CurrY + 1, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX + 2, CurrY + 2, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX + 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX + 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
     Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true) > 0)
                         {
                             CurrX += 2;
@@ -2580,8 +2580,8 @@ namespace GameSvr.RobotPlay
                         break;
                     case Grobal2.DR_DOWN:
                         if (CurrY < Envir.Height - 2 &&
-  (Envir.CanWalkEx(CurrX, CurrY + 1, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX, CurrY + 2, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
     Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true) > 0)
                         {
                             CurrY += 2;
@@ -2590,8 +2590,8 @@ namespace GameSvr.RobotPlay
                     case Grobal2.DR_DOWNLEFT:
                         if (CurrX > 1 &&
   CurrY < Envir.Height - 2 &&
-  (Envir.CanWalkEx(CurrX - 1, CurrY + 1, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX - 2, CurrY + 2, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX - 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX - 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
     Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true) > 0)
                         {
                             CurrX -= 2;
@@ -2601,8 +2601,8 @@ namespace GameSvr.RobotPlay
                         break;
                     case Grobal2.DR_LEFT:
                         if (CurrX > 1 &&
-  (Envir.CanWalkEx(CurrX - 1, CurrY, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX - 2, CurrY, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX - 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX - 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
     Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true) > 0)
                         {
                             CurrX -= 2;
@@ -2610,8 +2610,8 @@ namespace GameSvr.RobotPlay
                         break;
                     case Grobal2.DR_UPLEFT:
                         if (CurrX > 1 && CurrY > 1 &&
- (Envir.CanWalkEx(CurrX - 1, CurrY - 1, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX - 2, CurrY - 2, M2Share.Config.boDiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+ (Envir.CanWalkEx(CurrX - 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+  (Envir.CanWalkEx(CurrX - 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
     Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true) > 0)
                         {
                             CurrX -= 2;
@@ -3230,7 +3230,7 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.nMagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
+                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
                     {
                         // 目标为不死系
                         m_SkillUseTick[32] = HUtil32.GetTickCount();
@@ -3781,7 +3781,7 @@ namespace GameSvr.RobotPlay
                         result = 33;
                         return result;
                     }
-                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.nMagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
+                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.MWAbil.Level < MWAbil.Level - 1)
                     {
                         // 目标为不死系
                         result = 32;// 圣言术

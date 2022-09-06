@@ -147,7 +147,7 @@ namespace GameSvr.Castle
             m_nWarRangeX = M2Share.Config.nCastleWarRangeX;
             m_nWarRangeY = M2Share.Config.nCastleWarRangeY;
             m_EnvirList = new List<string>();
-            var filePath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir, m_sConfigDir);
+            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir, m_sConfigDir);
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
@@ -284,7 +284,7 @@ namespace GameSvr.Castle
         /// </summary>
         private void LoadAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir, m_sConfigDir);
             var guildName = string.Empty;
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
@@ -324,7 +324,7 @@ namespace GameSvr.Castle
         /// </summary>
         private void SaveAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.sCastleDir, m_sConfigDir);
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
             var sFileName = Path.Combine(sabukwallPath, AttackSabukWallList);
@@ -360,7 +360,7 @@ namespace GameSvr.Castle
                 if (!IsStartWar && !m_boUnderWar)
                 {
                     var hour = DateTime.Now.Hour;
-                    if (hour == M2Share.Config.nStartCastlewarTime) // 20
+                    if (hour == M2Share.Config.StartCastlewarTime) // 20
                     {
                         IsStartWar = true;
                         m_AttackGuildList.Clear();
@@ -416,16 +416,16 @@ namespace GameSvr.Castle
                     if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.StoneMode = false;
                     if (!m_boShowOverMsg)
                     {
-                        if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.Config.dwCastleWarTime - M2Share.Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
+                        if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.Config.CastleWarTime - M2Share.Config.ShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             m_boShowOverMsg = true;
-                            var s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.Config.dwShowCastleWarEndMsgTime / (60 * 1000));
+                            var s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.Config.ShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
                             _logger.Warn(s20);
                         }
                     }
-                    if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > M2Share.Config.dwCastleWarTime)
+                    if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > M2Share.Config.CastleWarTime)
                     {
                         StopWallconquestWar();
                     }
@@ -505,7 +505,7 @@ namespace GameSvr.Castle
 
         public bool CanGetCastle(GuildInfo guild)
         {
-            if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) <= M2Share.Config.dwGetCastleTime)
+            if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) <= M2Share.Config.GetCastleTime)
             {
                 return false;
             }
@@ -738,7 +738,7 @@ namespace GameSvr.Castle
             {
                 if (nGold <= m_nTotalGold)
                 {
-                    if (PlayObject.Gold + nGold <= M2Share.Config.nHumanMaxGold)
+                    if (PlayObject.Gold + nGold <= M2Share.Config.HumanMaxGold)
                     {
                         m_nTotalGold -= nGold;
                         PlayObject.IncGold(nGold);
@@ -910,7 +910,7 @@ namespace GameSvr.Castle
             var result = false;
             if (InAttackerList(Guild)) return result;
             var AttackerInfo = new TAttackerInfo();
-            AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.Config.nStartCastleWarDays);
+            AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.Config.StartCastleWarDays);
             AttackerInfo.sGuildName = Guild.sGuildName;
             AttackerInfo.Guild = Guild;
             m_AttackWarList.Add(AttackerInfo);

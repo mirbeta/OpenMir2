@@ -104,9 +104,9 @@ namespace GameSvr.Actor
                     if (CanReAlive && MonGen != null)
                     {
                         var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.UserEngine.ProcessMonsters_GetZenTime(MonGen.dwZenTime) - 20 * 1000);
-                        if (dwMakeGhostTime > M2Share.Config.dwMakeGhostTime)
+                        if (dwMakeGhostTime > M2Share.Config.MakeGhostTime)
                         {
-                            dwMakeGhostTime = M2Share.Config.dwMakeGhostTime;
+                            dwMakeGhostTime = M2Share.Config.MakeGhostTime;
                         }
                         if ((HUtil32.GetTickCount() - DeathTick > dwMakeGhostTime))
                         {
@@ -115,7 +115,7 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - DeathTick) > M2Share.Config.dwMakeGhostTime)// 3 * 60 * 1000
+                        if ((HUtil32.GetTickCount() - DeathTick) > M2Share.Config.MakeGhostTime)// 3 * 60 * 1000
                         {
                             MakeGhost();
                         }
@@ -485,12 +485,12 @@ namespace GameSvr.Actor
             try
             {
                 // 减少PK值开始
-                if ((HUtil32.GetTickCount() - _decPkPointTick) > M2Share.Config.dwDecPkPointTime)// 120000
+                if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 120000
                 {
-                    _decPkPointTick = HUtil32.GetTickCount();
+                    DecPkPointTick = HUtil32.GetTickCount();
                     if (PkPoint > 0)
                     {
-                        DecPkPoint(M2Share.Config.nDecPkPointCount);
+                        DecPkPoint(M2Share.Config.DecPkPointCount);
                     }
                 }
                 if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.dwDecLightItemDrugTime)
@@ -733,7 +733,7 @@ namespace GameSvr.Actor
             {
                 if (Race != Grobal2.RC_PLAYOBJECT && LastHiter != null)
                 {
-                    if (M2Share.Config.boMonSayMsg)
+                    if (M2Share.Config.MonSayMsg)
                     {
                         MonsterSayMsg(LastHiter, MonStatus.Die);
                     }
@@ -831,7 +831,7 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                if (M2Share.Config.boMonSayMsg && Race == Grobal2.RC_PLAYOBJECT && LastHiter != null)
+                if (M2Share.Config.MonSayMsg && Race == Grobal2.RC_PLAYOBJECT && LastHiter != null)
                 {
                     LastHiter.MonsterSayMsg(this, MonStatus.KillHuman);
                 }
@@ -1602,7 +1602,7 @@ namespace GameSvr.Actor
             NoDropUseItem = false;
             MBopirit = false;
             HorseType = 0;
-            _dressEffType = 0;
+            DressEffType = 0;
             AutoAddHpmpMode = 0;
             // 气血石
             MoXieSuite = 0;
@@ -1888,7 +1888,7 @@ namespace GameSvr.Actor
                 {
                     if (StdItem.Shape >= 1 && StdItem.Shape <= 50)
                     {
-                        _dressEffType = StdItem.Shape;
+                        DressEffType = StdItem.Shape;
                     }
                     if (StdItem.Shape >= 51 && StdItem.Shape <= 100)
                     {
@@ -1900,11 +1900,11 @@ namespace GameSvr.Actor
                 {
                     if (UseItems[i].btValue[5] > 0)
                     {
-                        _dressEffType = UseItems[i].btValue[5];
+                        DressEffType = UseItems[i].btValue[5];
                     }
                     if (StdItem.AniCount > 0)
                     {
-                        _dressEffType = StdItem.AniCount;
+                        DressEffType = StdItem.AniCount;
                     }
                     if (StdItem.Light)
                     {
@@ -2478,7 +2478,7 @@ namespace GameSvr.Actor
             MWAbil.DC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(MWAbil.DC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(MWAbil.DC)));
             MWAbil.MC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(MWAbil.MC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(MWAbil.MC)));
             MWAbil.SC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(MWAbil.SC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(MWAbil.SC)));
-            if (M2Share.Config.boHungerSystem && M2Share.Config.boHungerDecPower)
+            if (M2Share.Config.HungerSystem && M2Share.Config.HungerDecPower)
             {
                 if (HUtil32.RangeInDefined(HungerStatus, 0, 999))
                 {

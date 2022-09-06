@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            M2Share.Config.nZenFastStep = nFastStep;
+            M2Share.Config.ZenFastStep = nFastStep;
             PlayObject.SysMsg($"怪物行动速度: {nFastStep}", MsgColor.Green, MsgType.Hint);
         }
     }

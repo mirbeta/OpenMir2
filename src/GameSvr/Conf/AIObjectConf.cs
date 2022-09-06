@@ -6,7 +6,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Configs
+namespace GameSvr.Conf
 {
     public class AIObjectConf : IniFile
     {

@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void ReloadMonItems(PlayObject PlayObject)
         {
-            M2Share.CommonDB.LoadMagicDB();
+            M2Share.CommonDb.LoadMagicDB();
             PlayObject.SysMsg("魔法数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
         }
     }

@@ -260,7 +260,7 @@ namespace GameSvr.DataStores
                             Monster.wAttackSpeed = 200;
                         }
                         Monster.ItemList = null;
-                        M2Share.LocalDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
+                        M2Share.LocalDb.LoadMonitems(Monster.sName, ref Monster.ItemList);
                         M2Share.UserEngine.MonsterList.Add(Monster);
                         result = 1;
                     }
@@ -385,7 +385,7 @@ namespace GameSvr.DataStores
             {
                 try
                 {
-                    _dbConnection = new MySqlConnection(M2Share.Config.sConnctionString);
+                    _dbConnection = new MySqlConnection(M2Share.Config.ConnctionString);
                     _dbConnection.Open();
                     return true;
                 }
