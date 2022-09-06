@@ -53,7 +53,7 @@ namespace GameSvr.Command.Commands
                             }
                         }
                         PlayObject.GroupRcallTick = HUtil32.GetTickCount();
-                        PlayObject.GroupRcallTime = (short)M2Share.Config.nGroupRecallTime;
+                        PlayObject.GroupRcallTime = (short)M2Share.Config.GroupRecallTime;
                     }
                 }
                 else

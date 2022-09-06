@@ -1070,8 +1070,8 @@ namespace GameSvr.Player
             ClientConf.boRunMon = nRunMon == 1;
             ClientConf.boRunNpc = nRunNpc == 1;
             ClientConf.boWarRunAll = nWarRunAll == 1;
-            ClientConf.wSpellTime = (ushort)(M2Share.Config.dwMagicHitIntervalTime + 300);
-            ClientConf.wHitIime = (ushort)(M2Share.Config.dwHitIntervalTime + 500);
+            ClientConf.wSpellTime = (ushort)(M2Share.Config.MagicHitIntervalTime + 300);
+            ClientConf.wHitIime = (ushort)(M2Share.Config.HitIntervalTime + 500);
             var sMsg = EDcode.EncodeBuffer(ClientConf);
             var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
             short nParam = (short)HUtil32.MakeWord(5, 0);
@@ -1359,14 +1359,14 @@ namespace GameSvr.Player
 
         public void PKDie(PlayObject PlayObject)
         {
-            var nWinLevel = M2Share.Config.nKillHumanWinLevel;
-            var nLostLevel = M2Share.Config.nKilledLostLevel;
-            var nWinExp = M2Share.Config.nKillHumanWinExp;
-            var nLostExp = M2Share.Config.nKillHumanLostExp;
-            var boWinLEvel = M2Share.Config.boKillHumanWinLevel;
-            var boLostLevel = M2Share.Config.boKilledLostLevel;
-            var boWinExp = M2Share.Config.boKillHumanWinExp;
-            var boLostExp = M2Share.Config.boKilledLostExp;
+            var nWinLevel = M2Share.Config.KillHumanWinLevel;
+            var nLostLevel = M2Share.Config.KilledLostLevel;
+            var nWinExp = M2Share.Config.KillHumanWinExp;
+            var nLostExp = M2Share.Config.KillHumanLostExp;
+            var boWinLEvel = M2Share.Config.IsKillHumanWinLevel;
+            var boLostLevel = M2Share.Config.IsKilledLostLevel;
+            var boWinExp = M2Share.Config.IsKillHumanWinExp;
+            var boLostExp = M2Share.Config.IsKilledLostExp;
             if (Envir.Flag.boPKWINLEVEL)
             {
                 boWinLEvel = true;
@@ -1387,7 +1387,7 @@ namespace GameSvr.Player
                 boLostExp = true;
                 nLostExp = Envir.Flag.nPKLOSTEXP;
             }
-            if (PlayObject.Abil.Level - Abil.Level > M2Share.Config.nHumanLevelDiffer)
+            if (PlayObject.Abil.Level - Abil.Level > M2Share.Config.HumanLevelDiffer)
             {
                 if (!PlayObject.IsGoodKilling(this))
                 {
@@ -3076,7 +3076,7 @@ namespace GameSvr.Player
         {
             var result = false;
             dwDelayTime = 0;
-            if (M2Share.Config.boSpeedHackCheck)
+            if (M2Share.Config.CloseSpeedHackCheck)
             {
                 return true;
             }

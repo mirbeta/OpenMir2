@@ -51,16 +51,16 @@ namespace GameSvr.DataStores
                         Item.Reserved = (byte)dr.GetInt32("Reserved");// 保留
                         Item.Looks = dr.GetUInt16("Looks");// 物品外观
                         Item.DuraMax = (ushort)dr.GetInt32("DuraMax");// 持久
-                        Item.Ac = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.nItemsACPowerRate / 10));
-                        Item.Ac2 = (ushort)HUtil32.Round(dr.GetInt32("AC2") * (M2Share.Config.nItemsACPowerRate / 10));
-                        Item.Mac = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.nItemsACPowerRate / 10));
-                        Item.Mac2 = (ushort)HUtil32.Round(dr.GetInt32("MAC2") * (M2Share.Config.nItemsACPowerRate / 10));
-                        Item.Dc = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.nItemsPowerRate / 10));
-                        Item.Dc2 = (ushort)HUtil32.Round(dr.GetInt32("DC2") * (M2Share.Config.nItemsPowerRate / 10));
-                        Item.Mc = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.nItemsPowerRate / 10));
-                        Item.Mc2 = (ushort)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.Config.nItemsPowerRate / 10));
-                        Item.Sc = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.nItemsPowerRate / 10));
-                        Item.Sc2 = (ushort)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.Config.nItemsPowerRate / 10));
+                        Item.Ac = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.ItemsACPowerRate / 10));
+                        Item.Ac2 = (ushort)HUtil32.Round(dr.GetInt32("AC2") * (M2Share.Config.ItemsACPowerRate / 10));
+                        Item.Mac = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.ItemsACPowerRate / 10));
+                        Item.Mac2 = (ushort)HUtil32.Round(dr.GetInt32("MAC2") * (M2Share.Config.ItemsACPowerRate / 10));
+                        Item.Dc = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.ItemsPowerRate / 10));
+                        Item.Dc2 = (ushort)HUtil32.Round(dr.GetInt32("DC2") * (M2Share.Config.ItemsPowerRate / 10));
+                        Item.Mc = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.ItemsPowerRate / 10));
+                        Item.Mc2 = (ushort)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.Config.ItemsPowerRate / 10));
+                        Item.Sc = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.ItemsPowerRate / 10));
+                        Item.Sc2 = (ushort)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.Config.ItemsPowerRate / 10));
                         Item.Need = dr.GetByte("Need");// 附加条件
                         Item.NeedLevel = dr.GetByte("NeedLevel");// 需要等级
                         Item.Price = dr.GetInt32("Price");// 价格
@@ -236,15 +236,15 @@ namespace GameSvr.DataStores
                         }
                         else
                         {
-                            Monster.wHP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.nMonsterPowerRate / 10));
+                            Monster.wHP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.MonsterPowerRate / 10));
                         }
-                        Monster.wMP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.nMonsterPowerRate / 10));
-                        Monster.wAC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.nMonsterPowerRate / 10));
-                        Monster.wMAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.nMonsterPowerRate / 10));
-                        Monster.wDC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.nMonsterPowerRate / 10));
-                        Monster.wMaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.nMonsterPowerRate / 10));
-                        Monster.wMC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.nMonsterPowerRate / 10));
-                        Monster.wSC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.nMonsterPowerRate / 10));
+                        Monster.wMP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.wAC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.wMAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.wDC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.wMaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.wMC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.wSC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.MonsterPowerRate / 10));
                         Monster.wSpeed = dr.GetUInt16("SPEED");
                         Monster.wHitPoint = dr.GetUInt16("HIT");
                         Monster.wWalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));

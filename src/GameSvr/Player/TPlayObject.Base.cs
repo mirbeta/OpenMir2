@@ -565,11 +565,11 @@ namespace GameSvr.Player
             m_dwAutoGetExpTick = HUtil32.GetTickCount();
             m_nAutoGetExpPoint = 0;
             m_AutoGetExpEnvir = null;
-            m_dwHitIntervalTime = M2Share.Config.dwHitIntervalTime;// 攻击间隔
-            m_dwMagicHitIntervalTime = M2Share.Config.dwMagicHitIntervalTime;// 魔法间隔
-            m_dwRunIntervalTime = M2Share.Config.dwRunIntervalTime;// 走路间隔
-            m_dwWalkIntervalTime = M2Share.Config.dwWalkIntervalTime;// 走路间隔
-            m_dwTurnIntervalTime = M2Share.Config.dwTurnIntervalTime;// 换方向间隔
+            m_dwHitIntervalTime = M2Share.Config.HitIntervalTime;// 攻击间隔
+            m_dwMagicHitIntervalTime = M2Share.Config.MagicHitIntervalTime;// 魔法间隔
+            m_dwRunIntervalTime = M2Share.Config.RunIntervalTime;// 走路间隔
+            m_dwWalkIntervalTime = M2Share.Config.WalkIntervalTime;// 走路间隔
+            m_dwTurnIntervalTime = M2Share.Config.TurnIntervalTime;// 换方向间隔
             m_dwActionIntervalTime = M2Share.Config.dwActionIntervalTime;// 组合操作间隔
             m_dwRunLongHitIntervalTime = M2Share.Config.dwRunLongHitIntervalTime;// 组合操作间隔
             m_dwRunHitIntervalTime = M2Share.Config.dwRunHitIntervalTime;// 组合操作间隔
@@ -685,13 +685,13 @@ namespace GameSvr.Player
             {
                 if (M2Share.Config.boTestServer)
                 {
-                    if (Abil.Level < M2Share.Config.nTestLevel)
+                    if (Abil.Level < M2Share.Config.TestLevel)
                     {
-                        Abil.Level = (byte)M2Share.Config.nTestLevel;
+                        Abil.Level = (byte)M2Share.Config.TestLevel;
                     }
-                    if (Gold < M2Share.Config.nTestGold)
+                    if (Gold < M2Share.Config.TestGold)
                     {
-                        Gold = M2Share.Config.nTestGold;
+                        Gold = M2Share.Config.TestGold;
                     }
                 }
                 if (M2Share.Config.boTestServer || M2Share.Config.boServiceMode)
@@ -853,7 +853,7 @@ namespace GameSvr.Player
                     {
                         SysMsg(M2Share.sClientSoftVersionTooOld, MsgColor.Blue, MsgType.Hint);
                         SysMsg(M2Share.sDownLoadAndUseNewClient, MsgColor.Red, MsgType.Hint);
-                        if (!M2Share.Config.boCanOldClientLogon)
+                        if (!M2Share.Config.CanOldClientLogon)
                         {
                             SysMsg(M2Share.sClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                             SysMsg(M2Share.sDownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
@@ -891,7 +891,7 @@ namespace GameSvr.Player
                     {
                         SysMsg(M2Share.sStartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
-                    if (M2Share.UserEngine.PlayObjectCount > M2Share.Config.nTestUserLimit)
+                    if (M2Share.UserEngine.PlayObjectCount > M2Share.Config.TestUserLimit)
                     {
                         if (Permission < 2)
                         {
@@ -1089,7 +1089,7 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.Config.nRepairItemDecDura);
+            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.Config.RepairItemDecDura);
             var nDura = HUtil32._MIN(5000, UserItem.DuraMax - UserItem.Dura);
             if (nDura <= 0) return false;
             UserItem.Dura += (ushort)nDura;
@@ -1681,12 +1681,12 @@ namespace GameSvr.Player
             {
                 return;// 不死戒指
             }
-            var boDropall = M2Share.Config.boDieRedScatterBagAll && PvpLevel() >= 2;
+            var boDropall = M2Share.Config.DieRedScatterBagAll && PvpLevel() >= 2;
             try
             {
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.nDieScatterBagRate) == 0)
+                    if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0)
                     {
                         if (DropItemDown(ItemList[i], DropWide, true, ItemOfCreat, this))
                         {

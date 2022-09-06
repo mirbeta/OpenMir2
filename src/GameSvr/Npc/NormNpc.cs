@@ -1655,7 +1655,7 @@ namespace GameSvr.Npc
 
         protected virtual void SendCustemMsg(PlayObject PlayObject, string sMsg)
         {
-            if (!M2Share.Config.boSendCustemMsg)
+            if (!M2Share.Config.SendCustemMsg)
             {
                 PlayObject.SysMsg(M2Share.g_sSendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;

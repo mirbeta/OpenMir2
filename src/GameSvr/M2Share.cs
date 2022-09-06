@@ -913,7 +913,7 @@ namespace GameSvr
         public static bool CheckGuildName(string sGuildName)
         {
             var result = true;
-            if (sGuildName.Length > Config.nGuildNameLen)
+            if (sGuildName.Length > Config.GuildNameLen)
             {
                 result = false;
                 return result;
@@ -931,26 +931,26 @@ namespace GameSvr
 
         public static int GetItemNumber()
         {
-            Config.nItemNumber++;
-            if (Config.nItemNumber > int.MaxValue / 2 - 1)
+            Config.ItemNumber++;
+            if (Config.ItemNumber > int.MaxValue / 2 - 1)
             {
-                Config.nItemNumber = 1;
+                Config.ItemNumber = 1;
             }
-            return Config.nItemNumber;
+            return Config.ItemNumber;
         }
 
         public static int GetItemNumberEx()
         {
-            Config.nItemNumberEx++;
-            if (Config.nItemNumberEx < int.MaxValue / 2)
+            Config.ItemNumberEx++;
+            if (Config.ItemNumberEx < int.MaxValue / 2)
             {
-                Config.nItemNumberEx = int.MaxValue / 2;
+                Config.ItemNumberEx = int.MaxValue / 2;
             }
-            if (Config.nItemNumberEx > int.MaxValue - 1)
+            if (Config.ItemNumberEx > int.MaxValue - 1)
             {
-                Config.nItemNumberEx = int.MaxValue / 2;
+                Config.ItemNumberEx = int.MaxValue / 2;
             }
-            return Config.nItemNumberEx;
+            return Config.ItemNumberEx;
         }
 
         public static string FilterShowName(string sName)

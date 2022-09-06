@@ -4469,8 +4469,8 @@ namespace GameSvr.Actor
                 return true;
             }
             if ((Envir.MapName != M2Share.Config.RedHomeMap) ||
-                (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.nSafeZoneSize) ||
-                (Math.Abs(CurrY - M2Share.Config.RedHomeY) > M2Share.Config.nSafeZoneSize))
+                (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) ||
+                (Math.Abs(CurrY - M2Share.Config.RedHomeY) > M2Share.Config.SafeZoneSize))
             {
                 result = false;
             }
@@ -4486,8 +4486,8 @@ namespace GameSvr.Actor
                     {
                         int nSafeX = M2Share.StartPointList[i].m_nCurrX;
                         int nSafeY = M2Share.StartPointList[i].m_nCurrY;
-                        if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.nSafeZoneSize) &&
-                            (Math.Abs(CurrY - nSafeY) <= M2Share.Config.nSafeZoneSize))
+                        if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
+                            (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
                         {
                             result = true;
                         }
@@ -4509,8 +4509,8 @@ namespace GameSvr.Actor
                 return true;
             }
             if ((envir.MapName != M2Share.Config.RedHomeMap) ||
-                (Math.Abs(nX - M2Share.Config.RedHomeX) > M2Share.Config.nSafeZoneSize) ||
-                (Math.Abs(nY - M2Share.Config.RedHomeY) > M2Share.Config.nSafeZoneSize))
+                (Math.Abs(nX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) ||
+                (Math.Abs(nY - M2Share.Config.RedHomeY) > M2Share.Config.SafeZoneSize))
             {
                 result = false;
             }
@@ -4526,8 +4526,8 @@ namespace GameSvr.Actor
                     {
                         int nSafeX = M2Share.StartPointList[i].m_nCurrX;
                         int nSafeY = M2Share.StartPointList[i].m_nCurrY;
-                        if ((Math.Abs(nX - nSafeX) <= M2Share.Config.nSafeZoneSize) &&
-                            (Math.Abs(nY - nSafeY) <= M2Share.Config.nSafeZoneSize))
+                        if ((Math.Abs(nX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
+                            (Math.Abs(nY - nSafeY) <= M2Share.Config.SafeZoneSize))
                         {
                             result = true;
                         }

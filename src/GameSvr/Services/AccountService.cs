@@ -326,7 +326,7 @@ namespace GameSvr.Services
                     break;
                 }
             }
-            if (M2Share.Config.boViewAdmissionFailure && !boFound)
+            if (M2Share.Config.ViewAdmissionFailure && !boFound)
             {
                 _logger.Error(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
             }

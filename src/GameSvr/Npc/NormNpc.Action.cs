@@ -3168,7 +3168,7 @@ namespace GameSvr.Npc
                 {
                     PlayObject.Abil.Level = (byte)nLevel;
                 }
-                if (M2Share.Config.boReNewLevelClearExp)
+                if (M2Share.Config.ReNewLevelClearExp)
                 {
                     PlayObject.Abil.Exp = 0;
                 }

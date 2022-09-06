@@ -226,12 +226,12 @@ namespace GameSvr.Player
 
         private bool ClientDropGold(int nGold)
         {
-            if (M2Share.Config.boInSafeDisableDrop && InSafeZone())
+            if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return false;
             }
-            if (M2Share.Config.boControlDropItem && nGold < M2Share.Config.nCanDropGold)
+            if (M2Share.Config.ControlDropItem && nGold < M2Share.Config.CanDropGold)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropGoldMsg);
                 return false;
@@ -268,7 +268,7 @@ namespace GameSvr.Player
                     m_nStep = 0;
                 }
             }
-            if (M2Share.Config.boInSafeDisableDrop && InSafeZone())
+            if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return false;
@@ -298,7 +298,7 @@ namespace GameSvr.Player
                         var sUserItemName = ItemUnit.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.Config.boControlDropItem && stdItem.Price < M2Share.Config.nCanDropPrice)
+                            if (M2Share.Config.ControlDropItem && stdItem.Price < M2Share.Config.CanDropPrice)
                             {
                                 Dispose(userItem);
                                 ItemList.RemoveAt(i);
@@ -335,12 +335,12 @@ namespace GameSvr.Player
                 return false;
             }
             m_boFilterAction = true;
-            if (!M2Share.Config.boSpeedHackCheck)
+            if (!M2Share.Config.CloseSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-                if (dwCheckTime < M2Share.Config.dwTurnIntervalTime)
+                if (dwCheckTime < M2Share.Config.TurnIntervalTime)
                 {
-                    dwDelayTime = M2Share.Config.dwTurnIntervalTime - dwCheckTime;
+                    dwDelayTime = M2Share.Config.TurnIntervalTime - dwCheckTime;
                     return false;
                 }
             }
@@ -362,12 +362,12 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            if (!M2Share.Config.boSpeedHackCheck)
+            if (!M2Share.Config.CloseSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-                if (dwCheckTime < M2Share.Config.dwTurnIntervalTime)
+                if (dwCheckTime < M2Share.Config.TurnIntervalTime)
                 {
-                    dwDelayTime = M2Share.Config.dwTurnIntervalTime - dwCheckTime;
+                    dwDelayTime = M2Share.Config.TurnIntervalTime - dwCheckTime;
                     return false;
                 }
                 m_dwTurnTick = HUtil32.GetTickCount();
@@ -720,12 +720,12 @@ namespace GameSvr.Player
         {
             dwDelayTime = 0;
             var baseObject = M2Share.ActorMgr.Get(charId);
-            if (!M2Share.Config.boSpeedHackCheck)
+            if (!M2Share.Config.CloseSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-                if (dwCheckTime < HUtil32._MAX(150, M2Share.Config.dwTurnIntervalTime - 150))
+                if (dwCheckTime < HUtil32._MAX(150, M2Share.Config.TurnIntervalTime - 150))
                 {
-                    dwDelayTime = HUtil32._MAX(150, M2Share.Config.dwTurnIntervalTime - 150) - dwCheckTime;
+                    dwDelayTime = HUtil32._MAX(150, M2Share.Config.TurnIntervalTime - 150) - dwCheckTime;
                     return false;
                 }
                 m_dwTurnTick = HUtil32.GetTickCount();
@@ -847,7 +847,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
                 return;
             }
-            if (GroupMembers.Count > M2Share.Config.nGroupMembersMax)
+            if (GroupMembers.Count > M2Share.Config.GroupMembersMax)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
                 return;
@@ -905,7 +905,7 @@ namespace GameSvr.Player
 
         private void ClientDealTry(string sHumName)
         {
-            if (M2Share.Config.boDisableDeal)
+            if (M2Share.Config.DisableDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDisableDealItemsMsg);
                 return;
@@ -914,7 +914,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if ((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.dwTryDealTime)
+            if ((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.TryDealTime)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
                 return;
@@ -994,7 +994,7 @@ namespace GameSvr.Player
 
         private void ClientDelDealItem(int nItemIdx, string sItemName)
         {
-            if (M2Share.Config.boCanNotGetBackDeal)
+            if (M2Share.Config.CanNotGetBackDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
                 SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
@@ -1042,7 +1042,7 @@ namespace GameSvr.Player
 
         private void ClientChangeDealGold(int nGold)
         {
-            if (DealGolds > 0 && M2Share.Config.boCanNotGetBackDeal)// 禁止取回放入交易栏内的金币
+            if (DealGolds > 0 && M2Share.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
                 SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
@@ -1083,7 +1083,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.dwDealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < M2Share.Config.dwDealOKTime))
+            if (((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.DealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < M2Share.Config.DealOKTime))
             {
                 SysMsg(M2Share.g_sDealOKTooFast, MsgColor.Red, MsgType.Hint);
                 DealCancel();

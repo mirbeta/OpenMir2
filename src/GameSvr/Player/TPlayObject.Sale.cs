@@ -306,9 +306,9 @@ namespace GameSvr.Player
                             && string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.N == 0)
                         {
                             dealOffInfo.N = 4;
-                            if (m_nGameGold >= dealOffInfo.nSellGold + M2Share.Config.nDecUserGameGold)// 每次扣多少元宝(元宝寄售)
+                            if (m_nGameGold >= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
                             {
-                                m_nGameGold -= dealOffInfo.nSellGold + M2Share.Config.nDecUserGameGold; // 扣出元宝
+                                m_nGameGold -= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold; // 扣出元宝
                                 if (m_nGameGold < 0)
                                 {
                                     m_nGameGold = 0;
@@ -582,7 +582,7 @@ namespace GameSvr.Player
                 DealOffInfo.N = 0; // 标识
                 M2Share.sSellOffItemList.Add(DealOffInfo); // 增加到元宝寄售列表中
                 this.SendMsg(this, Grobal2.RM_SELLOFFEND_OK, 0, 0, 0, 0, "");
-                m_nGameGold -= M2Share.Config.nDecUserGameGold; // 每次扣多少元宝(元宝寄售) 
+                m_nGameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
                 if (m_nGameGold < 0)
                 {
                     m_nGameGold = 0;
