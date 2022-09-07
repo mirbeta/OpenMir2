@@ -963,8 +963,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "ItemExpRate", M2Share.Config.ItemExpRate);
             M2Share.Config.ItemExpRate = ReadInteger("Setup", "ItemExpRate", M2Share.Config.ItemExpRate);
             if (ReadInteger("Setup", "ScriptGotoCountLimit", -1) < 0)
-                WriteInteger("Setup", "ScriptGotoCountLimit", M2Share.Config.nScriptGotoCountLimit);
-            M2Share.Config.nScriptGotoCountLimit = ReadInteger("Setup", "ScriptGotoCountLimit", M2Share.Config.nScriptGotoCountLimit);
+                WriteInteger("Setup", "ScriptGotoCountLimit", M2Share.Config.ScriptGotoCountLimit);
+            M2Share.Config.ScriptGotoCountLimit = ReadInteger("Setup", "ScriptGotoCountLimit", M2Share.Config.ScriptGotoCountLimit);
             if (ReadInteger("Setup", "HearMsgFColor", -1) < 0)
                 WriteInteger("Setup", "HearMsgFColor", M2Share.Config.btHearMsgFColor);
             M2Share.Config.btHearMsgFColor = Read<byte>("Setup", "HearMsgFColor", M2Share.Config.btHearMsgFColor);
