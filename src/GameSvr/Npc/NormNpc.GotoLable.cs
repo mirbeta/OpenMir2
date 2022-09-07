@@ -1426,7 +1426,7 @@ namespace GameSvr.Npc
         private bool GotoLable_JmpToLable(PlayObject PlayObject, string sLabel)
         {
             PlayObject.m_nScriptGotoCount++;
-            if (PlayObject.m_nScriptGotoCount > M2Share.Config.nScriptGotoCountLimit)
+            if (PlayObject.m_nScriptGotoCount > M2Share.Config.ScriptGotoCountLimit)
             {
                 return false;
             }
