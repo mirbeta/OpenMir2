@@ -14,7 +14,7 @@ namespace GameSvr.Script
 
         public int LoadNpcScript(NormNpc NPC, string sPatch, string sScritpName)
         {
-            if (sPatch == "")
+            if (string.IsNullOrEmpty(sPatch))
             {
                 sPatch = ScriptConst.sNpc_def;
             }
@@ -227,25 +227,23 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
-
-            if (sCmd.IndexOf(".") > -1) //支持脚本变量
+            if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
                 if (!string.IsNullOrEmpty(sActName))
                 {
                     QuestConditionInfo.sOpName = sActName;
-                    if (sCmd.IndexOf(".") > -1)
+                    if (".".IndexOf(sCmd, StringComparison.Ordinal) > -1)
                     {
                         sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
-                        if (string.Compare(sActName, "H", true) == 0)
+                        if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             QuestConditionInfo.sOpHName = "H";
                         }
                     }
                 }
             }
-
             sCmd = sCmd.ToUpper();
             switch (sCmd)
             {
@@ -854,17 +852,17 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
-            if (sCmd.IndexOf(".") > -1) //支持脚本变量
+            if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
                 if (!string.IsNullOrEmpty(sActName))
                 {
                     QuestActionInfo.sOpName = sActName;
-                    if (sCmd.IndexOf(".") > -1)
+                    if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1)
                     {
                         sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
-                        if (string.Compare(sActName, "H", true) == 0)
+                        if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             QuestActionInfo.sOpHName = "H";
                         }
