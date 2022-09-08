@@ -19,6 +19,8 @@ namespace GameSvr.Maps
         /// </summary>
         public PooledList<CellObject> ObjList;
 
+        public bool IsAvailable => ObjList != null && ObjList.Count > 0;
+
         public void Add(CellObject cell, EntityId entityId)
         {
             using (M2Share.syncLock.EnterWriteLock())

@@ -1,6 +1,5 @@
 ﻿using Collections.Pooled;
 using GameSvr.Actor;
-using GameSvr.Castle;
 using GameSvr.Event;
 using GameSvr.Event.Events;
 using GameSvr.Npc;
@@ -99,7 +98,6 @@ namespace GameSvr.Maps
                 var cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
                 if (cellsuccess && cellInfo.Valid)
                 {
-                    CellObject osObject;
                     if (cellInfo.ObjList == null)
                     {
                         cellInfo.ObjList = new PooledList<CellObject>();
@@ -112,7 +110,7 @@ namespace GameSvr.Maps
                             {
                                 for (var i = 0; i < cellInfo.Count; i++)
                                 {
-                                    osObject = cellInfo.ObjList[i];
+                                    var osObject = cellInfo.ObjList[i];
                                     if (osObject.CellType == CellType.ItemObject)
                                     {
                                         var mapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);
@@ -142,7 +140,7 @@ namespace GameSvr.Maps
                     }
                     if (!bo1E)
                     {
-                        osObject = new CellObject
+                        var osObject = new CellObject
                         {
                             CellType = btType,
                             CellObjId = pRemoveObject.ObjectId,
@@ -223,7 +221,7 @@ namespace GameSvr.Maps
                 {
                     if (cellInfo.Valid)
                     {
-                        if (cellInfo.ObjList != null)
+                        if (cellInfo.IsAvailable)
                         {
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
@@ -257,7 +255,7 @@ namespace GameSvr.Maps
                     }
                     else
                     {
-                        if (GetCellInfo(nCx, nCy, ref cellInfo) && cellInfo.ObjList != null)
+                        if (GetCellInfo(nCx, nCy, ref cellInfo) && cellInfo.IsAvailable)
                         {
                             var i = 0;
                             while (true)
@@ -328,7 +326,7 @@ namespace GameSvr.Maps
                     return true;
                 }
                 result = true;
-                if (!boFlag && cellInfo.ObjList != null)
+                if (!boFlag && cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
@@ -371,7 +369,7 @@ namespace GameSvr.Maps
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
             if (cellsuccess && cellInfo.Valid)
             {
-                if (cellInfo.ObjList != null)
+                if (cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
@@ -407,7 +405,7 @@ namespace GameSvr.Maps
             if (cellsuccess && cellInfo.Valid)
             {
                 result = true;
-                if (!boFlag && cellInfo.ObjList != null)
+                if (!boFlag && cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
@@ -491,7 +489,7 @@ namespace GameSvr.Maps
                         CellObject osObject;
                         try
                         {
-                            if (cellInfo.ObjList != null)
+                            if (cellInfo.IsAvailable)
                             {
                                 for (var i = 0; i < cellInfo.Count; i++)
                                 {
@@ -565,7 +563,7 @@ namespace GameSvr.Maps
             if (cellsuccess && cellInfo.Valid)
             {
                 Bo2C = true;
-                if (cellInfo.ObjList != null)
+                if (cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
@@ -656,7 +654,7 @@ namespace GameSvr.Maps
                         {
                             if (GetCellInfo(x, y, ref mc))
                             {
-                                if ((mc.Valid))
+                                if (mc.Valid)
                                 {
                                     isSpace = true;
                                 }
@@ -714,7 +712,7 @@ namespace GameSvr.Maps
             {
                 boVerify = false;
                 MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-                if (cellsuccess && cellInfo.ObjList != null)
+                if (cellsuccess && cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
@@ -951,7 +949,7 @@ namespace GameSvr.Maps
             var result = 0;
             var cellsuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-            if (cellsuccess && cellInfo.ObjList != null)
+            if (cellsuccess && cellInfo.IsAvailable)
             {
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
@@ -1052,7 +1050,7 @@ namespace GameSvr.Maps
             var result = true;
             var cellsuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-            if (cellsuccess && cellInfo.ObjList != null)
+            if (cellsuccess && cellInfo.IsAvailable)
             {
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
@@ -1093,7 +1091,7 @@ namespace GameSvr.Maps
             object result = null;
             var cellsuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-            if (cellsuccess && cellInfo.ObjList != null)
+            if (cellsuccess && cellInfo.IsAvailable)
             {
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
@@ -1165,7 +1163,7 @@ namespace GameSvr.Maps
             if (cellsuccess && cellInfo.Valid)
             {
                 Bo2C = true;
-                if (cellInfo.ObjList != null)
+                if (cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
@@ -1214,7 +1212,7 @@ namespace GameSvr.Maps
                 {
                     var cellsuccess = false;
                     var cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-                    if (cellsuccess && cellInfo.ObjList != null)
+                    if (cellsuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
@@ -1252,7 +1250,7 @@ namespace GameSvr.Maps
             var nEndX = nX + nRage;
             var nStartY = nY - nRage;
             var nEndY = nY + nRage;
-            Console.WriteLine("todo GetMapBaseObjects");
+            M2Share.Log.Error("todo GetMapBaseObjects");
             return true;
         }
 
@@ -1268,7 +1266,7 @@ namespace GameSvr.Maps
         {
             var cellsuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-            if (cellsuccess && cellInfo.ObjList != null)
+            if (cellsuccess && cellInfo.IsAvailable)
             {
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
@@ -1298,7 +1296,7 @@ namespace GameSvr.Maps
             Bo2C = false;
             var cellsuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-            if (cellsuccess && cellInfo.ObjList != null)
+            if (cellsuccess && cellInfo.IsAvailable)
             {
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
@@ -1360,7 +1358,7 @@ namespace GameSvr.Maps
             var cellsuccess = false;
             var result = false;
             MapCellInfo cellInfo = GetCellInfo(nMapX, nMapY, ref cellsuccess);
-            if (cellsuccess && cellInfo.ObjList != null)
+            if (cellsuccess && cellInfo.IsAvailable)
             {
                 for (var i = 0; i < cellInfo.Count; i++)
                 {

@@ -1604,7 +1604,7 @@ namespace GameSvr.Npc
             {
                 if (UserItem.DuraMax > 0)
                 {
-                    nRepairPrice = HUtil32.Round(((double)(nPrice / 3) / UserItem.DuraMax) * (UserItem.DuraMax - UserItem.Dura));
+                    nRepairPrice = HUtil32.Round((double)(nPrice / 3) / UserItem.DuraMax * (UserItem.DuraMax - UserItem.Dura));
                 }
                 else
                 {
@@ -1673,7 +1673,7 @@ namespace GameSvr.Npc
                 {
                     if (UserItem.DuraMax > 0)
                     {
-                        nRepairPrice = HUtil32.Round(((nPrice / 3) / UserItem.DuraMax) * (UserItem.DuraMax - UserItem.Dura));
+                        nRepairPrice = HUtil32.Round(nPrice / 3 / UserItem.DuraMax * (UserItem.DuraMax - UserItem.Dura));
                     }
                     else
                     {

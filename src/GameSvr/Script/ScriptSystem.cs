@@ -1712,9 +1712,9 @@ namespace GameSvr.Script
                                         ((Merchant)NPC).m_boOffLineMsg = true;
                                         continue;
                                     }
-                                    if (String.Compare(s30, (ScriptConst.sybdeal), StringComparison.OrdinalIgnoreCase) == 0)
+                                    if (String.Compare(s30, ScriptConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0)
                                     {
-                                        ((Merchant)(NPC)).m_boYBDeal = true;
+                                        ((Merchant)NPC).m_boYBDeal = true;
                                         continue;
                                     }
                                 }

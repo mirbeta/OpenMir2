@@ -45,8 +45,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("13" + "\09" + PlayObject.MapName + "\09" + (PlayObject.CurrX).ToString() + "\09" + (PlayObject.CurrY).ToString() + "\09"
-                        + PlayObject.CharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + (nCount).ToString() + "\09" + "1" + "\09" + sHumName);
+                    M2Share.AddGameDataLog("13" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX.ToString() + "\09" + PlayObject.CurrY.ToString() + "\09"
+                        + PlayObject.CharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + nCount.ToString() + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else

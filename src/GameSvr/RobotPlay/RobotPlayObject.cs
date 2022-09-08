@@ -598,7 +598,7 @@ namespace GameSvr.RobotPlay
                             sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
                             Whisper(sChrName, "你猜我是谁.");
                             //Whisper(sChrName, m_AISayMsgList[(M2Share.RandomNumber.Random(m_AISayMsgList.Count)).Next()]);
-                            Console.WriteLine("TODO Hear...");
+                            M2Share.Log.Error("TODO Hear...");
                         }
                     }
                     break;

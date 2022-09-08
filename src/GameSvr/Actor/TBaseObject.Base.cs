@@ -108,7 +108,7 @@ namespace GameSvr.Actor
                         {
                             dwMakeGhostTime = M2Share.Config.MakeGhostTime;
                         }
-                        if ((HUtil32.GetTickCount() - DeathTick > dwMakeGhostTime))
+                        if (HUtil32.GetTickCount() - DeathTick > dwMakeGhostTime)
                         {
                             MakeGhost();
                         }

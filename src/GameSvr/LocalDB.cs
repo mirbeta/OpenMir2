@@ -155,7 +155,7 @@ namespace GameSvr
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                M2Share.Log.Error(ex.StackTrace);
             }
         }
 
@@ -897,7 +897,7 @@ namespace GameSvr
                         {
                             if (M2Share.g_UnbindList.ContainsKey(n10))
                             {
-                                Console.WriteLine("重复解包物品[{0}]...", sItemName);
+                                M2Share.Log.Warn(string.Format("重复解包物品[{0}]...", sItemName));
                                 continue;
                             }
                             M2Share.g_UnbindList.Add(n10, sItemName);

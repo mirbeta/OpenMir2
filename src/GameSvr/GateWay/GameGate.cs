@@ -634,7 +634,7 @@ namespace GameSvr.GateWay
                             }
                         }
                     }
-                });
+                }, cancellation.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
         }
     }

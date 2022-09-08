@@ -122,7 +122,7 @@ namespace GameSvr.DataStores
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                M2Share.Log.Error(ex.StackTrace);
                 return result;
             }
             finally
@@ -189,7 +189,7 @@ namespace GameSvr.DataStores
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                M2Share.Log.Error(ex.StackTrace);
             }
             finally
             {
@@ -392,7 +392,7 @@ namespace GameSvr.DataStores
                 catch (Exception e)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(e);
+                    M2Share.Log.Error(e.StackTrace);
                     Console.ResetColor();
                     return false;
                 }

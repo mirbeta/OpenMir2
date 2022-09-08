@@ -126,7 +126,7 @@ namespace GameSvr.Snaps
                     MsgGetRequestLoverRecall(serverNum, body);
                     break;
                 case Grobal2.ISM_GRUOPMESSAGE:
-                    Console.WriteLine("跨服消息");
+                    M2Share.Log.Info("跨服消息");
                     break;
             }
         }

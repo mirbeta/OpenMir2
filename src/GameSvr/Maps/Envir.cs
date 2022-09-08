@@ -38,7 +38,7 @@ namespace GameSvr.Maps
         /// </summary>
         public int CellObjId;
         /// <summary>
-        /// Cell类型
+        /// Cell对象类型
         /// </summary>
         public CellType CellType;
         /// <summary>
