@@ -8,6 +8,10 @@ namespace GameGate.Conf
     /// </summary>
     public class GateConfig
     {
+        /// <summary>
+        /// 是否启用OTP动态加密
+        /// </summary>
+        public bool EnableOtp;
         public bool m_fAddLog;
         /// <summary>
         /// 日志等级
@@ -222,6 +226,7 @@ namespace GameGate.Conf
 
         public GateConfig()
         {
+            EnableOtp = false;
             CheckNullSession = true;
             UseCloudGate = false;
             IsOverSpeedSendBack = false;

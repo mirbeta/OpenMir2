@@ -42,6 +42,7 @@ namespace SystemModule.Packet.ClientPackets
         public ushort Param;
         public ushort Tag;
         public ushort Series;
+        public int OtpCode;
 
         public const int PackSize = 12;
 

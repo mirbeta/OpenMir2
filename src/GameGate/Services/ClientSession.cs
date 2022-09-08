@@ -1,3 +1,4 @@
+using GameGate.Auth;
 using GameGate.Conf;
 using GameGate.Packet;
 using GameGate.Services;
@@ -31,7 +32,13 @@ namespace GameGate
         private int m_nChrStutas = 0;
         private int m_SendCheckTick = 0;
         private TCheckStep m_Stat;
+        /// <summary>
+        /// 会话密钥
+        /// 用于OTP动态口令验证
+        /// </summary>
+        private readonly string SessionKey;
         private readonly long m_FinishTick = 0;
+        private readonly DynamicAuthenticator _authenticator = null;
 
         public ClientSession(TSessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
@@ -45,6 +52,8 @@ namespace GameGate
             m_Stat = TCheckStep.CheckLogin;
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
+            SessionKey = Guid.NewGuid().ToString("N");
+            _authenticator = new DynamicAuthenticator();
         }
 
         public GameSpeed GetGameSpeed()
@@ -57,6 +66,11 @@ namespace GameGate
         private static MirLog LogQueue => MirLog.Instance;
 
         private GateConfig Config => ConfigManager.Instance.GateConfig;
+
+        private void Kick(byte code)
+        {                            
+            Session.Socket.Close();
+        }
 
         /// <summary>
         /// 处理客户端发送过来的封包
@@ -119,8 +133,8 @@ namespace GameGate
                         if (!success)
                         {
                             LogQueue.Enqueue("客户端登陆消息处理失败，剔除链接", 1);
-                            //KickUser("ip");
-                            Session.Socket.Close();
+                            Kick(1);
+                            return;
                         }
                         break;
                     }
@@ -137,6 +151,23 @@ namespace GameGate
                         var packBuff = Misc.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
 
                         var CltCmd = Packets.ToPacket<ClientPacket>(packBuff);
+
+                        if (Config.EnableOtp)
+                        {
+                            if (CltCmd.OtpCode <= 0)
+                            {
+                                LogQueue.Enqueue("动态加密口令错误，剔除链接.", 1);
+                                Kick(100);
+                                return;
+                            }
+                            var authSuccess = _authenticator.ValidateTwoFactorPIN(SessionKey, CltCmd.OtpCode.ToString());
+                            if (!authSuccess)
+                            {
+                                LogQueue.Enqueue("动态加密口令验证失效,剔除链接.", 1);
+                                Kick(100);
+                                return;
+                            }
+                        }
                         switch (CltCmd.Cmd)
                         {
                             case Grobal2.CM_GUILDUPDATENOTICE:
@@ -973,8 +1004,8 @@ namespace GameGate
         /// </summary>
         private void HandleLogin(string loginData, int nLen, string Addr, ref bool success)
         {
-            const int FIRST_PAKCET_MAX_LEN = 254;
-            if (nLen < FIRST_PAKCET_MAX_LEN && nLen > 15)
+            const int FirstPakcetMaxLen = 254;
+            if (nLen < FirstPakcetMaxLen && nLen > 15)
             {
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
@@ -990,6 +1021,12 @@ namespace GameGate
                 var szCode = string.Empty;
                 var szHarewareID = string.Empty;//硬件ID
                 var sData = string.Empty;
+                
+                var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);
+                LogQueue.Enqueue($"加密密钥:{secretKey.AccountSecretKey}", 1);
+                var code = secretKey.ManualEntryKey;
+                LogQueue.Enqueue($"动态验证码为：{code}", 1);
+                LogQueue.Enqueue($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后更换新的密钥", 1);
 
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sAccount, HUtil32.Backslash);
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, HUtil32.Backslash);

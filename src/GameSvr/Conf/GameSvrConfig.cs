@@ -378,7 +378,7 @@ namespace GameSvr.Conf
         public int nRedPKProtectLevel;
         public int ItemPowerRate;
         public int ItemExpRate;
-        public int nScriptGotoCountLimit;
+        public int ScriptGotoCountLimit;
         public byte btHearMsgFColor;
         public byte btHearMsgBColor;
         public byte btWhisperMsgFColor;
@@ -1245,7 +1245,7 @@ namespace GameSvr.Conf
             nRedPKProtectLevel = 10;
             ItemPowerRate = 10000;
             ItemExpRate = 10000;
-            nScriptGotoCountLimit = 30;
+            ScriptGotoCountLimit = 30;
             btHearMsgFColor = 0x00; //前景
             btHearMsgBColor = 0xFF; //背景
             btWhisperMsgFColor = 0xFC; //前景
