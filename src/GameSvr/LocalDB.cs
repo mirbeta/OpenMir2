@@ -31,8 +31,7 @@ namespace GameSvr
             var sIPaddr = string.Empty;
             var sCharName = string.Empty;
             var sData = string.Empty;
-            TAdminInfo AdminInfo;
-            string sfilename = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "AdminList.txt");
+            var sfilename = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "AdminList.txt");
             if (!File.Exists(sfilename))
             {
                 return false;
@@ -96,7 +95,7 @@ namespace GameSvr
                         {
                             continue;
                         }
-                        AdminInfo = new TAdminInfo
+                        var AdminInfo = new TAdminInfo
                         {
                             nLv = nLv,
                             sChrName = sCharName,
@@ -400,7 +399,7 @@ namespace GameSvr
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
                                 var n38 = HUtil32.Str_ToInt(s34, 0);
                                 var n3C = HUtil32.Str_ToInt(s20, 0);
-                                bool boGrouped = HUtil32.CompareLStr(s30, "GROUP", "GROUP".Length);
+                                var boGrouped = HUtil32.CompareLStr(s30, "GROUP", "GROUP".Length);
                                 if (!Map.CreateQuest(n38, n3C, sMonName, sItem, sQuest, boGrouped))
                                 {
                                     result = -i;
@@ -664,7 +663,7 @@ namespace GameSvr
             var cY = string.Empty;
             var flag = string.Empty;
             var appr = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Npcs.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Npcs.txt");
             if (File.Exists(sFileName))
             {
                 using var LoadList = new StringList();
@@ -735,7 +734,7 @@ namespace GameSvr
 
         public int LoadQuestDiary()
         {
-            int result = 1;
+            var result = 1;
             var s18 = string.Empty;
             var s1C = string.Empty;
             var s20 = string.Empty;
@@ -915,8 +914,8 @@ namespace GameSvr
 
         public int SaveGoodRecord(Merchant NPC, string sFile)
         {
-            int result = -1;
-            string sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
+            var result = -1;
+            var sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
             //if (File.Exists(sFileName))
             //{
             //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Write | FileShare.ReadWrite);
@@ -953,8 +952,8 @@ namespace GameSvr
 
         public int SaveGoodPriceRecord(Merchant NPC, string sFile)
         {
-            int result = -1;
-            string sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";
+            var result = -1;
+            var sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";
             //if (File.Exists(sFileName))
             //{
             //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Write | FileShare.ReadWrite);
@@ -1122,8 +1121,8 @@ namespace GameSvr
 
         public int LoadGoodRecord(Merchant NPC, string sFile)
         {
-            int result = -1;
-            string sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
+            var result = -1;
+            var sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
             //if (File.Exists(sFileName))
             //{
             //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Read | FileShare.ReadWrite);
