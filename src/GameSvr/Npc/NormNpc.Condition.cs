@@ -1052,13 +1052,13 @@ namespace GameSvr.Npc
                     }
                     break;
                 case 1:
-                    if (CastleDoor.MBoOpened)
+                    if (CastleDoor.IsOpened)
                     {
                         result = true;
                     }
                     break;
                 case 2:
-                    if (!CastleDoor.MBoOpened)
+                    if (!CastleDoor.IsOpened)
                     {
                         result = true;
                     }

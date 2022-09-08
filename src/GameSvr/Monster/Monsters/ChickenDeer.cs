@@ -12,11 +12,11 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            int n10 = 9999;
-            BaseObject baseObject1C = null;
-            BaseObject baseObject = null;
             if (CanWalk())
             {
+                int n10 = 9999;
+                BaseObject baseObject1C = null;
+                BaseObject baseObject = null;
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)

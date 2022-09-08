@@ -57,7 +57,7 @@ namespace GameSvr.Npc
                         {
                             sText = "destroyed";
                         }
-                        else if (castleDoor.MBoOpened)
+                        else if (castleDoor.IsOpened)
                         {
                             sText = "opened";
                         }

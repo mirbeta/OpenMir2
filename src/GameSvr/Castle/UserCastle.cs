@@ -803,14 +803,14 @@ namespace GameSvr.Castle
             {
                 if (boClose)
                 {
-                    if (((CastleDoor)MainDoor.BaseObject).MBoOpened)
+                    if (((CastleDoor)MainDoor.BaseObject).IsOpened)
                     {
                         ((CastleDoor)MainDoor.BaseObject).Close();
                     }
                 }
                 else
                 {
-                    if (!((CastleDoor)MainDoor.BaseObject).MBoOpened)
+                    if (!((CastleDoor)MainDoor.BaseObject).IsOpened)
                     {
                         ((CastleDoor)MainDoor.BaseObject).Open();
                     }
@@ -845,7 +845,7 @@ namespace GameSvr.Castle
                 {
                     CastleDoor.BaseObject.WAbil.HP = CastleDoor.BaseObject.WAbil.MaxHP;
                     CastleDoor.BaseObject.Death = false;
-                    ((CastleDoor)CastleDoor.BaseObject).MBoOpened = false;
+                    ((CastleDoor)CastleDoor.BaseObject).IsOpened = false;
                     ((CastleDoor)CastleDoor.BaseObject).RefStatus();
                     result = true;
                 }

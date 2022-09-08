@@ -8,7 +8,7 @@ namespace GameSvr.Monster.Monsters
 
         public SandMobObject() : base()
         {
-            NComeOutValue = 8;
+            ComeOutValue = 8;
         }
 
         public override void Run()
