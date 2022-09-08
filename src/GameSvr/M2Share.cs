@@ -2,6 +2,7 @@ using GameSvr.Actor;
 using GameSvr.Castle;
 using GameSvr.Command;
 using GameSvr.Conf;
+using GameSvr.Conf.Model;
 using GameSvr.DataStores;
 using GameSvr.Event;
 using GameSvr.GateWay;

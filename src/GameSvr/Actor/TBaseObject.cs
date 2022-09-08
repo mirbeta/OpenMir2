@@ -5978,7 +5978,7 @@ namespace GameSvr.Actor
 
             if (this is MagicMonObject)
             {
-                ((MagicMonObject)this).MBoUseMagic = false;
+                ((MagicMonObject)this).UseMagic = false;
             }
 
             if (this is RockManObject)

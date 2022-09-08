@@ -2,7 +2,7 @@
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Conf
+namespace GameSvr.Conf.Model
 {
     public class GameSvrConfig
     {
