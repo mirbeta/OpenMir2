@@ -11,12 +11,12 @@ namespace GameSvr.Event
         /// </summary>
         public readonly int Id;
         public VisibleFlag VisibleFlag = 0;
-        public Envirnoment m_Envir;
-        public int m_nX;
-        public int m_nY;
+        public Envirnoment Envir;
+        public int nX;
+        public int nY;
         public int EventType;
-        public int m_nEventParam;
-        protected int m_dwOpenStartTick;
+        public int EventParam;
+        protected int OpenStartTick;
         /// <summary>
         /// 持续时间
         /// </summary>
@@ -30,11 +30,11 @@ namespace GameSvr.Event
         /// <summary>
         /// 开始运行时间
         /// </summary>
-        public int m_dwRunStart;
+        public int RunStart;
         /// <summary>
         /// 运行间隔
         /// </summary>
-        public int m_dwRunTick;
+        public int RunTick;
         /// <summary>
         /// 是否关闭
         /// </summary>
@@ -51,23 +51,23 @@ namespace GameSvr.Event
         public MirEvent(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
         {
             Id = HUtil32.Sequence();
-            m_dwOpenStartTick = HUtil32.GetTickCount();
+            OpenStartTick = HUtil32.GetTickCount();
             EventType = nType;
-            m_nEventParam = 0;
+            EventParam = 0;
             ContinueTime = dwETime;
             Visible = boVisible;
             Closed = false;
-            m_Envir = envir;
-            m_nX = ntX;
-            m_nY = ntY;
+            Envir = envir;
+            nX = ntX;
+            nY = ntY;
             Active = true;
             Damage = 0;
             OwnBaseObject = null;
-            m_dwRunStart = HUtil32.GetTickCount();
-            m_dwRunTick = 500;
-            if (m_Envir != null && Visible)
+            RunStart = HUtil32.GetTickCount();
+            RunTick = 500;
+            if (Envir != null && Visible)
             {
-                m_Envir.AddToMap(m_nX, m_nY, CellType.EventObject, this);
+                Envir.AddToMap(nX, nY, CellType.EventObject, this);
             }
             else
             {
@@ -77,7 +77,7 @@ namespace GameSvr.Event
 
         public virtual void Run()
         {
-            if ((HUtil32.GetTickCount() - m_dwOpenStartTick) > ContinueTime)
+            if ((HUtil32.GetTickCount() - OpenStartTick) > ContinueTime)
             {
                 Closed = true;
                 Close();
@@ -93,11 +93,11 @@ namespace GameSvr.Event
             CloseTick = HUtil32.GetTickCount();
             if (!Visible) return;
             Visible = false;
-            if (m_Envir != null)
+            if (Envir != null)
             {
-                m_Envir.DeleteFromMap(m_nX, m_nY, CellType.EventObject, this);
+                Envir.DeleteFromMap(nX, nY, CellType.EventObject, this);
             }
-            m_Envir = null;
+            Envir = null;
         }
 
         public void Dispose()

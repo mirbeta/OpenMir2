@@ -2537,10 +2537,10 @@ namespace GameSvr.Player
         /// <returns></returns>
         private ushort MakeMineRandomDrua()
         {
-            var result = M2Share.RandomNumber.Random(M2Share.Config.nStoneGeneralDuraRate) + M2Share.Config.nStoneMinDura;
-            if (M2Share.RandomNumber.Random(M2Share.Config.nStoneAddDuraRate) == 0)
+            var result = M2Share.RandomNumber.Random(M2Share.Config.StoneGeneralDuraRate) + M2Share.Config.StoneMinDura;
+            if (M2Share.RandomNumber.Random(M2Share.Config.StoneAddDuraRate) == 0)
             {
-                result += M2Share.RandomNumber.Random(M2Share.Config.nStoneAddDuraMax);
+                result += M2Share.RandomNumber.Random(M2Share.Config.StoneAddDuraMax);
             }
             return (ushort)result;
         }
@@ -2588,7 +2588,7 @@ namespace GameSvr.Player
                 }
                 return;
             }
-            if (nRandom >= M2Share.Config.nSteelStoneMin && nRandom <= M2Share.Config.nSteelStoneMax)
+            if (nRandom >= M2Share.Config.SteelStoneMin && nRandom <= M2Share.Config.SteelStoneMax)
             {
                 UserItem = new TUserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.SteelStone, ref UserItem))
@@ -2604,7 +2604,7 @@ namespace GameSvr.Player
                 }
                 return;
             }
-            if (nRandom >= M2Share.Config.nBlackStoneMin && nRandom <= M2Share.Config.nBlackStoneMax)
+            if (nRandom >= M2Share.Config.BlackStoneMin && nRandom <= M2Share.Config.BlackStoneMax)
             {
                 UserItem = new TUserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.BlackStone, ref UserItem))

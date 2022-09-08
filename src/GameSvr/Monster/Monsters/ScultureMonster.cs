@@ -24,16 +24,16 @@ namespace GameSvr.Monster.Monsters
         private void MeltStoneAll()
         {
             MeltStone();
-            IList<BaseObject> List10 = new List<BaseObject>();
-            GetMapBaseObjects(Envir, CurrX, CurrY, 7, List10);
-            for (var i = 0; i < List10.Count; i++)
+            IList<BaseObject> list10 = new List<BaseObject>();
+            GetMapBaseObjects(Envir, CurrX, CurrY, 7, list10);
+            for (var i = 0; i < list10.Count; i++)
             {
-                var BaseObject = List10[i];
-                if (BaseObject.StoneMode)
+                var baseObject = list10[i];
+                if (baseObject.StoneMode)
                 {
-                    if (BaseObject is ScultureMonster)
+                    if (baseObject is ScultureMonster)
                     {
-                        (BaseObject as ScultureMonster).MeltStone();
+                        (baseObject as ScultureMonster).MeltStone();
                     }
                 }
             }
@@ -47,16 +47,16 @@ namespace GameSvr.Monster.Monsters
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        var BaseObject = VisibleActors[i].BaseObject;
-                        if (BaseObject.Death)
+                        var baseObject = VisibleActors[i].BaseObject;
+                        if (baseObject.Death)
                         {
                             continue;
                         }
-                        if (IsProperTarget(BaseObject))
+                        if (IsProperTarget(baseObject))
                         {
-                            if (!BaseObject.HideMode || CoolEye)
+                            if (!baseObject.HideMode || CoolEye)
                             {
-                                if (Math.Abs(CurrX - BaseObject.CurrX) <= 2 && Math.Abs(CurrY - BaseObject.CurrY) <= 2)
+                                if (Math.Abs(CurrX - baseObject.CurrX) <= 2 && Math.Abs(CurrY - baseObject.CurrY) <= 2)
                                 {
                                     MeltStoneAll();
                                     break;

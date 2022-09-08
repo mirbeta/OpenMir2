@@ -2,7 +2,7 @@
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Conf
+namespace GameSvr.Conf.Model
 {
     public class GameSvrConfig
     {
@@ -351,7 +351,7 @@ namespace GameSvr.Conf
         /// 消息发送范围
         /// </summary>
         public byte SendRefMsgRange;
-        public bool boDecLampDura;
+        public bool DecLampDura;
         public bool HungerSystem;
         public bool HungerDecHP;
         public bool HungerDecPower;
@@ -521,41 +521,41 @@ namespace GameSvr.Conf
         public int GoldStoneMax;
         public int SilverStoneMin;
         public int SilverStoneMax;
-        public int nSteelStoneMin;
-        public int nSteelStoneMax;
-        public int nBlackStoneMin;
-        public int nBlackStoneMax;
-        public int nStoneMinDura;
-        public int nStoneGeneralDuraRate;
-        public int nStoneAddDuraRate;
-        public int nStoneAddDuraMax;
-        public int nWinLottery6Min;
-        public int nWinLottery6Max;
-        public int nWinLottery5Min;
-        public int nWinLottery5Max;
-        public int nWinLottery4Min;
-        public int nWinLottery4Max;
-        public int nWinLottery3Min;
-        public int nWinLottery3Max;
-        public int nWinLottery2Min;
-        public int nWinLottery2Max;
-        public int nWinLottery1Min;
-        public int nWinLottery1Max;
-        public int nWinLottery1Gold;
-        public int nWinLottery2Gold;
-        public int nWinLottery3Gold;
-        public int nWinLottery4Gold;
-        public int nWinLottery5Gold;
-        public int nWinLottery6Gold;
-        public int nWinLotteryRate;
-        public int nWinLotteryCount;
-        public int nNoWinLotteryCount;
-        public int nWinLotteryLevel1;
-        public int nWinLotteryLevel2;
-        public int nWinLotteryLevel3;
-        public int nWinLotteryLevel4;
-        public int nWinLotteryLevel5;
-        public int nWinLotteryLevel6;
+        public int SteelStoneMin;
+        public int SteelStoneMax;
+        public int BlackStoneMin;
+        public int BlackStoneMax;
+        public int StoneMinDura;
+        public int StoneGeneralDuraRate;
+        public int StoneAddDuraRate;
+        public int StoneAddDuraMax;
+        public int WinLottery6Min;
+        public int WinLottery6Max;
+        public int WinLottery5Min;
+        public int WinLottery5Max;
+        public int WinLottery4Min;
+        public int WinLottery4Max;
+        public int WinLottery3Min;
+        public int WinLottery3Max;
+        public int WinLottery2Min;
+        public int WinLottery2Max;
+        public int WinLottery1Min;
+        public int WinLottery1Max;
+        public int WinLottery1Gold;
+        public int WinLottery2Gold;
+        public int WinLottery3Gold;
+        public int WinLottery4Gold;
+        public int WinLottery5Gold;
+        public int WinLottery6Gold;
+        public int WinLotteryRate;
+        public int WinLotteryCount;
+        public int NoWinLotteryCount;
+        public int WinLotteryLevel1;
+        public int WinLotteryLevel2;
+        public int WinLotteryLevel3;
+        public int WinLotteryLevel4;
+        public int WinLotteryLevel5;
+        public int WinLotteryLevel6;
         public int ItemNumber;
         public int ItemNumberEx;
         public int GuildRecallTime;
@@ -580,9 +580,9 @@ namespace GameSvr.Conf
         public int DieDropUseItemRate;
         public int DieRedDropUseItemRate;
         public bool DieDropGold;
-        public bool boKillByHumanDropUseItem;
-        public bool boKillByMonstDropUseItem;
-        public bool boKickExpireHuman;
+        public bool KillByHumanDropUseItem;
+        public bool KillByMonstDropUseItem;
+        public bool KickExpireHuman;
         public int GuildRankNameLen;
         public int GuildMemberMaxLimit;
         public int GuildNameLen;
@@ -598,7 +598,7 @@ namespace GameSvr.Conf
         /// <summary>
         /// 复活间隔时间
         /// </summary>
-        public int dwRevivalTime;
+        public int RevivalTime;
         public bool boUserMoveCanDupObj;
         public bool boUserMoveCanOnItem;
         public int dwUserMoveTime;
@@ -621,7 +621,7 @@ namespace GameSvr.Conf
         public int BBMonAutoChangeColorTime;
         public bool boOldClientShowHiLevel;
         public bool ShowScriptActionMsg;
-        public int nRunSocketDieLoopLimit;
+        public int RunSocketDieLoopLimit;
         public bool ThreadRun;
         public bool ShowExceptionMsg;
         public bool ShowPreFixMsg;
@@ -773,19 +773,19 @@ namespace GameSvr.Conf
         public int MonHptoExpmax;
         public bool UseFixExp;
         public int BaseExp;
-        public int nAddExp;
+        public int AddExp;
         public int LimitExpLevel;
         public int LimitExpValue;
-        public bool boAddUserItemNewValue;
-        public string sLineNoticePreFix;
-        public string sSysMsgPreFix;
-        public string sGuildMsgPreFix;
-        public string sGroupMsgPreFix;
-        public string sHintMsgPreFix;
-        public string sGMRedMsgpreFix;
-        public string sMonSayMsgpreFix;
-        public string sCustMsgpreFix;
-        public string sCastleMsgpreFix;
+        public bool AddUserItemNewValue;
+        public string LineNoticePreFix;
+        public string SysMsgPreFix;
+        public string GuildMsgPreFix;
+        public string GroupMsgPreFix;
+        public string HintMsgPreFix;
+        public string GameManagerRedMsgPreFix;
+        public string MonSayMsgPreFix;
+        public string CustMsgPreFix;
+        public string CastleMsgPreFix;
         public string GuildNotice;
         public string GuildWar;
         public string GuildAll;
@@ -898,9 +898,9 @@ namespace GameSvr.Conf
         public int nDBSocketSendLen;
         public bool PermissionSystem;
         /// <summary>
-        /// 假人自动拾取物品
+        /// 机器人自动拾取物品
         /// </summary>
-        public bool boAutoPickUpItem;
+        public bool RobotAutoPickUpItem;
         /// <summary>
         /// 道22后是否物理攻击
         /// </summary>
@@ -1222,7 +1222,7 @@ namespace GameSvr.Conf
             PasswordErrorCountLock = 3; //输入密码错误超过 指定次数则锁定密码
             PasswordErrorKick = false; //输入密码错误超过限制则踢下线
             SendRefMsgRange = 12;
-            boDecLampDura = true;
+            DecLampDura = true;
             HungerSystem = false;
             HungerDecHP = false;
             HungerDecPower = false;
@@ -1379,41 +1379,41 @@ namespace GameSvr.Conf
             GoldStoneMax = 2;
             SilverStoneMin = 3;
             SilverStoneMax = 20;
-            nSteelStoneMin = 21;
-            nSteelStoneMax = 45;
-            nBlackStoneMin = 46;
-            nBlackStoneMax = 56;
-            nStoneMinDura = 3000;
-            nStoneGeneralDuraRate = 13000;
-            nStoneAddDuraRate = 20;
-            nStoneAddDuraMax = 10000;
-            nWinLottery6Min = 1;
-            nWinLottery6Max = 4999;
-            nWinLottery5Min = 14000;
-            nWinLottery5Max = 15999;
-            nWinLottery4Min = 16000;
-            nWinLottery4Max = 16149;
-            nWinLottery3Min = 16150;
-            nWinLottery3Max = 16169;
-            nWinLottery2Min = 16170;
-            nWinLottery2Max = 16179;
-            nWinLottery1Min = 16180;
-            nWinLottery1Max = 16185;//16180 + 1820;
-            nWinLottery1Gold = 1000000;
-            nWinLottery2Gold = 200000;
-            nWinLottery3Gold = 100000;
-            nWinLottery4Gold = 10000;
-            nWinLottery5Gold = 1000;
-            nWinLottery6Gold = 500;
-            nWinLotteryRate = 30000;
-            nWinLotteryCount = 0;
-            nNoWinLotteryCount = 0;
-            nWinLotteryLevel1 = 0;
-            nWinLotteryLevel2 = 0;
-            nWinLotteryLevel3 = 0;
-            nWinLotteryLevel4 = 0;
-            nWinLotteryLevel5 = 0;
-            nWinLotteryLevel6 = 0;
+            SteelStoneMin = 21;
+            SteelStoneMax = 45;
+            BlackStoneMin = 46;
+            BlackStoneMax = 56;
+            StoneMinDura = 3000;
+            StoneGeneralDuraRate = 13000;
+            StoneAddDuraRate = 20;
+            StoneAddDuraMax = 10000;
+            WinLottery6Min = 1;
+            WinLottery6Max = 4999;
+            WinLottery5Min = 14000;
+            WinLottery5Max = 15999;
+            WinLottery4Min = 16000;
+            WinLottery4Max = 16149;
+            WinLottery3Min = 16150;
+            WinLottery3Max = 16169;
+            WinLottery2Min = 16170;
+            WinLottery2Max = 16179;
+            WinLottery1Min = 16180;
+            WinLottery1Max = 16185;//16180 + 1820;
+            WinLottery1Gold = 1000000;
+            WinLottery2Gold = 200000;
+            WinLottery3Gold = 100000;
+            WinLottery4Gold = 10000;
+            WinLottery5Gold = 1000;
+            WinLottery6Gold = 500;
+            WinLotteryRate = 30000;
+            WinLotteryCount = 0;
+            NoWinLotteryCount = 0;
+            WinLotteryLevel1 = 0;
+            WinLotteryLevel2 = 0;
+            WinLotteryLevel3 = 0;
+            WinLotteryLevel4 = 0;
+            WinLotteryLevel5 = 0;
+            WinLotteryLevel6 = 0;
             GlobalVal = new int[500];
             GlobaDyMval = new int[500];
             GlobalAVal = new string[500];
@@ -1435,15 +1435,15 @@ namespace GameSvr.Conf
             DieDropUseItemRate = 30;
             DieRedDropUseItemRate = 15;
             DieDropGold = false;
-            boKillByHumanDropUseItem = false;
-            boKillByMonstDropUseItem = true;
-            boKickExpireHuman = false;
+            KillByHumanDropUseItem = false;
+            KillByMonstDropUseItem = true;
+            KickExpireHuman = false;
             GuildRankNameLen = 16;
             GuildMemberMaxLimit = 200;
             GuildNameLen = 16;
             AttackPosionRate = 5;
             AttackPosionTime = 5;
-            dwRevivalTime = 60 * 1000; //复活间隔时间
+            RevivalTime = 60 * 1000; //复活间隔时间
             boUserMoveCanDupObj = false;
             boUserMoveCanOnItem = true;
             dwUserMoveTime = 10;
@@ -1466,7 +1466,7 @@ namespace GameSvr.Conf
             BBMonAutoChangeColorTime = 3000;
             boOldClientShowHiLevel = true;
             ShowScriptActionMsg = true;
-            nRunSocketDieLoopLimit = 100;
+            RunSocketDieLoopLimit = 100;
             ThreadRun = false;
             ShowExceptionMsg = false;
             ShowPreFixMsg = false;
@@ -1555,19 +1555,19 @@ namespace GameSvr.Conf
             MonHptoExpmax = 1;
             UseFixExp = true;
             BaseExp = 100000000;
-            nAddExp = 1000000;
+            AddExp = 1000000;
             LimitExpLevel = 1000;
             LimitExpValue = 1;
-            boAddUserItemNewValue = true;
-            sLineNoticePreFix = "〖公告〗";
-            sSysMsgPreFix = "〖系统〗";
-            sGuildMsgPreFix = "〖行会〗";
-            sGroupMsgPreFix = "〖组队〗";
-            sHintMsgPreFix = "〖提示〗";
-            sGMRedMsgpreFix = "〖ＧＭ〗";
-            sMonSayMsgpreFix = "〖怪物〗";
-            sCustMsgpreFix = "〖祝福〗";
-            sCastleMsgpreFix = "〖城主〗";
+            AddUserItemNewValue = true;
+            LineNoticePreFix = "〖公告〗";
+            SysMsgPreFix = "〖系统〗";
+            GuildMsgPreFix = "〖行会〗";
+            GroupMsgPreFix = "〖组队〗";
+            HintMsgPreFix = "〖提示〗";
+            GameManagerRedMsgPreFix = "〖ＧＭ〗";
+            MonSayMsgPreFix = "〖怪物〗";
+            CustMsgPreFix = "〖祝福〗";
+            CastleMsgPreFix = "〖城主〗";
             GuildNotice = "公告";
             GuildWar = "敌对行会";
             GuildAll = "联盟行会";
@@ -1638,7 +1638,7 @@ namespace GameSvr.Conf
             nAIHomeY = 330;
             boHPAutoMoveMap = false;//低血回城
             boAutoRepairItem = true;
-            boAutoPickUpItem = false;
+            RobotAutoPickUpItem = false;
             boRenewHealth = true;
             btHeroSkillMode = true;
             dwHeroWarrorAttackTime = 1660;

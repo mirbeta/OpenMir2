@@ -2,9 +2,9 @@ using SystemModule.Common;
 
 namespace GameSvr.Conf
 {
-    public class GlobalConfig : IniFile
+    public class GlobalConf : IniFile
     {
-        public GlobalConfig(string fileName) : base(fileName)
+        public GlobalConf(string fileName) : base(fileName)
         {
             Load();
         }

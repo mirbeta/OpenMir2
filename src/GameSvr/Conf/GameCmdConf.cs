@@ -2,9 +2,9 @@
 
 namespace GameSvr.Conf
 {
-    public class GameCmdConfig : IniFile
+    public class GameCmdConf : IniFile
     {
-        public GameCmdConfig(string fileName) : base(fileName)
+        public GameCmdConf(string fileName) : base(fileName)
         {
             Load();
         }

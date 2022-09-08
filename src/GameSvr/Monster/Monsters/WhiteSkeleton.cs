@@ -4,11 +4,11 @@ namespace GameSvr.Monster.Monsters
 {
     public class WhiteSkeleton : AtMonster
     {
-        public bool m_boIsFirst;
+        public bool MBoIsFirst;
 
         public WhiteSkeleton() : base()
         {
-            m_boIsFirst = true;
+            MBoIsFirst = true;
             this.FixedHideMode = true;
             this.ViewRange = 6;
         }
@@ -23,9 +23,9 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (m_boIsFirst)
+            if (MBoIsFirst)
             {
-                m_boIsFirst = false;
+                MBoIsFirst = false;
                 this.Direction = 5;
                 this.FixedHideMode = false;
                 this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");

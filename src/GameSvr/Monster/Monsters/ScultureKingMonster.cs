@@ -6,8 +6,8 @@ namespace GameSvr.Monster.Monsters
 {
     public class ScultureKingMonster : MonsterObject
     {
-        private int m_nDangerLevel;
-        private readonly IList<BaseObject> m_SlaveObjectList;
+        private int _mNDangerLevel;
+        private readonly IList<BaseObject> _mSlaveObjectList;
 
         public ScultureKingMonster() : base()
         {
@@ -16,8 +16,8 @@ namespace GameSvr.Monster.Monsters
             StoneMode = true;
             CharStatusEx = Grobal2.STATE_STONE_MODE;
             Direction = 5;
-            m_nDangerLevel = 5;
-            m_SlaveObjectList = new List<BaseObject>();
+            _mNDangerLevel = 5;
+            _mSlaveObjectList = new List<BaseObject>();
         }
 
         private void MeltStone()
@@ -38,43 +38,43 @@ namespace GameSvr.Monster.Monsters
             GetFrontPosition(ref nX, ref nY);
             for (var i = 0; i < nCount; i++)
             {
-                if (m_SlaveObjectList.Count >= 30)
+                if (_mSlaveObjectList.Count >= 30)
                 {
                     break;
                 }
                 var baseObject = M2Share.UserEngine.RegenMonsterByName(MapName, nX, nY, M2Share.Config.Zuma[M2Share.RandomNumber.Random(4)]);
                 if (baseObject != null)
                 {
-                    m_SlaveObjectList.Add(baseObject);
+                    _mSlaveObjectList.Add(baseObject);
                 }
             }
         }
 
-        public override void Attack(BaseObject TargeTBaseObject, byte nDir)
+        public override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
             int nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
-            HitMagAttackTarget(TargeTBaseObject, 0, nPower, true);
+            HitMagAttackTarget(targeTBaseObject, 0, nPower, true);
         }
 
         public override void Run()
         {
             if (!Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
-                BaseObject BaseObject;
+                BaseObject baseObject;
                 if (StoneMode)
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = VisibleActors[i].BaseObject;
-                        if (BaseObject.Death)
+                        baseObject = VisibleActors[i].BaseObject;
+                        if (baseObject.Death)
                         {
                             continue;
                         }
-                        if (IsProperTarget(BaseObject))
+                        if (IsProperTarget(baseObject))
                         {
-                            if (!BaseObject.HideMode || CoolEye)
+                            if (!baseObject.HideMode || CoolEye)
                             {
-                                if (Math.Abs(CurrX - BaseObject.CurrX) <= 2 && Math.Abs(CurrY - BaseObject.CurrY) <= 2)
+                                if (Math.Abs(CurrX - baseObject.CurrX) <= 2 && Math.Abs(CurrY - baseObject.CurrY) <= 2)
                                 {
                                     MeltStone();
                                     break;
@@ -89,23 +89,23 @@ namespace GameSvr.Monster.Monsters
                     {
                         SearchEnemyTick = HUtil32.GetTickCount();
                         SearchTarget();
-                        if (m_nDangerLevel > Abil.HP / Abil.MaxHP * 5 && m_nDangerLevel > 0)
+                        if (_mNDangerLevel > Abil.HP / Abil.MaxHP * 5 && _mNDangerLevel > 0)
                         {
-                            m_nDangerLevel -= 1;
+                            _mNDangerLevel -= 1;
                             CallSlave();
                         }
                         if (Abil.HP == Abil.MaxHP)
                         {
-                            m_nDangerLevel = 5;
+                            _mNDangerLevel = 5;
                         }
                     }
                 }
-                for (var i = m_SlaveObjectList.Count - 1; i >= 0; i--)
+                for (var i = _mSlaveObjectList.Count - 1; i >= 0; i--)
                 {
-                    BaseObject = m_SlaveObjectList[i];
-                    if (BaseObject.Death || BaseObject.Ghost)
+                    baseObject = _mSlaveObjectList[i];
+                    if (baseObject.Death || baseObject.Ghost)
                     {
-                        m_SlaveObjectList.RemoveAt(i);
+                        _mSlaveObjectList.RemoveAt(i);
                     }
                 }
             }

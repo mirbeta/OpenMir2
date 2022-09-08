@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class BeeQueen : AnimalObject
     {
-        private readonly IList<BaseObject> BeeList;
+        private readonly IList<BaseObject> _beeList;
 
         public BeeQueen() : base()
         {
@@ -15,12 +15,12 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = HUtil32.GetTickCount();
             StickMode = true;
-            BeeList = new List<BaseObject>();
+            _beeList = new List<BaseObject>();
         }
 
         private void MakeChildBee()
         {
-            if (BeeList.Count >= 15)
+            if (_beeList.Count >= 15)
             {
                 return;
             }
@@ -28,18 +28,18 @@ namespace GameSvr.Monster.Monsters
             SendDelayMsg(this, Grobal2.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage processMsg)
         {
-            if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
+            if (processMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                var BB = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.Config.Bee);
-                if (BB != null)
+                var bb = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.Config.Bee);
+                if (bb != null)
                 {
-                    BB.SetTargetCreat(TargetCret);
-                    BeeList.Add(BB);
+                    bb.SetTargetCreat(TargetCret);
+                    _beeList.Add(bb);
                 }
             }
-            return base.Operate(ProcessMsg);
+            return base.Operate(processMsg);
         }
 
         public override void Run()
@@ -58,12 +58,12 @@ namespace GameSvr.Monster.Monsters
                             MakeChildBee();
                         }
                     }
-                    for (var i = BeeList.Count - 1; i >= 0; i--)
+                    for (var i = _beeList.Count - 1; i >= 0; i--)
                     {
-                        var BB = BeeList[i];
-                        if (BB.Death || BB.Ghost)
+                        var bb = _beeList[i];
+                        if (bb.Death || bb.Ghost)
                         {
-                            BeeList.RemoveAt(i);
+                            _beeList.RemoveAt(i);
                         }
                     }
                 }
