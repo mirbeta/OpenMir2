@@ -656,7 +656,7 @@ namespace GameSvr.Player
         private void SendLogon()
         {
             var MessageBodyWL = new TMessageBodyWL();
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ObjectId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
             MessageBodyWL.lParam1 = GetFeatureToLong();
             MessageBodyWL.lParam2 = CharStatus;
             if (AllowGroup)
@@ -670,7 +670,7 @@ namespace GameSvr.Player
             MessageBodyWL.lTag2 = 0;
             SendSocket(m_DefMsg, EDcode.EncodeBuffer(MessageBodyWL));
             var nRecog = GetFeatureToLong();
-            SendDefMessage(Grobal2.SM_FEATURECHANGED, ObjectId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
+            SendDefMessage(Grobal2.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
             SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0, "");
         }
 
@@ -988,7 +988,7 @@ namespace GameSvr.Player
                         ObMode = M2Share.Config.LockInObModeAction;
                         AdminMode = M2Share.Config.LockInObModeAction;
                         SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.LOCKLOGON.sCmd, MsgColor.Red, MsgType.Hint);
-                        SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "密码命令: @" + M2Share.g_GameCommand.PASSWORDLOCK.sCmd);
+                        SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "密码命令: @" + M2Share.g_GameCommand.PASSWORDLOCK.sCmd);
                     }
                     if (!m_boPasswordLocked)
                     {
@@ -999,7 +999,7 @@ namespace GameSvr.Player
                         SysMsg(Format(M2Share.g_sNotPasswordProtectMode, M2Share.g_GameCommand.LOCKLOGON.sCmd), MsgColor.Red, MsgType.Hint);
                     }
                     SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd, MsgColor.Red, MsgType.Hint);
-                    SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd + '\\' + "加锁命令: @" + M2Share.g_GameCommand.__LOCK.sCmd + '\\' + "设置密码命令: @" + M2Share.g_GameCommand.SETPASSWORD.sCmd + '\\' + "修改密码命令: @" + M2Share.g_GameCommand.CHGPASSWORD.sCmd);
+                    SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd + '\\' + "加锁命令: @" + M2Share.g_GameCommand.__LOCK.sCmd + '\\' + "设置密码命令: @" + M2Share.g_GameCommand.SETPASSWORD.sCmd + '\\' + "修改密码命令: @" + M2Share.g_GameCommand.CHGPASSWORD.sCmd);
                 }
                 // 重置泡点方面计时
                 m_dwIncGamePointTick = HUtil32.GetTickCount();
@@ -1432,14 +1432,14 @@ namespace GameSvr.Player
                     var VisibleMapItem = VisibleItems[I];
                     if (VisibleMapItem.VisibleFlag == 0)
                     {
-                        SendMsg(this, Grobal2.RM_ITEMHIDE, 0, VisibleMapItem.MapItem.ObjectId, VisibleMapItem.nX, VisibleMapItem.nY, "");
+                        SendMsg(this, Grobal2.RM_ITEMHIDE, 0, VisibleMapItem.MapItem.ActorId, VisibleMapItem.nX, VisibleMapItem.nY, "");
                         VisibleItems.RemoveAt(I);
                         Dispose(VisibleMapItem);
                         continue;
                     }
                     if (VisibleMapItem.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(this, Grobal2.RM_ITEMSHOW, VisibleMapItem.wLooks, VisibleMapItem.MapItem.ObjectId, VisibleMapItem.nX, VisibleMapItem.nY, VisibleMapItem.sName);
+                        SendMsg(this, Grobal2.RM_ITEMSHOW, VisibleMapItem.wLooks, VisibleMapItem.MapItem.ActorId, VisibleMapItem.nX, VisibleMapItem.nY, VisibleMapItem.sName);
                     }
                     I++;
                 }

@@ -653,7 +653,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (this.IncGold(MapItem.Count))
                     {
-                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.ObjectId, nX, nY, "");
+                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.ActorId, nX, nY, "");
                         result = true;
                         GoldChanged();
                         SearchPickUpItem_SetHideItem(MapItem);
@@ -690,7 +690,7 @@ namespace GameSvr.RobotPlay
                             //}
                             if (AddItemToBag(UserItem))
                             {
-                                SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.ObjectId, nX, nY, "");
+                                SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.ActorId, nX, nY, "");
                                 this.SendAddItem(UserItem);
                                 Abil.Weight = RecalcBagWeight();
                                 result = true;
@@ -796,7 +796,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(mapItem.UserItem.wIndex)))
                                         {
-                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ObjectId || (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Master == this))
+                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ActorId || (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Master == this))
                                             {
                                                 if (Math.Abs(VisibleMapItem.nX - CurrX) <= 5 && Math.Abs(VisibleMapItem.nY - CurrY) <= 5)
                                                 {
@@ -1329,7 +1329,7 @@ namespace GameSvr.RobotPlay
             {
                 if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
                 {
-                    if (ProcessMsg.BaseObject == this.ObjectId)
+                    if (ProcessMsg.BaseObject == this.ActorId)
                     {
                         AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)

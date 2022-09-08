@@ -143,7 +143,7 @@ namespace GameSvr.Maps
                         var osObject = new CellObject
                         {
                             CellType = btType,
-                            CellObjId = pRemoveObject.ObjectId,
+                            CellObjId = pRemoveObject.ActorId,
                             AddTime = HUtil32.GetTickCount()
                         };
                         cellInfo.Add(osObject, pRemoveObject);
@@ -267,7 +267,7 @@ namespace GameSvr.Maps
                                 osObject = cellInfo.ObjList[i];
                                 if (osObject.CellType == CellType.MovingObject)
                                 {
-                                    if (osObject.CellObjId == cert.ObjectId)
+                                    if (osObject.CellObjId == cert.ActorId)
                                     {
                                         cellInfo.Remove(osObject);
                                         if (cellInfo.Count > 0)
@@ -290,7 +290,7 @@ namespace GameSvr.Maps
                             osObject = new CellObject
                             {
                                 CellType = CellType.MovingObject,
-                                CellObjId = cert.ObjectId,
+                                CellObjId = cert.ActorId,
                                 AddTime = HUtil32.GetTickCount()
                             };
                             cellInfo.Add(osObject, cert);
@@ -496,7 +496,7 @@ namespace GameSvr.Maps
                                     osObject = cellInfo.ObjList[i];
                                     if (osObject != null)
                                     {
-                                        if (osObject.CellType == cellType && osObject.CellObjId == pRemoveObject.ObjectId)
+                                        if (osObject.CellType == cellType && osObject.CellObjId == pRemoveObject.ActorId)
                                         {
                                             cellInfo.Remove(osObject);
                                             result = 1;
@@ -717,7 +717,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.MovingObject && osObject.CellObjId == baseObject.ObjectId)
+                        if (osObject.CellType == CellType.MovingObject && osObject.CellObjId == baseObject.ActorId)
                         {
                             osObject.AddTime = HUtil32.GetTickCount();
                             boVerify = true;
@@ -1217,7 +1217,7 @@ namespace GameSvr.Maps
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
                             var cellObject = cellInfo.ObjList[i];
-                            if (cellObject.CellObjId == baseObject.ObjectId)
+                            if (cellObject.CellObjId == baseObject.ActorId)
                             {
                                 return true;
                             }

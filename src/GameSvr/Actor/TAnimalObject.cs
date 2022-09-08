@@ -124,7 +124,7 @@ namespace GameSvr.Actor
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
             {
                 var struckObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
-                if (ProcessMsg.BaseObject == this.ObjectId && struckObject != null)
+                if (ProcessMsg.BaseObject == this.ActorId && struckObject != null)
                 {
                     this.SetLastHiter(struckObject);
                     Struck(struckObject);
@@ -189,7 +189,7 @@ namespace GameSvr.Actor
                     if (nDamage > 0)
                     {
                         BaseObject.StruckDamage(nDamage);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (ushort)nDamage, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, this.ObjectId, "", 200);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (ushort)nDamage, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, this.ActorId, "", 200);
                     }
                 }
             }

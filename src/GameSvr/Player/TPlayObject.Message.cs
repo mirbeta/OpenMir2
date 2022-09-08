@@ -782,7 +782,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_CLICKNPC:
-                    ClientClickNPC(ProcessMsg.nParam1);
+                    ClientClickNpc(ProcessMsg.nParam1);
                     break;
                 case Grobal2.CM_MERCHANTDLGSELECT:
                     ClientMerchantDlgSelect(ProcessMsg.nParam1, ProcessMsg.Msg);
@@ -1303,7 +1303,7 @@ namespace GameSvr.Player
                     ProcessQueryValue(ProcessMsg.nParam1, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_WALK:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WALK, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
                         CharDesc = new TCharDesc();
@@ -1313,7 +1313,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.RM_HORSERUN:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HORSERUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
                         CharDesc = new TCharDesc();
@@ -1323,7 +1323,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.RM_RUN:
-                    if (ProcessMsg.BaseObject != this.ObjectId && BaseObject != null)
+                    if (ProcessMsg.BaseObject != this.ActorId && BaseObject != null)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
                         CharDesc = new TCharDesc();
@@ -1333,91 +1333,91 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.RM_HIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_HEAVYHIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAVYHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg, ProcessMsg.Msg);
                     }
                     break;
                 case Grobal2.RM_BIGHIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BIGHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_SPELL:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPELL, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg, ProcessMsg.nParam3.ToString());
                     }
                     break;
                 case Grobal2.RM_SPELL2:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_POWERHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_MOVEFAIL:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEFAIL, ObjectId, CurrX, CurrY, Direction);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEFAIL, ActorId, CurrX, CurrY, Direction);
                     CharDesc = new TCharDesc();
                     CharDesc.Feature = BaseObject.GetFeatureToLong();
                     CharDesc.Status = BaseObject.CharStatus;
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(CharDesc));
                     break;
                 case Grobal2.RM_LONGHIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LONGHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_WIDEHIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WIDEHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_FIREHIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FIREHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_CRSHIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CRSHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_41:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_41, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_TWINHIT:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TWINHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
                     }
                     break;
                 case Grobal2.RM_43:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ActorId)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_43, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         SendSocket(m_DefMsg);
@@ -1427,7 +1427,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_PUSH:
                 case Grobal2.RM_RUSH:
                 case Grobal2.RM_RUSHKUNG:
-                    if (ProcessMsg.BaseObject != this.ObjectId || ProcessMsg.wIdent == Grobal2.RM_PUSH || ProcessMsg.wIdent == Grobal2.RM_RUSH || ProcessMsg.wIdent == Grobal2.RM_RUSHKUNG)
+                    if (ProcessMsg.BaseObject != this.ActorId || ProcessMsg.wIdent == Grobal2.RM_PUSH || ProcessMsg.wIdent == Grobal2.RM_RUSH || ProcessMsg.wIdent == Grobal2.RM_RUSHKUNG)
                     {
                         switch (ProcessMsg.wIdent)
                         {
@@ -1465,7 +1465,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_STRUCK_MAG:
                     if (ProcessMsg.wParam > 0)
                     {
-                        if (ProcessMsg.BaseObject == ObjectId)
+                        if (ProcessMsg.BaseObject == ActorId)
                         {
                             if (M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
                             {
@@ -1488,7 +1488,7 @@ namespace GameSvr.Player
                         }
                         if (ProcessMsg.BaseObject != 0)
                         {
-                            if (ProcessMsg.BaseObject == ObjectId && M2Share.Config.DisableSelfStruck || BaseObject.Race == Grobal2.RC_PLAYOBJECT && M2Share.Config.DisableStruck)
+                            if (ProcessMsg.BaseObject == ActorId && M2Share.Config.DisableSelfStruck || BaseObject.Race == Grobal2.RC_PLAYOBJECT && M2Share.Config.DisableStruck)
                             {
                                 BaseObject.SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
                             }
@@ -1516,7 +1516,7 @@ namespace GameSvr.Player
                     if (ProcessMsg.nParam3 == 1)
                     {
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NOWDEATH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        if (ProcessMsg.BaseObject == ObjectId)
+                        if (ProcessMsg.BaseObject == ActorId)
                         {
                             if (M2Share.g_FunctionNPC != null)
                             {
@@ -1563,12 +1563,12 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_CHANGENAMECOLOR, ProcessMsg.BaseObject, GetCharColor(BaseObject), 0, 0, "");
                     break;
                 case Grobal2.RM_LOGON:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWMAP, ObjectId, CurrX, CurrY, DayBright());
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
                     SendSocket(m_DefMsg, EDcode.EncodeString(MapFileName));
                     SendMsg(this, Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                     SendLogon();
                     SendServerConfig();
-                    ClientQueryUserName(ObjectId, CurrX, CurrY);
+                    ClientQueryUserName(ActorId, CurrX, CurrY);
                     RefUserState();
                     SendMapDescription();
                     SendGoldInfo(true);
@@ -1651,7 +1651,7 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_CLEAROBJECTS, 0, 0, 0, 0, "");
                     break;
                 case Grobal2.RM_CHANGEMAP:
-                    SendDefMessage(Grobal2.SM_CHANGEMAP, ObjectId, CurrX, CurrY, DayBright(), ProcessMsg.Msg);
+                    SendDefMessage(Grobal2.SM_CHANGEMAP, ActorId, CurrX, CurrY, DayBright(), ProcessMsg.Msg);
                     RefUserState();
                     SendMapDescription();
                     SendServerConfig();

@@ -24,7 +24,7 @@ namespace GameSvr.Npc
             var result = false;
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
             {
-                if (ProcessMsg.BaseObject == this.ObjectId)
+                if (ProcessMsg.BaseObject == this.ActorId)
                 {
                     _attackPower += ProcessMsg.wParam;
                     AttackTick = HUtil32.GetTickCount();
