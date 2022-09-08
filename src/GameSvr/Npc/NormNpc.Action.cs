@@ -155,7 +155,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "您未开通寄售服务,请先开通!!!");
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "您未开通寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -270,7 +270,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -447,7 +447,7 @@ namespace GameSvr.Npc
         private void ActionOfOffLine(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
-            PlayObject.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ObjectId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
+            PlayObject.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
             PlayObject.SendSocket(PlayObject.m_DefMsg, EDcode.EncodeString(sOffLineStartMsg));
             var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 5);
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 500);
@@ -1156,7 +1156,7 @@ namespace GameSvr.Npc
 
         private void ActionOfMessageBox(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, GetLineVariableText(PlayObject, QuestActionInfo.sParam1));
+            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, GetLineVariableText(PlayObject, QuestActionInfo.sParam1));
         }
 
         private void ActionOfMission(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -1504,7 +1504,7 @@ namespace GameSvr.Npc
             PlayObject.m_sDelayCallLabel = QuestActionInfo.sParam2;
             PlayObject.m_dwDelayCallTick = HUtil32.GetTickCount();
             PlayObject.m_boDelayCall = true;
-            PlayObject.m_DelayCallNPC = this.ObjectId;
+            PlayObject.m_DelayCallNPC = this.ActorId;
         }
 
         /// <summary>
@@ -3440,9 +3440,9 @@ namespace GameSvr.Npc
                         MapItem.Name = Grobal2.sSTRING_GOLDNAME;
                         MapItem.Count = nCount;
                         MapItem.Looks = M2Share.GetGoldShape(nCount);
-                        MapItem.OfBaseObject = PlayObject.ObjectId; 
+                        MapItem.OfBaseObject = PlayObject.ActorId; 
                         MapItem.CanPickUpTick = HUtil32.GetTickCount();
-                        MapItem.DropBaseObject = PlayObject.ObjectId;
+                        MapItem.DropBaseObject = PlayObject.ActorId;
                         MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
                         if (MapItemA != null)
                         {
@@ -3451,7 +3451,7 @@ namespace GameSvr.Npc
                                 Dispose(MapItem);
                                 MapItem = MapItemA;
                             }
-                            this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, dX, dY, MapItem.Name + "@0");
+                            this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ActorId, dX, dY, MapItem.Name + "@0");
                         }
                         else
                         {
@@ -3500,9 +3500,9 @@ namespace GameSvr.Npc
                                 MapItem.AniCount = StdItem.AniCount;
                                 MapItem.Reserved = 0;
                                 MapItem.Count = nCount;
-                                MapItem.OfBaseObject = PlayObject.ObjectId;
+                                MapItem.OfBaseObject = PlayObject.ActorId;
                                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
-                                MapItem.DropBaseObject = PlayObject.ObjectId;
+                                MapItem.DropBaseObject = PlayObject.ActorId;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
                                 MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
                                 if (MapItemA != null)
@@ -3512,7 +3512,7 @@ namespace GameSvr.Npc
                                         Dispose(MapItem);
                                         MapItem = MapItemA;
                                     }
-                                    this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ObjectId, dX, dY, MapItem.Name + NameCorlr);
+                                    this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ActorId, dX, dY, MapItem.Name + NameCorlr);
                                 }
                                 else
                                 {

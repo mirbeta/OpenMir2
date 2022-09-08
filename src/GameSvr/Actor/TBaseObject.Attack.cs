@@ -231,10 +231,10 @@ namespace GameSvr.Actor
                     if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
                     {
                         BaseObject.StruckDamage(nSecPwr);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ObjectId, "", 500);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ActorId, "", 500);
                         if (BaseObject.Race != Grobal2.RC_PLAYOBJECT)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ObjectId, "");
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ActorId, "");
                         }
                         result = true;
                     }
@@ -508,7 +508,7 @@ namespace GameSvr.Actor
                 if (nPower > 0)
                 {
                     AttackTarget.StruckDamage(nPower);
-                    AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.Abil.HP, AttackTarget.Abil.MaxHP, ObjectId, "", 200);
+                    AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, AttackTarget.Abil.HP, AttackTarget.Abil.MaxHP, ActorId, "", 200);
                     if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
                     {
                         AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.Config.AttackPosionTime, 0);
@@ -561,7 +561,7 @@ namespace GameSvr.Actor
                                         (this as PlayObject).TrainSkill(attackMagic, 1);
                                         if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
                                         {
-                                            SendDelayMsg(this.ObjectId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                            SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
                                         }
                                     }
                                 }
@@ -575,7 +575,7 @@ namespace GameSvr.Actor
                                         (this as PlayObject).TrainSkill(attackMagic, 1);
                                         if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
                                         {
-                                            SendDelayMsg(this.ObjectId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                            SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
                                         }
                                     }
                                 }
@@ -589,7 +589,7 @@ namespace GameSvr.Actor
                                         (this as PlayObject).TrainSkill(attackMagic, 1);
                                         if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
                                         {
-                                            SendDelayMsg(this.ObjectId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                            SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
                                         }
                                     }
                                 }
@@ -702,7 +702,7 @@ namespace GameSvr.Actor
                 }
                 if (AttackTarget.Race != Grobal2.RC_PLAYOBJECT)
                 {
-                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.Abil.HP, AttackTarget.Abil.MaxHP, ObjectId, "");
+                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.Abil.HP, AttackTarget.Abil.MaxHP, ActorId, "");
                 }
             }
             catch (Exception e)

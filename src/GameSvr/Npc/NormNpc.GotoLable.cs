@@ -1870,7 +1870,7 @@ namespace GameSvr.Npc
                         GotoLable_TakeWItem(PlayObject, QuestActionInfo.sParam1, QuestActionInfo.nParam2);
                         break;
                     case ScriptConst.nCLOSE:
-                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
+                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ActorId, 0, 0, "");
                         break;
                     case ScriptConst.nRESET:
                         for (var k = 0; k < QuestActionInfo.nParam2; k++)
@@ -2112,7 +2112,7 @@ namespace GameSvr.Npc
                         for (var k = 0; k < BatchParamsList.Count; k++)
                         {
                             var batchParam = BatchParamsList[k];
-                            PlayObject.SendDelayMsg(this.ObjectId, Grobal2.RM_10155, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
+                            PlayObject.SendDelayMsg(this.ActorId, Grobal2.RM_10155, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
                             n20 += batchParam.nParams;
                         }
                         break;
@@ -2528,7 +2528,7 @@ namespace GameSvr.Npc
             PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam2;
             var sHint = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sHint)) sHint = "请输入:";
-            PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, this.ObjectId, 0, 0, 0, sHint);
+            PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, this.ActorId, 0, 0, 0, sHint);
         }
 
         private void ActionOfKillSlaveName(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)

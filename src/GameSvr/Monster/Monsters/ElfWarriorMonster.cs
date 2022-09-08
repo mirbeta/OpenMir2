@@ -80,7 +80,7 @@ namespace GameSvr.Monster.Monsters
                         if (elfMon != null)
                         {
                             SendRefMsg(Grobal2.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
-                            SendRefMsg(Grobal2.RM_CHANGEFACE, 0, ObjectId, elfMon.ObjectId, 0, "");
+                            SendRefMsg(Grobal2.RM_CHANGEFACE, 0, ActorId, elfMon.ActorId, 0, "");
                             elfMon.AutoChangeColor = AutoChangeColor;
                             if (elfMon is ElfMonster monster)
                             {

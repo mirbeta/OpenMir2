@@ -5,11 +5,11 @@ namespace SystemModule
         /// <summary>
         /// 对象唯一ID
         /// </summary>
-        public int ObjectId;
+        public int ActorId;
 
         public EntityId()
         {
-            ObjectId = HUtil32.Sequence();
+            ActorId = HUtil32.Sequence();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace GameSvr.Monster.Monsters
                     if (n10 > 0)
                     {
                         baseObject.StruckDamage(n10);
-                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, baseObject.Abil.HP, baseObject.Abil.MaxHP, ObjectId, "", 300);
+                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, baseObject.Abil.HP, baseObject.Abil.MaxHP, ActorId, "", 300);
                         if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0)
                         {
                             baseObject.MakePosion(Grobal2.POISON_STONE, 5, 0);

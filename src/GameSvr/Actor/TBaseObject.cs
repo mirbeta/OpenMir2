@@ -1014,7 +1014,7 @@ namespace GameSvr.Actor
             FastParalysis = false;
             NastyMode = false;
             MagicArr = new TUserMagic[100];
-            M2Share.ActorMgr.Add(ObjectId, this);
+            M2Share.ActorMgr.Add(ActorId, this);
         }
 
         public void ChangePkStatus(bool boWarFlag)
@@ -1128,14 +1128,14 @@ namespace GameSvr.Actor
                 mapItem.AniCount = stdItem.AniCount;
                 mapItem.Reserved = 0;
                 mapItem.Count = 1;
-                mapItem.OfBaseObject = itemOfCreat == null ? 0 : itemOfCreat.ObjectId;
+                mapItem.OfBaseObject = itemOfCreat == null ? 0 : itemOfCreat.ActorId;
                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
-                mapItem.DropBaseObject = dropCreat.ObjectId;
+                mapItem.DropBaseObject = dropCreat.ActorId;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
                 var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.ItemObject, mapItem);
                 if (pr == mapItem)
                 {
-                    SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ObjectId, dx, dy, mapItem.Name);
+                    SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
                     string logcap;
                     if (boDieDrop)
                     {
@@ -1464,9 +1464,9 @@ namespace GameSvr.Actor
                 Name = Grobal2.sSTRING_GOLDNAME,
                 Count = nGold,
                 Looks = M2Share.GetGoldShape(nGold),
-                OfBaseObject = goldOfCreat.ObjectId,
+                OfBaseObject = goldOfCreat.ActorId,
                 CanPickUpTick = HUtil32.GetTickCount(),
-                DropBaseObject = dropGoldCreat.ObjectId
+                DropBaseObject = dropGoldCreat.ActorId
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
             var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.ItemObject, mapItem);
@@ -1476,7 +1476,7 @@ namespace GameSvr.Actor
                 {
                     mapItem = mapItemA;
                 }
-                SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ObjectId, nX, nY, mapItem.Name);
+                SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, nX, nY, mapItem.Name);
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
                     if (boFalg)
@@ -3111,7 +3111,7 @@ namespace GameSvr.Actor
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         DeliveryTime = 0,
-                        BaseObject = baseObject.ObjectId
+                        BaseObject = baseObject.ActorId
                     };
                     if (!string.IsNullOrEmpty(sMsg))
                     {
@@ -3141,7 +3141,7 @@ namespace GameSvr.Actor
                     nParam2 = nParam2,
                     nParam3 = nParam3,
                     DeliveryTime = 0,
-                    BaseObject = baseObject.ObjectId,
+                    BaseObject = baseObject.ActorId,
                     LateDelivery = false
                 };
                 if (!Ghost)
@@ -3179,7 +3179,7 @@ namespace GameSvr.Actor
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         DeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        BaseObject = baseObject.ObjectId,
+                        BaseObject = baseObject.ActorId,
                         LateDelivery = true
                     };
                     if (!string.IsNullOrEmpty(sMsg))
@@ -3269,7 +3269,7 @@ namespace GameSvr.Actor
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
 
-            SendDelayMsg(baseObject.ObjectId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
+            SendDelayMsg(baseObject.ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
         }
 
         public void SendUpdateMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
