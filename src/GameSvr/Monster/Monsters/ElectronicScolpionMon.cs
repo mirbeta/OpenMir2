@@ -4,26 +4,26 @@ namespace GameSvr.Monster.Monsters
 {
     public class ElectronicScolpionMon : MonsterObject
     {
-        public bool m_boUseMagic;
+        public bool MBoUseMagic;
 
         public ElectronicScolpionMon() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
-            m_boUseMagic = false;
+            MBoUseMagic = false;
         }
 
         private void LightingAttack(byte nDir)
         {
             Direction = nDir;
-            var WAbil = Abil;
-            int nPower = GetAttackPower(HUtil32.LoWord(WAbil.MC), HUtil32.HiWord(WAbil.MC) - HUtil32.LoWord(WAbil.MC));
+            var wAbil = Abil;
+            int nPower = GetAttackPower(HUtil32.LoWord(wAbil.MC), HUtil32.HiWord(wAbil.MC) - HUtil32.LoWord(wAbil.MC));
             var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {
-                int btGetBackHP = HUtil32.LoByte(Abil.MP);
-                if (btGetBackHP != 0)
+                int btGetBackHp = HUtil32.LoByte(Abil.MP);
+                if (btGetBackHp != 0)
                 {
-                    Abil.HP += (ushort)(nDamage / btGetBackHP);
+                    Abil.HP += (ushort)(nDamage / btGetBackHp);
                 }
                 TargetCret.StruckDamage(nDamage);
                 TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, TargetCret.Abil.HP, TargetCret.Abil.MaxHP, ObjectId, "", 200);
@@ -37,11 +37,11 @@ namespace GameSvr.Monster.Monsters
             {
                 if (Abil.HP < Abil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
-                    m_boUseMagic = true;
+                    MBoUseMagic = true;
                 }
                 else
                 {
-                    m_boUseMagic = false;
+                    MBoUseMagic = false;
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
@@ -56,7 +56,7 @@ namespace GameSvr.Monster.Monsters
                 var nY = Math.Abs(CurrY - TargetCret.CurrY);
                 if (nX <= 2 && nY <= 2)
                 {
-                    if (m_boUseMagic || nX == 2 || nY == 2)
+                    if (MBoUseMagic || nX == 2 || nY == 2)
                     {
                         if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {

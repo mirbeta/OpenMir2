@@ -15,7 +15,7 @@ namespace GameSvr.Event.Events
 
         public override void Run()
         {
-            m_dwOpenStartTick = HUtil32.GetTickCount();
+            OpenStartTick = HUtil32.GetTickCount();
             base.Run();
         }
     }

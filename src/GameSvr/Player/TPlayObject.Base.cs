@@ -1120,59 +1120,59 @@ namespace GameSvr.Player
         {
             var nGold = 0;
             var nWinLevel = 0;
-            var nRate = M2Share.RandomNumber.Random(M2Share.Config.nWinLotteryRate);
-            if (nRate >= M2Share.Config.nWinLottery6Min && nRate <= M2Share.Config.nWinLottery6Max)
+            var nRate = M2Share.RandomNumber.Random(M2Share.Config.WinLotteryRate);
+            if (nRate >= M2Share.Config.WinLottery6Min && nRate <= M2Share.Config.WinLottery6Max)
             {
-                if (M2Share.Config.nWinLotteryCount < M2Share.Config.nNoWinLotteryCount)
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.nWinLottery6Gold;
+                    nGold = M2Share.Config.WinLottery6Gold;
                     nWinLevel = 6;
-                    M2Share.Config.nWinLotteryLevel6++;
+                    M2Share.Config.WinLotteryLevel6++;
                 }
             }
-            else if (nRate >= M2Share.Config.nWinLottery5Min && nRate <= M2Share.Config.nWinLottery5Max)
+            else if (nRate >= M2Share.Config.WinLottery5Min && nRate <= M2Share.Config.WinLottery5Max)
             {
-                if (M2Share.Config.nWinLotteryCount < M2Share.Config.nNoWinLotteryCount)
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.nWinLottery5Gold;
+                    nGold = M2Share.Config.WinLottery5Gold;
                     nWinLevel = 5;
-                    M2Share.Config.nWinLotteryLevel5++;
+                    M2Share.Config.WinLotteryLevel5++;
                 }
             }
-            else if (nRate >= M2Share.Config.nWinLottery4Min && nRate <= M2Share.Config.nWinLottery4Max)
+            else if (nRate >= M2Share.Config.WinLottery4Min && nRate <= M2Share.Config.WinLottery4Max)
             {
-                if (M2Share.Config.nWinLotteryCount < M2Share.Config.nNoWinLotteryCount)
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.nWinLottery4Gold;
+                    nGold = M2Share.Config.WinLottery4Gold;
                     nWinLevel = 4;
-                    M2Share.Config.nWinLotteryLevel4++;
+                    M2Share.Config.WinLotteryLevel4++;
                 }
             }
-            else if (nRate >= M2Share.Config.nWinLottery3Min && nRate <= M2Share.Config.nWinLottery3Max)
+            else if (nRate >= M2Share.Config.WinLottery3Min && nRate <= M2Share.Config.WinLottery3Max)
             {
-                if (M2Share.Config.nWinLotteryCount < M2Share.Config.nNoWinLotteryCount)
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.nWinLottery3Gold;
+                    nGold = M2Share.Config.WinLottery3Gold;
                     nWinLevel = 3;
-                    M2Share.Config.nWinLotteryLevel3++;
+                    M2Share.Config.WinLotteryLevel3++;
                 }
             }
-            else if (nRate >= M2Share.Config.nWinLottery2Min && nRate <= M2Share.Config.nWinLottery2Max)
+            else if (nRate >= M2Share.Config.WinLottery2Min && nRate <= M2Share.Config.WinLottery2Max)
             {
-                if (M2Share.Config.nWinLotteryCount < M2Share.Config.nNoWinLotteryCount)
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.nWinLottery2Gold;
+                    nGold = M2Share.Config.WinLottery2Gold;
                     nWinLevel = 2;
-                    M2Share.Config.nWinLotteryLevel2++;
+                    M2Share.Config.WinLotteryLevel2++;
                 }
             }
-            else if (new ArrayList(new int[] { M2Share.Config.nWinLottery1Min + M2Share.Config.nWinLottery1Max }).Contains(nRate))
+            else if (new ArrayList(new int[] { M2Share.Config.WinLottery1Min + M2Share.Config.WinLottery1Max }).Contains(nRate))
             {
-                if (M2Share.Config.nWinLotteryCount < M2Share.Config.nNoWinLotteryCount)
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.nWinLottery1Gold;
+                    nGold = M2Share.Config.WinLottery1Gold;
                     nWinLevel = 1;
-                    M2Share.Config.nWinLotteryLevel1++;
+                    M2Share.Config.WinLotteryLevel1++;
                 }
             }
             if (nGold > 0)
@@ -1209,7 +1209,7 @@ namespace GameSvr.Player
             }
             else
             {
-                M2Share.Config.nNoWinLotteryCount += 500;
+                M2Share.Config.NoWinLotteryCount += 500;
                 SysMsg(M2Share.g_sNotWinLotteryMsg, MsgColor.Red, MsgType.Hint);
             }
         }
@@ -1453,13 +1453,13 @@ namespace GameSvr.Player
                     MapEvent = VisibleEvents[I];
                     if (MapEvent.VisibleFlag == VisibleFlag.Visible)
                     {
-                        SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
+                        SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.nX, MapEvent.nY, "");
                         VisibleEvents.RemoveAt(I);
                         continue;
                     }
                     if (MapEvent.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(this, Grobal2.RM_SHOWEVENT, (short)MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
+                        SendMsg(this, Grobal2.RM_SHOWEVENT, (short)MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, MapEvent.EventParam), MapEvent.nY, "");
                     }
                     I++;
                 }

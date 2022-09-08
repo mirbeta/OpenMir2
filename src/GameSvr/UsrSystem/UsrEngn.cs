@@ -1666,7 +1666,7 @@ namespace GameSvr.UsrSystem
                     if (M2Share.RandomNumber.Random(4) == 0) cert.Bo2Ba = true;
                     break;
                 case 97:
-                    cert = new TCowMonster();
+                    cert = new CowMonster();
                     if (M2Share.RandomNumber.Random(2) == 0) cert.Bo2Ba = true;
                     break;
                 case MonsterConst.MONSTER_WHITESKELETON:
@@ -2567,7 +2567,7 @@ namespace GameSvr.UsrSystem
 
         public void HumanExpire(string sAccount)
         {
-            if (!M2Share.Config.boKickExpireHuman) return;
+            if (!M2Share.Config.KickExpireHuman) return;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
                 PlayObject playObject = PlayObjectList[i];

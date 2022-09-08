@@ -11,7 +11,7 @@ namespace GameSvr.Event.Events
         /// <summary>
         /// 火墙运行时间
         /// </summary>
-        private int m_fireRunTick;
+        protected int FireRunTick;
 
         public FireBurnEvent(BaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.Envir, nX, nY, nType, nTime, true)
         {
@@ -21,13 +21,13 @@ namespace GameSvr.Event.Events
 
         public override void Run()
         {
-            if ((HUtil32.GetTickCount() - m_fireRunTick) > 3000)
+            if ((HUtil32.GetTickCount() - FireRunTick) > 3000)
             {
-                m_fireRunTick = HUtil32.GetTickCount();
+                FireRunTick = HUtil32.GetTickCount();
                 IList<BaseObject> BaseObjectList = new List<BaseObject>();
-                if (m_Envir != null)
+                if (Envir != null)
                 {
-                    m_Envir.GetBaseObjects(m_nX, m_nY, true, BaseObjectList);
+                    Envir.GetBaseObjects(nX, nY, true, BaseObjectList);
                     for (var i = 0; i < BaseObjectList.Count; i++)
                     {
                         var targeTBaseObject = BaseObjectList[i];

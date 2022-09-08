@@ -7,14 +7,14 @@ namespace GameSvr.Monster.Monsters
     /// </summary>
     public class ElfMonster : MonsterObject
     {
-        public bool boIsFirst;
+        public bool BoIsFirst;
 
         public ElfMonster() : base()
         {
             ViewRange = 6;
             FixedHideMode = true;
             NoAttackMode = true;
-            boIsFirst = true;
+            BoIsFirst = true;
         }
 
         public void AppearNow()
@@ -39,9 +39,9 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             bool boChangeFace = false;
-            if (boIsFirst)
+            if (BoIsFirst)
             {
-                boIsFirst = false;
+                BoIsFirst = false;
                 FixedHideMode = false;
                 SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
                 ResetElfMon();
@@ -65,13 +65,13 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (boChangeFace)
                 {
-                    var ElfMon = MakeClone(M2Share.Config.Dragon1, this);
-                    if (ElfMon != null)
+                    var elfMon = MakeClone(M2Share.Config.Dragon1, this);
+                    if (elfMon != null)
                     {
-                        ElfMon.AutoChangeColor = AutoChangeColor;
-                        if (ElfMon is ElfWarriorMonster)
+                        elfMon.AutoChangeColor = AutoChangeColor;
+                        if (elfMon is ElfWarriorMonster)
                         {
-                            (ElfMon as ElfWarriorMonster).AppearNow();
+                            (elfMon as ElfWarriorMonster).AppearNow();
                         }
                         Master = null;
                         KickException();

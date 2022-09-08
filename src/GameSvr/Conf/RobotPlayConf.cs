@@ -8,13 +8,13 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Conf
 {
-    public class AIObjectConf : IniFile
+    public class RobotPlayConf : IniFile
     {
         private readonly string m_sFilePath = string.Empty;
         private readonly string m_sConfigListFileName = string.Empty;
         private readonly string m_sHeroConfigListFileName = string.Empty;
 
-        public AIObjectConf(string fileName) : base(fileName)
+        public RobotPlayConf(string fileName) : base(fileName)
         {
             Load();
         }

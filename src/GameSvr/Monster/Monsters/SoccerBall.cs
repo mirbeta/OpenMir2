@@ -5,13 +5,13 @@ namespace GameSvr.Monster.Monsters
 {
     public class SoccerBall : AnimalObject
     {
-        public int n550;
+        public int N550;
 
         public SoccerBall() : base()
         {
             Animal = false;
             SuperMan = true;
-            n550 = 0;
+            N550 = 0;
             TargetX = -1;
         }
 
@@ -20,7 +20,7 @@ namespace GameSvr.Monster.Monsters
             short n08 = 0;
             short n0C = 0;
             var bo0D = false;
-            if (n550 > 0)
+            if (N550 > 0)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, Direction, 1, ref n08, ref n0C))
                 {
@@ -53,7 +53,7 @@ namespace GameSvr.Monster.Monsters
                                 Direction = 1;
                                 break;
                         }
-                        Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref TargetX, ref TargetY);
+                        Envir.GetNextPosition(CurrX, CurrY, Direction, N550, ref TargetX, ref TargetY);
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace GameSvr.Monster.Monsters
                 GotoTargetXY();
                 if (TargetX == CurrX && TargetY == CurrY)
                 {
-                    n550 = 0;
+                    N550 = 0;
                 }
             }
             base.Run();
@@ -79,9 +79,9 @@ namespace GameSvr.Monster.Monsters
                 return;
             }
             Direction = hiter.Direction;
-            n550 = M2Share.RandomNumber.Random(4) + n550 + 4;
-            n550 = HUtil32._MIN(20, n550);
-            Envir.GetNextPosition(CurrX, CurrY, Direction, n550, ref TargetX, ref TargetY);
+            N550 = M2Share.RandomNumber.Random(4) + N550 + 4;
+            N550 = HUtil32._MIN(20, N550);
+            Envir.GetNextPosition(CurrX, CurrY, Direction, N550, ref TargetX, ref TargetY);
         }
     }
 }

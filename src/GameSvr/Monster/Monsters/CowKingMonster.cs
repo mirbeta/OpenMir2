@@ -5,46 +5,46 @@ namespace GameSvr.Monster.Monsters
 {
     public class CowKingMonster : AtMonster
     {
-        private int dw558;
-        private bool bo55C;
-        private bool bo55D;
-        private int n560;
-        private int dw564;
-        private int dw568;
-        private int dw56C;
-        private int dw570;
+        private int _dw558;
+        private bool _bo55C;
+        private bool _bo55D;
+        private int _n560;
+        private int _dw564;
+        private int _dw568;
+        private int _dw56C;
+        private int _dw570;
 
         public CowKingMonster() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 500;
-            dw558 = HUtil32.GetTickCount();
+            _dw558 = HUtil32.GetTickCount();
             Bo2Bf = true;
-            n560 = 0;
-            bo55C = false;
-            bo55D = false;
+            _n560 = 0;
+            _bo55C = false;
+            _bo55D = false;
         }
 
-        public override void Attack(BaseObject TargeTBaseObject, byte nDir)
+        public override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
             var nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
-            HitMagAttackTarget(TargeTBaseObject, nPower / 2, nPower / 2, true);
+            HitMagAttackTarget(targeTBaseObject, nPower / 2, nPower / 2, true);
         }
 
         public override void Initialize()
         {
-            dw56C = NextHitTime;
-            dw570 = WalkSpeed;
+            _dw56C = NextHitTime;
+            _dw570 = WalkSpeed;
             base.Initialize();
         }
 
         public override void Run()
         {
-            if (!Death && !Ghost && (HUtil32.GetTickCount() - dw558) > (30 * 1000))
+            if (!Death && !Ghost && (HUtil32.GetTickCount() - _dw558) > (30 * 1000))
             {
                 short n8 = 0;
                 short nC = 0;
                 int n10;
-                dw558 = HUtil32.GetTickCount();
+                _dw558 = HUtil32.GetTickCount();
                 if (TargetCret != null && sub_4C3538() >= 5)
                 {
                     TargetCret.GetBackPosition(ref n8, ref nC);
@@ -56,38 +56,38 @@ namespace GameSvr.Monster.Monsters
                     MapRandomMove(Envir.MapName, 0);
                     return;
                 }
-                n10 = n560;
-                n560 = 7 - Abil.HP / (Abil.MaxHP / 7);
-                if (n560 >= 2 && n560 != n10)
+                n10 = _n560;
+                _n560 = 7 - Abil.HP / (Abil.MaxHP / 7);
+                if (_n560 >= 2 && _n560 != n10)
                 {
-                    bo55C = true;
-                    dw564 = HUtil32.GetTickCount();
+                    _bo55C = true;
+                    _dw564 = HUtil32.GetTickCount();
                 }
-                if (bo55C)
+                if (_bo55C)
                 {
-                    if ((HUtil32.GetTickCount() - dw564) < 8000)
+                    if ((HUtil32.GetTickCount() - _dw564) < 8000)
                     {
                         NextHitTime = 10000;
                     }
                     else
                     {
-                        bo55C = false;
-                        bo55D = true;
-                        dw568 = HUtil32.GetTickCount();
+                        _bo55C = false;
+                        _bo55D = true;
+                        _dw568 = HUtil32.GetTickCount();
                     }
                 }
-                if (bo55D)
+                if (_bo55D)
                 {
-                    if ((HUtil32.GetTickCount() - dw568) < 8000)
+                    if ((HUtil32.GetTickCount() - _dw568) < 8000)
                     {
                         NextHitTime = 500;
                         WalkSpeed = 400;
                     }
                     else
                     {
-                        bo55D = false;
-                        NextHitTime = dw56C;
-                        WalkSpeed = dw570;
+                        _bo55D = false;
+                        NextHitTime = _dw56C;
+                        WalkSpeed = _dw570;
                     }
                 }
             }

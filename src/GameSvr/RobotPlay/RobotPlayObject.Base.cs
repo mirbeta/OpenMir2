@@ -799,7 +799,7 @@ namespace GameSvr.RobotPlay
                             switch (MapEvent.VisibleFlag)
                             {
                                 case VisibleFlag.Visible:
-                                    SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
+                                    SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.nX, MapEvent.nY, "");
                                     VisibleEvents.RemoveAt(position);
                                     if (VisibleEvents.Count > 0)
                                     {
@@ -810,7 +810,7 @@ namespace GameSvr.RobotPlay
                                     MapEvent.VisibleFlag = 0;
                                     break;
                                 case VisibleFlag.Hidden:
-                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
+                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, MapEvent.EventParam), MapEvent.nY, "");
                                     MapEvent.VisibleFlag = 0;
                                     break;
                             }

@@ -50,9 +50,9 @@ namespace GameSvr.Monster.Monsters
             AttackPet = true;
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage processMsg)
         {
-            return base.Operate(ProcessMsg);
+            return base.Operate(processMsg);
         }
 
         public override void Run()
@@ -66,26 +66,26 @@ namespace GameSvr.Monster.Monsters
             {
                 for (var i = 0; i < this.VisibleActors.Count; i++)
                 {
-                    var BaseObject = this.VisibleActors[i].BaseObject;
-                    if (BaseObject.Death)
+                    var baseObject = this.VisibleActors[i].BaseObject;
+                    if (baseObject.Death)
                     {
                         continue;
                     }
-                    if (BaseObject.PvpLevel() >= 2 || BaseObject.Race >= Grobal2.RC_MONSTER && !BaseObject.Mission)
+                    if (baseObject.PvpLevel() >= 2 || baseObject.Race >= Grobal2.RC_MONSTER && !baseObject.Mission)
                     {
                         if (AttackPet)
                         {
-                            this.SetTargetCreat(BaseObject);
+                            this.SetTargetCreat(baseObject);
                             break;
                         }
-                        if (BaseObject.Master == null)
+                        if (baseObject.Master == null)
                         {
-                            this.SetTargetCreat(BaseObject);
+                            this.SetTargetCreat(baseObject);
                             break;
                         }
-                        if (BaseObject.TargetCret == this)
+                        if (baseObject.TargetCret == this)
                         {
-                            this.SetTargetCreat(BaseObject);
+                            this.SetTargetCreat(baseObject);
                             break;
                         }
                     }

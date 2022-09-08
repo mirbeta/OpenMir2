@@ -20,9 +20,9 @@ namespace GameSvr.Event
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = _eventList[i];
-                if (executeEvent.Active && (HUtil32.GetTickCount() - executeEvent.m_dwRunStart) > executeEvent.m_dwRunTick)
+                if (executeEvent.Active && (HUtil32.GetTickCount() - executeEvent.RunStart) > executeEvent.RunTick)
                 {
-                    executeEvent.m_dwRunStart = HUtil32.GetTickCount();
+                    executeEvent.RunStart = HUtil32.GetTickCount();
                     executeEvent.Run();
                     if (executeEvent.Closed)
                     {
@@ -47,10 +47,10 @@ namespace GameSvr.Event
         {
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
-                MirEvent currentEvent = _eventList[i];
+                var currentEvent = _eventList[i];
                 if (currentEvent.EventType == nType)
                 {
-                    if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY)
+                    if (currentEvent.Envir == Envir && currentEvent.nX == nX && currentEvent.nY == nY)
                     {
                         return currentEvent;
                     }

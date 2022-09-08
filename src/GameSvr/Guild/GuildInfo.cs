@@ -448,7 +448,7 @@ namespace GameSvr.Guild
             {
                 if (M2Share.Config.ShowPreFixMsg)
                 {
-                    sMsg = M2Share.Config.sGuildMsgPreFix + sMsg;
+                    sMsg = M2Share.Config.GuildMsgPreFix + sMsg;
                 }
                 for (var i = 0; i < m_RankList.Count; i++)
                 {

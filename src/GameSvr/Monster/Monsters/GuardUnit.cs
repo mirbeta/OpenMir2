@@ -15,28 +15,28 @@ namespace GameSvr.Monster.Monsters
             }
         }
 
-        public override bool IsProperTarget(BaseObject BaseObject)
+        public override bool IsProperTarget(BaseObject baseObject)
         {
             var result = false;
             if (Castle != null)
             {
-                if (LastHiter == BaseObject)
+                if (LastHiter == baseObject)
                 {
                     result = true;
                 }
-                if (BaseObject.Bo2B0)
+                if (baseObject.Bo2B0)
                 {
-                    if ((HUtil32.GetTickCount() - BaseObject.MDw2B4Tick) < (2 * 60 * 1000))
+                    if ((HUtil32.GetTickCount() - baseObject.MDw2B4Tick) < (2 * 60 * 1000))
                     {
                         result = true;
                     }
                     else
                     {
-                        BaseObject.Bo2B0 = false;
+                        baseObject.Bo2B0 = false;
                     }
-                    if (BaseObject.Castle != null)
+                    if (baseObject.Castle != null)
                     {
-                        BaseObject.Bo2B0 = false;
+                        baseObject.Bo2B0 = false;
                         result = false;
                     }
                 }
@@ -46,11 +46,11 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (Castle.MasterGuild != null)
                 {
-                    if (BaseObject.Master == null)
+                    if (baseObject.Master == null)
                     {
-                        if (Castle.MasterGuild == BaseObject.MyGuild || Castle.MasterGuild.IsAllyGuild(BaseObject.MyGuild))
+                        if (Castle.MasterGuild == baseObject.MyGuild || Castle.MasterGuild.IsAllyGuild(baseObject.MyGuild))
                         {
-                            if (LastHiter != BaseObject)
+                            if (LastHiter != baseObject)
                             {
                                 result = false;
                             }
@@ -58,34 +58,34 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (Castle.MasterGuild == BaseObject.Master.MyGuild || Castle.MasterGuild.IsAllyGuild(BaseObject.Master.MyGuild))
+                        if (Castle.MasterGuild == baseObject.Master.MyGuild || Castle.MasterGuild.IsAllyGuild(baseObject.Master.MyGuild))
                         {
-                            if (LastHiter != BaseObject.Master && LastHiter != BaseObject)
+                            if (LastHiter != baseObject.Master && LastHiter != baseObject)
                             {
                                 result = false;
                             }
                         }
                     }
                 }
-                if (BaseObject.AdminMode || BaseObject.StoneMode || BaseObject.Race >= Grobal2.RC_NPC && BaseObject.Race < Grobal2.RC_ANIMAL || BaseObject == this || BaseObject.Castle == Castle)
+                if (baseObject.AdminMode || baseObject.StoneMode || baseObject.Race >= Grobal2.RC_NPC && baseObject.Race < Grobal2.RC_ANIMAL || baseObject == this || baseObject.Castle == Castle)
                 {
                     result = false;
                 }
                 return result;
             }
-            if (LastHiter == BaseObject)
+            if (LastHiter == baseObject)
             {
                 result = true;
             }
-            if (BaseObject.TargetCret != null && BaseObject.TargetCret.Race == 112)
+            if (baseObject.TargetCret != null && baseObject.TargetCret.Race == 112)
             {
                 result = true;
             }
-            if (BaseObject.PvpLevel() >= 2)
+            if (baseObject.PvpLevel() >= 2)
             {
                 result = true;
             }
-            if (BaseObject.AdminMode || BaseObject.StoneMode || BaseObject == this)
+            if (baseObject.AdminMode || baseObject.StoneMode || baseObject == this)
             {
                 result = false;
             }

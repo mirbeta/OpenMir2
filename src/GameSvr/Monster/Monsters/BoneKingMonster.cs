@@ -5,16 +5,16 @@ namespace GameSvr.Monster.Monsters
 {
     public class BoneKingMonster : MonsterObject
     {
-        private short DangerLevel;
-        private readonly IList<BaseObject> SlaveObjectList;
+        private short _dangerLevel;
+        private readonly IList<BaseObject> _slaveObjectList;
 
         public BoneKingMonster() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             Direction = 5;
-            DangerLevel = 5;
-            SlaveObjectList = new List<BaseObject>();
+            _dangerLevel = 5;
+            _slaveObjectList = new List<BaseObject>();
         }
 
         private void CallSlave()
@@ -26,23 +26,23 @@ namespace GameSvr.Monster.Monsters
             GetFrontPosition(ref n10, ref n14);
             for (var i = 0; i < nC; i++)
             {
-                if (SlaveObjectList.Count >= 30)
+                if (_slaveObjectList.Count >= 30)
                 {
                     break;
                 }
-                var BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
-                if (BaseObject != null)
+                var baseObject = M2Share.UserEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
+                if (baseObject != null)
                 {
-                    SlaveObjectList.Add(BaseObject);
+                    _slaveObjectList.Add(baseObject);
                 }
             }
         }
 
-        public override void Attack(BaseObject TargeTBaseObject, byte nDir)
+        public override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
-            var WAbil = Abil;
-            var nPower = GetAttackPower(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC));
-            HitMagAttackTarget(TargeTBaseObject, 0, nPower, true);
+            var wAbil = Abil;
+            var nPower = GetAttackPower(HUtil32.LoWord(wAbil.DC), HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC));
+            HitMagAttackTarget(targeTBaseObject, 0, nPower, true);
         }
 
         public override void Run()
@@ -53,22 +53,22 @@ namespace GameSvr.Monster.Monsters
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
-                    if (DangerLevel > Abil.HP / Abil.MaxHP * 5 && DangerLevel > 0)
+                    if (_dangerLevel > Abil.HP / Abil.MaxHP * 5 && _dangerLevel > 0)
                     {
-                        DangerLevel -= 1;
+                        _dangerLevel -= 1;
                         CallSlave();
                     }
                     if (Abil.HP == Abil.MaxHP)
                     {
-                        DangerLevel = 5;
+                        _dangerLevel = 5;
                     }
                 }
-                for (var i = SlaveObjectList.Count - 1; i >= 0; i--)
+                for (var i = _slaveObjectList.Count - 1; i >= 0; i--)
                 {
-                    var BaseObject = SlaveObjectList[i];
-                    if (BaseObject.Death || BaseObject.Ghost)
+                    var baseObject = _slaveObjectList[i];
+                    if (baseObject.Death || baseObject.Ghost)
                     {
-                        SlaveObjectList.RemoveAt(i);
+                        _slaveObjectList.RemoveAt(i);
                     }
                 }
             }

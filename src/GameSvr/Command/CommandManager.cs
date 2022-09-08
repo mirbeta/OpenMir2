@@ -12,11 +12,11 @@ namespace GameSvr.Command
         /// 自定义游戏命令列表
         /// </summary>
         private static readonly Dictionary<string, string> CustomCommands = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        public GameCmdConfig CommandConf;
+        public GameCmdConf CommandConf;
 
         public CommandManager()
         {
-            CommandConf = new GameCmdConfig(Path.Combine(M2Share.BasePath, ConfConst.sCommandFileName));
+            CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.sCommandFileName));
         }
 
         public void RegisterCommand()
