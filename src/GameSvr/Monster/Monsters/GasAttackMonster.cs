@@ -15,24 +15,24 @@ namespace GameSvr.Monster.Monsters
         {
             BaseObject result = null;
             Direction = bt05;
-            var WAbil = Abil;
-            var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+            var wAbil = Abil;
+            var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
             if (n10 > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-                var BaseObject = GetPoseCreate();
-                if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < HitPoint)
+                var baseObject = GetPoseCreate();
+                if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                 {
-                    n10 = BaseObject.GetMagStruckDamage(this, n10);
+                    n10 = baseObject.GetMagStruckDamage(this, n10);
                     if (n10 > 0)
                     {
-                        BaseObject.StruckDamage(n10);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ObjectId, "", 300);
-                        if (M2Share.RandomNumber.Random(BaseObject.AntiPoison + 20) == 0)
+                        baseObject.StruckDamage(n10);
+                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, baseObject.Abil.HP, baseObject.Abil.MaxHP, ObjectId, "", 300);
+                        if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0)
                         {
-                            BaseObject.MakePosion(Grobal2.POISON_STONE, 5, 0);
+                            baseObject.MakePosion(Grobal2.POISON_STONE, 5, 0);
                         }
-                        result = BaseObject;
+                        result = baseObject;
                     }
                 }
             }

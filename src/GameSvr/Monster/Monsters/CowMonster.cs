@@ -1,8 +1,8 @@
 ﻿namespace GameSvr.Monster.Monsters
 {
-    public class TCowMonster : AtMonster
+    public class CowMonster : AtMonster
     {
-        public TCowMonster() : base()
+        public CowMonster() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }

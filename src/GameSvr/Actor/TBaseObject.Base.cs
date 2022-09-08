@@ -77,7 +77,7 @@ namespace GameSvr.Actor
                     }
                     if (Abil.HP == 0)
                     {
-                        if (((LastHiter == null) || !LastHiter.UnRevival) && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.dwRevivalTime))// 60 * 1000
+                        if (((LastHiter == null) || !LastHiter.UnRevival) && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))// 60 * 1000
                         {
                             RevivalTick = HUtil32.GetTickCount();
                             ItemDamageRevivalRing();
@@ -964,7 +964,7 @@ namespace GameSvr.Actor
                         {
                             if (AttackBaseObject != null)
                             {
-                                if (M2Share.Config.boKillByHumanDropUseItem && AttackBaseObject.Race == Grobal2.RC_PLAYOBJECT || M2Share.Config.boKillByMonstDropUseItem && AttackBaseObject.Race != Grobal2.RC_PLAYOBJECT)
+                                if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == Grobal2.RC_PLAYOBJECT || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != Grobal2.RC_PLAYOBJECT)
                                 {
                                     DropUseItems(null);
                                 }

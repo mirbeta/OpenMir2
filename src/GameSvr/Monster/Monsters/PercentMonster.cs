@@ -6,13 +6,13 @@ namespace GameSvr.Monster.Monsters
 {
     public class PercentMonster : AnimalObject
     {
-        public int m_dwThinkTick;
-        public bool m_boDupMode;
+        public int MDwThinkTick;
+        public bool MBoDupMode;
 
         public PercentMonster() : base()
         {
-            m_boDupMode = false;
-            m_dwThinkTick = HUtil32.GetTickCount();
+            MBoDupMode = false;
+            MDwThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
             RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
@@ -20,26 +20,26 @@ namespace GameSvr.Monster.Monsters
             Race = 80;
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage processMsg)
         {
-            return base.Operate(ProcessMsg);
+            return base.Operate(processMsg);
         }
 
         private bool Think()
         {
-            if ((HUtil32.GetTickCount() - m_dwThinkTick) > 3 * 1000)
+            if ((HUtil32.GetTickCount() - MDwThinkTick) > 3 * 1000)
             {
-                m_dwThinkTick = HUtil32.GetTickCount();
+                MDwThinkTick = HUtil32.GetTickCount();
                 if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
                 {
-                    m_boDupMode = true;
+                    MBoDupMode = true;
                 }
                 if (!IsProperTarget(TargetCret))
                 {
                     TargetCret = null;
                 }
             }
-            if (m_boDupMode)
+            if (MBoDupMode)
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
@@ -48,7 +48,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     return false;
                 }
-                m_boDupMode = false;
+                MBoDupMode = false;
                 return true;
             }
             return false;

@@ -6,14 +6,14 @@ namespace GameSvr.Monster.Monsters
 {
     public class MagicMonster : AnimalObject
     {
-        public int m_dwThinkTick;
-        public int m_dwSpellTick = 0;
-        public bool m_boDupMode;
+        public int MDwThinkTick;
+        public int MDwSpellTick = 0;
+        public bool MBoDupMode;
 
         public MagicMonster() : base()
         {
-            m_boDupMode = false;
-            m_dwThinkTick = HUtil32.GetTickCount();
+            MBoDupMode = false;
+            MDwThinkTick = HUtil32.GetTickCount();
             ViewRange = 8;
             RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
@@ -21,34 +21,34 @@ namespace GameSvr.Monster.Monsters
             Race = 215;
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage processMsg)
         {
-            return base.Operate(ProcessMsg);
+            return base.Operate(processMsg);
         }
 
         private bool Think()
         {
             var result = false;
-            if ((HUtil32.GetTickCount() - m_dwThinkTick) > (3 * 1000))
+            if ((HUtil32.GetTickCount() - MDwThinkTick) > (3 * 1000))
             {
-                m_dwThinkTick = HUtil32.GetTickCount();
+                MDwThinkTick = HUtil32.GetTickCount();
                 if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
                 {
-                    m_boDupMode = true;
+                    MBoDupMode = true;
                 }
                 if (!IsProperTarget(TargetCret))
                 {
                     TargetCret = null;
                 }
             }
-            if (m_boDupMode)
+            if (MBoDupMode)
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX != CurrX || nOldY != CurrY)
                 {
-                    m_boDupMode = false;
+                    MBoDupMode = false;
                     result = true;
                 }
             }

@@ -21,10 +21,10 @@ namespace GameSvr.Monster.Monsters
             {
                 for (var i = xTargetList.Count - 1; i >= 0; i--)
                 {
-                    var BaseObject = xTargetList[i];
-                    if (BaseObject != null)
+                    var baseObject = xTargetList[i];
+                    if (baseObject != null)
                     {
-                        _Attack(ref wHitMode, BaseObject);
+                        _Attack(ref wHitMode, baseObject);
                         xTargetList.RemoveAt(i);
                     }
                 }

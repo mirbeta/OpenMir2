@@ -18,21 +18,21 @@ namespace GameSvr.Monster.Monsters
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-                var WAbil = Abil;
-                var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+                var wAbil = Abil;
+                var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
-                    var BaseObject = VisibleActors[i].BaseObject;
-                    if (BaseObject.Death)
+                    var baseObject = VisibleActors[i].BaseObject;
+                    if (baseObject.Death)
                     {
                         continue;
                     }
-                    if (IsProperTarget(BaseObject))
+                    if (IsProperTarget(baseObject))
                     {
-                        if (Math.Abs(CurrX - BaseObject.CurrX) <= ViewRange && Math.Abs(CurrY - BaseObject.CurrY) <= ViewRange)
+                        if (Math.Abs(CurrX - baseObject.CurrX) <= ViewRange && Math.Abs(CurrY - baseObject.CurrY) <= ViewRange)
                         {
-                            SendDelayMsg(this, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 1, BaseObject.ObjectId, "", 200);
-                            SendRefMsg(Grobal2.RM_10205, 0, BaseObject.CurrX, BaseObject.CurrY, 1, "");
+                            SendDelayMsg(this, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 1, baseObject.ObjectId, "", 200);
+                            SendRefMsg(Grobal2.RM_10205, 0, baseObject.CurrX, baseObject.CurrY, 1, "");
                         }
                     }
                 }

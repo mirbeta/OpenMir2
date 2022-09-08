@@ -30,16 +30,16 @@ namespace GameSvr.Monster.Monsters
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        var BaseObject = VisibleActors[i].BaseObject;
-                        if (BaseObject.Death)
+                        var baseObject = VisibleActors[i].BaseObject;
+                        if (baseObject.Death)
                         {
                             continue;
                         }
-                        if (IsProperTarget(BaseObject))
+                        if (IsProperTarget(baseObject))
                         {
-                            if (!BaseObject.HideMode || CoolEye)
+                            if (!baseObject.HideMode || CoolEye)
                             {
-                                if (Math.Abs(CurrX - BaseObject.CurrX) <= 3 && Math.Abs(CurrY - BaseObject.CurrY) <= 3)
+                                if (Math.Abs(CurrX - baseObject.CurrX) <= 3 && Math.Abs(CurrY - baseObject.CurrY) <= 3)
                                 {
                                     sub_4AA8DC();
                                     WalkTick = HUtil32.GetTickCount() + 1000;

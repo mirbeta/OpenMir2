@@ -6,7 +6,6 @@
         {
             Animal = true;
         }
-
     }
 }
 

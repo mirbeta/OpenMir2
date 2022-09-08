@@ -7,17 +7,17 @@ namespace GameSvr.Monster.Monsters
     /// </summary>
     public class CastleDoor : GuardUnit
     {
-        public bool m_boOpened;
+        public bool MBoOpened;
 
         public CastleDoor() : base()
         {
             Animal = false;
             StickMode = true;
-            m_boOpened = false;
+            MBoOpened = false;
             AntiPoison = 200;
         }
 
-        private void SetMapXYFlag(int nFlag)
+        private void SetMapXyFlag(int nFlag)
         {
             bool bo06;
             Envir.SetMapXyFlag(CurrX, CurrY - 2, true);
@@ -56,9 +56,9 @@ namespace GameSvr.Monster.Monsters
             }
             Direction = 7;
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
-            m_boOpened = true;
+            MBoOpened = true;
             StoneMode = true;
-            SetMapXYFlag(0);
+            SetMapXyFlag(0);
             Bo2B9 = false;
         }
 
@@ -74,16 +74,16 @@ namespace GameSvr.Monster.Monsters
                 Direction = 0;
             }
             SendRefMsg(Grobal2.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
-            m_boOpened = false;
+            MBoOpened = false;
             StoneMode = false;
-            SetMapXYFlag(1);
+            SetMapXyFlag(1);
             Bo2B9 = true;
         }
 
         public override void Die()
         {
             base.Die();
-            SetMapXYFlag(2);
+            SetMapXyFlag(2);
         }
 
         public override void Run()
@@ -96,7 +96,7 @@ namespace GameSvr.Monster.Monsters
             {
                 HealthTick = 0;
             }
-            if (!m_boOpened)
+            if (!MBoOpened)
             {
                 int n08 = 3 - HUtil32.Round(Abil.HP / Abil.MaxHP * 3);
                 if (Direction != n08 && n08 < 3)

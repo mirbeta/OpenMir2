@@ -14,29 +14,29 @@ namespace GameSvr.Monster.Monsters
             Direction = 0;
         }
 
-        private void sub_4A6B30(BaseObject TargeTBaseObject)
+        private void sub_4A6B30(BaseObject targeTBaseObject)
         {
-            Direction = M2Share.GetNextDirection(CurrX, CurrY, TargeTBaseObject.CurrX, TargeTBaseObject.CurrY);
-            TAbility WAbil = Abil;
-            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+            Direction = M2Share.GetNextDirection(CurrX, CurrY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
+            TAbility wAbil = Abil;
+            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
             if (nPower > 0)
             {
-                nPower = TargeTBaseObject.GetHitStruckDamage(this, nPower);
+                nPower = targeTBaseObject.GetHitStruckDamage(this, nPower);
             }
             if (nPower > 0)
             {
-                TargeTBaseObject.SetLastHiter(this);
-                TargeTBaseObject.ExpHitter = null;
-                TargeTBaseObject.StruckDamage(nPower);
-                TargeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nPower, TargeTBaseObject.Abil.HP, TargeTBaseObject.Abil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - TargeTBaseObject.CurrX), Math.Abs(CurrY - TargeTBaseObject.CurrY)) * 50 + 600);
+                targeTBaseObject.SetLastHiter(this);
+                targeTBaseObject.ExpHitter = null;
+                targeTBaseObject.StruckDamage(nPower);
+                targeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nPower, targeTBaseObject.Abil.HP, targeTBaseObject.Abil.MaxHP, ObjectId, "", HUtil32._MAX(Math.Abs(CurrX - targeTBaseObject.CurrX), Math.Abs(CurrY - targeTBaseObject.CurrY)) * 50 + 600);
             }
-            SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, TargeTBaseObject.ObjectId, "");
+            SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, targeTBaseObject.ObjectId, "");
         }
 
         public override void Run()
         {
             int nRage = 9999;
-            BaseObject TargetBaseObject = null;
+            BaseObject targetBaseObject = null;
             if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
@@ -44,24 +44,24 @@ namespace GameSvr.Monster.Monsters
                     WalkTick = HUtil32.GetTickCount();
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        var BaseObject = VisibleActors[i].BaseObject;
-                        if (BaseObject.Death)
+                        var baseObject = VisibleActors[i].BaseObject;
+                        if (baseObject.Death)
                         {
                             continue;
                         }
-                        if (IsProperTarget(BaseObject))
+                        if (IsProperTarget(baseObject))
                         {
-                            var nAbs = Math.Abs(CurrX - BaseObject.CurrX) + Math.Abs(CurrY - BaseObject.CurrY);
+                            var nAbs = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
                             if (nAbs < nRage)
                             {
                                 nRage = nAbs;
-                                TargetBaseObject = BaseObject;
+                                targetBaseObject = baseObject;
                             }
                         }
                     }
-                    if (TargetBaseObject != null)
+                    if (targetBaseObject != null)
                     {
-                        SetTargetCreat(TargetBaseObject);
+                        SetTargetCreat(targetBaseObject);
                     }
                     else
                     {

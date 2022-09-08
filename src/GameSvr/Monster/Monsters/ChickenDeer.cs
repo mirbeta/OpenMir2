@@ -13,36 +13,36 @@ namespace GameSvr.Monster.Monsters
         public override void Run()
         {
             int n10 = 9999;
-            BaseObject BaseObject1C = null;
-            BaseObject BaseObject = null;
+            BaseObject baseObject1C = null;
+            BaseObject baseObject = null;
             if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject = VisibleActors[i].BaseObject;
-                        if (BaseObject.Death)
+                        baseObject = VisibleActors[i].BaseObject;
+                        if (baseObject.Death)
                         {
                             continue;
                         }
-                        if (IsProperTarget(BaseObject))
+                        if (IsProperTarget(baseObject))
                         {
-                            if (!BaseObject.HideMode || CoolEye)
+                            if (!baseObject.HideMode || CoolEye)
                             {
-                                var nC = Math.Abs(CurrX - BaseObject.CurrX) + Math.Abs(CurrY - BaseObject.CurrY);
+                                var nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
                                 if (nC < n10)
                                 {
                                     n10 = nC;
-                                    BaseObject1C = BaseObject;
+                                    baseObject1C = baseObject;
                                 }
                             }
                         }
                     }
-                    if (BaseObject1C != null)
+                    if (baseObject1C != null)
                     {
                         m_boRunAwayMode = true;
-                        TargetCret = BaseObject1C;
+                        TargetCret = baseObject1C;
                     }
                     else
                     {
@@ -52,7 +52,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (m_boRunAwayMode && TargetCret != null && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
-                    if (Math.Abs(CurrX - BaseObject.CurrX) <= 6 && Math.Abs(CurrX - BaseObject.CurrX) <= 6)
+                    if (Math.Abs(CurrX - baseObject.CurrX) <= 6 && Math.Abs(CurrX - baseObject.CurrX) <= 6)
                     {
                         int n14 = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                         Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, n14, 5, ref TargetX, ref TargetY);

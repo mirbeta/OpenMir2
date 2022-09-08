@@ -12,10 +12,10 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage processMsg)
         {
             var result = false;
-            if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK || ProcessMsg.wIdent == Grobal2.RM_SPELL)
+            if (processMsg.wIdent == Grobal2.RM_STRUCK || processMsg.wIdent == Grobal2.RM_MAGSTRUCK || processMsg.wIdent == Grobal2.RM_SPELL)
             {
                 if (Master != null)
                 {
@@ -23,13 +23,13 @@ namespace GameSvr.Monster.Monsters
                     {
                         Abil.HP = 0;
                     }
-                    if (ProcessMsg.wIdent == Grobal2.RM_SPELL)
+                    if (processMsg.wIdent == Grobal2.RM_SPELL)
                     {
-                        Master.Abil.MP -= (ushort)ProcessMsg.nParam3;
+                        Master.Abil.MP -= (ushort)processMsg.nParam3;
                     }
                     else
                     {
-                        Master.Abil.MP -= (ushort)ProcessMsg.wParam;
+                        Master.Abil.MP -= (ushort)processMsg.wParam;
                     }
                 }
             }
@@ -38,18 +38,18 @@ namespace GameSvr.Monster.Monsters
 
         private void LightingAttack(byte nDir)
         {
-            short nSX = 0;
-            short nSY = 0;
-            short nTX = 0;
-            short nTY = 0;
+            short nSx = 0;
+            short nSy = 0;
+            short nTx = 0;
+            short nTy = 0;
             Direction = nDir;
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ObjectId, "");
-            if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSX, ref nSY))
+            if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSx, ref nSy))
             {
-                Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTX, ref nTY);
-                var WAbil = Abil;
-                var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
-                MagPassThroughMagic(nSX, nSY, nTX, nTY, nDir, nPwr, true);
+                Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTx, ref nTy);
+                var wAbil = Abil;
+                var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
+                MagPassThroughMagic(nSx, nSy, nTx, nTy, nDir, nPwr, true);
             }
             BreakHolySeizeMode();
         }
