@@ -235,7 +235,7 @@ namespace GameSvr.Castle
                         {
                             ObjUnit.BaseObject.WAbil.HP = Archers[i].nHP;
                             ObjUnit.BaseObject.Castle = this;
-                            ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
+                            ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                         }
                         else
                         {

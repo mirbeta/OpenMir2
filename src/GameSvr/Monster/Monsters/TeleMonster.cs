@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!this.Death && !this.Ghost && this.StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
                 if (this.TargetCret != null)
                 {

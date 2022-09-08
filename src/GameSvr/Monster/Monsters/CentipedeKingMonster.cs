@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
             _mDwAttickTick = HUtil32.GetTickCount();
         }
 
-        private bool sub_4A5B0C()
+        private bool CheckAttackTarget()
         {
             var result = false;
             for (var i = 0; i < VisibleActors.Count; i++)
@@ -41,7 +41,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool AttackTarget()
         {
-            if (!sub_4A5B0C())
+            if (!CheckAttackTarget())
             {
                 return false;
             }
@@ -91,7 +91,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
                 if ((HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
                 {

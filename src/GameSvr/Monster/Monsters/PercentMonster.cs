@@ -90,7 +90,7 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk() && !FixedHideMode && !StoneMode)
             {
                 if (Think())
                 {

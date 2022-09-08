@@ -41,7 +41,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0 && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
+            if (CanWalk() && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
                 if (StoneMode)
                 {

@@ -285,7 +285,7 @@ namespace GameSvr.Npc
                             {
                                 this.Castle.TotalGold -= M2Share.Config.HireGuardPrice;
                                 ObjUnit.BaseObject.Castle = this.Castle;
-                                ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
+                                ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
                         }
@@ -332,7 +332,7 @@ namespace GameSvr.Npc
                             {
                                 this.Castle.TotalGold -= M2Share.Config.HireArcherPrice;
                                 ObjUnit.BaseObject.Castle = this.Castle;
-                                ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
+                                ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
                         }

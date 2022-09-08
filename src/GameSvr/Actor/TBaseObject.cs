@@ -6,9 +6,7 @@ using GameSvr.Magic;
 using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
-using GameSvr.Npc;
 using GameSvr.Player;
-using GameSvr.UsrSystem;
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;
@@ -136,9 +134,10 @@ namespace GameSvr.Actor
         /// </summary>
         protected byte ViewRange;
         /// <summary>
-        /// 人物状态属性值 0-绿毒(减HP) 1-红毒(减MP) 2-防、魔防为0(唯我独尊3级) 3-不能跑动(中蛛网)
-        ///  4-不能移动(中战连击) 5-麻痹(石化) 6-减血，被连击技能万剑归宗击中后掉血
-        ///  7-冰冻(不能跑动，不能魔法) 8-隐身 9-防御力(神圣战甲术) 10-魔御力(幽灵盾) 11-魔法盾
+        /// 人物状态属性值 
+        /// 0-绿毒(减HP) 1-红毒(减MP) 2-防、魔防为0(唯我独尊3级) 3-不能跑动(中蛛网)
+        /// 4-不能移动(中战连击) 5-麻痹(石化) 6-减血，被连击技能万剑归宗击中后掉血
+        /// 7-冰冻(不能跑动，不能魔法) 8-隐身 9-防御力(神圣战甲术) 10-魔御力(幽灵盾) 11-魔法盾
         /// </summary>
         internal ushort[] StatusTimeArr;
         /// <summary>
@@ -759,7 +758,6 @@ namespace GameSvr.Actor
         protected bool RedUseHalfMoon;
         protected bool FireHitSkill;
         protected bool CrsHitkill = false;
-        public bool MBo41Kill = false;
         public bool MBoTwinHitSkill;
         public bool MBo43Kill = false;
         public int MDwLatestFireHitTick = 0;
@@ -1618,7 +1616,6 @@ namespace GameSvr.Actor
         public ushort GetAttackPower(int nBasePower, int nPower)
         {
             int result;
-            PlayObject playObject;
             if (nPower < 0)
             {
                 nPower = 0;
@@ -1647,7 +1644,7 @@ namespace GameSvr.Actor
             }
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
-                playObject = this as PlayObject;
+                PlayObject playObject = this as PlayObject;
                 result = HUtil32.Round(result * (playObject.m_nPowerRate / 100));
                 if (playObject.BoPowerItem)
                 {
@@ -5973,7 +5970,7 @@ namespace GameSvr.Actor
 
             if (this is MagicMonster)
             {
-                ((MagicMonster)this).MBoDupMode = false;
+                ((MagicMonster)this).DupMode = false;
             }
 
             if (this is MagicMonObject)
