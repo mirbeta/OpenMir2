@@ -1,20 +1,18 @@
-﻿using GameSvr.Actor;
-using SystemModule;
-using SystemModule.Packet.ClientPackets;
+﻿using SystemModule;
 
 namespace GameSvr.Monster.Monsters
 {
     public class CentipedeKingMonster : StickMonster
     {
-        private int _mDwAttickTick;
+        private int _attickTick;
 
         public CentipedeKingMonster() : base()
         {
             ViewRange = 6;
-            NComeOutValue = 4;
-            NAttackRange = 6;
+            ComeOutValue = 4;
+            AttackRange = 6;
             Animal = false;
-            _mDwAttickTick = HUtil32.GetTickCount();
+            _attickTick = HUtil32.GetTickCount();
         }
 
         private bool CheckAttackTarget()
@@ -83,9 +81,9 @@ namespace GameSvr.Monster.Monsters
             return true;
         }
 
-        protected override void ComeOut()
+        protected override void FindAttackTarget()
         {
-            base.ComeOut();
+            base.FindAttackTarget();
             Abil.HP = Abil.MaxHP;
         }
 
@@ -98,7 +96,7 @@ namespace GameSvr.Monster.Monsters
                     WalkTick = HUtil32.GetTickCount();
                     if (FixedHideMode)
                     {
-                        if ((HUtil32.GetTickCount() - _mDwAttickTick) > 10000)
+                        if ((HUtil32.GetTickCount() - _attickTick) > 10000)
                         {
                             for (var i = 0; i < VisibleActors.Count; i++)
                             {
@@ -111,10 +109,10 @@ namespace GameSvr.Monster.Monsters
                                 {
                                     if (!baseObject.HideMode || CoolEye)
                                     {
-                                        if (Math.Abs(CurrX - baseObject.CurrX) < NComeOutValue && Math.Abs(CurrY - baseObject.CurrY) < NComeOutValue)
+                                        if (Math.Abs(CurrX - baseObject.CurrX) < ComeOutValue && Math.Abs(CurrY - baseObject.CurrY) < ComeOutValue)
                                         {
-                                            ComeOut();
-                                            _mDwAttickTick = HUtil32.GetTickCount();
+                                            FindAttackTarget();
+                                            _attickTick = HUtil32.GetTickCount();
                                             break;
                                         }
                                     }
@@ -124,17 +122,17 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - _mDwAttickTick) > 3000)
+                        if ((HUtil32.GetTickCount() - _attickTick) > 3000)
                         {
                             if (AttackTarget())
                             {
                                 base.Run();
                                 return;
                             }
-                            if ((HUtil32.GetTickCount() - _mDwAttickTick) > 10000)
+                            if ((HUtil32.GetTickCount() - _attickTick) > 10000)
                             {
                                 ComeDown();
-                                _mDwAttickTick = HUtil32.GetTickCount();
+                                _attickTick = HUtil32.GetTickCount();
                             }
                         }
                     }

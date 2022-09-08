@@ -4,12 +4,12 @@ namespace GameSvr.Monster.Monsters
 {
     public class ElectronicScolpionMon : MonsterObject
     {
-        public bool MBoUseMagic;
+        public bool UseMagic;
 
         public ElectronicScolpionMon() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
-            MBoUseMagic = false;
+            UseMagic = false;
         }
 
         private void LightingAttack(byte nDir)
@@ -37,11 +37,11 @@ namespace GameSvr.Monster.Monsters
             {
                 if (Abil.HP < Abil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
-                    MBoUseMagic = true;
+                    UseMagic = true;
                 }
                 else
                 {
-                    MBoUseMagic = false;
+                    UseMagic = false;
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
@@ -56,13 +56,13 @@ namespace GameSvr.Monster.Monsters
                 var nY = Math.Abs(CurrY - TargetCret.CurrY);
                 if (nX <= 2 && nY <= 2)
                 {
-                    if (MBoUseMagic || nX == 2 || nY == 2)
+                    if (UseMagic || nX == 2 || nY == 2)
                     {
                         if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {
                             AttackTick = HUtil32.GetTickCount();
-                            int nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-                            LightingAttack((byte)nAttackDir);
+                            byte nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                            LightingAttack(nAttackDir);
                         }
                     }
                 }

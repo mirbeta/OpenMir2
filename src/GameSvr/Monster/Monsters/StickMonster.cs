@@ -6,8 +6,8 @@ namespace GameSvr.Monster.Monsters
 {
     public class StickMonster : AnimalObject
     {
-        protected int NComeOutValue;
-        protected int NAttackRange;
+        protected int ComeOutValue;
+        protected int AttackRange;
 
         public StickMonster() : base()
         {
@@ -15,8 +15,8 @@ namespace GameSvr.Monster.Monsters
             this.RunTime = 250;
             this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             this.SearchTick = HUtil32.GetTickCount();
-            NComeOutValue = 4;
-            NAttackRange = 4;
+            ComeOutValue = 4;
+            AttackRange = 4;
             this.FixedHideMode = true;
             this.StickMode = true;
             this.Animal = true;
@@ -50,7 +50,7 @@ namespace GameSvr.Monster.Monsters
             return false;
         }
 
-        protected virtual void ComeOut()
+        protected virtual void FindAttackTarget()
         {
             this.FixedHideMode = false;
             this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
@@ -81,7 +81,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (!baseObject.HideMode || this.CoolEye)
                     {
-                        if (Math.Abs(this.CurrX - baseObject.CurrX) < NComeOutValue && Math.Abs(this.CurrY - baseObject.CurrY) < NComeOutValue)
+                        if (Math.Abs(this.CurrX - baseObject.CurrX) < ComeOutValue && Math.Abs(this.CurrY - baseObject.CurrY) < ComeOutValue)
                         {
                             result = true;
                             break;
@@ -108,7 +108,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (CheckComeOut())
                         {
-                            ComeOut();
+                            FindAttackTarget();
                         }
                     }
                     else
@@ -120,7 +120,7 @@ namespace GameSvr.Monster.Monsters
                         var bo05 = false;
                         if (this.TargetCret != null)
                         {
-                            if (Math.Abs(this.TargetCret.CurrX - this.CurrX) > NAttackRange || Math.Abs(this.TargetCret.CurrY - this.CurrY) > NAttackRange)
+                            if (Math.Abs(this.TargetCret.CurrX - this.CurrX) > AttackRange || Math.Abs(this.TargetCret.CurrY - this.CurrY) > AttackRange)
                             {
                                 bo05 = true;
                             }

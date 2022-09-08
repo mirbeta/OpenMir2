@@ -51,7 +51,7 @@ namespace GameSvr.Monster.Monsters
             SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
             for (var i = 0; i < 4; i++)
             {
-                for (var k = 0; k <= 4; k++)
+                for (var k = 0; k < 4; k++)
                 {
                     if (M2Share.Config.SpitMap[btDir, i, k] == 1)
                     {

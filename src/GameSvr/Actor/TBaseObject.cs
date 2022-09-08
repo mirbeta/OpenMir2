@@ -5964,7 +5964,7 @@ namespace GameSvr.Actor
 
             if (this is CastleDoor)
             {
-                ((CastleDoor)this).MBoOpened = false;
+                ((CastleDoor)this).IsOpened = false;
                 this.StickMode = true;
             }
 
@@ -6045,7 +6045,7 @@ namespace GameSvr.Actor
 
             if (this is ElectronicScolpionMon)
             {
-                ((ElectronicScolpionMon)this).MBoUseMagic = false;
+                ((ElectronicScolpionMon)this).UseMagic = false;
                 //((TElectronicScolpionMon)(this)).m_boApproach = false;
             }
 
