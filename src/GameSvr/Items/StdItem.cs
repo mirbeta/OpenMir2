@@ -684,7 +684,7 @@ namespace GameSvr.Items
                             addAbility.btLuck += (byte)Mac2;
                             break;
                         case 53: // 新加物品属性
-                            if (M2Share.Config.boAddUserItemNewValue)
+                            if (M2Share.Config.AddUserItemNewValue)
                             {
                                 addAbility.wAntiMagic += Ac2;
                                 addAbility.btUnLuck += (byte)Mac;
@@ -708,7 +708,7 @@ namespace GameSvr.Items
                             addAbility.wSpeedPoint += Mac2;
                             break;
                         case 52:// 原本与 20,24 一个属性，现在分开单独进行设置
-                            if (M2Share.Config.boAddUserItemNewValue)
+                            if (M2Share.Config.AddUserItemNewValue)
                             {
                                 addAbility.wHitPoint += Ac2;
                                 addAbility.wSpeedPoint += Mac2;
@@ -731,7 +731,7 @@ namespace GameSvr.Items
                             addAbility.nHitSpeed -= Mac;
                             break;
                         case 54:
-                            if (M2Share.Config.boAddUserItemNewValue)
+                            if (M2Share.Config.AddUserItemNewValue)
                             {
                                 addAbility.wHealthRecover += Ac2;
                                 addAbility.wSpellRecover += Mac2;

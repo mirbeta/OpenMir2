@@ -114,7 +114,7 @@ namespace GameSvr.RobotPlay
         /// 假人掉装备机率
         /// </summary>
         public int m_nDropUseItemRate;
-        private readonly AIObjectConf _conf;
+        private readonly RobotPlayConf _conf;
 
         public RobotPlayObject() : base()
         {
@@ -172,7 +172,7 @@ namespace GameSvr.RobotPlay
                     sFileName = m_sConfigFileName;
                 }
             }
-            _conf = new AIObjectConf(sFileName);
+            _conf = new RobotPlayConf(sFileName);
         }
 
         /// <summary>
@@ -2083,14 +2083,12 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool Thinking()
+        private bool Thinking()
         {
             bool result = false;
-            int nOldX;
-            int nOldY;
             try
             {
-                if (M2Share.Config.boAutoPickUpItem)//&& (g_AllowAIPickUpItemList.Count > 0)
+                if (M2Share.Config.RobotAutoPickUpItem)//&& (g_AllowAIPickUpItemList.Count > 0)
                 {
                     if (SearchPickUpItem(500))
                     {
@@ -2099,14 +2097,13 @@ namespace GameSvr.RobotPlay
                 }
                 if (Master != null && Master.Ghost)
                 {
-                    return result;
+                    return false;
                 }
                 if (Master != null && Master.InSafeZone() && InSafeZone())
                 {
                     if (Math.Abs(CurrX - Master.CurrX) <= 3 && Math.Abs(CurrY - Master.CurrY) <= 3)
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
                 }
                 if (HUtil32.GetTickCount() - m_dwThinkTick > 3000)
@@ -2126,8 +2123,8 @@ namespace GameSvr.RobotPlay
                 }
                 if (m_boDupMode)
                 {
-                    nOldX = CurrX;
-                    nOldY = CurrY;
+                    int nOldX = CurrX;
+                    int nOldY = CurrY;
                     WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                     //m_dwStationTick = HUtil32.GetTickCount(); // 增加检测人物站立时间
                     if (nOldX != CurrX || nOldY != CurrY)

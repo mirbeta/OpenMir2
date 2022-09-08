@@ -2433,7 +2433,7 @@ namespace GameSvr.Actor
                     }
                     var nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
                     var nDura = 0;
-                    if (M2Share.Config.boDecLampDura)
+                    if (M2Share.Config.DecLampDura)
                     {
                         nDura = UseItems[Grobal2.U_RIGHTHAND].Dura - 1;
                     }
@@ -3991,22 +3991,22 @@ namespace GameSvr.Actor
                 switch (msgType)
                 {
                     case MsgType.Mon:
-                        sMsg = M2Share.Config.sMonSayMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.MonSayMsgPreFix + sMsg;
                         break;
                     case MsgType.Hint:
-                        sMsg = M2Share.Config.sHintMsgPreFix + sMsg;
+                        sMsg = M2Share.Config.HintMsgPreFix + sMsg;
                         break;
                     case MsgType.GameManger:
-                        sMsg = M2Share.Config.sGMRedMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.GameManagerRedMsgPreFix + sMsg;
                         break;
                     case MsgType.System:
-                        sMsg = M2Share.Config.sSysMsgPreFix + sMsg;
+                        sMsg = M2Share.Config.SysMsgPreFix + sMsg;
                         break;
                     case MsgType.Cust:
-                        sMsg = M2Share.Config.sCustMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.CustMsgPreFix + sMsg;
                         break;
                     case MsgType.Castle:
-                        sMsg = M2Share.Config.sCastleMsgpreFix + sMsg;
+                        sMsg = M2Share.Config.CastleMsgPreFix + sMsg;
                         break;
                 }
             }
@@ -4023,7 +4023,7 @@ namespace GameSvr.Actor
                     bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
                     if (M2Share.Config.ShowPreFixMsg)
                     {
-                        sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
+                        sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
 
                     SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255),
@@ -4035,7 +4035,7 @@ namespace GameSvr.Actor
                     bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
                     if (M2Share.Config.ShowPreFixMsg)
                     {
-                        sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
+                        sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
 
                     SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255),
@@ -4049,7 +4049,7 @@ namespace GameSvr.Actor
                     str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { "," });
                     if (M2Share.Config.ShowPreFixMsg)
                     {
-                        sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
+                        sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
 
                     SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(fColor, 255),
@@ -4062,7 +4062,7 @@ namespace GameSvr.Actor
                         case MsgColor.Red: // 控制公告的颜色
                             if (M2Share.Config.ShowPreFixMsg)
                             {
-                                sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
 
                             SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor,
@@ -4071,7 +4071,7 @@ namespace GameSvr.Actor
                         case MsgColor.Green:
                             if (M2Share.Config.ShowPreFixMsg)
                             {
-                                sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
 
                             SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor,
@@ -4080,7 +4080,7 @@ namespace GameSvr.Actor
                         case MsgColor.Blue:
                             if (M2Share.Config.ShowPreFixMsg)
                             {
-                                sMsg = M2Share.Config.sLineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
 
                             SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor,
@@ -4184,7 +4184,7 @@ namespace GameSvr.Actor
 
         public void SendGroupText(string sMsg)
         {
-            sMsg = M2Share.Config.sGroupMsgPreFix + sMsg;
+            sMsg = M2Share.Config.GroupMsgPreFix + sMsg;
             if (GroupOwner != null)
             {
                 for (var i = 0; i < GroupOwner.GroupMembers.Count; i++)
@@ -5967,18 +5967,18 @@ namespace GameSvr.Actor
 
             if (this is CastleDoor)
             {
-                ((CastleDoor)this).m_boOpened = false;
+                ((CastleDoor)this).MBoOpened = false;
                 this.StickMode = true;
             }
 
             if (this is MagicMonster)
             {
-                ((MagicMonster)this).m_boDupMode = false;
+                ((MagicMonster)this).MBoDupMode = false;
             }
 
             if (this is MagicMonObject)
             {
-                ((MagicMonObject)this).m_boUseMagic = false;
+                ((MagicMonObject)this).MBoUseMagic = false;
             }
 
             if (this is RockManObject)
@@ -5993,7 +5993,7 @@ namespace GameSvr.Actor
 
             if (this is SoccerBall)
             {
-                ((SoccerBall)this).n550 = 0;
+                ((SoccerBall)this).N550 = 0;
                 ((SoccerBall)this).TargetX = -1;
             }
 
@@ -6017,7 +6017,7 @@ namespace GameSvr.Actor
 
             if (this is WhiteSkeleton)
             {
-                ((WhiteSkeleton)this).m_boIsFirst = true;
+                ((WhiteSkeleton)this).MBoIsFirst = true;
                 this.FixedHideMode = true;
             }
 
@@ -6036,19 +6036,19 @@ namespace GameSvr.Actor
             {
                 this.FixedHideMode = true;
                 this.NoAttackMode = true;
-                ((ElfMonster)this).boIsFirst = true;
+                ((ElfMonster)this).BoIsFirst = true;
             }
 
             if (this is ElfWarriorMonster)
             {
                 this.FixedHideMode = true;
-                ((ElfWarriorMonster)this).boIsFirst = true;
+                ((ElfWarriorMonster)this).BoIsFirst = true;
                 ((ElfWarriorMonster)this).UsePoison = false;
             }
 
             if (this is ElectronicScolpionMon)
             {
-                ((ElectronicScolpionMon)this).m_boUseMagic = false;
+                ((ElectronicScolpionMon)this).MBoUseMagic = false;
                 //((TElectronicScolpionMon)(this)).m_boApproach = false;
             }
 

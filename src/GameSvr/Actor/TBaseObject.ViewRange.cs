@@ -84,8 +84,8 @@ namespace GameSvr.Actor
                 return;
             }
             MapEvent.VisibleFlag = VisibleFlag.Hidden;
-            MapEvent.m_nX = wX;
-            MapEvent.m_nY = wY;
+            MapEvent.nX = wX;
+            MapEvent.nY = wY;
             VisibleEvents.Add(MapEvent);
         }
 

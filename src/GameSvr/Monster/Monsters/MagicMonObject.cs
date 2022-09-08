@@ -4,12 +4,12 @@ namespace GameSvr.Monster.Monsters
 {
     public class MagicMonObject : MonsterObject
     {
-        public bool m_boUseMagic;
+        public bool MBoUseMagic;
 
         public MagicMonObject() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
-            m_boUseMagic = false;
+            MBoUseMagic = false;
         }
 
         private void LightingAttack(int nDir)
@@ -23,11 +23,11 @@ namespace GameSvr.Monster.Monsters
             {
                 if (Abil.HP < Abil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
-                    m_boUseMagic = true;
+                    MBoUseMagic = true;
                 }
                 else
                 {
-                    m_boUseMagic = false;
+                    MBoUseMagic = false;
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
@@ -42,7 +42,7 @@ namespace GameSvr.Monster.Monsters
                 var nY = Math.Abs(CurrY - Master.CurrY);
                 if (nX <= 5 && nY <= 5)
                 {
-                    if (m_boUseMagic || nX == 5 || nY == 5)
+                    if (MBoUseMagic || nX == 5 || nY == 5)
                     {
                         if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {

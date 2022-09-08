@@ -98,10 +98,10 @@ namespace GameSvr
         public static int g_nServerTickDifference = 0;
         public static readonly ReaderWriterLockWrapper syncLock = new ReaderWriterLockWrapper();
         public static ActorMgr ActorMgr = null;
-        public static ServerConfig ServerConf;
-        private static StringConfig StringConf;
-        private static ExpsConfig ExpConf;
-        private static GlobalConfig GlobalConf;
+        public static ServerConf ServerConf;
+        private static StringConf StringConf;
+        private static ExpsConf ExpConf;
+        private static GlobalConf GlobalConf;
         /// <summary>
         /// 寻路
         /// </summary>
@@ -659,10 +659,10 @@ namespace GameSvr
             {
                 throw new Exception("不受支持的操作系统");
             }
-            ServerConf = new ServerConfig(Path.Combine(BasePath, ConfConst.sConfigFileName));
-            StringConf = new StringConfig(Path.Combine(BasePath, ConfConst.sStringFileName));
-            ExpConf = new ExpsConfig(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
-            GlobalConf = new GlobalConfig(Path.Combine(BasePath, ConfConst.sGlobalConfigFileName));
+            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.sConfigFileName));
+            StringConf = new StringConf(Path.Combine(BasePath, ConfConst.sStringFileName));
+            ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
+            GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.sGlobalConfigFileName));
             Log = new MirLog();
             Config = new GameSvrConfig();
             RandomNumber = RandomNumber.GetInstance();

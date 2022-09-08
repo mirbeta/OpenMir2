@@ -17,8 +17,8 @@ namespace GameSvr.Monster.Monsters
         private void SpitAttack(byte btDir)
         {
             Direction = btDir;
-            var WAbil = Abil;
-            var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+            var wAbil = Abil;
+            var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
             if (nDamage <= 0)
             {
                 return;
@@ -32,19 +32,19 @@ namespace GameSvr.Monster.Monsters
                     {
                         var nX = (short)(CurrX - 2 + k);
                         var nY = (short)(CurrY - 2 + i);
-                        var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
-                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.SpeedPoint) < HitPoint)
+                        var baseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                        if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                         {
-                            nDamage = BaseObject.GetMagStruckDamage(this, nDamage);
+                            nDamage = baseObject.GetMagStruckDamage(this, nDamage);
                             if (nDamage > 0)
                             {
-                                BaseObject.StruckDamage(nDamage);
-                                BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Abil.HP, Abil.MaxHP, ObjectId, "", 300);
+                                baseObject.StruckDamage(nDamage);
+                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Abil.HP, Abil.MaxHP, ObjectId, "", 300);
                                 if (UsePoison)
                                 {
                                     if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0)
                                     {
-                                        BaseObject.MakePosion(Grobal2.POISON_DECHEALTH, 30, 1);
+                                        baseObject.MakePosion(Grobal2.POISON_DECHEALTH, 30, 1);
                                     }
                                 }
                             }

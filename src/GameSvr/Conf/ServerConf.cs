@@ -3,9 +3,9 @@ using SystemModule.Common;
 
 namespace GameSvr.Conf
 {
-    public class ServerConfig : IniFile
+    public class ServerConf : IniFile
     {
-        public ServerConfig(string fileName) : base(fileName)
+        public ServerConf(string fileName) : base(fileName)
         {
             Load();
         }
@@ -834,8 +834,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "SendRefMsgRange", M2Share.Config.SendRefMsgRange);
             M2Share.Config.SendRefMsgRange = (byte)ReadInteger("Setup", "SendRefMsgRange", M2Share.Config.SendRefMsgRange);
             if (ReadInteger("Setup", "DecLampDura", -1) < 0)
-                WriteBool("Setup", "DecLampDura", M2Share.Config.boDecLampDura);
-            M2Share.Config.boDecLampDura = ReadBool("Setup", "DecLampDura", M2Share.Config.boDecLampDura);
+                WriteBool("Setup", "DecLampDura", M2Share.Config.DecLampDura);
+            M2Share.Config.DecLampDura = ReadBool("Setup", "DecLampDura", M2Share.Config.DecLampDura);
             if (ReadInteger("Setup", "HungerSystem", -1) < 0)
                 WriteBool("Setup", "HungerSystem", M2Share.Config.HungerSystem);
             M2Share.Config.HungerSystem = ReadBool("Setup", "HungerSystem", M2Share.Config.HungerSystem);
@@ -1429,86 +1429,86 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "SilverStoneMax", M2Share.Config.SilverStoneMax);
             M2Share.Config.SilverStoneMax = ReadInteger("Setup", "SilverStoneMax", M2Share.Config.SilverStoneMax);
             if (ReadInteger("Setup", "SteelStoneMin", -1) < 0)
-                WriteInteger("Setup", "SteelStoneMin", M2Share.Config.nSteelStoneMin);
-            M2Share.Config.nSteelStoneMin = ReadInteger("Setup", "SteelStoneMin", M2Share.Config.nSteelStoneMin);
+                WriteInteger("Setup", "SteelStoneMin", M2Share.Config.SteelStoneMin);
+            M2Share.Config.SteelStoneMin = ReadInteger("Setup", "SteelStoneMin", M2Share.Config.SteelStoneMin);
             if (ReadInteger("Setup", "SteelStoneMax", -1) < 0)
-                WriteInteger("Setup", "SteelStoneMax", M2Share.Config.nSteelStoneMax);
-            M2Share.Config.nSteelStoneMax = ReadInteger("Setup", "SteelStoneMax", M2Share.Config.nSteelStoneMax);
+                WriteInteger("Setup", "SteelStoneMax", M2Share.Config.SteelStoneMax);
+            M2Share.Config.SteelStoneMax = ReadInteger("Setup", "SteelStoneMax", M2Share.Config.SteelStoneMax);
             if (ReadInteger("Setup", "BlackStoneMin", -1) < 0)
-                WriteInteger("Setup", "BlackStoneMin", M2Share.Config.nBlackStoneMin);
-            M2Share.Config.nBlackStoneMin = ReadInteger("Setup", "BlackStoneMin", M2Share.Config.nBlackStoneMin);
+                WriteInteger("Setup", "BlackStoneMin", M2Share.Config.BlackStoneMin);
+            M2Share.Config.BlackStoneMin = ReadInteger("Setup", "BlackStoneMin", M2Share.Config.BlackStoneMin);
             if (ReadInteger("Setup", "BlackStoneMax", -1) < 0)
-                WriteInteger("Setup", "BlackStoneMax", M2Share.Config.nBlackStoneMax);
-            M2Share.Config.nBlackStoneMax = ReadInteger("Setup", "BlackStoneMax", M2Share.Config.nBlackStoneMax);
+                WriteInteger("Setup", "BlackStoneMax", M2Share.Config.BlackStoneMax);
+            M2Share.Config.BlackStoneMax = ReadInteger("Setup", "BlackStoneMax", M2Share.Config.BlackStoneMax);
             if (ReadInteger("Setup", "StoneMinDura", -1) < 0)
-                WriteInteger("Setup", "StoneMinDura", M2Share.Config.nStoneMinDura);
-            M2Share.Config.nStoneMinDura = ReadInteger("Setup", "StoneMinDura", M2Share.Config.nStoneMinDura);
+                WriteInteger("Setup", "StoneMinDura", M2Share.Config.StoneMinDura);
+            M2Share.Config.StoneMinDura = ReadInteger("Setup", "StoneMinDura", M2Share.Config.StoneMinDura);
             if (ReadInteger("Setup", "StoneGeneralDuraRate", -1) < 0)
-                WriteInteger("Setup", "StoneGeneralDuraRate", M2Share.Config.nStoneGeneralDuraRate);
-            M2Share.Config.nStoneGeneralDuraRate = ReadInteger("Setup", "StoneGeneralDuraRate", M2Share.Config.nStoneGeneralDuraRate);
+                WriteInteger("Setup", "StoneGeneralDuraRate", M2Share.Config.StoneGeneralDuraRate);
+            M2Share.Config.StoneGeneralDuraRate = ReadInteger("Setup", "StoneGeneralDuraRate", M2Share.Config.StoneGeneralDuraRate);
             if (ReadInteger("Setup", "StoneAddDuraRate", -1) < 0)
-                WriteInteger("Setup", "StoneAddDuraRate", M2Share.Config.nStoneAddDuraRate);
-            M2Share.Config.nStoneAddDuraRate = ReadInteger("Setup", "StoneAddDuraRate", M2Share.Config.nStoneAddDuraRate);
+                WriteInteger("Setup", "StoneAddDuraRate", M2Share.Config.StoneAddDuraRate);
+            M2Share.Config.StoneAddDuraRate = ReadInteger("Setup", "StoneAddDuraRate", M2Share.Config.StoneAddDuraRate);
             if (ReadInteger("Setup", "StoneAddDuraMax", -1) < 0)
-                WriteInteger("Setup", "StoneAddDuraMax", M2Share.Config.nStoneAddDuraMax);
-            M2Share.Config.nStoneAddDuraMax = ReadInteger("Setup", "StoneAddDuraMax", M2Share.Config.nStoneAddDuraMax);
+                WriteInteger("Setup", "StoneAddDuraMax", M2Share.Config.StoneAddDuraMax);
+            M2Share.Config.StoneAddDuraMax = ReadInteger("Setup", "StoneAddDuraMax", M2Share.Config.StoneAddDuraMax);
             if (ReadInteger("Setup", "WinLottery1Min", -1) < 0)
-                WriteInteger("Setup", "WinLottery1Min", M2Share.Config.nWinLottery1Min);
-            M2Share.Config.nWinLottery1Min = ReadInteger("Setup", "WinLottery1Min", M2Share.Config.nWinLottery1Min);
+                WriteInteger("Setup", "WinLottery1Min", M2Share.Config.WinLottery1Min);
+            M2Share.Config.WinLottery1Min = ReadInteger("Setup", "WinLottery1Min", M2Share.Config.WinLottery1Min);
             if (ReadInteger("Setup", "WinLottery1Max", -1) < 0)
-                WriteInteger("Setup", "WinLottery1Max", M2Share.Config.nWinLottery1Max);
-            M2Share.Config.nWinLottery1Max = ReadInteger("Setup", "WinLottery1Max", M2Share.Config.nWinLottery1Max);
+                WriteInteger("Setup", "WinLottery1Max", M2Share.Config.WinLottery1Max);
+            M2Share.Config.WinLottery1Max = ReadInteger("Setup", "WinLottery1Max", M2Share.Config.WinLottery1Max);
             if (ReadInteger("Setup", "WinLottery2Min", -1) < 0)
-                WriteInteger("Setup", "WinLottery2Min", M2Share.Config.nWinLottery2Min);
-            M2Share.Config.nWinLottery2Min = ReadInteger("Setup", "WinLottery2Min", M2Share.Config.nWinLottery2Min);
+                WriteInteger("Setup", "WinLottery2Min", M2Share.Config.WinLottery2Min);
+            M2Share.Config.WinLottery2Min = ReadInteger("Setup", "WinLottery2Min", M2Share.Config.WinLottery2Min);
             if (ReadInteger("Setup", "WinLottery2Max", -1) < 0)
-                WriteInteger("Setup", "WinLottery2Max", M2Share.Config.nWinLottery2Max);
-            M2Share.Config.nWinLottery2Max = ReadInteger("Setup", "WinLottery2Max", M2Share.Config.nWinLottery2Max);
+                WriteInteger("Setup", "WinLottery2Max", M2Share.Config.WinLottery2Max);
+            M2Share.Config.WinLottery2Max = ReadInteger("Setup", "WinLottery2Max", M2Share.Config.WinLottery2Max);
             if (ReadInteger("Setup", "WinLottery3Min", -1) < 0)
-                WriteInteger("Setup", "WinLottery3Min", M2Share.Config.nWinLottery3Min);
-            M2Share.Config.nWinLottery3Min = ReadInteger("Setup", "WinLottery3Min", M2Share.Config.nWinLottery3Min);
+                WriteInteger("Setup", "WinLottery3Min", M2Share.Config.WinLottery3Min);
+            M2Share.Config.WinLottery3Min = ReadInteger("Setup", "WinLottery3Min", M2Share.Config.WinLottery3Min);
             if (ReadInteger("Setup", "WinLottery3Max", -1) < 0)
-                WriteInteger("Setup", "WinLottery3Max", M2Share.Config.nWinLottery3Max);
-            M2Share.Config.nWinLottery3Max = ReadInteger("Setup", "WinLottery3Max", M2Share.Config.nWinLottery3Max);
+                WriteInteger("Setup", "WinLottery3Max", M2Share.Config.WinLottery3Max);
+            M2Share.Config.WinLottery3Max = ReadInteger("Setup", "WinLottery3Max", M2Share.Config.WinLottery3Max);
             if (ReadInteger("Setup", "WinLottery4Min", -1) < 0)
-                WriteInteger("Setup", "WinLottery4Min", M2Share.Config.nWinLottery4Min);
-            M2Share.Config.nWinLottery4Min = ReadInteger("Setup", "WinLottery4Min", M2Share.Config.nWinLottery4Min);
+                WriteInteger("Setup", "WinLottery4Min", M2Share.Config.WinLottery4Min);
+            M2Share.Config.WinLottery4Min = ReadInteger("Setup", "WinLottery4Min", M2Share.Config.WinLottery4Min);
             if (ReadInteger("Setup", "WinLottery4Max", -1) < 0)
-                WriteInteger("Setup", "WinLottery4Max", M2Share.Config.nWinLottery4Max);
-            M2Share.Config.nWinLottery4Max = ReadInteger("Setup", "WinLottery4Max", M2Share.Config.nWinLottery4Max);
+                WriteInteger("Setup", "WinLottery4Max", M2Share.Config.WinLottery4Max);
+            M2Share.Config.WinLottery4Max = ReadInteger("Setup", "WinLottery4Max", M2Share.Config.WinLottery4Max);
             if (ReadInteger("Setup", "WinLottery5Min", -1) < 0)
-                WriteInteger("Setup", "WinLottery5Min", M2Share.Config.nWinLottery5Min);
-            M2Share.Config.nWinLottery5Min = ReadInteger("Setup", "WinLottery5Min", M2Share.Config.nWinLottery5Min);
+                WriteInteger("Setup", "WinLottery5Min", M2Share.Config.WinLottery5Min);
+            M2Share.Config.WinLottery5Min = ReadInteger("Setup", "WinLottery5Min", M2Share.Config.WinLottery5Min);
             if (ReadInteger("Setup", "WinLottery5Max", -1) < 0)
-                WriteInteger("Setup", "WinLottery5Max", M2Share.Config.nWinLottery5Max);
-            M2Share.Config.nWinLottery5Max = ReadInteger("Setup", "WinLottery5Max", M2Share.Config.nWinLottery5Max);
+                WriteInteger("Setup", "WinLottery5Max", M2Share.Config.WinLottery5Max);
+            M2Share.Config.WinLottery5Max = ReadInteger("Setup", "WinLottery5Max", M2Share.Config.WinLottery5Max);
             if (ReadInteger("Setup", "WinLottery6Min", -1) < 0)
-                WriteInteger("Setup", "WinLottery6Min", M2Share.Config.nWinLottery6Min);
-            M2Share.Config.nWinLottery6Min = ReadInteger("Setup", "WinLottery6Min", M2Share.Config.nWinLottery6Min);
+                WriteInteger("Setup", "WinLottery6Min", M2Share.Config.WinLottery6Min);
+            M2Share.Config.WinLottery6Min = ReadInteger("Setup", "WinLottery6Min", M2Share.Config.WinLottery6Min);
             if (ReadInteger("Setup", "WinLottery6Max", -1) < 0)
-                WriteInteger("Setup", "WinLottery6Max", M2Share.Config.nWinLottery6Max);
-            M2Share.Config.nWinLottery6Max = ReadInteger("Setup", "WinLottery6Max", M2Share.Config.nWinLottery6Max);
+                WriteInteger("Setup", "WinLottery6Max", M2Share.Config.WinLottery6Max);
+            M2Share.Config.WinLottery6Max = ReadInteger("Setup", "WinLottery6Max", M2Share.Config.WinLottery6Max);
             if (ReadInteger("Setup", "WinLotteryRate", -1) < 0)
-                WriteInteger("Setup", "WinLotteryRate", M2Share.Config.nWinLotteryRate);
-            M2Share.Config.nWinLotteryRate = ReadInteger("Setup", "WinLotteryRate", M2Share.Config.nWinLotteryRate);
+                WriteInteger("Setup", "WinLotteryRate", M2Share.Config.WinLotteryRate);
+            M2Share.Config.WinLotteryRate = ReadInteger("Setup", "WinLotteryRate", M2Share.Config.WinLotteryRate);
             if (ReadInteger("Setup", "WinLottery1Gold", -1) < 0)
-                WriteInteger("Setup", "WinLottery1Gold", M2Share.Config.nWinLottery1Gold);
-            M2Share.Config.nWinLottery1Gold = ReadInteger("Setup", "WinLottery1Gold", M2Share.Config.nWinLottery1Gold);
+                WriteInteger("Setup", "WinLottery1Gold", M2Share.Config.WinLottery1Gold);
+            M2Share.Config.WinLottery1Gold = ReadInteger("Setup", "WinLottery1Gold", M2Share.Config.WinLottery1Gold);
             if (ReadInteger("Setup", "WinLottery2Gold", -1) < 0)
-                WriteInteger("Setup", "WinLottery2Gold", M2Share.Config.nWinLottery2Gold);
-            M2Share.Config.nWinLottery2Gold = ReadInteger("Setup", "WinLottery2Gold", M2Share.Config.nWinLottery2Gold);
+                WriteInteger("Setup", "WinLottery2Gold", M2Share.Config.WinLottery2Gold);
+            M2Share.Config.WinLottery2Gold = ReadInteger("Setup", "WinLottery2Gold", M2Share.Config.WinLottery2Gold);
             if (ReadInteger("Setup", "WinLottery3Gold", -1) < 0)
-                WriteInteger("Setup", "WinLottery3Gold", M2Share.Config.nWinLottery3Gold);
-            M2Share.Config.nWinLottery3Gold = ReadInteger("Setup", "WinLottery3Gold", M2Share.Config.nWinLottery3Gold);
+                WriteInteger("Setup", "WinLottery3Gold", M2Share.Config.WinLottery3Gold);
+            M2Share.Config.WinLottery3Gold = ReadInteger("Setup", "WinLottery3Gold", M2Share.Config.WinLottery3Gold);
             if (ReadInteger("Setup", "WinLottery4Gold", -1) < 0)
-                WriteInteger("Setup", "WinLottery4Gold", M2Share.Config.nWinLottery4Gold);
-            M2Share.Config.nWinLottery4Gold = ReadInteger("Setup", "WinLottery4Gold", M2Share.Config.nWinLottery4Gold);
+                WriteInteger("Setup", "WinLottery4Gold", M2Share.Config.WinLottery4Gold);
+            M2Share.Config.WinLottery4Gold = ReadInteger("Setup", "WinLottery4Gold", M2Share.Config.WinLottery4Gold);
             if (ReadInteger("Setup", "WinLottery5Gold", -1) < 0)
-                WriteInteger("Setup", "WinLottery5Gold", M2Share.Config.nWinLottery5Gold);
-            M2Share.Config.nWinLottery5Gold = ReadInteger("Setup", "WinLottery5Gold", M2Share.Config.nWinLottery5Gold);
+                WriteInteger("Setup", "WinLottery5Gold", M2Share.Config.WinLottery5Gold);
+            M2Share.Config.WinLottery5Gold = ReadInteger("Setup", "WinLottery5Gold", M2Share.Config.WinLottery5Gold);
             if (ReadInteger("Setup", "WinLottery6Gold", -1) < 0)
-                WriteInteger("Setup", "WinLottery6Gold", M2Share.Config.nWinLottery6Gold);
-            M2Share.Config.nWinLottery6Gold = ReadInteger("Setup", "WinLottery6Gold", M2Share.Config.nWinLottery6Gold);
+                WriteInteger("Setup", "WinLottery6Gold", M2Share.Config.WinLottery6Gold);
+            M2Share.Config.WinLottery6Gold = ReadInteger("Setup", "WinLottery6Gold", M2Share.Config.WinLottery6Gold);
             if (ReadInteger("Setup", "GuildRecallTime", -1) < 0)
                 WriteInteger("Setup", "GuildRecallTime", M2Share.Config.GuildRecallTime);
             M2Share.Config.GuildRecallTime = ReadInteger("Setup", "GuildRecallTime", M2Share.Config.GuildRecallTime);
@@ -1562,14 +1562,14 @@ namespace GameSvr.Conf
                 WriteBool("Setup", "DieDropGold", M2Share.Config.DieDropGold);
             M2Share.Config.DieDropGold = ReadBool("Setup", "DieDropGold", M2Share.Config.DieDropGold);
             if (ReadInteger("Setup", "KillByHumanDropUseItem", -1) < 0)
-                WriteBool("Setup", "KillByHumanDropUseItem", M2Share.Config.boKillByHumanDropUseItem);
-            M2Share.Config.boKillByHumanDropUseItem = ReadBool("Setup", "KillByHumanDropUseItem", M2Share.Config.boKillByHumanDropUseItem);
+                WriteBool("Setup", "KillByHumanDropUseItem", M2Share.Config.KillByHumanDropUseItem);
+            M2Share.Config.KillByHumanDropUseItem = ReadBool("Setup", "KillByHumanDropUseItem", M2Share.Config.KillByHumanDropUseItem);
             if (ReadInteger("Setup", "KillByMonstDropUseItem", -1) < 0)
-                WriteBool("Setup", "KillByMonstDropUseItem", M2Share.Config.boKillByMonstDropUseItem);
-            M2Share.Config.boKillByMonstDropUseItem = ReadBool("Setup", "KillByMonstDropUseItem", M2Share.Config.boKillByMonstDropUseItem);
+                WriteBool("Setup", "KillByMonstDropUseItem", M2Share.Config.KillByMonstDropUseItem);
+            M2Share.Config.KillByMonstDropUseItem = ReadBool("Setup", "KillByMonstDropUseItem", M2Share.Config.KillByMonstDropUseItem);
             if (ReadInteger("Setup", "KickExpireHuman", -1) < 0)
-                WriteBool("Setup", "KickExpireHuman", M2Share.Config.boKickExpireHuman);
-            M2Share.Config.boKickExpireHuman = ReadBool("Setup", "KickExpireHuman", M2Share.Config.boKickExpireHuman);
+                WriteBool("Setup", "KickExpireHuman", M2Share.Config.KickExpireHuman);
+            M2Share.Config.KickExpireHuman = ReadBool("Setup", "KickExpireHuman", M2Share.Config.KickExpireHuman);
             if (ReadInteger("Setup", "GuildRankNameLen", -1) < 0)
                 WriteInteger("Setup", "GuildRankNameLen", M2Share.Config.GuildRankNameLen);
             M2Share.Config.GuildRankNameLen = ReadInteger("Setup", "GuildRankNameLen", M2Share.Config.GuildRankNameLen);
@@ -1586,8 +1586,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "AttackPosionTime", M2Share.Config.AttackPosionTime);
             M2Share.Config.AttackPosionTime = (ushort)ReadInteger("Setup", "AttackPosionTime", M2Share.Config.AttackPosionTime);
             if (ReadInteger("Setup", "RevivalTime", -1) < 0)
-                WriteInteger("Setup", "RevivalTime", M2Share.Config.dwRevivalTime);
-            M2Share.Config.dwRevivalTime = ReadInteger("Setup", "RevivalTime", M2Share.Config.dwRevivalTime);
+                WriteInteger("Setup", "RevivalTime", M2Share.Config.RevivalTime);
+            M2Share.Config.RevivalTime = ReadInteger("Setup", "RevivalTime", M2Share.Config.RevivalTime);
             nLoadInteger = ReadInteger("Setup", "UserMoveCanDupObj", -1);
             if (nLoadInteger < 0)
                 WriteBool("Setup", "UserMoveCanDupObj", M2Share.Config.boUserMoveCanDupObj);
@@ -1669,8 +1669,8 @@ namespace GameSvr.Conf
                 WriteBool("Setup", "ShowScriptActionMsg", M2Share.Config.ShowScriptActionMsg);
             M2Share.Config.ShowScriptActionMsg = ReadBool("Setup", "ShowScriptActionMsg", M2Share.Config.ShowScriptActionMsg);
             if (ReadInteger("Setup", "RunSocketDieLoopLimit", -1) < 0)
-                WriteInteger("Setup", "RunSocketDieLoopLimit", M2Share.Config.nRunSocketDieLoopLimit);
-            M2Share.Config.nRunSocketDieLoopLimit = ReadInteger("Setup", "RunSocketDieLoopLimit", M2Share.Config.nRunSocketDieLoopLimit);
+                WriteInteger("Setup", "RunSocketDieLoopLimit", M2Share.Config.RunSocketDieLoopLimit);
+            M2Share.Config.RunSocketDieLoopLimit = ReadInteger("Setup", "RunSocketDieLoopLimit", M2Share.Config.RunSocketDieLoopLimit);
             if (ReadInteger("Setup", "ThreadRun", -1) < 0)
                 WriteBool("Setup", "ThreadRun", M2Share.Config.ThreadRun);
             M2Share.Config.ThreadRun = ReadBool("Setup", "ThreadRun", M2Share.Config.ThreadRun);
@@ -2042,11 +2042,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Setup", "AddUserItemNewValue", -1);
             if (nLoadInteger < 0)
             {
-                WriteBool("Setup", "AddUserItemNewValue", M2Share.Config.boAddUserItemNewValue);
+                WriteBool("Setup", "AddUserItemNewValue", M2Share.Config.AddUserItemNewValue);
             }
             else
             {
-                M2Share.Config.boAddUserItemNewValue = nLoadInteger == 1;
+                M2Share.Config.AddUserItemNewValue = nLoadInteger == 1;
             }
             nLoadInteger = ReadInteger("Setup", "TestSpeedMode", -1);
             if (nLoadInteger < 0)
@@ -2281,74 +2281,74 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Setup", "WinLotteryCount", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "WinLotteryCount", M2Share.Config.nWinLotteryCount);
+                WriteInteger("Setup", "WinLotteryCount", M2Share.Config.WinLotteryCount);
             }
             else
             {
-                M2Share.Config.nWinLotteryCount = nLoadInteger;
+                M2Share.Config.WinLotteryCount = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "NoWinLotteryCount", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "NoWinLotteryCount", M2Share.Config.nNoWinLotteryCount);
+                WriteInteger("Setup", "NoWinLotteryCount", M2Share.Config.NoWinLotteryCount);
             }
             else
             {
-                M2Share.Config.nNoWinLotteryCount = nLoadInteger;
+                M2Share.Config.NoWinLotteryCount = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "WinLotteryLevel1", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "WinLotteryLevel1", M2Share.Config.nWinLotteryLevel1);
+                WriteInteger("Setup", "WinLotteryLevel1", M2Share.Config.WinLotteryLevel1);
             }
             else
             {
-                M2Share.Config.nWinLotteryLevel1 = nLoadInteger;
+                M2Share.Config.WinLotteryLevel1 = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "WinLotteryLevel2", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "WinLotteryLevel2", M2Share.Config.nWinLotteryLevel2);
+                WriteInteger("Setup", "WinLotteryLevel2", M2Share.Config.WinLotteryLevel2);
             }
             else
             {
-                M2Share.Config.nWinLotteryLevel2 = nLoadInteger;
+                M2Share.Config.WinLotteryLevel2 = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "WinLotteryLevel3", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "WinLotteryLevel3", M2Share.Config.nWinLotteryLevel3);
+                WriteInteger("Setup", "WinLotteryLevel3", M2Share.Config.WinLotteryLevel3);
             }
             else
             {
-                M2Share.Config.nWinLotteryLevel3 = nLoadInteger;
+                M2Share.Config.WinLotteryLevel3 = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "WinLotteryLevel4", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "WinLotteryLevel4", M2Share.Config.nWinLotteryLevel4);
+                WriteInteger("Setup", "WinLotteryLevel4", M2Share.Config.WinLotteryLevel4);
             }
             else
             {
-                M2Share.Config.nWinLotteryLevel4 = nLoadInteger;
+                M2Share.Config.WinLotteryLevel4 = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "WinLotteryLevel5", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "WinLotteryLevel5", M2Share.Config.nWinLotteryLevel5);
+                WriteInteger("Setup", "WinLotteryLevel5", M2Share.Config.WinLotteryLevel5);
             }
             else
             {
-                M2Share.Config.nWinLotteryLevel5 = nLoadInteger;
+                M2Share.Config.WinLotteryLevel5 = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Setup", "WinLotteryLevel6", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Setup", "WinLotteryLevel6", M2Share.Config.nWinLotteryLevel6);
+                WriteInteger("Setup", "WinLotteryLevel6", M2Share.Config.WinLotteryLevel6);
             }
             else
             {
-                M2Share.Config.nWinLotteryLevel6 = nLoadInteger;
+                M2Share.Config.WinLotteryLevel6 = nLoadInteger;
             }
         }
 
@@ -2359,14 +2359,14 @@ namespace GameSvr.Conf
         {
             WriteInteger("Setup", "ItemNumber", M2Share.Config.ItemNumber);
             WriteInteger("Setup", "ItemNumberEx", M2Share.Config.ItemNumberEx);
-            WriteInteger("Setup", "WinLotteryCount", M2Share.Config.nWinLotteryCount);
-            WriteInteger("Setup", "NoWinLotteryCount", M2Share.Config.nNoWinLotteryCount);
-            WriteInteger("Setup", "WinLotteryLevel1", M2Share.Config.nWinLotteryLevel1);
-            WriteInteger("Setup", "WinLotteryLevel2", M2Share.Config.nWinLotteryLevel2);
-            WriteInteger("Setup", "WinLotteryLevel3", M2Share.Config.nWinLotteryLevel3);
-            WriteInteger("Setup", "WinLotteryLevel4", M2Share.Config.nWinLotteryLevel4);
-            WriteInteger("Setup", "WinLotteryLevel5", M2Share.Config.nWinLotteryLevel5);
-            WriteInteger("Setup", "WinLotteryLevel6", M2Share.Config.nWinLotteryLevel6);
+            WriteInteger("Setup", "WinLotteryCount", M2Share.Config.WinLotteryCount);
+            WriteInteger("Setup", "NoWinLotteryCount", M2Share.Config.NoWinLotteryCount);
+            WriteInteger("Setup", "WinLotteryLevel1", M2Share.Config.WinLotteryLevel1);
+            WriteInteger("Setup", "WinLotteryLevel2", M2Share.Config.WinLotteryLevel2);
+            WriteInteger("Setup", "WinLotteryLevel3", M2Share.Config.WinLotteryLevel3);
+            WriteInteger("Setup", "WinLotteryLevel4", M2Share.Config.WinLotteryLevel4);
+            WriteInteger("Setup", "WinLotteryLevel5", M2Share.Config.WinLotteryLevel5);
+            WriteInteger("Setup", "WinLotteryLevel6", M2Share.Config.WinLotteryLevel6);
         }
 
     }

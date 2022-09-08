@@ -8,17 +8,17 @@ namespace GameSvr.Monster.Monsters
     /// </summary>
     public class ElfWarriorMonster : SpitSpider
     {
-        public bool boIsFirst;
-        private int dwDigDownTick;
+        public bool BoIsFirst;
+        private int _dwDigDownTick;
 
         public void AppearNow()
         {
-            boIsFirst = false;
+            BoIsFirst = false;
             FixedHideMode = false;
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             RecalcAbilitys();
             WalkTick = WalkTick + 800;
-            dwDigDownTick = HUtil32.GetTickCount();
+            _dwDigDownTick = HUtil32.GetTickCount();
         }
 
         public ElfWarriorMonster()
@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
         {
             ViewRange = 6;
             FixedHideMode = true;
-            boIsFirst = true;
+            BoIsFirst = true;
             UsePoison = false;
         }
 
@@ -45,9 +45,9 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (boIsFirst)
+            if (BoIsFirst)
             {
-                boIsFirst = false;
+                BoIsFirst = false;
                 FixedHideMode = false;
                 SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
                 ResetElfMon();
@@ -68,7 +68,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (boChangeFace)
                 {
-                    if ((HUtil32.GetTickCount() - dwDigDownTick) > (6 * 10 * 1000))
+                    if ((HUtil32.GetTickCount() - _dwDigDownTick) > (6 * 10 * 1000))
                     {
                         BaseObject elfMon = null;
                         var elfName = CharName;
@@ -93,7 +93,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 else
                 {
-                    dwDigDownTick = HUtil32.GetTickCount();
+                    _dwDigDownTick = HUtil32.GetTickCount();
                 }
             }
             base.Run();

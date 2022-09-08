@@ -4,11 +4,11 @@ namespace GameSvr.Monster.Monsters
 {
     public class SandMobObject : StickMonster
     {
-        private int m_dwAppearStart;
+        private int _mDwAppearStart;
 
         public SandMobObject() : base()
         {
-            nComeOutValue = 8;
+            NComeOutValue = 8;
         }
 
         public override void Run()
@@ -22,12 +22,12 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (Abil.HP > Abil.MaxHP / 20 && CheckComeOut())
                         {
-                            m_dwAppearStart = HUtil32.GetTickCount();
+                            _mDwAppearStart = HUtil32.GetTickCount();
                         }
                     }
                     else
                     {
-                        if (Abil.HP > 0 && Abil.HP < Abil.MaxHP / 20 && (HUtil32.GetTickCount() - m_dwAppearStart) > 3000)
+                        if (Abil.HP > 0 && Abil.HP < Abil.MaxHP / 20 && (HUtil32.GetTickCount() - _mDwAppearStart) > 3000)
                         {
                             ComeDown();
                         }

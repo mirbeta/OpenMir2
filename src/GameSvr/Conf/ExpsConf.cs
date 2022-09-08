@@ -3,9 +3,9 @@ using SystemModule.Common;
 
 namespace GameSvr.Conf
 {
-    public class ExpsConfig : IniFile
+    public class ExpsConf : IniFile
     {
-        public ExpsConfig(string fileName) : base(fileName)
+        public ExpsConf(string fileName) : base(fileName)
         {
             Load();
         }
@@ -108,11 +108,11 @@ namespace GameSvr.Conf
             LoadInteger = ReadInteger("Exp", "AddExp", -1);
             if (LoadInteger < 0)
             {
-                WriteInteger("Exp", "AddExp", M2Share.Config.nAddExp);
+                WriteInteger("Exp", "AddExp", M2Share.Config.AddExp);
             }
             else
             {
-                M2Share.Config.nAddExp = LoadInteger;
+                M2Share.Config.AddExp = LoadInteger;
             }
             LoadInteger = ReadInteger("Exp", "MonHptoExpLevel", -1);
             if (LoadInteger < 0)

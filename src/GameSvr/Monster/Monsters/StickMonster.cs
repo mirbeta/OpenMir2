@@ -6,8 +6,8 @@ namespace GameSvr.Monster.Monsters
 {
     public class StickMonster : AnimalObject
     {
-        protected int nComeOutValue;
-        protected int nAttackRange;
+        protected int NComeOutValue;
+        protected int NAttackRange;
 
         public StickMonster() : base()
         {
@@ -15,8 +15,8 @@ namespace GameSvr.Monster.Monsters
             this.RunTime = 250;
             this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             this.SearchTick = HUtil32.GetTickCount();
-            nComeOutValue = 4;
-            nAttackRange = 4;
+            NComeOutValue = 4;
+            NAttackRange = 4;
             this.FixedHideMode = true;
             this.StickMode = true;
             this.Animal = true;
@@ -69,20 +69,20 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual bool CheckComeOut()
         {
-            BaseObject BaseObject;
+            BaseObject baseObject;
             var result = false;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                BaseObject = this.VisibleActors[i].BaseObject;
-                if (BaseObject.Death)
+                baseObject = this.VisibleActors[i].BaseObject;
+                if (baseObject.Death)
                 {
                     continue;
                 }
-                if (this.IsProperTarget(BaseObject))
+                if (this.IsProperTarget(baseObject))
                 {
-                    if (!BaseObject.HideMode || this.CoolEye)
+                    if (!baseObject.HideMode || this.CoolEye)
                     {
-                        if (Math.Abs(this.CurrX - BaseObject.CurrX) < nComeOutValue && Math.Abs(this.CurrY - BaseObject.CurrY) < nComeOutValue)
+                        if (Math.Abs(this.CurrX - baseObject.CurrX) < NComeOutValue && Math.Abs(this.CurrY - baseObject.CurrY) < NComeOutValue)
                         {
                             result = true;
                             break;
@@ -93,9 +93,9 @@ namespace GameSvr.Monster.Monsters
             return result;
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage processMsg)
         {
-            return base.Operate(ProcessMsg);
+            return base.Operate(processMsg);
         }
 
         public override void Run()
@@ -121,7 +121,7 @@ namespace GameSvr.Monster.Monsters
                         var bo05 = false;
                         if (this.TargetCret != null)
                         {
-                            if (Math.Abs(this.TargetCret.CurrX - this.CurrX) > nAttackRange || Math.Abs(this.TargetCret.CurrY - this.CurrY) > nAttackRange)
+                            if (Math.Abs(this.TargetCret.CurrX - this.CurrX) > NAttackRange || Math.Abs(this.TargetCret.CurrY - this.CurrY) > NAttackRange)
                             {
                                 bo05 = true;
                             }

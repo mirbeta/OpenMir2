@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class ExplosionSpider : MonsterObject
     {
-        public int dw558;
+        public int Dw558;
 
         public ExplosionSpider() : base()
         {
@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
             RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
-            dw558 = HUtil32.GetTickCount();
+            Dw558 = HUtil32.GetTickCount();
         }
 
         private void sub_4A65C4()
@@ -21,22 +21,22 @@ namespace GameSvr.Monster.Monsters
             var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC) + 1) + HUtil32.LoWord(Abil.DC);
             for (var i = 0; i < VisibleActors.Count; i++)
             {
-                var BaseObject = VisibleActors[i].BaseObject;
-                if (BaseObject.Death)
+                var baseObject = VisibleActors[i].BaseObject;
+                if (baseObject.Death)
                 {
                     continue;
                 }
-                if (IsProperTarget(BaseObject))
+                if (IsProperTarget(baseObject))
                 {
-                    if (Math.Abs(CurrX - BaseObject.CurrX) <= 1 && Math.Abs(CurrY - BaseObject.CurrY) <= 1)
+                    if (Math.Abs(CurrX - baseObject.CurrX) <= 1 && Math.Abs(CurrY - baseObject.CurrY) <= 1)
                     {
                         var damage = 0;
-                        damage += BaseObject.GetHitStruckDamage(this, nPower / 2);
-                        damage += BaseObject.GetMagStruckDamage(this, nPower / 2);
+                        damage += baseObject.GetHitStruckDamage(this, nPower / 2);
+                        damage += baseObject.GetMagStruckDamage(this, nPower / 2);
                         if (damage > 0)
                         {
-                            BaseObject.StruckDamage(damage);
-                            BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)damage, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ObjectId, "", 700);
+                            baseObject.StruckDamage(damage);
+                            baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)damage, baseObject.Abil.HP, baseObject.Abil.MaxHP, ObjectId, "", 700);
                         }
                     }
                 }
@@ -79,9 +79,9 @@ namespace GameSvr.Monster.Monsters
         {
             if (!Death && !Ghost)
             {
-                if ((HUtil32.GetTickCount() - dw558) > (60 * 1000))
+                if ((HUtil32.GetTickCount() - Dw558) > (60 * 1000))
                 {
-                    dw558 = HUtil32.GetTickCount();
+                    Dw558 = HUtil32.GetTickCount();
                     sub_4A65C4();
                 }
             }

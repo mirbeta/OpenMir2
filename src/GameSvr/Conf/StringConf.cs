@@ -2,9 +2,9 @@
 
 namespace GameSvr.Conf
 {
-    public class StringConfig : IniFile
+    public class StringConf : IniFile
     {
-        public StringConfig(string fileName) : base(fileName)
+        public StringConf(string fileName) : base(fileName)
         {
             Load();
         }
@@ -669,83 +669,83 @@ namespace GameSvr.Conf
             LoadString = ReadString("String", "LineNoticePreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "LineNoticePreFix", M2Share.Config.sLineNoticePreFix);
+                WriteString("String", "LineNoticePreFix", M2Share.Config.LineNoticePreFix);
             }
             else
             {
-                M2Share.Config.sLineNoticePreFix = LoadString;
+                M2Share.Config.LineNoticePreFix = LoadString;
             }
             LoadString = ReadString("String", "SysMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "SysMsgPreFix", M2Share.Config.sSysMsgPreFix);
+                WriteString("String", "SysMsgPreFix", M2Share.Config.SysMsgPreFix);
             }
             else
             {
-                M2Share.Config.sSysMsgPreFix = LoadString;
+                M2Share.Config.SysMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "GuildMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "GuildMsgPreFix", M2Share.Config.sGuildMsgPreFix);
+                WriteString("String", "GuildMsgPreFix", M2Share.Config.GuildMsgPreFix);
             }
             else
             {
-                M2Share.Config.sGuildMsgPreFix = LoadString;
+                M2Share.Config.GuildMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "GroupMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "GroupMsgPreFix", M2Share.Config.sGroupMsgPreFix);
+                WriteString("String", "GroupMsgPreFix", M2Share.Config.GroupMsgPreFix);
             }
             else
             {
-                M2Share.Config.sGroupMsgPreFix = LoadString;
+                M2Share.Config.GroupMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "HintMsgPreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "HintMsgPreFix", M2Share.Config.sHintMsgPreFix);
+                WriteString("String", "HintMsgPreFix", M2Share.Config.HintMsgPreFix);
             }
             else
             {
-                M2Share.Config.sHintMsgPreFix = LoadString;
+                M2Share.Config.HintMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "GMRedMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "GMRedMsgpreFix", M2Share.Config.sGMRedMsgpreFix);
+                WriteString("String", "GMRedMsgpreFix", M2Share.Config.GameManagerRedMsgPreFix);
             }
             else
             {
-                M2Share.Config.sGMRedMsgpreFix = LoadString;
+                M2Share.Config.GameManagerRedMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "MonSayMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "MonSayMsgpreFix", M2Share.Config.sMonSayMsgpreFix);
+                WriteString("String", "MonSayMsgpreFix", M2Share.Config.MonSayMsgPreFix);
             }
             else
             {
-                M2Share.Config.sMonSayMsgpreFix = LoadString;
+                M2Share.Config.MonSayMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "CustMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "CustMsgpreFix", M2Share.Config.sCustMsgpreFix);
+                WriteString("String", "CustMsgpreFix", M2Share.Config.CustMsgPreFix);
             }
             else
             {
-                M2Share.Config.sCustMsgpreFix = LoadString;
+                M2Share.Config.CustMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "CastleMsgpreFix", "");
             if (LoadString == "")
             {
-                WriteString("String", "CastleMsgpreFix", M2Share.Config.sCastleMsgpreFix);
+                WriteString("String", "CastleMsgpreFix", M2Share.Config.CastleMsgPreFix);
             }
             else
             {
-                M2Share.Config.sCastleMsgpreFix = LoadString;
+                M2Share.Config.CastleMsgPreFix = LoadString;
             }
             LoadString = ReadString("String", "NoPasswordLockSystemMsg", "");
             if (LoadString == "")

@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class SpiderHouseMonster : AnimalObject
     {
-        private readonly IList<BaseObject> BBList;
+        private readonly IList<BaseObject> _bbList;
 
         public SpiderHouseMonster() : base()
         {
@@ -15,38 +15,38 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
             StickMode = true;
-            BBList = new List<BaseObject>();
+            _bbList = new List<BaseObject>();
         }
 
-        private void GenBB()
+        private void GenBb()
         {
-            if (BBList.Count < 15)
+            if (_bbList.Count < 15)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 SendDelayMsg(this, Grobal2.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
             }
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        protected override bool Operate(ProcessMessage processMsg)
         {
-            BaseObject BB;
+            BaseObject bb;
             short n08 = 0;
             short n0C = 0;
-            if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
+            if (processMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
                 n08 = CurrX;
                 n0C = (short)(CurrY + 1);
                 if (Envir.CanWalk(n08, n0C, true))
                 {
-                    BB = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.Spider);
-                    if (BB != null)
+                    bb = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.Spider);
+                    if (bb != null)
                     {
-                        BB.SetTargetCreat(TargetCret);
-                        BBList.Add(BB);
+                        bb.SetTargetCreat(TargetCret);
+                        _bbList.Add(bb);
                     }
                 }
             }
-            return base.Operate(ProcessMsg);
+            return base.Operate(processMsg);
         }
 
         public override void Run()
@@ -62,15 +62,15 @@ namespace GameSvr.Monster.Monsters
                         SearchTarget();
                         if (TargetCret != null)
                         {
-                            GenBB();
+                            GenBb();
                         }
                     }
-                    for (var i = BBList.Count - 1; i >= 0; i--)
+                    for (var i = _bbList.Count - 1; i >= 0; i--)
                     {
-                        var BB = BBList[i];
-                        if (BB.Death || BB.Ghost)
+                        var bb = _bbList[i];
+                        if (bb.Death || bb.Ghost)
                         {
-                            BBList.RemoveAt(i);
+                            _bbList.RemoveAt(i);
                         }
                     }
                 }
