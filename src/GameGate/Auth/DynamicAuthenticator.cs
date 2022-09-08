@@ -39,6 +39,7 @@ namespace GameGate.Auth
         /// <param name="QRPixelsPerModule">Number of pixels per QR Module (2 = ~120x120px QRCode)</param>
         /// <returns>SetupCode object</returns>
         public SetupCode GenerateSetupCode(string issuer, string accountTitleNoSpaces, byte[] accountSecretKey, int QRPixelsPerModule)
+
         {
             if (accountTitleNoSpaces == null) { throw new NullReferenceException("Account Title is null"); }
             accountTitleNoSpaces = RemoveWhitespace(accountTitleNoSpaces);
