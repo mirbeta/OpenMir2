@@ -11,7 +11,8 @@ namespace GameSvr.Monster.Monsters
             ViewRange = 12;
             WantRefMsg = true;
             Castle = null;
-            Direction = 0;
+            GuardDirection = -1;
+            Race = 112;
         }
 
         private void sub_4A6B30(BaseObject targeTBaseObject)
@@ -37,7 +38,7 @@ namespace GameSvr.Monster.Monsters
         {
             int nRage = 9999;
             BaseObject targetBaseObject = null;
-            if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
@@ -78,9 +79,9 @@ namespace GameSvr.Monster.Monsters
                 }
                 else
                 {
-                    if (Direction > 0 && Direction != Direction)
+                    if (GuardDirection > 0 && Direction != GuardDirection)
                     {
-                        TurnTo(Direction);
+                        TurnTo((byte)GuardDirection);
                     }
                 }
             }

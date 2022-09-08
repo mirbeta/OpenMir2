@@ -43,7 +43,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
                 if (VisibleActors.Count > 0)
                 {

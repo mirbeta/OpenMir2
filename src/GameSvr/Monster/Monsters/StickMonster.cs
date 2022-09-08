@@ -69,11 +69,10 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual bool CheckComeOut()
         {
-            BaseObject baseObject;
             var result = false;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                baseObject = this.VisibleActors[i].BaseObject;
+                BaseObject baseObject = this.VisibleActors[i].BaseObject;
                 if (baseObject.Death)
                 {
                     continue;
@@ -100,7 +99,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!this.Ghost && !this.Death && this.StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
                 if ((HUtil32.GetTickCount() - this.WalkTick) > this.WalkSpeed)
                 {

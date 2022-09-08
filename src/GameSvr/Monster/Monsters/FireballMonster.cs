@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
     {
         public FireballMonster() : base()
         {
-            MDwSpellTick = HUtil32.GetTickCount();
+            SpellTick = HUtil32.GetTickCount();
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
@@ -32,9 +32,9 @@ namespace GameSvr.Monster.Monsters
                                         if (nPower > 0)
                                         {
                                             baseObject.StruckDamage(nPower);
-                                            if ((HUtil32.GetTickCount() - MDwSpellTick) > NextHitTime)
+                                            if ((HUtil32.GetTickCount() - SpellTick) > NextHitTime)
                                             {
-                                                MDwSpellTick = HUtil32.GetTickCount();
+                                                SpellTick = HUtil32.GetTickCount();
                                                 SendRefMsg(Grobal2.RM_SPELL, 48, TargetCret.CurrX, TargetCret.CurrY, 48, "");
                                                 SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(2, 48), HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), TargetCret.ObjectId, "");
                                                 SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), 2, TargetCret.ObjectId, "", 600);

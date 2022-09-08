@@ -29,16 +29,13 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            BaseObject bb;
-            short n08 = 0;
-            short n0C = 0;
             if (processMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                n08 = CurrX;
-                n0C = (short)(CurrY + 1);
+                short n08 = CurrX;
+                short n0C = (short)(CurrY + 1);
                 if (Envir.CanWalk(n08, n0C, true))
                 {
-                    bb = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.Spider);
+                    BaseObject bb = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.Spider);
                     if (bb != null)
                     {
                         bb.SetTargetCreat(TargetCret);
@@ -51,7 +48,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (!Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {

@@ -86,7 +86,7 @@ namespace GameSvr.Monster.Monsters
         {
             int nRage = 9999;
             BaseObject targetBaseObject = null;
-            if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) >= 5000)
                 {

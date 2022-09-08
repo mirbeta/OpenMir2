@@ -6,14 +6,17 @@ namespace GameSvr.Monster.Monsters
 {
     public class MagicMonster : AnimalObject
     {
-        public int MDwThinkTick;
-        public int MDwSpellTick = 0;
-        public bool MBoDupMode;
+        /// <summary>
+        /// 思考间隔
+        /// </summary>
+        public int ThinkTick;
+        //public int SpellTick = 0;
+        public bool DupMode;
 
         public MagicMonster() : base()
         {
-            MBoDupMode = false;
-            MDwThinkTick = HUtil32.GetTickCount();
+            DupMode = false;
+            ThinkTick = HUtil32.GetTickCount();
             ViewRange = 8;
             RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
@@ -29,26 +32,26 @@ namespace GameSvr.Monster.Monsters
         private bool Think()
         {
             var result = false;
-            if ((HUtil32.GetTickCount() - MDwThinkTick) > (3 * 1000))
+            if ((HUtil32.GetTickCount() - ThinkTick) > (3 * 1000))
             {
-                MDwThinkTick = HUtil32.GetTickCount();
+                ThinkTick = HUtil32.GetTickCount();
                 if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
                 {
-                    MBoDupMode = true;
+                    DupMode = true;
                 }
                 if (!IsProperTarget(TargetCret))
                 {
                     TargetCret = null;
                 }
             }
-            if (MBoDupMode)
+            if (DupMode)
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX != CurrX || nOldY != CurrY)
                 {
-                    MBoDupMode = false;
+                    DupMode = false;
                     result = true;
                 }
             }
@@ -58,7 +61,7 @@ namespace GameSvr.Monster.Monsters
         protected virtual bool AttackTarget()
         {
             var result = false;
-            byte bt06 = 0;
+            byte dir = 0;
             if (TargetCret != null)
             {
                 if (TargetCret == Master)
@@ -67,7 +70,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 else
                 {
-                    if (GetAttackDir(TargetCret, ref bt06))
+                    if (GetAttackDir(TargetCret, ref dir))
                     {
                         if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
                         {
@@ -96,7 +99,7 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk() && !FixedHideMode && !StoneMode)
             {
                 if (Think())
                 {
@@ -197,4 +200,3 @@ namespace GameSvr.Monster.Monsters
         }
     }
 }
-

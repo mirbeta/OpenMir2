@@ -13,16 +13,15 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (!Death && !Ghost && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (CanWalk())
             {
-                var time1 = M2Share.RandomNumber.Random(2);
                 if (TargetCret != null)
                 {
                     TargetX = TargetCret.CurrX;
                     TargetY = TargetCret.CurrY;
                     if (Math.Abs(TargetX - CurrX) == 2 && Math.Abs(TargetY - CurrY) == 2)
                     {
-                        if (time1 == 0)
+                        if (M2Share.RandomNumber.Random(2) == 0)
                         {
                             GetFrontPosition(ref nX, ref nY);
                             TargetCret.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");

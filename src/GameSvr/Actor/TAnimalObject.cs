@@ -15,10 +15,7 @@ namespace GameSvr.Actor
         public int m_dwRunAwayStart;
         public int m_dwRunAwayTime;
 
-        public virtual void Attack(BaseObject TargeTBaseObject, byte nDir)
-        {
-            base.AttackDir(TargeTBaseObject, 0, nDir);
-        }
+
 
         public AnimalObject() : base()
         {
@@ -31,6 +28,20 @@ namespace GameSvr.Actor
             m_boRunAwayMode = false;
             m_dwRunAwayStart = HUtil32.GetTickCount();
             m_dwRunAwayTime = 0;
+        }
+
+        /// <summary>
+        /// 是否可以走动
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool CanWalk()
+        {
+            return !Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0;
+        }
+
+        public virtual void Attack(BaseObject TargeTBaseObject, byte nDir)
+        {
+            base.AttackDir(TargeTBaseObject, 0, nDir);
         }
 
         protected virtual void GotoTargetXY()

@@ -70,7 +70,6 @@ namespace GameSvr.Actor
                 }
                 var boPowerHit = PowerHit;
                 var boFireHit = FireHitSkill;
-                var bo41 = MBo41Kill;
                 var boTwinHit = MBoTwinHitSkill;
                 if (_Attack(ref wHitMode, AttackTarget))
                 {

@@ -5,6 +5,8 @@ namespace GameSvr.Monster.Monsters
 {
     public class GuardUnit : AnimalObject
     {
+        public sbyte GuardDirection;
+
         public override void Struck(BaseObject hiter)
         {
             base.Struck(hiter);
