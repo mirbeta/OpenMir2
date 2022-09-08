@@ -264,7 +264,7 @@ namespace GameSvr.Player
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var bMsg = HUtil32.GetBytes(sMsg);
-                MsgHdr.PackLength = -(bMsg.Length);
+                MsgHdr.PackLength = -bMsg.Length;
                 var nSendBytes = Math.Abs(MsgHdr.PackLength) + 20;
                 using var memoryStream = new MemoryStream();
                 using var backingStream = new BinaryWriter(memoryStream);
@@ -322,7 +322,7 @@ namespace GameSvr.Player
             else if (!string.IsNullOrEmpty(sMsg))
             {
                 bMsg = HUtil32.GetBytes(sMsg);
-                messageHead.PackLength = -(bMsg.Length);
+                messageHead.PackLength = -bMsg.Length;
                 nSendBytes = Math.Abs(messageHead.PackLength) + PacketHeader.PacketSize;
                 backingStream.Write(nSendBytes);
                 backingStream.Write(messageHead.GetBuffer());
@@ -1107,7 +1107,7 @@ namespace GameSvr.Player
                 {
                     var cellsuccess = false;
                     cellInfo = Envir.GetCellInfo(nCX, nCY, ref cellsuccess);
-                    if (cellsuccess && cellInfo.ObjList != null)
+                    if (cellsuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
@@ -1341,7 +1341,7 @@ namespace GameSvr.Player
                     if (cellsuccess)
                     {
                         SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);
-                        if (cellInfo.ObjList != null)
+                        if (cellInfo.IsAvailable)
                         {
                             SysMsg("对象数: " + cellInfo.Count, MsgColor.Green, MsgType.Hint);
                         }
@@ -3916,7 +3916,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                if (((Npc.Envir == Envir) && (Math.Abs(Npc.CurrX - CurrX) < 15)) && (Math.Abs(Npc.CurrY - CurrY) < 15) || (Npc.m_boIsHide))
+                if ((Npc.Envir == Envir) && (Math.Abs(Npc.CurrX - CurrX) < 15) && (Math.Abs(Npc.CurrY - CurrY) < 15) || Npc.m_boIsHide)
                 {
                     DlgItemIndex = HUtil32.MakeLong(nParam2, nParam3);
                     var nTemp = 0;

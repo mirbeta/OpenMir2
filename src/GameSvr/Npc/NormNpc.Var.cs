@@ -312,7 +312,7 @@ namespace GameSvr.Npc
             }
             if (sParam3 != "")
             {
-                if ((!HUtil32.IsVarNumber(sParam1)) && (HUtil32.IsVarNumber(sParam2)))
+                if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     n10 = 1;
                     boVarFound = false;
@@ -444,7 +444,7 @@ namespace GameSvr.Npc
                     }
                     return;
                 }
-                if ((HUtil32.IsVarNumber(sParam1)) && (!HUtil32.IsVarNumber(sParam2)))
+                if (HUtil32.IsVarNumber(sParam1) && (!HUtil32.IsVarNumber(sParam2)))
                 {
                     if ((sParam3 != "") && (!HUtil32.IsStringNumber(sParam3)))
                     {
@@ -761,7 +761,7 @@ namespace GameSvr.Npc
             }
             if (sParam3 != "")
             {
-                if ((!HUtil32.IsVarNumber(sParam1)) && (HUtil32.IsVarNumber(sParam2)))
+                if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     n10 = 1;
                     boVarFound = false;
@@ -902,7 +902,7 @@ namespace GameSvr.Npc
                     }
                     return;
                 }
-                if ((HUtil32.IsVarNumber(sParam1)) && (!HUtil32.IsVarNumber(sParam2)))
+                if (HUtil32.IsVarNumber(sParam1) && (!HUtil32.IsVarNumber(sParam2)))
                 {
                     if ((sParam3 != "") && (!HUtil32.IsStringNumber(sParam3)))
                     {
@@ -1973,7 +1973,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$USERCOUNT":
-                    sValue = (M2Share.UserEngine.PlayObjectCount).ToString();
+                    sValue = M2Share.UserEngine.PlayObjectCount.ToString();
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2045,7 +2045,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.Death && (PlayObject.LastHiter != null))
                         {
-                            if ((PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT))
+                            if (PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT)
                             {
                                 sValue = PlayObject.LastHiter.CharName;
                             }
@@ -2062,7 +2062,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.Death && (PlayObject.LastHiter != null))
                         {
-                            if ((PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT))
+                            if (PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT)
                             {
                                 sValue = PlayObject.LastHiter.CharName;
                             }
@@ -2301,7 +2301,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$LOGINTIME":
-                    sValue = (PlayObject.m_dLogonTime).ToString();
+                    sValue = PlayObject.m_dLogonTime.ToString();
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2525,12 +2525,12 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
                         {
-                            PlayObject.m_sString[n100 - 600] = (nValue).ToString();
+                            PlayObject.m_sString[n100 - 600] = nValue.ToString();
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
                         {
-                            M2Share.Config.GlobalAVal[n100 - 700] = (nValue).ToString();
+                            M2Share.Config.GlobalAVal[n100 - 700] = nValue.ToString();
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
@@ -2540,7 +2540,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量
                         {
-                            M2Share.Config.GlobalAVal[n100 - 1100] = (nValue).ToString();
+                            M2Share.Config.GlobalAVal[n100 - 1100] = nValue.ToString();
                             result = true;
                         }
                         else

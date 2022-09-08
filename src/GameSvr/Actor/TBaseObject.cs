@@ -1192,7 +1192,7 @@ namespace GameSvr.Actor
                     Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
                     Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 50 * nLevel));
-                    if ((12 + HUtil32.Round((Abil.Level / 13) * Abil.Level)) > 255)
+                    if ((12 + HUtil32.Round(Abil.Level / 13 * Abil.Level)) > 255)
                     {
                         Abil.MaxHandWeight = byte.MaxValue;
                     }
@@ -3416,7 +3416,7 @@ namespace GameSvr.Actor
                     {
                         var cellsuccess = false;
                         cellInfo = tEnvir.GetCellInfo(x, y, ref cellsuccess);
-                        if (cellsuccess && (cellInfo.ObjList != null))
+                        if (cellsuccess && cellInfo.IsAvailable)
                         {
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
@@ -3477,7 +3477,7 @@ namespace GameSvr.Actor
                             var cellInfo = Envir.GetCellInfo(nCx, nCy, ref cellsuccess);
                             if (cellsuccess)
                             {
-                                if (cellInfo.ObjList != null)
+                                if (cellInfo.IsAvailable)
                                 {
                                     for (var i = 0; i < cellInfo.Count; i++)
                                     {
@@ -3661,7 +3661,6 @@ namespace GameSvr.Actor
                 }
                 return Grobal2.MakeMonsterFeature(nRaceImg, MonsterWeapon, nAppr);
             }
-            Console.WriteLine($"Name:{CharName} ReceImg:{RaceImg} Appr:{Appr}");
             return Grobal2.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
         }
 
@@ -3685,7 +3684,7 @@ namespace GameSvr.Actor
             { 
                 if ((MagicArr[31] != null) && (MagicArr[31].btLevel >= 4))
                 {
-                    nStatus = (int)((0x80000000 | 11) | nStatus);
+                    nStatus = (int)(0x80000000 | 11 | nStatus);
                 }
             }
             return CharStatusEx | nStatus;
@@ -3786,7 +3785,7 @@ namespace GameSvr.Actor
             {
                 var cellsuccess = false;
                 var cellInfo = Envir.GetCellInfo(CurrX, CurrY, ref cellsuccess);
-                if (cellsuccess && (cellInfo.ObjList != null))
+                if (cellsuccess && cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
@@ -3799,7 +3798,7 @@ namespace GameSvr.Actor
                         {
                             case CellType.GateObject:
                                 var gateObj = (GateObject)M2Share.CellObjectSystem.Get(osObject.CellObjId);
-                                if ((gateObj != null))
+                                if (gateObj != null)
                                 {
                                     if (Race == Grobal2.RC_PLAYOBJECT)
                                     {
@@ -5429,7 +5428,7 @@ namespace GameSvr.Actor
                 {
                     var cellsuccess = false;
                     var cellInfo = Envir.GetCellInfo(i, j, ref cellsuccess);
-                    if (cellsuccess && (cellInfo.ObjList != null))
+                    if (cellsuccess && cellInfo.IsAvailable)
                     {
                         for (var k = 0; k < cellInfo.Count; k++)
                         {
@@ -5700,7 +5699,7 @@ namespace GameSvr.Actor
                         if (Envir.CanWalkEx(nCurrX + 1, nCurrY,
                                 M2Share.Config.DiableHumanRun ||
                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                            (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                            M2Share.Config.boSafeAreaLimited && InSafeZone() &&
                             (Envir.CanWalkEx(nCurrX + 2, nCurrY,
                                  M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
@@ -5731,7 +5730,7 @@ namespace GameSvr.Actor
                         (Envir.CanWalkEx(nCurrX, nCurrY + 1,
                              M2Share.Config.DiableHumanRun ||
                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                         M2Share.Config.boSafeAreaLimited && InSafeZone() &&
                          (Envir.CanWalkEx(nCurrX, nCurrY + 2,
                               M2Share.Config.DiableHumanRun ||
                               ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
@@ -5837,7 +5836,7 @@ namespace GameSvr.Actor
                         if (Envir.CanWalkEx(CurrX + 1, CurrY,
                                 M2Share.Config.DiableHumanRun ||
                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                            (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                            M2Share.Config.boSafeAreaLimited && InSafeZone() &&
                             (Envir.CanWalkEx(CurrX + 2, CurrY,
                                  M2Share.Config.DiableHumanRun ||
                                  ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
@@ -5868,7 +5867,7 @@ namespace GameSvr.Actor
                         (Envir.CanWalkEx(CurrX, CurrY + 1,
                              M2Share.Config.DiableHumanRun ||
                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                         M2Share.Config.boSafeAreaLimited && InSafeZone() &&
                          (Envir.CanWalkEx(CurrX, CurrY + 2,
                               M2Share.Config.DiableHumanRun ||
                               ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
@@ -5968,18 +5967,18 @@ namespace GameSvr.Actor
 
             if (this is CastleDoor)
             {
-                ((CastleDoor)(this)).m_boOpened = false;
+                ((CastleDoor)this).m_boOpened = false;
                 this.StickMode = true;
             }
 
             if (this is MagicMonster)
             {
-                ((MagicMonster)(this)).m_boDupMode = false;
+                ((MagicMonster)this).m_boDupMode = false;
             }
 
             if (this is MagicMonObject)
             {
-                ((MagicMonObject)(this)).m_boUseMagic = false;
+                ((MagicMonObject)this).m_boUseMagic = false;
             }
 
             if (this is RockManObject)
@@ -5989,13 +5988,13 @@ namespace GameSvr.Actor
 
             if (this is WallStructure)
             {
-                ((WallStructure)(this)).SetMapFlaged = false;
+                ((WallStructure)this).SetMapFlaged = false;
             }
 
             if (this is SoccerBall)
             {
-                ((SoccerBall)(this)).n550 = 0;
-                ((SoccerBall)(this)).TargetX = -1;
+                ((SoccerBall)this).n550 = 0;
+                ((SoccerBall)this).TargetX = -1;
             }
 
             if (this is FrostTiger)
@@ -6018,7 +6017,7 @@ namespace GameSvr.Actor
 
             if (this is WhiteSkeleton)
             {
-                ((WhiteSkeleton)(this)).m_boIsFirst = true;
+                ((WhiteSkeleton)this).m_boIsFirst = true;
                 this.FixedHideMode = true;
             }
 
@@ -6037,19 +6036,19 @@ namespace GameSvr.Actor
             {
                 this.FixedHideMode = true;
                 this.NoAttackMode = true;
-                ((ElfMonster)(this)).boIsFirst = true;
+                ((ElfMonster)this).boIsFirst = true;
             }
 
             if (this is ElfWarriorMonster)
             {
                 this.FixedHideMode = true;
-                ((ElfWarriorMonster)(this)).boIsFirst = true;
-                ((ElfWarriorMonster)(this)).UsePoison = false;
+                ((ElfWarriorMonster)this).boIsFirst = true;
+                ((ElfWarriorMonster)this).UsePoison = false;
             }
 
             if (this is ElectronicScolpionMon)
             {
-                ((ElectronicScolpionMon)(this)).m_boUseMagic = false;
+                ((ElectronicScolpionMon)this).m_boUseMagic = false;
                 //((TElectronicScolpionMon)(this)).m_boApproach = false;
             }
 
@@ -6142,8 +6141,8 @@ namespace GameSvr.Actor
                 return false;
             }
 
-            var nX = (monGen.nX - monGen.nRange) + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
-            var nY = (monGen.nY - monGen.nRange) + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
+            var nX = monGen.nX - monGen.nRange + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
+            var nY = monGen.nY - monGen.nRange + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
             var mBoErrorOnInit = true;
             if (Envir.CanWalk(nX, nY, true))
             {
@@ -6168,9 +6167,9 @@ namespace GameSvr.Actor
                     nRange = 3;
                 }
 
-                if ((Envir.Height < 250))
+                if (Envir.Height < 250)
                 {
-                    if ((Envir.Height < 30))
+                    if (Envir.Height < 30)
                     {
                         nRange2 = 2;
                     }

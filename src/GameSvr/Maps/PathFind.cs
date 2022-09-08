@@ -478,7 +478,7 @@ namespace GameSvr.Maps
                 result[nY1, nX1].Distance = 0;// 起点Distance:=0
                 oldWave.Add(nX1, nY1, 0, 0);// 将起点加入OldWave
                 FillPathMap_TestNeighbours(oldWave, newWave, ref result);
-                finished = ((nX1 == nX2) && (nY1 == nY2));// 检验是否到达终点
+                finished = (nX1 == nX2) && (nY1 == nY2);// 检验是否到达终点
                 while (!finished)
                 {
                     FillPathMap_ExchangeWaves(oldWave, newWave);
@@ -515,7 +515,7 @@ namespace GameSvr.Maps
                             result[I.Y, I.X].Distance = result[I.Y - DirToDy(I.Direction), I.X - DirToDx(I.Direction)].Distance + 1;
                             // 此点 Distance:=上一个点Distance+1
                             result[I.Y, I.X].Direction = I.Direction;
-                            finished = ((I.X == nX2) && (I.Y == nY2));
+                            finished = (I.X == nX2) && (I.Y == nY2);
                             // 检验是否到达终点
                             if (finished)
                             {
@@ -523,7 +523,7 @@ namespace GameSvr.Maps
                             }
                             FillPathMap_TestNeighbours(oldWave, newWave, ref result);
                         }
-                    } while (!(!oldWave.Next()));
+                    } while (!!oldWave.Next());
                 }
             }
             finally
@@ -536,7 +536,7 @@ namespace GameSvr.Maps
         protected virtual int GetCost(int x, int y, int direction)
         {
             int result;
-            direction = (direction & 7);
+            direction = direction & 7;
             if ((x < 0) || (x >= Width) || (y < 0) || (y >= Height))
             {
                 result = -1;
@@ -622,7 +622,7 @@ namespace GameSvr.Maps
             int nY;
             if (_pathEnvir != null)
             {
-                direction = (direction & 7);
+                direction = direction & 7;
                 if ((x < 0) || (x >= this.ClientRect.Right - this.ClientRect.Left) || (y < 0) || (y >= this.ClientRect.Bottom - this.ClientRect.Top))
                 {
                     result = -1;
@@ -721,7 +721,7 @@ namespace GameSvr.Maps
         public bool Next()
         {
             _fPos++;
-            return (_fPos < _fCount);
+            return _fPos < _fCount;
         }
     }
 

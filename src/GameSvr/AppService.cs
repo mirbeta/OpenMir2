@@ -87,7 +87,7 @@ namespace GameSvr
                         }
                         M2Share.boStartReady = false;
                         _mirApp.Stop();
-                    }, stoppingToken);
+                    }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
                 }
             }
             else

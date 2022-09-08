@@ -1282,7 +1282,7 @@ namespace GameSvr.Player
                     {
                         var cellsuccess = false;
                         var cellInfo = Envir.GetCellInfo(nX, nY, ref cellsuccess);
-                        if (cellsuccess && cellInfo.ObjList != null)
+                        if (cellsuccess && cellInfo.IsAvailable)
                         {
                             var nIdx = 0;
                             while (true)

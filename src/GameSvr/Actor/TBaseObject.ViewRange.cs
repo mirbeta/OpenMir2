@@ -130,7 +130,7 @@ namespace GameSvr.Actor
                     {
                         var cellsuccess = false;
                         var cellInfo = Envir.GetCellInfo(n18, n1C, ref cellsuccess);
-                        if (cellsuccess && (cellInfo.ObjList != null))
+                        if (cellsuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
                             var nIdx = 0;
@@ -162,8 +162,7 @@ namespace GameSvr.Actor
                                             {
                                                 if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                 {
-                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || 
-                                                        ((baseObject.Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || 
+                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) ||
                                                         (baseObject.Race == Grobal2.RC_PLAYOBJECT))
                                                     {
                                                         UpdateVisibleGay(baseObject);
@@ -233,7 +232,7 @@ namespace GameSvr.Actor
                 {
                     var cellsuccess = false;
                     var cellInfo = Envir.GetCellInfo(n18, n1C, ref cellsuccess);
-                    if (cellsuccess && (cellInfo.ObjList != null))
+                    if (cellsuccess && cellInfo.IsAvailable)
                     {
                         try
                         {
@@ -272,8 +271,7 @@ namespace GameSvr.Actor
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e);
-                            throw;
+                            M2Share.Log.Error(e.StackTrace);
                         }
                     }
                 }

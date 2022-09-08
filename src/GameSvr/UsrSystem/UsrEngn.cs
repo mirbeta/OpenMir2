@@ -1008,7 +1008,7 @@ namespace GameSvr.UsrSystem
                         {
                             var nGenCount = monGen.nActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var nGenModCount = (monGen.nCount / M2Share.Config.MonGenRate) * 10;
+                            var nGenModCount = monGen.nCount / M2Share.Config.MonGenRate * 10;
                             var map = M2Share.MapMgr.FindMap(monGen.sMapName);
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 boCanCreate = false;
@@ -1295,7 +1295,7 @@ namespace GameSvr.UsrSystem
             if (OtherUserNameList.TryGetValue(sName, out var groupServer))
             {
                 nServerIndex = groupServer.nServerIdx;
-                Console.WriteLine($"玩家在[{nServerIndex}]服务器上.");
+                M2Share.Log.Info($"玩家在[{nServerIndex}]服务器上.");
                 return true;
             }
             return false;
@@ -1821,8 +1821,7 @@ namespace GameSvr.UsrSystem
                                 if (cert.Envir.Height - n24 - 1 > cert.CurrY)
                                     cert.CurrY += (short)n20;
                                 else
-                                    cert.CurrY =
-                                        (short)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
+                                    cert.CurrY = (short)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
                             }
                         }
                         else
@@ -2384,7 +2383,7 @@ namespace GameSvr.UsrSystem
                 {
                     var cellsuccess = false;
                     var cellInfo = envir.GetCellInfo(n10, n14, ref cellsuccess);
-                    if (cellsuccess && cellInfo.ObjList != null)
+                    if (cellsuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
@@ -2765,9 +2764,9 @@ namespace GameSvr.UsrSystem
                 {
                     n20 = 3;
                 }
-                if ((cert.Envir.Height < 250))
+                if (cert.Envir.Height < 250)
                 {
-                    if ((cert.Envir.Height < 30))
+                    if (cert.Envir.Height < 30)
                     {
                         n24 = 2;
                     }
@@ -2791,7 +2790,7 @@ namespace GameSvr.UsrSystem
                         }
                         else
                         {
-                            cert.CurrX = (byte)((M2Share.RandomNumber.Random(cert.Envir.Width / 2)) + n24);
+                            cert.CurrX = (byte)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
                             if (cert.Envir.Height - n24 - 1 > cert.CurrY)
                             {
                                 cert.CurrY += (short)n20;

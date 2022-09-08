@@ -404,7 +404,7 @@ namespace GameSvr.Npc
 
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam1))
                 {
-                    if ((QuestConditionInfo.sParam1[0] == '$'))
+                    if (QuestConditionInfo.sParam1[0] == '$')
                     {
                         var s50 = QuestConditionInfo.sParam1;
                         QuestConditionInfo.sParam1 = '<' + QuestConditionInfo.sParam1 + '>';
@@ -417,7 +417,7 @@ namespace GameSvr.Npc
                 }
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam2))
                 {
-                    if ((QuestConditionInfo.sParam2[0] == '$'))
+                    if (QuestConditionInfo.sParam2[0] == '$')
                     {
                         var s50 = QuestConditionInfo.sParam2;
                         QuestConditionInfo.sParam2 = '<' + QuestConditionInfo.sParam2 + '>';
@@ -430,7 +430,7 @@ namespace GameSvr.Npc
                 }
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam3))
                 {
-                    if ((QuestConditionInfo.sParam3[0] == '$'))
+                    if (QuestConditionInfo.sParam3[0] == '$')
                     {
                         var s50 = QuestConditionInfo.sParam3;
                         QuestConditionInfo.sParam3 = '<' + QuestConditionInfo.sParam3 + '>';
@@ -443,7 +443,7 @@ namespace GameSvr.Npc
                 }
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam4))
                 {
-                    if ((QuestConditionInfo.sParam4[0] == '$'))
+                    if (QuestConditionInfo.sParam4[0] == '$')
                     {
                         var s50 = QuestConditionInfo.sParam4;
                         QuestConditionInfo.sParam4 = '<' + QuestConditionInfo.sParam4 + '>';
@@ -456,7 +456,7 @@ namespace GameSvr.Npc
                 }
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam5))
                 {
-                    if ((QuestConditionInfo.sParam5[0] == '$'))
+                    if (QuestConditionInfo.sParam5[0] == '$')
                     {
                         var s50 = QuestConditionInfo.sParam5;
                         QuestConditionInfo.sParam5 = '<' + QuestConditionInfo.sParam5 + '>';
@@ -469,7 +469,7 @@ namespace GameSvr.Npc
                 }
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam6))
                 {
-                    if ((QuestConditionInfo.sParam6[0] == '$'))
+                    if (QuestConditionInfo.sParam6[0] == '$')
                     {
                         var s50 = QuestConditionInfo.sParam6;
                         QuestConditionInfo.sParam6 = '<' + QuestConditionInfo.sParam6 + '>';
@@ -527,7 +527,7 @@ namespace GameSvr.Npc
                         result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.CharName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
                         break;
                     case ScriptConst.nSC_CHECKRANDOMNO:
-                        Console.WriteLine("TODO nSC_CHECKRANDOMNO...");
+                        M2Share.Log.Error("TODO nSC_CHECKRANDOMNO...");
                         //result = GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject, sMsg);
                         break;
                     case ScriptConst.nCheckDiemon:

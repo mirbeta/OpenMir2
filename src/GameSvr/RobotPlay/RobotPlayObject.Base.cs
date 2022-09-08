@@ -308,7 +308,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                M2Share.Log.Error(ex.StackTrace);
             }
             base.Run();
         }
@@ -498,7 +498,7 @@ namespace GameSvr.RobotPlay
                     {
                         var cellsuccess = false;
                         cellInfo = Envir.GetCellInfo(nX, nY, ref cellsuccess);
-                        if (cellsuccess && cellInfo.ObjList != null)
+                        if (cellsuccess && cellInfo.IsAvailable)
                         {
                             nIdx = 0;
                             while (cellInfo.Count>0)
@@ -507,7 +507,7 @@ namespace GameSvr.RobotPlay
                                 {
                                     break;
                                 }
-                                if (cellInfo.ObjList != null && cellInfo.Count <= 0)
+                                if (cellInfo.IsAvailable && cellInfo.Count <= 0)
                                 {
                                     cellInfo.Dispose();
                                     break;
