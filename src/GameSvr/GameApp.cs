@@ -87,7 +87,6 @@ namespace GameSvr
             M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
             M2Share.AbuseTextList = new StringList();
             M2Share.g_MonSayMsgList = new Dictionary<string, IList<TMonSayMsg>>(StringComparer.OrdinalIgnoreCase);
-            M2Share.g_ChatLoggingList = new List<string>();
             M2Share.g_DisableMakeItemList = new List<string>();
             M2Share.g_EnableMakeItemList = new List<string>();
             M2Share.g_DisableSellOffList = new List<string>();

@@ -23,7 +23,7 @@ namespace GameSvr.Maps
 
         public void Add(CellObject cell, EntityId entityId)
         {
-            using (M2Share.syncLock.EnterWriteLock())
+            using (M2Share.SyncLock.EnterWriteLock())
             {
                 ObjList.Add(cell);
                 M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);
@@ -32,7 +32,7 @@ namespace GameSvr.Maps
 
         public void Remove(CellObject cell)
         {
-            using (M2Share.syncLock.EnterReadLock())
+            using (M2Share.SyncLock.EnterReadLock())
             {
                 if (ObjList != null && cell != null)
                 {

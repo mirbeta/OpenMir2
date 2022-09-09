@@ -12,11 +12,11 @@ namespace GameSvr.Command.Commands
             playObject.BanShout = !playObject.BanShout;
             if (playObject.BanShout)
             {
-                playObject.SysMsg(M2Share.g_sEnableShoutMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.EnableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(M2Share.g_sDisableShoutMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.DisableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
         }
     }

@@ -12,11 +12,11 @@ namespace GameSvr.Command.Commands
             playObject.BanGuildChat = !playObject.BanGuildChat;
             if (playObject.BanGuildChat)
             {
-                playObject.SysMsg(M2Share.g_sEnableGuildChat, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.EnableGuildChat, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(M2Share.g_sDisableGuildChat, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.DisableGuildChat, MsgColor.Green, MsgType.Hint);
             }
             return;
         }

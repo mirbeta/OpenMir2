@@ -12,7 +12,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void Date(PlayObject PlayObject)
         {
-            PlayObject.SysMsg(M2Share.g_sNowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), MsgColor.Blue, MsgType.Hint);
+            PlayObject.SysMsg(GameCommandConst.NowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), MsgColor.Blue, MsgType.Hint);
         }
     }
 }

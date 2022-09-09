@@ -14,11 +14,11 @@ namespace GameSvr.Command.Commands
                 playObject.MyGuild.m_boEnableAuthAlly = !playObject.MyGuild.m_boEnableAuthAlly;
                 if (playObject.MyGuild.m_boEnableAuthAlly)
                 {
-                    playObject.SysMsg(M2Share.g_sEnableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(GameCommandConst.EnableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(M2Share.g_sDisableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(GameCommandConst.DisableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                 }
             }
             return;

@@ -141,7 +141,7 @@ namespace GameSvr.Player
                 }
                 if (!(boDisableSayMsg || Envir.Flag.boNOCHAT))
                 {
-                    M2Share.g_ChatLoggingList.Add('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + CharName + ": " + sData);
+                    M2Share.Log.Info('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + CharName + ": " + sData);
                     m_sOldSayMsg = sData;
                     if (sData.StartsWith("@@加速处理"))
                     {

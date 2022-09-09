@@ -15,11 +15,11 @@ namespace GameSvr.Command.Commands
             PlayObject.m_boCanMasterRecall = !PlayObject.m_boCanMasterRecall;
             if (PlayObject.m_boCanMasterRecall)
             {
-                PlayObject.SysMsg(M2Share.g_sEnableMasterRecall, MsgColor.Blue, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.EnableMasterRecall, MsgColor.Blue, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(M2Share.g_sDisableMasterRecall, MsgColor.Blue, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.DisableMasterRecall, MsgColor.Blue, MsgType.Hint);
             }
         }
     }

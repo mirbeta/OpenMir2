@@ -48,7 +48,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.MapDesc), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(GameCommandConst.TheMapDisableMove, sMapName, Envir.MapDesc), MsgColor.Red, MsgType.Hint);
                 }
             }
             catch (Exception e)

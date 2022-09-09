@@ -1984,7 +1984,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$SERVERRUNTIME":
-                    nSecond = (HUtil32.GetTickCount() - M2Share.g_dwStartTick) / 1000;
+                    nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
                     //wHour = nSecond / 3600;
                     //wMinute = (nSecond / 60) % 60;
                     //wSecond = nSecond % 60;
