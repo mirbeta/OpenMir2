@@ -89,9 +89,9 @@ namespace DBSvr.Storage
                             }
                             else
                             {
-                                if (String.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    ChrList = m_List[_quickList[nHigh].sAccount] as List<QuickId>;
+                                    ChrList = m_List[_quickList[nHigh].sAccount];
                                     ChrList.Add(QuickID);
                                     _quickList.Add(QuickID);
                                     break;
@@ -121,7 +121,7 @@ namespace DBSvr.Storage
                                         }
                                         else
                                         {
-                                            ChrList = m_List[_quickList[n20].sAccount] as List<QuickId>;
+                                            ChrList = m_List[_quickList[n20].sAccount];
                                             ChrList.Add(QuickID);
                                             break;
                                         }
@@ -144,7 +144,7 @@ namespace DBSvr.Storage
                                 nMed = (nHigh - nLow) / 2 + nLow;
                                 continue;
                             }
-                            ChrList = m_List[_quickList[nMed].sAccount] as List<QuickId>;
+                            ChrList = m_List[_quickList[nMed].sAccount];
                             ChrList.Add(QuickID);
                             break;
                         }
@@ -155,16 +155,14 @@ namespace DBSvr.Storage
 
         public void DelRecord(int nIndex, string sChrName)
         {
-            QuickId QuickID;
-            IList<QuickId> ChrList;
             if ((m_List.Count - 1) < nIndex)
             {
                 return;
             }
-            ChrList = m_List[sChrName] as List<QuickId>;
+            var ChrList = m_List[sChrName];
             for (var i = 0; i < ChrList.Count; i++)
             {
-                QuickID = ChrList[i];
+                var QuickID = ChrList[i];
                 if (QuickID.sChrName == sChrName)
                 {
                     QuickID = null;

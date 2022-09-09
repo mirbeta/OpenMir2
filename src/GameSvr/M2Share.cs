@@ -133,14 +133,14 @@ namespace GameSvr
         public static TFrontEngine FrontEngine = null;
         public static UserEngine UserEngine = null;
         public static RobotManage RobotMgr = null;
-        public static Dictionary<string, IList<TMakeItem>> MakeItemList = null;
-        public static IList<TStartPoint> StartPointList = null;
-        public static TStartPoint g_RedStartPoint = null;
+        public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
+        public static IList<StartPoint> StartPointList = null;
+        public static StartPoint g_RedStartPoint = null;
         public static TRouteInfo[] ServerTableList = null;
         public static ConcurrentDictionary<string, long> DenySayMsgList = null;
         public static ConcurrentDictionary<string, int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
-        public static IList<TDealOffInfo> sSellOffItemList = null;
+        public static IList<DealOffInfo> sSellOffItemList = null;
         public static ArrayList LogonCostLogList = null;
         /// <summary>
         /// 游戏公告列表
@@ -253,7 +253,7 @@ namespace GameSvr
         public static object g_HighSCHuman = null;
         public static object g_HighOnlineHuman = null;
         public static int g_dwSpiritMutinyTick = 0;
-        public static GameSvrConfig Config;
+        public static GameSvrConf Config;
         public static int[] g_dwOldNeedExps = new int[Grobal2.MaxChangeLevel];
         public static IList<GameCmd> CustomCommands = new List<GameCmd>();
         public static GameCommand GameCommand = new GameCommand();
@@ -521,32 +521,6 @@ namespace GameSvr
 
         public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
 
-        public static void CopyStdItemToOStdItem(TStdItem StdItem, ref TOStdItem OStdItem)
-        {
-            if (OStdItem == null)
-            {
-                OStdItem = new TOStdItem();
-            }
-            OStdItem.Name = StdItem.Name;
-            OStdItem.StdMode = StdItem.StdMode;
-            OStdItem.Shape = StdItem.Shape;
-            OStdItem.Weight = StdItem.Weight;
-            OStdItem.AniCount = StdItem.AniCount;
-            /*OStdItem.Source = (byte)StdItem.Source;
-            OStdItem.Reserved = StdItem.reserved;*/
-            OStdItem.NeedIdentify = StdItem.NeedIdentify;
-            OStdItem.Looks = StdItem.Looks;
-            OStdItem.DuraMax = StdItem.DuraMax;
-            OStdItem.AC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.AC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.AC)));
-            OStdItem.MAC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MAC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MAC)));
-            OStdItem.DC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.DC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.DC)));
-            OStdItem.MC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MC)));
-            OStdItem.SC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.SC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.SC)));
-            //OStdItem.Need = StdItem.Need;
-            //OStdItem.NeedLevel = StdItem.NeedLevel;
-            OStdItem.Price = StdItem.Price;
-        }
-
         public static bool LoadLineNotice(string FileName)
         {
             var result = false;
@@ -640,7 +614,7 @@ namespace GameSvr
             ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
             GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.sGlobalConfigFileName));
             Log = new MirLog();
-            Config = new GameSvrConfig();
+            Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
         }
 
@@ -737,7 +711,7 @@ namespace GameSvr
             return result;
         }
 
-        public static bool CheckUserItems(int nIdx, StdItem StdItem)
+        public static bool CheckUserItems(int nIdx, Items.StdItem StdItem)
         {
             var result = false;
             switch (nIdx)
@@ -1212,7 +1186,7 @@ namespace GameSvr
             return result;
         }
 
-        public static IList<TMakeItem> GetMakeItemInfo(string sItemName)
+        public static IList<MakeItem> GetMakeItemInfo(string sItemName)
         {
             if (MakeItemList.TryGetValue(sItemName, out var itemList))
             {

@@ -4,9 +4,9 @@ using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule
 {
-    public class EDcode
+    public class EDCode
     {
-        private const int BUFFERSIZE = 10000;
+        private const int BufferSize = 10000;
 
         /// <summary>
         /// 解码客户端封包
@@ -108,7 +108,7 @@ namespace SystemModule
             var data = obj.GetBuffer();
             var buffSize = data.Length;
             if (buffSize <= 0) return result;
-            if (buffSize < BUFFERSIZE)
+            if (buffSize < BufferSize)
             {
                 var encBuf = new byte[buffSize * 2];
                 var tempBuf = new byte[buffSize];
@@ -127,7 +127,7 @@ namespace SystemModule
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             var buffSize = data.Length;
-            if (buffSize >= BUFFERSIZE) return Array.Empty<byte>();
+            if (buffSize >= BufferSize) return Array.Empty<byte>();
             var encBuf = new byte[buffSize * 2];
             var destLen = Misc.EncodeBuf(data, buffSize, encBuf);
             return encBuf[..destLen];
@@ -141,7 +141,7 @@ namespace SystemModule
             if (data == null) throw new ArgumentNullException(nameof(data));
             var tempBuf = new byte[data.Length];
             var encBuf = new byte[tempBuf.Length * 2];
-            if (bufsize < BUFFERSIZE)
+            if (bufsize < BufferSize)
             {
                 Buffer.BlockCopy(data, 0, tempBuf, 0, bufsize);
                 var destLen = Misc.EncodeBuf(tempBuf, bufsize, encBuf);

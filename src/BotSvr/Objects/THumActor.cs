@@ -409,7 +409,7 @@ namespace BotSvr.Objects
     public class TClientStallInfo
     {
         public int ItemCount;
-        public TClientItem[] Items = new TClientItem[10];
+        public ClientItem[] Items = new ClientItem[10];
         public string StallName;
     }
 }

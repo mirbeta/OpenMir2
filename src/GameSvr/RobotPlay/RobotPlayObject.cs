@@ -9,6 +9,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.RobotPlay
 {
@@ -491,10 +492,10 @@ namespace GameSvr.RobotPlay
             }
         }
 
-        public TUserMagic FindMagic(short wMagIdx)
+        public UserMagic FindMagic(short wMagIdx)
         {
-            TUserMagic result = null;
-            TUserMagic UserMagic;
+            UserMagic result = null;
+            UserMagic UserMagic;
             for (var i = 0; i < MagicList.Count; i++)
             {
                 UserMagic = MagicList[i];
@@ -507,12 +508,12 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public TUserMagic FindMagic(string sMagicName)
+        public UserMagic FindMagic(string sMagicName)
         {
-            TUserMagic result = null;
+            UserMagic result = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
-                TUserMagic UserMagic = MagicList[i];
+                UserMagic UserMagic = MagicList[i];
                 if (string.Compare(UserMagic.MagicInfo.sMagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UserMagic;
@@ -640,7 +641,7 @@ namespace GameSvr.RobotPlay
         public bool SearchPickUpItem_PickUpItem(int nX, int nY)
         {
             bool result = false;
-            TUserItem UserItem = null;
+            UserItem UserItem = null;
             StdItem StdItem;
             MapItem MapItem = Envir.GetItem(nX, nY);
             if (MapItem == null)
@@ -677,7 +678,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (Envir.DeleteFromMap(nX, nY, CellType.ItemObject, MapItem) == 1)
                     {
-                        UserItem = new TUserItem();
+                        UserItem = new UserItem();
                         UserItem = MapItem.UserItem;
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                         if (StdItem != null && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
@@ -1567,7 +1568,7 @@ namespace GameSvr.RobotPlay
         private bool AllowUseMagic(short wMagIdx)
         {
             bool result = false;
-            TUserMagic UserMagic = FindMagic(wMagIdx);
+            UserMagic UserMagic = FindMagic(wMagIdx);
             if (UserMagic != null)
             {
                 if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx))
@@ -1662,7 +1663,7 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (nIndex >= 0 && nIndex < ItemList.Count)
             {
-                TUserItem UserItem = ItemList[nIndex];
+                UserItem UserItem = ItemList[nIndex];
                 if (UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
                     StdItem StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
@@ -1675,7 +1676,7 @@ namespace GameSvr.RobotPlay
                         else
                         {
                             ItemList.RemoveAt(nIndex);
-                            TUserItem AddUserItem = UseItems[Grobal2.U_ARMRINGL];
+                            UserItem AddUserItem = UseItems[Grobal2.U_ARMRINGL];
                             if (AddItemToBag(AddUserItem))
                             {
                                 UseItems[Grobal2.U_ARMRINGL] = UserItem;
@@ -1830,7 +1831,7 @@ namespace GameSvr.RobotPlay
         /// <returns></returns>
         private bool IsUseAttackMagic()
         {
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             bool result = false;
             switch (Job)
             {
@@ -1914,7 +1915,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private bool UseSpell(TUserMagic UserMagic, short nTargetX, short nTargetY, BaseObject TargeTBaseObject)
+        private bool UseSpell(UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject TargeTBaseObject)
         {
             int n14;
             BaseObject BaseObject;
@@ -2058,7 +2059,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private bool AutoSpell(TUserMagic UserMagic, short nTargetX, short nTargetY, BaseObject BaseObject)
+        private bool AutoSpell(UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject BaseObject)
         {
             bool result = false;
             try
@@ -2805,7 +2806,7 @@ namespace GameSvr.RobotPlay
             m_nSelectMagic = SelectMagic();
             if (m_nSelectMagic > 0)
             {
-                TUserMagic UserMagic = FindMagic(m_nSelectMagic);
+                UserMagic UserMagic = FindMagic(m_nSelectMagic);
                 if (UserMagic != null)
                 {
                     m_boIsUseAttackMagic = IsUseAttackMagic();
@@ -4242,7 +4243,7 @@ namespace GameSvr.RobotPlay
         private bool CheckHeroAmulet(int nType, int nCount)
         {
             bool result = false;
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem AmuletStdItem;
             try
             {

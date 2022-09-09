@@ -78,7 +78,7 @@ namespace LoginGate.Services
                     GatePacket accountPacket = new GatePacket();
                     accountPacket.Body = userData.Body;
                     accountPacket.BuffLen = (short)userData.Body.Length;
-                    accountPacket.PacketType = PacketType.Data;
+                    accountPacket.Type = PacketType.Data;
                     accountPacket.SocketId = Session.ConnectionId;
                     _lastLoginSvr.SendPacket(accountPacket);
                 }
@@ -223,7 +223,7 @@ namespace LoginGate.Services
             GatePacket accountPacket = new GatePacket();
             accountPacket.Body = body;
             accountPacket.BuffLen = (byte)body.Length;
-            accountPacket.PacketType = PacketType.Enter;
+            accountPacket.Type = PacketType.Enter;
             accountPacket.SocketId = Session.ConnectionId;
             _lastLoginSvr.SendPacket(accountPacket);
         }
@@ -240,7 +240,7 @@ namespace LoginGate.Services
             GatePacket accountPacket = new GatePacket();
             accountPacket.Body = Array.Empty<byte>();
             accountPacket.BuffLen = 0;
-            accountPacket.PacketType = PacketType.Leave;
+            accountPacket.Type = PacketType.Leave;
             accountPacket.SocketId = Session.ConnectionId;
             _lastLoginSvr.SendPacket(accountPacket);
             m_KickFlag = false;

@@ -166,7 +166,7 @@ namespace GameSvr
             int nItemCount;
             var sSubName = string.Empty;
             var sItemName = string.Empty;
-            IList<TMakeItem> List28 = null;
+            IList<MakeItem> List28 = null;
             var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MakeItem.txt");
             if (File.Exists(sFileName))
             {
@@ -185,7 +185,7 @@ namespace GameSvr
                         {
                             M2Share.MakeItemList.Add(sItemName, List28);
                         }
-                        List28 = new List<TMakeItem>();
+                        List28 = new List<MakeItem>();
                         HUtil32.ArrestStringEx(sLine, "[", "]", ref sItemName);
                     }
                     else
@@ -194,7 +194,7 @@ namespace GameSvr
                         {
                             sLine = HUtil32.GetValidStr3(sLine, ref sSubName, new[] { " ", "\t" });
                             nItemCount = HUtil32.Str_ToInt(sLine.Trim(), 1);
-                            List28.Add(new TMakeItem() { ItemName = sSubName, ItemCount = nItemCount });
+                            List28.Add(new MakeItem() { ItemName = sSubName, ItemCount = nItemCount });
                         }
                     }
                 }
@@ -850,7 +850,7 @@ namespace GameSvr
                         sLine = HUtil32.GetValidStr3(sLine, ref fire, new[] { " ", "\t" });
                         if (!string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(cX) && cY != "")
                         {
-                            var startPoint = new TStartPoint
+                            var startPoint = new StartPoint
                             {
                                 m_sMapName = mapName,
                                 m_nCurrX = (short)HUtil32.Str_ToInt(cX, 0),

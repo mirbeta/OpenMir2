@@ -2,22 +2,23 @@ using GameSvr.Items;
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Magic
 {
     public static class MagicBase
     {
-        public static int MPow(TUserMagic UserMagic)
+        public static int MPow(UserMagic UserMagic)
         {
             return UserMagic.MagicInfo.wPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.wMaxPower - UserMagic.MagicInfo.wPower);
         }
 
-        public static int GetPower(int nPower, TUserMagic UserMagic)
+        public static int GetPower(int nPower, UserMagic UserMagic)
         {
             return HUtil32.Round(nPower / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower);
         }
 
-        public static int GetPower13(int nInt, TUserMagic UserMagic)
+        public static int GetPower13(int nInt, UserMagic UserMagic)
         {
             double d10 = nInt / 3.0;
             double d18 = nInt - d10;

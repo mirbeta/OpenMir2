@@ -5,7 +5,7 @@ namespace GameSvr.Npc
     public class TUpgradeInfo
     {
         public string sUserName;
-        public TUserItem UserItem;
+        public UserItem UserItem;
         public byte btDc;
         public byte btSc;
         public byte btMc;

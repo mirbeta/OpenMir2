@@ -2,6 +2,7 @@ using NLog;
 using System.Collections.Concurrent;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Services
 {
@@ -58,7 +59,7 @@ namespace GameSvr.Services
                 }
                 if (respPack.PacketLen > 0)
                 {
-                    var serverPacket = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDcode.DecodeBuff(respPack.Message));
+                    var serverPacket = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDCode.DecodeBuff(respPack.Message));
                     if (serverPacket == null)
                     {
                         return false;
@@ -165,9 +166,9 @@ namespace GameSvr.Services
                     {
                         if (nRecog == 1)
                         {
-                            humRespData = EDcode.DecodeBuff(humRespData);
+                            humRespData = EDCode.DecodeBuff(humRespData);
                             var responsePacket = ProtoBufDecoder.DeSerialize<LoadHumanRcdResponsePacket>(humRespData);
-                            var sDBCharName = EDcode.DeCodeString(responsePacket.sChrName);
+                            var sDBCharName = EDCode.DeCodeString(responsePacket.sChrName);
                             if (sDBCharName == loadHuman.sChrName)
                             {
                                 HumanRcd = new THumDataInfo();

@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
         private void sub_4A6B30(BaseObject targeTBaseObject)
         {
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
-            TAbility wAbil = Abil;
+            Ability wAbil = Abil;
             var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
             if (nPower > 0)
             {

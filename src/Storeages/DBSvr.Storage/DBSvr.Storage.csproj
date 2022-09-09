@@ -6,14 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="3.1.17" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\SystemModule\SystemModule.csproj" />
   </ItemGroup>
 

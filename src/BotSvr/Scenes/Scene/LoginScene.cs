@@ -12,7 +12,7 @@ namespace BotSvr.Scenes.Scene
     public class LoginScene : SceneBase
     {
         private readonly ClientScoket _clientSocket;
-        private readonly TUserEntryAdd _mNewIdRetryAdd = null;
+        private readonly UserEntryAdd _mNewIdRetryAdd = null;
         private readonly ClientManager _clientManager;
 
         public LoginScene(RobotClient robotClient, ClientManager clientManager) : base(SceneType.stLogin, robotClient)
@@ -105,7 +105,7 @@ namespace BotSvr.Scenes.Scene
             ue.UserEntryAdd.sMemo = "";
             ue.UserEntryAdd.sMemo2 = "";
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue));
+            SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue));
         }
 
         private void SendLogin(string uid, string passwd)
@@ -114,7 +114,7 @@ namespace BotSvr.Scenes.Scene
             robotClient.LoginID = uid;
             robotClient.LoginPasswd = passwd;
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_IDPASSWORD, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(uid + "/" + passwd));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + passwd));
             MShare.g_boSendLogin = true;
         }
 
@@ -137,7 +137,7 @@ namespace BotSvr.Scenes.Scene
                 MainOutMessage("帐号登录成功！");
             }
             var sServerName = string.Empty;
-            var sText = EDcode.DeCodeString(sBody);
+            var sText = EDCode.DeCodeString(sBody);
             HUtil32.GetValidStr3(sText, ref sServerName, new[] { "/" });
             ClientGetSelectServer();
             SendSelectServer(sServerName);
@@ -153,7 +153,7 @@ namespace BotSvr.Scenes.Scene
             MainOutMessage($"选择服务器：{svname}");
             m_ConnectionStep = TConnectionStep.cnsSelServer;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELECTSERVER, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(svname));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(svname));
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace BotSvr.Scenes.Scene
             var runaddr = string.Empty;
             var runport = string.Empty;
             var certifystr = string.Empty;
-            var Str = EDcode.DeCodeString(body);
+            var Str = EDCode.DeCodeString(body);
             Str = HUtil32.GetValidStr3(Str, ref runaddr, HUtil32.Backslash);
             Str = HUtil32.GetValidStr3(Str, ref runport, HUtil32.Backslash);
             Str = HUtil32.GetValidStr3(Str, ref certifystr, HUtil32.Backslash);

@@ -5,6 +5,7 @@ using GameSvr.RobotPlay;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Actor
 {
@@ -151,7 +152,7 @@ namespace GameSvr.Actor
         /// 检查武器升级状态
         /// </summary>
         /// <param name="UserItem"></param>
-        private void CheckWeaponUpgradeStatus(ref TUserItem UserItem)
+        private void CheckWeaponUpgradeStatus(ref UserItem UserItem)
         {
             if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
             {
@@ -183,7 +184,7 @@ namespace GameSvr.Actor
         {
             if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].btValue[ItemAttr.WeaponUpgrade] > 0) //检车武器是否升级
             {
-                var useItems = new TUserItem(UseItems[Grobal2.U_WEAPON]);
+                var useItems = new UserItem(UseItems[Grobal2.U_WEAPON]);
                 CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
                 PlayObject PlayObject = null;
                 StdItem StdItem = null;
@@ -525,7 +526,7 @@ namespace GameSvr.Actor
                     }
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        TUserMagic attackMagic = null;
+                        UserMagic attackMagic = null;
                         if (MagicArr[SpellsDef.SKILL_ILKWANG] != null)
                         {
                             attackMagic = GetAttrackMagic(SpellsDef.SKILL_ILKWANG);
@@ -915,7 +916,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private TUserMagic GetAttrackMagic(int magicId)
+        private UserMagic GetAttrackMagic(int magicId)
         {
             return MagicArr[magicId];
         }

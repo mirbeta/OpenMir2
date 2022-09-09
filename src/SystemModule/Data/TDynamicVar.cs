@@ -1,9 +1,10 @@
-﻿namespace SystemModule.Data;
-
-public class TDynamicVar
+﻿namespace SystemModule.Data
 {
-    public string sName;
-    public VarType VarType;
-    public int nInternet;
-    public string sString;
+    public class TDynamicVar
+    {
+        public string sName;
+        public VarType VarType;
+        public int nInternet;
+        public string sString;
+    }
 }

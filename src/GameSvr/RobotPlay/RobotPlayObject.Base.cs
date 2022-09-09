@@ -5,6 +5,7 @@ using GameSvr.Maps;
 using System.Collections;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.RobotPlay
 {
@@ -16,7 +17,7 @@ namespace GameSvr.RobotPlay
             int nPercent;
             int nValue;
             StdItem StdItem;
-            TUserItem UserItem;
+            UserItem UserItem;
             bool boRecalcAbilitys;
             bool boFind = false;
             try
@@ -167,7 +168,7 @@ namespace GameSvr.RobotPlay
                                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItemNames[nWhere]);
                                             if (StdItem != null)
                                             {
-                                                UserItem = new TUserItem();
+                                                UserItem = new UserItem();
                                                 if (M2Share.UserEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref UserItem))
                                                 {
                                                     boRecalcAbilitys = true;
@@ -207,7 +208,7 @@ namespace GameSvr.RobotPlay
                                             }
                                             if (!boFind)
                                             {
-                                                UserItem = new TUserItem();
+                                                UserItem = new UserItem();
                                                 if (M2Share.UserEngine.CopyToUserItemFromName(m_BagItemNames[i], ref UserItem))
                                                 {
                                                     if (!AddItemToBag(UserItem))

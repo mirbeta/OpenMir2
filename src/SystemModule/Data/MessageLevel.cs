@@ -1,8 +1,9 @@
-﻿namespace SystemModule.Data;
-
-public enum MessageLevel
+﻿namespace SystemModule.Data
 {
-    Hihg = 3,
-    Low = 2,
-    None = 1
+    public enum MessageLevel
+    {
+        Hihg = 3,
+        Low = 2,
+        None = 1
+    }
 }

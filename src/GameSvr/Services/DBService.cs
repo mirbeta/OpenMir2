@@ -1,6 +1,7 @@
 ﻿using NLog;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -57,11 +58,11 @@ namespace GameSvr.Services
 
             var requestPacket = new RequestServerPacket();
             requestPacket.QueryId = nQueryID;
-            requestPacket.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
-            requestPacket.Packet = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(requet));
+            requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
+            requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(requet));
 
             var s = HUtil32.MakeLong(nQueryID ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
-            requestPacket.Sgin = EDcode.EncodeBuffer(BitConverter.GetBytes(s));
+            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
 
             _clientScoket.Send(requestPacket.GetBuffer());
 
@@ -156,7 +157,7 @@ namespace GameSvr.Services
                     if (nLen >= 12)
                     {
                         var nCheckCode = HUtil32.MakeLong(respCheckCode ^ 170, nLen);
-                        var sginBuff = EDcode.DecodeBuff(responsePacket.Sgin);
+                        var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
                         if (nCheckCode == BitConverter.ToInt16(sginBuff))
                         {
                             HumDataService.AddToProcess(respCheckCode, responsePacket);

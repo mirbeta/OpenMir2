@@ -1019,7 +1019,7 @@ namespace BotSvr.Scenes.Scene
         public void SendMsg(int ident, int chrid, int x, int y, int cdir, int feature, int state, string str, int ipInfo = 0)
         {
             TActor actor;
-            TMessageBodyW mbw;
+            MessageBodyW mbw;
             switch (ident)
             {
                 case Grobal2.SM_CHANGEMAP:
@@ -1159,7 +1159,7 @@ namespace BotSvr.Scenes.Scene
                             actor.m_nFeatureEx = state;
                             if (!string.IsNullOrEmpty(str))
                             {
-                                mbw = EDcode.DecodeBuffer<TMessageBodyW>(str);
+                                mbw = EDCode.DecodeBuffer<MessageBodyW>(str);
                                 actor.m_btTitleIndex = (byte)HUtil32.LoWord(mbw.Param1);
                             }
                             else

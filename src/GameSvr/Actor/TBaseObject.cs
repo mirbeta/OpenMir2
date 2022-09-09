@@ -11,6 +11,8 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Actor
 {
@@ -101,8 +103,8 @@ namespace GameSvr.Actor
         /// 在行会占争地图中死亡次数
         /// </summary>
         public int FightZoneDieCount;
-        public TNakedAbility BonusAbil;
-        private TNakedAbility CurBonusAbil;
+        public NakedAbility BonusAbil;
+        private NakedAbility CurBonusAbil;
         public int BonusPoint = 0;
         public int HungerStatus = 0;
         public bool AllowGuildReCall = false;
@@ -120,11 +122,11 @@ namespace GameSvr.Actor
         /// <summary>
         /// 基本属性
         /// </summary>
-        public TAbility Abil;
+        public Ability Abil;
         /// <summary>
         /// 角色属性
         /// </summary>
-        public TAbility WAbil;
+        public Ability WAbil;
         /// <summary>
         /// 附加属性
         /// </summary>
@@ -706,11 +708,11 @@ namespace GameSvr.Actor
         /// <summary>
         /// 物品列表
         /// </summary>
-        public IList<TUserItem> ItemList;
+        public IList<UserItem> ItemList;
         /// <summary>
         /// 交易列表
         /// </summary>
-        public IList<TUserItem> DealItemList;
+        public IList<UserItem> DealItemList;
         /// <summary>
         /// 交易的金币数量
         /// </summary>
@@ -722,16 +724,16 @@ namespace GameSvr.Actor
         /// <summary>
         /// 技能表
         /// </summary>
-        public readonly IList<TUserMagic> MagicList;
+        public readonly IList<UserMagic> MagicList;
         /// <summary>
         /// 身上物品
         /// </summary>
-        public TUserItem[] UseItems;
+        public UserItem[] UseItems;
         public IList<TMonSayMsg> SayMsgList;
         /// <summary>
         /// 仓库物品列表
         /// </summary>
-        internal readonly IList<TUserItem> StorageItemList;
+        internal readonly IList<UserItem> StorageItemList;
         /// <summary>
         /// 走路速度
         /// </summary>
@@ -751,7 +753,7 @@ namespace GameSvr.Actor
         /// 下次攻击时间
         /// </summary>
         public int NextHitTime;
-        protected TUserMagic[] MagicArr;
+        protected UserMagic[] MagicArr;
         protected bool PowerHit;
         protected bool UseThrusting;
         protected bool UseHalfMoon;
@@ -882,8 +884,8 @@ namespace GameSvr.Actor
             StatusArrTick = new int[12];
             StatusArrValue = new ushort[6];
             StatusArrTimeOutTick = new int[6];
-            BonusAbil = new TNakedAbility();
-            CurBonusAbil = new TNakedAbility();
+            BonusAbil = new NakedAbility();
+            CurBonusAbil = new NakedAbility();
             AllowGroup = false;
             AllowGuild = false;
             BtB2 = 0;
@@ -915,14 +917,14 @@ namespace GameSvr.Actor
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
             VisibleEvents = new List<MirEvent>();
-            ItemList = new List<TUserItem>();
-            DealItemList = new List<TUserItem>();
+            ItemList = new List<UserItem>();
+            DealItemList = new List<UserItem>();
             IsVisibleActive = false;
             ProcessRunCount = 0;
             DealGolds = 0;
-            MagicList = new List<TUserMagic>();
-            StorageItemList = new List<TUserItem>();
-            UseItems = new TUserItem[13];
+            MagicList = new List<UserMagic>();
+            StorageItemList = new List<UserItem>();
+            UseItems = new UserItem[13];
             GroupOwner = null;
             Castle = null;
             Master = null;
@@ -936,11 +938,11 @@ namespace GameSvr.Actor
             AllowGroupReCall = false;
             LockWhisperList = new List<string>();
             SlaveList = new List<BaseObject>();
-            Abil = new TAbility();
+            Abil = new Ability();
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
-            Abil = new TAbility
+            Abil = new Ability
             {
                 Level = 1,
                 AC = 0,
@@ -1013,7 +1015,7 @@ namespace GameSvr.Actor
             FixStatus = -1;
             FastParalysis = false;
             NastyMode = false;
-            MagicArr = new TUserMagic[100];
+            MagicArr = new UserMagic[100];
             M2Share.ActorMgr.Add(ActorId, this);
         }
 
@@ -1091,7 +1093,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool DropItemDown(TUserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat,
+        public bool DropItemDown(UserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat,
             BaseObject dropCreat)
         {
             var result = false;
@@ -2184,7 +2186,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public bool AddItemToBag(TUserItem userItem)
+        public bool AddItemToBag(UserItem userItem)
         {
             var result = false;
             if (ItemList.Count < Grobal2.MAXBAGITEM)
@@ -2199,7 +2201,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 检查心灵启示
         /// </summary>
-        protected void CheckSeeHealGauge(TUserMagic magic)
+        protected void CheckSeeHealGauge(UserMagic magic)
         {
             if (magic.MagicInfo.wMagicID == 28)
             {
@@ -2607,7 +2609,7 @@ namespace GameSvr.Actor
         /// </summary>
         private void RecalcHitSpeed()
         {
-            TNakedAbility bonusTick = null;
+            NakedAbility bonusTick = null;
             switch (Job)
             {
                 case PlayJob.Warrior:
@@ -2670,7 +2672,7 @@ namespace GameSvr.Actor
 
         private void AddItemSkill(int nIndex)
         {
-            TMagic magic = null;
+            SystemModule.Packet.ServerPackets.MagicInfo magic = null;
             switch (nIndex)
             {
                 case 1:
@@ -2685,7 +2687,7 @@ namespace GameSvr.Actor
             {
                 if (!IsTrainingSkill(magic.wMagicID))
                 {
-                    var userMagic = new TUserMagic
+                    var userMagic = new UserMagic
                     {
                         MagicInfo = magic,
                         wMagIdx = magic.wMagicID,
@@ -2718,7 +2720,7 @@ namespace GameSvr.Actor
         /// </summary>
         /// <param name="userMagic"></param>
         /// <returns></returns>
-        private ushort GetMagicSpell(TUserMagic userMagic)
+        private ushort GetMagicSpell(UserMagic userMagic)
         {
             return (ushort)HUtil32.Round(userMagic.MagicInfo.wSpell / (userMagic.MagicInfo.btTrainLv + 1) *
                                          (userMagic.btLevel + 1));
@@ -4757,10 +4759,10 @@ namespace GameSvr.Actor
             SendMsg(this, Grobal2.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
 
-        protected TUserMagic GetMagicInfo(int nMagicId)
+        protected UserMagic GetMagicInfo(int nMagicId)
         {
-            TUserMagic result = null;
-            TUserMagic userMagic;
+            UserMagic result = null;
+            UserMagic userMagic;
             for (var i = 0; i < MagicList.Count; i++)
             {
                 userMagic = MagicList[i];
@@ -4774,7 +4776,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public void TrainSkill(TUserMagic userMagic, int nTranPoint)
+        public void TrainSkill(UserMagic userMagic, int nTranPoint)
         {
             if (FastTrain)
             {
@@ -4783,7 +4785,7 @@ namespace GameSvr.Actor
             userMagic.nTranPoint += nTranPoint;
         }
 
-        public bool CheckMagicLevelup(TUserMagic userMagic)
+        public bool CheckMagicLevelup(UserMagic userMagic)
         {
             var result = false;
             int nLevel;
@@ -5222,7 +5224,7 @@ namespace GameSvr.Actor
         public bool IsTrainingSkill(int nIndex)
         {
             var result = false;
-            TUserMagic userMagic;
+            UserMagic userMagic;
             for (var i = 0; i < MagicList.Count; i++)
             {
                 userMagic = MagicList[i];
@@ -5544,9 +5546,9 @@ namespace GameSvr.Actor
             return true;
         }
 
-        public TUserItem CheckItemCount(string sItemName, ref int nCount)
+        public UserItem CheckItemCount(string sItemName, ref int nCount)
         {
-            TUserItem result = null;
+            UserItem result = null;
             nCount = 0;
             for (var i = 0; i < UseItems.Length; i++)
             {
@@ -5566,10 +5568,10 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public TUserItem CheckItems(string sItemName)
+        public UserItem CheckItems(string sItemName)
         {
-            TUserItem result = null;
-            TUserItem userItem;
+            UserItem result = null;
+            UserItem userItem;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
@@ -5602,7 +5604,7 @@ namespace GameSvr.Actor
 
         public bool DelBagItem(int nItemIndex, string sItemName)
         {
-            TUserItem userItem;
+            UserItem userItem;
             var result = false;
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -6122,7 +6124,7 @@ namespace GameSvr.Actor
                     break;
             }
 
-            UseItems = new TUserItem[8];
+            UseItems = new UserItem[8];
             for (var i = 0; i < ItemList.Count; i++)
             {
                 ItemList[i] = null;

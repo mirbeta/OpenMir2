@@ -1,9 +1,10 @@
-﻿namespace SystemModule.Data;
-
-public class TMonDrop
+﻿namespace SystemModule.Data
 {
-    public string sItemName;
-    public int nDropCount;
-    public int nNoDropCount;
-    public int nCountLimit;
+    public class TMonDrop
+    {
+        public string sItemName;
+        public int nDropCount;
+        public int nNoDropCount;
+        public int nCountLimit;
+    }
 }

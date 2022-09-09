@@ -77,8 +77,8 @@ namespace GameSvr
             M2Share.FrontEngine = new TFrontEngine();
             M2Share.UserEngine = new UserEngine();
             M2Share.RobotMgr = new RobotManage();
-            M2Share.MakeItemList = new Dictionary<string, IList<TMakeItem>>(StringComparer.OrdinalIgnoreCase);
-            M2Share.StartPointList = new List<TStartPoint>();
+            M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
+            M2Share.StartPointList = new List<StartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
             M2Share.DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
             M2Share.MiniMapList = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -110,7 +110,7 @@ namespace GameSvr
             M2Share.Config.UserIDSection = new object();
             M2Share.UserDBSection = new object();
             M2Share.g_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
-            M2Share.sSellOffItemList = new List<TDealOffInfo>();
+            M2Share.sSellOffItemList = new List<DealOffInfo>();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
         }
 

@@ -7,6 +7,8 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.DataStores
 {
@@ -135,7 +137,7 @@ namespace GameSvr.DataStores
 
         public int LoadMagicDB()
         {
-            TMagic Magic;
+            SystemModule.Packet.ServerPackets.MagicInfo Magic;
             const string sSQLString = "select * from TBL_Magics";
             var result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
@@ -150,7 +152,7 @@ namespace GameSvr.DataStores
                 {
                     while (dr.Read())
                     {
-                        Magic = new TMagic
+                        Magic = new SystemModule.Packet.ServerPackets.MagicInfo
                         {
                             wMagicID = dr.GetUInt16("MagId"),
                             sMagicName = dr.GetString("MagName"),
@@ -286,7 +288,7 @@ namespace GameSvr.DataStores
             }
             try
             {
-                TDealOffInfo DealOffInfo;
+                DealOffInfo DealOffInfo;
                 const string sSQLString = "select * from TBL_GOLDSALES";
                 using (var dr = Query(sSQLString))
                 {
@@ -300,12 +302,12 @@ namespace GameSvr.DataStores
                         var sUseItems = dr.GetString("UseItems");
                         if ((sDealCharName != "") && (sBuyCharName != "") && (nState < 4))
                         {
-                            DealOffInfo = new TDealOffInfo();
+                            DealOffInfo = new DealOffInfo();
                             DealOffInfo.sDealCharName = sDealCharName;
                             DealOffInfo.sBuyCharName = sBuyCharName;
                             DealOffInfo.dSellDateTime = dSellDateTime;
                             DealOffInfo.nSellGold = nSellGold;
-                            DealOffInfo.UseItems = JsonSerializer.Deserialize<TUserItem[]>(sUseItems);
+                            DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
                             DealOffInfo.N = nState;
                             M2Share.sSellOffItemList.Add(DealOffInfo);
                         }
@@ -332,7 +334,7 @@ namespace GameSvr.DataStores
                 M2Share.Log.Error("保存物品寄售数据失败.");
                 return;
             }
-            TDealOffInfo DealOffInfo;
+            DealOffInfo DealOffInfo;
             const string sSQLString = "delete from TBL_GOLDSALES";
             try
             {

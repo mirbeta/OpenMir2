@@ -3,6 +3,7 @@ using GameSvr.Items;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Player
 {
@@ -18,7 +19,7 @@ namespace GameSvr.Player
         /// <param name="code"></param>        
         private void UpdateSellOffInfo(int code)
         {
-            TDealOffInfo DealOffInfo;
+            DealOffInfo DealOffInfo;
             if (bo_YBDEAL)// 已开通元宝服务
             {
                 for (var i = M2Share.sSellOffItemList.Count - 1; i >= 0; i--)
@@ -65,7 +66,7 @@ namespace GameSvr.Player
         private void ClientAddSellOffItem(int nItemIdx, string sItemName)
         {
             bool bo11;
-            TUserItem UserItem;
+            UserItem UserItem;
             string sUserItemName;
             if (sItemName.IndexOf(' ') >= 0)
             {
@@ -131,7 +132,7 @@ namespace GameSvr.Player
         /// <param name="sItemName"></param>
         private void ClientDelSellOffItem(int nItemIdx, string sItemName)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             string sUserItemName = string.Empty;
             if (sItemName.IndexOf(' ') >= 0)
             {
@@ -185,9 +186,9 @@ namespace GameSvr.Player
         /// </summary>
         private void ClientCancelSellOffIng()
         {
-            TDealOffInfo DealOffInfo;
+            DealOffInfo DealOffInfo;
             StdItem StdItem;
-            TUserItem UserItem;
+            UserItem UserItem;
             try
             {
                 if (M2Share.sSellOffItemList == null || M2Share.sSellOffItemList.Count == 0 || !IsEnoughBag())
@@ -289,7 +290,7 @@ namespace GameSvr.Player
         private void ClientBuySellOffItme(string dealCharName)
         {
             StdItem StdItem;
-            TUserItem UserItem;
+            UserItem UserItem;
             PlayObject PlayObject;
             try
             {
@@ -528,16 +529,16 @@ namespace GameSvr.Player
         /// <param name="nCode">金刚石特征,类型上限表示</param>
         private void ClientSellOffEnd(string sBuyCharName, int nSellGold, int nGameDiamond, int nCode)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem StdItem;
-            TDealOffInfo DealOffInfo;
+            DealOffInfo DealOffInfo;
             m_boSellOffOK = true;
             var bo11 = false;
             if (m_boSellOffOK && (m_SellOffItemList.Count > 0 || nGameDiamond > 0) && m_SellOffItemList.Count < 10 && sBuyCharName.Length < 20 && nSellGold > 0 && nSellGold < 100000000
                 && string.Compare(sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 // 不能自己寄售给自己
-                DealOffInfo = new TDealOffInfo() { UseItems = new TUserItem[9] };
+                DealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
                 if (m_SellOffItemList.Count > 0)
                 {
                     for (var i = 0; i < m_SellOffItemList.Count; i++)
@@ -618,7 +619,7 @@ namespace GameSvr.Player
         {
             if (m_SellOffItemList == null)
             {
-                m_SellOffItemList = new List<TUserItem>();
+                m_SellOffItemList = new List<UserItem>();
             }
             if (m_SellOffItemList.Count > 0)
             {

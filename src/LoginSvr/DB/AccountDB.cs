@@ -172,8 +172,8 @@ namespace LoginSvr.DB
                 {
                     DBRecord = new TAccountDBRecord();
                     DBRecord.Header = new TRecordHeader();
-                    DBRecord.UserEntry = new TUserEntry();
-                    DBRecord.UserEntryAdd = new TUserEntryAdd();
+                    DBRecord.UserEntry = new UserEntry();
+                    DBRecord.UserEntryAdd = new UserEntryAdd();
                 }
                 if (dr.Read())
                 {

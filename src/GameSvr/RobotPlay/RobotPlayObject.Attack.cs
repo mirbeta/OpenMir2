@@ -58,7 +58,7 @@ namespace GameSvr.RobotPlay
         /// <returns></returns>
         private bool WarrorAttackTarget1()
         {
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             bool result = false;
             try
             {
@@ -215,7 +215,7 @@ namespace GameSvr.RobotPlay
         private bool TaoistAttackTarget()
         {
             bool result = false;
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             try
             {
                 m_wHitMode = 0;

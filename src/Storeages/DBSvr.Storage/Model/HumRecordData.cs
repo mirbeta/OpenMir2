@@ -1,4 +1,5 @@
 ﻿using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.Model
 {
@@ -8,7 +9,7 @@ namespace DBSvr.Storage.Model
         public TRecordHeader Header;
         public string sChrName;
         public string sAccount;
-        public bool boDeleted;
-        public byte boSelected;
+        public bool Deleted;
+        public byte Selected;
     }
 }

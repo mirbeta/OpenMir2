@@ -14,6 +14,8 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Player
 {
@@ -200,14 +202,14 @@ namespace GameSvr.Player
             return Abil.Weight + nWeight <= Abil.MaxWeight;
         }
 
-        public void SendAddItem(TUserItem UserItem)
+        public void SendAddItem(UserItem UserItem)
         {
             var Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (Item == null)
             {
                 return;
             }
-            var ClientItem = new TClientItem();
+            var ClientItem = new ClientItem();
             Item.GetStandardItem(ref ClientItem.Item);
             Item.GetItemAddValue(UserItem, ref ClientItem.Item);
             ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
@@ -231,7 +233,7 @@ namespace GameSvr.Player
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ActorId, 0, 0, 1);
-            SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+            SendSocket(m_DefMsg, EDCode.EncodeBuffer(ClientItem));
         }
 
         internal bool IsBlockWhisper(string sName)
@@ -342,7 +344,7 @@ namespace GameSvr.Player
             m_DefMsg = Grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
             if (!string.IsNullOrEmpty(sMsg))
             {
-                SendSocket(m_DefMsg, EDcode.EncodeString(sMsg));
+                SendSocket(m_DefMsg, EDCode.EncodeString(sMsg));
             }
             else
             {
@@ -996,7 +998,7 @@ namespace GameSvr.Player
             for (var i = 0; i < M2Share.UserEngine.MagicList.Count; i++)
             {
                 var Magic = M2Share.UserEngine.MagicList[i];
-                var UserMagic = new TUserMagic
+                var UserMagic = new UserMagic
                 {
                     MagicInfo = Magic,
                     wMagIdx = Magic.wMagicID,
@@ -1067,7 +1069,7 @@ namespace GameSvr.Player
             ClientConf.boWarRunAll = nWarRunAll == 1;
             ClientConf.wSpellTime = (ushort)(M2Share.Config.MagicHitIntervalTime + 300);
             ClientConf.wHitIime = (ushort)(M2Share.Config.HitIntervalTime + 500);
-            var sMsg = EDcode.EncodeBuffer(ClientConf);
+            var sMsg = EDCode.EncodeBuffer(ClientConf);
             var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
             var nParam = (short)HUtil32.MakeWord(5, 0);
             SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, nParam, 0, 0, sMsg);
@@ -1134,14 +1136,14 @@ namespace GameSvr.Player
                     var Item = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
                     if (Item != null)
                     {
-                        var ClientItem = new TClientItem();
+                        var ClientItem = new ClientItem();
                         Item.GetStandardItem(ref ClientItem.Item);
                         Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
                         ClientItem.Item.Name = ItemUnit.GetItemName(UseItems[i]);
                         ClientItem.Dura = UseItems[i].Dura;
                         ClientItem.DuraMax = UseItems[i].DuraMax;
                         ClientItem.MakeIndex = UseItems[i].MakeIndex;
-                        sSendMsg = sSendMsg + i + '/' + EDcode.EncodeBuffer(ClientItem) + '/';
+                        sSendMsg = sSendMsg + i + '/' + EDCode.EncodeBuffer(ClientItem) + '/';
                     }
                 }
             }
@@ -1158,12 +1160,12 @@ namespace GameSvr.Player
             for (var i = 0; i < MagicList.Count; i++)
             {
                 var userMagic = MagicList[i];
-                var clientMagic = new TClientMagic();
+                var clientMagic = new ClientMagic();
                 clientMagic.Key = (char)userMagic.btKey;
                 clientMagic.Level = userMagic.btLevel;
                 clientMagic.CurTrain = userMagic.nTranPoint;
                 clientMagic.Def = userMagic.MagicInfo;
-                sSendMsg = sSendMsg + EDcode.EncodeBuffer(clientMagic) + '/';
+                sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientMagic) + '/';
             }
             if (!string.IsNullOrEmpty(sSendMsg))
             {
@@ -1216,8 +1218,8 @@ namespace GameSvr.Player
             short hsc = 0;
             short hac = 0;
             short hmac = 0;
-            TNakedAbility BonusTick = null;
-            TNakedAbility NakedAbil = null;
+            NakedAbility BonusTick = null;
+            NakedAbility NakedAbil = null;
             switch (Job)
             {
                 case PlayJob.Warrior:
@@ -1254,7 +1256,7 @@ namespace GameSvr.Player
 
         private void ClientAdjustBonus(int nPoint, string sMsg)
         {
-            var BonusAbil = new TNakedAbility();
+            var BonusAbil = new NakedAbility();
             var nTotleUsePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.X2;
             if (nPoint + nTotleUsePoint == BonusPoint)
             {
@@ -1295,13 +1297,13 @@ namespace GameSvr.Player
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    sSendMsg = EDcode.EncodeBuffer(M2Share.Config.BonusAbilofWarr) + '/' + EDcode.EncodeBuffer(BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.Config.NakedAbilofWarr);
+                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofWarr) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofWarr);
                     break;
                 case PlayJob.Wizard:
-                    sSendMsg = EDcode.EncodeBuffer(M2Share.Config.BonusAbilofWizard) + '/' + EDcode.EncodeBuffer(BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.Config.NakedAbilofWizard);
+                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofWizard) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofWizard);
                     break;
                 case PlayJob.Taoist:
-                    sSendMsg = EDcode.EncodeBuffer(M2Share.Config.BonusAbilofTaos) + '/' + EDcode.EncodeBuffer(BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.Config.NakedAbilofTaos);
+                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofTaos) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofTaos);
                     break;
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADJUST_BONUS, BonusPoint, 0, 0, 0);
@@ -1465,7 +1467,7 @@ namespace GameSvr.Player
             }
         }
 
-        protected ushort GetSpellPoint(TUserMagic UserMagic)
+        protected ushort GetSpellPoint(UserMagic UserMagic)
         {
             return (ushort)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
         }
@@ -1602,7 +1604,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool DoSpell(TUserMagic UserMagic, short nTargetX, short nTargetY, BaseObject BaseObject)
+        private bool DoSpell(UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject BaseObject)
         {
             var result = false;
             try
@@ -1696,14 +1698,14 @@ namespace GameSvr.Player
                 var Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (Item != null)
                 {
-                    TClientItem ClientItem = null;
+                    ClientItem ClientItem = null;
                     Item.GetStandardItem(ref ClientItem.Item);
                     Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                     ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     ClientItem.MakeIndex = UserItem.MakeIndex;
-                    sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
+                    sSendMsg = sSendMsg + EDCode.EncodeBuffer(ClientItem) + '/';
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)StorageItemList.Count);
@@ -1730,15 +1732,15 @@ namespace GameSvr.Player
                 s10 = s10 + ItemList[i].sItemName + '/' + ItemList[i].MakeIndex + '/';
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, (short)ItemList.Count);
-            SendSocket(m_DefMsg, EDcode.EncodeString(s10));
+            SendSocket(m_DefMsg, EDCode.EncodeString(s10));
         }
 
-        public void SendDelItems(TUserItem UserItem)
+        public void SendDelItems(UserItem UserItem)
         {
             var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
-                var ClientItem = new TClientItem();
+                var ClientItem = new ClientItem();
                 StdItem.GetStandardItem(ref ClientItem.Item);
                 StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
                 ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
@@ -1750,16 +1752,16 @@ namespace GameSvr.Player
                     ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                 }
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ActorId, 0, 0, 1);
-                SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                SendSocket(m_DefMsg, EDCode.EncodeBuffer(ClientItem));
             }
         }
 
-        public void SendUpdateItem(TUserItem UserItem)
+        public void SendUpdateItem(UserItem UserItem)
         {
             var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
-                var ClientItem = new TClientItem();
+                var ClientItem = new ClientItem();
                 StdItem.GetStandardItem(ref ClientItem.Item);
                 StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
                 ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
@@ -1771,11 +1773,11 @@ namespace GameSvr.Player
                     ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                 }
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
-                SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                SendSocket(m_DefMsg, EDCode.EncodeBuffer(ClientItem));
             }
         }
 
-        private bool CheckTakeOnItems(int nWhere, ref TClientStdItem StdItem)
+        private bool CheckTakeOnItems(int nWhere, ref ClientStdItem StdItem)
         {
             var result = false;
             if (StdItem.StdMode == 10 && Gender != PlayGender.Man)
@@ -2093,7 +2095,7 @@ namespace GameSvr.Player
             return n14;
         }
 
-        private bool EatItems(StdItem StdItem, TUserItem Useritem)
+        private bool EatItems(StdItem StdItem, UserItem Useritem)
         {
             var result = false;
             if (Envir.Flag.boNODRUG)
@@ -2223,7 +2225,7 @@ namespace GameSvr.Player
                     {
                         if (Abil.Level >= magic.TrainLevel[0])
                         {
-                            var UserMagic = new TUserMagic
+                            var UserMagic = new UserMagic
                             {
                                 MagicInfo = magic,
                                 wMagIdx = magic.wMagicID,
@@ -2245,9 +2247,9 @@ namespace GameSvr.Player
             return result;
         }
 
-        public void SendAddMagic(TUserMagic UserMagic)
+        public void SendAddMagic(UserMagic UserMagic)
         {
-            var clientMagic = new TClientMagic
+            var clientMagic = new ClientMagic
             {
                 Key = (char)UserMagic.btKey,
                 Level = UserMagic.btLevel,
@@ -2255,10 +2257,10 @@ namespace GameSvr.Player
                 Def = UserMagic.MagicInfo
             };
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDMAGIC, 0, 0, 0, 1);
-            SendSocket(m_DefMsg, EDcode.EncodeBuffer(clientMagic));
+            SendSocket(m_DefMsg, EDCode.EncodeBuffer(clientMagic));
         }
 
-        internal void SendDelMagic(TUserMagic UserMagic)
+        internal void SendDelMagic(UserMagic UserMagic)
         {
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELMAGIC, UserMagic.wMagIdx, 0, 0, 1);
             SendSocket(m_DefMsg);
@@ -2376,7 +2378,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void ChangeServerMakeSlave(TSlaveInfo slaveInfo)
+        private void ChangeServerMakeSlave(SlaveInfo slaveInfo)
         {
             var nSlavecount = 0;
             if (Job == PlayJob.Taoist)
@@ -2406,21 +2408,21 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendDelDealItem(TUserItem UserItem)
+        private void SendDelDealItem(UserItem UserItem)
         {
             if (DealCreat != null)
             {
                 var pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (pStdItem != null)
                 {
-                    var ClientItem = new TClientItem();
+                    var ClientItem = new ClientItem();
                     pStdItem.GetStandardItem(ref ClientItem.Item);
                     ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
                     ClientItem.MakeIndex = UserItem.MakeIndex;
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ActorId, 0, 0, 1);
-                    (DealCreat as PlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                    (DealCreat as PlayObject)?.SendSocket(m_DefMsg, EDCode.EncodeBuffer(ClientItem));
                     DealCreat.DealLastTick = HUtil32.GetTickCount();
                     DealLastTick = HUtil32.GetTickCount();
                 }
@@ -2432,7 +2434,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendAddDealItem(TUserItem UserItem)
+        private void SendAddDealItem(UserItem UserItem)
         {
             SendDefMessage(Grobal2.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
             if (DealCreat != null)
@@ -2440,7 +2442,7 @@ namespace GameSvr.Player
                 var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    var ClientItem = new TClientItem();
+                    var ClientItem = new ClientItem();
                     StdItem.GetStandardItem(ref ClientItem.Item);
                     StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
                     ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
@@ -2448,7 +2450,7 @@ namespace GameSvr.Player
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ActorId, 0, 0, 1);
-                    (DealCreat as PlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                    (DealCreat as PlayObject).SendSocket(m_DefMsg, EDCode.EncodeBuffer(ClientItem));
                     DealCreat.DealLastTick = HUtil32.GetTickCount();
                     DealLastTick = HUtil32.GetTickCount();
                 }
@@ -2489,7 +2491,7 @@ namespace GameSvr.Player
         /// </summary>
         private void MakeMine()
         {
-            TUserItem UserItem = null;
+            UserItem UserItem = null;
             if (ItemList.Count >= Grobal2.MAXBAGITEM)
             {
                 return;
@@ -2497,7 +2499,7 @@ namespace GameSvr.Player
             var nRandom = M2Share.RandomNumber.Random(M2Share.Config.StoneTypeRate);
             if (nRandom >= M2Share.Config.GoldStoneMin && nRandom <= M2Share.Config.GoldStoneMax)
             {
-                UserItem = new TUserItem();
+                UserItem = new UserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.GoldStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2513,7 +2515,7 @@ namespace GameSvr.Player
             }
             if (nRandom >= M2Share.Config.SilverStoneMin && nRandom <= M2Share.Config.SilverStoneMax)
             {
-                UserItem = new TUserItem();
+                UserItem = new UserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.SilverStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2529,7 +2531,7 @@ namespace GameSvr.Player
             }
             if (nRandom >= M2Share.Config.SteelStoneMin && nRandom <= M2Share.Config.SteelStoneMax)
             {
-                UserItem = new TUserItem();
+                UserItem = new UserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.SteelStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2545,7 +2547,7 @@ namespace GameSvr.Player
             }
             if (nRandom >= M2Share.Config.BlackStoneMin && nRandom <= M2Share.Config.BlackStoneMax)
             {
-                UserItem = new TUserItem();
+                UserItem = new UserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.BlackStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2559,7 +2561,7 @@ namespace GameSvr.Player
                 }
                 return;
             }
-            UserItem = new TUserItem();
+            UserItem = new UserItem();
             if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.CopperStone, ref UserItem))
             {
                 UserItem.Dura = MakeMineRandomDrua();
@@ -2582,7 +2584,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            TUserItem mineItem = null;
+            UserItem mineItem = null;
             var mineRate = M2Share.RandomNumber.Random(120);
             if (HUtil32.RangeInDefined(mineRate, 1, 2))
             {
@@ -2646,10 +2648,10 @@ namespace GameSvr.Player
         /// 检查任务物品
         /// </summary>
         /// <returns></returns>
-        public TUserItem QuestCheckItem(string sItemName, ref int nCount, ref int nParam, ref int nDura)
+        public UserItem QuestCheckItem(string sItemName, ref int nCount, ref int nParam, ref int nDura)
         {
             string s1C;
-            TUserItem result = null;
+            UserItem result = null;
             nParam = 0;
             nDura = 0;
             nCount = 0;
@@ -2675,7 +2677,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        public bool QuestTakeCheckItem(TUserItem CheckItem)
+        public bool QuestTakeCheckItem(UserItem CheckItem)
         {
             var result = false;
             for (var i = 0; i < ItemList.Count; i++)
@@ -2773,7 +2775,7 @@ namespace GameSvr.Player
             var HumItems = HumanRcd.Data.HumItems;
             if (HumItems == null)
             {
-                HumItems = new TUserItem[13];
+                HumItems = new UserItem[13];
             }
             HumItems[Grobal2.U_DRESS] = UseItems[Grobal2.U_DRESS] == null ? HUtil32.DelfautItem : UseItems[Grobal2.U_DRESS];
             HumItems[Grobal2.U_WEAPON] = UseItems[Grobal2.U_WEAPON] == null ? HUtil32.DelfautItem : UseItems[Grobal2.U_WEAPON];
@@ -2791,7 +2793,7 @@ namespace GameSvr.Player
             var BagItems = HumanRcd.Data.BagItems;
             if (BagItems == null)
             {
-                BagItems = new TUserItem[46];
+                BagItems = new UserItem[46];
             }
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -2838,7 +2840,7 @@ namespace GameSvr.Player
             var StorageItems = HumanRcd.Data.StorageItems;
             if (StorageItems == null)
             {
-                StorageItems = new TUserItem[50];
+                StorageItems = new UserItem[50];
             }
             for (var i = 0; i < this.StorageItemList.Count; i++)
             {
@@ -3482,7 +3484,7 @@ namespace GameSvr.Player
             return sMyInfo;
         }
 
-        private bool CheckItemBindUse(TUserItem UserItem)
+        private bool CheckItemBindUse(UserItem UserItem)
         {
             TItemBind ItemBind;
             var result = true;
@@ -3781,7 +3783,7 @@ namespace GameSvr.Player
             var sRefMsg = string.Empty;
             if (!Ghost && !string.IsNullOrEmpty(m_sGotoNpcLabel))
             {
-                sRefMsg = EDcode.DeCodeString(sData);
+                sRefMsg = EDCode.DeCodeString(sData);
                 //if (IsInGuildRankNameFilterList(sRefMsg))
                 //{
                 //    SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, sIsInQVFilterListMsg);

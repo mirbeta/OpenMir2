@@ -1,16 +1,18 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.UsrSystem
 {
     public partial class UserEngine
     {
-        private TSwitchDataInfo GetSwitchData(string sChrName, int nCode)
+        private SwitchDataInfo GetSwitchData(string sChrName, int nCode)
         {
-            TSwitchDataInfo result = null;
-            TSwitchDataInfo SwitchData = null;
+            SwitchDataInfo result = null;
+            SwitchDataInfo SwitchData = null;
             for (var i = 0; i < _mChangeServerList.Count; i++)
             {
                 SwitchData = _mChangeServerList[i];
@@ -23,10 +25,10 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        private void LoadSwitchData(TSwitchDataInfo SwitchData, ref PlayObject PlayObject)
+        private void LoadSwitchData(SwitchDataInfo SwitchData, ref PlayObject PlayObject)
         {
             int nCount;
-            TSlaveInfo SlaveInfo;
+            SlaveInfo SlaveInfo;
             if (SwitchData.boC70)
             {
 
@@ -67,15 +69,15 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public void AddSwitchData(TSwitchDataInfo SwitchData)
+        public void AddSwitchData(SwitchDataInfo SwitchData)
         {
             SwitchData.dwWaitTime = HUtil32.GetTickCount();
             _mChangeServerList.Add(SwitchData);
         }
 
-        private void DelSwitchData(TSwitchDataInfo SwitchData)
+        private void DelSwitchData(SwitchDataInfo SwitchData)
         {
-            TSwitchDataInfo SwitchDataInfo;
+            SwitchDataInfo SwitchDataInfo;
             for (var i = 0; i < _mChangeServerList.Count; i++)
             {
                 SwitchDataInfo = _mChangeServerList[i];
@@ -90,7 +92,7 @@ namespace GameSvr.UsrSystem
 
         private bool SendSwitchData(PlayObject PlayObject, int nServerIndex)
         {
-            TSwitchDataInfo SwitchData = null;
+            SwitchDataInfo SwitchData = null;
             MakeSwitchData(PlayObject, ref SwitchData);
             var flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
             PlayObject.m_sSwitchDataTempFile = flName;
@@ -99,9 +101,9 @@ namespace GameSvr.UsrSystem
             return true;
         }
 
-        private void MakeSwitchData(PlayObject PlayObject, ref TSwitchDataInfo SwitchData)
+        private void MakeSwitchData(PlayObject PlayObject, ref SwitchDataInfo SwitchData)
         {
-            SwitchData = new TSwitchDataInfo();
+            SwitchData = new SwitchDataInfo();
             SwitchData.sChrName = PlayObject.CharName;
             SwitchData.sMap = PlayObject.MapName;
             SwitchData.wX = PlayObject.CurrX;

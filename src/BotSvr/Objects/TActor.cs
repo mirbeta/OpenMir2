@@ -8,7 +8,7 @@ namespace BotSvr.Objects
     public class TActor
     {
         public RobotClient robotClient;
-        public TAbility m_Abil = null;
+        public Ability m_Abil = null;
         //public TOAbility m_Abils = null;
         public TMonsterAction m_Action;
         public bool m_boAttackSlow; // 腕力不够时慢动作攻击.
@@ -279,7 +279,7 @@ namespace BotSvr.Objects
             m_nMoveHpList = new ArrayList();
             m_nTempState = 1;
             m_fHideMode = false;
-            m_Abil = new TAbility();
+            m_Abil = new Ability();
         }
 
         public void SendMsg(int wIdent, int nX, int nY, int ndir, int nFeature, int nState, string sStr, int nSound, int dwDelay = 0)

@@ -7,7 +7,7 @@ namespace BotSvr
 {
     public class ClFunc
     {
-        private static IList<TClientItem> DropItems = null;
+        private static IList<ClientItem> DropItems = null;
 
         public static void GetNextHitPosition(int sX, int sY, ref int NewX, ref int NewY)
         {
@@ -60,7 +60,7 @@ namespace BotSvr
             }
         }
 
-        public static void AddItemBag(TClientItem cu, int idx = 0)
+        public static void AddItemBag(ClientItem cu, int idx = 0)
         {
             bool InputCheck = false;
             if (cu == null)
@@ -128,7 +128,7 @@ namespace BotSvr
             ArrangeItembag();
         }
 
-        public static void UpdateItemBag(TClientItem cu)
+        public static void UpdateItemBag(ClientItem cu)
         {
             for (var i = MShare.MAXBAGITEMCL - 1; i >= 0; i--)
             {
@@ -144,7 +144,7 @@ namespace BotSvr
             }
         }
 
-        public static void UpdateBagStallItem(TClientItem cu, byte ststus)
+        public static void UpdateBagStallItem(ClientItem cu, byte ststus)
         {
             for (var i = MShare.MAXBAGITEMCL - 1; i >= 6; i--)
             {
@@ -260,12 +260,12 @@ namespace BotSvr
             }
         }
 
-        public static void AddDropItem(TClientItem ci)
+        public static void AddDropItem(ClientItem ci)
         {
             DropItems.Add(ci);
         }
 
-        public static TClientItem GetDropItem(string iname, int makeIndex)
+        public static ClientItem GetDropItem(string iname, int makeIndex)
         {
             for (var i = 0; i < DropItems.Count; i++)
             {
@@ -290,9 +290,9 @@ namespace BotSvr
             }
         }
 
-        public static TClientItem GetDrosItem(string iname, int MakeIndex)
+        public static ClientItem GetDrosItem(string iname, int MakeIndex)
         {
-            TClientItem result = null;
+            ClientItem result = null;
             for (var i = 0; i < DropItems.Count; i++)
             {
                 if ((DropItems[i].Item.Name == iname) && (DropItems[i].MakeIndex == MakeIndex))
@@ -317,7 +317,7 @@ namespace BotSvr
             }
         }
 
-        public static void AddDealItem(TClientItem ci)
+        public static void AddDealItem(ClientItem ci)
         {
             for (var i = 0; i < 10; i++)
             {
@@ -334,7 +334,7 @@ namespace BotSvr
             }
         }
 
-        public static void AddYbDealItem(TClientItem ci)
+        public static void AddYbDealItem(ClientItem ci)
         {
             for (var i = 0; i < 8; i++)
             {
@@ -373,7 +373,7 @@ namespace BotSvr
             return result;
         }
 
-        public static bool AddStallItem(TClientItem ci)
+        public static bool AddStallItem(ClientItem ci)
         {
             bool result = false;
             for (var i = 0; i < 10; i++)
@@ -400,7 +400,7 @@ namespace BotSvr
             return result;
         }
 
-        public static bool DelStallItem(TClientItem ci)
+        public static bool DelStallItem(ClientItem ci)
         {
             bool result = false;
             for (var i = 0; i < 10; i++)
@@ -415,7 +415,7 @@ namespace BotSvr
             return result;
         }
 
-        public static void DelDealItem(TClientItem ci)
+        public static void DelDealItem(ClientItem ci)
         {
             for (var i = 0; i < 10; i++)
             {
@@ -437,7 +437,7 @@ namespace BotSvr
             }
         }
 
-        public static void AddDealRemoteItem(TClientItem ci)
+        public static void AddDealRemoteItem(ClientItem ci)
         {
             for (var i = 0; i < 20; i++)
             {
@@ -453,7 +453,7 @@ namespace BotSvr
             }
         }
 
-        public static void DelDealRemoteItem(TClientItem ci)
+        public static void DelDealRemoteItem(ClientItem ci)
         {
             for (var i = 0; i < 20; i++)
             {
@@ -1029,7 +1029,7 @@ namespace BotSvr
             return result;
         }
 
-        public static int GetTakeOnPosition(TClientStdItem smode, TClientItem[] UseItems, bool bPos)
+        public static int GetTakeOnPosition(ClientStdItem smode, ClientItem[] UseItems, bool bPos)
         {
             int result = -1;
             switch (smode.StdMode)
@@ -1115,7 +1115,7 @@ namespace BotSvr
             return result;
         }
 
-        public static int GetTakeOnPosition(TClientStdItem smode, TClientItem[] UseItems)
+        public static int GetTakeOnPosition(ClientStdItem smode, ClientItem[] UseItems)
         {
             return GetTakeOnPosition(smode, UseItems, false);
         }
@@ -1272,7 +1272,7 @@ namespace BotSvr
             return result;
         }
 
-        public static void ResultDealItem(TClientItem ci, int mindex, ushort Count)
+        public static void ResultDealItem(ClientItem ci, int mindex, ushort Count)
         {
             for (var i = 0; i < 10; i++)
             {

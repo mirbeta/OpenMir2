@@ -145,7 +145,7 @@ namespace GameSvr.Snaps
             {
                 try
                 {
-                    M2Share.UserEngine.AddSwitchData(new TSwitchDataInfo());
+                    M2Share.UserEngine.AddSwitchData(new SwitchDataInfo());
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
                 }
                 catch

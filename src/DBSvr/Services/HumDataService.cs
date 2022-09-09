@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
@@ -139,12 +140,12 @@ namespace DBSvr.Services
                     return;
                 }
                 nQueryId = requestPacket.QueryId;
-                var packet = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDcode.DecodeBuff(requestPacket.Message));
+                var packet = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDCode.DecodeBuff(requestPacket.Message));
                 var packetLen = requestPacket.Message.Length + requestPacket.Packet.Length + 6;
                 if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0)
                 {
                     var queryId = HUtil32.MakeLong(nQueryId ^ 170, packetLen);
-                    var sginBuff = EDcode.DecodeBuff(requestPacket.Sgin);
+                    var sginBuff = EDCode.DecodeBuff(requestPacket.Sgin);
                     var sgin = BitConverter.ToInt16(sginBuff);
                     if (sgin == queryId)
                     {
@@ -159,7 +160,7 @@ namespace DBSvr.Services
             var responsePack = new RequestServerPacket();
             responsePack.QueryId = nQueryId;
             var messagePacket = new ServerMessagePacket(Grobal2.DBR_FAIL, 0, 0, 0, 0);
-            responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+            responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
             SendRequest(serverInfo.Socket, responsePack);
             serverInfo.Data = null;
         }
@@ -177,7 +178,7 @@ namespace DBSvr.Services
                 queryPart = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + 6);
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
-            requestPacket.Sgin = EDcode.EncodeBuffer(nCheckCode);
+            requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
             var pk = requestPacket.GetBuffer();
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
@@ -186,10 +187,10 @@ namespace DBSvr.Services
         {
             if (packet != null)
             {
-                requestPacket.Packet = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
+                requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
             }
             var s = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
-            requestPacket.Sgin = EDcode.EncodeBuffer(BitConverter.GetBytes(s));
+            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
             var pk = requestPacket.GetBuffer();
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
@@ -272,7 +273,7 @@ namespace DBSvr.Services
 
         private void ProcessServerMsg(int nQueryId, ServerMessagePacket packet, byte[] sData, Socket Socket)
         {
-            sData = EDcode.DecodeBuff(sData);
+            sData = EDCode.DecodeBuff(sData);
             switch (packet.Ident)
             {
                 case Grobal2.DB_LOADHUMANRCD:
@@ -288,7 +289,7 @@ namespace DBSvr.Services
                     var responsePack = new RequestServerPacket();
                     responsePack.QueryId = nQueryId;
                     var messagePacket = new ServerMessagePacket(Grobal2.DBR_FAIL, 0, 0, 0, 0);
-                    responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+                    responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                     SendRequest(Socket, responsePack);
                     break;
             }
@@ -332,16 +333,16 @@ namespace DBSvr.Services
             if ((nCheckCode == 1) || boFoundSession)
             {
                 var loadHumData = new LoadHumanRcdResponsePacket();
-                loadHumData.sChrName = EDcode.EncodeString(loadHumanPacket.sChrName);
+                loadHumData.sChrName = EDCode.EncodeString(loadHumanPacket.sChrName);
                 loadHumData.HumDataInfo = HumanRCD;
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
-                responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+                responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack, loadHumData);
             }
             else
             {
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
-                responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+                responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack);
             }
         }
@@ -390,13 +391,13 @@ namespace DBSvr.Services
                     }
                 }
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
-                responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+                responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack);
             }
             else
             {
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
-                responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+                responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack);
             }
         }

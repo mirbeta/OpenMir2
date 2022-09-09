@@ -11,6 +11,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Npc
 {
@@ -56,10 +57,10 @@ namespace GameSvr.Npc
         /// </summary>
         private void ActionOfQUERYYBSELL(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TDealOffInfo DealOffInfo;
+            DealOffInfo DealOffInfo;
             string sSendStr;
             string sUserItemName;
-            TClientDealOffInfo sClientDealOffInfo = null;
+            ClientDealOffInfo sClientDealOffInfo = null;
             StdItem StdItem;
             StdItem StdItem80;
             bool bo12;
@@ -72,8 +73,8 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.sSellOffItemList.Count > 0)
                         {
-                            sClientDealOffInfo = new TClientDealOffInfo();
-                            sClientDealOffInfo.UseItems = new TClientItem[9];
+                            sClientDealOffInfo = new ClientDealOffInfo();
+                            sClientDealOffInfo.UseItems = new ClientItem[9];
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
@@ -91,7 +92,7 @@ namespace GameSvr.Npc
                                             // 是金刚石
                                             if (!bo12 && DealOffInfo.UseItems[j].MakeIndex > 0 && DealOffInfo.UseItems[j].wIndex == ushort.MaxValue && DealOffInfo.UseItems[j].Dura == ushort.MaxValue && DealOffInfo.UseItems[j].DuraMax == ushort.MaxValue)
                                             {
-                                                TClientItem _wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
+                                                ClientItem _wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
                                                 _wvar1.Dura = ushort.MaxValue;// 客户端金刚石特征
@@ -108,7 +109,7 @@ namespace GameSvr.Npc
                                         StdItem80 = StdItem;
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S, sizeof(TStdItem));
-                                        sClientDealOffInfo.UseItems[j] = new TClientItem();
+                                        sClientDealOffInfo.UseItems[j] = new ClientItem();
                                         StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[j].Item);
                                         //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
@@ -141,7 +142,7 @@ namespace GameSvr.Npc
                                     sClientDealOffInfo.SellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.N;
-                                    sSendStr = EDcode.EncodeBuffer(sClientDealOffInfo);
+                                    sSendStr = EDCode.EncodeBuffer(sClientDealOffInfo);
                                     PlayObject.SendMsg(this, Grobal2.RM_QUERYYBSELL, 0, 0, 0, 0, sSendStr);
                                     break;
                                 }
@@ -169,10 +170,10 @@ namespace GameSvr.Npc
         /// </summary>
         private void ActionOfQueryTrustDeal(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TDealOffInfo DealOffInfo;
+            DealOffInfo DealOffInfo;
             string sSendStr;
             string sUserItemName;
-            TClientDealOffInfo sClientDealOffInfo = null;
+            ClientDealOffInfo sClientDealOffInfo = null;
             StdItem StdItem;
             StdItem StdItem80;
             bool bo12;
@@ -186,8 +187,8 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.sSellOffItemList.Count > 0)
                         {
-                            sClientDealOffInfo = new TClientDealOffInfo();
-                            sClientDealOffInfo.UseItems = new TClientItem[9];
+                            sClientDealOffInfo = new ClientDealOffInfo();
+                            sClientDealOffInfo.UseItems = new ClientItem[9];
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
@@ -205,7 +206,7 @@ namespace GameSvr.Npc
                                             // 是金刚石
                                             if (!bo12 && DealOffInfo.UseItems[k].MakeIndex > 0 && DealOffInfo.UseItems[k].wIndex == short.MaxValue && DealOffInfo.UseItems[k].Dura == short.MaxValue && DealOffInfo.UseItems[k].DuraMax == short.MaxValue)
                                             {
-                                                TClientItem _wvar1 = sClientDealOffInfo.UseItems[k];// '金刚石'
+                                                ClientItem _wvar1 = sClientDealOffInfo.UseItems[k];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;
                                                 //// 金刚石数量
@@ -224,7 +225,7 @@ namespace GameSvr.Npc
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S);// 取自定义物品名称
                                         //sClientDealOffInfo.UseItems[K].S = StdItem80;
-                                        sClientDealOffInfo.UseItems[k] = new TClientItem();
+                                        sClientDealOffInfo.UseItems[k] = new ClientItem();
                                         StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].Item);
                                         sUserItemName = "";
                                         if (DealOffInfo.UseItems[k].btValue[13] == 1)
@@ -256,7 +257,7 @@ namespace GameSvr.Npc
                                     sClientDealOffInfo.SellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.N;
-                                    sSendStr = EDcode.EncodeBuffer(sClientDealOffInfo);
+                                    sSendStr = EDCode.EncodeBuffer(sClientDealOffInfo);
                                     PlayObject.SendMsg(this, Grobal2.RM_QUERYYBDEAL, 0, 0, 0, 0, sSendStr);
                                     break;
                                 }
@@ -376,7 +377,7 @@ namespace GameSvr.Npc
             {
                 if (!PlayObject.IsTrainingSkill(Magic.wMagicID))
                 {
-                    var UserMagic = new TUserMagic();
+                    var UserMagic = new UserMagic();
                     UserMagic.MagicInfo = Magic;
                     UserMagic.wMagIdx = Magic.wMagicID;
                     UserMagic.btKey = 0;
@@ -448,7 +449,7 @@ namespace GameSvr.Npc
         {
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             PlayObject.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
-            PlayObject.SendSocket(PlayObject.m_DefMsg, EDcode.EncodeString(sOffLineStartMsg));
+            PlayObject.SendSocket(PlayObject.m_DefMsg, EDCode.EncodeString(sOffLineStartMsg));
             var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 5);
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 500);
             var nKickOffLine = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 1440 * 15);
@@ -746,7 +747,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearSkill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             for (var i = PlayObject.MagicList.Count - 1; i >= 0; i--)
             {
                 UserMagic = PlayObject.MagicList[i];
@@ -773,7 +774,7 @@ namespace GameSvr.Npc
 
         private void ActionOfDelSkill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             var sMagicName = QuestActionInfo.sParam1;
             var Magic = M2Share.UserEngine.FindMagic(sMagicName);
             if (Magic == null)
@@ -1260,7 +1261,7 @@ namespace GameSvr.Npc
 
         private void ActionOfSkillLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             var nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 0);
             if (nLevel < 0)
             {
@@ -1993,7 +1994,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearNeedItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem StdItem;
             var nNeed = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if (nNeed < 0)
@@ -2026,7 +2027,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearMakeItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem StdItem;
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
@@ -2617,7 +2618,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGiveItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem StdItem;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
@@ -2647,7 +2648,7 @@ namespace GameSvr.Npc
                     // nItemCount 为0时出死循环
                     if (PlayObject.IsEnoughBag())
                     {
-                        UserItem = new TUserItem();
+                        UserItem = new UserItem();
                         if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
                             PlayObject.ItemList.Add(UserItem);
@@ -2665,7 +2666,7 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        UserItem = new TUserItem();
+                        UserItem = new UserItem();
                         if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -3391,7 +3392,7 @@ namespace GameSvr.Npc
             MapItem MapItem;
             MapItem MapItemA;
             StdItem StdItem;
-            TUserItem UserItem = null;
+            UserItem UserItem = null;
             try
             {
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref sMap))

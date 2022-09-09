@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
 {
@@ -59,13 +60,13 @@ namespace DBSvr.Storage.MySQL
                     DBRecord.Id = dr.GetInt32("Id");
                     DBRecord.sAccount = dr.GetString("FLD_Account");
                     DBRecord.sChrName = dr.GetString("FLD_CharName");
-                    DBRecord.boSelected = (byte)dr.GetInt32("FLD_SelectID");
-                    DBRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
+                    DBRecord.Selected = (byte)dr.GetInt32("FLD_SelectID");
+                    DBRecord.Deleted = dr.GetBoolean("FLD_IsDeleted");
                     DBRecord.Header = new TRecordHeader();
                     DBRecord.Header.sAccount = DBRecord.sAccount;
                     DBRecord.Header.sName = DBRecord.sChrName;
-                    DBRecord.Header.boDeleted = DBRecord.boDeleted;
-                    if (!DBRecord.Header.boDeleted)
+                    DBRecord.Header.Deleted = DBRecord.Deleted;
+                    if (!DBRecord.Header.Deleted)
                     {
                         QuickList.Add(DBRecord.Header.sName, nRecordIndex);
                         IndexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
@@ -154,13 +155,13 @@ namespace DBSvr.Storage.MySQL
                 var HumRecord = new HumRecordData();
                 HumRecord.sAccount = dr.GetString("FLD_Account");
                 HumRecord.sChrName = dr.GetString("FLD_CharName");
-                HumRecord.boSelected = (byte)dr.GetUInt32("FLD_SelectID");
-                HumRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
+                HumRecord.Selected = (byte)dr.GetUInt32("FLD_SelectID");
+                HumRecord.Deleted = dr.GetBoolean("FLD_IsDeleted");
                 HumRecord.Header = new TRecordHeader();
                 HumRecord.Header.sAccount = HumRecord.sAccount;
                 HumRecord.Header.sName = HumRecord.sChrName;
-                HumRecord.Header.nSelectID = HumRecord.boSelected;
-                HumRecord.Header.boDeleted = HumRecord.boDeleted;
+                HumRecord.Header.SelectID = HumRecord.Selected;
+                HumRecord.Header.Deleted = HumRecord.Deleted;
                 success = true;
                 return HumRecord;
             }
@@ -211,7 +212,7 @@ namespace DBSvr.Storage.MySQL
                 for (var i = 0; i < ChrList.Count; i++)
                 {
                     HumRecordData HumDBRecord = GetBy(ChrList[i].nIndex, ref success);
-                    if (success && !HumDBRecord.boDeleted)
+                    if (success && !HumDBRecord.Deleted)
                     {
                         result++;
                     }
@@ -246,7 +247,7 @@ namespace DBSvr.Storage.MySQL
                 if (UpdateRecord(HumRecord, true, ref nIndex))
                 {
                     QuickList.Add(HumRecord.Header.sName, nIndex);
-                    QuickIDList.AddRecord(HumRecord.sAccount, HumRecord.sChrName, nIndex, HumRecord.Header.nSelectID);
+                    QuickIDList.AddRecord(HumRecord.sAccount, HumRecord.sChrName, nIndex, HumRecord.Header.SelectID);
                     result = true;
                 }
                 else
@@ -267,7 +268,7 @@ namespace DBSvr.Storage.MySQL
             }
             try
             {
-                if (boNew && (!HumRecord.Header.boDeleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
+                if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
                 {
                     var strSql = new StringBuilder();
                     strSql.AppendLine("INSERT INTO TBL_HUMRECORD (FLD_Account, FLD_CharName, FLD_SelectID, FLD_IsDeleted, FLD_CreateDate, FLD_ModifyDate) VALUES ");
@@ -277,8 +278,8 @@ namespace DBSvr.Storage.MySQL
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@FLD_CharName", HumRecord.sChrName);
-                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.boSelected);
-                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.boDeleted);
+                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.Selected);
+                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.Deleted);
                     command.ExecuteNonQuery();
                     var id = command.LastInsertedId;
                     nIndex = (int)id;
@@ -286,7 +287,7 @@ namespace DBSvr.Storage.MySQL
                 }
                 else
                 {
-                    HumRecord.Header.boDeleted = false;
+                    HumRecord.Header.Deleted = false;
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE TBL_HUMRECORD SET FLD_Account = @FLD_Account, FLD_CharName = @FLD_CharName, FLD_SelectID = @FLD_SelectID, FLD_IsDeleted = @FLD_IsDeleted, ");
                     strSql.AppendLine(" FLD_ModifyDate = now() WHERE Id = @Id;");
@@ -295,8 +296,8 @@ namespace DBSvr.Storage.MySQL
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@FLD_CharName", HumRecord.sChrName);
-                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.boSelected);
-                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.boDeleted);
+                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.Selected);
+                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.Deleted);
                     command.Parameters.AddWithValue("@Id", nIndex);
                     command.ExecuteNonQuery();
                     result = true;

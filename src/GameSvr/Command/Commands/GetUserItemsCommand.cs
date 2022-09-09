@@ -3,6 +3,7 @@ using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Command.Commands
 {
@@ -26,7 +27,7 @@ namespace GameSvr.Command.Commands
 
             int nItemCount;
             StdItem StdItem;
-            TUserItem UserItem = null;
+            UserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || sItemCount == "" || sType == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -58,7 +59,7 @@ namespace GameSvr.Command.Commands
                             {
                                 break;
                             }
-                            UserItem = new TUserItem(); ;
+                            UserItem = new UserItem(); ;
                             UserItem = m_PlayObject.UseItems[i];
                             m_PlayObject.ItemList.Add(UserItem);
                             m_PlayObject.SendAddItem(UserItem);
