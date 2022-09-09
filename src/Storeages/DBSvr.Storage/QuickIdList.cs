@@ -17,9 +17,8 @@ namespace DBSvr.Storage
 
         public void AddRecord(string sAccount, string sChrName, int nIndex, int nSelIndex)
         {
-            QuickId QuickID;
             IList<QuickId> ChrList;
-            QuickID = new QuickId();
+            var QuickID = new QuickId();
             QuickID.sAccount = sAccount;
             QuickID.sChrName = sChrName;
             QuickID.nIndex = nIndex;
@@ -172,7 +171,6 @@ namespace DBSvr.Storage
             }
             if (ChrList.Count <= 0)
             {
-                //ChrList.Free;
                 m_List.Remove(sChrName);
             }
         }
