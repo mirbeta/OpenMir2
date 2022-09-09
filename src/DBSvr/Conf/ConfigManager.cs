@@ -6,28 +6,25 @@ namespace DBSvr.Conf
 {
     public class ConfigManager : IniFile
     {
-        private readonly DBConfig _config;
+        private readonly SvrConf _config;
         private static readonly string ConfitFile = Path.Combine(AppContext.BaseDirectory, "dbsvr.conf");
 
-        private static readonly ConfigManager instance = new ConfigManager(ConfitFile);
-
-        public static DBConfig GetConfig()
+        public ConfigManager() : base(ConfitFile)
         {
-            return Instance._config;
+            _config = new SvrConf();
+            Load();
         }
 
-        public static ConfigManager Instance => instance;
-
-        public ConfigManager(string fileName) : base(fileName)
+        public SvrConf GetConfig()
         {
-            _config = new DBConfig();
-            Load();
+            return _config;
         }
 
         public void LoadConfig()
         {
+            _config.ConnctionString = ReadString("DataBase", "ConnctionString", _config.ConnctionString);
+            _config.StoreageType = ReadString("DataBase", "Storeage", _config.StoreageType);
             _config.ShowDebugLog = ReadBool("Setup", "ShowDebugLog", _config.ShowDebugLog);
-            _config.DBConnection = ReadString("DataBase", "ConnctionString", _config.DBConnection);
             _config.ServerPort = ReadInteger("Setup", "ServerPort", _config.ServerPort);
             _config.ServerAddr = ReadString("Setup", "ServerAddr", _config.ServerAddr);
             _config.GatePort = ReadInteger("Setup", "GatePort", _config.GatePort);

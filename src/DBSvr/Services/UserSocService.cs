@@ -1,5 +1,6 @@
 using DBSvr.Conf;
-using DBSvr.DB;
+using DBSvr.Storage;
+using DBSvr.Storage.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,32 +18,25 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace DBSvr.Services
 {
-    public class UsrSocMessage
-    {
-        public GatePacket Packet;
-        public TGateInfo GateInfo;
-    }
-
     public class UserSocService
     {
         private readonly MirLog _logger;
-        private IList<TGateInfo> _gateList = null;
-        private Dictionary<string, int> _mapList = null;
+        private readonly Dictionary<string, int> _mapList = null;
         private readonly IPlayDataService _playDataService;
         private readonly IPlayRecordService _playRecordService;
         private readonly SocketServer _userSocket;
         private readonly LoginSvrService _loginService;
-        private readonly DBConfig _config = ConfigManager.GetConfig();
+        private readonly SvrConf _config;
         private readonly Channel<UsrSocMessage> _reviceQueue;
-        private CancellationTokenSource _cancellationToken;
+        private readonly CancellationTokenSource _cancellationToken;
 
-        public UserSocService(MirLog logger, LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService)
+        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService)
         {
             _logger = logger;
             _loginService = loginService;
             _playRecordService = playRecordService;
             _playDataService = playDataService;
-            _gateList = new List<TGateInfo>();
+            GateList = new List<TGateInfo>();
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _reviceQueue = Channel.CreateUnbounded<UsrSocMessage>();
             _userSocket = new SocketServer(byte.MaxValue, 1024);
@@ -50,12 +44,13 @@ namespace DBSvr.Services
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
             _userSocket.OnClientRead += UserSocketClientRead;
             _userSocket.OnClientError += UserSocketClientError;
-            _userSocket.Init();
             _cancellationToken = new CancellationTokenSource();
+            _config = conf;
         }
 
         public void Start()
         {
+            _userSocket.Init();
             LoadServerInfo();
             LoadChrNameList("DenyChrName.txt");
             LoadClearMakeIndexList("ClearMakeIndex.txt");
@@ -67,9 +62,9 @@ namespace DBSvr.Services
 
         public void Stop()
         {
-            for (var i = 0; i < _gateList.Count; i++)
+            for (var i = 0; i < GateList.Count; i++)
             {
-                var gateInfo = _gateList[i];
+                var gateInfo = GateList[i];
                 if (gateInfo != null)
                 {
                     for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
@@ -78,14 +73,12 @@ namespace DBSvr.Services
                     }
                     gateInfo.UserList = null;
                 }
-                _gateList.RemoveAt(i);
+                GateList.RemoveAt(i);
             }
-            _gateList = null;
-            _mapList = null;
             _cancellationToken.Cancel();//停止消息处理线程
         }
 
-        public IList<TGateInfo> GateList => _gateList;
+        public IList<TGateInfo> GateList { get; } = null;
 
         /// <summary>
         /// 处理客户端发过来的消息
@@ -165,7 +158,6 @@ namespace DBSvr.Services
         private void UserSocketClientConnect(object sender, AsyncUserToken e)
         {
             var sIPaddr = e.RemoteIPaddr;
-            const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
             if (!DBShare.CheckServerIP(sIPaddr))
             {
                 e.Socket.Close();
@@ -177,16 +169,18 @@ namespace DBSvr.Services
             gateInfo.RemoteEndPoint = e.EndPoint;
             gateInfo.UserList = new List<TUserInfo>();
             gateInfo.nGateID = DBShare.GetGateID(sIPaddr);
-            _gateList.Add(gateInfo);
+            GateList.Add(gateInfo);
             _logger.LogInformation(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
         }
 
+        private const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
+        private const string sGateClose = "角色网关[{0}]({1}:{2})已关闭...";
+
         private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            const string sGateClose = "角色网关[{0}]({1}:{2})已关闭...";
-            for (var i = 0; i < _gateList.Count; i++)
+            for (var i = 0; i < GateList.Count; i++)
             {
-                var gateInfo = _gateList[i];
+                var gateInfo = GateList[i];
                 if (gateInfo != null && gateInfo.UserList != null)
                 {
                     for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
@@ -196,7 +190,7 @@ namespace DBSvr.Services
                     gateInfo.UserList = null;
                 }
                 _logger.LogInformation(string.Format(sGateClose, i, e.RemoteIPaddr, e.RemotePort));
-                _gateList.RemoveAt(i);
+                GateList.RemoveAt(i);
                 break;
             }
         }
@@ -208,9 +202,9 @@ namespace DBSvr.Services
 
         private void UserSocketClientRead(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < _gateList.Count; i++)
+            for (var i = 0; i < GateList.Count; i++)
             {
-                if (_gateList[i].Socket != e.Socket)
+                if (GateList[i].Socket != e.Socket)
                     continue;
                 var nReviceLen = e.BytesReceived;
                 var data = new byte[nReviceLen];
@@ -223,7 +217,7 @@ namespace DBSvr.Services
                 }
                 var message = new UsrSocMessage();
                 message.Packet = Packets.ToPacket<GatePacket>(data);
-                message.GateInfo = _gateList[i];
+                message.GateInfo = GateList[i];
                 _reviceQueue.Writer.TryWrite(message);
             }
         }
@@ -232,9 +226,9 @@ namespace DBSvr.Services
         {
             TGateInfo gateInfo;
             var nUserCount = 0;
-            for (var i = 0; i < _gateList.Count; i++)
+            for (var i = 0; i < GateList.Count; i++)
             {
-                gateInfo = _gateList[i];
+                gateInfo = GateList[i];
                 nUserCount += gateInfo.UserList.Count;
             }
             return nUserCount;
@@ -577,7 +571,7 @@ namespace DBSvr.Services
                 _loginService.SetGlobaSessionNoPlay(nSessionId);
                 userInfo.sAccount = sAccount;
                 userInfo.nSessionID = nSessionId;
-                IList<TQuickID> chrList = new List<TQuickID>();
+                IList<QuickId> chrList = new List<QuickId>();
                 if ((_playRecordService.FindByAccount(sAccount, ref chrList) >= 0))
                 {
                     for (var i = 0; i < chrList.Count; i++)
@@ -803,7 +797,7 @@ namespace DBSvr.Services
             if (userInfo.sAccount == sAccount)
             {
                 int nIndex;
-                IList<TQuickID> chrList = new List<TQuickID>();
+                IList<QuickId> chrList = new List<QuickId>();
                 if (_playRecordService.FindByAccount(sAccount, ref chrList) >= 0)
                 {
                     for (var i = 0; i < chrList.Count; i++)
@@ -935,5 +929,11 @@ namespace DBSvr.Services
             packet.EndChar = '$';
             socket.Send(packet.GetBuffer());
         }
+    }
+
+    public class UsrSocMessage
+    {
+        public GatePacket Packet;
+        public TGateInfo GateInfo;
     }
 }

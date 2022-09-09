@@ -1,8 +1,12 @@
+using DBSvr.Storage.Model;
 using System.Collections.Specialized;
 using SystemModule.Packet.ClientPackets;
 
-namespace DBSvr.DB
+namespace DBSvr.Storage
 {
+    /// <summary>
+    /// 玩家数据服务接口
+    /// </summary>
     public interface IPlayDataService
     {
         void LoadQuickList();
@@ -11,11 +15,11 @@ namespace DBSvr.DB
 
         int Get(int nIndex, ref THumDataInfo HumanRCD);
 
-        int GetQryChar(int nIndex, ref TQueryChr QueryChrRcd);
+        int GetQryChar(int nIndex, ref QueryChr QueryChrRcd);
 
         bool Update(int nIndex, ref THumDataInfo HumanRCD);
 
-        bool UpdateQryChar(int nIndex, TQueryChr QueryChrRcd);
+        bool UpdateQryChar(int nIndex, QueryChr QueryChrRcd);
 
         bool Add(ref THumDataInfo HumanRCD);
 

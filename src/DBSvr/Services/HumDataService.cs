@@ -1,5 +1,5 @@
 ﻿using DBSvr.Conf;
-using DBSvr.DB;
+using DBSvr.Storage;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -22,13 +22,13 @@ namespace DBSvr.Services
         private readonly IPlayDataService _playDataService;
         private readonly SocketServer _serverSocket;
         private readonly LoginSvrService _loginSvrService;
-        private readonly DBConfig _config = ConfigManager.GetConfig();
+        private readonly SvrConf _config;
 
-        public HumDataService(LoginSvrService loginSvrService, IPlayDataService playDataService, MirLog logger)
+        public HumDataService(MirLog logger, LoginSvrService loginSvrService, IPlayDataService playDataService, SvrConf conf)
         {
+            _logger = logger;
             _loginSvrService = loginSvrService;
             _playDataService = playDataService;
-            _logger = logger;
             _serverList = new List<TServerInfo>();
             _humSessionList = new List<THumSession>();
             _serverSocket = new SocketServer(byte.MaxValue, 1024);
@@ -36,11 +36,12 @@ namespace DBSvr.Services
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
-            _serverSocket.Init();
+            _config = conf;
         }
 
         public void Start()
         {
+            _serverSocket.Init();
             _serverSocket.Start(_config.ServerAddr, _config.ServerPort);
             _playDataService.LoadQuickList();
             _logger.LogInformation($"数据库角色服务[{_config.ServerAddr}:{_config.ServerPort}]已启动.等待链接...");
@@ -198,7 +199,6 @@ namespace DBSvr.Services
         /// </summary>
         public void ClearTimeoutSession()
         {
-            THumSession HumSession;
             int i = 0;
             while (true)
             {
@@ -206,7 +206,7 @@ namespace DBSvr.Services
                 {
                     break;
                 }
-                HumSession = _humSessionList[i];
+                THumSession HumSession = _humSessionList[i];
                 if (!HumSession.bo24)
                 {
                     if (HumSession.bo2C)
@@ -240,12 +240,12 @@ namespace DBSvr.Services
 
         public bool CopyHumData(string sSrcChrName, string sDestChrName, string sUserID)
         {
-            THumDataInfo HumanRCD = null;
             bool result = false;
             bool bo15 = false;
             try
             {
                 int n14 = _playDataService.Index(sSrcChrName);
+                THumDataInfo HumanRCD = null;
                 if ((n14 >= 0) && (_playDataService.Get(n14, ref HumanRCD) >= 0))
                 {
                     bo15 = true;

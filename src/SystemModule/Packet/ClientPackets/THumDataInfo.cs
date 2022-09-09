@@ -5,8 +5,10 @@ namespace SystemModule.Packet.ClientPackets
     [ProtoContract]
     public class THumDataInfo
     {
-        [ProtoMember(1)] public TRecordHeader Header { get; set; }
-        [ProtoMember(2)] public THumInfoData Data { get; set; }
+        [ProtoMember(1)] 
+        public TRecordHeader Header { get; set; }
+        [ProtoMember(2)] 
+        public THumInfoData Data { get; set; }
 
         public THumDataInfo()
         {
