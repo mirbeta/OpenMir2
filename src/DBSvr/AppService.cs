@@ -1,4 +1,3 @@
-using DBSvr.Conf;
 using DBSvr.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,6 @@ namespace DBSvr
         private readonly UserSocService _userSocService;
         private readonly LoginSvrService _loginSvrService;
         private readonly HumDataService _dataService;
-        private ConfigManager ConfigManager => ConfigManager.Instance;
 
         public AppService(ILogger<AppService> logger, UserSocService userSoc, LoginSvrService idSoc, HumDataService dataService)
         {
@@ -36,9 +34,7 @@ namespace DBSvr
         {
             _logger.LogDebug($"DBSvr is starting.");
             DBShare.Initialization();
-            ConfigManager.LoadConfig();
             DBShare.LoadConfig();
-            _logger.LogInformation("数据库配置文件读取完成...");
             return base.StartAsync(cancellationToken);
         }
 

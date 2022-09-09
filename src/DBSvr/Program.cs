@@ -1,6 +1,7 @@
-﻿using DBSvr.DB;
-using DBSvr.DB.impl;
+﻿using DBSvr.Conf;
 using DBSvr.Services;
+using DBSvr.Storage;
+using DBSvr.Storage.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +10,7 @@ using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -17,14 +19,15 @@ using System.Threading.Tasks;
 
 namespace DBSvr
 {
-    class Program
+    internal class Program
     {
         private static PeriodicTimer _timer;
         private static IHost _host;
         private static Logger _logger;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private static SvrConf _config;
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -45,15 +48,61 @@ namespace DBSvr
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
 
+            //todo 根据数据库类型注册数据存储实现
+
+            var configManager = new ConfigManager();
+            configManager.LoadConfig();
+            _config = configManager.GetConfig();
+            _logger.Info("数据库配置文件读取完成...");
+            if (!Enum.TryParse<StorageType>(_config.StoreageType, true, out var storageName))
+            {
+                throw new Exception("Storage存储配置文件错误或者不支持该存储类型");
+            }
+
+            var storageOption = new StorageOption();
+            storageOption.ConnectionString = _config.ConnctionString;
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton(_config);
                     services.AddSingleton<MirLog>();
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<LoginSvrService>();
                     services.AddSingleton<HumDataService>();
-                    services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
-                    services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
+                    switch (storageName)
+                    {
+                        case StorageType.MySQL:
+                            if (!File.Exists("DBSvr.Storage.MySQL.dll"))
+                            {
+                                throw new Exception("请确认DBSvr.Storage.MySQL文件是否存在.");
+                            }
+                            var assembly = Assembly.LoadFrom("DBSvr.Storage.MySQL.dll");
+                            if (assembly == null)
+                            {
+                                throw new Exception("获取MySQL存储实例失败，请确认文件是否正确.");
+                            }
+                            var playDataService = (IPlayDataService)Activator.CreateInstance(assembly.GetType("DBSvr.Storage.MySQL.MySqlPlayDataService"), storageOption);
+                            if (playDataService != null)
+                            {
+                                services.AddSingleton(playDataService);
+                            }
+                            var playRecordService = (IPlayRecordService)Activator.CreateInstance(assembly.GetType("DBSvr.Storage.MySQL.MySqlPlayRecordService"), storageOption);
+                            if (playRecordService != null)
+                            {
+                                services.AddSingleton(playRecordService);
+                            }
+                            _logger.Info("当前使用[MySQL]数据存储.");
+                            break;
+                        case StorageType.Sqlite:
+                            // services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
+                            // services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
+                            break;
+                        case StorageType.Local:
+                            // services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
+                            // services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
+                            break;
+                    }
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 }).ConfigureLogging(logging =>
@@ -67,7 +116,7 @@ namespace DBSvr
             Stop();
         }
 
-        static void Stop()
+        private static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -75,7 +124,7 @@ namespace DBSvr
             });
         }
 
-        static async Task ProcessLoopAsync()
+        private static async Task ProcessLoopAsync()
         {
             string input = null;
             do
@@ -166,7 +215,7 @@ namespace DBSvr
                  });
         }
 
-        static void PrintUsage()
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DBSvr.logo.png");

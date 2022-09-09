@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Common;
-using SystemModule.Packet.ClientPackets;
 
 namespace DBSvr
 {
@@ -217,16 +216,6 @@ namespace DBSvr
         public long lastSessionTick;
     }
 
-    public struct HumRecordData
-    {
-        public int Id;
-        public TRecordHeader Header;
-        public string sChrName;
-        public string sAccount;
-        public bool boDeleted;
-        public byte boSelected;
-    }
-
     public class TGlobaSessionInfo
     {
         public string sAccount;
@@ -289,14 +278,5 @@ namespace DBSvr
             sGameGateIP = new string[8];
             nGameGatePort = new int[8];
         }
-    }
-
-    public class TQueryChr
-    {
-        public byte btJob;
-        public byte btHair;
-        public byte btSex;
-        public ushort wLevel;
-        public string sName;
     }
 }

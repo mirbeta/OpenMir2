@@ -1,9 +1,12 @@
+using DBSvr.Storage.Model;
 using System.Collections;
 using System.Collections.Generic;
-using SystemModule;
 
-namespace DBSvr.DB
+namespace DBSvr.Storage
 {
+    /// <summary>
+    /// 玩家数据服务接口
+    /// </summary>
     public interface IPlayRecordService
     {
         void LoadQuickList();
@@ -14,7 +17,7 @@ namespace DBSvr.DB
 
         HumRecordData GetBy(int nIndex, ref bool success);
 
-        int FindByAccount(string sAccount, ref IList<TQuickID> ChrList);
+        int FindByAccount(string sAccount, ref IList<QuickId> ChrList);
 
         int ChrCountOfAccount(string sAccount);
 

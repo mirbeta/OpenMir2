@@ -7,16 +7,17 @@ namespace DBSvr
     public class MirLog
     {
         private readonly ILogger<MirLog> _logger;
-        private readonly DBConfig _config = ConfigManager.GetConfig();
+        private readonly SvrConf _config;
 
-        public MirLog(ILogger<MirLog> logger)
+        public MirLog(ILogger<MirLog> logger, SvrConf svrConf)
         {
             _logger = logger;
+            _config = svrConf;
         }
 
         public void LogInformation(string msg)
         {
-            _logger.LogInformation($"{msg}");
+            _logger.LogInformation(msg);
         }
 
         public void Enqueue(Exception ex)

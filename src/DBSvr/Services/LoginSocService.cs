@@ -16,12 +16,13 @@ namespace DBSvr.Services
         private readonly MirLog _logger;
         private readonly ClientScoket _loginSocket;
         private readonly IList<TGlobaSessionInfo> _globaSessionList = null;
-        private readonly DBConfig _config = ConfigManager.GetConfig();
+        private readonly SvrConf _config;
         private string _sockMsg = string.Empty;
 
-        public LoginSvrService(MirLog logger)
+        public LoginSvrService(MirLog logger, SvrConf conf)
         {
             _logger = logger;
+            _config = conf;
             _loginSocket = new ClientScoket();
             _loginSocket.ReceivedDatagram += LoginSocketRead;
             _loginSocket.OnConnected += LoginSocketConnected;

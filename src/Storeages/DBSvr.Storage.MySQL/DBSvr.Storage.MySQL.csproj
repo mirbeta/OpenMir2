@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	<Choose>
+		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+			<PropertyGroup>
+				<OutputPath>D:\MirServer\DBServer</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/Data/Mirserver/DBServer</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/opt/Mirserver/DBServer</OutputPath>
+			</PropertyGroup>
+		</When>
+	</Choose>
+
+	<ItemGroup>
+		<PackageReference Include="MySql.Data" Version="8.0.30" />
+		<PackageReference Include="NLog" Version="5.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DBSvr.Storage\DBSvr.Storage.csproj" />
+	</ItemGroup>
+
+</Project>
