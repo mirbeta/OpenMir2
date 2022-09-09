@@ -13,17 +13,18 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace DBSvr.Services
 {
     /// <summary>
-    /// 玩家数据服务
+    /// 玩家数据查询保存
+    /// DBSvr->GameSvr
     /// </summary>
     public class HumDataService
     {
         private readonly MirLog _logger;
-        private readonly IList<TServerInfo> _serverList = null;
-        private readonly IList<THumSession> _humSessionList = null;
+        private readonly IList<TServerInfo> _serverList;
+        private readonly IList<THumSession> _playSessionList;
         private readonly IPlayDataService _playDataService;
         private readonly SocketServer _serverSocket;
         private readonly LoginSvrService _loginSvrService;
-        private readonly SvrConf _config;
+        private readonly SvrConf _conf;
 
         public HumDataService(MirLog logger, LoginSvrService loginSvrService, IPlayDataService playDataService, SvrConf conf)
         {
@@ -31,21 +32,21 @@ namespace DBSvr.Services
             _loginSvrService = loginSvrService;
             _playDataService = playDataService;
             _serverList = new List<TServerInfo>();
-            _humSessionList = new List<THumSession>();
+            _playSessionList = new List<THumSession>();
             _serverSocket = new SocketServer(byte.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
-            _config = conf;
+            _conf = conf;
         }
 
         public void Start()
         {
             _serverSocket.Init();
-            _serverSocket.Start(_config.ServerAddr, _config.ServerPort);
+            _serverSocket.Start(_conf.ServerAddr, _conf.ServerPort);
             _playDataService.LoadQuickList();
-            _logger.LogInformation($"数据库角色服务[{_config.ServerAddr}:{_config.ServerPort}]已启动.等待链接...");
+            _logger.LogInformation($"数据库角色服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -203,11 +204,11 @@ namespace DBSvr.Services
             int i = 0;
             while (true)
             {
-                if (_humSessionList.Count <= i)
+                if (_playSessionList.Count <= i)
                 {
                     break;
                 }
-                THumSession HumSession = _humSessionList[i];
+                THumSession HumSession = _playSessionList[i];
                 if (!HumSession.bo24)
                 {
                     if (HumSession.bo2C)
@@ -215,7 +216,7 @@ namespace DBSvr.Services
                         if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 20 * 1000)
                         {
                             HumSession = null;
-                            _humSessionList.RemoveAt(i);
+                            _playSessionList.RemoveAt(i);
                             continue;
                         }
                     }
@@ -224,7 +225,7 @@ namespace DBSvr.Services
                         if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 2 * 60 * 1000)
                         {
                             HumSession = null;
-                            _humSessionList.RemoveAt(i);
+                            _playSessionList.RemoveAt(i);
                             continue;
                         }
                     }
@@ -232,7 +233,7 @@ namespace DBSvr.Services
                 if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 40 * 60 * 1000)
                 {
                     HumSession = null;
-                    _humSessionList.RemoveAt(i);
+                    _playSessionList.RemoveAt(i);
                     continue;
                 }
                 i++;
@@ -381,9 +382,9 @@ namespace DBSvr.Services
             responsePack.QueryId = queryId;
             if (!bo21)
             {
-                for (var i = 0; i < _humSessionList.Count; i++)
+                for (var i = 0; i < _playSessionList.Count; i++)
                 {
-                    THumSession HumSession = _humSessionList[i];
+                    THumSession HumSession = _playSessionList[i];
                     if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
                     {
                         HumSession.lastSessionTick = HUtil32.GetTickCount();
@@ -411,9 +412,9 @@ namespace DBSvr.Services
                 return;
             }
             var sChrName = saveHumDataPacket.sCharName;
-            for (var i = 0; i < _humSessionList.Count; i++)
+            for (var i = 0; i < _playSessionList.Count; i++)
             {
-                THumSession HumSession = _humSessionList[i];
+                THumSession HumSession = _playSessionList[i];
                 if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
                 {
                     HumSession.bo24 = false;
@@ -432,15 +433,15 @@ namespace DBSvr.Services
             int nIndex = 0;
             while (true)
             {
-                if (_humSessionList.Count <= nIndex)
+                if (_playSessionList.Count <= nIndex)
                 {
                     break;
                 }
-                HumSession = _humSessionList[nIndex];
+                HumSession = _playSessionList[nIndex];
                 if (HumSession.Socket == Socket)
                 {
                     HumSession = null;
-                    _humSessionList.RemoveAt(nIndex);
+                    _playSessionList.RemoveAt(nIndex);
                     continue;
                 }
                 nIndex++;

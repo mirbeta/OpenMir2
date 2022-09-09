@@ -14,18 +14,18 @@ namespace DBSvr.Storage.MySQL
     public class MySqlPlayDataService : IPlayDataService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly Dictionary<string, int> MirQuickList = null;
-        private readonly QuickIdList MirQuickIDList = null;
-        private readonly Dictionary<int, int> QuickIndexIdList = null;
+        private readonly Dictionary<string, int> _mirQuickMap;
+        private readonly Dictionary<int, int> _quickIndexIdMap;
+        private readonly QuickIdList _mirQuickIdList;
         private readonly StorageOption _storageOption;
-        private int _recordCount = 0;
+        private int _recordCount;
 
         public MySqlPlayDataService(StorageOption storageOption)
         {
-            MirQuickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            MirQuickIDList = new QuickIdList();
+            _mirQuickMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            _mirQuickIdList = new QuickIdList();
             _recordCount = -1;
-            QuickIndexIdList = new Dictionary<int, int>();
+            _quickIndexIdMap = new Dictionary<int, int>();
             _storageOption = storageOption;
         }
 
@@ -37,8 +37,8 @@ namespace DBSvr.Storage.MySQL
             string sAccount;
             string sChrName;
             const string sSQLString = "SELECT * FROM TBL_CHARACTER WHERE FLD_Deleted=0";
-            MirQuickList.Clear();
-            MirQuickIDList.Clear();
+            _mirQuickMap.Clear();
+            _mirQuickIdList.Clear();
             _recordCount = -1;
             AccountList = new List<QuickId>();
             ChrNameList = new List<string>();
@@ -64,14 +64,14 @@ namespace DBSvr.Storage.MySQL
                     sChrName = dr.GetString("FLD_CHARNAME");
                     if (!boDeleted && (!string.IsNullOrEmpty(sChrName)))
                     {
-                        MirQuickList.Add(sChrName, nIndex);
+                        _mirQuickMap.Add(sChrName, nIndex);
                         AccountList.Add(new QuickId()
                         {
                             sAccount = sAccount,
                             nSelectID = 0
                         });
                         ChrNameList.Add(sChrName);
-                        QuickIndexIdList.Add(nIndex, nIndex);
+                        _quickIndexIdMap.Add(nIndex, nIndex);
                     }
                 }
             }
@@ -81,7 +81,7 @@ namespace DBSvr.Storage.MySQL
             }
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
-                MirQuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], 0, AccountList[nIndex].nSelectID);
+                _mirQuickIdList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], 0, AccountList[nIndex].nSelectID);
             }
             AccountList = null;
             ChrNameList = null;
@@ -116,9 +116,9 @@ namespace DBSvr.Storage.MySQL
 
         public int Index(string sName)
         {
-            if (MirQuickList.ContainsKey(sName))
+            if (_mirQuickMap.ContainsKey(sName))
             {
-                return MirQuickList[sName];
+                return _mirQuickMap[sName];
             }
             return -1;
         }
@@ -130,7 +130,7 @@ namespace DBSvr.Storage.MySQL
             {
                 return result;
             }
-            if (MirQuickList.Count < nIndex)
+            if (_mirQuickMap.Count < nIndex)
             {
                 return result;
             }
@@ -144,7 +144,7 @@ namespace DBSvr.Storage.MySQL
         public bool Update(int nIndex, ref THumDataInfo HumanRCD)
         {
             bool result = false;
-            if ((nIndex >= 0) && (MirQuickList.Count >= nIndex))
+            if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))
             {
                 if (UpdateRecord(nIndex, ref HumanRCD))
                 {
@@ -157,7 +157,7 @@ namespace DBSvr.Storage.MySQL
         public bool UpdateQryChar(int nIndex, QueryChr QueryChrRcd)
         {
             bool result = false;
-            if ((nIndex >= 0) && (MirQuickList.Count > nIndex))
+            if ((nIndex >= 0) && (_mirQuickMap.Count > nIndex))
             {
                 if (UpdateChrRecord(nIndex, QueryChrRcd))
                 {
@@ -207,7 +207,7 @@ namespace DBSvr.Storage.MySQL
             bool result = false;
             int nIndex;
             string sChrName = HumanRCD.Header.sName;
-            if (MirQuickList.TryGetValue(sChrName, out nIndex))
+            if (_mirQuickMap.TryGetValue(sChrName, out nIndex))
             {
                 if (nIndex >= 0)
                 {
@@ -220,8 +220,8 @@ namespace DBSvr.Storage.MySQL
                 _recordCount++;
                 if (AddRecord(ref nIndex, ref HumanRCD))
                 {
-                    MirQuickList.Add(sChrName, nIndex);
-                    QuickIndexIdList.Add(nIndex, nIndex);
+                    _mirQuickMap.Add(sChrName, nIndex);
+                    _quickIndexIdMap.Add(nIndex, nIndex);
                     result = true;
                 }
             }
@@ -233,7 +233,7 @@ namespace DBSvr.Storage.MySQL
             int playerId = 0;
             if (HumanRCD == null)
             {
-                playerId = QuickIndexIdList[nIndex];
+                playerId = _quickIndexIdMap[nIndex];
             }
             if (playerId == 0)
             {
@@ -1213,7 +1213,7 @@ namespace DBSvr.Storage.MySQL
         public int Find(string sChrName, StringDictionary List)
         {
             int result;
-            for (var i = 0; i < MirQuickList.Count; i++)
+            for (var i = 0; i < _mirQuickMap.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_MirQuickList[i], sChrName, sChrName.Length))
                 //{
@@ -1226,7 +1226,7 @@ namespace DBSvr.Storage.MySQL
 
         public bool Delete(int nIndex)
         {
-            for (var i = 0; i < MirQuickList.Count; i++)
+            for (var i = 0; i < _mirQuickMap.Count; i++)
             {
                 //if (((int)m_MirQuickList.Values[i]) == nIndex)
                 //{
@@ -1245,7 +1245,7 @@ namespace DBSvr.Storage.MySQL
         private bool DeleteRecord(int nIndex)
         {
             bool result = true;
-            int PlayerId = QuickIndexIdList[nIndex];
+            int PlayerId = _quickIndexIdMap[nIndex];
             bool success = false;
             MySqlConnection dbConnection = Open(ref success);
             if (!success)
@@ -1273,7 +1273,7 @@ namespace DBSvr.Storage.MySQL
 
         public int Count()
         {
-            return MirQuickList.Count;
+            return _mirQuickMap.Count;
         }
 
         public bool Delete(string sChrName)
@@ -1299,11 +1299,11 @@ namespace DBSvr.Storage.MySQL
             {
                 return result;
             }
-            if (QuickIndexIdList.Count <= nIndex)
+            if (_quickIndexIdMap.Count <= nIndex)
             {
                 return result;
             }
-            int PlayerId = QuickIndexIdList[nIndex];
+            int PlayerId = _quickIndexIdMap[nIndex];
             bool success = false;
             MySqlConnection dbConnection = Open(ref success);
             if (!success)

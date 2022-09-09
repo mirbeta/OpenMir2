@@ -1,7 +1,7 @@
 ﻿using ProtoBuf;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packet.ClientPackets;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
     public class THumDataInfo

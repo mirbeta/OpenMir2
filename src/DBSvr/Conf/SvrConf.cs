@@ -40,7 +40,10 @@
         /// 是否禁止检测玩家名字
         /// </summary>
         public bool boDenyChrName = true;
-        public int nDELMaxLevel = 30;
+        /// <summary>
+        /// 角色删除最小等级，小于该值的角色无法删除
+        /// </summary>
+        public int DeleteMinLevel = 30;
         public int Interval = 3000;
         /// <summary>
         /// 动态IP模式
