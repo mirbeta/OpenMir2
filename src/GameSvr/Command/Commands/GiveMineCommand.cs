@@ -23,7 +23,7 @@ namespace GameSvr.Command.Commands
             var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
             if (PlayObject.Permission < this.GameCommand.nPermissionMin)
             {
-                PlayObject.SysMsg(GameCommandConst.g_sGameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sMineName == "" || sMineName != "" && sMineName[0] == '?' || nMineCount <= 0)

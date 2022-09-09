@@ -38,7 +38,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, new object[] { sHumanName }), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, new object[] { sHumanName }), MsgColor.Red, MsgType.Hint);
             }
         }
     }

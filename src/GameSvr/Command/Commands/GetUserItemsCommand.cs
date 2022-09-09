@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nCount = HUtil32.Str_ToInt(sItemCount, 0);
@@ -87,7 +87,7 @@ namespace GameSvr.Command.Commands
                         }
                         UserItem = m_PlayObject.ItemList[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null && String.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
                             {
@@ -120,7 +120,7 @@ namespace GameSvr.Command.Commands
                         }
                         UserItem = m_PlayObject.StorageItemList[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null && String.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
                             {

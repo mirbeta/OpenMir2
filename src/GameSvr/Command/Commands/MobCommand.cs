@@ -50,7 +50,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    PlayObject.SysMsg(GameCommandConst.g_sGameCommandMobMsg, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(GameCommandConst.GameCommandMobMsg, MsgColor.Red, MsgType.Hint);
                     break;
                 }
             }

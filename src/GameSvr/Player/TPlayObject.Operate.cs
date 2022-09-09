@@ -29,7 +29,7 @@ namespace GameSvr.Player
 
         public void ClientQueryBagItems()
         {
-            string sSendMsg = String.Empty;
+            string sSendMsg = string.Empty;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 TUserItem userItem = ItemList[i];
@@ -1338,7 +1338,7 @@ namespace GameSvr.Player
                         else
                         {
                             nC = 5; // '对方不允许加入行会。'
-                            playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + M2Share.g_GameCommand.LETGUILD.sCmd + ']', MsgColor.Red, MsgType.Hint);
+                            playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + M2Share.GameCommand.Letguild.CommandName + ']', MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
@@ -1457,7 +1457,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void ClientGuildAlly()
+        internal void ClientGuildAlly()
         {
             const string sExceptionMsg = "[Exception] TPlayObject::ClientGuildAlly";
             try
@@ -1513,7 +1513,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void ClientGuildBreakAlly(string sGuildName)
+        internal void ClientGuildBreakAlly(string sGuildName)
         {
             int n10;
             if (!IsGuildMaster())
@@ -1670,7 +1670,7 @@ namespace GameSvr.Player
             }
             if (!m_boCanGetBackItem)
             {
-                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + M2Share.g_GameCommand.UNLOCKSTORAGE.sCmd + '\\' + "仓库加锁命令: @" + M2Share.g_GameCommand.__LOCK.sCmd + '\\' + "设置密码命令: @" + M2Share.g_GameCommand.SETPASSWORD.sCmd + '\\' + "修改密码命令: @" + M2Share.g_GameCommand.CHGPASSWORD.sCmd);
+                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + M2Share.GameCommand.UnlockStorage.CommandName + '\\' + "仓库加锁命令: @" + M2Share.GameCommand.Lock.CommandName + '\\' + "设置密码命令: @" + M2Share.GameCommand.SetPassword.CommandName + '\\' + "修改密码命令: @" + M2Share.GameCommand.ChgPassword.CommandName);
                 return;
             }
             for (var i = 0; i < StorageItemList.Count; i++)

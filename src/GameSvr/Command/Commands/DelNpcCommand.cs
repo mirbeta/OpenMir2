@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
                     }
                 }
             }
-            PlayObject.SysMsg(GameCommandConst.g_sGameCommandDelNpcMsg, MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(GameCommandConst.GameCommandDelNpcMsg, MsgColor.Red, MsgType.Hint);
         }
     }
 }

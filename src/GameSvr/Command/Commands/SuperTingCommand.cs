@@ -8,7 +8,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 随机传送一个指定玩家和他身边的人
     /// </summary>
-    [GameCommand("SuperTing", "随机传送一个指定玩家和他身边的人", GameCommandConst.g_sGameCommandSuperTingHelpMsg, 10)]
+    [GameCommand("SuperTing", "随机传送一个指定玩家和他身边的人", GameCommandConst.GameCommandSuperTingHelpMsg, 10)]
     public class SuperTingCommand : BaseCommond
     {
         [DefaultCommand]
@@ -45,7 +45,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

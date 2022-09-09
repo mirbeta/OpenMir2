@@ -8,7 +8,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 移动到某地图XY坐标处
     /// </summary>
-    [GameCommand("PositionMove", "移动到某地图XY坐标处", GameCommandConst.g_sGameCommandPositionMoveHelpMsg, 10)]
+    [GameCommand("PositionMove", "移动到某地图XY坐标处", GameCommandConst.GameCommandPositionMoveHelpMsg, 10)]
     public class PositionMoveCommand : BaseCommond
     {
         [DefaultCommand]
@@ -42,7 +42,7 @@ namespace GameSvr.Command.Commands
                         }
                         else
                         {
-                            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandPositionMoveCanotMoveToMap, sMapName, sX, sY), MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandPositionMoveCanotMoveToMap, sMapName, sX, sY), MsgColor.Green, MsgType.Hint);
                         }
                     }
                 }

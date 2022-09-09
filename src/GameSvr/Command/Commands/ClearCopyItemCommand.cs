@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
             var TargerObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (TargerObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = TargerObject.ItemList.Count - 1; i >= 0; i--)

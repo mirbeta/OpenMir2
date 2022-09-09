@@ -7,7 +7,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 在指定地图随机移动
     /// </summary>
-    [GameCommand("MapMove", "在指定地图随机移动", GameCommandConst.g_sGameCommandMoveHelpMsg, 10)]
+    [GameCommand("MapMove", "在指定地图随机移动", GameCommandConst.GameCommandMoveHelpMsg, 10)]
     public class MapMoveCommand : BaseCommond
     {
         [DefaultCommand]

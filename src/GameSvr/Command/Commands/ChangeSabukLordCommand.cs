@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
             var Castle = M2Share.CastleMgr.Find(sCastleName);
             if (Castle == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = M2Share.GuildMgr.FindGuild(sGuildName);

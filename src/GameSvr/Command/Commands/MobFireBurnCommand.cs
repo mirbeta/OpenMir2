@@ -27,7 +27,7 @@ namespace GameSvr.Command.Commands
             var sPoint = @Params.Length > 5 ? @Params[5] : "";//未知
             if (sMAP == "" || sMAP != "" && sMAP[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nX = HUtil32.Str_ToInt(sX, -1);
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
             }
             if (sMAP == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY,
+                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY,
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
@@ -55,7 +55,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.Envir = OldEnvir;
                 return;
             }
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMobFireBurnMapNotFountMsg, this.GameCommand.Name, sMAP), MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobFireBurnMapNotFountMsg, this.GameCommand.Name, sMAP), MsgColor.Red, MsgType.Hint);
         }
     }
 }

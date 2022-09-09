@@ -40,7 +40,7 @@ namespace GameSvr.Command.Commands
                     }
                     else
                     {
-                        PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandPositionMoveCanotMoveToMap, PlayObject.MapName, sX, sY), MsgColor.Green, MsgType.Hint);
+                        PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandPositionMoveCanotMoveToMap, PlayObject.MapName, sX, sY), MsgColor.Green, MsgType.Hint);
                     }
                 }
                 else

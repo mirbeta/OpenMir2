@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if (String.Compare(sDearName, "无", StringComparison.Ordinal) == 0)
+                if (string.Compare(sDearName, "无", StringComparison.Ordinal) == 0)
                 {
                     m_PlayObject.m_sDearName = "";
                     m_PlayObject.RefShowName();
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

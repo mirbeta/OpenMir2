@@ -256,7 +256,8 @@ namespace GameSvr
         public static int g_dwSpiritMutinyTick = 0;
         public static GameSvrConfig Config;
         public static int[] g_dwOldNeedExps = new int[Grobal2.MaxChangeLevel];
-        public static TGameCommand g_GameCommand = new TGameCommand();
+        public static IList<GameCmd> CustomCommands = new List<GameCmd>();
+        public static GameCommand GameCommand = new GameCommand();
         public static string sClientSoftVersionError = "游戏版本错误!!!";
         public static string sDownLoadNewClientSoft = "请到网站上下载最新版本游戏客户端软件。";
         public static string sForceDisConnect = "连接被强行中断!!!";

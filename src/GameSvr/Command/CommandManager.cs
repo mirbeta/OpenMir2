@@ -22,7 +22,43 @@ namespace GameSvr.Command
         public void RegisterCommand()
         {
             CommandConf.LoadConfig();
+            RegisterCustomCommand();
             RegisterCommandGroups();
+        }
+
+        /// <summary>
+        /// 注册自定义命令
+        /// </summary>
+        private void RegisterCustomCommand()
+        {
+            if (M2Share.CustomCommands.Count <= 0)
+            {
+                return;
+            }
+            var cmdIndex = -1;
+            foreach (var command in M2Share.GameCommand.GetType().GetFields())
+            {
+                cmdIndex++;
+                var attributes = (ConvertToBinaryAttribute)command.GetCustomAttribute(typeof(ConvertToBinaryAttribute), true);
+                if (attributes == null) continue;
+                if (cmdIndex > M2Share.CustomCommands.Count)
+                {
+                    return;
+                }
+                var customCmd = M2Share.CustomCommands[cmdIndex];
+                if (customCmd == null || string.IsNullOrEmpty(customCmd.CommandName))
+                {
+                    continue;
+                }
+                var commandInfo = (GameCommandAttribute)attributes.CommandType.GetCustomAttribute(typeof(GameCommandAttribute), true);
+                if (CustomCommands.ContainsKey(commandInfo.Name))
+                {
+                    M2Share.Log.Error($"重复定义游戏命令[{commandInfo.Name}]");
+                    continue;
+                }
+                CustomCommands.Add(commandInfo.Name, customCmd.CommandName);
+            }
+            M2Share.CustomCommands.Clear();
         }
 
         /// <summary>
@@ -71,11 +107,6 @@ namespace GameSvr.Command
                 commandGroup.Register(groupAttribute, methodInfo);
                 CommandMaps.Add(groupAttribute.Name, commandGroup);
             }
-        }
-
-        public void RegisterCommand(string command, string commandName)
-        {
-            CustomCommands.Add(command, commandName);
         }
 
         /// <summary>

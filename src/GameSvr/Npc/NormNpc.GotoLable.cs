@@ -562,7 +562,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nGENDER:
-                        if (String.Compare(QuestConditionInfo.sParam1, ScriptConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (PlayObject.Gender != PlayGender.Man)
                             {
@@ -578,28 +578,28 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nDAYTIME:
-                        if (String.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 0)
                             {
                                 result = false;
                             }
                         }
-                        if (String.Compare(QuestConditionInfo.sParam1, ScriptConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 1)
                             {
                                 result = false;
                             }
                         }
-                        if (String.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 2)
                             {
                                 result = false;
                             }
                         }
-                        if (String.Compare(QuestConditionInfo.sParam1, ScriptConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 3)
                             {
@@ -1474,7 +1474,7 @@ namespace GameSvr.Npc
             {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new string[] { " ", "\t" });
-                if (String.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;
                     break;
@@ -1550,7 +1550,7 @@ namespace GameSvr.Npc
             {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new string[] { " ", "\t" });
-                if (String.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;
                     LoadList.RemoveAt(i);
@@ -1584,7 +1584,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < LoadList.Count; i++)
             {
                 s10 = LoadList[i].Trim();
-                if (String.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList.RemoveAt(i);
                     bo15 = true;
@@ -1601,7 +1601,7 @@ namespace GameSvr.Npc
         {
             TUserItem UserItem;
             StdItem StdItem;
-            if (String.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.DecGold(nItemCount);
                 PlayObject.GoldChanged();
@@ -1618,7 +1618,7 @@ namespace GameSvr.Npc
                     break;
                 }
                 UserItem = PlayObject.ItemList[i];
-                if (String.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem.NeedIdentify == 1)
@@ -1638,7 +1638,7 @@ namespace GameSvr.Npc
         {
             TUserItem UserItem;
             StdItem StdItem;
-            if (String.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
@@ -1819,7 +1819,7 @@ namespace GameSvr.Npc
                 if (PlayObject.UseItems[i].wIndex > 0)
                 {
                     sName = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[i].wIndex);
-                    if (String.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendDelItems(PlayObject.UseItems[i]);
                         PlayObject.UseItems[i].wIndex = 0;

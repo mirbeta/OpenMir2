@@ -432,7 +432,7 @@ namespace GameSvr.GateWay
             var GateUser = new GateUserInfo
             {
                 sAccount = string.Empty,
-                sCharName = String.Empty,
+                sCharName = string.Empty,
                 sIPaddr = sIPaddr,
                 nSocket = socket,
                 SocketId = socketId,
