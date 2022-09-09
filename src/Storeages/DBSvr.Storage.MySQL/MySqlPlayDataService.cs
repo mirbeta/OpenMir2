@@ -17,8 +17,8 @@ namespace DBSvr.Storage.MySQL
         private readonly Dictionary<string, int> MirQuickList = null;
         private readonly QuickIdList MirQuickIDList = null;
         private readonly Dictionary<int, int> QuickIndexIdList = null;
-        private int _recordCount = 0;
         private readonly StorageOption _storageOption;
+        private int _recordCount = 0;
 
         public MySqlPlayDataService(StorageOption storageOption)
         {

@@ -65,7 +65,11 @@ namespace DBSvr.Storage.MySQL
                     DBRecord.Header = new TRecordHeader();
                     DBRecord.Header.sAccount = DBRecord.sAccount;
                     DBRecord.Header.sName = DBRecord.sChrName;
+<<<<<<< HEAD
                     DBRecord.Header.Deleted = DBRecord.Deleted;
+=======
+                    DBRecord.Header.Deleted = DBRecord.boDeleted;
+>>>>>>> 4aee4eb831d80ccdcb0b3029c343b73a91bccc80
                     if (!DBRecord.Header.Deleted)
                     {
                         QuickList.Add(DBRecord.Header.sName, nRecordIndex);
@@ -149,9 +153,11 @@ namespace DBSvr.Storage.MySQL
             command.CommandText = "select * from TBL_HUMRECORD where Id=@Id";
             command.Connection = dbConnection;
             command.Parameters.AddWithValue("@Id", nIndex);
+            var humRecord = new HumRecordData();
             using var dr = command.ExecuteReader();
             if (dr.Read())
             {
+<<<<<<< HEAD
                 var HumRecord = new HumRecordData();
                 HumRecord.sAccount = dr.GetString("FLD_Account");
                 HumRecord.sChrName = dr.GetString("FLD_CharName");
@@ -162,10 +168,21 @@ namespace DBSvr.Storage.MySQL
                 HumRecord.Header.sName = HumRecord.sChrName;
                 HumRecord.Header.SelectID = HumRecord.Selected;
                 HumRecord.Header.Deleted = HumRecord.Deleted;
+=======
+                humRecord.sAccount = dr.GetString("FLD_Account");
+                humRecord.sChrName = dr.GetString("FLD_CharName");
+                humRecord.boSelected = (byte)dr.GetUInt32("FLD_SelectID");
+                humRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
+                humRecord.Header = new TRecordHeader();
+                humRecord.Header.sAccount = humRecord.sAccount;
+                humRecord.Header.sName = humRecord.sChrName;
+                humRecord.Header.nSelectID = humRecord.boSelected;
+                humRecord.Header.Deleted = humRecord.boDeleted;
+>>>>>>> 4aee4eb831d80ccdcb0b3029c343b73a91bccc80
                 success = true;
-                return HumRecord;
             }
-            return default;
+            Close(dbConnection);
+            return humRecord;
         }
 
         public int FindByName(string sChrName, ArrayList ChrList)
