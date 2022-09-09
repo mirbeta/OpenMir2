@@ -15,11 +15,11 @@ namespace GameSvr.Command.Commands
             PlayObject.m_boCanDearRecall = !PlayObject.m_boCanDearRecall;
             if (PlayObject.m_boCanDearRecall)
             {
-                PlayObject.SysMsg(M2Share.g_sEnableDearRecall, MsgColor.Blue, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.EnableDearRecall, MsgColor.Blue, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(M2Share.g_sDisableDearRecall, MsgColor.Blue, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.DisableDearRecall, MsgColor.Blue, MsgType.Hint);
             }
         }
     }

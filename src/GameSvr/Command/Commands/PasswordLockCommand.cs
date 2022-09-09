@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 密码锁定
@@ -10,6 +10,7 @@ namespace GameSvr.Command
     [GameCommand("PasswordLock", "锁定登录", "", 0)]
     public class PasswordLockCommand : BaseCommond
     {
+        [DefaultCommand]
         public void PasswordLock(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
@@ -39,9 +40,7 @@ namespace GameSvr.Command
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.m_boCheckOldPwd = true;
                 playObject.SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
-                return;
             }
-            return;
         }
     }
 }

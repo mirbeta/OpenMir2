@@ -703,20 +703,20 @@ namespace GameSvr.Conf
             LoadString = ReadString("Command", "ObServer", "");
             if (LoadString == "")
             {
-                WriteString("Command", "ObServer", M2Share.GameCommand.Observer.CommandName);
+                WriteString("Command", "ObServer", M2Share.GameCommand.ObServer.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Observer.CommandName = LoadString;
+                M2Share.GameCommand.ObServer.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ObServer", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ObServer", M2Share.GameCommand.Observer.nPerMissionMin);
+                WriteInteger("Permission", "ObServer", M2Share.GameCommand.ObServer.nPerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Observer.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ObServer.nPerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SuperMan", "");
             if (LoadString == "")

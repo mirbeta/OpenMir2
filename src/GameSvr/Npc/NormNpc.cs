@@ -328,7 +328,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$MACRUNTIME>", sText);
                     return;
                 case "$SERVERRUNTIME":
-                    var nSecond = (HUtil32.GetTickCount() - M2Share.g_dwStartTick) / 1000;
+                    var nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
                     var wHour = nSecond / 3600;
                     var wMinute = nSecond / 60 % 60;
                     var wSecond = nSecond % 60;

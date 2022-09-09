@@ -12,11 +12,11 @@ namespace GameSvr.Command.Commands
             playObject.HearWhisper = !playObject.HearWhisper;
             if (playObject.HearWhisper)
             {
-                playObject.SysMsg(M2Share.g_sEnableHearWhisper, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.EnableHearWhisper, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(M2Share.g_sDisableHearWhisper, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.DisableHearWhisper, MsgColor.Green, MsgType.Hint);
             }
         }
     }

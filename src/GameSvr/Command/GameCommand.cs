@@ -170,12 +170,12 @@ namespace GameSvr.Command
         [ConvertToBinary(typeof(ChangeAdminModeCommand))]
         public readonly GameCmd GameMaster;
         [ConvertToBinary(typeof(ChangeObModeCommand))]
-        public readonly GameCmd Observer;
+        public readonly GameCmd ObServer;
         [ConvertToBinary(typeof(ChangeSuperManModeCommand))]
         public readonly GameCmd SueprMan;
         [ConvertToBinary(typeof(ChangeLevelCommand))]
         public readonly GameCmd Level;
-        [ConvertToBinary(typeof(ShowHumanFlagCommand))]
+        [ConvertToBinary(typeof(ShowHumanFlagCommand))] 
         public readonly GameCmd Showflag;
         [ConvertToBinary(typeof(MobCommand))]
         public readonly GameCmd Mob;
@@ -408,7 +408,7 @@ namespace GameSvr.Command
             ReleaseShutup = new GameCmd();
             ShutupList = new GameCmd();
             GameMaster = new GameCmd();
-            Observer = new GameCmd();
+            ObServer = new GameCmd();
             SueprMan = new GameCmd();
             Level = new GameCmd();
             SabukwallGold = new GameCmd();

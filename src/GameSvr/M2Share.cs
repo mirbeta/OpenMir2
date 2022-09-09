@@ -94,10 +94,10 @@ namespace GameSvr
         /// <summary>
         /// 服务器启动时间
         /// </summary>
-        public static int g_dwStartTick = 0;
+        public static int StartTick = 0;
         public static int ShareFileNameNum = 0;
-        public static int g_nServerTickDifference = 0;
-        public static readonly ReaderWriterLockWrapper syncLock = new ReaderWriterLockWrapper();
+        public static int ServerTickDifference = 0;
+        public static readonly ReaderWriterLockWrapper SyncLock = new ReaderWriterLockWrapper();
         public static ActorMgr ActorMgr = null;
         public static ServerConf ServerConf;
         private static StringConf StringConf;
@@ -108,7 +108,7 @@ namespace GameSvr
         /// </summary>
         public static FindPath FindPath;
         /// <summary>
-        /// 游戏命令系统
+        /// 游戏命令
         /// </summary>
         public static CommandManager CommandMgr = null;
         /// <summary>
@@ -180,7 +180,6 @@ namespace GameSvr
         /// 禁止取下物品列表
         /// </summary>
         public static IList<string> g_DisableTakeOffList = null;
-        public static IList<string> g_ChatLoggingList = null;
         public static IList<TItemBind> g_ItemBindIPaddr = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
         public static IList<TItemBind> g_ItemBindCharName = null;
@@ -258,7 +257,7 @@ namespace GameSvr
         public static int[] g_dwOldNeedExps = new int[Grobal2.MaxChangeLevel];
         public static IList<GameCmd> CustomCommands = new List<GameCmd>();
         public static GameCommand GameCommand = new GameCommand();
-        public static string sClientSoftVersionError = "游戏版本错误!!!";
+      public static string sClientSoftVersionError = "游戏版本错误!!!";
         public static string sDownLoadNewClientSoft = "请到网站上下载最新版本游戏客户端软件。";
         public static string sForceDisConnect = "连接被强行中断!!!";
         public static string sClientSoftVersionTooOld = "您现在使用的客户端软件版本太老了，大量的游戏效果新将无法使用。";
@@ -445,30 +444,6 @@ namespace GameSvr
         public static string g_sJoinGroup = "{0} 已加入小组.";
         public static string g_sTryModeCanotUseStorage = "试玩模式不可以使用仓库功能!!!";
         public static string g_sCanotGetItems = "无法携带更多的东西!!!";
-        public static string g_sEnableDearRecall = "允许夫妻传送!!!";
-        public static string g_sDisableDearRecall = "禁止夫妻传送!!!";
-        public static string g_sEnableMasterRecall = "允许师徒传送!!!";
-        public static string g_sDisableMasterRecall = "禁止师徒传送!!!";
-        public static string g_sNowCurrDateTime = "当前日期时间: ";
-        public static string g_sEnableHearWhisper = "[允许私聊]";
-        public static string g_sDisableHearWhisper = "[禁止私聊]";
-        public static string g_sEnableShoutMsg = "[允许群聊]";
-        public static string g_sDisableShoutMsg = "[禁止群聊]";
-        public static string g_sEnableDealMsg = "[允许交易]";
-        public static string g_sDisableDealMsg = "[禁止交易]";
-        public static string g_sEnableGuildChat = "[允许行会聊天]";
-        public static string g_sDisableGuildChat = "[禁止行会聊天]";
-        public static string g_sEnableJoinGuild = "[允许加入行会]";
-        public static string g_sDisableJoinGuild = "[禁止加入行会]";
-        public static string g_sEnableAuthAllyGuild = "[允许行会联盟]";
-        public static string g_sDisableAuthAllyGuild = "[禁止行会联盟]";
-        public static string g_sEnableGroupRecall = "[允许天地合一]";
-        public static string g_sDisableGroupRecall = "[禁止天地合一]";
-        public static string g_sEnableGuildRecall = "[允许行会合一]";
-        public static string g_sDisableGuildRecall = "[禁止行会合一]";
-        public static string g_sPleaseInputPassword = "请输入密码:";
-        public static string g_sTheMapDisableMove = "地图{0}({1})不允许传送!!!";
-        public static string g_sTheMapNotFound = "{0} 此地图号不存在!!!";
         public static string g_sYourIPaddrDenyLogon = "你当前登录的IP地址已被禁止登录了!!!";
         public static string g_sYourAccountDenyLogon = "你当前登录的帐号已被禁止登录了!!!";
         public static string g_sYourCharNameDenyLogon = "你当前登录的人物已被禁止登录了!!!";
@@ -517,10 +492,9 @@ namespace GameSvr
         public static string g_sYouKilledByMsg = "你被{0}杀害了!!!";
         public static string g_sYouprotectedByLawOfDefense = "[你受到正当规则保护。]";
         public static string g_sYourUseItemIsNul = "你的{0}处没有放上装备!!!";
-
+        
         public const string g_sVersion = "引擎版本: 1.00 Build 20161001";
         public const string g_sUpDateTime = "更新日期: 2016/10/01";
-
         private const string sSTATUS_FAIL = "+FL/{0}";
         private const string sSTATUS_GOOD = "+GD/{0}";
 

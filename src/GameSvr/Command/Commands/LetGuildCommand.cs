@@ -17,11 +17,11 @@ namespace GameSvr.Command.Commands
             playObject.AllowGuild = !playObject.AllowGuild;
             if (playObject.AllowGuild)
             {
-                playObject.SysMsg(M2Share.g_sEnableJoinGuild, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.EnableJoinGuild, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(M2Share.g_sDisableJoinGuild, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.DisableJoinGuild, MsgColor.Green, MsgType.Hint);
             }
             return;
         }

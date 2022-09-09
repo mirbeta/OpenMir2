@@ -12,13 +12,12 @@ namespace GameSvr.Command.Commands
             playObject.AllowDeal = !playObject.AllowDeal;
             if (playObject.AllowDeal)
             {
-                playObject.SysMsg(M2Share.g_sEnableDealMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.EnableDealMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(M2Share.g_sDisableDealMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(GameCommandConst.DisableDealMsg, MsgColor.Green, MsgType.Hint);
             }
-            return;
         }
     }
 }

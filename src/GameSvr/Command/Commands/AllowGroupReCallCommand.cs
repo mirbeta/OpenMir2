@@ -15,11 +15,11 @@ namespace GameSvr.Command.Commands
             PlayObject.AllowGroupReCall = !PlayObject.AllowGroupReCall;
             if (PlayObject.AllowGroupReCall)
             {
-                PlayObject.SysMsg(M2Share.g_sEnableGroupRecall, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.EnableGroupRecall, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(M2Share.g_sDisableGroupRecall, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.DisableGroupRecall, MsgColor.Green, MsgType.Hint);
             }
         }
     }

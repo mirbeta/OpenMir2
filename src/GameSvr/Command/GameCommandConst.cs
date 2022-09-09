@@ -104,5 +104,30 @@
         public const string GameCommandMobFireBurnHelpMsg = "命令格式: {0} {1} {2} {3} {4} {5} {6}";
         public const string GameCommandMobFireBurnMapNotFountMsg = "地图{0} 不存在";
         public static string GetSellOffGlod = "{0} {1}增加";
+        public static string EnableDearRecall = "允许夫妻传送!!!";
+        public static string DisableDearRecall = "禁止夫妻传送!!!";
+        public static string EnableMasterRecall = "允许师徒传送!!!";
+        public static string DisableMasterRecall = "禁止师徒传送!!!";
+        public static string NowCurrDateTime = "当前日期时间: ";
+        public static string EnableHearWhisper = "[允许私聊]";
+        public static string DisableHearWhisper = "[禁止私聊]";
+        public static string EnableShoutMsg = "[允许群聊]";
+        public static string DisableShoutMsg = "[禁止群聊]";
+        public static string EnableDealMsg = "[允许交易]";
+        public static string DisableDealMsg = "[禁止交易]";
+        public static string EnableGuildChat = "[允许行会聊天]";
+        public static string DisableGuildChat = "[禁止行会聊天]";
+        public static string EnableJoinGuild = "[允许加入行会]";
+        public static string DisableJoinGuild = "[禁止加入行会]";
+        public static string EnableAuthAllyGuild = "[允许行会联盟]";
+        public static string DisableAuthAllyGuild = "[禁止行会联盟]";
+        public static string EnableGroupRecall = "[允许天地合一]";
+        public static string DisableGroupRecall = "[禁止天地合一]";
+        public static string EnableGuildRecall = "[允许行会合一]";
+        public static string DisableGuildRecall = "[禁止行会合一]";
+        public static string PleaseInputPassword = "请输入密码:";
+        public static string TheMapDisableMove = "地图{0}({1})不允许传送!!!";
+        public static string TheMapNotFound = "{0} 此地图号不存在!!!";
+       
     }
 }
