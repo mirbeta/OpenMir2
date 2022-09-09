@@ -27,7 +27,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount > 0)

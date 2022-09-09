@@ -5,36 +5,35 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("BindUseItem", "", GameCommandConst.g_sGameCommandBindUseItemHelpMsg, 10)]
+    [GameCommand("BindUseItem", "", GameCommandConst.GameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : BaseCommond
     {
         [DefaultCommand]
         public void BindUseItem(string[] @Params, PlayObject PlayObject)
         {
+            if (@Params == null || @Params.Length <= 0)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sItem = @Params.Length > 1 ? @Params[1] : "";
             var sType = @Params.Length > 2 ? @Params[2] : "";
             var sLight = @Params.Length > 3 ? @Params[3] : "";
-
-            TUserItem UserItem = null;
             var nBind = -1;
-            TItemBind ItemBind;
-            string sBindName;
-            bool boFind;
             var nItem = M2Share.GetUseItemIdx(sItem);
-            if (String.Compare(sType, "帐号", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "帐号", StringComparison.Ordinal) == 0)
             {
                 nBind = 0;
             }
-            if (String.Compare(sType, "人物", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "人物", StringComparison.Ordinal) == 0)
             {
                 nBind = 1;
             }
-            if (String.Compare(sType, "IP", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "IP", StringComparison.Ordinal) == 0)
             {
                 nBind = 2;
             }
-            if (String.Compare(sType, "死亡", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "死亡", StringComparison.Ordinal) == 0)
             {
                 nBind = 3;
             }
@@ -47,17 +46,20 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            UserItem = m_PlayObject.UseItems[nItem];
+            TUserItem UserItem = m_PlayObject.UseItems[nItem];
             if (UserItem.wIndex == 0)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandBindUseItemNoItemMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandBindUseItemNoItemMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nItemIdx = UserItem.wIndex;
             var nMakeIdex = UserItem.MakeIndex;
+            TItemBind ItemBind;
+            string sBindName;
+            bool boFind;
             switch (nBind)
             {
                 case 0:
@@ -71,7 +73,7 @@ namespace GameSvr.Command.Commands
                             ItemBind = M2Share.g_ItemBindAccount[i];
                             if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
-                                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
+                                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
                                 boFind = true;
                                 break;
                             }
@@ -112,7 +114,7 @@ namespace GameSvr.Command.Commands
                             ItemBind = M2Share.g_ItemBindCharName[i];
                             if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
-                                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
+                                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
                                 boFind = true;
                                 break;
                             }
@@ -155,7 +157,7 @@ namespace GameSvr.Command.Commands
                             ItemBind = M2Share.g_ItemBindIPaddr[i];
                             if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
-                                PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
+                                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
                                 boFind = true;
                                 break;
                             }

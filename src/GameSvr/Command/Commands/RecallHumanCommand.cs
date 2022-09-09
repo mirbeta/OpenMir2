@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 将指定人物召唤到身边(支持权限分配)
     /// </summary>
-    [GameCommand("RecallHuman", "将指定人物召唤到身边(支持权限分配)", GameCommandConst.g_sGameCommandPrvMsgHelpMsg, 10)]
+    [GameCommand("RecallHuman", "将指定人物召唤到身边(支持权限分配)", GameCommandConst.GameCommandPrvMsgHelpMsg, 10)]
     public class RecallHumanCommand : BaseCommond
     {
         [DefaultCommand]

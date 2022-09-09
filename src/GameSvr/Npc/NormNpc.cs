@@ -995,67 +995,67 @@ namespace GameSvr.Npc
                         return;
                     }
                 case "$CMD_DATE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_DATE>", M2Share.g_GameCommand.DATA.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_DATE>", M2Share.GameCommand.Data.CommandName);
                     return;
                 case "$CMD_ALLOWMSG":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWMSG>", M2Share.g_GameCommand.ALLOWMSG.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWMSG>", M2Share.GameCommand.AllowMsg.CommandName);
                     return;
                 case "$CMD_LETSHOUT":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETSHOUT>", M2Share.g_GameCommand.LETSHOUT.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETSHOUT>", M2Share.GameCommand.Letshout.CommandName);
                     return;
                 case "$CMD_LETTRADE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETTRADE>", M2Share.g_GameCommand.LETTRADE.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETTRADE>", M2Share.GameCommand.LetTrade.CommandName);
                     return;
                 case "$CMD_LETGUILD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", M2Share.g_GameCommand.LETGUILD.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", M2Share.GameCommand.Letguild.CommandName);
                     return;
                 case "$CMD_ENDGUILD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", M2Share.g_GameCommand.ENDGUILD.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", M2Share.GameCommand.Endguild.CommandName);
                     return;
                 case "$CMD_BANGUILDCHAT":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_BANGUILDCHAT>", M2Share.g_GameCommand.BANGUILDCHAT.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_BANGUILDCHAT>", M2Share.GameCommand.BanGuildChat.CommandName);
                     return;
                 case "$CMD_AUTHALLY":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHALLY>", M2Share.g_GameCommand.AUTHALLY.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHALLY>", M2Share.GameCommand.Authally.CommandName);
                     return;
                 case "$CMD_AUTH":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTH>", M2Share.g_GameCommand.AUTH.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTH>", M2Share.GameCommand.Auth.CommandName);
                     return;
                 case "$CMD_AUTHCANCEL":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHCANCEL>", M2Share.g_GameCommand.AUTHCANCEL.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHCANCEL>", M2Share.GameCommand.AuthCancel.CommandName);
                     return;
                 case "$CMD_USERMOVE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_USERMOVE>", M2Share.g_GameCommand.USERMOVE.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_USERMOVE>", M2Share.GameCommand.UserMove.CommandName);
                     return;
                 case "$CMD_SEARCHING":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_SEARCHING>", M2Share.g_GameCommand.SEARCHING.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_SEARCHING>", M2Share.GameCommand.Searching.CommandName);
                     return;
                 case "$CMD_ALLOWGROUPCALL":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWGROUPCALL>", M2Share.g_GameCommand.ALLOWGROUPCALL.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWGROUPCALL>", M2Share.GameCommand.AllowGroupCall.CommandName);
                     return;
                 case "$CMD_GROUPRECALLL":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_GROUPRECALLL>", M2Share.g_GameCommand.GROUPRECALLL.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_GROUPRECALLL>", M2Share.GameCommand.GroupRecalll.CommandName);
                     return;
                 case "$CMD_ATTACKMODE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ATTACKMODE>", M2Share.g_GameCommand.ATTACKMODE.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ATTACKMODE>", M2Share.GameCommand.AttackMode.CommandName);
                     return;
                 case "$CMD_REST":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_REST>", M2Share.g_GameCommand.REST.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_REST>", M2Share.GameCommand.Rest.CommandName);
                     return;
                 case "$CMD_STORAGESETPASSWORD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGESETPASSWORD>", M2Share.g_GameCommand.SETPASSWORD.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGESETPASSWORD>", M2Share.GameCommand.SetPassword.CommandName);
                     return;
                 case "$CMD_STORAGECHGPASSWORD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGECHGPASSWORD>", M2Share.g_GameCommand.CHGPASSWORD.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGECHGPASSWORD>", M2Share.GameCommand.ChgPassword.CommandName);
                     return;
                 case "$CMD_STORAGELOCK":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGELOCK>", M2Share.g_GameCommand.__LOCK.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGELOCK>", M2Share.GameCommand.Lock.CommandName);
                     return;
                 case "$CMD_STORAGEUNLOCK":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGEUNLOCK>", M2Share.g_GameCommand.UNLOCKSTORAGE.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGEUNLOCK>", M2Share.GameCommand.UnlockStorage.CommandName);
                     return;
                 case "$CMD_UNLOCK":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", M2Share.g_GameCommand.UNLOCK.sCmd);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", M2Share.GameCommand.Unlock.CommandName);
                     return;
             }
             if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[", "$MAPMONSTERCOUNT[".Length)) // 地图怪物数量
@@ -1457,7 +1457,7 @@ namespace GameSvr.Npc
                 boFoundVar = false;
                 if (PlayObject.MyGuild.m_DynamicVarList.TryGetValue(s14, out DynamicVar))
                 {
-                    if (String.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         switch (DynamicVar.VarType)
                         {

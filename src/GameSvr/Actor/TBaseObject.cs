@@ -90,7 +90,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 允许加入行会
         /// </summary>        
-        protected bool AllowGuild;
+        internal bool AllowGuild;
         public byte BtB2;
         public int IncHealth;
         public int IncSpell;
@@ -261,7 +261,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 是不允许交易
         /// </summary>
-        protected bool AllowDeal;
+        internal bool AllowDeal;
         /// <summary>
         /// 禁止私聊人员列表
         /// </summary>

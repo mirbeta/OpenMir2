@@ -25,13 +25,13 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject.PkPoint = 0;
             m_PlayObject.RefNameColor();
-            m_PlayObject.SysMsg(GameCommandConst.g_sGameCommandFreePKHumanMsg, MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandFreePKMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(GameCommandConst.GameCommandFreePKHumanMsg, MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandFreePKMsg, sHumanName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

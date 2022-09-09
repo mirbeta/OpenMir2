@@ -9,7 +9,7 @@ namespace GameSvr.Command.Commands
         [DefaultCommand]
         public void LotteryTicket(PlayObject PlayObject)
         {
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandLotteryTicketMsg, M2Share.Config.WinLotteryCount,
+            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandLotteryTicketMsg, M2Share.Config.WinLotteryCount,
                 M2Share.Config.NoWinLotteryCount, M2Share.Config.WinLotteryLevel1, M2Share.Config.WinLotteryLevel2,
                 M2Share.Config.WinLotteryLevel3, M2Share.Config.WinLotteryLevel4, M2Share.Config.WinLotteryLevel5,
                 M2Share.Config.WinLotteryLevel6), MsgColor.Green, MsgType.Hint);

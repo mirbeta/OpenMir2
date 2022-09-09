@@ -1308,37 +1308,6 @@ namespace GameSvr.Player
             SendSocket(m_DefMsg, sSendMsg);
         }
 
-        private void ShowMapInfo(string sMap, string sX, string sY)
-        {
-            var nX = (short)HUtil32.Str_ToInt(sX, 0);
-            var nY = (short)HUtil32.Str_ToInt(sY, 0);
-            if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0)
-            {
-                var Map = M2Share.MapMgr.FindMap(sMap);
-                if (Map != null)
-                {
-                    var cellsuccess = false;
-                    var cellInfo = Map.GetCellInfo(nX, nY, ref cellsuccess);
-                    if (cellsuccess)
-                    {
-                        SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);
-                        if (cellInfo.IsAvailable)
-                        {
-                            SysMsg("对象数: " + cellInfo.Count, MsgColor.Green, MsgType.Hint);
-                        }
-                    }
-                    else
-                    {
-                        SysMsg("取地图单元信息失败: " + sMap, MsgColor.Red, MsgType.Hint);
-                    }
-                }
-            }
-            else
-            {
-                SysMsg("请按正确格式输入: " + M2Share.g_GameCommand.MAPINFO.sCmd + " 地图号 X Y", MsgColor.Green, MsgType.Hint);
-            }
-        }
-
         public void PKDie(PlayObject PlayObject)
         {
             var nWinLevel = M2Share.Config.KillHumanWinLevel;
@@ -3575,7 +3544,7 @@ namespace GameSvr.Player
         {
             if (ProcessMsg.wParam == 0)
             {
-                ProcessUserLineMsg("@" + M2Share.g_GameCommand.UNLOCK.sCmd);
+                ProcessUserLineMsg("@" + M2Share.GameCommand.Unlock.CommandName);
                 return;
             }
             var sData = ProcessMsg.Msg;
@@ -3728,7 +3697,7 @@ namespace GameSvr.Player
             }
             else
             {
-                SysMsg(Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                SysMsg(Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
 

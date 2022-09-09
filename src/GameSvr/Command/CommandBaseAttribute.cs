@@ -96,4 +96,15 @@
 
         }
     }
+
+    [AttributeUsage(AttributeTargets.Field)]
+    public class ConvertToBinaryAttribute : Attribute
+    {
+        public Type CommandType;
+
+        public ConvertToBinaryAttribute(Type commond)
+        {
+            CommandType = commond;
+        }
+    }
 }

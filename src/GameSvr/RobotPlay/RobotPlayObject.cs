@@ -513,7 +513,7 @@ namespace GameSvr.RobotPlay
             for (var i = 0; i < MagicList.Count; i++)
             {
                 TUserMagic UserMagic = MagicList[i];
-                if (String.Compare(UserMagic.MagicInfo.sMagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(UserMagic.MagicInfo.sMagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UserMagic;
                     break;

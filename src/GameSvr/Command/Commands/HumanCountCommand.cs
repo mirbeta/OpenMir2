@@ -6,7 +6,7 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 取指定地图玩家数量
     /// </summary>
-    [GameCommand("HumanCount", "取指定地图玩家数量", GameCommandConst.g_sGameCommandHumanCountHelpMsg, 10)]
+    [GameCommand("HumanCount", "取指定地图玩家数量", GameCommandConst.GameCommandHumanCountHelpMsg, 10)]
     public class HumanCountCommand : BaseCommond
     {
         [DefaultCommand]
@@ -25,10 +25,10 @@ namespace GameSvr.Command.Commands
             var Envir = M2Share.MapMgr.FindMap(sMapName);
             if (Envir == null)
             {
-                PlayObject.SysMsg(GameCommandConst.g_sGameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommandConst.GameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg(string.Format(GameCommandConst.g_sGameCommandMobCountMonsterCount, M2Share.UserEngine.GetMapHuman(sMapName)), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobCountMonsterCount, M2Share.UserEngine.GetMapHuman(sMapName)), MsgColor.Green, MsgType.Hint);
         }
     }
 }
