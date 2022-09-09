@@ -30,7 +30,7 @@ namespace DBSvr.Conf
             _config.LoginServerPort = ReadInteger("Server", "IDSPort", _config.LoginServerPort);
             _config.ServerName = ReadString("Setup", "ServerName", _config.ServerName);
             _config.boDenyChrName = ReadBool("Setup", "DenyChrName", _config.boDenyChrName);
-            _config.nDELMaxLevel = ReadInteger("Setup", "DELMaxLevel", _config.nDELMaxLevel);
+            _config.DeleteMinLevel = ReadInteger("Setup", "DELMaxLevel", _config.DeleteMinLevel);
             _config.Interval = Read<int>("DBClear", "Interval", _config.Interval);
             var dynamicIpMode = ReadInteger("Setup", "DynamicIPMode", -1);
             if (dynamicIpMode < 0)

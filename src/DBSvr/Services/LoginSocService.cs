@@ -9,20 +9,20 @@ namespace DBSvr.Services
 {
     /// <summary>
     /// 账号中心
-    /// 登陆会话服务
+    /// 会话同步服务(DBSvr-LoginSvr)
     /// </summary>
     public class LoginSvrService
     {
         private readonly MirLog _logger;
         private readonly ClientScoket _loginSocket;
         private readonly IList<TGlobaSessionInfo> _globaSessionList = null;
-        private readonly SvrConf _config;
+        private readonly SvrConf _conf;
         private string _sockMsg = string.Empty;
 
         public LoginSvrService(MirLog logger, SvrConf conf)
         {
             _logger = logger;
-            _config = conf;
+            _conf = conf;
             _loginSocket = new ClientScoket();
             _loginSocket.ReceivedDatagram += LoginSocketRead;
             _loginSocket.OnConnected += LoginSocketConnected;
@@ -36,13 +36,13 @@ namespace DBSvr.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.LogWarning("账号服务器[" + _config.LoginServerAddr + ":" + _config.LoginServerPort + "]拒绝链接...");
+                    _logger.LogWarning("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.LogWarning("账号服务器[" + _config.LoginServerAddr + ":" + _config.LoginServerPort + "]关闭连接...");
+                    _logger.LogWarning("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.LogWarning("账号服务器[" + _config.LoginServerAddr + ":" + _config.LoginServerPort + "]链接超时...");
+                    _logger.LogWarning("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]链接超时...");
                     break;
             }
         }
@@ -59,7 +59,7 @@ namespace DBSvr.Services
 
         public void Start()
         {
-            _loginSocket.Connect(_config.LoginServerAddr, _config.LoginServerPort);
+            _loginSocket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
         }
 
         public void Stop()
@@ -81,7 +81,7 @@ namespace DBSvr.Services
                 return;
             }
             _logger.DebugLog($"重新链接账号服务器[{_loginSocket.EndPoint}].");
-            _loginSocket.Connect(_config.LoginServerAddr, _config.LoginServerPort);
+            _loginSocket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
         }
 
         private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -133,7 +133,7 @@ namespace DBSvr.Services
             }
         }
 
-        public bool CheckSession(string sAccount, string sIPaddr, int nSessionID)
+        public bool CheckSession(string account, string sIPaddr, int sessionId)
         {
             bool result = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
@@ -141,7 +141,7 @@ namespace DBSvr.Services
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.nSessionID == nSessionID))
+                    if ((globaSessionInfo.sAccount == account) && (globaSessionInfo.nSessionID == sessionId))
                     {
                         result = true;
                         break;
@@ -151,21 +151,21 @@ namespace DBSvr.Services
             return result;
         }
 
-        public int CheckSessionLoadRcd(string sAccount, string sIPaddr, int nSessionID, ref bool boFoundSession)
+        public int CheckSessionLoadRcd(string sAccount, string sIPaddr, int nSessionId, ref bool boFoundSession)
         {
             int result = -1;
             boFoundSession = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                var GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                var globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.sAccount == sAccount) && (GlobaSessionInfo.nSessionID == nSessionID))
+                    if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.nSessionID == nSessionId))
                     {
                         boFoundSession = true;
-                        if (!GlobaSessionInfo.boLoadRcd)
+                        if (!globaSessionInfo.boLoadRcd)
                         {
-                            GlobaSessionInfo.boLoadRcd = true;
+                            globaSessionInfo.boLoadRcd = true;
                             result = 1;
                         }
                         break;
@@ -180,12 +180,12 @@ namespace DBSvr.Services
             bool result = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                var GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                var globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.sAccount == sAccount))
+                    if ((globaSessionInfo.sAccount == sAccount))
                     {
-                        GlobaSessionInfo.boLoadRcd = false;
+                        globaSessionInfo.boLoadRcd = false;
                         result = true;
                     }
                 }
@@ -193,49 +193,49 @@ namespace DBSvr.Services
             return result;
         }
 
-        public void SetGlobaSessionNoPlay(int nSessionID)
+        public void SetGlobaSessionNoPlay(int nSessionId)
         {
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                var GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                var globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.nSessionID == nSessionID))
+                    if ((globaSessionInfo.nSessionID == nSessionId))
                     {
-                        GlobaSessionInfo.boStartPlay = false;
+                        globaSessionInfo.boStartPlay = false;
                         break;
                     }
                 }
             }
         }
 
-        public void SetGlobaSessionPlay(int nSessionID)
+        public void SetGlobaSessionPlay(int nSessionId)
         {
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                var GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                var globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.nSessionID == nSessionID))
+                    if ((globaSessionInfo.nSessionID == nSessionId))
                     {
-                        GlobaSessionInfo.boStartPlay = true;
+                        globaSessionInfo.boStartPlay = true;
                         break;
                     }
                 }
             }
         }
 
-        public bool GetGlobaSessionStatus(int nSessionID)
+        public bool GetGlobaSessionStatus(int nSessionId)
         {
             bool result = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                var GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                var globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.nSessionID == nSessionID))
+                    if ((globaSessionInfo.nSessionID == nSessionId))
                     {
-                        result = GlobaSessionInfo.boStartPlay;
+                        result = globaSessionInfo.boStartPlay;
                         break;
                     }
                 }
@@ -243,18 +243,18 @@ namespace DBSvr.Services
             return result;
         }
 
-        public void CloseSession(string sAccount, int nSessionID)
+        public void CloseSession(string sAccount, int nSessionId)
         {
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                var GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                var globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.nSessionID == nSessionID))
+                    if ((globaSessionInfo.nSessionID == nSessionId))
                     {
-                        if (GlobaSessionInfo.sAccount == sAccount)
+                        if (globaSessionInfo.sAccount == sAccount)
                         {
-                            GlobaSessionInfo = null;
+                            globaSessionInfo = null;
                             _globaSessionList.RemoveAt(i);
                             break;
                         }
@@ -275,16 +275,16 @@ namespace DBSvr.Services
             sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);
-            TGlobaSessionInfo GlobaSessionInfo = new TGlobaSessionInfo();
-            GlobaSessionInfo.sAccount = sAccount;
-            GlobaSessionInfo.sIPaddr = sIPaddr;
-            GlobaSessionInfo.nSessionID = HUtil32.Str_ToInt(s10, 0);
+            TGlobaSessionInfo globaSessionInfo = new TGlobaSessionInfo();
+            globaSessionInfo.sAccount = sAccount;
+            globaSessionInfo.sIPaddr = sIPaddr;
+            globaSessionInfo.nSessionID = HUtil32.Str_ToInt(s10, 0);
             //GlobaSessionInfo.n24 = HUtil32.Str_ToInt(s14, 0);
-            GlobaSessionInfo.boStartPlay = false;
-            GlobaSessionInfo.boLoadRcd = false;
-            GlobaSessionInfo.dwAddTick = HUtil32.GetTickCount();
-            GlobaSessionInfo.dAddDate = DateTime.Now;
-            _globaSessionList.Add(GlobaSessionInfo);
+            globaSessionInfo.boStartPlay = false;
+            globaSessionInfo.boLoadRcd = false;
+            globaSessionInfo.dwAddTick = HUtil32.GetTickCount();
+            globaSessionInfo.dAddDate = DateTime.Now;
+            _globaSessionList.Add(globaSessionInfo);
 
             _logger.DebugLog("收到账号中心同步会话消息.");
         }
@@ -292,17 +292,17 @@ namespace DBSvr.Services
         private void ProcessDelSession(string sData)
         {
             string sAccount = string.Empty;
-            TGlobaSessionInfo GlobaSessionInfo;
+            TGlobaSessionInfo globaSessionInfo;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-            int nSessionID = HUtil32.Str_ToInt(sData, 0);
+            int nSessionId = HUtil32.Str_ToInt(sData, 0);
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.nSessionID == nSessionID) && (GlobaSessionInfo.sAccount == sAccount))
+                    if ((globaSessionInfo.nSessionID == nSessionId) && (globaSessionInfo.sAccount == sAccount))
                     {
-                        GlobaSessionInfo = null;
+                        globaSessionInfo = null;
                         _globaSessionList.RemoveAt(i);
                         break;
                     }
@@ -313,13 +313,13 @@ namespace DBSvr.Services
         public bool GetSession(string sAccount, string sIPaddr)
         {
             bool result = false;
-            TGlobaSessionInfo GlobaSessionInfo;
+            TGlobaSessionInfo globaSessionInfo;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                GlobaSessionInfo = _globaSessionList[i];
-                if (GlobaSessionInfo != null)
+                globaSessionInfo = _globaSessionList[i];
+                if (globaSessionInfo != null)
                 {
-                    if ((GlobaSessionInfo.sAccount == sAccount) && (GlobaSessionInfo.sIPaddr == sIPaddr))
+                    if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.sIPaddr == sIPaddr))
                     {
                         result = true;
                         break;
@@ -338,7 +338,7 @@ namespace DBSvr.Services
         {
             if (_loginSocket.IsConnected)
             {
-                _loginSocket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + _config.ServerName + "/" + "99" + "/" + userCount + ")");
+                _loginSocket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + _conf.ServerName + "/" + "99" + "/" + userCount + ")");
             }
         }
     }

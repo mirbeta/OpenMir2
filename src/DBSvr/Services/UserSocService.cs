@@ -18,6 +18,10 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace DBSvr.Services
 {
+    /// <summary>
+    /// 角色数据服务
+    /// DBSvr-SelGate-Client
+    /// </summary>
     public class UserSocService
     {
         private readonly MirLog _logger;
@@ -78,7 +82,7 @@ namespace DBSvr.Services
         public IList<TGateInfo> GateList { get; } = null;
 
         /// <summary>
-        /// 处理客户端发过来的消息
+        /// 处理客户端请求消息
         /// </summary>
         private void StartMessageThread(CancellationToken stoppingToken)
         {
@@ -100,6 +104,7 @@ namespace DBSvr.Services
             var sData = string.Empty;
             if (packet.EndChar != '$')
             {
+                _logger.LogWarning("非法数据包.");
                 return;
             }
             var sText = HUtil32.GetString(packet.Body, 0, packet.BuffLen);
@@ -409,7 +414,7 @@ namespace DBSvr.Services
         }
 
         /// <summary>
-        /// 打开用户会话
+        /// 用户打开会话
         /// </summary>
         private void OpenUser(string sId, string sIp, ref TGateInfo gateInfo)
         {
@@ -515,7 +520,7 @@ namespace DBSvr.Services
                         userInfo.dwChrTick = HUtil32.GetTickCount();
                         if ((userInfo.sAccount != "") && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
-                            DelChr(sText, ref userInfo);
+                            DeleteChr(sText, ref userInfo);
                             userInfo.boChrQueryed = false;
                         }
                         else
@@ -639,7 +644,7 @@ namespace DBSvr.Services
         /// <summary>
         /// 删除角色
         /// </summary>
-        private void DelChr(string sData, ref TUserInfo userInfo)
+        private void DeleteChr(string sData, ref TUserInfo userInfo)
         {
             ClientPacket msg;
             var sChrName = EDCode.DeCodeString(sData);
@@ -653,7 +658,7 @@ namespace DBSvr.Services
                     if (humRecord.sAccount == userInfo.sAccount)
                     {
                         var nLevel = DelChrSnameToLevel(sChrName);
-                        if (nLevel < _conf.nDELMaxLevel)
+                        if (nLevel < _conf.DeleteMinLevel)
                         {
                             humRecord.Deleted = true;
                             boCheck = _playRecordService.Update(nIndex, ref humRecord);
@@ -851,7 +856,11 @@ namespace DBSvr.Services
             return result;
         }
 
-        private string GateRouteIP_GetRoute(TRouteInfo routeInfo, ref int nGatePort)
+        /// <summary>
+        /// 获取游戏网关
+        /// </summary>
+        /// <returns></returns>
+        private string GetGameGateRoute(TRouteInfo routeInfo, ref int nGatePort)
         {
             var nGateIndex = RandomNumber.GetInstance().Random(routeInfo.nGateCount);
             var result = routeInfo.sGameGateIP[nGateIndex];
@@ -862,18 +871,17 @@ namespace DBSvr.Services
         private string GateRouteIp(string sGateIp, ref int nPort)
         {
             var result = string.Empty;
-            TRouteInfo routeInfo;
             nPort = 0;
             for (var i = 0; i < DBShare.RouteInfo.Length; i++)
             {
-                routeInfo = DBShare.RouteInfo[i];
+                var routeInfo = DBShare.RouteInfo[i];
                 if (routeInfo == null)
                 {
                     continue;
                 }
                 if (routeInfo.sSelGateIP == sGateIp)
                 {
-                    result = GateRouteIP_GetRoute(routeInfo, ref nPort);
+                    result = GetGameGateRoute(routeInfo, ref nPort);
                     break;
                 }
             }
