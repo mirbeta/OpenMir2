@@ -1,9 +1,10 @@
-﻿namespace SystemModule.Data;
-
-public struct TRecallMigic
+﻿namespace SystemModule.Data
 {
-    public int nHumLevel;
-    public string sMonName;
-    public int nCount;
-    public int nLevel;
+    public struct TRecallMigic
+    {
+        public int nHumLevel;
+        public string sMonName;
+        public int nCount;
+        public int nLevel;
+    }
 }

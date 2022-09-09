@@ -5,6 +5,8 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Conf
 {
@@ -27,9 +29,9 @@ namespace GameSvr.Conf
             string sItemName;
             string sSayMsg;
             IList<string> TempList;
-            TUserItem UserItem;
-            TMagic Magic;
-            TUserMagic UserMagic;
+            UserItem UserItem;
+            SystemModule.Packet.ServerPackets.MagicInfo Magic;
+            UserMagic UserMagic;
             StdItem StdItem;
             playObject.NoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
             playObject.NoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
@@ -63,7 +65,7 @@ namespace GameSvr.Conf
                             {
                                 if (Magic.btJob == 99 || Magic.btJob == (byte)playObject.Job)
                                 {
-                                    UserMagic = new TUserMagic();
+                                    UserMagic = new UserMagic();
                                     UserMagic.MagicInfo = Magic;
                                     UserMagic.wMagIdx = Magic.wMagicID;
                                     UserMagic.btLevel = 3;
@@ -94,7 +96,7 @@ namespace GameSvr.Conf
                         StdItem = M2Share.UserEngine.GetStdItem(sItemName);
                         if (StdItem != null)
                         {
-                            UserItem = new TUserItem();
+                            UserItem = new UserItem();
                             if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                             {
                                 if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
@@ -151,7 +153,7 @@ namespace GameSvr.Conf
                     StdItem = M2Share.UserEngine.GetStdItem(playObject.m_UseItemNames[i]);
                     if (StdItem != null)
                     {
-                        UserItem = new TUserItem();
+                        UserItem = new UserItem();
                         if (M2Share.UserEngine.CopyToUserItemFromName(playObject.m_UseItemNames[i], ref UserItem))
                         {
                             if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))

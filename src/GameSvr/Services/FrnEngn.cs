@@ -2,6 +2,7 @@ using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Services
 {
@@ -335,7 +336,7 @@ namespace GameSvr.Services
             }
             else
             {
-                var userOpenInfo = new TUserOpenInfo
+                var userOpenInfo = new UserOpenInfo
                 {
                     sChrName = LoadUser.sCharName,
                     LoadUser = LoadUser,

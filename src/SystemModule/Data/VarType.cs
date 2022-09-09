@@ -1,8 +1,9 @@
-﻿namespace SystemModule.Data;
-
-public enum VarType
+﻿namespace SystemModule.Data
 {
-    None,
-    Integer,
-    String
+    public enum VarType
+    {
+        None,
+        Integer,
+        String
+    }
 }

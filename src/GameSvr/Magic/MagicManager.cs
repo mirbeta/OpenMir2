@@ -88,18 +88,18 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private ushort DoSpell_MPow(TUserMagic UserMagic)
+        private ushort DoSpell_MPow(UserMagic UserMagic)
         {
             return (ushort)(UserMagic.MagicInfo.wPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.wMaxPower - UserMagic.MagicInfo.wPower));
         }
 
-        private ushort DoSpell_GetPower(TUserMagic UserMagic, ushort nPower)
+        private ushort DoSpell_GetPower(UserMagic UserMagic, ushort nPower)
         {
             return (ushort)(HUtil32.Round(nPower / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefPower +
                             M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower));
         }
 
-        private ushort DoSpell_GetPower13(TUserMagic UserMagic, int nInt)
+        private ushort DoSpell_GetPower13(UserMagic UserMagic, int nInt)
         {
             var d10 = nInt / 3.0;
             var d18 = nInt - d10;
@@ -131,7 +131,7 @@ namespace GameSvr.Magic
             }
         }
 
-        public bool DoSpell(PlayObject PlayObject, TUserMagic UserMagic, short nTargetX, short nTargetY, BaseObject TargeTBaseObject)
+        public bool DoSpell(PlayObject PlayObject, UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject TargeTBaseObject)
         {
             var result = false;
             short n14 = 0;
@@ -846,7 +846,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagWindTebo(PlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagWindTebo(PlayObject PlayObject, UserMagic UserMagic)
         {
             var result = false;
             var PoseBaseObject = PlayObject.GetPoseCreate();
@@ -885,7 +885,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagGroupAmyounsul(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, BaseObject TargeTBaseObject)
+        private bool MagGroupAmyounsul(PlayObject PlayObject, UserMagic UserMagic, int nTargetX, int nTargetY, BaseObject TargeTBaseObject)
         {
             short nAmuletIdx = 0;
             var result = false;
@@ -935,7 +935,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagGroupDeDing(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, BaseObject TargeTBaseObject)
+        private bool MagGroupDeDing(PlayObject PlayObject, UserMagic UserMagic, int nTargetX, int nTargetY, BaseObject TargeTBaseObject)
         {
             BaseObject BaseObject;
             var result = false;
@@ -976,7 +976,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagGroupLightening(PlayObject PlayObject, TUserMagic UserMagic, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, ref bool boSpellFire)
+        private bool MagGroupLightening(PlayObject PlayObject, UserMagic UserMagic, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, ref bool boSpellFire)
         {
             var result = false;
             boSpellFire = false;
@@ -1016,7 +1016,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagHbFireBall(PlayObject PlayObject, TUserMagic UserMagic, short nTargetX, short nTargetY, ref BaseObject TargetBaseObject)
+        private bool MagHbFireBall(PlayObject PlayObject, UserMagic UserMagic, short nTargetX, short nTargetY, ref BaseObject TargetBaseObject)
         {
             var result = false;
             if (!PlayObject.MagCanHitTarget(PlayObject.CurrX, PlayObject.CurrY, TargetBaseObject))
@@ -1286,7 +1286,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagMakeSinSuSlave(PlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeSinSuSlave(PlayObject PlayObject, UserMagic UserMagic)
         {
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
@@ -1324,7 +1324,7 @@ namespace GameSvr.Magic
         /// </summary>
         const int dwRoyaltySec = 10 * 24 * 60 * 60;
 
-        private bool MagMakeSlave(PlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeSlave(PlayObject PlayObject, UserMagic UserMagic)
         {
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())
@@ -1353,13 +1353,13 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagMakeClone(PlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeClone(PlayObject PlayObject, UserMagic UserMagic)
         {
             var playCloneObject = new TPlayCloneObject(PlayObject);
             return true;
         }
 
-        private bool MagMakeAngelSlave(PlayObject PlayObject, TUserMagic UserMagic)
+        private bool MagMakeAngelSlave(PlayObject PlayObject, UserMagic UserMagic)
         {
             var result = false;
             if (!PlayObject.CheckServerMakeSlave())

@@ -8,7 +8,7 @@ namespace BotSvr.Scenes
         public int NTargetX;
         public int NTargetY;
         public TActor XTarget;
-        public TClientMagic XMagic;
+        public ClientMagic XMagic;
         public bool FReacll;
         public bool FContinue;
         public bool FUnLockMagic;

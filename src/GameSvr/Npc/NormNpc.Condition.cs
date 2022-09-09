@@ -1710,7 +1710,7 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckMagicLvl(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             for (var i = 0; i < PlayObject.MagicList.Count; i++)
             {
                 UserMagic = PlayObject.MagicList[i];

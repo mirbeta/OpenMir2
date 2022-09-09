@@ -202,7 +202,7 @@ namespace DBSvr
                          {
                              var (serverIp, status, sessionCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
 
-                             table.UpdateCell(i, 0, $"[bold][blue]SelGate[/][/]");
+                             table.UpdateCell(i, 0, "[bold][blue]SelGate[/][/]");
                              table.UpdateCell(i, 1, ($"[bold]{serverIp}[/]"));
                              table.UpdateCell(i, 2, ($"[bold]{status}[/]"));
                              table.UpdateCell(i, 3, ($"[bold]{sessionCount}[/]"));

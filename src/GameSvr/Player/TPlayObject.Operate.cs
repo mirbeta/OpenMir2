@@ -6,6 +6,7 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Player
 {
@@ -19,7 +20,7 @@ namespace GameSvr.Player
                 var tagColor = GetCharColor(baseObject);
                 var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, baseObject.ActorId, tagColor, 0, 0);
                 var uname = baseObject.GetShowName();
-                SendSocket(defMsg, EDcode.EncodeString(uname));
+                SendSocket(defMsg, EDCode.EncodeString(uname));
             }
             else
             {
@@ -32,11 +33,11 @@ namespace GameSvr.Player
             string sSendMsg = string.Empty;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                TUserItem userItem = ItemList[i];
+                UserItem userItem = ItemList[i];
                 StdItem item = M2Share.UserEngine.GetStdItem(userItem.wIndex);
                 if (item != null)
                 {
-                    TClientItem clientItem = new TClientItem();
+                    ClientItem clientItem = new ClientItem();
                     item.GetStandardItem(ref clientItem.Item);
                     item.GetItemAddValue(userItem, ref clientItem.Item);
                     clientItem.Item.Name = ItemUnit.GetItemName(userItem);
@@ -47,7 +48,7 @@ namespace GameSvr.Player
                     {
                         clientItem.Item.Name = clientItem.Item.Name + " #" + userItem.Dura;
                     }
-                    sSendMsg = sSendMsg + EDcode.EncodeBuffer(clientItem) + '/';
+                    sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + '/';
                 }
             }
             if (!string.IsNullOrEmpty(sSendMsg))
@@ -60,7 +61,7 @@ namespace GameSvr.Player
         private void ClientQueryUserSet(ProcessMessage processMsg)
         {
             var sPassword = processMsg.Msg;
-            if (sPassword != EDcode.DeCodeString("NbA_VsaSTRucMbAjUl"))
+            if (sPassword != EDCode.DeCodeString("NbA_VsaSTRucMbAjUl"))
             {
                 M2Share.Log.Error("Fail");
                 return;
@@ -76,7 +77,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            TUserStateInfo userState = new TUserStateInfo();
+            UserStateInfo userState = new UserStateInfo();
             userState.Feature = playObject.GetFeature(this);
             userState.UserName = playObject.CharName;
             userState.NameColor = GetCharColor(playObject);
@@ -87,7 +88,7 @@ namespace GameSvr.Player
             userState.GuildRankName = playObject.GuildRankName;
             for (var i = 0; i < playObject.UseItems.Length; i++)
             {
-                TUserItem userItem = playObject.UseItems[i];
+                UserItem userItem = playObject.UseItems[i];
                 if (userItem.wIndex > 0)
                 {
                     StdItem stdItem = M2Share.UserEngine.GetStdItem(playObject.UseItems[i].wIndex);
@@ -95,7 +96,7 @@ namespace GameSvr.Player
                     {
                         continue;
                     }
-                    TClientItem clientItem = new TClientItem();
+                    ClientItem clientItem = new ClientItem();
                     stdItem.GetStandardItem(ref clientItem.Item);
                     stdItem.GetItemAddValue(playObject.UseItems[i], ref clientItem.Item);
                     clientItem.Item.Name = ItemUnit.GetItemName(playObject.UseItems[i]);
@@ -106,7 +107,7 @@ namespace GameSvr.Player
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
-            SendSocket(m_DefMsg, EDcode.EncodeBuffer(userState));
+            SendSocket(m_DefMsg, EDCode.EncodeBuffer(userState));
         }
 
         private void ClientMerchantDlgSelect(int nParam1, string sMsg)
@@ -132,9 +133,9 @@ namespace GameSvr.Player
 
         private void ClientMerchantQuerySellPrice(int nParam1, int nMakeIndex, string sMsg)
         {
-            TUserItem userItem;
+            UserItem userItem;
             string sUserItemName;
-            TUserItem userItem18 = null;
+            UserItem userItem18 = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
@@ -394,9 +395,9 @@ namespace GameSvr.Player
         {
             var n14 = -1;
             var n18 = 0;
-            TUserItem userItem = null;
+            UserItem userItem = null;
             StdItem stdItem = null;
-            TClientStdItem stdItem58 = null;
+            ClientStdItem stdItem58 = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
@@ -424,7 +425,7 @@ namespace GameSvr.Player
                     stdItem58.Name = ItemUnit.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref stdItem58) && CheckItemBindUse(userItem))
                     {
-                        TUserItem takeOffItem = null;
+                        UserItem takeOffItem = null;
                         if (btWhere >= 0 && btWhere <= 12)
                         {
                             if (UseItems[btWhere] != null && UseItems[btWhere].wIndex > 0)
@@ -596,7 +597,7 @@ namespace GameSvr.Player
             var result = false;
             for (var i = 0; i < nCount; i++)
             {
-                var userItem = new TUserItem();
+                var userItem = new UserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
                     ItemList.Add(userItem);
@@ -619,7 +620,7 @@ namespace GameSvr.Player
         {
             var boEatOk = false;
             StdItem stdItem = null;
-            TUserItem userItem34 = null;
+            UserItem userItem34 = null;
             if (m_boCanUseItem)
             {
                 if (!Death)
@@ -1114,7 +1115,7 @@ namespace GameSvr.Player
                 }
                 if (bo11)
                 {
-                    TUserItem userItem;
+                    UserItem userItem;
                     StdItem stdItem;
                     for (var i = 0; i < DealItemList.Count; i++)
                     {
@@ -1264,7 +1265,7 @@ namespace GameSvr.Player
                     sC = sC + MyGuild.GuildAllList[i] + '\r';
                 }
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
-                SendSocket(m_DefMsg, EDcode.EncodeString(sC));
+                SendSocket(m_DefMsg, EDCode.EncodeString(sC));
             }
             else
             {
@@ -1298,7 +1299,7 @@ namespace GameSvr.Player
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
-            SendSocket(m_DefMsg, EDcode.EncodeString(sSendMsg));
+            SendSocket(m_DefMsg, EDCode.EncodeString(sSendMsg));
         }
 
         private void ClientGuildAddMember(string sHumName)
@@ -1556,7 +1557,7 @@ namespace GameSvr.Player
 
         private void ClientQueryRepairCost(int nParam1, int nInt, string sMsg)
         {
-            TUserItem userItemA = null;
+            UserItem userItemA = null;
             string sUserItemName;
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -1584,7 +1585,7 @@ namespace GameSvr.Player
 
         private void ClientRepairItem(int nParam1, int nInt, string sMsg)
         {
-            TUserItem userItem = null;
+            UserItem userItem = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];

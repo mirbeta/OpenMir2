@@ -45,11 +45,11 @@ namespace GameSvr.Items
             return result;
         }
 
-        public void GetStandardItem(ref TClientStdItem stdItem)
+        public void GetStandardItem(ref ClientStdItem stdItem)
         {
             if (stdItem == null)
             {
-                stdItem = new TClientStdItem();
+                stdItem = new ClientStdItem();
             }
             stdItem.Name = M2Share.FilterShowName(Name);
             stdItem.StdMode = StdMode;
@@ -66,7 +66,7 @@ namespace GameSvr.Items
             stdItem.Price = Price;
         }
 
-        public void GetItemAddValue(TUserItem userItem, ref TClientStdItem stdItem)
+        public void GetItemAddValue(UserItem userItem, ref ClientStdItem stdItem)
         {
             switch (ItemType)
             {
@@ -126,7 +126,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void RandomUpgradeItem(TUserItem userItem)
+        public void RandomUpgradeItem(UserItem userItem)
         {
             int nUpgrade;
             int nIncp;
@@ -421,7 +421,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void RandomUpgradeUnknownItem(TUserItem userItem)
+        public void RandomUpgradeUnknownItem(UserItem userItem)
         {
             switch (ItemType)
             {

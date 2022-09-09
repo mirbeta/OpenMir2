@@ -47,7 +47,7 @@ namespace MakePlayer.Cliens
         public int m_nGold = 0;
         public byte m_btJob = 0;
         public int m_nGameGold = 0;
-        public TAbility m_Abil = null;
+        public Ability m_Abil = null;
         public bool m_boLogin = false;
         public long m_dwSayTick = 0;
         private Action? FNotifyEvent = null;
@@ -171,7 +171,7 @@ namespace MakePlayer.Cliens
         private void SendClientMessage(int nIdent, int nRecog, int nParam, int nTag, int nSeries)
         {
             var DefMsg = Grobal2.MakeDefaultMsg(nIdent, nRecog, nParam, nTag, nSeries);
-            SendSocket(EDcode.EncodeMessage(DefMsg));
+            SendSocket(EDCode.EncodeMessage(DefMsg));
         }
 
         private void SendNewAccount(string sAccount, string sPassword)
@@ -194,7 +194,7 @@ namespace MakePlayer.Cliens
             ue.UserEntryAdd.sMemo = "";
             ue.UserEntryAdd.sMemo2 = "";
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue));
+            SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue));
         }
 
         private void SelectChrCreateNewChr(string sCharName)
@@ -228,7 +228,7 @@ namespace MakePlayer.Cliens
             m_ConnectionStep = TConnectionStep.cnsSelChr;
             m_sCharName = sCharName;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(m_sLoginAccount + "/" + sCharName));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(m_sLoginAccount + "/" + sCharName));
         }
 
         private void SendLogin(string sAccount, string sPassword)
@@ -236,7 +236,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{m_sLoginAccount}] 开始登录");
             m_ConnectionStep = TConnectionStep.cnsLogin;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_IDPASSWORD, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sAccount + "/" + sPassword));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sPassword));
             m_boSendLogin = true;
         }
 
@@ -245,7 +245,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{m_sLoginAccount}] 创建人物：{sChrName}");
             m_ConnectionStep = TConnectionStep.cnsNewChr;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_NEWCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
         }
 
         private void SendQueryChr()
@@ -253,7 +253,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{m_sLoginAccount}] 查询人物");
             m_ConnectionStep = TConnectionStep.cnsQueryChr;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_QUERYCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(m_sLoginAccount + "/" + m_nCertification.ToString()));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(m_sLoginAccount + "/" + m_nCertification.ToString()));
         }
 
         private void SendSelectServer(string sServerName)
@@ -261,7 +261,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{m_sLoginAccount}] 选择服务器：{sServerName}");
             m_ConnectionStep = TConnectionStep.cnsSelServer;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELECTSERVER, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sServerName));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sServerName));
         }
 
         private void SendRunLogin()
@@ -269,7 +269,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{m_sLoginAccount}] 进入游戏");
             m_ConnectionStep = TConnectionStep.cnsPlay;
             var sSendMsg = string.Format("**{0}/{1}/{2}/{3}/{4}", new object[] { m_sLoginAccount, m_sCharName, m_nCertification, Grobal2.CLIENT_VERSION_NUMBER, 2022080300 });
-            SendSocket(EDcode.EncodeString(sSendMsg));
+            SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
         private void DoNotifyEvent()
@@ -292,7 +292,7 @@ namespace MakePlayer.Cliens
 
         private void ClientGetStartPlay(string sData)
         {
-            var sText = EDcode.DeCodeString(sData);
+            var sText = EDCode.DeCodeString(sData);
             var sRunPort = HUtil32.GetValidStr3(sText, ref m_sRunServerAddr, new[] { "/" });
             m_nRunServerPort = Convert.ToInt32(sRunPort);
             //ClientSocket.Disconnect();
@@ -335,7 +335,7 @@ namespace MakePlayer.Cliens
         {
             m_dwSayTick = HUtil32.GetTickCount();
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SAY, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeString(message));
+            SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeString(message));
         }
 
         private void ClientGetAbility(ClientPacket DefMsg, string sData)
@@ -343,8 +343,8 @@ namespace MakePlayer.Cliens
             m_nGold = DefMsg.Recog;
             m_btJob = (byte)DefMsg.Param;
             m_nGameGold = HUtil32.MakeLong(DefMsg.Tag, DefMsg.Series);
-            var buff = EDcode.DecodeBuffer(sData);
-            m_Abil = Packets.ToPacket<TAbility>(buff);
+            var buff = EDCode.DecodeBuffer(sData);
+            m_Abil = Packets.ToPacket<Ability>(buff);
         }
 
         private void ClientGetWinExp(ClientPacket DefMsg)
@@ -416,7 +416,7 @@ namespace MakePlayer.Cliens
             var sSelChrPort = string.Empty;
             var sCertification = string.Empty;
             MainOutMessage($"[{m_sLoginAccount}] 帐号登录成功！");
-            var sText = EDcode.DeCodeString(sData);
+            var sText = EDCode.DeCodeString(sData);
             sText = HUtil32.GetValidStr3(sText, ref m_sSelChrAddr, new[] { "/" });
             sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, new[] { "/" });
             sText = HUtil32.GetValidStr3(sText, ref sCertification, new[] { "/" });
@@ -507,7 +507,7 @@ namespace MakePlayer.Cliens
             var sHair = string.Empty;
             var sLevel = string.Empty;
             var sSex = string.Empty;
-            var sText = EDcode.DeCodeString(sData);
+            var sText = EDCode.DeCodeString(sData);
             var nChrCount = 0;
             var nSelect = 0;
             for (var i = 0; i < m_ChrArr.Length; i++)
@@ -593,7 +593,7 @@ namespace MakePlayer.Cliens
         {
             var sServerName = string.Empty;
             var sServerStatus = string.Empty;
-            sBody = EDcode.DeCodeString(sBody);
+            sBody = EDCode.DeCodeString(sBody);
             var nCount = HUtil32._MIN(6, DefMsg.Series);
             for (var i = 0; i < nCount; i++)
             {
@@ -616,7 +616,7 @@ namespace MakePlayer.Cliens
         {
             var sServerName = string.Empty;
             MainOutMessage($"[{m_sLoginAccount}] 帐号登录成功！");
-            var sText = EDcode.DeCodeString(sData);
+            var sText = EDCode.DeCodeString(sData);
             HUtil32.GetValidStr3(sText, ref sServerName, new[] { "/" });
             SendSelectServer(sServerName);
         }
@@ -697,7 +697,7 @@ namespace MakePlayer.Cliens
             }
             var sDefMsg = sDataBlock.Substring(0, Grobal2.DEFBLOCKSIZE);
             var sBody = sDataBlock.Substring(Grobal2.DEFBLOCKSIZE, sDataBlock.Length - Grobal2.DEFBLOCKSIZE);
-            var DefMsg = EDcode.DecodePacket(sDefMsg);
+            var DefMsg = EDCode.DecodePacket(sDefMsg);
             switch (DefMsg.Ident)
             {
                 case Grobal2.SM_NEWID_SUCCESS:

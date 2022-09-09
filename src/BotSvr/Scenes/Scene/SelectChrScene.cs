@@ -46,14 +46,14 @@ namespace BotSvr.Scenes.Scene
             }
             robotClient.CharName = chrname;
             ClientPacket msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(robotClient.LoginID + "/" + chrname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(robotClient.LoginID + "/" + chrname));
             MainOutMessage($"选择角色 {chrname}");
         }
 
         private void SendDelChr(string chrname)
         {
             ClientPacket msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DELCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(chrname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(chrname));
         }
 
         private void ClearChrs()
@@ -114,7 +114,7 @@ namespace BotSvr.Scenes.Scene
                 MShare.g_nAPReLogonWaitTime = 5000 + RandomNumber.GetInstance().Random(10) * 1000;
             }
             ClearChrs();
-            string Str = EDcode.DeCodeString(body);
+            string Str = EDCode.DeCodeString(body);
             int select = 0;
             int nChrCount = 0;
             for (var i = 0; i < 1; i++)
@@ -181,7 +181,7 @@ namespace BotSvr.Scenes.Scene
         {
             MainOutMessage("准备进入游戏");
             string addr = string.Empty;
-            string Str = EDcode.DeCodeString(body);
+            string Str = EDCode.DeCodeString(body);
             string sport = HUtil32.GetValidStr3(Str, ref addr, HUtil32.Backslash);
             MShare.g_nRunServerPort = HUtil32.Str_ToInt(sport, 0);
             MShare.g_sRunServerAddr = addr;
@@ -212,14 +212,14 @@ namespace BotSvr.Scenes.Scene
         private void SendNewChr(string uid, string uname, byte shair, byte sjob, byte ssex)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_NEWCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(uid + "/" + uname + "/" + shair + "/" + sjob + "/" + ssex));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + uname + "/" + shair + "/" + sjob + "/" + ssex));
         }
 
         public void SendQueryChr()
         {
             m_ConnectionStep = TConnectionStep.cnsQueryChr;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_QUERYCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(robotClient.LoginID + "/" + robotClient.Certification));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(robotClient.LoginID + "/" + robotClient.Certification));
             MainOutMessage("查询角色.");
         }
 

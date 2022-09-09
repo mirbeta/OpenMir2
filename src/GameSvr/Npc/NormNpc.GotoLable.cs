@@ -8,6 +8,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Npc
 {
@@ -21,7 +22,7 @@ namespace GameSvr.Npc
             TScript Script3C = null;
             TSayingRecord SayingRecord;
             TSayingProcedure SayingProcedure;
-            TUserItem UserItem = null;
+            UserItem UserItem = null;
             string sC = string.Empty;
             if (PlayObject.m_NPC != this)
             {
@@ -149,9 +150,9 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private TUserItem GotoLable_CheckItemW(PlayObject PlayObject, string sItemType, int nParam)
+        private UserItem GotoLable_CheckItemW(PlayObject PlayObject, string sItemType, int nParam)
         {
-            TUserItem result = null;
+            UserItem result = null;
             int nCount = 0;
             if (HUtil32.CompareLStr(sItemType, "[NECKLACE]", 4))
             {
@@ -382,7 +383,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLableQuestCheckCondition(PlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref TUserItem UserItem)
+        private bool GotoLableQuestCheckCondition(PlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref UserItem UserItem)
         {
             bool result = true;
             TQuestConditionInfo QuestConditionInfo;
@@ -1599,7 +1600,7 @@ namespace GameSvr.Npc
 
         private void GotoLable_TakeItem(PlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem StdItem;
             if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -1636,7 +1637,7 @@ namespace GameSvr.Npc
 
         public void GotoLable_GiveItem(PlayObject PlayObject, string sItemName, int nItemCount)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem StdItem;
             if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -1658,7 +1659,7 @@ namespace GameSvr.Npc
                 {
                     if (PlayObject.IsEnoughBag())
                     {
-                        UserItem = new TUserItem();
+                        UserItem = new UserItem();
                         if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
                             PlayObject.ItemList.Add(UserItem);
@@ -1676,7 +1677,7 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        UserItem = new TUserItem();
+                        UserItem = new UserItem();
                         if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -1829,7 +1830,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem, ref bool bo11)
+        private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref UserItem UserItem, ref bool bo11)
         {
             bool result = true;
             TQuestActionInfo QuestActionInfo;

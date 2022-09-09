@@ -119,7 +119,7 @@ namespace GameSvr.Npc
         {
             var result = 0;
             sGuildName = sGuildName.Trim();
-            TUserItem UserItem = null;
+            UserItem UserItem = null;
             if (sGuildName == "")
             {
                 result = -4;

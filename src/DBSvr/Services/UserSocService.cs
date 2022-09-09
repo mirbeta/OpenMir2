@@ -21,14 +21,13 @@ namespace DBSvr.Services
     public class UserSocService
     {
         private readonly MirLog _logger;
-        private readonly Dictionary<string, int> _mapList = null;
+        private readonly SvrConf _conf;
+        private readonly Dictionary<string, int> _mapList;
         private readonly IPlayDataService _playDataService;
         private readonly IPlayRecordService _playRecordService;
         private readonly SocketServer _userSocket;
         private readonly LoginSvrService _loginService;
-        private readonly SvrConf _config;
         private readonly Channel<UsrSocMessage> _reviceQueue;
-        private readonly CancellationTokenSource _cancellationToken;
 
         public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService)
         {
@@ -44,20 +43,19 @@ namespace DBSvr.Services
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
             _userSocket.OnClientRead += UserSocketClientRead;
             _userSocket.OnClientError += UserSocketClientError;
-            _cancellationToken = new CancellationTokenSource();
-            _config = conf;
+            _conf = conf;
         }
 
-        public void Start()
+        public void Start(CancellationToken stoppingToken)
         {
             _userSocket.Init();
             LoadServerInfo();
             LoadChrNameList("DenyChrName.txt");
             LoadClearMakeIndexList("ClearMakeIndex.txt");
             _playRecordService.LoadQuickList();
-            _userSocket.Start(_config.GateAddr, _config.GatePort);
-            StartMessageThread();
-            _logger.LogInformation($"数据库服务[{_config.GateAddr}:{_config.GatePort}]已启动.等待链接...");
+            _userSocket.Start(_conf.GateAddr, _conf.GatePort);
+            StartMessageThread(stoppingToken);
+            _logger.LogInformation($"数据库服务[{_conf.GateAddr}:{_conf.GatePort}]已启动.等待链接...");
         }
 
         public void Stop()
@@ -75,7 +73,6 @@ namespace DBSvr.Services
                 }
                 GateList.RemoveAt(i);
             }
-            _cancellationToken.Cancel();//停止消息处理线程
         }
 
         public IList<TGateInfo> GateList { get; } = null;
@@ -83,18 +80,18 @@ namespace DBSvr.Services
         /// <summary>
         /// 处理客户端发过来的消息
         /// </summary>
-        private void StartMessageThread()
+        private void StartMessageThread(CancellationToken stoppingToken)
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await _reviceQueue.Reader.WaitToReadAsync(_cancellationToken.Token))
+                while (await _reviceQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
                     if (_reviceQueue.Reader.TryRead(out var message))
                     {
                         ProcessGateMsg(message.GateInfo, message.Packet);
                     }
                 }
-            }, _cancellationToken.Token);
+            }, stoppingToken);
         }
 
         private void ProcessGateMsg(TGateInfo gateInfo, GatePacket packet)
@@ -107,7 +104,7 @@ namespace DBSvr.Services
             }
             var sText = HUtil32.GetString(packet.Body, 0, packet.BuffLen);
             HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
-            switch (packet.PacketType)
+            switch (packet.Type)
             {
                 case PacketType.KeepAlive:
                     _logger.DebugLog("Received SelGate Heartbeat.");
@@ -308,10 +305,10 @@ namespace DBSvr.Services
             }
             _logger.LogInformation($"读取网关配置信息成功.[{loadList.Count}]");
             _mapList.Clear();
-            if (File.Exists(_config.MapFile))
+            if (File.Exists(_conf.MapFile))
             {
                 loadList.Clear();
-                loadList.LoadFromFile(_config.MapFile);
+                loadList.LoadFromFile(_conf.MapFile);
                 for (var i = 0; i < loadList.Count; i++)
                 {
                     sLineText = loadList[i];
@@ -379,7 +376,7 @@ namespace DBSvr.Services
         private void SendKeepAlivePacket(Socket socket)
         {
             var gataPacket = new GatePacket();
-            gataPacket.PacketType = PacketType.KeepAlive;
+            gataPacket.Type = PacketType.KeepAlive;
             gataPacket.SocketId = string.Empty;
             SendPacket(socket, gataPacket);
         }
@@ -471,7 +468,7 @@ namespace DBSvr.Services
         {
             var sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
             var sText = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
-            var clientPacket = EDcode.DecodePacket(sDefMsg);
+            var clientPacket = EDCode.DecodePacket(sDefMsg);
             switch (clientPacket.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
@@ -563,7 +560,7 @@ namespace DBSvr.Services
             var sAccount = string.Empty;
             var sSendMsg = string.Empty;
             var result = false;
-            var sSessionId = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
+            var sSessionId = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
             var nSessionId = HUtil32.Str_ToInt(sSessionId, -2);
             var nChrCount = 0;
             if (_loginService.CheckSession(sAccount, userInfo.sUserIPaddr, nSessionId))
@@ -582,7 +579,7 @@ namespace DBSvr.Services
                             continue;
                         }
                         var humRecord = _playRecordService.GetBy(quickId.nIndex, ref result);
-                        if (result && !humRecord.boDeleted)
+                        if (result && !humRecord.Deleted)
                         {
                             var sChrName = quickId.sChrName;
                             var nIndex = _playDataService.Index(sChrName);
@@ -597,7 +594,7 @@ namespace DBSvr.Services
                                 var sJob = chrRecord.Data.btJob;
                                 var sHair = chrRecord.Data.btHair;
                                 var sLevel = chrRecord.Data.Abil.Level;
-                                if (humRecord.boSelected == 1)
+                                if (humRecord.Selected == 1)
                                 {
                                     sSendMsg = sSendMsg + "*";
                                 }
@@ -608,12 +605,12 @@ namespace DBSvr.Services
                     }
                 }
                 chrList = null;
-                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(sSendMsg));
+                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDCode.EncodeString(sSendMsg));
                 result = true;
             }
             else
             {
-                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
+                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
                 CloseUser(userInfo.sConnID, ref curGate);
             }
             return result;
@@ -625,7 +622,7 @@ namespace DBSvr.Services
         private void OutOfConnect(TUserInfo userInfo)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            var sMsg = EDcode.EncodeMessage(msg);
+            var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.Socket, sMsg, userInfo.sConnID);
         }
 
@@ -645,7 +642,7 @@ namespace DBSvr.Services
         private void DelChr(string sData, ref TUserInfo userInfo)
         {
             ClientPacket msg;
-            var sChrName = EDcode.DeCodeString(sData);
+            var sChrName = EDCode.DeCodeString(sData);
             var boCheck = false;
             var nIndex = _playRecordService.Index(sChrName);
             if (nIndex >= 0)
@@ -656,9 +653,9 @@ namespace DBSvr.Services
                     if (humRecord.sAccount == userInfo.sAccount)
                     {
                         var nLevel = DelChrSnameToLevel(sChrName);
-                        if (nLevel < _config.nDELMaxLevel)
+                        if (nLevel < _conf.nDELMaxLevel)
                         {
-                            humRecord.boDeleted = true;
+                            humRecord.Deleted = true;
                             boCheck = _playRecordService.Update(nIndex, ref humRecord);
                         }
                     }
@@ -672,7 +669,7 @@ namespace DBSvr.Services
             {
                 msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_FAIL, 0, 0, 0, 0);
             }
-            var sMsg = EDcode.EncodeMessage(msg);
+            var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
         }
 
@@ -688,7 +685,7 @@ namespace DBSvr.Services
             var sSex = string.Empty;
             ClientPacket msg;
             var nCode = -1;
-            var data = EDcode.DeCodeString(sData);
+            var data = EDCode.DeCodeString(sData);
             data = HUtil32.GetValidStr3(data, ref sAccount, HUtil32.Backslash);
             data = HUtil32.GetValidStr3(data, ref sChrName, HUtil32.Backslash);
             data = HUtil32.GetValidStr3(data, ref sHair, HUtil32.Backslash);
@@ -703,7 +700,7 @@ namespace DBSvr.Services
             {
                 nCode = 0;
             }
-            if (_config.EnglishNames && !HUtil32.IsEnglishStr(sChrName))
+            if (_conf.EnglishNames && !HUtil32.IsEnglishStr(sChrName))
             {
                 nCode = 0;
             }
@@ -741,10 +738,10 @@ namespace DBSvr.Services
                     var humRecord = new HumRecordData();
                     humRecord.sChrName = sChrName;
                     humRecord.sAccount = sAccount;
-                    humRecord.boDeleted = false;
+                    humRecord.Deleted = false;
                     humRecord.Header = new TRecordHeader();
                     humRecord.Header.sName = sChrName;
-                    humRecord.Header.nSelectID = userInfo.nSelGateID;
+                    humRecord.Header.SelectID = userInfo.nSelGateID;
                     if (!string.IsNullOrEmpty(humRecord.Header.sName))
                     {
                         if (!_playRecordService.Add(humRecord))
@@ -778,7 +775,7 @@ namespace DBSvr.Services
             {
                 msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
-            var sMsg = EDcode.EncodeMessage(msg);
+            var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
         }
 
@@ -792,7 +789,7 @@ namespace DBSvr.Services
             var sCurMap = string.Empty;
             var nRoutePort = 0;
             var result = false;
-            var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
+            var sChrName = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
             var boDataOk = false;
             if (userInfo.sAccount == sAccount)
             {
@@ -808,14 +805,14 @@ namespace DBSvr.Services
                         {
                             if (humRecord.sChrName == sChrName)
                             {
-                                humRecord.boSelected = 1;
+                                humRecord.Selected = 1;
                                 _playRecordService.UpdateBy(nIndex, ref humRecord);
                             }
                             else
                             {
-                                if (humRecord.boSelected == 1)
+                                if (humRecord.Selected == 1)
                                 {
-                                    humRecord.boSelected = 0;
+                                    humRecord.Selected = 0;
                                     _playRecordService.UpdateBy(nIndex, ref humRecord);
                                 }
                             }
@@ -835,13 +832,13 @@ namespace DBSvr.Services
             if (boDataOk)
             {
                 var nMapIndex = GetMapIndex(sCurMap);
-                var sDefMsg = EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
+                var sDefMsg = EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
                 var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIPAddress(), ref nRoutePort);
-                if (_config.DynamicIpMode)// 使用动态IP
+                if (_conf.DynamicIpMode)// 使用动态IP
                 {
                     sRouteIp = userInfo.sGateIPaddr;
                 }
-                var sRouteMsg = EDcode.EncodeString(sRouteIp + "/" + (nRoutePort + nMapIndex));
+                var sRouteMsg = EDCode.EncodeString(sRouteIp + "/" + (nRoutePort + nMapIndex));
                 SendUserSocket(userInfo.Socket, userInfo.sConnID, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
@@ -849,7 +846,7 @@ namespace DBSvr.Services
             }
             else
             {
-                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0)));
+                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0)));
             }
             return result;
         }
@@ -898,7 +895,7 @@ namespace DBSvr.Services
             packet.SocketId = sessionId;
             packet.Body = HUtil32.GetBytes("#" + sSendMsg + "!");
             packet.BuffLen = (short)packet.Body.Length;
-            packet.PacketType = PacketType.Data;
+            packet.Type = PacketType.Data;
             SendPacket(socket, packet);
         }
 

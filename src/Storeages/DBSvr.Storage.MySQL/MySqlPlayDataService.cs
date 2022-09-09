@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Text;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
 {
@@ -269,7 +270,7 @@ namespace DBSvr.Storage.MySQL
                     HumanRCD.Data.Initialization();
                     HumanRCD.Data.sAccount = dr.GetString("FLD_LOGINID");
                     HumanRCD.Header.sName = dr.GetString("FLD_CHARNAME");
-                    HumanRCD.Header.boDeleted = dr.GetBoolean("FLD_DELETED");
+                    HumanRCD.Header.Deleted = dr.GetBoolean("FLD_DELETED");
                     HumanRCD.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("FLD_CREATEDATE"));
                     HumanRCD.Data.sCharName = dr.GetString("FLD_CHARNAME");
                     if (!dr.IsDBNull(dr.GetOrdinal("FLD_MAPNAME")))
@@ -404,7 +405,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     if (HumanRCD.Data.BonusAbil == null)
                     {
-                        HumanRCD.Data.BonusAbil = new TNakedAbility();
+                        HumanRCD.Data.BonusAbil = new NakedAbility();
                     }
                     HumanRCD.Data.BonusAbil.AC = dr.GetUInt16("FLD_AC");
                     HumanRCD.Data.BonusAbil.MAC = dr.GetUInt16("FLD_MAC");
@@ -489,11 +490,11 @@ namespace DBSvr.Storage.MySQL
                 var i = 0;
                 for (var j = 0; j < HumanRCD.Data.HumItems.Length; j++)
                 {
-                    HumanRCD.Data.HumItems[j] = new TUserItem();
+                    HumanRCD.Data.HumItems[j] = new UserItem();
                 }
                 for (int j = 0; j < HumanRCD.Data.BagItems.Length; j++)
                 {
-                    HumanRCD.Data.BagItems[j] = new TUserItem();
+                    HumanRCD.Data.BagItems[j] = new UserItem();
                 }
                 while (dr.Read())
                 {
@@ -549,7 +550,7 @@ namespace DBSvr.Storage.MySQL
             }
             for (int i = 0; i < HumanRCD.Data.StorageItems.Length; i++)
             {
-                HumanRCD.Data.StorageItems[i] = new TUserItem();
+                HumanRCD.Data.StorageItems[i] = new UserItem();
             }
             const string sSQLString = "SELECT * FROM TBL_Storages WHERE FLD_PLAYERID={0}";
             var command = new MySqlCommand();

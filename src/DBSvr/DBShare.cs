@@ -246,7 +246,7 @@ namespace DBSvr
 
         private string GetConnected()
         {
-            return Socket.Connected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
+            return Socket.Connected ? "[green]Connected[/]" : "[red]Not Connected[/]";
         }
     }
 

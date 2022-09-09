@@ -38,7 +38,7 @@ namespace LoginSvr
         public TRecordHeader Header;
         public int nErrorCount;
         public double dwActionTick;
-        public TUserEntry UserEntry;
-        public TUserEntryAdd UserEntryAdd;
+        public UserEntry UserEntry;
+        public UserEntryAdd UserEntryAdd;
     }
 }

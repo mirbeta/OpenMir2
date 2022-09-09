@@ -37,18 +37,21 @@ namespace DBSvr
                     _lastKeepTick = HUtil32.GetTickCount();
                     var userCount = _userSoc.GetUserCount();
                     _loginSoc.SendKeepAlivePacket(userCount);
+                    _logger.DebugLog("发送心跳检测.");
                 }
                 if (HUtil32.GetTickCount() - _lastSocketTick > 10000)
                 {
                     _lastSocketTick = HUtil32.GetTickCount();
                     _loginSoc.CheckConnection();
+                    _logger.DebugLog("检查服务链接状态.");
                 }
                 if (HUtil32.GetTickCount() - _lastClearTick > 10000)
                 {
                     _lastClearTick = HUtil32.GetTickCount();
                     _dataService.ClearTimeoutSession();
+                    _logger.DebugLog("清理过期会话.");
                 }
-                await Task.Delay(TimeSpan.FromMilliseconds(100), stoppingToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(1000), stoppingToken);
             }
         }
     }

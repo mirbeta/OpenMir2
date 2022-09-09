@@ -197,7 +197,7 @@ namespace LoginSvr.Services
                     var sMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
                     if (!string.IsNullOrEmpty(sMsg))
                     {
-                        switch (packet.PacketType)
+                        switch (packet.Type)
                         {
                             case PacketType.KeepAlive:
                                 SendKeepAlivePacket(gateInfo.Socket);
@@ -340,7 +340,7 @@ namespace LoginSvr.Services
         {
             var sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
             var sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
-            var defMsg = EDcode.DecodePacket(sDefMsg);
+            var defMsg = EDCode.DecodePacket(sDefMsg);
             switch (defMsg.Ident)
             {
                 case Grobal2.CM_SELECTSERVER:
@@ -430,7 +430,7 @@ namespace LoginSvr.Services
                     _logger.Information("[新建账号失败] 数据包为空.");
                     return;
                 }
-                var deBuffer = EDcode.DecodeBuffer(sData);
+                var deBuffer = EDCode.DecodeBuffer(sData);
                 userFullEntry = Packets.ToPacket<UserFullEntry>(deBuffer);
                 var nErrCode = -1;
                 if (LsShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
@@ -471,7 +471,7 @@ namespace LoginSvr.Services
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWID_FAIL, nErrCode, 0, 0, 0);
                 }
-                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg));
             }
             catch (Exception ex)
             {
@@ -492,7 +492,7 @@ namespace LoginSvr.Services
             TAccountDBRecord DBRecord = null;
             try
             {
-                var sMsg = EDcode.DeCodeString(sData);
+                var sMsg = EDCode.DeCodeString(sData);
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginID, new[] { "\09" });
                 var sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\09" });
                 var nCode = 0;
@@ -536,7 +536,7 @@ namespace LoginSvr.Services
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHGPASSWD_FAIL, nCode, 0, 0, 0);
                 }
-                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg));
             }
             catch (Exception ex)
             {
@@ -558,7 +558,7 @@ namespace LoginSvr.Services
                 UserInfo.nVersionDate = nDate;
                 UserInfo.boCertificationOK = true;
             }
-            SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+            SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg));
         }
 
         private void KickUser(Config Config, ref TUserInfo UserInfo)
@@ -588,13 +588,13 @@ namespace LoginSvr.Services
         private void AccountLogin(Config Config, TUserInfo UserInfo, string sData)
         {
             var sLoginID = string.Empty;
-            TUserEntry UserEntry = null;
+            UserEntry UserEntry = null;
             var nIDCostIndex = -1;
             var nIPCostIndex = -1;
             TAccountDBRecord DBRecord = null;
             try
             {
-                var sPassword = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sLoginID, new[] { "/" });
+                var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginID, new[] { "/" });
                 var nCode = 0;
                 var boNeedUpdate = false;
                 var n10 = _accountDb.Index(sLoginID);
@@ -637,7 +637,7 @@ namespace LoginSvr.Services
                 if (boNeedUpdate)
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
-                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeBuffer(UserEntry));
+                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg) + EDCode.EncodeBuffer(UserEntry));
                 }
                 if (nCode == 1)
                 {
@@ -683,13 +683,13 @@ namespace LoginSvr.Services
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, nIDCost, HUtil32.LoWord(nIPCost), HUtil32.HiWord(nIPCost), Config.ServerNameList.Count);
                     }
                     var sServerName = GetServerListInfo();
-                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sServerName));
+                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sServerName));
                     SessionAdd(Config, UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID, UserInfo.boPayCost, false);
                 }
                 else
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSWD_FAIL, nCode, 0, 0, 0);
-                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg));
                 }
             }
             catch (Exception ex)
@@ -808,7 +808,7 @@ namespace LoginSvr.Services
             var sSelGateIP = string.Empty;
             var nSelGatePort = 0;
             const string sSelServerMsg = "Server: {0}/{1}-{2}:{3}";
-            var sServerName = EDcode.DeCodeString(sData);
+            var sServerName = EDCode.DeCodeString(sData);
             if (!string.IsNullOrEmpty(UserInfo.sAccount) && !string.IsNullOrEmpty(sServerName) && IsLogin(Config, UserInfo.nSessionID))
             {
                 GetSelGateInfo(Config, sServerName, Config.sGateIPaddr, ref sSelGateIP, ref nSelGatePort);
@@ -843,14 +843,14 @@ namespace LoginSvr.Services
                         SessionUpdate(Config, UserInfo.nSessionID, sServerName, boPayCost);
                         _masSocService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, UserInfo.sAccount + "/" + UserInfo.nSessionID + "/" + (UserInfo.boPayCost ? 1 : 0) + "/" + nPayMode + "/" + UserInfo.sUserIPaddr);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, UserInfo.nSessionID, 0, 0, 0);
-                        SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sSelGateIP + "/" + nSelGatePort + "/" + UserInfo.nSessionID));
+                        SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sSelGateIP + "/" + nSelGatePort + "/" + UserInfo.nSessionID));
                     }
                     else
                     {
                         UserInfo.boSelServer = false;
                         SessionDel(Config, UserInfo.nSessionID);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0);
-                        SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+                        SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg));
                     }
                 }
             }
@@ -871,7 +871,7 @@ namespace LoginSvr.Services
                     _logger.Information("[新建账号失败,数据包为空].");
                     return;
                 }
-                var deBuffer = EDcode.DecodeBuffer(sData);
+                var deBuffer = EDCode.DecodeBuffer(sData);
                 userFullEntry = Packets.ToPacket<UserFullEntry>(deBuffer);
                 var nCode = -1;
                 if (UserInfo.sAccount == userFullEntry.UserEntry.sAccount && LsShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
@@ -900,7 +900,7 @@ namespace LoginSvr.Services
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_FAIL, nCode, 0, 0, 0);
                 }
-                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg));
             }
             catch (Exception ex)
             {
@@ -923,7 +923,7 @@ namespace LoginSvr.Services
             var sBirthDay = string.Empty;
             ClientPacket DefMsg;
             TAccountDBRecord DBRecord = null;
-            var sMsg = EDcode.DeCodeString(sData);
+            var sMsg = EDCode.DeCodeString(sData);
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "\09" });
             sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, new[] { "\09" });
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer1, new[] { "\09" });
@@ -989,12 +989,12 @@ namespace LoginSvr.Services
             if (nCode == 1)
             {
                 DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_GETBACKPASSWD_SUCCESS, 0, 0, 0, 0);
-                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sPassword));
+                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sPassword));
             }
             else
             {
                 DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_GETBACKPASSWD_FAIL, nCode, 0, 0, 0);
-                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDCode.EncodeMessage(DefMsg));
             }
         }
 

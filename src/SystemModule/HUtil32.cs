@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 
 namespace SystemModule
 {
@@ -10,7 +11,7 @@ namespace SystemModule
     {
         public const string Backslash = "/";
         public static readonly string[] Separator =  { " ", ",", "\t" };
-        public static readonly TUserItem DelfautItem = new TUserItem();
+        public static readonly UserItem DelfautItem = new UserItem();
         public static readonly TMagicRcd DetailtMagicRcd = new TMagicRcd();
 
         /// <summary>

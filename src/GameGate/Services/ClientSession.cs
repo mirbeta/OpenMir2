@@ -128,7 +128,7 @@ namespace GameGate
                     {
                         sMsg = HUtil32.GetString(message.Buffer, 2, message.BufferLen - 3);
                         LogQueue.EnqueueDebugging("Login Packet: " + sMsg);
-                        var tempStr = EDcode.DeCodeString(sMsg);
+                        var tempStr = EDCode.DeCodeString(sMsg);
                         HandleLogin(tempStr, message.BufferLen, "", ref success);
                         if (!success)
                         {

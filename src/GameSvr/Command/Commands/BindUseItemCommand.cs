@@ -49,7 +49,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            TUserItem UserItem = m_PlayObject.UseItems[nItem];
+            UserItem UserItem = m_PlayObject.UseItems[nItem];
             if (UserItem.wIndex == 0)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandBindUseItemNoItemMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);

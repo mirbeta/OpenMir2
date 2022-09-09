@@ -75,7 +75,7 @@ namespace BotSvr
             g_PlayScene = new PlayScene(this);
             Map = new TMap(this);
             MShare.g_DropedItemList = new List<TDropItem>();
-            MShare.g_MagicList = new List<TClientMagic>();
+            MShare.g_MagicList = new List<ClientMagic>();
             MShare.g_FreeActorList = new List<TActor>();
             //EventMan = new TClEventManager();
             MShare.g_ChangeFaceReadyList = new ArrayList();
@@ -782,9 +782,9 @@ namespace BotSvr
             return;
         }
 
-        public TClientMagic GetMagicByKey(char Key)
+        public ClientMagic GetMagicByKey(char Key)
         {
-            TClientMagic result = null;
+            ClientMagic result = null;
             for (var i = 0; i < MShare.g_MagicList.Count; i++)
             {
                 var pm = MShare.g_MagicList[i];
@@ -797,7 +797,7 @@ namespace BotSvr
             return result;
         }
 
-        public void UseMagic(int tx, int ty, TClientMagic pcm, bool boReacll = false, bool boContinue = false)
+        public void UseMagic(int tx, int ty, ClientMagic pcm, bool boReacll = false, bool boContinue = false)
         {
             bool boSeriesSkill;
             int defSpellSpend;
@@ -2347,7 +2347,7 @@ namespace BotSvr
         private void SendClientMessage(int msg, int Recog, int param, int tag, int series)
         {
             var dMsg = Grobal2.MakeDefaultMsg(msg, Recog, param, tag, series);
-            SendSocket(EDcode.EncodeMessage(dMsg));
+            SendSocket(EDCode.EncodeMessage(dMsg));
         }
 
         /// <summary>
@@ -2358,7 +2358,7 @@ namespace BotSvr
             MainOutMessage("进入游戏");
             DScreen.CurrentScene.m_ConnectionStep = TConnectionStep.cnsPlay;
             var sSendMsg = $"**{LoginID}/{CharName}/{Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{0}";
-            SendSocket(EDcode.EncodeString(sSendMsg));
+            SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
         public void SendSay(string Str)
@@ -2414,7 +2414,7 @@ namespace BotSvr
                     return;
                 }
                 var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SAY, 0, 0, 0, 0);
-                SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(Str));
+                SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(Str));
                 if (Str[0] == '/')
                 {
                     DScreen.AddChatBoardString(Str, GetRGB(180));
@@ -2429,7 +2429,7 @@ namespace BotSvr
         private void SendActMsg(int ident, int X, int Y, int dir)
         {
             var msg = Grobal2.MakeDefaultMsg(ident, HUtil32.MakeLong(X, Y), 0, dir, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
             ActionLock = true;
             ActionLockTime = MShare.GetTickCount();
         }
@@ -2437,7 +2437,7 @@ namespace BotSvr
         private void SendSpellMsg(int ident, int X, int Y, int dir, int target, bool bLock = false)
         {
             var msg = Grobal2.MakeDefaultMsg(ident, HUtil32.MakeLong(X, Y), HUtil32.LoWord(target), dir, HUtil32.HiWord(target));
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
             if (!bLock)
             {
                 return;
@@ -2449,50 +2449,50 @@ namespace BotSvr
         public void SendQueryUserName(int targetid, int X, int Y)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_QUERYUSERNAME, targetid, X, Y, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendDropItem(string Name, int itemserverindex, int dropcnt)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DROPITEM, itemserverindex, dropcnt, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(Name));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(Name));
         }
 
         private void SendPickup()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_PICKUP, 0, MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         private void SendTakeOnItem(int where, int itmindex, string itmname)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_TAKEONITEM, itmindex, where, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itmname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itmname));
         }
 
         public void SendTakeOffItem(byte where, int itmindex, string itmname)
         {
             ClientPacket msg;
             msg = Grobal2.MakeDefaultMsg(Grobal2.CM_TAKEOFFITEM, itmindex, where, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itmname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itmname));
         }
 
         private void SendEat(int itmindex, string itmname, int nUnBindItem)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_EAT, itmindex, 0, 0, nUnBindItem);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         private void SendButchAnimal(int X, int Y, int dir, int actorid)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_BUTCH, actorid, X, Y, dir);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendMagicKeyChange(int magid, char keych)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_MAGICKEYCHANGE, magid, (byte)keych, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         private void SendMerchantDlgSelect(int merchant, string rstr)
@@ -2560,67 +2560,67 @@ namespace BotSvr
                 }
             }
             msg = Grobal2.MakeDefaultMsg(Grobal2.CM_MERCHANTDLGSELECT, merchant, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(rstr));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(rstr));
         }
 
         public void SendQueryPrice(int merchant, int itemindex, string itemname)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_MERCHANTQUERYSELLPRICE, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendQueryRepairCost(int merchant, int itemindex, string itemname)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_MERCHANTQUERYREPAIRCOST, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendSellItem(int merchant, int itemindex, string itemname, short count)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_USERSELLITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), count);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendRepairItem(int merchant, int itemindex, string itemname)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_USERREPAIRITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendStorageItem(int merchant, int itemindex, string itemname, short count)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_USERSTORAGEITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), count);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendGetDetailItem(int merchant, int menuindex, string itemname)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_USERGETDETAILITEM, merchant, menuindex, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendBuyItem(int merchant, int itemserverindex, string itemname, short conut)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_USERBUYITEM, merchant, HUtil32.LoWord(itemserverindex), HUtil32.HiWord(itemserverindex), conut);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendTakeBackStorageItem(int merchant, int itemserverindex, string itemname, short count)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_USERTAKEBACKSTORAGEITEM, merchant, HUtil32.LoWord(itemserverindex), HUtil32.HiWord(itemserverindex), count);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendMakeDrugItem(int merchant, string itemname)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_USERMAKEDRUGITEM, merchant, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(itemname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendDropGold(int dropgold)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DROPGOLD, dropgold, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendGroupMode(bool onoff)
@@ -2634,7 +2634,7 @@ namespace BotSvr
             {
                 msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GROUPMODE, 0, 0, 0, 0);
             }
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendCreateGroup(string withwho)
@@ -2642,57 +2642,57 @@ namespace BotSvr
             if (withwho != "")
             {
                 var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_CREATEGROUP, 0, 0, 0, 0);
-                SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(withwho));
+                SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(withwho));
             }
         }
 
         public void SendWantMiniMap()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_WANTMINIMAP, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendGuildDlg()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_OPENGUILDDLG, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendDealTry()
         {
             var who = string.Empty;
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DEALTRY, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(who));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(who));
         }
 
         public void SendCancelDeal()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DEALCANCEL, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
-        public void SendAddDealItem(TClientItem ci)
+        public void SendAddDealItem(ClientItem ci)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DEALADDITEM, ci.MakeIndex, 0, 0, ci.Dura);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(ci.Item.Name));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(ci.Item.Name));
         }
 
-        public void SendDelDealItem(TClientItem ci)
+        public void SendDelDealItem(ClientItem ci)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DEALDELITEM, ci.MakeIndex, 0, 0, ci.Dura);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(ci.Item.Name));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(ci.Item.Name));
         }
 
         public void SendChangeDealGold(int gold)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DEALCHGGOLD, gold, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendDealEnd()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DEALEND, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendAddGroupMember(string withwho)
@@ -2700,7 +2700,7 @@ namespace BotSvr
             if (withwho != "")
             {
                 var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDGROUPMEMBER, 0, 0, 0, 0);
-                SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(withwho));
+                SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(withwho));
             }
         }
 
@@ -2709,20 +2709,20 @@ namespace BotSvr
             if (withwho != "")
             {
                 var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DELGROUPMEMBER, 0, 0, 0, 0);
-                SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(withwho));
+                SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(withwho));
             }
         }
 
         public void SendGuildHome()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GUILDHOME, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         private void SendGuildMemberList()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GUILDMEMBERLIST, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendGuildAddMem(string who)
@@ -2730,7 +2730,7 @@ namespace BotSvr
             if (who.Trim() != "")
             {
                 var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GUILDADDMEMBER, 0, 0, 0, 0);
-                SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(who));
+                SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(who));
             }
         }
 
@@ -2739,32 +2739,32 @@ namespace BotSvr
             if (who.Trim() != "")
             {
                 var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GUILDDELMEMBER, 0, 0, 0, 0);
-                SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(who));
+                SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(who));
             }
         }
 
         public void SendGuildUpdateNotice(string notices)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GUILDUPDATENOTICE, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(notices));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(notices));
         }
 
         public void SendGuildUpdateGrade(string rankinfo)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GUILDUPDATERANKINFO, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeString(rankinfo));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(rankinfo));
         }
 
         public void SendSpeedHackUser()
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SPEEDHACKUSER, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg));
+            SendSocket(EDCode.EncodeMessage(msg));
         }
 
-        public void SendAdjustBonus(int remain, TNakedAbility babil)
+        public void SendAdjustBonus(int remain, NakedAbility babil)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADJUST_BONUS, remain, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(msg) + EDcode.EncodeBuffer(babil));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeBuffer(babil));
         }
 
         public void SendFireSerieSkill()
@@ -2988,10 +2988,10 @@ namespace BotSvr
             var Str2 = string.Empty;
             var str3 = string.Empty;
             ClientPacket msg = null;
-            TShortMessage sMsg;
-            TMessageBodyW mbw;
-            TCharDesc desc;
-            TMessageBodyWL wl;
+            ShortMessage sMsg;
+            MessageBodyW mbw;
+            CharDesc desc;
+            MessageBodyWL wl;
             int i;
             int j;
             var n = 0;
@@ -3014,7 +3014,7 @@ namespace BotSvr
             if (btPacket == 0)
             {
                 head = datablock.Substring(0, Grobal2.DEFBLOCKSIZE);
-                msg = EDcode.DecodePacket(head);
+                msg = EDCode.DecodePacket(head);
                 if (msg == null)
                 {
                     return;
@@ -3172,7 +3172,7 @@ namespace BotSvr
                 if (msg.Ident == Grobal2.SM_CHANGEMAP)
                 {
                     WaitingMsg = msg;
-                    WaitingStr = EDcode.DeCodeString(body);
+                    WaitingStr = EDCode.DeCodeString(body);
                     MShare.g_boMapMovingWait = true;
                     //WaitMsgTimer.Enabled = true;
                 }
@@ -3190,13 +3190,13 @@ namespace BotSvr
                     break;
                 case Grobal2.SM_NEWMAP:
                     MShare.g_sMapTitle = "";
-                    Str = EDcode.DeCodeString(body);
+                    Str = EDCode.DeCodeString(body);
                     g_PlayScene.SendMsg(Grobal2.SM_NEWMAP, 0, msg.Param, msg.Tag, msg.Series, 0, 0, Str);
                     break;
                 case Grobal2.SM_LOGON:
                     MShare.g_dwFirstServerTime = 0;
                     MShare.g_dwFirstClientTime = 0;
-                    wl = EDcode.DecodeBuffer<TMessageBodyWL>(body);
+                    wl = EDCode.DecodeBuffer<MessageBodyWL>(body);
                     if (msg.Series > 8)
                     {
                         msg.Series = (byte)RandomNumber.GetInstance().Random(8);
@@ -3263,7 +3263,7 @@ namespace BotSvr
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n, body.Length - n);
-                        data = EDcode.DeCodeString(body2);
+                        data = EDCode.DeCodeString(body2);
                         body2 = body.Substring(0, n);
                         Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                     }
@@ -3272,7 +3272,7 @@ namespace BotSvr
                         body2 = body;
                         data = "";
                     }
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body2);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body2);
                     g_PlayScene.SendMsg(Grobal2.SM_TURN, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
                     if (data != "")
                     {
@@ -3317,7 +3317,7 @@ namespace BotSvr
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
-                        data = EDcode.DeCodeString(body2);
+                        data = EDCode.DeCodeString(body2);
                         body2 = body.Substring(1 - 1, n);
                         Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                     }
@@ -3326,7 +3326,7 @@ namespace BotSvr
                         body2 = body;
                         data = "";
                     }
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body2);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body2);
                     g_PlayScene.SendMsg(Grobal2.SM_BACKSTEP, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
                     if (data != "")
                     {
@@ -3359,7 +3359,7 @@ namespace BotSvr
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
-                        data = EDcode.DeCodeString(body2);
+                        data = EDCode.DeCodeString(body2);
                         body2 = body.Substring(1 - 1, n);
                         Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                     }
@@ -3368,7 +3368,7 @@ namespace BotSvr
                         body2 = body;
                         data = "";
                     }
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body2);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body2);
                     if (msg.Recog != MShare.g_MySelf.m_nRecogId)
                     {
                         g_PlayScene.NewActor(msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status);
@@ -3394,7 +3394,7 @@ namespace BotSvr
                     break;
                 case Grobal2.SM_RUSH:
                 case Grobal2.SM_RUSHKUNG:
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     if (msg.Recog == MShare.g_MySelf.m_nRecogId)
                     {
                         g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
@@ -3411,7 +3411,7 @@ namespace BotSvr
                 case Grobal2.SM_WALK:
                 case Grobal2.SM_RUN:
                 case Grobal2.SM_HORSERUN:
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     if (msg.Recog != MShare.g_MySelf.m_nRecogId)
                     {
                         g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
@@ -3434,12 +3434,12 @@ namespace BotSvr
                     ActionFailed();
                     ActionLock = false;
                     RecalcAutoMovePath();
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     ActionFailLock = false;
                     g_PlayScene.SendMsg(Grobal2.SM_TURN, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
                     break;
                 case Grobal2.SM_BUTCH:// 挖肉动作封包
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     if (msg.Recog != MShare.g_MySelf.m_nRecogId)
                     {
                         Actor = g_PlayScene.FindActor(msg.Recog);
@@ -3450,7 +3450,7 @@ namespace BotSvr
                     }
                     break;
                 case Grobal2.SM_SITDOWN:// 蹲下动作封包
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     if (msg.Recog != MShare.g_MySelf.m_nRecogId)
                     {
                         Actor = g_PlayScene.FindActor(msg.Recog);
@@ -3485,7 +3485,7 @@ namespace BotSvr
                     }
                     break;
                 case Grobal2.SM_FLYAXE:
-                    mbw = EDcode.DecodeBuffer<TMessageBodyW>(body);
+                    mbw = EDCode.DecodeBuffer<MessageBodyW>(body);
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
@@ -3497,7 +3497,7 @@ namespace BotSvr
                     break;
                 // Modify the A .. B: Grobal2.SM_LIGHTING, Grobal2.SM_LIGHTING_1 .. Grobal2.SM_LIGHTING_3
                 case Grobal2.SM_LIGHTING:
-                    wl = EDcode.DecodeBuffer<TMessageBodyWL>(body);
+                    wl = EDCode.DecodeBuffer<MessageBodyWL>(body);
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
@@ -3512,7 +3512,7 @@ namespace BotSvr
                     UseMagicSpell(msg.Recog, msg.Series, msg.Param, msg.Tag, HUtil32.Str_ToInt(body, 0));
                     break;
                 case Grobal2.SM_MAGICFIRE:
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     UseMagicFire(msg.Recog, HUtil32.LoByte(msg.Series), HUtil32.HiByte(msg.Series), msg.Param, msg.Tag, desc.Feature, desc.Status);
                     break;
                 case Grobal2.SM_MAGICFIRE_FAIL:
@@ -3524,7 +3524,7 @@ namespace BotSvr
                     break;
                 case Grobal2.SM_DEATH:
                 case Grobal2.SM_NOWDEATH:
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
@@ -3538,11 +3538,11 @@ namespace BotSvr
                     }
                     break;
                 case Grobal2.SM_SKELETON:
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     g_PlayScene.SendMsg(Grobal2.SM_SKELETON, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
                     break;
                 case Grobal2.SM_ALIVE:
-                    desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                    desc = EDCode.DecodeBuffer<CharDesc>(body);
                     g_PlayScene.SendMsg(Grobal2.SM_ALIVE, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
                     break;
                 case Grobal2.SM_ABILITY:
@@ -3550,7 +3550,7 @@ namespace BotSvr
                     MShare.g_MySelf.m_btJob = HUtil32.LoByte(msg.Param);
                     MShare.g_MySelf.m_nIPowerLvl = HUtil32.HiByte(msg.Param);
                     MShare.g_MySelf.m_nGameGold = HUtil32.MakeLong(msg.Tag, msg.Series);
-                    MShare.g_MySelf.m_Abil = EDcode.DecodeBuffer<TAbility>(body);
+                    MShare.g_MySelf.m_Abil = EDCode.DecodeBuffer<Ability>(body);
                     break;
                 case Grobal2.SM_SUBABILITY:
                     MShare.g_nMyHitPoint = HUtil32.LoByte(msg.Param);
@@ -3588,7 +3588,7 @@ namespace BotSvr
                     }
                     break;
                 case Grobal2.SM_STRUCK:
-                    wl = EDcode.DecodeBuffer<TMessageBodyWL>(body);
+                    wl = EDCode.DecodeBuffer<MessageBodyWL>(body);
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
@@ -3647,7 +3647,7 @@ namespace BotSvr
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        desc = EDcode.DecodeBuffer<TCharDesc>(body);
+                        desc = EDCode.DecodeBuffer<CharDesc>(body);
                         Actor.m_nWaitForRecogId = HUtil32.MakeLong(msg.Param, msg.Tag);
                         Actor.m_nWaitForFeature = desc.Feature;
                         Actor.m_nWaitForStatus = desc.Status;
@@ -3702,7 +3702,7 @@ namespace BotSvr
                 case Grobal2.SM_GUILDMESSAGE:
                 case Grobal2.SM_WHISPER:
                 case Grobal2.SM_SYSMESSAGE:
-                    Str = EDcode.DeCodeString(body);
+                    Str = EDCode.DeCodeString(body);
                     if (msg.Tag > 0)
                     {
                         DScreen.AddChatBoardString(Str, GetRGB(HUtil32.LoByte(msg.Param)), GetRGB(HUtil32.HiByte(msg.Param)));
@@ -3727,7 +3727,7 @@ namespace BotSvr
                     }
                     break;
                 case Grobal2.SM_USERNAME:
-                    Str = EDcode.DeCodeString(body);
+                    Str = EDCode.DeCodeString(body);
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
@@ -3771,7 +3771,7 @@ namespace BotSvr
                     }
                     break;
                 case Grobal2.SM_DIGUP:
-                    wl = EDcode.DecodeBuffer<TMessageBodyWL>(body);
+                    wl = EDCode.DecodeBuffer<MessageBodyWL>(body);
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor == null)
                     {
@@ -3784,7 +3784,7 @@ namespace BotSvr
                     g_PlayScene.SendMsg(Grobal2.SM_DIGDOWN, msg.Recog, msg.Param, msg.Tag, 0, 0, 0, "");
                     break;
                 case Grobal2.SM_SHOWEVENT:
-                    sMsg = EDcode.DecodeBuffer<TShortMessage>(body);
+                    sMsg = EDCode.DecodeBuffer<ShortMessage>(body);
                     //__event = new TClEvent(msg.Recog, HUtil32.LoWord(msg.Tag), msg.Series, msg.Param);
                     //__event.m_nDir = 0;
                     //__event.m_nEventParam = sMsg.Ident;
@@ -3810,13 +3810,13 @@ namespace BotSvr
                     ClientGetDelItems(body, msg.Param);
                     break;
                 case Grobal2.SM_DROPITEM_SUCCESS:
-                    ClFunc.DelDropItem(EDcode.DeCodeString(body), msg.Recog);
+                    ClFunc.DelDropItem(EDCode.DeCodeString(body), msg.Recog);
                     break;
                 case Grobal2.SM_DROPITEM_FAIL:
-                    ClientGetDropItemFail(EDcode.DeCodeString(body), msg.Recog);
+                    ClientGetDropItemFail(EDCode.DeCodeString(body), msg.Recog);
                     break;
                 case Grobal2.SM_ITEMSHOW:
-                    ClientGetShowItem(msg.Recog, msg.Param, msg.Tag, msg.Series, EDcode.DeCodeString(body));
+                    ClientGetShowItem(msg.Recog, msg.Param, msg.Tag, msg.Series, EDCode.DeCodeString(body));
                     break;
                 case Grobal2.SM_ITEMHIDE:
                     ClientGetHideItem(msg.Recog, msg.Param, msg.Tag);
@@ -3887,7 +3887,7 @@ namespace BotSvr
                 case Grobal2.SM_CHARSTATUSCHANGED:
                     if (body != "")
                     {
-                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, 0, 0, 0, HUtil32.MakeLong(msg.Param, msg.Tag), msg.Series, EDcode.DeCodeString(body));
+                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, 0, 0, 0, HUtil32.MakeLong(msg.Param, msg.Tag), msg.Series, EDCode.DeCodeString(body));
                     }
                     else
                     {
@@ -3989,7 +3989,7 @@ namespace BotSvr
                     ClientGetDuraChange(msg.Param, msg.Recog, HUtil32.MakeLong(msg.Tag, msg.Series));
                     break;
                 case Grobal2.SM_MERCHANTSAY:
-                    ClientGetMerchantSay(msg.Recog, msg.Param, EDcode.DeCodeString(body));
+                    ClientGetMerchantSay(msg.Recog, msg.Param, EDCode.DeCodeString(body));
                     break;
                 case Grobal2.SM_SENDGOODSLIST:
                     ClientGetSendGoodsList(msg.Recog, msg.Param, body);
@@ -4241,7 +4241,7 @@ namespace BotSvr
                     MShare.g_GroupMembers.Clear();
                     break;
                 case Grobal2.SM_GROUPMEMBERS:
-                    ClientGetGroupMembers(EDcode.DeCodeString(body));
+                    ClientGetGroupMembers(EDCode.DeCodeString(body));
                     break;
                 case Grobal2.SM_OPENGUILDDLG:
                     MShare.g_dwQueryMsgTick = MShare.GetTickCount();
@@ -4259,7 +4259,7 @@ namespace BotSvr
                     break;
                 case Grobal2.SM_DEALMENU:
                     MShare.g_dwQueryMsgTick = MShare.GetTickCount();
-                    MShare.g_sDealWho = EDcode.DeCodeString(body);
+                    MShare.g_sDealWho = EDCode.DeCodeString(body);
                     break;
                 case Grobal2.SM_DEALCANCEL:
                     ClFunc.MoveDealItemToBag();
@@ -4339,7 +4339,7 @@ namespace BotSvr
                     DScreen.AddChatBoardString("没有小地图", ConsoleColor.Red);
                     break;
                 case Grobal2.SM_CHANGEGUILDNAME:
-                    ClientGetChangeGuildName(EDcode.DeCodeString(body));
+                    ClientGetChangeGuildName(EDCode.DeCodeString(body));
                     break;
                 case Grobal2.SM_SENDUSERSTATE:
                     ClientGetSendUserState(body);
@@ -4469,13 +4469,13 @@ namespace BotSvr
                     LastestClickTime = MShare.GetTickCount();
                     if (body != "")
                     {
-                        MainOutMessage(EDcode.DeCodeString(body));
+                        MainOutMessage(EDCode.DeCodeString(body));
                     }
                     break;
                 case Grobal2.SM_DLGMSG:
                     if (body != "")
                     {
-                        MainOutMessage(EDcode.DeCodeString(body));
+                        MainOutMessage(EDCode.DeCodeString(body));
                     }
                     break;
                 case Grobal2.SM_DONATE_OK:
@@ -4487,9 +4487,9 @@ namespace BotSvr
                 case Grobal2.SM_PLAYDICE:
                     //n = HUtil32.GetCodeMsgSize(sizeof(TMessageBodyWL) * 4 / 3);
                     body2 = body.Substring(n + 1 - 1, body.Length);
-                    data = EDcode.DeCodeString(body2);
+                    data = EDCode.DeCodeString(body2);
                     body2 = body.Substring(1 - 1, n);
-                    wl = EDcode.DecodeBuffer<TMessageBodyWL>(body2);
+                    wl = EDCode.DecodeBuffer<MessageBodyWL>(body2);
                     //FrmDlg.m_nDiceCount = msg.Param;
                     //FrmDlg.m_Dice[0].nDicePoint = HUtil32.LoByte(HUtil32.LoWord(wl.lParam1));
                     //FrmDlg.m_Dice[1].nDicePoint = HUtil32.HiByte(HUtil32.LoWord(wl.lParam1));
@@ -4526,7 +4526,7 @@ namespace BotSvr
 
         private void ClientGetMapDescription(ClientPacket msg, string sBody)
         {
-            sBody = EDcode.DeCodeString(sBody);
+            sBody = EDCode.DeCodeString(sBody);
             var sTitle = sBody;
             MShare.g_sMapTitle = sTitle;
             LoadWayPoint();
@@ -4552,7 +4552,7 @@ namespace BotSvr
             var sData = string.Empty;
             if (sBody != "")
             {
-                sBody = EDcode.DeCodeString(sBody);
+                sBody = EDCode.DeCodeString(sBody);
                 sBody = HUtil32.GetValidStr3(sBody, ref sData, new char[] { '\r' });
                 MShare.g_sGameGoldName = sData;
                 MShare.g_sGamePointName = sBody;
@@ -4578,7 +4578,7 @@ namespace BotSvr
         {
             if (!string.IsNullOrEmpty(body))
             {
-                var cu = EDcode.DecodeBuffer<TClientItem>(body);
+                var cu = EDCode.DecodeBuffer<ClientItem>(body);
                 ClFunc.AddItemBag(cu);
                 if (Hint != 0)
                 {
@@ -4591,7 +4591,7 @@ namespace BotSvr
         {
             if (!string.IsNullOrEmpty(body))
             {
-                var cu = EDcode.DecodeBuffer<TClientItem>(body);
+                var cu = EDCode.DecodeBuffer<ClientItem>(body);
                 ClFunc.UpdateItemBag(cu);
                 for (var i = 0; i < MShare.g_UseItems.Length; i++)
                 {
@@ -4630,7 +4630,7 @@ namespace BotSvr
         {
             if (body != "")
             {
-                var cu = EDcode.DecodeBuffer<TClientItem>(body);
+                var cu = EDCode.DecodeBuffer<ClientItem>(body);
                 ClFunc.DelItemBag(cu.Item.Name, cu.MakeIndex);
                 for (var i = 0; i < MShare.g_UseItems.Length; i++)
                 {
@@ -4665,8 +4665,8 @@ namespace BotSvr
             int iindex;
             var Str = string.Empty;
             var iname = string.Empty;
-            var cu = new TClientItem();
-            body = EDcode.DeCodeString(body);
+            var cu = new ClientItem();
+            body = EDCode.DeCodeString(body);
             while (body != "")
             {
                 body = HUtil32.GetValidStr3(body, ref iname, HUtil32.Backslash);
@@ -4712,7 +4712,7 @@ namespace BotSvr
             }
         }
 
-        public bool ClientGetBagItmes_CompareItemArr(TClientItem[] ItemSaveArr)
+        public bool ClientGetBagItmes_CompareItemArr(ClientItem[] ItemSaveArr)
         {
             var flag = true;
             for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
@@ -4770,8 +4770,8 @@ namespace BotSvr
         {
             int k;
             var Str = string.Empty;
-            TClientItem cu;
-            var ItemSaveArr = new TClientItem[MShare.MAXBAGITEMCL - 1 + 1];
+            ClientItem cu;
+            var ItemSaveArr = new ClientItem[MShare.MAXBAGITEMCL - 1 + 1];
             //MShare.g_SellDlgItem.Item.Name = "";
             //FillChar(MShare.g_RefineItems, sizeof(TMovingItem) * 3, '\0');
             //FillChar(MShare.g_BuildAcuses, sizeof(MShare.g_BuildAcuses), '\0');
@@ -4793,7 +4793,7 @@ namespace BotSvr
                     break;
                 }
                 body = HUtil32.GetValidStr3(body, ref Str, HUtil32.Backslash);
-                cu = EDcode.DecodeBuffer<TClientItem>(Str);
+                cu = EDCode.DecodeBuffer<ClientItem>(Str);
                 ClFunc.AddItemBag(cu);
             }
             //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sCharName + ".itm-plus", ItemSaveArr);
@@ -4946,7 +4946,7 @@ namespace BotSvr
             int Index;
             var Str = string.Empty;
             var data = string.Empty;
-            TClientItem cu;
+            ClientItem cu;
             while (true)
             {
                 if (string.IsNullOrEmpty(body))
@@ -4958,7 +4958,7 @@ namespace BotSvr
                 Index = HUtil32.Str_ToInt(Str, -1);
                 if (Index >= 0 && Index <= 13)
                 {
-                    cu = EDcode.DecodeBuffer<TClientItem>(data);
+                    cu = EDCode.DecodeBuffer<ClientItem>(data);
                     MShare.g_UseItems[Index] = cu;
                 }
             }
@@ -4967,11 +4967,11 @@ namespace BotSvr
         public int ClientGetAddMagic_ListSortCompareLevel(object Item1, object Item2)
         {
             var result = 1;
-            if (((TClientMagic)Item1).Def.TrainLevel[0] < ((TClientMagic)Item2).Def.TrainLevel[0])
+            if (((ClientMagic)Item1).Def.TrainLevel[0] < ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = -1;
             }
-            else if (((TClientMagic)Item1).Def.TrainLevel[0] == ((TClientMagic)Item2).Def.TrainLevel[0])
+            else if (((ClientMagic)Item1).Def.TrainLevel[0] == ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = 0;
             }
@@ -4980,7 +4980,7 @@ namespace BotSvr
 
         private void ClientGetAddMagic(string body)
         {
-            var pcm = EDcode.DecodeBuffer<TClientMagic>(body);
+            var pcm = EDCode.DecodeBuffer<ClientMagic>(body);
             MShare.g_MagicArr[pcm.Def.wMagicID] = pcm;
             MShare.g_MagicList.Add(pcm);
             for (var i = 0; i < MShare.g_MagicList.Count; i++)
@@ -5010,11 +5010,11 @@ namespace BotSvr
         public int ClientConvertMagic_ListSortCompareLevel(object Item1, object Item2)
         {
             var result = 1;
-            if (((TClientMagic)Item1).Def.TrainLevel[0] < ((TClientMagic)Item2).Def.TrainLevel[0])
+            if (((ClientMagic)Item1).Def.TrainLevel[0] < ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = -1;
             }
-            else if (((TClientMagic)Item1).Def.TrainLevel[0] == ((TClientMagic)Item2).Def.TrainLevel[0])
+            else if (((ClientMagic)Item1).Def.TrainLevel[0] == ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = 0;
             }
@@ -5102,11 +5102,11 @@ namespace BotSvr
         public int hClientConvertMagic_ListSortCompareLevel(object Item1, object Item2)
         {
             var result = 1;
-            if (((TClientMagic)Item1).Def.TrainLevel[0] < ((TClientMagic)Item2).Def.TrainLevel[0])
+            if (((ClientMagic)Item1).Def.TrainLevel[0] < ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = -1;
             }
-            else if (((TClientMagic)Item1).Def.TrainLevel[0] == ((TClientMagic)Item2).Def.TrainLevel[0])
+            else if (((ClientMagic)Item1).Def.TrainLevel[0] == ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = 0;
             }
@@ -5116,11 +5116,11 @@ namespace BotSvr
         public int ClientGetMyMagics_ListSortCompareLevel(object Item1, object Item2)
         {
             var result = 1;
-            if (((TClientMagic)Item1).Def.TrainLevel[0] < ((TClientMagic)Item2).Def.TrainLevel[0])
+            if (((ClientMagic)Item1).Def.TrainLevel[0] < ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = -1;
             }
-            else if (((TClientMagic)Item1).Def.TrainLevel[0] == ((TClientMagic)Item2).Def.TrainLevel[0])
+            else if (((ClientMagic)Item1).Def.TrainLevel[0] == ((ClientMagic)Item2).Def.TrainLevel[0])
             {
                 result = 0;
             }
@@ -5144,7 +5144,7 @@ namespace BotSvr
                 body = HUtil32.GetValidStr3(body, ref data, HUtil32.Backslash);
                 if (data != "")
                 {
-                    var pcm = EDcode.DecodeBuffer<TClientMagic>(data);
+                    var pcm = EDCode.DecodeBuffer<ClientMagic>(data);
                     MShare.g_MagicList.Add(pcm);
                     MShare.g_MagicArr[pcm.Def.wMagicID] = pcm;
                 }
@@ -5542,7 +5542,7 @@ namespace BotSvr
         {
             if (body != "")
             {
-                var ci = EDcode.DecodeBuffer<TClientItem>(body);
+                var ci = EDCode.DecodeBuffer<ClientItem>(body);
                 ClFunc.AddDealRemoteItem(ci);
             }
         }
@@ -5551,7 +5551,7 @@ namespace BotSvr
         {
             if (body != "")
             {
-                var ci = EDcode.DecodeBuffer<TClientItem>(body);
+                var ci = EDCode.DecodeBuffer<ClientItem>(body);
                 ClFunc.DelDealRemoteItem(ci);
             }
         }
@@ -5589,7 +5589,7 @@ namespace BotSvr
         public void SendPassword(string sPassword, int nIdent)
         {
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_PASSWORD, 0, nIdent, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sPassword));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sPassword));
         }
 
         private void ClientGetServerConfig(ClientPacket msg, string sBody)
@@ -5604,8 +5604,8 @@ namespace BotSvr
             MShare.g_boCanRunMon = HUtil32.HiByte(HUtil32.LoWord(msg.Recog)) == 1;
             MShare.g_boCanRunNpc = HUtil32.LoByte(HUtil32.HiWord(msg.Recog)) == 1;
             MShare.g_boCanRunAllInWarZone = HUtil32.HiByte(HUtil32.HiWord(msg.Recog)) == 1;
-            sBody = EDcode.DeCodeString(sBody);
-            var ClientConf = EDcode.DecodeBuffer<TClientConf>(sBody);
+            sBody = EDCode.DeCodeString(sBody);
+            var ClientConf = EDCode.DecodeBuffer<ClientConf>(sBody);
             MShare.g_boCanRunHuman = ClientConf.boRunHuman;
             MShare.g_boCanRunMon = ClientConf.boRunMon;
             MShare.g_boCanRunNpc = ClientConf.boRunNpc;
@@ -5622,7 +5622,7 @@ namespace BotSvr
             MShare.g_boMagicLock = ClientConf.boMagicLock;
         }
 
-        public TClientMagic GetMagicByID(int magid)
+        public ClientMagic GetMagicByID(int magid)
         {
             if ((magid <= 0) || (magid >= 255))
             {
@@ -5666,7 +5666,7 @@ namespace BotSvr
             }
         }
 
-        private void SmartChangePoison(TClientMagic pcm)
+        private void SmartChangePoison(ClientMagic pcm)
         {
             string Str;
             string cStr;
@@ -5740,7 +5740,7 @@ namespace BotSvr
 
         public void TimerAutoMagicTimer(object Sender, EventArgs _e1)
         {
-            TClientMagic pcm;
+            ClientMagic pcm;
             if ((MShare.g_MySelf != null) && MShare.g_MySelf.m_StallMgr.OnSale)
             {
                 return;

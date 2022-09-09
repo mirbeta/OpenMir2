@@ -4,6 +4,7 @@ using GameSvr.Script;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Npc
 {
@@ -29,7 +30,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 商品列表
         /// </summary>
-        private readonly IList<IList<TUserItem>> m_GoodsList;
+        private readonly IList<IList<UserItem>> m_GoodsList;
         /// <summary>
         /// 物品价格列表
         /// </summary>
@@ -105,10 +106,10 @@ namespace GameSvr.Npc
             }
         }
 
-        private IList<TUserItem> GetRefillList(int nIndex)
+        private IList<UserItem> GetRefillList(int nIndex)
         {
-            IList<TUserItem> result = null;
-            IList<TUserItem> List;
+            IList<UserItem> result = null;
+            IList<UserItem> List;
             if (nIndex <= 0)
             {
                 return result;
@@ -128,17 +129,17 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void RefillGoods_RefillItems(ref IList<TUserItem> List, string sItemName, int nInt)
+        private void RefillGoods_RefillItems(ref IList<UserItem> List, string sItemName, int nInt)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             if (List == null)
             {
-                List = new List<TUserItem>();
+                List = new List<UserItem>();
                 m_GoodsList.Add(List);
             }
             for (var i = 0; i < nInt; i++)
             {
-                UserItem = new TUserItem();
+                UserItem = new UserItem();
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     List.Insert(0, UserItem);
@@ -150,7 +151,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void RefillGoods_DelReFillItem(ref IList<TUserItem> List, int nInt)
+        private void RefillGoods_DelReFillItem(ref IList<UserItem> List, int nInt)
         {
             for (var i = List.Count - 1; i >= 0; i--)
             {
@@ -168,8 +169,8 @@ namespace GameSvr.Npc
         {
             TGoods Goods;
             int nRefillCount;
-            IList<TUserItem> RefillList;
-            IList<TUserItem> RefillList20;
+            IList<UserItem> RefillList;
+            IList<UserItem> RefillList20;
             bool bo21;
             const string sExceptionMsg = "[Exception] TMerchant::RefillGoods {0}/{1}:{2} [{3}] Code:{4}";
             try
@@ -293,11 +294,11 @@ namespace GameSvr.Npc
             }
         }
 
-        private void UpgradeWaponAddValue(PlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
+        private void UpgradeWaponAddValue(PlayObject User, IList<UserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
-            TUserItem UserItem;
+            UserItem UserItem;
             StdItem StdItem;
-            TClientStdItem StdItem80 = null;
+            ClientStdItem StdItem80 = null;
             IList<TDeleteItem> DelItemList = null;
             int nDc;
             int nSc;
@@ -482,7 +483,7 @@ namespace GameSvr.Npc
                     }
                 }
                 User.GoldChanged();
-                var userItem = new TUserItem(User.UseItems[Grobal2.U_WEAPON]);
+                var userItem = new UserItem(User.UseItems[Grobal2.U_WEAPON]);
                 upgradeInfo = new TUpgradeInfo
                 {
                     sUserName = User.CharName,
@@ -764,8 +765,8 @@ namespace GameSvr.Npc
 
         private void UserSelect_MakeDurg(PlayObject User)
         {
-            IList<TUserItem> List14;
-            TUserItem UserItem;
+            IList<UserItem> List14;
+            UserItem UserItem;
             StdItem StdItem;
             var sSendMsg = string.Empty;
             for (var i = 0; i < m_GoodsList.Count; i++)
@@ -1069,7 +1070,7 @@ namespace GameSvr.Npc
             m_boCastle = false;
             m_ItemTypeList = new List<int>();
             m_RefillGoodsList = new List<TGoods>();
-            m_GoodsList = new List<IList<TUserItem>>();
+            m_GoodsList = new List<IList<UserItem>>();
             m_ItemPriceList = new List<TItemPrice>();
             m_UpgradeWeaponList = new List<TUpgradeInfo>();
             dwRefillGoodsTick = HUtil32.GetTickCount();
@@ -1150,7 +1151,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private double GetUserItemPrice(TUserItem UserItem)
+        private double GetUserItemPrice(UserItem UserItem)
         {
             double result;
             StdItem StdItem;
@@ -1240,8 +1241,8 @@ namespace GameSvr.Npc
 
         public void ClientBuyItem(PlayObject PlayObject, string sItemName, int nInt)
         {
-            IList<TUserItem> List20;
-            TUserItem UserItem;
+            IList<UserItem> List20;
+            UserItem UserItem;
             StdItem StdItem;
             int nPrice;
             string sUserItemName;
@@ -1330,7 +1331,7 @@ namespace GameSvr.Npc
 
         public void ClientGetDetailGoodsList(PlayObject PlayObject, string sItemName, int nInt)
         {
-            IList<TUserItem> List20;
+            IList<UserItem> List20;
             var sSendMsg = string.Empty;
             int nItemCount = 0;
             for (var i = 0; i < m_GoodsList.Count; i++)
@@ -1340,7 +1341,7 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                TUserItem UserItem = List20[0];
+                UserItem UserItem = List20[0];
                 StdItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (Item != null && Item.Name == sItemName)
                 {
@@ -1351,13 +1352,13 @@ namespace GameSvr.Npc
                     for (var j = List20.Count - 1; j >= 0; j--)
                     {
                         UserItem = List20[j];
-                        TClientItem ClientItem = new TClientItem();
+                        ClientItem ClientItem = new ClientItem();
                         Item.GetStandardItem(ref ClientItem.Item);
                         Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                         ClientItem.MakeIndex = UserItem.MakeIndex;
-                        sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + "/";
+                        sSendMsg = sSendMsg + EDCode.EncodeBuffer(ClientItem) + "/";
                         nItemCount++;
                         if (nItemCount >= 10)
                         {
@@ -1370,7 +1371,7 @@ namespace GameSvr.Npc
             PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ActorId, nItemCount, nInt, sSendMsg);
         }
 
-        public void ClientQuerySellPrice(PlayObject PlayObject, TUserItem UserItem)
+        public void ClientQuerySellPrice(PlayObject PlayObject, UserItem UserItem)
         {
             var nC = GetSellItemPrice(GetUserItemPrice(UserItem));
             if (nC >= 0)
@@ -1388,7 +1389,7 @@ namespace GameSvr.Npc
             return HUtil32.Round(nPrice / 2.0);
         }
 
-        private bool ClientSellItem_sub_4A1C84(TUserItem UserItem)
+        private bool ClientSellItem_sub_4A1C84(UserItem UserItem)
         {
             var result = true;
             var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -1402,7 +1403,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        public bool ClientSellItem(PlayObject PlayObject, TUserItem UserItem)
+        public bool ClientSellItem(PlayObject PlayObject, UserItem UserItem)
         {
             var result = false;
             StdItem StdItem;
@@ -1443,7 +1444,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool AddItemToGoodsList(TUserItem UserItem)
+        private bool AddItemToGoodsList(UserItem UserItem)
         {
             var result = false;
             if (UserItem.Dura <= 0)
@@ -1453,7 +1454,7 @@ namespace GameSvr.Npc
             var ItemList = GetRefillList(UserItem.wIndex);
             if (ItemList == null)
             {
-                ItemList = new List<TUserItem>();
+                ItemList = new List<UserItem>();
                 m_GoodsList.Add(ItemList);
             }
             ItemList.Insert(0, UserItem);
@@ -1464,8 +1465,8 @@ namespace GameSvr.Npc
         private bool ClientMakeDrugItem_sub_4A28FC(PlayObject PlayObject, string sItemName)
         {
             bool result = false;
-            IList<TMakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
-            TUserItem UserItem = null;
+            IList<MakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
+            UserItem UserItem = null;
             IList<TDeleteItem> List28;
             string s20 = string.Empty;
             int n1C = 0;
@@ -1534,9 +1535,9 @@ namespace GameSvr.Npc
 
         public void ClientMakeDrugItem(PlayObject PlayObject, string sItemName)
         {
-            IList<TUserItem> List1C;
-            TUserItem MakeItem;
-            TUserItem UserItem;
+            IList<UserItem> List1C;
+            UserItem MakeItem;
+            UserItem UserItem;
             StdItem StdItem;
             var n14 = 1;
             for (var i = 0; i < m_GoodsList.Count; i++)
@@ -1550,7 +1551,7 @@ namespace GameSvr.Npc
                     {
                         if (ClientMakeDrugItem_sub_4A28FC(PlayObject, sItemName))
                         {
-                            UserItem = new TUserItem();
+                            UserItem = new UserItem();
                             M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem);
                             if (PlayObject.AddItemToBag(UserItem))
                             {
@@ -1596,7 +1597,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="UserItem"></param>
-        public void ClientQueryRepairCost(PlayObject PlayObject, TUserItem UserItem)
+        public void ClientQueryRepairCost(PlayObject PlayObject, UserItem UserItem)
         {
             int nRepairPrice;
             var nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
@@ -1642,7 +1643,7 @@ namespace GameSvr.Npc
         /// <param name="PlayObject"></param>
         /// <param name="UserItem"></param>
         /// <returns></returns>
-        public bool ClientRepairItem(PlayObject PlayObject, TUserItem UserItem)
+        public bool ClientRepairItem(PlayObject PlayObject, UserItem UserItem)
         {
             int nRepairPrice;
             var result = false;
@@ -1775,8 +1776,8 @@ namespace GameSvr.Npc
         /// </summary>
         public void ClearData()
         {
-            TUserItem UserItem;
-            IList<TUserItem> ItemList;
+            UserItem UserItem;
+            IList<UserItem> ItemList;
             TItemPrice ItemPrice;
             const string sExceptionMsg = "[Exception] TMerchant::ClearData";
             try

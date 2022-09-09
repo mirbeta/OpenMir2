@@ -95,15 +95,15 @@ namespace BotSvr
         public static int g_SendSayListIdx = 0;
         public static IList<string> g_GroupMembers = null;
         public static int g_DxFontsMgrTick = 0;
-        public static TClientMagic[] g_MagicArr = new TClientMagic[255];
-        public static IList<TClientMagic> g_MagicList = null;
+        public static ClientMagic[] g_MagicArr = new ClientMagic[255];
+        public static IList<ClientMagic> g_MagicList = null;
         public static IList<TDropItem> g_DropedItemList = null;
         public static ArrayList g_ChangeFaceReadyList = null;
         public static IList<TActor> g_FreeActorList = null;
-        public static TNakedAbility g_BonusTick = null;
-        public static TNakedAbility g_BonusAbil = null;
-        public static TNakedAbility g_NakedAbil = null;
-        public static TNakedAbility g_BonusAbilChg = null;
+        public static NakedAbility g_BonusTick = null;
+        public static NakedAbility g_BonusAbil = null;
+        public static NakedAbility g_NakedAbil = null;
+        public static NakedAbility g_BonusAbilChg = null;
         public static string g_sGuildName = string.Empty;
         public static string g_sGuildRankName = string.Empty;
         public static int g_dwLatestJoinAttackTick = 0;
@@ -228,12 +228,12 @@ namespace BotSvr
         public static TMovingItem[] g_RefineItems = new TMovingItem[2 + 1];
         public static int g_BuildAcusesStep = 0;
         public static TMovingItem[] g_BuildAcuses = new TMovingItem[7 + 1];
-        public static TClientItem[] g_tui = new TClientItem[13 + 1];
-        public static TClientItem[] g_UseItems = new TClientItem[13 + 1];
+        public static ClientItem[] g_tui = new ClientItem[13 + 1];
+        public static ClientItem[] g_UseItems = new ClientItem[13 + 1];
         public static TItemShine g_detectItemShine = null;
         public static TItemShine[] UserState1Shine = new TItemShine[13 + 1];
         public static TItemShine[] g_UseItemsShine = new TItemShine[13 + 1];
-        public static TClientItem[] g_ItemArr = new TClientItem[MAXBAGITEMCL - 1 + 1];
+        public static ClientItem[] g_ItemArr = new ClientItem[MAXBAGITEMCL - 1 + 1];
         public static TItemShine[] g_ItemArrShine = new TItemShine[MAXBAGITEMCL - 1 + 1];
         public static TItemShine[] g_StallItemArrShine = new TItemShine[10 - 1 + 1];
         public static TItemShine[] g_uStallItemArrShine = new TItemShine[10 - 1 + 1];
@@ -246,24 +246,24 @@ namespace BotSvr
         public static int g_nSpellCount = 0;
         public static int g_nSpellFailCount = 0;
         public static int g_nFireCount = 0;
-        public static TClientItem g_SellDlgItem = null;
+        public static ClientItem g_SellDlgItem = null;
         public static TMovingItem g_TakeBackItemWait = null;
         public static TMovingItem g_SellDlgItemSellWait = null;
-        public static TClientItem g_DetectItem = null;
+        public static ClientItem g_DetectItem = null;
         public static int g_DetectItemMineID = 0;
-        public static TClientItem g_DealDlgItem = null;
+        public static ClientItem g_DealDlgItem = null;
         public static bool g_boQueryPrice = false;
         public static int g_dwQueryPriceTime = 0;
         public static string g_sSellPriceStr = string.Empty;
-        public static TClientItem[] g_DealItems = new TClientItem[9 + 1];
-        public static TClientItem[] g_YbDealItems = new TClientItem[9 + 1];
-        public static TClientItem[] g_DealRemoteItems = new TClientItem[19 + 1];
+        public static ClientItem[] g_DealItems = new ClientItem[9 + 1];
+        public static ClientItem[] g_YbDealItems = new ClientItem[9 + 1];
+        public static ClientItem[] g_DealRemoteItems = new ClientItem[19 + 1];
         public static int g_nDealGold = 0;
         public static int g_nDealRemoteGold = 0;
         public static string g_sDealWho = string.Empty;
-        public static TClientItem g_MouseItem = null;
-        public static TClientItem g_MouseStateItem = null;
-        public static TClientItem g_MouseUserStateItem = null;
+        public static ClientItem g_MouseItem = null;
+        public static ClientItem g_MouseStateItem = null;
+        public static ClientItem g_MouseUserStateItem = null;
         public static bool g_boItemMoving = false;
         public static TMovingItem g_MovingItem = null;
         public static TMovingItem g_OpenBoxItem = null;
@@ -282,7 +282,7 @@ namespace BotSvr
         public static int g_nAreaStateValue = 0;
         public static int g_nRunReadyCount = 0;
         public static bool g_boForceNotViewFog = true;
-        public static TClientItem g_EatingItem = null;
+        public static ClientItem g_EatingItem = null;
         public static int g_dwEatTime = 0;
         public static int g_dwDizzyDelayStart = 0;
         public static int g_dwDizzyDelayTime = 0;
@@ -1023,7 +1023,7 @@ namespace BotSvr
             //ls.Free;
         }
 
-        public static int GetItemWhere(TClientItem clientItem)
+        public static int GetItemWhere(ClientItem clientItem)
         {
             int result;
             result = -1;
@@ -1079,7 +1079,7 @@ namespace BotSvr
             return result;
         }
 
-        public static bool GetSecretAbil(TClientItem CurrMouseItem)
+        public static bool GetSecretAbil(ClientItem CurrMouseItem)
         {
             bool result = false;
             //if (!new ArrayList(new int[] { 5, 6, 10, 15, 26 }).Contains(CurrMous.Item.Item.StdMode))
@@ -1107,7 +1107,7 @@ namespace BotSvr
             //FillChar(g_DealRemoteItems);
         }
 
-        public static byte GetTIHintString1(int idx, TClientItem ci, string iname)
+        public static byte GetTIHintString1(int idx, ClientItem ci, string iname)
         {
             byte result;
             result = 0;
@@ -1243,12 +1243,12 @@ namespace BotSvr
             return GetTIHintString1(idx, null);
         }
 
-        public static byte GetTIHintString1(int idx, TClientItem ci)
+        public static byte GetTIHintString1(int idx, ClientItem ci)
         {
             return GetTIHintString1(idx, ci, "");
         }
 
-        public static byte GetTIHintString2(int idx, TClientItem ci, string iname)
+        public static byte GetTIHintString2(int idx, ClientItem ci, string iname)
         {
             byte result;
             result = 0;
@@ -1293,12 +1293,12 @@ namespace BotSvr
             return GetTIHintString2(idx, null);
         }
 
-        public static byte GetTIHintString2(int idx, TClientItem ci)
+        public static byte GetTIHintString2(int idx, ClientItem ci)
         {
             return GetTIHintString2(idx, ci, "");
         }
 
-        public static byte GetSpHintString1(int idx, TClientItem ci, string iname)
+        public static byte GetSpHintString1(int idx, ClientItem ci, string iname)
         {
             byte result;
             result = 0;
@@ -1357,12 +1357,12 @@ namespace BotSvr
             return GetSpHintString1(idx, null);
         }
 
-        public static byte GetSpHintString1(int idx, TClientItem ci)
+        public static byte GetSpHintString1(int idx, ClientItem ci)
         {
             return GetSpHintString1(idx, ci, "");
         }
 
-        public static byte GetSpHintString2(int idx, TClientItem ci, string iname)
+        public static byte GetSpHintString2(int idx, ClientItem ci, string iname)
         {
             byte result;
             result = 0;
@@ -1381,7 +1381,7 @@ namespace BotSvr
             return GetSpHintString2(idx, null);
         }
 
-        public static byte GetSpHintString2(int idx, TClientItem ci)
+        public static byte GetSpHintString2(int idx, ClientItem ci)
         {
             return GetSpHintString2(idx, ci, "");
         }
@@ -1642,13 +1642,13 @@ namespace BotSvr
     public class TMovingItem
     {
         public int Index;
-        public TClientItem Item;
+        public ClientItem Item;
     }
 
     public struct TCleintBox
     {
         public int Index;
-        public TClientItem Item;
+        public ClientItem Item;
     }
 
     public enum MagicType
@@ -1711,7 +1711,7 @@ namespace BotSvr
 
     public struct TTempSeriesSkillA
     {
-        public TClientMagic pm;
+        public ClientMagic pm;
         public bool bo;
     }
 

@@ -78,7 +78,7 @@ namespace SelGate
                     accountPacket.Body = userData.Body;
                     accountPacket.BuffLen = (byte)userData.Body.Length;
                     accountPacket.StartChar = '%';
-                    accountPacket.PacketType = PacketType.Data;
+                    accountPacket.Type = PacketType.Data;
                     accountPacket.SocketId = Session.SocketId;
                     accountPacket.EndChar = '$';
                     _lastDbSvr.SendSocket(accountPacket.GetBuffer());
@@ -189,7 +189,7 @@ namespace SelGate
             accountPacket.Body = body;
             accountPacket.BuffLen = (short)body.Length;
             accountPacket.StartChar = '%';
-            accountPacket.PacketType = PacketType.Enter;
+            accountPacket.Type = PacketType.Enter;
             accountPacket.SocketId = Session.SocketId;
             accountPacket.EndChar = '$';
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
@@ -211,7 +211,7 @@ namespace SelGate
             accountPacket.Body = body;
             accountPacket.BuffLen = (short)body.Length;
             accountPacket.StartChar = '%';
-            accountPacket.PacketType = PacketType.Leave;
+            accountPacket.Type = PacketType.Leave;
             accountPacket.SocketId = Session.SocketId;
             accountPacket.EndChar = '$';
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());

@@ -15,6 +15,8 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
+using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.UsrSystem
 {
@@ -69,16 +71,16 @@ namespace GameSvr.UsrSystem
         public long RobotLogonTick;
         public readonly IList<TAdminInfo> AdminList;
         private readonly IList<TGoldChangeInfo> _mChangeHumanDbGoldList;
-        private readonly IList<TSwitchDataInfo> _mChangeServerList;
+        private readonly IList<SwitchDataInfo> _mChangeServerList;
         private readonly IList<int> _mListOfGateIdx;
         private readonly IList<int> _mListOfSocket;
         /// <summary>
         /// 从DB读取人物数据
         /// </summary>
-        protected readonly IList<TUserOpenInfo> LoadPlayList;
+        protected readonly IList<UserOpenInfo> LoadPlayList;
         protected readonly object LoadPlaySection;
         public readonly IList<MagicEvent> MagicEventList;
-        public IList<TMagic> MagicList;
+        public IList<SystemModule.Packet.ServerPackets.MagicInfo> MagicList;
         public readonly IList<Merchant> MerchantList;
         public readonly IList<MonGenInfo> MonGenList;
         protected readonly IList<PlayObject> NewHumanList;
@@ -98,7 +100,7 @@ namespace GameSvr.UsrSystem
         public UserEngine()
         {
             LoadPlaySection = new object();
-            LoadPlayList = new List<TUserOpenInfo>();
+            LoadPlayList = new List<UserOpenInfo>();
             PlayObjectList = new List<PlayObject>();
             PlayObjectFreeList = new List<PlayObject>();
             _mChangeHumanDbGoldList = new List<TGoldChangeInfo>();
@@ -119,11 +121,11 @@ namespace GameSvr.UsrSystem
             StdItemList = new List<StdItem>();
             MonsterList = new List<TMonInfo>();
             MonGenList = new List<MonGenInfo>();
-            MagicList = new List<TMagic>();
+            MagicList = new List<SystemModule.Packet.ServerPackets.MagicInfo>();
             AdminList = new List<TAdminInfo>();
             MerchantList = new List<Merchant>();
             QuestNpcList = new List<NormNpc>();
-            _mChangeServerList = new List<TSwitchDataInfo>();
+            _mChangeServerList = new List<SwitchDataInfo>();
             MagicEventList = new List<MagicEvent>();
             ProcessMerchantTimeMin = 0;
             ProcessMerchantTimeMax = 0;
@@ -312,11 +314,11 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        private PlayObject ProcessHumans_MakeNewHuman(TUserOpenInfo userOpenInfo)
+        private PlayObject ProcessHumans_MakeNewHuman(UserOpenInfo userOpenInfo)
         {
             PlayObject result = null;
             PlayObject playObject = null;
-            TSwitchDataInfo switchDataInfo = null;
+            SwitchDataInfo switchDataInfo = null;
             const string sExceptionMsg = "[Exception] TUserEngine::MakeNewHuman";
             const string sChangeServerFail1 = "chg-server-fail-1 [{0}] -> [{1}] [{2}]";
             const string sChangeServerFail2 = "chg-server-fail-2 [{0}] -> [{1}] [{2}]";
@@ -569,7 +571,7 @@ namespace GameSvr.UsrSystem
                     {
                         for (var i = 0; i < LoadPlayList.Count; i++)
                         {
-                            TUserOpenInfo userOpenInfo;
+                            UserOpenInfo userOpenInfo;
                             if (!M2Share.FrontEngine.IsFull() && !ProcessHumansIsLogined(LoadPlayList[i].sChrName))
                             {
                                 userOpenInfo = LoadPlayList[i];
@@ -1345,7 +1347,7 @@ namespace GameSvr.UsrSystem
                         else
                         {
                             if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
-                            TUserItem userItem = null;
+                            UserItem userItem = null;
                             if (CopyToUserItemFromName(itemName, ref userItem))
                             {
                                 userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
@@ -1370,14 +1372,14 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public bool CopyToUserItemFromName(string sItemName, ref TUserItem item)
+        public bool CopyToUserItemFromName(string sItemName, ref UserItem item)
         {
             if (string.IsNullOrEmpty(sItemName)) return false;
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 var stdItem = StdItemList[i];
                 if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
-                if (item == null) item = new TUserItem();
+                if (item == null) item = new UserItem();
                 item.wIndex = (ushort)(i + 1);
                 item.MakeIndex = M2Share.GetItemNumber();
                 item.Dura = stdItem.DuraMax;
@@ -2049,7 +2051,7 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
-        public void AddUserOpenInfo(TUserOpenInfo userOpenInfo)
+        public void AddUserOpenInfo(UserOpenInfo userOpenInfo)
         {
             HUtil32.EnterCriticalSection(LoadPlaySection);
             try
@@ -2116,13 +2118,13 @@ namespace GameSvr.UsrSystem
         private void GetHumData(PlayObject playObject, ref THumDataInfo humanRcd)
         {
             THumInfoData humData;
-            TUserItem[] humItems;
-            TUserItem[] bagItems;
+            UserItem[] humItems;
+            UserItem[] bagItems;
             TMagicRcd[] humMagic;
-            TMagic magicInfo;
-            TUserMagic userMagic;
-            TUserItem[] storageItems;
-            TUserItem userItem;
+            SystemModule.Packet.ServerPackets.MagicInfo magicInfo;
+            UserMagic userMagic;
+            UserItem[] storageItems;
+            UserItem userItem;
             humData = humanRcd.Data;
             playObject.CharName = humData.sCharName;
             playObject.MapName = humData.sCurMap;
@@ -2233,7 +2235,7 @@ namespace GameSvr.UsrSystem
                     magicInfo = M2Share.UserEngine.FindMagic(humMagic[i].wMagIdx);
                     if (magicInfo != null)
                     {
-                        userMagic = new TUserMagic();
+                        userMagic = new UserMagic();
                         userMagic.MagicInfo = magicInfo;
                         userMagic.wMagIdx = humMagic[i].wMagIdx;
                         userMagic.btLevel = humMagic[i].btLevel;
@@ -2292,12 +2294,12 @@ namespace GameSvr.UsrSystem
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeY - 2));
         }
 
-        public TMagic FindMagic(int nMagIdx)
+        public SystemModule.Packet.ServerPackets.MagicInfo FindMagic(int nMagIdx)
         {
-            TMagic result = null;
+            SystemModule.Packet.ServerPackets.MagicInfo result = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
-                TMagic magic = MagicList[i];
+                SystemModule.Packet.ServerPackets.MagicInfo magic = MagicList[i];
                 if (magic.wMagicID == nMagIdx)
                 {
                     result = magic;
@@ -2453,12 +2455,12 @@ namespace GameSvr.UsrSystem
             }
         }
 
-        public TMagic FindMagic(string sMagicName)
+        public SystemModule.Packet.ServerPackets.MagicInfo FindMagic(string sMagicName)
         {
-            TMagic result = null;
+            SystemModule.Packet.ServerPackets.MagicInfo result = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
-                TMagic magic = MagicList[i];
+                SystemModule.Packet.ServerPackets.MagicInfo magic = MagicList[i];
                 if (magic.sMagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
                 {
                     result = magic;
@@ -2842,7 +2844,7 @@ namespace GameSvr.UsrSystem
             if (MagicList.Count > 0)
             {
                 _oldMagicList.Add(MagicList);
-                MagicList = new List<TMagic>();
+                MagicList = new List<SystemModule.Packet.ServerPackets.MagicInfo>();
             }
         }
 
