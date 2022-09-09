@@ -48,36 +48,37 @@ namespace DBSvr
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
 
-            //todo 根据数据库类型注册数据存储实现
-
             var configManager = new ConfigManager();
             configManager.LoadConfig();
-            _config = configManager.GetConfig();
+            _config = configManager.GetConfig;
             _logger.Info("数据库配置文件读取完成...");
-            if (!Enum.TryParse<StorageType>(_config.StoreageType, true, out var storageName))
+            if (!Enum.TryParse<StoragePolicy>(_config.StoreageType, true, out var storagePolicy))
             {
                 throw new Exception("Storage存储配置文件错误或者不支持该存储类型");
             }
 
-            var storageOption = new StorageOption();
-            storageOption.ConnectionString = _config.ConnctionString;
+            var storageOption = new StorageOption()
+            {
+                ConnectionString = _config.ConnctionString
+            };
 
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(_config);
                     services.AddSingleton<MirLog>();
-                    services.AddSingleton<UserSocService>();
                     services.AddSingleton<LoginSvrService>();
+                    services.AddSingleton<UserSocService>();
                     services.AddSingleton<HumDataService>();
-                    switch (storageName)
+                    switch (storagePolicy)
                     {
-                        case StorageType.MySQL:
-                            if (!File.Exists("DBSvr.Storage.MySQL.dll"))
+                        case StoragePolicy.MySQL:
+                            const string storageFile = "DBSvr.Storage.MySQL.dll";
+                            if (!File.Exists(storageFile))
                             {
-                                throw new Exception("请确认DBSvr.Storage.MySQL文件是否存在.");
+                                throw new Exception($"请确认{storageFile}文件是否存在.");
                             }
-                            var assembly = Assembly.LoadFrom("DBSvr.Storage.MySQL.dll");
+                            var assembly = Assembly.LoadFile(storageFile);
                             if (assembly == null)
                             {
                                 throw new Exception("获取MySQL存储实例失败，请确认文件是否正确.");
@@ -94,11 +95,11 @@ namespace DBSvr
                             }
                             _logger.Info("当前使用[MySQL]数据存储.");
                             break;
-                        case StorageType.Sqlite:
+                        case StoragePolicy.Sqlite:
                             // services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
                             // services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
                             break;
-                        case StorageType.Local:
+                        case StoragePolicy.Local:
                             // services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
                             // services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
                             break;
@@ -202,7 +203,7 @@ namespace DBSvr
                          {
                              var (serverIp, status, sessionCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
 
-                             table.UpdateCell(i, 0, $"[bold][blue]SelGate[/][/]");
+                             table.UpdateCell(i, 0, "[bold][blue]SelGate[/][/]");
                              table.UpdateCell(i, 1, ($"[bold]{serverIp}[/]"));
                              table.UpdateCell(i, 2, ($"[bold]{status}[/]"));
                              table.UpdateCell(i, 3, ($"[bold]{sessionCount}[/]"));

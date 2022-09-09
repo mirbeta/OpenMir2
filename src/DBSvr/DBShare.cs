@@ -23,14 +23,13 @@ namespace DBSvr
 
         private static void LoadGateID()
         {
-            StringList LoadList;
             string sLineText;
             string sID = string.Empty;
             string sIPaddr = string.Empty;
             _gateIdList.Clear();
             if (File.Exists(GateIdConfFileName))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 LoadList.LoadFromFile(GateIdConfFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -246,7 +245,7 @@ namespace DBSvr
 
         private string GetConnected()
         {
-            return Socket.Connected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
+            return Socket.Connected ? "[green]Connected[/]" : "[red]Not Connected[/]";
         }
     }
 
