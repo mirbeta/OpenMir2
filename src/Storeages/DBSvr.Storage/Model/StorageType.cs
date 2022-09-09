@@ -1,6 +1,6 @@
 ﻿namespace DBSvr.Storage.Model
 {
-    public enum StorageType
+    public enum StoragePolicy
     {
         Local,
         MySQL,

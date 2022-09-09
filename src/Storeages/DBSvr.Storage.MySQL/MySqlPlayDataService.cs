@@ -16,8 +16,8 @@ namespace DBSvr.Storage.MySQL
         private readonly Dictionary<string, int> MirQuickList = null;
         private readonly QuickIdList MirQuickIDList = null;
         private readonly Dictionary<int, int> QuickIndexIdList = null;
-        private int _recordCount = 0;
         private readonly StorageOption _storageOption;
+        private int _recordCount = 0;
 
         public MySqlPlayDataService(StorageOption storageOption)
         {
@@ -269,7 +269,7 @@ namespace DBSvr.Storage.MySQL
                     HumanRCD.Data.Initialization();
                     HumanRCD.Data.sAccount = dr.GetString("FLD_LOGINID");
                     HumanRCD.Header.sName = dr.GetString("FLD_CHARNAME");
-                    HumanRCD.Header.boDeleted = dr.GetBoolean("FLD_DELETED");
+                    HumanRCD.Header.Deleted = dr.GetBoolean("FLD_DELETED");
                     HumanRCD.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("FLD_CREATEDATE"));
                     HumanRCD.Data.sCharName = dr.GetString("FLD_CHARNAME");
                     if (!dr.IsDBNull(dr.GetOrdinal("FLD_MAPNAME")))

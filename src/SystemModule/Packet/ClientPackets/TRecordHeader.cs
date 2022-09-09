@@ -14,7 +14,7 @@ namespace SystemModule.Packet.ClientPackets
         [ProtoMember(4)]
         public double dCreateDate;
         [ProtoMember(5)]
-        public bool boDeleted;
+        public bool Deleted;
         [ProtoMember(6)]
         public double UpdateDate;
         [ProtoMember(7)]

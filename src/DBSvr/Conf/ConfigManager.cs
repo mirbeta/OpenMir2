@@ -15,10 +15,7 @@ namespace DBSvr.Conf
             Load();
         }
 
-        public SvrConf GetConfig()
-        {
-            return _config;
-        }
+        public SvrConf GetConfig => _config;
 
         public void LoadConfig()
         {

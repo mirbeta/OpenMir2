@@ -23,7 +23,7 @@ namespace DBSvr
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.LogDebug($"DBSvr is stopping."));
+            stoppingToken.Register(() => _logger.LogDebug("DBSvr is stopping."));
             _userSocService.Start();
             _loginSvrService.Start();
             _dataService.Start();
@@ -32,7 +32,7 @@ namespace DBSvr
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"DBSvr is starting.");
+            _logger.LogDebug("DBSvr is starting.");
             DBShare.Initialization();
             DBShare.LoadConfig();
             return base.StartAsync(cancellationToken);
@@ -40,7 +40,7 @@ namespace DBSvr
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"DBSvr is stopping.");
+            _logger.LogDebug("DBSvr is stopping.");
             _userSocService.Stop();
             return base.StopAsync(cancellationToken);
         }

@@ -17,9 +17,8 @@ namespace DBSvr.Storage
 
         public void AddRecord(string sAccount, string sChrName, int nIndex, int nSelIndex)
         {
-            QuickId QuickID;
             IList<QuickId> ChrList;
-            QuickID = new QuickId();
+            var QuickID = new QuickId();
             QuickID.sAccount = sAccount;
             QuickID.sChrName = sChrName;
             QuickID.nIndex = nIndex;
@@ -144,7 +143,7 @@ namespace DBSvr.Storage
                                 nMed = (nHigh - nLow) / 2 + nLow;
                                 continue;
                             }
-                            ChrList = m_List[_quickList[nMed].sAccount] as List<QuickId>;
+                            ChrList = m_List[_quickList[nMed].sAccount];
                             ChrList.Add(QuickID);
                             break;
                         }
@@ -155,16 +154,14 @@ namespace DBSvr.Storage
 
         public void DelRecord(int nIndex, string sChrName)
         {
-            QuickId QuickID;
-            IList<QuickId> ChrList;
             if ((m_List.Count - 1) < nIndex)
             {
                 return;
             }
-            ChrList = m_List[sChrName] as List<QuickId>;
+            IList<QuickId> ChrList = m_List[sChrName];
             for (var i = 0; i < ChrList.Count; i++)
             {
-                QuickID = ChrList[i];
+                var QuickID = ChrList[i];
                 if (QuickID.sChrName == sChrName)
                 {
                     QuickID = null;
@@ -174,7 +171,6 @@ namespace DBSvr.Storage
             }
             if (ChrList.Count <= 0)
             {
-                //ChrList.Free;
                 m_List.Remove(sChrName);
             }
         }
