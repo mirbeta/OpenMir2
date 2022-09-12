@@ -3,10 +3,12 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
-        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<AnalysisLevel>latest</AnalysisLevel>
     </PropertyGroup>
     <Choose>
         <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
@@ -32,10 +34,10 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-      <PackageReference Include="Spectre.Console" Version="0.44.0" />
-      <PackageReference Include="Spectre.Console.ImageSharp" Version="0.44.0" />
-      <PackageReference Include="NLog" Version="5.0.2" />
-      <PackageReference Include="NLog.Extensions.Logging" Version="5.0.2" />
+      <PackageReference Include="Spectre.Console" Version="0.45.0" />
+      <PackageReference Include="Spectre.Console.ImageSharp" Version="0.45.0" />
+      <PackageReference Include="NLog" Version="5.0.4" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.0.4" />
     </ItemGroup>
 
     <ItemGroup>

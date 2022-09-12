@@ -11,6 +11,7 @@ namespace GameSvr
         private int _checkIntervalTime;
         private int _saveIntervalTime;
         private int _clearIntervalTime;
+        private CancellationTokenSource? _cancellationTokenSource;
 
         public TimedService(GameApp mirApp)
         {
@@ -19,13 +20,14 @@ namespace GameSvr
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
             _checkIntervalTime = HUtil32.GetTickCount();
             _saveIntervalTime = HUtil32.GetTickCount();
             _clearIntervalTime = HUtil32.GetTickCount();
-            while (!stoppingToken.IsCancellationRequested)
+            while (M2Share.StartReady)
             {
                 ServiceTimer();
-                await Task.Delay(TimeSpan.FromMilliseconds(1000), stoppingToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(1000), _cancellationTokenSource.Token);
             }
         }
 

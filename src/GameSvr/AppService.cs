@@ -29,12 +29,12 @@ namespace GameSvr
             _logger.LogDebug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
-            
+
             _application.HelpOption("-?|-h|-help");
             _application.OnExecute(() =>
             {
                 _application.ShowHelp();
-                return 0; 
+                return 0;
             });
             _application.Command("s", command =>
             {
@@ -43,14 +43,23 @@ namespace GameSvr
                     await ShowServerStatus(cancellationToken);
                 });
             });
+            _application.Command("exit", command =>
+            {
+                command.OnExecute(() =>
+                {
+                    _appLifetime.StopApplication();
+                    return 0;
+                });
+            });
             _application.Command("q", command =>
             {
                 command.OnExecute(() =>
                 {
                     Exit();
+                    return 0;
                 });
             });
-            
+
             _appLifetime.ApplicationStarted.Register(() =>
             {
                 _logger.LogDebug("Application has started");
@@ -63,7 +72,7 @@ namespace GameSvr
                         _logger.LogInformation("读取配置信息完成...");
                         _mirApp.StartEngine(stoppingToken);
                         _mirApp.StartService();
-                        if (M2Share.boStartReady)
+                        if (M2Share.StartReady)
                         {
                             _mirApp.Start(stoppingToken);
                             M2Share.UserEngine.Start(stoppingToken);
@@ -85,7 +94,7 @@ namespace GameSvr
             });
 
             _appLifetime.ApplicationStopping.Register(OnShutdown);
-            
+
             return Task.CompletedTask;
         }
 
@@ -107,7 +116,7 @@ namespace GameSvr
         private void OnShutdown()
         {
             _logger.LogDebug("Application is stopping");
-
+            M2Share.StartReady = false;
             if (M2Share.UserEngine.PlayObjectCount > 0)
             {
                 _logger.LogInformation("保存玩家数据");
@@ -165,7 +174,6 @@ namespace GameSvr
                                 break;
                             }
                         }
-                        M2Share.boStartReady = false;
                         _logger.LogInformation("玩家转移完毕，关闭游戏服务器.");
                         _mirApp.Stop();
                     }, _cancellationTokenSource.Token);
@@ -174,7 +182,6 @@ namespace GameSvr
             else
             {
                 _logger.LogInformation("没有可用服务器，即将关闭游戏服务器.");
-                M2Share.boStartReady = false;
                 _mirApp.Stop();
             }
             _cancellationTokenSource?.CancelAfter(3000);
@@ -259,7 +266,7 @@ namespace GameSvr
             //     });
             return Task.CompletedTask;
         }
-        
+
         public void Dispose()
         {
 

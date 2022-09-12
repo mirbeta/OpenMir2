@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
@@ -27,7 +27,7 @@
 	</Choose>
 
 	<ItemGroup>
-		<PackageReference Include="MySql.Data" Version="8.0.30" />
+		<PackageReference Include="MySqlConnector" Version="2.1.13" />
 		<PackageReference Include="NLog" Version="5.0.4" />
 	</ItemGroup>
 

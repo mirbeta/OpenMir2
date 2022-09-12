@@ -1,13 +1,12 @@
 using GameSvr.Command;
 using GameSvr.Items;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Data;
 using System.Text.Json;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
 using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.DataStores

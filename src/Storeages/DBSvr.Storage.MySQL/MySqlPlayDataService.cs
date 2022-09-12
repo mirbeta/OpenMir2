@@ -1,5 +1,5 @@
 using DBSvr.Storage.Model;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using NLog;
 using System;
 using System.Collections.Generic;

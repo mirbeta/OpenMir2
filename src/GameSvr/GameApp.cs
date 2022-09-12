@@ -48,7 +48,7 @@ namespace GameSvr
             M2Share.Config.nDBQueryID = 0;
             M2Share.Config.ItemNumber = 0;
             M2Share.Config.ItemNumberEx = int.MaxValue / 2;
-            M2Share.boStartReady = false;
+            M2Share.StartReady = false;
             M2Share.boFilterWord = true;
             M2Share.Config.WinLotteryCount = 0;
             M2Share.Config.NoWinLotteryCount = 0;
@@ -276,7 +276,7 @@ namespace GameSvr
                 _logger.LogInformation("游戏处理引擎初始化成功...");
                 _logger.LogInformation(M2Share.g_sVersion);
                 _logger.LogInformation(M2Share.g_sUpDateTime);
-                M2Share.boStartReady = true;
+                M2Share.StartReady = true;
             }
             catch (Exception ex)
             {

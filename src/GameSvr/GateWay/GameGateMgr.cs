@@ -63,7 +63,7 @@ namespace GameSvr.GateWay
         {
             const string sGateOpen = "游戏网关({0})已打开...";
             const string sKickGate = "服务器未就绪: {0}";
-            if (M2Share.boStartReady)
+            if (M2Share.StartReady)
             {
                 if (_gameGates.Count > 20)
                 {
@@ -194,6 +194,10 @@ namespace GameSvr.GateWay
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
+                if (!_gameGates.ContainsKey(e.SocHandle))
+                {
+                    return;
+                }
                 if (_gameGates[e.SocHandle] == null)
                 {
                     Debug.WriteLine("非法请求");
@@ -276,7 +280,7 @@ namespace GameSvr.GateWay
         public void Run()
         {
             var dwRunTick = HUtil32.GetTickCount();
-            if (M2Share.boStartReady)
+            if (M2Share.StartReady)
             {
                 if (_gameGates.Count > 0)
                 {
