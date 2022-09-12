@@ -14,8 +14,8 @@ namespace GameSvr
         private readonly GameApp _mirApp;
         private Task? _applicationTask;
         private int? _exitCode;
-        private CancellationTokenSource? _cancellationTokenSource = null;
-        private readonly CommandLineApplication application = new CommandLineApplication();
+        private CancellationTokenSource? _cancellationTokenSource;
+        private readonly CommandLineApplication _application = new CommandLineApplication();
 
         public AppService(ILogger<AppService> logger, IHostApplicationLifetime lifetime, GameApp serverApp)
         {
@@ -30,20 +30,20 @@ namespace GameSvr
 
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
             
-            application.HelpOption("-?|-h|-help");
-            application.OnExecute(() =>
+            _application.HelpOption("-?|-h|-help");
+            _application.OnExecute(() =>
             {
-                application.ShowHelp();
+                _application.ShowHelp();
                 return 0; 
             });
-            application.Command("s", command =>
+            _application.Command("s", command =>
             {
                 command.OnExecuteAsync(async (cancellationToken) =>
                 {
                     await ShowServerStatus(cancellationToken);
                 });
             });
-            application.Command("q", command =>
+            _application.Command("q", command =>
             {
                 command.OnExecute(() =>
                 {
@@ -80,7 +80,7 @@ namespace GameSvr
                         _logger.LogError(ex, "Unhandled exception!");
                         _exitCode = 1;
                     }
-                });
+                }, stoppingToken);
                 ProcessLoopAsync();
             });
 
@@ -191,7 +191,7 @@ namespace GameSvr
                 }
                 try
                 {
-                    application.Execute(new string[] { cmdline });
+                    _application.Execute(new string[] { cmdline });
                 }
                 catch
                 {
