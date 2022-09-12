@@ -30,8 +30,11 @@ namespace GameSvr
         {
             Task.Factory.StartNew(async () =>
             {
-                Execute();
-                await Task.Delay(20);
+                while (!stoppingToken.IsCancellationRequested)
+                { 
+                    Execute();
+                    await Task.Delay(20, stoppingToken);
+                }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
