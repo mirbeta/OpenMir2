@@ -275,11 +275,11 @@ namespace GameSvr.Npc
                 var n10 = HUtil32.Str_ToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCalsteGuard)
                 {
-                    if (this.Castle.m_Guard[n10].BaseObject == null)
+                    if (this.Castle.Guards[n10].BaseObject == null)
                     {
                         if (!this.Castle.UnderWar)
                         {
-                            var ObjUnit = this.Castle.m_Guard[n10];
+                            var ObjUnit = this.Castle.Guards[n10];
                             ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(this.Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {

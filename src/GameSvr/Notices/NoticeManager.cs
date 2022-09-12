@@ -12,7 +12,6 @@ namespace GameSvr.Notices
             {
                 NoticeList[i].sMsg = string.Empty;
                 NoticeList[i].sList = null;
-                NoticeList[i].bo0C = true;
             }
         }
 
@@ -20,7 +19,7 @@ namespace GameSvr.Notices
         {
             for (var i = 0; i < NoticeList.Length; i++)
             {
-                if (NoticeList[i].sMsg == "")
+                if (string.IsNullOrEmpty(NoticeList[i].sMsg))
                 {
                     continue;
                 }

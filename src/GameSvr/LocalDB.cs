@@ -693,7 +693,7 @@ namespace GameSvr
                                     NPC = new Merchant();
                                     break;
                                 case 1:
-                                    NPC = new TGuildOfficial();
+                                    NPC = new GuildOfficial();
                                     break;
                                 case 2:
                                     NPC = new CastleOfficial();

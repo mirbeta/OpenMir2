@@ -368,7 +368,6 @@ namespace GameSvr
         {
             int lineCount = 0;
             var result = false;
-            var sText = string.Empty;
             if (File.Exists(FileName))
             {
                 M2Share.AbuseTextList.Clear();
@@ -379,8 +378,8 @@ namespace GameSvr
                     {
                         break;
                     }
-                    sText = M2Share.AbuseTextList[lineCount].Trim();
-                    if (sText == "")
+                    var sText = M2Share.AbuseTextList[lineCount].Trim();
+                    if (string.IsNullOrEmpty(sText))
                     {
                         M2Share.AbuseTextList.RemoveAt(lineCount);
                         continue;

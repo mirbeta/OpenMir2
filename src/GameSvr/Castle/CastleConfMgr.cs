@@ -80,7 +80,7 @@ namespace GameSvr.Castle
                 objUnit.BaseObject = null;
                 userCastle.Archers[i] = objUnit;
             }
-            for (var i = 0; i < userCastle.m_Guard.Length; i++)
+            for (var i = 0; i < userCastle.Guards.Length; i++)
             {
                 var objUnit = new ArcherUnit();
                 objUnit.nX = Read<short>("Defense", "Guard_" + i + 1 + "_X", (short)0);
@@ -88,7 +88,7 @@ namespace GameSvr.Castle
                 objUnit.sName = ReadString("Defense", "Guard_" + i + 1 + "_Name", "守卫");
                 objUnit.nHP = Read<ushort>("Defense", "Guard_" + i + 1 + "_HP", (short)2000);
                 objUnit.BaseObject = null;
-                userCastle.m_Guard[i] = objUnit;
+                userCastle.Guards[i] = objUnit;
             }
         }
 
@@ -161,9 +161,9 @@ namespace GameSvr.Castle
                     WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", 0);
             }
 
-            for (var i = 0; i < userCastle.m_Guard.Length; i++)
+            for (var i = 0; i < userCastle.Guards.Length; i++)
             {
-                objUnit = userCastle.m_Guard[i];
+                objUnit = userCastle.Guards[i];
                 if (objUnit.nX != 0) WriteInteger("Defense", "Guard_" + (i + 1) + "_X", objUnit.nX);
                 if (objUnit.nY != 0) WriteInteger("Defense", "Guard_" + (i + 1) + "_Y", objUnit.nY);
                 if (objUnit.sName != "") WriteString("Defense", "Guard_" + (i + 1) + "_Name", objUnit.sName);

@@ -87,11 +87,8 @@ namespace GameSvr.Robots
             sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ":");
             var nHour = HUtil32.Str_ToInt(sHour, -1);
             var nMin = HUtil32.Str_ToInt(sMin, -1);
-            var sLabel = AutoRunInfo.sParam2;
             var wHour = DateTime.Now.Hour;
             var wMin = DateTime.Now.Minute;
-            var wSec = DateTime.Now.Second;
-            var wMSec = DateTime.Now.Millisecond;
             if (nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
                 if (wHour == nHour)
@@ -134,11 +131,8 @@ namespace GameSvr.Robots
             var nWeek = HUtil32.Str_ToInt(sWeek, -1);
             var nHour = HUtil32.Str_ToInt(sHour, -1);
             var nMin = HUtil32.Str_ToInt(sMin, -1);
-            var sLabel = AutoRunInfo.sParam2;
             var wHour = DateTime.Now.Hour;
             var wMin = DateTime.Now.Minute;
-            var wSec = DateTime.Now.Second;
-            var wMSec = DateTime.Now.Millisecond;
             var wWeek = DateTime.Now.DayOfWeek;
             if (nWeek >= 1 && nWeek <= 7 && nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
@@ -181,7 +175,6 @@ namespace GameSvr.Robots
 
         public void LoadScript()
         {
-            StringList LoadList;
             string sLineText;
             var sActionType = string.Empty;
             var sRunCmd = string.Empty;
@@ -190,11 +183,10 @@ namespace GameSvr.Robots
             var sParam2 = string.Empty;
             var sParam3 = string.Empty;
             var sParam4 = string.Empty;
-            AutoRunInfo AutoRunInfo;
             var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", $"{m_sScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -212,7 +204,7 @@ namespace GameSvr.Robots
                         {
                             if (string.Compare(sRunCmd, Robot.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                AutoRunInfo = new AutoRunInfo();
+                                var AutoRunInfo = new AutoRunInfo();
                                 AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                 AutoRunInfo.dwRunTimeLen = 0;
                                 AutoRunInfo.boStatus = false;
@@ -269,11 +261,9 @@ namespace GameSvr.Robots
 
         private void ProcessAutoRun()
         {
-            AutoRunInfo AutoRunInfo;
             for (var i = _autoRunList.Count - 1; i >= 0; i--)
             {
-                AutoRunInfo = _autoRunList[i];
-                AutoRun(AutoRunInfo);
+                AutoRun(_autoRunList[i]);
             }
         }
 

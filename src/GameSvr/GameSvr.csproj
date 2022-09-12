@@ -42,6 +42,8 @@
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' " />
 	<ItemGroup>
 		<PackageReference Include="Collections.Pooled" Version="1.0.82" />
+		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
 		<PackageReference Include="MySql.Data" Version="8.0.30" />

@@ -46,7 +46,7 @@ namespace GameSvr.Castle
         private int SaveTick;
         public int StartCastleWarTick;
         public IList<string> EnvirList;
-        public ArcherUnit[] m_Guard = new ArcherUnit[4];
+        public ArcherUnit[] Guards = new ArcherUnit[4];
         public DateTime IncomeToday;
         public ArcherUnit LeftWall;
         public ArcherUnit MainDoor;
@@ -242,13 +242,13 @@ namespace GameSvr.Castle
                             _logger.Warn("[错误信息] 城堡初始化弓箭手失败，检查怪物数据库里有没弓箭手的设置: " + ObjUnit.sName);
                         }
                     }
-                    for (var i = 0; i < m_Guard.Length; i++)
+                    for (var i = 0; i < Guards.Length; i++)
                     {
-                        ObjUnit = m_Guard[i];
+                        ObjUnit = Guards[i];
                         if (ObjUnit.nHP <= 0) continue;
                         ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
-                            ObjUnit.BaseObject.WAbil.HP = m_Guard[i].nHP;
+                            ObjUnit.BaseObject.WAbil.HP = Guards[i].nHP;
                         else
                             _logger.Warn("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
                     }
@@ -395,11 +395,11 @@ namespace GameSvr.Castle
                         }
                     }
                 }
-                for (var i = 0; i < m_Guard.Length; i++)
+                for (var i = 0; i < Guards.Length; i++)
                 {
-                    if (m_Guard[i].BaseObject != null && m_Guard[i].BaseObject.Ghost)
+                    if (Guards[i].BaseObject != null && Guards[i].BaseObject.Ghost)
                     {
-                        m_Guard[i].BaseObject = null;
+                        Guards[i].BaseObject = null;
                     }
                 }
                 for (var i = 0; i < Archers.Length; i++)
