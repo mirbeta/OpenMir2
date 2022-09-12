@@ -1,11 +1,10 @@
 using DBSvr.Storage.Model;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL

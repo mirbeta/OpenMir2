@@ -62,6 +62,7 @@ namespace DBSvr
                 ConnectionString = _config.ConnctionString
             };
 
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -73,10 +74,11 @@ namespace DBSvr
                     switch (storagePolicy)
                     {
                         case StoragePolicy.MySQL:
-                            const string storageFile = "DBSvr.Storage.MySQL.dll";
+                            const string storagePolicyName = "DBSvr.Storage.MySQL.dll";
+                            var storageFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, storagePolicyName);
                             if (!File.Exists(storageFile))
                             {
-                                throw new Exception($"请确认{storageFile}文件是否存在.");
+                                throw new Exception($"请确认{storagePolicyName}文件是否存在.");
                             }
                             var assembly = Assembly.LoadFile(storageFile);
                             if (assembly == null)

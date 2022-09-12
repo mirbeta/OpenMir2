@@ -217,7 +217,7 @@ namespace GameSvr
         public static string g_sMissionMap = string.Empty;
         public static short g_nMissionX = 0;
         public static short g_nMissionY = 0;
-        public static bool boStartReady = false;
+        public static bool StartReady = false;
         public static bool boFilterWord = false;
         public static int g_nBaseObjTimeMin = 0;
         public static int g_nBaseObjTimeMax = 0;
