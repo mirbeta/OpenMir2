@@ -1991,9 +1991,9 @@ namespace GameSvr.UsrSystem
             {
                 npcObject = (Merchant)Convert.ChangeType(normNpc, typeof(Merchant));
             }
-            if (npcType == typeof(TGuildOfficial))
+            if (npcType == typeof(GuildOfficial))
             {
-                npcObject = (TGuildOfficial)Convert.ChangeType(normNpc, typeof(TGuildOfficial));
+                npcObject = (GuildOfficial)Convert.ChangeType(normNpc, typeof(GuildOfficial));
             }
             if (npcType == typeof(NormNpc))
             {

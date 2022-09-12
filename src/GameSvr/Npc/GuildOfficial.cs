@@ -10,9 +10,9 @@ namespace GameSvr.Npc
     /// 行会NPC类
     /// 行会管理NPC 如：比奇国王
     /// </summary>
-    public class TGuildOfficial : NormNpc
+    public class GuildOfficial : NormNpc
     {
-        public TGuildOfficial() : base()
+        public GuildOfficial() : base()
         {
             this.RaceImg = Grobal2.RCC_MERCHANT;
             this.Appr = 8;
@@ -64,7 +64,7 @@ namespace GameSvr.Npc
             base.UserSelect(PlayObject, sData);
             try
             {
-                if (sData != "" && sData[0] == '@')
+                if (!string.IsNullOrEmpty(sData) && sData.StartsWith("@"))
                 {
                     sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
                     var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
