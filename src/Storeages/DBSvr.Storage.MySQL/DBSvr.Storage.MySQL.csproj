@@ -2,11 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<Nullable>disable</Nullable>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
 	</PropertyGroup>
 	<Choose>
 		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">

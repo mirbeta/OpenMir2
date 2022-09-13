@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,7 +62,7 @@ namespace DBSvr
             {
                 ConnectionString = _config.ConnctionString
             };
-
+            AssemblyLoadContext context;
 
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
@@ -80,7 +81,9 @@ namespace DBSvr
                             {
                                 throw new Exception($"请确认{storagePolicyName}文件是否存在.");
                             }
-                            var assembly = Assembly.LoadFile(storageFile);
+                            context = new AssemblyLoadContext(storageFile);
+                            context.Resolving += Context_Resolving;
+                            var assembly = context.LoadFromAssemblyPath(storageFile);
                             if (assembly == null)
                             {
                                 throw new Exception("获取MySQL存储实例失败，请确认文件是否正确.");
@@ -117,6 +120,34 @@ namespace DBSvr
             _host = await builder.StartAsync(cts.Token);
             await ProcessLoopAsync();
             Stop();
+        }
+
+        /// <summary>
+        /// 加载依赖项
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="assemblyName"></param>
+        /// <returns></returns>
+        private static Assembly Context_Resolving(AssemblyLoadContext context, AssemblyName assemblyName)
+        {
+            string expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
+            if (File.Exists(expectedPath))
+            {
+                try
+                {
+                    using var stream = File.OpenRead(expectedPath);
+                    return context.LoadFromStream(stream);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"加载节点{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"依赖文件不存在：{expectedPath}");
+            }
+            return null;
         }
 
         private static void Stop()
