@@ -38,7 +38,7 @@ namespace GameSvr.Monster.Monsters
             }
         }
 
-        public override void Attack(BaseObject targeTBaseObject, byte nDir)
+        protected override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
             var wAbil = Abil;
             var nPower = GetAttackPower(HUtil32.LoWord(wAbil.DC), HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC));

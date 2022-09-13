@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
             _bo55D = false;
         }
 
-        public override void Attack(BaseObject targeTBaseObject, byte nDir)
+        protected override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
             var nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
             HitMagAttackTarget(targeTBaseObject, nPower / 2, nPower / 2, true);

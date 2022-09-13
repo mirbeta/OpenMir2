@@ -15,8 +15,6 @@ namespace GameSvr.Actor
         public int m_dwRunAwayStart;
         public int m_dwRunAwayTime;
 
-
-
         public AnimalObject() : base()
         {
             m_nNotProcessCount = 0;
@@ -34,17 +32,17 @@ namespace GameSvr.Actor
         /// 是否可以走动
         /// </summary>
         /// <returns></returns>
-        protected virtual bool CanWalk()
+        protected bool CanWalk()
         {
             return !Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0;
         }
 
-        public virtual void Attack(BaseObject TargeTBaseObject, byte nDir)
+        protected virtual void Attack(BaseObject TargeTBaseObject, byte nDir)
         {
             base.AttackDir(TargeTBaseObject, 0, nDir);
         }
 
-        protected virtual void GotoTargetXY()
+        protected void GotoTargetXY()
         {
             if (this.CurrX != TargetX || this.CurrY != TargetY)
             {

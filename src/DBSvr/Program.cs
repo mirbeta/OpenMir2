@@ -100,6 +100,9 @@ namespace DBSvr
                             }
                             _logger.Info("当前使用[MySQL]数据存储.");
                             break;
+                        case StoragePolicy.MongoDB:
+
+                            break;
                         case StoragePolicy.Sqlite:
                             // services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
                             // services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
