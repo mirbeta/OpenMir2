@@ -68,7 +68,7 @@ namespace GameSvr.Command.Commands
                 }
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    m_PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
+                    m_PlayObject = M2Share.WorldEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
                     if (m_PlayObject != null)
                     {
                         if (m_PlayObject == PlayObject)

@@ -320,7 +320,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$GAMEPOINTNAME>", M2Share.Config.GamePointName);
                     return;
                 case "$USERCOUNT":
-                    sText = M2Share.UserEngine.PlayObjectCount.ToString();
+                    sText = M2Share.WorldEngine.PlayObjectCount.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$USERCOUNT>", sText);
                     return;
                 case "$MACRUNTIME":
@@ -605,55 +605,55 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINLONG>", sText);
                     return;
                 case "$DRESS":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$DRESS>", sText);
                     return;
                 case "$WEAPON":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$WEAPON>", sText);
                     return;
                 case "$RIGHTHAND":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$RIGHTHAND>", sText);
                     return;
                 case "$HELMET":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$HELMET>", sText);
                     return;
                 case "$NECKLACE":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$NECKLACE>", sText);
                     return;
                 case "$RING_R":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_R>", sText);
                     return;
                 case "$RING_L":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_L>", sText);
                     return;
                 case "$ARMRING_R":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_R>", sText);
                     return;
                 case "$ARMRING_L":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_L>", sText);
                     return;
                 case "$BUJUK":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$BUJUK>", sText);
                     return;
                 case "$BELT":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$BELT>", sText);
                     return;
                 case "$BOOTS":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$BOOTS>", sText);
                     return;
                 case "$CHARM":
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].wIndex);
                     sMsg = ReplaceVariableText(sMsg, "<$CHARM>", sText);
                     return;
                 case "$IPADDR":
@@ -1078,9 +1078,9 @@ namespace GameSvr.Npc
                 {
                     if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物
                     {
-                        for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
+                        for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
                         {
-                            MonGen = M2Share.UserEngine.MonGenList[i];
+                            MonGen = M2Share.WorldEngine.MonGenList[i];
                             if (MonGen == null)
                             {
                                 continue;
@@ -1097,9 +1097,9 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
+                        for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
                         {
-                            MonGen = M2Share.UserEngine.MonGenList[i];
+                            MonGen = M2Share.WorldEngine.MonGenList[i];
                             if (MonGen == null)
                             {
                                 continue;
@@ -1123,9 +1123,9 @@ namespace GameSvr.Npc
                     {
                         if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
                         {
-                            for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
+                            for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
                             {
-                                MonGen = M2Share.UserEngine.MonGenList[i];
+                                MonGen = M2Share.WorldEngine.MonGenList[i];
                                 if (MonGen == null)
                                 {
                                     continue;
@@ -1142,9 +1142,9 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            for (var i = 0; i < M2Share.UserEngine.MonGenList.Count; i++)
+                            for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
                             {
-                                MonGen = M2Share.UserEngine.MonGenList[i];
+                                MonGen = M2Share.WorldEngine.MonGenList[i];
                                 if (MonGen == null)
                                 {
                                     continue;
@@ -1316,7 +1316,7 @@ namespace GameSvr.Npc
                 var n18 = HUtil32.Str_ToInt(s14, -1);
                 if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].wIndex > 0)
                 {
-                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.UserEngine.GetStdItemName(PlayObject.UseItems[n18].wIndex));
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[n18].wIndex));
                 }
                 else
                 {
@@ -1663,7 +1663,7 @@ namespace GameSvr.Npc
             if (PlayObject.m_boSendMsgFlag)
             {
                 PlayObject.m_boSendMsgFlag = false;
-                M2Share.UserEngine.SendBroadCastMsg(PlayObject.CharName + ": " + sMsg, MsgType.Cust);
+                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.CharName + ": " + sMsg, MsgType.Cust);
             }
         }
 

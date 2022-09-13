@@ -27,8 +27,8 @@ namespace GameSvr.Command.Commands
             {
                 short nX = 0;
                 short nY = 0;
-                var sMapName = M2Share.UserEngine.GetHomeInfo(ref nX, ref nY);
-                M2Share.UserEngine.AddAiLogon(new RoBotLogon()
+                var sMapName = M2Share.WorldEngine.GetHomeInfo(ref nX, ref nY);
+                M2Share.WorldEngine.AddAiLogon(new RoBotLogon()
                 {
                     sCharName = "玩家" + RandomNumber.GetInstance().Random() + "号",
                     sConfigFileName = "",
@@ -43,7 +43,7 @@ namespace GameSvr.Command.Commands
             }
             if (userCount > 0)
             {
-                M2Share.UserEngine.StartAi();
+                M2Share.WorldEngine.StartAi();
             }
         }
     }

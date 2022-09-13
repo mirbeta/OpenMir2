@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -44,7 +44,7 @@ namespace GameSvr.Command.Commands
                 }
 
                 UserItem = m_PlayObject.ItemList[i];
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.SendDelItems(UserItem);

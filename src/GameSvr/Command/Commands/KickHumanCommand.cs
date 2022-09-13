@@ -21,7 +21,7 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
                 m_PlayObject.m_boKickFlag = true;

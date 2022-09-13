@@ -61,7 +61,7 @@ namespace GameSvr.Command.Commands
             IList<BaseObject> MonList = new List<BaseObject>();
             if (!boMoveAll)// 指定名称的怪移动
             {
-                M2Share.UserEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 10, MonList);// 查指定XY范围内的怪
+                M2Share.WorldEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 10, MonList);// 查指定XY范围内的怪
                 if (MonList.Count > 0)
                 {
                     for (var i = 0; i < MonList.Count; i++)
@@ -80,7 +80,7 @@ namespace GameSvr.Command.Commands
             else
             {
                 // 所有怪移动
-                M2Share.UserEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 1000, MonList);// 查指定XY范围内的怪
+                M2Share.WorldEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 1000, MonList);// 查指定XY范围内的怪
                 for (var i = 0; i < MonList.Count; i++)
                 {
                     MoveMon = MonList[i];

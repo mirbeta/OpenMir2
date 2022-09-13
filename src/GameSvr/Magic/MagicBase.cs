@@ -53,7 +53,7 @@ namespace GameSvr.Magic
             Idx = 0;
             if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
             {
-                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
+                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
@@ -77,7 +77,7 @@ namespace GameSvr.Magic
             }
             if (PlayObject.UseItems[Grobal2.U_BUJUK] != null && PlayObject.UseItems[Grobal2.U_BUJUK].wIndex > 0)
             {
-                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
+                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)

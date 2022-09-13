@@ -165,18 +165,18 @@ namespace GameSvr.RobotPlay
                                         }
                                         if (UseItems[nWhere].wIndex <= 0)
                                         {
-                                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItemNames[nWhere]);
+                                            StdItem = M2Share.WorldEngine.GetStdItem(m_UseItemNames[nWhere]);
                                             if (StdItem != null)
                                             {
                                                 UserItem = new UserItem();
-                                                if (M2Share.UserEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref UserItem))
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref UserItem))
                                                 {
                                                     boRecalcAbilitys = true;
                                                     if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                                     {
                                                         if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                                         {
-                                                            //M2Share.UserEngine.GetUnknowItemValue(UserItem);
+                                                            //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
                                                         }
                                                     }
                                                 }
@@ -194,7 +194,7 @@ namespace GameSvr.RobotPlay
                                                 UserItem = ItemList[j];
                                                 if (UserItem != null)
                                                 {
-                                                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                                                    StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
                                                     if (StdItem != null)
                                                     {
                                                         boFind = false;
@@ -209,7 +209,7 @@ namespace GameSvr.RobotPlay
                                             if (!boFind)
                                             {
                                                 UserItem = new UserItem();
-                                                if (M2Share.UserEngine.CopyToUserItemFromName(m_BagItemNames[i], ref UserItem))
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_BagItemNames[i], ref UserItem))
                                                 {
                                                     if (!AddItemToBag(UserItem))
                                                     {
@@ -228,7 +228,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].wIndex > 0)
                                         {
-                                            StdItem = M2Share.UserEngine.GetStdItem(UseItems[nWhere].wIndex);
+                                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nWhere].wIndex);
                                             if (StdItem != null)
                                             {
                                                 if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && StdItem.StdMode != 43)

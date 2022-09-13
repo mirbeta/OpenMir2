@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var dwExp = HUtil32.Str_ToInt(sExp, 0);
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 var dwOExp = PlayObject.Abil.Exp;

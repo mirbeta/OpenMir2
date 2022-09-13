@@ -1103,7 +1103,7 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
             if (stdItem != null)
             {
                 if (stdItem.StdMode == 40)
@@ -1877,7 +1877,7 @@ namespace GameSvr.Actor
             {
                 if (UseItems[i] != null && UseItems[i].wIndex > 0)
                 {
-                    var pSItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                    var pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                     if (pSItem != null)
                     {
                         if (new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) ||
@@ -2135,7 +2135,7 @@ namespace GameSvr.Actor
             if (SlaveList.Count < nMaxMob)
             {
                 GetFrontPosition(ref nX, ref nY);
-                var monObj = M2Share.UserEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                var monObj = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
                 {
                     monObj.Master = this;
@@ -2425,7 +2425,7 @@ namespace GameSvr.Actor
             {
                 if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].wIndex > 0)
                 {
-                    var stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].wIndex);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].wIndex);
                     if ((stdItem == null) || (stdItem.Source != 0))
                     {
                         return;
@@ -2595,7 +2595,7 @@ namespace GameSvr.Actor
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
-                var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                 if (stdItem != null)
                 {
                     result += stdItem.Weight;
@@ -2676,10 +2676,10 @@ namespace GameSvr.Actor
             switch (nIndex)
             {
                 case 1:
-                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.FireBallSkill);
+                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.FireBallSkill);
                     break;
                 case 2:
-                    magic = M2Share.UserEngine.FindMagic(M2Share.Config.HealSkill);
+                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.HealSkill);
                     break;
             }
 
@@ -2858,7 +2858,7 @@ namespace GameSvr.Actor
                 {
                     var playObject = this as PlayObject;
                     playObject.SendDelItems(UseItems[Grobal2.U_WEAPON]);
-                    var stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
                     if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
@@ -3603,7 +3603,7 @@ namespace GameSvr.Actor
                 StdItem stdItem;
                 if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0) // 衣服
                 {
-                    stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
                     if (stdItem != null)
                     {
                         nDress = (byte)(stdItem.Shape * 2);
@@ -3614,7 +3614,7 @@ namespace GameSvr.Actor
                 byte nWeapon = 0;
                 if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].wIndex > 0) // 武器
                 {
-                    stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
                     if (stdItem != null)
                     {
                         nWeapon = (byte)(stdItem.Shape * 2);
@@ -4163,7 +4163,7 @@ namespace GameSvr.Actor
                 {
                     if (monStatus == MonStatus.MonGen)
                     {
-                        M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
+                        M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
                         break;
                     }
 
@@ -4201,7 +4201,7 @@ namespace GameSvr.Actor
         {
             for (var i = 0; i < ItemList.Count; i++)
             {
-                var stdItem = M2Share.UserEngine.GetStdItem(ItemList[i].wIndex);
+                var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].wIndex);
                 if (stdItem != null)
                 {
                     if (stdItem.StdMode == 40)
@@ -4946,7 +4946,7 @@ namespace GameSvr.Actor
                     {
                         playObject = this as PlayObject;
                         playObject.SendDelItems(UseItems[Grobal2.U_DRESS]);
-                        stdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
+                        stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
                         if (stdItem.NeedIdentify == 1)
                         {
                             M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
@@ -4987,7 +4987,7 @@ namespace GameSvr.Actor
                         {
                             playObject = this as PlayObject;
                             playObject.SendDelItems(UseItems[i]);
-                            stdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                            stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
@@ -5557,7 +5557,7 @@ namespace GameSvr.Actor
                     continue;
                 }
 
-                var sName = M2Share.UserEngine.GetStdItemName(UseItems[i].wIndex);
+                var sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].wIndex);
                 if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UseItems[i];
@@ -5580,7 +5580,7 @@ namespace GameSvr.Actor
                     continue;
                 }
 
-                if (string.Compare(M2Share.UserEngine.GetStdItemName(userItem.wIndex), sItemName,
+                if (string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.wIndex), sItemName,
                         StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = userItem;
@@ -5610,7 +5610,7 @@ namespace GameSvr.Actor
             {
                 userItem = ItemList[i];
                 if ((userItem.MakeIndex == nItemIndex) &&
-                    string.Compare(M2Share.UserEngine.GetStdItemName(userItem.wIndex), sItemName,
+                    string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.wIndex), sItemName,
                         StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);

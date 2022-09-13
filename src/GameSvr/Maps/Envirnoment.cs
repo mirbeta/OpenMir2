@@ -937,7 +937,7 @@ namespace GameSvr.Maps
                 m_boIsHide = true,
                 m_boIsQuest = false
             };
-            M2Share.UserEngine.QuestNpcList.Add(mapMerchant);
+            M2Share.WorldEngine.QuestNpcList.Add(mapMerchant);
             mapQuest.NPC = mapMerchant;
             _questList.Add(mapQuest);
             result = true;

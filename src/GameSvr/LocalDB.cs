@@ -36,7 +36,7 @@ namespace GameSvr
             {
                 return false;
             }
-            M2Share.UserEngine.AdminList.Clear();
+            M2Share.WorldEngine.AdminList.Clear();
             using var LoadList = new StringList();
             LoadList.LoadFromFile(sfilename);
             for (var i = 0; i < LoadList.Count; i++)
@@ -101,7 +101,7 @@ namespace GameSvr
                             sChrName = sCharName,
                             sIPaddr = sIPaddr
                         };
-                        M2Share.UserEngine.AdminList.Add(AdminInfo);
+                        M2Share.WorldEngine.AdminList.Add(AdminInfo);
                     }
                 }
             }
@@ -142,7 +142,7 @@ namespace GameSvr
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
                             {
-                                var tGuard = M2Share.UserEngine.RegenMonsterByName(mapName, (short)HUtil32.Str_ToInt(cX, 0), (short)HUtil32.Str_ToInt(cY, 0), monName);
+                                var tGuard = M2Share.WorldEngine.RegenMonsterByName(mapName, (short)HUtil32.Str_ToInt(cX, 0), (short)HUtil32.Str_ToInt(cY, 0), monName);
                                 if (tGuard != null)
                                 {
                                     tGuard.Direction = (byte)HUtil32.Str_ToInt(direction, 0);
@@ -237,7 +237,7 @@ namespace GameSvr
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.UserEngine.AddMerchant(M2Share.g_FunctionNPC);
+                    M2Share.WorldEngine.AddMerchant(M2Share.g_FunctionNPC);
                 }
                 else
                 {
@@ -294,7 +294,7 @@ namespace GameSvr
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.UserEngine.QuestNpcList.Add(M2Share.g_ManageNPC);
+                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.g_ManageNPC);
                 }
                 else
                 {
@@ -338,7 +338,7 @@ namespace GameSvr
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.UserEngine.QuestNpcList.Add(M2Share.g_RobotNPC);
+                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.g_RobotNPC);
                 }
                 else
                 {
@@ -483,7 +483,7 @@ namespace GameSvr
                             {
                                 merchantNpc.m_boCanMove = true;
                             }
-                            M2Share.UserEngine.AddMerchant(merchantNpc);
+                            M2Share.WorldEngine.AddMerchant(merchantNpc);
                         }
                     }
                 }
@@ -570,7 +570,7 @@ namespace GameSvr
                             MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.sMapName);
                             if (MonGenInfo.Envir != null)
                             {
-                                M2Share.UserEngine.MonGenList.Add(MonGenInfo);
+                                M2Share.WorldEngine.MonGenList.Add(MonGenInfo);
                             }
                             else
                             {
@@ -584,7 +584,7 @@ namespace GameSvr
                 //    CertList = new List<TBaseObject>(),
                 //    Envir = null
                 //};
-                M2Share.UserEngine.MonGenList.Add(MonGenInfo);
+                M2Share.WorldEngine.MonGenList.Add(MonGenInfo);
                 result = 1;
             }
             return result;
@@ -707,7 +707,7 @@ namespace GameSvr
                                 NPC.CharName = charName;
                                 NPC.m_nFlag = (short)HUtil32.Str_ToInt(flag, 0);
                                 NPC.Appr = (ushort)HUtil32.Str_ToInt(appr, 0);
-                                M2Share.UserEngine.QuestNpcList.Add(NPC);
+                                M2Share.WorldEngine.QuestNpcList.Add(NPC);
                             }
                         }
                     }
@@ -1003,9 +1003,9 @@ namespace GameSvr
             {
                 return;
             }
-            for (var i = 0; i < M2Share.UserEngine.MerchantList.Count; i++)
+            for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
             {
-                Merchant = M2Share.UserEngine.MerchantList[i];
+                Merchant = M2Share.WorldEngine.MerchantList[i];
                 if (Merchant != M2Share.g_FunctionNPC)
                 {
                     Merchant.m_nFlag = -1;
@@ -1035,9 +1035,9 @@ namespace GameSvr
                     var nX = HUtil32.Str_ToInt(sX, 0);
                     var nY = HUtil32.Str_ToInt(sY, 0);
                     var boNewNpc = true;
-                    for (var j = 0; j < M2Share.UserEngine.MerchantList.Count; j++)
+                    for (var j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++)
                     {
-                        Merchant = M2Share.UserEngine.MerchantList[j];
+                        Merchant = M2Share.WorldEngine.MerchantList[j];
                         if (Merchant.MapName == sMapName && Merchant.CurrX == nX && Merchant.CurrY == nY)
                         {
                             boNewNpc = false;
@@ -1089,20 +1089,20 @@ namespace GameSvr
                             {
                                 Merchant.m_boCanMove = true;
                             }
-                            M2Share.UserEngine.MerchantList.Add(Merchant);
+                            M2Share.WorldEngine.MerchantList.Add(Merchant);
                             Merchant.Initialize();
                         }
                     }
                 }
             }
-            for (var i = M2Share.UserEngine.MerchantList.Count - 1; i >= 0; i--)
+            for (var i = M2Share.WorldEngine.MerchantList.Count - 1; i >= 0; i--)
             {
-                Merchant = M2Share.UserEngine.MerchantList[i];
+                Merchant = M2Share.WorldEngine.MerchantList[i];
                 if (Merchant.m_nFlag == -1)
                 {
                     Merchant.Ghost = true;
                     Merchant.GhostTick = HUtil32.GetTickCount();
-                    M2Share.UserEngine.MerchantList.RemoveAt(i);
+                    M2Share.WorldEngine.MerchantList.RemoveAt(i);
                 }
             }
         }

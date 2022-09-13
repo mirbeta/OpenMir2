@@ -60,7 +60,7 @@ namespace GameSvr.Conf
                         sMagicName = TempList[i].Trim();
                         if (playObject.FindMagic(sMagicName) == null)
                         {
-                            Magic = M2Share.UserEngine.FindMagic(sMagicName);
+                            Magic = M2Share.WorldEngine.FindMagic(sMagicName);
                             if (Magic != null)
                             {
                                 if (Magic.btJob == 99 || Magic.btJob == (byte)playObject.Job)
@@ -93,17 +93,17 @@ namespace GameSvr.Conf
                     for (var i = 0; i < TempList.Count; i++)
                     {
                         sItemName = TempList[i].Trim();
-                        StdItem = M2Share.UserEngine.GetStdItem(sItemName);
+                        StdItem = M2Share.WorldEngine.GetStdItem(sItemName);
                         if (StdItem != null)
                         {
                             UserItem = new UserItem();
-                            if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
+                            if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                             {
                                 if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                 {
                                     if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                     {
-                                        //M2Share.UserEngine.GetUnknowItemValue(UserItem);
+                                        //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
                                     }
                                 }
                                 if (!playObject.AddItemToBag(UserItem))
@@ -150,17 +150,17 @@ namespace GameSvr.Conf
             {
                 if (!string.IsNullOrEmpty(playObject.m_UseItemNames[i]))
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(playObject.m_UseItemNames[i]);
+                    StdItem = M2Share.WorldEngine.GetStdItem(playObject.m_UseItemNames[i]);
                     if (StdItem != null)
                     {
                         UserItem = new UserItem();
-                        if (M2Share.UserEngine.CopyToUserItemFromName(playObject.m_UseItemNames[i], ref UserItem))
+                        if (M2Share.WorldEngine.CopyToUserItemFromName(playObject.m_UseItemNames[i], ref UserItem))
                         {
                             if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                             {
                                 if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                 {
-                                    //M2Share.UserEngine.GetUnknowItemValue(UserItem);
+                                    //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
                                 }
                             }
                         }

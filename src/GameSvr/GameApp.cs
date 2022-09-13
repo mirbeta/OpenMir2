@@ -14,7 +14,7 @@ using GameSvr.Robots;
 using GameSvr.Script;
 using GameSvr.Services;
 using GameSvr.Snaps;
-using GameSvr.UsrSystem;
+using GameSvr.World;
 using Microsoft.Extensions.Logging;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -75,7 +75,7 @@ namespace GameSvr
             M2Share.EventMgr = new EventManager();
             M2Share.CastleMgr = new CastleManager();
             M2Share.FrontEngine = new TFrontEngine();
-            M2Share.UserEngine = new UserEngine();
+            M2Share.WorldEngine = new WorldEngine();
             M2Share.RobotMgr = new RobotManage();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<StartPoint>();
@@ -131,7 +131,7 @@ namespace GameSvr
                 _logger.LogInformation("物品数据库加载失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
+            _logger.LogInformation($"物品数据库加载成功({M2Share.WorldEngine.StdItemList.Count})...");
             _logger.LogInformation("正在加载数据图文件...");
             nCode = Maps.Maps.LoadMinMap();
             if (nCode < 0)
@@ -155,7 +155,7 @@ namespace GameSvr
                 _logger.LogInformation("加载怪物数据库失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
+            _logger.LogInformation($"加载怪物数据库成功({M2Share.WorldEngine.MonsterList.Count})...");
             _logger.LogInformation("正在加载技能数据库...");
             nCode = M2Share.CommonDb.LoadMagicDB();
             if (nCode < 0)
@@ -163,7 +163,7 @@ namespace GameSvr
                 _logger.LogInformation("加载技能数据库失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"加载技能数据库成功({M2Share.UserEngine.MagicList.Count})...");
+            _logger.LogInformation($"加载技能数据库成功({M2Share.WorldEngine.MagicList.Count})...");
             _logger.LogInformation("正在加载怪物刷新配置信息...");
             nCode = M2Share.LocalDb.LoadMonGen();
             if (nCode < 0)
@@ -171,7 +171,7 @@ namespace GameSvr
                 _logger.LogInformation("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"加载怪物刷新配置信息成功({M2Share.UserEngine.MonGenList.Count})...");
+            _logger.LogInformation($"加载怪物刷新配置信息成功({M2Share.WorldEngine.MonGenList.Count})...");
             _logger.LogInformation("正加载怪物说话配置信息...");
             M2Share.LoadMonSayMsg();
             _logger.LogInformation($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
@@ -244,7 +244,7 @@ namespace GameSvr
             }
         }
 
-        public void StartEngine(CancellationToken stoppingToken)
+        public void StartWorld(CancellationToken stoppingToken)
         {
             try
             {
@@ -272,7 +272,7 @@ namespace GameSvr
                 _logger.LogInformation("安全区光圈初始化成功...");
                 M2Share.FrontEngine.Start(stoppingToken);
                 _logger.LogInformation("人物数据引擎启动成功...");
-                M2Share.UserEngine.Initialize();
+                M2Share.WorldEngine.Initialize();
                 _logger.LogInformation("游戏处理引擎初始化成功...");
                 _logger.LogInformation(M2Share.g_sVersion);
                 _logger.LogInformation(M2Share.g_sUpDateTime);

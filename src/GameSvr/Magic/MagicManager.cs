@@ -218,7 +218,7 @@ namespace GameSvr.Magic
                     {
                         if (MagicBase.CheckAmulet(PlayObject, 1, 2, ref nAmuletIdx))
                         {
-                            var StdItem = M2Share.UserEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].wIndex);
+                            var StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].wIndex);
                             if (StdItem != null)
                             {
                                 MagicBase.UseAmulet(PlayObject, 1, 2, ref nAmuletIdx);
@@ -902,7 +902,7 @@ namespace GameSvr.Magic
                 {
                     if (MagicBase.CheckAmulet(PlayObject, 1, 2, ref nAmuletIdx))
                     {
-                        var StdItem = M2Share.UserEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].wIndex);
+                        var StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].wIndex);
                         if (StdItem != null)
                         {
                             MagicBase.UseAmulet(PlayObject, 1, 2, ref nAmuletIdx);
@@ -1202,7 +1202,7 @@ namespace GameSvr.Magic
                     HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX + 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[7] = HolyCurtainEvent;
-                    M2Share.UserEngine.MagicEventList.Add(MagicEvent);
+                    M2Share.WorldEngine.MagicEventList.Add(MagicEvent);
                 }
                 else
                 {

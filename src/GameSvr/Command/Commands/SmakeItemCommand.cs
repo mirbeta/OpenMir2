@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
             {
                 if (PlayObject.UseItems[nWhere].wIndex > 0)
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(PlayObject.UseItems[nWhere].wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nWhere].wIndex);
                     if (StdItem == null)
                     {
                         return;

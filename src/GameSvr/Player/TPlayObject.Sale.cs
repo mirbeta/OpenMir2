@@ -97,7 +97,7 @@ namespace GameSvr.Player
                         }
                         if (sUserItemName == "")
                         {
-                            sUserItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
+                            sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.wIndex);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && m_SellOffItemList.Count < 9)
                         {
@@ -161,7 +161,7 @@ namespace GameSvr.Player
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
+                            sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.wIndex);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -214,7 +214,7 @@ namespace GameSvr.Player
                                 {
                                     continue;
                                 }
-                                StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
+                                StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
                                 if (StdItem != null)
                                 {
                                     //UserItem = new TUserItem();
@@ -315,7 +315,7 @@ namespace GameSvr.Player
                                     m_nGameGold = 0;
                                 }
                                 this.GameGoldChanged(); // 更新元宝数量
-                                PlayObject = M2Share.UserEngine.GetPlayObject(dealOffInfo.sDealCharName);
+                                PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealCharName);
                                 if (PlayObject == null)// 出售人不在线
                                 {
                                     dealOffInfo.N = 1; // 物品已出售,出售人未得到元宝
@@ -344,7 +344,7 @@ namespace GameSvr.Player
                                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (var j = 0; j <= 9; j++)
                                 {
-                                    StdItem = M2Share.UserEngine.GetStdItem(dealOffInfo.UseItems[j].wIndex);
+                                    StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].wIndex);
                                     if (StdItem != null)
                                     {
                                         //UserItem = new TUserItem();
@@ -544,7 +544,7 @@ namespace GameSvr.Player
                     for (var i = 0; i < m_SellOffItemList.Count; i++)
                     {
                         UserItem = m_SellOffItemList[i];
-                        StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
                         if (StdItem != null && UserItem != null && UserItem.MakeIndex > 0)
                         {
                             DealOffInfo.UseItems[i] = UserItem;
@@ -557,7 +557,7 @@ namespace GameSvr.Player
                     {
                         continue;
                     }
-                    StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
                     if (StdItem == null && nGameDiamond > 0 && nGameDiamond < 10000 && nCode == short.MaxValue)// 物品是金刚石
                     {
                         if (nGameDiamond > Gold) // 金刚石数量大于玩家的数量时则反回失败

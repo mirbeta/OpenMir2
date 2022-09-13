@@ -51,7 +51,7 @@ namespace GameSvr.Command.Commands
             //    }
             //    return;
             //}
-            //m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            //m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             //if (m_PlayObject == null)
             //{
             //    PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -95,8 +95,8 @@ namespace GameSvr.Command.Commands
             //            //M2Share.g_ItemBindAccount.UnLock();
             //        }
             //        M2Share.SaveItemBindAccount();
-            //        PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
-            //        m_PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        m_PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
             //        break;
             //    case 1:
             //        sBindName = m_PlayObject.m_sCharName;
@@ -126,8 +126,8 @@ namespace GameSvr.Command.Commands
             //            //M2Share.g_ItemBindCharName.UnLock();
             //        }
             //        M2Share.SaveItemBindCharName();
-            //        //this.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", new string[] { M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
-            //        //PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", new string[] { M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sType, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        //this.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", new string[] { M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        //PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", new string[] { M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
             //        break;
             //    case 2:
             //        sBindName = m_PlayObject.m_sIPaddr;
@@ -157,8 +157,8 @@ namespace GameSvr.Command.Commands
             //            //M2Share.g_ItemBindIPaddr.UnLock();
             //        }
             //        M2Share.SaveItemBindIPaddr();
-            //        //this.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", new string[] { M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
-            //        //PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", new string[] { M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sType, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        //this.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", new string[] { M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        //PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", new string[] { M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
             //        break;
             //    case 3:// 人物装备死亡不爆绑定
             //        sBindName = m_PlayObject.m_sCharName;
@@ -189,8 +189,8 @@ namespace GameSvr.Command.Commands
             //        }
             //        M2Share.SaveItemBindDieNoDropName();
             //        // 保存人物装备死亡不爆列表 20081127
-            //        //this.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", new string[] { M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
-            //        //PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", new string[] { M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sType, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        //this.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", new string[] { M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
+            //        //PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", new string[] { M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName }), TMsgColor.c_Blue, TMsgType.t_Hint);
             //        break;
             //}
         }

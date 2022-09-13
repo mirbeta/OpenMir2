@@ -2,12 +2,10 @@
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
 
-namespace GameSvr.UsrSystem
+namespace GameSvr.World
 {
-    public partial class UserEngine
+    public partial class WorldEngine
     {
         private SwitchDataInfo GetSwitchData(string sChrName, int nCode)
         {

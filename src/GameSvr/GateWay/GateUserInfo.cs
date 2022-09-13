@@ -1,6 +1,6 @@
 using GameSvr.Player;
 using GameSvr.Services;
-using GameSvr.UsrSystem;
+using GameSvr.World;
 using SystemModule.Data;
 
 namespace GameSvr.GateWay
@@ -39,7 +39,7 @@ namespace GameSvr.GateWay
         public TSessInfo SessInfo;
         public int nSocket;
         public TFrontEngine FrontEngine;
-        public UserEngine UserEngine;
+        public WorldEngine UserEngine;
         public int dwNewUserTick;
     }
 }

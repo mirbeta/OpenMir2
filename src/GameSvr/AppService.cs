@@ -70,12 +70,11 @@ namespace GameSvr
                         _logger.LogInformation("正在读取配置信息...");
                         _mirApp.Initialize();
                         _logger.LogInformation("读取配置信息完成...");
-                        _mirApp.StartEngine(stoppingToken);
+                        _mirApp.StartWorld(stoppingToken);
                         _mirApp.StartService();
+                        _mirApp.Start(stoppingToken);
                         if (M2Share.StartReady)
                         {
-                            _mirApp.Start(stoppingToken);
-                            M2Share.UserEngine.Start(stoppingToken);
                             M2Share.GateMgr.Start(stoppingToken);
                         }
                         _exitCode = 0;
@@ -117,12 +116,12 @@ namespace GameSvr
         {
             _logger.LogDebug("Application is stopping");
             M2Share.StartReady = false;
-            if (M2Share.UserEngine.PlayObjectCount > 0)
+            if (M2Share.WorldEngine.PlayObjectCount > 0)
             {
                 _logger.LogInformation("保存玩家数据");
-                foreach (var item in M2Share.UserEngine.PlayObjects)
+                foreach (var item in M2Share.WorldEngine.PlayObjects)
                 {
-                    M2Share.UserEngine.SaveHumanRcd(item);
+                    M2Share.WorldEngine.SaveHumanRcd(item);
                 }
                 _logger.LogInformation("数据保存完毕.");
             }
@@ -136,7 +135,7 @@ namespace GameSvr
             {
                 //todo 通知网关断开链接.停止新玩家进入游戏
                 _logger.LogInformation($"转移到新服务器[{sIPaddr}:{nPort}]");
-                var playerCount = M2Share.UserEngine.PlayObjects.Count();
+                var playerCount = M2Share.WorldEngine.PlayObjects.Count();
                 if (playerCount > 0)
                 {
                     Task.Factory.StartNew(async () =>
@@ -148,7 +147,7 @@ namespace GameSvr
                             {
                                 break;
                             }
-                            foreach (var playObject in M2Share.UserEngine.PlayObjects)
+                            foreach (var playObject in M2Share.WorldEngine.PlayObjects)
                             {
                                 var closeStr = $"服务器关闭倒计时 [{shutdownSeconds}].";
                                 playObject.SysMsg(closeStr, MsgColor.Red, MsgType.Notice);
@@ -161,7 +160,7 @@ namespace GameSvr
                             }
                             else
                             {
-                                foreach (var playObject in M2Share.UserEngine.PlayObjects)
+                                foreach (var playObject in M2Share.WorldEngine.PlayObjects)
                                 {
                                     if (playObject.Ghost || playObject.Death)//死亡或者下线的玩家不进行转移
                                     {

@@ -34,7 +34,7 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
-                StdItem item = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                StdItem item = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                 if (item != null)
                 {
                     ClientItem clientItem = new ClientItem();
@@ -91,7 +91,7 @@ namespace GameSvr.Player
                 UserItem userItem = playObject.UseItems[i];
                 if (userItem.wIndex > 0)
                 {
-                    StdItem stdItem = M2Share.UserEngine.GetStdItem(playObject.UseItems[i].wIndex);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[i].wIndex);
                     if (stdItem == null)
                     {
                         continue;
@@ -116,10 +116,10 @@ namespace GameSvr.Player
             {
                 return;
             }
-            NormNpc npc = (NormNpc)M2Share.UserEngine.FindMerchant(nParam1);
+            NormNpc npc = (NormNpc)M2Share.WorldEngine.FindMerchant(nParam1);
             if (npc == null)
             {
-                npc = (NormNpc)M2Share.UserEngine.FindNpc(nParam1);
+                npc = (NormNpc)M2Share.WorldEngine.FindNpc(nParam1);
             }
             if (npc == null)
             {
@@ -153,7 +153,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
+            Merchant merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
             if (merchant == null)
             {
                 return;
@@ -174,7 +174,7 @@ namespace GameSvr.Player
                     var sUserItemName = ItemUnit.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
+                        var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
                         if (merchant != null && merchant.m_boSell && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
                         {
                             if (merchant.ClientSellItem(this, userItem))
@@ -203,7 +203,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
+                var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
                 if (merchant == null || !merchant.m_boBuy || merchant.Envir != Envir || Math.Abs(merchant.CurrX - CurrX) > 15 || Math.Abs(merchant.CurrY - CurrY) > 15)
                 {
                     return;
@@ -291,7 +291,7 @@ namespace GameSvr.Player
                     var userItem = ItemList[i];
                     if (userItem != null && userItem.MakeIndex == nItemIdx)
                     {
-                        var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                        var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                         if (stdItem == null)
                         {
                             continue;
@@ -387,7 +387,7 @@ namespace GameSvr.Player
             var castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
             if (castle == null || castle.DoorStatus != door.Status || Race != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(CurrX, CurrY, this))
             {
-                M2Share.UserEngine.OpenDoor(Envir, nX, nY);
+                M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
             }
         }
 
@@ -403,7 +403,7 @@ namespace GameSvr.Player
                 userItem = ItemList[i];
                 if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
-                    stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                    stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                     var sUserItemName = ItemUnit.GetItemName(userItem);
                     if (stdItem != null)
                     {
@@ -430,7 +430,7 @@ namespace GameSvr.Player
                         {
                             if (UseItems[btWhere] != null && UseItems[btWhere].wIndex > 0)
                             {
-                                var stdItem20 = M2Share.UserEngine.GetStdItem(UseItems[btWhere].wIndex);
+                                var stdItem20 = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
                                 if (stdItem20 != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem20.StdMode))
                                 {
                                     if (!UserUnLockDurg && UseItems[btWhere].btValue[7] != 0)
@@ -508,7 +508,7 @@ namespace GameSvr.Player
                 {
                     if (UseItems[btWhere].MakeIndex == nItemIdx)
                     {
-                        var stdItem = M2Share.UserEngine.GetStdItem(UseItems[btWhere].wIndex);
+                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
                         if (stdItem != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem.StdMode))
                         {
                             if (!UserUnLockDurg && UseItems[btWhere].btValue[7] != 0)
@@ -598,7 +598,7 @@ namespace GameSvr.Player
             for (var i = 0; i < nCount; i++)
             {
                 var userItem = new UserItem();
-                if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
                     ItemList.Add(userItem);
                     if (Race == Grobal2.RC_PLAYOBJECT)
@@ -631,7 +631,7 @@ namespace GameSvr.Player
                         if (userItem != null && userItem.MakeIndex == nItemIdx)
                         {
                             userItem34 = userItem;
-                            stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                            stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                             if (stdItem != null)
                             {
                                 switch (stdItem.StdMode)
@@ -805,7 +805,7 @@ namespace GameSvr.Player
 
         private void ClientCreateGroup(string sHumName)
         {
-            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != null)
             {
                 SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
@@ -842,7 +842,7 @@ namespace GameSvr.Player
 
         private void ClientAddGroupMember(string sHumName)
         {
-            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
@@ -880,7 +880,7 @@ namespace GameSvr.Player
 
         private void ClientDelGroupMember(string sHumName)
         {
-            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this)
             {
                 SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
@@ -1122,7 +1122,7 @@ namespace GameSvr.Player
                         userItem = DealItemList[i];
                         DealCreat.AddItemToBag(userItem);
                         (DealCreat as PlayObject).SendAddItem(userItem);
-                        stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                         if (stdItem != null)
                         {
                             if (!M2Share.IsCheapStuff(stdItem.StdMode))
@@ -1148,7 +1148,7 @@ namespace GameSvr.Player
                         userItem = DealCreat.DealItemList[i];
                         AddItemToBag(userItem);
                         this.SendAddItem(userItem);
-                        stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                         if (stdItem != null)
                         {
                             if (!M2Share.IsCheapStuff(stdItem.StdMode))
@@ -1212,7 +1212,7 @@ namespace GameSvr.Player
 
         private void ClientMakeDrugItem(int objectId, string nItemName)
         {
-            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(objectId);
+            var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(objectId);
             if (merchant == null || !merchant.m_boMakeDrug)
             {
                 return;
@@ -1307,7 +1307,7 @@ namespace GameSvr.Player
             var nC = 1; // '你没有权利使用这个命令。'
             if (IsGuildMaster())
             {
-                var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
+                var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
                 if (playObject != null)
                 {
                     if (playObject.GetPoseCreate() == this)
@@ -1319,7 +1319,7 @@ namespace GameSvr.Player
                                 if (playObject.MyGuild == null && MyGuild.m_RankList.Count < 400)
                                 {
                                     MyGuild.AddMember(playObject);
-                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                                     playObject.MyGuild = MyGuild;
                                     playObject.GuildRankName = MyGuild.GetRankName(playObject, ref playObject.GuildRankNo);
                                     playObject.RefShowName();
@@ -1373,14 +1373,14 @@ namespace GameSvr.Player
                     {
                         if (MyGuild.DelMember(sHumName))
                         {
-                            var playObject = M2Share.UserEngine.GetPlayObject(sHumName);
+                            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
                             if (playObject != null)
                             {
                                 playObject.MyGuild = null;
                                 playObject.RefRankInfo(0, "");
                                 playObject.RefShowName();
                             }
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                             nC = 0;
                         }
                         else
@@ -1395,7 +1395,7 @@ namespace GameSvr.Player
                         if (MyGuild.CancelGuld(sHumName))
                         {
                             M2Share.GuildMgr.DelGuild(s14);
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, s14);
+                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, s14);
                             MyGuild = null;
                             RefRankInfo(0, "");
                             RefShowName();
@@ -1433,7 +1433,7 @@ namespace GameSvr.Player
                 MyGuild.NoticeList.Add(sC);
             }
             MyGuild.SaveGuildInfoFile();
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
             ClientOpenGuildDlg();
         }
 
@@ -1446,7 +1446,7 @@ namespace GameSvr.Player
             var nC = MyGuild.UpdateRank(sRankInfo);
             if (nC == 0)
             {
-                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                 ClientGuildMemberList();
             }
             else
@@ -1479,8 +1479,8 @@ namespace GameSvr.Player
                                 baseObjectC.MyGuild.SendGuildMsg(MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
                                 MyGuild.RefMemberName();
                                 baseObjectC.MyGuild.RefMemberName();
-                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, baseObjectC.MyGuild.sGuildName);
+                                M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, baseObjectC.MyGuild.sGuildName);
                                 n8 = 0;
                             }
                             else
@@ -1532,8 +1532,8 @@ namespace GameSvr.Player
                     guild.SendGuildMsg(MyGuild.sGuildName + " 行会解除了与您行会的联盟!!!");
                     MyGuild.RefMemberName();
                     guild.RefMemberName();
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, guild.sGuildName);
+                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, guild.sGuildName);
                     n10 = 0;
                 }
                 else
@@ -1576,7 +1576,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
+            var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientQueryRepairCost(this, userItemA);
@@ -1599,7 +1599,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
+            Merchant merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientRepairItem(this, userItem);
@@ -1618,7 +1618,7 @@ namespace GameSvr.Player
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(objectId);
+            Merchant merchant = (Merchant)M2Share.WorldEngine.FindMerchant(objectId);
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
@@ -1634,7 +1634,7 @@ namespace GameSvr.Player
                             ItemList.RemoveAt(i);
                             WeightChanged();
                             SendDefMessage(Grobal2.SM_STORAGE_OK, 0, 0, 0, 0, "");
-                            var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('1' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -1658,7 +1658,7 @@ namespace GameSvr.Player
         private void ClientTakeBackStorageItem(int npc, int nItemIdx, string sMsg)
         {
             var bo19 = false;
-            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(npc);
+            var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(npc);
             if (merchant == null)
             {
                 return;
@@ -1680,7 +1680,7 @@ namespace GameSvr.Player
                 var sUserItemName = ItemUnit.GetItemName(userItem);
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(userItem.wIndex)))
+                    if (IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.wIndex)))
                     {
                         // 检查NPC是否允许取物品
                         if (merchant.m_boGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
@@ -1690,7 +1690,7 @@ namespace GameSvr.Player
                                 SendAddItem(userItem);
                                 StorageItemList.RemoveAt(i);
                                 SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
-                                var stdItem = M2Share.UserEngine.GetStdItem(userItem.wIndex);
+                                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                                 if (stdItem.NeedIdentify == 1)
                                 {
                                     M2Share.AddGameDataLog('0' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');

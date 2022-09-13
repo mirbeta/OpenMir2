@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
                 if (HUtil32.GetTickCount() - PlayObject.ProbeTick > 10000 || PlayObject.Permission >= 3)
                 {
                     PlayObject.ProbeTick = HUtil32.GetTickCount();
-                    var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+                    var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
                     if (m_PlayObject != null)
                     {
                         PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.Envir.MapDesc + '(' + m_PlayObject.Envir.MapName + ") " + m_PlayObject.CurrX + ':'

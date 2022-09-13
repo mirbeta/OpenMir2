@@ -16,11 +16,10 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
-using StdItem = GameSvr.Items.StdItem;
 
-namespace GameSvr.UsrSystem
+namespace GameSvr.World
 {
-    public partial class UserEngine
+    public partial class WorldEngine
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int ProcessMapDoorTick;
@@ -97,7 +96,7 @@ namespace GameSvr.UsrSystem
         /// </summary>
         private readonly IList<RoBotLogon> RobotLogonList;
 
-        public UserEngine()
+        public WorldEngine()
         {
             LoadPlaySection = new object();
             LoadPlayList = new List<UserOpenInfo>();
@@ -147,19 +146,7 @@ namespace GameSvr.UsrSystem
 
         public IEnumerable<PlayObject> PlayObjects => PlayObjectList;
 
-        public void Start(CancellationToken stoppingToken)
-        {
-            Task.Factory.StartNew(() =>
-            {
-                while (!stoppingToken.IsCancellationRequested)
-                {
-                    Execute();
-                    Thread.Sleep(20);
-                }
-            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-        }
-
-        private void Execute()
+        public void Execute()
         {
             PrcocessData();
             ProcessRobotPlayData();
@@ -950,7 +937,7 @@ namespace GameSvr.UsrSystem
         /// 取怪物刷新时间
         /// </summary>
         /// <returns></returns>
-        public int ProcessMonsters_GetZenTime(int dwTime)
+        public int GetMonstersZenTime(int dwTime)
         {
             int result;
             if (dwTime < 30 * 60 * 1000)
@@ -973,6 +960,10 @@ namespace GameSvr.UsrSystem
             return result;
         }
 
+        /// <summary>
+        /// 怪物处理
+        /// 刷新、行动、攻击等动作
+        /// </summary>
         private void ProcessMonsters()
         {
             bool boCanCreate;
@@ -1006,7 +997,7 @@ namespace GameSvr.UsrSystem
                     if (monGen != null && !string.IsNullOrEmpty(monGen.sMonName) && !M2Share.Config.boVentureServer)
                     {
                         var nTemp = HUtil32.GetTickCount() - monGen.dwStartTick;
-                        if (monGen.dwStartTick == 0 || nTemp > ProcessMonsters_GetZenTime(monGen.dwZenTime))
+                        if (monGen.dwStartTick == 0 || nTemp > GetMonstersZenTime(monGen.dwZenTime))
                         {
                             var nGenCount = monGen.nActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
@@ -1057,7 +1048,7 @@ namespace GameSvr.UsrSystem
                                     monster.RunTick = dwRunTick;
                                     if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
                                     {
-                                        if ((HUtil32.GetTickCount() - monster.ReAliveTick) > M2Share.UserEngine.ProcessMonsters_GetZenTime(monster.MonGen.dwZenTime))
+                                        if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.dwZenTime))
                                         {
                                             if (monster.ReAliveEx(monster.MonGen))
                                             {
@@ -2232,7 +2223,7 @@ namespace GameSvr.UsrSystem
                     {
                         continue;
                     }
-                    magicInfo = M2Share.UserEngine.FindMagic(humMagic[i].wMagIdx);
+                    magicInfo = FindMagic(humMagic[i].wMagIdx);
                     if (magicInfo != null)
                     {
                         userMagic = new UserMagic();
@@ -2495,15 +2486,14 @@ namespace GameSvr.UsrSystem
 
         public void AddMerchant(Merchant merchant)
         {
-            M2Share.UserEngine.MerchantList.Add(merchant);
+            MerchantList.Add(merchant);
         }
 
         public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
         {
-            Merchant merchant;
             for (var i = 0; i < MerchantList.Count; i++)
             {
-                merchant = MerchantList[i];
+                var merchant = MerchantList[i];
                 if (merchant.Envir == envir && Math.Abs(merchant.CurrX - nX) <= nRange &&
                     Math.Abs(merchant.CurrY - nY) <= nRange) tmpList.Add(merchant);
             }
@@ -2512,10 +2502,9 @@ namespace GameSvr.UsrSystem
 
         public int GetNpcList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
         {
-            NormNpc npc;
             for (var i = 0; i < QuestNpcList.Count; i++)
             {
-                npc = QuestNpcList[i];
+                var npc = QuestNpcList[i];
                 if (npc.Envir == envir && Math.Abs(npc.CurrX - nX) <= nRange &&
                     Math.Abs(npc.CurrY - nY) <= nRange) tmpList.Add(npc);
             }
@@ -2612,12 +2601,11 @@ namespace GameSvr.UsrSystem
 
         public ushort GetStdItemIdx(string sItemName)
         {
-            StdItem stdItem;
             ushort result = 0;
             if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
-                stdItem = StdItemList[i];
+                var stdItem = StdItemList[i];
                 if (stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase))
                 {
                     result = (ushort)(i + 1);
@@ -2859,7 +2847,7 @@ namespace GameSvr.UsrSystem
         public void GuildMemberReGetRankName(GuildInfo guild)
         {
             var nRankNo = 0;
-            for (int i = 0; i < PlayObjectList.Count; i++)
+            for (var i = 0; i < PlayObjectList.Count; i++)
             {
                 if (PlayObjectList[i].MyGuild == guild)
                 {

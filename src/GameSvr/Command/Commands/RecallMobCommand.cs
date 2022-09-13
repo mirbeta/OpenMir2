@@ -48,7 +48,7 @@ namespace GameSvr.Command.Commands
                     break;
                 }
                 PlayObject.GetFrontPosition(ref n10, ref n14);
-                mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.Envir.MapName, n10, n14, sMonName);
+                mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, n10, n14, sMonName);
                 if (mon != null)
                 {
                     mon.Master = PlayObject;

@@ -14,7 +14,7 @@ namespace GameSvr.Player
         protected virtual void Whisper(string whostr, string saystr)
         {
             var svidx = 0;
-            var PlayObject = M2Share.UserEngine.GetPlayObject(whostr);
+            var PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
                 if (!PlayObject.m_boReadyRun)
@@ -66,9 +66,9 @@ namespace GameSvr.Player
             }
             else
             {
-                if (M2Share.UserEngine.FindOtherServerUser(whostr, ref svidx))
+                if (M2Share.WorldEngine.FindOtherServerUser(whostr, ref svidx))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + CharName + "=> " + saystr);
+                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + CharName + "=> " + saystr);
                 }
                 else
                 {
@@ -160,7 +160,7 @@ namespace GameSvr.Player
                                 //        SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                                 //        return;
                                 //    }
-                                //    HearMsg(format(M2Share.g_sOnlineCountMsg, M2Share.UserEngine.PlayObjectCount));
+                                //    HearMsg(format(M2Share.g_sOnlineCountMsg, M2Share.WorldEngine.PlayObjectCount));
                                 //    return;
                                 //}
                                 //if (string.Compare(sC.Trim(), M2Share.g_GameCommand.TOTAL.sCmd.Trim(), StringComparison.OrdinalIgnoreCase) == 0) //统计在线人数
@@ -188,14 +188,14 @@ namespace GameSvr.Player
                                     {
                                         sC = sData.Substring(3 - 1, sData.Length - 2);
                                         SendGroupText(CharName + ": " + sC);
-                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, CharName + "/:" + sC);
+                                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, CharName + "/:" + sC);
                                         return;
                                     }
                                     if (sData[1] == '~' && MyGuild != null) //发送行会消息
                                     {
                                         sC = sData.Substring(2, sData.Length - 2);
                                         MyGuild.SendGuildMsg(CharName + ": " + sC);
-                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + CharName + '/' + sC);
+                                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + CharName + '/' + sC);
                                         return;
                                     }
                                 }
@@ -217,7 +217,7 @@ namespace GameSvr.Player
                                         }
                                         else
                                         {
-                                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, sCryCryMsg);
+                                            M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, sCryCryMsg);
                                         }
                                         return;
                                     }
@@ -453,7 +453,7 @@ namespace GameSvr.Player
                             {
                                 sC = sData;
                             }
-                            M2Share.UserEngine.SendBroadCastMsg(sC, MsgType.GameManger);
+                            M2Share.WorldEngine.SendBroadCastMsg(sC, MsgType.GameManger);
                         }
                         return;
                     }

@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
             }
             if (M2Share.GuildMgr.DelGuild(sGuildName))
             {
-                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, sGuildName);
+                M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, sGuildName);
             }
             else
             {

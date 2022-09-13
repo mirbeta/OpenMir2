@@ -88,10 +88,10 @@ namespace GameSvr.Player
                 if (m_boDelayCall && (HUtil32.GetTickCount() - m_dwDelayCallTick) > m_nDelayCall)
                 {
                     m_boDelayCall = false;
-                    NormNpc normNpc = (Merchant)M2Share.UserEngine.FindMerchant(m_DelayCallNPC);
+                    NormNpc normNpc = (Merchant)M2Share.WorldEngine.FindMerchant(m_DelayCallNPC);
                     if (normNpc == null)
                     {
-                        normNpc = (NormNpc)M2Share.UserEngine.FindNpc(m_DelayCallNPC);
+                        normNpc = (NormNpc)M2Share.WorldEngine.FindNpc(m_DelayCallNPC);
                     }
                     if (normNpc != null)
                     {
@@ -165,7 +165,7 @@ namespace GameSvr.Player
                                     if (castle.CanGetCastle(MyGuild))
                                     {
                                         castle.GetCastle(MyGuild);
-                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, MyGuild.sGuildName);
+                                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, MyGuild.sGuildName);
                                         if (castle.InPalaceGuildCount() <= 1)
                                         {
                                             castle.StopWallconquestWar();
@@ -224,7 +224,7 @@ namespace GameSvr.Player
                         if (MyGuild != null)
                         {
                             MyGuild.SendGuildMsg(CharName + " 已经退出游戏.");
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + CharName + " has exited the game.");
+                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + CharName + " has exited the game.");
                         }
                         IdSrvClient.Instance.SendHumanLogOutMsg(m_sUserID, m_nSessionID);
                     }
@@ -245,7 +245,7 @@ namespace GameSvr.Player
             {
                 if (UseItems[i] != null && UseItems[i].wIndex > 0)
                 {
-                    var StdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                     if (StdItem != null)
                     {
                         if (!CheckItemsNeed(StdItem))
@@ -649,7 +649,7 @@ namespace GameSvr.Player
                 else
                 {
                     // Die();
-                    M2Share.UserEngine.ClearItemList();
+                    M2Share.WorldEngine.ClearItemList();
                 }
             }
             if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - m_dwAutoGetExpTick) > m_nAutoGetExpTime)
@@ -2040,7 +2040,7 @@ namespace GameSvr.Player
                     {
                         continue;
                     }
-                    StdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                     if (StdItem != null)
                     {
                         if ((StdItem.Reserved & 8) != 0)
@@ -2072,7 +2072,7 @@ namespace GameSvr.Player
                     // 检查是否在禁止取下列表,如果在列表中则不掉此物品
                     if (DropItemDown(UseItems[i], 2, true, BaseObject, this))
                     {
-                        StdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                         if (StdItem != null)
                         {
                             if ((StdItem.Reserved & 10) == 0)
@@ -2085,7 +2085,7 @@ namespace GameSvr.Player
                                     }
                                     delList.Add(new TDeleteItem()
                                     {
-                                        sItemName = M2Share.UserEngine.GetStdItemName(UseItems[i].wIndex),
+                                        sItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].wIndex),
                                         MakeIndex = this.UseItems[i].MakeIndex
                                     });
                                 }

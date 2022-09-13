@@ -337,7 +337,7 @@ namespace GameSvr.Guild
                                 {
                                     break;
                                 }
-                                var playObject = M2Share.UserEngine.GetPlayObject(s1C);
+                                var playObject = M2Share.WorldEngine.GetPlayObject(s1C);
                                 GuildRank.MemberList.Add(new GuildMember()
                                 {
                                     sMemberName = s1C,
@@ -485,7 +485,7 @@ namespace GameSvr.Guild
                     sRankName = M2Share.Config.GuildChief,
                     MemberList = new List<GuildMember>()
                 };
-                var playObject = M2Share.UserEngine.GetPlayObject(sChief);
+                var playObject = M2Share.WorldEngine.GetPlayObject(sChief);
                 GuildRank.MemberList.Add(new GuildMember() { sMemberName = sChief, PlayObject = playObject });
                 m_RankList.Add(GuildRank);
                 SaveGuildInfoFile();
@@ -791,7 +791,7 @@ namespace GameSvr.Guild
                     {
                         GuildRank.MemberList.Add(new GuildMember()
                         {
-                            PlayObject = M2Share.UserEngine.GetPlayObject(sMemberName),
+                            PlayObject = M2Share.WorldEngine.GetPlayObject(sMemberName),
                             sMemberName = sMemberName
                         });
                     }
@@ -864,7 +864,7 @@ namespace GameSvr.Guild
                     n28 = GuildRank.MemberList.Count;
                     for (var i = 0; i < GuildRank.MemberList.Count; i++)
                     {
-                        if (M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[i].sMemberName) == null)
+                        if (M2Share.WorldEngine.GetPlayObject(GuildRank.MemberList[i].sMemberName) == null)
                         {
                             n28 -= 1;
                             break;
@@ -991,7 +991,7 @@ namespace GameSvr.Guild
                     GuildRank = m_RankList[i];
                     for (var j = 0; j < GuildRank.MemberList.Count; j++)
                     {
-                        PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
+                        PlayObject = M2Share.WorldEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
                         if (PlayObject != null)
                         {
                             GuildRank.MemberList[j].PlayObject = PlayObject;

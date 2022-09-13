@@ -23,7 +23,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerPlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var targerPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (targerPlayObject != null)
             {
                 targerPlayObject.BonusPoint = 0;

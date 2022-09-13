@@ -218,7 +218,7 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var PlayObject = M2Share.UserEngine.GetPlayObject(@params[0]);
+            var PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (PlayObject != null)
             {
                 var nFlag = HUtil32.Str_ToInt(@params[1], 0);
@@ -254,7 +254,7 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var PlayObject = M2Share.UserEngine.GetPlayObject(@params[0]);
+            var PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (PlayObject != null)
             {
                 var nFlag = HUtil32.Str_ToInt(@params[1], 0);
@@ -290,7 +290,7 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var PlayObject = M2Share.UserEngine.GetPlayObject(@params[0]);
+            var PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (PlayObject != null)
             {
                 var nFlag = HUtil32.Str_ToInt(@params[1], 0);

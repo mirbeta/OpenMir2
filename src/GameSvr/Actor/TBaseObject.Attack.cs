@@ -194,7 +194,7 @@ namespace GameSvr.Actor
                     PlayObject = this as PlayObject;
                     PlayObject.SendDelItems(useItems);
                     SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
-                    StdItem = M2Share.UserEngine.GetStdItem(useItems.wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.wIndex);
                     if (StdItem != null)
                     {
                         if (StdItem.NeedIdentify == 1)
@@ -209,7 +209,7 @@ namespace GameSvr.Actor
                     SysMsg(M2Share.sTheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
                     PlayObject = this as PlayObject;
                     PlayObject.SendUpdateItem(UseItems[Grobal2.U_WEAPON]);
-                    StdItem = M2Share.UserEngine.GetStdItem(useItems.wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.wIndex);
                     if (StdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog("20" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');

@@ -38,7 +38,7 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 if (m_PlayObject.Gender != playSex)

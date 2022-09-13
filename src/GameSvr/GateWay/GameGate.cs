@@ -539,12 +539,12 @@ namespace GameSvr.GateWay
                                     var defMsg = Packets.ToPacket<ClientPacket>(MsgBuff);
                                     if (nMsgLen == 12)
                                     {
-                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);
+                                        M2Share.WorldEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);
                                     }
                                     else
                                     {
                                         var sMsg = EDCode.DeCodeString(HUtil32.GetString(MsgBuff, 12, MsgBuff.Length - 13));
-                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, sMsg);
+                                        M2Share.WorldEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, sMsg);
                                     }
                                 }
                             }
@@ -577,7 +577,7 @@ namespace GameSvr.GateWay
                     if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
-                        gateUserInfo.UserEngine = M2Share.UserEngine;
+                        gateUserInfo.UserEngine = M2Share.WorldEngine;
                         gateUserInfo.PlayObject = PlayObject;
                         break;
                     }

@@ -145,8 +145,8 @@ namespace GameSvr.Snaps
             {
                 try
                 {
-                    M2Share.UserEngine.AddSwitchData(new SwitchDataInfo());
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
+                    M2Share.WorldEngine.AddSwitchData(new SwitchDataInfo());
+                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
                 }
                 catch
                 {
@@ -158,19 +158,19 @@ namespace GameSvr.Snaps
         private void MsgGetUserChangeServerRecieveOk(int sNum, string Body)
         {
             var ufilename = Body;
-            M2Share.UserEngine.GetIsmChangeServerReceive(ufilename);
+            M2Share.WorldEngine.GetIsmChangeServerReceive(ufilename);
         }
 
         private void MsgGetUserLogon(int sNum, string Body)
         {
             var uname = Body;
-            M2Share.UserEngine.OtherServerUserLogon(sNum, uname);
+            M2Share.WorldEngine.OtherServerUserLogon(sNum, uname);
         }
 
         private void MsgGetUserLogout(int sNum, string Body)
         {
             var uname = Body;
-            M2Share.UserEngine.OtherServerUserLogout(sNum, uname);
+            M2Share.WorldEngine.OtherServerUserLogout(sNum, uname);
         }
 
         private void MsgGetWhisper(int sNum, string Body)
@@ -180,7 +180,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.HearWhisper)
@@ -198,7 +198,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.HearWhisper)
@@ -216,7 +216,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.HearWhisper)
@@ -229,7 +229,7 @@ namespace GameSvr.Snaps
 
         private void MsgGetSysopMsg(int sNum, string Body)
         {
-            M2Share.UserEngine.SendBroadCastMsg(Body, MsgType.System);
+            M2Share.WorldEngine.SendBroadCastMsg(Body, MsgType.System);
         }
 
         private void MsgGetAddGuild(int sNum, string Body)
@@ -255,7 +255,7 @@ namespace GameSvr.Snaps
                 if (guild != null)
                 {
                     guild.LoadGuild();
-                    M2Share.UserEngine.GuildMemberReGetRankName(guild);
+                    M2Share.WorldEngine.GuildMemberReGetRankName(guild);
                 }
             }
             else if (M2Share.ServerIndex != sNum)
@@ -264,7 +264,7 @@ namespace GameSvr.Snaps
                 if (guild != null)
                 {
                     guild.LoadGuildFile(gname + '.' + sNum);
-                    M2Share.UserEngine.GuildMemberReGetRankName(guild);
+                    M2Share.WorldEngine.GuildMemberReGetRankName(guild);
                     guild.SaveGuildInfoFile();
                 }
             }
@@ -418,7 +418,7 @@ namespace GameSvr.Snaps
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 var dx = (short)HUtil32.Str_ToInt(dxstr, 0);
                 var dy = (short)HUtil32.Str_ToInt(dystr, 0);
-                var hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.AllowGuildReCall)
@@ -447,13 +447,13 @@ namespace GameSvr.Snaps
                 Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref lovername, HUtil32.Backslash);
-                humlover = M2Share.UserEngine.GetPlayObject(lovername);
+                humlover = M2Share.WorldEngine.GetPlayObject(lovername);
                 if (humlover != null)
                 {
                     int svidx = 0;
-                    if (M2Share.UserEngine.FindOtherServerUser(uname, ref svidx))
+                    if (M2Share.WorldEngine.FindOtherServerUser(uname, ref svidx))
                     {
-                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
+                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
                     }
                 }
             }
@@ -468,7 +468,7 @@ namespace GameSvr.Snaps
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 var lovername = Str;
-                var hum = M2Share.UserEngine.GetPlayObject(lovername);
+                var hum = M2Share.WorldEngine.GetPlayObject(lovername);
                 if (hum != null)
                 {
                     hum.SysMsg(uname + sLoverFindYouMsg, MsgColor.Red, MsgType.Hint);
@@ -488,7 +488,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                var hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.SysMsg(Str, MsgColor.Red, MsgType.Hint);
@@ -509,7 +509,7 @@ namespace GameSvr.Snaps
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 var dx = (short)HUtil32.Str_ToInt(dxstr, 0);
                 var dy = (short)HUtil32.Str_ToInt(dystr, 0);
-                var hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -525,7 +525,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                var hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.RecallHuman(Str);
@@ -540,7 +540,7 @@ namespace GameSvr.Snaps
             {
                 var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                var hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (!hum.Envir.Flag.boNORECALL)

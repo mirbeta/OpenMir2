@@ -28,11 +28,11 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var nRange = HUtil32._MAX(10, HUtil32.Str_ToInt(sRange, 2));
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 HumanList = new List<BaseObject>();
-                M2Share.UserEngine.GetMapRageHuman(m_PlayObject.Envir, m_PlayObject.CurrX, m_PlayObject.CurrY, nRange, HumanList);
+                M2Share.WorldEngine.GetMapRageHuman(m_PlayObject.Envir, m_PlayObject.CurrX, m_PlayObject.CurrY, nRange, HumanList);
                 for (var i = 0; i < HumanList.Count; i++)
                 {
                     MoveHuman = HumanList[i] as PlayObject;

@@ -33,7 +33,7 @@ namespace GameSvr.Command.Commands
             //        return;
             //    }
 
-            //    var TargerObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            //    var TargerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             //    if (TargerObject == null)
             //    {
             //        PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, new string[] { sHumanName }),

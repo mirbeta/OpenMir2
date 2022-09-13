@@ -29,20 +29,20 @@ namespace GameSvr.Command.Commands
             //Guild = M2Share.g_GuildManager.FindGuild(sGuildName);
             //if (Guild != null)
             //{
-            //    M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor,
+            //    M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor,
             //        M2Share.g_Config.btCryMsgBColor, string.Format(" - %s 行会争霸赛结果: ", Guild.sGuildName));
             //    for (int i = 0; i < Guild.TeamFightDeadList.Count; i++)
             //    {
             //        nPoint = HUtil32.ObjectToInt(Guild.TeamFightDeadList[i]);
             //        sHumanName = Guild.TeamFightDeadList[i];
-            //        M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
+            //        M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
             //            M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, string.Format(" - %s  : %d 分/死亡%d次。 ",
             //            sHumanName, HUtil32.HiWord(nPoint), HUtil32.LoWord(nPoint)));
             //    }
             //}
-            //M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
+            //M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
             //    M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, string.Format(" - [%s] : %d 分。", Guild.sGuildName, Guild.nContestPoint));
-            //M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
+            //M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
             //    M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "------------------------------------");
         }
     }

@@ -28,12 +28,12 @@ namespace GameSvr
 
         public void Start(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
-                while (!stoppingToken.IsCancellationRequested)
+                while (M2Share.StartReady)
                 { 
                     Execute();
-                    await Task.Delay(20, stoppingToken);
+                    Thread.Sleep(10);
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
@@ -48,7 +48,7 @@ namespace GameSvr
         {
             M2Share.GateMgr.Run();
             IdSrvClient.Instance.Run();
-            M2Share.UserEngine.Run();
+            M2Share.WorldEngine.Run();
             ProcessGameRun();
             if (M2Share.ServerIndex == 0)
             {
@@ -65,8 +65,8 @@ namespace GameSvr
             if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.Config.SendOnlineTime)
             {
                 M2Share.g_dwSendOnlineTick = HUtil32.GetTickCount();
-                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
-                M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.System);
+                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
+                M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }
 
@@ -81,8 +81,9 @@ namespace GameSvr
             HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.EventMgr.Run();
+                M2Share.WorldEngine.Execute();
                 M2Share.RobotMgr.Run();
+                M2Share.EventMgr.Run();
                 if ((HUtil32.GetTickCount() - _runTimeTick) > 10000)
                 {
                     _runTimeTick = HUtil32.GetTickCount();

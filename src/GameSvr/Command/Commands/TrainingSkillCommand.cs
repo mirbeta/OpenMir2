@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);

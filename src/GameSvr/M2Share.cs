@@ -15,7 +15,7 @@ using GameSvr.Npc;
 using GameSvr.Robots;
 using GameSvr.Script;
 using GameSvr.Services;
-using GameSvr.UsrSystem;
+using GameSvr.World;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
@@ -131,7 +131,7 @@ namespace GameSvr
         public static EventManager EventMgr = null;
         public static CastleManager CastleMgr = null;
         public static TFrontEngine FrontEngine = null;
-        public static UserEngine UserEngine = null;
+        public static WorldEngine WorldEngine = null;
         public static RobotManage RobotMgr = null;
         public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
         public static IList<StartPoint> StartPointList = null;
@@ -1174,7 +1174,7 @@ namespace GameSvr
         public static bool IsAccessory(ushort nIndex)
         {
             bool result;
-            var item = UserEngine.GetStdItem(nIndex);
+            var item = WorldEngine.GetStdItem(nIndex);
             if (new ArrayList(new byte[] { 19, 20, 21, 22, 23, 24, 26 }).Contains(item.StdMode))// 修正错误
             {
                 result = true;
