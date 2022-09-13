@@ -1231,7 +1231,7 @@ namespace GameGate
             var iLen = ClientPacket.PackSize + szMsg.Length;
             iLen = Misc.EncodeBuf(TempBuf, iLen, SendBuf);
             SendBuf[iLen + 1] = (byte)'!';
-            _sendQueue.AddToQueue(_session, SendBuf);
+            _sendQueue.AddToQueue(_session, SendBuf.AsSpan()[..(iLen + 1)].ToArray());
         }
     }
 
