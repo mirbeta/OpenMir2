@@ -400,6 +400,7 @@ namespace GameSvr.DataStores
             }
             else if (_dbConnection.State == ConnectionState.Closed)
             {
+                _dbConnection = new MySqlConnection(M2Share.Config.ConnctionString);
                 _dbConnection.Open();
             }
             return true;
