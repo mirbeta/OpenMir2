@@ -833,23 +833,23 @@ namespace GameGate
         /// <summary>
         /// 发送延时处理消息
         /// </summary>
-        private void SendDelayMsg(int nMid, int nDir, int nIdx, int nLen, byte[] pMsg, int dwDelay)
+        private void SendDelayMsg(int magicId, byte nDir, int nIdx, int nLen, byte[] pMsg, int delayTime)
         {
             const int DELAY_BUFFER_LEN = 1024;
             if (nLen > 0 && nLen <= DELAY_BUFFER_LEN)
             {
                 var pDelayMsg = new TDelayMsg();
-                pDelayMsg.nMag = nMid;
+                pDelayMsg.nMag = magicId;
                 pDelayMsg.nDir = nDir;
                 pDelayMsg.nCmd = nIdx;
-                pDelayMsg.dwDelayTime = HUtil32.GetTickCount() + dwDelay;
+                pDelayMsg.dwDelayTime = HUtil32.GetTickCount() + delayTime;
                 pDelayMsg.nBufLen = nLen;
                 pDelayMsg.Buffer = pMsg;
                 _msgList.Add(pDelayMsg);
             }
-            if (nMid > 0)
+            if (magicId > 0)
             {
-                LogQueue.EnqueueDebugging($"发送延时处理消息:User:[{_session.sChrName}] MagicID:[{nMid}] DelayTime:[{dwDelay}]");
+                LogQueue.EnqueueDebugging($"发送延时处理消息:User:[{_session.sChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
             }
         }
 
