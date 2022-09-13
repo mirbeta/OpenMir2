@@ -79,7 +79,7 @@ namespace GameSvr.World
         protected readonly IList<UserOpenInfo> LoadPlayList;
         protected readonly object LoadPlaySection;
         public readonly IList<MagicEvent> MagicEventList;
-        public IList<SystemModule.Packet.ServerPackets.MagicInfo> MagicList;
+        public IList<MagicInfo> MagicList;
         public readonly IList<Merchant> MerchantList;
         public readonly IList<MonGenInfo> MonGenList;
         protected readonly IList<PlayObject> NewHumanList;
@@ -120,7 +120,7 @@ namespace GameSvr.World
             StdItemList = new List<StdItem>();
             MonsterList = new List<TMonInfo>();
             MonGenList = new List<MonGenInfo>();
-            MagicList = new List<SystemModule.Packet.ServerPackets.MagicInfo>();
+            MagicList = new List<MagicInfo>();
             AdminList = new List<TAdminInfo>();
             MerchantList = new List<Merchant>();
             QuestNpcList = new List<NormNpc>();
@@ -968,7 +968,6 @@ namespace GameSvr.World
         {
             bool boCanCreate;
             var dwRunTick = HUtil32.GetTickCount();
-            AnimalObject monster = null;
             try
             {
                 var boProcessLimit = false;
@@ -1021,6 +1020,8 @@ namespace GameSvr.World
                 // 刷新怪物结束
                 var dwMonProcTick = HUtil32.GetTickCount();
 
+                //todo 怪物多了会导致怪物行动缓慢，需要优化
+
                 MonsterProcessCount = 0;
                 var i = 0;
                 for (i = MonGenListPosition; i < MonGenList.Count; i++)
@@ -1038,7 +1039,7 @@ namespace GameSvr.World
                         {
                             break;
                         }
-                        monster = (AnimalObject)monGen.CertList[nProcessPosition];
+                        AnimalObject monster = (AnimalObject)monGen.CertList[nProcessPosition];
                         if (monster != null)
                         {
                             if (!monster.Ghost)
@@ -2112,7 +2113,7 @@ namespace GameSvr.World
             UserItem[] humItems;
             UserItem[] bagItems;
             TMagicRcd[] humMagic;
-            SystemModule.Packet.ServerPackets.MagicInfo magicInfo;
+            MagicInfo magicInfo;
             UserMagic userMagic;
             UserItem[] storageItems;
             UserItem userItem;
@@ -2285,12 +2286,12 @@ namespace GameSvr.World
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeY - 2));
         }
 
-        public SystemModule.Packet.ServerPackets.MagicInfo FindMagic(int nMagIdx)
+        public MagicInfo FindMagic(int nMagIdx)
         {
-            SystemModule.Packet.ServerPackets.MagicInfo result = null;
+            MagicInfo result = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
-                SystemModule.Packet.ServerPackets.MagicInfo magic = MagicList[i];
+                MagicInfo magic = MagicList[i];
                 if (magic.wMagicID == nMagIdx)
                 {
                     result = magic;
@@ -2446,12 +2447,12 @@ namespace GameSvr.World
             }
         }
 
-        public SystemModule.Packet.ServerPackets.MagicInfo FindMagic(string sMagicName)
+        public MagicInfo FindMagic(string sMagicName)
         {
-            SystemModule.Packet.ServerPackets.MagicInfo result = null;
+            MagicInfo result = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
-                SystemModule.Packet.ServerPackets.MagicInfo magic = MagicList[i];
+                MagicInfo magic = MagicList[i];
                 if (magic.sMagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
                 {
                     result = magic;
@@ -2832,7 +2833,7 @@ namespace GameSvr.World
             if (MagicList.Count > 0)
             {
                 _oldMagicList.Add(MagicList);
-                MagicList = new List<SystemModule.Packet.ServerPackets.MagicInfo>();
+                MagicList = new List<MagicInfo>();
             }
         }
 

@@ -30,7 +30,7 @@ namespace GameSvr.Conf
             string sSayMsg;
             IList<string> TempList;
             UserItem UserItem;
-            SystemModule.Packet.ServerPackets.MagicInfo Magic;
+            MagicInfo Magic;
             UserMagic UserMagic;
             StdItem StdItem;
             playObject.NoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品

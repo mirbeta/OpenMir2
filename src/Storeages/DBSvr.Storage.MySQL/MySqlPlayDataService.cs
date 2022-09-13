@@ -454,7 +454,7 @@ namespace DBSvr.Storage.MySQL
                 while (dr.Read())
                 {
                     HumanRCD.Data.Magic[position].wMagIdx = dr.GetUInt16("FLD_MAGICID");
-                    HumanRCD.Data.Magic[position].btKey = (byte)dr.GetInt32("FLD_USEKEY");
+                    HumanRCD.Data.Magic[position].btKey = (byte)dr.GetChar("FLD_USEKEY");
                     HumanRCD.Data.Magic[position].btLevel = (byte)dr.GetInt32("FLD_LEVEL");
                     HumanRCD.Data.Magic[position].nTranPoint = dr.GetInt32("FLD_CURRTRAIN");
                     position++;
@@ -462,9 +462,10 @@ namespace DBSvr.Storage.MySQL
                 dr.Close();
                 dr.Dispose();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _logger.Error("[Exception] MySqlHumDB.GetMagicRecord");
+                _logger.Error(ex.StackTrace);
             }
             finally
             {

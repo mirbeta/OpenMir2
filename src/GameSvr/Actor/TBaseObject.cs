@@ -2672,7 +2672,7 @@ namespace GameSvr.Actor
 
         private void AddItemSkill(int nIndex)
         {
-            SystemModule.Packet.ServerPackets.MagicInfo magic = null;
+            MagicInfo magic = null;
             switch (nIndex)
             {
                 case 1:

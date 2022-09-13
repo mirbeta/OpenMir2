@@ -16,6 +16,7 @@ namespace GameSvr
         private int? _exitCode;
         private CancellationTokenSource? _cancellationTokenSource;
         private readonly CommandLineApplication _application = new CommandLineApplication();
+        private PeriodicTimer _timer;
 
         public AppService(ILogger<AppService> logger, IHostApplicationLifetime lifetime, GameApp serverApp)
         {
@@ -57,6 +58,13 @@ namespace GameSvr
                 {
                     Exit();
                     return 0;
+                });
+            });
+            _application.Command("status", command =>
+            {
+                command.OnExecute(() =>
+                {
+                    ShowWordStatus(stoppingToken);
                 });
             });
 
@@ -220,6 +228,25 @@ namespace GameSvr
             AnsiConsole.Clear();
             return Task.CompletedTask;
         }
+
+        private void ShowWordStatus(CancellationToken cancellationToken)
+        {
+            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+            AnsiConsole.Status()
+                .AutoRefresh(true)
+                .Spinner(Spinner.Known.Star)
+                .SpinnerStyle(Style.Parse("green bold"))
+                .Start("Thinking...", async ctx =>
+                {
+                    // Omitted
+                    while (await _timer.WaitForNextTickAsync(cancellationToken))
+                    {
+                        AnsiConsole.MarkupLine($"MonCount:{M2Share.WorldEngine.MonsterCount}");
+                        ctx.Refresh();
+                    }
+                });
+        }
+
 
         private static Task ShowServerStatus(CancellationToken cancellationToken)
         {
