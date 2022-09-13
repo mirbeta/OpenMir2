@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
                 }
                 //if ((sHumanName).CompareTo((M2Share.g_DisableSendMsgList[i])) == 0)
                 //{
-                //    m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+                //    m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
                 //    if (m_PlayObject != null)
                 //    {
                 //        m_PlayObject.m_boFilterSendMsg = false;

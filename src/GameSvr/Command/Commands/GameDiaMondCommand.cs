@@ -32,7 +32,7 @@ namespace GameSvr.Command.Commands
             //    }
             //    return;
             //}
-            //TPlayObject TargetObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            //TPlayObject TargetObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             //if (TargetObject == null)
             //{
             //    PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red,

@@ -44,7 +44,7 @@ namespace GameSvr.Command.Commands
             }
             for (var i = 0; i < nCount; i++)
             {
-                mon = M2Share.UserEngine.RegenMonsterByName(M2Share.g_sMissionMap, nX, nY, sMonName);
+                mon = M2Share.WorldEngine.RegenMonsterByName(M2Share.g_sMissionMap, nX, nY, sMonName);
                 if (mon != null)
                 {
                     mon.Mission = true;

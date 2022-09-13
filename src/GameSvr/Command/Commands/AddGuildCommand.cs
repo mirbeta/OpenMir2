@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var boAddState = false;
-            var Human = M2Share.UserEngine.GetPlayObject(sGuildChief);
+            var Human = M2Share.WorldEngine.GetPlayObject(sGuildChief);
             if (Human == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
@@ -40,7 +40,7 @@ namespace GameSvr.Command.Commands
             {
                 if (M2Share.GuildMgr.AddGuild(sGuildName, sGuildChief))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + sGuildChief);
+                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + sGuildChief);
                     PlayObject.SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, MsgColor.Green, MsgType.Hint);
                     boAddState = true;
                 }

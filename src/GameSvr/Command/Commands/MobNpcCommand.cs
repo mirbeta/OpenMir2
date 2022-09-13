@@ -49,7 +49,7 @@ namespace GameSvr.Command.Commands
             Merchant.CurrY = nY;
             Merchant.Initialize();
             Merchant.OnEnvirnomentChanged();
-            M2Share.UserEngine.AddMerchant(Merchant);
+            M2Share.WorldEngine.AddMerchant(Merchant);
         }
     }
 }

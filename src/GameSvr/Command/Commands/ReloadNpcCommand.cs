@@ -26,9 +26,9 @@ namespace GameSvr.Command.Commands
             if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0)
             {
                 M2Share.LocalDb.ReLoadMerchants();
-                M2Share.UserEngine.ReloadMerchantList();
+                M2Share.WorldEngine.ReloadMerchantList();
                 PlayObject.SysMsg("交易NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
-                M2Share.UserEngine.ReloadNpcList();
+                M2Share.WorldEngine.ReloadNpcList();
                 PlayObject.SysMsg("管理NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
@@ -37,7 +37,7 @@ namespace GameSvr.Command.Commands
                 TmpMerList = new List<BaseObject>();
                 try
                 {
-                    if (M2Share.UserEngine.GetMerchantList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpMerList) > 0)
+                    if (M2Share.WorldEngine.GetMerchantList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpMerList) > 0)
                     {
                         for (var i = 0; i < TmpMerList.Count; i++)
                         {
@@ -52,7 +52,7 @@ namespace GameSvr.Command.Commands
                         PlayObject.SysMsg("附近未发现任何交易NPC!!!", MsgColor.Red, MsgType.Hint);
                     }
                     TmpNorList = new List<BaseObject>();
-                    if (M2Share.UserEngine.GetNpcList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpNorList) > 0)
+                    if (M2Share.WorldEngine.GetNpcList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpNorList) > 0)
                     {
                         for (var i = 0; i < TmpNorList.Count; i++)
                         {

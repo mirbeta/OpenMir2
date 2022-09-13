@@ -27,15 +27,15 @@ namespace GameSvr.Command.Commands
                 //if (M2Share.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
                 //    M2Share.g_DenySayMsgList.Remove(sHumanName);
-                //    TPlayObject m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
-                //    //PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+                //    TPlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                //    //PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
                 //    if (m_PlayObject != null)
                 //    {
                 //        m_PlayObject.SysMsg(M2Share.g_sGameCommandShutupReleaseCanSendMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                 //    }
                 //    if (boAll)
                 //    {
-                //        //M2Share.UserEngine.SendServerGroupMsg(SS_210, nServerIndex, sHumanName);
+                //        //M2Share.WorldEngine.SendServerGroupMsg(SS_210, nServerIndex, sHumanName);
                 //    }
                 //    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandShutupReleaseHumanCanSendMsg, sHumanName),
                 //        TMsgColor.c_Green, TMsgType.t_Hint);

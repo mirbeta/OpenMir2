@@ -11,7 +11,7 @@ namespace GameSvr
         private int _checkIntervalTime;
         private int _saveIntervalTime;
         private int _clearIntervalTime;
-        private CancellationTokenSource? _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public TimedService(GameApp mirApp)
         {

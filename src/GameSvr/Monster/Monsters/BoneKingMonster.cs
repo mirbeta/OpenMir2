@@ -30,7 +30,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     break;
                 }
-                var baseObject = M2Share.UserEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
+                var baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
                 if (baseObject != null)
                 {
                     _slaveObjectList.Add(baseObject);

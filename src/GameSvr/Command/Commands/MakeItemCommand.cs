@@ -49,9 +49,9 @@ namespace GameSvr.Command.Commands
             {
                 if (PlayObject.ItemList.Count >= Grobal2.MAXBAGITEM) return;
                 UserItem UserItem = null;
-                if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
+                if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
-                    var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem.Price >= 15000 && !M2Share.Config.boTestServer && PlayObject.Permission < 5)
                     {
                         UserItem = null;

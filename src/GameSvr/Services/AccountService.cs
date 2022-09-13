@@ -348,7 +348,7 @@ namespace GameSvr.Services
                 var nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
                 if (!M2Share.Config.boTestServer)
                 {
-                    M2Share.UserEngine.HumanExpire(sAccount);
+                    M2Share.WorldEngine.HumanExpire(sAccount);
                     DelSession(nSessionID);
                 }
             }
@@ -381,7 +381,7 @@ namespace GameSvr.Services
         {
             M2Share.Config.boIDSocketConnected = true;
             _logger.Info("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]连接成功...");
-            SendOnlineHumCountMsg(M2Share.UserEngine.OnlinePlayObject);
+            SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
         }
 
         private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e)

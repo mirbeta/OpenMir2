@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommandConst.GameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobCountMonsterCount, M2Share.UserEngine.GetMapMonster(envirnoment, null)), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobCountMonsterCount, M2Share.WorldEngine.GetMapMonster(envirnoment, null)), MsgColor.Green, MsgType.Hint);
         }
     }
 }

@@ -1201,7 +1201,7 @@ namespace GameSvr.Npc
             {
                 return result;
             }
-            var Stditem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            var Stditem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
             if ((Stditem != null) && (Stditem.StdMode == nType))
             {
                 result = true;
@@ -2471,7 +2471,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMAPHUMANCOUNT);
                 return result;
             }
-            var nHumanCount = M2Share.UserEngine.GetMapHuman(QuestConditionInfo.sParam1);
+            var nHumanCount = M2Share.WorldEngine.GetMapHuman(QuestConditionInfo.sParam1);
             var cMethod = QuestConditionInfo.sParam2[0];
             switch (cMethod)
             {
@@ -2513,7 +2513,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMAPMONCOUNT);
                 return result;
             }
-            var nMonCount = M2Share.UserEngine.GetMapMonster(Envir, null);
+            var nMonCount = M2Share.WorldEngine.GetMapMonster(Envir, null);
             var cMethod = QuestConditionInfo.sParam2[0];
             switch (cMethod)
             {

@@ -354,7 +354,7 @@ namespace GameSvr.RobotPlay
 
         protected override void Whisper(string whostr, string saystr)
         {
-            PlayObject PlayObject = M2Share.UserEngine.GetPlayObject(whostr);
+            PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
                 if (!PlayObject.m_boReadyRun)
@@ -470,7 +470,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 else
                                 {
-                                    M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, sCryCryMsg);
+                                    M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, sCryCryMsg);
                                 }
                                 return;
                             }
@@ -673,15 +673,15 @@ namespace GameSvr.RobotPlay
             else
             {
                 // 捡物品
-                StdItem = M2Share.UserEngine.GetStdItem(MapItem.UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(MapItem.UserItem.wIndex);
                 if (StdItem != null)
                 {
                     if (Envir.DeleteFromMap(nX, nY, CellType.ItemObject, MapItem) == 1)
                     {
                         UserItem = new UserItem();
                         UserItem = MapItem.UserItem;
-                        StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
+                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                        if (StdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(UserItem.wIndex)))
                         {
                             //if (GetCheckItemList(18, StdItem.Name))
                             //{
@@ -795,7 +795,7 @@ namespace GameSvr.RobotPlay
                                     var mapItem = VisibleMapItem.MapItem;
                                     if (mapItem != null)
                                     {
-                                        if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(mapItem.UserItem.wIndex)))
+                                        if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(mapItem.UserItem.wIndex)))
                                         {
                                             if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ActorId || (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Master == this))
                                             {
@@ -1628,7 +1628,7 @@ namespace GameSvr.RobotPlay
             if (UseItems[Grobal2.U_ARMRINGL] != null && UseItems[Grobal2.U_ARMRINGL].wIndex > 0 &&
                 Math.Round(Convert.ToDouble(UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount)
             {
-                StdItem StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (StdItem != null)
                 {
                     result = CheckItemType(nItemType, StdItem);
@@ -1644,7 +1644,7 @@ namespace GameSvr.RobotPlay
             int result = -1;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                StdItem StdItem = M2Share.UserEngine.GetStdItem(ItemList[i].wIndex);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].wIndex);
                 if (StdItem != null)
                 {
                     if (CheckItemType(nItemType, StdItem) && HUtil32.Round(ItemList[i].Dura / 100) >= nCount)
@@ -1666,7 +1666,7 @@ namespace GameSvr.RobotPlay
                 UserItem UserItem = ItemList[nIndex];
                 if (UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
-                    StdItem StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
                     if (StdItem != null)
                     {
                         if (CheckItemType(nItemType, StdItem))
@@ -4250,7 +4250,7 @@ namespace GameSvr.RobotPlay
                 result = false;
                 if (UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
-                    AmuletStdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    AmuletStdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
                     if (AmuletStdItem != null)
                     {
                         if (AmuletStdItem.StdMode == 25)
@@ -4277,7 +4277,7 @@ namespace GameSvr.RobotPlay
                 }
                 if (UseItems[Grobal2.U_BUJUK] != null && UseItems[Grobal2.U_BUJUK].wIndex > 0)
                 {
-                    AmuletStdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_BUJUK].wIndex);
+                    AmuletStdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_BUJUK].wIndex);
                     if (AmuletStdItem != null)
                     {
                         if (AmuletStdItem.StdMode == 25)
@@ -4311,7 +4311,7 @@ namespace GameSvr.RobotPlay
                         UserItem = ItemList[i];
                         if (UserItem != null)
                         {
-                            AmuletStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                            AmuletStdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
                             if (AmuletStdItem != null)
                             {
                                 if (AmuletStdItem.StdMode == 25)

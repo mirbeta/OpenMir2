@@ -122,7 +122,7 @@ namespace GameSvr.Items
             }
             if (string.IsNullOrEmpty(result))
             {
-                result = M2Share.UserEngine.GetStdItemName(userItem.wIndex);
+                result = M2Share.WorldEngine.GetStdItemName(userItem.wIndex);
             }
             return result;
         }
@@ -183,7 +183,7 @@ namespace GameSvr.Items
             //     }
             //     else
             //     {
-            //         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            //         StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
             //         if (StdItem != null)
             //         {
             //             switch(StdItem.StdMode)
@@ -228,7 +228,7 @@ namespace GameSvr.Items
             // }
             // else
             // {
-            //     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            //     StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
             //     if (StdItem != null)
             //     {
             //         if (StdItem.NameColor != 0)

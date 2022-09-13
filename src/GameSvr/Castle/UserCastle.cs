@@ -182,7 +182,7 @@ namespace GameSvr.Castle
                 CastleEnvir = M2Share.MapMgr.FindMap(MapName);
                 if (CastleEnvir != null)
                 {
-                    MainDoor.BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, MainDoor.nX, MainDoor.nY, MainDoor.sName);
+                    MainDoor.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, MainDoor.nX, MainDoor.nY, MainDoor.sName);
                     if (MainDoor.BaseObject != null)
                     {
                         MainDoor.BaseObject.WAbil.HP = MainDoor.nHP;
@@ -196,7 +196,7 @@ namespace GameSvr.Castle
                     {
                         _logger.Warn("[Error] UserCastle.Initialize MainDoor.UnitObj = nil");
                     }
-                    LeftWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, LeftWall.nX, LeftWall.nY, LeftWall.sName);
+                    LeftWall.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, LeftWall.nX, LeftWall.nY, LeftWall.sName);
                     if (LeftWall.BaseObject != null)
                     {
                         LeftWall.BaseObject.WAbil.HP = LeftWall.nHP;
@@ -206,7 +206,7 @@ namespace GameSvr.Castle
                     {
                         _logger.Warn("[错误信息] 城堡初始化城门失败，检查怪物数据库里有没城门的设置: " + MainDoor.sName);
                     }
-                    CenterWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, CenterWall.nX, CenterWall.nY, CenterWall.sName);
+                    CenterWall.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, CenterWall.nX, CenterWall.nY, CenterWall.sName);
                     if (CenterWall.BaseObject != null)
                     {
                         CenterWall.BaseObject.WAbil.HP = CenterWall.nHP;
@@ -216,7 +216,7 @@ namespace GameSvr.Castle
                     {
                         _logger.Warn("[错误信息] 城堡初始化左城墙失败，检查怪物数据库里有没左城墙的设置: " + LeftWall.sName);
                     }
-                    RightWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, RightWall.nX, RightWall.nY, RightWall.sName);
+                    RightWall.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, RightWall.nX, RightWall.nY, RightWall.sName);
                     if (RightWall.BaseObject != null)
                     {
                         RightWall.BaseObject.WAbil.HP = RightWall.nHP;
@@ -230,7 +230,7 @@ namespace GameSvr.Castle
                     {
                         ObjUnit = Archers[i];
                         if (ObjUnit.nHP <= 0) continue;
-                        ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                        ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                         {
                             ObjUnit.BaseObject.WAbil.HP = Archers[i].nHP;
@@ -246,7 +246,7 @@ namespace GameSvr.Castle
                     {
                         ObjUnit = Guards[i];
                         if (ObjUnit.nHP <= 0) continue;
-                        ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                        ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                             ObjUnit.BaseObject.WAbil.HP = Guards[i].nHP;
                         else
@@ -386,10 +386,10 @@ namespace GameSvr.Castle
                             AttackGuildList.Add(MasterGuild);
                             StartWallconquestWar();
                             SaveAttackSabukWall();
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
+                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
                             var s20 = string.Format(sWarStartMsg, sName);
-                            M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
+                            M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
+                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
                             _logger.Info(s20);
                             MainDoorControl(true);
                         }
@@ -420,8 +420,8 @@ namespace GameSvr.Castle
                         {
                             ShowOverMsg = true;
                             var s20 = string.Format(sWarStopTimeMsg, sName, M2Share.Config.ShowCastleWarEndMsgTime / (60 * 1000));
-                            M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
+                            M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
+                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
                             _logger.Warn(s20);
                         }
                     }
@@ -508,7 +508,7 @@ namespace GameSvr.Castle
                 return false;
             }
             var playPbjectList = new List<BaseObject>();
-            M2Share.UserEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, playPbjectList);
+            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, playPbjectList);
             var result = true;
             for (var i = 0; i < playPbjectList.Count; i++)
             {
@@ -535,8 +535,8 @@ namespace GameSvr.Castle
             }
             Guild.RefMemberName();
             var castleMessage = string.Format(sGetCastleMsg, sName, OwnGuild);
-            M2Share.UserEngine.SendBroadCastMsgExt(castleMessage, MsgType.System);
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, castleMessage);
+            M2Share.WorldEngine.SendBroadCastMsgExt(castleMessage, MsgType.System);
+            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, castleMessage);
             _logger.Info(castleMessage);
         }
 
@@ -544,7 +544,7 @@ namespace GameSvr.Castle
         {
             PlayObject PlayObject;
             var ListC = new List<BaseObject>();
-            M2Share.UserEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ListC);
+            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ListC);
             for (var i = 0; i < ListC.Count; i++)
             {
                 PlayObject = (PlayObject)ListC[i];
@@ -561,7 +561,7 @@ namespace GameSvr.Castle
             UnderWar = false;
             AttackGuildList.Clear();
             IList<PlayObject> ListC = new List<PlayObject>();
-            M2Share.UserEngine.GetMapOfRangeHumanCount(CastleEnvir, HomeX, HomeY, 100);
+            M2Share.WorldEngine.GetMapOfRangeHumanCount(CastleEnvir, HomeX, HomeY, 100);
             for (var i = 0; i < ListC.Count; i++)
             {
                 var PlayObject = ListC[i];
@@ -572,8 +572,8 @@ namespace GameSvr.Castle
                 }
             }
             var stopMessage = string.Format(sWallWarStop, sName);
-            M2Share.UserEngine.SendBroadCastMsgExt(stopMessage, MsgType.System);
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, stopMessage);
+            M2Share.WorldEngine.SendBroadCastMsgExt(stopMessage, MsgType.System);
+            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, stopMessage);
             _logger.Info(stopMessage);
         }
 
@@ -909,7 +909,7 @@ namespace GameSvr.Castle
             AttackerInfo.Guild = Guild;
             AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();
-            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
+            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
             return true;
         }
 

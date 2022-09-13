@@ -716,7 +716,7 @@ namespace GameSvr.Player
                 {
                     MapRandomMove(Envir.MapName, 0);
                 }
-                if (M2Share.UserEngine.GetHumPermission(CharName, ref sIPaddr, ref Permission))
+                if (M2Share.WorldEngine.GetHumPermission(CharName, ref sIPaddr, ref Permission))
                 {
                     if (M2Share.Config.PermissionSystem)
                     {
@@ -735,7 +735,7 @@ namespace GameSvr.Player
                 if (m_boNewHuman)
                 {
                     UserItem = new UserItem();
-                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref UserItem))
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref UserItem))
                     {
                         ItemList.Add(UserItem);
                     }
@@ -744,7 +744,7 @@ namespace GameSvr.Player
                         Dispose(UserItem);
                     }
                     UserItem = new UserItem();
-                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref UserItem))
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref UserItem))
                     {
                         ItemList.Add(UserItem);
                     }
@@ -753,7 +753,7 @@ namespace GameSvr.Player
                         Dispose(UserItem);
                     }
                     UserItem = new UserItem();
-                    if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref UserItem))
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref UserItem))
                     {
                         ItemList.Add(UserItem);
                     }
@@ -765,7 +765,7 @@ namespace GameSvr.Player
                     var sItem = Gender == PlayGender.Man
                         ? M2Share.Config.ClothsMan
                         : M2Share.Config.ClothsWoman;
-                    if (M2Share.UserEngine.CopyToUserItemFromName(sItem, ref UserItem))
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(sItem, ref UserItem))
                     {
                         ItemList.Add(UserItem);
                     }
@@ -778,7 +778,7 @@ namespace GameSvr.Player
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
                     UserItem = ItemList[i];
-                    if (!string.IsNullOrEmpty(M2Share.UserEngine.GetStdItemName(UserItem.wIndex))) continue;
+                    if (!string.IsNullOrEmpty(M2Share.WorldEngine.GetStdItemName(UserItem.wIndex))) continue;
                     Dispose(ItemList[i]);
                     ItemList.RemoveAt(i);
                 }
@@ -788,7 +788,7 @@ namespace GameSvr.Player
                     for (var i = 0; i < UseItems.Length; i++)
                     {
                         if (UseItems[i] == null || UseItems[i].wIndex <= 0) continue;
-                        var StdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                        var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                         if (StdItem != null)
                         {
                             if (!M2Share.CheckUserItems(i, StdItem))
@@ -811,11 +811,11 @@ namespace GameSvr.Player
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
                     UserItem = ItemList[i];
-                    var sItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
+                    var sItemName = M2Share.WorldEngine.GetStdItemName(UserItem.wIndex);
                     for (var j = i - 1; j >= 0; j--)
                     {
                         var UserItem1 = ItemList[j];
-                        if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == sItemName && UserItem.MakeIndex == UserItem1.MakeIndex)
+                        if (M2Share.WorldEngine.GetStdItemName(UserItem1.wIndex) == sItemName && UserItem.MakeIndex == UserItem1.MakeIndex)
                         {
                             ItemList.RemoveAt(j);
                             break;
@@ -893,7 +893,7 @@ namespace GameSvr.Player
                     {
                         SysMsg(M2Share.sStartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
-                    if (M2Share.UserEngine.PlayObjectCount > M2Share.Config.TestUserLimit)
+                    if (M2Share.WorldEngine.PlayObjectCount > M2Share.Config.TestUserLimit)
                     {
                         if (Permission < 2)
                         {
@@ -1026,7 +1026,7 @@ namespace GameSvr.Player
                 return false;
             }
             var nRand = 0;
-            var StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+            var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
             if (StdItem != null)
             {
                 nRand = Math.Abs(StdItem.Dc2 - StdItem.Dc) / 5;
@@ -1701,7 +1701,7 @@ namespace GameSvr.Player
                                 }
                                 DelList.Add(new TDeleteItem()
                                 {
-                                    sItemName = M2Share.UserEngine.GetStdItemName(pu.wIndex),
+                                    sItemName = M2Share.WorldEngine.GetStdItemName(pu.wIndex),
                                     MakeIndex = pu.MakeIndex
                                 });
                             }

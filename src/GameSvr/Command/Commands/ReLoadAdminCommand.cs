@@ -13,7 +13,7 @@ namespace GameSvr.Command.Commands
         public void ReLoadAdmin(PlayObject playObject)
         {
             M2Share.LocalDb.LoadAdminList();
-            M2Share.UserEngine.SendServerGroupMsg(213, M2Share.ServerIndex, "");
+            M2Share.WorldEngine.SendServerGroupMsg(213, M2Share.ServerIndex, "");
             playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }

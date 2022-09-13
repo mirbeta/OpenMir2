@@ -103,7 +103,7 @@ namespace GameSvr.Actor
                 {
                     if (CanReAlive && MonGen != null)
                     {
-                        var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.UserEngine.ProcessMonsters_GetZenTime(MonGen.dwZenTime) - 20 * 1000);
+                        var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.dwZenTime) - 20 * 1000);
                         if (dwMakeGhostTime > M2Share.Config.MakeGhostTime)
                         {
                             dwMakeGhostTime = M2Share.Config.MakeGhostTime;
@@ -244,7 +244,7 @@ namespace GameSvr.Actor
                         if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((Abil.HP / Abil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
                         {
                             IncHpStoneTime = HUtil32.GetTickCount();
-                            StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
                             if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 1, 3 }).Contains(StdItem.Shape))
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
@@ -287,7 +287,7 @@ namespace GameSvr.Actor
                         if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((Abil.MP / Abil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
                         {
                             IncMpStoneTime = HUtil32.GetTickCount();
-                            StdItem = M2Share.UserEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
                             if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 2, 3 }).Contains(StdItem.Shape))
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
@@ -999,7 +999,7 @@ namespace GameSvr.Actor
                         {
                             LastHiter.MyGuild.TeamFightWhoWinPoint(LastHiter.CharName, 100);
                             tStr = LastHiter.MyGuild.sGuildName + ':' + LastHiter.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
-                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
+                            M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                         }
                     }
                 }
@@ -1153,7 +1153,7 @@ namespace GameSvr.Actor
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
                     var UserItem = ItemList[i];
-                    var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
                     var boCanNotDrop = false;
                     if (StdItem != null)
                     {
@@ -1213,7 +1213,7 @@ namespace GameSvr.Actor
                             nC++;
                             continue;
                         }
-                        StdItem = M2Share.UserEngine.GetStdItem(UseItems[nC].wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].wIndex);
                         if (StdItem != null)
                         {
                             if ((StdItem.Reserved & 8) != 0)
@@ -1260,7 +1260,7 @@ namespace GameSvr.Actor
                         }
                         if (DropItemDown(UseItems[nC], 2, true, BaseObject, this))
                         {
-                            StdItem = M2Share.UserEngine.GetStdItem(UseItems[nC].wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].wIndex);
                             if (StdItem != null)
                             {
                                 if ((StdItem.Reserved & 10) == 0)
@@ -1273,7 +1273,7 @@ namespace GameSvr.Actor
                                         }
                                         DropItemList.Add(new TDeleteItem()
                                         {
-                                            sItemName = M2Share.UserEngine.GetStdItemName(UseItems[nC].wIndex),
+                                            sItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].wIndex),
                                             MakeIndex = UseItems[nC].MakeIndex
                                         });
                                     }
@@ -1649,7 +1649,7 @@ namespace GameSvr.Actor
                 {
                     continue;
                 }
-                var StdItem = M2Share.UserEngine.GetStdItem(UseItems[i].wIndex);
+                var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                 if (StdItem == null)
                 {
                     continue;

@@ -18,17 +18,17 @@ namespace GameSvr.Command.Commands
             var BaseObject = PlayObject.GetPoseCreate();
             if (BaseObject != null)
             {
-                for (var i = 0; i < M2Share.UserEngine.MerchantList.Count; i++)
+                for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
                 {
-                    if (M2Share.UserEngine.MerchantList[i] == BaseObject)
+                    if (M2Share.WorldEngine.MerchantList[i] == BaseObject)
                     {
                         nNPCType = 0;
                         break;
                     }
                 }
-                for (var i = 0; i < M2Share.UserEngine.QuestNpcList.Count; i++)
+                for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++)
                 {
-                    if (M2Share.UserEngine.QuestNpcList[i] == BaseObject)
+                    if (M2Share.WorldEngine.QuestNpcList[i] == BaseObject)
                     {
                         nNPCType = 1;
                         break;

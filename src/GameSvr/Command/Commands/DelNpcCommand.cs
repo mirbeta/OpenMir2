@@ -18,9 +18,9 @@ namespace GameSvr.Command.Commands
             BaseObject BaseObject = PlayObject.GetPoseCreate();
             if (BaseObject != null)
             {
-                for (var i = 0; i < M2Share.UserEngine.MerchantList.Count; i++)
+                for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
                 {
-                    if (M2Share.UserEngine.MerchantList[i] == BaseObject)
+                    if (M2Share.WorldEngine.MerchantList[i] == BaseObject)
                     {
                         BaseObject.Ghost = true;
                         BaseObject.GhostTick = HUtil32.GetTickCount();
@@ -29,9 +29,9 @@ namespace GameSvr.Command.Commands
                         return;
                     }
                 }
-                for (var i = 0; i < M2Share.UserEngine.QuestNpcList.Count; i++)
+                for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++)
                 {
-                    if (M2Share.UserEngine.QuestNpcList[i] == BaseObject)
+                    if (M2Share.WorldEngine.QuestNpcList[i] == BaseObject)
                     {
                         BaseObject.Ghost = true;
                         BaseObject.GhostTick = HUtil32.GetTickCount();

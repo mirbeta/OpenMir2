@@ -426,7 +426,7 @@ namespace GameSvr.Maps
                 m_boIsHide = true,
                 m_boIsQuest = false
             };
-            M2Share.UserEngine.QuestNpcList.Add(questNPC);
+            M2Share.WorldEngine.QuestNpcList.Add(questNPC);
             return questNPC;
         }
 

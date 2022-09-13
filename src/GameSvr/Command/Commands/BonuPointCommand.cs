@@ -24,7 +24,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);

@@ -23,13 +23,13 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (sHumName == "" || nCount <= 0)
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
+            m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
                 if (m_PlayObject.Gold > nCount)
@@ -52,7 +52,7 @@ namespace GameSvr.Command.Commands
             else
             {
                 var nServerIndex = 0;
-                if (M2Share.UserEngine.FindOtherServerUser(sHumName, ref nServerIndex))
+                if (M2Share.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
                     PlayObject.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);
                 }

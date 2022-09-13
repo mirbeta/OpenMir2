@@ -27,12 +27,12 @@ namespace GameSvr.Services
 
         public void Start(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     Execute();
-                    await Task.Delay(20);
+                    Thread.Sleep(20);
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
@@ -324,9 +324,9 @@ namespace GameSvr.Services
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (M2Share.UserEngine.GetPlayObjectEx(LoadUser.sCharName) != null)
+            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.sCharName) != null)
             {
-                M2Share.UserEngine.KickPlayObjectEx(LoadUser.sCharName);
+                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.sCharName);
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
@@ -342,7 +342,7 @@ namespace GameSvr.Services
                     LoadUser = LoadUser,
                     HumanRcd = HumanRcd
                 };
-                M2Share.UserEngine.AddUserOpenInfo(userOpenInfo);
+                M2Share.WorldEngine.AddUserOpenInfo(userOpenInfo);
                 result = true;
             }
             return result;
@@ -439,7 +439,7 @@ namespace GameSvr.Services
                     HumanRcd.Data.nGold += GoldChangeInfo.nGold;
                     if (HumDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
                     {
-                        M2Share.UserEngine.sub_4AE514(GoldChangeInfo);
+                        M2Share.WorldEngine.sub_4AE514(GoldChangeInfo);
                         result = true;
                     }
                 }

@@ -22,7 +22,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 m_PlayObject.MapRandomMove(m_PlayObject.HomeMap, 0);

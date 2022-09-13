@@ -27,11 +27,11 @@ namespace GameSvr.DataStores
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-                for (var i = 0; i < M2Share.UserEngine.StdItemList.Count; i++)
+                for (var i = 0; i < M2Share.WorldEngine.StdItemList.Count; i++)
                 {
-                    M2Share.UserEngine.StdItemList[i] = null;
+                    M2Share.WorldEngine.StdItemList[i] = null;
                 }
-                M2Share.UserEngine.StdItemList.Clear();
+                M2Share.WorldEngine.StdItemList.Clear();
                 result = -1;
                 if (!Open())
                 {
@@ -103,9 +103,9 @@ namespace GameSvr.DataStores
                                 Item.ItemType = GoodType.ITEM_ETC;
                                 break;
                         }
-                        if (M2Share.UserEngine.StdItemList.Count <= Idx)
+                        if (M2Share.WorldEngine.StdItemList.Count <= Idx)
                         {
-                            M2Share.UserEngine.StdItemList.Add(Item);
+                            M2Share.WorldEngine.StdItemList.Add(Item);
                             result = 1;
                         }
                         else
@@ -142,7 +142,7 @@ namespace GameSvr.DataStores
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.UserEngine.SwitchMagicList();
+                M2Share.WorldEngine.SwitchMagicList();
                 if (!Open())
                 {
                     return result;
@@ -178,7 +178,7 @@ namespace GameSvr.DataStores
                         Magic.sDescr = dr.GetString("Descr");
                         if (Magic.wMagicID > 0)
                         {
-                            M2Share.UserEngine.MagicList.Add(Magic);
+                            M2Share.WorldEngine.MagicList.Add(Magic);
                         }
                         else
                         {
@@ -208,7 +208,7 @@ namespace GameSvr.DataStores
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.UserEngine.MonsterList.Clear();
+                M2Share.WorldEngine.MonsterList.Clear();
                 if (!Open())
                 {
                     return result;
@@ -262,7 +262,7 @@ namespace GameSvr.DataStores
                         }
                         Monster.ItemList = null;
                         M2Share.LocalDb.LoadMonitems(Monster.sName, ref Monster.ItemList);
-                        M2Share.UserEngine.MonsterList.Add(Monster);
+                        M2Share.WorldEngine.MonsterList.Add(Monster);
                         result = 1;
                     }
                 }

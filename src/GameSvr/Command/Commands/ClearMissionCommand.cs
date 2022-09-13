@@ -27,7 +27,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg("此命令用于清除人物的任务标志。", MsgColor.Blue, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
