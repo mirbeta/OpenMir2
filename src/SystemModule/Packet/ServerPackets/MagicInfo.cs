@@ -32,7 +32,7 @@ namespace SystemModule.Packet.ServerPackets
         /// <summary>
         /// 技能等级
         /// </summary>
-        public byte[] TrainLevel;
+        public short[] TrainLevel;
         /// <summary>
         /// 技能等级最高修炼点
         /// </summary>
@@ -69,10 +69,11 @@ namespace SystemModule.Packet.ServerPackets
         /// 备注说明
         /// </summary>
         public string sDescr;
+        public byte btClass;
 
         public MagicInfo()
         {
-            TrainLevel = new byte[4];
+            TrainLevel = new short[4];
             MaxTrain = new int[4];
         }
 
@@ -84,29 +85,28 @@ namespace SystemModule.Packet.ServerPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(wMagicID);
-            writer.Write(sMagicName.ToByte(13));
+            writer.WriteAsciiString(sMagicName, 12);
             writer.Write(btEffectType);
             writer.Write(btEffect);
-            writer.Write((byte)0);
             writer.Write(wSpell);
             writer.Write(wPower);
-            writer.Write(TrainLevel);
-            writer.Write((byte)0);
-            writer.Write((byte)0);
+            writer.Write(TrainLevel[0]);
+            writer.Write(TrainLevel[1]);
+            writer.Write(TrainLevel[2]);
+            writer.Write(TrainLevel[3]);
             writer.Write(MaxTrain[0]);
             writer.Write(MaxTrain[1]);
             writer.Write(MaxTrain[2]);
             writer.Write(MaxTrain[3]);
             writer.Write(btTrainLv);
             writer.Write(btJob);
-            writer.Write((byte)0);
-            writer.Write((byte)0);
             writer.Write(dwDelayTime);
             writer.Write(btDefSpell);
             writer.Write(btDefPower);
             writer.Write(wMaxPower);
             writer.Write(btDefMaxPower);
-            writer.Write(sDescr.ToByte(19));
+            writer.WriteAsciiString(sDescr, 14);
+            writer.Write(btClass);
         }
     }
 }

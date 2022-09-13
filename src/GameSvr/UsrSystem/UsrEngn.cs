@@ -154,7 +154,7 @@ namespace GameSvr.UsrSystem
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     Execute();
-                    await Task.Delay(20);
+                    await Task.Delay(20, stoppingToken);
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
