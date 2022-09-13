@@ -4,14 +4,11 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text;
-using SystemModule;
-using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MongoDB
 {
-    public class MongoDBPlayDataService : IPlayDataStorage
+    public class PlayDataStorage : IPlayDataStorage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> _mirQuickMap;
@@ -21,7 +18,7 @@ namespace DBSvr.Storage.MongoDB
         private IMongoCollection<THumDataInfo> humDataInfo;
         private int _recordCount;
 
-        public MongoDBPlayDataService(StorageOption storageOption)
+        public PlayDataStorage(StorageOption storageOption)
         {
             _mirQuickMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _mirQuickIdList = new QuickIdList();
