@@ -1,6 +1,5 @@
 using DBSvr.Storage.Model;
 using System.Collections.Specialized;
-using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage
@@ -8,7 +7,7 @@ namespace DBSvr.Storage
     /// <summary>
     /// 玩家数据服务接口
     /// </summary>
-    public interface IPlayDataService
+    public interface IPlayDataStorage
     {
         void LoadQuickList();
 

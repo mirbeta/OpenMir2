@@ -27,13 +27,13 @@ namespace DBSvr.Services
         private readonly MirLog _logger;
         private readonly SvrConf _conf;
         private readonly Dictionary<string, int> _mapList;
-        private readonly IPlayDataService _playDataService;
-        private readonly IPlayRecordService _playRecordService;
+        private readonly IPlayDataStorage _playDataService;
+        private readonly IPlayRecordStorage _playRecordService;
         private readonly SocketServer _userSocket;
         private readonly LoginSvrService _loginService;
         private readonly Channel<UsrSocMessage> _reviceQueue;
 
-        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService)
+        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecordService, IPlayDataStorage playDataService)
         {
             _logger = logger;
             _loginService = loginService;

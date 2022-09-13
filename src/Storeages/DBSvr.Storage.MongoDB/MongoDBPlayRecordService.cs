@@ -8,7 +8,7 @@ using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MongoDB
 {
-    public class MongoDBPlayRecordService : IPlayRecordService
+    public class MongoDBPlayRecordService : IPlayRecordStorage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int _recordCount;

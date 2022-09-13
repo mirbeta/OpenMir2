@@ -58,12 +58,6 @@ namespace DBSvr
                 throw new Exception("Storage存储配置文件错误或者不支持该存储类型");
             }
 
-            var storageOption = new StorageOption()
-            {
-                ConnectionString = _config.ConnctionString
-            };
-            AssemblyLoadContext context;
-
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -72,44 +66,24 @@ namespace DBSvr
                     services.AddSingleton<LoginSvrService>();
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<HumDataService>();
+                    AssemblyLoadContext context = null;
                     switch (storagePolicy)
                     {
                         case StoragePolicy.MySQL:
-                            const string storagePolicyName = "DBSvr.Storage.MySQL.dll";
-                            var storageFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, storagePolicyName);
-                            if (!File.Exists(storageFile))
-                            {
-                                throw new Exception($"请确认{storagePolicyName}文件是否存在.");
-                            }
-                            context = new AssemblyLoadContext(storageFile);
-                            context.Resolving += Context_Resolving;
-                            var assembly = context.LoadFromAssemblyPath(storageFile);
-                            if (assembly == null)
-                            {
-                                throw new Exception("获取MySQL存储实例失败，请确认文件是否正确.");
-                            }
-                            var playDataService = (IPlayDataService)Activator.CreateInstance(assembly.GetType("DBSvr.Storage.MySQL.MySqlPlayDataService"), storageOption);
-                            if (playDataService != null)
-                            {
-                                services.AddSingleton(playDataService);
-                            }
-                            var playRecordService = (IPlayRecordService)Activator.CreateInstance(assembly.GetType("DBSvr.Storage.MySQL.MySqlPlayRecordService"), storageOption);
-                            if (playRecordService != null)
-                            {
-                                services.AddSingleton(playRecordService);
-                            }
+                            LoadAssembly(services, context, "MySQL");
                             _logger.Info("当前使用[MySQL]数据存储.");
                             break;
                         case StoragePolicy.MongoDB:
-
+                            LoadAssembly(services, context, "MongoDB");
+                            _logger.Info("当前使用[MongoDB]数据存储.");
                             break;
                         case StoragePolicy.Sqlite:
-                            // services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
-                            // services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
+                            LoadAssembly(services, context, "Sqlite");
+                            _logger.Info("当前使用[Sqlite]数据存储.");
                             break;
                         case StoragePolicy.Local:
-                            // services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
-                            // services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
+                            LoadAssembly(services, context, "Local");
+                            _logger.Info("当前使用[Local]数据存储.");
                             break;
                     }
                     services.AddHostedService<TimedService>();
@@ -125,15 +99,44 @@ namespace DBSvr
             Stop();
         }
 
+        private static void LoadAssembly(IServiceCollection services, AssemblyLoadContext context, string storageName)
+        {
+            var storageFileName = $"DBSvr.Storage.{storageName}.dll";
+            var storagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, storageFileName);
+            if (!File.Exists(storagePath))
+            {
+                throw new Exception($"请确认{storageFileName}文件是否存在.");
+            }
+            context = new AssemblyLoadContext(storagePath);
+            context.Resolving += Context_Resolving;
+            var assembly = context.LoadFromAssemblyPath(storagePath);
+            if (assembly == null)
+            {
+                throw new Exception($"获取{storageName}数据存储实例失败，请确认文件是否正确.");
+            }
+            var storageOption = new StorageOption()
+            {
+                ConnectionString = _config.ConnctionString
+            };
+            var playDataStorage = (IPlayDataStorage)Activator.CreateInstance(assembly.GetType($"DBSvr.Storage.{storageName}.PlayDataStorage", true, true), storageOption);
+            var playRecordStorage = (IPlayRecordStorage)Activator.CreateInstance(assembly.GetType($"DBSvr.Storage.{storageName}.PlayRecordStorage", true, true), storageOption);
+            if (playDataStorage != null)
+            {
+                services.AddSingleton(playDataStorage);
+            }
+            if (playRecordStorage != null)
+            {
+                services.AddSingleton(playRecordStorage);
+            }
+        }
+
         /// <summary>
         /// 加载依赖项
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="assemblyName"></param>
         /// <returns></returns>
         private static Assembly Context_Resolving(AssemblyLoadContext context, AssemblyName assemblyName)
         {
-            string expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
+            var expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
             if (File.Exists(expectedPath))
             {
                 try
@@ -143,12 +146,12 @@ namespace DBSvr
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"加载节点{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
+                    Console.WriteLine($"加载依赖项{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
                 }
             }
             else
             {
-                Console.WriteLine($"依赖文件不存在：{expectedPath}");
+                Console.WriteLine($"依赖项不存在：{expectedPath}");
             }
             return null;
         }

@@ -21,12 +21,12 @@ namespace DBSvr.Services
         private readonly MirLog _logger;
         private readonly IList<TServerInfo> _serverList;
         private readonly IList<THumSession> _playSessionList;
-        private readonly IPlayDataService _playDataService;
+        private readonly IPlayDataStorage _playDataService;
         private readonly SocketServer _serverSocket;
         private readonly LoginSvrService _loginSvrService;
         private readonly SvrConf _conf;
 
-        public HumDataService(MirLog logger, LoginSvrService loginSvrService, IPlayDataService playDataService, SvrConf conf)
+        public HumDataService(MirLog logger, LoginSvrService loginSvrService, IPlayDataStorage playDataService, SvrConf conf)
         {
             _logger = logger;
             _loginSvrService = loginSvrService;
