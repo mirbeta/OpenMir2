@@ -11,7 +11,7 @@ using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MongoDB
 {
-    public class MongoDBPlayDataService : IPlayDataService
+    public class MongoDBPlayDataService : IPlayDataStorage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> _mirQuickMap;

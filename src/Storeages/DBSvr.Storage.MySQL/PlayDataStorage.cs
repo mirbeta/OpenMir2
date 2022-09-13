@@ -11,7 +11,7 @@ using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
 {
-    public class MySqlPlayDataService : IPlayDataService
+    public class PlayDataStorage : IPlayDataStorage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> _mirQuickMap;
@@ -20,7 +20,7 @@ namespace DBSvr.Storage.MySQL
         private readonly StorageOption _storageOption;
         private int _recordCount;
 
-        public MySqlPlayDataService(StorageOption storageOption)
+        public PlayDataStorage(StorageOption storageOption)
         {
             _mirQuickMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _mirQuickIdList = new QuickIdList();

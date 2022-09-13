@@ -7,7 +7,7 @@ namespace DBSvr.Storage
     /// <summary>
     /// 玩家数据服务接口
     /// </summary>
-    public interface IPlayRecordService
+    public interface IPlayRecordStorage
     {
         void LoadQuickList();
 

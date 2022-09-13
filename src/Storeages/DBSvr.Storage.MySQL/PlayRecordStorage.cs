@@ -9,7 +9,7 @@ using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
 {
-    public class MySqlPlayRecordService : IPlayRecordService
+    public class PlayRecordStorage : IPlayRecordStorage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int _recordCount;
@@ -23,7 +23,7 @@ namespace DBSvr.Storage.MySQL
 
         private readonly StorageOption _storageOption;
 
-        public MySqlPlayRecordService(StorageOption option)
+        public PlayRecordStorage(StorageOption option)
         {
             _quickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _indexQuickList = new Dictionary<int, string>();
