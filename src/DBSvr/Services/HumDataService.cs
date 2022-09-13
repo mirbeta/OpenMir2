@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -21,16 +20,16 @@ namespace DBSvr.Services
         private readonly MirLog _logger;
         private readonly IList<TServerInfo> _serverList;
         private readonly IList<THumSession> _playSessionList;
-        private readonly IPlayDataStorage _playDataService;
+        private readonly IPlayDataStorage _playDataStorage;
         private readonly SocketServer _serverSocket;
         private readonly LoginSvrService _loginSvrService;
         private readonly SvrConf _conf;
 
-        public HumDataService(MirLog logger, LoginSvrService loginSvrService, IPlayDataStorage playDataService, SvrConf conf)
+        public HumDataService(MirLog logger, LoginSvrService loginSvrService, IPlayDataStorage playDataStorage, SvrConf conf)
         {
             _logger = logger;
             _loginSvrService = loginSvrService;
-            _playDataService = playDataService;
+            _playDataStorage = playDataStorage;
             _serverList = new List<TServerInfo>();
             _playSessionList = new List<THumSession>();
             _serverSocket = new SocketServer(byte.MaxValue, 1024);
@@ -45,7 +44,7 @@ namespace DBSvr.Services
         {
             _serverSocket.Init();
             _serverSocket.Start(_conf.ServerAddr, _conf.ServerPort);
-            _playDataService.LoadQuickList();
+            _playDataStorage.LoadQuickList();
             _logger.LogInformation($"数据库角色服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
         }
 
@@ -246,21 +245,21 @@ namespace DBSvr.Services
             bool bo15 = false;
             try
             {
-                int n14 = _playDataService.Index(sSrcChrName);
+                int n14 = _playDataStorage.Index(sSrcChrName);
                 THumDataInfo HumanRCD = null;
-                if ((n14 >= 0) && (_playDataService.Get(n14, ref HumanRCD) >= 0))
+                if ((n14 >= 0) && (_playDataStorage.Get(n14, ref HumanRCD) >= 0))
                 {
                     bo15 = true;
                 }
                 if (bo15)
                 {
-                    n14 = _playDataService.Index(sDestChrName);
+                    n14 = _playDataStorage.Index(sDestChrName);
                     if ((n14 >= 0))
                     {
                         HumanRCD.Header.sName = sDestChrName;
                         HumanRCD.Data.sCharName = sDestChrName;
                         HumanRCD.Data.sAccount = sUserID;
-                        _playDataService.Update(n14, ref HumanRCD);
+                        _playDataStorage.Update(n14, ref HumanRCD);
                         result = true;
                     }
                 }
@@ -316,10 +315,10 @@ namespace DBSvr.Services
             }
             if ((nCheckCode == 1) || boFoundSession)
             {
-                int nIndex = _playDataService.Index(loadHumanPacket.sChrName);
+                int nIndex = _playDataStorage.Index(loadHumanPacket.sChrName);
                 if (nIndex >= 0)
                 {
-                    if (_playDataService.Get(nIndex, ref HumanRCD) < 0)
+                    if (_playDataStorage.Get(nIndex, ref HumanRCD) < 0)
                     {
                         nCheckCode = -2;
                     }
@@ -363,17 +362,17 @@ namespace DBSvr.Services
             if (!bo21)
             {
                 bo21 = true;
-                int nIndex = _playDataService.Index(sChrName);
+                int nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex < 0)
                 {
                     humanRcd.Header.sName = sChrName;
-                    _playDataService.Add(ref humanRcd);
-                    nIndex = _playDataService.Index(sChrName);
+                    _playDataStorage.Add(ref humanRcd);
+                    nIndex = _playDataStorage.Index(sChrName);
                 }
                 if (nIndex >= 0)
                 {
                     humanRcd.Header.sName = sChrName;
-                    _playDataService.Update(nIndex, ref humanRcd);
+                    _playDataStorage.Update(nIndex, ref humanRcd);
                     bo21 = false;
                 }
                 _loginSvrService.SetSessionSaveRcd(sUserID);

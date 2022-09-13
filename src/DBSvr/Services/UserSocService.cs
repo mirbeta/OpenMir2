@@ -27,18 +27,18 @@ namespace DBSvr.Services
         private readonly MirLog _logger;
         private readonly SvrConf _conf;
         private readonly Dictionary<string, int> _mapList;
-        private readonly IPlayDataStorage _playDataService;
-        private readonly IPlayRecordStorage _playRecordService;
+        private readonly IPlayDataStorage _playDataStorage;
+        private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
         private readonly LoginSvrService _loginService;
         private readonly Channel<UsrSocMessage> _reviceQueue;
 
-        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecordService, IPlayDataStorage playDataService)
+        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecordStorage, IPlayDataStorage playDataStorage)
         {
             _logger = logger;
             _loginService = loginService;
-            _playRecordService = playRecordService;
-            _playDataService = playDataService;
+            _playRecordStorage = playRecordStorage;
+            _playDataStorage = playDataStorage;
             GateList = new List<TGateInfo>();
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _reviceQueue = Channel.CreateUnbounded<UsrSocMessage>();
@@ -56,7 +56,7 @@ namespace DBSvr.Services
             LoadServerInfo();
             LoadChrNameList("DenyChrName.txt");
             LoadClearMakeIndexList("ClearMakeIndex.txt");
-            _playRecordService.LoadQuickList();
+            _playRecordStorage.LoadQuickList();
             _userSocket.Start(_conf.GateAddr, _conf.GatePort);
             StartMessageThread(stoppingToken);
             _logger.LogInformation($"数据库服务[{_conf.GateAddr}:{_conf.GatePort}]已启动.等待链接...");
@@ -239,7 +239,7 @@ namespace DBSvr.Services
         private bool NewChrData(string sAccount, string sChrName, int nSex, int nJob, int nHair)
         {
             var result = false;
-            if ((_playDataService.Index(sChrName) == -1))
+            if ((_playDataStorage.Index(sChrName) == -1))
             {
                 var chrRecord = new THumDataInfo();
                 chrRecord.Header = new TRecordHeader();
@@ -252,7 +252,7 @@ namespace DBSvr.Services
                 chrRecord.Data.btSex = (byte)nSex;
                 chrRecord.Data.btJob = (byte)nJob;
                 chrRecord.Data.btHair = (byte)nHair;
-                _playDataService.Add(ref chrRecord);
+                _playDataStorage.Add(ref chrRecord);
                 result = true;
             }
             return result;
@@ -574,7 +574,7 @@ namespace DBSvr.Services
                 userInfo.sAccount = sAccount;
                 userInfo.nSessionID = nSessionId;
                 IList<QuickId> chrList = new List<QuickId>();
-                if ((_playRecordService.FindByAccount(sAccount, ref chrList) >= 0))
+                if ((_playRecordStorage.FindByAccount(sAccount, ref chrList) >= 0))
                 {
                     for (var i = 0; i < chrList.Count; i++)
                     {
@@ -583,17 +583,17 @@ namespace DBSvr.Services
                         {
                             continue;
                         }
-                        var humRecord = _playRecordService.GetBy(quickId.nIndex, ref result);
+                        var humRecord = _playRecordStorage.GetBy(quickId.nIndex, ref result);
                         if (result && !humRecord.Deleted)
                         {
                             var sChrName = quickId.sChrName;
-                            var nIndex = _playDataService.Index(sChrName);
+                            var nIndex = _playDataStorage.Index(sChrName);
                             if ((nIndex < 0) || (nChrCount >= 2))
                             {
                                 continue;
                             }
                             THumDataInfo chrRecord = null;
-                            if (_playDataService.Get(nIndex, ref chrRecord) >= 0)
+                            if (_playDataStorage.Get(nIndex, ref chrRecord) >= 0)
                             {
                                 var btSex = chrRecord.Data.btSex;
                                 var sJob = chrRecord.Data.btJob;
@@ -634,10 +634,10 @@ namespace DBSvr.Services
         private int DelChrSnameToLevel(string sName)
         {
             THumDataInfo chrRecord = null;
-            var nIndex = _playDataService.Index(sName);
+            var nIndex = _playDataStorage.Index(sName);
             if (nIndex < 0)
                 return 0;
-            _playDataService.Get(nIndex, ref chrRecord);
+            _playDataStorage.Get(nIndex, ref chrRecord);
             return chrRecord.Data.Abil.Level;
         }
 
@@ -649,10 +649,10 @@ namespace DBSvr.Services
             ClientPacket msg;
             var sChrName = EDCode.DeCodeString(sData);
             var boCheck = false;
-            var nIndex = _playRecordService.Index(sChrName);
+            var nIndex = _playRecordStorage.Index(sChrName);
             if (nIndex >= 0)
             {
-                var humRecord = _playRecordService.Get(nIndex, ref boCheck);
+                var humRecord = _playRecordStorage.Get(nIndex, ref boCheck);
                 if (boCheck)
                 {
                     if (humRecord.sAccount == userInfo.sAccount)
@@ -661,7 +661,7 @@ namespace DBSvr.Services
                         if (nLevel < _conf.DeleteMinLevel)
                         {
                             humRecord.Deleted = true;
-                            boCheck = _playRecordService.Update(nIndex, ref humRecord);
+                            boCheck = _playRecordStorage.Update(nIndex, ref humRecord);
                         }
                     }
                 }
@@ -734,11 +734,11 @@ namespace DBSvr.Services
             }*/
             if (nCode == -1)
             {
-                if (_playDataService.Index(sChrName) >= 0)
+                if (_playDataStorage.Index(sChrName) >= 0)
                 {
                     nCode = 2;
                 }
-                if (_playRecordService.ChrCountOfAccount(sAccount) < 2)
+                if (_playRecordStorage.ChrCountOfAccount(sAccount) < 2)
                 {
                     var humRecord = new HumRecordData();
                     humRecord.sChrName = sChrName;
@@ -749,7 +749,7 @@ namespace DBSvr.Services
                     humRecord.Header.SelectID = userInfo.nSelGateID;
                     if (!string.IsNullOrEmpty(humRecord.Header.sName))
                     {
-                        if (!_playRecordService.Add(humRecord))
+                        if (!_playRecordStorage.Add(humRecord))
                         {
                             nCode = 2;
                         }
@@ -768,7 +768,7 @@ namespace DBSvr.Services
                 }
                 else
                 {
-                    _playDataService.Delete(sChrName);//删除人物
+                    _playDataStorage.Delete(sChrName);//删除人物
                     nCode = 4;
                 }
             }
@@ -800,36 +800,36 @@ namespace DBSvr.Services
             {
                 int nIndex;
                 IList<QuickId> chrList = new List<QuickId>();
-                if (_playRecordService.FindByAccount(sAccount, ref chrList) >= 0)
+                if (_playRecordStorage.FindByAccount(sAccount, ref chrList) >= 0)
                 {
                     for (var i = 0; i < chrList.Count; i++)
                     {
                         nIndex = chrList[i].nIndex;
-                        var humRecord = _playRecordService.GetBy(nIndex, ref result);
+                        var humRecord = _playRecordStorage.GetBy(nIndex, ref result);
                         if (result)
                         {
                             if (humRecord.sChrName == sChrName)
                             {
                                 humRecord.Selected = 1;
-                                _playRecordService.UpdateBy(nIndex, ref humRecord);
+                                _playRecordStorage.UpdateBy(nIndex, ref humRecord);
                             }
                             else
                             {
                                 if (humRecord.Selected == 1)
                                 {
                                     humRecord.Selected = 0;
-                                    _playRecordService.UpdateBy(nIndex, ref humRecord);
+                                    _playRecordStorage.UpdateBy(nIndex, ref humRecord);
                                 }
                             }
                         }
                     }
                 }
                 chrList = null;
-                nIndex = _playDataService.Index(sChrName);
+                nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex >= 0)
                 {
                     THumDataInfo chrRecord = null;
-                    _playDataService.Get(nIndex, ref chrRecord);
+                    _playDataStorage.Get(nIndex, ref chrRecord);
                     sCurMap = chrRecord.Data.sCurMap;
                     boDataOk = true;
                 }
