@@ -357,6 +357,7 @@ namespace GameSvr.GateWay
                                 GateUser.sAccount = sDisable;
                                 GateUser.boCertification = false;
                                 CloseUser(nSocket);
+                                _logger.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionID} Address:{GateUser.sIPaddr}");
                             }
                         }
                         else

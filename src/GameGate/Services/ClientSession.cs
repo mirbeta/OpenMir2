@@ -1021,15 +1021,10 @@ namespace GameGate
                 var szCode = string.Empty;
                 var szHarewareID = string.Empty;//硬件ID
                 var sData = string.Empty;
-                
-                var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);
-                LogQueue.Enqueue($"加密密钥:{secretKey.AccountSecretKey}", 1);
-                var code = secretKey.ManualEntryKey;
-                LogQueue.Enqueue($"动态验证码为：{code}", 1);
-                LogQueue.Enqueue($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后更换新的密钥", 1);
 
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sAccount, HUtil32.Backslash);
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, HUtil32.Backslash);
+
                 if ((sAccount.Length >= 4) && (sAccount.Length <= 12) && (sHumName.Length > 2) && (sHumName.Length < 15))
                 {
                     sDataText = HUtil32.GetValidStr3(sDataText, ref szCert, HUtil32.Backslash);
@@ -1162,6 +1157,13 @@ namespace GameGate
                     _session.sAccount = sAccount;
                     _session.sChrName = sHumName;
                     success = true;
+
+                    var dyKey = $"{sAccount}-{szHarewareID}";
+                    var secretKey = _authenticator.GenerateSetupCode("openmir2", dyKey, SessionKey, 5);
+                    LogQueue.Enqueue($"动态密钥:{secretKey.AccountSecretKey}", 1);
+                    var code = secretKey.ManualEntryKey;
+                    LogQueue.Enqueue($"动态验证码为：{code}", 1);
+                    LogQueue.Enqueue($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后验证新的密钥,容错5秒.", 1);
                 }
                 else
                 {

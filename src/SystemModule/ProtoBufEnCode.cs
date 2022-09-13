@@ -11,7 +11,7 @@ namespace SystemModule
             try
             {
                 using var ms = new MemoryStream();
-                Serializer.Serialize<T>(ms, model);
+                Serializer.Serialize(ms, model);
                 byte[] result = new byte[ms.Length];
                 ms.Position = 0;
                 ms.Read(result, 0, result.Length);
