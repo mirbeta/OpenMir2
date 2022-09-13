@@ -5,5 +5,6 @@
         Local,
         MySQL,
         Sqlite,
+        MongoDB
     }
 }

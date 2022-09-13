@@ -149,12 +149,12 @@ namespace GameSvr.UsrSystem
 
         public void Start(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     Execute();
-                    await Task.Delay(20, stoppingToken);
+                    Thread.Sleep(20);
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
