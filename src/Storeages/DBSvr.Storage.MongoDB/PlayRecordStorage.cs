@@ -3,12 +3,10 @@ using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MongoDB
 {
-    public class MongoDBPlayRecordService : IPlayRecordStorage
+    public class PlayRecordStorage : IPlayRecordStorage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int _recordCount;
@@ -22,7 +20,7 @@ namespace DBSvr.Storage.MongoDB
 
         private readonly StorageOption _storageOption;
 
-        public MongoDBPlayRecordService(StorageOption option)
+        public PlayRecordStorage(StorageOption option)
         {
             _quickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _indexQuickList = new Dictionary<int, string>();
