@@ -3071,9 +3071,9 @@ namespace GameSvr.Actor
         {
             WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC));
             var n8 = 0;
-            if ((Race == MonsterConst.MONSTER_WHITESKELETON) ||
-                (Race == MonsterConst.MONSTER_ELFMONSTER) ||
-                (Race == MonsterConst.MONSTER_ELFWARRIOR))
+            if ((Race == MonsterConst.MonsterWhiteskeleton) ||
+                (Race == MonsterConst.MonsterElfmonster) ||
+                (Race == MonsterConst.MonsterElfwarrior))
             {
                 WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC),
                     HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
@@ -4434,7 +4434,7 @@ namespace GameSvr.Actor
                                 result = true;
                             }
 
-                            if (M2Share.Config.boNonPKServer)
+                            if (M2Share.Config.PveServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -4503,7 +4503,7 @@ namespace GameSvr.Actor
                                 }
                             }
 
-                            if (M2Share.Config.boNonPKServer)
+                            if (M2Share.Config.PveServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -4535,7 +4535,7 @@ namespace GameSvr.Actor
                                 }
                             }
 
-                            if (M2Share.Config.boNonPKServer)
+                            if (M2Share.Config.PveServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -4574,7 +4574,7 @@ namespace GameSvr.Actor
                                 }
                             }
 
-                            if (M2Share.Config.boNonPKServer)
+                            if (M2Share.Config.PveServer)
                             {
                                 result = IsAttackTarget_sub_4C88E4();
                             }
@@ -6135,8 +6135,8 @@ namespace GameSvr.Actor
                 return false;
             }
 
-            var nX = monGen.nX - monGen.nRange + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
-            var nY = monGen.nY - monGen.nRange + M2Share.RandomNumber.Random(monGen.nRange * 2 + 1);
+            var nX = monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
+            var nY = monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
             var mBoErrorOnInit = true;
             if (Envir.CanWalk(nX, nY, true))
             {
@@ -6250,9 +6250,9 @@ namespace GameSvr.Actor
                 if ((MonGen != null) && (MonGen.Envir != Envir))
                 {
                     CanReAlive = false;
-                    if (MonGen.nActiveCount > 0)
+                    if (MonGen.ActiveCount > 0)
                     {
-                        MonGen.nActiveCount--;
+                        MonGen.ActiveCount--;
                     }
 
                     MonGen = null;

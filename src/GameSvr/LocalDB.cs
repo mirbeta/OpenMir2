@@ -3,6 +3,7 @@ using GameSvr.Monster;
 using GameSvr.Npc;
 using GameSvr.Script;
 using System.Collections;
+using System.Collections.Concurrent;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -544,33 +545,46 @@ namespace GameSvr
                     {
                         MonGenInfo = new MonGenInfo();
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
-                        MonGenInfo.sMapName = sData;
+                        MonGenInfo.MapName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
-                        MonGenInfo.nX = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.X = HUtil32.Str_ToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
-                        MonGenInfo.nY = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.Y = HUtil32.Str_ToInt(sData, 0);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { " ", "\t" });
                         if (!string.IsNullOrEmpty(sData) && sData[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sData, "\"", "\"", ref sData);
                         }
-                        MonGenInfo.sMonName = sData;
+                        MonGenInfo.MonName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
-                        MonGenInfo.nRange = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.Range = HUtil32.Str_ToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
-                        MonGenInfo.nCount = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.Count = HUtil32.Str_ToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.ZenTime = HUtil32.Str_ToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
-                        MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (!string.IsNullOrEmpty(MonGenInfo.sMapName) && !string.IsNullOrEmpty(MonGenInfo.sMonName) && MonGenInfo.ZenTime != 0 && 
-                            M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, MonGenInfo.sMapName) != null)
+                        MonGenInfo.MissionGenRate = HUtil32.Str_ToInt(sData, 0);// 集中座标刷新机率 1 -100
+                        if (!string.IsNullOrEmpty(MonGenInfo.MapName) && !string.IsNullOrEmpty(MonGenInfo.MonName) && MonGenInfo.ZenTime != 0 &&
+                            M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, MonGenInfo.MapName) != null)
                         {
                             MonGenInfo.CertList = new List<BaseObject>();
-                            MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.sMapName);
+                            MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.MapName);
                             if (MonGenInfo.Envir != null)
                             {
-                                M2Share.WorldEngine.MonGenList.Add(MonGenInfo);
+                                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                                MonGenInfo.ThreadId = threadId;
+                                if (M2Share.WorldEngine.MonGenList.ContainsKey(threadId))
+                                {
+                                    M2Share.WorldEngine.MonGenList[threadId].Add(MonGenInfo);
+                                }
+                                else
+                                {
+                                    M2Share.WorldEngine.MonGenList.Add(threadId, new List<MonGenInfo>() { MonGenInfo });
+                                }
+                                if (!M2Share.WorldEngine.MonThreadMap.ContainsKey(MonGenInfo.MonName))
+                                {
+                                    M2Share.WorldEngine.MonThreadMap.Add(MonGenInfo.MonName, MonGenInfo.ThreadId);
+                                }
                             }
                             else
                             {
@@ -579,12 +593,19 @@ namespace GameSvr
                         }
                     }
                 }
-                //MonGenInfo = new MonGenInfo
-                //{
-                //    CertList = new List<TBaseObject>(),
-                //    Envir = null
-                //};
-                M2Share.WorldEngine.MonGenList.Add(MonGenInfo);
+                MonGenInfo = new MonGenInfo
+                {
+                    CertList = new List<BaseObject>(),
+                    Envir = null
+                };
+                if (M2Share.WorldEngine.MonGenList.ContainsKey(0))
+                {
+                    M2Share.WorldEngine.MonGenList[0].Add(MonGenInfo);
+                }
+                else
+                {
+                    M2Share.WorldEngine.MonGenList.Add(0, new List<MonGenInfo>() { MonGenInfo });
+                }
                 result = 1;
             }
             return result;

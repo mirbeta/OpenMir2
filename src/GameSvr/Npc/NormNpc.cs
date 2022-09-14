@@ -1078,38 +1078,44 @@ namespace GameSvr.Npc
                 {
                     if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物
                     {
-                        for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
+                        for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                         {
-                            MonGen = M2Share.WorldEngine.MonGenList[i];
-                            if (MonGen == null)
+                            for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
                             {
-                                continue;
-                            }
-                            for (var j = 0; j < MonGen.CertList.Count; j++)
-                            {
-                                BaseObject = MonGen.CertList[j];
-                                if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost)
+                                MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                if (MonGen == null)
                                 {
-                                    MonGenCount++;
+                                    continue;
+                                }
+                                for (var k = 0; k < MonGen.CertList.Count; k++)
+                                {
+                                    BaseObject = MonGen.CertList[k];
+                                    if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost)
+                                    {
+                                        MonGenCount++;
+                                    }
                                 }
                             }
                         }
                     }
                     else
                     {
-                        for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
+                        for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                         {
-                            MonGen = M2Share.WorldEngine.MonGenList[i];
-                            if (MonGen == null)
+                            for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
                             {
-                                continue;
-                            }
-                            for (var j = 0; j < MonGen.CertList.Count; j++)
-                            {
-                                BaseObject = MonGen.CertList[j];
-                                if (BaseObject.Master == null && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                if (MonGen == null)
                                 {
-                                    MonGenCount++;
+                                    continue;
+                                }
+                                for (var k = 0; k < MonGen.CertList.Count; k++)
+                                {
+                                    BaseObject = MonGen.CertList[k];
+                                    if (BaseObject.Master == null && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                    {
+                                        MonGenCount++;
+                                    }
                                 }
                             }
                         }
@@ -1123,38 +1129,44 @@ namespace GameSvr.Npc
                     {
                         if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
                         {
-                            for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
+                            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                             {
-                                MonGen = M2Share.WorldEngine.MonGenList[i];
-                                if (MonGen == null)
+                                for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
                                 {
-                                    continue;
-                                }
-                                for (var j = 0; j < MonGen.CertList.Count; j++)
-                                {
-                                    BaseObject = MonGen.CertList[j];
-                                    if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost)
+                                    MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                    if (MonGen == null)
                                     {
-                                        MonGenCount++;
+                                        continue;
+                                    }
+                                    for (var k = 0; k < MonGen.CertList.Count; k++)
+                                    {
+                                        BaseObject = MonGen.CertList[k];
+                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost)
+                                        {
+                                            MonGenCount++;
+                                        }
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            for (var i = 0; i < M2Share.WorldEngine.MonGenList.Count; i++)
+                            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                             {
-                                MonGen = M2Share.WorldEngine.MonGenList[i];
-                                if (MonGen == null)
+                                for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
                                 {
-                                    continue;
-                                }
-                                for (var j = 0; j < MonGen.CertList.Count; j++)
-                                {
-                                    BaseObject = MonGen.CertList[j];
-                                    if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                    MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                    if (MonGen == null)
                                     {
-                                        MonGenCount++;
+                                        continue;
+                                    }
+                                    for (var k = 0; k < MonGen.CertList.Count; k++)
+                                    {
+                                        BaseObject = MonGen.CertList[k];
+                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                        {
+                                            MonGenCount++;
+                                        }
                                     }
                                 }
                             }

@@ -346,7 +346,7 @@ namespace GameSvr.Services
             {
                 var sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                 var nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
-                if (!M2Share.Config.boTestServer)
+                if (!M2Share.Config.TestServer)
                 {
                     M2Share.WorldEngine.HumanExpire(sAccount);
                     DelSession(nSessionID);

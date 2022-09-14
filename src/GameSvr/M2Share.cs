@@ -131,7 +131,7 @@ namespace GameSvr
         public static EventManager EventMgr = null;
         public static CastleManager CastleMgr = null;
         public static TFrontEngine FrontEngine = null;
-        public static WorldEngine WorldEngine = null;
+        public static WorldServer WorldEngine = null;
         public static RobotManage RobotMgr = null;
         public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
         public static IList<StartPoint> StartPointList = null;

@@ -685,7 +685,7 @@ namespace GameSvr.Player
             const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
             try
             {
-                if (M2Share.Config.boTestServer)
+                if (M2Share.Config.TestServer)
                 {
                     if (Abil.Level < M2Share.Config.TestLevel)
                     {
@@ -696,7 +696,7 @@ namespace GameSvr.Player
                         Gold = M2Share.Config.TestGold;
                     }
                 }
-                if (M2Share.Config.boTestServer || M2Share.Config.boServiceMode)
+                if (M2Share.Config.TestServer || M2Share.Config.ServiceMode)
                 {
                     m_nPayMent = 3;
                 }
@@ -889,7 +889,7 @@ namespace GameSvr.Player
                             break;
                     }
                     SysMsg(M2Share.sStartChangeAttackModeHelp, MsgColor.Green, MsgType.Hint);// 使用组合快捷键 CTRL-H 更改攻击...
-                    if (M2Share.Config.boTestServer)
+                    if (M2Share.Config.TestServer)
                     {
                         SysMsg(M2Share.sStartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
@@ -940,7 +940,7 @@ namespace GameSvr.Player
                 {
                     SysMsg(M2Share.g_sNowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
                 }
-                if (M2Share.Config.boVentureServer)
+                if (M2Share.Config.VentureServer)
                 {
                     SysMsg("当前服务器运行于冒险模式.", MsgColor.Green, MsgType.Hint);
                 }
