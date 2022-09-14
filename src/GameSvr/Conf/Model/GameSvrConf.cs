@@ -843,6 +843,11 @@ namespace GameSvr.Conf.Model
         public int nLevelValueOfWarrHP;
         public double nLevelValueOfWarrHPRate;
         /// <summary>
+        /// 怪物处理线程数量
+        /// 建议高于5w以上怪物启用2个线程，虽然可以提高处理速度，但不是越多越好,默认值=1。
+        /// </summary>
+        public int ProcessMonsterMultiThreadLimit;
+        /// <summary>
         /// 怪物处理间隔
         /// 空闲时处理怪物检测次数，数字越大，怪物行动越迟钝,但节约服务器资源,默认值=2。
         /// </summary>
@@ -1626,6 +1631,7 @@ namespace GameSvr.Conf.Model
             nLevelValueOfWarrHP = 4;
             nLevelValueOfWarrHPRate = 4.5;
             ProcessMonsterInterval = 2;
+            ProcessMonsterMultiThreadLimit = 1;
             nDBSocketSendLen = 0;
             PermissionSystem = false;
             nRenewPercent = 60;

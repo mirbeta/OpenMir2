@@ -6,7 +6,7 @@ using SystemModule.Data;
 
 namespace GameSvr.Maps
 {
-    public class TPointManager
+    public class PointManager
     {
         public int Count
         {
@@ -36,7 +36,7 @@ namespace GameSvr.Maps
         private readonly BaseObject FBaseObject;
         private TPathType FPathType;
 
-        public TPointManager(BaseObject ABaseObject)
+        public PointManager(BaseObject ABaseObject)
         {
             m_nCurrX = -1;
             m_nCurrY = -1;

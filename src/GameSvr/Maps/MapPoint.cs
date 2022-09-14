@@ -1,16 +1,16 @@
 namespace GameSvr.Maps
 {
-    public class TMapPoint
+    public class MapPoint
     {
         public int X
         {
             get
             {
-                return FX;
+                return nX;
             }
             set
             {
-                FX = value;
+                nX = value;
             }
         }
 
@@ -18,11 +18,11 @@ namespace GameSvr.Maps
         {
             get
             {
-                return FY;
+                return nY;
             }
             set
             {
-                FY = value;
+                nY = value;
             }
         }
 
@@ -38,14 +38,14 @@ namespace GameSvr.Maps
             }
         }
 
-        private int FX;
-        private int FY;
+        private int nX;
+        private int nY;
         private bool FThrough;
 
-        public TMapPoint(int nX, int nY)
+        public MapPoint(int nX, int nY)
         {
-            FX = nX;
-            FY = nY;
+            this.nX = nX;
+            this.nY = nY;
             FThrough = false;
         }
     }
