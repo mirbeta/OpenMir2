@@ -27,7 +27,7 @@ namespace GameSvr.RobotPlay
         /// 挂机地图
         /// </summary>
         public Envirnoment m_ManagedEnvir;
-        public TPointManager m_PointManager;
+        public PointManager m_PointManager;
         public PointInfo[] m_Path;
         public int m_nPostion;
         public int m_nMoveFailCount;
@@ -136,7 +136,7 @@ namespace GameSvr.RobotPlay
             m_sHeroConfigListFileName = "";
             m_UseItemNames = new string[13];
             m_BagItemNames = new List<string>();
-            m_PointManager = new TPointManager(this);
+            m_PointManager = new PointManager(this);
             m_SkillUseTick = new long[59];// 魔法使用间隔
             m_nSelItemType = 1;
             m_nIncSelfHealthCount = 0;

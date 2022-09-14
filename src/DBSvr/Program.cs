@@ -66,23 +66,22 @@ namespace DBSvr
                     services.AddSingleton<LoginSvrService>();
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<HumDataService>();
-                    AssemblyLoadContext context = null;
                     switch (storagePolicy)
                     {
                         case StoragePolicy.MySQL:
-                            LoadAssembly(services, context, "MySQL");
+                            LoadAssembly(services, "MySQL");
                             _logger.Info("当前使用[MySQL]数据存储.");
                             break;
                         case StoragePolicy.MongoDB:
-                            LoadAssembly(services, context, "MongoDB");
+                            LoadAssembly(services, "MongoDB");
                             _logger.Info("当前使用[MongoDB]数据存储.");
                             break;
                         case StoragePolicy.Sqlite:
-                            LoadAssembly(services, context, "Sqlite");
+                            LoadAssembly(services, "Sqlite");
                             _logger.Info("当前使用[Sqlite]数据存储.");
                             break;
                         case StoragePolicy.Local:
-                            LoadAssembly(services, context, "Local");
+                            LoadAssembly(services, "Local");
                             _logger.Info("当前使用[Local]数据存储.");
                             break;
                     }
@@ -99,7 +98,7 @@ namespace DBSvr
             Stop();
         }
 
-        private static void LoadAssembly(IServiceCollection services, AssemblyLoadContext context, string storageName)
+        private static void LoadAssembly(IServiceCollection services, string storageName)
         {
             var storageFileName = $"DBSvr.Storage.{storageName}.dll";
             var storagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, storageFileName);
@@ -107,7 +106,7 @@ namespace DBSvr
             {
                 throw new Exception($"请确认{storageFileName}文件是否存在.");
             }
-            context = new AssemblyLoadContext(storagePath);
+            var context = new AssemblyLoadContext(storagePath);
             context.Resolving += Context_Resolving;
             var assembly = context.LoadFromAssemblyPath(storagePath);
             if (assembly == null)

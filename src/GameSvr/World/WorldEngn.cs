@@ -19,6 +19,17 @@ using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.World
 {
+    public class MonsterThread
+    {
+        public int Id = 0;
+        public long LastRunTime = 0;
+        public long StartTime = 0;
+        public long EndTime = 0;
+        public LinkedList<BaseObject> ObjectsList = new LinkedList<BaseObject>();
+        public LinkedListNode<BaseObject> _current = null;
+        public bool Stop = false;
+    }
+
     public partial class WorldEngine
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -165,10 +176,73 @@ namespace GameSvr.World
             }
         }
 
+        public void Stop()
+        {
+            lock (_locker)
+            {
+                // changing a blocking condition. (this makes the threads wake up!)
+                Monitor.PulseAll(_locker);
+            }
+
+            //simply intterupt all the mob threads if they are running (will give an invisible error on them but fastest way of getting rid of them on shutdowns)
+            for (var i = 1; i < MobThreading.Length; i++)
+            {
+                if (MobThreads[i] != null)
+                {
+                    MobThreads[i].EndTime = HUtil32.GetTickCount() + 9999;
+                }
+                if (MobThreading[i] != null &&
+                    MobThreading[i].ThreadState != ThreadState.Stopped && MobThreading[i].ThreadState != ThreadState.Unstarted)
+                {
+                    MobThreading[i].Interrupt();
+                }
+            }
+        }
+
+        public MonsterThread[] MobThreads;
+        private Thread[] MobThreading;
+        private readonly object _locker = new object();
+
+        private void StartMonstersLoop()
+        {
+            MobThreads = new MonsterThread[M2Share.Config.ProcessMonsterMultiThreadLimit];
+            MobThreading = new Thread[M2Share.Config.ProcessMonsterMultiThreadLimit];
+
+            for (var i = 0; i < MobThreads.Length; i++)
+            {
+                MobThreads[i] = new MonsterThread();
+                MobThreads[i].Id = i;
+            }
+
+            for (var j = 0; j < MobThreads.Length; j++)
+            {
+                var Info = MobThreads[j];
+                if (j <= 0) continue;
+                MobThreading[j] = new Thread(() => ProcessMonstersLoop(Info)) { IsBackground = true };
+                MobThreading[j].Start();
+            }
+
+        }
+
         private void PrcocessData()
         {
             try
             {
+                for (var j = 1; j < MobThreads.Length; j++)
+                {
+                    var Info = MobThreads[j];
+
+                    if (!Info.Stop) continue;
+                    Info.EndTime = HUtil32.GetTickCount() + 10;
+                    Info.Stop = false;
+                }
+                lock (_locker)
+                {
+                    Monitor.PulseAll(_locker); //changing a blocking condition. (this makes the threads wake up!)
+                }
+                //run the first loop in the main thread so the main thread automaticaly 'halts' until the other threads are finished
+                ProcessMonstersLoop(MobThreads[0]);
+
                 ProcessHumans();
                 ProcessMonsters();
                 ProcessMerchants();
@@ -961,69 +1035,70 @@ namespace GameSvr.World
         }
 
         /// <summary>
-        /// 怪物处理
-        /// 刷新、行动、攻击等动作
+        /// 刷新怪物
         /// </summary>
         private void ProcessMonsters()
         {
+            MonGenInfo monGen = null;
             bool boCanCreate;
+            if ((HUtil32.GetTickCount() - RegenMonstersTick) > M2Share.Config.RegenMonstersTime)
+            {
+                RegenMonstersTick = HUtil32.GetTickCount();
+                if (CurrMonGenIdx < MonGenList.Count)
+                {
+                    monGen = MonGenList[CurrMonGenIdx];
+                }
+                else if (MonGenList.Count > 0)
+                {
+                    monGen = MonGenList[0];
+                }
+                if (CurrMonGenIdx < MonGenList.Count - 1)
+                {
+                    CurrMonGenIdx++;
+                }
+                else
+                {
+                    CurrMonGenIdx = 0;
+                }
+                if (monGen != null && !string.IsNullOrEmpty(monGen.sMonName) && !M2Share.Config.boVentureServer)
+                {
+                    var nTemp = HUtil32.GetTickCount() - monGen.dwStartTick;
+                    if (monGen.dwStartTick == 0 || nTemp > GetMonstersZenTime(monGen.ZenTime))
+                    {
+                        var nGenCount = monGen.nActiveCount; //取已刷出来的怪数量
+                        var boRegened = true;
+                        var nGenModCount = monGen.nCount / M2Share.Config.MonGenRate * 10;
+                        var map = M2Share.MapMgr.FindMap(monGen.sMapName);
+                        if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
+                            boCanCreate = false;
+                        else
+                            boCanCreate = true;
+                        if (nGenModCount > nGenCount && boCanCreate)// 增加 控制刷怪数量比例
+                        {
+                            boRegened = RegenMonsters(monGen, nGenModCount - nGenCount);
+                        }
+                        if (boRegened)
+                        {
+                            monGen.dwStartTick = HUtil32.GetTickCount();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 怪物处理
+        /// 刷新、行动、攻击等动作
+        /// </summary>
+        private void ProcessMonstersLoop(MonsterThread thread)
+        {
             var dwRunTick = HUtil32.GetTickCount();
             try
             {
                 var boProcessLimit = false;
                 var dwCurrentTick = HUtil32.GetTickCount();
-                MonGenInfo monGen = null;
-                // 刷新怪物开始
-                if ((HUtil32.GetTickCount() - RegenMonstersTick) > M2Share.Config.RegenMonstersTime)
-                {
-                    RegenMonstersTick = HUtil32.GetTickCount();
-                    if (CurrMonGenIdx < MonGenList.Count)
-                    {
-                        monGen = MonGenList[CurrMonGenIdx];
-                    }
-                    else if (MonGenList.Count > 0)
-                    {
-                        monGen = MonGenList[0];
-                    }
-                    if (CurrMonGenIdx < MonGenList.Count - 1)
-                    {
-                        CurrMonGenIdx++;
-                    }
-                    else
-                    {
-                        CurrMonGenIdx = 0;
-                    }
-                    if (monGen != null && !string.IsNullOrEmpty(monGen.sMonName) && !M2Share.Config.boVentureServer)
-                    {
-                        var nTemp = HUtil32.GetTickCount() - monGen.dwStartTick;
-                        if (monGen.dwStartTick == 0 || nTemp > GetMonstersZenTime(monGen.ZenTime))
-                        {
-                            var nGenCount = monGen.nActiveCount; //取已刷出来的怪数量
-                            var boRegened = true;
-                            var nGenModCount = monGen.nCount / M2Share.Config.MonGenRate * 10;
-                            var map = M2Share.MapMgr.FindMap(monGen.sMapName);
-                            if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
-                                boCanCreate = false;
-                            else
-                                boCanCreate = true;
-                            if (nGenModCount > nGenCount && boCanCreate)// 增加 控制刷怪数量比例
-                            {
-                                boRegened = RegenMonsters(monGen, nGenModCount - nGenCount);
-                            }
-                            if (boRegened)
-                            {
-                                monGen.dwStartTick = HUtil32.GetTickCount();
-                            }
-                        }
-                    }
-                }
-                // 刷新怪物结束
-
-
                 var dwMonProcTick = HUtil32.GetTickCount();
-
-                //todo 怪物多了会导致怪物行动缓慢，需要优化
-
+                MonGenInfo monGen = null;
                 MonsterProcessCount = 0;
                 var i = 0;
                 for (i = MonGenListPosition; i < MonGenList.Count; i++)
@@ -1047,7 +1122,7 @@ namespace GameSvr.World
                     {
                         if (nProcessPosition >= monGen.CertList.Count)
                         {
-                            break;
+                            break;  
                         }
                         AnimalObject monster = (AnimalObject)monGen.CertList[nProcessPosition];
                         if (monster != null)

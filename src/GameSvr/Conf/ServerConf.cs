@@ -2235,6 +2235,15 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.ProcessMonsterInterval = nLoadInteger;
             }
+            nLoadInteger = ReadInteger("Setup", "ProcessMonsterMultiThreadLimit", -1);
+            if (nLoadInteger < 0)
+            {
+                WriteInteger("Setup", "ProcessMonsterMultiThreadLimit", M2Share.Config.ProcessMonsterMultiThreadLimit);
+            }
+            else
+            {
+                M2Share.Config.ProcessMonsterMultiThreadLimit = nLoadInteger;
+            }
             if (ReadInteger("Setup", "StartCastleWarDays", -1) < 0)
             {
                 WriteInteger("Setup", "StartCastleWarDays", M2Share.Config.StartCastleWarDays);

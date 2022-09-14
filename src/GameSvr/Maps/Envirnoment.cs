@@ -3,6 +3,7 @@ using GameSvr.Actor;
 using GameSvr.Event;
 using GameSvr.Event.Events;
 using GameSvr.Npc;
+using GameSvr.World;
 using System.Buffers;
 using SystemModule;
 using SystemModule.Common;
@@ -20,7 +21,8 @@ namespace GameSvr.Maps
         /// 玩家数量
         /// </summary>
         public int HumCount => _humCount;
-        
+
+        public int ThreadId;
         public short Width;
         public short Height;
         public string MapFileName = string.Empty;
@@ -50,6 +52,12 @@ namespace GameSvr.Maps
         private int _humCount;
         public readonly IList<PointInfo> PointList;
 
+        //multithread vars
+        readonly object _locker = new object();
+        public MonsterThread[] MobThreads;
+        private readonly Thread[] MobThreading;
+        public int SpawnMultiplier = 1;//set this to 2 if you want double spawns (warning this can easily lag your server far beyond what you imagine)
+
         public Envirnoment()
         {
             ServerIndex = 0;
@@ -62,6 +70,9 @@ namespace GameSvr.Maps
             WhisperTick = 0;
             _cellPool = MemoryPool<MapCellInfo>.Shared;
             PointList = new List<PointInfo>();
+            ThreadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+            MobThreads = new MonsterThread[M2Share.Config.ProcessMonsterMultiThreadLimit];
+            MobThreading = new Thread[M2Share.Config.ProcessMonsterMultiThreadLimit];
         }
 
         ~Envirnoment()
@@ -87,7 +98,7 @@ namespace GameSvr.Maps
         /// 添加对象到地图
         /// </summary>
         /// <returns></returns>
-        public object AddToMap(int nX, int nY, CellType btType, EntityId pRemoveObject)
+        public object AddToMap(int nX, int nY, CellType cellType, EntityId pRemoveObject)
         {
             object result = null;
             const string sExceptionMsg = "[Exception] TEnvirnoment::AddToMap";
@@ -104,7 +115,7 @@ namespace GameSvr.Maps
                     }
                     else
                     {
-                        if (btType == CellType.ItemObject)
+                        if (cellType == CellType.ItemObject)
                         {
                             if (((MapItem)pRemoveObject).Name == Grobal2.sSTRING_GOLDNAME)
                             {
@@ -142,13 +153,18 @@ namespace GameSvr.Maps
                     {
                         var osObject = new CellObject
                         {
-                            CellType = btType,
+                            CellType = cellType,
                             CellObjId = pRemoveObject.ActorId,
                             AddTime = HUtil32.GetTickCount()
                         };
                         cellInfo.Add(osObject, pRemoveObject);
+                        /*if (cellType == CellType.MovingObject)
+                        {
+                            SpawnThread = ThreadId;
+                            NodeThreaded = MobThreads[ThreadId].ObjectsList.AddLast(pRemoveObject);
+                        }*/
                         result = pRemoveObject;
-                        if (btType == CellType.MovingObject && !((BaseObject)pRemoveObject).AddToMaped)
+                        if (cellType == CellType.MovingObject && !((BaseObject)pRemoveObject).AddToMaped)
                         {
                             ((BaseObject)pRemoveObject).DelFormMaped = false;
                             ((BaseObject)pRemoveObject).AddToMaped = true;
