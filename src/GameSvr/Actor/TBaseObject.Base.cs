@@ -103,7 +103,7 @@ namespace GameSvr.Actor
                 {
                     if (CanReAlive && MonGen != null)
                     {
-                        var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.dwZenTime) - 20 * 1000);
+                        var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
                         if (dwMakeGhostTime > M2Share.Config.MakeGhostTime)
                         {
                             dwMakeGhostTime = M2Share.Config.MakeGhostTime;

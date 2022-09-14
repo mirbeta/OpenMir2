@@ -34,7 +34,7 @@ namespace GameSvr.World
         private int ProcessLoadPlayTick;
         private int CurrMonGenIdx;
         /// <summary>
-        /// 当前怪物列表刷新位置索引
+        /// 当前怪物列表处理位置索引
         /// </summary>
         private int MonGenCertListPosition;
         private int MonGenListPosition;
@@ -996,7 +996,7 @@ namespace GameSvr.World
                     if (monGen != null && !string.IsNullOrEmpty(monGen.sMonName) && !M2Share.Config.boVentureServer)
                     {
                         var nTemp = HUtil32.GetTickCount() - monGen.dwStartTick;
-                        if (monGen.dwStartTick == 0 || nTemp > GetMonstersZenTime(monGen.dwZenTime))
+                        if (monGen.dwStartTick == 0 || nTemp > GetMonstersZenTime(monGen.ZenTime))
                         {
                             var nGenCount = monGen.nActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
@@ -1018,6 +1018,8 @@ namespace GameSvr.World
                     }
                 }
                 // 刷新怪物结束
+
+
                 var dwMonProcTick = HUtil32.GetTickCount();
 
                 //todo 怪物多了会导致怪物行动缓慢，需要优化
@@ -1027,11 +1029,19 @@ namespace GameSvr.World
                 for (i = MonGenListPosition; i < MonGenList.Count; i++)
                 {
                     monGen = MonGenList[i];
+
+                    var envir = M2Share.MapMgr.FindMap(monGen.sMapName);
+                    if (envir == null || envir.HumCount <= 0) //地图没有玩家，怪物进入静默状态
+                    {
+                        continue;
+                    }
+
                     int nProcessPosition;
                     if (MonGenCertListPosition < monGen.CertList.Count)
                         nProcessPosition = MonGenCertListPosition;
                     else
                         nProcessPosition = 0;
+
                     MonGenCertListPosition = 0;
                     while (true)
                     {
@@ -1049,7 +1059,7 @@ namespace GameSvr.World
                                     monster.RunTick = dwRunTick;
                                     if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
                                     {
-                                        if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.dwZenTime))
+                                        if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
                                         {
                                             if (monster.ReAliveEx(monster.MonGen))
                                             {

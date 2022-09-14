@@ -843,7 +843,8 @@ namespace GameSvr.Conf.Model
         public int nLevelValueOfWarrHP;
         public double nLevelValueOfWarrHPRate;
         /// <summary>
-        /// 怪物刷新间隔
+        /// 怪物处理间隔
+        /// 空闲时处理怪物检测次数，数字越大，怪物行动越迟钝,但节约服务器资源,默认值=2。
         /// </summary>
         public int ProcessMonsterInterval;
         public bool boCheckFail;
