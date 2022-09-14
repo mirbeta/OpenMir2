@@ -11,7 +11,7 @@ namespace SystemModule.Common
     public abstract class IniFile
     {
         private string _fileName;
-        private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>();
+        private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
 
         private bool largeCommentFlag = false;
 
@@ -213,6 +213,10 @@ namespace SystemModule.Common
             if (str != null)
             {
                 str = str.Trim();
+                if (str.StartsWith(";"))
+                {
+                    goto Label_02A6;
+                }
                 if (!string.IsNullOrEmpty(str))
                 {
                     if (str.StartsWith("/*"))
@@ -245,7 +249,7 @@ namespace SystemModule.Common
                                 // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件!");
                                 goto Label_02AE;
                             }
-                            curSec = new Dictionary<string, string>();
+                            curSec = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                             iniCahce.Add(sec, curSec);
                         }
                         else if (!isCurSecComment)
@@ -257,7 +261,7 @@ namespace SystemModule.Common
                             }
                             if (curSec == null)
                             {
-                                curSec = new Dictionary<string, string>();
+                                curSec = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                                 iniCahce.Add("", curSec);
                             }
                             var substr = SplitKeyVal(str);

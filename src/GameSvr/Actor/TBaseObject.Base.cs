@@ -716,9 +716,9 @@ namespace GameSvr.Actor
                 if ((MonGen != null) && (MonGen.Envir != Envir))
                 {
                     CanReAlive = false;
-                    if (MonGen.nActiveCount > 0)
+                    if (MonGen.ActiveCount > 0)
                     {
-                        MonGen.nActiveCount--;
+                        MonGen.ActiveCount--;
                     }
                     MonGen = null;
                 }
@@ -745,7 +745,7 @@ namespace GameSvr.Actor
                                 M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject, "@PlayKillMob", false);
                             }
                             tExp = ExpHitter.CalcGetExp(Abil.Level, FightExp);
-                            if (!M2Share.Config.boVentureServer)
+                            if (!M2Share.Config.VentureServer)
                             {
                                 if (ExpHitter.IsRobot)
                                 {
@@ -793,7 +793,7 @@ namespace GameSvr.Actor
                             {
                                 ExpHitter.GainSlaveExp(Abil.Level);
                                 tExp = ExpHitter.Master.CalcGetExp(Abil.Level, FightExp);
-                                if (!M2Share.Config.boVentureServer)
+                                if (!M2Share.Config.VentureServer)
                                 {
                                     if (ExpHitter.Master.IsRobot)
                                     {
@@ -816,7 +816,7 @@ namespace GameSvr.Actor
                                 M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@PlayKillMob", false);
                             }
                             tExp = LastHiter.CalcGetExp(Abil.Level, FightExp);
-                            if (!M2Share.Config.boVentureServer)
+                            if (!M2Share.Config.VentureServer)
                             {
                                 if (LastHiter.IsRobot)
                                 {
@@ -844,7 +844,7 @@ namespace GameSvr.Actor
             try
             {
                 var boPK = false;
-                if (!M2Share.Config.boVentureServer && !Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone)
+                if (!M2Share.Config.VentureServer && !Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone)
                 {
                     if (Race == Grobal2.RC_PLAYOBJECT && LastHiter != null && PvpLevel() < 2)
                     {

@@ -75,7 +75,7 @@ namespace GameSvr
             M2Share.EventMgr = new EventManager();
             M2Share.CastleMgr = new CastleManager();
             M2Share.FrontEngine = new TFrontEngine();
-            M2Share.WorldEngine = new WorldEngine();
+            M2Share.WorldEngine = new WorldServer();
             M2Share.RobotMgr = new RobotManage();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<StartPoint>();
@@ -256,7 +256,7 @@ namespace GameSvr
                 _logger.LogInformation("矿物数据初始成功...");
                 M2Share.LocalDb.LoadMerchant();
                 _logger.LogInformation("交易NPC列表加载成功...");
-                if (!M2Share.Config.boVentureServer)
+                if (!M2Share.Config.VentureServer)
                 {
                     M2Share.LocalDb.LoadGuardList();
                     _logger.LogInformation("守卫列表加载成功...");
@@ -273,6 +273,7 @@ namespace GameSvr
                 M2Share.FrontEngine.Start(stoppingToken);
                 _logger.LogInformation("人物数据引擎启动成功...");
                 M2Share.WorldEngine.Initialize();
+                M2Share.WorldEngine.InitializationMonsterThread();
                 _logger.LogInformation("游戏处理引擎初始化成功...");
                 _logger.LogInformation(M2Share.g_sVersion);
                 _logger.LogInformation(M2Share.g_sUpDateTime);

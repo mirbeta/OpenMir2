@@ -39,7 +39,7 @@ namespace GameSvr.GateWay
         public TSessInfo SessInfo;
         public int nSocket;
         public TFrontEngine FrontEngine;
-        public WorldEngine UserEngine;
+        public WorldServer UserEngine;
         public int dwNewUserTick;
     }
 }

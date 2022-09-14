@@ -736,9 +736,9 @@ namespace GameSvr.Magic
                                                 TargeTBaseObject.CanReAlive = false;
                                                 if (TargeTBaseObject.MonGen != null)
                                                 {
-                                                    if (TargeTBaseObject.MonGen.nActiveCount > 0)
+                                                    if (TargeTBaseObject.MonGen.ActiveCount > 0)
                                                     {
-                                                        TargeTBaseObject.MonGen.nActiveCount--;
+                                                        TargeTBaseObject.MonGen.ActiveCount--;
                                                     }
                                                     else
                                                     {

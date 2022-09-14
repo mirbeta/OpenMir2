@@ -441,7 +441,7 @@ namespace GameSvr.Player
         private void LogonTimcCost()
         {
             int n08;
-            if (m_nPayMent == 2 || M2Share.Config.boTestServer)
+            if (m_nPayMent == 2 || M2Share.Config.TestServer)
             {
                 n08 = (HUtil32.GetTickCount() - m_dwLogonTick) / 1000;
             }

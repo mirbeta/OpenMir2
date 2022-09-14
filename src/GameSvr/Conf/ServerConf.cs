@@ -41,11 +41,11 @@ namespace GameSvr.Conf
                 WriteInteger("Server", "ServerNumber", M2Share.Config.nServerNumber);
             M2Share.Config.nServerNumber = ReadInteger("Server", "ServerNumber", M2Share.Config.nServerNumber);
             if (ReadString("Server", "VentureServer", "") == "")
-                WriteString("Server", "VentureServer", HUtil32.BoolToStr(M2Share.Config.boVentureServer));
-            M2Share.Config.boVentureServer = string.Compare(ReadString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
+                WriteString("Server", "VentureServer", HUtil32.BoolToStr(M2Share.Config.VentureServer));
+            M2Share.Config.VentureServer = string.Compare(ReadString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
             if (ReadString("Server", "TestServer", "") == "")
-                WriteString("Server", "TestServer", HUtil32.BoolToStr(M2Share.Config.boTestServer));
-            M2Share.Config.boTestServer = string.Compare(ReadString("Server", "TestServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
+                WriteString("Server", "TestServer", HUtil32.BoolToStr(M2Share.Config.TestServer));
+            M2Share.Config.TestServer = string.Compare(ReadString("Server", "TestServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
             if (ReadInteger("Server", "TestLevel", -1) < 0)
                 WriteInteger("Server", "TestLevel", M2Share.Config.TestLevel);
             M2Share.Config.TestLevel = ReadInteger("Server", "TestLevel", M2Share.Config.TestLevel);
@@ -56,11 +56,11 @@ namespace GameSvr.Conf
                 WriteInteger("Server", "TestServerUserLimit", M2Share.Config.TestUserLimit);
             M2Share.Config.TestUserLimit = ReadInteger("Server", "TestServerUserLimit", M2Share.Config.TestUserLimit);
             if (ReadString("Server", "ServiceMode", "") == "")
-                WriteString("Server", "ServiceMode", HUtil32.BoolToStr(M2Share.Config.boServiceMode));
-            M2Share.Config.boServiceMode = ReadString("Server", "ServiceMode", "FALSE").CompareTo("TRUE") == 0;
+                WriteString("Server", "ServiceMode", HUtil32.BoolToStr(M2Share.Config.ServiceMode));
+            M2Share.Config.ServiceMode = ReadString("Server", "ServiceMode", "FALSE").CompareTo("TRUE") == 0;
             if (ReadString("Server", "NonPKServer", "") == "")
-                WriteString("Server", "NonPKServer", HUtil32.BoolToStr(M2Share.Config.boNonPKServer));
-            M2Share.Config.boNonPKServer = ReadString("Server", "NonPKServer", "FALSE").CompareTo("TRUE") == 0;
+                WriteString("Server", "NonPKServer", HUtil32.BoolToStr(M2Share.Config.PveServer));
+            M2Share.Config.PveServer = ReadString("Server", "NonPKServer", "FALSE").CompareTo("TRUE") == 0;
             if (ReadString("Server", "ViewHackMessage", "") == "")
                 WriteString("Server", "ViewHackMessage", HUtil32.BoolToStr(M2Share.Config.ViewHackMessage));
             M2Share.Config.ViewHackMessage = ReadString("Server", "ViewHackMessage", "FALSE").CompareTo("TRUE") == 0;

@@ -26,10 +26,22 @@ namespace GameSvr.Conf.Model
         public string sBankAccount8;
         public string sBankAccount9;
         public int nServerNumber;
-        public bool boVentureServer;
-        public bool boTestServer;
-        public bool boServiceMode;
-        public bool boNonPKServer;
+        /// <summary>
+        /// 不刷怪模式
+        /// </summary>
+        public bool VentureServer;
+        /// <summary>
+        /// 测试模式
+        /// </summary>
+        public bool TestServer;
+        /// <summary>
+        /// 免费模式
+        /// </summary>
+        public bool ServiceMode;
+        /// <summary>
+        /// PEV模式
+        /// </summary>
+        public bool PveServer;
         public int TestLevel;
         public int TestGold;
         public int TestUserLimit;
@@ -215,8 +227,20 @@ namespace GameSvr.Conf.Model
         /// 武器升级魔法成功几率
         /// </summary>
         public int UpgradeWeaponMCThreePointRate;
+        /// <summary>
+        /// 怪物处理间隔
+        /// 处理怪物间隔时间，此设置数字越大，怪物行动越慢
+        /// </summary>
         public int ProcessMonstersTime;
+        /// <summary>
+        /// 怪物刷新间隔
+        /// 刷怪间隔控制，数字越大，刷怪速度越慢
+        /// </summary>
         public int RegenMonstersTime;
+        /// <summary>
+        /// 怪物刷新倍率
+        /// 刷怪倍率，倍率除以10为实际倍率(设置为10则为1:1)，此倍率以刷怪文件设置为准，数字越大，刷怪数量越小
+        /// </summary>
         public int MonGenRate;
         public int ProcessMonRandRate;
         public int ProcessMonLimitCount;
@@ -844,7 +868,7 @@ namespace GameSvr.Conf.Model
         public double nLevelValueOfWarrHPRate;
         /// <summary>
         /// 怪物处理线程数量
-        /// 建议高于5w以上怪物启用2个线程，虽然可以提高处理速度，但不是越多越好,默认值=1。
+        /// 建议高于5w以上怪物启用2个线程，虽然可以提高处理速度，但不是越多越好,默认值=2。
         /// </summary>
         public int ProcessMonsterMultiThreadLimit;
         /// <summary>
@@ -982,10 +1006,10 @@ namespace GameSvr.Conf.Model
             sBankAccount8 = "银行信息";
             sBankAccount9 = "银行信息";
             nServerNumber = 0;
-            boVentureServer = false;
-            boTestServer = true;
-            boServiceMode = false;
-            boNonPKServer = false;
+            VentureServer = false;
+            TestServer = true;
+            ServiceMode = false;
+            PveServer = false;
             TestLevel = 1;
             TestGold = 0;
             TestUserLimit = 1000;
@@ -1631,7 +1655,7 @@ namespace GameSvr.Conf.Model
             nLevelValueOfWarrHP = 4;
             nLevelValueOfWarrHPRate = 4.5;
             ProcessMonsterInterval = 2;
-            ProcessMonsterMultiThreadLimit = 1;
+            ProcessMonsterMultiThreadLimit = 2;
             nDBSocketSendLen = 0;
             PermissionSystem = false;
             nRenewPercent = 60;

@@ -52,7 +52,7 @@ namespace GameSvr.Command.Commands
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
-                    if (StdItem.Price >= 15000 && !M2Share.Config.boTestServer && PlayObject.Permission < 5)
+                    if (StdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5)
                     {
                         UserItem = null;
                     }
