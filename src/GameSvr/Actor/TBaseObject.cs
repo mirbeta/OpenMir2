@@ -620,7 +620,7 @@ namespace GameSvr.Actor
         /// </summary>
         public int SearchTick;
         /// <summary>
-        /// 运行间隔
+        /// 上次运行时间
         /// </summary>
         public int RunTick;
         /// <summary>
@@ -700,7 +700,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 当前处理数量
         /// </summary>
-        public short ProcessRunCount;
+        public int ProcessRunCount;
         /// <summary>
         /// 可见玩家列表
         /// </summary>
@@ -3803,14 +3803,11 @@ namespace GameSvr.Actor
                                     {
                                         if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                         {
-                                            if ((!gateObj.DEnvir.Flag.boNEEDHOLE) ||
-                                                (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY,
-                                                    Grobal2.ET_DIGOUTZOMBI) != null))
+                                            if ((!gateObj.DEnvir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
                                             {
                                                 if (M2Share.ServerIndex == gateObj.DEnvir.ServerIndex)
                                                 {
-                                                    if (!EnterAnotherMap(gateObj.DEnvir, gateObj.nDMapX,
-                                                            gateObj.nDMapY))
+                                                    if (!EnterAnotherMap(gateObj.DEnvir, gateObj.nDMapX, gateObj.nDMapY))
                                                     {
                                                         result = false;
                                                     }
@@ -3836,26 +3833,24 @@ namespace GameSvr.Actor
                                         result = false;
                                     }
                                 }
-
                                 break;
                             case CellType.EventObject:
-                            {
-                                MirEvent mapEvent = null;
-                                var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
-                                if (owinEvent.OwnBaseObject != null)
                                 {
-                                    mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
-                                }
-                                if (mapEvent != null)
-                                {
-                                    if (mapEvent.OwnBaseObject.IsProperTarget(this))
+                                    MirEvent mapEvent = null;
+                                    var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                    if (owinEvent.OwnBaseObject != null)
                                     {
-                                        SendMsg(mapEvent.OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage,
-                                            0, 0, "");
+                                        mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                     }
+                                    if (mapEvent != null)
+                                    {
+                                        if (mapEvent.OwnBaseObject.IsProperTarget(this))
+                                        {
+                                            SendMsg(mapEvent.OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0, "");
+                                        }
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                             case CellType.MapEvent:
                                 break;
                             case CellType.Door:
@@ -3884,7 +3879,7 @@ namespace GameSvr.Actor
         private bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
         {
             var result = false;
-            const string sExceptionMsg7 = "[Exception] TBaseObject::EnterAnotherMap";
+            const string sExceptionMsg = "[Exception] TBaseObject::EnterAnotherMap";
             try
             {
                 if (Abil.Level < envir.RequestLevel)
@@ -3971,7 +3966,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg7);
+                M2Share.Log.Error(sExceptionMsg);
             }
 
             return result;
