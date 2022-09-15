@@ -104,6 +104,11 @@ namespace GameSvr.Actor
             return result;
         }
         
+        public virtual void DeliveryViewRange()
+        {
+            
+        }
+        
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
@@ -122,9 +127,6 @@ namespace GameSvr.Actor
             var nEndX = (short)(CurrX + ViewRange);
             var nStartY =  (short)(CurrY - ViewRange);
             var nEndY =  (short)(CurrY + ViewRange);
-
-            //当前坐标X，Y + 视野范围大小 看看有没有玩家
-
             try
             {
                 for (var n18 = nStartX; n18 <= nEndX; n18++)
