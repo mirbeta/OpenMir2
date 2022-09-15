@@ -94,8 +94,10 @@ namespace GameSvr.World
         {
             _logger.Info($"Monster Run thread count:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
 
-            MobThreads = new MonsterThread[M2Share.Config.ProcessMonsterMultiThreadLimit];
-            MobThreading = new Thread[M2Share.Config.ProcessMonsterMultiThreadLimit];
+            var monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit + M2Share.Config.ProcessMonsterRetainThreadLimit; //处理线程+预留线程
+
+            MobThreads = new MonsterThread[monsterThreads];
+            MobThreading = new Thread[monsterThreads];
             
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
@@ -103,9 +105,19 @@ namespace GameSvr.World
                 MobThreads[i].Id = i;
             }
 
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = M2Share.Config.ProcessMonsterMultiThreadLimit; i < M2Share.Config.ProcessMonsterRetainThreadLimit; i++)
+            {
+                MobThreads[i] = new MonsterThread();
+                MobThreads[i].Id = i;
+            }
+
+            for (var i = 0; i < monsterThreads; i++)
             {
                 var mobThread = MobThreads[i];
+                if (mobThread == null)
+                {
+                    continue;
+                }
                 MobThreading[i] = new Thread(() => ProcessMonsters(mobThread)) { IsBackground = true };
                 MobThreading[i].Start();
             }
@@ -345,8 +357,16 @@ namespace GameSvr.World
                     if (MonGenList[threadId].Count > n18)
                     {
                         var monGen = MonGenList[threadId][n18];
-                        monGen.CertList.Add(baseObject);
-                        monGen.CertCount++;
+                        if (monGen.TryAdd(baseObject))
+                        {
+                            monGen.CertCount++;
+                        }
+                        else
+                        {
+                            threadId = M2Share.Config.ProcessMonsterMultiThreadLimit + 1;
+                            MonGenList.Add(threadId, new List<MonGenInfo> { monGen.Clone() });
+                            //todo 启动线程
+                        }
                     }
                     baseObject.Envir.AddObject(baseObject);
                     baseObject.AddToMaped = true;

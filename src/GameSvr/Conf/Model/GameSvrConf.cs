@@ -875,6 +875,10 @@ namespace GameSvr.Conf.Model
         /// </summary>
         public int ProcessMonsterMultiThreadLimit;
         /// <summary>
+        /// 怪物线程预留线程数
+        /// </summary>
+        public int ProcessMonsterRetainThreadLimit;
+        /// <summary>
         /// 当前怪物处理线程最大上限值.
         /// 默认值=40000
         /// 40000值为比较合理和保守的设定，单线程下40000值能够稳定运行
@@ -1665,6 +1669,7 @@ namespace GameSvr.Conf.Model
             nLevelValueOfWarrHPRate = 4.5;
             ProcessMonsterInterval = 2;
             ProcessMonsterMultiThreadLimit = 2;
+            ProcessMonsterRetainThreadLimit = 2;
             nDBSocketSendLen = 0;
             PermissionSystem = false;
             nRenewPercent = 60;

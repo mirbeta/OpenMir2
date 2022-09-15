@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Concurrent;
 using GameSvr.Actor;
 
 namespace GameSvr.Monster
@@ -35,5 +33,35 @@ namespace GameSvr.Monster
         /// 怪物所在线程
         /// </summary>
         public int ThreadId;
+
+        /// <summary>
+        /// 添加对象到列表
+        /// 返回true则当前线程怪物列表未满
+        /// 返回false则表示当前线程怪物列表已经满了
+        /// </summary>
+        /// <param name="baseObject"></param>
+        /// <returns></returns>
+        public bool TryAdd(BaseObject baseObject)
+        {
+            if (CertList.Count <= MonGenConst.ThreadMonLimit)
+            {
+                return false;
+            }
+            CertList.Add(baseObject);
+            return true;
+
+        }
+
+        public MonGenInfo Clone()
+        {
+            return (MonGenInfo)this.MemberwiseClone();
+        }
+
+    }
+
+    public class MonGenConst
+    {
+        public const int ThreadMonLimit = 40000;
+    
     }
 }
