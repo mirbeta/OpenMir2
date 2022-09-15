@@ -8,7 +8,7 @@ using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.DataStores
 {
     public class TDefineInfo
     {
@@ -27,7 +27,6 @@ namespace GameSvr
     {
         public bool LoadAdminList()
         {
-            var sLineText = string.Empty;
             var sIPaddr = string.Empty;
             var sCharName = string.Empty;
             var sData = string.Empty;
@@ -41,7 +40,7 @@ namespace GameSvr
             LoadList.LoadFromFile(sfilename);
             for (var i = 0; i < LoadList.Count; i++)
             {
-                sLineText = LoadList[i];
+                var sLineText = LoadList[i];
                 var nLv = -1;
                 if (sLineText != "" && sLineText[0] != ';')
                 {
@@ -115,7 +114,6 @@ namespace GameSvr
         {
             try
             {
-                var sLine = string.Empty;
                 var monName = string.Empty;
                 var mapName = string.Empty;
                 var cX = string.Empty;
@@ -128,7 +126,7 @@ namespace GameSvr
                     tGuardList.LoadFromFile(sFileName);
                     for (var i = 0; i < tGuardList.Count; i++)
                     {
-                        sLine = tGuardList[i];
+                        var sLine = tGuardList[i];
                         if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';')
                         {
                             sLine = HUtil32.GetValidStrCap(sLine, ref monName, new[] { " " });
@@ -163,7 +161,6 @@ namespace GameSvr
         /// </summary>
         public void LoadMakeItem()
         {
-            int nItemCount;
             var sSubName = string.Empty;
             var sItemName = string.Empty;
             IList<MakeItem> List28 = null;
@@ -193,7 +190,7 @@ namespace GameSvr
                         if (List28 != null)
                         {
                             sLine = HUtil32.GetValidStr3(sLine, ref sSubName, new[] { " ", "\t" });
-                            nItemCount = HUtil32.Str_ToInt(sLine.Trim(), 1);
+                            var nItemCount = HUtil32.Str_ToInt(sLine.Trim(), 1);
                             List28.Add(new MakeItem() { ItemName = sSubName, ItemCount = nItemCount });
                         }
                     }
@@ -507,6 +504,10 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 读取怪物刷新配置信息
+        /// </summary>
+        /// <returns></returns>
         public int LoadMonGen()
         {
             var sLineText = string.Empty;
@@ -631,6 +632,10 @@ namespace GameSvr
                     }
                     ItemList.Clear();
                 }
+                if (ItemList == null)
+                {
+                    ItemList = new List<TMonItem>();
+                }
                 using var LoadList = new StringList();
                 LoadList.LoadFromFile(monFileName);
                 for (var i = 0; i < LoadList.Count; i++)
@@ -643,7 +648,7 @@ namespace GameSvr
                         s28 = HUtil32.GetValidStr3(s28, ref sData, new[] { " ", "/", "\t" });
                         var n1C = HUtil32.Str_ToInt(sData, -1);
                         s28 = HUtil32.GetValidStr3(s28, ref sData, new[] { " ", "\t" });
-                        if (sData != "")
+                        if (!string.IsNullOrEmpty(sData))
                         {
                             if (sData[0] == '\"')
                             {
@@ -655,10 +660,6 @@ namespace GameSvr
                         var itemCount = HUtil32.Str_ToInt(sData, 1);
                         if (n18 > 0 && n1C > 0 && !string.IsNullOrEmpty(itemName))
                         {
-                            if (ItemList == null)
-                            {
-                                ItemList = new List<TMonItem>();
-                            }
                             var MonItem = new TMonItem
                             {
                                 SelPoint = n18 - 1,
@@ -842,6 +843,9 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 读取安全区配置
+        /// </summary>
         public void LoadStartPoint()
         {
             var mapName = string.Empty;
@@ -891,13 +895,15 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 读取解包物品配置
+        /// </summary>
+        /// <returns></returns>
         public int LoadUnbindList()
         {
             var result = 0;
-            var tStr = string.Empty;
             var sData = string.Empty;
             var sItemName = string.Empty;
-            int n10;
             var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "UnbindList.txt");
             if (File.Exists(sFileName))
             {
@@ -905,21 +911,21 @@ namespace GameSvr
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    tStr = LoadList[i];
-                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
+                    var readLine = LoadList[i];
+                    if (!string.IsNullOrEmpty(readLine) && readLine[0] != ';')
                     {
-                        tStr = HUtil32.GetValidStr3(tStr, ref sData, new[] { " ", "\t" });
-                        tStr = HUtil32.GetValidStrCap(tStr, ref sItemName, new[] { " ", "\t" });
+                        readLine = HUtil32.GetValidStr3(readLine, ref sData, new[] { " ", "\t" });
+                        readLine = HUtil32.GetValidStrCap(readLine, ref sItemName, new[] { " ", "\t" });
                         if (!string.IsNullOrEmpty(sItemName) && sItemName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                         }
-                        n10 = HUtil32.Str_ToInt(sData, 0);
+                        var n10 = HUtil32.Str_ToInt(sData, 0);
                         if (n10 > 0)
                         {
                             if (M2Share.g_UnbindList.ContainsKey(n10))
                             {
-                                M2Share.Log.Warn(string.Format("重复解包物品[{0}]...", sItemName));
+                                M2Share.Log.Warn($"重复解包物品[{sItemName}]...");
                                 continue;
                             }
                             M2Share.g_UnbindList.Add(n10, sItemName);
