@@ -38,15 +38,15 @@ namespace GameSvr.World
             {
                 for (int j = 0; j < M2Share.WorldEngine.MonGenList.Count; j++)
                 {
-                    for (int k = 0; k < M2Share.WorldEngine.MonGenList[i].Count; k++)
+                    for (int k = 0; k < M2Share.WorldEngine.MonGenList[j].Count; k++)
                     {
-                        if (string.Compare(M2Share.WorldEngine.MonGenList[i][k].MonName, MonsterList[i].sName, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(M2Share.WorldEngine.MonGenList[j][k].MonName, MonsterList[i].sName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.WorldEngine.MonThreadMap.ContainsKey(MonsterList[i].sName))
                             {
                                 break;
                             }
-                            M2Share.WorldEngine.MonThreadMap.Add(MonsterList[i].sName, M2Share.WorldEngine.MonGenList[i][k].ThreadId);
+                            M2Share.WorldEngine.MonThreadMap.Add(MonsterList[i].sName, M2Share.WorldEngine.MonGenList[j][k].ThreadId);
                         }
                     }
                 }
@@ -96,8 +96,6 @@ namespace GameSvr.World
 
             MobThreads = new MonsterThread[M2Share.Config.ProcessMonsterMultiThreadLimit];
             MobThreading = new Thread[M2Share.Config.ProcessMonsterMultiThreadLimit];
-
-            //todo 在这里把怪物分配
             
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
@@ -156,7 +154,7 @@ namespace GameSvr.World
                 return;
             }
 
-            _logger.Info($"Monster thread:{monsterThread.Id} monsters:{mongenList.Count} work.");
+            _logger.Info($"Monster Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
 
             while (true)
             {
