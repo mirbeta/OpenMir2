@@ -256,11 +256,6 @@ namespace GameSvr
                 _logger.LogInformation("矿物数据初始成功...");
                 M2Share.LocalDb.LoadMerchant();
                 _logger.LogInformation("交易NPC列表加载成功...");
-                if (!M2Share.Config.VentureServer)
-                {
-                    M2Share.LocalDb.LoadGuardList();
-                    _logger.LogInformation("守卫列表加载成功...");
-                }
                 M2Share.LocalDb.LoadNpcs();
                 _logger.LogInformation("管理NPC列表加载成功...");
                 M2Share.LocalDb.LoadMakeItem();
@@ -274,6 +269,11 @@ namespace GameSvr
                 _logger.LogInformation("人物数据引擎启动成功...");
                 M2Share.WorldEngine.Initialize();
                 M2Share.WorldEngine.InitializationMonsterThread();
+                if (!M2Share.Config.VentureServer)
+                {
+                    M2Share.LocalDb.LoadGuardList();
+                    _logger.LogInformation("守卫列表加载成功...");
+                }
                 _logger.LogInformation("游戏处理引擎初始化成功...");
                 _logger.LogInformation(M2Share.g_sVersion);
                 _logger.LogInformation(M2Share.g_sUpDateTime);
@@ -281,7 +281,7 @@ namespace GameSvr
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Source);
+                _logger.LogError(ex.StackTrace);
             }
         }
 
