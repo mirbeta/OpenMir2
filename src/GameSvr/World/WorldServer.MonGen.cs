@@ -17,24 +17,41 @@ namespace GameSvr.World
         /// Key:线程ID
         /// Value:怪物列表
         /// </summary>
-        //public readonly ConcurrentDictionary<int, MonGenInfo> MonGenList;
         public readonly Dictionary<int, IList<MonGenInfo>> MonGenList;
+        public readonly Dictionary<string, int> MonGenCountInfo;
         /// <summary>
         /// 怪物对应线程
         /// </summary>
         public readonly Dictionary<string, int> MonThreadMap;
-
         /// <summary>
         /// 怪物列表
         /// </summary>
         internal readonly IList<TMonInfo> MonsterList;
 
-        public MonsterThread[] MobThreads;
+        private MonsterThread[] MobThreads;
         private Thread[] MobThreading;
         private readonly object _locker = new object();
 
         private void InitializeMonster()
         {
+            for (int i = 0; i < MonsterList.Count; i++)
+            {
+                for (int j = 0; j < M2Share.WorldEngine.MonGenList.Count; j++)
+                {
+                    for (int k = 0; k < M2Share.WorldEngine.MonGenList[i].Count; k++)
+                    {
+                        if (string.Compare(M2Share.WorldEngine.MonGenList[i][k].MonName, MonsterList[i].sName, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            if (M2Share.WorldEngine.MonThreadMap.ContainsKey(MonsterList[i].sName))
+                            {
+                                break;
+                            }
+                            M2Share.WorldEngine.MonThreadMap.Add(MonsterList[i].sName, M2Share.WorldEngine.MonGenList[i][k].ThreadId);
+                        }
+                    }
+                }
+            }
+            
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 for (var j = 0; j < MonGenList[i].Count; j++)
@@ -80,6 +97,8 @@ namespace GameSvr.World
             MobThreads = new MonsterThread[M2Share.Config.ProcessMonsterMultiThreadLimit];
             MobThreading = new Thread[M2Share.Config.ProcessMonsterMultiThreadLimit];
 
+            //todo 在这里把怪物分配
+            
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 MobThreads[i] = new MonsterThread();
@@ -334,10 +353,13 @@ namespace GameSvr.World
                     baseObject.Envir.AddObject(baseObject);
                     baseObject.AddToMaped = true;
                 }
+                else
+                {
+                    return null;
+                }
             }
             return baseObject;
         }
-
 
         /// <summary>
         /// 计算怪物掉落物品
@@ -395,7 +417,6 @@ namespace GameSvr.World
                 }
             }
         }
-
 
         /// <summary>
         /// 创建对象

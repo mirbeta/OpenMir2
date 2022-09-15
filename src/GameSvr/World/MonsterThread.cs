@@ -1,6 +1,4 @@
-﻿using GameSvr.Actor;
-
-namespace GameSvr.World
+﻿namespace GameSvr.World
 {
     public class MonsterThread
     {
@@ -9,7 +7,6 @@ namespace GameSvr.World
         public long StartTime = 0;
         public long EndTime = 0;
         public bool Stop = false;
-        public IList<BaseObject> MonsterList;
         /// <summary>
         /// 当前怪物列表处理位置索引
         /// </summary>
@@ -30,7 +27,7 @@ namespace GameSvr.World
 
         public MonsterThread()
         {
-            MonsterList = new List<BaseObject>();
+         
         }
     }
 }

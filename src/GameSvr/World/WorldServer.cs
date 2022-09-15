@@ -101,6 +101,7 @@ namespace GameSvr.World
             StdItemList = new List<StdItem>();
             MonsterList = new List<TMonInfo>();
             MonGenList = new Dictionary<int, IList<MonGenInfo>>();
+            MonGenCountInfo = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MonThreadMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MagicList = new List<MagicInfo>();
             AdminList = new List<TAdminInfo>();
@@ -205,10 +206,9 @@ namespace GameSvr.World
 
         private void MerchantInitialize()
         {
-            Merchant merchant;
             for (var i = MerchantList.Count - 1; i >= 0; i--)
             {
-                merchant = MerchantList[i];
+                var merchant = MerchantList[i];
                 merchant.Envir = M2Share.MapMgr.FindMap(merchant.MapName);
                 if (merchant.Envir != null)
                 {
@@ -216,9 +216,7 @@ namespace GameSvr.World
                     merchant.Initialize();
                     if (merchant.AddtoMapSuccess && !merchant.m_boIsHide)
                     {
-                        _logger.Warn("Merchant Initalize fail..." + merchant.CharName + ' ' +
-                                     merchant.MapName + '(' +
-                                     merchant.CurrX + ':' + merchant.CurrY + ')');
+                        _logger.Warn("Merchant Initalize fail..." + merchant.CharName + ' ' + merchant.MapName + '(' + merchant.CurrX + ':' + merchant.CurrY + ')');
                         MerchantList.RemoveAt(i);
                     }
                     else
@@ -237,10 +235,9 @@ namespace GameSvr.World
 
         private void NpCinitialize()
         {
-            NormNpc normNpc;
             for (var i = QuestNpcList.Count - 1; i >= 0; i--)
             {
-                normNpc = QuestNpcList[i];
+                var normNpc = QuestNpcList[i];
                 normNpc.Envir = M2Share.MapMgr.FindMap(normNpc.MapName);
                 if (normNpc.Envir != null)
                 {

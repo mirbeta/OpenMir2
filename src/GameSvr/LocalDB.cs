@@ -3,7 +3,6 @@ using GameSvr.Monster;
 using GameSvr.Npc;
 using GameSvr.Script;
 using System.Collections;
-using System.Collections.Concurrent;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -564,8 +563,7 @@ namespace GameSvr
                         MonGenInfo.ZenTime = HUtil32.Str_ToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.MissionGenRate = HUtil32.Str_ToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (!string.IsNullOrEmpty(MonGenInfo.MapName) && !string.IsNullOrEmpty(MonGenInfo.MonName) && MonGenInfo.ZenTime != 0 &&
-                            M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, MonGenInfo.MapName) != null)
+                        if (!string.IsNullOrEmpty(MonGenInfo.MapName) && !string.IsNullOrEmpty(MonGenInfo.MonName) && MonGenInfo.ZenTime != 0 && M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, MonGenInfo.MapName) != null)
                         {
                             MonGenInfo.CertList = new List<BaseObject>();
                             MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.MapName);
@@ -581,9 +579,13 @@ namespace GameSvr
                                 {
                                     M2Share.WorldEngine.MonGenList.Add(threadId, new List<MonGenInfo>() { MonGenInfo });
                                 }
-                                if (!M2Share.WorldEngine.MonThreadMap.ContainsKey(MonGenInfo.MonName))
+
+                                if (M2Share.WorldEngine.MonGenCountInfo.ContainsKey(MonGenInfo.MonName))
                                 {
-                                    M2Share.WorldEngine.MonThreadMap.Add(MonGenInfo.MonName, MonGenInfo.ThreadId);
+                                    M2Share.WorldEngine.MonGenCountInfo[MonGenInfo.MonName] += MonGenInfo.Count;
+                                }
+                                else {
+                                    M2Share.WorldEngine.MonGenCountInfo.Add(MonGenInfo.MonName, MonGenInfo.Count);
                                 }
                             }
                             else

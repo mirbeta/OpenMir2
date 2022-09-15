@@ -77,7 +77,7 @@ namespace GameSvr
         /// </summary>
         HAM_PKATTACK = 6
     }
-    
+
     public struct TItemBind
     {
         public int nMakeIdex;
@@ -86,7 +86,7 @@ namespace GameSvr
     }
 
     public static class M2Share
-    {        
+    {
         /// <summary>
         /// 服务器编号
         /// </summary>
@@ -257,7 +257,7 @@ namespace GameSvr
         public static int[] g_dwOldNeedExps = new int[Grobal2.MaxChangeLevel];
         public static IList<GameCmd> CustomCommands = new List<GameCmd>();
         public static GameCommand GameCommand = new GameCommand();
-      public static string sClientSoftVersionError = "游戏版本错误!!!";
+        public static string sClientSoftVersionError = "游戏版本错误!!!";
         public static string sDownLoadNewClientSoft = "请到网站上下载最新版本游戏客户端软件。";
         public static string sForceDisConnect = "连接被强行中断!!!";
         public static string sClientSoftVersionTooOld = "您现在使用的客户端软件版本太老了，大量的游戏效果新将无法使用。";
@@ -492,7 +492,7 @@ namespace GameSvr
         public static string g_sYouKilledByMsg = "你被{0}杀害了!!!";
         public static string g_sYouprotectedByLawOfDefense = "[你受到正当规则保护。]";
         public static string g_sYourUseItemIsNul = "你的{0}处没有放上装备!!!";
-        
+
         public const string g_sVersion = "引擎版本: 1.00 Build 20161001";
         public const string g_sUpDateTime = "更新日期: 2016/10/01";
         private const string sSTATUS_FAIL = "+FL/{0}";
@@ -504,7 +504,7 @@ namespace GameSvr
         public const ushort DEFHIT = 5;
         public const ushort DEFSPEED = 15;
 
-        
+
         public const string U_DRESSNAME = "衣服";
         public const string U_WEAPONNAME = "武器";
         public const string U_RIGHTHANDNAME = "照明物";
