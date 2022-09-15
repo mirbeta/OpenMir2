@@ -1,7 +1,12 @@
-﻿namespace GameSvr.World
+﻿using SystemModule;
+
+namespace GameSvr.World
 {
     public class MonsterThread
     {
+        /// <summary>
+        /// 线程ID
+        /// </summary>
         public int Id = 0;
         public long LastRunTime = 0;
         public long StartTime = 0;
@@ -24,10 +29,14 @@
         /// 当前怪物索引ID
         /// </summary>
         public int CurrMonGenIdx;
+        /// <summary>
+        /// 怪物刷新间隔
+        /// </summary>
+        public int RegenMonstersTick;
 
         public MonsterThread()
         {
-         
+            RegenMonstersTick = HUtil32.GetTickCount();
         }
     }
 }

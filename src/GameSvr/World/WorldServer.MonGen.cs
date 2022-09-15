@@ -171,9 +171,9 @@ namespace GameSvr.World
             while (true)
             {
                 MonGenInfo monGen = null;
-                if ((HUtil32.GetTickCount() - RegenMonstersTick) > M2Share.Config.RegenMonstersTime)
+                if ((HUtil32.GetTickCount() - monsterThread.RegenMonstersTick) > M2Share.Config.RegenMonstersTime)
                 {
-                    RegenMonstersTick = HUtil32.GetTickCount();
+                    monsterThread.RegenMonstersTick = HUtil32.GetTickCount();
                     if (monsterThread.CurrMonGenIdx < mongenList.Count)
                     {
                         monGen = mongenList[monsterThread.CurrMonGenIdx];

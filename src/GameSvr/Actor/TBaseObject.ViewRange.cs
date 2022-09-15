@@ -103,7 +103,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
+        
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";

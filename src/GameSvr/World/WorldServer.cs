@@ -28,7 +28,6 @@ namespace GameSvr.World
         private int ProcessMissionsTime;
         private int ProcessNpcTimeMax;
         private int ProcessNpcTimeMin;
-        private int RegenMonstersTick;
         private int SendOnlineHumTime;
         private int ShowOnlineTick;
         private int ProcessLoadPlayTick;
@@ -91,7 +90,6 @@ namespace GameSvr.World
             SendOnlineHumTime = HUtil32.GetTickCount();
             ProcessMapDoorTick = HUtil32.GetTickCount();
             ProcessMissionsTime = HUtil32.GetTickCount();
-            RegenMonstersTick = HUtil32.GetTickCount();
             ProcessLoadPlayTick = HUtil32.GetTickCount();
             ProcHumIdx = 0;
             ProcBotHubIdx = 0;
