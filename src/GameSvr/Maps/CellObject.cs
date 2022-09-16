@@ -30,6 +30,11 @@
         public LinkedListNode<CellObject> Node;
         public LinkedListNode<CellObject> NodeThreaded;
 
+        public bool MoveObject()
+        {
+            return CellType == CellType.Play || CellType == CellType.Monster || CellType == CellType.Merchant;
+        }
+
         public void Add()
         {
             /*Node = Envir.Objects.AddLast(this);

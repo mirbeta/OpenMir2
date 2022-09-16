@@ -1313,7 +1313,7 @@ namespace GameSvr.Player
                                             {
                                                 if (Race < Grobal2.RC_ANIMAL || Master != null || CrazyMode || NastyMode || WantRefMsg || BaseObject.Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (BaseObject.MapCell == CellType.Monster && this.MapCell == CellType.Play && !this.ObMode)
+                                                    if (BaseObject.MapCell == CellType.Monster && this.MapCell == CellType.Play && !this.ObMode && !BaseObject.FixedHideMode)
                                                     {
                                                         BaseObject.UpdateMonsterVisible(this);
                                                     }
