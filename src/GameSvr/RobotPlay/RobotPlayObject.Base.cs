@@ -5,7 +5,7 @@ using GameSvr.Maps;
 using System.Collections;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
+using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.RobotPlay
 {
@@ -16,7 +16,7 @@ namespace GameSvr.RobotPlay
             int nWhere;
             int nPercent;
             int nValue;
-            StdItem StdItem;
+            Equipment StdItem;
             UserItem UserItem;
             bool boRecalcAbilitys;
             bool boFind = false;

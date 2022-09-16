@@ -3,6 +3,7 @@ using GameSvr.Command;
 using GameSvr.Event.Events;
 using GameSvr.Items;
 using GameSvr.Maps;
+using GameSvr.Monster;
 using GameSvr.Player;
 using GameSvr.Script;
 using GameSvr.Services;
@@ -11,7 +12,6 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Npc
 {
@@ -61,8 +61,8 @@ namespace GameSvr.Npc
             string sSendStr;
             string sUserItemName;
             ClientDealOffInfo sClientDealOffInfo = null;
-            StdItem StdItem;
-            StdItem StdItem80;
+            Equipment StdItem = null;
+            Equipment StdItem80;
             bool bo12;
             try
             {
@@ -174,8 +174,8 @@ namespace GameSvr.Npc
             string sSendStr;
             string sUserItemName;
             ClientDealOffInfo sClientDealOffInfo = null;
-            StdItem StdItem;
-            StdItem StdItem80;
+            Equipment StdItem = null;
+            Equipment StdItem80;
             bool bo12;
             try
             {
@@ -710,12 +710,11 @@ namespace GameSvr.Npc
 
         private void ActionOfClearMapMon(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            BaseObject Mon;
             IList<BaseObject> MonList = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), MonList);
-            for (var i = 0; i < MonList.Count; i++)
+            var monsterCount = M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), MonList);
+            for (var i = 0; i < monsterCount; i++)
             {
-                Mon = MonList[i];
+                BaseObject Mon = MonList[i];
                 if (Mon.Master != null)
                 {
                     continue;
@@ -1995,7 +1994,7 @@ namespace GameSvr.Npc
         private void ActionOfClearNeedItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            StdItem StdItem;
+            Equipment StdItem = null;
             var nNeed = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
@@ -2028,7 +2027,7 @@ namespace GameSvr.Npc
         private void ActionOfClearMakeItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            StdItem StdItem;
+            Equipment StdItem = null;
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
             var boMatchName = QuestActionInfo.sParam3 == "1";
@@ -2619,7 +2618,7 @@ namespace GameSvr.Npc
         private void ActionOfGiveItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            StdItem StdItem;
+            Equipment StdItem = null;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
             if (string.IsNullOrEmpty(sItemName) || nItemCount <= 0)
@@ -3391,7 +3390,7 @@ namespace GameSvr.Npc
             Envirnoment Envir;
             MapItem MapItem;
             MapItem MapItemA;
-            StdItem StdItem;
+            Equipment StdItem = null;
             UserItem UserItem = null;
             try
             {

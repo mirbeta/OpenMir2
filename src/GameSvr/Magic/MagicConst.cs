@@ -1,6 +1,6 @@
 ﻿namespace GameSvr.Magic
 {
-    public class SpellsDef
+    public class MagicConst
     {
         /// <summary>
         /// 火球术

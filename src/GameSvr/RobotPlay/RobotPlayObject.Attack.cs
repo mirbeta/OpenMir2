@@ -273,7 +273,7 @@ namespace GameSvr.RobotPlay
                     }
                     switch (m_nSelectMagic)
                     {
-                        case SpellsDef.SKILL_HEALLING:// 治愈术 
+                        case MagicConst.SKILL_HEALLING:// 治愈术 
                             if (Abil.HP <= Math.Round(Abil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
@@ -301,7 +301,7 @@ namespace GameSvr.RobotPlay
                                 }
                             }
                             break;
-                        case SpellsDef.SKILL_BIGHEALLING:// 群体治疗术
+                        case MagicConst.SKILL_BIGHEALLING:// 群体治疗术
                             if (Abil.HP <= Math.Round(Abil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
@@ -329,15 +329,15 @@ namespace GameSvr.RobotPlay
                                 }
                             }
                             break;
-                        case SpellsDef.SKILL_FIRECHARM:// 灵符火符
+                        case MagicConst.SKILL_FIRECHARM:// 灵符火符
                             if (!MagCanHitTarget(CurrX, CurrY, TargetCret))
                             {
                                 GetGotoXY(TargetCret, 3);
                                 GotoTargetXY(TargetX, TargetY, 1);
                             }
                             break;
-                        case SpellsDef.SKILL_AMYOUNSUL:
-                        case SpellsDef.SKILL_GROUPAMYOUNSUL:
+                        case MagicConst.SKILL_AMYOUNSUL:
+                        case MagicConst.SKILL_GROUPAMYOUNSUL:
                             if (TargetCret.StatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
                             {
                                 n_AmuletIndx = 1;
@@ -347,8 +347,8 @@ namespace GameSvr.RobotPlay
                                 n_AmuletIndx = 2;
                             }
                             break;
-                        case SpellsDef.SKILL_CLOAK:
-                        case SpellsDef.SKILL_BIGCLOAK: // 集体隐身术  隐身术
+                        case MagicConst.SKILL_CLOAK:
+                        case MagicConst.SKILL_BIGCLOAK: // 集体隐身术  隐身术
                             UserMagic = FindMagic(m_nSelectMagic);
                             if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
                             {
@@ -373,8 +373,8 @@ namespace GameSvr.RobotPlay
                                 }
                             }
                             break;
-                        case SpellsDef.SKILL_SKELLETON:
-                        case SpellsDef.SKILL_SINSU:
+                        case MagicConst.SKILL_SKELLETON:
+                        case MagicConst.SKILL_SINSU:
                             UserMagic = FindMagic(m_nSelectMagic);
                             if (UserMagic != null && UserMagic.btKey == 0)
                             {

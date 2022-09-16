@@ -6,7 +6,6 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Player
 {
@@ -34,13 +33,13 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
-                StdItem item = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                Equipment item = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                 if (item != null)
                 {
                     ClientItem clientItem = new ClientItem();
                     item.GetStandardItem(ref clientItem.Item);
                     item.GetItemAddValue(userItem, ref clientItem.Item);
-                    clientItem.Item.Name = ItemUnit.GetItemName(userItem);
+                    clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
                     clientItem.MakeIndex = userItem.MakeIndex;
@@ -91,7 +90,7 @@ namespace GameSvr.Player
                 UserItem userItem = playObject.UseItems[i];
                 if (userItem.wIndex > 0)
                 {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[i].wIndex);
+                    Equipment stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[i].wIndex);
                     if (stdItem == null)
                     {
                         continue;
@@ -99,7 +98,7 @@ namespace GameSvr.Player
                     ClientItem clientItem = new ClientItem();
                     stdItem.GetStandardItem(ref clientItem.Item);
                     stdItem.GetItemAddValue(playObject.UseItems[i], ref clientItem.Item);
-                    clientItem.Item.Name = ItemUnit.GetItemName(playObject.UseItems[i]);
+                    clientItem.Item.Name = CustomItem.GetItemName(playObject.UseItems[i]);
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
                     clientItem.DuraMax = playObject.UseItems[i].DuraMax;
@@ -141,7 +140,7 @@ namespace GameSvr.Player
                 userItem = ItemList[i];
                 if (userItem.MakeIndex == nMakeIndex)
                 {
-                    sUserItemName = ItemUnit.GetItemName(userItem); // 取自定义物品名称
+                    sUserItemName = CustomItem.GetItemName(userItem); // 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         userItem18 = userItem;
@@ -171,7 +170,7 @@ namespace GameSvr.Player
                 var userItem = ItemList[i];
                 if (userItem != null && userItem.MakeIndex == nMakeIndex)
                 {
-                    var sUserItemName = ItemUnit.GetItemName(userItem);
+                    var sUserItemName = CustomItem.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
@@ -296,7 +295,7 @@ namespace GameSvr.Player
                         {
                             continue;
                         }
-                        var sUserItemName = ItemUnit.GetItemName(userItem);
+                        var sUserItemName = CustomItem.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.Config.ControlDropItem && stdItem.Price < M2Share.Config.CanDropPrice)
@@ -396,7 +395,7 @@ namespace GameSvr.Player
             var n14 = -1;
             var n18 = 0;
             UserItem userItem = null;
-            StdItem stdItem = null;
+            Equipment stdItem = null;
             ClientStdItem stdItem58 = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -404,7 +403,7 @@ namespace GameSvr.Player
                 if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
                     stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
-                    var sUserItemName = ItemUnit.GetItemName(userItem);
+                    var sUserItemName = CustomItem.GetItemName(userItem);
                     if (stdItem != null)
                     {
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -422,7 +421,7 @@ namespace GameSvr.Player
                 {
                     stdItem.GetStandardItem(ref stdItem58);
                     stdItem.GetItemAddValue(userItem, ref stdItem58);
-                    stdItem58.Name = ItemUnit.GetItemName(userItem);
+                    stdItem58.Name = CustomItem.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref stdItem58) && CheckItemBindUse(userItem))
                     {
                         UserItem takeOffItem = null;
@@ -540,7 +539,7 @@ namespace GameSvr.Player
                             goto FailExit;
                         }
                         // 取自定义物品名称
-                        var sUserItemName = ItemUnit.GetItemName(UseItems[btWhere]);
+                        var sUserItemName = CustomItem.GetItemName(UseItems[btWhere]);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             var userItem = UseItems[btWhere];
@@ -619,7 +618,7 @@ namespace GameSvr.Player
         private void ClientUseItems(int nItemIdx, string sItemName)
         {
             var boEatOk = false;
-            StdItem stdItem = null;
+            Equipment stdItem = null;
             UserItem userItem34 = null;
             if (m_boCanUseItem)
             {
@@ -653,17 +652,17 @@ namespace GameSvr.Player
                                             Dispose(userItem);
                                             ItemList.RemoveAt(i);
                                             boEatOk = true;
-                                            if (MagicArr[SpellsDef.SKILL_ERGUM] != null && !UseThrusting)
+                                            if (MagicArr[MagicConst.SKILL_ERGUM] != null && !UseThrusting)
                                             {
                                                 ThrustingOnOff(true);
                                                 SendSocket("+LNG");
                                             }
-                                            if (MagicArr[SpellsDef.SKILL_BANWOL] != null && !UseHalfMoon)
+                                            if (MagicArr[MagicConst.SKILL_BANWOL] != null && !UseHalfMoon)
                                             {
                                                 HalfMoonOnOff(true);
                                                 SendSocket("+WID");
                                             }
-                                            if (MagicArr[SpellsDef.SKILL_REDBANWOL] != null && !RedUseHalfMoon)
+                                            if (MagicArr[MagicConst.SKILL_REDBANWOL] != null && !RedUseHalfMoon)
                                             {
                                                 RedHalfMoonOnOff(true);
                                                 SendSocket("+WID");
@@ -975,7 +974,7 @@ namespace GameSvr.Player
                     var userItem = ItemList[i];
                     if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = ItemUnit.GetItemName(userItem);
+                        var sUserItemName = CustomItem.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && DealItemList.Count < 12)
                         {
                             DealItemList.Add(userItem);
@@ -1018,7 +1017,7 @@ namespace GameSvr.Player
                     var userItem = DealItemList[i];
                     if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = ItemUnit.GetItemName(userItem);
+                        var sUserItemName = CustomItem.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             ItemList.Add(userItem);
@@ -1116,7 +1115,7 @@ namespace GameSvr.Player
                 if (bo11)
                 {
                     UserItem userItem;
-                    StdItem stdItem;
+                    Equipment stdItem = null;
                     for (var i = 0; i < DealItemList.Count; i++)
                     {
                         userItem = DealItemList[i];
@@ -1564,7 +1563,7 @@ namespace GameSvr.Player
                 var userItem = ItemList[i];
                 if (userItem.MakeIndex == nInt)
                 {
-                    sUserItemName = ItemUnit.GetItemName(userItem); // 取自定义物品名称
+                    sUserItemName = CustomItem.GetItemName(userItem); // 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         userItemA = userItem;
@@ -1589,7 +1588,7 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
-                var sUserItemName = ItemUnit.GetItemName(userItem);
+                var sUserItemName = CustomItem.GetItemName(userItem);
                 if (userItem.MakeIndex == nInt && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     break;
@@ -1622,7 +1621,7 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
-                var sUserItemName = ItemUnit.GetItemName(userItem);// 取自定义物品名称
+                var sUserItemName = CustomItem.GetItemName(userItem);// 取自定义物品名称
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
@@ -1677,7 +1676,7 @@ namespace GameSvr.Player
             for (var i = 0; i < StorageItemList.Count; i++)
             {
                 var userItem = StorageItemList[i];
-                var sUserItemName = ItemUnit.GetItemName(userItem);
+                var sUserItemName = CustomItem.GetItemName(userItem);
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.wIndex)))

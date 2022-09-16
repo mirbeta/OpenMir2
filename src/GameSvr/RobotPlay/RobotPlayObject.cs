@@ -9,7 +9,6 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.RobotPlay
 {
@@ -642,7 +641,7 @@ namespace GameSvr.RobotPlay
         {
             bool result = false;
             UserItem UserItem = null;
-            StdItem StdItem;
+            Equipment StdItem = null;
             MapItem MapItem = Envir.GetItem(nX, nY);
             if (MapItem == null)
             {
@@ -1588,7 +1587,7 @@ namespace GameSvr.RobotPlay
             return CheckUserItemType(nItemType, nCount) || GetUserItemList(nItemType, nCount) >= 0;
         }
 
-        private bool CheckItemType(int nItemType, StdItem StdItem)
+        private bool CheckItemType(int nItemType, Equipment StdItem)
         {
             bool result = false;
             switch (nItemType)
@@ -1628,7 +1627,7 @@ namespace GameSvr.RobotPlay
             if (UseItems[Grobal2.U_ARMRINGL] != null && UseItems[Grobal2.U_ARMRINGL].wIndex > 0 &&
                 Math.Round(Convert.ToDouble(UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount)
             {
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
+                Equipment StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (StdItem != null)
                 {
                     result = CheckItemType(nItemType, StdItem);
@@ -1644,7 +1643,7 @@ namespace GameSvr.RobotPlay
             int result = -1;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].wIndex);
+                Equipment StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].wIndex);
                 if (StdItem != null)
                 {
                     if (CheckItemType(nItemType, StdItem) && HUtil32.Round(ItemList[i].Dura / 100) >= nCount)
@@ -1666,7 +1665,7 @@ namespace GameSvr.RobotPlay
                 UserItem UserItem = ItemList[nIndex];
                 if (UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    Equipment StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].wIndex);
                     if (StdItem != null)
                     {
                         if (CheckItemType(nItemType, StdItem))
@@ -1844,18 +1843,18 @@ namespace GameSvr.RobotPlay
                         UserMagic = MagicList[i];
                         switch (UserMagic.wMagIdx)
                         {
-                            case SpellsDef.SKILL_FIREBALL:
-                            case SpellsDef.SKILL_FIREBALL2:
-                            case SpellsDef.SKILL_FIRE:
-                            case SpellsDef.SKILL_SHOOTLIGHTEN:
-                            case SpellsDef.SKILL_LIGHTENING:
-                            case SpellsDef.SKILL_EARTHFIRE:
-                            case SpellsDef.SKILL_FIREBOOM:
-                            case SpellsDef.SKILL_LIGHTFLOWER:
-                            case SpellsDef.SKILL_SNOWWIND:
-                            case SpellsDef.SKILL_GROUPLIGHTENING:
-                            case SpellsDef.SKILL_47:
-                            case SpellsDef.SKILL_58:
+                            case MagicConst.SKILL_FIREBALL:
+                            case MagicConst.SKILL_FIREBALL2:
+                            case MagicConst.SKILL_FIRE:
+                            case MagicConst.SKILL_SHOOTLIGHTEN:
+                            case MagicConst.SKILL_LIGHTENING:
+                            case MagicConst.SKILL_EARTHFIRE:
+                            case MagicConst.SKILL_FIREBOOM:
+                            case MagicConst.SKILL_LIGHTFLOWER:
+                            case MagicConst.SKILL_SNOWWIND:
+                            case MagicConst.SKILL_GROUPLIGHTENING:
+                            case MagicConst.SKILL_47:
+                            case MagicConst.SKILL_58:
                                 if (GetSpellPoint(UserMagic) <= Abil.MP)
                                 {
                                     result = true;
@@ -1873,34 +1872,34 @@ namespace GameSvr.RobotPlay
                         {
                             switch (UserMagic.wMagIdx)
                             {
-                                case SpellsDef.SKILL_AMYOUNSUL:
-                                case SpellsDef.SKILL_GROUPAMYOUNSUL:// 需要毒药
+                                case MagicConst.SKILL_AMYOUNSUL:
+                                case MagicConst.SKILL_GROUPAMYOUNSUL:// 需要毒药
                                     result = CheckUserItem(1, 2) || CheckUserItem(2, 2);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL) || AllowUseMagic(SpellsDef.SKILL_GROUPAMYOUNSUL);
+                                        result = AllowUseMagic(MagicConst.SKILL_AMYOUNSUL) || AllowUseMagic(MagicConst.SKILL_GROUPAMYOUNSUL);
                                     }
                                     if (result)
                                     {
                                         break;
                                     }
                                     break;
-                                case SpellsDef.SKILL_FIRECHARM:// 需要符
+                                case MagicConst.SKILL_FIRECHARM:// 需要符
                                     result = CheckUserItem(5, 1);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(SpellsDef.SKILL_FIRECHARM);
+                                        result = AllowUseMagic(MagicConst.SKILL_FIRECHARM);
                                     }
                                     if (result)
                                     {
                                         break;
                                     }
                                     break;
-                                case SpellsDef.SKILL_59:// 需要符
+                                case MagicConst.SKILL_59:// 需要符
                                     result = CheckUserItem(5, 5);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(SpellsDef.SKILL_59);
+                                        result = AllowUseMagic(MagicConst.SKILL_59);
                                     }
                                     if (result)
                                     {
@@ -1945,8 +1944,8 @@ namespace GameSvr.RobotPlay
             SpellTick = HUtil32._MAX(0, SpellTick);
             switch (UserMagic.wMagIdx)
             {
-                case SpellsDef.SKILL_ERGUM:
-                    if (MagicArr[SpellsDef.SKILL_ERGUM] != null)
+                case MagicConst.SKILL_ERGUM:
+                    if (MagicArr[MagicConst.SKILL_ERGUM] != null)
                     {
                         if (!UseThrusting)
                         {
@@ -1959,8 +1958,8 @@ namespace GameSvr.RobotPlay
                     }
                     result = true;
                     break;
-                case SpellsDef.SKILL_BANWOL:
-                    if (MagicArr[SpellsDef.SKILL_BANWOL] != null)
+                case MagicConst.SKILL_BANWOL:
+                    if (MagicArr[MagicConst.SKILL_BANWOL] != null)
                     {
                         if (!UseHalfMoon)
                         {
@@ -1973,13 +1972,13 @@ namespace GameSvr.RobotPlay
                     }
                     result = true;
                     break;
-                case SpellsDef.SKILL_FIRESWORD:
-                    if (MagicArr[SpellsDef.SKILL_FIRESWORD] != null)
+                case MagicConst.SKILL_FIRESWORD:
+                    if (MagicArr[MagicConst.SKILL_FIRESWORD] != null)
                     {
                         result = true;
                     }
                     break;
-                case SpellsDef.SKILL_MOOTEBO:
+                case MagicConst.SKILL_MOOTEBO:
                     result = true;
                     if ((HUtil32.GetTickCount() - MDwDoMotaeboTick) > 3000)
                     {
@@ -1990,7 +1989,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case SpellsDef.SKILL_43:
+                case MagicConst.SKILL_43:
                     result = true;
                     break;
                 default:
@@ -2010,13 +2009,13 @@ namespace GameSvr.RobotPlay
                     {
                         switch (UserMagic.wMagIdx)
                         {
-                            case SpellsDef.SKILL_HEALLING:
-                            case SpellsDef.SKILL_HANGMAJINBUB:
-                            case SpellsDef.SKILL_DEJIWONHO:
-                            case SpellsDef.SKILL_BIGHEALLING:
-                            case SpellsDef.SKILL_SINSU:
-                            case SpellsDef.SKILL_UNAMYOUNSUL:
-                            case SpellsDef.SKILL_46:
+                            case MagicConst.SKILL_HEALLING:
+                            case MagicConst.SKILL_HANGMAJINBUB:
+                            case MagicConst.SKILL_DEJIWONHO:
+                            case MagicConst.SKILL_BIGHEALLING:
+                            case MagicConst.SKILL_SINSU:
+                            case MagicConst.SKILL_UNAMYOUNSUL:
+                            case MagicConst.SKILL_46:
                                 if (m_boSelSelf)
                                 {
                                     BaseObject = this;
@@ -2198,7 +2197,7 @@ namespace GameSvr.RobotPlay
                 {
                     switch (m_nSelectMagic)
                     {
-                        case SpellsDef.SKILL_ERGUM:
+                        case MagicConst.SKILL_ERGUM:
                             if (AllowUseMagic(12) && Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref TargetX, ref TargetY))
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
@@ -2883,15 +2882,15 @@ namespace GameSvr.RobotPlay
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
+                                if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(MagicConst.SKILL_BANWOL) > 0)
                                     {
                                         if (!UseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = SpellsDef.SKILL_BANWOL;
+                                        result = MagicConst.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -2943,15 +2942,15 @@ namespace GameSvr.RobotPlay
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
+                                if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(MagicConst.SKILL_BANWOL) > 0)
                                     {
                                         if (!UseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = SpellsDef.SKILL_BANWOL;
+                                        result = MagicConst.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -2994,15 +2993,15 @@ namespace GameSvr.RobotPlay
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
+                                if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(MagicConst.SKILL_BANWOL) > 0)
                                     {
                                         if (!UseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = SpellsDef.SKILL_BANWOL;
+                                        result = MagicConst.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -3035,17 +3034,17 @@ namespace GameSvr.RobotPlay
                             }
                             if ((HUtil32.GetTickCount() - m_SkillUseTick[25]) > 1500)
                             {
-                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))
+                                if (AllowUseMagic(MagicConst.SKILL_BANWOL))
                                 {
                                     // 半月弯刀
-                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(MagicConst.SKILL_BANWOL) > 0)
                                     {
                                         m_SkillUseTick[25] = HUtil32.GetTickCount();
                                         if (!UseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = SpellsDef.SKILL_BANWOL;
+                                        result = MagicConst.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -3098,14 +3097,14 @@ namespace GameSvr.RobotPlay
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[25]) > 3000)
                     {
-                        if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
+                        if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                         {
                             if (!UseHalfMoon)
                             {
                                 HalfMoonOnOff(true);
                             }
                             m_SkillUseTick[25] = HUtil32.GetTickCount();
-                            result = SpellsDef.SKILL_BANWOL;
+                            result = MagicConst.SKILL_BANWOL;
                             return result;
                         }
                     }
@@ -3846,13 +3845,13 @@ namespace GameSvr.RobotPlay
                         {
                             result = 72;
                         }
-                        else if (AllowUseMagic(SpellsDef.SKILL_SINSU))// 召唤神兽
+                        else if (AllowUseMagic(MagicConst.SKILL_SINSU))// 召唤神兽
                         {
-                            result = SpellsDef.SKILL_SINSU;
+                            result = MagicConst.SKILL_SINSU;
                         }
-                        else if (AllowUseMagic(SpellsDef.SKILL_SKELLETON)) // 召唤骷髅
+                        else if (AllowUseMagic(MagicConst.SKILL_SKELLETON)) // 召唤骷髅
                         {
-                            result = SpellsDef.SKILL_SKELLETON;
+                            result = MagicConst.SKILL_SKELLETON;
                         }
                         return result;
                     }
@@ -3898,24 +3897,24 @@ namespace GameSvr.RobotPlay
                                 {
                                     if (Envir != null)// 判断地图是否禁用
                                     {
-                                        if (Envir.AllowMagics(SpellsDef.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (Envir.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = SpellsDef.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
+                                            result = MagicConst.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
                                 else if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
                                         if (Envir != null)
                                         {
-                                            if (Envir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
+                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = SpellsDef.SKILL_AMYOUNSUL;// 英雄施毒术
+                                                result = MagicConst.SKILL_AMYOUNSUL;// 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -3925,14 +3924,14 @@ namespace GameSvr.RobotPlay
                             case 1:
                                 if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
                                         if (Envir != null)
                                         {
-                                            if (Envir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
+                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = SpellsDef.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -3955,25 +3954,25 @@ namespace GameSvr.RobotPlay
                                     if (Envir != null)
                                     {
                                         // 判断地图是否禁用
-                                        if (Envir.AllowMagics(SpellsDef.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (Envir.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = SpellsDef.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
+                                            result = MagicConst.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
                                 else if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
                                         if (Envir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (Envir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))
+                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = SpellsDef.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -3983,15 +3982,15 @@ namespace GameSvr.RobotPlay
                             case 1:
                                 if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
                                         if (Envir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (Envir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))
+                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = SpellsDef.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -4166,7 +4165,7 @@ namespace GameSvr.RobotPlay
                 {
                     switch (nMode)
                     {
-                        case SpellsDef.SKILL_BANWOL:
+                        case MagicConst.SKILL_BANWOL:
                             n10 = (Direction + M2Share.Config.WideAttack[nC]) % 8;
                             break;
                     }
@@ -4187,7 +4186,7 @@ namespace GameSvr.RobotPlay
                     nC++;
                     switch (nMode)
                     {
-                        case SpellsDef.SKILL_BANWOL:
+                        case MagicConst.SKILL_BANWOL:
                             if (nC >= 3)
                             {
                                 break;
@@ -4244,7 +4243,7 @@ namespace GameSvr.RobotPlay
         {
             bool result = false;
             UserItem UserItem;
-            StdItem AmuletStdItem;
+            Equipment AmuletStdItem;
             try
             {
                 result = false;

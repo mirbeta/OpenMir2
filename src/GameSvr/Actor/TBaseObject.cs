@@ -12,7 +12,6 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Actor
 {
@@ -1120,7 +1119,7 @@ namespace GameSvr.Actor
                 var mapItem = new MapItem
                 {
                     UserItem = userItem,
-                    Name = ItemUnit.GetItemName(userItem), // 取自定义物品名称
+                    Name = CustomItem.GetItemName(userItem), // 取自定义物品名称
                     Looks = stdItem.Looks
                 };
                 if (stdItem.StdMode == 45)
@@ -2642,19 +2641,19 @@ namespace GameSvr.Actor
                 MagicArr[userMagic.wMagIdx] = userMagic;
                 switch (userMagic.wMagIdx)
                 {
-                    case SpellsDef.SKILL_ONESWORD: // 基本剑法
+                    case MagicConst.SKILL_ONESWORD: // 基本剑法
                         if (userMagic.btLevel > 0)
                         {
                             HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.btLevel));
                         }
                         break;
-                    case SpellsDef.SKILL_ILKWANG: // 精神力战法
+                    case MagicConst.SKILL_ILKWANG: // 精神力战法
                         if (userMagic.btLevel > 0)
                         {
                             HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.btLevel));
                         }
                         break;
-                    case SpellsDef.SKILL_YEDO: // 攻杀剑法
+                    case MagicConst.SKILL_YEDO: // 攻杀剑法
                         if (userMagic.btLevel > 0)
                         {
                             HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.btLevel));
@@ -2663,7 +2662,7 @@ namespace GameSvr.Actor
                         AttackSkillCount = (byte)(7 - userMagic.btLevel);
                         AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         break;
-                    case SpellsDef.SKILL_FIRESWORD: // 烈火剑法
+                    case MagicConst.SKILL_FIRESWORD: // 烈火剑法
                         HitDouble = (byte)(4 + userMagic.btLevel * 4);
                         break;
                 }
@@ -3600,7 +3599,7 @@ namespace GameSvr.Actor
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
                 byte nDress = 0;
-                StdItem stdItem;
+                Equipment stdItem = null;
                 if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0) // 衣服
                 {
                     stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
@@ -4898,7 +4897,7 @@ namespace GameSvr.Actor
             int nDura;
             int nOldDura;
             PlayObject playObject;
-            StdItem stdItem;
+            Equipment stdItem = null;
             bool bo19;
             if (nDamage <= 0)
             {

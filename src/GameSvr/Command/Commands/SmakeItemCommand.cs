@@ -3,7 +3,6 @@ using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Command.Commands
 {
@@ -24,7 +23,7 @@ namespace GameSvr.Command.Commands
             var nValueType = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;//参数16为吸伤属性
             var nValue = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
             string sShowMsg;
-            StdItem StdItem;
+            Equipment StdItem = null;
             if (nWhere >= 0 && nWhere <= 12 && nValueType >= 0 && nValueType <= 15 && nValue >= 0 && nValue <= 255)
             {
                 if (PlayObject.UseItems[nWhere].wIndex > 0)

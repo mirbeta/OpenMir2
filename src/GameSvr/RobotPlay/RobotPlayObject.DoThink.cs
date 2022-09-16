@@ -185,7 +185,7 @@ namespace GameSvr.RobotPlay
                         {
                             result = 2;
                         }
-                        else if (new ArrayList(new short[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2 }).Contains(wMagicID) && !CanAttack(TargetCret, 10, ref btDir))
+                        else if (new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2 }).Contains(wMagicID) && !CanAttack(TargetCret, 10, ref btDir))
                         {
                             result = 3;
                         }
@@ -218,7 +218,7 @@ namespace GameSvr.RobotPlay
                         {
                             result = 2;
                         }
-                        else if (wMagicID == SpellsDef.SKILL_FIRECHARM && !CanAttack(TargetCret, 10, ref btDir))
+                        else if (wMagicID == MagicConst.SKILL_FIRECHARM && !CanAttack(TargetCret, 10, ref btDir))
                         {
                             result = 3;
                         }

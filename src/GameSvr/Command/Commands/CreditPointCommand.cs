@@ -63,10 +63,8 @@ namespace GameSvr.Command.Commands
                     }
                     break;
             }
-            m_PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandCreditPointHumanMsg, nPoint, m_PlayObject.m_btCreditPoint),
-                MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.m_btCreditPoint),
-                MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandCreditPointHumanMsg, nPoint, m_PlayObject.m_btCreditPoint), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.m_btCreditPoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

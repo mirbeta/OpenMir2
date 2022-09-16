@@ -54,10 +54,10 @@ namespace GameSvr.Command.Commands
                     {
                         if (boKillAllMap || string.Compare(Envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            M2Share.WorldEngine.GetMapMonster(Envir, MonList);
-                            if (MonList.Count > 0)
+                            var monsterCount = M2Share.WorldEngine.GetMapMonster(Envir, MonList);
+                            if (monsterCount > 0)
                             {
-                                for (var j = 0; j < MonList.Count; j++)
+                                for (var j = 0; j < monsterCount; j++)
                                 {
                                     var BaseObject = MonList[j];
                                     if (BaseObject != null)

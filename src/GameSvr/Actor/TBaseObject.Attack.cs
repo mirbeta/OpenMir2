@@ -5,7 +5,6 @@ using GameSvr.RobotPlay;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Actor
 {
@@ -17,11 +16,11 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::AttackDir";
             try
             {
-                if ((wHitMode == 5) && (MagicArr[SpellsDef.SKILL_BANWOL] != null)) // 半月
+                if ((wHitMode == 5) && (MagicArr[MagicConst.SKILL_BANWOL] != null)) // 半月
                 {
                     if (Abil.MP > 0)
                     {
-                        DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_BANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_BANWOL])));
+                        DamageSpell((ushort)(MagicArr[MagicConst.SKILL_BANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[MagicConst.SKILL_BANWOL])));
                         HealthSpellChanged();
                     }
                     else
@@ -29,11 +28,11 @@ namespace GameSvr.Actor
                         wHitMode = Grobal2.RM_HIT;
                     }
                 }
-                if ((wHitMode == 12) && (MagicArr[SpellsDef.SKILL_REDBANWOL] != null))
+                if ((wHitMode == 12) && (MagicArr[MagicConst.SKILL_REDBANWOL] != null))
                 {
                     if (Abil.MP > 0)
                     {
-                        DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_REDBANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_REDBANWOL])));
+                        DamageSpell((ushort)(MagicArr[MagicConst.SKILL_REDBANWOL].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[MagicConst.SKILL_REDBANWOL])));
                         HealthSpellChanged();
                     }
                     else
@@ -41,11 +40,11 @@ namespace GameSvr.Actor
                         wHitMode = Grobal2.RM_HIT;
                     }
                 }
-                if ((wHitMode == 8) && (MagicArr[SpellsDef.SKILL_CROSSMOON] != null))
+                if ((wHitMode == 8) && (MagicArr[MagicConst.SKILL_CROSSMOON] != null))
                 {
                     if (Abil.MP > 0)
                     {
-                        DamageSpell((ushort)(MagicArr[SpellsDef.SKILL_CROSSMOON].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[SpellsDef.SKILL_CROSSMOON])));
+                        DamageSpell((ushort)(MagicArr[MagicConst.SKILL_CROSSMOON].MagicInfo.btDefSpell + GetMagicSpell(MagicArr[MagicConst.SKILL_CROSSMOON])));
                         HealthSpellChanged();
                     }
                     else
@@ -97,13 +96,13 @@ namespace GameSvr.Actor
                             }
                             break;
                         case 4:
-                            if (MagicArr[SpellsDef.SKILL_ERGUM] != null)
+                            if (MagicArr[MagicConst.SKILL_ERGUM] != null)
                             {
                                 wIdent = Grobal2.RM_LONGHIT;
                             }
                             break;
                         case 5:
-                            if (MagicArr[SpellsDef.SKILL_BANWOL] != null)
+                            if (MagicArr[MagicConst.SKILL_BANWOL] != null)
                             {
                                 wIdent = Grobal2.RM_WIDEHIT;
                             }
@@ -115,7 +114,7 @@ namespace GameSvr.Actor
                             }
                             break;
                         case 8:
-                            if (MagicArr[SpellsDef.SKILL_CROSSMOON] != null)
+                            if (MagicArr[MagicConst.SKILL_CROSSMOON] != null)
                             {
                                 wIdent = Grobal2.RM_CRSHIT;
                             }
@@ -127,7 +126,7 @@ namespace GameSvr.Actor
                             }
                             break;
                         case 12:
-                            if (MagicArr[SpellsDef.SKILL_REDBANWOL] != null)
+                            if (MagicArr[MagicConst.SKILL_REDBANWOL] != null)
                             {
                                 wIdent = Grobal2.RM_WIDEHIT;
                             }
@@ -187,7 +186,7 @@ namespace GameSvr.Actor
                 var useItems = new UserItem(UseItems[Grobal2.U_WEAPON]);
                 CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
                 PlayObject PlayObject = null;
-                StdItem StdItem = null;
+                Equipment StdItem = null;
                 if (UseItems[Grobal2.U_WEAPON].wIndex == 0)
                 {
                     SysMsg(M2Share.g_sTheWeaponBroke, MsgColor.Red, MsgType.Hint);
@@ -417,9 +416,9 @@ namespace GameSvr.Actor
                     nSecPwr = 0;
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        if (MagicArr[SpellsDef.SKILL_ERGUM] != null)
+                        if (MagicArr[MagicConst.SKILL_ERGUM] != null)
                         {
-                            nSecPwr = HUtil32.Round(nPower / (MagicArr[SpellsDef.SKILL_ERGUM].MagicInfo.btTrainLv + 2) * (MagicArr[SpellsDef.SKILL_ERGUM].btLevel + 2));
+                            nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_ERGUM].MagicInfo.btTrainLv + 2) * (MagicArr[MagicConst.SKILL_ERGUM].btLevel + 2));
                         }
                     }
                     if (nSecPwr > 0)
@@ -435,9 +434,9 @@ namespace GameSvr.Actor
                     nSecPwr = 0;
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        if (MagicArr[SpellsDef.SKILL_BANWOL] != null)
+                        if (MagicArr[MagicConst.SKILL_BANWOL] != null)
                         {
-                            nSecPwr = HUtil32.Round(nPower / (MagicArr[SpellsDef.SKILL_BANWOL].MagicInfo.btTrainLv + 10) * (MagicArr[SpellsDef.SKILL_BANWOL].btLevel + 2));
+                            nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_BANWOL].MagicInfo.btTrainLv + 10) * (MagicArr[MagicConst.SKILL_BANWOL].btLevel + 2));
                         }
                     }
                     if (nSecPwr > 0)
@@ -450,9 +449,9 @@ namespace GameSvr.Actor
                     nSecPwr = 0;
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        if (MagicArr[SpellsDef.SKILL_REDBANWOL] != null)
+                        if (MagicArr[MagicConst.SKILL_REDBANWOL] != null)
                         {
-                            nSecPwr = HUtil32.Round(nPower / (MagicArr[SpellsDef.SKILL_REDBANWOL].MagicInfo.btTrainLv + 10) * (MagicArr[SpellsDef.SKILL_REDBANWOL].btLevel + 2));
+                            nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_REDBANWOL].MagicInfo.btTrainLv + 10) * (MagicArr[MagicConst.SKILL_REDBANWOL].btLevel + 2));
                         }
                     }
                     if (nSecPwr > 0)
@@ -473,9 +472,9 @@ namespace GameSvr.Actor
                     nSecPwr = 0;
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
-                        if (MagicArr[SpellsDef.SKILL_CROSSMOON] != null)
+                        if (MagicArr[MagicConst.SKILL_CROSSMOON] != null)
                         {
-                            nSecPwr = HUtil32.Round(nPower / (MagicArr[SpellsDef.SKILL_CROSSMOON].MagicInfo.btTrainLv + 10) * (MagicArr[SpellsDef.SKILL_CROSSMOON].btLevel + 2));
+                            nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_CROSSMOON].MagicInfo.btTrainLv + 10) * (MagicArr[MagicConst.SKILL_CROSSMOON].btLevel + 2));
                         }
                     }
                     if (nSecPwr > 0)
@@ -527,9 +526,9 @@ namespace GameSvr.Actor
                     if (Race == Grobal2.RC_PLAYOBJECT)
                     {
                         UserMagic attackMagic = null;
-                        if (MagicArr[SpellsDef.SKILL_ILKWANG] != null)
+                        if (MagicArr[MagicConst.SKILL_ILKWANG] != null)
                         {
-                            attackMagic = GetAttrackMagic(SpellsDef.SKILL_ILKWANG);
+                            attackMagic = GetAttrackMagic(MagicConst.SKILL_ILKWANG);
                             if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
                             {
                                 (this as PlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
@@ -539,9 +538,9 @@ namespace GameSvr.Actor
                                 }
                             }
                         }
-                        if (bo21 && (MagicArr[SpellsDef.SKILL_YEDO] != null))
+                        if (bo21 && (MagicArr[MagicConst.SKILL_YEDO] != null))
                         {
-                            attackMagic = GetAttrackMagic(SpellsDef.SKILL_YEDO);
+                            attackMagic = GetAttrackMagic(MagicConst.SKILL_YEDO);
                             if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
                             {
                                 (this as PlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
@@ -554,7 +553,7 @@ namespace GameSvr.Actor
                         switch (wHitMode)
                         {
                             case 4:
-                                attackMagic = GetAttrackMagic(SpellsDef.SKILL_ERGUM);
+                                attackMagic = GetAttrackMagic(MagicConst.SKILL_ERGUM);
                                 if (attackMagic != null)
                                 {
                                     if (attackMagic.btLevel < 3 && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
@@ -568,7 +567,7 @@ namespace GameSvr.Actor
                                 }
                                 break;
                             case 5:
-                                attackMagic = GetAttrackMagic(SpellsDef.SKILL_BANWOL);
+                                attackMagic = GetAttrackMagic(MagicConst.SKILL_BANWOL);
                                 if (attackMagic != null)
                                 {
                                     if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
@@ -582,7 +581,7 @@ namespace GameSvr.Actor
                                 }
                                 break;
                             case 12:
-                                attackMagic = GetAttrackMagic(SpellsDef.SKILL_REDBANWOL);
+                                attackMagic = GetAttrackMagic(MagicConst.SKILL_REDBANWOL);
                                 if (attackMagic != null)
                                 {
                                     if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
@@ -596,7 +595,7 @@ namespace GameSvr.Actor
                                 }
                                 break;
                             case 7:
-                                attackMagic = GetAttrackMagic(SpellsDef.SKILL_FIRESWORD);
+                                attackMagic = GetAttrackMagic(MagicConst.SKILL_FIRESWORD);
                                 if (attackMagic != null)
                                 {
                                     if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
@@ -610,7 +609,7 @@ namespace GameSvr.Actor
                                 }
                                 break;
                             case 8:
-                                attackMagic = GetAttrackMagic(SpellsDef.SKILL_CROSSMOON);
+                                attackMagic = GetAttrackMagic(MagicConst.SKILL_CROSSMOON);
                                 if (attackMagic != null)
                                 {
                                     if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
@@ -624,7 +623,7 @@ namespace GameSvr.Actor
                                 }
                                 break;
                             case 9:
-                                attackMagic = GetAttrackMagic(SpellsDef.SKILL_TWINBLADE);
+                                attackMagic = GetAttrackMagic(MagicConst.SKILL_TWINBLADE);
                                 if (attackMagic != null)
                                 {
                                     if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= Abil.Level))
@@ -716,69 +715,69 @@ namespace GameSvr.Actor
         private void TrainCurrentSkill(int wHitMode)
         {
             int nCLevel = Abil.Level;
-            if ((MagicArr[SpellsDef.SKILL_ONESWORD] != null) && Race == Grobal2.RC_PLAYOBJECT)
+            if ((MagicArr[MagicConst.SKILL_ONESWORD] != null) && Race == Grobal2.RC_PLAYOBJECT)
             {
-                if ((MagicArr[SpellsDef.SKILL_ONESWORD].btLevel < MagicArr[SpellsDef.SKILL_ONESWORD].MagicInfo.btTrainLv) && (MagicArr[SpellsDef.SKILL_ONESWORD].MagicInfo.TrainLevel[MagicArr[SpellsDef.SKILL_ONESWORD].btLevel] <= nCLevel))
+                if ((MagicArr[MagicConst.SKILL_ONESWORD].btLevel < MagicArr[MagicConst.SKILL_ONESWORD].MagicInfo.btTrainLv) && (MagicArr[MagicConst.SKILL_ONESWORD].MagicInfo.TrainLevel[MagicArr[MagicConst.SKILL_ONESWORD].btLevel] <= nCLevel))
                 {
-                    (this as PlayObject).TrainSkill(MagicArr[SpellsDef.SKILL_ONESWORD], M2Share.RandomNumber.Random(3) + 1);
-                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[SpellsDef.SKILL_ONESWORD]))
+                    (this as PlayObject).TrainSkill(MagicArr[MagicConst.SKILL_ONESWORD], M2Share.RandomNumber.Random(3) + 1);
+                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[MagicConst.SKILL_ONESWORD]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[SpellsDef.SKILL_ONESWORD].MagicInfo.wMagicID, MagicArr[SpellsDef.SKILL_ONESWORD].btLevel, MagicArr[SpellsDef.SKILL_ONESWORD].nTranPoint, "", 3000);
+                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ONESWORD].MagicInfo.wMagicID, MagicArr[MagicConst.SKILL_ONESWORD].btLevel, MagicArr[MagicConst.SKILL_ONESWORD].nTranPoint, "", 3000);
                     }
                 }
             }
-            if ((MagicArr[SpellsDef.SKILL_ILKWANG] != null) && Race == Grobal2.RC_PLAYOBJECT)
+            if ((MagicArr[MagicConst.SKILL_ILKWANG] != null) && Race == Grobal2.RC_PLAYOBJECT)
             {
-                if ((MagicArr[SpellsDef.SKILL_ILKWANG].btLevel < MagicArr[SpellsDef.SKILL_ILKWANG].MagicInfo.btTrainLv) && (MagicArr[SpellsDef.SKILL_ILKWANG].MagicInfo.TrainLevel[MagicArr[SpellsDef.SKILL_ILKWANG].btLevel] <= nCLevel))
+                if ((MagicArr[MagicConst.SKILL_ILKWANG].btLevel < MagicArr[MagicConst.SKILL_ILKWANG].MagicInfo.btTrainLv) && (MagicArr[MagicConst.SKILL_ILKWANG].MagicInfo.TrainLevel[MagicArr[MagicConst.SKILL_ILKWANG].btLevel] <= nCLevel))
                 {
-                    (this as PlayObject).TrainSkill(MagicArr[SpellsDef.SKILL_ILKWANG], M2Share.RandomNumber.Random(3) + 1);
-                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[SpellsDef.SKILL_ILKWANG]))
+                    (this as PlayObject).TrainSkill(MagicArr[MagicConst.SKILL_ILKWANG], M2Share.RandomNumber.Random(3) + 1);
+                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[MagicConst.SKILL_ILKWANG]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[SpellsDef.SKILL_ILKWANG].MagicInfo.wMagicID, MagicArr[SpellsDef.SKILL_ILKWANG].btLevel, MagicArr[SpellsDef.SKILL_ILKWANG].nTranPoint, "", 3000);
+                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].MagicInfo.wMagicID, MagicArr[MagicConst.SKILL_ILKWANG].btLevel, MagicArr[MagicConst.SKILL_ILKWANG].nTranPoint, "", 3000);
                     }
                 }
             }
-            if ((wHitMode == 3) && (MagicArr[SpellsDef.SKILL_YEDO] != null) && (Race == Grobal2.RC_PLAYOBJECT))
+            if ((wHitMode == 3) && (MagicArr[MagicConst.SKILL_YEDO] != null) && (Race == Grobal2.RC_PLAYOBJECT))
             {
-                if ((MagicArr[SpellsDef.SKILL_YEDO].btLevel < MagicArr[SpellsDef.SKILL_YEDO].MagicInfo.btTrainLv) && (MagicArr[SpellsDef.SKILL_YEDO].MagicInfo.TrainLevel[MagicArr[SpellsDef.SKILL_YEDO].btLevel] <= nCLevel))
+                if ((MagicArr[MagicConst.SKILL_YEDO].btLevel < MagicArr[MagicConst.SKILL_YEDO].MagicInfo.btTrainLv) && (MagicArr[MagicConst.SKILL_YEDO].MagicInfo.TrainLevel[MagicArr[MagicConst.SKILL_YEDO].btLevel] <= nCLevel))
                 {
-                    (this as PlayObject).TrainSkill(MagicArr[SpellsDef.SKILL_YEDO], M2Share.RandomNumber.Random(3) + 1);
-                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[SpellsDef.SKILL_YEDO]))
+                    (this as PlayObject).TrainSkill(MagicArr[MagicConst.SKILL_YEDO], M2Share.RandomNumber.Random(3) + 1);
+                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[MagicConst.SKILL_YEDO]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[SpellsDef.SKILL_YEDO].MagicInfo.wMagicID, MagicArr[SpellsDef.SKILL_YEDO].btLevel, MagicArr[SpellsDef.SKILL_YEDO].nTranPoint, "", 3000);
+                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_YEDO].MagicInfo.wMagicID, MagicArr[MagicConst.SKILL_YEDO].btLevel, MagicArr[MagicConst.SKILL_YEDO].nTranPoint, "", 3000);
                     }
                 }
             }
-            if ((wHitMode == 4) && (MagicArr[SpellsDef.SKILL_ERGUM] != null) && Race == Grobal2.RC_PLAYOBJECT)
+            if ((wHitMode == 4) && (MagicArr[MagicConst.SKILL_ERGUM] != null) && Race == Grobal2.RC_PLAYOBJECT)
             {
-                if ((MagicArr[SpellsDef.SKILL_ERGUM].btLevel < MagicArr[SpellsDef.SKILL_ERGUM].MagicInfo.btTrainLv) && (MagicArr[SpellsDef.SKILL_ERGUM].MagicInfo.TrainLevel[MagicArr[SpellsDef.SKILL_ERGUM].btLevel] <= nCLevel))
+                if ((MagicArr[MagicConst.SKILL_ERGUM].btLevel < MagicArr[MagicConst.SKILL_ERGUM].MagicInfo.btTrainLv) && (MagicArr[MagicConst.SKILL_ERGUM].MagicInfo.TrainLevel[MagicArr[MagicConst.SKILL_ERGUM].btLevel] <= nCLevel))
                 {
-                    (this as PlayObject).TrainSkill(MagicArr[SpellsDef.SKILL_ERGUM], 1);
-                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[SpellsDef.SKILL_ERGUM]))
+                    (this as PlayObject).TrainSkill(MagicArr[MagicConst.SKILL_ERGUM], 1);
+                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[MagicConst.SKILL_ERGUM]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[SpellsDef.SKILL_ERGUM].MagicInfo.wMagicID, MagicArr[SpellsDef.SKILL_ERGUM].btLevel, MagicArr[SpellsDef.SKILL_ERGUM].nTranPoint, "", 3000);
+                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ERGUM].MagicInfo.wMagicID, MagicArr[MagicConst.SKILL_ERGUM].btLevel, MagicArr[MagicConst.SKILL_ERGUM].nTranPoint, "", 3000);
                     }
                 }
             }
-            if ((wHitMode == 5) && (MagicArr[SpellsDef.SKILL_BANWOL] != null) && Race == Grobal2.RC_PLAYOBJECT)
+            if ((wHitMode == 5) && (MagicArr[MagicConst.SKILL_BANWOL] != null) && Race == Grobal2.RC_PLAYOBJECT)
             {
-                if ((MagicArr[SpellsDef.SKILL_BANWOL].btLevel < MagicArr[SpellsDef.SKILL_BANWOL].MagicInfo.btTrainLv) && (MagicArr[SpellsDef.SKILL_BANWOL].MagicInfo.TrainLevel[MagicArr[SpellsDef.SKILL_BANWOL].btLevel] <= nCLevel))
+                if ((MagicArr[MagicConst.SKILL_BANWOL].btLevel < MagicArr[MagicConst.SKILL_BANWOL].MagicInfo.btTrainLv) && (MagicArr[MagicConst.SKILL_BANWOL].MagicInfo.TrainLevel[MagicArr[MagicConst.SKILL_BANWOL].btLevel] <= nCLevel))
                 {
-                    (this as PlayObject).TrainSkill(MagicArr[SpellsDef.SKILL_BANWOL], 1);
-                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[SpellsDef.SKILL_BANWOL]))
+                    (this as PlayObject).TrainSkill(MagicArr[MagicConst.SKILL_BANWOL], 1);
+                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[MagicConst.SKILL_BANWOL]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[SpellsDef.SKILL_BANWOL].MagicInfo.wMagicID, MagicArr[SpellsDef.SKILL_BANWOL].btLevel, MagicArr[SpellsDef.SKILL_BANWOL].nTranPoint, "", 3000);
+                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_BANWOL].MagicInfo.wMagicID, MagicArr[MagicConst.SKILL_BANWOL].btLevel, MagicArr[MagicConst.SKILL_BANWOL].nTranPoint, "", 3000);
                     }
                 }
             }
-            if ((wHitMode == 7) && (MagicArr[SpellsDef.SKILL_FIRESWORD] != null) && Race == Grobal2.RC_PLAYOBJECT)
+            if ((wHitMode == 7) && (MagicArr[MagicConst.SKILL_FIRESWORD] != null) && Race == Grobal2.RC_PLAYOBJECT)
             {
-                if ((MagicArr[SpellsDef.SKILL_FIRESWORD].btLevel < MagicArr[SpellsDef.SKILL_FIRESWORD].MagicInfo.btTrainLv) && (MagicArr[SpellsDef.SKILL_FIRESWORD].MagicInfo.TrainLevel[MagicArr[SpellsDef.SKILL_FIRESWORD].btLevel] <= nCLevel))
+                if ((MagicArr[MagicConst.SKILL_FIRESWORD].btLevel < MagicArr[MagicConst.SKILL_FIRESWORD].MagicInfo.btTrainLv) && (MagicArr[MagicConst.SKILL_FIRESWORD].MagicInfo.TrainLevel[MagicArr[MagicConst.SKILL_FIRESWORD].btLevel] <= nCLevel))
                 {
-                    (this as PlayObject).TrainSkill(MagicArr[SpellsDef.SKILL_FIRESWORD], 1);
-                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[SpellsDef.SKILL_FIRESWORD]))
+                    (this as PlayObject).TrainSkill(MagicArr[MagicConst.SKILL_FIRESWORD], 1);
+                    if (!(this as PlayObject).CheckMagicLevelup(MagicArr[MagicConst.SKILL_FIRESWORD]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[SpellsDef.SKILL_FIRESWORD].MagicInfo.wMagicID, MagicArr[SpellsDef.SKILL_FIRESWORD].btLevel, MagicArr[SpellsDef.SKILL_FIRESWORD].nTranPoint, "", 3000);
+                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_FIRESWORD].MagicInfo.wMagicID, MagicArr[MagicConst.SKILL_FIRESWORD].btLevel, MagicArr[MagicConst.SKILL_FIRESWORD].nTranPoint, "", 3000);
                     }
                 }
             }
