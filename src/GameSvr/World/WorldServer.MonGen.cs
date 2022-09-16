@@ -36,17 +36,34 @@ namespace GameSvr.World
         {
             for (int i = 0; i < MonsterList.Count; i++)
             {
-                for (int j = 0; j < M2Share.WorldEngine.MonGenList.Count; j++)
+                if (M2Share.WorldEngine.MonGenList.Count == 1)
                 {
-                    for (int k = 0; k < M2Share.WorldEngine.MonGenList[j].Count; k++)
+                    for (int j = 0; j < M2Share.WorldEngine.MonGenList.Count; j++)
                     {
-                        if (string.Compare(M2Share.WorldEngine.MonGenList[j][k].MonName, MonsterList[i].sName, StringComparison.OrdinalIgnoreCase) == 0)
+                        for (int k = 0; k < M2Share.WorldEngine.MonGenList[j].Count; k++)
                         {
                             if (M2Share.WorldEngine.MonThreadMap.ContainsKey(MonsterList[i].sName))
                             {
                                 break;
                             }
                             M2Share.WorldEngine.MonThreadMap.Add(MonsterList[i].sName, M2Share.WorldEngine.MonGenList[j][k].ThreadId);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < M2Share.WorldEngine.MonGenList.Count; j++)
+                    {
+                        for (int k = 0; k < M2Share.WorldEngine.MonGenList[j].Count; k++)
+                        {
+                            if (string.Compare(M2Share.WorldEngine.MonGenList[j][k].MonName, MonsterList[i].sName, StringComparison.OrdinalIgnoreCase) == 0)
+                            {
+                                if (M2Share.WorldEngine.MonThreadMap.ContainsKey(MonsterList[i].sName))
+                                {
+                                    break;
+                                }
+                                M2Share.WorldEngine.MonThreadMap.Add(MonsterList[i].sName, M2Share.WorldEngine.MonGenList[j][k].ThreadId);
+                            }
                         }
                     }
                 }

@@ -342,7 +342,7 @@ namespace GameSvr.Actor
                 {
                     if (((HUtil32.GetTickCount() - TargetFocusTick) > 30000) || TargetCret.Death || TargetCret.Ghost || (TargetCret.Envir != Envir) || (Math.Abs(TargetCret.CurrX - CurrX) > 15) || (Math.Abs(TargetCret.CurrY - CurrY) > 15))
                     {
-                        TargetCret = null;
+                        ClearTargetCreat(TargetCret);
                     }
                 }
                 if (LastHiter != null)
@@ -1311,6 +1311,22 @@ namespace GameSvr.Actor
         protected virtual void DelTargetCreat()
         {
             TargetCret = null;
+        }
+
+        protected void ClearTargetCreat(BaseObject baseObject)
+        {
+            if (VisibleActors.Count > 0)
+            {
+                for (int i = 0; i < VisibleActors.Count; i++)
+                {
+                    if (VisibleActors[i].BaseObject == baseObject)
+                    {
+                        VisibleActors.RemoveAt(i);
+                        DelTargetCreat();
+                        break;
+                    }
+                }
+            }
         }
 
         public virtual bool IsProperFriend(BaseObject BaseObject)

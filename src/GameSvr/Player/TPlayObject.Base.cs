@@ -1314,7 +1314,14 @@ namespace GameSvr.Player
                                             {
                                                 if (Race < Grobal2.RC_ANIMAL || Master != null || CrazyMode || NastyMode || WantRefMsg || BaseObject.Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    UpdateVisibleGay(BaseObject);
+                                                    if (BaseObject.Cell == CellType.Monster && this.Cell == CellType.Play && !this.ObMode)
+                                                    {
+                                                        BaseObject.UpdateMonsterVisible(this);
+                                                    }
+                                                    else
+                                                    {
+                                                        UpdateVisibleGay(BaseObject);
+                                                    }
                                                 }
                                             }
                                         }

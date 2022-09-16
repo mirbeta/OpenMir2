@@ -647,10 +647,6 @@ namespace GameSvr.Maps
         /// <summary>
         /// 添加矿石到地图上
         /// </summary>
-        /// <param name="nX"></param>
-        /// <param name="nY"></param>
-        /// <param name="nType"></param>
-        /// <param name="stoneMineEvent"></param>
         /// <returns></returns>
         public object AddToMapMineEvent(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent)
         {
