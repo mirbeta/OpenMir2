@@ -98,7 +98,7 @@ namespace GameSvr.Maps
         /// 添加对象到地图
         /// </summary>
         /// <returns></returns>
-        public object AddToMap(int nX, int nY, CellType cellType, EntityId pRemoveObject)
+        public object AddToMap(int nX, int nY, CellType cellType, EntityId mapObject)
         {
             object result = null;
             const string sExceptionMsg = "[Exception] TEnvirnoment::AddToMap";
@@ -117,7 +117,7 @@ namespace GameSvr.Maps
                     {
                         if (cellType == CellType.Item)
                         {
-                            if (((MapItem)pRemoveObject).Name == Grobal2.sSTRING_GOLDNAME)
+                            if (string.Compare(((MapItem)mapObject).Name, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 for (var i = 0; i < cellInfo.Count; i++)
                                 {
@@ -127,7 +127,7 @@ namespace GameSvr.Maps
                                         var mapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                         if (mapItem.Name == Grobal2.sSTRING_GOLDNAME)
                                         {
-                                            var nGoldCount = mapItem.Count + ((MapItem)pRemoveObject).Count;
+                                            var nGoldCount = mapItem.Count + ((MapItem)mapObject).Count;
                                             if (nGoldCount <= 2000)
                                             {
                                                 mapItem.Count = nGoldCount;
@@ -154,17 +154,17 @@ namespace GameSvr.Maps
                         var osObject = new CellObject
                         {
                             CellType = cellType,
-                            CellObjId = pRemoveObject.ActorId,
+                            CellObjId = mapObject.ActorId,
                             AddTime = HUtil32.GetTickCount()
                         };
-                        cellInfo.Add(osObject, pRemoveObject);
-                        result = pRemoveObject;
-                        if (cellType == CellType.Play || cellType == CellType.Monster || cellType == CellType.Merchant && !((BaseObject)pRemoveObject).AddToMaped)
+                        if (cellType == CellType.Play || cellType == CellType.Monster || cellType == CellType.Merchant && !((BaseObject)mapObject).AddToMaped)
                         {
-                            ((BaseObject)pRemoveObject).DelFormMaped = false;
-                            ((BaseObject)pRemoveObject).AddToMaped = true;
-                            AddObject(((BaseObject)pRemoveObject));
+                            ((BaseObject)mapObject).DelFormMaped = false;
+                            ((BaseObject)mapObject).AddToMaped = true;
+                            AddObject(((BaseObject)mapObject));
                         }
+                        cellInfo.Add(osObject, mapObject);
+                        result = mapObject;
                     }
                 }
             }
