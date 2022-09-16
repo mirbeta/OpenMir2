@@ -239,7 +239,7 @@ namespace GameSvr.Actor
                         int nCount;
                         int dCount;
                         int bCount;
-                        StdItem StdItem;
+                        Items.Equipment StdItem;
                         // 加HP
                         if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((Abil.HP / Abil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
                         {
@@ -1194,7 +1194,7 @@ namespace GameSvr.Actor
         {
             int nC;
             int nRate;
-            StdItem StdItem;
+            Items.Equipment StdItem;
             IList<TDeleteItem> DropItemList = null;
             const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
             try

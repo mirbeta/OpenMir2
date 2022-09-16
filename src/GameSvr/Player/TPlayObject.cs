@@ -14,7 +14,6 @@ using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Player
 {
@@ -211,7 +210,7 @@ namespace GameSvr.Player
             var ClientItem = new ClientItem();
             Item.GetStandardItem(ref ClientItem.Item);
             Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-            ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
+            ClientItem.Item.Name = CustomItem.GetItemName(UserItem);
             ClientItem.MakeIndex = UserItem.MakeIndex;
             ClientItem.Dura = UserItem.Dura;
             ClientItem.DuraMax = UserItem.DuraMax;
@@ -1138,7 +1137,7 @@ namespace GameSvr.Player
                         var ClientItem = new ClientItem();
                         Item.GetStandardItem(ref ClientItem.Item);
                         Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
-                        ClientItem.Item.Name = ItemUnit.GetItemName(UseItems[i]);
+                        ClientItem.Item.Name = CustomItem.GetItemName(UseItems[i]);
                         ClientItem.Dura = UseItems[i].Dura;
                         ClientItem.DuraMax = UseItems[i].DuraMax;
                         ClientItem.MakeIndex = UseItems[i].MakeIndex;
@@ -1173,7 +1172,7 @@ namespace GameSvr.Player
             }
         }
 
-        private bool UseStdmodeFunItem(StdItem StdItem)
+        private bool UseStdmodeFunItem(Equipment StdItem)
         {
             var result = false;
             if (M2Share.g_FunctionNPC != null)
@@ -1700,7 +1699,7 @@ namespace GameSvr.Player
                     ClientItem ClientItem = null;
                     Item.GetStandardItem(ref ClientItem.Item);
                     Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
+                    ClientItem.Item.Name = CustomItem.GetItemName(UserItem);
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     ClientItem.MakeIndex = UserItem.MakeIndex;
@@ -1742,7 +1741,7 @@ namespace GameSvr.Player
                 var ClientItem = new ClientItem();
                 StdItem.GetStandardItem(ref ClientItem.Item);
                 StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
+                ClientItem.Item.Name = CustomItem.GetItemName(UserItem);
                 ClientItem.MakeIndex = UserItem.MakeIndex;
                 ClientItem.Dura = UserItem.Dura;
                 ClientItem.DuraMax = UserItem.DuraMax;
@@ -1763,7 +1762,7 @@ namespace GameSvr.Player
                 var ClientItem = new ClientItem();
                 StdItem.GetStandardItem(ref ClientItem.Item);
                 StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
+                ClientItem.Item.Name = CustomItem.GetItemName(UserItem);
                 ClientItem.MakeIndex = UserItem.MakeIndex;
                 ClientItem.Dura = UserItem.Dura;
                 ClientItem.DuraMax = UserItem.DuraMax;
@@ -2094,7 +2093,7 @@ namespace GameSvr.Player
             return n14;
         }
 
-        private bool EatItems(StdItem StdItem, UserItem Useritem)
+        private bool EatItems(Equipment StdItem, UserItem Useritem)
         {
             var result = false;
             if (Envir.Flag.boNODRUG)
@@ -2212,7 +2211,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ReadBook(StdItem StdItem)
+        private bool ReadBook(Equipment StdItem)
         {
             var result = false;
             var magic = M2Share.WorldEngine.FindMagic(StdItem.Name);
@@ -2416,7 +2415,7 @@ namespace GameSvr.Player
                 {
                     var ClientItem = new ClientItem();
                     pStdItem.GetStandardItem(ref ClientItem.Item);
-                    ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
+                    ClientItem.Item.Name = CustomItem.GetItemName(UserItem);
                     ClientItem.MakeIndex = UserItem.MakeIndex;
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
@@ -2444,7 +2443,7 @@ namespace GameSvr.Player
                     var ClientItem = new ClientItem();
                     StdItem.GetStandardItem(ref ClientItem.Item);
                     StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    ClientItem.Item.Name = ItemUnit.GetItemName(UserItem);
+                    ClientItem.Item.Name = CustomItem.GetItemName(UserItem);
                     ClientItem.MakeIndex = UserItem.MakeIndex;
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
@@ -3181,7 +3180,7 @@ namespace GameSvr.Player
             return false;
         }
 
-        private bool CheckItemsNeed(StdItem stdItem)
+        private bool CheckItemsNeed(Equipment stdItem)
         {
             var result = true;
             var castle = M2Share.CastleMgr.IsCastleMember(this);

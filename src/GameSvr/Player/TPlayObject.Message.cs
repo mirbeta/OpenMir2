@@ -7,7 +7,7 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
-using StdItem = GameSvr.Items.StdItem;
+using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.Player
 {
@@ -2033,7 +2033,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                StdItem StdItem;
+                Equipment StdItem;
                 for (var i = 0; i < UseItems.Length; i++)
                 {
                     if (UseItems[i] == null)

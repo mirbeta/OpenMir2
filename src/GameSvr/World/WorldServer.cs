@@ -4,7 +4,6 @@ using GameSvr.Guild;
 using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Monster;
-using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
 using GameSvr.Player;
 using GameSvr.RobotPlay;
@@ -56,8 +55,8 @@ namespace GameSvr.World
         public readonly IList<TAdminInfo> AdminList;
         private readonly IList<TGoldChangeInfo> _mChangeHumanDbGoldList;
         private readonly IList<SwitchDataInfo> _mChangeServerList;
-        private readonly IList<int> _mListOfGateIdx;
-        private readonly IList<int> _mListOfSocket;
+        private readonly IList<int> ListOfGateIdx;
+        private readonly IList<int> ListOfSocket;
         /// <summary>
         /// 从DB读取人物数据
         /// </summary>
@@ -73,7 +72,7 @@ namespace GameSvr.World
         protected readonly IList<PlayObject> BotPlayObjectList;
         private readonly ArrayList _oldMagicList;
         public readonly IList<NormNpc> QuestNpcList;
-        public readonly IList<StdItem> StdItemList;
+        public readonly IList<Items.Equipment> StdItemList;
         /// <summary>
         /// 假人列表
         /// </summary>
@@ -96,7 +95,7 @@ namespace GameSvr.World
             ProcessHumanLoopTime = 0;
             _merchantPosition = 0;
             NpcPosition = 0;
-            StdItemList = new List<StdItem>();
+            StdItemList = new List<Items.Equipment>();
             MonsterList = new List<TMonInfo>();
             MonGenList = new Dictionary<int, IList<MonGenInfo>>();
             MonGenCountInfo = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -112,8 +111,8 @@ namespace GameSvr.World
             ProcessNpcTimeMin = 0;
             ProcessNpcTimeMax = 0;
             NewHumanList = new List<PlayObject>();
-            _mListOfGateIdx = new List<int>();
-            _mListOfSocket = new List<int>();
+            ListOfGateIdx = new List<int>();
+            ListOfSocket = new List<int>();
             _oldMagicList = new ArrayList();
             OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
             RobotLogonList = new List<RoBotLogon>();
@@ -149,6 +148,10 @@ namespace GameSvr.World
                 for (var i = 0; i < MobThreads.Length; i++)
                 {
                     var mobThread = MobThreads[i];
+                    if (mobThread == null)
+                    {
+                        continue;
+                    }
                     if (!mobThread.Stop) continue;
                     mobThread.EndTime = HUtil32.GetTickCount() + 10;
                     mobThread.Stop = false;
@@ -575,8 +578,8 @@ namespace GameSvr.World
                             {
                                 KickOnlineUser(LoadPlayList[i].sChrName);
                                 userOpenInfo = LoadPlayList[i];
-                                _mListOfGateIdx.Add(userOpenInfo.LoadUser.nGateIdx);
-                                _mListOfSocket.Add(userOpenInfo.LoadUser.nSocket);
+                                ListOfGateIdx.Add(userOpenInfo.LoadUser.nGateIdx);
+                                ListOfSocket.Add(userOpenInfo.LoadUser.nSocket);
                             }
                             LoadPlayList[i] = null;
                         }
@@ -601,12 +604,12 @@ namespace GameSvr.World
                         M2Share.GateMgr.SetGateUserList(playObject.m_nGateIdx, playObject.m_nSocket, playObject);
                     }
                     NewHumanList.Clear();
-                    for (var i = 0; i < _mListOfGateIdx.Count; i++)
+                    for (var i = 0; i < ListOfGateIdx.Count; i++)
                     {
-                        M2Share.GateMgr.CloseUser(_mListOfGateIdx[i], _mListOfSocket[i]);
+                        M2Share.GateMgr.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
                     }
-                    _mListOfGateIdx.Clear();
-                    _mListOfSocket.Clear();
+                    ListOfGateIdx.Clear();
+                    ListOfSocket.Clear();
                 }
                 catch (Exception e)
                 {
@@ -1003,9 +1006,9 @@ namespace GameSvr.World
             }
         }
 
-        public StdItem GetStdItem(ushort nItemIdx)
+        public Items.Equipment GetStdItem(ushort nItemIdx)
         {
-            StdItem result = null;
+            Items.Equipment result = null;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
@@ -1015,13 +1018,13 @@ namespace GameSvr.World
             return result;
         }
 
-        public StdItem GetStdItem(string sItemName)
+        public Items.Equipment GetStdItem(string sItemName)
         {
-            StdItem result = null;
+            Items.Equipment result = null;
             if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
-                StdItem stdItem = StdItemList[i];
+                Items.Equipment stdItem = StdItemList[i];
                 if (string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = stdItem;
@@ -1850,6 +1853,10 @@ namespace GameSvr.World
 
         public int GetMapMonster(Envirnoment envir, IList<BaseObject> list)
         {
+            if (list == null)
+            {
+                list = new List<BaseObject>();
+            }
             var result = 0;
             if (envir == null) return result;
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
@@ -1863,8 +1870,7 @@ namespace GameSvr.World
                         BaseObject baseObject = monGen.CertList[k];
                         if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir)
                         {
-                            if (list != null)
-                                list.Add(baseObject);
+                            list.Add(baseObject);
                             result++;
                         }
                     }
@@ -2152,6 +2158,7 @@ namespace GameSvr.World
             if (MagicList.Count > 0)
             {
                 _oldMagicList.Add(MagicList);
+                MagicList = null;
                 MagicList = new List<MagicInfo>();
             }
         }

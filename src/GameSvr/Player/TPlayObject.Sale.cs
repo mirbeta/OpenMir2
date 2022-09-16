@@ -3,7 +3,7 @@ using GameSvr.Items;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
+using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.Player
 {
@@ -187,7 +187,7 @@ namespace GameSvr.Player
         private void ClientCancelSellOffIng()
         {
             DealOffInfo DealOffInfo;
-            StdItem StdItem;
+            Equipment StdItem;
             UserItem UserItem;
             try
             {
@@ -289,7 +289,7 @@ namespace GameSvr.Player
         /// <param name="dealCharName"></param>
         private void ClientBuySellOffItme(string dealCharName)
         {
-            StdItem StdItem;
+            Equipment StdItem;
             UserItem UserItem;
             PlayObject PlayObject;
             try
@@ -530,7 +530,7 @@ namespace GameSvr.Player
         private void ClientSellOffEnd(string sBuyCharName, int nSellGold, int nGameDiamond, int nCode)
         {
             UserItem UserItem;
-            StdItem StdItem;
+            Equipment StdItem;
             DealOffInfo DealOffInfo;
             m_boSellOffOK = true;
             var bo11 = false;

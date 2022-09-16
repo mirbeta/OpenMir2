@@ -7,7 +7,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
+using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.Npc
 {
@@ -397,7 +397,7 @@ namespace GameSvr.Npc
             int Sec = 0;
             int MSec = 0;
             Envirnoment Envir;
-            StdItem StdItem;
+            Equipment StdItem;
             for (var i = 0; i < ConditionList.Count; i++)
             {
                 QuestConditionInfo = ConditionList[i];
@@ -1600,7 +1600,7 @@ namespace GameSvr.Npc
         private void GotoLable_TakeItem(PlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
         {
             UserItem UserItem;
-            StdItem StdItem;
+            Equipment StdItem;
             if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.DecGold(nItemCount);
@@ -1637,7 +1637,7 @@ namespace GameSvr.Npc
         public void GotoLable_GiveItem(PlayObject PlayObject, string sItemName, int nItemCount)
         {
             UserItem UserItem;
-            StdItem StdItem;
+            Equipment StdItem;
             if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.IncGold(nItemCount);

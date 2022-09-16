@@ -3,7 +3,7 @@ using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
+using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.Command.Commands
 {
@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
             var sType = @Params.Length > 3 ? @Params[3] : "";
 
             int nItemCount;
-            StdItem StdItem;
+            Equipment StdItem;
             UserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || sItemCount == "" || sType == "")
             {

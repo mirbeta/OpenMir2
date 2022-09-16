@@ -944,7 +944,7 @@ namespace GameSvr.Player
                 {
                     SysMsg("当前服务器运行于冒险模式.", MsgColor.Green, MsgType.Hint);
                 }
-                if (MagicArr[SpellsDef.SKILL_ERGUM] != null && !UseThrusting)
+                if (MagicArr[MagicConst.SKILL_ERGUM] != null && !UseThrusting)
                 {
                     UseThrusting = true;
                     SendSocket("+LNG");

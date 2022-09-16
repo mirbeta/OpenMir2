@@ -356,7 +356,7 @@ namespace GameSvr.RobotPlay
             bool result = false;
             try
             {
-                boFlag = Race == 108 || new ArrayList(new int[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
+                boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
                 if (Job == 0 || wMagicID <= 0)
                 {
                     nRange = 1;
@@ -424,7 +424,7 @@ namespace GameSvr.RobotPlay
                     {
                         nRange = 1;
                     }
-                    boFlag = Race == 108 || new ArrayList(new int[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
+                    boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
                     for (var i = 2; i >= 1; i--)
                     {
                         if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
@@ -490,7 +490,7 @@ namespace GameSvr.RobotPlay
             TMapWalkXY[] WalkStep = null;
             bool result = false;
             int nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
-            boFlag = Race == 108 || new ArrayList(new short[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID);
+            boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             TMapWalkXY MapWalkXY;
             for (var i = nRange; i >= 1; i--)
@@ -559,7 +559,7 @@ namespace GameSvr.RobotPlay
             TMapWalkXY[] WalkStep = null;
             TMapWalkXY MapWalkXY;
             bool result = false;
-            bool boFlag = Race == 108 || new ArrayList(new short[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID);
+            bool boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             for (var i = nRange; i >= 1; i--)
             {
                 if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))

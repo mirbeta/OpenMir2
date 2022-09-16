@@ -2,7 +2,6 @@ using GameSvr.Items;
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.Magic
 {
@@ -49,7 +48,7 @@ namespace GameSvr.Magic
             {
                 return false;
             }
-            StdItem amuletStdItem = null;
+            Equipment amuletStdItem = null;
             Idx = 0;
             if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
             {

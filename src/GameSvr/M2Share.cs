@@ -124,7 +124,7 @@ namespace GameSvr
         public static GameGateMgr GateMgr = null;
         public static ConcurrentQueue<string> ItemLogQueue = null;
         public static MapManager MapMgr = null;
-        public static ItemUnit ItemUnit = null;
+        public static CustomItem ItemUnit = null;
         public static MagicManager MagicMgr = null;
         public static NoticeManager NoticeMgr = null;
         public static GuildManager GuildMgr = null;
@@ -711,7 +711,7 @@ namespace GameSvr
             return result;
         }
 
-        public static bool CheckUserItems(int nIdx, StdItem StdItem)
+        public static bool CheckUserItems(int nIdx, Items.Equipment StdItem)
         {
             var result = false;
             switch (nIdx)

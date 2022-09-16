@@ -68,7 +68,7 @@ namespace GameSvr
             M2Share.ItemLogQueue = new();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapMgr = new MapManager();
-            M2Share.ItemUnit = new ItemUnit();
+            M2Share.ItemUnit = new CustomItem();
             M2Share.MagicMgr = new MagicManager();
             M2Share.NoticeMgr = new NoticeManager();
             M2Share.GuildMgr = new GuildManager();

@@ -7,7 +7,6 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
-using StdItem = GameSvr.Items.StdItem;
 
 namespace GameSvr.DataStores
 {
@@ -22,7 +21,7 @@ namespace GameSvr.DataStores
         {
             int result = -1;
             int Idx;
-            StdItem Item;
+            Equipment Item;
             const string sSQLString = "SELECT * FROM TBL_StdItems";
             try
             {
@@ -41,7 +40,7 @@ namespace GameSvr.DataStores
                 {
                     while (dr.Read())
                     {
-                        Item = new StdItem();
+                        Item = new Equipment();
                         Idx = dr.GetInt32("Idx");// 序号
                         Item.Name = dr.GetString("Name");// 名称
                         Item.StdMode = (byte)dr.GetInt32("StdMode");// 分类号
@@ -71,15 +70,15 @@ namespace GameSvr.DataStores
                             case 0:
                             case 55:
                             case 58: // 药品
-                                Item.ItemType = GoodType.ITEM_LEECHDOM;
+                                Item.ItemType = EquipmentType.ITEM_LEECHDOM;
                                 break;
                             case 5:
                             case 6: // 武器
-                                Item.ItemType = GoodType.ITEM_WEAPON;
+                                Item.ItemType = EquipmentType.ITEM_WEAPON;
                                 break;
                             case 10:
                             case 11: // 衣服
-                                Item.ItemType = GoodType.ITEM_ARMOR;
+                                Item.ItemType = EquipmentType.ITEM_ARMOR;
                                 break;
                             case 15:
                             case 19:
@@ -97,10 +96,10 @@ namespace GameSvr.DataStores
                             case 63:
                             case 64:
                             case 30: // 辅助物品
-                                Item.ItemType = GoodType.ITEM_ACCESSORY;
+                                Item.ItemType = EquipmentType.ITEM_ACCESSORY;
                                 break;
                             default: // 其它物品
-                                Item.ItemType = GoodType.ITEM_ETC;
+                                Item.ItemType = EquipmentType.ITEM_ETC;
                                 break;
                         }
                         if (M2Share.WorldEngine.StdItemList.Count <= Idx)
