@@ -588,6 +588,7 @@ namespace GameSvr.Player
             m_TimeGotoNPC = null;
             AutoTimerTick = new int[20];
             AutoTimerStatus = new int[20];
+            Cell = CellType.Play;
             m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 
@@ -1294,7 +1295,7 @@ namespace GameSvr.Player
                                 var OSObject =  cellInfo.ObjList[nIdx];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.CellType == CellType.MovingObject)
+                                    if (OSObject.CellType == CellType.Play||OSObject.CellType == CellType.Monster)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
                                         {

@@ -6,6 +6,36 @@ namespace GameSvr.Actor
 {
     public partial class BaseObject
     {
+        protected virtual void UpdateMonsterVisible(BaseObject baseObject)
+        {
+            bool boIsVisible = false;
+            VisibleBaseObject visibleBaseObject;
+            if ((baseObject.Race == Grobal2.RC_PLAYOBJECT) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
+            {
+                IsVisibleActive = true;
+            }
+            for (var i = 0; i < baseObject.VisibleActors.Count; i++)
+            {
+                visibleBaseObject = baseObject.VisibleActors[i];
+                if (visibleBaseObject.BaseObject == baseObject)
+                {
+                    visibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
+                    boIsVisible = true;
+                    break;
+                }
+            }
+            if (boIsVisible)
+            {
+                return;
+            }
+            visibleBaseObject = new VisibleBaseObject
+            {
+                VisibleFlag = VisibleFlag.Hidden,
+                BaseObject = baseObject
+            };
+            baseObject.VisibleActors.Add(visibleBaseObject);
+        }
+
         protected virtual void UpdateVisibleGay(BaseObject baseObject)
         {
             bool boIsVisible = false;
@@ -103,12 +133,12 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         public virtual void DeliveryViewRange()
         {
-            
+
         }
-        
+
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
@@ -125,8 +155,8 @@ namespace GameSvr.Actor
             }
             var nStartX = (short)(CurrX - ViewRange);
             var nEndX = (short)(CurrX + ViewRange);
-            var nStartY =  (short)(CurrY - ViewRange);
-            var nEndY =  (short)(CurrY + ViewRange);
+            var nStartY = (short)(CurrY - ViewRange);
+            var nEndY = (short)(CurrY + ViewRange);
             try
             {
                 for (var n18 = nStartX; n18 <= nEndX; n18++)
@@ -148,7 +178,7 @@ namespace GameSvr.Actor
                                 var osObject = cellInfo.ObjList[nIdx];
                                 if (osObject != null)
                                 {
-                                    if (osObject.CellType == CellType.MovingObject)
+                                    if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster)
                                     {
                                         if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                         {
@@ -167,15 +197,21 @@ namespace GameSvr.Actor
                                             {
                                                 if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                 {
-                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) ||
-                                                        (baseObject.Race == Grobal2.RC_PLAYOBJECT))
+                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null)
+                                                        && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || (baseObject.Race == Grobal2.RC_PLAYOBJECT))
                                                     {
-                                                        UpdateVisibleGay(baseObject);
+                                                        if (baseObject.Cell == CellType.Monster)
+                                                        {
+                                                            baseObject.UpdateMonsterVisible(this);
+                                                        }
+                                                        else
+                                                        {
+                                                            UpdateVisibleGay(baseObject);
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-
                                     }
                                 }
                                 nIdx++;
@@ -247,7 +283,7 @@ namespace GameSvr.Actor
                                 var OSObject = cellInfo.ObjList[i];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.CellType == CellType.MovingObject)
+                                    if (OSObject.CellType == CellType.Play || OSObject.CellType == CellType.Monster)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
                                         {

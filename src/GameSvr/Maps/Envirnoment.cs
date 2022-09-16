@@ -164,7 +164,7 @@ namespace GameSvr.Maps
                             NodeThreaded = MobThreads[ThreadId].ObjectsList.AddLast(pRemoveObject);
                         }*/
                         result = pRemoveObject;
-                        if (cellType == CellType.MovingObject && !((BaseObject)pRemoveObject).AddToMaped)
+                        if (cellType == CellType.Play || cellType == CellType.Monster && !((BaseObject)pRemoveObject).AddToMaped)
                         {
                             ((BaseObject)pRemoveObject).DelFormMaped = false;
                             ((BaseObject)pRemoveObject).AddToMaped = true;
@@ -242,7 +242,7 @@ namespace GameSvr.Maps
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 var OSObject = cellInfo.ObjList[i];
-                                if (OSObject.CellType == CellType.MovingObject)
+                                if (OSObject.CellType == CellType.Monster || OSObject.CellType == CellType.Play)
                                 {
                                     baseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                     if (baseObject != null)
@@ -281,7 +281,7 @@ namespace GameSvr.Maps
                                     break;
                                 }
                                 osObject = cellInfo.ObjList[i];
-                                if (osObject.CellType == CellType.MovingObject)
+                                if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                                 {
                                     if (osObject.CellObjId == cert.ActorId)
                                     {
@@ -305,7 +305,7 @@ namespace GameSvr.Maps
                             }
                             osObject = new CellObject
                             {
-                                CellType = CellType.MovingObject,
+                                CellType = cert.Cell,
                                 CellObjId = cert.ActorId,
                                 AddTime = HUtil32.GetTickCount()
                             };
@@ -347,7 +347,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.MovingObject)
+                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                         {
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                             if (baseObject != null)
@@ -390,7 +390,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var osObject = cellInfo.ObjList[i];
-                        if (!boFlag && osObject.CellType == CellType.MovingObject)
+                        if (!boFlag && osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                         {
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                             if (baseObject != null)
@@ -426,7 +426,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.MovingObject)
+                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                         {
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                             if (baseObject != null)
@@ -517,7 +517,7 @@ namespace GameSvr.Maps
                                             cellInfo.Remove(osObject);
                                             result = 1;
                                             // 减地图人物怪物计数
-                                            if (cellType == CellType.MovingObject && !((BaseObject)pRemoveObject).DelFormMaped)
+                                            if (cellType == CellType.Play || cellType == CellType.Monster && !((BaseObject)pRemoveObject).DelFormMaped)
                                             {
                                                 ((BaseObject)pRemoveObject).DelFormMaped = true;
                                                 ((BaseObject)pRemoveObject).AddToMaped = false;
@@ -592,7 +592,7 @@ namespace GameSvr.Maps
                         {
                             Bo2C = false;
                         }
-                        if (osObject.CellType == CellType.MovingObject)
+                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                         {
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                             if (!baseObject.Death)
@@ -715,9 +715,6 @@ namespace GameSvr.Maps
         /// <summary>
         /// 刷新在地图上位置的时间
         /// </summary>
-        /// <param name="nX"></param>
-        /// <param name="nY"></param>
-        /// <param name="baseObject"></param>
         public void VerifyMapTime(int nX, int nY, BaseObject baseObject)
         {
             CellObject osObject;
@@ -733,7 +730,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.MovingObject && osObject.CellObjId == baseObject.ActorId)
+                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play && osObject.CellObjId == baseObject.ActorId)
                         {
                             osObject.AddTime = HUtil32.GetTickCount();
                             boVerify = true;
@@ -743,7 +740,7 @@ namespace GameSvr.Maps
                 }
                 if (!boVerify)
                 {
-                    AddToMap(nX, nY, CellType.MovingObject, baseObject);
+                    AddToMap(nX, nY, baseObject.Cell, baseObject);
                 }
             }
             catch
@@ -974,7 +971,7 @@ namespace GameSvr.Maps
                     {
                         continue;
                     }
-                    if (osObject.CellType == CellType.MovingObject)
+                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
@@ -1112,7 +1109,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var osObject = cellInfo.ObjList[i];
-                    if (osObject.CellType == CellType.MovingObject)
+                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null && !baseObject.Ghost && baseObject.Bo2B9 && (!boFlag || !baseObject.Death))
@@ -1193,7 +1190,7 @@ namespace GameSvr.Maps
                         {
                             Bo2C = false;
                         }
-                        if (osObject.CellType == CellType.MovingObject)
+                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                         {
                             var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                             if (!baseObject.Death)
@@ -1256,7 +1253,7 @@ namespace GameSvr.Maps
             return baseObjectList.Count;
         }
 
-        public bool GetMapBaseObjects(short nX, short nY, int nRage, IList<BaseObject> baseObjectList, CellType btType = CellType.MovingObject)
+        public bool GetMapBaseObjects(short nX, short nY, int nRage, IList<BaseObject> baseObjectList, CellType btType = CellType.Monster)
         {
             if (baseObjectList.Count == 0)
             {
@@ -1287,7 +1284,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var osObject = cellInfo.ObjList[i];
-                    if (osObject.CellType == CellType.MovingObject)
+                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
@@ -1379,7 +1376,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var osObject = cellInfo.ObjList[i];
-                    if (osObject.CellType == CellType.MovingObject)
+                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject.Race == Grobal2.RC_PLAYOBJECT)

@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using GameSvr.Maps;
+using SystemModule;
 using SystemModule.Data;
 
 namespace GameSvr.Actor
@@ -26,6 +27,7 @@ namespace GameSvr.Actor
             m_boRunAwayMode = false;
             m_dwRunAwayStart = HUtil32.GetTickCount();
             m_dwRunAwayTime = 0;
+            Cell = CellType.Monster;
         }
 
         /// <summary>
@@ -203,6 +205,9 @@ namespace GameSvr.Actor
             TargetY = -1;
         }
 
+        /// <summary>
+        /// 搜索目标
+        /// </summary>
         protected virtual void SearchTarget()
         {
             BaseObject BaseObject18 = null;

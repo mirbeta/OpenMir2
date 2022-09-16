@@ -1125,7 +1125,7 @@ namespace GameSvr.Actor
             {
                 Invisible = true;
                 GhostTick = HUtil32.GetTickCount();
-                Envir.DeleteFromMap(CurrX, CurrY, CellType.MovingObject, this);
+                Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
                 SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
             }
             else

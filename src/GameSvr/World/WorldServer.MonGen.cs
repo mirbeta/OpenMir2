@@ -52,12 +52,16 @@ namespace GameSvr.World
                 }
             }
             
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < MonGenList.Count; i++)
             {
                 for (var j = 0; j < MonGenList[i].Count; j++)
                 {
                     if (MonGenList[i] != null)
                     {
+                        if (string.IsNullOrEmpty(MonGenList[i][j].MonName))
+                        {
+                            continue;
+                        }
                         MonGenList[i][j].Race = GetMonRace(MonGenList[i][j].MonName);
                     }
                 }
@@ -197,7 +201,7 @@ namespace GameSvr.World
                         {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var nGenModCount = monGen.Count / M2Share.Config.MonGenRate * 10;
+                            var nGenModCount = (int)Math.Ceiling(monGen.Count / (decimal)(M2Share.Config.MonGenRate * 10));
                             var map = M2Share.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
@@ -281,7 +285,8 @@ namespace GameSvr.World
                                                 //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
                                                 //其余怪物均为主动攻击
                                                 //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
-                                                monster.SearchViewRange();
+                                                //由玩家找出附近的怪物，然后添加到怪物列表
+                                                //monster.SearchViewRange();
                                                 monster.DeliveryViewRange();
                                             }
                                             else
@@ -716,7 +721,7 @@ namespace GameSvr.World
                         }
                         else
                         {
-                            p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.MovingObject, cert);
+                            p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert);
                             break;
                         }
 
@@ -764,7 +769,7 @@ namespace GameSvr.World
                                 cert.ReAliveTick = HUtil32.GetTickCount();
                                 cert.MonGen = monGen;
                                 monGen.ActiveCount++;
-                                monGen.CertList.Add(cert);
+                                monGen.TryAdd(cert);
                             }
                             if ((HUtil32.GetTickCount() - dwStartTick) > M2Share.g_dwZenLimit)
                             {
@@ -786,7 +791,7 @@ namespace GameSvr.World
                                 cert.ReAliveTick = HUtil32.GetTickCount();
                                 cert.MonGen = monGen;
                                 monGen.ActiveCount++;
-                                monGen.CertList.Add(cert);
+                                monGen.TryAdd(cert);
                             }
                             if (HUtil32.GetTickCount() - dwStartTick > M2Share.g_dwZenLimit)
                             {

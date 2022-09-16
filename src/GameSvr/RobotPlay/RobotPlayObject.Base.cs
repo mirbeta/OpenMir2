@@ -536,7 +536,8 @@ namespace GameSvr.RobotPlay
                                     {
                                         switch (osObject.CellType)
                                         {
-                                            case CellType.MovingObject:
+                                            case CellType.Play:
+                                            case CellType.Monster:
                                                 if (HUtil32.GetTickCount() - osObject.AddTime >= 60000)
                                                 {
                                                     osObject.ObjectDispose = true;

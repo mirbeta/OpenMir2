@@ -170,6 +170,10 @@ namespace GameSvr.Actor
         /// </summary>
         public byte Race;
         /// <summary>
+        /// 在地图上的类型
+        /// </summary>
+        public CellType Cell;
+        /// <summary>
         /// 角色外形
         /// </summary>
         public byte RaceImg;
@@ -701,7 +705,7 @@ namespace GameSvr.Actor
         /// </summary>
         public int ProcessRunCount;
         /// <summary>
-        /// 可见玩家列表
+        /// 可见精灵列表
         /// </summary>
         public readonly IList<VisibleBaseObject> VisibleActors;
         /// <summary>
@@ -1349,10 +1353,10 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        Envir.DeleteFromMap(CurrX, CurrY, CellType.MovingObject, this);
+                        Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
                         CurrX = oldX;
                         CurrY = oldY;
-                        Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
+                        Envir.AddToMap(CurrX, CurrY, Cell, this);
                     }
                 }
             }
@@ -2052,7 +2056,7 @@ namespace GameSvr.Actor
                     nOldX = CurrX;
                     nOldY = CurrY;
                     bo21 = false;
-                    this.Envir.DeleteFromMap(CurrX, CurrY, CellType.MovingObject, this);
+                    this.Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
                     VisibleHumanList.Clear();
                     for (var i = 0; i < VisibleItems.Count; i++)
                     {
@@ -2072,7 +2076,7 @@ namespace GameSvr.Actor
                     CurrY = nY;
                     if (SpaceMove_GetRandXY(this.Envir, ref CurrX, ref CurrY))
                     {
-                        this.Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
+                        this.Envir.AddToMap(CurrX, CurrY, Cell, this);
                         SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                         SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
@@ -2092,7 +2096,7 @@ namespace GameSvr.Actor
                         this.Envir = oldEnvir;
                         CurrX = (short)nOldX;
                         CurrY = (short)nOldY;
-                        this.Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
+                        this.Envir.AddToMap(CurrX, CurrY, Cell, this);
                     }
                     OnEnvirnomentChanged();
                 }
@@ -2705,7 +2709,7 @@ namespace GameSvr.Actor
 
         private bool AddToMap()
         {
-            var point = Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
+            var point = Envir.AddToMap(CurrX, CurrY, Cell, this);
             var result = point != null;
             if (!FixedHideMode)
             {
@@ -3419,7 +3423,7 @@ namespace GameSvr.Actor
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 osObject = cellInfo.ObjList[i];
-                                if ((osObject != null) && (osObject.CellType == CellType.MovingObject))
+                                if ((osObject != null) && (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster))
                                 {
                                     baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                     if ((baseObject != null) && (!baseObject.Death) && (!baseObject.Ghost))
@@ -3482,7 +3486,7 @@ namespace GameSvr.Actor
                                         var osObject = cellInfo.ObjList[i];
                                         if (osObject != null)
                                         {
-                                            if (osObject.CellType == CellType.MovingObject)
+                                            if (osObject.CellType == CellType.Play||osObject.CellType == CellType.Monster)
                                             {
                                                 if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                                 {
@@ -3748,7 +3752,7 @@ namespace GameSvr.Actor
 
         protected void DisappearA()
         {
-            Envir.DeleteFromMap(CurrX, CurrY, CellType.MovingObject, this);
+            Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
             SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
@@ -3949,7 +3953,7 @@ namespace GameSvr.Actor
                     this.Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
-                    this.Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
+                    this.Envir.AddToMap(CurrX, CurrY, Cell, this);
                 }
                 OnEnvirnomentChanged();
                 if (Race == Grobal2.RC_PLAYOBJECT) // 复位泡点，及金币，时间
@@ -5426,7 +5430,7 @@ namespace GameSvr.Actor
                         for (var k = 0; k < cellInfo.Count; k++)
                         {
                             var osObject = cellInfo.ObjList[k];
-                            if ((osObject != null) && (osObject.CellType == CellType.MovingObject))
+                            if ((osObject != null) && (osObject.CellType == CellType.Play||osObject.CellType == CellType.Monster))
                             {
                                 var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                 ;
@@ -6207,7 +6211,8 @@ namespace GameSvr.Actor
                 {
                     CurrX = (short)nX;
                     CurrY = (short)nY;
-                    addObj = Envir.AddToMap(nX, nY, CellType.MovingObject, this);
+                    
+                    addObj = Envir.AddToMap(nX, nY, Cell, this);
                     break;
                 }
 
@@ -6222,7 +6227,7 @@ namespace GameSvr.Actor
             {
                 CurrX = nX2;
                 CurrY = nY2;
-                Envir.AddToMap(CurrX, CurrY, CellType.MovingObject, this);
+                Envir.AddToMap(CurrX, CurrY, Cell, this);
             }
             Abil.HP = Abil.MaxHP;
             Abil.MP = Abil.MaxMP;

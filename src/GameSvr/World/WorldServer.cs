@@ -1695,7 +1695,7 @@ namespace GameSvr.World
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
                             var osObject = cellInfo.ObjList[i];
-                            if (osObject != null && osObject.CellType == CellType.MovingObject)
+                            if (osObject != null && osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                             {
                                 var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == Grobal2.RC_PLAYOBJECT)
@@ -2119,7 +2119,7 @@ namespace GameSvr.World
                     }
                     else
                     {
-                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.MovingObject, cert);
+                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.Cell, cert);
                         break;
                     }
                     n1C++;

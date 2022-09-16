@@ -1,4 +1,5 @@
 ﻿using GameSvr.Actor;
+using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Player;
 using GameSvr.Script;
@@ -56,6 +57,7 @@ namespace GameSvr.Npc
             this.m_boIsHide = false;
             this.m_boIsQuest = true;
             this.FGotoLable = new int[100];
+            this.Cell = CellType.Merchant;
         }
 
         ~NormNpc()

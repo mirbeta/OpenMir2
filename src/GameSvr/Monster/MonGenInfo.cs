@@ -43,13 +43,12 @@ namespace GameSvr.Monster
         /// <returns></returns>
         public bool TryAdd(BaseObject baseObject)
         {
-            if (CertList.Count <= MonGenConst.ThreadMonLimit)
+            if (CertList.Count > MonGenConst.ThreadMonLimit)
             {
                 return false;
             }
             CertList.Add(baseObject);
             return true;
-
         }
 
         public MonGenInfo Clone()
