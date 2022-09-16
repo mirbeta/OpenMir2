@@ -6,7 +6,11 @@ namespace GameSvr.Actor
 {
     public partial class BaseObject
     {
-        protected virtual void UpdateMonsterVisible(BaseObject baseObject)
+        /// <summary>
+        /// 更新怪物视野
+        /// </summary>
+        /// <param name="baseObject"></param>
+        public virtual void UpdateMonsterVisible(BaseObject baseObject)
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
@@ -14,9 +18,9 @@ namespace GameSvr.Actor
             {
                 IsVisibleActive = true;
             }
-            for (var i = 0; i < baseObject.VisibleActors.Count; i++)
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                visibleBaseObject = baseObject.VisibleActors[i];
+                visibleBaseObject = VisibleActors[i];
                 if (visibleBaseObject.BaseObject == baseObject)
                 {
                     visibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
@@ -33,7 +37,7 @@ namespace GameSvr.Actor
                 VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = baseObject
             };
-            baseObject.VisibleActors.Add(visibleBaseObject);
+            VisibleActors.Add(visibleBaseObject);
         }
 
         protected virtual void UpdateVisibleGay(BaseObject baseObject)
@@ -200,14 +204,7 @@ namespace GameSvr.Actor
                                                     if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null)
                                                         && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || (baseObject.Race == Grobal2.RC_PLAYOBJECT))
                                                     {
-                                                        if (baseObject.Cell == CellType.Monster)
-                                                        {
-                                                            baseObject.UpdateMonsterVisible(this);
-                                                        }
-                                                        else
-                                                        {
-                                                            UpdateVisibleGay(baseObject);
-                                                        }
+                                                        UpdateVisibleGay(baseObject);
                                                     }
                                                 }
                                             }

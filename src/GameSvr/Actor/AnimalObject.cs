@@ -215,6 +215,11 @@ namespace GameSvr.Actor
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
                 var BaseObject = this.VisibleActors[i].BaseObject;
+                if (BaseObject.Death || BaseObject.Ghost || (BaseObject.Envir != Envir) || (Math.Abs(BaseObject.CurrX - CurrX) > 15) || (Math.Abs(BaseObject.CurrY - CurrY) > 15))
+                {
+                    ClearTargetCreat(BaseObject);
+                    continue;
+                }
                 if (!BaseObject.Death)
                 {
                     if (this.IsProperTarget(BaseObject) && (!BaseObject.HideMode || this.CoolEye))
