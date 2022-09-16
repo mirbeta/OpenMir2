@@ -280,7 +280,7 @@ namespace GameSvr.Actor
                                 var OSObject = cellInfo.ObjList[i];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.CellType == CellType.Play || OSObject.CellType == CellType.Monster)
+                                    if (OSObject.CellType == CellType.Play || OSObject.CellType == CellType.Monster || OSObject.CellType == CellType.Merchant)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
                                         {
