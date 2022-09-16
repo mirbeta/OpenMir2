@@ -158,13 +158,8 @@ namespace GameSvr.Maps
                             AddTime = HUtil32.GetTickCount()
                         };
                         cellInfo.Add(osObject, pRemoveObject);
-                        /*if (cellType == CellType.MovingObject)
-                        {
-                            SpawnThread = ThreadId;
-                            NodeThreaded = MobThreads[ThreadId].ObjectsList.AddLast(pRemoveObject);
-                        }*/
                         result = pRemoveObject;
-                        if (cellType == CellType.Play || cellType == CellType.Monster && !((BaseObject)pRemoveObject).AddToMaped)
+                        if (cellType == CellType.Play || cellType == CellType.Monster || cellType == CellType.Merchant && !((BaseObject)pRemoveObject).AddToMaped)
                         {
                             ((BaseObject)pRemoveObject).DelFormMaped = false;
                             ((BaseObject)pRemoveObject).AddToMaped = true;
@@ -242,7 +237,7 @@ namespace GameSvr.Maps
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 var OSObject = cellInfo.ObjList[i];
-                                if (OSObject.CellType == CellType.Monster || OSObject.CellType == CellType.Play)
+                                if (OSObject.CellType == CellType.Monster || OSObject.CellType == CellType.Play || OSObject.CellType == CellType.Merchant)
                                 {
                                     baseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                     if (baseObject != null)
@@ -509,7 +504,7 @@ namespace GameSvr.Maps
                             {
                                 cellInfo.Remove(osObject);
                                 result = 1;
-                                if (cellType == CellType.Play || cellType == CellType.Monster && !((BaseObject)pRemoveObject).DelFormMaped)
+                                if (cellType == CellType.Play || cellType == CellType.Monster || osObject.CellType == CellType.Merchant && !((BaseObject)pRemoveObject).DelFormMaped)
                                 {
                                     ((BaseObject)pRemoveObject).DelFormMaped = true;
                                     ((BaseObject)pRemoveObject).AddToMaped = false;
@@ -700,7 +695,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play && osObject.CellObjId == baseObject.ActorId)
+                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play || osObject.CellType == CellType.Merchant && osObject.CellObjId == baseObject.ActorId)
                         {
                             osObject.AddTime = HUtil32.GetTickCount();
                             boVerify = true;
@@ -941,7 +936,7 @@ namespace GameSvr.Maps
                     {
                         continue;
                     }
-                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
+                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play || osObject.CellType == CellType.Merchant)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
@@ -1079,9 +1074,9 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var osObject = cellInfo.ObjList[i];
-                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
+                    if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play || osObject.CellType == CellType.Merchant)
                     {
-                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                         if (baseObject != null && !baseObject.Ghost && baseObject.Bo2B9 && (!boFlag || !baseObject.Death))
                         {
                             result = baseObject;
