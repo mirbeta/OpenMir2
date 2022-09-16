@@ -75,12 +75,14 @@ namespace GameSvr.Maps
     public enum CellType : byte
     {
         EventObject = 1,
-        MovingObject = 2,
+        Play = 2,
         ItemObject = 3,
         GateObject = 4,
         MapEvent = 5,
         Door = 6,
-        Roon = 7
+        Roon = 7,
+        Merchant = 8,
+        Monster = 9,
     }
 
     public enum CellAttribute : byte
