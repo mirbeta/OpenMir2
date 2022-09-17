@@ -588,7 +588,7 @@ namespace GameSvr.Player
             m_TimeGotoNPC = null;
             AutoTimerTick = new int[20];
             AutoTimerStatus = new int[20];
-            Cell = CellType.Play;
+            MapCell = CellType.Play;
             m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 
@@ -912,7 +912,6 @@ namespace GameSvr.Player
                 SendMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SENDMYMAGIC, 0, 0, 0, 0, "");
-                // FeatureChanged(); //增加，广播人物骑马信息
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(CharName);
                 if (MyGuild != null)
                 {
@@ -1292,14 +1291,14 @@ namespace GameSvr.Player
                                 {
                                     break;
                                 }
-                                var OSObject =  cellInfo.ObjList[nIdx];
-                                if (OSObject != null)
+                                var osObject =  cellInfo.ObjList[nIdx];
+                                if (osObject != null)
                                 {
-                                    if (OSObject.CellType == CellType.Play||OSObject.CellType == CellType.Monster)
+                                    if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
                                     {
-                                        if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
+                                        if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                         {
-                                            cellInfo.Remove(OSObject);
+                                            cellInfo.Remove(osObject);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
@@ -1307,14 +1306,14 @@ namespace GameSvr.Player
                                             cellInfo.Dispose();
                                             break;
                                         }
-                                        BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
+                                        BaseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                         if (BaseObject != null && !BaseObject.Invisible)
                                         {
                                             if (!BaseObject.Ghost && !BaseObject.FixedHideMode && !BaseObject.ObMode)
                                             {
                                                 if (Race < Grobal2.RC_ANIMAL || Master != null || CrazyMode || NastyMode || WantRefMsg || BaseObject.Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (BaseObject.Cell == CellType.Monster && this.Cell == CellType.Play && !this.ObMode)
+                                                    if (BaseObject.MapCell == CellType.Monster && this.MapCell == CellType.Play && !this.ObMode)
                                                     {
                                                         BaseObject.UpdateMonsterVisible(this);
                                                     }
@@ -1328,11 +1327,11 @@ namespace GameSvr.Player
                                     }
                                     if (Race == Grobal2.RC_PLAYOBJECT)
                                     {
-                                        if (OSObject.CellType == CellType.ItemObject)
+                                        if (osObject.CellType == CellType.Item)
                                         {
-                                            if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
+                                            if ((HUtil32.GetTickCount() - osObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
-                                                cellInfo.Remove(OSObject);
+                                                cellInfo.Remove(osObject);
                                                 if (cellInfo.Count > 0)
                                                 {
                                                     continue;
@@ -1340,37 +1339,37 @@ namespace GameSvr.Player
                                                 cellInfo.Dispose();
                                                 break;
                                             }
-                                            var MapItem = (MapItem)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
-                                            UpdateVisibleItem(nX, nY, MapItem);
-                                            if (MapItem.OfBaseObject > 0 || MapItem.DropBaseObject > 0)
+                                            var mapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);;
+                                            UpdateVisibleItem(nX, nY, mapItem);
+                                            if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
                                             {
-                                                if ((HUtil32.GetTickCount() - MapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime) // 2 * 60 * 1000
+                                                if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime) // 2 * 60 * 1000
                                                 {
-                                                    MapItem.OfBaseObject = 0;
-                                                    MapItem.DropBaseObject = 0;
+                                                    mapItem.OfBaseObject = 0;
+                                                    mapItem.DropBaseObject = 0;
                                                 }
                                                 else
                                                 {
-                                                    if (M2Share.ActorMgr.Get(MapItem.OfBaseObject) != null)
+                                                    if (M2Share.ActorMgr.Get(mapItem.OfBaseObject) != null)
                                                     {
-                                                        if (M2Share.ActorMgr.Get(MapItem.OfBaseObject).Ghost)
+                                                        if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
                                                         {
-                                                            MapItem.OfBaseObject = 0;
+                                                            mapItem.OfBaseObject = 0;
                                                         }
                                                     }
-                                                    if (M2Share.ActorMgr.Get(MapItem.DropBaseObject) != null)
+                                                    if (M2Share.ActorMgr.Get(mapItem.DropBaseObject) != null)
                                                     {
-                                                        if (M2Share.ActorMgr.Get(MapItem.DropBaseObject).Ghost)
+                                                        if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
                                                         {
-                                                            MapItem.DropBaseObject = 0;
+                                                            mapItem.DropBaseObject = 0;
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                        if (OSObject.CellType == CellType.EventObject)
+                                        if (osObject.CellType == CellType.Event)
                                         {
-                                            MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(OSObject.CellObjId);;
+                                            MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);;
                                             if (MapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(nX, nY, MapEvent);
@@ -1686,7 +1685,7 @@ namespace GameSvr.Player
             const int DropWide = 2;
             UserItem pu;
             const string sExceptionMsg = "[Exception] TPlayObject::ScatterBagItems";
-            IList<TDeleteItem> DelList = null;
+            IList<DeleteItem> DelList = null;
             if (AngryRing || NoDropItem || Envir.Flag.boNODROPITEM)
             {
                 return;// 不死戒指
@@ -1705,11 +1704,11 @@ namespace GameSvr.Player
                             {
                                 if (DelList == null)
                                 {
-                                    DelList = new List<TDeleteItem>();
+                                    DelList = new List<DeleteItem>();
                                 }
-                                DelList.Add(new TDeleteItem()
+                                DelList.Add(new DeleteItem()
                                 {
-                                    sItemName = M2Share.WorldEngine.GetStdItemName(pu.wIndex),
+                                    ItemName = M2Share.WorldEngine.GetStdItemName(pu.wIndex),
                                     MakeIndex = pu.MakeIndex
                                 });
                             }

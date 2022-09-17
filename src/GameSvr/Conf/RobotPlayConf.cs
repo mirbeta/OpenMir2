@@ -6,7 +6,6 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
-using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.Conf
 {
@@ -32,7 +31,7 @@ namespace GameSvr.Conf
             UserItem UserItem;
             MagicInfo Magic;
             UserMagic UserMagic;
-            Equipment StdItem;
+            StdItem StdItem;
             playObject.NoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
             playObject.NoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
             playObject.m_nDropUseItemRate = ReadInteger("Info", "DropUseItemRate", 100);// 掉装备机率

@@ -132,7 +132,7 @@ namespace GameSvr.Maps
                     nDMapX = (short)nDMapX,
                     nDMapY = (short)nDMapY
                 };
-                SEnvir.AddToMap(nSMapX, nSMapY, CellType.GateObject, GateObj);
+                SEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, GateObj);
                 result = true;
             }
             return result;

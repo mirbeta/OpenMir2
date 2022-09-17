@@ -27,7 +27,7 @@ namespace GameSvr.Actor
             m_boRunAwayMode = false;
             m_dwRunAwayStart = HUtil32.GetTickCount();
             m_dwRunAwayTime = 0;
-            Cell = CellType.Monster;
+            MapCell = CellType.Monster;
         }
 
         /// <summary>
@@ -214,21 +214,21 @@ namespace GameSvr.Actor
             var n10 = 999;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
-                var BaseObject = this.VisibleActors[i].BaseObject;
-                if (BaseObject.Death || BaseObject.Ghost || (BaseObject.Envir != Envir) || (Math.Abs(BaseObject.CurrX - CurrX) > 15) || (Math.Abs(BaseObject.CurrY - CurrY) > 15))
+                var baseObject = this.VisibleActors[i].BaseObject;
+                if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15))
                 {
-                    ClearTargetCreat(BaseObject);
+                    ClearTargetCreat(baseObject);
                     continue;
                 }
-                if (!BaseObject.Death)
+                if (!baseObject.Death)
                 {
-                    if (this.IsProperTarget(BaseObject) && (!BaseObject.HideMode || this.CoolEye))
+                    if (this.IsProperTarget(baseObject) && (!baseObject.HideMode || this.CoolEye))
                     {
-                        var nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
+                        var nC = Math.Abs(this.CurrX - baseObject.CurrX) + Math.Abs(this.CurrY - baseObject.CurrY);
                         if (nC < n10)
                         {
                             n10 = nC;
-                            BaseObject18 = BaseObject;
+                            BaseObject18 = baseObject;
                         }
                     }
                 }

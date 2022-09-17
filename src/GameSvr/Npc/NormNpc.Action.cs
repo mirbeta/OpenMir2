@@ -61,8 +61,8 @@ namespace GameSvr.Npc
             string sSendStr;
             string sUserItemName;
             ClientDealOffInfo sClientDealOffInfo = null;
-            Equipment StdItem = null;
-            Equipment StdItem80;
+            StdItem StdItem = null;
+            StdItem StdItem80;
             bool bo12;
             try
             {
@@ -174,8 +174,8 @@ namespace GameSvr.Npc
             string sSendStr;
             string sUserItemName;
             ClientDealOffInfo sClientDealOffInfo = null;
-            Equipment StdItem = null;
-            Equipment StdItem80;
+            StdItem StdItem = null;
+            StdItem StdItem80;
             bool bo12;
             try
             {
@@ -1994,7 +1994,7 @@ namespace GameSvr.Npc
         private void ActionOfClearNeedItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             var nNeed = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
@@ -2027,7 +2027,7 @@ namespace GameSvr.Npc
         private void ActionOfClearMakeItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
             var boMatchName = QuestActionInfo.sParam3 == "1";
@@ -2618,7 +2618,7 @@ namespace GameSvr.Npc
         private void ActionOfGiveItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
             if (string.IsNullOrEmpty(sItemName) || nItemCount <= 0)
@@ -3390,7 +3390,7 @@ namespace GameSvr.Npc
             Envirnoment Envir;
             MapItem MapItem;
             MapItem MapItemA;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             UserItem UserItem = null;
             try
             {
@@ -3443,7 +3443,7 @@ namespace GameSvr.Npc
                         MapItem.OfBaseObject = PlayObject.ActorId; 
                         MapItem.CanPickUpTick = HUtil32.GetTickCount();
                         MapItem.DropBaseObject = PlayObject.ActorId;
-                        MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
+                        MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.Item, MapItem);
                         if (MapItemA != null)
                         {
                             if (MapItemA != MapItem)
@@ -3504,7 +3504,7 @@ namespace GameSvr.Npc
                                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
                                 MapItem.DropBaseObject = PlayObject.ActorId;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
-                                MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.ItemObject, MapItem);
+                                MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.Item, MapItem);
                                 if (MapItemA != null)
                                 {
                                     if (MapItemA != MapItem)

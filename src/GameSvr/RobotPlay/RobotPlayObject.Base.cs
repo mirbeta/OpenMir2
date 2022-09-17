@@ -5,7 +5,6 @@ using GameSvr.Maps;
 using System.Collections;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
-using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.RobotPlay
 {
@@ -16,7 +15,7 @@ namespace GameSvr.RobotPlay
             int nWhere;
             int nPercent;
             int nValue;
-            Equipment StdItem;
+            StdItem StdItem;
             UserItem UserItem;
             bool boRecalcAbilitys;
             bool boFind = false;
@@ -561,7 +560,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                 }
                                                 break;
-                                            case CellType.ItemObject:
+                                            case CellType.Item:
                                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
@@ -611,7 +610,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                 }
                                                 break;
-                                            case CellType.EventObject:
+                                            case CellType.Event:
                                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (osObject.CellObjId < 0)

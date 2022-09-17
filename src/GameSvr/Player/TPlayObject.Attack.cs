@@ -79,7 +79,7 @@ namespace GameSvr.Player
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
                         {
-                            Items.Equipment StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                            Items.StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -490,18 +490,18 @@ namespace GameSvr.Player
             dwDelayTime = 0;
             if (!m_boCanRun)
             {
-                return result;
+                return false;
             }
             if (Death || StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
             {
-                return result;
+                return false;
             }
             if (nFlag != wIdent && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
                     m_boFilterAction = false;
-                    return result;
+                    return false;
                 }
                 m_boFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;

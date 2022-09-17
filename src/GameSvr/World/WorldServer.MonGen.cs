@@ -297,18 +297,20 @@ namespace GameSvr.World
                                             monster.SearchTick = HUtil32.GetTickCount();
                                             if (!monster.Death)
                                             {
-                                                //todo 怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升效率
+                                                //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升效率
                                                 //要区分哪些怪物是主动攻击，哪些怪物是被动攻击
                                                 //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
                                                 //其余怪物均为主动攻击
                                                 //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
                                                 //由玩家找出附近的怪物，然后添加到怪物列表
                                                 //monster.SearchViewRange();
-                                                monster.DeliveryViewRange();
                                             }
                                             else
                                             {
-                                                monster.SearchViewRangeDeath();
+                                                //todo 怪物死了 要从可视范围内删除,自身也需要清除视觉范围 要调试一下怪物死亡过程个尸体清理过程
+                                                //或者人物视野范围内判断怪物是否死亡，死亡则删除范围，但是是要区分是死亡还是释放尸体，释放尸体则彻底不可见,死亡貌似还是处于可见状态
+                                                //或者可以用更效率的算法来处理视野范围,玩家搜索范围还是会有可能导致CPU使用率上升问题(目前有初步思路，预计后续优化)
+                                                monster.SearchViewRangeDeath(); 
                                             }
                                         }
                                         monster.ProcessRunCount = 0;

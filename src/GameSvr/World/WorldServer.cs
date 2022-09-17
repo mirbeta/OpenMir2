@@ -72,7 +72,7 @@ namespace GameSvr.World
         protected readonly IList<PlayObject> BotPlayObjectList;
         private readonly ArrayList _oldMagicList;
         public readonly IList<NormNpc> QuestNpcList;
-        public readonly IList<Items.Equipment> StdItemList;
+        public readonly IList<Items.StdItem> StdItemList;
         /// <summary>
         /// 假人列表
         /// </summary>
@@ -95,7 +95,7 @@ namespace GameSvr.World
             ProcessHumanLoopTime = 0;
             _merchantPosition = 0;
             NpcPosition = 0;
-            StdItemList = new List<Items.Equipment>();
+            StdItemList = new List<Items.StdItem>();
             MonsterList = new List<TMonInfo>();
             MonGenList = new Dictionary<int, IList<MonGenInfo>>();
             MonGenCountInfo = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -1006,9 +1006,9 @@ namespace GameSvr.World
             }
         }
 
-        public Items.Equipment GetStdItem(ushort nItemIdx)
+        public Items.StdItem GetStdItem(ushort nItemIdx)
         {
-            Items.Equipment result = null;
+            Items.StdItem result = null;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
@@ -1018,13 +1018,13 @@ namespace GameSvr.World
             return result;
         }
 
-        public Items.Equipment GetStdItem(string sItemName)
+        public Items.StdItem GetStdItem(string sItemName)
         {
-            Items.Equipment result = null;
+            Items.StdItem result = null;
             if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
-                Items.Equipment stdItem = StdItemList[i];
+                Items.StdItem stdItem = StdItemList[i];
                 if (string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = stdItem;
@@ -1859,19 +1859,22 @@ namespace GameSvr.World
             }
             var result = 0;
             if (envir == null) return result;
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < MonGenList.Count; i++)
             {
-                for (var j = 0; j < MonGenList[i].Count; j++)
+                if (MonGenList.TryGetValue(i, out var mongenList))
                 {
-                    MonGenInfo monGen = MonGenList[i][j];
-                    if (monGen == null) continue;
-                    for (var k = 0; k < monGen.CertList.Count; k++)
+                    for (var j = 0; j < mongenList.Count; j++)
                     {
-                        BaseObject baseObject = monGen.CertList[k];
-                        if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir)
+                        MonGenInfo monGen = mongenList[j];
+                        if (monGen == null) continue;
+                        for (var k = 0; k < monGen.CertList.Count; k++)
                         {
-                            list.Add(baseObject);
-                            result++;
+                            BaseObject baseObject = monGen.CertList[k];
+                            if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir)
+                            {
+                                list.Add(baseObject);
+                                result++;
+                            }
                         }
                     }
                 }
@@ -2119,7 +2122,7 @@ namespace GameSvr.World
                     }
                     else
                     {
-                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.Cell, cert);
+                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.MapCell, cert);
                         break;
                     }
                     n1C++;

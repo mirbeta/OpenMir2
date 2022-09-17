@@ -40,6 +40,11 @@ namespace GameSvr.Actor
             VisibleActors.Add(visibleBaseObject);
         }
 
+        public void ClearMonsterVisible(BaseObject baseObject)
+        {
+
+        }
+
         protected virtual void UpdateVisibleGay(BaseObject baseObject)
         {
             bool boIsVisible = false;
@@ -138,11 +143,6 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public virtual void DeliveryViewRange()
-        {
-
-        }
-
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
@@ -182,7 +182,7 @@ namespace GameSvr.Actor
                                 var osObject = cellInfo.ObjList[nIdx];
                                 if (osObject != null)
                                 {
-                                    if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster)
+                                    if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
                                     {
                                         if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                         {
@@ -293,7 +293,7 @@ namespace GameSvr.Actor
                                             break;
                                         }
                                     }
-                                    if ((OSObject.CellType == CellType.ItemObject) && !Death && (Race > Grobal2.RC_MONSTER))
+                                    if ((OSObject.CellType == CellType.Item) && !Death && (Race > Grobal2.RC_MONSTER))
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
                                         {
@@ -315,24 +315,7 @@ namespace GameSvr.Actor
                     }
                 }
             }
-
-            var n17 = 0;
-            if (VisibleActors.Count > 0)
-            {
-                while (true)
-                {
-                    if (VisibleActors.Count <= n17)
-                    {
-                        break;
-                    }
-                    if (VisibleActors[n17].VisibleFlag == 0)
-                    {
-                        VisibleActors.RemoveAt(n17);
-                        continue;
-                    }
-                    n17++;
-                }
-            }
+            VisibleActors.Clear();
         }
     }
 }

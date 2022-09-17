@@ -172,7 +172,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 在地图上的类型
         /// </summary>
-        public CellType Cell;
+        public CellType MapCell;
         /// <summary>
         /// 角色外形
         /// </summary>
@@ -431,6 +431,9 @@ namespace GameSvr.Actor
         /// </summary>
         public int DeathTick;
         public bool Invisible;
+        /// <summary>
+        /// 是否可以复活
+        /// </summary>
         public bool CanReAlive;
         /// <summary>
         /// 复活时间
@@ -1078,7 +1081,6 @@ namespace GameSvr.Actor
                     break;
                 }
             }
-
             if (!result)
             {
                 if (n24 < 8)
@@ -1092,7 +1094,6 @@ namespace GameSvr.Actor
                     pY = nOrgY;
                 }
             }
-
             return result;
         }
 
@@ -1137,7 +1138,7 @@ namespace GameSvr.Actor
                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                 mapItem.DropBaseObject = dropCreat.ActorId;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
-                var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.ItemObject, mapItem);
+                var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.Item, mapItem);
                 if (pr == mapItem)
                 {
                     SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
@@ -1353,10 +1354,10 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
+                        Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
                         CurrX = oldX;
                         CurrY = oldY;
-                        Envir.AddToMap(CurrX, CurrY, Cell, this);
+                        Envir.AddToMap(CurrX, CurrY, MapCell, this);
                     }
                 }
             }
@@ -1469,15 +1470,15 @@ namespace GameSvr.Actor
                 Name = Grobal2.sSTRING_GOLDNAME,
                 Count = nGold,
                 Looks = M2Share.GetGoldShape(nGold),
-                OfBaseObject = goldOfCreat.ActorId,
+                OfBaseObject = goldOfCreat?.ActorId ?? 0,
                 CanPickUpTick = HUtil32.GetTickCount(),
                 DropBaseObject = dropGoldCreat.ActorId
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
-            var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.ItemObject, mapItem);
+            var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.Item, mapItem);
             if (mapItemA != null)
             {
-                if (mapItemA != mapItem)
+                if (mapItemA.ActorId != mapItem.ActorId)
                 {
                     mapItem = mapItemA;
                 }
@@ -2056,7 +2057,7 @@ namespace GameSvr.Actor
                     nOldX = CurrX;
                     nOldY = CurrY;
                     bo21 = false;
-                    this.Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
+                    this.Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
                     VisibleHumanList.Clear();
                     for (var i = 0; i < VisibleItems.Count; i++)
                     {
@@ -2076,7 +2077,7 @@ namespace GameSvr.Actor
                     CurrY = nY;
                     if (SpaceMove_GetRandXY(this.Envir, ref CurrX, ref CurrY))
                     {
-                        this.Envir.AddToMap(CurrX, CurrY, Cell, this);
+                        this.Envir.AddToMap(CurrX, CurrY, MapCell, this);
                         SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                         SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
@@ -2096,7 +2097,7 @@ namespace GameSvr.Actor
                         this.Envir = oldEnvir;
                         CurrX = (short)nOldX;
                         CurrY = (short)nOldY;
-                        this.Envir.AddToMap(CurrX, CurrY, Cell, this);
+                        this.Envir.AddToMap(CurrX, CurrY, MapCell, this);
                     }
                     OnEnvirnomentChanged();
                 }
@@ -2709,7 +2710,7 @@ namespace GameSvr.Actor
 
         private bool AddToMap()
         {
-            var point = Envir.AddToMap(CurrX, CurrY, Cell, this);
+            var point = Envir.AddToMap(CurrX, CurrY, MapCell, this);
             var result = point != null;
             if (!FixedHideMode)
             {
@@ -3423,7 +3424,7 @@ namespace GameSvr.Actor
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 osObject = cellInfo.ObjList[i];
-                                if ((osObject != null) && (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster))
+                                if ((osObject != null) && (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant))
                                 {
                                     baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                     if ((baseObject != null) && (!baseObject.Death) && (!baseObject.Ghost))
@@ -3486,7 +3487,7 @@ namespace GameSvr.Actor
                                         var osObject = cellInfo.ObjList[i];
                                         if (osObject != null)
                                         {
-                                            if (osObject.CellType == CellType.Play||osObject.CellType == CellType.Monster)
+                                            if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
                                             {
                                                 if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                                 {
@@ -3603,7 +3604,7 @@ namespace GameSvr.Actor
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
                 byte nDress = 0;
-                Equipment stdItem = null;
+                StdItem stdItem = null;
                 if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0) // 衣服
                 {
                     stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
@@ -3752,7 +3753,7 @@ namespace GameSvr.Actor
 
         protected void DisappearA()
         {
-            Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
+            Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
             SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
@@ -3798,7 +3799,7 @@ namespace GameSvr.Actor
                         }
                         switch (osObject.CellType)
                         {
-                            case CellType.GateObject:
+                            case CellType.Route:
                                 var gateObj = (GateObject)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                 if (gateObj != null)
                                 {
@@ -3837,7 +3838,7 @@ namespace GameSvr.Actor
                                     }
                                 }
                                 break;
-                            case CellType.EventObject:
+                            case CellType.Event:
                                 {
                                     MirEvent mapEvent = null;
                                     var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
@@ -3953,7 +3954,7 @@ namespace GameSvr.Actor
                     this.Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
-                    this.Envir.AddToMap(CurrX, CurrY, Cell, this);
+                    this.Envir.AddToMap(CurrX, CurrY, MapCell, this);
                 }
                 OnEnvirnomentChanged();
                 if (Race == Grobal2.RC_PLAYOBJECT) // 复位泡点，及金币，时间
@@ -4901,7 +4902,7 @@ namespace GameSvr.Actor
             int nDura;
             int nOldDura;
             PlayObject playObject;
-            Equipment stdItem = null;
+            StdItem stdItem = null;
             bool bo19;
             if (nDamage <= 0)
             {
@@ -5430,10 +5431,9 @@ namespace GameSvr.Actor
                         for (var k = 0; k < cellInfo.Count; k++)
                         {
                             var osObject = cellInfo.ObjList[k];
-                            if ((osObject != null) && (osObject.CellType == CellType.Play||osObject.CellType == CellType.Monster))
+                            if ((osObject != null) && (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster))
                             {
                                 var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
-                                ;
                                 if ((baseObject != null) && (!baseObject.Ghost))
                                 {
                                     if (IsProperFriend(baseObject))
@@ -6212,7 +6212,7 @@ namespace GameSvr.Actor
                     CurrX = (short)nX;
                     CurrY = (short)nY;
                     
-                    addObj = Envir.AddToMap(nX, nY, Cell, this);
+                    addObj = Envir.AddToMap(nX, nY, MapCell, this);
                     break;
                 }
 
@@ -6227,7 +6227,7 @@ namespace GameSvr.Actor
             {
                 CurrX = nX2;
                 CurrY = nY2;
-                Envir.AddToMap(CurrX, CurrY, Cell, this);
+                Envir.AddToMap(CurrX, CurrY, MapCell, this);
             }
             Abil.HP = Abil.MaxHP;
             Abil.MP = Abil.MaxMP;

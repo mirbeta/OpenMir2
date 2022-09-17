@@ -48,7 +48,7 @@ namespace GameSvr.Magic
             {
                 return false;
             }
-            Equipment amuletStdItem = null;
+            StdItem amuletStdItem = null;
             Idx = 0;
             if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
             {

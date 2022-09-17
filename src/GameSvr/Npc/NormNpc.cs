@@ -32,19 +32,6 @@ namespace GameSvr.Npc
         protected string m_sPath = string.Empty;
         private IList<TScriptParams> BatchParamsList;
 
-        public virtual void ClearScript()
-        {
-            m_ScriptList.Clear();
-        }
-
-        public virtual void Click(PlayObject PlayObject)
-        {
-            PlayObject.m_nScriptGotoCount = 0;
-            PlayObject.m_sScriptGoBackLable = "";
-            PlayObject.m_sScriptCurrLable = "";
-            GotoLable(PlayObject, "@main", false);
-        }
-
         public NormNpc() : base()
         {
             this.SuperMan = true;
@@ -57,12 +44,25 @@ namespace GameSvr.Npc
             this.m_boIsHide = false;
             this.m_boIsQuest = true;
             this.FGotoLable = new int[100];
-            this.Cell = CellType.Merchant;
+            this.MapCell = CellType.Merchant;
         }
-
+        
         ~NormNpc()
         {
             ClearScript();
+        }
+        
+        public virtual void ClearScript()
+        {
+            m_ScriptList.Clear();
+        }
+
+        public virtual void Click(PlayObject PlayObject)
+        {
+            PlayObject.m_nScriptGotoCount = 0;
+            PlayObject.m_sScriptGoBackLable = "";
+            PlayObject.m_sScriptCurrLable = "";
+            GotoLable(PlayObject, "@main", false);
         }
 
         private void ExeAction(PlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3)
@@ -253,9 +253,6 @@ namespace GameSvr.Npc
         /// <summary>
         /// 获取全局变量信息
         /// </summary>
-        /// <param name="PlayObject"></param>
-        /// <param name="sMsg"></param>
-        /// <param name="sVariable"></param>
         protected virtual void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
             string sText = string.Empty;
@@ -1606,13 +1603,13 @@ namespace GameSvr.Npc
         private void ScriptActionError(PlayObject PlayObject, string sErrMsg, TQuestActionInfo QuestActionInfo, string sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
-            string sMsg = Format(sOutMessage, sErrMsg, sCmd, this.CharName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            var sMsg = Format(sOutMessage, sErrMsg, sCmd, this.CharName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.Log.Error(sMsg);
         }
 
         private void ScriptConditionError(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, string sCmd)
         {
-            string sMsg = "Cmd:" + sCmd + " NPC名称:" + this.CharName + " 地图:" + this.MapName + " 座标:" + this.CurrX + ':' + this.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
+            var sMsg = "Cmd:" + sCmd + " NPC名称:" + this.CharName + " 地图:" + this.MapName + " 座标:" + this.CurrX + ':' + this.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.Log.Error("[脚本参数不正确] " + sMsg);
         }
 

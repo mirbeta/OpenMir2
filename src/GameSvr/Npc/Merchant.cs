@@ -78,15 +78,13 @@ namespace GameSvr.Npc
 
         private void CheckItemPrice(ushort nIndex)
         {
-            TItemPrice ItemPrice;
             double n10;
-            Equipment StdItem = null;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
             {
-                ItemPrice = m_ItemPriceList[i];
-                if (ItemPrice.wIndex == nIndex)
+                var itemPrice = m_ItemPriceList[i];
+                if (itemPrice.wIndex == nIndex)
                 {
-                    n10 = ItemPrice.nPrice;
+                    n10 = itemPrice.nPrice;
                     if (Math.Round(n10 * 1.1) > n10)
                     {
                         n10 = HUtil32.Round(n10 * 1.1);
@@ -98,10 +96,10 @@ namespace GameSvr.Npc
                     return;
                 }
             }
-            StdItem = M2Share.WorldEngine.GetStdItem(nIndex);
-            if (StdItem != null)
+            StdItem stdItem = M2Share.WorldEngine.GetStdItem(nIndex);
+            if (stdItem != null)
             {
-                AddItemPrice(nIndex, HUtil32.Round(StdItem.Price * 1.1));
+                AddItemPrice(nIndex, HUtil32.Round(stdItem.Price * 1.1));
             }
         }
 
@@ -257,7 +255,7 @@ namespace GameSvr.Npc
         {
             double result = -1;
             TItemPrice ItemPrice;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
             {
                 ItemPrice = m_ItemPriceList[i];
@@ -296,9 +294,9 @@ namespace GameSvr.Npc
         private void UpgradeWaponAddValue(PlayObject User, IList<UserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
             UserItem UserItem;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             ClientStdItem StdItem80 = null;
-            IList<TDeleteItem> DelItemList = null;
+            IList<DeleteItem> DelItemList = null;
             int nDc;
             int nSc;
             int nMc;
@@ -319,12 +317,12 @@ namespace GameSvr.Npc
                     DuraList.Add(Math.Round(UserItem.Dura / 1.0e3));
                     if (DelItemList == null)
                     {
-                        DelItemList = new List<TDeleteItem>();
+                        DelItemList = new List<DeleteItem>();
                     }
-                    DelItemList.Add(new TDeleteItem()
+                    DelItemList.Add(new DeleteItem()
                     {
                         MakeIndex = UserItem.MakeIndex,
-                        sItemName = M2Share.Config.BlackStone
+                        ItemName = M2Share.Config.BlackStone
                     });
                     DisPose(UserItem);
                     ItemList.RemoveAt(i);
@@ -401,11 +399,11 @@ namespace GameSvr.Npc
                             }
                             if (DelItemList == null)
                             {
-                                DelItemList = new List<TDeleteItem>();
+                                DelItemList = new List<DeleteItem>();
                             }
-                            DelItemList.Add(new TDeleteItem()
+                            DelItemList.Add(new DeleteItem()
                             {
-                                sItemName = StdItem.Name,
+                                ItemName = StdItem.Name,
                                 MakeIndex = UserItem.MakeIndex
                             });
                             if (StdItem.NeedIdentify == 1)
@@ -766,7 +764,7 @@ namespace GameSvr.Npc
         {
             IList<UserItem> List14;
             UserItem UserItem;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             var sSendMsg = string.Empty;
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
@@ -1153,7 +1151,7 @@ namespace GameSvr.Npc
         private double GetUserItemPrice(UserItem UserItem)
         {
             double result;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             double n20;
             int nC;
             int n14;
@@ -1242,7 +1240,7 @@ namespace GameSvr.Npc
         {
             IList<UserItem> List20;
             UserItem UserItem;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             int nPrice;
             string sUserItemName;
             var bo29 = false;
@@ -1341,7 +1339,7 @@ namespace GameSvr.Npc
                     continue;
                 }
                 UserItem UserItem = List20[0];
-                Equipment Item = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem Item = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
                 if (Item != null && Item.Name == sItemName)
                 {
                     if (List20.Count - 1 < nInt)
@@ -1405,7 +1403,7 @@ namespace GameSvr.Npc
         public bool ClientSellItem(PlayObject PlayObject, UserItem UserItem)
         {
             var result = false;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             var nPrice = GetSellItemPrice(GetUserItemPrice(UserItem));
             if (nPrice > 0 && ClientSellItem_sub_4A1C84(UserItem))
             {
@@ -1466,7 +1464,7 @@ namespace GameSvr.Npc
             bool result = false;
             IList<MakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
             UserItem UserItem = null;
-            IList<TDeleteItem> List28;
+            IList<DeleteItem> List28;
             string s20 = string.Empty;
             int n1C = 0;
             if (List10 == null)
@@ -1509,11 +1507,11 @@ namespace GameSvr.Npc
                         {
                             if (List28 == null)
                             {
-                                List28 = new List<TDeleteItem>();
+                                List28 = new List<DeleteItem>();
                             }
-                            List28.Add(new TDeleteItem()
+                            List28.Add(new DeleteItem()
                             {
-                                sItemName = s20,
+                                ItemName = s20,
                                 MakeIndex = UserItem.MakeIndex
                             });
                             Dispose(UserItem);
@@ -1537,7 +1535,7 @@ namespace GameSvr.Npc
             IList<UserItem> List1C;
             UserItem MakeItem;
             UserItem UserItem;
-            Equipment StdItem = null;
+            StdItem StdItem = null;
             var n14 = 1;
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
@@ -1666,7 +1664,7 @@ namespace GameSvr.Npc
             {
                 nPrice = nPrice * M2Share.Config.SuperRepairPriceRate;
             }
-            Equipment StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
                 if (boCanRepair && nPrice > 0 && UserItem.DuraMax > UserItem.Dura && StdItem.StdMode != 43)
