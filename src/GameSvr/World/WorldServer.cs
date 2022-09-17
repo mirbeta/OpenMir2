@@ -739,7 +739,7 @@ namespace GameSvr.World
                         }
                     }
                     nIdx++;
-                    if ((HUtil32.GetTickCount() - dwCheckTime) > M2Share.g_dwHumLimit)
+                    if ((HUtil32.GetTickCount() - dwCheckTime) > M2Share.HumLimit)
                     {
                         boCheckTimeLimit = true;
                         ProcBotHubIdx = nIdx;
@@ -846,7 +846,7 @@ namespace GameSvr.World
                         }
                     }
                     nIdx++;
-                    if ((HUtil32.GetTickCount() - dwCheckTime) > M2Share.g_dwHumLimit)
+                    if ((HUtil32.GetTickCount() - dwCheckTime) > M2Share.HumLimit)
                     {
                         boCheckTimeLimit = true;
                         ProcHumIdx = nIdx;
@@ -882,7 +882,7 @@ namespace GameSvr.World
                             //    merchantNpc.SearchTick = HUtil32.GetTickCount();
                             //   // merchantNpc.SearchViewRange();
                             //}
-                            if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime)
+                            if ((HUtil32.GetTickCount() - merchantNpc.RunTick) > merchantNpc.RunTime)
                             {
                                 merchantNpc.RunTick = dwCurrTick;
                                 merchantNpc.Run();
@@ -898,7 +898,7 @@ namespace GameSvr.World
                             break;
                         }
                     }
-                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.g_dwNpcLimit)
+                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.NpcLimit)
                     {
                         _merchantPosition = i;
                         boProcessLimit = true;
@@ -944,11 +944,11 @@ namespace GameSvr.World
                     {
                         if ((dwCurrTick - npc.RunTick) > npc.RunTime)
                         {
-                            if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
-                            {
-                                npc.SearchTick = HUtil32.GetTickCount();
-                                npc.SearchViewRange();
-                            }
+                            //if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
+                            //{
+                            //    npc.SearchTick = HUtil32.GetTickCount();
+                            //    npc.SearchViewRange();
+                            //}
                             if ((dwCurrTick - npc.RunTick) > npc.RunTime)
                             {
                                 npc.RunTick = dwCurrTick;
@@ -964,7 +964,7 @@ namespace GameSvr.World
                             break;
                         }
                     }
-                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.g_dwNpcLimit)
+                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.NpcLimit)
                     {
                         NpcPosition = i;
                         boProcessLimit = true;

@@ -295,6 +295,7 @@ namespace GameSvr.World
                                         if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
                                         {
                                             monster.SearchTick = HUtil32.GetTickCount();
+
                                             if (!monster.Death)
                                             {
                                                 //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升效率
@@ -304,13 +305,18 @@ namespace GameSvr.World
                                                 //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
                                                 //由玩家找出附近的怪物，然后添加到怪物列表
                                                 //monster.SearchViewRange();
+
+                                                if (monster.Race == Grobal2.RC_GUARD || monster.Race == Grobal2.RC_ARCHERGUARD) //守卫才主动搜索附近的精灵
+                                                {
+                                                    monster.SearchViewRange();
+                                                }
                                             }
                                             else
                                             {
                                                 //todo 怪物死了 要从可视范围内删除,自身也需要清除视觉范围 要调试一下怪物死亡过程个尸体清理过程
                                                 //或者人物视野范围内判断怪物是否死亡，死亡则删除范围，但是是要区分是死亡还是释放尸体，释放尸体则彻底不可见,死亡貌似还是处于可见状态
                                                 //或者可以用更效率的算法来处理视野范围,玩家搜索范围还是会有可能导致CPU使用率上升问题(目前有初步思路，预计后续优化)
-                                                monster.SearchViewRangeDeath(); 
+                                                monster.SearchViewRangeDeath();
                                             }
                                         }
                                         monster.ProcessRunCount = 0;
@@ -331,7 +337,7 @@ namespace GameSvr.World
                             }
                         }
                         processPosition++;
-                        if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.g_dwMonLimit)
+                        if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.MonLimit)
                         {
                             boProcessLimit = true;
                             thread.MonGenCertListPosition = processPosition;
@@ -790,7 +796,7 @@ namespace GameSvr.World
                                 monGen.ActiveCount++;
                                 monGen.TryAdd(cert);
                             }
-                            if ((HUtil32.GetTickCount() - dwStartTick) > M2Share.g_dwZenLimit)
+                            if ((HUtil32.GetTickCount() - dwStartTick) > M2Share.ZenLimit)
                             {
                                 result = false;
                                 break;
@@ -812,7 +818,7 @@ namespace GameSvr.World
                                 monGen.ActiveCount++;
                                 monGen.TryAdd(cert);
                             }
-                            if (HUtil32.GetTickCount() - dwStartTick > M2Share.g_dwZenLimit)
+                            if (HUtil32.GetTickCount() - dwStartTick > M2Share.ZenLimit)
                             {
                                 result = false;
                                 break;

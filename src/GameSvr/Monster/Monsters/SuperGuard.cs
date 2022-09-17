@@ -1,4 +1,5 @@
 ﻿using GameSvr.Actor;
+using GameSvr.Maps;
 using GameSvr.Npc;
 using SystemModule;
 using SystemModule.Data;
@@ -55,6 +56,12 @@ namespace GameSvr.Monster.Monsters
             return base.Operate(processMsg);
         }
 
+        private bool CanAttckTarget(BaseObject baseObject)
+        {
+            //todo 最好加个字段直接判断是否能被攻击，减少判断
+            return baseObject.Race == Grobal2.RC_ARCHERGUARD || baseObject.Race == Grobal2.RC_GUARD || baseObject.Race == Grobal2.RC_PEACENPC || baseObject.Race == Grobal2.RC_NPC;
+        }
+
         public override void Run()
         {
             if (this.Master != null)
@@ -67,7 +74,7 @@ namespace GameSvr.Monster.Monsters
                 for (var i = 0; i < this.VisibleActors.Count; i++)
                 {
                     var baseObject = this.VisibleActors[i].BaseObject;
-                    if (baseObject.Death)
+                    if (baseObject.Death || CanAttckTarget(baseObject))
                     {
                         continue;
                     }
@@ -93,7 +100,14 @@ namespace GameSvr.Monster.Monsters
             }
             if (this.TargetCret != null)
             {
-                AttackTarget();
+                if (TargetCret.Death)
+                {
+                    DelTargetCreat();
+                }
+                else
+                {
+                    AttackTarget();
+                }
             }
             base.Run();
         }

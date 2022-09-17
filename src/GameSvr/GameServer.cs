@@ -33,7 +33,7 @@ namespace GameSvr
                 while (M2Share.StartReady)
                 { 
                     Execute();
-                    Thread.Sleep(10);
+                    Thread.Sleep(20);
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }

@@ -229,11 +229,11 @@ namespace GameSvr
         public static int dwUsrRotCountMax = 0;
         public static int g_dwUsrRotCountTick = 0;
         public static int g_nProcessHumanLoopTime = 0;
-        public static int g_dwHumLimit = 30;
-        public static int g_dwMonLimit = 30;
-        public static int g_dwZenLimit = 5;
-        public static int g_dwNpcLimit = 5;
-        public static int g_dwSocLimit = 10;
+        public static int HumLimit = 30;
+        public static int MonLimit = 30;
+        public static int ZenLimit = 5;
+        public static int NpcLimit = 5;
+        public static int SocLimit = 10;
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
         public static string BasePath;
