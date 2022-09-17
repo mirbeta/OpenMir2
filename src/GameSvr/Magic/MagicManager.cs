@@ -1355,7 +1355,7 @@ namespace GameSvr.Magic
 
         private bool MagMakeClone(PlayObject PlayObject, UserMagic UserMagic)
         {
-            var playCloneObject = new TPlayCloneObject(PlayObject);
+            var playCloneObject = new PlayCloneObject(PlayObject);
             return true;
         }
 

@@ -4,11 +4,11 @@ using SystemModule.Data;
 
 namespace GameSvr.Player
 {
-    public class TPlayCloneObject : PlayObject
+    public class PlayCloneObject : PlayObject
     {
         private readonly int m_dwRunTime;
 
-        public TPlayCloneObject(PlayObject PlayObject) : base()
+        public PlayCloneObject(PlayObject PlayObject) : base()
         {
             this.m_dwRunTime = HUtil32.GetTickCount();
             this.CharName = "Clone";
