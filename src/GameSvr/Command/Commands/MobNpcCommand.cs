@@ -42,7 +42,7 @@ namespace GameSvr.Command.Commands
             Merchant.Envir = PlayObject.Envir;
             Merchant.Appr = (ushort)nAppr;
             Merchant.m_nFlag = 0;
-            Merchant.m_boCastle = boIsCastle;
+            Merchant.CastleMerchant = boIsCastle;
             Merchant.m_sScript = sParam2;
             PlayObject.GetFrontPosition(ref nX, ref nY);
             Merchant.CurrX = nX;

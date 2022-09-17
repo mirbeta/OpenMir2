@@ -1624,7 +1624,7 @@ namespace GameSvr.Script
                             var nPriceRate = HUtil32.Str_ToInt(sScript, -1);
                             if (nPriceRate >= 55)
                             {
-                                ((Merchant)NPC).m_nPriceRate = nPriceRate;
+                                ((Merchant)NPC).PriceRate = nPriceRate;
                             }
                             continue;
                         }
@@ -1634,7 +1634,7 @@ namespace GameSvr.Script
                             var nItemType = HUtil32.Str_ToInt(sScript, -1);
                             if (nItemType >= 0)
                             {
-                                ((Merchant)NPC).m_ItemTypeList.Add(nItemType);
+                                ((Merchant)NPC).ItemTypeList.Add(nItemType);
                             }
                             continue;
                         }
@@ -1897,7 +1897,7 @@ namespace GameSvr.Script
                                     dwRefillTime = HUtil32.Str_ToInt(s50, 0),
                                     dwRefillTick = 0
                                 };
-                                ((Merchant)NPC).m_RefillGoodsList.Add(Goods);
+                                ((Merchant)NPC).RefillGoodsList.Add(Goods);
                             }
                         }
                     }
