@@ -474,7 +474,7 @@ namespace GameSvr.DataStores
                             };
                             if (HUtil32.Str_ToInt(sIsCalste, 0) != 0)
                             {
-                                merchantNpc.m_boCastle = true;
+                                merchantNpc.CastleMerchant = true;
                             }
                             if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && merchantNpc.m_dwMoveTime > 0)
                             {
@@ -1060,11 +1060,11 @@ namespace GameSvr.DataStores
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
                             if (HUtil32.Str_ToInt(sCastle, 0) != 1)
                             {
-                                Merchant.m_boCastle = true;
+                                Merchant.CastleMerchant = true;
                             }
                             else
                             {
-                                Merchant.m_boCastle = false;
+                                Merchant.CastleMerchant = false;
                             }
                             if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
                             {
@@ -1091,11 +1091,11 @@ namespace GameSvr.DataStores
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
                             if (HUtil32.Str_ToInt(sCastle, 0) != 1)
                             {
-                                Merchant.m_boCastle = true;
+                                Merchant.CastleMerchant = true;
                             }
                             else
                             {
-                                Merchant.m_boCastle = false;
+                                Merchant.CastleMerchant = false;
                             }
                             if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
                             {
