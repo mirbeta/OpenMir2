@@ -877,11 +877,11 @@ namespace GameSvr.World
                     {
                         if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime)
                         {
-                            if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
-                            {
-                                merchantNpc.SearchTick = HUtil32.GetTickCount();
-                                merchantNpc.SearchViewRange();
-                            }
+                            //if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
+                            //{
+                            //    merchantNpc.SearchTick = HUtil32.GetTickCount();
+                            //   // merchantNpc.SearchViewRange();
+                            //}
                             if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime)
                             {
                                 merchantNpc.RunTick = dwCurrTick;
