@@ -186,7 +186,7 @@ namespace GameSvr.Actor
                 var useItems = new UserItem(UseItems[Grobal2.U_WEAPON]);
                 CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
                 PlayObject PlayObject = null;
-                Equipment StdItem = null;
+                StdItem StdItem = null;
                 if (UseItems[Grobal2.U_WEAPON].wIndex == 0)
                 {
                     SysMsg(M2Share.g_sTheWeaponBroke, MsgColor.Red, MsgType.Hint);

@@ -7,7 +7,6 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.Npc
 {
@@ -397,7 +396,7 @@ namespace GameSvr.Npc
             int Sec = 0;
             int MSec = 0;
             Envirnoment Envir;
-            Equipment StdItem;
+            StdItem StdItem;
             for (var i = 0; i < ConditionList.Count; i++)
             {
                 QuestConditionInfo = ConditionList[i];
@@ -1600,7 +1599,7 @@ namespace GameSvr.Npc
         private void GotoLable_TakeItem(PlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
         {
             UserItem UserItem;
-            Equipment StdItem;
+            StdItem StdItem;
             if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.DecGold(nItemCount);
@@ -1637,7 +1636,7 @@ namespace GameSvr.Npc
         public void GotoLable_GiveItem(PlayObject PlayObject, string sItemName, int nItemCount)
         {
             UserItem UserItem;
-            Equipment StdItem;
+            StdItem StdItem;
             if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.IncGold(nItemCount);
@@ -2539,7 +2538,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_KILLSLAVENAME);
                 return;
             }
-            if (sSlaveName.Equals("*") || string.Compare(sSlaveName, "ALL", true) == 0)
+            if (sSlaveName.Equals("*") || string.Compare(sSlaveName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 for (int i = 0; i < PlayObject.SlaveList.Count; i++)
                 {
@@ -2547,15 +2546,12 @@ namespace GameSvr.Npc
                 }
                 return;
             }
-            else
+            for (int i = 0; i < PlayObject.SlaveList.Count; i++)
             {
-                for (int i = 0; i < PlayObject.SlaveList.Count; i++)
+                var BaseObject = PlayObject.SlaveList[i];
+                if (!Death && (string.Compare(sSlaveName, BaseObject.CharName, StringComparison.OrdinalIgnoreCase) == 0))
                 {
-                    var BaseObject = PlayObject.SlaveList[i];
-                    if (!Death && (string.Compare(sSlaveName, BaseObject.CharName, true) == 0))
-                    {
-                        BaseObject.WAbil.HP = 0;
-                    }
+                    BaseObject.WAbil.HP = 0;
                 }
             }
         }

@@ -72,7 +72,7 @@ namespace GameSvr.Player
             }
             if (mapItem.Name.Equals(Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
             {
-                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.ItemObject, mapItem) == 1)
+                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem) == 1)
                 {
                     if (IncGold(mapItem.Count))
                     {
@@ -87,14 +87,14 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        Envir.AddToMap(CurrX, CurrY, CellType.ItemObject, mapItem);
+                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem);
                     }
                 }
                 return result;
             }
             if (IsEnoughBag())
             {
-                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.ItemObject, mapItem) == 1)
+                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem) == 1)
                 {
                     var UserItem = mapItem.UserItem;
                     var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
@@ -120,7 +120,7 @@ namespace GameSvr.Player
                     else
                     {
                         Dispose(UserItem);
-                        Envir.AddToMap(CurrX, CurrY, CellType.ItemObject, mapItem);
+                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem);
                     }
                 }
             }
@@ -1095,20 +1095,20 @@ namespace GameSvr.Player
                 M2Share.Log.Error("CretInNearXY nil PEnvir");
                 return false;
             }
-            for (var nCX = nX - 1; nCX <= nX + 1; nCX++)
+            for (var cX = nX - 1; cX <= nX + 1; cX++)
             {
-                for (var nCY = nY - 1; nCY <= nY + 1; nCY++)
+                for (var cY = nY - 1; cY <= nY + 1; cY++)
                 {
                     var cellsuccess = false;
-                    cellInfo = Envir.GetCellInfo(nCX, nCY, ref cellsuccess);
+                    cellInfo = Envir.GetCellInfo(cX, cY, ref cellsuccess);
                     if (cellsuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
                             OSObject = cellInfo.ObjList[i];
-                            if (OSObject.CellType == CellType.Play||OSObject.CellType == CellType.Monster)
+                            if (OSObject.CellType == CellType.Play || OSObject.CellType == CellType.Monster || OSObject.CellType == CellType.Merchant)
                             {
-                                BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId); ;
+                                BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                 if (BaseObject != null)
                                 {
                                     if (!BaseObject.Ghost && BaseObject == TargeTBaseObject)
@@ -1172,7 +1172,7 @@ namespace GameSvr.Player
             }
         }
 
-        private bool UseStdmodeFunItem(Equipment StdItem)
+        private bool UseStdmodeFunItem(StdItem StdItem)
         {
             var result = false;
             if (M2Share.g_FunctionNPC != null)
@@ -1722,12 +1722,12 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendDelItemList(IList<TDeleteItem> ItemList)
+        private void SendDelItemList(IList<DeleteItem> ItemList)
         {
             var s10 = string.Empty;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                s10 = s10 + ItemList[i].sItemName + '/' + ItemList[i].MakeIndex + '/';
+                s10 = s10 + ItemList[i].ItemName + '/' + ItemList[i].MakeIndex + '/';
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, (short)ItemList.Count);
             SendSocket(m_DefMsg, EDCode.EncodeString(s10));
@@ -2093,7 +2093,7 @@ namespace GameSvr.Player
             return n14;
         }
 
-        private bool EatItems(Equipment StdItem, UserItem Useritem)
+        private bool EatItems(StdItem StdItem, UserItem Useritem)
         {
             var result = false;
             if (Envir.Flag.boNODRUG)
@@ -2211,7 +2211,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ReadBook(Equipment StdItem)
+        private bool ReadBook(StdItem StdItem)
         {
             var result = false;
             var magic = M2Share.WorldEngine.FindMagic(StdItem.Name);
@@ -3180,7 +3180,7 @@ namespace GameSvr.Player
             return false;
         }
 
-        private bool CheckItemsNeed(Equipment stdItem)
+        private bool CheckItemsNeed(StdItem stdItem)
         {
             var result = true;
             var castle = M2Share.CastleMgr.IsCastleMember(this);

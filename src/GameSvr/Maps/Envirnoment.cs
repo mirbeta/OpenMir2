@@ -115,14 +115,14 @@ namespace GameSvr.Maps
                     }
                     else
                     {
-                        if (cellType == CellType.ItemObject)
+                        if (cellType == CellType.Item)
                         {
                             if (((MapItem)pRemoveObject).Name == Grobal2.sSTRING_GOLDNAME)
                             {
                                 for (var i = 0; i < cellInfo.Count; i++)
                                 {
                                     var osObject = cellInfo.ObjList[i];
-                                    if (osObject.CellType == CellType.ItemObject)
+                                    if (osObject.CellType == CellType.Item)
                                     {
                                         var mapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                         if (mapItem.Name == Grobal2.sSTRING_GOLDNAME)
@@ -168,7 +168,7 @@ namespace GameSvr.Maps
                         {
                             ((BaseObject)pRemoveObject).DelFormMaped = false;
                             ((BaseObject)pRemoveObject).AddToMaped = true;
-                            AddObject(pRemoveObject);
+                            AddObject(((BaseObject)pRemoveObject));
                         }
                     }
                 }
@@ -305,7 +305,7 @@ namespace GameSvr.Maps
                             }
                             osObject = new CellObject
                             {
-                                CellType = cert.Cell,
+                                CellType = cert.MapCell,
                                 CellObjId = cert.ActorId,
                                 AddTime = HUtil32.GetTickCount()
                             };
@@ -402,7 +402,7 @@ namespace GameSvr.Maps
                                 }
                             }
                         }
-                        if (!boItem && osObject.CellType == CellType.ItemObject)
+                        if (!boItem && osObject.CellType == CellType.Item)
                         {
                             result = false;
                             break;
@@ -486,87 +486,63 @@ namespace GameSvr.Maps
         }
 
         /// <summary>
-        /// 从地图上删除对象
+        /// 从地图指定坐标上删除对象
         /// </summary>
         /// <returns></returns>
         public int DeleteFromMap(int nX, int nY, CellType cellType, EntityId pRemoveObject)
         {
-            const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except 1 ** %d";
-            const string sExceptionMsg2 = "[Exception] TEnvirnoment::DeleteFromMap -> Except 2 ** %d";
+            const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except 1 ** {0}";
+            const string sExceptionMsg2 = "[Exception] TEnvirnoment::DeleteFromMap -> Except 2 ** {0}";
             var result = -1;
-            var cellsuccess = false;
-            try
+            var cellSuccess = false;
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
+            if (cellSuccess && cellInfo.IsAvailable)
             {
-                MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-                if (cellsuccess)
+                try
                 {
-                    if (cellsuccess)
+                    for (var i = 0; i < cellInfo.Count; i++)
                     {
-                        CellObject osObject;
-                        try
+                        var osObject = cellInfo.ObjList[i];
+                        if (osObject != null)
                         {
-                            if (cellInfo.IsAvailable)
+                            if (osObject.CellType == cellType && osObject.CellObjId == pRemoveObject.ActorId)
                             {
-                                for (var i = 0; i < cellInfo.Count; i++)
+                                cellInfo.Remove(osObject);
+                                result = 1;
+                                if (cellType == CellType.Play || cellType == CellType.Monster && !((BaseObject)pRemoveObject).DelFormMaped)
                                 {
-                                    osObject = cellInfo.ObjList[i];
-                                    if (osObject != null)
-                                    {
-                                        if (osObject.CellType == cellType && osObject.CellObjId == pRemoveObject.ActorId)
-                                        {
-                                            cellInfo.Remove(osObject);
-                                            result = 1;
-                                            // 减地图人物怪物计数
-                                            if (cellType == CellType.Play || cellType == CellType.Monster && !((BaseObject)pRemoveObject).DelFormMaped)
-                                            {
-                                                ((BaseObject)pRemoveObject).DelFormMaped = true;
-                                                ((BaseObject)pRemoveObject).AddToMaped = false;
-                                                DelObjectCount(pRemoveObject);
-                                            }
-                                            if (cellInfo.Count > 0)
-                                            {
-                                                continue;
-                                            }
-                                            cellInfo.Dispose();
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        cellInfo.Remove(osObject);
-                                        if (cellInfo.Count > 0)
-                                        {
-                                            continue;
-                                        }
-                                        cellInfo.Dispose();
-                                        break;
-                                    }
+                                    ((BaseObject)pRemoveObject).DelFormMaped = true;
+                                    ((BaseObject)pRemoveObject).AddToMaped = false;
+                                    DelObjectCount(((BaseObject)pRemoveObject));// 减地图人物怪物计数
                                 }
-                            }
-                            else
-                            {
-                                result = -2;
+                                if (cellInfo.Count > 0)
+                                {
+                                    continue;
+                                }
+                                cellInfo.Dispose();
+                                break;
                             }
                         }
-                        catch
+                        else
                         {
-                            osObject = null;
-                            M2Share.Log.Error(string.Format(sExceptionMsg1, cellType));
+                            cellInfo.ObjList.RemoveAt(i);
+                            if (cellInfo.Count > 0)
+                            {
+                                continue;
+                            }
+                            cellInfo.Dispose();
+                            break;
                         }
-                    }
-                    else
-                    {
-                        result = -3;
                     }
                 }
-                else
+                catch
                 {
-                    result = 0;
+                    M2Share.Log.Error(string.Format(sExceptionMsg1, cellType));
                 }
             }
-            catch
+            else
             {
-                M2Share.Log.Error(string.Format(sExceptionMsg2, cellType));
+                result = 0;
             }
             return result;
         }
@@ -584,11 +560,11 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.ItemObject)
+                        if (osObject.CellType == CellType.Item)
                         {
                             return (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);;
                         }
-                        if (osObject.CellType == CellType.GateObject)
+                        if (osObject.CellType == CellType.Route)
                         {
                             Bo2C = false;
                         }
@@ -620,28 +596,27 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public object AddToMapItemEvent(int nX, int nY, CellType nType, StoneMineEvent @event)
+        public bool AddToMapItemEvent(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent)
         {
-            object result = null;
-            var cellsuccess = false;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
-            if (cellsuccess && cellInfo.Valid)
+            var cellSuccess = false;
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
+            if (cellSuccess && cellInfo.Valid)
             {
                 if (cellInfo.ObjList == null)
                 {
                     cellInfo.ObjList = new PooledList<CellObject>();
                 }
-                if (nType == CellType.EventObject)
+                if (nType == CellType.Event)
                 {
                     var osObject = new CellObject();
                     osObject.CellType = nType;
-                    osObject.CellObjId = @event.Id;
+                    osObject.CellObjId = stoneMineEvent.Id;
                     osObject.AddTime = HUtil32.GetTickCount();
-                    cellInfo.Add(osObject, @event);
-                    result = osObject;
+                    cellInfo.Add(osObject, stoneMineEvent);
+                    return true;
                 }
             }
-            return result;
+            return false;
         }
 
         /// <summary>
@@ -714,12 +689,11 @@ namespace GameSvr.Maps
         public void VerifyMapTime(int nX, int nY, BaseObject baseObject)
         {
             CellObject osObject;
-            bool boVerify;
+            bool boVerify = false;
             var cellsuccess = false;
             const string sExceptionMsg = "[Exception] TEnvirnoment::VerifyMapTime";
             try
             {
-                boVerify = false;
                 MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
                 if (cellsuccess && cellInfo.IsAvailable)
                 {
@@ -736,7 +710,7 @@ namespace GameSvr.Maps
                 }
                 if (!boVerify)
                 {
-                    AddToMap(nX, nY, baseObject.Cell, baseObject);
+                    AddToMap(nX, nY, baseObject.MapCell, baseObject);
                 }
             }
             catch
@@ -1064,7 +1038,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var osObject = cellInfo.ObjList[i];
-                    if (osObject.CellType == CellType.EventObject)
+                    if (osObject.CellType == CellType.Event)
                     {
                         var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                         if (owinEvent.Damage > 0)
@@ -1177,12 +1151,12 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.ItemObject)
+                        if (osObject.CellType == CellType.Item)
                         {
                             result = osObject.CellObjId;
                             nCount++;
                         }
-                        if (osObject.CellType == CellType.GateObject)
+                        if (osObject.CellType == CellType.Route)
                         {
                             Bo2C = false;
                         }
@@ -1285,12 +1259,9 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
                         if (baseObject != null)
                         {
-                            if (!baseObject.Ghost && baseObject.Bo2B9)
+                            if (!baseObject.Ghost && baseObject.Bo2B9 && !boFlag || !baseObject.Death)
                             {
-                                if (!boFlag || !baseObject.Death)
-                                {
-                                    baseObjectList.Add(baseObject);
-                                }
+                                baseObjectList.Add(baseObject);
                             }
                         }
                     }
@@ -1310,7 +1281,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var osObject = cellInfo.ObjList[i];
-                    if (osObject.CellType == CellType.EventObject)
+                    if (osObject.CellType == CellType.Event)
                     {
                         result = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);;
                     }
@@ -1414,9 +1385,9 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public void AddObject(object baseObject)
+        public void AddObject(BaseObject baseObject)
         {
-            var btRaceServer = ((BaseObject)baseObject).Race;
+            var btRaceServer = baseObject.Race;
             if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 _humCount++;
@@ -1427,9 +1398,9 @@ namespace GameSvr.Maps
             }
         }
 
-        public void DelObjectCount(object baseObject)
+        public void DelObjectCount(BaseObject baseObject)
         {
-            var btRaceServer = ((BaseObject)baseObject).Race;
+            var btRaceServer = baseObject.Race;
             if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 _humCount--;

@@ -33,7 +33,7 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
-                Equipment item = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                StdItem item = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
                 if (item != null)
                 {
                     ClientItem clientItem = new ClientItem();
@@ -90,7 +90,7 @@ namespace GameSvr.Player
                 UserItem userItem = playObject.UseItems[i];
                 if (userItem.wIndex > 0)
                 {
-                    Equipment stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[i].wIndex);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[i].wIndex);
                     if (stdItem == null)
                     {
                         continue;
@@ -395,7 +395,7 @@ namespace GameSvr.Player
             var n14 = -1;
             var n18 = 0;
             UserItem userItem = null;
-            Equipment stdItem = null;
+            StdItem stdItem = null;
             ClientStdItem stdItem58 = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -618,7 +618,7 @@ namespace GameSvr.Player
         private void ClientUseItems(int nItemIdx, string sItemName)
         {
             var boEatOk = false;
-            Equipment stdItem = null;
+            StdItem stdItem = null;
             UserItem userItem34 = null;
             if (m_boCanUseItem)
             {
@@ -1115,7 +1115,7 @@ namespace GameSvr.Player
                 if (bo11)
                 {
                     UserItem userItem;
-                    Equipment stdItem = null;
+                    StdItem stdItem = null;
                     for (var i = 0; i < DealItemList.Count; i++)
                     {
                         userItem = DealItemList[i];

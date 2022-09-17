@@ -711,7 +711,7 @@ namespace GameSvr
             return result;
         }
 
-        public static bool CheckUserItems(int nIdx, Items.Equipment StdItem)
+        public static bool CheckUserItems(int nIdx, Items.StdItem StdItem)
         {
             var result = false;
             switch (nIdx)

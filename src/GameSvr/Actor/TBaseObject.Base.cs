@@ -239,7 +239,7 @@ namespace GameSvr.Actor
                         int nCount;
                         int dCount;
                         int bCount;
-                        Items.Equipment StdItem;
+                        Items.StdItem StdItem;
                         // 加HP
                         if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((Abil.HP / Abil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
                         {
@@ -1119,33 +1119,32 @@ namespace GameSvr.Actor
             SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sCharName + ':' + sMsg);
         }
 
+        /// <summary>
+        /// 精灵死亡，彻底释放对象
+        /// </summary>
         public virtual void MakeGhost()
         {
             if (CanReAlive)
             {
                 Invisible = true;
-                GhostTick = HUtil32.GetTickCount();
-                Envir.DeleteFromMap(CurrX, CurrY, Cell, this);
-                SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
             }
             else
             {
                 Ghost = true;
-                GhostTick = HUtil32.GetTickCount();
-                DisappearA();
             }
+            GhostTick = HUtil32.GetTickCount();
+            DisappearA();
         }
 
         /// <summary>
         /// 散落包裹物品
         /// </summary>
-        /// <param name="ItemOfCreat"></param>
         protected virtual void ScatterBagItems(BaseObject ItemOfCreat)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
-                var DropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
+                var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
                 if ((Race == Grobal2.RC_PLAYCLONE) && (Master != null))
                 {
                     return;
@@ -1177,7 +1176,7 @@ namespace GameSvr.Actor
                     {
                         continue;
                     }
-                    if (DropItemDown(UserItem, DropWide, true, ItemOfCreat, this))
+                    if (DropItemDown(UserItem, dropWide, true, ItemOfCreat, this))
                     {
                         Dispose(UserItem);
                         ItemList.RemoveAt(i);
@@ -1194,8 +1193,8 @@ namespace GameSvr.Actor
         {
             int nC;
             int nRate;
-            Items.Equipment StdItem;
-            IList<TDeleteItem> DropItemList = null;
+            StdItem StdItem;
+            IList<DeleteItem> DropItemList = null;
             const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
             try
             {
@@ -1220,9 +1219,9 @@ namespace GameSvr.Actor
                             {
                                 if (DropItemList == null)
                                 {
-                                    DropItemList = new List<TDeleteItem>();
+                                    DropItemList = new List<DeleteItem>();
                                 }
-                                DropItemList.Add(new TDeleteItem()
+                                DropItemList.Add(new DeleteItem()
                                 {
                                     MakeIndex = UseItems[nC].MakeIndex
                                 });
@@ -1269,11 +1268,11 @@ namespace GameSvr.Actor
                                     {
                                         if (DropItemList == null)
                                         {
-                                            DropItemList = new List<TDeleteItem>();
+                                            DropItemList = new List<DeleteItem>();
                                         }
-                                        DropItemList.Add(new TDeleteItem()
+                                        DropItemList.Add(new DeleteItem()
                                         {
-                                            sItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].wIndex),
+                                            ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].wIndex),
                                             MakeIndex = UseItems[nC].MakeIndex
                                         });
                                     }

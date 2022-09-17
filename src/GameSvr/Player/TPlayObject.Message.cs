@@ -7,7 +7,6 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
-using Items = GameSvr.Items.Equipment;
 
 namespace GameSvr.Player
 {
@@ -234,7 +233,7 @@ namespace GameSvr.Player
             {
                 if (ProcessMsg.wIdent == 0)
                 {
-                    MakeGhost(); //用于处理 人物异常退出，但人物还在游戏中问题 提示 Ident0  错误
+                    MakeGhost(); //用于处理 人物异常退出，但人物还在游戏中问题
                 }
                 M2Share.Log.Error(Format(sExceptionMsg2, CharName, ProcessMsg.wIdent, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.Msg));
                 M2Share.Log.Error(e.Message);
@@ -1575,7 +1574,7 @@ namespace GameSvr.Player
                     SendMapDescription();
                     SendGoldInfo(true);
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_VERSION_FAIL, M2Share.Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.Config.nClientFile2_CRC), 0);
-                    SendSocket(m_DefMsg, "<<<<<<");//EDcode.EncodeBuffer(HUtil32.GetBytes(M2Share.g_Config.nClientFile3_CRC), sizeof(int))
+                    SendSocket(m_DefMsg, "<<<<<<");
                     break;
                 case Grobal2.RM_HEAR:
                 case Grobal2.RM_WHISPER:
@@ -1755,7 +1754,7 @@ namespace GameSvr.Player
                     SendSaveItemList(ProcessMsg.nParam1);
                     break;
                 case Grobal2.RM_SENDDELITEMLIST:
-                    var delItemList = (IList<TDeleteItem>)M2Share.ActorMgr.GetOhter(ProcessMsg.nParam1);
+                    var delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(ProcessMsg.nParam1);
                     SendDelItemList(delItemList);
                     break;
                 case Grobal2.RM_USERMAKEDRUGITEMLIST:
@@ -2026,14 +2025,14 @@ namespace GameSvr.Player
         protected override void DropUseItems(BaseObject BaseObject)
         {
             const string sExceptionMsg = "[Exception] TPlayObject::DropUseItems";
-            IList<TDeleteItem> delList = null;
+            IList<DeleteItem> delList = null;
             try
             {
                 if (AngryRing || NoDropUseItem)
                 {
                     return;
                 }
-                Equipment StdItem;
+                StdItem StdItem;
                 for (var i = 0; i < UseItems.Length; i++)
                 {
                     if (UseItems[i] == null)
@@ -2047,9 +2046,9 @@ namespace GameSvr.Player
                         {
                             if (delList == null)
                             {
-                                delList = new List<TDeleteItem>();
+                                delList = new List<DeleteItem>();
                             }
-                            delList.Add(new TDeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
+                            delList.Add(new DeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
@@ -2081,11 +2080,11 @@ namespace GameSvr.Player
                                 {
                                     if (delList == null)
                                     {
-                                        delList = new List<TDeleteItem>();
+                                        delList = new List<DeleteItem>();
                                     }
-                                    delList.Add(new TDeleteItem()
+                                    delList.Add(new DeleteItem()
                                     {
-                                        sItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].wIndex),
+                                        ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].wIndex),
                                         MakeIndex = this.UseItems[i].MakeIndex
                                     });
                                 }

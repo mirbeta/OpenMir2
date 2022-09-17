@@ -4,7 +4,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Items
 {
-    public class Equipment
+    public class StdItem
     {
         public EquipmentType ItemType = 0;
         public string Name;
@@ -45,37 +45,37 @@ namespace GameSvr.Items
             return result;
         }
 
-        public void GetStandardItem(ref ClientStdItem stdItem)
+        public void GetStandardItem(ref ClientStdItem clientStdItem)
         {
-            if (stdItem == null)
+            if (clientStdItem == null)
             {
-                stdItem = new ClientStdItem();
+                clientStdItem = new ClientStdItem();
             }
-            stdItem.Name = M2Share.FilterShowName(Name);
-            stdItem.StdMode = StdMode;
-            stdItem.Shape = Shape;
-            stdItem.Weight = Weight;
-            stdItem.AniCount = AniCount;
+            clientStdItem.Name = M2Share.FilterShowName(Name);
+            clientStdItem.StdMode = StdMode;
+            clientStdItem.Shape = Shape;
+            clientStdItem.Weight = Weight;
+            clientStdItem.AniCount = AniCount;
             //stdItem.reserved = Reserved;
             //stdItem.Source = (sbyte)Source;
-            stdItem.NeedIdentify = NeedIdentify;
-            stdItem.Looks = Looks;
-            stdItem.DuraMax = DuraMax;
-            stdItem.Need = Need;
-            stdItem.NeedLevel = NeedLevel;
-            stdItem.Price = Price;
+            clientStdItem.NeedIdentify = NeedIdentify;
+            clientStdItem.Looks = Looks;
+            clientStdItem.DuraMax = DuraMax;
+            clientStdItem.Need = Need;
+            clientStdItem.NeedLevel = NeedLevel;
+            clientStdItem.Price = Price;
         }
 
-        public void GetItemAddValue(UserItem userItem, ref ClientStdItem stdItem)
+        public void GetItemAddValue(UserItem userItem, ref ClientStdItem clientStdItem)
         {
             switch (ItemType)
             {
                 case EquipmentType.ITEM_WEAPON:
-                    stdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[0]);
-                    stdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[1]);
-                    stdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[2]);
-                    stdItem.AC = HUtil32.MakeLong(Ac + userItem.btValue[3], Ac2 + userItem.btValue[5]);
-                    stdItem.MAC = HUtil32.MakeLong(Mac + userItem.btValue[4], Mac2 + userItem.btValue[6]);
+                    clientStdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[0]);
+                    clientStdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[1]);
+                    clientStdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[2]);
+                    clientStdItem.AC = HUtil32.MakeLong(Ac + userItem.btValue[3], Ac2 + userItem.btValue[5]);
+                    clientStdItem.MAC = HUtil32.MakeLong(Mac + userItem.btValue[4], Mac2 + userItem.btValue[6]);
                     //if (userItem.btValue[7] - 1 < 10)
                     //{
                     //    stdItem.Source = (sbyte)userItem.btValue[7];
@@ -86,40 +86,40 @@ namespace GameSvr.Items
                     //}
                     break;
                 case EquipmentType.ITEM_ARMOR:
-                    stdItem.AC = HUtil32.MakeLong(Ac, Ac2 + userItem.btValue[0]);
-                    stdItem.MAC = HUtil32.MakeLong(Mac, Mac2 + userItem.btValue[1]);
-                    stdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[2]);
-                    stdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[3]);
-                    stdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[4]);
+                    clientStdItem.AC = HUtil32.MakeLong(Ac, Ac2 + userItem.btValue[0]);
+                    clientStdItem.MAC = HUtil32.MakeLong(Mac, Mac2 + userItem.btValue[1]);
+                    clientStdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[2]);
+                    clientStdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[3]);
+                    clientStdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[4]);
                     break;
                 case EquipmentType.ITEM_ACCESSORY:
-                    stdItem.AC = HUtil32.MakeLong(Ac, Ac2 + userItem.btValue[0]);
-                    stdItem.MAC = HUtil32.MakeLong(Mac, Mac2 + userItem.btValue[1]);
-                    stdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[2]);
-                    stdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[3]);
-                    stdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[4]);
+                    clientStdItem.AC = HUtil32.MakeLong(Ac, Ac2 + userItem.btValue[0]);
+                    clientStdItem.MAC = HUtil32.MakeLong(Mac, Mac2 + userItem.btValue[1]);
+                    clientStdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[2]);
+                    clientStdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[3]);
+                    clientStdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[4]);
                     if (userItem.btValue[5] > 0)
                     {
-                        stdItem.Need = userItem.btValue[5];
+                        clientStdItem.Need = userItem.btValue[5];
                     }
                     if (userItem.btValue[6] > 0)
                     {
-                        stdItem.NeedLevel = userItem.btValue[6];
+                        clientStdItem.NeedLevel = userItem.btValue[6];
                     }
                     break;
                 case EquipmentType.ITEM_LEECHDOM:
-                    stdItem.AC = HUtil32.MakeLong(Ac, Ac2);
-                    stdItem.MAC = HUtil32.MakeLong(Mac, Mac2);
-                    stdItem.DC = HUtil32.MakeLong(Dc, Dc2);
-                    stdItem.MC = HUtil32.MakeLong(Mc, Mc2);
-                    stdItem.SC = HUtil32.MakeLong(Sc, Sc2);
+                    clientStdItem.AC = HUtil32.MakeLong(Ac, Ac2);
+                    clientStdItem.MAC = HUtil32.MakeLong(Mac, Mac2);
+                    clientStdItem.DC = HUtil32.MakeLong(Dc, Dc2);
+                    clientStdItem.MC = HUtil32.MakeLong(Mc, Mc2);
+                    clientStdItem.SC = HUtil32.MakeLong(Sc, Sc2);
                     break;
                 default:
-                    stdItem.AC = 0;
-                    stdItem.MAC = 0;
-                    stdItem.DC = 0;
-                    stdItem.MC = 0;
-                    stdItem.SC = 0;
+                    clientStdItem.AC = 0;
+                    clientStdItem.MAC = 0;
+                    clientStdItem.DC = 0;
+                    clientStdItem.MC = 0;
+                    clientStdItem.SC = 0;
                     //stdItem.Source = 0;
                     //stdItem.reserved = 0;
                     break;
