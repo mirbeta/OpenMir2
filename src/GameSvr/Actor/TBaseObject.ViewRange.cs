@@ -143,7 +143,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public virtual void SearchViewRange()
+        public virtual void SearchViewRange() //这里应该只有NPC商人才会执行了,但是NPC商人貌似又不太需要执行这个方法
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
             if (Envir == null)
