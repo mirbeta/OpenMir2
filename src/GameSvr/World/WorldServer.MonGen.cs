@@ -58,6 +58,7 @@ namespace GameSvr.World
                 }
             }
 
+            //todo 这里还是有问题，刷怪时会导致索引不对 获取到错误的怪物信息
             var monsterName = MonsterList.Values.ToList();
             for (int i = 0; i < monsterName.Count; i++)
             {
