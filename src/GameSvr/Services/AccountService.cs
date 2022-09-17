@@ -76,6 +76,7 @@ namespace GameSvr.Services
         public void Initialize()
         {
             CheckConnected();
+            _logger.Debug("登录服务器连接初始化完成...");
         }
 
         private void SendSocket(string sSendMsg)

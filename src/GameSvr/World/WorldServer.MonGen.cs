@@ -4,6 +4,7 @@ using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
 using System.Collections;
+using System.Threading;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
@@ -17,72 +18,72 @@ namespace GameSvr.World
         /// Key:线程ID
         /// Value:怪物列表
         /// </summary>
-        public readonly Dictionary<int, IList<MonGenInfo>> MonGenList;
+        public readonly Dictionary<int, IList<MonGenInfo>> MonGenInfoThreadMap;
+        /// <summary>
+        /// 怪物刷新列表
+        /// </summary>
+        public readonly IList<MonGenInfo> MonGenList;
         public readonly Dictionary<string, int> MonGenCountInfo;
         /// <summary>
         /// 怪物对应线程
         /// </summary>
-        public readonly Dictionary<string, int> MonThreadMap;
+        public readonly Dictionary<string, int> MonsterThreadMap;
         /// <summary>
         /// 怪物列表
         /// </summary>
-        internal readonly IList<TMonInfo> MonsterList;
+        internal readonly Dictionary<string, MonsterInfo> MonsterList;
 
         private MonsterThread[] MobThreads;
         private Thread[] MobThreading;
         private readonly object _locker = new object();
 
-        private void InitializeMonster()
+        public void InitializeMonster()
         {
-            for (int i = 0; i < MonsterList.Count; i++)
+            for (int i = 0; i < MonGenList.Count; i++)
             {
-                if (M2Share.WorldEngine.MonGenList.Count == 1)
+                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+
+                if (MonGenInfoThreadMap.ContainsKey(threadId))
                 {
-                    for (int j = 0; j < M2Share.WorldEngine.MonGenList.Count; j++)
-                    {
-                        for (int k = 0; k < M2Share.WorldEngine.MonGenList[j].Count; k++)
-                        {
-                            if (M2Share.WorldEngine.MonThreadMap.ContainsKey(MonsterList[i].sName))
-                            {
-                                break;
-                            }
-                            M2Share.WorldEngine.MonThreadMap.Add(MonsterList[i].sName, M2Share.WorldEngine.MonGenList[j][k].ThreadId);
-                        }
-                    }
+                    MonGenInfoThreadMap[threadId].Add(MonGenList[i]);
                 }
                 else
                 {
-                    for (int j = 0; j < M2Share.WorldEngine.MonGenList.Count; j++)
-                    {
-                        for (int k = 0; k < M2Share.WorldEngine.MonGenList[j].Count; k++)
-                        {
-                            if (string.Compare(M2Share.WorldEngine.MonGenList[j][k].MonName, MonsterList[i].sName, StringComparison.OrdinalIgnoreCase) == 0)
-                            {
-                                if (M2Share.WorldEngine.MonThreadMap.ContainsKey(MonsterList[i].sName))
-                                {
-                                    break;
-                                }
-                                M2Share.WorldEngine.MonThreadMap.Add(MonsterList[i].sName, M2Share.WorldEngine.MonGenList[j][k].ThreadId);
-                            }
-                        }
-                    }
+                    MonGenInfoThreadMap.Add(threadId, new List<MonGenInfo>() { MonGenList[i] });
+                }
+
+                if (!MonsterThreadMap.ContainsKey(MonGenList[i].MonName))
+                {
+                    MonsterThreadMap.Add(MonGenList[i].MonName, threadId);
                 }
             }
-            
-            for (var i = 0; i < MonGenList.Count; i++)
+
+            var monsterName = MonsterList.Values.ToList();
+            for (int i = 0; i < monsterName.Count; i++)
             {
-                for (var j = 0; j < MonGenList[i].Count; j++)
+                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                if (!MonsterThreadMap.ContainsKey(MonsterList[monsterName[i].sName].sName))
                 {
-                    if (MonGenList[i] != null)
+                    MonsterThreadMap.Add(MonsterList[monsterName[i].sName].sName, threadId);
+                }
+            }
+
+            for (var i = 0; i < MonGenInfoThreadMap.Count; i++)
+            {
+                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
+                {
+                    if (MonGenInfoThreadMap[i] != null)
                     {
-                        if (string.IsNullOrEmpty(MonGenList[i][j].MonName))
+                        if (string.IsNullOrEmpty(MonGenInfoThreadMap[i][j].MonName))
                         {
                             continue;
                         }
-                        MonGenList[i][j].Race = GetMonRace(MonGenList[i][j].MonName);
+                        MonGenInfoThreadMap[i][j].Race = GetMonRace(MonGenInfoThreadMap[i][j].MonName);
                     }
                 }
             }
+
+            MonGenList.Clear();
         }
 
         public void Stop()
@@ -119,7 +120,7 @@ namespace GameSvr.World
 
             MobThreads = new MonsterThread[monsterThreads];
             MobThreading = new Thread[monsterThreads];
-            
+
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 MobThreads[i] = new MonsterThread();
@@ -181,12 +182,12 @@ namespace GameSvr.World
             {
                 return;
             }
-            IList<MonGenInfo> mongenList = null;
-            if (!MonGenList.TryGetValue(monsterThread.Id, out mongenList))
+
+            IList<MonGenInfo> mongenList;
+            if (!MonGenInfoThreadMap.TryGetValue(monsterThread.Id, out mongenList))
             {
                 return;
             }
-
             _logger.Info($"Monster Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
 
             while (true)
@@ -345,7 +346,7 @@ namespace GameSvr.World
                     }
                     if (boProcessLimit) break;
                 }
-                if (MonGenList.Count <= i)
+                if (MonGenInfoThreadMap.Count <= i)
                 {
                     thread.MonGenListPosition = 0;
                     _monsterCount = thread.MonsterProcessPostion;
@@ -387,11 +388,11 @@ namespace GameSvr.World
                 var threadId = GetMonsterThreadId(sMonName);
                 if (threadId >= 0)
                 {
-                    var n18 = MonGenList[threadId].Count - 1;
+                    var n18 = MonGenInfoThreadMap[threadId].Count - 1;
                     if (n18 < 0) n18 = 0;
-                    if (MonGenList[threadId].Count > n18)
+                    if (MonGenInfoThreadMap[threadId].Count > n18)
                     {
-                        var monGen = MonGenList[threadId][n18];
+                        var monGen = MonGenInfoThreadMap[threadId][n18];
                         if (monGen.TryAdd(baseObject))
                         {
                             monGen.CertCount++;
@@ -399,7 +400,7 @@ namespace GameSvr.World
                         else
                         {
                             threadId = M2Share.Config.ProcessMonsterMultiThreadLimit + 1;
-                            MonGenList.Add(threadId, new List<MonGenInfo> { monGen.Clone() });
+                            MonGenInfoThreadMap.Add(threadId, new List<MonGenInfo> { monGen.Clone() });
                             //todo 启动线程
                         }
                     }
@@ -423,14 +424,9 @@ namespace GameSvr.World
         {
             IList<TMonItem> itemList = null;
             var itemName = string.Empty;
-            for (var i = 0; i < MonsterList.Count; i++)
+            if (MonsterList.TryGetValue(mon.CharName, out var monster))
             {
-                var monster = MonsterList[i];
-                if (string.Compare(monster.sName, mon.CharName, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    itemList = monster.ItemList;
-                    break;
-                }
+                itemList = monster.ItemList;
             }
             if (itemList != null)
             {
@@ -835,40 +831,34 @@ namespace GameSvr.World
 
         private void MonInitialize(BaseObject baseObject, string sMonName)
         {
-            for (var i = 0; i < MonsterList.Count; i++)
+            if (MonsterList.TryGetValue(sMonName, out var monster))
             {
-                TMonInfo monster = MonsterList[i];
-                if (string.Compare(monster.sName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    baseObject.Race = monster.btRace;
-                    baseObject.RaceImg = monster.btRaceImg;
-                    baseObject.Appr = monster.wAppr;
-                    baseObject.Abil.Level = (byte)monster.wLevel;
-                    baseObject.LifeAttrib = monster.btLifeAttrib;
-                    baseObject.CoolEyeCode = (byte)monster.wCoolEye;
-                    baseObject.FightExp = monster.dwExp;
-                    baseObject.Abil.HP = monster.wHP;
-                    baseObject.Abil.MaxHP = monster.wHP;
-                    baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
-                    baseObject.Abil.MP = 0;
-                    baseObject.Abil.MaxMP = monster.wMP;
-                    baseObject.Abil.AC = HUtil32.MakeLong(monster.wAC, monster.wAC);
-                    baseObject.Abil.MAC = HUtil32.MakeLong(monster.wMAC, monster.wMAC);
-                    baseObject.Abil.DC = HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
-                    baseObject.Abil.MC = HUtil32.MakeLong(monster.wMC, monster.wMC);
-                    baseObject.Abil.SC = HUtil32.MakeLong(monster.wSC, monster.wSC);
-                    baseObject.SpeedPoint = (byte)monster.wSpeed;
-                    baseObject.HitPoint = (byte)monster.wHitPoint;
-                    baseObject.WalkSpeed = monster.wWalkSpeed;
-                    baseObject.WalkStep = monster.wWalkStep;
-                    baseObject.WalkWait = monster.wWalkWait;
-                    baseObject.NextHitTime = monster.wAttackSpeed;
-                    baseObject.NastyMode = monster.boAggro;
-                    baseObject.NoTame = monster.boTame;
-                    break;
-                }
+                baseObject.Race = monster.btRace;
+                baseObject.RaceImg = monster.btRaceImg;
+                baseObject.Appr = monster.wAppr;
+                baseObject.Abil.Level = (byte)monster.wLevel;
+                baseObject.LifeAttrib = monster.btLifeAttrib;
+                baseObject.CoolEyeCode = (byte)monster.wCoolEye;
+                baseObject.FightExp = monster.dwExp;
+                baseObject.Abil.HP = monster.wHP;
+                baseObject.Abil.MaxHP = monster.wHP;
+                baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
+                baseObject.Abil.MP = 0;
+                baseObject.Abil.MaxMP = monster.wMP;
+                baseObject.Abil.AC = HUtil32.MakeLong(monster.wAC, monster.wAC);
+                baseObject.Abil.MAC = HUtil32.MakeLong(monster.wMAC, monster.wMAC);
+                baseObject.Abil.DC = HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
+                baseObject.Abil.MC = HUtil32.MakeLong(monster.wMC, monster.wMC);
+                baseObject.Abil.SC = HUtil32.MakeLong(monster.wSC, monster.wSC);
+                baseObject.SpeedPoint = (byte)monster.wSpeed;
+                baseObject.HitPoint = (byte)monster.wHitPoint;
+                baseObject.WalkSpeed = monster.wWalkSpeed;
+                baseObject.WalkStep = monster.wWalkStep;
+                baseObject.WalkWait = monster.wWalkWait;
+                baseObject.NextHitTime = monster.wAttackSpeed;
+                baseObject.NastyMode = monster.boAggro;
+                baseObject.NoTame = monster.boTame;
             }
         }
-
     }
 }

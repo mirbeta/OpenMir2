@@ -2,9 +2,8 @@
 
 namespace SystemModule.Data
 {
-    public struct TMonInfo
+    public struct MonsterInfo
     {
-        public IList<TMonItem> ItemList;
         /// <summary>
         /// 怪物名
         /// </summary>
@@ -69,5 +68,9 @@ namespace SystemModule.Data
         public ushort wAntiPush;
         public bool boAggro;
         public bool boTame;
+        /// <summary>
+        /// 掉落物品列表
+        /// </summary>
+        public IList<TMonItem> ItemList;
     }
 }

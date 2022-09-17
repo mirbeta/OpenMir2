@@ -202,7 +202,7 @@ namespace GameSvr.DataStores
         public int LoadMonsterDB()
         {
             var result = 0;
-            TMonInfo Monster;
+            MonsterInfo Monster;
             const string sSQLString = "select * from TBL_Monsters";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
@@ -216,7 +216,7 @@ namespace GameSvr.DataStores
                 {
                     while (dr.Read())
                     {
-                        Monster = new TMonInfo
+                        Monster = new MonsterInfo
                         {
                             ItemList = new List<TMonItem>(),
                             sName = dr.GetString("NAME").Trim(),
@@ -261,7 +261,12 @@ namespace GameSvr.DataStores
                         }
                         Monster.ItemList = null;
                         M2Share.LocalDb.LoadMonitems(Monster.sName, ref Monster.ItemList);
-                        M2Share.WorldEngine.MonsterList.Add(Monster);
+                        if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.sName))
+                        {
+                            M2Share.Log.Error($"怪物名称[{Monster.sName}]重复,请确认数据是否正常.");
+                            continue;
+                        }
+                        M2Share.WorldEngine.MonsterList.Add(Monster.sName, Monster);
                         result = 1;
                     }
                 }

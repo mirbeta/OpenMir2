@@ -122,11 +122,11 @@ namespace GameSvr.DataStores
                 var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "GuardList.txt");
                 if (File.Exists(sFileName))
                 {
-                    var tGuardList = new StringList();
-                    tGuardList.LoadFromFile(sFileName);
-                    for (var i = 0; i < tGuardList.Count; i++)
+                    var guardList = new StringList();
+                    guardList.LoadFromFile(sFileName);
+                    for (var i = 0; i < guardList.Count; i++)
                     {
-                        var sLine = tGuardList[i];
+                        var sLine = guardList[i];
                         if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';')
                         {
                             sLine = HUtil32.GetValidStrCap(sLine, ref monName, new[] { " " });
@@ -140,10 +140,10 @@ namespace GameSvr.DataStores
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
                             {
-                                var tGuard = M2Share.WorldEngine.RegenMonsterByName(mapName, (short)HUtil32.Str_ToInt(cX, 0), (short)HUtil32.Str_ToInt(cY, 0), monName);
-                                if (tGuard != null)
+                                var guard = M2Share.WorldEngine.RegenMonsterByName(mapName, (short)HUtil32.Str_ToInt(cX, 0), (short)HUtil32.Str_ToInt(cY, 0), monName);
+                                if (guard != null)
                                 {
-                                    tGuard.Direction = (byte)HUtil32.Str_ToInt(direction, 0);
+                                    guard.Direction = (byte)HUtil32.Str_ToInt(direction, 0);
                                 }
                             }
                         }
@@ -570,24 +570,7 @@ namespace GameSvr.DataStores
                             MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.MapName);
                             if (MonGenInfo.Envir != null)
                             {
-                                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
-                                MonGenInfo.ThreadId = threadId;
-                                if (M2Share.WorldEngine.MonGenList.ContainsKey(threadId))
-                                {
-                                    M2Share.WorldEngine.MonGenList[threadId].Add(MonGenInfo);
-                                }
-                                else
-                                {
-                                    M2Share.WorldEngine.MonGenList.Add(threadId, new List<MonGenInfo>() { MonGenInfo });
-                                }
-
-                                if (M2Share.WorldEngine.MonGenCountInfo.ContainsKey(MonGenInfo.MonName))
-                                {
-                                    M2Share.WorldEngine.MonGenCountInfo[MonGenInfo.MonName] += MonGenInfo.Count;
-                                }
-                                else {
-                                    M2Share.WorldEngine.MonGenCountInfo.Add(MonGenInfo.MonName, MonGenInfo.Count);
-                                }
+                                M2Share.WorldEngine.MonGenList.Add(MonGenInfo);
                             }
                             else
                             {
@@ -601,13 +584,13 @@ namespace GameSvr.DataStores
                     CertList = new List<BaseObject>(),
                     Envir = null
                 };
-                if (M2Share.WorldEngine.MonGenList.ContainsKey(0))
+                if (M2Share.WorldEngine.MonGenInfoThreadMap.ContainsKey(0))
                 {
-                    M2Share.WorldEngine.MonGenList[0].Add(MonGenInfo);
+                    M2Share.WorldEngine.MonGenInfoThreadMap[0].Add(MonGenInfo);
                 }
                 else
                 {
-                    M2Share.WorldEngine.MonGenList.Add(0, new List<MonGenInfo>() { MonGenInfo });
+                    M2Share.WorldEngine.MonGenInfoThreadMap.Add(0, new List<MonGenInfo>() { MonGenInfo });
                 }
                 result = 1;
             }

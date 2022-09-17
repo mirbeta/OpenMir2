@@ -1,7 +1,6 @@
 using GameSvr.Actor;
 using GameSvr.Event.Events;
 using GameSvr.Guild;
-using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Npc;
@@ -96,10 +95,11 @@ namespace GameSvr.World
             _merchantPosition = 0;
             NpcPosition = 0;
             StdItemList = new List<Items.StdItem>();
-            MonsterList = new List<TMonInfo>();
-            MonGenList = new Dictionary<int, IList<MonGenInfo>>();
+            MonsterList = new Dictionary<string, MonsterInfo>(StringComparer.OrdinalIgnoreCase);
+            MonGenList = new List<MonGenInfo>();
+            MonGenInfoThreadMap = new Dictionary<int, IList<MonGenInfo>>();
             MonGenCountInfo = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            MonThreadMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            MonsterThreadMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MagicList = new List<MagicInfo>();
             AdminList = new List<TAdminInfo>();
             MerchantList = new List<Merchant>();
@@ -138,7 +138,6 @@ namespace GameSvr.World
             MerchantInitialize();
             NpCinitialize();
             _logger.Info("初始化NPC脚本完成...");
-            InitializeMonster();
         }
 
         private void PrcocessData()
@@ -186,19 +185,16 @@ namespace GameSvr.World
         private int GetMonRace(string sMonName)
         {
             var result = -1;
-            for (var i = 0; i < MonsterList.Count; i++)
+            if (MonsterList.ContainsKey(sMonName))
             {
-                var sName = MonsterList[i].sName;
-                if (!sName.Equals(sMonName, StringComparison.OrdinalIgnoreCase)) continue;
-                result = MonsterList[i].btRace;
-                break;
+                return MonsterList[sMonName].btRace;
             }
             return result;
         }
         
         private int GetMonsterThreadId(string sMonName)
         {
-            if (MonThreadMap.TryGetValue(sMonName, out var threadId))
+            if (MonsterThreadMap.TryGetValue(sMonName, out var threadId))
             {
                 return threadId;
             }
@@ -1781,9 +1777,9 @@ namespace GameSvr.World
             if (envir == null) return result;
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
-                for (var j = 0; j < MonGenList[i].Count; j++)
+                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
-                    var monGen = MonGenList[i][j];
+                    var monGen = MonGenInfoThreadMap[i][j];
                     if (monGen == null) continue;
                     if (monGen.Envir != null && monGen.Envir != envir) continue;
                     for (var k = 0; k < monGen.CertList.Count; k++)
@@ -1859,9 +1855,9 @@ namespace GameSvr.World
             }
             var result = 0;
             if (envir == null) return result;
-            for (var i = 0; i < MonGenList.Count; i++)
+            for (var i = 0; i < MonGenInfoThreadMap.Count; i++)
             {
-                if (MonGenList.TryGetValue(i, out var mongenList))
+                if (MonGenInfoThreadMap.TryGetValue(i, out var mongenList))
                 {
                     for (var j = 0; j < mongenList.Count; j++)
                     {
@@ -1977,9 +1973,9 @@ namespace GameSvr.World
         {
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
-                for (var j = 0; j < MonGenList[i].Count; j++)
+                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
-                    MonGenInfo monGen = MonGenList[i][j];
+                    MonGenInfo monGen = MonGenInfoThreadMap[i][j];
                     for (var k = 0; k < monGen.CertList.Count; k++)
                     {
                         BaseObject monBaseObject = monGen.CertList[k];

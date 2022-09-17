@@ -12,10 +12,10 @@ namespace GameSvr.Monster.Monsters
             WantRefMsg = true;
             Castle = null;
             GuardDirection = -1;
-            Race = 112;
+            Race = Grobal2.RC_ARCHERGUARD;
         }
 
-        private void sub_4A6B30(BaseObject targeTBaseObject)
+        private void AttackTarger(BaseObject targeTBaseObject)
         {
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
             Ability wAbil = Abil;
@@ -74,7 +74,7 @@ namespace GameSvr.Monster.Monsters
                     if ((HUtil32.GetTickCount() - AttackTick) >= NextHitTime)
                     {
                         AttackTick = HUtil32.GetTickCount();
-                        sub_4A6B30(TargetCret);
+                        AttackTarger(TargetCret);
                     }
                 }
                 else
