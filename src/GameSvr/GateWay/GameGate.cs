@@ -218,7 +218,7 @@ namespace GameSvr.GateWay
                         break;
                     }
                 }
-                if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.g_dwSocLimit)
+                if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit)
                 {
                     return;
                 }

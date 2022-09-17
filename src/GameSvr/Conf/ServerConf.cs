@@ -113,20 +113,20 @@ namespace GameSvr.Conf
                 WriteInteger("Server", "HalfFeeEnd", M2Share.Config.HalfFeeEnd);
             M2Share.Config.HalfFeeEnd = ReadInteger("Server", "HalfFeeEnd", M2Share.Config.HalfFeeEnd);
             if (ReadInteger("Server", "HumLimit", -1) < 0)
-                WriteInteger("Server", "HumLimit", M2Share.g_dwHumLimit);
-            M2Share.g_dwHumLimit = ReadInteger("Server", "HumLimit", M2Share.g_dwHumLimit);
+                WriteInteger("Server", "HumLimit", M2Share.HumLimit);
+            M2Share.HumLimit = ReadInteger("Server", "HumLimit", M2Share.HumLimit);
             if (ReadInteger("Server", "MonLimit", -1) < 0)
-                WriteInteger("Server", "MonLimit", M2Share.g_dwMonLimit);
-            M2Share.g_dwMonLimit = ReadInteger("Server", "MonLimit", M2Share.g_dwMonLimit);
+                WriteInteger("Server", "MonLimit", M2Share.MonLimit);
+            M2Share.MonLimit = ReadInteger("Server", "MonLimit", M2Share.MonLimit);
             if (ReadInteger("Server", "ZenLimit", -1) < 0)
-                WriteInteger("Server", "ZenLimit", M2Share.g_dwZenLimit);
-            M2Share.g_dwZenLimit = ReadInteger("Server", "ZenLimit", M2Share.g_dwZenLimit);
+                WriteInteger("Server", "ZenLimit", M2Share.ZenLimit);
+            M2Share.ZenLimit = ReadInteger("Server", "ZenLimit", M2Share.ZenLimit);
             if (ReadInteger("Server", "NpcLimit", -1) < 0)
-                WriteInteger("Server", "NpcLimit", M2Share.g_dwNpcLimit);
-            M2Share.g_dwNpcLimit = ReadInteger("Server", "NpcLimit", M2Share.g_dwNpcLimit);
+                WriteInteger("Server", "NpcLimit", M2Share.NpcLimit);
+            M2Share.NpcLimit = ReadInteger("Server", "NpcLimit", M2Share.NpcLimit);
             if (ReadInteger("Server", "SocLimit", -1) < 0)
-                WriteInteger("Server", "SocLimit", M2Share.g_dwSocLimit);
-            M2Share.g_dwSocLimit = ReadInteger("Server", "SocLimit", M2Share.g_dwSocLimit);
+                WriteInteger("Server", "SocLimit", M2Share.SocLimit);
+            M2Share.SocLimit = ReadInteger("Server", "SocLimit", M2Share.SocLimit);
             if (ReadInteger("Server", "DecLimit", -1) < 0)
                 WriteInteger("Server", "DecLimit", M2Share.nDecLimit);
             M2Share.nDecLimit = ReadInteger("Server", "DecLimit", M2Share.nDecLimit);

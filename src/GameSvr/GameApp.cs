@@ -36,11 +36,11 @@ namespace GameSvr
             M2Share.dwUsrRotCountMin = 0;
             M2Share.dwUsrRotCountMax = 0;
             M2Share.g_nProcessHumanLoopTime = 0;
-            M2Share.g_dwHumLimit = 30;
-            M2Share.g_dwMonLimit = 30;
-            M2Share.g_dwZenLimit = 5;
-            M2Share.g_dwNpcLimit = 5;
-            M2Share.g_dwSocLimit = 10;
+            M2Share.HumLimit = 30;
+            M2Share.MonLimit = 30;
+            M2Share.ZenLimit = 5;
+            M2Share.NpcLimit = 5;
+            M2Share.SocLimit = 10;
             M2Share.nDecLimit = 20;
             M2Share.Config.nLoadDBErrorCount = 0;
             M2Share.Config.nLoadDBCount = 0;
