@@ -213,21 +213,20 @@ namespace GameSvr.World
                     }
                     if (monGen != null && !string.IsNullOrEmpty(monGen.MonName) && !M2Share.Config.VentureServer)
                     {
-                        var nTemp = HUtil32.GetTickCount() - monGen.StartTick;
-                        if (monGen.StartTick == 0 || nTemp > GetMonstersZenTime(monGen.ZenTime))
+                        if (monGen.StartTick == 0 || ((HUtil32.GetTickCount() - monGen.StartTick) > GetMonstersZenTime(monGen.ZenTime)))
                         {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var nGenModCount = (int)Math.Ceiling(monGen.Count / (decimal)(M2Share.Config.MonGenRate * 10));
+                            var GenModCount = (int)Math.Ceiling(monGen.Count / (decimal)(M2Share.Config.MonGenRate * 10));
                             var map = M2Share.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 canCreate = false;
                             else
                                 canCreate = true;
-                            if (nGenModCount > nGenCount && canCreate)// 增加 控制刷怪数量比例
+                            if (GenModCount > nGenCount && canCreate)// 增加 控制刷怪数量比例
                             {
-                                boRegened = RegenMonsters(monGen, nGenModCount - nGenCount);
+                                boRegened = RegenMonsters(monGen, GenModCount - nGenCount);
                             }
                             if (boRegened)
                             {
