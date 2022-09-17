@@ -172,6 +172,9 @@ namespace GameSvr
                 return;
             }
             _logger.LogInformation($"加载怪物刷新配置信息成功({M2Share.WorldEngine.MonGenList.Count})...");
+            _logger.LogInformation("初始化怪物处理线程...");
+            M2Share.WorldEngine.InitializeMonster();
+            _logger.LogInformation("初始化怪物处理完成...");
             _logger.LogInformation("正加载怪物说话配置信息...");
             M2Share.LoadMonSayMsg();
             _logger.LogInformation($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
@@ -226,30 +229,12 @@ namespace GameSvr
             _logger.LogInformation("加载公告提示信息成功...");
             M2Share.LocalDb.LoadAdminList();
             _logger.LogInformation("管理员列表加载成功...");
-            M2Share.GuildMgr.LoadGuildInfo();
-            _logger.LogInformation("行会列表加载成功...");
-            M2Share.CastleMgr.LoadCastleList();
-            _logger.LogInformation("城堡列表加载成功...");
-            M2Share.CastleMgr.Initialize();
-            _logger.LogInformation("城堡城初始完成...");
-            if (M2Share.ServerIndex == 0)
-            {
-                SnapsmService.Instance.StartSnapsServer();
-                _logger.LogInformation("当前服务器运行主节点模式...");
-            }
-            else
-            {
-                SnapsmClient.Instance.ConnectMsgServer();
-                _logger.LogInformation($"当前运行从节点模式...[{M2Share.Config.MsgSrvAddr}:{M2Share.Config.MsgSrvPort}]");
-            }
         }
 
         public void StartWorld(CancellationToken stoppingToken)
         {
             try
             {
-                IdSrvClient.Instance.Initialize();
-                _logger.LogInformation("登录服务器连接初始化完成...");
                 M2Share.MapMgr.LoadMapDoor();
                 _logger.LogInformation("地图环境加载成功...");
                 MakeStoneMines();
@@ -274,7 +259,21 @@ namespace GameSvr
                     M2Share.LocalDb.LoadGuardList();
                     _logger.LogInformation("守卫列表加载成功...");
                 }
+                M2Share.GuildMgr.LoadGuildInfo();
+                M2Share.CastleMgr.LoadCastleList();
+                M2Share.CastleMgr.Initialize();
                 _logger.LogInformation("游戏处理引擎初始化成功...");
+                if (M2Share.ServerIndex == 0)
+                {
+                    SnapsmService.Instance.StartSnapsServer();
+                    _logger.LogDebug("当前服务器运行主节点模式...");
+                }
+                else
+                {
+                    SnapsmClient.Instance.ConnectMsgServer();
+                    _logger.LogInformation($"当前运行从节点模式...[{M2Share.Config.MsgSrvAddr}:{M2Share.Config.MsgSrvPort}]");
+                }
+                IdSrvClient.Instance.Initialize();
                 _logger.LogInformation(M2Share.g_sVersion);
                 _logger.LogInformation(M2Share.g_sUpDateTime);
                 M2Share.StartReady = true;

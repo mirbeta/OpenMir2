@@ -81,6 +81,7 @@ namespace GameSvr.Castle
                 castle = _castleList[i];
                 castle.Initialize();
             }
+            _logger.Debug("城堡城初始完成...");
         }
 
         // 城堡皇宫所在地图

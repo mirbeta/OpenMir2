@@ -662,7 +662,7 @@ namespace SystemModule
         /// </summary>
         public const byte RC_NPC = 10;
         /// <summary>
-        /// 守卫
+        /// 守卫(弓箭手)
         /// </summary>
         public const byte RC_ARCHERGUARD = 112;
         /// <summary>

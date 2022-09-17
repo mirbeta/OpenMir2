@@ -1079,9 +1079,9 @@ namespace GameSvr.Npc
                     {
                         for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                         {
-                            for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
+                            for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                             {
-                                MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                 if (MonGen == null)
                                 {
                                     continue;
@@ -1101,9 +1101,9 @@ namespace GameSvr.Npc
                     {
                         for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                         {
-                            for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
+                            for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                             {
-                                MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                 if (MonGen == null)
                                 {
                                     continue;
@@ -1130,9 +1130,9 @@ namespace GameSvr.Npc
                         {
                             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                             {
-                                for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
+                                for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                                 {
-                                    MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                    MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                     if (MonGen == null)
                                     {
                                         continue;
@@ -1152,9 +1152,9 @@ namespace GameSvr.Npc
                         {
                             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                             {
-                                for (var j = 0; j < M2Share.WorldEngine.MonGenList[i].Count; j++)
+                                for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                                 {
-                                    MonGen = M2Share.WorldEngine.MonGenList[i][j];
+                                    MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                     if (MonGen == null)
                                     {
                                         continue;
