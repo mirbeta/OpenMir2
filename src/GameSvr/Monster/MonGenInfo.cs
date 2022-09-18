@@ -1,4 +1,5 @@
 using GameSvr.Actor;
+using GameSvr.Maps;
 
 namespace GameSvr.Monster
 {
@@ -23,16 +24,16 @@ namespace GameSvr.Monster
         /// </summary>
         public IList<BaseObject> CertList;
         public int CertCount;
-        public object Envir;
+        public Envirnoment Envir;
         public int Race;
         /// <summary>
         /// 创建时间
         /// </summary>
         public int StartTick;
         /// <summary>
-        /// 怪物所在线程
+        /// 死亡释放
         /// </summary>
-        public int ThreadId;
+        public bool DeathRelease;
 
         /// <summary>
         /// 添加对象到列表

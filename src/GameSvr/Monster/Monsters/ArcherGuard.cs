@@ -19,7 +19,7 @@ namespace GameSvr.Monster.Monsters
         {
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
             Ability wAbil = Abil;
-            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
+            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
             if (nPower > 0)
             {
                 nPower = targeTBaseObject.GetHitStruckDamage(this, nPower);

@@ -33,6 +33,10 @@ namespace GameSvr.World
         /// 怪物刷新间隔
         /// </summary>
         public int RegenMonstersTick;
+        /// <summary>
+        /// 怪物总数
+        /// </summary>
+        public int MonsterCount;
 
         public MonsterThread()
         {

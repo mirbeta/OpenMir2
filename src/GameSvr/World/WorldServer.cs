@@ -36,10 +36,6 @@ namespace GameSvr.World
         /// </summary>
         private int _merchantPosition;
         /// <summary>
-        /// 怪物总数
-        /// </summary>
-        private int _monsterCount;
-        /// <summary>
         /// NPC处理位置
         /// </summary>
         private int NpcPosition;
@@ -71,7 +67,14 @@ namespace GameSvr.World
         protected readonly IList<PlayObject> BotPlayObjectList;
         private readonly ArrayList _oldMagicList;
         public readonly IList<NormNpc> QuestNpcList;
+        /// <summary>
+        /// 物品列表
+        /// </summary>
         public readonly IList<Items.StdItem> StdItemList;
+        /// <summary>
+        /// 怪物列表
+        /// </summary>
+        internal readonly Dictionary<string, MonsterInfo> MonsterList;
         /// <summary>
         /// 假人列表
         /// </summary>
@@ -119,7 +122,6 @@ namespace GameSvr.World
             BotPlayObjectList = new List<PlayObject>();
         }
 
-        public int MonsterCount => _monsterCount;
         public int OnlinePlayObject => GetOnlineHumCount();
         public int PlayObjectCount => GetUserCount();
         public int LoadPlayCount => GetLoadPlayCount();

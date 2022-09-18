@@ -241,7 +241,12 @@ namespace GameSvr
                     // Omitted
                     while (await _timer.WaitForNextTickAsync(cancellationToken))
                     {
-                        AnsiConsole.MarkupLine($"MonCount:{M2Share.WorldEngine.MonsterCount}");
+                        var monsterCount = 0;
+                        for (int i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++)
+                        {
+                            monsterCount += M2Share.WorldEngine.MobThreads[i].MonsterCount;
+                        }
+                        AnsiConsole.MarkupLine($"MonCount:{monsterCount}");
                         ctx.Refresh();
                     }
                 });
