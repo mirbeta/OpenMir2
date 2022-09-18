@@ -28,28 +28,52 @@ namespace GameSvr.World
         /// 怪物对应线程
         /// </summary>
         public readonly Dictionary<string, int> MonsterThreadMap;
-        /// <summary>
-        /// 怪物列表
-        /// </summary>
-        internal readonly Dictionary<string, MonsterInfo> MonsterList;
 
-        private MonsterThread[] MobThreads;
+        public MonsterThread[] MobThreads;
         private Thread[] MobThreading;
         private readonly object _locker = new object();
 
         public void InitializeMonster()
         {
+            //todo 这里需要想办法归类怪物，把怪物名称一样的归类到一个列表，方便后续管理和维护怪物刷新列表
+
+            //线程ID -> 怪物名称-> 怪物刷新信息  结果大概是这样
+
+            var monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,这样也能知道每一个怪要刷新几个和统计
+
             for (int i = 0; i < MonGenList.Count; i++)
             {
-                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
-
-                if (MonGenInfoThreadMap.ContainsKey(threadId))
+                var monName = MonGenList[i].MonName;
+                if (monsterGenMap.ContainsKey(monName))
                 {
-                    MonGenInfoThreadMap[threadId].Add(MonGenList[i]);
+                    monsterGenMap[monName].Add(MonGenList[i]);
                 }
                 else
                 {
-                    MonGenInfoThreadMap.Add(threadId, new List<MonGenInfo>() { MonGenList[i] });
+                    monsterGenMap.Add(monName, new List<MonGenInfo>() { MonGenList[i] });
+                }
+            }
+
+            var monsterNames = monsterGenMap.Keys.ToList();
+            for (int i = 0; i < monsterNames.Count; i++)
+            {
+                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                var monName = monsterNames[i];
+                if (MonGenInfoThreadMap.ContainsKey(threadId))
+                {
+                    for (int j = 0; j < monsterGenMap[monName].Count; j++)
+                    {
+                        MonGenInfoThreadMap[threadId].Add(monsterGenMap[monName][j]);
+                    }
+                }
+                else
+                {
+                    var monsterList = new List<MonGenInfo>();
+                    for (int j = 0; j < monsterGenMap[monName].Count; j++)
+                    {
+                        monsterList.Add(monsterGenMap[monName][j]);
+                    }
+                    MonGenInfoThreadMap.Add(threadId, monsterList);
                 }
 
                 if (!MonsterThreadMap.ContainsKey(MonGenList[i].MonName))
@@ -58,7 +82,6 @@ namespace GameSvr.World
                 }
             }
 
-            //todo 这里还是有问题，刷怪时会导致索引不对 获取到错误的怪物信息
             var monsterName = MonsterList.Values.ToList();
             for (int i = 0; i < monsterName.Count; i++)
             {
@@ -117,18 +140,12 @@ namespace GameSvr.World
         {
             _logger.Info($"Monster Run thread count:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
 
-            var monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit + M2Share.Config.ProcessMonsterRetainThreadLimit; //处理线程+预留线程
+            var monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit; //处理线程+预留线程
 
             MobThreads = new MonsterThread[monsterThreads];
             MobThreading = new Thread[monsterThreads];
 
             for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
-            {
-                MobThreads[i] = new MonsterThread();
-                MobThreads[i].Id = i;
-            }
-
-            for (var i = M2Share.Config.ProcessMonsterMultiThreadLimit; i < M2Share.Config.ProcessMonsterRetainThreadLimit; i++)
             {
                 MobThreads[i] = new MonsterThread();
                 MobThreads[i].Id = i;
@@ -238,126 +255,119 @@ namespace GameSvr.World
                     }
                 }
 
-                ProcessMonstersLoop(monsterThread, mongenList);
-
-                Thread.Sleep(20);
-            }
-        }
-
-        /// <summary>
-        /// 怪物处理
-        /// 刷新、行动、攻击等动作
-        /// </summary>
-        private void ProcessMonstersLoop(MonsterThread thread, IList<MonGenInfo> monGenList)
-        {
-            var dwRunTick = HUtil32.GetTickCount();
-            try
-            {
-                var boProcessLimit = false;
-                var dwCurrentTick = HUtil32.GetTickCount();
-                var dwMonProcTick = HUtil32.GetTickCount();
-                thread.MonsterProcessCount = 0;
-                var i = 0;
-                for (i = thread.MonGenListPosition; i < monGenList.Count; i++)
+                var dwRunTick = HUtil32.GetTickCount();
+                try
                 {
-                    var monGen = monGenList[i];
-                    var processPosition = thread.MonGenCertListPosition < monGen.CertList.Count ? thread.MonGenCertListPosition : 0;
-                    thread.MonGenCertListPosition = 0;
-                    while (true)
+                    var boProcessLimit = false;
+                    var dwCurrentTick = HUtil32.GetTickCount();
+                    var dwMonProcTick = HUtil32.GetTickCount();
+                    monsterThread.MonsterProcessCount = 0;
+                    var i = 0;
+                    for (i = monsterThread.MonGenListPosition; i < mongenList.Count; i++)
                     {
-                        if (processPosition >= monGen.CertList.Count)
+                        monGen = mongenList[i];
+                        var processPosition = monsterThread.MonGenCertListPosition < monGen.CertList.Count ? monsterThread.MonGenCertListPosition : 0;
+                        monsterThread.MonGenCertListPosition = 0;
+                        while (true)
                         {
-                            break;
-                        }
-                        var monster = (AnimalObject)monGen.CertList[processPosition];
-                        if (monster != null)
-                        {
-                            if (!monster.Ghost)
+                            if (processPosition >= monGen.CertList.Count)
                             {
-                                if ((dwCurrentTick - monster.RunTick) > monster.RunTime)
+                                break;
+                            }
+                            var monster = (AnimalObject)monGen.CertList[processPosition];
+                            if (monster != null)
+                            {
+                                if (!monster.Ghost)
                                 {
-                                    monster.RunTick = dwRunTick;
-                                    if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
+                                    if ((dwCurrentTick - monster.RunTick) > monster.RunTime)
                                     {
-                                        if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
+                                        monster.RunTick = dwRunTick;
+                                        if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
                                         {
-                                            if (monster.ReAliveEx(monster.MonGen))
+                                            if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
                                             {
-                                                monster.ReAliveTick = HUtil32.GetTickCount();
-                                            }
-                                        }
-                                    }
-                                    if (!monster.IsVisibleActive && (monster.ProcessRunCount < M2Share.Config.ProcessMonsterInterval))
-                                    {
-                                        monster.ProcessRunCount++;
-                                    }
-                                    else
-                                    {
-                                        if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
-                                        {
-                                            monster.SearchTick = HUtil32.GetTickCount();
-
-                                            if (!monster.Death)
-                                            {
-                                                //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升效率
-                                                //要区分哪些怪物是主动攻击，哪些怪物是被动攻击
-                                                //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
-                                                //其余怪物均为主动攻击
-                                                //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
-                                                //由玩家找出附近的怪物，然后添加到怪物列表
-                                                //monster.SearchViewRange();
-
-                                                if (monster.Race == Grobal2.RC_GUARD || monster.Race == Grobal2.RC_ARCHERGUARD) //守卫才主动搜索附近的精灵
+                                                if (monster.ReAliveEx(monster.MonGen))
                                                 {
-                                                    monster.SearchViewRange();
+                                                    monster.ReAliveTick = HUtil32.GetTickCount();
                                                 }
                                             }
-                                            else
-                                            {
-                                                //todo 怪物死了 要从可视范围内删除,自身也需要清除视觉范围 要调试一下怪物死亡过程个尸体清理过程
-                                                //或者人物视野范围内判断怪物是否死亡，死亡则删除范围，但是是要区分是死亡还是释放尸体，释放尸体则彻底不可见,死亡貌似还是处于可见状态
-                                                //或者可以用更效率的算法来处理视野范围,玩家搜索范围还是会有可能导致CPU使用率上升问题(目前有初步思路，预计后续优化)
-                                                monster.SearchViewRangeDeath();
-                                            }
                                         }
-                                        monster.ProcessRunCount = 0;
-                                        monster.Run();
+                                        if (!monster.IsVisibleActive && (monster.ProcessRunCount < M2Share.Config.ProcessMonsterInterval))
+                                        {
+                                            monster.ProcessRunCount++;
+                                        }
+                                        else
+                                        {
+                                            if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
+                                            {
+                                                monster.SearchTick = HUtil32.GetTickCount();
+
+                                                if (!monster.Death)
+                                                {
+                                                    //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升效率
+                                                    //要区分哪些怪物是主动攻击，哪些怪物是被动攻击
+                                                    //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
+                                                    //其余怪物均为主动攻击
+                                                    //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
+                                                    //由玩家找出附近的怪物，然后添加到怪物列表
+                                                    //monster.SearchViewRange();
+
+                                                    if (monster.Race == Grobal2.RC_GUARD || monster.Race == Grobal2.RC_ARCHERGUARD) //守卫才主动搜索附近的精灵
+                                                    {
+                                                        monster.SearchViewRange();
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    //todo 怪物死了 要从可视范围内删除,自身也需要清除视觉范围 要调试一下怪物死亡过程个尸体清理过程
+                                                    //或者人物视野范围内判断怪物是否死亡，死亡则删除范围，但是是要区分是死亡还是释放尸体，释放尸体则彻底不可见,死亡貌似还是处于可见状态
+                                                    //或者可以用更效率的算法来处理视野范围,玩家搜索范围还是会有可能导致CPU使用率上升问题(目前有初步思路，预计后续优化)
+                                                    monster.SearchViewRangeDeath();
+                                                }
+                                            }
+                                            monster.ProcessRunCount = 0;
+                                            monster.Run();
+                                        }
+                                    }
+                                    monsterThread.MonsterProcessPostion++;
+                                }
+                                else
+                                {
+                                    if ((HUtil32.GetTickCount() - monster.GhostTick) > 5 * 60 * 1000)
+                                    {
+                                        monGen.CertList.RemoveAt(processPosition);
+                                        monGen.CertCount--;
+                                        monster = null;
+                                        continue;
                                     }
                                 }
-                                thread.MonsterProcessPostion++;
                             }
-                            else
+                            processPosition++;
+                            if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.MonLimit)
                             {
-                                if ((HUtil32.GetTickCount() - monster.GhostTick) > 5 * 60 * 1000)
-                                {
-                                    monGen.CertList.RemoveAt(processPosition);
-                                    monGen.CertCount--;
-                                    monster = null;
-                                    continue;
-                                }
+                                boProcessLimit = true;
+                                monsterThread.MonGenCertListPosition = processPosition;
+                                break;
                             }
                         }
-                        processPosition++;
-                        if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.MonLimit)
-                        {
-                            boProcessLimit = true;
-                            thread.MonGenCertListPosition = processPosition;
-                            break;
-                        }
+                        if (boProcessLimit) break;
                     }
-                    if (boProcessLimit) break;
+                    if (MonGenInfoThreadMap.Count <= i)
+                    {
+                        monsterThread.MonGenListPosition = 0;
+                        monsterThread.MonsterCount = monsterThread.MonsterProcessPostion;
+                        monsterThread.MonsterProcessPostion = 0;
+                    }
+                    monsterThread.MonGenListPosition = !boProcessLimit ? 0 : i;
                 }
-                if (MonGenInfoThreadMap.Count <= i)
+                catch (Exception e)
                 {
-                    thread.MonGenListPosition = 0;
-                    _monsterCount = thread.MonsterProcessPostion;
-                    thread.MonsterProcessPostion = 0;
+                    _logger.Error(e.StackTrace);
                 }
-                thread.MonGenListPosition = !boProcessLimit ? 0 : i;
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e.StackTrace);
+                finally
+                {
+                    Thread.Sleep(50);
+                }
             }
         }
 
@@ -389,22 +399,38 @@ namespace GameSvr.World
                 var threadId = GetMonsterThreadId(sMonName);
                 if (threadId >= 0)
                 {
-                    var n18 = MonGenInfoThreadMap[threadId].Count - 1;
-                    if (n18 < 0) n18 = 0;
-                    if (MonGenInfoThreadMap[threadId].Count > n18)
+                    MonGenInfo MonGenInfo = new MonGenInfo();
+                    MonGenInfo.MapName = sMap;
+                    MonGenInfo.X = nX;
+                    MonGenInfo.Y = nY;
+                    MonGenInfo.MonName = sMonName;
+                    MonGenInfo.Range = 0;
+                    MonGenInfo.Count = 1;
+                    MonGenInfo.ZenTime = 0;
+                    MonGenInfo.MissionGenRate = 0;// 集中座标刷新机率 1 -100
+                    MonGenInfo.CertList = new List<BaseObject>();
+                    MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.MapName);
+                    if (MonGenInfo.TryAdd(baseObject))
                     {
-                        var monGen = MonGenInfoThreadMap[threadId][n18];
-                        if (monGen.TryAdd(baseObject))
-                        {
-                            monGen.CertCount++;
-                        }
-                        else
-                        {
-                            threadId = M2Share.Config.ProcessMonsterMultiThreadLimit + 1;
-                            MonGenInfoThreadMap.Add(threadId, new List<MonGenInfo> { monGen.Clone() });
-                            //todo 启动线程
-                        }
+                        MonGenInfo.CertCount++;
                     }
+                    MonGenInfoThreadMap[threadId].Add(MonGenInfo);
+
+                    //var n18 = MonGenInfoThreadMap[threadId].Count - 1;
+                    //if (n18 < 0) n18 = 0;
+                    //if (MonGenInfoThreadMap[threadId].Count > n18)
+                    //{
+                    //    var monGen = MonGenInfoThreadMap[threadId][n18];
+                    //    if (monGen.TryAdd(baseObject))
+                    //    {
+                    //        monGen.CertCount++;
+                    //    }
+                    //    else
+                    //    {
+                    //        threadId = M2Share.Config.ProcessMonsterMultiThreadLimit + 1;
+                    //        MonGenInfoThreadMap.Add(threadId, new List<MonGenInfo> { monGen.Clone() });//todo 启动线程
+                    //    }
+                    //}
                     baseObject.Envir.AddObject(baseObject);
                     baseObject.AddToMaped = true;
                 }
@@ -474,7 +500,6 @@ namespace GameSvr.World
         /// <returns></returns>
         private BaseObject CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName)
         {
-            BaseObject result = null;
             BaseObject cert = null;
             int n1C;
             int n20;
@@ -503,19 +528,23 @@ namespace GameSvr.World
                     break;
                 case MonsterConst.AnimalDeer:
                     if (M2Share.RandomNumber.Random(30) == 0)
+                    {
                         cert = new ChickenDeer
                         {
                             Animal = true,
                             MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
                             BodyLeathery = 150
                         };
+                    }
                     else
+                    {
                         cert = new MonsterObject()
                         {
                             Animal = true,
                             MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
                             BodyLeathery = 150
                         };
+                    }
                     break;
                 case MonsterConst.AnimalWolf:
                     cert = new AtMonster
@@ -751,13 +780,13 @@ namespace GameSvr.World
                     }
 
                     if (p28 == null)
-                        //Cert.Free;
-                        cert = null;
+                    {
+                        _logger.Error($"创建怪物失败 地图:[{sMapName}] X:{nX} Y:{nY} MonName:{sMonName}");
+                        return null;
+                    }
                 }
             }
-
-            result = cert;
-            return result;
+            return cert;
         }
 
         /// <summary>
@@ -813,6 +842,10 @@ namespace GameSvr.World
                                 cert.MonGen = monGen;
                                 monGen.ActiveCount++;
                                 monGen.TryAdd(cert);
+                            }
+                            else
+                            {
+                                return false;
                             }
                             if (HUtil32.GetTickCount() - dwStartTick > M2Share.ZenLimit)
                             {
