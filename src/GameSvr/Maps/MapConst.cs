@@ -45,19 +45,6 @@ namespace GameSvr.Maps
         public short nDMapY;
         public bool boFlag;
     }
-    
-    public class MapCellInfoConst
-    {
-        public static MapCellInfo LowWall = new MapCellInfo
-        {
-            Attribute = CellAttribute.LowWall
-        };
-
-        public static MapCellInfo HighWall = new MapCellInfo
-        {
-            Attribute = CellAttribute.HighWall
-        };
-    }
 
     /// <summary>
     /// 地图物品
