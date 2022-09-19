@@ -52,7 +52,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
-            int nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
+            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC))) + HUtil32.LoWord(Abil.DC);
             HitMagAttackTarget(targeTBaseObject, 0, nPower, true);
         }
 
