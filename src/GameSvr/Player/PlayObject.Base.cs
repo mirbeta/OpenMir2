@@ -1289,7 +1289,7 @@ namespace GameSvr.Player
                                 {
                                     break;
                                 }
-                                var osObject =  cellInfo.ObjList[nIdx];
+                                var osObject = cellInfo.ObjList[nIdx];
                                 if (osObject != null)
                                 {
                                     if (osObject.ActorObject)
