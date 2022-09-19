@@ -1274,8 +1274,6 @@ namespace GameSvr.Player
             var nEndY = (short)(CurrY + ViewRange);
             try
             {
-                BaseObject BaseObject = null;
-                MirEvent MapEvent = null;
                 for (var nX = nStartX; nX <= nEndX; nX++)
                 {
                     for (var nY = nStartY; nY <= nEndY; nY++)
@@ -1294,7 +1292,7 @@ namespace GameSvr.Player
                                 var osObject =  cellInfo.ObjList[nIdx];
                                 if (osObject != null)
                                 {
-                                    if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
+                                    if (osObject.ActorObject)
                                     {
                                         if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                         {
@@ -1306,7 +1304,7 @@ namespace GameSvr.Player
                                             cellInfo.Dispose();
                                             break;
                                         }
-                                        BaseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                        BaseObject BaseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                         if (BaseObject != null && !BaseObject.Invisible)
                                         {
                                             if (!BaseObject.Ghost && !BaseObject.FixedHideMode && !BaseObject.ObMode)
@@ -1366,7 +1364,7 @@ namespace GameSvr.Player
                                         }
                                         if (osObject.CellType == CellType.Event)
                                         {
-                                            MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);;
+                                            MirEvent MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                             if (MapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(nX, nY, MapEvent);
@@ -1391,7 +1389,7 @@ namespace GameSvr.Player
                     {
                         if (Race == Grobal2.RC_PLAYOBJECT)
                         {
-                            BaseObject = VisibleBaseObject.BaseObject;
+                            var BaseObject = VisibleBaseObject.BaseObject;
                             if (!BaseObject.FixedHideMode && !BaseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                             {
                                 SendMsg(BaseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
@@ -1403,7 +1401,7 @@ namespace GameSvr.Player
                     }
                     if (Race == Grobal2.RC_PLAYOBJECT && VisibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        BaseObject = VisibleBaseObject.BaseObject;
+                        var BaseObject = VisibleBaseObject.BaseObject;
                         if (BaseObject != this)
                         {
                             if (BaseObject.Death)
@@ -1454,7 +1452,7 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-                    MapEvent = VisibleEvents[I];
+                    MirEvent MapEvent = VisibleEvents[I];
                     if (MapEvent.VisibleFlag == VisibleFlag.Visible)
                     {
                         SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.nX, MapEvent.nY, "");

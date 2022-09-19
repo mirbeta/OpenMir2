@@ -12,7 +12,6 @@ namespace GameSvr.Castle
 
         public void LoadConfig(TUserCastle userCastle)
         {
-            var mapSplit = new[] { ',' };
             userCastle.sName = ReadString("Setup", "CastleName", userCastle.sName);
             userCastle.OwnGuild = ReadString("Setup", "OwnGuild", "");
             userCastle.ChangeDate = ReadDateTime("Setup", "ChangeDate", DateTime.Now);
@@ -26,8 +25,8 @@ namespace GameSvr.Castle
             {
                 while (!string.IsNullOrEmpty(sMapList))
                 {
-                    sMapList = HUtil32.GetValidStr3(sMapList, ref sMap, mapSplit);
-                    if (sMap == "") break;
+                    sMapList = HUtil32.GetValidStr3(sMapList, ref sMap, new[] { ',' });
+                    if (string.IsNullOrEmpty(sMap)) break;
                     userCastle.EnvirList.Add(sMap);
                 }
             }

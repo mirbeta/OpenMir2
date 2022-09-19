@@ -3424,7 +3424,7 @@ namespace GameSvr.Actor
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 osObject = cellInfo.ObjList[i];
-                                if ((osObject != null) && (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant))
+                                if ((osObject != null) && osObject.ActorObject)
                                 {
                                     baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                     if ((baseObject != null) && (!baseObject.Death) && (!baseObject.Ghost))
@@ -3487,7 +3487,7 @@ namespace GameSvr.Actor
                                         var osObject = cellInfo.ObjList[i];
                                         if (osObject != null)
                                         {
-                                            if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
+                                            if (osObject.ActorObject)
                                             {
                                                 if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                                 {
@@ -5446,7 +5446,6 @@ namespace GameSvr.Actor
                                         {
                                             baseObject.MagDefenceUp(nSec);
                                         }
-
                                         result++;
                                     }
                                 }
@@ -5455,7 +5454,6 @@ namespace GameSvr.Actor
                     }
                 }
             }
-
             return result;
         }
 

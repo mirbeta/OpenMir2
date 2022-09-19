@@ -122,7 +122,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 StartWaitingForData(asyncState); //开始接收数据
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 RaiseDisconnectedEvent();
                 IsConnected = false;

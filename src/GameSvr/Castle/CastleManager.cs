@@ -60,7 +60,6 @@ namespace GameSvr.Castle
             if (_castleList.Count <= 0)
             {
                 castle = new TUserCastle(M2Share.Config.CastleDir);
-                _castleList.Add(castle);
                 castle.Initialize();
                 castle.ConfigDir = "0";
                 castle.EnvirList.Add("0151");
@@ -73,6 +72,7 @@ namespace GameSvr.Castle
                 {
                     castle.EnvirList[i] = M2Share.MapMgr.FindMap(castle.EnvirList[i]).MapName;
                 }
+                _castleList.Add(castle);
                 Save();
                 return;
             }

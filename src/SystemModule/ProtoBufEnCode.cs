@@ -19,7 +19,7 @@ namespace SystemModule
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -33,7 +33,7 @@ namespace SystemModule
             }
             catch (Exception ex)
             {
-                return default(T);
+                throw new Exception(ex.StackTrace);
             }
         }
     }

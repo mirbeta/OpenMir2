@@ -182,7 +182,7 @@ namespace GameSvr.Actor
                                 var osObject = cellInfo.ObjList[nIdx];
                                 if (osObject != null)
                                 {
-                                    if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
+                                    if (osObject.ActorObject)
                                     {
                                         if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
                                         {
@@ -280,7 +280,7 @@ namespace GameSvr.Actor
                                 var OSObject = cellInfo.ObjList[i];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.CellType == CellType.Play || OSObject.CellType == CellType.Monster || OSObject.CellType == CellType.Merchant)
+                                    if (OSObject.ActorObject)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) >= 60 * 1000)
                                         {
