@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
         private void sub_4A65C4()
         {
             Abil.HP = 0;
-            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC) + 1) + HUtil32.LoWord(Abil.DC);
+            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC) + 1)) + HUtil32.LoWord(Abil.DC);
             for (var i = 0; i < VisibleActors.Count; i++)
             {
                 var baseObject = VisibleActors[i].BaseObject;

@@ -13,18 +13,18 @@ namespace GameSvr.Monster.Monsters
         {
             Direction = btDir;
             var wAbil = Abil;
-            var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
-            if (n10 > 0)
+            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
+            if (nPower > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 var baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && AntiMagic >= 0)
                 {
-                    n10 = baseObject.GetMagStruckDamage(this, n10);
-                    if (n10 > 0)
+                    nPower = baseObject.GetMagStruckDamage(this, nPower);
+                    if (nPower > 0)
                     {
-                        baseObject.StruckDamage(n10);
-                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, baseObject.Abil.HP, baseObject.Abil.MaxHP, ActorId, "", 300);
+                        baseObject.StruckDamage(nPower);
+                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, baseObject.Abil.HP, baseObject.Abil.MaxHP, ActorId, "", 300);
                     }
                 }
             }
