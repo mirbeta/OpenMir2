@@ -10,7 +10,7 @@ using SystemModule.Data;
 
 namespace GameSvr.Maps
 {
-    public class Envirnoment
+    public class Envirnoment : IDisposable
     {
         /// <summary>
         /// 怪物数量
@@ -20,15 +20,13 @@ namespace GameSvr.Maps
         /// 玩家数量
         /// </summary>
         public int HumCount => _humCount;
-
-        public int ThreadId;
         public short Width;
         public short Height;
         public string MapFileName = string.Empty;
         public string MapName = string.Empty;
         public string MapDesc = string.Empty;
         private Memory<MapCellInfo> _cellArray;
-        private readonly MemoryPool<MapCellInfo> _cellPool;
+        private ArrayPool<MapCellInfo> _cellPool;
         public int MinMap;
         public int ServerIndex;
         /// <summary>
@@ -65,15 +63,39 @@ namespace GameSvr.Maps
             DoorList = new List<TDoorInfo>();
             _questList = new List<TMapQuestInfo>();
             WhisperTick = 0;
-            _cellPool = MemoryPool<MapCellInfo>.Shared;
             PointList = new List<PointInfo>();
-            ThreadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
         }
 
         ~Envirnoment()
         {
-            _cellArray = null;
+            Dispose(false);
         }
+        
+        private void Initialize(short nWidth, short nHeight)
+        {
+            if (nWidth > 1 && nHeight > 1)
+            {
+                if (!_cellArray.IsEmpty)
+                {
+                    for (var nW = 0; nW < Width; nW++)
+                    {
+                        for (var nH = 0; nH < Height; nH++)
+                        {
+                            if (_cellArray.Span[nW * Height + nH].ObjList != null)
+                            {
+                                _cellArray.Span[nW * Height + nH].Dispose();
+                            }
+                        }
+                    }
+                    _cellArray = null;
+                }
+                Width = nWidth;
+                Height = nHeight;
+                _cellPool = ArrayPool<MapCellInfo>.Shared;
+                _cellArray = _cellPool.Rent(nWidth * nHeight);
+            }
+        }
+
 
         public bool AllowMagics(string magicName)
         {
@@ -757,12 +779,12 @@ namespace GameSvr.Maps
                             // wBkImg High
                             if ((buffer[buffIndex + 1] & 0x80) != 0)
                             {
-                                _cellArray.Span[n24 + nH] = MapCellInfoConst.HighWall;
+                                _cellArray.Span[n24 + nH] = MapCellInfo.HighWall;
                             }
                             // wFrImg High
                             if ((buffer[buffIndex + 5] & 0x80) != 0)
                             {
-                                _cellArray.Span[n24 + nH] = MapCellInfoConst.LowWall;
+                                _cellArray.Span[n24 + nH] = MapCellInfo.LowWall;
                             }
                             if (_cellArray.Span[n24 + nH] == null)
                             {
@@ -852,32 +874,7 @@ namespace GameSvr.Maps
             }
             return result;
         }
-
-        private void Initialize(short nWidth, short nHeight)
-        {
-            if (nWidth > 1 && nHeight > 1)
-            {
-                if (!_cellArray.IsEmpty)
-                {
-                    for (var nW = 0; nW < Width; nW++)
-                    {
-                        for (var nH = 0; nH < Height; nH++)
-                        {
-                            if (_cellArray.Span[nW * Height + nH].ObjList != null)
-                            {
-                                _cellArray.Span[nW * Height + nH].Dispose();
-                            }
-                        }
-                    }
-                    _cellArray = null;
-                }
-                Width = nWidth;
-                Height = nHeight;
-                //_cellArray = new MapCellInfo[nWidth * nHeight];
-                _cellArray = _cellPool.Rent(nWidth * nHeight).Memory;
-            }
-        }
-
+        
         public bool CreateQuest(int nFlag, int nValue, string sMonName, string sItem, string sQuest, bool boGrouped)
         {
             TMapQuestInfo mapQuest;
@@ -1418,6 +1415,20 @@ namespace GameSvr.Maps
             {
                 _monCount--;
             }
+        }
+        
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _cellPool.Return(_cellArray.ToArray());
+            }
+        }
+        
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

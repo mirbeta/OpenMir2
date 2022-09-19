@@ -1289,6 +1289,10 @@ namespace GameSvr.Player
                                 {
                                     break;
                                 }
+                                if (cellInfo.Count > 1000)
+                                {
+                                    var s = "0";
+                                }
                                 var osObject = cellInfo.ObjList[nIdx];
                                 if (osObject != null)
                                 {

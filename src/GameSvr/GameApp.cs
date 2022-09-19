@@ -237,7 +237,7 @@ namespace GameSvr
             {
                 M2Share.MapMgr.LoadMapDoor();
                 _logger.LogInformation("地图环境加载成功...");
-                //MakeStoneMines();
+                MakeStoneMines();
                 _logger.LogInformation("矿物数据初始成功...");
                 M2Share.LocalDb.LoadMerchant();
                 _logger.LogInformation("交易NPC列表加载成功...");

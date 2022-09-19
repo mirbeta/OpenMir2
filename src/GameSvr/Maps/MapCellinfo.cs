@@ -3,8 +3,23 @@ using SystemModule;
 
 namespace GameSvr.Maps
 {
-    public class MapCellInfo
+    public struct MapTest
     {
+        
+    }
+
+    public class MapCellInfo : IDisposable
+    {
+        public static MapCellInfo LowWall => new MapCellInfo
+        {
+            Attribute = CellAttribute.LowWall
+        };
+
+        public static MapCellInfo HighWall => new MapCellInfo
+        {
+            Attribute = CellAttribute.HighWall
+        };
+        
         public bool Valid => Attribute == CellAttribute.Walk;
 
         public CellAttribute Attribute;
