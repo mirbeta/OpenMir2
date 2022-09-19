@@ -72,6 +72,17 @@ namespace GameSvr.Maps
         public VisibleFlag VisibleFlag;
     }
 
+    /// <summary>
+    /// 地图对象类型
+    /// </summary>
+    public enum CellObjectType : byte
+    {
+        /// <summary>
+        /// 可以移动的对象
+        /// </summary>
+        MoveObject = 0
+    }
+
     public enum CellType : byte
     {
         /// <summary>

@@ -507,19 +507,19 @@ namespace GameSvr.Castle
             {
                 return false;
             }
-            var playPbjectList = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, playPbjectList);
+            var playObjectList = new List<BaseObject>();
+            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, playObjectList);
             var result = true;
-            for (var i = 0; i < playPbjectList.Count; i++)
+            for (var i = 0; i < playObjectList.Count; i++)
             {
-                var playObject = (PlayObject)playPbjectList[i];
+                var playObject = (PlayObject)playObjectList[i];
                 if (!playObject.Death && playObject.MyGuild != guild)
                 {
                     result = false;
                     break;
                 }
             }
-            playPbjectList = null;
+            playObjectList.Clear();
             return result;
         }
 
@@ -825,28 +825,28 @@ namespace GameSvr.Castle
         public bool RepairDoor()
         {
             var result = false;
-            var CastleDoor = MainDoor;
-            if (CastleDoor.BaseObject == null || UnderWar || CastleDoor.BaseObject.WAbil.HP >= CastleDoor.BaseObject.WAbil.MaxHP)
+            var castleDoor = MainDoor;
+            if (castleDoor.BaseObject == null || UnderWar || castleDoor.BaseObject.WAbil.HP >= castleDoor.BaseObject.WAbil.MaxHP)
             {
-                return result;
+                return false;
             }
-            if (!CastleDoor.BaseObject.Death)
+            if (!castleDoor.BaseObject.Death)
             {
-                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.StruckTick) > 60 * 1000)
+                if ((HUtil32.GetTickCount() - castleDoor.BaseObject.StruckTick) > 60 * 1000)
                 {
-                    CastleDoor.BaseObject.WAbil.HP = CastleDoor.BaseObject.WAbil.MaxHP;
-                    ((CastleDoor)CastleDoor.BaseObject).RefStatus();
+                    castleDoor.BaseObject.WAbil.HP = castleDoor.BaseObject.WAbil.MaxHP;
+                    ((CastleDoor)castleDoor.BaseObject).RefStatus();
                     result = true;
                 }
             }
             else
             {
-                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.StruckTick) > 60 * 1000)
+                if ((HUtil32.GetTickCount() - castleDoor.BaseObject.StruckTick) > 60 * 1000)
                 {
-                    CastleDoor.BaseObject.WAbil.HP = CastleDoor.BaseObject.WAbil.MaxHP;
-                    CastleDoor.BaseObject.Death = false;
-                    ((CastleDoor)CastleDoor.BaseObject).IsOpened = false;
-                    ((CastleDoor)CastleDoor.BaseObject).RefStatus();
+                    castleDoor.BaseObject.WAbil.HP = castleDoor.BaseObject.WAbil.MaxHP;
+                    castleDoor.BaseObject.Death = false;
+                    ((CastleDoor)castleDoor.BaseObject).IsOpened = false;
+                    ((CastleDoor)castleDoor.BaseObject).RefStatus();
                     result = true;
                 }
             }
@@ -876,7 +876,7 @@ namespace GameSvr.Castle
             }
             if (Wall == null || UnderWar || Wall.WAbil.HP >= Wall.WAbil.MaxHP)
             {
-                return result;
+                return false;
             }
             if (!Wall.Death)
             {

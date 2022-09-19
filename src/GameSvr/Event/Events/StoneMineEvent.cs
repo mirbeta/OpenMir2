@@ -30,7 +30,7 @@ namespace GameSvr.Event.Events
             }
             else
             {
-                if (base.Envir.AddToMapMineEvent(nX, nY, CellType.Event, this) == null)
+                if (this.Envir.AddToMapMineEvent(nX, nY, CellType.Event, this) == null)
                 {
                     AddToMap = false;
                 }

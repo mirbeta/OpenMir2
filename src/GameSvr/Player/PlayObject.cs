@@ -1106,7 +1106,7 @@ namespace GameSvr.Player
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
                             OSObject = cellInfo.ObjList[i];
-                            if (OSObject.CellType == CellType.Play || OSObject.CellType == CellType.Monster || OSObject.CellType == CellType.Merchant)
+                            if (OSObject.ActorObject)
                             {
                                 BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
                                 if (BaseObject != null)

@@ -289,12 +289,12 @@ namespace GameSvr
             var mineMapList = M2Share.MapMgr.GetMineMaps();
             for (var i = 0; i < mineMapList.Count; i++)
             {
-                var Envir = mineMapList[i];
-                for (var nW = 0; nW < Envir.Width; nW++)
+                var envir = mineMapList[i];
+                for (var nW = 0; nW < envir.Width; nW++)
                 {
-                    for (var nH = 0; nH < Envir.Height; nH++)
+                    for (var nH = 0; nH < envir.Height; nH++)
                     {
-                        var mine = new StoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
+                        var mine = new StoneMineEvent(envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)
                         {
                             mine.Dispose();

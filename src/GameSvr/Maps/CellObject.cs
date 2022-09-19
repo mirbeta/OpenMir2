@@ -10,9 +10,13 @@
         /// </summary>
         public int CellObjId;
         /// <summary>
-        /// Cell对象类型
+        /// Cell类型
         /// </summary>
         public CellType CellType;
+        /// <summary>
+        /// 精灵对象（玩家 怪物 商人）
+        /// </summary>
+        public bool ActorObject;
         /// <summary>
         /// 添加时间
         /// </summary>
@@ -29,12 +33,7 @@
         
         public LinkedListNode<CellObject> Node;
         public LinkedListNode<CellObject> NodeThreaded;
-
-        public bool MoveObject()
-        {
-            return CellType == CellType.Play || CellType == CellType.Monster || CellType == CellType.Merchant;
-        }
-
+        
         public void Add()
         {
             /*Node = Envir.Objects.AddLast(this);
