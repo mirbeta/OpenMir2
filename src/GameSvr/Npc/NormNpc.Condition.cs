@@ -1732,15 +1732,15 @@ namespace GameSvr.Npc
             int nCount = 0;
             PlayJob nJob = PlayJob.None;
             PlayObject PlayObjectEx;
-            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior, ScriptConst.sWarrior.Length))
+            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior))
             {
                 nJob = PlayJob.Warrior;
             }
-            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWizard, ScriptConst.sWizard.Length))
+            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWizard))
             {
                 nJob = PlayJob.Wizard;
             }
-            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTaos, ScriptConst.sTaos.Length))
+            if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTaos))
             {
                 nJob = PlayJob.Taoist;
             }

@@ -2368,7 +2368,7 @@ namespace BotSvr
             const string sam = "/move";
             if (!string.IsNullOrEmpty(Str))
             {
-                if (HUtil32.CompareLStr(Str, sam, sam.Length))
+                if (HUtil32.CompareLStr(Str, sam))
                 {
                     var param = Str.Substring(sam.Length, Str.Length - sam.Length);
                     if (param != "")
@@ -2507,7 +2507,7 @@ namespace BotSvr
             var sM = string.Empty;
             if (rstr.Length >= 2)
             {
-                if (HUtil32.CompareLStr(rstr, sam, sam.Length))
+                if (HUtil32.CompareLStr(rstr, sam))
                 {
                     param = rstr.Substring(sam.Length + 1 - 1, rstr.Length - sam.Length);
                     if (param != "")

@@ -43,7 +43,7 @@ namespace GameSvr.Maps
                     {
                         break;
                     }
-                    if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count], "ConnectMapInfo".Length))
+                    if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count]))
                     {
                         sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { " ", "\t" });
                         LoadList.RemoveAt(count);
@@ -125,7 +125,7 @@ namespace GameSvr.Maps
                                 MapFlag.boQUIZ = true;
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NORECONNECT", "NORECONNECT".Length))
+                            if (HUtil32.CompareLStr(s34, "NORECONNECT"))
                             {
                                 MapFlag.boNORECONNECT = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sReConnectMap);
@@ -136,69 +136,69 @@ namespace GameSvr.Maps
                                 }
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "CHECKQUEST", "CHECKQUEST".Length))
+                            if (HUtil32.CompareLStr(s34, "CHECKQUEST"))
                             {
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 QuestNPC = LoadMapInfo_LoadMapQuest(sLine);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NEEDSET_ON", "NEEDSET_ON".Length))
+                            if (HUtil32.CompareLStr(s34, "NEEDSET_ON"))
                             {
                                 MapFlag.nNeedONOFF = 1;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nNEEDSETONFlag = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NEEDSET_OFF", "NEEDSET_OFF".Length))
+                            if (HUtil32.CompareLStr(s34, "NEEDSET_OFF"))
                             {
                                 MapFlag.nNeedONOFF = 0;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nNEEDSETONFlag = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "MUSIC", "MUSIC".Length))
+                            if (HUtil32.CompareLStr(s34, "MUSIC"))
                             {
                                 MapFlag.boMUSIC = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nMUSICID = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "EXPRATE", "EXPRATE".Length))
+                            if (HUtil32.CompareLStr(s34, "EXPRATE"))
                             {
                                 MapFlag.boEXPRATE = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nEXPRATE = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKWINLEVEL", "PKWINLEVEL".Length))
+                            if (HUtil32.CompareLStr(s34, "PKWINLEVEL"))
                             {
                                 MapFlag.boPKWINLEVEL = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nPKWINLEVEL = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKWINEXP", "PKWINEXP".Length))
+                            if (HUtil32.CompareLStr(s34, "PKWINEXP"))
                             {
                                 MapFlag.boPKWINEXP = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nPKWINEXP = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKLOSTLEVEL", "PKLOSTLEVEL".Length))
+                            if (HUtil32.CompareLStr(s34, "PKLOSTLEVEL"))
                             {
                                 MapFlag.boPKLOSTLEVEL = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nPKLOSTLEVEL = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKLOSTEXP", "PKLOSTEXP".Length))
+                            if (HUtil32.CompareLStr(s34, "PKLOSTEXP"))
                             {
                                 MapFlag.boPKLOSTEXP = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nPKLOSTEXP = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "DECHP", "DECHP".Length))
+                            if (HUtil32.CompareLStr(s34, "DECHP"))
                             {
                                 MapFlag.boDECHP = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
@@ -206,7 +206,7 @@ namespace GameSvr.Maps
                                 MapFlag.nDECHPTIME = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "INCHP", "INCHP".Length))
+                            if (HUtil32.CompareLStr(s34, "INCHP"))
                             {
                                 MapFlag.boINCHP = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
@@ -214,7 +214,7 @@ namespace GameSvr.Maps
                                 MapFlag.nINCHPTIME = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "DECGAMEGOLD", "DECGAMEGOLD".Length))
+                            if (HUtil32.CompareLStr(s34, "DECGAMEGOLD"))
                             {
                                 MapFlag.boDECGAMEGOLD = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
@@ -222,7 +222,7 @@ namespace GameSvr.Maps
                                 MapFlag.nDECGAMEGOLDTIME = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "DECGAMEPOINT", "DECGAMEPOINT".Length))
+                            if (HUtil32.CompareLStr(s34, "DECGAMEPOINT"))
                             {
                                 MapFlag.boDECGAMEPOINT = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
@@ -230,7 +230,7 @@ namespace GameSvr.Maps
                                 MapFlag.nDECGAMEPOINTTIME = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "INCGAMEGOLD", "INCGAMEGOLD".Length))
+                            if (HUtil32.CompareLStr(s34, "INCGAMEGOLD"))
                             {
                                 MapFlag.boINCGAMEGOLD = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
@@ -238,7 +238,7 @@ namespace GameSvr.Maps
                                 MapFlag.nINCGAMEGOLDTIME = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "INCGAMEPOINT", "INCGAMEPOINT".Length))
+                            if (HUtil32.CompareLStr(s34, "INCGAMEPOINT"))
                             {
                                 MapFlag.boINCGAMEPOINT = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
@@ -326,14 +326,14 @@ namespace GameSvr.Maps
                                 MapFlag.boNOCHAT = true;
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "KILLFUNC", "KILLFUNC".Length))
+                            if (HUtil32.CompareLStr(s34, "KILLFUNC"))
                             {
                                 MapFlag.boKILLFUNC = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
                                 MapFlag.nKILLFUNCNO = HUtil32.Str_ToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NOHUMNOMON", "NOHUMNOMON".Length))
+                            if (HUtil32.CompareLStr(s34, "NOHUMNOMON"))
                             {
                                 // 有人才开始刷怪
                                 MapFlag.boNOHUMNOMON = true;

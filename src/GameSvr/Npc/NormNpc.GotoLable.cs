@@ -651,21 +651,21 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKJOB:
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior, ScriptConst.sWarrior.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior))
                         {
                             if (PlayObject.Job != PlayJob.Warrior)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWizard, ScriptConst.sWizard.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWizard))
                         {
                             if (PlayObject.Job != PlayJob.Wizard)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTaos, ScriptConst.sTaos.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTaos))
                         {
                             if (PlayObject.Job != PlayJob.Taoist)
                             {
@@ -729,49 +729,49 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nDAYOFWEEK:
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSUN, ScriptConst.sSUN.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSUN))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 1)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sMON, ScriptConst.sMON.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sMON))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 2)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTUE, ScriptConst.sTUE.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTUE))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 3)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWED, ScriptConst.sWED.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWED))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 4)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTHU, ScriptConst.sTHU.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTHU))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 5)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sFRI, ScriptConst.sFRI.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sFRI))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 6)
                             {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSAT, ScriptConst.sSAT.Length))
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSAT))
                         {
                             if ((int)DateTime.Now.DayOfWeek != 7)
                             {

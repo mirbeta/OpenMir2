@@ -1057,7 +1057,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", M2Share.GameCommand.Unlock.CommandName);
                     return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[", "$MAPMONSTERCOUNT[".Length)) // 地图怪物数量
+            if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[")) // 地图怪物数量
             {
                 MonGenInfo MonGen = null;
                 BaseObject BaseObject = null;
@@ -1187,7 +1187,7 @@ namespace GameSvr.Npc
             //    return;
             //}
             // -------------------------------------------------------------------------------
-            if (HUtil32.CompareLStr(sVariable, "$MONKILLER[", "$MONKILLER[".Length))// $MONKILLER(怪物名称 + 地图号) 显示杀死此怪物的杀手
+            if (HUtil32.CompareLStr(sVariable, "$MONKILLER["))// $MONKILLER(怪物名称 + 地图号) 显示杀死此怪物的杀手
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
@@ -1204,7 +1204,7 @@ namespace GameSvr.Npc
                 //MonDie.Free;
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$MONDIEHOUR[", "$MONDIEHOUR[".Length)) // $MONDIEHOUR(怪物名称 + 地图号) 显示该怪物死时的小时
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEHOUR[")) // $MONDIEHOUR(怪物名称 + 地图号) 显示该怪物死时的小时
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
@@ -1221,7 +1221,7 @@ namespace GameSvr.Npc
                 //MonDie.Free;
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$MONDIEMIN[", "$MONDIEMIN[".Length))// $MONDIEMIN(怪物名称 + 地图号) 显示该怪物死时的分钟
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEMIN["))// $MONDIEMIN(怪物名称 + 地图号) 显示该怪物死时的分钟
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
@@ -1238,7 +1238,7 @@ namespace GameSvr.Npc
                 //MonDie.Free;
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$MONDIESEC[", "$MONDIESEC[".Length))// $MONDIESEC(怪物名称 + 地图号) 显示该怪物死时的秒数
+            if (HUtil32.CompareLStr(sVariable, "$MONDIESEC["))// $MONDIESEC(怪物名称 + 地图号) 显示该怪物死时的秒数
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
@@ -1255,7 +1255,7 @@ namespace GameSvr.Npc
                 //MonDie.Free;
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$MONDIEYEAR[", "$MONDIEYEAR[".Length))// $MONDIEYEAR[怪物名称 + 地图号]   显示该怪物死亡的年
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEYEAR["))// $MONDIEYEAR[怪物名称 + 地图号]   显示该怪物死亡的年
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
@@ -1272,7 +1272,7 @@ namespace GameSvr.Npc
                 //MonDie.Free;
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$MONDIEMONTH[", "$MONDIEMONTH[".Length))// $MONDIEMONTH[怪物名称 + 地图号]  显示该怪物死亡的月
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEMONTH["))// $MONDIEMONTH[怪物名称 + 地图号]  显示该怪物死亡的月
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
@@ -1289,7 +1289,7 @@ namespace GameSvr.Npc
                 //MonDie.Free;
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$MONDIEDAY[", "$MONDIEDAY[".Length))// $MONDIEDAY[怪物名称 + 地图号]    显示该怪物死亡的日
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEDAY["))// $MONDIEDAY[怪物名称 + 地图号]    显示该怪物死亡的日
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
@@ -1307,7 +1307,7 @@ namespace GameSvr.Npc
                 return;
             }
             // 个人信息
-            if (HUtil32.CompareLStr(sVariable, "$USEITEMMAKEINDEX(", "$USEITEMAKEINDEX(".Length))// 显示n位置的装备ID
+            if (HUtil32.CompareLStr(sVariable, "$USEITEMMAKEINDEX("))// 显示n位置的装备ID
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 var n18 = HUtil32.Str_ToInt(s14, -1);
@@ -1321,7 +1321,7 @@ namespace GameSvr.Npc
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$USEITEMNAME(", "$USEITEMNAME(".Length))// 显示n位置的装备名称
+            if (HUtil32.CompareLStr(sVariable, "$USEITEMNAME("))// 显示n位置的装备名称
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 var n18 = HUtil32.Str_ToInt(s14, -1);
@@ -1434,7 +1434,7 @@ namespace GameSvr.Npc
                 sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.BuildGuildPrice.ToString());
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$HUMAN(", "$HUMAN(".Length))
+            if (HUtil32.CompareLStr(sVariable, "$HUMAN("))
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
@@ -1458,7 +1458,7 @@ namespace GameSvr.Npc
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$GUILD(", "$GUILD(".Length))
+            if (HUtil32.CompareLStr(sVariable, "$GUILD("))
             {
                 if (PlayObject.MyGuild == null)
                 {
@@ -1489,7 +1489,7 @@ namespace GameSvr.Npc
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$GLOBAL(", "$GLOBAL(".Length))
+            if (HUtil32.CompareLStr(sVariable, "$GLOBAL("))
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
@@ -1513,7 +1513,7 @@ namespace GameSvr.Npc
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$STR(", "$STR(".Length))
+            if (HUtil32.CompareLStr(sVariable, "$STR("))
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 var nVarValue = M2Share.GetValNameNo(s14);

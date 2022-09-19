@@ -111,7 +111,7 @@ namespace GameSvr.Script
             {
                 var sLine = LoadList[i].Trim();
                 callList.AppendText(sLine);
-                if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL", "#CALL".Length))
+                if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL"))
                 {
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
                     var sCallScriptFile = GetCallScriptPath(sLable.Trim());
@@ -160,12 +160,12 @@ namespace GameSvr.Script
                 s14 = LoadList[i].Trim();
                 if (s14 != "" && s14[0] == '#')
                 {
-                    if (HUtil32.CompareLStr(s14, "#SETHOME", "#SETHOME".Length))
+                    if (HUtil32.CompareLStr(s14, "#SETHOME"))
                     {
                         result = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
                         LoadList[i] = "";
                     }
-                    if (HUtil32.CompareLStr(s14, "#DEFINE", "#DEFINE".Length))
+                    if (HUtil32.CompareLStr(s14, "#DEFINE"))
                     {
                         s14 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" });
                         s14 = HUtil32.GetValidStr3(s14, ref s20, new[] { " ", "\t" });
@@ -178,7 +178,7 @@ namespace GameSvr.Script
                         List.Add(DefineInfo);
                         LoadList[i] = "";
                     }
-                    if (HUtil32.CompareLStr(s14, "#INCLUDE", "#INCLUDE".Length))
+                    if (HUtil32.CompareLStr(s14, "#INCLUDE"))
                     {
                         s28 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
                         s28 = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Defines", s28);
@@ -1566,7 +1566,7 @@ namespace GameSvr.Script
                         }
                         else
                         {
-                            if (sScript[0] == '#' && (HUtil32.CompareLStr(sScript, "#IF", "#IF".Length) || HUtil32.CompareLStr(sScript, "#ACT", "#ACT".Length) || HUtil32.CompareLStr(sScript, "#ELSEACT", "#ELSEACT".Length)))
+                            if (sScript[0] == '#' && (HUtil32.CompareLStr(sScript, "#IF") || HUtil32.CompareLStr(sScript, "#ACT") || HUtil32.CompareLStr(sScript, "#ELSEACT")))
                             {
                                 bo8D = true;
                             }
@@ -1724,7 +1724,7 @@ namespace GameSvr.Script
                     }
                     if (sScript.StartsWith("{"))
                     {
-                        if (HUtil32.CompareLStr(sScript, "{Quest", "{Quest".Length))
+                        if (HUtil32.CompareLStr(sScript, "{Quest"))
                         {
                             s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { " ", "}", "\t" });
                             HUtil32.GetValidStr3(s38, ref s3C, new[] { " ", "}", "\t" });
@@ -1733,7 +1733,7 @@ namespace GameSvr.Script
                             Script.nQuest = n70;
                             n70++;
                         }
-                        if (HUtil32.CompareLStr(sScript, "{~Quest", "{~Quest".Length))
+                        if (HUtil32.CompareLStr(sScript, "{~Quest"))
                         {
                             continue;
                         }
@@ -1742,7 +1742,7 @@ namespace GameSvr.Script
                     {
                         s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { "=", " ", "\t" });
                         Script.boQuest = true;
-                        if (HUtil32.CompareLStr(sScript, "#IF", "#IF".Length))
+                        if (HUtil32.CompareLStr(sScript, "#IF"))
                         {
                             HUtil32.ArrestStringEx(sScript, "[", "]", ref s40);
                             Script.QuestInfo[nQuestIdx].wFlag = (short)HUtil32.Str_ToInt(s40, 0);
@@ -1754,7 +1754,7 @@ namespace GameSvr.Script
                             }
                             Script.QuestInfo[nQuestIdx].btValue = (byte)n24;
                         }
-                        if (HUtil32.CompareLStr(sScript, "#RAND", "#RAND".Length))
+                        if (HUtil32.CompareLStr(sScript, "#RAND"))
                         {
                             Script.QuestInfo[nQuestIdx].nRandRage = HUtil32.Str_ToInt(s44, 0);
                         }
@@ -3197,7 +3197,7 @@ namespace GameSvr.Script
             }
             //===========================================没有使用的========================================
             #endregion
-            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_TEAM, ScriptConst.sVAR_TEAM.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_TEAM))
             {
                 s14 = sLabel2.Substring(ScriptConst.sVAR_TEAM.Length + 1 - 1, 1);
                 if (s14 != "")
@@ -3209,7 +3209,7 @@ namespace GameSvr.Script
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_HUMAN, ScriptConst.sVAR_HUMAN.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_HUMAN))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")
@@ -3221,7 +3221,7 @@ namespace GameSvr.Script
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_GUILD, ScriptConst.sVAR_GUILD.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_GUILD))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")
@@ -3233,7 +3233,7 @@ namespace GameSvr.Script
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_GLOBAL, ScriptConst.sVAR_GLOBAL.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_GLOBAL))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")
@@ -3245,7 +3245,7 @@ namespace GameSvr.Script
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_STR, ScriptConst.sVAR_STR.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_STR))
             {
                 //'欢迎使用个人银行储蓄，目前完全免费，请多利用。\ \<您的个人银行存款有/@-1>：<$46><｜/@-2><$125/G18>\ \<您的包裹里以携带有/AUTOCOLOR=249>：<$GOLDCOUNT><｜/@-2><$GOLDCOUNTX>\ \ \<存入金币/@@InPutInteger1>      <取出金币/@@InPutInteger2>      <返 回/@Main>'
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
@@ -3258,7 +3258,7 @@ namespace GameSvr.Script
                     sMsg = sMsg.Replace("<" + sLabel + ">", "????");
                 }
             }
-            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_MISSIONARITHMOMETER, ScriptConst.sVAR_MISSIONARITHMOMETER.Length))
+            else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_MISSIONARITHMOMETER))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
                 if (s14 != "")

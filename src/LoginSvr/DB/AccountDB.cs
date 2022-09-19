@@ -129,7 +129,7 @@ namespace LoginSvr.DB
             int result;
             for (var i = 0; i < _quickList.Count; i++)
             {
-                if (HUtil32.CompareLStr(_quickList[i].sAccount, sName, sName.Length))
+                if (HUtil32.CompareLStr(_quickList[i].sAccount, sName))
                 {
                     List.Add(new AccountQuick(_quickList[i].sAccount, _quickList[i].nIndex));
                 }

@@ -68,7 +68,7 @@ namespace SelGate
             for (var i = 0; i < GateShare.BlockIPList.Count; i++)
             {
                 sBlockIPaddr = GateShare.BlockIPList[i];
-                if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr, sBlockIPaddr.Length))
+                if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr))
                 {
                     result = true;
                     break;

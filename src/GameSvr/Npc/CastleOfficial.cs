@@ -225,13 +225,13 @@ namespace GameSvr.Npc
                             RepairWallNow(3, PlayObject);
                             this.GotoLable(PlayObject, ScriptConst.sMAIN, false);
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREGUARDNOW, ScriptConst.sHIREGUARDNOW.Length))
+                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREGUARDNOW))
                         {
                             s20 = sLabel.Substring(ScriptConst.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "");
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREARCHERNOW, ScriptConst.sHIREARCHERNOW.Length))
+                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREARCHERNOW))
                         {
                             s20 = sLabel.Substring(ScriptConst.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);

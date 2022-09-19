@@ -294,10 +294,6 @@ namespace GameSvr.Maps
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
-                            if (cert.MapCell == CellType.Event)
-                            {
-                                Console.WriteLine("123123");
-                            }
                             if (cellInfo.ObjList == null)
                             {
                                 cellInfo.ObjList = new PooledList<CellObject>();
@@ -738,7 +734,11 @@ namespace GameSvr.Maps
                     using var binReader = new BinaryReader(fileStream);
 
                     var bytData = new byte[52];
-                    binReader.Read(bytData, 0, bytData.Length);
+                    var read = binReader.Read(bytData, 0, bytData.Length);
+                    if (read <= 0)
+                    {
+                        return false;
+                    }
                     Width = BitConverter.ToInt16(bytData, 0);
                     Height = BitConverter.ToInt16(bytData, 2);
 
