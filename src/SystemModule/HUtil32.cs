@@ -483,6 +483,20 @@ namespace SystemModule
             return result;
         }
 
+        public static bool CompareLStr(string src, string targ)
+        {
+            int compn = targ.Length;
+            if (compn <= 0) return false;
+            if (src.Length < compn) return false;
+            if (targ.Length < compn) return false;
+            for (var i = 0; i < compn; i++)
+            {
+                if (char.ToUpper(src[i]) == char.ToUpper(targ[i])) continue;
+                return false;
+            }
+            return true;
+        }
+        
         public static bool CompareLStr(string src, string targ, int compn)
         {
             if (compn <= 0) return false;

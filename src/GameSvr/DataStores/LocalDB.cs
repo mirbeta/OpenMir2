@@ -396,7 +396,7 @@ namespace GameSvr.DataStores
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
                                 var n38 = HUtil32.Str_ToInt(s34, 0);
                                 var n3C = HUtil32.Str_ToInt(s20, 0);
-                                var boGrouped = HUtil32.CompareLStr(s30, "GROUP", "GROUP".Length);
+                                var boGrouped = HUtil32.CompareLStr(s30, "GROUP");
                                 if (!Map.CreateQuest(n38, n3C, sMonName, sItem, sQuest, boGrouped))
                                 {
                                     result = -i;
@@ -526,7 +526,7 @@ namespace GameSvr.DataStores
                     {
                         break;
                     }
-                    if (HUtil32.CompareLStr("loadgen", LoadList[i], "loadgen".Length))
+                    if (HUtil32.CompareLStr("loadgen", LoadList[i]))
                     {
                         var sMapGenFile = HUtil32.GetValidStr3(LoadList[i], ref sLineText, new[] { " ", "\t" });
                         LoadList.RemoveAt(i);

@@ -610,15 +610,15 @@ namespace GameSvr.Npc
         private void ActionOfChangeJob(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             PlayJob nJob = PlayJob.None;
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptConst.sWarrior, ScriptConst.sWarrior.Length))
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptConst.sWarrior))
             {
                 nJob = PlayJob.Warrior;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptConst.sWizard, ScriptConst.sWizard.Length))
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptConst.sWizard))
             {
                 nJob = PlayJob.Wizard;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptConst.sTaos, ScriptConst.sTaos.Length))
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptConst.sTaos))
             {
                 nJob = PlayJob.Taoist;
             }
@@ -1531,7 +1531,7 @@ namespace GameSvr.Npc
                 return;
             }
             bool boFoundVar = false;
-            if (sVarValue != "" && !HUtil32.IsStringNumber(sVarValue))
+            if (!string.IsNullOrEmpty(sVarValue) && !HUtil32.IsStringNumber(sVarValue))
             {
                 if (HUtil32.CompareLStr(sVarValue, "<$HUMAN(", 8))
                 {

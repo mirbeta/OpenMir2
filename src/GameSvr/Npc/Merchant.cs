@@ -936,7 +936,7 @@ namespace GameSvr.Npc
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sUSEITEMNAME, ScriptConst.sUSEITEMNAME.Length))
+                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sUSEITEMNAME))
                         {
                             if (m_boUseItemName)
                             {

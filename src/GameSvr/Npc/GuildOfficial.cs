@@ -85,7 +85,7 @@ namespace GameSvr.Npc
                     {
                         DoNate(PlayObject);
                     }
-                    else if (HUtil32.CompareLStr(sLabel, ScriptConst.sREQUESTCASTLEWAR, ScriptConst.sREQUESTCASTLEWAR.Length))
+                    else if (HUtil32.CompareLStr(sLabel, ScriptConst.sREQUESTCASTLEWAR))
                     {
                         ReQuestCastleWar(PlayObject, sLabel.Substring(ScriptConst.sREQUESTCASTLEWAR.Length, sLabel.Length - ScriptConst.sREQUESTCASTLEWAR.Length));
                     }
