@@ -3,7 +3,6 @@ using GameSvr.Actor;
 using GameSvr.Event;
 using GameSvr.Event.Events;
 using GameSvr.Npc;
-using GameSvr.World;
 using System.Buffers;
 using SystemModule;
 using SystemModule.Common;
@@ -54,9 +53,7 @@ namespace GameSvr.Maps
 
         //multithread vars
         readonly object _locker = new object();
-        public MonsterThread[] MobThreads;
-        private readonly Thread[] MobThreading;
-        public int SpawnMultiplier = 1;//set this to 2 if you want double spawns (warning this can easily lag your server far beyond what you imagine)
+        public int SpawnMultiplier = 1;
 
         public Envirnoment()
         {
@@ -71,8 +68,6 @@ namespace GameSvr.Maps
             _cellPool = MemoryPool<MapCellInfo>.Shared;
             PointList = new List<PointInfo>();
             ThreadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
-            MobThreads = new MonsterThread[M2Share.Config.ProcessMonsterMultiThreadLimit];
-            MobThreading = new Thread[M2Share.Config.ProcessMonsterMultiThreadLimit];
         }
 
         ~Envirnoment()
@@ -164,9 +159,9 @@ namespace GameSvr.Maps
                             {
                                 baseObject.DelFormMaped = false;
                                 baseObject.AddToMaped = true;
-                                osObject.ActorObject = true;
                                 AddObject(baseObject);
                             }
+                            osObject.ActorObject = true;
                         }
                         cellInfo.Add(osObject, mapObject);
                         result = mapObject;
@@ -299,6 +294,10 @@ namespace GameSvr.Maps
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
+                            if (cert.MapCell == CellType.Event)
+                            {
+                                Console.WriteLine("123123");
+                            }
                             if (cellInfo.ObjList == null)
                             {
                                 cellInfo.ObjList = new PooledList<CellObject>();

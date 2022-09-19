@@ -531,7 +531,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 if (osObject != null)
                                 {
-                                    if (!osObject.ObjectDispose)
+                                    if (!osObject.Dispose)
                                     {
                                         switch (osObject.CellType)
                                         {
@@ -539,7 +539,7 @@ namespace GameSvr.RobotPlay
                                             case CellType.Monster:
                                                 if (HUtil32.GetTickCount() - osObject.AddTime >= 60000)
                                                 {
-                                                    osObject.ObjectDispose = true;
+                                                    osObject.Dispose = true;
                                                     cellInfo.Remove(osObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
@@ -571,7 +571,7 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         if (osObject != null)
                                                         {
-                                                            osObject.ObjectDispose = true;
+                                                            osObject.Dispose = true;
                                                         }
                                                         cellInfo.Remove(osObject);
                                                         if (cellInfo.Count <= 0)

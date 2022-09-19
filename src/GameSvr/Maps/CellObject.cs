@@ -24,34 +24,6 @@
         /// <summary>
         /// 对象释放已释放
         /// </summary>
-        public bool ObjectDispose;
-
-        /// <summary>
-        /// 所属线程
-        /// </summary>
-        private int SpawnThread;
-        
-        public LinkedListNode<CellObject> Node;
-        public LinkedListNode<CellObject> NodeThreaded;
-        
-        public void Add()
-        {
-            /*Node = Envir.Objects.AddLast(this);
-            if (CellType == CellType.MovingObject)
-            {
-                SpawnThread = CurrentMap.Thread;
-                NodeThreaded = Envir.MobThreads[SpawnThread].ObjectsList.AddLast(this);
-            }*/
-        }
-
-        public void Remove()
-        {
-            /*Envir.Objects.Remove(Node);
-            if (CellType == CellType.MovingObject)
-            {
-                Envir.MobThreads[SpawnThread].ObjectsList.Remove(NodeThreaded);
-            }*/
-        }
-
+        public bool Dispose;
     }
 }
