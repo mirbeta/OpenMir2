@@ -7,9 +7,9 @@ namespace GameSvr.Maps
 {
     public class MapManager
     {
-        private readonly Dictionary<string, Envirnoment> m_MapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Envirnoment> MapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
 
-        public IList<Envirnoment> Maps => m_MapList.Values.ToList();
+        public IList<Envirnoment> Maps => MapList.Values.ToList();
 
         public void MakeSafePkZone()
         {
@@ -44,7 +44,7 @@ namespace GameSvr.Maps
         public IList<Envirnoment> GetMineMaps()
         {
             var list = new List<Envirnoment>();
-            foreach (var item in m_MapList.Values)
+            foreach (var item in MapList.Values)
             {
                 if (item.Flag.boMINE || item.Flag.boMINE2)
                 {
@@ -57,7 +57,7 @@ namespace GameSvr.Maps
         public IList<Envirnoment> GetDoorMapList()
         {
             var list = new List<Envirnoment>();
-            foreach (var item in m_MapList.Values)
+            foreach (var item in MapList.Values)
             {
                 if (item.DoorList.Count > 0)
                 {
@@ -102,9 +102,9 @@ namespace GameSvr.Maps
             }
             if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.MapDir, sMapFileName + ".map")))
             {
-                if (!m_MapList.ContainsKey(sMapName))
+                if (!MapList.ContainsKey(sMapName))
                 {
-                    m_MapList.Add(sMapName, envirnoment);
+                    MapList.Add(sMapName, envirnoment);
                 }
                 else
                 {
@@ -141,13 +141,13 @@ namespace GameSvr.Maps
         public Envirnoment FindMap(string sMapName)
         {
             Envirnoment Map = null;
-            return m_MapList.TryGetValue(sMapName, out Map) ? Map : null;
+            return MapList.TryGetValue(sMapName, out Map) ? Map : null;
         }
 
         public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
             Envirnoment result = null;
-            if (m_MapList.TryGetValue(sMapName, out var envirnoment))
+            if (MapList.TryGetValue(sMapName, out var envirnoment))
             {
                 if (envirnoment.ServerIndex == nServerIdx)
                 {
@@ -164,7 +164,7 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
-            if (m_MapList.TryGetValue(sMapName, out var envirnoment))
+            if (MapList.TryGetValue(sMapName, out var envirnoment))
             {
                 return envirnoment.ServerIndex;
             }

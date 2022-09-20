@@ -49,10 +49,6 @@ namespace GameSvr.Maps
         private int _humCount;
         public readonly IList<PointInfo> PointList;
 
-        //multithread vars
-        readonly object _locker = new object();
-        public int SpawnMultiplier = 1;
-
         public Envirnoment()
         {
             ServerIndex = 0;
@@ -95,7 +91,6 @@ namespace GameSvr.Maps
                 _cellArray = _cellPool.Rent(nWidth * nHeight);
             }
         }
-
 
         public bool AllowMagics(string magicName)
         {
@@ -243,12 +238,11 @@ namespace GameSvr.Maps
             bool cellsuccess = false;
             BaseObject baseObject;
             CellObject osObject;
-            bool moveSuccess;
+            bool moveSuccess = true;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
             var result = 0;
             try
             {
-                moveSuccess = true;
                 var cellInfo = GetCellInfo(nX, nY, ref cellsuccess);
                 if (!boFlag && cellsuccess)
                 {
@@ -298,18 +292,15 @@ namespace GameSvr.Maps
                                     break;
                                 }
                                 osObject = cellInfo.ObjList[i];
-                                if (osObject.ActorObject)
+                                if (osObject.ActorObject && osObject.CellObjId == cert.ActorId)
                                 {
-                                    if (osObject.CellObjId == cert.ActorId)
+                                    cellInfo.Remove(osObject);
+                                    if (cellInfo.Count > 0)
                                     {
-                                        cellInfo.Remove(osObject);
-                                        if (cellInfo.Count > 0)
-                                        {
-                                            continue;
-                                        }
-                                        cellInfo.Dispose();
-                                        break;
+                                        continue;
                                     }
+                                    cellInfo.Dispose();
+                                    break;
                                 }
                                 i++;
                             }
@@ -581,21 +572,22 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var osObject = cellInfo.ObjList[i];
-                        if (osObject.CellType == CellType.Item)
+                        switch (osObject.CellType)
                         {
-                            return (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);;
-                        }
-                        if (osObject.CellType == CellType.Route)
-                        {
-                            Bo2C = false;
-                        }
-                        if (osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
-                        {
-                            var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
-                            if (!baseObject.Death)
-                            {
+                            case CellType.Item:
+                                return (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                            case CellType.Route:
                                 Bo2C = false;
-                            }
+                                break;
+                            case CellType.Play:
+                            case CellType.Monster:
+                            case CellType.Merchant:
+                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                                if (!baseObject.Death)
+                                {
+                                    Bo2C = false;
+                                }
+                                break;
                         }
                     }
                 }
@@ -605,16 +597,7 @@ namespace GameSvr.Maps
 
         public bool IsCheapStuff()
         {
-            bool result;
-            if (_questList.Count > 0)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-            return result;
+            return _questList.Count > 0;
         }
 
         public bool AddToMapItemEvent(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent)
@@ -709,7 +692,6 @@ namespace GameSvr.Maps
         /// </summary>
         public void VerifyMapTime(int nX, int nY, BaseObject baseObject)
         {
-            CellObject osObject;
             bool boVerify = false;
             var cellsuccess = false;
             const string sExceptionMsg = "[Exception] TEnvirnoment::VerifyMapTime";
@@ -720,7 +702,7 @@ namespace GameSvr.Maps
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
-                        osObject = cellInfo.ObjList[i];
+                        CellObject osObject = cellInfo.ObjList[i];
                         if (osObject.ActorObject && osObject.CellObjId == baseObject.ActorId)
                         {
                             osObject.AddTime = HUtil32.GetTickCount();

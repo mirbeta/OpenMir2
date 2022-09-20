@@ -3396,17 +3396,13 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool GetMapBaseObjects(Envirnoment tEnvir, int nX, int nY, int nRage, IList<BaseObject> rList)
+        public bool GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, IList<BaseObject> rList)
         {
-            MapCellInfo cellInfo;
-            CellObject osObject;
-            BaseObject baseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
             if (rList == null)
             {
                 return false;
             }
-
             try
             {
                 var nStartX = nX - nRage;
@@ -3418,16 +3414,16 @@ namespace GameSvr.Actor
                     for (var y = nStartY; y <= nEndY; y++)
                     {
                         var cellsuccess = false;
-                        cellInfo = tEnvir.GetCellInfo(x, y, ref cellsuccess);
+                        var cellInfo = envir.GetCellInfo(x, y, ref cellsuccess);
                         if (cellsuccess && cellInfo.IsAvailable)
                         {
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
-                                osObject = cellInfo.ObjList[i];
-                                if ((osObject != null) && osObject.ActorObject)
+                                var osObject = cellInfo.ObjList[i];
+                                if (osObject != null && osObject.ActorObject)
                                 {
-                                    baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
-                                    if ((baseObject != null) && (!baseObject.Death) && (!baseObject.Ghost))
+                                    var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                    if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
                                     {
                                         rList.Add(baseObject);
                                     }
@@ -3441,7 +3437,6 @@ namespace GameSvr.Actor
             {
                 M2Share.Log.Error(sExceptionMsg);
             }
-
             return true;
         }
 
@@ -3507,18 +3502,14 @@ namespace GameSvr.Actor
                                                         {
                                                             if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                                             {
-                                                                baseObject.SendMsg(this, wIdent, wParam, nParam1,
-                                                                    nParam2, nParam3, sMsg);
+                                                                baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                                                                 VisibleHumanList.Add(baseObject);
                                                             }
                                                             else if (baseObject.WantRefMsg)
                                                             {
-                                                                if ((wIdent == Grobal2.RM_STRUCK) ||
-                                                                    (wIdent == Grobal2.RM_HEAR) ||
-                                                                    (wIdent == Grobal2.RM_DEATH))
+                                                                if ((wIdent == Grobal2.RM_STRUCK) || (wIdent == Grobal2.RM_HEAR) || (wIdent == Grobal2.RM_DEATH))
                                                                 {
-                                                                    baseObject.SendMsg(this, wIdent, wParam, nParam1,
-                                                                        nParam2, nParam3, sMsg);
+                                                                    baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                                                                     VisibleHumanList.Add(baseObject);
                                                                 }
                                                             }
@@ -3531,7 +3522,6 @@ namespace GameSvr.Actor
                                                         {
                                                             cellInfo.Dispose();
                                                         }
-
                                                         M2Share.Log.Error(Format(sExceptionMsg, CharName));
                                                         M2Share.Log.Error(e.Message);
                                                     }
@@ -3543,7 +3533,6 @@ namespace GameSvr.Actor
                             }
                         }
                     }
-
                     return;
                 }
 
@@ -5420,12 +5409,12 @@ namespace GameSvr.Actor
             var nEndX = nX + nRange;
             var nStartY = nY - nRange;
             var nEndY = nY + nRange;
-            for (var i = nStartX; i <= nEndX; i++)
+            for (var cX = nStartX; cX <= nEndX; cX++)
             {
-                for (var j = nStartY; j <= nEndY; j++)
+                for (var cY = nStartY; cY <= nEndY; cY++)
                 {
                     var cellsuccess = false;
-                    var cellInfo = Envir.GetCellInfo(i, j, ref cellsuccess);
+                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellsuccess);
                     if (cellsuccess && cellInfo.IsAvailable)
                     {
                         for (var k = 0; k < cellInfo.Count; k++)

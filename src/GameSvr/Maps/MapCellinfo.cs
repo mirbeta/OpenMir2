@@ -3,11 +3,6 @@ using SystemModule;
 
 namespace GameSvr.Maps
 {
-    public struct MapTest
-    {
-        
-    }
-
     public class MapCellInfo : IDisposable
     {
         public static MapCellInfo LowWall = new MapCellInfo
