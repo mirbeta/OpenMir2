@@ -1,7 +1,6 @@
 using GameSvr.Actor;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -14,7 +13,6 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            var result = false;
             if (processMsg.wIdent == Grobal2.RM_STRUCK || processMsg.wIdent == Grobal2.RM_MAGSTRUCK || processMsg.wIdent == Grobal2.RM_SPELL)
             {
                 if (Master != null)
@@ -33,7 +31,7 @@ namespace GameSvr.Monster.Monsters
                     }
                 }
             }
-            return result;
+            return false;
         }
 
         private void LightingAttack(byte nDir)
@@ -48,7 +46,7 @@ namespace GameSvr.Monster.Monsters
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTx, ref nTy);
                 var wAbil = Abil;
-                var nPwr = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
+                var nPwr = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
                 MagPassThroughMagic(nSx, nSy, nTx, nTy, nDir, nPwr, true);
             }
             BreakHolySeizeMode();
