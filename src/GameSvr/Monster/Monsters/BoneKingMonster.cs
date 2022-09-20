@@ -5,16 +5,16 @@ namespace GameSvr.Monster.Monsters
 {
     public class BoneKingMonster : MonsterObject
     {
-        private short _dangerLevel;
-        private readonly IList<BaseObject> _slaveObjectList;
+        private short DangerLevel;
+        private readonly IList<BaseObject> SlaveObjectList;
 
         public BoneKingMonster() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             Direction = 5;
-            _dangerLevel = 5;
-            _slaveObjectList = new List<BaseObject>();
+            DangerLevel = 5;
+            SlaveObjectList = new List<BaseObject>();
         }
 
         private void CallSlave()
@@ -26,14 +26,14 @@ namespace GameSvr.Monster.Monsters
             GetFrontPosition(ref n10, ref n14);
             for (var i = 0; i < nC; i++)
             {
-                if (_slaveObjectList.Count >= 30)
+                if (SlaveObjectList.Count >= 30)
                 {
                     break;
                 }
                 var baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
                 if (baseObject != null)
                 {
-                    _slaveObjectList.Add(baseObject);
+                    SlaveObjectList.Add(baseObject);
                 }
             }
         }
@@ -53,22 +53,22 @@ namespace GameSvr.Monster.Monsters
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
-                    if (_dangerLevel > Abil.HP / Abil.MaxHP * 5 && _dangerLevel > 0)
+                    if (DangerLevel > Abil.HP / Abil.MaxHP * 5 && DangerLevel > 0)
                     {
-                        _dangerLevel -= 1;
+                        DangerLevel -= 1;
                         CallSlave();
                     }
                     if (Abil.HP == Abil.MaxHP)
                     {
-                        _dangerLevel = 5;
+                        DangerLevel = 5;
                     }
                 }
-                for (var i = _slaveObjectList.Count - 1; i >= 0; i--)
+                for (var i = SlaveObjectList.Count - 1; i >= 0; i--)
                 {
-                    var baseObject = _slaveObjectList[i];
+                    var baseObject = SlaveObjectList[i];
                     if (baseObject.Death || baseObject.Ghost)
                     {
-                        _slaveObjectList.RemoveAt(i);
+                        SlaveObjectList.RemoveAt(i);
                     }
                 }
             }

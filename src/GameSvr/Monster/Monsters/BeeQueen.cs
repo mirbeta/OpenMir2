@@ -6,7 +6,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class BeeQueen : AnimalObject
     {
-        private readonly IList<BaseObject> _beeList;
+        private readonly IList<BaseObject> BeeList;
 
         public BeeQueen() : base()
         {
@@ -15,12 +15,12 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = HUtil32.GetTickCount();
             StickMode = true;
-            _beeList = new List<BaseObject>();
+            BeeList = new List<BaseObject>();
         }
 
         private void MakeChildBee()
         {
-            if (_beeList.Count >= 15)
+            if (BeeList.Count >= 15)
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace GameSvr.Monster.Monsters
                 if (bb != null)
                 {
                     bb.SetTargetCreat(TargetCret);
-                    _beeList.Add(bb);
+                    BeeList.Add(bb);
                 }
             }
             return base.Operate(processMsg);
@@ -58,12 +58,12 @@ namespace GameSvr.Monster.Monsters
                             MakeChildBee();
                         }
                     }
-                    for (var i = _beeList.Count - 1; i >= 0; i--)
+                    for (var i = BeeList.Count - 1; i >= 0; i--)
                     {
-                        var bb = _beeList[i];
+                        var bb = BeeList[i];
                         if (bb.Death || bb.Ghost)
                         {
-                            _beeList.RemoveAt(i);
+                            BeeList.RemoveAt(i);
                         }
                     }
                 }
