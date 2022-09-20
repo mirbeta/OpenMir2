@@ -18,6 +18,7 @@ using GameSvr.Services;
 using GameSvr.World;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Common;
@@ -78,7 +79,7 @@ namespace GameSvr
         HAM_PKATTACK = 6
     }
 
-    public struct TItemBind
+    public class TItemBind
     {
         public int nMakeIdex;
         public int nItemIdx;
@@ -167,7 +168,7 @@ namespace GameSvr
         /// <summary>
         /// 禁止移动地图列表
         /// </summary>
-        public static IList<string> g_DisableMoveMapList = null;
+        public static StringList g_DisableMoveMapList = null;
         /// <summary>
         /// 禁止发信息名称列表
         /// </summary>
@@ -179,7 +180,7 @@ namespace GameSvr
         /// <summary>
         /// 禁止取下物品列表
         /// </summary>
-        public static IList<string> g_DisableTakeOffList = null;
+        public static Dictionary<int, string> g_DisableTakeOffList = null;
         public static IList<TItemBind> g_ItemBindIPaddr = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
         public static IList<TItemBind> g_ItemBindCharName = null;
@@ -1329,57 +1330,54 @@ namespace GameSvr
 
         public static bool LoadItemBindIPaddr()
         {
-            bool result;
-            ArrayList LoadList;
-            var sFileName = string.Empty;
-            var sLineText = string.Empty;
+            StringList LoadList = null;
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sBindName = string.Empty;
-            result = false;
-            sFileName = Config.EnvirDir + "ItemBindIPaddr.txt";
-            LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_ItemBindIPaddr.__Lock();
-            //    try {
-            //        for (I = 0; I < g_ItemBindIPaddr.Count; I++)
-            //        {
-            //            Dispose(((g_ItemBindIPaddr[I]) as TItemBind));
-            //        }
-            //        g_ItemBindIPaddr.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I++)
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if (sLineText[1] == ';')
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
-            //            nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-            //            nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
-            //            if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
-            //            {
-            //                ItemBind = new TItemBind();
-            //                ItemBind.nMakeIdex = nMakeIndex;
-            //                ItemBind.nItemIdx = nItemIndex;
-            //                ItemBind.sBindName = sBindName;
-            //                g_ItemBindIPaddr.Add(ItemBind);
-            //            }
-            //        }
-            //    } finally {
-            //        g_ItemBindIPaddr.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            bool result = false;
+            var sFileName = Path.Combine(Config.EnvirDir, "ItemBindIPaddr.txt");
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                try
+                {
+                    for (var i = 0; i < g_ItemBindIPaddr.Count; i++)
+                    {
+                        g_ItemBindIPaddr[i] = null;
+                    }
+                    g_ItemBindIPaddr.Clear();
+                    LoadList.LoadFromFile(sFileName);
+                    for (var i = 0; i < LoadList.Count; i++)
+                    {
+                        var sLineText = LoadList[i].Trim();
+                        if (sLineText[0] == ';')
+                        {
+                            continue;
+                        }
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                        var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
+                        var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+                        if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                        {
+                            var ItemBind = new TItemBind();
+                            ItemBind.nMakeIdex = nMakeIndex;
+                            ItemBind.nItemIdx = nItemIndex;
+                            ItemBind.sBindName = sBindName;
+                            g_ItemBindIPaddr.Add(ItemBind);
+                        }
+                    }
+                }
+                finally
+                {
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
@@ -1405,54 +1403,54 @@ namespace GameSvr
 
         public static bool LoadItemBindAccount()
         {
-            ArrayList LoadList;
+            StringList LoadList = null;
             var sMakeIndex = string.Empty;
-            var sItemInde = string.Empty;
+            var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
-            string sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindAccount.txt";
-            LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_ItemBindAccount.__Lock();
-            //    try {
-            //        for (I = 0; I < g_ItemBindAccount.Count; I++)
-            //        {
-            //            Dispose(((g_ItemBindAccount[I]) as TItemBind));
-            //        }
-            //        g_ItemBindAccount.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I++)
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if (sLineText[1] == ';')
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
-            //            nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-            //            nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
-            //            if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
-            //            {
-            //                ItemBind = new TItemBind();
-            //                ItemBind.nMakeIdex = nMakeIndex;
-            //                ItemBind.nItemIdx = nItemIndex;
-            //                ItemBind.sBindName = sBindName;
-            //                g_ItemBindAccount.Add(ItemBind);
-            //            }
-            //        }
-            //    } finally {
-            //        g_ItemBindAccount.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "ItemBindAccount.txt");
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                try
+                {
+                    for (var i = 0; i < g_ItemBindAccount.Count; i++)
+                    {
+                        g_ItemBindAccount[i] = null;
+                    }
+                    g_ItemBindAccount.Clear();
+                    LoadList.LoadFromFile(sFileName);
+                    for (var i = 0; i < LoadList.Count; i++)
+                    {
+                        var sLineText = LoadList[i].Trim();
+                        if (sLineText[0] == ';')
+                        {
+                            continue;
+                        }
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                        var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
+                        var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+                        if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                        {
+                            var ItemBind = new TItemBind();
+                            ItemBind.nMakeIdex = nMakeIndex;
+                            ItemBind.nItemIdx = nItemIndex;
+                            ItemBind.sBindName = sBindName;
+                            g_ItemBindAccount.Add(ItemBind);
+                        }
+                    }
+                }
+                finally
+                {
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
@@ -1482,53 +1480,47 @@ namespace GameSvr
         public static bool LoadItemBindCharName()
         {
             var sMakeIndex = string.Empty;
+            var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
-            string sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindChrName.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_ItemBindCharName.__Lock();
-            //    try {
-            //        for (I = 0; I < g_ItemBindCharName.Count; I ++ )
-            //        {
-            //            Dispose(((g_ItemBindCharName[I]) as TItemBind));
-            //        }
-            //        g_ItemBindCharName.Clear();
-
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if (sLineText[1] == ';')
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] {" ", ",", "\t"});
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] {" ", ",", "\t"});
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] {" ", ",", "\t"});
-            //            nMakeIndex = HUtil32.Str_ToInt(sMakeIndex,  -1);
-            //            nItemIndex = HUtil32.Str_ToInt(sItemIndex,  -1);
-            //            if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
-            //            {
-            //                ItemBind = new TItemBind();
-            //                ItemBind.nMakeIdex = nMakeIndex;
-            //                ItemBind.nItemIdx = nItemIndex;
-            //                ItemBind.sBindName = sBindName;
-            //                g_ItemBindCharName.Add(ItemBind);
-            //            }
-            //        }
-            //    } finally {
-            //        g_ItemBindCharName.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-
-            //    LoadList.SaveToFile(sFileName);
-            //}
-
-            //LoadList.Free;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "ItemBindChrName.txt");
+            StringList LoadList = null;
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                for (var I = 0; I < g_ItemBindCharName.Count; I++)
+                {
+                    g_ItemBindCharName[I] = null;
+                }
+                g_ItemBindCharName.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    var sLineText = LoadList[i].Trim();
+                    if (sLineText[0] == ';')
+                    {
+                        continue;
+                    }
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                    var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
+                    var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                    {
+                        var ItemBind = new TItemBind();
+                        ItemBind.nMakeIdex = nMakeIndex;
+                        ItemBind.nItemIdx = nItemIndex;
+                        ItemBind.sBindName = sBindName;
+                        g_ItemBindCharName.Add(ItemBind);
+                    }
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
@@ -1626,27 +1618,22 @@ namespace GameSvr
         public static bool LoadUnForceMasterList()
         {
             var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "UnForceMaster.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_UnForceMasterList.__Lock();
-            //    try {
-            //        g_UnForceMasterList.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I++)
-            //        {
-            //            g_UnForceMasterList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_UnForceMasterList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "UnForceMaster.txt");
+            StringList LoadList = null;
+            if (File.Exists(sFileName))
+            {
+                g_UnForceMasterList.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    g_UnForceMasterList.Add(LoadList[i].Trim());
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
@@ -1694,62 +1681,58 @@ namespace GameSvr
         public static bool LoadDisableMoveMap()
         {
             var result = false;
-            var sFileName = Config.EnvirDir + "DisableMoveMap.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_DisableMoveMapList.__Lock();
-            //    try {
-            //        g_DisableMoveMapList.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (var I = 0; I < LoadList.Count; I++)
-            //        {
-            //            g_DisableMoveMapList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_DisableMoveMapList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(Config.EnvirDir, "DisableMoveMap.txt");
+            StringList LoadList = null;
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                g_DisableMoveMapList.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    g_DisableMoveMapList.Add(LoadList[i].Trim());
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveDisableMoveMap()
         {
-            string sFileName = Config.EnvirDir + "DisableMoveMap.txt";
-            //g_DisableMoveMapList.SaveToFile(sFileName);
+            string sFileName = Path.Combine(Config.EnvirDir, "DisableMoveMap.txt");
+            g_DisableMoveMapList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadAllowSellOffItem()
         {
             var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "DisableSellOffItem.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_DisableSellOffList.__Lock();
-            //    try {
-            //        g_DisableSellOffList.Clear();
-
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            g_DisableSellOffList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_DisableSellOffList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableSellOffItem.txt");
+            StringList LoadList = null;
+            if (File.Exists(sFileName))
+            {
+                try
+                {
+                    g_DisableSellOffList.Clear();
+                    LoadList.LoadFromFile(sFileName);
+                    for (var i = 0; i < LoadList.Count; i++)
+                    {
+                        g_DisableSellOffList.Add(LoadList[i].Trim());
+                    }
+                }
+                finally
+                {
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
@@ -1917,155 +1900,122 @@ namespace GameSvr
             var sItemName = string.Empty;
             var sItemCount = string.Empty;
             var result = false;
-            string sFileName = M2Share.BasePath + Config.EnvirDir + "MonDropLimitList.txt";
-            var LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_MonDropLimitLIst.Clear();
-            //    LoadList.LoadFromFile(sFileName);
-            //    for (I = 0; I < LoadList.Count; I ++ )
-            //    {
-            //        sLineText = LoadList[I].Trim();
-            //        if ((sLineText == "") || (sLineText[1] == ';'))
-            //        {
-            //            continue;
-            //        }
-            //        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] {" ", "/", ",", "\t"});
-            //        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new string[] {" ", "/", ",", "\t"});
-            //        nItemCount = HUtil32.Str_ToInt(sItemCount,  -1);
-            //        if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
-            //        {
-            //            MonDrop = new TMonDrop();
-            //            MonDrop.sItemName = sItemName;
-            //            MonDrop.nDropCount = 0;
-            //            MonDrop.nNoDropCount = 0;
-            //            MonDrop.nCountLimit = nItemCount;
-            //            g_MonDropLimitLIst.Add(sItemName, MonDrop);
-            //        }
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "MonDropLimitList.txt");
+            var LoadList = new StringList();
+            if (File.Exists(sFileName))
+            {
+                g_MonDropLimitLIst.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    sLineText = LoadList[i].Trim();
+                    if ((sLineText == "") || (sLineText[0] == ';'))
+                    {
+                        continue;
+                    }
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new string[] { " ", "/", ",", "\t" });
+                    var nItemCount = HUtil32.Str_ToInt(sItemCount, -1);
+                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
+                    {
+                        var MonDrop = new TMonDrop();
+                        MonDrop.sItemName = sItemName;
+                        MonDrop.nDropCount = 0;
+                        MonDrop.nNoDropCount = 0;
+                        MonDrop.nCountLimit = nItemCount;
+                        g_MonDropLimitLIst.TryAdd(sItemName, MonDrop);
+                    }
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveMonDropLimitList()
         {
-            bool result;
             var sFileName = Config.EnvirDir + "MonDropLimitList.txt";
-            var LoadList = new ArrayList();
-            //for (I = 0; I < g_MonDropLimitLIst.Count; I ++ )
-            //{
-
-            //    MonDrop = ((TMonDrop)(g_MonDropLimitLIst.Values[I]));
-            //    sLineText = MonDrop.sItemName + "\t" + (MonDrop.nCountLimit).ToString();
-            //    LoadList.Add(sLineText);
-            //}
-            //LoadList.SaveToFile(sFileName);
-            //LoadList.Free;
-            result = true;
-            return result;
+            StringList LoadList = new StringList();
+            foreach (var item in g_MonDropLimitLIst)
+            {
+                var monDrop = item.Value;
+                var sLineText = monDrop.sItemName + "\t" + (monDrop.nCountLimit).ToString();
+                LoadList.Add(sLineText);
+            }
+            LoadList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool LoadDisableTakeOffList()
         {
             var sItemName = string.Empty;
+            var sItemIdx = string.Empty;
             var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "DisableTakeOffList.txt";
-            var LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    LoadList.LoadFromFile(sFileName);
-            //    g_DisableTakeOffList.__Lock();
-            //    try {
-            //        g_DisableTakeOffList.Clear();
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if ((sLineText == "") || (sLineText[1] == ';'))
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] {" ", "/", ",", "\t"});
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new string[] {" ", "/", ",", "\t"});
-            //            nItemIdx = HUtil32.Str_ToInt(sItemIdx,  -1);
-            //            if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
-            //            {
-            //                g_DisableTakeOffList.Add(sItemName, ((nItemIdx) as Object));
-            //            }
-            //        }
-            //    } finally {
-            //        g_DisableTakeOffList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
+            var LoadList = new StringList();
+            if (File.Exists(sFileName))
+            {
+                LoadList.LoadFromFile(sFileName);
+                g_DisableTakeOffList.Clear();
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    var sLineText = LoadList[i].Trim();
+                    if ((sLineText == "") || (sLineText[0] == ';'))
+                    {
+                        continue;
+                    }
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new string[] { " ", "/", ",", "\t" });
+                    var nItemIdx = HUtil32.Str_ToInt(sItemIdx, -1);
+                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
+                    {
+                        g_DisableTakeOffList.Add(nItemIdx, sItemName);
+                    }
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveDisableTakeOffList()
         {
-            bool result;
-            ArrayList LoadList;
-            string sFileName;
-            sFileName = M2Share.BasePath + Config.EnvirDir + "DisableTakeOffList.txt";
-            LoadList = new ArrayList();
-            //g_DisableTakeOffList.__Lock();
-            //try {
-            //    for (I = 0; I < g_DisableTakeOffList.Count; I++)
-            //    {
-            //        sLineText = g_DisableTakeOffList[I] + "\t" + (((int)g_DisableTakeOffList.Values[I])).ToString();
-            //        LoadList.Add(sLineText);
-            //    }
-            //} finally {
-            //    g_DisableTakeOffList.UnLock();
-            //}
-            //LoadList.SaveToFile(sFileName);
-            //LoadList.Free;
-            result = true;
-            return result;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
+            StringList LoadList = new StringList();
+            foreach (var item in g_DisableTakeOffList)
+            {
+                var sLineText = item.Value + "\t" + item.Key;
+                LoadList.Add(sLineText);
+            }
+            LoadList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool InDisableTakeOffList(int nItemIdx)
         {
-            bool result = false;
-            //for (I = 0; I < g_DisableTakeOffList.Count; I ++ )
-            //{
-            //    if (((int)g_DisableTakeOffList.Values[I]) == nItemIdx - 1)
-            //    {
-            //        result = true;
-            //        break;
-            //    }
-            //}
-            return result;
+            return g_DisableTakeOffList.ContainsKey(nItemIdx - 1);
         }
 
-        public static bool SaveDisableSendMsgList()
+        public static void SaveDisableSendMsgList()
         {
-            bool result;
-            string sFileName = M2Share.BasePath + Config.EnvirDir + "DisableSendMsgList.txt";
-            ArrayList LoadList = new ArrayList();
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableSendMsgList.txt");
+            StringList LoadList = new StringList();
             for (var i = 0; i < g_DisableSendMsgList.Count; i++)
             {
                 LoadList.Add(g_DisableSendMsgList[i]);
             }
-            //LoadList.SaveToFile(sFileName);
-            result = true;
-            return result;
+            LoadList.SaveToFile(sFileName);
         }
 
         public static bool GetDisableSendMsgList(string sHumanName)
         {
-            bool result;
-            result = false;
+            bool result = false;
             //for (I = 0; I < g_DisableSendMsgList.Count; I ++ )
             //{
             //    if ((sHumanName).CompareTo((g_DisableSendMsgList[I])) == 0)
@@ -2378,8 +2328,7 @@ namespace GameSvr
 
         public static bool GetNoHptoexpMonList(string sMonName)
         {
-            bool result;
-            result = false;
+            bool result = false;
             try
             {
                 //for (var i = 0; i < g_NoHptoexpMonLIst.Count; i++)

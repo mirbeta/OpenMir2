@@ -90,10 +90,10 @@ namespace GameSvr
             M2Share.g_DisableMakeItemList = new List<string>();
             M2Share.g_EnableMakeItemList = new List<string>();
             M2Share.g_DisableSellOffList = new List<string>();
-            M2Share.g_DisableMoveMapList = new List<string>();
+            M2Share.g_DisableMoveMapList = new StringList();
             M2Share.g_DisableSendMsgList = new List<string>();
             M2Share.g_MonDropLimitLIst = new ConcurrentDictionary<string, TMonDrop>(StringComparer.OrdinalIgnoreCase);
-            M2Share.g_DisableTakeOffList = new List<string>();
+            M2Share.g_DisableTakeOffList = new Dictionary<int, string>();
             M2Share.g_UnMasterList = new List<string>();
             M2Share.g_UnForceMasterList = new List<string>();
             M2Share.g_GameLogItemNameList = new List<string>();

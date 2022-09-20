@@ -503,8 +503,7 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public int DeleteFromMap(int nX, int nY, CellType cellType, EntityId pRemoveObject)
         {
-            const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except 1 ** {0}";
-            const string sExceptionMsg2 = "[Exception] TEnvirnoment::DeleteFromMap -> Except 2 ** {0}";
+            const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
             var result = -1;
             var cellSuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
