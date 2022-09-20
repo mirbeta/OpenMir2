@@ -234,7 +234,7 @@ namespace GameSvr.Actor
             {
                 if (UseItems.Length >= Grobal2.U_CHARM && UseItems[Grobal2.U_CHARM] != null)
                 {
-                    if (!Death && new ArrayList(new byte[] { Grobal2.RC_PLAYOBJECT, Grobal2.RC_PLAYCLONE }).Contains(Race))
+                    if (!Death && Race == Grobal2.RC_PLAYOBJECT || Race == Grobal2.RC_PLAYCLONE)
                     {
                         int nCount;
                         int dCount;
@@ -245,7 +245,7 @@ namespace GameSvr.Actor
                         {
                             IncHpStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
-                            if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 1, 3 }).Contains(StdItem.Shape))
+                            if ((StdItem.StdMode == 7) && (StdItem.Shape == 1 || StdItem.Shape == 3))
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
                                 bCount = Convert.ToInt32(nCount / M2Share.Config.HPStoneAddRate);
@@ -288,7 +288,7 @@ namespace GameSvr.Actor
                         {
                             IncMpStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
-                            if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 2, 3 }).Contains(StdItem.Shape))
+                            if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
                                 bCount = Convert.ToInt32(nCount / M2Share.Config.MPStoneAddRate);

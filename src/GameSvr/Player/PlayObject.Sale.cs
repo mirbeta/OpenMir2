@@ -30,7 +30,7 @@ namespace GameSvr.Player
                     DealOffInfo = M2Share.sSellOffItemList[i];
                     if (DealOffInfo != null)
                     {
-                        if (DealOffInfo.N == 2)
+                        if (DealOffInfo.Flag == 2)
                         {
                             switch (code)
                             {
@@ -204,9 +204,9 @@ namespace GameSvr.Player
                     DealOffInfo = M2Share.sSellOffItemList[i];
                     if (DealOffInfo != null)
                     {
-                        if (string.Compare(DealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.N == 0 || DealOffInfo.N == 3))
+                        if (string.Compare(DealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
                         {
-                            DealOffInfo.N = 4;
+                            DealOffInfo.Flag = 4;
                             for (var j = 0; j < 9; j++)
                             {
                                 if (DealOffInfo.UseItems[j] == null)
@@ -270,9 +270,9 @@ namespace GameSvr.Player
                 if (dealOffInfo != null)
                 {
                     if (string.Compare(dealOffInfo.sDealCharName, dealCharName, StringComparison.OrdinalIgnoreCase) == 0 &&
-                        string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.N == 0)
+                        string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                     {
-                        dealOffInfo.N = 3;// 购买人取消标识
+                        dealOffInfo.Flag = 3;// 购买人取消标识
                         // sSellOffItemList.Delete(I);
                         // sSellOffItemList.Add(DealOffInfo);
                         this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "取消交易成功!");
@@ -303,9 +303,9 @@ namespace GameSvr.Player
                     if (dealOffInfo != null)
                     {
                         if (string.Compare(dealOffInfo.sDealCharName, dealCharName, StringComparison.OrdinalIgnoreCase) == 0
-                            && string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.N == 0)
+                            && string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                         {
-                            dealOffInfo.N = 4;
+                            dealOffInfo.Flag = 4;
                             if (m_nGameGold >= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
                             {
                                 m_nGameGold -= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold; // 扣出元宝
@@ -317,7 +317,7 @@ namespace GameSvr.Player
                                 PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealCharName);
                                 if (PlayObject == null)// 出售人不在线
                                 {
-                                    dealOffInfo.N = 1; // 物品已出售,出售人未得到元宝
+                                    dealOffInfo.Flag = 1; // 物品已出售,出售人未得到元宝
                                     // sSellOffItemList.Delete(I);
                                     // sSellOffItemList.Add(DealOffInfo);
                                 }
@@ -325,12 +325,12 @@ namespace GameSvr.Player
                                 {
                                     if (PlayObject.OffLineFlag)  // 挂机
                                     {
-                                        dealOffInfo.N = 1; // 物品已出售,出售人未得到元宝
+                                        dealOffInfo.Flag = 1; // 物品已出售,出售人未得到元宝
                                     }
                                     else
                                     {
                                         UpdateSellOffInfo(1);
-                                        dealOffInfo.N = 2; // 交易结束
+                                        dealOffInfo.Flag = 2; // 交易结束
                                         PlayObject.m_nGameGold += dealOffInfo.nSellGold;
                                         PlayObject.GameGoldChanged();
                                         PlayObject.SysMsg(string.Format(GameCommandConst.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
@@ -378,7 +378,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                dealOffInfo.N = 0;
+                                dealOffInfo.Flag = 0;
                                 this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[错误] 您的申请提交不成功");
                                 break;
                             }
@@ -412,10 +412,10 @@ namespace GameSvr.Player
                     var dealOffInfo = M2Share.sSellOffItemList[i];
                     if (dealOffInfo != null)
                     {
-                        if (string.Compare(dealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.N == 1)
+                        if (string.Compare(dealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 1)
                         {
                             UpdateSellOffInfo(0);
-                            dealOffInfo.N = 2; // 交易结束
+                            dealOffInfo.Flag = 2; // 交易结束
                             // sSellOffItemList.Delete(I);
                             // sSellOffItemList.Add(DealOffInfo);
                             m_nGameGold += dealOffInfo.nSellGold;
@@ -462,12 +462,12 @@ namespace GameSvr.Player
                         var dealOffInfo = M2Share.sSellOffItemList[i];
                         if (dealOffInfo != null)
                         {
-                            if (string.Compare(dealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.N == 2)
+                            if (string.Compare(dealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 2)
                             {
                                 result = "最后一笔出售记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sBuyCharName + "交易成功,获得了" + dealOffInfo.nSellGold + '个' + M2Share.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
                             }
-                            else if (string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.N == 1 || dealOffInfo.N == 2))
+                            else if (string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.Flag == 1 || dealOffInfo.Flag == 2))
                             {
                                 result = "最后一笔购买记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sDealCharName + "交易成功,支付了" + dealOffInfo.nSellGold + '个' + M2Share.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
@@ -498,14 +498,14 @@ namespace GameSvr.Player
                         switch (nCode)
                         {
                             case 0: // 出售者
-                                if (string.Compare(dealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.N == 0 || dealOffInfo.N == 3))
+                                if (string.Compare(dealOffInfo.sDealCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.Flag == 0 || dealOffInfo.Flag == 3))
                                 {
                                     result = true;
                                     break;
                                 }
                                 break;
                             case 1: // 购买者
-                                if (string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.N == 0)
+                                if (string.Compare(dealOffInfo.sBuyCharName, this.CharName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                                 {
                                     result = true;
                                     break;
@@ -579,7 +579,7 @@ namespace GameSvr.Player
                 DealOffInfo.sBuyCharName = sBuyCharName.Trim(); // 购买人
                 DealOffInfo.nSellGold = nSellGold; // 元宝数
                 DealOffInfo.dSellDateTime = DateTime.Now; // 操作时间
-                DealOffInfo.N = 0; // 标识
+                DealOffInfo.Flag = 0; // 标识
                 M2Share.sSellOffItemList.Add(DealOffInfo); // 增加到元宝寄售列表中
                 this.SendMsg(this, Grobal2.RM_SELLOFFEND_OK, 0, 0, 0, 0, "");
                 m_nGameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 

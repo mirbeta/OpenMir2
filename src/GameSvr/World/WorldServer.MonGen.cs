@@ -32,7 +32,6 @@ namespace GameSvr.World
         public MonsterThread[] MobThreads;
         private Thread[] MobThreading;
         private readonly object _locker = new object();
-        private readonly HashSet<byte> StdModeMap = new HashSet<byte>(){15, 19, 20, 21, 22, 23, 24, 26};
 
         public void InitializeMonster()
         {
@@ -480,7 +479,7 @@ namespace GameSvr.World
                                 {
                                     stdItem.RandomUpgradeItem(userItem);
                                 }
-                                if (StdModeMap.Contains(stdItem.StdMode))
+                                if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                                 {
                                     if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                     {

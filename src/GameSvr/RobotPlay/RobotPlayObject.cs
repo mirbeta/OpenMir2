@@ -3886,7 +3886,7 @@ namespace GameSvr.RobotPlay
                     // 绿毒
                     if (TargetCret.StatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
                         || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
-                        && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(TargetCret.Race))
+                        && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
                         // 对于血量超过800的怪用 不毒城墙
                         n_AmuletIndx = 0;
@@ -3942,7 +3942,7 @@ namespace GameSvr.RobotPlay
                     }
                     if (TargetCret.StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
                         || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
-                        && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(TargetCret.Race))
+                        && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
                         // 对于血量超过100的怪用 不毒城墙
                         n_AmuletIndx = 0;

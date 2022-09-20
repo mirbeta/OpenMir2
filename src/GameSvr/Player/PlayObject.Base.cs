@@ -1166,7 +1166,7 @@ namespace GameSvr.Player
                     M2Share.Config.WinLotteryLevel2++;
                 }
             }
-            else if (new ArrayList(new int[] { M2Share.Config.WinLottery1Min + M2Share.Config.WinLottery1Max }).Contains(nRate))
+            else if (M2Share.Config.WinLottery1Min + M2Share.Config.WinLottery1Max == nRate)
             {
                 if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
                 {

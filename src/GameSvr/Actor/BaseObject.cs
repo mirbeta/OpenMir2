@@ -1361,7 +1361,7 @@ namespace GameSvr.Actor
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.Log.Error(sExceptionMsg);
                 M2Share.Log.Error(ex.StackTrace);
@@ -1884,9 +1884,7 @@ namespace GameSvr.Actor
                     var pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
                     if (pSItem != null)
                     {
-                        if (new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) ||
-                            (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) &&
-                             new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.AniCount)))
+                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
                         {
                             var nDura = UseItems[i].Dura;
                             var tDura = (ushort)HUtil32.Round(nDura / 1000.0);
@@ -2480,7 +2478,7 @@ namespace GameSvr.Actor
             short nY = 0;
             if (GetFrontPosition(ref nX, ref nY))
             {
-               return (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                return (BaseObject)Envir.GetMovingObject(nX, nY, true);
             }
             return null;
         }
@@ -3673,7 +3671,7 @@ namespace GameSvr.Actor
                 }
             }
             if ((nStatus & 0x00100000) != 0)
-            { 
+            {
                 if ((MagicArr[31] != null) && (MagicArr[31].btLevel >= 4))
                 {
                     nStatus = (int)(0x80000000 | 11 | nStatus);
@@ -6198,7 +6196,7 @@ namespace GameSvr.Actor
                 {
                     CurrX = (short)nX;
                     CurrY = (short)nY;
-                    
+
                     addObj = Envir.AddToMap(nX, nY, MapCell, this);
                     break;
                 }

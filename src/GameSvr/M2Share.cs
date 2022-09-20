@@ -195,6 +195,12 @@ namespace GameSvr
         /// 游戏日志物品名
         /// </summary>
         public static IList<string> g_GameLogItemNameList = null;
+
+        public static readonly HashSet<byte> ItemDamageRevivalMap = new HashSet<byte>() { 114, 160, 161, 162 };
+        public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
+        public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
+        public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
+
         public static bool g_boGameLogGold = false;
         public static bool g_boGameLogGameGold = false;
         public static bool g_boGameLogGamePoint = false;
@@ -1175,7 +1181,7 @@ namespace GameSvr
         {
             bool result;
             var item = WorldEngine.GetStdItem(nIndex);
-            if (new ArrayList(new byte[] { 19, 20, 21, 22, 23, 24, 26 }).Contains(item.StdMode))// 修正错误
+            if (IsAccessoryMap.Contains(item.StdMode))
             {
                 result = true;
             }
