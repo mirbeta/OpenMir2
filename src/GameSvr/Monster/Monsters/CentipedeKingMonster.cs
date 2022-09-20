@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class CentipedeKingMonster : StickMonster
     {
-        private int _attickTick;
+        private int _attackTick;
 
         public CentipedeKingMonster() : base()
         {
@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
             ComeOutValue = 4;
             AttackRange = 6;
             Animal = false;
-            _attickTick = HUtil32.GetTickCount();
+            _attackTick = HUtil32.GetTickCount();
         }
 
         private bool CheckAttackTarget()
@@ -96,7 +96,7 @@ namespace GameSvr.Monster.Monsters
                     WalkTick = HUtil32.GetTickCount();
                     if (FixedHideMode)
                     {
-                        if ((HUtil32.GetTickCount() - _attickTick) > 10000)
+                        if ((HUtil32.GetTickCount() - _attackTick) > 10000)
                         {
                             for (var i = 0; i < VisibleActors.Count; i++)
                             {
@@ -112,7 +112,7 @@ namespace GameSvr.Monster.Monsters
                                         if (Math.Abs(CurrX - baseObject.CurrX) < ComeOutValue && Math.Abs(CurrY - baseObject.CurrY) < ComeOutValue)
                                         {
                                             FindAttackTarget();
-                                            _attickTick = HUtil32.GetTickCount();
+                                            _attackTick = HUtil32.GetTickCount();
                                             break;
                                         }
                                     }
@@ -122,17 +122,17 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - _attickTick) > 3000)
+                        if ((HUtil32.GetTickCount() - _attackTick) > 3000)
                         {
                             if (AttackTarget())
                             {
                                 base.Run();
                                 return;
                             }
-                            if ((HUtil32.GetTickCount() - _attickTick) > 10000)
+                            if ((HUtil32.GetTickCount() - _attackTick) > 10000)
                             {
                                 ComeDown();
-                                _attickTick = HUtil32.GetTickCount();
+                                _attackTick = HUtil32.GetTickCount();
                             }
                         }
                     }
