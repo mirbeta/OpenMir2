@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class ExplosionSpider : MonsterObject
     {
-        public int Dw558;
+        private int MakeTime;
 
         public ExplosionSpider() : base()
         {
@@ -12,10 +12,10 @@ namespace GameSvr.Monster.Monsters
             RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
-            Dw558 = HUtil32.GetTickCount();
+            MakeTime = HUtil32.GetTickCount();
         }
 
-        private void sub_4A65C4()
+        private void DoSelfExplosion()
         {
             Abil.HP = 0;
             var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC) + 1)) + HUtil32.LoWord(Abil.DC);
@@ -36,7 +36,7 @@ namespace GameSvr.Monster.Monsters
                         if (damage > 0)
                         {
                             baseObject.StruckDamage(damage);
-                            baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)damage, baseObject.Abil.HP, baseObject.Abil.MaxHP, ActorId, "", 700);
+                            baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, damage, baseObject.Abil.HP, baseObject.Abil.MaxHP, ActorId, "", 700);
                         }
                     }
                 }
@@ -49,7 +49,7 @@ namespace GameSvr.Monster.Monsters
             byte btDir = 0;
             if (TargetCret == null)
             {
-                return result;
+                return false;
             }
             if (GetAttackDir(TargetCret, ref btDir))
             {
@@ -57,7 +57,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     AttackTick = HUtil32.GetTickCount();
                     TargetFocusTick = HUtil32.GetTickCount();
-                    sub_4A65C4();
+                    DoSelfExplosion();
                 }
                 result = true;
             }
@@ -79,10 +79,10 @@ namespace GameSvr.Monster.Monsters
         {
             if (!Death && !Ghost)
             {
-                if ((HUtil32.GetTickCount() - Dw558) > (60 * 1000))
+                if ((HUtil32.GetTickCount() - MakeTime) > (60 * 1000))
                 {
-                    Dw558 = HUtil32.GetTickCount();
-                    sub_4A65C4();
+                    MakeTime = HUtil32.GetTickCount();
+                    DoSelfExplosion();
                 }
             }
             base.Run();

@@ -37,7 +37,7 @@ namespace GameSvr.Monster.Monsters
                                                 SpellTick = HUtil32.GetTickCount();
                                                 SendRefMsg(Grobal2.RM_SPELL, 48, TargetCret.CurrX, TargetCret.CurrY, 48, "");
                                                 SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(2, 48), HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), TargetCret.ActorId, "");
-                                                SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), 2, TargetCret.ActorId, "", 600);
+                                                SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), 2, TargetCret.ActorId, "", 600);
                                             }
                                         }
                                     }
