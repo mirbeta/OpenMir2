@@ -78,7 +78,7 @@ namespace GameSvr.Npc
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if (string.Compare(DealOffInfo.sDealCharName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 0 && new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N))
+                                if (string.Compare(DealOffInfo.sDealCharName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
                                 {
                                     for (var j = 0; j < 9; j++)
                                     {
@@ -141,7 +141,7 @@ namespace GameSvr.Npc
                                     sClientDealOffInfo.BuyCharName = DealOffInfo.sBuyCharName;
                                     sClientDealOffInfo.SellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
-                                    sClientDealOffInfo.N = DealOffInfo.N;
+                                    sClientDealOffInfo.N = DealOffInfo.Flag;
                                     sSendStr = EDCode.EncodeBuffer(sClientDealOffInfo);
                                     PlayObject.SendMsg(this, Grobal2.RM_QUERYYBSELL, 0, 0, 0, 0, sSendStr);
                                     break;
@@ -192,7 +192,7 @@ namespace GameSvr.Npc
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if (string.Compare(DealOffInfo.sBuyCharName, PlayObject.CharName, StringComparison.Ordinal) == 0 && DealOffInfo.N == 0)
+                                if (string.Compare(DealOffInfo.sBuyCharName, PlayObject.CharName, StringComparison.Ordinal) == 0 && DealOffInfo.Flag == 0)
                                 {
                                     for (var k = 0; k < 9; k++)
                                     {
@@ -256,7 +256,7 @@ namespace GameSvr.Npc
                                     sClientDealOffInfo.BuyCharName = DealOffInfo.sBuyCharName;
                                     sClientDealOffInfo.SellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
-                                    sClientDealOffInfo.N = DealOffInfo.N;
+                                    sClientDealOffInfo.N = DealOffInfo.Flag;
                                     sSendStr = EDCode.EncodeBuffer(sClientDealOffInfo);
                                     PlayObject.SendMsg(this, Grobal2.RM_QUERYYBDEAL, 0, 0, 0, 0, sSendStr);
                                     break;

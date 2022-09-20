@@ -430,7 +430,7 @@ namespace GameSvr.Player
                             if (UseItems[btWhere] != null && UseItems[btWhere].wIndex > 0)
                             {
                                 var stdItem20 = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
-                                if (stdItem20 != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem20.StdMode))
+                                if (stdItem20 != null && M2Share.StdModeMap.Contains(stdItem20.StdMode))
                                 {
                                     if (!UserUnLockDurg && UseItems[btWhere].btValue[7] != 0)
                                     {
@@ -462,7 +462,7 @@ namespace GameSvr.Player
                                 }
                                 takeOffItem = UseItems[btWhere];
                             }
-                            if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem.StdMode) && userItem.btValue[8] != 0)
+                            if (M2Share.StdModeMap.Contains(stdItem.StdMode) && userItem.btValue[8] != 0)
                             {
                                 userItem.btValue[8] = 0;
                             }
@@ -508,7 +508,7 @@ namespace GameSvr.Player
                     if (UseItems[btWhere].MakeIndex == nItemIdx)
                     {
                         var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
-                        if (stdItem != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(stdItem.StdMode))
+                        if (stdItem != null && M2Share.StdModeMap.Contains(stdItem.StdMode))
                         {
                             if (!UserUnLockDurg && UseItems[btWhere].btValue[7] != 0)
                             {

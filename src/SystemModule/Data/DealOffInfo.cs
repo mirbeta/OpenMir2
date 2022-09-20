@@ -28,6 +28,6 @@ namespace SystemModule.Data
         /// 物品
         /// </summary>        
         public UserItem[] UseItems;
-        public byte N;
+        public byte Flag;
     }
 }

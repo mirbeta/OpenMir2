@@ -311,7 +311,7 @@ namespace GameSvr.DataStores
                             DealOffInfo.dSellDateTime = dSellDateTime;
                             DealOffInfo.nSellGold = nSellGold;
                             DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
-                            DealOffInfo.N = nState;
+                            DealOffInfo.Flag = nState;
                             M2Share.sSellOffItemList.Add(DealOffInfo);
                         }
                     }
@@ -351,7 +351,7 @@ namespace GameSvr.DataStores
                         if (DealOffInfo != null)
                         {
                             string InsertSql = "INSERT INTO sales (DealCharName, BuyCharName, SellDateTime, State, SellGold,UseItems) values " +
-                                "(" + DealOffInfo.sDealCharName + "," + DealOffInfo.sBuyCharName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.N + ","
+                                "(" + DealOffInfo.sDealCharName + "," + DealOffInfo.sBuyCharName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.Flag + ","
                                 + DealOffInfo.nSellGold + "," + JsonSerializer.Serialize(DealOffInfo.UseItems) + ")";
                             Execute(InsertSql);
                         }

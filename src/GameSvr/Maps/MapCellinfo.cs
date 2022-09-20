@@ -14,7 +14,7 @@ namespace GameSvr.Maps
         {
             Attribute = CellAttribute.HighWall
         };
-        
+
         public bool Valid => Attribute == CellAttribute.Walk;
 
         public CellAttribute Attribute;

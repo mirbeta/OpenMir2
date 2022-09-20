@@ -66,7 +66,7 @@ namespace GameSvr.Maps
         {
             Dispose(false);
         }
-        
+
         private void Initialize(short nWidth, short nHeight)
         {
             if (nWidth > 1 && nHeight > 1)
@@ -404,7 +404,7 @@ namespace GameSvr.Maps
                         var osObject = cellInfo.ObjList[i];
                         if (!boFlag && osObject.ActorObject)
                         {
-                            var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                            var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                             if (baseObject != null)
                             {
                                 if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -440,7 +440,7 @@ namespace GameSvr.Maps
                         var osObject = cellInfo.ObjList[i];
                         if (osObject.ActorObject)
                         {
-                            var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                            var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                             if (baseObject != null)
                             {
                                 var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
@@ -582,7 +582,7 @@ namespace GameSvr.Maps
                             case CellType.Play:
                             case CellType.Monster:
                             case CellType.Merchant:
-                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                                 if (!baseObject.Death)
                                 {
                                     Bo2C = false;
@@ -763,7 +763,7 @@ namespace GameSvr.Maps
                                 // wBkImg High
                                 if ((buffer[buffIndex + 1] & 0x80) != 0)
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo() { Attribute= CellAttribute.HighWall };
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.HighWall };
                                 }
                                 // wFrImg High
                                 if ((buffer[buffIndex + 5] & 0x80) != 0)
@@ -927,7 +927,7 @@ namespace GameSvr.Maps
             }
             return result;
         }
-        
+
         public bool CreateQuest(int nFlag, int nValue, string sMonName, string sItem, string sQuest, bool boGrouped)
         {
             TMapQuestInfo mapQuest;
@@ -996,7 +996,7 @@ namespace GameSvr.Maps
                     }
                     if (osObject.ActorObject)
                     {
-                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                         if (baseObject != null)
                         {
                             if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -1309,7 +1309,7 @@ namespace GameSvr.Maps
                     var osObject = cellInfo.ObjList[i];
                     if (osObject.ActorObject)
                     {
-                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                         if (baseObject != null)
                         {
                             if (!baseObject.Ghost && baseObject.Bo2B9 && !boFlag || !baseObject.Death)
@@ -1336,7 +1336,7 @@ namespace GameSvr.Maps
                     var osObject = cellInfo.ObjList[i];
                     if (osObject.CellType == CellType.Event)
                     {
-                        result = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);;
+                        result = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId); ;
                     }
                 }
             }
@@ -1404,7 +1404,7 @@ namespace GameSvr.Maps
                     var osObject = cellInfo.ObjList[i];
                     if (osObject.CellType == CellType.Play)
                     {
-                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                        var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                         if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                         {
                             result = true;
@@ -1469,7 +1469,7 @@ namespace GameSvr.Maps
                 _monCount--;
             }
         }
-        
+
         private void Dispose(bool disposing)
         {
             if (disposing)
@@ -1477,7 +1477,7 @@ namespace GameSvr.Maps
                 _cellPool.Return(_cellArray.ToArray());
             }
         }
-        
+
         public void Dispose()
         {
             Dispose(true);
@@ -1485,4 +1485,3 @@ namespace GameSvr.Maps
         }
     }
 }
-

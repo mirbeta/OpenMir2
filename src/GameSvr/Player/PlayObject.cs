@@ -219,7 +219,7 @@ namespace GameSvr.Player
             {
                 ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
             }
-            if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+            if (M2Share.StdModeMap.Contains(StdItem.StdMode))
             {
                 if (UserItem.btValue[8] == 0)
                 {

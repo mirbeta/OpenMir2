@@ -171,7 +171,7 @@ namespace GameSvr.RobotPlay
                                                 if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref UserItem))
                                                 {
                                                     boRecalcAbilitys = true;
-                                                    if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                                                    if (M2Share.StdModeMap.Contains(StdItem.StdMode))
                                                     {
                                                         if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                                         {
