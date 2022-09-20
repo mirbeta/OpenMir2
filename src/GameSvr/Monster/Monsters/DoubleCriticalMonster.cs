@@ -43,7 +43,7 @@ namespace GameSvr.Monster.Monsters
         {
             Direction = btDir;
             var wAbil = Abil;
-            var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1) + HUtil32.LoWord(wAbil.DC);
+            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC))) + HUtil32.LoWord(wAbil.DC);
             if (nDamage <= 0)
             {
                 return;
@@ -64,7 +64,7 @@ namespace GameSvr.Monster.Monsters
                             if (nDamage > 0)
                             {
                                 baseObject.StruckDamage(nDamage);
-                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, Abil.HP, Abil.MaxHP, ActorId, "", 300);
+                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, Abil.HP, Abil.MaxHP, ActorId, "", 300);
                             }
                         }
                     }

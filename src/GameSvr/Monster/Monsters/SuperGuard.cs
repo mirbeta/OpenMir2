@@ -100,7 +100,7 @@ namespace GameSvr.Monster.Monsters
             }
             if (this.TargetCret != null)
             {
-                if (TargetCret.Death)
+                if (TargetCret.Death || TargetCret.Ghost)
                 {
                     DelTargetCreat();
                 }

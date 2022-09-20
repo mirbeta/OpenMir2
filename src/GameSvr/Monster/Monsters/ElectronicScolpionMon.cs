@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
                     Abil.HP += (ushort)(nDamage / btGetBackHp);
                 }
                 TargetCret.StruckDamage(nDamage);
-                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)nDamage, TargetCret.Abil.HP, TargetCret.Abil.MaxHP, ActorId, "", 200);
+                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, TargetCret.Abil.HP, TargetCret.Abil.MaxHP, ActorId, "", 200);
             }
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
         }
