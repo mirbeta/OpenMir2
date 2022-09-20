@@ -326,7 +326,7 @@ namespace GameSvr.Maps
                                 CellObjId = cert.ActorId,
                                 AddTime = HUtil32.GetTickCount()
                             };
-                            if (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
+                            if (cert.MapCell == CellType.Play || osObject.CellType == CellType.Monster || osObject.CellType == CellType.Merchant)
                             {
                                 osObject.ActorObject = true;
                             }
@@ -771,70 +771,141 @@ namespace GameSvr.Maps
                     binReader.Read(buffer, 0, nMapSize);
                     var buffIndex = 0;
 
-                    for (var nW = 0; nW < Width; nW++)
+                    if (Flag.boMINE || Flag.boMINE2)
                     {
-                        n24 = nW * Height;
-                        for (var nH = 0; nH < Height; nH++)
+                        for (var nW = 0; nW < Width; nW++)
                         {
-                            // wBkImg High
-                            if ((buffer[buffIndex + 1] & 0x80) != 0)
+                            n24 = nW * Height;
+                            for (var nH = 0; nH < Height; nH++)
                             {
-                                _cellArray.Span[n24 + nH] = MapCellInfo.HighWall;
-                            }
-                            // wFrImg High
-                            if ((buffer[buffIndex + 5] & 0x80) != 0)
-                            {
-                                _cellArray.Span[n24 + nH] = MapCellInfo.LowWall;
-                            }
-                            if (_cellArray.Span[n24 + nH] == null)
-                            {
-                                _cellArray.Span[n24 + nH] = new MapCellInfo();
-                            }
-                            // btDoorIndex
-                            if ((buffer[buffIndex + 6] & 0x80) != 0)
-                            {
-                                point = buffer[buffIndex + 6] & 0x7F;
-                                if (point > 0)
+                                // wBkImg High
+                                if ((buffer[buffIndex + 1] & 0x80) != 0)
                                 {
-                                    door = new TDoorInfo
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo() { Attribute= CellAttribute.HighWall };
+                                }
+                                // wFrImg High
+                                if ((buffer[buffIndex + 5] & 0x80) != 0)
+                                {
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.LowWall };
+                                }
+                                if (_cellArray.Span[n24 + nH] == null)
+                                {
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo();
+                                }
+                                // btDoorIndex
+                                if ((buffer[buffIndex + 6] & 0x80) != 0)
+                                {
+                                    point = buffer[buffIndex + 6] & 0x7F;
+                                    if (point > 0)
                                     {
-                                        nX = nW,
-                                        nY = nH,
-                                        n08 = point,
-                                        Status = null
-                                    };
-                                    for (var i = 0; i < DoorList.Count; i++)
-                                    {
-                                        if (Math.Abs(DoorList[i].nX - door.nX) <= 10)
+                                        door = new TDoorInfo
                                         {
-                                            if (Math.Abs(DoorList[i].nY - door.nY) <= 10)
+                                            nX = nW,
+                                            nY = nH,
+                                            n08 = point,
+                                            Status = null
+                                        };
+                                        for (var i = 0; i < DoorList.Count; i++)
+                                        {
+                                            if (Math.Abs(DoorList[i].nX - door.nX) <= 10)
                                             {
-                                                if (DoorList[i].n08 == point)
+                                                if (Math.Abs(DoorList[i].nY - door.nY) <= 10)
                                                 {
-                                                    door.Status = DoorList[i].Status;
-                                                    door.Status.nRefCount++;
-                                                    break;
+                                                    if (DoorList[i].n08 == point)
+                                                    {
+                                                        door.Status = DoorList[i].Status;
+                                                        door.Status.nRefCount++;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                    if (door.Status == null)
-                                    {
-                                        door.Status = new TDoorStatus
+                                        if (door.Status == null)
                                         {
-                                            boOpened = false,
-                                            bo01 = false,
-                                            n04 = 0,
-                                            dwOpenTick = 0,
-                                            nRefCount = 1
-                                        };
+                                            door.Status = new TDoorStatus
+                                            {
+                                                boOpened = false,
+                                                bo01 = false,
+                                                n04 = 0,
+                                                dwOpenTick = 0,
+                                                nRefCount = 1
+                                            };
+                                        }
+                                        DoorList.Add(door);
                                     }
-                                    DoorList.Add(door);
                                 }
+                                buffIndex += muiSize;
                             }
-                            buffIndex += muiSize;
                         }
                     }
+                    else
+                    {
+                        for (var nW = 0; nW < Width; nW++)
+                        {
+                            n24 = nW * Height;
+                            for (var nH = 0; nH < Height; nH++)
+                            {
+                                // wBkImg High
+                                if ((buffer[buffIndex + 1] & 0x80) != 0)
+                                {
+                                    _cellArray.Span[n24 + nH] = MapCellInfo.HighWall;
+                                }
+                                // wFrImg High
+                                if ((buffer[buffIndex + 5] & 0x80) != 0)
+                                {
+                                    _cellArray.Span[n24 + nH] = MapCellInfo.LowWall;
+                                }
+                                if (_cellArray.Span[n24 + nH] == null)
+                                {
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo();
+                                }
+                                // btDoorIndex
+                                if ((buffer[buffIndex + 6] & 0x80) != 0)
+                                {
+                                    point = buffer[buffIndex + 6] & 0x7F;
+                                    if (point > 0)
+                                    {
+                                        door = new TDoorInfo
+                                        {
+                                            nX = nW,
+                                            nY = nH,
+                                            n08 = point,
+                                            Status = null
+                                        };
+                                        for (var i = 0; i < DoorList.Count; i++)
+                                        {
+                                            if (Math.Abs(DoorList[i].nX - door.nX) <= 10)
+                                            {
+                                                if (Math.Abs(DoorList[i].nY - door.nY) <= 10)
+                                                {
+                                                    if (DoorList[i].n08 == point)
+                                                    {
+                                                        door.Status = DoorList[i].Status;
+                                                        door.Status.nRefCount++;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (door.Status == null)
+                                        {
+                                            door.Status = new TDoorStatus
+                                            {
+                                                boOpened = false,
+                                                bo01 = false,
+                                                n04 = 0,
+                                                dwOpenTick = 0,
+                                                nRefCount = 1
+                                            };
+                                        }
+                                        DoorList.Add(door);
+                                    }
+                                }
+                                buffIndex += muiSize;
+                            }
+                        }
+                    }
+
                     binReader.Close();
                     binReader.Dispose();
                     fileStream.Close();

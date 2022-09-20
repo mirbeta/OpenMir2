@@ -10,12 +10,12 @@ namespace GameSvr.Maps
 
     public class MapCellInfo : IDisposable
     {
-        public static MapCellInfo LowWall => new MapCellInfo
+        public static MapCellInfo LowWall = new MapCellInfo
         {
             Attribute = CellAttribute.LowWall
         };
 
-        public static MapCellInfo HighWall => new MapCellInfo
+        public static MapCellInfo HighWall = new MapCellInfo
         {
             Attribute = CellAttribute.HighWall
         };
