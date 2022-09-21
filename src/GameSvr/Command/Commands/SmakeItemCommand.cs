@@ -26,9 +26,9 @@ namespace GameSvr.Command.Commands
             StdItem StdItem = null;
             if (nWhere >= 0 && nWhere <= 12 && nValueType >= 0 && nValueType <= 15 && nValue >= 0 && nValue <= 255)
             {
-                if (PlayObject.UseItems[nWhere].wIndex > 0)
+                if (PlayObject.UseItems[nWhere].Index > 0)
                 {
-                    StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nWhere].wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nWhere].Index);
                     if (StdItem == null)
                     {
                         return;
@@ -60,7 +60,7 @@ namespace GameSvr.Command.Commands
                     }
                     PlayObject.RecalcAbilitys();
                     PlayObject.SendUpdateItem(PlayObject.UseItems[nWhere]);
-                    sShowMsg = PlayObject.UseItems[nWhere].wIndex.ToString() + '-' + PlayObject.UseItems[nWhere].MakeIndex + ' ' + PlayObject.UseItems[nWhere].Dura + '/'
+                    sShowMsg = PlayObject.UseItems[nWhere].Index.ToString() + '-' + PlayObject.UseItems[nWhere].MakeIndex + ' ' + PlayObject.UseItems[nWhere].Dura + '/'
                         + PlayObject.UseItems[nWhere].DuraMax + ' ' + PlayObject.UseItems[nWhere].Desc[0] + '/'
                         + PlayObject.UseItems[nWhere].Desc[1] + '/' + PlayObject.UseItems[nWhere].Desc[2] + '/'
                         + PlayObject.UseItems[nWhere].Desc[3] + '/' + PlayObject.UseItems[nWhere].Desc[4] + '/' + PlayObject.UseItems[nWhere].Desc[5]

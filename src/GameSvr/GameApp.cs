@@ -68,7 +68,7 @@ namespace GameSvr
             M2Share.ItemLogQueue = new();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapMgr = new MapManager();
-            M2Share.ItemUnit = new CustomItem();
+            M2Share.CustomItemMgr = new CustomItem();
             M2Share.MagicMgr = new MagicManager();
             M2Share.NoticeMgr = new NoticeManager();
             M2Share.GuildMgr = new GuildManager();
@@ -184,7 +184,7 @@ namespace GameSvr
             M2Share.LoadEnableMakeItem();
             M2Share.LoadAllowSellOffItem();
             M2Share.LoadDisableMoveMap();
-            M2Share.ItemUnit.LoadCustomItemName();
+            M2Share.CustomItemMgr.LoadCustomItemName();
             M2Share.LoadDisableSendMsgList();
             M2Share.LoadItemBindIPaddr();
             M2Share.LoadItemBindAccount();

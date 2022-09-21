@@ -117,11 +117,11 @@ namespace GameSvr.Items
             var result = string.Empty;
             if (userItem.Desc[13] == 1)
             {
-                result = M2Share.ItemUnit.GetCustomItemName(userItem.MakeIndex, userItem.wIndex);
+                result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
             }
             if (string.IsNullOrEmpty(result))
             {
-                result = M2Share.WorldEngine.GetStdItemName(userItem.wIndex);
+                result = M2Share.WorldEngine.GetStdItemName(userItem.Index);
             }
             return result;
         }

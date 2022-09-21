@@ -1085,7 +1085,7 @@ namespace GameSvr.World
                 var stdItem = StdItemList[i];
                 if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
                 if (item == null) item = new UserItem();
-                item.wIndex = (ushort)(i + 1);
+                item.Index = (ushort)(i + 1);
                 item.MakeIndex = M2Share.GetItemNumber();
                 item.Dura = stdItem.DuraMax;
                 item.DuraMax = stdItem.DuraMax;
@@ -1556,7 +1556,7 @@ namespace GameSvr.World
                     {
                         continue;
                     }
-                    if (bagItems[i].wIndex > 0)
+                    if (bagItems[i].Index > 0)
                     {
                         userItem = bagItems[i];
                         playObject.ItemList.Add(userItem);
@@ -1594,7 +1594,7 @@ namespace GameSvr.World
                     {
                         continue;
                     }
-                    if (storageItems[i].wIndex > 0)
+                    if (storageItems[i].Index > 0)
                     {
                         userItem = storageItems[i];
                         playObject.StorageItemList.Add(userItem);

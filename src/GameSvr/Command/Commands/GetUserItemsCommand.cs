@@ -51,7 +51,7 @@ namespace GameSvr.Command.Commands
                             break;
                         }
                         UserItem = m_PlayObject.UseItems[i];
-                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.Ordinal) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
@@ -62,7 +62,7 @@ namespace GameSvr.Command.Commands
                             UserItem = m_PlayObject.UseItems[i];
                             m_PlayObject.ItemList.Add(UserItem);
                             m_PlayObject.SendAddItem(UserItem);
-                            m_PlayObject.UseItems[i].wIndex = 0;
+                            m_PlayObject.UseItems[i].Index = 0;
                             nItemCount++;
                             if (nItemCount >= nCount)
                             {
@@ -70,7 +70,7 @@ namespace GameSvr.Command.Commands
                             }
                         }
                     }
-                    m_PlayObject.SendUseitems();
+                    m_PlayObject.SendUseItems();
                     break;
 
                 case 1:
@@ -86,7 +86,7 @@ namespace GameSvr.Command.Commands
                             break;
                         }
                         UserItem = m_PlayObject.ItemList[i];
-                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
@@ -119,7 +119,7 @@ namespace GameSvr.Command.Commands
                             break;
                         }
                         UserItem = m_PlayObject.StorageItemList[i];
-                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())

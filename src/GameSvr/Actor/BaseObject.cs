@@ -152,7 +152,8 @@ namespace GameSvr.Actor
         /// 17-内力瞬间恢复增加(何首凝神酒) 18-增加斗转上限(培元酒) 19-不死状态 21-弟子心法激活
         /// 22-移动减速 23-定身(十步一杀)
         /// </summary>
-        internal ushort[] StatusArrValue;
+        internal ushort[] ExtraAbil;
+        internal byte[] ExtraAbilFlag;
         /// <summary>
         /// 0-攻击力增加 1-魔法增加  2-道术增加(无极真气) 3-攻击速度 4-HP增加(酒气护体)
         /// 5-增加MP上限 6-减攻击力 7-减魔法 8-减道术 9-减HP 10-减MP 11-敏捷 12-增加防
@@ -160,7 +161,7 @@ namespace GameSvr.Actor
         /// 17-内力瞬间恢复增加(何首凝神酒) 18-增加斗转上限(培元酒) 19-不死状态 20-道术+上下限(除魔药剂类) 21-弟子心法激活
         /// 22-移动减速 23-定身(十步一杀)
         /// </summary>
-        internal int[] StatusArrTimeOutTick;
+        internal int[] ExtraAbilTimes;
         /// <summary>
         /// 外观代码
         /// </summary>
@@ -888,8 +889,9 @@ namespace GameSvr.Actor
             CharStatusEx = 0;
             StatusTimeArr = new ushort[12];
             StatusArrTick = new int[12];
-            StatusArrValue = new ushort[6];
-            StatusArrTimeOutTick = new int[6];
+            ExtraAbil = new ushort[6];
+            ExtraAbilTimes = new int[6];
+            ExtraAbilFlag = new byte[6];
             BonusAbil = new NakedAbility();
             CurBonusAbil = new NakedAbility();
             AllowGroup = false;
@@ -1107,7 +1109,7 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 if (stdItem.StdMode == 40)
@@ -1594,7 +1596,7 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            if (UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (UseItems[Grobal2.U_WEAPON].Index <= 0)
             {
                 return;
             }
@@ -1879,9 +1881,9 @@ namespace GameSvr.Actor
         {
             for (var i = 0; i < UseItems.Length; i++)
             {
-                if (UseItems[i] != null && UseItems[i].wIndex > 0)
+                if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    var pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
+                    var pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (pSItem != null)
                     {
                         if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
@@ -1898,7 +1900,7 @@ namespace GameSvr.Actor
                                     var playObject = this as PlayObject;
                                     playObject.SendDelItems(UseItems[i]);
                                 }
-                                UseItems[i].wIndex = 0;
+                                UseItems[i].Index = 0;
                                 RecalcAbilitys();
                             }
                             else
@@ -2425,10 +2427,10 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
             try
             {
-                if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].wIndex > 0)
+                if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].Index > 0)
                 {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].wIndex);
-                    if ((stdItem == null) || (stdItem.Source != 0))
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
+                    if ((stdItem == null) || (stdItem.SpecialPwr != 0))
                     {
                         return;
                     }
@@ -2450,7 +2452,7 @@ namespace GameSvr.Actor
                             var playObject = this as PlayObject;
                             playObject.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
                         }
-                        UseItems[Grobal2.U_RIGHTHAND].wIndex = 0;
+                        UseItems[Grobal2.U_RIGHTHAND].Index = 0;
                         Light = 0;
                         SendRefMsg(Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                         SendMsg(this, Grobal2.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
@@ -2597,7 +2599,7 @@ namespace GameSvr.Actor
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
-                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
                     result += stdItem.Weight;
@@ -2844,7 +2846,7 @@ namespace GameSvr.Actor
 
         protected void DoDamageWeapon(int nWeaponDamage)
         {
-            if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0)
             {
                 return;
             }
@@ -2860,7 +2862,7 @@ namespace GameSvr.Actor
                 {
                     var playObject = this as PlayObject;
                     playObject.SendDelItems(UseItems[Grobal2.U_WEAPON]);
-                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
@@ -2870,7 +2872,7 @@ namespace GameSvr.Actor
                                                '0');
                     }
                 }
-                UseItems[Grobal2.U_WEAPON].wIndex = 0;
+                UseItems[Grobal2.U_WEAPON].Index = 0;
                 SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
             else
@@ -3591,9 +3593,9 @@ namespace GameSvr.Actor
             {
                 byte nDress = 0;
                 StdItem stdItem = null;
-                if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0) // 衣服
+                if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0) // 衣服
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
                     if (stdItem != null)
                     {
                         nDress = (byte)(stdItem.Shape * 2);
@@ -3602,9 +3604,9 @@ namespace GameSvr.Actor
 
                 nDress += (byte)Gender;
                 byte nWeapon = 0;
-                if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].wIndex > 0) // 武器
+                if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Index > 0) // 武器
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem != null)
                     {
                         nWeapon = (byte)(stdItem.Shape * 2);
@@ -4179,7 +4181,7 @@ namespace GameSvr.Actor
         {
             for (var i = 0; i < ItemList.Count; i++)
             {
-                var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].wIndex);
+                var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (stdItem.StdMode == 40)
@@ -4848,7 +4850,7 @@ namespace GameSvr.Actor
             {
                 if ((LifeAttrib == Grobal2.LA_UNDEAD) && (target != null))
                 {
-                    nDamage += target.AddAbil.btUndead;
+                    nDamage += target.AddAbil.UndeadPower;
                 }
                 if (AbilMagBubbleDefence)
                 {
@@ -4865,7 +4867,7 @@ namespace GameSvr.Actor
             nDamage = HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
-                nDamage += AddAbil.btUndead;
+                nDamage += AddAbil.UndeadPower;
             }
             if ((nDamage > 0) && AbilMagBubbleDefence)
             {
@@ -4913,7 +4915,7 @@ namespace GameSvr.Actor
                 nDamage = HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
             }
             bo19 = false;
-            if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].wIndex > 0)
+            if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0)
             {
                 nDura = UseItems[Grobal2.U_DRESS].Dura;
                 nOldDura = HUtil32.Round(nDura / 1000);
@@ -4924,7 +4926,7 @@ namespace GameSvr.Actor
                     {
                         playObject = this as PlayObject;
                         playObject.SendDelItems(UseItems[Grobal2.U_DRESS]);
-                        stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].wIndex);
+                        stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
                         if (stdItem.NeedIdentify == 1)
                         {
                             M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
@@ -4933,10 +4935,10 @@ namespace GameSvr.Actor
                                                    + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
                                                    "\t" + '0');
                         }
-                        UseItems[Grobal2.U_DRESS].wIndex = 0;
+                        UseItems[Grobal2.U_DRESS].Index = 0;
                         FeatureChanged();
                     }
-                    UseItems[Grobal2.U_DRESS].wIndex = 0;
+                    UseItems[Grobal2.U_DRESS].Index = 0;
                     UseItems[Grobal2.U_DRESS].Dura = 0;
                     bo19 = true;
                 }
@@ -4954,7 +4956,7 @@ namespace GameSvr.Actor
 
             for (var i = 0; i < UseItems.Length; i++)
             {
-                if ((UseItems[i] != null) && (UseItems[i].wIndex > 0) && (M2Share.RandomNumber.Random(8) == 0))
+                if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (M2Share.RandomNumber.Random(8) == 0))
                 {
                     nDura = UseItems[i].Dura;
                     nOldDura = HUtil32.Round(nDura / 1000);
@@ -4965,7 +4967,7 @@ namespace GameSvr.Actor
                         {
                             playObject = this as PlayObject;
                             playObject.SendDelItems(UseItems[i]);
-                            stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
+                            stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
@@ -4974,10 +4976,10 @@ namespace GameSvr.Actor
                                                        + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
                                                        "\t" + '0');
                             }
-                            UseItems[i].wIndex = 0;
+                            UseItems[i].Index = 0;
                             FeatureChanged();
                         }
-                        UseItems[i].wIndex = 0;
+                        UseItems[i].Index = 0;
                         UseItems[i].Dura = 0;
                         bo19 = true;
                     }
@@ -5462,8 +5464,8 @@ namespace GameSvr.Actor
 
         public bool AttPowerUp(int nPower, int nTime)
         {
-            StatusArrValue[0] = (ushort)nPower;
-            StatusArrTimeOutTick[0] = HUtil32.GetTickCount() + nTime * 1000;
+            ExtraAbil[0] = (ushort)nPower;
+            ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
             var nMin = nTime / 60;
             var nSec = nTime % 60;
             SysMsg(Format(M2Share.g_sAttPowerUpTime, nMin, nSec), MsgColor.Green, MsgType.Hint);
@@ -5532,7 +5534,7 @@ namespace GameSvr.Actor
                     continue;
                 }
 
-                var sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].wIndex);
+                var sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
                 if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UseItems[i];
@@ -5555,7 +5557,7 @@ namespace GameSvr.Actor
                     continue;
                 }
 
-                if (string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.wIndex), sItemName,
+                if (string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName,
                         StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = userItem;
@@ -5585,7 +5587,7 @@ namespace GameSvr.Actor
             {
                 userItem = ItemList[i];
                 if ((userItem.MakeIndex == nItemIndex) &&
-                    string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.wIndex), sItemName,
+                    string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName,
                         StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);

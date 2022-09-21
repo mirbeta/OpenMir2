@@ -60,8 +60,8 @@ namespace GameSvr.World
             nCount = 0;
             while (true)
             {
-                PlayObject.StatusArrValue[nCount] = SwitchData.StatusValue[nCount];
-                PlayObject.StatusArrTimeOutTick[nCount] = SwitchData.StatusTimeOut[nCount];
+                PlayObject.ExtraAbil[nCount] = SwitchData.StatusValue[nCount];
+                PlayObject.ExtraAbilTimes[nCount] = SwitchData.StatusTimeOut[nCount];
                 nCount++;
                 if (nCount >= 6) break;
             }
@@ -133,12 +133,12 @@ namespace GameSvr.World
                     SwitchData.SlaveArr[i].nMP = BaseObject.Abil.MP;
                 }
             }
-            for (var i = 0; i < PlayObject.StatusArrValue.Length; i++)
+            for (var i = 0; i < PlayObject.ExtraAbil.Length; i++)
             {
-                if (PlayObject.StatusArrValue[i] > 0)
+                if (PlayObject.ExtraAbil[i] > 0)
                 {
-                    SwitchData.StatusValue[i] = PlayObject.StatusArrValue[i];
-                    SwitchData.StatusTimeOut[i] = PlayObject.StatusArrTimeOutTick[i];
+                    SwitchData.StatusValue[i] = PlayObject.ExtraAbil[i];
+                    SwitchData.StatusTimeOut[i] = PlayObject.ExtraAbilTimes[i];
                 }
             }
         }

@@ -23,7 +23,7 @@ namespace SystemModule.Packet.ClientPackets
         /// 物品ID
         /// </summary>
         [ProtoMember(2)]
-        public ushort wIndex;
+        public ushort Index;
         /// <summary>
         /// 当前持久值
         /// </summary>
@@ -54,7 +54,7 @@ namespace SystemModule.Packet.ClientPackets
         public UserItem(UserItem userItem)
         {
             MakeIndex = userItem.MakeIndex;
-            wIndex = userItem.wIndex;
+            Index = userItem.Index;
             Dura = userItem.Dura;
             DuraMax = userItem.DuraMax;
             Desc = userItem.Desc;
@@ -63,7 +63,7 @@ namespace SystemModule.Packet.ClientPackets
         protected override void ReadPacket(BinaryReader reader)
         {
             MakeIndex = reader.ReadInt32();
-            wIndex = reader.ReadUInt16();
+            Index = reader.ReadUInt16();
             Dura = reader.ReadUInt16();
             DuraMax = reader.ReadUInt16();
             Desc = reader.ReadBytes(14);
@@ -72,7 +72,7 @@ namespace SystemModule.Packet.ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(MakeIndex);
-            writer.Write(wIndex);
+            writer.Write(Index);
             writer.Write(Dura);
             writer.Write(DuraMax);
             writer.Write(Desc);

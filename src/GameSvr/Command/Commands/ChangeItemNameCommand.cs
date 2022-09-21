@@ -32,9 +32,9 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.ItemUnit.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
+            if (M2Share.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
             {
-                M2Share.ItemUnit.SaveCustomItemName();
+                M2Share.CustomItemMgr.SaveCustomItemName();
                 PlayObject.SysMsg("物品名称设置成功。", MsgColor.Green, MsgType.Hint);
                 return;
             }

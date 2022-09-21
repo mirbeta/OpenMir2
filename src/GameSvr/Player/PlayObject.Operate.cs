@@ -2,7 +2,6 @@ using GameSvr.Actor;
 using GameSvr.Items;
 using GameSvr.Magic;
 using GameSvr.Npc;
-using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
@@ -33,12 +32,11 @@ namespace GameSvr.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
-                StdItem item = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                StdItem item = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (item != null)
                 {
                     ClientItem clientItem = new ClientItem();
-                    item.GetStandardItem(ref clientItem.Item);
-                    item.GetItemAddValue(userItem, ref clientItem.Item);
+                    item.GetUpgradeStdItem(userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
@@ -87,17 +85,15 @@ namespace GameSvr.Player
             userState.GuildRankName = playObject.GuildRankName;
             for (var i = 0; i < playObject.UseItems.Length; i++)
             {
-                UserItem userItem = playObject.UseItems[i];
-                if (userItem.wIndex > 0)
+                if (playObject.UseItems[i].Index > 0)
                 {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[i].wIndex);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[i].Index);
                     if (stdItem == null)
                     {
                         continue;
                     }
                     ClientItem clientItem = new ClientItem();
-                    stdItem.GetStandardItem(ref clientItem.Item);
-                    stdItem.GetItemAddValue(playObject.UseItems[i], ref clientItem.Item);
+                    stdItem.GetUpgradeStdItem(playObject.UseItems[i], ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(playObject.UseItems[i]);
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
@@ -180,7 +176,7 @@ namespace GameSvr.Player
                             {
                                 if (userItem.Desc[13] == 1)
                                 {
-                                    M2Share.ItemUnit.DelCustomItemName(userItem.MakeIndex, userItem.wIndex);
+                                    M2Share.CustomItemMgr.DelCustomItemName(userItem.MakeIndex, userItem.Index);
                                     userItem.Desc[13] = 0;
                                 }
                                 userItem = null; //物品加到NPC物品列表中了
@@ -290,7 +286,7 @@ namespace GameSvr.Player
                     var userItem = ItemList[i];
                     if (userItem != null && userItem.MakeIndex == nItemIdx)
                     {
-                        var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                        var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem == null)
                         {
                             continue;
@@ -396,13 +392,13 @@ namespace GameSvr.Player
             var n18 = 0;
             UserItem userItem = null;
             StdItem stdItem = null;
-            ClientStdItem stdItem58 = null;
+            ClientItem stdItem58 = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
                 if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                    stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     var sUserItemName = CustomItem.GetItemName(userItem);
                     if (stdItem != null)
                     {
@@ -419,17 +415,16 @@ namespace GameSvr.Player
             {
                 if (M2Share.CheckUserItems(btWhere, stdItem))
                 {
-                    stdItem.GetStandardItem(ref stdItem58);
-                    stdItem.GetItemAddValue(userItem, ref stdItem58);
-                    stdItem58.Name = CustomItem.GetItemName(userItem);
+                    stdItem.GetUpgradeStdItem(userItem, ref stdItem58);
+                    stdItem58.Item.Name = CustomItem.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref stdItem58) && CheckItemBindUse(userItem))
                     {
                         UserItem takeOffItem = null;
                         if (btWhere <= 12)
                         {
-                            if (UseItems[btWhere] != null && UseItems[btWhere].wIndex > 0)
+                            if (UseItems[btWhere] != null && UseItems[btWhere].Index > 0)
                             {
-                                var stdItem20 = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
+                                var stdItem20 = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].Index);
                                 if (stdItem20 != null && M2Share.StdModeMap.Contains(stdItem20.StdMode))
                                 {
                                     if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
@@ -440,21 +435,21 @@ namespace GameSvr.Player
                                         goto FailExit;
                                     }
                                 }
-                                if (!UserUnLockDurg && (stdItem20.Reserved & 2) != 0)
+                                if (!UserUnLockDurg && (stdItem20.ItemDesc & 2) != 0)
                                 {
                                     // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
-                                if ((stdItem20.Reserved & 4) != 0)
+                                if ((stdItem20.ItemDesc & 4) != 0)
                                 {
                                     // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
-                                if (M2Share.InDisableTakeOffList(UseItems[btWhere].wIndex))
+                                if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                                 {
                                     // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
@@ -503,11 +498,11 @@ namespace GameSvr.Player
             var n10 = 0;
             if (!Dealing && btWhere < 13)
             {
-                if (UseItems[btWhere].wIndex > 0)
+                if (UseItems[btWhere].Index > 0)
                 {
                     if (UseItems[btWhere].MakeIndex == nItemIdx)
                     {
-                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
+                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].Index);
                         if (stdItem != null && M2Share.StdModeMap.Contains(stdItem.StdMode))
                         {
                             if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
@@ -518,21 +513,21 @@ namespace GameSvr.Player
                                 goto FailExit;
                             }
                         }
-                        if (!UserUnLockDurg && (stdItem.Reserved & 2) != 0)
+                        if (!UserUnLockDurg && (stdItem.ItemDesc & 2) != 0)
                         {
                             // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
-                        if ((stdItem.Reserved & 4) != 0)
+                        if ((stdItem.ItemDesc & 4) != 0)
                         {
                             // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
-                        if (M2Share.InDisableTakeOffList(UseItems[btWhere].wIndex))
+                        if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                         {
                             // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
@@ -630,7 +625,7 @@ namespace GameSvr.Player
                         if (userItem != null && userItem.MakeIndex == nItemIdx)
                         {
                             userItem34 = userItem;
-                            stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                            stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem != null)
                             {
                                 switch (stdItem.StdMode)
@@ -1121,7 +1116,7 @@ namespace GameSvr.Player
                         userItem = DealItemList[i];
                         DealCreat.AddItemToBag(userItem);
                         (DealCreat as PlayObject).SendAddItem(userItem);
-                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
                             if (!M2Share.IsCheapStuff(stdItem.StdMode))
@@ -1147,7 +1142,7 @@ namespace GameSvr.Player
                         userItem = DealCreat.DealItemList[i];
                         AddItemToBag(userItem);
                         this.SendAddItem(userItem);
-                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
                             if (!M2Share.IsCheapStuff(stdItem.StdMode))
@@ -1633,7 +1628,7 @@ namespace GameSvr.Player
                             ItemList.RemoveAt(i);
                             WeightChanged();
                             SendDefMessage(Grobal2.SM_STORAGE_OK, 0, 0, 0, 0, "");
-                            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('1' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -1679,7 +1674,7 @@ namespace GameSvr.Player
                 var sUserItemName = CustomItem.GetItemName(userItem);
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.wIndex)))
+                    if (IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
                     {
                         // 检查NPC是否允许取物品
                         if (merchant.m_boGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
@@ -1689,7 +1684,7 @@ namespace GameSvr.Player
                                 SendAddItem(userItem);
                                 StorageItemList.RemoveAt(i);
                                 SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
-                                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.wIndex);
+                                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
                                 {
                                     M2Share.AddGameDataLog('0' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');

@@ -50,12 +50,12 @@ namespace GameSvr.Command.Commands
                 return;
             }
             UserItem UserItem = m_PlayObject.UseItems[nItem];
-            if (UserItem.wIndex == 0)
+            if (UserItem.Index == 0)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandBindUseItemNoItemMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            int nItemIdx = UserItem.wIndex;
+            int nItemIdx = UserItem.Index;
             var nMakeIdex = UserItem.MakeIndex;
             TItemBind ItemBind;
             string sBindName;
@@ -96,8 +96,8 @@ namespace GameSvr.Command.Commands
                         return;
                     }
                     M2Share.SaveItemBindAccount();
-                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
                 case 1:
@@ -134,8 +134,8 @@ namespace GameSvr.Command.Commands
                         return;
                     }
                     M2Share.SaveItemBindCharName();
-                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayObject.SendUpdateItem(UserItem);
                     m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
@@ -173,8 +173,8 @@ namespace GameSvr.Command.Commands
                         return;
                     }
                     M2Share.SaveItemBindIPaddr();
-                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayObject.SendUpdateItem(UserItem);
                     m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
@@ -197,8 +197,8 @@ namespace GameSvr.Command.Commands
                     };
                     //M2Share.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
                     //M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
-                    m_PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    PlayObject.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    m_PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     break;
             }
         }

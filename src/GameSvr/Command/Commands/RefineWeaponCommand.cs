@@ -24,7 +24,7 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            if (PlayObject.UseItems[Grobal2.U_WEAPON] == null || PlayObject.UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (PlayObject.UseItems[Grobal2.U_WEAPON] == null || PlayObject.UseItems[Grobal2.U_WEAPON].Index <= 0)
             {
                 return;
             }

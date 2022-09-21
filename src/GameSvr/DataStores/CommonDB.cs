@@ -41,67 +41,50 @@ namespace GameSvr.DataStores
                     while (dr.Read())
                     {
                         Item = new StdItem();
-                        Idx = dr.GetInt32("Idx");// 序号
-                        Item.Name = dr.GetString("Name");// 名称
-                        Item.StdMode = (byte)dr.GetInt32("StdMode");// 分类号
-                        Item.Shape = (byte)dr.GetInt32("Shape");// 装备外观
-                        Item.Weight = (byte)dr.GetInt32("Weight");// 重量
-                        Item.AniCount = (byte)dr.GetInt32("AniCount");
-                        Item.Source = dr.GetInt16("Source");
-                        Item.Reserved = (byte)dr.GetInt32("Reserved");// 保留
-                        Item.Looks = dr.GetUInt16("Looks");// 物品外观
-                        Item.DuraMax = (ushort)dr.GetInt32("DuraMax");// 持久
-                        Item.Ac = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.ItemsACPowerRate / 10));
-                        Item.Ac2 = (ushort)HUtil32.Round(dr.GetInt32("AC2") * (M2Share.Config.ItemsACPowerRate / 10));
-                        Item.Mac = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.ItemsACPowerRate / 10));
-                        Item.Mac2 = (ushort)HUtil32.Round(dr.GetInt32("MAC2") * (M2Share.Config.ItemsACPowerRate / 10));
-                        Item.Dc = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.ItemsPowerRate / 10));
-                        Item.Dc2 = (ushort)HUtil32.Round(dr.GetInt32("DC2") * (M2Share.Config.ItemsPowerRate / 10));
-                        Item.Mc = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.ItemsPowerRate / 10));
-                        Item.Mc2 = (ushort)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.Config.ItemsPowerRate / 10));
-                        Item.Sc = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.ItemsPowerRate / 10));
-                        Item.Sc2 = (ushort)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.Config.ItemsPowerRate / 10));
-                        Item.Need = dr.GetByte("Need");// 附加条件
-                        Item.NeedLevel = dr.GetByte("NeedLevel");// 需要等级
-                        Item.Price = dr.GetInt32("Price");// 价格
-                        Item.NeedIdentify = M2Share.GetGameLogItemNameList(Item.Name);
-                        switch (Item.StdMode)
-                        {
-                            case 0:
-                            case 55:
-                            case 58: // 药品
-                                Item.ItemType = EquipmentType.ITEM_LEECHDOM;
-                                break;
-                            case 5:
-                            case 6: // 武器
-                                Item.ItemType = EquipmentType.ITEM_WEAPON;
-                                break;
-                            case 10:
-                            case 11: // 衣服
-                                Item.ItemType = EquipmentType.ITEM_ARMOR;
-                                break;
-                            case 15:
-                            case 19:
-                            case 20:
-                            case 21:
-                            case 22:
-                            case 23:
-                            case 24:
-                            case 26:
-                            case 51:
-                            case 52:
-                            case 53:
-                            case 54:
-                            case 62:
-                            case 63:
-                            case 64:
-                            case 30: // 辅助物品
-                                Item.ItemType = EquipmentType.ITEM_ACCESSORY;
-                                break;
-                            default: // 其它物品
-                                Item.ItemType = EquipmentType.ITEM_ETC;
-                                break;
-                        }
+                        Idx = dr.GetInt32("ID");
+                        Item.Name = dr.GetString("NAME");
+                        Item.StdMode = dr.GetByte("StdMode");
+                        Item.Shape = dr.GetByte("SHAPE");
+                        Item.Weight = dr.GetByte("WEIGHT");
+                        Item.AniCount = dr.GetByte("ANICOUNT");
+                        Item.SpecialPwr = dr.GetSByte("SOURCE");
+                        Item.ItemDesc = dr.GetByte("RESERVED");
+                        Item.Looks = dr.GetUInt16("IMGINDEX");
+                        Item.DuraMax = dr.GetUInt16("DURAMAX");
+                        Item.AC = HUtil32.MakeWord(dr.GetUInt16("AC"), dr.GetUInt16("ACMAX"));
+                        Item.MAC = HUtil32.MakeWord(dr.GetUInt16("MAC"), dr.GetUInt16("MACMAX"));
+                        Item.DC = HUtil32.MakeWord(dr.GetUInt16("DC"), dr.GetUInt16("DCMAX"));
+                        Item.MC = HUtil32.MakeWord(dr.GetUInt16("MC"), dr.GetUInt16("MCMAX"));
+                        Item.SC = HUtil32.MakeWord(dr.GetUInt16("SC"), dr.GetUInt16("SCMAX"));
+                        Item.Need = dr.GetByte("NEED");
+                        Item.NeedLevel = dr.GetByte("NEEDLEVEL");
+                        Item.NeedIdentify = 0;
+                        Item.Price = dr.GetInt32("PRICE");
+                        Item.Stock = dr.GetInt32("STOCK");
+                        Item.AtkSpd = dr.GetByte("ATKSPD");
+                        Item.Agility = dr.GetByte("AGILITY");
+                        Item.Accurate = dr.GetByte("ACCURATE");
+                        Item.MgAvoid = dr.GetByte("MGAVOID");
+                        Item.Strong = dr.GetByte("STRONG");
+                        Item.Undead = dr.GetByte("UNDEAD");
+                        Item.HpAdd = dr.GetInt32("HPADD");
+                        Item.MpAdd = dr.GetInt32("MPADD");
+                        Item.ExpAdd = dr.GetInt32("EXPADD");
+                        Item.EffType1 = dr.GetByte("EFFTYPE1");
+                        Item.EffRate1 = dr.GetByte("EFFRATE1");
+                        Item.EffValue1 = dr.GetByte("EFFVALUE1");
+                        Item.EffType2 = dr.GetByte("EFFTYPE2");
+                        Item.EffRate2 = dr.GetByte("EFFRATE2");
+                        Item.EffValue2 = dr.GetByte("EFFVALUE2");
+                        Item.Slowdown = dr.GetByte("SLOWDOWN");
+                        Item.Tox = dr.GetByte("TOX");
+                        Item.ToxAvoid = dr.GetByte("TOXAVOID");
+                        Item.UniqueItem = dr.GetByte("UNIQUEITEM");
+                        Item.OverlapItem = dr.GetByte("OVERLAPITEM");
+                        Item.Light = dr.GetByte("LIGHT");
+                        Item.ItemType = dr.GetByte("ITEMTYPE");
+                        Item.ItemSet = dr.GetUInt16("ITEMSET");
+                        Item.Reference = dr.GetString("REFERENCE");
                         if (M2Share.WorldEngine.StdItemList.Count <= Idx)
                         {
                             M2Share.WorldEngine.StdItemList.Add(Item);
@@ -109,7 +92,10 @@ namespace GameSvr.DataStores
                         }
                         else
                         {
-                            M2Share.Log.Error(string.Format("加载物品(Idx:{0} Name:{1})数据失败!!!", new object[] { Idx, Item.Name }));
+                            M2Share.Log.Error(string.Format("加载物品(Idx:{0} Name:{1})数据失败!!!", new object[]
+                            {
+                                Idx, Item.Name
+                            }));
                             result = -100;
                             return result;
                         }

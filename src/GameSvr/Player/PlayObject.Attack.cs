@@ -79,7 +79,7 @@ namespace GameSvr.Player
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
                         {
-                            Items.StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+                            Items.StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))

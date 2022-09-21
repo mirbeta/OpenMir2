@@ -118,7 +118,7 @@ namespace GameSvr.Npc
                 IList<UserItem> List = GoodsList[i];
                 if (List.Count > 0)
                 {
-                    if (List[0].wIndex == nIndex)
+                    if (List[0].Index == nIndex)
                     {
                         return List;
                     }
@@ -210,7 +210,7 @@ namespace GameSvr.Npc
                         {
                             Goods = RefillGoodsList[j];
                             nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.sItemName);
-                            if (RefillList20[0].wIndex == nIndex)
+                            if (RefillList20[0].Index == nIndex)
                             {
                                 bo21 = true;
                                 break;
@@ -287,8 +287,7 @@ namespace GameSvr.Npc
 
         private void UpgradeWaponAddValue(PlayObject User, IList<UserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
-            UserItem UserItem;
-            ClientStdItem StdItem80 = null;
+            ClientItem StdItem80 = null;
             IList<DeleteItem> DelItemList = null;
             int nDc;
             int nSc;
@@ -304,8 +303,8 @@ namespace GameSvr.Npc
             IList<double> DuraList = new List<double>();
             for (var i = ItemList.Count - 1; i >= 0; i--)
             {
-                UserItem = ItemList[i];
-                if (M2Share.WorldEngine.GetStdItemName(UserItem.wIndex) == M2Share.Config.BlackStone)
+                var UserItem = ItemList[i];
+                if (M2Share.WorldEngine.GetStdItemName(UserItem.Index) == M2Share.Config.BlackStone)
                 {
                     DuraList.Add(Math.Round(UserItem.Dura / 1.0e3));
                     if (DelItemList == null)
@@ -322,36 +321,36 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    if (M2Share.IsAccessory(UserItem.wIndex))
+                    if (M2Share.IsAccessory(UserItem.Index))
                     {
-                        StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                        StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null)
                         {
-                            StdItem.GetStandardItem(ref StdItem80);
-                            StdItem.GetItemAddValue(UserItem, ref StdItem80);
+                            StdItem.GetUpgradeStdItem(UserItem, ref StdItem80);
+                            //StdItem.GetItemAddValue(UserItem, ref StdItem80);
                             nDc = 0;
                             nSc = 0;
                             nMc = 0;
-                            switch (StdItem80.StdMode)
+                            switch (StdItem80.Item.StdMode)
                             {
                                 case 19:
                                 case 20:
                                 case 21:
-                                    nDc = HUtil32.HiWord(StdItem80.DC) + HUtil32.LoWord(StdItem80.DC);
-                                    nSc = HUtil32.HiWord(StdItem80.SC) + HUtil32.LoWord(StdItem80.SC);
-                                    nMc = HUtil32.HiWord(StdItem80.MC) + HUtil32.LoWord(StdItem80.MC);
+                                    nDc = HUtil32.HiWord(StdItem80.Item.DC) + HUtil32.LoWord(StdItem80.Item.DC);
+                                    nSc = HUtil32.HiWord(StdItem80.Item.SC) + HUtil32.LoWord(StdItem80.Item.SC);
+                                    nMc = HUtil32.HiWord(StdItem80.Item.MC) + HUtil32.LoWord(StdItem80.Item.MC);
                                     break;
                                 case 22:
                                 case 23:
-                                    nDc = HUtil32.HiWord(StdItem80.DC) + HUtil32.LoWord(StdItem80.DC);
-                                    nSc = HUtil32.HiWord(StdItem80.SC) + HUtil32.LoWord(StdItem80.SC);
-                                    nMc = HUtil32.HiWord(StdItem80.MC) + HUtil32.LoWord(StdItem80.MC);
+                                    nDc = HUtil32.HiWord(StdItem80.Item.DC) + HUtil32.LoWord(StdItem80.Item.DC);
+                                    nSc = HUtil32.HiWord(StdItem80.Item.SC) + HUtil32.LoWord(StdItem80.Item.SC);
+                                    nMc = HUtil32.HiWord(StdItem80.Item.MC) + HUtil32.LoWord(StdItem80.Item.MC);
                                     break;
                                 case 24:
                                 case 26:
-                                    nDc = HUtil32.HiWord(StdItem80.DC) + HUtil32.LoWord(StdItem80.DC) + 1;
-                                    nSc = HUtil32.HiWord(StdItem80.SC) + HUtil32.LoWord(StdItem80.SC) + 1;
-                                    nMc = HUtil32.HiWord(StdItem80.MC) + HUtil32.LoWord(StdItem80.MC) + 1;
+                                    nDc = HUtil32.HiWord(StdItem80.Item.DC) + HUtil32.LoWord(StdItem80.Item.DC) + 1;
+                                    nSc = HUtil32.HiWord(StdItem80.Item.SC) + HUtil32.LoWord(StdItem80.Item.SC) + 1;
+                                    nMc = HUtil32.HiWord(StdItem80.Item.MC) + HUtil32.LoWord(StdItem80.Item.MC) + 1;
                                     break;
                             }
                             if (nDcMin < nDc)
@@ -457,7 +456,7 @@ namespace GameSvr.Npc
                     return;
                 }
             }
-            if (User.UseItems[Grobal2.U_WEAPON] != null && User.UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.Gold >= M2Share.Config.UpgradeWeaponPrice
+            if (User.UseItems[Grobal2.U_WEAPON] != null && User.UseItems[Grobal2.U_WEAPON].Index != 0 && User.Gold >= M2Share.Config.UpgradeWeaponPrice
                 && User.CheckItems(M2Share.Config.BlackStone) != null)
             {
                 User.DecGold(M2Share.Config.UpgradeWeaponPrice);
@@ -478,13 +477,13 @@ namespace GameSvr.Npc
                     sUserName = User.CharName,
                     UserItem = User.UseItems[Grobal2.U_WEAPON]
                 };
-                var StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[Grobal2.U_WEAPON].wIndex);
+                var StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[Grobal2.U_WEAPON].Index);
                 if (StdItem.NeedIdentify == 1)
                 {
                     M2Share.AddGameDataLog("25" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.CharName + "\t" + StdItem.Name + "\t" + User.UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.SendDelItems(User.UseItems[Grobal2.U_WEAPON]);
-                User.UseItems[Grobal2.U_WEAPON].wIndex = 0;
+                User.UseItems[Grobal2.U_WEAPON].Index = 0;
                 User.RecalcAbilitys();
                 User.FeatureChanged();
                 User.SendMsg(User, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -655,7 +654,7 @@ namespace GameSvr.Npc
                     }
                 }
                 var UserItem = UpgradeInfo.UserItem;
-                var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem.NeedIdentify == 1)
                 {
                     M2Share.AddGameDataLog("24" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -719,11 +718,11 @@ namespace GameSvr.Npc
             {
                 var List14 = GoodsList[i];
                 var UserItem = List14[0];
-                var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null)
                 {
                     var sName = CustomItem.GetItemName(UserItem);
-                    var nPrice = GetUserPrice(User, GetItemPrice(UserItem.wIndex));
+                    var nPrice = GetUserPrice(User, GetItemPrice(UserItem.Index));
                     var nStock = List14.Count;
                     short nSubMenu;
                     if (StdItem.StdMode <= 4 || StdItem.StdMode == 42 || StdItem.StdMode == 31)
@@ -758,7 +757,7 @@ namespace GameSvr.Npc
             {
                 IList<UserItem> List14 = GoodsList[i];
                 UserItem UserItem = List14[0];
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null)
                 {
                     sSendMsg = sSendMsg + StdItem.Name + '/' + 0 + '/' + M2Share.Config.MakeDurgPrice + '/' + 1 + '/';
@@ -1123,9 +1122,9 @@ namespace GameSvr.Npc
                     break;
                 case "$USERWEAPON":
                     {
-                        if (PlayObject.UseItems[Grobal2.U_WEAPON].wIndex != 0)
+                        if (PlayObject.UseItems[Grobal2.U_WEAPON].Index != 0)
                         {
-                            sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].wIndex);
+                            sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].Index);
                         }
                         else
                         {
@@ -1143,10 +1142,10 @@ namespace GameSvr.Npc
             double n20;
             int nC;
             int n14;
-            var itemPrice = GetItemPrice(UserItem.wIndex);
+            var itemPrice = GetItemPrice(UserItem.Index);
             if (itemPrice > 0)
             {
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null && StdItem.StdMode > 4 && StdItem.DuraMax > 0 && UserItem.DuraMax > 0)
                 {
                     if (StdItem.StdMode == 40)// 肉
@@ -1241,7 +1240,7 @@ namespace GameSvr.Npc
                 }
                 List20 = GoodsList[i];
                 UserItem = List20[0];
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null)
                 {
                     sUserItemName = CustomItem.GetItemName(UserItem);
@@ -1327,7 +1326,7 @@ namespace GameSvr.Npc
                     continue;
                 }
                 UserItem UserItem = List20[0];
-                StdItem Item = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (Item != null && Item.Name == sItemName)
                 {
                     if (List20.Count - 1 < nInt)
@@ -1338,8 +1337,8 @@ namespace GameSvr.Npc
                     {
                         UserItem = List20[j];
                         ClientItem ClientItem = new ClientItem();
-                        Item.GetStandardItem(ref ClientItem.Item);
-                        Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                        Item.GetUpgradeStdItem(UserItem, ref ClientItem);
+                        //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                         ClientItem.MakeIndex = UserItem.MakeIndex;
@@ -1377,7 +1376,7 @@ namespace GameSvr.Npc
         private bool ClientSellItem_sub_4A1C84(UserItem UserItem)
         {
             var result = true;
-            var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+            var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (StdItem != null && (StdItem.StdMode == 25 || StdItem.StdMode == 30))
             {
                 if (UserItem.Dura < 4000)
@@ -1409,7 +1408,7 @@ namespace GameSvr.Npc
                     }
                     PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_OK, 0, PlayObject.Gold, 0, 0, "");
                     AddItemToGoodsList(UserItem);
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + CharName);
@@ -1434,7 +1433,7 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            var ItemList = GetRefillList(UserItem.wIndex);
+            var ItemList = GetRefillList(UserItem.Index);
             if (ItemList == null)
             {
                 ItemList = new List<UserItem>();
@@ -1463,7 +1462,7 @@ namespace GameSvr.Npc
                 n1C = List10[i].ItemCount;
                 for (var j = 0; j < PlayObject.ItemList.Count; j++)
                 {
-                    if (M2Share.WorldEngine.GetStdItemName(PlayObject.ItemList[j].wIndex) == s20)
+                    if (M2Share.WorldEngine.GetStdItemName(PlayObject.ItemList[j].Index) == s20)
                     {
                         n1C -= 1;
                     }
@@ -1488,7 +1487,7 @@ namespace GameSvr.Npc
                             break;
                         }
                         UserItem = PlayObject.ItemList[j];
-                        if (M2Share.WorldEngine.GetStdItemName(UserItem.wIndex) == s20)
+                        if (M2Share.WorldEngine.GetStdItemName(UserItem.Index) == s20)
                         {
                             if (List28 == null)
                             {
@@ -1522,7 +1521,7 @@ namespace GameSvr.Npc
             {
                 IList<UserItem> List1C = GoodsList[i];
                 UserItem MakeItem = List1C[0];
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(MakeItem.wIndex);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(MakeItem.Index);
                 if (StdItem != null && StdItem.Name == sItemName)
                 {
                     if (PlayObject.Gold >= M2Share.Config.MakeDurgPrice)
@@ -1535,7 +1534,7 @@ namespace GameSvr.Npc
                             {
                                 PlayObject.Gold -= M2Share.Config.MakeDurgPrice;
                                 PlayObject.SendAddItem(UserItem);
-                                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                                 if (StdItem.NeedIdentify == 1)
                                 {
                                     M2Share.AddGameDataLog('2' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + CharName);
@@ -1643,7 +1642,7 @@ namespace GameSvr.Npc
             {
                 nPrice = nPrice * M2Share.Config.SuperRepairPriceRate;
             }
-            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (StdItem != null)
             {
                 if (boCanRepair && nPrice > 0 && UserItem.DuraMax > UserItem.Dura && StdItem.StdMode != 43)
@@ -1795,7 +1794,7 @@ namespace GameSvr.Npc
             if (btWhere >= 0 && btWhere <= PlayObject.UseItems.Length)
             {
                 var UserItem = PlayObject.UseItems[btWhere];
-                if (UserItem.wIndex == 0)
+                if (UserItem.Index == 0)
                 {
                     var sMsg = Format(M2Share.g_sYourUseItemIsNul, M2Share.GetUseItemName(btWhere));
                     PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, sMsg);
@@ -1803,19 +1802,19 @@ namespace GameSvr.Npc
                 }
                 if (UserItem.Desc[13] == 1)
                 {
-                    M2Share.ItemUnit.DelCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
+                    M2Share.CustomItemMgr.DelCustomItemName(UserItem.MakeIndex, UserItem.Index);
                 }
                 if (!string.IsNullOrEmpty(sItemName))
                 {
-                    M2Share.ItemUnit.AddCustomItemName(UserItem.MakeIndex, UserItem.wIndex, sItemName);
+                    M2Share.CustomItemMgr.AddCustomItemName(UserItem.MakeIndex, UserItem.Index, sItemName);
                     UserItem.Desc[13] = 1;
                 }
                 else
                 {
-                    M2Share.ItemUnit.DelCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
+                    M2Share.CustomItemMgr.DelCustomItemName(UserItem.MakeIndex, UserItem.Index);
                     UserItem.Desc[13] = 0;
                 }
-                M2Share.ItemUnit.SaveCustomItemName();
+                M2Share.CustomItemMgr.SaveCustomItemName();
                 PlayObject.SendMsg(PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                 PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "");
             }

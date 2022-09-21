@@ -3,9 +3,11 @@ using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Player;
 using GameSvr.RobotPlay;
+using System;
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Actor
 {
@@ -241,10 +243,10 @@ namespace GameSvr.Actor
                         int bCount;
                         Items.StdItem StdItem;
                         // 加HP
-                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((Abil.HP / Abil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
+                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((Abil.HP / Abil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
                         {
                             IncHpStoneTime = HUtil32.GetTickCount();
-                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
                             if ((StdItem.StdMode == 7) && (StdItem.Shape == 1 || StdItem.Shape == 3))
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
@@ -279,15 +281,15 @@ namespace GameSvr.Actor
                                     {
                                         (this as PlayObject).SendDelItems(UseItems[Grobal2.U_CHARM]);
                                     }
-                                    UseItems[Grobal2.U_CHARM].wIndex = 0;
+                                    UseItems[Grobal2.U_CHARM].Index = 0;
                                 }
                             }
                         }
                         // 加MP
-                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((Abil.MP / Abil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
+                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((Abil.MP / Abil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
                         {
                             IncMpStoneTime = HUtil32.GetTickCount();
-                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
                             if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
@@ -323,7 +325,7 @@ namespace GameSvr.Actor
                                     {
                                         (this as PlayObject).SendDelItems(UseItems[Grobal2.U_CHARM]);
                                     }
-                                    UseItems[Grobal2.U_CHARM].wIndex = 0;
+                                    UseItems[Grobal2.U_CHARM].Index = 0;
                                 }
                             }
                         }
@@ -590,55 +592,94 @@ namespace GameSvr.Actor
                                 boChg = true;
                                 switch (i)
                                 {
-                                    case Grobal2.STATE_TRANSPARENT:
-                                        HideMode = false;
-                                        break;
                                     case Grobal2.STATE_DEFENCEUP:
                                         boNeedRecalc = true;
-                                        SysMsg("Defense strength is back to normal.", MsgColor.Green, MsgType.Hint);
+                                        SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
                                     case Grobal2.STATE_MAGDEFENCEUP:
                                         boNeedRecalc = true;
-                                        SysMsg("Magical defense strength is back to normal.", MsgColor.Green, MsgType.Hint);
+                                        SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
                                     case Grobal2.STATE_BUBBLEDEFENCEUP:
                                         AbilMagBubbleDefence = false;
                                         break;
+                                    case Grobal2.STATE_TRANSPARENT:
+                                        HideMode = false;
+                                        break;
+                                }
+                            }
+                            else if (StatusTimeArr[i] == 10)
+                            {
+                                if (i == Grobal2.STATE_DEFENCEUP)
+                                {
+                                    SysMsg("防御力" + StatusTimeArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                }
+                                if (i == Grobal2.STATE_MAGDEFENCEUP)
+                                {
+                                    SysMsg("魔法防御力" + StatusTimeArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
                                 }
                             }
                         }
                     }
                 }
-                for (var i = 0; i < StatusArrValue.Length; i++)
+                for (var i = 0; i < ExtraAbil.Length; i++)
                 {
-                    if (StatusArrValue[i] > 0)
+                    if (ExtraAbil[i] > 0)
                     {
-                        if (HUtil32.GetTickCount() > StatusArrTimeOutTick[i])
+                        if (HUtil32.GetTickCount() > ExtraAbilTimes[i])
                         {
-                            StatusArrValue[i] = 0;
+                            ExtraAbil[i] = 0;
+                            ExtraAbilFlag[i] = 0;
                             boNeedRecalc = true;
                             switch (i)
                             {
                                 case 0:
-                                    SysMsg("Removed temporarily increased destructive power.", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("攻击力恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 1:
-                                    SysMsg("Removed temporarily increased magic power.", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("魔法力恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 2:
-                                    SysMsg("Removed temporarily increased zen power.", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("精神力恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 3:
-                                    SysMsg("Removed temporarily increased hitting speed.", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("攻击速度恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 4:
-                                    SysMsg("Removed temporarily increased HP.", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("体力值恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 5:
-                                    SysMsg("Removed temporarily increased MP.", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("魔法值恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 6:
-                                    SysMsg("Removed temporarily decreased attack ability.", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("攻击能力恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                            }
+                        }
+                        else if (ExtraAbilFlag[i] == 0 && HUtil32.GetTickCount() > ExtraAbilTimes[i] - 10000)
+                        {
+                            ExtraAbilFlag[i] = 1;
+                            switch (i)
+                            {
+                                case AbilConst.EABIL_DCUP:
+                                    SysMsg("攻击力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_MCUP:
+                                    SysMsg("魔法力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_SCUP:
+                                    SysMsg("精神力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_HITSPEEDUP:
+                                    SysMsg("攻击速度10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_HPUP:
+                                    SysMsg("体力值10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_MPUP:
+                                    SysMsg("魔法值10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                             }
                         }
@@ -1152,7 +1193,7 @@ namespace GameSvr.Actor
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
                     var UserItem = ItemList[i];
-                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     var boCanNotDrop = false;
                     if (StdItem != null)
                     {
@@ -1212,10 +1253,10 @@ namespace GameSvr.Actor
                             nC++;
                             continue;
                         }
-                        StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
                         if (StdItem != null)
                         {
-                            if ((StdItem.Reserved & 8) != 0)
+                            if ((StdItem.ItemDesc & 8) != 0)
                             {
                                 if (DropItemList == null)
                                 {
@@ -1229,7 +1270,7 @@ namespace GameSvr.Actor
                                 {
                                     M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                                 }
-                                UseItems[nC].wIndex = 0;
+                                UseItems[nC].Index = 0;
                             }
                         }
                         nC++;
@@ -1259,10 +1300,10 @@ namespace GameSvr.Actor
                         }
                         if (DropItemDown(UseItems[nC], 2, true, BaseObject, this))
                         {
-                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
                             if (StdItem != null)
                             {
-                                if ((StdItem.Reserved & 10) == 0)
+                                if ((StdItem.ItemDesc & 10) == 0)
                                 {
                                     if (Race == Grobal2.RC_PLAYOBJECT)
                                     {
@@ -1272,11 +1313,11 @@ namespace GameSvr.Actor
                                         }
                                         DropItemList.Add(new DeleteItem()
                                         {
-                                            ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].wIndex),
+                                            ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].Index),
                                             MakeIndex = UseItems[nC].MakeIndex
                                         });
                                     }
-                                    UseItems[nC].wIndex = 0;
+                                    UseItems[nC].Index = 0;
                                 }
                             }
                         }
@@ -1660,27 +1701,28 @@ namespace GameSvr.Actor
                 {
                     continue;
                 }
-                if ((UseItems[i].wIndex <= 0) || (UseItems[i].Dura <= 0))
+                if ((UseItems[i].Index <= 0) || (UseItems[i].Dura <= 0))
                 {
                     continue;
                 }
-                var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
-                if (StdItem == null)
+                var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                if (stdItem == null)
                 {
                     continue;
                 }
-                StdItem.ApplyItemParameters(ref AddAbil);
+                ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
+                ApplyItemParametersEx(UseItems[i], ref WAbil);
                 if ((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND) || (i == Grobal2.U_DRESS))
                 {
                     if (i == Grobal2.U_DRESS)
                     {
-                        Abil.WearWeight += StdItem.Weight;
+                        Abil.WearWeight += stdItem.Weight;
                     }
                     else
                     {
-                        Abil.HandWeight += StdItem.Weight;
+                        Abil.HandWeight += stdItem.Weight;
                     }
-                    switch (StdItem.AniCount) 
+                    switch (stdItem.AniCount)
                     {
                         case 120:
                             FastTrain = true;
@@ -1721,10 +1763,10 @@ namespace GameSvr.Actor
                             break;
                         case 135:
                             boMoXieSuite[0] = true;
-                            MoXieSuite += StdItem.Weight / 10;
+                            MoXieSuite += stdItem.Weight / 10;
                             break;
                         case 138:
-                            HongMoSuite += StdItem.Weight;
+                            HongMoSuite += stdItem.Weight;
                             break;
                         case 139:
                             UnParalysis = true;
@@ -1780,13 +1822,13 @@ namespace GameSvr.Actor
                             MuscleRing = true;
                             break;
                     }
-                    if (StdItem.Shape == 154)
+                    if (stdItem.Shape == 154)
                     {
                         // 护身火球
                         MagicShield = true;
                         FlameRing = true;
                     }
-                    switch (StdItem.AniCount)
+                    switch (stdItem.AniCount)
                     {
                         case 155:// 护身防御
                             MagicShield = true;
@@ -1821,45 +1863,45 @@ namespace GameSvr.Actor
                             Revival = true;
                             break;
                         case 180:// PK 死亡掉经验
-                            PkDieLostExp = StdItem.DuraMax * M2Share.Config.dwPKDieLostExpRate;
+                            PkDieLostExp = stdItem.DuraMax * M2Share.Config.dwPKDieLostExpRate;
                             break;
                         case 181:// PK 死亡掉等级
-                            PkDieLostLevel = StdItem.DuraMax / M2Share.Config.nPKDieLostLevelRate;
+                            PkDieLostLevel = stdItem.DuraMax / M2Share.Config.nPKDieLostLevelRate;
                             break;
                     }
                 }
                 else
                 {
-                    Abil.WearWeight += StdItem.Weight;
+                    Abil.WearWeight += stdItem.Weight;
                 }
-                Abil.Weight += StdItem.Weight;
+                Abil.Weight += stdItem.Weight;
                 switch (i)
                 {
                     case Grobal2.U_WEAPON:
                         {
-                            if ((StdItem.Source - 1 - 10) < 0)
+                            if ((stdItem.SpecialPwr - 1 - 10) < 0)
                             {
-                                AddAbil.btWeaponStrong = (byte)StdItem.Source;// 强度+
+                                AddAbil.WeaponStrong = (byte)stdItem.SpecialPwr;// 强度+
                             }
-                            if ((StdItem.Source <= -1) && (StdItem.Source >= -50))  // -1 to -50
+                            if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))  // -1 to -50
                             {
-                                AddAbil.btUndead = (byte)(AddAbil.btUndead + -StdItem.Source);// Holy+
+                                AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + -stdItem.SpecialPwr);// Holy+
                             }
-                            if ((StdItem.Source <= -51) && (StdItem.Source >= -100))// -51 to -100
+                            if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))// -51 to -100
                             {
-                                AddAbil.btUndead = (byte)(AddAbil.btUndead + (StdItem.Source + 50));// Holy-
+                                AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));// Holy-
                             }
                             continue;
                         }
                     case Grobal2.U_RIGHTHAND:
                         {
-                            if (StdItem.Shape >= 1 && StdItem.Shape <= 50)
+                            if (stdItem.Shape >= 1 && stdItem.Shape <= 50)
                             {
-                                DressEffType = StdItem.Shape;
+                                DressEffType = stdItem.Shape;
                             }
-                            if (StdItem.Shape >= 51 && StdItem.Shape <= 100)
+                            if (stdItem.Shape >= 51 && stdItem.Shape <= 100)
                             {
-                                HorseType = (byte)(StdItem.Shape - 50);
+                                HorseType = (byte)(stdItem.Shape - 50);
                             }
                             continue;
                         }
@@ -1869,18 +1911,18 @@ namespace GameSvr.Actor
                             {
                                 DressEffType = UseItems[i].Desc[5];
                             }
-                            if (StdItem.AniCount > 0)
+                            if (stdItem.AniCount > 0)
                             {
-                                DressEffType = StdItem.AniCount;
+                                DressEffType = stdItem.AniCount;
                             }
-                            if (StdItem.Light)
+                            if (stdItem.Light > 0)
                             {
                                 Light = 3;
                             }
                             continue;
                         }
                 }
-                switch (StdItem.Shape)
+                switch (stdItem.Shape)
                 {
                     case 139:
                         UnParalysis = true;
@@ -1972,10 +2014,10 @@ namespace GameSvr.Actor
                         Revival = true;
                         break;
                     case 180:// PK 死亡掉经验
-                        PkDieLostExp = StdItem.DuraMax * M2Share.Config.dwPKDieLostExpRate;
+                        PkDieLostExp = stdItem.DuraMax * M2Share.Config.dwPKDieLostExpRate;
                         break;
                     case 181:// PK 死亡掉等级
-                        PkDieLostLevel = StdItem.DuraMax / M2Share.Config.nPKDieLostLevelRate;
+                        PkDieLostLevel = stdItem.DuraMax / M2Share.Config.nPKDieLostLevelRate;
                         break;
                     case 120:
                         FastTrain = true;
@@ -1994,11 +2036,11 @@ namespace GameSvr.Actor
                         break;
                     case 135:
                         boMoXieSuite[0] = true;
-                        MoXieSuite += StdItem.AniCount;
+                        MoXieSuite += stdItem.AniCount;
                         break;
                     case 138:
                         boHongMoSuite1 = true;
-                        HongMoSuite += StdItem.AniCount;
+                        HongMoSuite += stdItem.AniCount;
                         break;
                     case 200:
                         boSmash1 = true;
@@ -2048,11 +2090,11 @@ namespace GameSvr.Actor
                         break;
                     case 133:
                         boMoXieSuite[1] = true;
-                        MoXieSuite += StdItem.AniCount;
+                        MoXieSuite += stdItem.AniCount;
                         break;
                     case 136:
                         boHongMoSuite2 = true;
-                        HongMoSuite += StdItem.AniCount;
+                        HongMoSuite += stdItem.AniCount;
                         break;
                     case 201:
                         boSmash2 = true;
@@ -2076,19 +2118,19 @@ namespace GameSvr.Actor
                         boFiveString2 = true;
                         break;
                 }
-                if ((StdItem.Source <= -1) && (StdItem.Source >= -50))
+                if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
                 {
                     // -1 to -50
-                    AddAbil.btUndead = (byte)(AddAbil.btUndead + -StdItem.Source);
+                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + -stdItem.SpecialPwr);
                     // Holy+
                 }
-                if ((StdItem.Source <= -51) && (StdItem.Source >= -100))
+                if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
                 {
                     // -51 to -100
-                    AddAbil.btUndead = (byte)(AddAbil.btUndead + (StdItem.Source + 50));
+                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
                     // Holy-
                 }
-                switch (StdItem.Shape)
+                switch (stdItem.Shape)
                 {
                     case 124:
                         boRecallSuite[2] = true;
@@ -2101,11 +2143,11 @@ namespace GameSvr.Actor
                         break;
                     case 134:
                         boMoXieSuite[2] = true;
-                        MoXieSuite += StdItem.AniCount;
+                        MoXieSuite += stdItem.AniCount;
                         break;
                     case 137:
                         boHongMoSuite3 = true;
-                        HongMoSuite += StdItem.AniCount;
+                        HongMoSuite += stdItem.AniCount;
                         break;
                     case 202:
                         boSmash3 = true;
@@ -2146,7 +2188,7 @@ namespace GameSvr.Actor
             }
             if (boHongMoSuite1 && boHongMoSuite2 && boHongMoSuite3)
             {
-                AddAbil.wHitPoint += 2;
+                AddAbil.HIT += 2;
             }
             if (boSpirit[0] && boSpirit[1] && boSpirit[2] && boSpirit[3])
             {
@@ -2207,7 +2249,7 @@ namespace GameSvr.Actor
                 RecalcHitSpeed();//增加此行，只有类型为人物的角色才重新计算攻击敏捷
             }
             int nOldLight = Light;
-            if ((UseItems[Grobal2.U_RIGHTHAND] != null) && (UseItems[Grobal2.U_RIGHTHAND].wIndex > 0) && (UseItems[Grobal2.U_RIGHTHAND].Dura > 0))
+            if ((UseItems[Grobal2.U_RIGHTHAND] != null) && (UseItems[Grobal2.U_RIGHTHAND].Index > 0) && (UseItems[Grobal2.U_RIGHTHAND].Dura > 0))
             {
                 Light = 3;
             }
@@ -2219,21 +2261,21 @@ namespace GameSvr.Actor
             {
                 SendRefMsg(Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
             }
-            SpeedPoint += (byte)AddAbil.wSpeedPoint;
-            HitPoint += (byte)AddAbil.wHitPoint;
-            AntiPoison += (byte)AddAbil.wAntiPoison;
-            PoisonRecover += AddAbil.wPoisonRecover;
-            HealthRecover += AddAbil.wHealthRecover;
-            SpellRecover += AddAbil.wSpellRecover;
-            AntiMagic += AddAbil.wAntiMagic;
-            Luck += AddAbil.btLuck;
-            Luck -= AddAbil.btUnLuck;
-            HitSpeed = AddAbil.nHitSpeed;
-            Abil.MaxWeight += AddAbil.Weight;
-            Abil.MaxWearWeight += (byte)AddAbil.WearWeight;
-            Abil.MaxHandWeight += (byte)AddAbil.HandWeight;
-            Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxHP + AddAbil.wHP);
-            Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxMP + AddAbil.wMP);
+            SpeedPoint += (byte)AddAbil.SPEED;
+            HitPoint += (byte)AddAbil.HIT;
+            AntiPoison += (byte)AddAbil.AntiPoison;
+            PoisonRecover += AddAbil.PoisonRecover;
+            HealthRecover += AddAbil.HealthRecover;
+            SpellRecover += AddAbil.SpellRecover;
+            AntiMagic += AddAbil.AntiMagic;
+            Luck += AddAbil.Luck;
+            Luck -= AddAbil.UnLuck;
+            HitSpeed = AddAbil.HitSpeed;
+            //Abil.MaxWeight += AddAbil.Weight;
+            //Abil.MaxWearWeight += (byte)AddAbil.WearWeight;
+            //Abil.MaxHandWeight += (byte)AddAbil.HandWeight;
+            Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxHP + AddAbil.HP);
+            Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxMP + AddAbil.MP);
             Abil.AC = HUtil32.MakeLong(HUtil32.LoWord(AddAbil.AC) + HUtil32.LoWord(Abil.AC), HUtil32.HiWord(AddAbil.AC) + HUtil32.HiWord(Abil.AC));
             Abil.MAC = HUtil32.MakeLong(HUtil32.LoWord(AddAbil.MAC) + HUtil32.LoWord(Abil.MAC), HUtil32.HiWord(AddAbil.MAC) + HUtil32.HiWord(Abil.MAC));
             Abil.DC = HUtil32.MakeLong(HUtil32.LoWord(AddAbil.DC) + HUtil32.LoWord(Abil.DC), HUtil32.HiWord(AddAbil.DC) + HUtil32.HiWord(Abil.DC));
@@ -2247,29 +2289,29 @@ namespace GameSvr.Actor
             {
                 Abil.MAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.MAC), HUtil32.HiWord(Abil.MAC) + 2 + (Abil.Level / 7));
             }
-            if (StatusArrValue[0] > 0)
+            if (ExtraAbil[0] > 0)
             {
-                Abil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) + 2 + StatusArrValue[0]);
+                Abil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) + 2 + ExtraAbil[0]);
             }
-            if (StatusArrValue[1] > 0)
+            if (ExtraAbil[1] > 0)
             {
-                Abil.MC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.MC), HUtil32.HiWord(Abil.MC) + 2 + StatusArrValue[1]);
+                Abil.MC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.MC), HUtil32.HiWord(Abil.MC) + 2 + ExtraAbil[1]);
             }
-            if (StatusArrValue[2] > 0)
+            if (ExtraAbil[2] > 0)
             {
-                Abil.SC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.SC), HUtil32.HiWord(Abil.SC) + 2 + StatusArrValue[2]);
+                Abil.SC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.SC), HUtil32.HiWord(Abil.SC) + 2 + ExtraAbil[2]);
             }
-            if (StatusArrValue[3] > 0)
+            if (ExtraAbil[3] > 0)
             {
-                HitSpeed += StatusArrValue[3];
+                HitSpeed += ExtraAbil[3];
             }
-            if (StatusArrValue[4] > 0)
+            if (ExtraAbil[4] > 0)
             {
-                Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxHP + StatusArrValue[4]);
+                Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxHP + ExtraAbil[4]);
             }
-            if (StatusArrValue[5] > 0)
+            if (ExtraAbil[5] > 0)
             {
-                Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxMP + StatusArrValue[5]);
+                Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxMP + ExtraAbil[5]);
             }
             if (FlameRing)
             {
@@ -2325,7 +2367,7 @@ namespace GameSvr.Actor
             if (PuritySet)
             {
                 // Holy +3, Sc 1-2
-                AddAbil.btUndead = (byte)(AddAbil.btUndead + -3);
+                AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + -3);
                 Abil.SC = HUtil32.MakeLong(HUtil32.LoWord(Abil.SC) + 1, HUtil32.HiWord(Abil.SC) + 2 + 2);
             }
             if (MundaneSet)
@@ -2389,6 +2431,653 @@ namespace GameSvr.Actor
                     Abil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(Abil.DC) * 0.9), HUtil32.Round(HUtil32.HiWord(Abil.DC) * 0.9));
                     Abil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(Abil.MC) * 0.9), HUtil32.Round(HUtil32.HiWord(Abil.MC) * 0.9));
                     Abil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(Abil.SC) * 0.9), HUtil32.Round(HUtil32.HiWord(Abil.SC) * 0.9));
+                }
+            }
+        }
+
+        public void ApplyItemParameters(UserItem uitem,StdItem stdItem, ref AddAbility aabil)
+        {
+            var clientItem = new ClientItem();
+            var ps = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            if (ps != null)
+            {
+                ps.GetUpgradeStdItem(uitem, ref clientItem);
+                ApplyItemParametersByJob(uitem, ref clientItem);
+                switch (ps.StdMode)
+                {
+                    case 5:
+                    case 6:
+                        aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + stdItem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
+                        aabil.Luck = (byte)(aabil.Luck + HUtil32.LoByte(clientItem.Item.AC));
+                        aabil.UnLuck = (byte)(aabil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
+                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
+                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10)
+                        {
+                            aabil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
+                        }
+                        break;
+                    case 10:
+                    case 11:
+                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.SPEED = (byte)(aabil.SPEED + clientItem.Item.Agility);
+                        aabil.AntiMagic = (byte)(aabil.AntiMagic + clientItem.Item.MgAvoid);
+                        aabil.AntiPoison = (byte)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
+                        aabil.HP = (byte)(aabil.HP + clientItem.Item.HpAdd);
+                        aabil.MP = (byte)(aabil.MP + clientItem.Item.MpAdd);
+                        if (clientItem.Item.EffType1 > 0)
+                        {
+                            switch (clientItem.Item.EffType1)
+                            {
+                                case EfftypeConst.EFFTYPE_HP_MP_ADD:
+                                    if ((aabil.HealthRecover + clientItem.Item.EffRate1 > 65000))
+                                    {
+                                        aabil.HealthRecover = 65000;
+                                    }
+                                    else
+                                    {
+                                        aabil.HealthRecover = (ushort)(aabil.HealthRecover + clientItem.Item.EffRate1);
+                                    }
+                                    if ((aabil.SpellRecover + clientItem.Item.EffValue1 > 65000))
+                                    {
+                                        aabil.SpellRecover = 65000;
+                                    }
+                                    else
+                                    {
+                                        aabil.SpellRecover = (ushort)(aabil.SpellRecover + clientItem.Item.EffValue1);
+                                    }
+                                    break;
+                            }
+                        }
+                        if (clientItem.Item.EffType2 > 0)
+                        {
+                            switch (clientItem.Item.EffType2)
+                            {
+                                case EfftypeConst.EFFTYPE_HP_MP_ADD:
+                                    if ((aabil.HealthRecover + clientItem.Item.EffRate2 > 65000))
+                                    {
+                                        aabil.HealthRecover = 65000;
+                                    }
+                                    else
+                                    {
+                                        aabil.HealthRecover = (ushort)(aabil.HealthRecover + clientItem.Item.EffRate2);
+                                    }
+                                    if ((aabil.SpellRecover + clientItem.Item.EffValue2 > 65000))
+                                    {
+                                        aabil.SpellRecover = 65000;
+                                    }
+                                    else
+                                    {
+                                        aabil.SpellRecover = (ushort)(aabil.SpellRecover + clientItem.Item.EffValue2);
+                                    }
+                                    break;
+                            }
+                        }
+                        if (clientItem.Item.EffType1 == EfftypeConst.EFFTYPE_LUCK_ADD)
+                        {
+                            if (aabil.Luck + clientItem.Item.EffValue1 > 255)
+                            {
+                                aabil.Luck = 255;
+                            }
+                            else
+                            {
+                                aabil.Luck = (byte)(aabil.Luck + clientItem.Item.EffValue1);
+                            }
+                        }
+                        else if (clientItem.Item.EffType2 == EfftypeConst.EFFTYPE_LUCK_ADD)
+                        {
+                            if (aabil.Luck + clientItem.Item.EffValue2 > 255)
+                            {
+                                aabil.Luck = 255;
+                            }
+                            else
+                            {
+                                aabil.Luck = (byte)(aabil.Luck + clientItem.Item.EffValue2);
+                            }
+                        }
+                        break;
+                    case 15:
+                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.HIT = (byte)(aabil.HIT + clientItem.Item.Accurate);
+                        aabil.AntiMagic = (byte)(aabil.AntiMagic + clientItem.Item.MgAvoid);
+                        aabil.AntiPoison = (byte)((byte)(aabil.AntiPoison + clientItem.Item.ToxAvoid));
+                        break;
+                    case 19:
+                        aabil.AntiMagic = (ushort)(aabil.AntiMagic + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.UnLuck = (byte)(aabil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
+                        aabil.Luck = (byte)(aabil.Luck + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed + clientItem.Item.AtkSpd);
+                        aabil.HIT = (byte)(aabil.HIT + clientItem.Item.Accurate);
+                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
+                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        break;
+                    case 20:
+                        aabil.HIT = (byte)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.SPEED = (byte)(aabil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed + clientItem.Item.AtkSpd);
+                        aabil.AntiMagic = (byte)(aabil.AntiMagic + clientItem.Item.MgAvoid);
+                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
+                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        break;
+                    case 21:
+                        aabil.HealthRecover = (byte)(aabil.HealthRecover + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.SpellRecover = (byte)(aabil.SpellRecover + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed + HUtil32.LoByte(clientItem.Item.AC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed - HUtil32.LoByte(clientItem.Item.MAC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed + clientItem.Item.AtkSpd);
+                        aabil.HIT = (byte)(aabil.HIT + clientItem.Item.Accurate);
+                        aabil.AntiMagic = (byte)(aabil.AntiMagic + clientItem.Item.MgAvoid);
+                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
+                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        break;
+                    case 22:
+                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed + clientItem.Item.AtkSpd);
+                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
+                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        aabil.HIT = (byte)(aabil.HIT + clientItem.Item.Accurate);
+                        aabil.HP = (byte)(aabil.HP + clientItem.Item.HpAdd);
+                        break;
+                    case 23:
+                        aabil.AntiPoison = (byte)(aabil.AntiPoison + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.PoisonRecover = (byte)(aabil.PoisonRecover + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed + HUtil32.LoByte(clientItem.Item.AC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed - HUtil32.LoByte(clientItem.Item.MAC));
+                        aabil.HitSpeed = (byte)(aabil.HitSpeed + clientItem.Item.AtkSpd);
+                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
+                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        break;
+                    case 24:
+                    case 26:
+                        if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10)
+                        {
+                            aabil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
+                        }
+                        switch (ps.StdMode)
+                        {
+                            case 24:
+                                aabil.HIT = (byte)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
+                                aabil.SPEED = (byte)(aabil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
+                                break;
+                            case 26:
+                                aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
+                                aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                                aabil.HIT = (byte)(aabil.HIT + clientItem.Item.Accurate);
+                                aabil.SPEED = (byte)(aabil.SPEED + clientItem.Item.Agility);
+                                aabil.MP = (byte)(aabil.MP + clientItem.Item.MpAdd);
+                                break;
+                        }
+                        break;
+                    case 52:
+                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.SPEED = (byte)(aabil.SPEED + clientItem.Item.Agility);
+                        break;
+                    case 54:
+                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.HIT = (byte)(aabil.HIT + clientItem.Item.Accurate);
+                        aabil.SPEED = (byte)(aabil.SPEED + clientItem.Item.Agility);
+                        aabil.AntiPoison = (byte)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
+                        break;
+                    case 53:
+                        aabil.HP = (byte)(aabil.HP + clientItem.Item.HpAdd);
+                        aabil.MP = (byte)(aabil.MP + clientItem.Item.MpAdd);
+                        break;
+                    default:
+                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
+                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        break;
+                }
+                aabil.DC = HUtil32.MakeWord(HUtil32.LoByte(aabil.DC) + HUtil32.LoByte(clientItem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(aabil.DC) + HUtil32.HiByte(clientItem.Item.DC)));
+                aabil.MC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MC) + HUtil32.LoByte(clientItem.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(aabil.MC) + HUtil32.HiByte(clientItem.Item.MC)));
+                aabil.SC = HUtil32.MakeWord(HUtil32.LoByte(aabil.SC) + HUtil32.LoByte(clientItem.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(aabil.SC) + HUtil32.HiByte(clientItem.Item.SC)));
+            }
+        }
+
+        public void ApplyItemParametersEx(UserItem uitem, ref Ability AWabil)
+        {
+            var clientItem = new ClientItem();
+            StdItem ps = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            if (ps != null)
+            {
+                ps.GetUpgradeStdItem(uitem, ref clientItem);
+                switch (ps.StdMode)
+                {
+                    case 52:
+                        if (clientItem.Item.EffType1 > 0)
+                        {
+                            switch (clientItem.Item.EffType1)
+                            {
+                                case EfftypeConst.EFFTYPE_TWOHAND_WEHIGHT_ADD:
+                                    if ((AWabil.MaxHandWeight + clientItem.Item.EffValue1 > 255))
+                                    {
+                                        AWabil.MaxHandWeight = 255;
+                                    }
+                                    else
+                                    {
+                                        AWabil.MaxHandWeight = (byte)(AWabil.MaxHandWeight + clientItem.Item.EffValue1);
+                                    }
+                                    break;
+                                case EfftypeConst.EFFTYPE_EQUIP_WHEIGHT_ADD:
+                                    if ((AWabil.MaxWearWeight + clientItem.Item.EffValue1 > 255))
+                                    {
+                                        AWabil.MaxWearWeight = 255;
+                                    }
+                                    else
+                                    {
+                                        AWabil.MaxWearWeight = (byte)(AWabil.MaxWearWeight + clientItem.Item.EffValue1);
+                                    }
+                                    break;
+                            }
+                        }
+                        if (clientItem.Item.EffType2 > 0)
+                        {
+                            switch (clientItem.Item.EffType2)
+                            {
+                                case EfftypeConst.EFFTYPE_TWOHAND_WEHIGHT_ADD:
+                                    if ((AWabil.MaxHandWeight + clientItem.Item.EffValue2 > 255))
+                                    {
+                                        AWabil.MaxHandWeight = 255;
+                                    }
+                                    else
+                                    {
+                                        AWabil.MaxHandWeight = (byte)(AWabil.MaxHandWeight + clientItem.Item.EffValue2);
+                                    }
+                                    break;
+                                case EfftypeConst.EFFTYPE_EQUIP_WHEIGHT_ADD:
+                                    if ((AWabil.MaxWearWeight + clientItem.Item.EffValue2 > 255))
+                                    {
+                                        AWabil.MaxWearWeight = 255;
+                                    }
+                                    else
+                                    {
+                                        AWabil.MaxWearWeight =(byte)( AWabil.MaxWearWeight + clientItem.Item.EffValue2);
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+                    case 54:
+                        if (clientItem.Item.EffType1 > 0)
+                        {
+                            switch (clientItem.Item.EffType1)
+                            {
+                                case EfftypeConst.EFFTYPE_BAG_WHIGHT_ADD:
+                                    if ((AWabil.MaxWeight + clientItem.Item.EffValue1 > 65000))
+                                    {
+                                        AWabil.MaxWeight = 65000;
+                                    }
+                                    else
+                                    {
+                                        AWabil.MaxWeight = (byte)(AWabil.MaxWeight + clientItem.Item.EffValue1);
+                                    }
+                                    break;
+                            }
+                        }
+                        if (clientItem.Item.EffType2 > 0)
+                        {
+                            switch (clientItem.Item.EffType2)
+                            {
+                                case EfftypeConst.EFFTYPE_BAG_WHIGHT_ADD:
+                                    if ((AWabil.MaxWeight + clientItem.Item.EffValue2 > 65000))
+                                    {
+                                        AWabil.MaxWeight = 65000;
+                                    }
+                                    else
+                                    {
+                                        AWabil.MaxWeight = (byte)(AWabil.MaxWeight + clientItem.Item.EffValue2);
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        public void ChangeItemByJob(ref ClientItem citem, int lv)
+        {
+            if ((citem.Item.StdMode == 22) && (citem.Item.Shape == GragonConst.DRAGON_RING_SHAPE))
+            {
+                switch (Job)
+                {
+                    case 0:
+                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 4));
+                        citem.Item.MC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Taoist:
+                        citem.Item.DC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Wizard:
+                        citem.Item.MC = 0;
+                        break;
+                }
+            }
+            else if ((citem.Item.StdMode == 26) && (citem.Item.Shape == GragonConst.DRAGON_BRACELET_SHAPE))
+            {
+                switch (Job)
+                {
+                    case 0:
+                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
+                        citem.Item.MC = 0;
+                        citem.Item.SC = 0;
+                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
+                        break;
+                    case PlayJob.Taoist:
+                        citem.Item.DC = 0;
+                        citem.Item.SC = 0;
+                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
+                        break;
+                    case PlayJob.Wizard:
+                        citem.Item.MC = 0;
+                        break;
+                }
+            }
+            else if ((citem.Item.StdMode == 19) && (citem.Item.Shape == GragonConst.DRAGON_NECKLACE_SHAPE))
+            {
+                switch (Job)
+                {
+                    case 0:
+                        citem.Item.MC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Taoist:
+                        citem.Item.DC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Wizard:
+                        citem.Item.DC = 0;
+                        citem.Item.MC = 0;
+                        break;
+                }
+            }
+            else if (((citem.Item.StdMode == 10) || (citem.Item.StdMode == 11)) && (citem.Item.Shape == GragonConst.DRAGON_DRESS_SHAPE))
+            {
+                switch (Job)
+                {
+                    case 0:
+                        citem.Item.MC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Taoist:
+                        citem.Item.DC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Wizard:
+                        citem.Item.DC = 0;
+                        citem.Item.MC = 0;
+                        break;
+                }
+            }
+            else if ((citem.Item.StdMode == 15) && (citem.Item.Shape == GragonConst.DRAGON_HELMET_SHAPE))
+            {
+                switch (Job)
+                {
+                    case 0:
+                        citem.Item.MC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Taoist:
+                        citem.Item.DC = 0;
+                        citem.Item.SC = 0;
+                        break;
+                    case PlayJob.Wizard:
+                        citem.Item.DC = 0;
+                        citem.Item.MC = 0;
+                        break;
+                }
+            }
+            else if (((citem.Item.StdMode == 5) || (citem.Item.StdMode == 6)) && (citem.Item.Shape == GragonConst.DRAGON_WEAPON_SHAPE))
+            {
+                switch (Job)
+                {
+                    case 0:
+                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 28));
+                        citem.Item.MC = 0;
+                        citem.Item.SC = 0;
+                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC) - 2, HUtil32.HiByte(citem.Item.AC));
+                        break;
+                    case PlayJob.Taoist:
+                        citem.Item.SC = 0;
+                        if (HUtil32.HiByte(citem.Item.MAC) > 12)
+                        {
+                            citem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MAC), HUtil32.HiByte(citem.Item.MAC) - 12);
+                        }
+                        else
+                        {
+                            citem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MAC), 0);
+                        }
+                        break;
+                    case PlayJob.Wizard:
+                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 2, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 10));
+                        citem.Item.MC = 0;
+                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC) - 2, HUtil32.HiByte(citem.Item.AC));
+                        break;
+                }
+            }
+            else if ((citem.Item.StdMode == 53))
+            {
+                if ((citem.Item.Shape == ShapeConst.LOLLIPOP_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case 0:
+                            citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
+                            citem.Item.MC = 0;
+                            citem.Item.SC = 0;
+                            break;
+                        case PlayJob.Taoist:
+                            citem.Item.DC = 0;
+                            citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC) + 2));
+                            citem.Item.SC = 0;
+                            break;
+                        case PlayJob.Wizard:
+                            citem.Item.DC = 0;
+                            citem.Item.MC = 0;
+                            citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC) + 2));
+                            break;
+                    }
+                }
+                else if ((citem.Item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || (citem.Item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || (citem.Item.Shape == ShapeConst.BRONZEMEDAL_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case 0:
+                            citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC)));
+                            citem.Item.MC = 0;
+                            citem.Item.SC = 0;
+                            break;
+                        case PlayJob.Taoist:
+                            citem.Item.DC = 0;
+                            citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC)));
+                            citem.Item.SC = 0;
+                            break;
+                        case PlayJob.Wizard:
+                            citem.Item.DC = 0;
+                            citem.Item.MC = 0;
+                            citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC)));
+                            break;
+                    }
+                }
+            }
+        }
+
+        public void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std)
+        {
+            var ps = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            if (ps != null)
+            {
+                if ((ps.StdMode == 22) && (ps.Shape == GragonConst.DRAGON_RING_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case PlayJob.Warrior:
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.DC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.DC) + 4));
+                            std.Item.MC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Taoist:
+                            std.Item.DC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Wizard:
+                            std.Item.MC = 0;
+                            break;
+                    }
+                }
+                else if ((ps.StdMode == 26) && (ps.Shape == GragonConst.DRAGON_BRACELET_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case PlayJob.Warrior:
+                             std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte( std.Item.DC) + 2));
+                             std.Item.MC = 0;
+                             std.Item.SC = 0;
+                             std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.AC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.AC) + 1));
+                            break;
+                        case PlayJob.Taoist:
+                            std.Item.DC = 0;
+                            std.Item.SC = 0;
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.AC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.AC) + 1));
+                            break;
+                        case PlayJob.Wizard:
+                            std.Item.MC = 0;
+                            break;
+                    }
+                }
+                else if ((ps.StdMode == 19) && (ps.Shape == GragonConst.DRAGON_NECKLACE_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case PlayJob.Warrior:
+                            std.Item.MC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Taoist:
+                            std.Item.DC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Wizard:
+                            std.Item.DC = 0;
+                            std.Item.MC = 0;
+                            break;
+                    }
+                }
+                else if (((ps.StdMode == 10) || (ps.StdMode == 11)) && (ps.Shape == GragonConst.DRAGON_DRESS_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case PlayJob.Warrior:
+                            std.Item.MC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Taoist:
+                            std.Item.DC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Wizard:
+                            std.Item.DC = 0;
+                            std.Item.MC = 0;
+                            break;
+                    }
+                }
+                else if ((ps.StdMode == 15) && (ps.Shape == GragonConst.DRAGON_HELMET_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case PlayJob.Warrior:
+                            std.Item.MC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Taoist:
+                            std.Item.DC = 0;
+                            std.Item.SC = 0;
+                            break;
+                        case PlayJob.Wizard:
+                            std.Item.DC = 0;
+                            std.Item.MC = 0;
+                            break;
+                    }
+                }
+                else if (((ps.StdMode == 5) || (ps.StdMode == 6)) && (ps.Shape == GragonConst.DRAGON_WEAPON_SHAPE))
+                {
+                    switch (Job)
+                    {
+                        case PlayJob.Warrior:
+                             std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte( std.Item.DC) + 28));
+                             std.Item.MC = 0;
+                             std.Item.SC = 0;
+                             std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.AC) - 2, HUtil32.HiByte( std.Item.AC));
+                            break;
+                        case PlayJob.Taoist:
+                            std.Item.SC = 0;
+                            if (HUtil32.HiByte( std.Item.MAC) > 12)
+                            {
+                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.MAC), HUtil32.HiByte( std.Item.MAC) - 12);
+                            }
+                            else
+                            {
+                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.MAC), 0);
+                            }
+                            break;
+                        case PlayJob.Wizard:
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.DC) + 2, HUtil32._MIN(255, HUtil32.HiByte( std.Item.DC) + 10));
+                            std.Item.MC = 0;
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.AC) - 2, HUtil32.HiByte( std.Item.AC));
+                            break;
+                    }
+                }
+                else if ((ps.StdMode == 53))
+                {
+                    if ((ps.Shape == ShapeConst.LOLLIPOP_SHAPE))
+                    {
+                        switch (Job)
+                        {
+                            case PlayJob.Warrior:
+                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.DC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.DC) + 2));
+                                std.Item.MC = 0;
+                                std.Item.SC = 0;
+                                break;
+                            case PlayJob.Taoist:
+                                 std.Item.DC = 0;
+                                 std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.MC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.MC) + 2));
+                                 std.Item.SC = 0;
+                                break;
+                            case PlayJob.Wizard:
+                                 std.Item.DC = 0;
+                                 std.Item.MC = 0;
+                                 std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.SC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.SC) + 2));
+                                break;
+                        }
+                    }
+                    else if (( std.Item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || ( std.Item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || ( std.Item.Shape == ShapeConst.BRONZEMEDAL_SHAPE))
+                    {
+                        switch (Job)
+                        {
+                            case PlayJob.Warrior:
+                                 std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.DC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.DC)));
+                                 std.Item.MC = 0;
+                                 std.Item.SC = 0;
+                                break;
+                            case PlayJob.Taoist:
+                                 std.Item.DC = 0;
+                                 std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.MC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.MC)));
+                                 std.Item.SC = 0;
+                                break;
+                            case PlayJob.Wizard:
+                                 std.Item.DC = 0;
+                                 std.Item.MC = 0;
+                                 std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte( std.Item.SC), HUtil32._MIN(255, HUtil32.HiByte( std.Item.SC)));
+                                break;
+                        }
+                    }
                 }
             }
         }
