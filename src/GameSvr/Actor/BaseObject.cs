@@ -1186,74 +1186,7 @@ namespace GameSvr.Actor
                 SendUpdateMsg(this, Grobal2.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
             }
         }
-
-        public void RecalcLevelAbilitys()
-        {
-            int n;
-            var nLevel = Abil.Level;
-            switch (Job)
-            {
-                case PlayJob.Taoist:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.Config.nLevelValueOfTaosHP + M2Share.Config.nLevelValueOfTaosHPRate) * nLevel));
-                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.Config.nLevelValueOfTaosMP * 2.2 * nLevel));
-                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
-                    Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 50 * nLevel));
-                    if ((12 + HUtil32.Round(Abil.Level / 13 * Abil.Level)) > 255)
-                    {
-                        Abil.MaxHandWeight = byte.MaxValue;
-                    }
-                    else
-                    {
-                        Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 42 * nLevel));
-                    }
-                    n = nLevel / 7;
-                    Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
-                    Abil.MC = 0;
-                    Abil.SC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
-                    Abil.AC = 0;
-                    n = HUtil32.Round(nLevel / 6);
-                    Abil.MAC = HUtil32.MakeLong(n / 2, n + 1);
-                    break;
-                case PlayJob.Wizard:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.Config.nLevelValueOfWizardHP + M2Share.Config.nLevelValueOfWizardHPRate) * nLevel));
-                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
-                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5 * nLevel));
-                    Abil.MaxWearWeight = (byte)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
-                    Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 90 * nLevel));
-                    n = nLevel / 7;
-                    Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
-                    Abil.MC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
-                    Abil.SC = 0;
-                    Abil.AC = 0;
-                    Abil.MAC = 0;
-                    break;
-                case PlayJob.Warrior:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.Config.nLevelValueOfWarrHP + M2Share.Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
-                    Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
-                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
-                    Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 20 * nLevel));
-                    Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 13 * nLevel));
-                    Abil.DC = HUtil32.MakeLong(HUtil32._MAX(nLevel / 5 - 1, 1), HUtil32._MAX(1, nLevel / 5));
-                    Abil.SC = 0;
-                    Abil.MC = 0;
-                    Abil.AC = HUtil32.MakeLong(0, nLevel / 7);
-                    Abil.MAC = 0;
-                    break;
-                case PlayJob.None:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            if (Abil.HP > Abil.MaxHP)
-            {
-                Abil.HP = Abil.MaxHP;
-            }
-            if (Abil.MP > Abil.MaxMP)
-            {
-                Abil.MP = Abil.MaxMP;
-            }
-        }
-
+        
         public void HasLevelUp(int nLevel)
         {
             Abil.MaxExp = GetLevelExp(Abil.Level);
@@ -2607,73 +2540,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
-        /// <summary>
-        /// 计算攻击速度
-        /// </summary>
-        private void RecalcHitSpeed()
-        {
-            NakedAbility bonusTick = null;
-            switch (Job)
-            {
-                case PlayJob.Warrior:
-                    bonusTick = M2Share.Config.BonusAbilofWarr;
-                    break;
-                case PlayJob.Wizard:
-                    bonusTick = M2Share.Config.BonusAbilofWizard;
-                    break;
-                case PlayJob.Taoist:
-                    bonusTick = M2Share.Config.BonusAbilofTaos;
-                    break;
-            }
-
-            HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-            switch (Job)
-            {
-                case PlayJob.Taoist:
-                    SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
-                    break;
-                default:
-                    SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
-                    break;
-            }
-
-            HitPlus = 0;
-            HitDouble = 0;
-            for (var i = 0; i < MagicList.Count; i++)
-            {
-                var userMagic = MagicList[i];
-                MagicArr[userMagic.MagIdx] = userMagic;
-                switch (userMagic.MagIdx)
-                {
-                    case MagicConst.SKILL_ONESWORD: // 基本剑法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
-                        }
-                        break;
-                    case MagicConst.SKILL_ILKWANG: // 精神力战法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
-                        }
-                        break;
-                    case MagicConst.SKILL_YEDO: // 攻杀剑法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
-                        }
-                        HitPlus = (byte)(M2Share.DEFHIT + userMagic.Level);
-                        AttackSkillCount = (byte)(7 - userMagic.Level);
-                        AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
-                        break;
-                    case MagicConst.SKILL_FIRESWORD: // 烈火剑法
-                        HitDouble = (byte)(4 + userMagic.Level * 4);
-                        break;
-                }
-            }
-        }
-
+        
         private void AddItemSkill(int nIndex)
         {
             MagicInfo magic = null;
