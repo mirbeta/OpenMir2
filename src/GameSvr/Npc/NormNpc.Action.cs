@@ -86,11 +86,11 @@ namespace GameSvr.Npc
                                         {
                                             continue;
                                         }
-                                        StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
+                                        StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
                                         if (StdItem == null)
                                         {
                                             // 是金刚石
-                                            if (!bo12 && DealOffInfo.UseItems[j].MakeIndex > 0 && DealOffInfo.UseItems[j].wIndex == ushort.MaxValue && DealOffInfo.UseItems[j].Dura == ushort.MaxValue && DealOffInfo.UseItems[j].DuraMax == ushort.MaxValue)
+                                            if (!bo12 && DealOffInfo.UseItems[j].MakeIndex > 0 && DealOffInfo.UseItems[j].Index == ushort.MaxValue && DealOffInfo.UseItems[j].Dura == ushort.MaxValue && DealOffInfo.UseItems[j].DuraMax == ushort.MaxValue)
                                             {
                                                 ClientItem _wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
@@ -110,13 +110,13 @@ namespace GameSvr.Npc
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S, sizeof(TStdItem));
                                         sClientDealOffInfo.UseItems[j] = new ClientItem();
-                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[j].Item);
+                                        StdItem80.GetUpgradeStdItem(DealOffInfo.UseItems[j], ref sClientDealOffInfo.UseItems[j]);
                                         //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
                                         sUserItemName = "";
                                         if (DealOffInfo.UseItems[j].Desc[13] == 1)
                                         {
-                                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[j].MakeIndex, DealOffInfo.UseItems[j].wIndex);
+                                            sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(DealOffInfo.UseItems[j].MakeIndex, DealOffInfo.UseItems[j].Index);
                                         }
                                         if (sUserItemName != "")
                                         {
@@ -200,11 +200,11 @@ namespace GameSvr.Npc
                                         {
                                             continue;
                                         }
-                                        StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[k].wIndex);
+                                        StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[k].Index);
                                         if (StdItem == null)
                                         {
                                             // 是金刚石
-                                            if (!bo12 && DealOffInfo.UseItems[k].MakeIndex > 0 && DealOffInfo.UseItems[k].wIndex == short.MaxValue && DealOffInfo.UseItems[k].Dura == short.MaxValue && DealOffInfo.UseItems[k].DuraMax == short.MaxValue)
+                                            if (!bo12 && DealOffInfo.UseItems[k].MakeIndex > 0 && DealOffInfo.UseItems[k].Index == short.MaxValue && DealOffInfo.UseItems[k].Dura == short.MaxValue && DealOffInfo.UseItems[k].DuraMax == short.MaxValue)
                                             {
                                                 ClientItem _wvar1 = sClientDealOffInfo.UseItems[k];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
@@ -226,11 +226,11 @@ namespace GameSvr.Npc
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S);// 取自定义物品名称
                                         //sClientDealOffInfo.UseItems[K].S = StdItem80;
                                         sClientDealOffInfo.UseItems[k] = new ClientItem();
-                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].Item);
+                                        //StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].Item);
                                         sUserItemName = "";
                                         if (DealOffInfo.UseItems[k].Desc[13] == 1)
                                         {
-                                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[k].MakeIndex, DealOffInfo.UseItems[k].wIndex);
+                                            sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(DealOffInfo.UseItems[k].MakeIndex, DealOffInfo.UseItems[k].Index);
                                         }
                                         if (sUserItemName != "")
                                         {
@@ -1675,11 +1675,11 @@ namespace GameSvr.Npc
             bool boIsHasItem = false;
             for (var i = 0; i < PlayObject.UseItems.Length; i++)
             {
-                if (PlayObject.UseItems[i].wIndex <= 0)
+                if (PlayObject.UseItems[i].Index <= 0)
                 {
                     continue;
                 }
-                sUserItemName = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[i].wIndex);
+                sUserItemName = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[i].Index);
                 if (!(i != Grobal2.U_CHARM))
                 {
                     PlayObject.SysMsg(sUserItemName + " 禁止修理...", MsgColor.Red, MsgType.Hint);
@@ -1733,8 +1733,8 @@ namespace GameSvr.Npc
                 return;
             }
             var UserItem = PlayObject.UseItems[nWhere];
-            var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
-            if (UserItem.wIndex <= 0 || StdItem == null)
+            var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+            if (UserItem.Index <= 0 || StdItem == null)
             {
                 PlayObject.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -1784,8 +1784,8 @@ namespace GameSvr.Npc
                 return;
             }
             var UserItem = PlayObject.UseItems[nWhere];
-            var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
-            if (UserItem.wIndex <= 0 || StdItem == null)
+            var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+            if (UserItem.Index <= 0 || StdItem == null)
             {
                 PlayObject.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -1801,7 +1801,7 @@ namespace GameSvr.Npc
                         break;
                     case 1:
                         PlayObject.SendDelItems(UserItem);
-                        UserItem.wIndex = 0;
+                        UserItem.Index = 0;
                         PlayObject.SysMsg("装备破碎!!!", MsgColor.Red, MsgType.Hint);
                         break;
                     case 2:
@@ -2004,7 +2004,7 @@ namespace GameSvr.Npc
             for (var i = PlayObject.ItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = PlayObject.ItemList[i];
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null && StdItem.Need == nNeed)
                 {
                     PlayObject.SendDelItems(UserItem);
@@ -2015,7 +2015,7 @@ namespace GameSvr.Npc
             for (var i = PlayObject.StorageItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = PlayObject.StorageItemList[i];
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null && StdItem.Need == nNeed)
                 {
                     Dispose(UserItem);
@@ -2043,7 +2043,7 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (!boMatchName || StdItem != null && StdItem.Name.CompareTo(sItemName) == 0)
                 {
                     PlayObject.SendDelItems(UserItem);
@@ -2058,7 +2058,7 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (!boMatchName || StdItem != null && StdItem.Name.CompareTo(sItemName) == 0)
                 {
                     Dispose(UserItem);
@@ -2072,10 +2072,10 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (!boMatchName || StdItem != null && StdItem.Name.CompareTo(sItemName) == 0)
                 {
-                    UserItem.wIndex = 0;
+                    UserItem.Index = 0;
                 }
             }
         }
@@ -2652,7 +2652,7 @@ namespace GameSvr.Npc
                         {
                             PlayObject.ItemList.Add(UserItem);
                             PlayObject.SendAddItem(UserItem);
-                            StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
@@ -2668,7 +2668,7 @@ namespace GameSvr.Npc
                         UserItem = new UserItem();
                         if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
-                            StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
@@ -3466,7 +3466,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
-                            StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                            StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem != null)
                             {
                                 if (StdItem.StdMode == 40)
@@ -3482,11 +3482,11 @@ namespace GameSvr.Npc
                                 MapItem = new MapItem();
                                 MapItem.UserItem = UserItem;
                                 MapItem.Name = StdItem.Name;
-                                var NameCorlr = "@" + M2Share.ItemUnit.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
+                                var NameCorlr = "@" + M2Share.CustomItemMgr.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
                                 var sUserItemName = "";
                                 if (UserItem.Desc[13] == 1)
                                 {
-                                    sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
+                                    sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(UserItem.MakeIndex, UserItem.Index);
                                     if (sUserItemName != "")
                                     {
                                         MapItem.Name = sUserItemName;

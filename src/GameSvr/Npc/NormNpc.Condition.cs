@@ -1146,7 +1146,7 @@ namespace GameSvr.Npc
                 return result;
             }
             var UserItem = PlayObject.UseItems[nWhere];
-            if (UserItem.wIndex == 0)
+            if (UserItem.Index == 0)
             {
                 return result;
             }
@@ -1197,11 +1197,11 @@ namespace GameSvr.Npc
                 return result;
             }
             var UserItem = PlayObject.UseItems[nWhere];
-            if (UserItem == null && UserItem.wIndex == 0)
+            if (UserItem == null && UserItem.Index == 0)
             {
                 return result;
             }
-            var Stditem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+            var Stditem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if ((Stditem != null) && (Stditem.StdMode == nType))
             {
                 result = true;
@@ -1951,7 +1951,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKUSEITEM);
                 return result;
             }
-            if (PlayObject.UseItems[nWhere].wIndex > 0)
+            if (PlayObject.UseItems[nWhere].Index > 0)
             {
                 result = true;
             }

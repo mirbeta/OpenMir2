@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
                 var UserItem = new UserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref UserItem))
                 {
-                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem != null && StdItem.StdMode == 43)
                     {
                         if (PlayObject.IsAddWeightAvailable(StdItem.Weight * nMineCount))

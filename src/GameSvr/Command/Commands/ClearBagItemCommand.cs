@@ -39,7 +39,7 @@ namespace GameSvr.Command.Commands
                     }
                     DelList.Add(new DeleteItem()
                     {
-                        ItemName = M2Share.WorldEngine.GetStdItemName(UserItem.wIndex),
+                        ItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index),
                         MakeIndex = UserItem.MakeIndex
                     });
                     UserItem = null;

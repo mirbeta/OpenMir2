@@ -473,7 +473,7 @@ namespace GameSvr.World
                             if (CopyToUserItemFromName(itemName, ref userItem))
                             {
                                 userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
-                                var stdItem = GetStdItem(userItem.wIndex);
+                                var stdItem = GetStdItem(userItem.Index);
                                 if (stdItem == null) continue;
                                 if (M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率
                                 {
@@ -483,7 +483,7 @@ namespace GameSvr.World
                                 {
                                     if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                     {
-                                        stdItem.RandomUpgradeUnknownItem(userItem);
+                                        stdItem.RandomSetUnknownItem(userItem);
                                     }
                                 }
                                 mon.ItemList.Add(userItem);

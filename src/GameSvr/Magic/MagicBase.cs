@@ -50,9 +50,9 @@ namespace GameSvr.Magic
             }
             StdItem amuletStdItem = null;
             Idx = 0;
-            if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
+            if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0)
             {
-                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
+                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
@@ -74,9 +74,9 @@ namespace GameSvr.Magic
                     }
                 }
             }
-            if (PlayObject.UseItems[Grobal2.U_BUJUK] != null && PlayObject.UseItems[Grobal2.U_BUJUK].wIndex > 0)
+            if (PlayObject.UseItems[Grobal2.U_BUJUK] != null && PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0)
             {
-                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
+                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_BUJUK].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
@@ -120,7 +120,7 @@ namespace GameSvr.Magic
             {
                 PlayObject.UseItems[Idx].Dura = 0;
                 PlayObject.SendDelItems(PlayObject.UseItems[Idx]);
-                PlayObject.UseItems[Idx].wIndex = 0;
+                PlayObject.UseItems[Idx].Index = 0;
             }
         }
     }

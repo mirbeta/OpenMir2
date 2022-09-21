@@ -242,9 +242,9 @@ namespace GameSvr.Player
             // 检查身上的装备有没不符合
             for (var i = 0; i < UseItems.Length; i++)
             {
-                if (UseItems[i] != null && UseItems[i].wIndex > 0)
+                if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (StdItem != null)
                     {
                         if (!CheckItemsNeed(StdItem))
@@ -267,14 +267,14 @@ namespace GameSvr.Player
                             if (boTakeItem)
                             {
                                 SendDelItems(UseItems[i]);
-                                UseItems[i].wIndex = 0;
+                                UseItems[i].Index = 0;
                                 RecalcAbilitys();
                             }
                         }
                     }
                     else
                     {
-                        UseItems[i].wIndex = 0;
+                        UseItems[i].Index = 0;
                     }
                 }
             }
@@ -1640,7 +1640,7 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_CLOSEDOOR, 0, ProcessMsg.nParam1, ProcessMsg.nParam2, 0, "");
                     break;
                 case Grobal2.RM_SENDUSEITEMS:
-                    SendUseitems();
+                    SendUseItems();
                     break;
                 case Grobal2.RM_WEIGHTCHANGED:
                     SendDefMessage(Grobal2.SM_WEIGHTCHANGED, Abil.Weight, Abil.WearWeight, Abil.HandWeight, 0, "");
@@ -2039,10 +2039,10 @@ namespace GameSvr.Player
                     {
                         continue;
                     }
-                    StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (StdItem != null)
                     {
-                        if ((StdItem.Reserved & 8) != 0)
+                        if ((StdItem.ItemDesc & 8) != 0)
                         {
                             if (delList == null)
                             {
@@ -2053,7 +2053,7 @@ namespace GameSvr.Player
                             {
                                 M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                             }
-                            UseItems[i].wIndex = 0;
+                            UseItems[i].Index = 0;
                         }
                     }
                 }
@@ -2064,17 +2064,17 @@ namespace GameSvr.Player
                     {
                         continue;
                     }
-                    if (UseItems[i] != null && M2Share.InDisableTakeOffList(UseItems[i].wIndex))
+                    if (UseItems[i] != null && M2Share.InDisableTakeOffList(UseItems[i].Index))
                     {
                         continue;
                     }
                     // 检查是否在禁止取下列表,如果在列表中则不掉此物品
                     if (DropItemDown(UseItems[i], 2, true, BaseObject, this))
                     {
-                        StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                         if (StdItem != null)
                         {
-                            if ((StdItem.Reserved & 10) == 0)
+                            if ((StdItem.ItemDesc & 10) == 0)
                             {
                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                 {
@@ -2084,11 +2084,11 @@ namespace GameSvr.Player
                                     }
                                     delList.Add(new DeleteItem()
                                     {
-                                        ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].wIndex),
+                                        ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index),
                                         MakeIndex = this.UseItems[i].MakeIndex
                                     });
                                 }
-                                UseItems[i].wIndex = 0;
+                                UseItems[i].Index = 0;
                             }
                         }
                     }

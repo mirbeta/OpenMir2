@@ -63,7 +63,7 @@ namespace GameSvr.Actor
                 }
                 if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
                 {
-                    if ((AttackTarget != null) && (UseItems[Grobal2.U_WEAPON].wIndex > 0))
+                    if ((AttackTarget != null) && (UseItems[Grobal2.U_WEAPON].Index > 0))
                     {
                         CheckWeaponUpgrade();
                     }
@@ -157,7 +157,7 @@ namespace GameSvr.Actor
             {
                 if (UserItem.Desc[ItemAttr.WeaponUpgrade] == 1)
                 {
-                    UserItem.wIndex = 0;
+                    UserItem.Index = 0;
                 }
                 if (HUtil32.RangeInDefined(UserItem.Desc[ItemAttr.WeaponUpgrade], 10, 13))
                 {
@@ -174,7 +174,7 @@ namespace GameSvr.Actor
             }
             else
             {
-                UserItem.wIndex = 0;
+                UserItem.Index = 0;
             }
             UserItem.Desc[ItemAttr.WeaponUpgrade] = 0;
         }
@@ -187,13 +187,13 @@ namespace GameSvr.Actor
                 CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
                 PlayObject PlayObject = null;
                 StdItem StdItem = null;
-                if (UseItems[Grobal2.U_WEAPON].wIndex == 0)
+                if (UseItems[Grobal2.U_WEAPON].Index == 0)
                 {
                     SysMsg(M2Share.g_sTheWeaponBroke, MsgColor.Red, MsgType.Hint);
                     PlayObject = this as PlayObject;
                     PlayObject.SendDelItems(useItems);
                     SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
-                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
                     if (StdItem != null)
                     {
                         if (StdItem.NeedIdentify == 1)
@@ -208,7 +208,7 @@ namespace GameSvr.Actor
                     SysMsg(M2Share.sTheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
                     PlayObject = this as PlayObject;
                     PlayObject.SendUpdateItem(UseItems[Grobal2.U_WEAPON]);
-                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog("20" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -503,7 +503,7 @@ namespace GameSvr.Actor
                 if (nPower > 0)
                 {
                     nPower = AttackTarget.GetHitStruckDamage(this, nPower);
-                    nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - AddAbil.btWeaponStrong;
+                    nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong;
                 }
                 if (nPower > 0)
                 {
@@ -696,7 +696,7 @@ namespace GameSvr.Actor
                 {
                     TrainCurrentSkill(wHitMode);
                 }
-                if ((nWeaponDamage > 0) && (UseItems[Grobal2.U_WEAPON] != null) && (UseItems[Grobal2.U_WEAPON].wIndex > 0))
+                if ((nWeaponDamage > 0) && (UseItems[Grobal2.U_WEAPON] != null) && (UseItems[Grobal2.U_WEAPON].Index > 0))
                 {
                     DoDamageWeapon(nWeaponDamage);
                 }

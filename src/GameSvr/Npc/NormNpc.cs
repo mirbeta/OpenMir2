@@ -604,55 +604,55 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINLONG>", sText);
                     return;
                 case "$DRESS":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$DRESS>", sText);
                     return;
                 case "$WEAPON":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$WEAPON>", sText);
                     return;
                 case "$RIGHTHAND":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RIGHTHAND>", sText);
                     return;
                 case "$HELMET":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$HELMET>", sText);
                     return;
                 case "$NECKLACE":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$NECKLACE>", sText);
                     return;
                 case "$RING_R":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_R>", sText);
                     return;
                 case "$RING_L":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_L>", sText);
                     return;
                 case "$ARMRING_R":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_R>", sText);
                     return;
                 case "$ARMRING_L":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_L>", sText);
                     return;
                 case "$BUJUK":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BUJUK>", sText);
                     return;
                 case "$BELT":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BELT>", sText);
                     return;
                 case "$BOOTS":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BOOTS>", sText);
                     return;
                 case "$CHARM":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].wIndex);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$CHARM>", sText);
                     return;
                 case "$IPADDR":
@@ -1311,7 +1311,7 @@ namespace GameSvr.Npc
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 var n18 = HUtil32.Str_ToInt(s14, -1);
-                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].wIndex > 0)
+                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
                 {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.UseItems[n18].MakeIndex.ToString());
                 }
@@ -1325,9 +1325,9 @@ namespace GameSvr.Npc
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 var n18 = HUtil32.Str_ToInt(s14, -1);
-                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].wIndex > 0)
+                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
                 {
-                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[n18].wIndex));
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[n18].Index));
                 }
                 else
                 {

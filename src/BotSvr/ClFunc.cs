@@ -1029,10 +1029,10 @@ namespace BotSvr
             return result;
         }
 
-        public static int GetTakeOnPosition(ClientStdItem smode, ClientItem[] UseItems, bool bPos)
+        public static int GetTakeOnPosition(ClientItem smode, ClientItem[] UseItems, bool bPos)
         {
             int result = -1;
-            switch (smode.StdMode)
+            switch (smode.Item.StdMode)
             {
                 case 5:
                 case 6:
@@ -1097,7 +1097,7 @@ namespace BotSvr
                     break;
                 // Modify the A .. B: 41 .. 50
                 case 41:
-                    if (!(smode.Shape >= 9 && smode.Shape <= 45))
+                    if (!(smode.Item.Shape >= 9 && smode.Item.Shape <= 45))
                     {
                         result = Grobal2.U_BUJUK;
                     }
@@ -1115,7 +1115,7 @@ namespace BotSvr
             return result;
         }
 
-        public static int GetTakeOnPosition(ClientStdItem smode, ClientItem[] UseItems)
+        public static int GetTakeOnPosition(ClientItem smode, ClientItem[] UseItems)
         {
             return GetTakeOnPosition(smode, UseItems, false);
         }

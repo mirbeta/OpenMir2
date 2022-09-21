@@ -779,7 +779,7 @@ namespace GameSvr.Player
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
                     UserItem = ItemList[i];
-                    if (!string.IsNullOrEmpty(M2Share.WorldEngine.GetStdItemName(UserItem.wIndex))) continue;
+                    if (!string.IsNullOrEmpty(M2Share.WorldEngine.GetStdItemName(UserItem.Index))) continue;
                     Dispose(ItemList[i]);
                     ItemList.RemoveAt(i);
                 }
@@ -788,8 +788,8 @@ namespace GameSvr.Player
                 {
                     for (var i = 0; i < UseItems.Length; i++)
                     {
-                        if (UseItems[i] == null || UseItems[i].wIndex <= 0) continue;
-                        var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].wIndex);
+                        if (UseItems[i] == null || UseItems[i].Index <= 0) continue;
+                        var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                         if (StdItem != null)
                         {
                             if (!M2Share.CheckUserItems(i, StdItem))
@@ -799,12 +799,12 @@ namespace GameSvr.Player
                                 {
                                     ItemList.Insert(0, UserItem);
                                 }
-                                UseItems[i].wIndex = 0;
+                                UseItems[i].Index = 0;
                             }
                         }
                         else
                         {
-                            UseItems[i].wIndex = 0;
+                            UseItems[i].Index = 0;
                         }
                     }
                 }
@@ -812,11 +812,11 @@ namespace GameSvr.Player
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
                     UserItem = ItemList[i];
-                    var sItemName = M2Share.WorldEngine.GetStdItemName(UserItem.wIndex);
+                    var sItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
                     for (var j = i - 1; j >= 0; j--)
                     {
                         var UserItem1 = ItemList[j];
-                        if (M2Share.WorldEngine.GetStdItemName(UserItem1.wIndex) == sItemName && UserItem.MakeIndex == UserItem1.MakeIndex)
+                        if (M2Share.WorldEngine.GetStdItemName(UserItem1.Index) == sItemName && UserItem.MakeIndex == UserItem1.MakeIndex)
                         {
                             ItemList.RemoveAt(j);
                             break;
@@ -1021,15 +1021,15 @@ namespace GameSvr.Player
         /// <returns></returns>
         private bool WeaptonMakeLuck()
         {
-            if (UseItems[Grobal2.U_WEAPON] == null && UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (UseItems[Grobal2.U_WEAPON] == null && UseItems[Grobal2.U_WEAPON].Index <= 0)
             {
                 return false;
             }
             var nRand = 0;
-            var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].wIndex);
+            var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
             if (StdItem != null)
             {
-                nRand = Math.Abs(StdItem.Dc2 - StdItem.Dc) / 5;
+                nRand = Math.Abs(HUtil32.HiByte(StdItem.DC) - HUtil32.LoByte(StdItem.DC)) / 5;
             }
             if (M2Share.RandomNumber.Random(M2Share.Config.WeaponMakeUnLuckRate) == 1)
             {
@@ -1087,7 +1087,7 @@ namespace GameSvr.Player
                 return false;
             }
             var UserItem = UseItems[Grobal2.U_WEAPON];
-            if (UserItem.wIndex <= 0 || UserItem.DuraMax <= UserItem.Dura)
+            if (UserItem.Index <= 0 || UserItem.DuraMax <= UserItem.Dura)
             {
                 return false;
             }
@@ -1106,7 +1106,7 @@ namespace GameSvr.Player
         /// <returns></returns>
         private bool SuperRepairWeapon()
         {
-            if (UseItems[Grobal2.U_WEAPON] == null && UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (UseItems[Grobal2.U_WEAPON] == null && UseItems[Grobal2.U_WEAPON].Index <= 0)
             {
                 return false;
             }
@@ -1703,7 +1703,7 @@ namespace GameSvr.Player
                                 }
                                 DelList.Add(new DeleteItem()
                                 {
-                                    ItemName = M2Share.WorldEngine.GetStdItemName(pu.wIndex),
+                                    ItemName = M2Share.WorldEngine.GetStdItemName(pu.Index),
                                     MakeIndex = pu.MakeIndex
                                 });
                             }

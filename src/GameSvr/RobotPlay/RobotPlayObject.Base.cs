@@ -162,7 +162,7 @@ namespace GameSvr.RobotPlay
                                         {
                                             continue;
                                         }
-                                        if (UseItems[nWhere].wIndex <= 0)
+                                        if (UseItems[nWhere].Index <= 0)
                                         {
                                             StdItem = M2Share.WorldEngine.GetStdItem(m_UseItemNames[nWhere]);
                                             if (StdItem != null)
@@ -193,7 +193,7 @@ namespace GameSvr.RobotPlay
                                                 UserItem = ItemList[j];
                                                 if (UserItem != null)
                                                 {
-                                                    StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                                                    StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                                                     if (StdItem != null)
                                                     {
                                                         boFind = false;
@@ -225,9 +225,9 @@ namespace GameSvr.RobotPlay
                                     }
                                     for (nWhere = 0; nWhere <= UseItems.Length; nWhere++)
                                     {
-                                        if (UseItems[nWhere] != null && UseItems[nWhere].wIndex > 0)
+                                        if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
-                                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nWhere].wIndex);
+                                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nWhere].Index);
                                             if (StdItem != null)
                                             {
                                                 if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && StdItem.StdMode != 43)

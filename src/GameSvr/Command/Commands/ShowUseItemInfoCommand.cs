@@ -32,11 +32,11 @@ namespace GameSvr.Command.Commands
             for (var i = 0; i < m_PlayObject.UseItems.Length; i++)
             {
                 var UserItem = m_PlayObject.UseItems[i];
-                if (UserItem.wIndex == 0)
+                if (UserItem.Index == 0)
                 {
                     continue;
                 }
-                PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", M2Share.GetUseItemName(i), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex,
+                PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", M2Share.GetUseItemName(i), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index,
                     UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax), MsgColor.Blue, MsgType.Hint);
             }
         }

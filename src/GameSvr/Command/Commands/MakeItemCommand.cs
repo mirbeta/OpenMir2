@@ -51,7 +51,7 @@ namespace GameSvr.Command.Commands
                 UserItem UserItem = null;
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
-                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5)
                     {
                         UserItem = null;
@@ -77,9 +77,9 @@ namespace GameSvr.Command.Commands
                     {
                         M2Share.AddGameDataLog("5" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX +
                            "\09" + PlayObject.CurrY + "\09" + PlayObject.CharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
-                           HUtil32.LoWord(StdItem.Dc) + "/" + HUtil32.HiWord(StdItem.Dc) + ")" + "(" + HUtil32.LoWord(StdItem.Mc) + "/" + HUtil32.HiWord(StdItem.Mc) + ")" + "(" +
-                           HUtil32.LoWord(StdItem.Sc) + "/" + HUtil32.HiWord(StdItem.Sc) + ")" + "(" + HUtil32.LoWord(StdItem.Ac) + "/" +
-                           HUtil32.HiWord(StdItem.Ac) + ")" + "(" + HUtil32.LoWord(StdItem.Mac) + "/" + HUtil32.HiWord(StdItem.Mac) + ")" + UserItem.Desc[0]
+                           HUtil32.LoWord(StdItem.DC) + "/" + HUtil32.HiWord(StdItem.DC) + ")" + "(" + HUtil32.LoWord(StdItem.MC) + "/" + HUtil32.HiWord(StdItem.MC) + ")" + "(" +
+                           HUtil32.LoWord(StdItem.SC) + "/" + HUtil32.HiWord(StdItem.SC) + ")" + "(" + HUtil32.LoWord(StdItem.AC) + "/" +
+                           HUtil32.HiWord(StdItem.AC) + ")" + "(" + HUtil32.LoWord(StdItem.MAC) + "/" + HUtil32.HiWord(StdItem.MAC) + ")" + UserItem.Desc[0]
                            + "/" + UserItem.Desc[1] + "/" + UserItem.Desc[2] + "/" + UserItem.Desc[3] + "/" + UserItem.Desc[4] + "/" + UserItem.Desc[5] + "/" + UserItem.Desc[6]
                            + "/" + UserItem.Desc[7] + "/" + UserItem.Desc[8] + "/" + UserItem.Desc[14] + "\09" + PlayObject.CharName);
                     }

@@ -43,7 +43,7 @@ namespace GameSvr.Command.Commands
                 }
 
                 UserItem = m_PlayObject.ItemList[i];
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.SendDelItems(UserItem);

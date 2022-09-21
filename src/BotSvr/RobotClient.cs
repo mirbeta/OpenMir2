@@ -1501,7 +1501,7 @@ namespace BotSvr
                             //}
                             return;
                         }
-                        where = ClFunc.GetTakeOnPosition(MShare.g_ItemArr[idx].Item, MShare.g_UseItems, true);
+                        where = ClFunc.GetTakeOnPosition(MShare.g_ItemArr[idx], MShare.g_UseItems, true);
                         if (where >= 0 && where <= 13)
                         {
                             takeon = true;
@@ -1593,7 +1593,7 @@ namespace BotSvr
                         return;
                     }
 
-                    where = ClFunc.GetTakeOnPosition(MShare.g_MovingItem.Item.Item, MShare.g_UseItems, true);
+                    where = ClFunc.GetTakeOnPosition(MShare.g_MovingItem.Item, MShare.g_UseItems, true);
                     if (where >= 0 && where <= 13)
                     {
                         takeon = true;

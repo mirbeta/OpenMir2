@@ -520,7 +520,7 @@ namespace DBSvr.Storage.MySQL
                     if ((nPosition >= 0) && (nPosition <= 9))
                     {
                         HumanRCD.Data.HumItems[nPosition].MakeIndex = dr.GetInt32("FLD_MAKEINDEX");
-                        HumanRCD.Data.HumItems[nPosition].wIndex = dr.GetUInt16("FLD_STDINDEX");
+                        HumanRCD.Data.HumItems[nPosition].Index = dr.GetUInt16("FLD_STDINDEX");
                         HumanRCD.Data.HumItems[nPosition].Dura = dr.GetUInt16("FLD_DURA");
                         HumanRCD.Data.HumItems[nPosition].DuraMax = dr.GetUInt16("FLD_DURAMAX");
                         for (var ii = 0; ii < 14; ii++)
@@ -535,7 +535,7 @@ namespace DBSvr.Storage.MySQL
                             break;
                         }
                         HumanRCD.Data.BagItems[i].MakeIndex = dr.GetInt32("FLD_MAKEINDEX");
-                        HumanRCD.Data.BagItems[i].wIndex = dr.GetUInt16("FLD_STDINDEX");
+                        HumanRCD.Data.BagItems[i].Index = dr.GetUInt16("FLD_STDINDEX");
                         HumanRCD.Data.BagItems[i].Dura = dr.GetUInt16("FLD_DURA");
                         HumanRCD.Data.BagItems[i].DuraMax = dr.GetUInt16("FLD_DURAMAX");
                         for (var ii = 0; ii < 14; ii++)
@@ -581,7 +581,7 @@ namespace DBSvr.Storage.MySQL
                 while (dr.Read())
                 {
                     HumanRCD.Data.StorageItems[i].MakeIndex = dr.GetInt32("FLD_MAKEINDEX");
-                    HumanRCD.Data.StorageItems[i].wIndex = dr.GetUInt16("FLD_STDINDEX");
+                    HumanRCD.Data.StorageItems[i].Index = dr.GetUInt16("FLD_STDINDEX");
                     HumanRCD.Data.StorageItems[i].Dura = dr.GetUInt16("FLD_DURA");
                     HumanRCD.Data.StorageItems[i].DuraMax = dr.GetUInt16("FLD_DURAMAX");
                     for (var ii = 0; ii < 14; ii++)
@@ -923,7 +923,7 @@ namespace DBSvr.Storage.MySQL
 
                 for (var i = 0; i < hd.BagItems.Length; i++)
                 {
-                    if ((hd.BagItems[i].wIndex > 0) && (hd.BagItems[i].MakeIndex > 0))
+                    if ((hd.BagItems[i].Index > 0) && (hd.BagItems[i].MakeIndex > 0))
                     {
                         command.CommandText = strSql.ToString();
                         command.Parameters.Clear();
@@ -931,7 +931,7 @@ namespace DBSvr.Storage.MySQL
                         command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
                         command.Parameters.AddWithValue("@FLD_POSITION", -1);
                         command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.BagItems[i].MakeIndex);
-                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
+                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].Index);
                         command.Parameters.AddWithValue("@FLD_DURA", hd.BagItems[i].Dura);
                         command.Parameters.AddWithValue("@FLD_DURAMAX", hd.BagItems[i].DuraMax);
                         command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].Desc[0]);
@@ -962,7 +962,7 @@ namespace DBSvr.Storage.MySQL
 
                 for (var i = 0; i < hd.HumItems.Length; i++)
                 {
-                    if ((hd.HumItems[i].wIndex > 0) && (hd.HumItems[i].MakeIndex > 0))
+                    if ((hd.HumItems[i].Index > 0) && (hd.HumItems[i].MakeIndex > 0))
                     {
                         command.CommandText = strSql.ToString();
                         command.Parameters.Clear();
@@ -970,7 +970,7 @@ namespace DBSvr.Storage.MySQL
                         command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
                         command.Parameters.AddWithValue("@FLD_POSITION", i);
                         command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.HumItems[i].MakeIndex);
-                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.HumItems[i].wIndex);
+                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.HumItems[i].Index);
                         command.Parameters.AddWithValue("@FLD_DURA", hd.HumItems[i].Dura);
                         command.Parameters.AddWithValue("@FLD_DURAMAX", hd.HumItems[i].DuraMax);
                         command.Parameters.AddWithValue("@FLD_VALUE0", hd.HumItems[i].Desc[0]);
@@ -1040,14 +1040,14 @@ namespace DBSvr.Storage.MySQL
                     {
                         continue;
                     }
-                    if ((hd.StorageItems[i].wIndex > 0) && (hd.StorageItems[i].MakeIndex > 0))
+                    if ((hd.StorageItems[i].Index > 0) && (hd.StorageItems[i].MakeIndex > 0))
                     {
                         command.CommandText = strSql.ToString();
                         command.Parameters.Clear();
                         command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
                         command.Parameters.AddWithValue("@FLD_POSITION", -1);
                         command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.BagItems[i].MakeIndex);
-                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
+                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].Index);
                         command.Parameters.AddWithValue("@FLD_DURA", hd.BagItems[i].Dura);
                         command.Parameters.AddWithValue("@FLD_DURAMAX", hd.BagItems[i].DuraMax);
                         command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].Desc[0]);

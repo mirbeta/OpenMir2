@@ -2311,67 +2311,67 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$DRESS":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEAPON":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RIGHTHAND":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$HELMET":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$NECKLACE":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_R":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_L":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_R":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_L":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BUJUK":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BELT":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BOOTS":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CHARM":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].wIndex);
+                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].Index);
                     nDataType = 0;
                     result = true;
                     return result;

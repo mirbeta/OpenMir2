@@ -92,11 +92,11 @@ namespace GameSvr.Player
                         sUserItemName = "";
                         if (UserItem.Desc[13] == 1)
                         {
-                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
+                            sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(UserItem.MakeIndex, UserItem.Index);
                         }
                         if (sUserItemName == "")
                         {
-                            sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.wIndex);
+                            sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && m_SellOffItemList.Count < 9)
                         {
@@ -156,11 +156,11 @@ namespace GameSvr.Player
                     {
                         if (UserItem.Desc[13] == 1)
                         {
-                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex); // 取自定义物品名称
+                            sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(UserItem.MakeIndex, UserItem.Index); // 取自定义物品名称
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.wIndex);
+                            sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -213,7 +213,7 @@ namespace GameSvr.Player
                                 {
                                     continue;
                                 }
-                                StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
+                                StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
                                 if (StdItem != null)
                                 {
                                     //UserItem = new TUserItem();
@@ -234,7 +234,7 @@ namespace GameSvr.Player
                                     }
                                 }
                                 // 是金刚石
-                                else if (DealOffInfo.UseItems[j].MakeIndex > 0 && DealOffInfo.UseItems[j].wIndex == short.MaxValue && DealOffInfo.UseItems[j].Dura == short.MaxValue && DealOffInfo.UseItems[j].DuraMax == short.MaxValue)
+                                else if (DealOffInfo.UseItems[j].MakeIndex > 0 && DealOffInfo.UseItems[j].Index == short.MaxValue && DealOffInfo.UseItems[j].Dura == short.MaxValue && DealOffInfo.UseItems[j].DuraMax == short.MaxValue)
                                 {
                                     Gold += DealOffInfo.UseItems[j].MakeIndex; // 增加金刚石
                                     this.GameGoldChanged(); // 更新金刚石数量
@@ -343,7 +343,7 @@ namespace GameSvr.Player
                                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (var j = 0; j <= 9; j++)
                                 {
-                                    StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].wIndex);
+                                    StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].Index);
                                     if (StdItem != null)
                                     {
                                         //UserItem = new TUserItem();
@@ -366,7 +366,7 @@ namespace GameSvr.Player
                                         }
                                     }
                                     // 是金刚石
-                                    else if (dealOffInfo.UseItems[j].MakeIndex > 0 && dealOffInfo.UseItems[j].wIndex == short.MaxValue && dealOffInfo.UseItems[j].Dura == short.MaxValue && dealOffInfo.UseItems[j].DuraMax == short.MaxValue)
+                                    else if (dealOffInfo.UseItems[j].MakeIndex > 0 && dealOffInfo.UseItems[j].Index == short.MaxValue && dealOffInfo.UseItems[j].Dura == short.MaxValue && dealOffInfo.UseItems[j].DuraMax == short.MaxValue)
                                     {
                                         Gold += dealOffInfo.UseItems[j].MakeIndex; // 增加金刚石
                                         this.SysMsg(dealOffInfo.UseItems[j].MakeIndex + " 颗金刚石增加", MsgColor.Blue, MsgType.Hint);
@@ -543,7 +543,7 @@ namespace GameSvr.Player
                     for (var i = 0; i < m_SellOffItemList.Count; i++)
                     {
                         UserItem = m_SellOffItemList[i];
-                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null && UserItem != null && UserItem.MakeIndex > 0)
                         {
                             DealOffInfo.UseItems[i] = UserItem;
@@ -556,7 +556,7 @@ namespace GameSvr.Player
                     {
                         continue;
                     }
-                    StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
+                    StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
                     if (StdItem == null && nGameDiamond > 0 && nGameDiamond < 10000 && nCode == short.MaxValue)// 物品是金刚石
                     {
                         if (nGameDiamond > Gold) // 金刚石数量大于玩家的数量时则反回失败
@@ -569,7 +569,7 @@ namespace GameSvr.Player
                         Gold -= nGameDiamond;
                         this.GameGoldChanged(); // 更新金刚石数量
                         DealOffInfo.UseItems[j].MakeIndex = nGameDiamond; // 金刚石数量
-                        DealOffInfo.UseItems[j].wIndex = ushort.MaxValue;
+                        DealOffInfo.UseItems[j].Index = ushort.MaxValue;
                         DealOffInfo.UseItems[j].Dura = ushort.MaxValue;
                         DealOffInfo.UseItems[j].DuraMax = ushort.MaxValue;
                         break;

@@ -18,7 +18,6 @@ using GameSvr.Services;
 using GameSvr.World;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Common;
@@ -125,7 +124,7 @@ namespace GameSvr
         public static GameGateMgr GateMgr = null;
         public static ConcurrentQueue<string> ItemLogQueue = null;
         public static MapManager MapMgr = null;
-        public static CustomItem ItemUnit = null;
+        public static CustomItem CustomItemMgr = null;
         public static MagicManager MagicMgr = null;
         public static NoticeManager NoticeMgr = null;
         public static GuildManager GuildMgr = null;

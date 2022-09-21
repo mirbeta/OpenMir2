@@ -127,7 +127,7 @@ namespace GameSvr.Magic
             {
                 PlayObject.UseItems[Grobal2.U_ARMRINGL].Dura = 0;
                 PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_ARMRINGL]);
-                PlayObject.UseItems[Grobal2.U_ARMRINGL].wIndex = 0;
+                PlayObject.UseItems[Grobal2.U_ARMRINGL].Index = 0;
             }
         }
 
@@ -218,7 +218,7 @@ namespace GameSvr.Magic
                     {
                         if (MagicBase.CheckAmulet(PlayObject, 1, 2, ref nAmuletIdx))
                         {
-                            var StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].wIndex);
+                            var StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].Index);
                             if (StdItem != null)
                             {
                                 MagicBase.UseAmulet(PlayObject, 1, 2, ref nAmuletIdx);
@@ -902,7 +902,7 @@ namespace GameSvr.Magic
                 {
                     if (MagicBase.CheckAmulet(PlayObject, 1, 2, ref nAmuletIdx))
                     {
-                        var StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].wIndex);
+                        var StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nAmuletIdx].Index);
                         if (StdItem != null)
                         {
                             MagicBase.UseAmulet(PlayObject, 1, 2, ref nAmuletIdx);
