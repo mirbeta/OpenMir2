@@ -493,19 +493,19 @@ namespace GameSvr.Magic
                     {
                         if (M2Share.RandomNumber.Random(7) - (UserMagic.Level + 1) < 0)
                         {
-                            if (TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DECHEALTH] != 0)
+                            if (TargeTBaseObject.StatusArr[Grobal2.POISON_DECHEALTH] != 0)
                             {
-                                TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DECHEALTH] = 1;
+                                TargeTBaseObject.StatusArr[Grobal2.POISON_DECHEALTH] = 1;
                                 boTrain = true;
                             }
-                            if (TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] != 0)
+                            if (TargeTBaseObject.StatusArr[Grobal2.POISON_DAMAGEARMOR] != 0)
                             {
-                                TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] = 1;
+                                TargeTBaseObject.StatusArr[Grobal2.POISON_DAMAGEARMOR] = 1;
                                 boTrain = true;
                             }
-                            if (TargeTBaseObject.StatusTimeArr[Grobal2.POISON_STONE] != 0)
+                            if (TargeTBaseObject.StatusArr[Grobal2.POISON_STONE] != 0)
                             {
-                                TargeTBaseObject.StatusTimeArr[Grobal2.POISON_STONE] = 1;
+                                TargeTBaseObject.StatusArr[Grobal2.POISON_STONE] = 1;
                                 boTrain = true;
                             }
                         }
@@ -664,7 +664,7 @@ namespace GameSvr.Magic
 
         public bool MagMakePrivateTransparent(BaseObject BaseObject, ushort nHTime)
         {
-            if (BaseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0)
+            if (BaseObject.StatusArr[Grobal2.STATE_TRANSPARENT] > 0)
             {
                 return false;
             }
@@ -683,7 +683,7 @@ namespace GameSvr.Magic
             }
             BaseObjectList.Clear();
             BaseObjectList = null;
-            BaseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] = nHTime;
+            BaseObject.StatusArr[Grobal2.STATE_TRANSPARENT] = nHTime;
             BaseObject.CharStatus = BaseObject.GetCharStatus();
             BaseObject.StatusChanged();
             BaseObject.HideMode = true;
@@ -1224,7 +1224,7 @@ namespace GameSvr.Magic
                 var TargeTBaseObject = BaseObjectList[i];
                 if (BaseObject.IsProperFriend(TargeTBaseObject))
                 {
-                    if (TargeTBaseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
+                    if (TargeTBaseObject.StatusArr[Grobal2.STATE_TRANSPARENT] == 0)
                     {
                         TargeTBaseObject.SendDelayMsg(TargeTBaseObject, Grobal2.RM_TRANSPARENT, 0, nHTime, 0, 0, "", 800);
                         result = true;

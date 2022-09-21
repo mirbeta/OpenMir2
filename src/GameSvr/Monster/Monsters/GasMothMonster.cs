@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             var baseObject = base.sub_4A9C78(bt05);
             if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.HideMode)
             {
-                baseObject.StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                baseObject.StatusArr[Grobal2.STATE_TRANSPARENT] = 1;
             }
             return baseObject;
         }

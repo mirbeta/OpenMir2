@@ -581,13 +581,13 @@ namespace GameSvr.Actor
                 bool boNeedRecalc = false;
                 for (var i = 0; i < StatusArrTick.Length; i++)
                 {
-                    if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
+                    if ((StatusArr[i] > 0) && (StatusArr[i] < 60000))
                     {
                         if ((HUtil32.GetTickCount() - StatusArrTick[i]) > 1000)
                         {
-                            StatusTimeArr[i] -= 1;
+                            StatusArr[i] -= 1;
                             StatusArrTick[i] += 1000;
-                            if (StatusTimeArr[i] == 0)
+                            if (StatusArr[i] == 0)
                             {
                                 boChg = true;
                                 switch (i)
@@ -608,16 +608,16 @@ namespace GameSvr.Actor
                                         break;
                                 }
                             }
-                            else if (StatusTimeArr[i] == 10)
+                            else if (StatusArr[i] == 10)
                             {
                                 if (i == Grobal2.STATE_DEFENCEUP)
                                 {
-                                    SysMsg("防御力" + StatusTimeArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 }
                                 if (i == Grobal2.STATE_MAGDEFENCEUP)
                                 {
-                                    SysMsg("魔法防御力" + StatusTimeArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    SysMsg("魔法防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 }
                             }
@@ -705,7 +705,7 @@ namespace GameSvr.Actor
                 if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
                 {
                     PoisoningTick = HUtil32.GetTickCount();
-                    if (StatusTimeArr[Grobal2.POISON_DECHEALTH] > 0)
+                    if (StatusArr[Grobal2.POISON_DECHEALTH] > 0)
                     {
                         if (Animal)
                         {
@@ -1489,7 +1489,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            StatusTimeArr[Grobal2.POISON_STONE] = 1;
+                            StatusArr[Grobal2.POISON_STONE] = 1;
                             FastParalysis = false;
                         }
                         break;
@@ -1520,7 +1520,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            StatusTimeArr[Grobal2.POISON_STONE] = 1;
+                            StatusArr[Grobal2.POISON_STONE] = 1;
                             FastParalysis = false;
                         }
                         break;
@@ -1695,79 +1695,235 @@ namespace GameSvr.Actor
             bool boOldHideMode = HideMode;
             PkDieLostExp = 0;
             PkDieLostLevel = 0;
-            for (var i = 0; i < UseItems.Length; i++)
+            if (Race == Grobal2.RC_PLAYOBJECT || Race == Grobal2.RC_PLAYCLONE)
             {
-                if (UseItems[i] == null)
+
+
+                for (var i = 0; i < UseItems.Length; i++)
                 {
-                    continue;
-                }
-                if ((UseItems[i].Index <= 0) || (UseItems[i].Dura <= 0))
-                {
-                    continue;
-                }
-                var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                if (stdItem == null)
-                {
-                    continue;
-                }
-                ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
-                ApplyItemParametersEx(UseItems[i], ref WAbil);
-                if ((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND) || (i == Grobal2.U_DRESS))
-                {
-                    if (i == Grobal2.U_DRESS)
+                    if (UseItems[i] == null || (UseItems[i].Index <= 0) || (UseItems[i].Dura <= 0))
                     {
-                        Abil.WearWeight += stdItem.Weight;
+                        continue;
+                    }
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    if (stdItem == null)
+                    {
+                        continue;
+                    }
+                    ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
+                    ApplyItemParametersEx(UseItems[i], ref WAbil);
+                    if ((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND) || (i == Grobal2.U_DRESS))
+                    {
+                        if (i == Grobal2.U_DRESS)
+                        {
+                            Abil.WearWeight += stdItem.Weight;
+                        }
+                        else
+                        {
+                            Abil.HandWeight += stdItem.Weight;
+                        }
+                        switch (stdItem.AniCount)
+                        {
+                            case 120:
+                                FastTrain = true;
+                                break;
+                            case 121:
+                                ProbeNecklace = true;
+                                break;
+                            case 145:
+                                GuildMove = true;
+                                break;
+                            case 111:
+                                StatusArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
+                                HideMode = true;
+                                break;
+                            case 112:
+                                Teleport = true;
+                                break;
+                            case 113:
+                                Paralysis = true;
+                                break;
+                            case 114:
+                                Revival = true;
+                                break;
+                            case 115:
+                                FlameRing = true;
+                                break;
+                            case 116:
+                                RecoveryRing = true;
+                                break;
+                            case 117:
+                                AngryRing = true;
+                                break;
+                            case 118:
+                                MagicShield = true;
+                                break;
+                            case 119:
+                                MuscleRing = true;
+                                break;
+                            case 135:
+                                boMoXieSuite[0] = true;
+                                MoXieSuite += stdItem.Weight / 10;
+                                break;
+                            case 138:
+                                HongMoSuite += stdItem.Weight;
+                                break;
+                            case 139:
+                                UnParalysis = true;
+                                break;
+                            case 140:
+                                SuperManItem = true;
+                                break;
+                            case 141:
+                                BoExpItem = true;
+                                ExpItem = ExpItem + (UseItems[i].Dura / M2Share.Config.ItemExpRate);
+                                break;
+                            case 142:
+                                BoPowerItem = true;
+                                PowerItem = PowerItem + (UseItems[i].Dura / M2Share.Config.ItemPowerRate);
+                                break;
+                            case 182:
+                                BoExpItem = true;
+                                ExpItem = ExpItem + (UseItems[i].DuraMax / M2Share.Config.ItemExpRate);
+                                break;
+                            case 183:
+                                BoPowerItem = true;
+                                PowerItem = PowerItem + (UseItems[i].DuraMax / M2Share.Config.ItemPowerRate);
+                                break;
+                            case 143:
+                                UnMagicShield = true;
+                                break;
+                            case 144:
+                                UnRevival = true;
+                                break;
+                            case 170:
+                                AngryRing = true;
+                                break;
+                            case 171:
+                                NoDropItem = true;
+                                break;
+                            case 172:
+                                NoDropUseItem = true;
+                                break;
+                            case 150:// 麻痹护身
+                                Paralysis = true;
+                                MagicShield = true;
+                                break;
+                            case 151:// 麻痹火球
+                                Paralysis = true;
+                                FlameRing = true;
+                                break;
+                            case 152:// 麻痹防御
+                                Paralysis = true;
+                                RecoveryRing = true;
+                                break;
+                            case 153:// 麻痹负载
+                                Paralysis = true;
+                                MuscleRing = true;
+                                break;
+                        }
+                        if (stdItem.Shape == 154)
+                        {
+                            // 护身火球
+                            MagicShield = true;
+                            FlameRing = true;
+                        }
+                        switch (stdItem.AniCount)
+                        {
+                            case 155:// 护身防御
+                                MagicShield = true;
+                                RecoveryRing = true;
+                                break;
+                            case 156:// 护身负载
+                                MagicShield = true;
+                                MuscleRing = true;
+                                break;
+                            case 157:// 传送麻痹
+                                Teleport = true;
+                                Paralysis = true;
+                                break;
+                            case 158:// 传送护身
+                                Teleport = true;
+                                MagicShield = true;
+                                break;
+                            case 159:// 传送探测
+                                Teleport = true;
+                                ProbeNecklace = true;
+                                break;
+                            case 160:// 传送复活
+                                Teleport = true;
+                                Revival = true;
+                                break;
+                            case 161:// 麻痹复活
+                                Paralysis = true;
+                                Revival = true;
+                                break;
+                            case 162:// 护身复活
+                                MagicShield = true;
+                                Revival = true;
+                                break;
+                            case 180:// PK 死亡掉经验
+                                PkDieLostExp = stdItem.DuraMax * M2Share.Config.dwPKDieLostExpRate;
+                                break;
+                            case 181:// PK 死亡掉等级
+                                PkDieLostLevel = stdItem.DuraMax / M2Share.Config.nPKDieLostLevelRate;
+                                break;
+                        }
                     }
                     else
                     {
-                        Abil.HandWeight += stdItem.Weight;
+                        Abil.WearWeight += stdItem.Weight;
                     }
-                    switch (stdItem.AniCount)
+                    Abil.Weight += stdItem.Weight;
+                    switch (i)
                     {
-                        case 120:
-                            FastTrain = true;
-                            break;
-                        case 121:
-                            ProbeNecklace = true;
-                            break;
-                        case 145:
-                            GuildMove = true;
-                            break;
-                        case 111:
-                            StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
-                            HideMode = true;
-                            break;
-                        case 112:
-                            Teleport = true;
-                            break;
-                        case 113:
-                            Paralysis = true;
-                            break;
-                        case 114:
-                            Revival = true;
-                            break;
-                        case 115:
-                            FlameRing = true;
-                            break;
-                        case 116:
-                            RecoveryRing = true;
-                            break;
-                        case 117:
-                            AngryRing = true;
-                            break;
-                        case 118:
-                            MagicShield = true;
-                            break;
-                        case 119:
-                            MuscleRing = true;
-                            break;
-                        case 135:
-                            boMoXieSuite[0] = true;
-                            MoXieSuite += stdItem.Weight / 10;
-                            break;
-                        case 138:
-                            HongMoSuite += stdItem.Weight;
-                            break;
+                        case Grobal2.U_WEAPON:
+                            {
+                                if ((stdItem.SpecialPwr - 1 - 10) < 0)
+                                {
+                                    AddAbil.WeaponStrong = (byte)stdItem.SpecialPwr;// 强度+
+                                }
+                                if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))  // -1 to -50
+                                {
+                                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + -stdItem.SpecialPwr);// Holy+
+                                }
+                                if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))// -51 to -100
+                                {
+                                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));// Holy-
+                                }
+                                continue;
+                            }
+                        case Grobal2.U_RIGHTHAND:
+                            {
+                                if (stdItem.Shape >= 1 && stdItem.Shape <= 50)
+                                {
+                                    DressEffType = stdItem.Shape;
+                                }
+                                if (stdItem.Shape >= 51 && stdItem.Shape <= 100)
+                                {
+                                    HorseType = (byte)(stdItem.Shape - 50);
+                                }
+                                continue;
+                            }
+                        case Grobal2.U_DRESS:
+                            {
+                                if (UseItems[i].Desc[5] > 0)
+                                {
+                                    DressEffType = UseItems[i].Desc[5];
+                                }
+                                if (stdItem.AniCount > 0)
+                                {
+                                    DressEffType = stdItem.AniCount;
+                                }
+                                if (stdItem.Light > 0)
+                                {
+                                    Light = 3;
+                                }
+                                continue;
+                            }
+                    }
+                    switch (stdItem.Shape)
+                    {
                         case 139:
                             UnParalysis = true;
                             break;
@@ -1821,15 +1977,10 @@ namespace GameSvr.Actor
                             Paralysis = true;
                             MuscleRing = true;
                             break;
-                    }
-                    if (stdItem.Shape == 154)
-                    {
-                        // 护身火球
-                        MagicShield = true;
-                        FlameRing = true;
-                    }
-                    switch (stdItem.AniCount)
-                    {
+                        case 154:// 护身火球
+                            MagicShield = true;
+                            FlameRing = true;
+                            break;
                         case 155:// 护身防御
                             MagicShield = true;
                             RecoveryRing = true;
@@ -1868,362 +2019,212 @@ namespace GameSvr.Actor
                         case 181:// PK 死亡掉等级
                             PkDieLostLevel = stdItem.DuraMax / M2Share.Config.nPKDieLostLevelRate;
                             break;
+                        case 120:
+                            FastTrain = true;
+                            break;
+                        case 121:
+                            ProbeNecklace = true;
+                            break;
+                        case 123:
+                            boRecallSuite[0] = true;
+                            break;
+                        case 145:
+                            GuildMove = true;
+                            break;
+                        case 127:
+                            boSpirit[0] = true;
+                            break;
+                        case 135:
+                            boMoXieSuite[0] = true;
+                            MoXieSuite += stdItem.AniCount;
+                            break;
+                        case 138:
+                            boHongMoSuite1 = true;
+                            HongMoSuite += stdItem.AniCount;
+                            break;
+                        case 200:
+                            boSmash1 = true;
+                            break;
+                        case 203:
+                            boHwanDevil1 = true;
+                            break;
+                        case 206:
+                            boPurity1 = true;
+                            break;
+                        case 216:
+                            boFiveString1 = true;
+                            break;
+                        case 111:
+                            StatusArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
+                            HideMode = true;
+                            break;
+                        case 112:
+                            Teleport = true;
+                            break;
+                        case 113:
+                            Paralysis = true;
+                            break;
+                        case 114:
+                            Revival = true;
+                            break;
+                        case 115:
+                            FlameRing = true;
+                            break;
+                        case 116:
+                            RecoveryRing = true;
+                            break;
+                        case 117:
+                            AngryRing = true;
+                            break;
+                        case 118:
+                            MagicShield = true;
+                            break;
+                        case 119:
+                            MuscleRing = true;
+                            break;
+                        case 122:
+                            boRecallSuite[1] = true;
+                            break;
+                        case 128:
+                            boSpirit[1] = true;
+                            break;
+                        case 133:
+                            boMoXieSuite[1] = true;
+                            MoXieSuite += stdItem.AniCount;
+                            break;
+                        case 136:
+                            boHongMoSuite2 = true;
+                            HongMoSuite += stdItem.AniCount;
+                            break;
+                        case 201:
+                            boSmash2 = true;
+                            break;
+                        case 204:
+                            boHwanDevil2 = true;
+                            break;
+                        case 207:
+                            boPurity2 = true;
+                            break;
+                        case 210:
+                            boMundane1 = true;
+                            break;
+                        case 212:
+                            boNokChi1 = true;
+                            break;
+                        case 214:
+                            boTaoBu1 = true;
+                            break;
+                        case 217:
+                            boFiveString2 = true;
+                            break;
+                    }
+                    if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
+                    {
+                        // -1 to -50
+                        AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + -stdItem.SpecialPwr);
+                        // Holy+
+                    }
+                    if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
+                    {
+                        // -51 to -100
+                        AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
+                        // Holy-
+                    }
+                    switch (stdItem.Shape)
+                    {
+                        case 124:
+                            boRecallSuite[2] = true;
+                            break;
+                        case 126:
+                            boSpirit[2] = true;
+                            break;
+                        case 145:
+                            GuildMove = true;
+                            break;
+                        case 134:
+                            boMoXieSuite[2] = true;
+                            MoXieSuite += stdItem.AniCount;
+                            break;
+                        case 137:
+                            boHongMoSuite3 = true;
+                            HongMoSuite += stdItem.AniCount;
+                            break;
+                        case 202:
+                            boSmash3 = true;
+                            break;
+                        case 205:
+                            boHwanDevil3 = true;
+                            break;
+                        case 208:
+                            boPurity3 = true;
+                            break;
+                        case 211:
+                            boMundane2 = true;
+                            break;
+                        case 213:
+                            boNokChi2 = true;
+                            break;
+                        case 215:
+                            boTaoBu2 = true;
+                            break;
+                        case 218:
+                            boFiveString3 = true;
+                            break;
+                        case 125:
+                            boRecallSuite[3] = true;
+                            break;
+                        case 129:
+                            boSpirit[3] = true;
+                            break;
                     }
                 }
-                else
+                if (boRecallSuite[0] && boRecallSuite[1] && boRecallSuite[2] && boRecallSuite[3])
                 {
-                    Abil.WearWeight += stdItem.Weight;
+                    RecallSuite = true;
                 }
-                Abil.Weight += stdItem.Weight;
-                switch (i)
+                if (boMoXieSuite[0] && boMoXieSuite[1] && boMoXieSuite[2])
                 {
-                    case Grobal2.U_WEAPON:
-                        {
-                            if ((stdItem.SpecialPwr - 1 - 10) < 0)
-                            {
-                                AddAbil.WeaponStrong = (byte)stdItem.SpecialPwr;// 强度+
-                            }
-                            if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))  // -1 to -50
-                            {
-                                AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + -stdItem.SpecialPwr);// Holy+
-                            }
-                            if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))// -51 to -100
-                            {
-                                AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));// Holy-
-                            }
-                            continue;
-                        }
-                    case Grobal2.U_RIGHTHAND:
-                        {
-                            if (stdItem.Shape >= 1 && stdItem.Shape <= 50)
-                            {
-                                DressEffType = stdItem.Shape;
-                            }
-                            if (stdItem.Shape >= 51 && stdItem.Shape <= 100)
-                            {
-                                HorseType = (byte)(stdItem.Shape - 50);
-                            }
-                            continue;
-                        }
-                    case Grobal2.U_DRESS:
-                        {
-                            if (UseItems[i].Desc[5] > 0)
-                            {
-                                DressEffType = UseItems[i].Desc[5];
-                            }
-                            if (stdItem.AniCount > 0)
-                            {
-                                DressEffType = stdItem.AniCount;
-                            }
-                            if (stdItem.Light > 0)
-                            {
-                                Light = 3;
-                            }
-                            continue;
-                        }
+                    MoXieSuite += 50;
                 }
-                switch (stdItem.Shape)
+                if (boHongMoSuite1 && boHongMoSuite2 && boHongMoSuite3)
                 {
-                    case 139:
-                        UnParalysis = true;
-                        break;
-                    case 140:
-                        SuperManItem = true;
-                        break;
-                    case 141:
-                        BoExpItem = true;
-                        ExpItem = ExpItem + (UseItems[i].Dura / M2Share.Config.ItemExpRate);
-                        break;
-                    case 142:
-                        BoPowerItem = true;
-                        PowerItem = PowerItem + (UseItems[i].Dura / M2Share.Config.ItemPowerRate);
-                        break;
-                    case 182:
-                        BoExpItem = true;
-                        ExpItem = ExpItem + (UseItems[i].DuraMax / M2Share.Config.ItemExpRate);
-                        break;
-                    case 183:
-                        BoPowerItem = true;
-                        PowerItem = PowerItem + (UseItems[i].DuraMax / M2Share.Config.ItemPowerRate);
-                        break;
-                    case 143:
-                        UnMagicShield = true;
-                        break;
-                    case 144:
-                        UnRevival = true;
-                        break;
-                    case 170:
-                        AngryRing = true;
-                        break;
-                    case 171:
-                        NoDropItem = true;
-                        break;
-                    case 172:
-                        NoDropUseItem = true;
-                        break;
-                    case 150:// 麻痹护身
-                        Paralysis = true;
-                        MagicShield = true;
-                        break;
-                    case 151:// 麻痹火球
-                        Paralysis = true;
-                        FlameRing = true;
-                        break;
-                    case 152:// 麻痹防御
-                        Paralysis = true;
-                        RecoveryRing = true;
-                        break;
-                    case 153:// 麻痹负载
-                        Paralysis = true;
-                        MuscleRing = true;
-                        break;
-                    case 154:// 护身火球
-                        MagicShield = true;
-                        FlameRing = true;
-                        break;
-                    case 155:// 护身防御
-                        MagicShield = true;
-                        RecoveryRing = true;
-                        break;
-                    case 156:// 护身负载
-                        MagicShield = true;
-                        MuscleRing = true;
-                        break;
-                    case 157:// 传送麻痹
-                        Teleport = true;
-                        Paralysis = true;
-                        break;
-                    case 158:// 传送护身
-                        Teleport = true;
-                        MagicShield = true;
-                        break;
-                    case 159:// 传送探测
-                        Teleport = true;
-                        ProbeNecklace = true;
-                        break;
-                    case 160:// 传送复活
-                        Teleport = true;
-                        Revival = true;
-                        break;
-                    case 161:// 麻痹复活
-                        Paralysis = true;
-                        Revival = true;
-                        break;
-                    case 162:// 护身复活
-                        MagicShield = true;
-                        Revival = true;
-                        break;
-                    case 180:// PK 死亡掉经验
-                        PkDieLostExp = stdItem.DuraMax * M2Share.Config.dwPKDieLostExpRate;
-                        break;
-                    case 181:// PK 死亡掉等级
-                        PkDieLostLevel = stdItem.DuraMax / M2Share.Config.nPKDieLostLevelRate;
-                        break;
-                    case 120:
-                        FastTrain = true;
-                        break;
-                    case 121:
-                        ProbeNecklace = true;
-                        break;
-                    case 123:
-                        boRecallSuite[0] = true;
-                        break;
-                    case 145:
-                        GuildMove = true;
-                        break;
-                    case 127:
-                        boSpirit[0] = true;
-                        break;
-                    case 135:
-                        boMoXieSuite[0] = true;
-                        MoXieSuite += stdItem.AniCount;
-                        break;
-                    case 138:
-                        boHongMoSuite1 = true;
-                        HongMoSuite += stdItem.AniCount;
-                        break;
-                    case 200:
-                        boSmash1 = true;
-                        break;
-                    case 203:
-                        boHwanDevil1 = true;
-                        break;
-                    case 206:
-                        boPurity1 = true;
-                        break;
-                    case 216:
-                        boFiveString1 = true;
-                        break;
-                    case 111:
-                        StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
-                        HideMode = true;
-                        break;
-                    case 112:
-                        Teleport = true;
-                        break;
-                    case 113:
-                        Paralysis = true;
-                        break;
-                    case 114:
-                        Revival = true;
-                        break;
-                    case 115:
-                        FlameRing = true;
-                        break;
-                    case 116:
-                        RecoveryRing = true;
-                        break;
-                    case 117:
-                        AngryRing = true;
-                        break;
-                    case 118:
-                        MagicShield = true;
-                        break;
-                    case 119:
-                        MuscleRing = true;
-                        break;
-                    case 122:
-                        boRecallSuite[1] = true;
-                        break;
-                    case 128:
-                        boSpirit[1] = true;
-                        break;
-                    case 133:
-                        boMoXieSuite[1] = true;
-                        MoXieSuite += stdItem.AniCount;
-                        break;
-                    case 136:
-                        boHongMoSuite2 = true;
-                        HongMoSuite += stdItem.AniCount;
-                        break;
-                    case 201:
-                        boSmash2 = true;
-                        break;
-                    case 204:
-                        boHwanDevil2 = true;
-                        break;
-                    case 207:
-                        boPurity2 = true;
-                        break;
-                    case 210:
-                        boMundane1 = true;
-                        break;
-                    case 212:
-                        boNokChi1 = true;
-                        break;
-                    case 214:
-                        boTaoBu1 = true;
-                        break;
-                    case 217:
-                        boFiveString2 = true;
-                        break;
+                    AddAbil.HIT += 2;
                 }
-                if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
+                if (boSpirit[0] && boSpirit[1] && boSpirit[2] && boSpirit[3])
                 {
-                    // -1 to -50
-                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + -stdItem.SpecialPwr);
-                    // Holy+
+                    MBopirit = true;
                 }
-                if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
+                if (boSmash1 && boSmash2 && boSmash3)
                 {
-                    // -51 to -100
-                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
-                    // Holy-
+                    SmashSet = true;
                 }
-                switch (stdItem.Shape)
+                if (boHwanDevil1 && boHwanDevil2 && boHwanDevil3)
                 {
-                    case 124:
-                        boRecallSuite[2] = true;
-                        break;
-                    case 126:
-                        boSpirit[2] = true;
-                        break;
-                    case 145:
-                        GuildMove = true;
-                        break;
-                    case 134:
-                        boMoXieSuite[2] = true;
-                        MoXieSuite += stdItem.AniCount;
-                        break;
-                    case 137:
-                        boHongMoSuite3 = true;
-                        HongMoSuite += stdItem.AniCount;
-                        break;
-                    case 202:
-                        boSmash3 = true;
-                        break;
-                    case 205:
-                        boHwanDevil3 = true;
-                        break;
-                    case 208:
-                        boPurity3 = true;
-                        break;
-                    case 211:
-                        boMundane2 = true;
-                        break;
-                    case 213:
-                        boNokChi2 = true;
-                        break;
-                    case 215:
-                        boTaoBu2 = true;
-                        break;
-                    case 218:
-                        boFiveString3 = true;
-                        break;
-                    case 125:
-                        boRecallSuite[3] = true;
-                        break;
-                    case 129:
-                        boSpirit[3] = true;
-                        break;
+                    HwanDevilSet = true;
                 }
+                if (boPurity1 && boPurity2 && boPurity3)
+                {
+                    PuritySet = true;
+                }
+                if (boMundane1 && boMundane2)
+                {
+                    MundaneSet = true;
+                }
+                if (boNokChi1 && boNokChi2)
+                {
+                    NokChiSet = true;
+                }
+                if (boTaoBu1 && boTaoBu2)
+                {
+                    TaoBuSet = true;
+                }
+                if (boFiveString1 && boFiveString2 && boFiveString3)
+                {
+                    FiveStringSet = true;
+                }
+                Abil.Weight = RecalcBagWeight();
             }
-            if (boRecallSuite[0] && boRecallSuite[1] && boRecallSuite[2] && boRecallSuite[3])
-            {
-                RecallSuite = true;
-            }
-            if (boMoXieSuite[0] && boMoXieSuite[1] && boMoXieSuite[2])
-            {
-                MoXieSuite += 50;
-            }
-            if (boHongMoSuite1 && boHongMoSuite2 && boHongMoSuite3)
-            {
-                AddAbil.HIT += 2;
-            }
-            if (boSpirit[0] && boSpirit[1] && boSpirit[2] && boSpirit[3])
-            {
-                MBopirit = true;
-            }
-            if (boSmash1 && boSmash2 && boSmash3)
-            {
-                SmashSet = true;
-            }
-            if (boHwanDevil1 && boHwanDevil2 && boHwanDevil3)
-            {
-                HwanDevilSet = true;
-            }
-            if (boPurity1 && boPurity2 && boPurity3)
-            {
-                PuritySet = true;
-            }
-            if (boMundane1 && boMundane2)
-            {
-                MundaneSet = true;
-            }
-            if (boNokChi1 && boNokChi2)
-            {
-                NokChiSet = true;
-            }
-            if (boTaoBu1 && boTaoBu2)
-            {
-                TaoBuSet = true;
-            }
-            if (boFiveString1 && boFiveString2 && boFiveString3)
-            {
-                FiveStringSet = true;
-            }
-            Abil.Weight = RecalcBagWeight();
-            if (Transparent && (StatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0))
+            if (Transparent && (StatusArr[Grobal2.STATE_TRANSPARENT] > 0))
             {
                 HideMode = true;
             }
@@ -2239,7 +2240,7 @@ namespace GameSvr.Actor
             {
                 if (boOldHideMode)
                 {
-                    StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
+                    StatusArr[Grobal2.STATE_TRANSPARENT] = 0;
                     CharStatus = GetCharStatus();
                     StatusChanged();
                 }
@@ -2281,11 +2282,11 @@ namespace GameSvr.Actor
             Abil.DC = HUtil32.MakeLong(HUtil32.LoWord(AddAbil.DC) + HUtil32.LoWord(Abil.DC), HUtil32.HiWord(AddAbil.DC) + HUtil32.HiWord(Abil.DC));
             Abil.MC = HUtil32.MakeLong(HUtil32.LoWord(AddAbil.MC) + HUtil32.LoWord(Abil.MC), HUtil32.HiWord(AddAbil.MC) + HUtil32.HiWord(Abil.MC));
             Abil.SC = HUtil32.MakeLong(HUtil32.LoWord(AddAbil.SC) + HUtil32.LoWord(Abil.SC), HUtil32.HiWord(AddAbil.SC) + HUtil32.HiWord(Abil.SC));
-            if (StatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
+            if (StatusArr[Grobal2.STATE_DEFENCEUP] > 0)
             {
                 Abil.AC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.AC), HUtil32.HiWord(Abil.AC) + 2 + (Abil.Level / 7));
             }
-            if (StatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
+            if (StatusArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
             {
                 Abil.MAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.MAC), HUtil32.HiWord(Abil.MAC) + 2 + (Abil.Level / 7));
             }
@@ -2435,15 +2436,15 @@ namespace GameSvr.Actor
             }
         }
 
-        public void ApplyItemParameters(UserItem uitem,StdItem stdItem, ref AddAbility aabil)
+        private void ApplyItemParameters(UserItem uitem,StdItem stdItem, ref AddAbility aabil)
         {
-            var clientItem = new ClientItem();
-            var ps = M2Share.WorldEngine.GetStdItem(uitem.Index);
-            if (ps != null)
+            var item = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            if (item != null)
             {
-                ps.GetUpgradeStdItem(uitem, ref clientItem);
+                var clientItem = new ClientItem();
+                item.GetUpgradeStdItem(uitem, ref clientItem);
                 ApplyItemParametersByJob(uitem, ref clientItem);
-                switch (ps.StdMode)
+                switch (item.StdMode)
                 {
                     case 5:
                     case 6:
@@ -2597,7 +2598,7 @@ namespace GameSvr.Actor
                         {
                             aabil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
                         }
-                        switch (ps.StdMode)
+                        switch (item.StdMode)
                         {
                             case 24:
                                 aabil.HIT = (byte)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
@@ -2639,14 +2640,14 @@ namespace GameSvr.Actor
             }
         }
 
-        public void ApplyItemParametersEx(UserItem uitem, ref Ability AWabil)
+        private void ApplyItemParametersEx(UserItem uitem, ref Ability AWabil)
         {
-            var clientItem = new ClientItem();
-            StdItem ps = M2Share.WorldEngine.GetStdItem(uitem.Index);
-            if (ps != null)
+            StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            if (item != null)
             {
-                ps.GetUpgradeStdItem(uitem, ref clientItem);
-                switch (ps.StdMode)
+                var clientItem = new ClientItem();
+                item.GetUpgradeStdItem(uitem, ref clientItem);
+                switch (item.StdMode)
                 {
                     case 52:
                         if (clientItem.Item.EffType1 > 0)
@@ -2740,13 +2741,13 @@ namespace GameSvr.Actor
             }
         }
 
-        public void ChangeItemByJob(ref ClientItem citem, int lv)
+        protected void ChangeItemByJob(ref ClientItem citem, int lv)
         {
             if ((citem.Item.StdMode == 22) && (citem.Item.Shape == GragonConst.DRAGON_RING_SHAPE))
             {
                 switch (Job)
                 {
-                    case 0:
+                    case PlayJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 4));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
@@ -2764,7 +2765,7 @@ namespace GameSvr.Actor
             {
                 switch (Job)
                 {
-                    case 0:
+                    case PlayJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
@@ -2784,7 +2785,7 @@ namespace GameSvr.Actor
             {
                 switch (Job)
                 {
-                    case 0:
+                    case PlayJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
@@ -2802,7 +2803,7 @@ namespace GameSvr.Actor
             {
                 switch (Job)
                 {
-                    case 0:
+                    case PlayJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
@@ -2820,7 +2821,7 @@ namespace GameSvr.Actor
             {
                 switch (Job)
                 {
-                    case 0:
+                    case PlayJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
@@ -2838,7 +2839,7 @@ namespace GameSvr.Actor
             {
                 switch (Job)
                 {
-                    case 0:
+                    case PlayJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 28));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
@@ -2868,7 +2869,7 @@ namespace GameSvr.Actor
                 {
                     switch (Job)
                     {
-                        case 0:
+                        case PlayJob.Warrior:
                             citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                             citem.Item.MC = 0;
                             citem.Item.SC = 0;
@@ -2889,7 +2890,7 @@ namespace GameSvr.Actor
                 {
                     switch (Job)
                     {
-                        case 0:
+                        case PlayJob.Warrior:
                             citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC)));
                             citem.Item.MC = 0;
                             citem.Item.SC = 0;
@@ -2909,12 +2910,12 @@ namespace GameSvr.Actor
             }
         }
 
-        public void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std)
+        private void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std)
         {
-            var ps = M2Share.WorldEngine.GetStdItem(uitem.Index);
-            if (ps != null)
+            var item = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            if (item != null)
             {
-                if ((ps.StdMode == 22) && (ps.Shape == GragonConst.DRAGON_RING_SHAPE))
+                if ((item.StdMode == 22) && (item.Shape == GragonConst.DRAGON_RING_SHAPE))
                 {
                     switch (Job)
                     {
@@ -2932,7 +2933,7 @@ namespace GameSvr.Actor
                             break;
                     }
                 }
-                else if ((ps.StdMode == 26) && (ps.Shape == GragonConst.DRAGON_BRACELET_SHAPE))
+                else if ((item.StdMode == 26) && (item.Shape == GragonConst.DRAGON_BRACELET_SHAPE))
                 {
                     switch (Job)
                     {
@@ -2952,7 +2953,7 @@ namespace GameSvr.Actor
                             break;
                     }
                 }
-                else if ((ps.StdMode == 19) && (ps.Shape == GragonConst.DRAGON_NECKLACE_SHAPE))
+                else if ((item.StdMode == 19) && (item.Shape == GragonConst.DRAGON_NECKLACE_SHAPE))
                 {
                     switch (Job)
                     {
@@ -2970,7 +2971,7 @@ namespace GameSvr.Actor
                             break;
                     }
                 }
-                else if (((ps.StdMode == 10) || (ps.StdMode == 11)) && (ps.Shape == GragonConst.DRAGON_DRESS_SHAPE))
+                else if (((item.StdMode == 10) || (item.StdMode == 11)) && (item.Shape == GragonConst.DRAGON_DRESS_SHAPE))
                 {
                     switch (Job)
                     {
@@ -2988,7 +2989,7 @@ namespace GameSvr.Actor
                             break;
                     }
                 }
-                else if ((ps.StdMode == 15) && (ps.Shape == GragonConst.DRAGON_HELMET_SHAPE))
+                else if ((item.StdMode == 15) && (item.Shape == GragonConst.DRAGON_HELMET_SHAPE))
                 {
                     switch (Job)
                     {
@@ -3006,7 +3007,7 @@ namespace GameSvr.Actor
                             break;
                     }
                 }
-                else if (((ps.StdMode == 5) || (ps.StdMode == 6)) && (ps.Shape == GragonConst.DRAGON_WEAPON_SHAPE))
+                else if (((item.StdMode == 5) || (item.StdMode == 6)) && (item.Shape == GragonConst.DRAGON_WEAPON_SHAPE))
                 {
                     switch (Job)
                     {
@@ -3034,9 +3035,9 @@ namespace GameSvr.Actor
                             break;
                     }
                 }
-                else if ((ps.StdMode == 53))
+                else if ((item.StdMode == 53))
                 {
-                    if ((ps.Shape == ShapeConst.LOLLIPOP_SHAPE))
+                    if ((item.Shape == ShapeConst.LOLLIPOP_SHAPE))
                     {
                         switch (Job)
                         {
