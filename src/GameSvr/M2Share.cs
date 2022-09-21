@@ -511,6 +511,10 @@ namespace GameSvr
         public const ushort DEFHIT = 5;
         public const ushort DEFSPEED = 15;
 
+        public const byte AM_FIREBALL = 1;
+        public const byte AM_HEALING = 2;
+        public const short INDEX_MIRBOOTS = 477;
+
 
         public const string U_DRESSNAME = "衣服";
         public const string U_WEAPONNAME = "武器";

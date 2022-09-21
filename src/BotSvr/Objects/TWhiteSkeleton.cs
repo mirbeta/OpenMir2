@@ -4,7 +4,7 @@
     {
         public TWhiteSkeleton(RobotClient robotClient) : base(robotClient)
         {
-
+            
         }
     }
 }
