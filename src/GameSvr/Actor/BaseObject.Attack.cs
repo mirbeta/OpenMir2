@@ -513,13 +513,13 @@ namespace GameSvr.Actor
                     {
                         AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.Config.AttackPosionTime, 0);
                     }
-                    if (HongMoSuite > 0)// 虹魔，吸血
+                    if (SuckupEnemyHealthRate > 0)// 虹魔，吸血
                     {
-                        MDb3B0 = nPower / 100 * HongMoSuite;
-                        if (MDb3B0 >= 2.0)
+                        SuckupEnemyHealth = nPower / 100 * SuckupEnemyHealthRate;
+                        if (SuckupEnemyHealth >= 2.0)
                         {
-                            n20 = Convert.ToInt32(MDb3B0);
-                            MDb3B0 = n20;
+                            n20 = Convert.ToInt32(SuckupEnemyHealth);
+                            SuckupEnemyHealth = n20;
                             DamageHealth(-n20);
                         }
                     }

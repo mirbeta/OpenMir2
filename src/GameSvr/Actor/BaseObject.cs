@@ -672,8 +672,8 @@ namespace GameSvr.Actor
         /// <summary>
         /// 虹魔一套
         /// </summary>
-        protected int HongMoSuite;
-        protected double MDb3B0;
+        protected int SuckupEnemyHealthRate;
+        protected double SuckupEnemyHealth;
         /// <summary>
         /// 中毒处理间隔时间
         /// </summary>
@@ -917,8 +917,8 @@ namespace GameSvr.Actor
             NoTame = false;
             PvpFlag = false;
             MoXieSuite = 0;
-            HongMoSuite = 0;
-            MDb3B0 = 0;
+            SuckupEnemyHealthRate = 0;
+            SuckupEnemyHealth = 0;
             AddAbil = new AddAbility();
             MsgList = new List<SendMessage>();
             VisibleHumanList = new List<BaseObject>();

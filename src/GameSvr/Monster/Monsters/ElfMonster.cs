@@ -15,6 +15,7 @@ namespace GameSvr.Monster.Monsters
             FixedHideMode = true;
             NoAttackMode = true;
             BoIsFirst = true;
+            Race = Grobal2.RC_ELFMON;
         }
 
         public void AppearNow()

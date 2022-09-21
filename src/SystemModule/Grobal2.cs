@@ -130,6 +130,8 @@ namespace SystemModule
         /// </summary>
         public const byte STATE_LOCKRUN = 3;
         public const byte POISON_68 = 68;
+
+        public const byte STATE_FASTMOVE = 7;
         /// <summary>
         /// 隐身
         /// </summary>
@@ -677,6 +679,9 @@ namespace SystemModule
         /// 任务怪物
         /// </summary>
         public const byte RC_153 = 153;
+        public const byte RC_WHITESKELETON = 100;
+        public const byte RC_ELFMON = 113;
+        public const byte RC_ELFWARRIORMON = 114;
         
         public const int RM_TURN = 10001;
         public const int RM_WALK = 10002;
