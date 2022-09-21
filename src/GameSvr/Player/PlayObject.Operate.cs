@@ -425,7 +425,7 @@ namespace GameSvr.Player
                     if (CheckTakeOnItems(btWhere, ref stdItem58) && CheckItemBindUse(userItem))
                     {
                         UserItem takeOffItem = null;
-                        if (btWhere >= 0 && btWhere <= 12)
+                        if (btWhere <= 12)
                         {
                             if (UseItems[btWhere] != null && UseItems[btWhere].wIndex > 0)
                             {
