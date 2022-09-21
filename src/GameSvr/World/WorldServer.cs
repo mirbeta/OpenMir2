@@ -1488,7 +1488,7 @@ namespace GameSvr.World
             playObject.Abil.MaxWearWeight = humData.Abil.MaxWearWeight;
             playObject.Abil.HandWeight = humData.Abil.HandWeight;
             playObject.Abil.MaxHandWeight = humData.Abil.MaxHandWeight;
-            playObject.StatusTimeArr = humData.wStatusTimeArr;
+            playObject.StatusArr = humData.wStatusTimeArr;
             playObject.HomeMap = humData.sHomeMap;
             playObject.HomeX = humData.wHomeX;
             playObject.HomeY = humData.wHomeY;

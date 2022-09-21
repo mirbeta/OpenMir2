@@ -36,7 +36,7 @@ namespace GameSvr.Actor
         /// <returns></returns>
         protected bool CanWalk()
         {
-            return !Ghost && !Death && StatusTimeArr[Grobal2.POISON_STONE] == 0;
+            return !Ghost && !Death && StatusArr[Grobal2.POISON_STONE] == 0;
         }
 
         protected virtual void Attack(BaseObject TargeTBaseObject, byte nDir)

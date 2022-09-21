@@ -864,9 +864,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[Grobal2.POISON_DONTMOVE] != 0 || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动 
             }
@@ -1083,7 +1083,7 @@ namespace GameSvr.RobotPlay
         {
             short nX = 0;
             short nY = 0;
-            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[Grobal2.POISON_STONE] == 0)
             {
                 nX = CurrX;
                 nY = CurrY;
@@ -1924,11 +1924,11 @@ namespace GameSvr.RobotPlay
             {
                 return result;
             }
-            if (Death || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (Death || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result; // 防麻
             }
-            if (StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)
+            if (StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)
             {
                 return result;// 防麻
             }
@@ -2489,9 +2489,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusTimeArr[Grobal2.POISON_STONE] > 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
+            if (StatusArr[Grobal2.POISON_STONE] > 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[Grobal2.POISON_DONTMOVE] != 0 || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
             {
                 return result; // 麻痹不能跑动 
             }
@@ -2653,9 +2653,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || StatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[Grobal2.POISON_DONTMOVE] != 0 || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动
             }
@@ -2765,7 +2765,7 @@ namespace GameSvr.RobotPlay
                 case 0:// 正常模式
                     if (Math.Abs(CurrX - nTargetX) > 2 || Math.Abs(CurrY - nTargetY) > 2)
                     {
-                        if (StatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
+                        if (StatusArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -2782,7 +2782,7 @@ namespace GameSvr.RobotPlay
                 case 1:// 躲避模式
                     if (Math.Abs(CurrX - nTargetX) > 1 || Math.Abs(CurrY - nTargetY) > 1)
                     {
-                        if (StatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
+                        if (StatusArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -3155,7 +3155,7 @@ namespace GameSvr.RobotPlay
                     }
                     break;
                 case PlayJob.Wizard: // 法师
-                    if (StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
+                    if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
@@ -3855,7 +3855,7 @@ namespace GameSvr.RobotPlay
                         }
                         return result;
                     }
-                    if (StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
+                    if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
                     {
                         if (AllowUseMagic(73)) // 道力盾
                         {
@@ -3884,7 +3884,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     // 绿毒
-                    if (TargetCret.StatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
+                    if (TargetCret.StatusArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
                         || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
@@ -3940,7 +3940,7 @@ namespace GameSvr.RobotPlay
                                 break;
                         }
                     }
-                    if (TargetCret.StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
+                    if (TargetCret.StatusArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
                         || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {

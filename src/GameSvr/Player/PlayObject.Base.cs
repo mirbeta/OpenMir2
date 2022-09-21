@@ -825,7 +825,7 @@ namespace GameSvr.Player
                 }
                 for (var i = 0; i < StatusArrTick.Length; i++)
                 {
-                    if (StatusTimeArr[i] > 0)
+                    if (StatusArr[i] > 0)
                     {
                         StatusArrTick[i] = HUtil32.GetTickCount();
                     }

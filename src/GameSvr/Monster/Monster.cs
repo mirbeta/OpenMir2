@@ -37,7 +37,7 @@ namespace GameSvr.Monster
                     OldMon.Master.SlaveList.Add(ElfMon);
                 }
                 ElfMon.Abil = OldMon.Abil;
-                ElfMon.StatusTimeArr = OldMon.StatusTimeArr;
+                ElfMon.StatusArr = OldMon.StatusArr;
                 ElfMon.TargetCret = OldMon.TargetCret;
                 ElfMon.TargetFocusTick = OldMon.TargetFocusTick;
                 ElfMon.LastHiter = OldMon.LastHiter;
@@ -116,7 +116,7 @@ namespace GameSvr.Monster
 
         public override void Run()
         {
-            if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[Grobal2.POISON_STONE] == 0)
             {
                 if (Think())
                 {

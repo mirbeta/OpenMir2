@@ -2008,7 +2008,7 @@ namespace GameSvr.Player
             }
             if (Transparent && HideMode)
             {
-                StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
+                StatusArr[Grobal2.STATE_TRANSPARENT] = 0;
             }
             if (GroupOwner != null)
             {

@@ -140,7 +140,7 @@ namespace GameSvr.Actor
         /// 4-不能移动(中战连击) 5-麻痹(石化) 6-减血，被连击技能万剑归宗击中后掉血
         /// 7-冰冻(不能跑动，不能魔法) 8-隐身 9-防御力(神圣战甲术) 10-魔御力(幽灵盾) 11-魔法盾
         /// </summary>
-        internal ushort[] StatusTimeArr;
+        internal ushort[] StatusArr;
         /// <summary>
         /// 人物状态持续的开始时间
         /// </summary>
@@ -887,7 +887,7 @@ namespace GameSvr.Actor
             GoldMax = M2Share.Config.HumanMaxGold;
             CharStatus = 0;
             CharStatusEx = 0;
-            StatusTimeArr = new ushort[12];
+            StatusArr = new ushort[12];
             StatusArrTick = new int[12];
             ExtraAbil = new ushort[6];
             ExtraAbilTimes = new int[6];
@@ -1350,7 +1350,7 @@ namespace GameSvr.Actor
                     {
                         if (Transparent && HideMode)
                         {
-                            StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                            StatusArr[Grobal2.STATE_TRANSPARENT] = 1;
                         }
                         result = true;
                     }
@@ -3664,9 +3664,9 @@ namespace GameSvr.Actor
             //and 表示 当对应位均为1时返回1，其余为0
             //从上面算法得到，最终 nStatus得到是1,
             var nStatus = 0;
-            for (var i = 0; i < StatusTimeArr.Length; i++)
+            for (var i = 0; i < StatusArr.Length; i++)
             {
-                if (StatusTimeArr[i] > 0)
+                if (StatusArr[i] > 0)
                 {
                     nStatus = (int)((long)nStatus | (0x80000000 >> i));
                 }
@@ -4909,7 +4909,7 @@ namespace GameSvr.Actor
                 nDamage = nDamage * M2Share.Config.MonHum / 10;
             }
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
-            if (StatusTimeArr[Grobal2.POISON_DAMAGEARMOR] > 0)
+            if (StatusArr[Grobal2.POISON_DAMAGEARMOR] > 0)
             {
                 nDam = HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
                 nDamage = HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
@@ -5097,16 +5097,16 @@ namespace GameSvr.Actor
             if (nType < Grobal2.MAX_STATUS_ATTRIBUTE)
             {
                 var nOldCharStatus = CharStatus;
-                if (StatusTimeArr[nType] > 0)
+                if (StatusArr[nType] > 0)
                 {
-                    if (StatusTimeArr[nType] < nTime)
+                    if (StatusArr[nType] < nTime)
                     {
-                        StatusTimeArr[nType] = nTime;
+                        StatusArr[nType] = nTime;
                     }
                 }
                 else
                 {
-                    StatusTimeArr[nType] = nTime;
+                    StatusArr[nType] = nTime;
                 }
                 StatusArrTick[nType] = HUtil32.GetTickCount();
                 CharStatus = GetCharStatus();
@@ -5220,15 +5220,15 @@ namespace GameSvr.Actor
 
         private void DamageBubbleDefence(int nInt)
         {
-            if (StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 0)
+            if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 0)
             {
-                if (StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 3)
+                if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 3)
                 {
-                    StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] -= 3;
+                    StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] -= 3;
                 }
                 else
                 {
-                    StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] = 1;
+                    StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] = 1;
                 }
             }
         }
@@ -5441,17 +5441,17 @@ namespace GameSvr.Actor
         private bool DefenceUp(ushort nSec)
         {
             var result = false;
-            if (StatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
+            if (StatusArr[Grobal2.STATE_DEFENCEUP] > 0)
             {
-                if (StatusTimeArr[Grobal2.STATE_DEFENCEUP] < nSec)
+                if (StatusArr[Grobal2.STATE_DEFENCEUP] < nSec)
                 {
-                    StatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
+                    StatusArr[Grobal2.STATE_DEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
+                StatusArr[Grobal2.STATE_DEFENCEUP] = nSec;
                 result = true;
             }
 
@@ -5477,17 +5477,17 @@ namespace GameSvr.Actor
         private bool MagDefenceUp(ushort nSec)
         {
             var result = false;
-            if (StatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
+            if (StatusArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
             {
-                if (StatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] < nSec)
+                if (StatusArr[Grobal2.STATE_MAGDEFENCEUP] < nSec)
                 {
-                    StatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
+                    StatusArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
+                StatusArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
                 result = true;
             }
 
@@ -5504,13 +5504,13 @@ namespace GameSvr.Actor
         /// <returns></returns>
         public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
         {
-            if (StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] != 0)
+            if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] != 0)
             {
                 return false;
             }
 
             var nOldStatus = CharStatus;
-            StatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] = nSec;
+            StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] = nSec;
             StatusArrTick[Grobal2.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
             if (nOldStatus != CharStatus)

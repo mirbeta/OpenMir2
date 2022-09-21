@@ -15,14 +15,14 @@ namespace GameSvr.Monster.Monsters
             {
                 if (TargetCret == null)
                 {
-                    if (StatusTimeArr[Grobal2.STATE_TRANSPARENT] == 0)
+                    if (StatusArr[Grobal2.STATE_TRANSPARENT] == 0)
                     {
                         M2Share.MagicMgr.MagMakePrivateTransparent(this, 180);
                     }
                 }
                 else
                 {
-                    StatusTimeArr[Grobal2.STATE_TRANSPARENT] = 0;
+                    StatusArr[Grobal2.STATE_TRANSPARENT] = 0;
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
