@@ -1,5 +1,4 @@
-﻿
-using System.IO;
+﻿using System.IO;
 
 namespace SystemModule.Packet.ClientPackets
 {
@@ -9,10 +8,12 @@ namespace SystemModule.Packet.ClientPackets
         public int MakeIndex;
         public ushort Dura;
         public ushort DuraMax;
+        public byte[] Desc;
 
         public ClientItem()
         {
             Item = new ClientStdItem();
+            Desc = new byte[14];
         }
 
         protected override void ReadPacket(BinaryReader reader)
@@ -26,6 +27,7 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(MakeIndex);
             writer.Write(Dura);
             writer.Write(DuraMax);
+            writer.Write(Desc, 0, Desc.Length);
         }
     }
 }

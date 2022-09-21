@@ -1574,7 +1574,7 @@ namespace GameSvr.Actor
             bool[] boRecallSuite = new bool[4] { false, false, false, false };
             bool[] boMoXieSuite = new bool[3] { false, false, false };
             bool[] boSpirit = new bool[4] { false, false, false, false };
-            AddAbil = new TAddAbility();
+            AddAbil = new AddAbility();
             ushort wOldHP = Abil.HP;
             ushort wOldMP = Abil.MP;
             WAbil = Abil;
@@ -1912,9 +1912,9 @@ namespace GameSvr.Actor
                 }
                 if (i == Grobal2.U_DRESS)
                 {
-                    if (UseItems[i].btValue[5] > 0)
+                    if (UseItems[i].Desc[5] > 0)
                     {
-                        DressEffType = UseItems[i].btValue[5];
+                        DressEffType = UseItems[i].Desc[5];
                     }
                     if (StdItem.AniCount > 0)
                     {
@@ -2369,23 +2369,23 @@ namespace GameSvr.Actor
             Abil.SC = HUtil32.MakeLong(HUtil32.LoWord(AddAbil.wSC) + HUtil32.LoWord(Abil.SC), HUtil32.HiWord(AddAbil.wSC) + HUtil32.HiWord(Abil.SC));
             if (StatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
             {
-                Abil.AC = HUtil32.MakeLong(HUtil32.LoWord(Abil.AC), HUtil32.HiWord(Abil.AC) + 2 + (Abil.Level / 7));
+                Abil.AC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.AC), HUtil32.HiWord(Abil.AC) + 2 + (Abil.Level / 7));
             }
             if (StatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
             {
-                Abil.MAC = HUtil32.MakeLong(HUtil32.LoWord(Abil.MAC), HUtil32.HiWord(Abil.MAC) + 2 + (Abil.Level / 7));
+                Abil.MAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.MAC), HUtil32.HiWord(Abil.MAC) + 2 + (Abil.Level / 7));
             }
             if (StatusArrValue[0] > 0)
             {
-                Abil.DC = HUtil32.MakeLong(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) + 2 + StatusArrValue[0]);
+                Abil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) + 2 + StatusArrValue[0]);
             }
             if (StatusArrValue[1] > 0)
             {
-                Abil.MC = HUtil32.MakeLong(HUtil32.LoWord(Abil.MC), HUtil32.HiWord(Abil.MC) + 2 + StatusArrValue[1]);
+                Abil.MC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.MC), HUtil32.HiWord(Abil.MC) + 2 + StatusArrValue[1]);
             }
             if (StatusArrValue[2] > 0)
             {
-                Abil.SC = HUtil32.MakeLong(HUtil32.LoWord(Abil.SC), HUtil32.HiWord(Abil.SC) + 2 + StatusArrValue[2]);
+                Abil.SC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(Abil.SC), HUtil32.HiWord(Abil.SC) + 2 + StatusArrValue[2]);
             }
             if (StatusArrValue[3] > 0)
             {

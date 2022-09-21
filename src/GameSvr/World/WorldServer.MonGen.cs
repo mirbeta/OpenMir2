@@ -879,11 +879,11 @@ namespace GameSvr.World
                 baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
                 baseObject.Abil.MP = 0;
                 baseObject.Abil.MaxMP = monster.wMP;
-                baseObject.Abil.AC = HUtil32.MakeLong(monster.wAC, monster.wAC);
-                baseObject.Abil.MAC = HUtil32.MakeLong(monster.wMAC, monster.wMAC);
-                baseObject.Abil.DC = HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
-                baseObject.Abil.MC = HUtil32.MakeLong(monster.wMC, monster.wMC);
-                baseObject.Abil.SC = HUtil32.MakeLong(monster.wSC, monster.wSC);
+                baseObject.Abil.AC =(ushort) HUtil32.MakeLong(monster.wAC, monster.wAC);
+                baseObject.Abil.MAC = (ushort)HUtil32.MakeLong(monster.wMAC, monster.wMAC);
+                baseObject.Abil.DC = (ushort)HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
+                baseObject.Abil.MC = (ushort)HUtil32.MakeLong(monster.wMC, monster.wMC);
+                baseObject.Abil.SC = (ushort)HUtil32.MakeLong(monster.wSC, monster.wSC);
                 baseObject.SpeedPoint = (byte)monster.wSpeed;
                 baseObject.HitPoint = (byte)monster.wHitPoint;
                 baseObject.WalkSpeed = monster.wWalkSpeed;

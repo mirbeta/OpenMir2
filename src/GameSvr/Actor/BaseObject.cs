@@ -129,7 +129,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 附加属性
         /// </summary>
-        private TAddAbility AddAbil;
+        private AddAbility AddAbil;
         /// <summary>
         /// 视觉范围大小
         /// </summary>
@@ -917,7 +917,7 @@ namespace GameSvr.Actor
             MoXieSuite = 0;
             HongMoSuite = 0;
             MDb3B0 = 0;
-            AddAbil = new TAddAbility();
+            AddAbil = new AddAbility();
             MsgList = new List<SendMessage>();
             VisibleHumanList = new List<BaseObject>();
             VisibleActors = new List<VisibleBaseObject>();
@@ -1598,16 +1598,16 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            if (UseItems[Grobal2.U_WEAPON].btValue[3] > 0)
+            if (UseItems[Grobal2.U_WEAPON].Desc[3] > 0)
             {
-                UseItems[Grobal2.U_WEAPON].btValue[3] -= 1;
+                UseItems[Grobal2.U_WEAPON].Desc[3] -= 1;
                 SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
             }
             else
             {
-                if (UseItems[Grobal2.U_WEAPON].btValue[4] < 10)
+                if (UseItems[Grobal2.U_WEAPON].Desc[4] < 10)
                 {
-                    UseItems[Grobal2.U_WEAPON].btValue[4]++;
+                    UseItems[Grobal2.U_WEAPON].Desc[4]++;
                     SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
             }
@@ -2205,9 +2205,9 @@ namespace GameSvr.Actor
         /// </summary>
         protected void CheckSeeHealGauge(UserMagic magic)
         {
-            if (magic.MagicInfo.wMagicID == 28)
+            if (magic.Magic.MagicId == 28)
             {
-                if (magic.btLevel >= 2)
+                if (magic.Level >= 2)
                 {
                     AbilSeeHealGauge = true;
                 }
@@ -2641,32 +2641,32 @@ namespace GameSvr.Actor
             for (var i = 0; i < MagicList.Count; i++)
             {
                 var userMagic = MagicList[i];
-                MagicArr[userMagic.wMagIdx] = userMagic;
-                switch (userMagic.wMagIdx)
+                MagicArr[userMagic.MagIdx] = userMagic;
+                switch (userMagic.MagIdx)
                 {
                     case MagicConst.SKILL_ONESWORD: // 基本剑法
-                        if (userMagic.btLevel > 0)
+                        if (userMagic.Level > 0)
                         {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.btLevel));
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
                         }
                         break;
                     case MagicConst.SKILL_ILKWANG: // 精神力战法
-                        if (userMagic.btLevel > 0)
+                        if (userMagic.Level > 0)
                         {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.btLevel));
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
                         }
                         break;
                     case MagicConst.SKILL_YEDO: // 攻杀剑法
-                        if (userMagic.btLevel > 0)
+                        if (userMagic.Level > 0)
                         {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.btLevel));
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
                         }
-                        HitPlus = (byte)(M2Share.DEFHIT + userMagic.btLevel);
-                        AttackSkillCount = (byte)(7 - userMagic.btLevel);
+                        HitPlus = (byte)(M2Share.DEFHIT + userMagic.Level);
+                        AttackSkillCount = (byte)(7 - userMagic.Level);
                         AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         break;
                     case MagicConst.SKILL_FIRESWORD: // 烈火剑法
-                        HitDouble = (byte)(4 + userMagic.btLevel * 4);
+                        HitDouble = (byte)(4 + userMagic.Level * 4);
                         break;
                 }
             }
@@ -2687,15 +2687,15 @@ namespace GameSvr.Actor
 
             if (magic != null)
             {
-                if (!IsTrainingSkill(magic.wMagicID))
+                if (!IsTrainingSkill(magic.MagicId))
                 {
                     var userMagic = new UserMagic
                     {
-                        MagicInfo = magic,
-                        wMagIdx = magic.wMagicID,
-                        btKey = 0,
-                        btLevel = 1,
-                        nTranPoint = 0
+                        Magic = magic,
+                        MagIdx = magic.MagicId,
+                        Key = 0,
+                        Level = 1,
+                        TranPoint = 0
                     };
                     MagicList.Add(userMagic);
                     if (Race == Grobal2.RC_PLAYOBJECT)
@@ -2724,8 +2724,8 @@ namespace GameSvr.Actor
         /// <returns></returns>
         private ushort GetMagicSpell(UserMagic userMagic)
         {
-            return (ushort)HUtil32.Round(userMagic.MagicInfo.wSpell / (userMagic.MagicInfo.btTrainLv + 1) *
-                                         (userMagic.btLevel + 1));
+            return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) *
+                                         (userMagic.Level + 1));
         }
 
         private void CheckPkStatus()
@@ -2772,7 +2772,7 @@ namespace GameSvr.Actor
             for (var i = 0; i < MagicList.Count; i++)
             {
                 var userMagic = MagicList[i];
-                if (userMagic.MagicInfo.sMagicName == sSkillName)
+                if (userMagic.Magic.MagicName == sSkillName)
                 {
                     var playObject = this as PlayObject;
                     playObject.SendDelMagic(userMagic);
@@ -3071,14 +3071,13 @@ namespace GameSvr.Actor
 
         private void MonsterRecalcAbilitys()
         {
-            WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC));
+            WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC));
             var n8 = 0;
             if ((Race == MonsterConst.MonsterWhiteskeleton) ||
                 (Race == MonsterConst.MonsterElfmonster) ||
                 (Race == MonsterConst.MonsterElfwarrior))
             {
-                WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC),
-                    HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
                 n8 = n8 + HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * SlaveExpLevel;
                 n8 = n8 + WAbil.MaxHP;
                 if (SlaveExpLevel > 0)
@@ -3093,7 +3092,7 @@ namespace GameSvr.Actor
             else
             {
                 n8 = Abil.MaxHP;
-                WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
                 n8 = n8 + HUtil32.Round(Abil.MaxHP * 0.15) * SlaveExpLevel;
                 WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(Abil.MaxHP + SlaveExpLevel * 60), n8);
             }
@@ -3667,17 +3666,10 @@ namespace GameSvr.Actor
             {
                 if (StatusTimeArr[i] > 0)
                 {
-                    nStatus = (int)((0x80000000 >> i) | nStatus);
+                    nStatus = (int)((long)nStatus | (0x80000000 >> i));
                 }
             }
-            if ((nStatus & 0x00100000) != 0)
-            {
-                if ((MagicArr[31] != null) && (MagicArr[31].btLevel >= 4))
-                {
-                    nStatus = (int)(0x80000000 | 11 | nStatus);
-                }
-            }
-            return CharStatusEx | nStatus;
+            return nStatus | (CharStatusEx & 0x0000FFFF);
         }
 
         public void AbilCopyToWAbil()
@@ -3690,9 +3682,9 @@ namespace GameSvr.Actor
             AbilCopyToWAbil();
             for (var i = 0; i < MagicList.Count; i++)
             {
-                if (MagicList[i].btLevel >= 4)
+                if (MagicList[i].Level >= 4)
                 {
-                    MagicList[i].btLevel = 0;
+                    MagicList[i].Level = 0;
                 }
             }
             AddtoMapSuccess = true;
@@ -4752,7 +4744,7 @@ namespace GameSvr.Actor
             for (var i = 0; i < MagicList.Count; i++)
             {
                 userMagic = MagicList[i];
-                if (userMagic.MagicInfo.wMagicID == nMagicId)
+                if (userMagic.Magic.MagicId == nMagicId)
                 {
                     result = userMagic;
                     break;
@@ -4768,36 +4760,36 @@ namespace GameSvr.Actor
             {
                 nTranPoint = nTranPoint * 3;
             }
-            userMagic.nTranPoint += nTranPoint;
+            userMagic.TranPoint += nTranPoint;
         }
 
         public bool CheckMagicLevelup(UserMagic userMagic)
         {
             var result = false;
             int nLevel;
-            if ((userMagic.btLevel < 4) && (userMagic.MagicInfo.btTrainLv >= userMagic.btLevel))
+            if ((userMagic.Level < 4) && (userMagic.Magic.TrainLv >= userMagic.Level))
             {
-                nLevel = userMagic.btLevel;
+                nLevel = userMagic.Level;
             }
             else
             {
                 nLevel = 0;
             }
 
-            if ((userMagic.MagicInfo.btTrainLv > userMagic.btLevel) &&
-                (userMagic.MagicInfo.MaxTrain[nLevel] <= userMagic.nTranPoint))
+            if ((userMagic.Magic.TrainLv > userMagic.Level) &&
+                (userMagic.Magic.MaxTrain[nLevel] <= userMagic.TranPoint))
             {
-                if (userMagic.MagicInfo.btTrainLv > userMagic.btLevel)
+                if (userMagic.Magic.TrainLv > userMagic.Level)
                 {
-                    userMagic.nTranPoint -= userMagic.MagicInfo.MaxTrain[nLevel];
-                    userMagic.btLevel++;
-                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, userMagic.MagicInfo.wMagicID, userMagic.btLevel,
-                        userMagic.nTranPoint, "", 800);
+                    userMagic.TranPoint -= userMagic.Magic.MaxTrain[nLevel];
+                    userMagic.Level++;
+                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level,
+                        userMagic.TranPoint, "", 800);
                     CheckSeeHealGauge(userMagic);
                 }
                 else
                 {
-                    userMagic.nTranPoint = userMagic.MagicInfo.MaxTrain[nLevel];
+                    userMagic.TranPoint = userMagic.Magic.MaxTrain[nLevel];
                 }
 
                 result = true;
@@ -5214,7 +5206,7 @@ namespace GameSvr.Actor
             for (var i = 0; i < MagicList.Count; i++)
             {
                 userMagic = MagicList[i];
-                if ((userMagic != null) && (userMagic.wMagIdx == nIndex))
+                if ((userMagic != null) && (userMagic.MagIdx == nIndex))
                 {
                     result = true;
                     break;

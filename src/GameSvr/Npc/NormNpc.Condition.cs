@@ -1151,9 +1151,9 @@ namespace GameSvr.Npc
                 return result;
             }
             var nAddAllValue = 0;
-            for (var i = 0; i < UserItem.btValue.Length; i++)
+            for (var i = 0; i < UserItem.Desc.Length; i++)
             {
-                nAddAllValue += UserItem.btValue[i];
+                nAddAllValue += UserItem.Desc[i];
             }
             cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
@@ -1714,9 +1714,9 @@ namespace GameSvr.Npc
             for (var i = 0; i < PlayObject.MagicList.Count; i++)
             {
                 UserMagic = PlayObject.MagicList[i];
-                if (string.Compare(UserMagic.MagicInfo.sMagicName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(UserMagic.Magic.MagicName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (UserMagic.btLevel == QuestConditionInfo.nParam2)
+                    if (UserMagic.Level == QuestConditionInfo.nParam2)
                     {
                         result = true;
                     }

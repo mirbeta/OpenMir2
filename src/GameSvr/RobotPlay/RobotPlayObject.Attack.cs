@@ -87,7 +87,7 @@ namespace GameSvr.RobotPlay
                         UserMagic = FindMagic(m_nSelectMagic);
                         if (UserMagic != null)
                         {
-                            if (UserMagic.btKey == 0)
+                            if (UserMagic.Key == 0)
                             {
                                 switch (m_nSelectMagic)
                                 {
@@ -187,7 +187,7 @@ namespace GameSvr.RobotPlay
                     var UserMagic = FindMagic(m_nSelectMagic);
                     if (UserMagic != null)
                     {
-                        if (UserMagic.btKey == 0)// 技能打开状态才能使用
+                        if (UserMagic.Key == 0)// 技能打开状态才能使用
                         {
                             AttackTick = HUtil32.GetTickCount();
                             return UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret);
@@ -277,7 +277,7 @@ namespace GameSvr.RobotPlay
                             if (Abil.HP <= Math.Round(Abil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
+                                if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, null);
                                     AttackTick = HUtil32.GetTickCount();
@@ -305,7 +305,7 @@ namespace GameSvr.RobotPlay
                             if (Abil.HP <= Math.Round(Abil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
+                                if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, this);
                                     AttackTick = HUtil32.GetTickCount();
@@ -350,7 +350,7 @@ namespace GameSvr.RobotPlay
                         case MagicConst.SKILL_CLOAK:
                         case MagicConst.SKILL_BIGCLOAK: // 集体隐身术  隐身术
                             UserMagic = FindMagic(m_nSelectMagic);
-                            if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
+                            if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                             {
                                 UseSpell(UserMagic, CurrX, CurrY, this);
                                 AttackTick = HUtil32.GetTickCount();
@@ -376,7 +376,7 @@ namespace GameSvr.RobotPlay
                         case MagicConst.SKILL_SKELLETON:
                         case MagicConst.SKILL_SINSU:
                             UserMagic = FindMagic(m_nSelectMagic);
-                            if (UserMagic != null && UserMagic.btKey == 0)
+                            if (UserMagic != null && UserMagic.Key == 0)
                             {
                                 UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
                                 AttackTick = HUtil32.GetTickCount();
@@ -404,7 +404,7 @@ namespace GameSvr.RobotPlay
                     UserMagic = FindMagic(m_nSelectMagic);
                     if (UserMagic != null)
                     {
-                        if (UserMagic.btKey == 0)   // 技能打开状态才能使用 
+                        if (UserMagic.Key == 0)   // 技能打开状态才能使用 
                         {
                             AttackTick = HUtil32.GetTickCount();
                             result = UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法

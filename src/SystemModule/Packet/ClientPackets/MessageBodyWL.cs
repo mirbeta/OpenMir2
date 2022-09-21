@@ -4,10 +4,10 @@ namespace SystemModule.Packet.ClientPackets
 {
     public class MessageBodyWL : Packets
     {
-        public int lParam1;
-        public int lParam2;
-        public int lTag1;
-        public int lTag2;
+        public int Param1;
+        public int Param2;
+        public int Tag1;
+        public int Tag2;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -16,10 +16,10 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(lParam1);
-            writer.Write(lParam2);
-            writer.Write(lTag1);
-            writer.Write(lTag2);
+            writer.Write(Param1);
+            writer.Write(Param2);
+            writer.Write(Tag1);
+            writer.Write(Tag2);
         }
     }
 }

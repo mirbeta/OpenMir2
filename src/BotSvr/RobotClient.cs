@@ -380,7 +380,7 @@ namespace BotSvr
                         //pmag.EffectNumber = g_PlayScene.ProcMagic.XMagic.Def.btEffect;
                         //pmag.MagicSerial = g_PlayScene.ProcMagic.XMagic.Def.wMagicID;
                         //pmag.ServerMagicCode = 0;
-                        MShare.g_dwMagicDelayTime = 200 + g_PlayScene.ProcMagic.XMagic.Def.dwDelayTime;
+                        MShare.g_dwMagicDelayTime = 200 + g_PlayScene.ProcMagic.XMagic.Def.DelayTime;
                         MShare.g_dwMagicPKDelayTime = 0;
                         if (MShare.g_MagicTarget != null)
                         {
@@ -816,12 +816,12 @@ namespace BotSvr
             {
                 return;
             }
-            if (pcm.Def.wMagicID == 0)
+            if (pcm.Def.MagicId == 0)
             {
                 return;
             }
-            SpellSpend = (ushort)(HUtil32.Round(pcm.Def.wSpell / (pcm.Def.btTrainLv + 1) * (pcm.Level + 1)) + pcm.Def.btDefSpell);
-            if (pcm.Def.wMagicID == 114)
+            SpellSpend = (ushort)(HUtil32.Round(pcm.Def.Spell / (pcm.Def.TrainLv + 1) * (pcm.Level + 1)) + pcm.Def.DefSpell);
+            if (pcm.Def.MagicId == 114)
             {
                 if (MShare.g_boSkill_114_MP)
                 {
@@ -832,7 +832,7 @@ namespace BotSvr
                     boSeriesSkill = true;
                 }
             }
-            else if (new ArrayList(new int[] { 68, 78 }).Contains(pcm.Def.wMagicID))
+            else if (new ArrayList(new int[] { 68, 78 }).Contains(pcm.Def.MagicId))
             {
                 if (MShare.g_boSkill_68_MP)
                 {
@@ -845,7 +845,7 @@ namespace BotSvr
             }
             else
             {
-                boSeriesSkill = pcm.Def.wMagicID >= 100 && pcm.Def.wMagicID <= 111;
+                boSeriesSkill = pcm.Def.MagicId >= 100 && pcm.Def.MagicId <= 111;
             }
             if (boSeriesSkill)
             {
@@ -857,14 +857,14 @@ namespace BotSvr
             }
             if (SpellSpend <= defSpellSpend)
             {
-                if (pcm.Def.btEffectType == 0)
+                if (pcm.Def.EffectType == 0)
                 {
-                    if (new ArrayList(new int[] { 68, 78 }).Contains(pcm.Def.wMagicID))
+                    if (new ArrayList(new int[] { 68, 78 }).Contains(pcm.Def.MagicId))
                     {
                         boContinue = true;
                         goto labSpell;
                     }
-                    switch (pcm.Def.wMagicID)
+                    switch (pcm.Def.MagicId)
                     {
                         case 26 when MShare.g_boNextTimeFireHit || (MShare.GetTickCount() - MShare.g_dwLatestFireHitTick <= 10 * 1000): // 烈火时间间隔
                         case 66 when MShare.g_boCanSLonHit || (MShare.GetTickCount() - MShare.g_dwLatestSLonHitTick <= 8 * 1000):
@@ -889,7 +889,7 @@ namespace BotSvr
                         {
                             MShare.g_dwLatestSpellTick = MShare.GetTickCount();
                             MShare.g_dwMagicDelayTime = 0;
-                            SendSpellMsg(Grobal2.CM_SPELL, MShare.g_MySelf.m_btDir, 0, pcm.Def.wMagicID, 0, false);
+                            SendSpellMsg(Grobal2.CM_SPELL, MShare.g_MySelf.m_btDir, 0, pcm.Def.MagicId, 0, false);
                         }
                     }
                     else
@@ -898,12 +898,12 @@ namespace BotSvr
                         {
                             MShare.g_dwLatestSpellTick = MShare.GetTickCount();
                             MShare.g_dwMagicDelayTime = 0;
-                            SendSpellMsg(Grobal2.CM_SPELL, MShare.g_MySelf.m_btDir, 0, pcm.Def.wMagicID, 0, false);
+                            SendSpellMsg(Grobal2.CM_SPELL, MShare.g_MySelf.m_btDir, 0, pcm.Def.MagicId, 0, false);
                         }
                     }
                 }
             labSpell:
-                fUnLockMagic = new ArrayList(new[] { 2, 9, 10, 14, 21, 33, 37, 41, 46, 50, 58, 70, 72, 75 }).Contains(pcm.Def.wMagicID);
+                fUnLockMagic = new ArrayList(new[] { 2, 9, 10, 14, 21, 33, 37, 41, 46, 50, 58, 70, 72, 75 }).Contains(pcm.Def.MagicId);
                 if (fUnLockMagic)
                 {
                     MShare.g_MagicTarget = MShare.g_FocusCret;
@@ -987,10 +987,10 @@ namespace BotSvr
                     MShare.g_dwLatestSpellTick = MShare.GetTickCount();
                     tdir = ClFunc.GetFlyDirection(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, targx, targy);
                     var pmag = new TUseMagicInfo();
-                    pmag.EffectNumber = pcm.Def.btEffect;
-                    pmag.MagicSerial = pcm.Def.wMagicID;
+                    pmag.EffectNumber = pcm.Def.Effect;
+                    pmag.MagicSerial = pcm.Def.MagicId;
                     pmag.ServerMagicCode = 0;
-                    MShare.g_dwMagicDelayTime = 200 + pcm.Def.dwDelayTime;
+                    MShare.g_dwMagicDelayTime = 200 + pcm.Def.DelayTime;
                     MShare.g_dwMagicPKDelayTime = 0;
                     if (MShare.g_MagicTarget != null)
                     {
@@ -1009,13 +1009,13 @@ namespace BotSvr
                     if (MShare.GetTickCount() - MShare.g_IPointLessHintTick > 5000)
                     {
                         MShare.g_IPointLessHintTick = MShare.GetTickCount();
-                        DScreen.AddSysMsg($"需要 {SpellSpend} 内力值才能释放 {pcm.Def.sMagicName}");
+                        DScreen.AddSysMsg($"需要 {SpellSpend} 内力值才能释放 {pcm.Def.MagicName}");
                     }
                 }
                 else if (MShare.GetTickCount() - MShare.g_MPLessHintTick > 1000)
                 {
                     MShare.g_MPLessHintTick = MShare.GetTickCount();
-                    DScreen.AddSysMsg($"需要 {SpellSpend} 魔法值才能释放 {pcm.Def.sMagicName}");
+                    DScreen.AddSysMsg($"需要 {SpellSpend} 魔法值才能释放 {pcm.Def.MagicName}");
                 }
             }
         }
@@ -3201,9 +3201,9 @@ namespace BotSvr
                     {
                         msg.Series = (byte)RandomNumber.GetInstance().Random(8);
                     }
-                    g_PlayScene.SendMsg(Grobal2.SM_LOGON, msg.Recog, msg.Param, msg.Tag, msg.Series, wl.lParam1, wl.lParam2, "");
+                    g_PlayScene.SendMsg(Grobal2.SM_LOGON, msg.Recog, msg.Param, msg.Tag, msg.Series, wl.Param1, wl.Param2, "");
                     SendClientMessage(Grobal2.CM_QUERYBAGITEMS, 1, 0, 0, 0);
-                    if (HUtil32.LoByte(HUtil32.LoWord(wl.lTag1)) == 1)
+                    if (HUtil32.LoByte(HUtil32.LoWord(wl.Tag1)) == 1)
                     {
                         MShare.g_boAllowGroup = true;
                     }
@@ -3502,10 +3502,10 @@ namespace BotSvr
                     if (Actor != null)
                     {
                         Actor.SendMsg(msg.Ident, msg.Param, msg.Tag, msg.Series, 0, 0, "", 0);
-                        Actor.m_nTargetX = wl.lParam1;
-                        Actor.m_nTargetY = wl.lParam2;
-                        Actor.m_nTargetRecog = wl.lTag1;
-                        Actor.m_nMagicNum = wl.lTag2;
+                        Actor.m_nTargetX = wl.Param1;
+                        Actor.m_nTargetY = wl.Param2;
+                        Actor.m_nTargetRecog = wl.Tag1;
+                        Actor.m_nMagicNum = wl.Tag2;
                     }
                     break;
                 case Grobal2.SM_SPELL:
@@ -3607,14 +3607,14 @@ namespace BotSvr
                         {
                             if ((Actor.m_btRace != 0) || !MShare.g_gcGeneral[15])
                             {
-                                Actor.UpdateMsg(Grobal2.SM_STRUCK, wl.lTag2, 0, msg.Series, wl.lParam1, wl.lParam2, "", wl.lTag1);
+                                Actor.UpdateMsg(Grobal2.SM_STRUCK, wl.Tag2, 0, msg.Series, wl.Param1, wl.Param2, "", wl.Tag1);
                             }
                         }
                         Actor.m_Abil.HP = msg.Param;
                         Actor.m_Abil.MaxHP = msg.Tag;
                         if (MShare.g_boOpenAutoPlay && TimerAutoPlay.Enabled) //  自己受人攻击,小退
                         {
-                            Actor2 = g_PlayScene.FindActor(wl.lTag1);
+                            Actor2 = g_PlayScene.FindActor(wl.Tag1);
                             if ((Actor2 == null) || ((Actor2.m_btRace != 0) && (Actor2.m_btIsHero != 1)))
                             {
                                 return;
@@ -3775,10 +3775,10 @@ namespace BotSvr
                     Actor = g_PlayScene.FindActor(msg.Recog);
                     if (Actor == null)
                     {
-                        Actor = g_PlayScene.NewActor(msg.Recog, msg.Param, msg.Tag, msg.Series, wl.lParam1, wl.lParam2);
+                        Actor = g_PlayScene.NewActor(msg.Recog, msg.Param, msg.Tag, msg.Series, wl.Param1, wl.Param2);
                     }
-                    Actor.m_nCurrentEvent = wl.lTag1;
-                    Actor.SendMsg(Grobal2.SM_DIGUP, msg.Param, msg.Tag, msg.Series, wl.lParam1, wl.lParam2, "", 0);
+                    Actor.m_nCurrentEvent = wl.Tag1;
+                    Actor.SendMsg(Grobal2.SM_DIGUP, msg.Param, msg.Tag, msg.Series, wl.Param1, wl.Param2, "", 0);
                     break;
                 case Grobal2.SM_DIGDOWN:
                     g_PlayScene.SendMsg(Grobal2.SM_DIGDOWN, msg.Recog, msg.Param, msg.Tag, 0, 0, 0, "");
@@ -4981,11 +4981,11 @@ namespace BotSvr
         private void ClientGetAddMagic(string body)
         {
             var pcm = EDCode.DecodeBuffer<ClientMagic>(body);
-            MShare.g_MagicArr[pcm.Def.wMagicID] = pcm;
+            MShare.g_MagicArr[pcm.Def.MagicId] = pcm;
             MShare.g_MagicList.Add(pcm);
             for (var i = 0; i < MShare.g_MagicList.Count; i++)
             {
-                if (MShare.g_MagicList[i].Def.wMagicID == 67)
+                if (MShare.g_MagicList[i].Def.MagicId == 67)
                 {
                     //MShare.g_MagicList.Move(i, 0);
                     break;
@@ -4997,7 +4997,7 @@ namespace BotSvr
         {
             for (var i = MShare.g_MagicList.Count - 1; i >= 0; i--)
             {
-                if (MShare.g_MagicList[i].Def.wMagicID == magid)
+                if (MShare.g_MagicList[i].Def.MagicId == magid)
                 {
                     MShare.g_MagicList[i] = null;
                     MShare.g_MagicList.RemoveAt(i);
@@ -5146,7 +5146,7 @@ namespace BotSvr
                 {
                     var pcm = EDCode.DecodeBuffer<ClientMagic>(data);
                     MShare.g_MagicList.Add(pcm);
-                    MShare.g_MagicArr[pcm.Def.wMagicID] = pcm;
+                    MShare.g_MagicArr[pcm.Def.MagicId] = pcm;
                 }
                 else
                 {
@@ -5155,7 +5155,7 @@ namespace BotSvr
             }
             for (var i = 0; i < MShare.g_MagicList.Count; i++)
             {
-                if (MShare.g_MagicList[i].Def.wMagicID == 67)
+                if (MShare.g_MagicList[i].Def.MagicId == 67)
                 {
                     //MShare.g_MagicList.Move(i, 0);
                     break;
@@ -5186,7 +5186,7 @@ namespace BotSvr
                 }
                 if (pcm != null)
                 {
-                    pcm.Def.btTrainLv = (byte)magMaxlv;
+                    pcm.Def.TrainLv = (byte)magMaxlv;
                 }
             }
         }
@@ -5675,12 +5675,12 @@ namespace BotSvr
                 return;
             }
             MShare.g_MySelf.m_btPoisonDecHealth = 0;
-            if (new ArrayList(new int[] { 13, 30, 43, 55, 57 }).Contains(pcm.Def.wMagicID))
+            if (new ArrayList(new int[] { 13, 30, 43, 55, 57 }).Contains(pcm.Def.MagicId))
             {
                 Str = "符";
                 cStr = "符";
             }
-            else if (new ArrayList(new int[] { 6, 38 }).Contains(pcm.Def.wMagicID))
+            else if (new ArrayList(new int[] { 6, 38 }).Contains(pcm.Def.MagicId))
             {
                 if (MShare.g_MagicTarget != null)
                 {

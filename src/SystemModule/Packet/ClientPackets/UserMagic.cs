@@ -5,15 +5,15 @@ namespace SystemModule.Packet.ClientPackets
 {
     public class UserMagic : Packets
     {
-        public MagicInfo MagicInfo;
-        public byte btLevel;
-        public ushort wMagIdx;
-        public int nTranPoint;
-        public byte btKey;
+        public MagicInfo Magic;
+        public ushort MagIdx;
+        public byte Level;
+        public byte Key;
+        public int TranPoint;
 
         public UserMagic()
         {
-            MagicInfo = new MagicInfo();
+            Magic = new MagicInfo();
         }
 
         protected override void ReadPacket(BinaryReader reader)
@@ -23,11 +23,11 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(MagicInfo.GetBuffer());
-            writer.Write(btLevel);
-            writer.Write(wMagIdx);
-            writer.Write(nTranPoint);
-            writer.Write(btKey);
+            writer.Write(Magic.GetBuffer());
+            writer.Write(MagIdx);
+            writer.Write(Level);
+            writer.Write(Key);
+            writer.Write(TranPoint);
         }
     }
 }

@@ -128,6 +128,11 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
+        public bool Get(string sName, ref THumDataInfo HumanRCD)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Update(int nIndex, ref THumDataInfo HumanRCD)
         {
             bool result = false;

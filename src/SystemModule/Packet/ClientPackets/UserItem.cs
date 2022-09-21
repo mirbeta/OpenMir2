@@ -35,11 +35,20 @@ namespace SystemModule.Packet.ClientPackets
         [ProtoMember(4)]
         public ushort DuraMax;
         [ProtoMember(5)]
-        public byte[] btValue;
+        public byte[] Desc;
+        [ProtoMember(6)]
+        public byte ColorR;
+        [ProtoMember(7)]
+        public byte ColorG;
+        [ProtoMember(8)]
+        public byte ColorB;
+        [ProtoMember(9)]
+        public char[] Prefix;
 
         public UserItem()
         {
-            btValue = new byte[14];
+            Desc = new byte[14];
+            Prefix = new char[13];
         }
 
         public UserItem(UserItem userItem)
@@ -48,7 +57,7 @@ namespace SystemModule.Packet.ClientPackets
             wIndex = userItem.wIndex;
             Dura = userItem.Dura;
             DuraMax = userItem.DuraMax;
-            btValue = userItem.btValue;
+            Desc = userItem.Desc;
         }
 
         protected override void ReadPacket(BinaryReader reader)
@@ -57,7 +66,7 @@ namespace SystemModule.Packet.ClientPackets
             wIndex = reader.ReadUInt16();
             Dura = reader.ReadUInt16();
             DuraMax = reader.ReadUInt16();
-            btValue = reader.ReadBytes(14);
+            Desc = reader.ReadBytes(14);
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -66,7 +75,11 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(wIndex);
             writer.Write(Dura);
             writer.Write(DuraMax);
-            writer.Write(btValue);
+            writer.Write(Desc);
+            writer.Write(ColorR);
+            writer.Write(ColorG);
+            writer.Write(ColorB);
+            writer.Write(Prefix);
         }
     }
 }

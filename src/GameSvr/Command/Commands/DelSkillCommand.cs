@@ -57,7 +57,7 @@ namespace GameSvr.Command.Commands
                     }
                     else
                     {
-                        if (string.Compare(UserMagic.MagicInfo.sDescr, sSkillName, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(UserMagic.Magic.Desc, sSkillName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             m_PlayObject.SendDelMagic(UserMagic);
                             UserMagic = null;

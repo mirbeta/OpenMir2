@@ -498,7 +498,7 @@ namespace GameSvr.RobotPlay
             for (var i = 0; i < MagicList.Count; i++)
             {
                 UserMagic = MagicList[i];
-                if (UserMagic.MagicInfo.wMagicID == wMagIdx)
+                if (UserMagic.Magic.MagicId == wMagIdx)
                 {
                     result = UserMagic;
                     break;
@@ -513,7 +513,7 @@ namespace GameSvr.RobotPlay
             for (var i = 0; i < MagicList.Count; i++)
             {
                 UserMagic UserMagic = MagicList[i];
-                if (string.Compare(UserMagic.MagicInfo.sMagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(UserMagic.Magic.MagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UserMagic;
                     break;
@@ -1570,13 +1570,13 @@ namespace GameSvr.RobotPlay
             UserMagic UserMagic = FindMagic(wMagIdx);
             if (UserMagic != null)
             {
-                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx))
+                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx))
                 {
-                    result = UserMagic.btKey == 0 || IsRobot;
+                    result = UserMagic.Key == 0 || IsRobot;
                 }
                 else
                 {
-                    result = UserMagic.btKey == 0 || IsRobot;
+                    result = UserMagic.Key == 0 || IsRobot;
                 }
             }
             return result;
@@ -1841,7 +1841,7 @@ namespace GameSvr.RobotPlay
                     for (var i = 0; i < MagicList.Count; i++)
                     {
                         UserMagic = MagicList[i];
-                        switch (UserMagic.wMagIdx)
+                        switch (UserMagic.MagIdx)
                         {
                             case MagicConst.SKILL_FIREBALL:
                             case MagicConst.SKILL_FIREBALL2:
@@ -1868,9 +1868,9 @@ namespace GameSvr.RobotPlay
                     for (var i = 0; i < MagicList.Count; i++)
                     {
                         UserMagic = MagicList[i];
-                        if (UserMagic.MagicInfo.btJob == 2 || UserMagic.MagicInfo.btJob == 99)
+                        if (UserMagic.Magic.Job == 2 || UserMagic.Magic.Job == 99)
                         {
-                            switch (UserMagic.wMagIdx)
+                            switch (UserMagic.MagIdx)
                             {
                                 case MagicConst.SKILL_AMYOUNSUL:
                                 case MagicConst.SKILL_GROUPAMYOUNSUL:// 需要毒药
@@ -1934,15 +1934,15 @@ namespace GameSvr.RobotPlay
             }
             if (Envir != null)
             {
-                if (!Envir.AllowMagics(UserMagic.MagicInfo.sMagicName))
+                if (!Envir.AllowMagics(UserMagic.Magic.MagicName))
                 {
                     return result;
                 }
             }
-            boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx); // 是否是战士技能
+            boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx); // 是否是战士技能
             SpellTick -= 450;
             SpellTick = HUtil32._MAX(0, SpellTick);
-            switch (UserMagic.wMagIdx)
+            switch (UserMagic.MagIdx)
             {
                 case MagicConst.SKILL_ERGUM:
                     if (MagicArr[MagicConst.SKILL_ERGUM] != null)
@@ -1985,7 +1985,7 @@ namespace GameSvr.RobotPlay
                         MDwDoMotaeboTick = HUtil32.GetTickCount();
                         if (GetAttackDir(TargeTBaseObject, ref Direction))
                         {
-                            DoMotaebo(Direction, UserMagic.btLevel);
+                            DoMotaebo(Direction, UserMagic.Level);
                         }
                     }
                     break;
@@ -1996,7 +1996,7 @@ namespace GameSvr.RobotPlay
                     n14 = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY);
                     Direction = (byte)n14;
                     BaseObject = null;
-                    if (UserMagic.wMagIdx >= 60 && UserMagic.wMagIdx <= 65)
+                    if (UserMagic.MagIdx >= 60 && UserMagic.MagIdx <= 65)
                     {
                         if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                         {
@@ -2007,7 +2007,7 @@ namespace GameSvr.RobotPlay
                     }
                     else
                     {
-                        switch (UserMagic.wMagIdx)
+                        switch (UserMagic.MagIdx)
                         {
                             case MagicConst.SKILL_HEALLING:
                             case MagicConst.SKILL_HANGMAJINBUB:
@@ -2070,7 +2070,7 @@ namespace GameSvr.RobotPlay
                         return result;
                     }
                 }
-                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx))
+                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx))
                 {
                     result = M2Share.MagicMgr.DoSpell(this, UserMagic, nTargetX, nTargetY, BaseObject);
                     AttackTick = HUtil32.GetTickCount();
@@ -2078,7 +2078,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.Error(Format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
+                M2Share.Log.Error(Format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.MagIdx, nTargetX, nTargetY }));
             }
             return result;
         }

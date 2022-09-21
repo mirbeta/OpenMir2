@@ -110,6 +110,12 @@ namespace SystemModule
             if (buffSize <= 0) return result;
             if (buffSize < BufferSize)
             {
+                char[] test = new char[data.Length];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    test[i] = (char)data[i];
+                }
+                
                 var encBuf = new byte[buffSize * 2];
                 var tempBuf = new byte[buffSize];
                 Buffer.BlockCopy(data, 0, tempBuf, 0, buffSize);

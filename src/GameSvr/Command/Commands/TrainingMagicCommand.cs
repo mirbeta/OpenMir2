@@ -39,18 +39,18 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg($"{sSkillName} 技能名称不正确!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (m_PlayObject.IsTrainingSkill(Magic.wMagicID))
+            if (m_PlayObject.IsTrainingSkill(Magic.MagicId))
             {
 
                 PlayObject.SysMsg($"{sSkillName} 技能已修炼过了!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             UserMagic = new UserMagic();
-            UserMagic.MagicInfo = Magic;
-            UserMagic.wMagIdx = Magic.wMagicID;
-            UserMagic.btLevel = (byte)nLevel;
-            UserMagic.btKey = 0;
-            UserMagic.nTranPoint = 0;
+            UserMagic.Magic = Magic;
+            UserMagic.MagIdx = Magic.MagicId;
+            UserMagic.Level = (byte)nLevel;
+            UserMagic.Key = 0;
+            UserMagic.TranPoint = 0;
             m_PlayObject.MagicList.Add(UserMagic);
             m_PlayObject.SendAddMagic(UserMagic);
             m_PlayObject.RecalcAbilitys();

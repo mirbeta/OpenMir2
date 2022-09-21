@@ -79,9 +79,9 @@ namespace GameSvr.Command.Commands
                            "\09" + PlayObject.CurrY + "\09" + PlayObject.CharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
                            HUtil32.LoWord(StdItem.Dc) + "/" + HUtil32.HiWord(StdItem.Dc) + ")" + "(" + HUtil32.LoWord(StdItem.Mc) + "/" + HUtil32.HiWord(StdItem.Mc) + ")" + "(" +
                            HUtil32.LoWord(StdItem.Sc) + "/" + HUtil32.HiWord(StdItem.Sc) + ")" + "(" + HUtil32.LoWord(StdItem.Ac) + "/" +
-                           HUtil32.HiWord(StdItem.Ac) + ")" + "(" + HUtil32.LoWord(StdItem.Mac) + "/" + HUtil32.HiWord(StdItem.Mac) + ")" + UserItem.btValue[0]
-                           + "/" + UserItem.btValue[1] + "/" + UserItem.btValue[2] + "/" + UserItem.btValue[3] + "/" + UserItem.btValue[4] + "/" + UserItem.btValue[5] + "/" + UserItem.btValue[6]
-                           + "/" + UserItem.btValue[7] + "/" + UserItem.btValue[8] + "/" + UserItem.btValue[14] + "\09" + PlayObject.CharName);
+                           HUtil32.HiWord(StdItem.Ac) + ")" + "(" + HUtil32.LoWord(StdItem.Mac) + "/" + HUtil32.HiWord(StdItem.Mac) + ")" + UserItem.Desc[0]
+                           + "/" + UserItem.Desc[1] + "/" + UserItem.Desc[2] + "/" + UserItem.Desc[3] + "/" + UserItem.Desc[4] + "/" + UserItem.Desc[5] + "/" + UserItem.Desc[6]
+                           + "/" + UserItem.Desc[7] + "/" + UserItem.Desc[8] + "/" + UserItem.Desc[14] + "\09" + PlayObject.CharName);
                     }
                 }
                 else

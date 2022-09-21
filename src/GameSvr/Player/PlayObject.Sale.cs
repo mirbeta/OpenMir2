@@ -90,7 +90,7 @@ namespace GameSvr.Player
                     {
                         // 取自定义物品名称
                         sUserItemName = "";
-                        if (UserItem.btValue[13] == 1)
+                        if (UserItem.Desc[13] == 1)
                         {
                             sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
                         }
@@ -154,7 +154,7 @@ namespace GameSvr.Player
                     }
                     if (UserItem.MakeIndex == nItemIdx)
                     {
-                        if (UserItem.btValue[13] == 1)
+                        if (UserItem.Desc[13] == 1)
                         {
                             sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex); // 取自定义物品名称
                         }

@@ -593,17 +593,13 @@ namespace DBSvr.Services
                                 continue;
                             }
                             THumDataInfo chrRecord = null;
-                            if (_playDataStorage.Get(nIndex, ref chrRecord) >= 0)
+                            if (_playDataStorage.Get(sChrName, ref chrRecord))
                             {
-                                var btSex = chrRecord.Data.btSex;
-                                var sJob = chrRecord.Data.btJob;
-                                var sHair = chrRecord.Data.btHair;
-                                var sLevel = chrRecord.Data.Abil.Level;
                                 if (humRecord.Selected == 1)
                                 {
                                     sSendMsg = sSendMsg + "*";
                                 }
-                                sSendMsg = sSendMsg + sChrName + "/" + sJob + "/" + sHair + "/" + sLevel + "/" + btSex + "/";
+                                sSendMsg = sSendMsg + sChrName + "/" + chrRecord.Data.btJob + "/" + chrRecord.Data.btHair + "/" + chrRecord.Data.Abil.Level + "/" + chrRecord.Data.btSex + "/";
                                 nChrCount++;
                             }
                         }
@@ -637,8 +633,11 @@ namespace DBSvr.Services
             var nIndex = _playDataStorage.Index(sName);
             if (nIndex < 0)
                 return 0;
-            _playDataStorage.Get(nIndex, ref chrRecord);
-            return chrRecord.Data.Abil.Level;
+            if (_playDataStorage.Get(sName, ref chrRecord))
+            {
+                return chrRecord.Data.Abil.Level;
+            }
+            return 0;
         }
 
         /// <summary>
@@ -829,9 +828,11 @@ namespace DBSvr.Services
                 if (nIndex >= 0)
                 {
                     THumDataInfo chrRecord = null;
-                    _playDataStorage.Get(nIndex, ref chrRecord);
-                    sCurMap = chrRecord.Data.sCurMap;
-                    boDataOk = true;
+                    if (_playDataStorage.Get(sChrName, ref chrRecord))
+                    {
+                        sCurMap = chrRecord.Data.sCurMap;
+                        boDataOk = true;
+                    }
                 }
             }
             if (boDataOk)

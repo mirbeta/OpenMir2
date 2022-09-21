@@ -62,14 +62,14 @@ namespace GameSvr.Conf
                             Magic = M2Share.WorldEngine.FindMagic(sMagicName);
                             if (Magic != null)
                             {
-                                if (Magic.btJob == 99 || Magic.btJob == (byte)playObject.Job)
+                                if (Magic.Job == 99 || Magic.Job == (byte)playObject.Job)
                                 {
                                     UserMagic = new UserMagic();
-                                    UserMagic.MagicInfo = Magic;
-                                    UserMagic.wMagIdx = Magic.wMagicID;
-                                    UserMagic.btLevel = 3;
-                                    UserMagic.btKey = 0;
-                                    UserMagic.nTranPoint = Magic.MaxTrain[3];
+                                    UserMagic.Magic = Magic;
+                                    UserMagic.MagIdx = Magic.MagicId;
+                                    UserMagic.Level = 3;
+                                    UserMagic.Key = 0;
+                                    UserMagic.TranPoint = Magic.MaxTrain[3];
                                     playObject.MagicList.Add(UserMagic);
                                 }
                             }
