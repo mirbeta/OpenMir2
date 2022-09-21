@@ -90,20 +90,20 @@ namespace GameSvr.Magic
 
         private ushort DoSpell_MPow(UserMagic UserMagic)
         {
-            return (ushort)(UserMagic.MagicInfo.wPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.wMaxPower - UserMagic.MagicInfo.wPower));
+            return (ushort)(UserMagic.Magic.Power + M2Share.RandomNumber.Random(UserMagic.Magic.MaxPower - UserMagic.Magic.Power));
         }
 
         private ushort DoSpell_GetPower(UserMagic UserMagic, ushort nPower)
         {
-            return (ushort)(HUtil32.Round(nPower / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefPower +
-                            M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower));
+            return (ushort)(HUtil32.Round(nPower / (UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1)) + UserMagic.Magic.DefPower +
+                            M2Share.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower));
         }
 
         private ushort DoSpell_GetPower13(UserMagic UserMagic, int nInt)
         {
             var d10 = nInt / 3.0;
             var d18 = nInt - d10;
-            var result = (ushort)HUtil32.Round(d18 / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1) + d10 + (UserMagic.MagicInfo.btDefPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower)));
+            var result = (ushort)HUtil32.Round(d18 / (UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1) + d10 + (UserMagic.Magic.DefPower + M2Share.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower)));
             return result;
         }
 
@@ -139,7 +139,7 @@ namespace GameSvr.Magic
             int n1C;
             ushort nPower = 0;
             short nAmuletIdx = 0;
-            if (IsWarrSkill(UserMagic.wMagIdx))
+            if (IsWarrSkill(UserMagic.MagIdx))
             {
                 return false;
             }
@@ -147,7 +147,7 @@ namespace GameSvr.Magic
             {
                 return false;
             }
-            PlayObject.SendRefMsg(Grobal2.RM_SPELL, UserMagic.MagicInfo.btEffect, nTargetX, nTargetY, UserMagic.MagicInfo.wMagicID, "");
+            PlayObject.SendRefMsg(Grobal2.RM_SPELL, UserMagic.Magic.Effect, nTargetX, nTargetY, UserMagic.Magic.MagicId, "");
             if (TargeTBaseObject != null && TargeTBaseObject.Death)
             {
                 TargeTBaseObject = null;
@@ -155,11 +155,11 @@ namespace GameSvr.Magic
             var boTrain = false;
             var boSpellFail = false;
             var boSpellFire = true;
-            if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0 && UserMagic.MagicInfo.wMagicID > 40)
+            if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0 && UserMagic.Magic.MagicId > 40)
             {
                 return false;
             }
-            switch (UserMagic.MagicInfo.wMagicID)
+            switch (UserMagic.Magic.MagicId)
             {
                 case MagicConst.SKILL_FIREBALL:
                 case MagicConst.SKILL_FIREBALL2:
@@ -228,11 +228,11 @@ namespace GameSvr.Magic
                                     {
                                         case 1:
                                             nPower = (ushort)(DoSpell_GetPower13(UserMagic, 40) + DoSpell_GetRPow(PlayObject.Abil.SC) * 2);// 中毒类型 - 绿毒
-                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                         case 2:
                                             nPower = (ushort)(DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.Abil.SC) * 2);// 中毒类型 - 红毒
-                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                     }
                                     if (TargeTBaseObject.Race == Grobal2.RC_PLAYOBJECT || TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
@@ -247,7 +247,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_FIREWIND:
-                    if (MagPushArround(PlayObject, UserMagic.btLevel) > 0)
+                    if (MagPushArround(PlayObject, UserMagic.Level) > 0)
                     {
                         boTrain = true;
                     }
@@ -313,7 +313,7 @@ namespace GameSvr.Magic
                     if (MagicBase.CheckAmulet(PlayObject, 1, 1, ref nAmuletIdx))
                     {
                         MagicBase.UseAmulet(PlayObject, 1, 1, ref nAmuletIdx);
-                        switch (UserMagic.MagicInfo.wMagicID)
+                        switch (UserMagic.Magic.MagicId)
                         {
                             case MagicConst.SKILL_FIRECHARM:
                                 if (PlayObject.MagCanHitTarget(PlayObject.CurrX, PlayObject.CurrY, TargeTBaseObject))
@@ -384,7 +384,7 @@ namespace GameSvr.Magic
                 case MagicConst.SKILL_TAMMING:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
-                        if (MagTamming(PlayObject, TargeTBaseObject, nTargetX, nTargetY, UserMagic.btLevel))
+                        if (MagTamming(PlayObject, TargeTBaseObject, nTargetX, nTargetY, UserMagic.Level))
                         {
                             boTrain = true;
                         }
@@ -392,9 +392,9 @@ namespace GameSvr.Magic
                     break;
                 case MagicConst.SKILL_SPACEMOVE:
                     var targerActors = TargeTBaseObject == null ? 0 : TargeTBaseObject.ActorId;
-                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), targerActors, "");
+                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.Magic.EffectType, UserMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), targerActors, "");
                     boSpellFire = false;
-                    if (MagSaceMove(PlayObject, UserMagic.btLevel))
+                    if (MagSaceMove(PlayObject, UserMagic.Level))
                     {
                         boTrain = true;
                     }
@@ -421,7 +421,7 @@ namespace GameSvr.Magic
                 case MagicConst.SKILL_SHOWHP:
                     if (TargeTBaseObject != null && !TargeTBaseObject.ShowHp)
                     {
-                        if (M2Share.RandomNumber.Random(6) <= UserMagic.btLevel + 3)
+                        if (M2Share.RandomNumber.Random(6) <= UserMagic.Level + 3)
                         {
                             TargeTBaseObject.ShowHpTick = HUtil32.GetTickCount();
                             TargeTBaseObject.ShowHpInterval = DoSpell_GetPower13(UserMagic, DoSpell_GetRPow(PlayObject.Abil.SC) * 2 + 30) * 1000;
@@ -462,7 +462,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_SHIELD:
-                    if (PlayObject.MagBubbleDefenceUp(UserMagic.btLevel, DoSpell_GetPower(UserMagic, (ushort)(DoSpell_GetRPow(PlayObject.Abil.MC) + 15))))
+                    if (PlayObject.MagBubbleDefenceUp(UserMagic.Level, DoSpell_GetPower(UserMagic, (ushort)(DoSpell_GetRPow(PlayObject.Abil.MC) + 15))))
                     {
                         boTrain = true;
                     }
@@ -470,7 +470,7 @@ namespace GameSvr.Magic
                 case MagicConst.SKILL_KILLUNDEAD:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
-                        if (MagTurnUndead(PlayObject, TargeTBaseObject, nTargetX, nTargetY, UserMagic.btLevel))
+                        if (MagTurnUndead(PlayObject, TargeTBaseObject, nTargetX, nTargetY, UserMagic.Level))
                         {
                             boTrain = true;
                         }
@@ -491,7 +491,7 @@ namespace GameSvr.Magic
                     }
                     if (PlayObject.IsProperFriend(TargeTBaseObject))
                     {
-                        if (M2Share.RandomNumber.Random(7) - (UserMagic.btLevel + 1) < 0)
+                        if (M2Share.RandomNumber.Random(7) - (UserMagic.Level + 1) < 0)
                         {
                             if (TargeTBaseObject.StatusTimeArr[Grobal2.POISON_DECHEALTH] != 0)
                             {
@@ -519,7 +519,7 @@ namespace GameSvr.Magic
                     break;
                 case MagicConst.SKILL_MABE:
                     nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.Abil.MC), HUtil32.HiWord(PlayObject.Abil.MC) - HUtil32.LoWord(PlayObject.Abil.MC) + 1);
-                    if (MabMabe(PlayObject, TargeTBaseObject, nPower, UserMagic.btLevel, nTargetX, nTargetY))
+                    if (MabMabe(PlayObject, TargeTBaseObject, nPower, UserMagic.Level, nTargetX, nTargetY))
                     {
                         boTrain = true;
                     }
@@ -589,7 +589,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_ENERGYREPULSOR:
-                    if (MagPushArround(PlayObject, UserMagic.btLevel) > 0)
+                    if (MagPushArround(PlayObject, UserMagic.Level) > 0)
                     {
                         boTrain = true;
                     }
@@ -610,7 +610,7 @@ namespace GameSvr.Magic
                         if (MagicBase.CheckAmulet(PlayObject, 1, 1, ref nAmuletIdx))
                         {
                             MagicBase.UseAmulet(PlayObject, 1, 1, ref nAmuletIdx);
-                            nPower = (ushort)(UserMagic.btLevel + 1 + M2Share.RandomNumber.Random(UserMagic.btLevel));
+                            nPower = (ushort)(UserMagic.Level + 1 + M2Share.RandomNumber.Random(UserMagic.Level));
                             n14 = (short)PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.Abil.SC) * 10, HUtil32.HiWord(PlayObject.Abil.SC) - HUtil32.LoWord(PlayObject.Abil.SC) + 1);
                             if (TargeTBaseObject.AttPowerUp(nPower, n14))
                             {
@@ -641,21 +641,21 @@ namespace GameSvr.Magic
             {
                 if (TargeTBaseObject == null)
                 {
-                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), 0, "");
+                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.Magic.EffectType, UserMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), 0, "");
                 }
                 else
                 {
-                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), TargeTBaseObject.ActorId, "");
+                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.Magic.EffectType, UserMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), TargeTBaseObject.ActorId, "");
                 }
             }
-            if (UserMagic.btLevel < 3 && boTrain)
+            if (UserMagic.Level < 3 && boTrain)
             {
-                if (UserMagic.MagicInfo.TrainLevel[UserMagic.btLevel] <= PlayObject.Abil.Level)
+                if (UserMagic.Magic.TrainLevel[UserMagic.Level] <= PlayObject.Abil.Level)
                 {
                     PlayObject.TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
                     if (!PlayObject.CheckMagicLevelup(UserMagic))
                     {
-                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "", 1000);
+                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 1000);
                     }
                 }
             }
@@ -854,9 +854,9 @@ namespace GameSvr.Magic
             {
                 if (Math.Abs(PlayObject.CurrX - PoseBaseObject.CurrX) <= 1 && Math.Abs(PlayObject.CurrY - PoseBaseObject.CurrY) <= 1 && PlayObject.Abil.Level > PoseBaseObject.Abil.Level)
                 {
-                    if (M2Share.RandomNumber.Random(20) < UserMagic.btLevel * 6 + 6 + (PlayObject.Abil.Level - PoseBaseObject.Abil.Level))
+                    if (M2Share.RandomNumber.Random(20) < UserMagic.Level * 6 + 6 + (PlayObject.Abil.Level - PoseBaseObject.Abil.Level))
                     {
-                        PoseBaseObject.CharPushed(M2Share.GetNextDirection(PlayObject.CurrX, PlayObject.CurrY, PoseBaseObject.CurrX, PoseBaseObject.CurrY), HUtil32._MAX(0, UserMagic.btLevel - 1) + 1);
+                        PoseBaseObject.CharPushed(M2Share.GetNextDirection(PlayObject.CurrX, PlayObject.CurrY, PoseBaseObject.CurrX, PoseBaseObject.CurrY), HUtil32._MAX(0, UserMagic.Level - 1) + 1);
                         result = true;
                     }
                 }
@@ -890,7 +890,7 @@ namespace GameSvr.Magic
             short nAmuletIdx = 0;
             var result = false;
             IList<BaseObject> BaseObjectList = new List<BaseObject>();
-            PlayObject.GetMapBaseObjects(PlayObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, UserMagic.btLevel), BaseObjectList);
+            PlayObject.GetMapBaseObjects(PlayObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, UserMagic.Level), BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 var BaseObject = BaseObjectList[i];
@@ -913,11 +913,11 @@ namespace GameSvr.Magic
                                 {
                                     case 1:
                                         nPower = MagicBase.GetPower13(40, UserMagic) + MagicBase.GetRPow(PlayObject.Abil.SC) * 2;// 中毒类型 - 绿毒
-                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                     case 2:
                                         nPower = MagicBase.GetPower13(30, UserMagic) + MagicBase.GetRPow(PlayObject.Abil.SC) * 2;// 中毒类型 - 红毒
-                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, Grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                 }
                                 if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Race >= Grobal2.RC_ANIMAL)
@@ -940,7 +940,7 @@ namespace GameSvr.Magic
             BaseObject BaseObject;
             var result = false;
             IList<BaseObject> BaseObjectList = new List<BaseObject>();
-            PlayObject.GetMapBaseObjects(PlayObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, UserMagic.btLevel), BaseObjectList);
+            PlayObject.GetMapBaseObjects(PlayObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, UserMagic.Level), BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 BaseObject = BaseObjectList[i];
@@ -981,8 +981,8 @@ namespace GameSvr.Magic
             var result = false;
             boSpellFire = false;
             IList<BaseObject> BaseObjectList = new List<BaseObject>();
-            PlayObject.GetMapBaseObjects(PlayObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, UserMagic.btLevel), BaseObjectList);
-            PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), TargeTBaseObject.ActorId, "");
+            PlayObject.GetMapBaseObjects(PlayObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, UserMagic.Level), BaseObjectList);
+            PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.Magic.EffectType, UserMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), TargeTBaseObject.ActorId, "");
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 var BaseObject = BaseObjectList[i];
@@ -1043,9 +1043,9 @@ namespace GameSvr.Magic
             if (PlayObject.Abil.Level > TargetBaseObject.Abil.Level && !TargetBaseObject.StickMode)
             {
                 var levelgap = PlayObject.Abil.Level - TargetBaseObject.Abil.Level;
-                if (M2Share.RandomNumber.Random(20) < 6 + UserMagic.btLevel * 3 + levelgap)
+                if (M2Share.RandomNumber.Random(20) < 6 + UserMagic.Level * 3 + levelgap)
                 {
-                    var push = M2Share.RandomNumber.Random(UserMagic.btLevel) - 1;
+                    var push = M2Share.RandomNumber.Random(UserMagic.Level) - 1;
                     if (push > 0)
                     {
                         byte nDir = M2Share.GetNextDirection(PlayObject.CurrX, PlayObject.CurrY, TargetBaseObject.CurrX, TargetBaseObject.CurrY);
@@ -1292,7 +1292,7 @@ namespace GameSvr.Magic
             if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.Config.Dragon;
-                int nExpLevel = UserMagic.btLevel;
+                int nExpLevel = UserMagic.Level;
                 var nCount = M2Share.Config.DragonCount;
                 for (var i = 0; i < M2Share.Config.DragonArray.Length; i++)
                 {
@@ -1307,7 +1307,7 @@ namespace GameSvr.Magic
                         nCount = M2Share.Config.DragonArray[i].nCount;
                     }
                 }
-                if (PlayObject.MakeSlave(sMonName, UserMagic.btLevel, nExpLevel, nCount, dwRoyaltySec) != null)
+                if (PlayObject.MakeSlave(sMonName, UserMagic.Level, nExpLevel, nCount, dwRoyaltySec) != null)
                 {
                     result = true;
                 }
@@ -1330,7 +1330,7 @@ namespace GameSvr.Magic
             if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.Config.Skeleton;
-                int nExpLevel = UserMagic.btLevel;
+                int nExpLevel = UserMagic.Level;
                 var nCount = M2Share.Config.SkeletonCount;
                 for (var i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
                 {
@@ -1345,7 +1345,7 @@ namespace GameSvr.Magic
                         nCount = M2Share.Config.SkeletonArray[i].nCount;
                     }
                 }
-                if (PlayObject.MakeSlave(sMonName, UserMagic.btLevel, nExpLevel, nCount, dwRoyaltySec) != null)
+                if (PlayObject.MakeSlave(sMonName, UserMagic.Level, nExpLevel, nCount, dwRoyaltySec) != null)
                 {
                     result = true;
                 }
@@ -1365,7 +1365,7 @@ namespace GameSvr.Magic
             if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.Config.Angel;
-                if (PlayObject.MakeSlave(sMonName, UserMagic.btLevel, UserMagic.btLevel, 1, dwRoyaltySec) != null)
+                if (PlayObject.MakeSlave(sMonName, UserMagic.Level, UserMagic.Level, 1, dwRoyaltySec) != null)
                 {
                     result = true;
                 }

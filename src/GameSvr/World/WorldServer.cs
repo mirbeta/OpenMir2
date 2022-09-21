@@ -1576,11 +1576,11 @@ namespace GameSvr.World
                     if (magicInfo != null)
                     {
                         userMagic = new UserMagic();
-                        userMagic.MagicInfo = magicInfo;
-                        userMagic.wMagIdx = humMagic[i].wMagIdx;
-                        userMagic.btLevel = humMagic[i].btLevel;
-                        userMagic.btKey = humMagic[i].btKey;
-                        userMagic.nTranPoint = humMagic[i].nTranPoint;
+                        userMagic.Magic = magicInfo;
+                        userMagic.MagIdx = humMagic[i].wMagIdx;
+                        userMagic.Level = humMagic[i].btLevel;
+                        userMagic.Key = humMagic[i].btKey;
+                        userMagic.TranPoint = humMagic[i].nTranPoint;
                         playObject.MagicList.Add(userMagic);
                     }
                 }
@@ -1640,7 +1640,7 @@ namespace GameSvr.World
             for (var i = 0; i < MagicList.Count; i++)
             {
                 MagicInfo magic = MagicList[i];
-                if (magic.wMagicID == nMagIdx)
+                if (magic.MagicId == nMagIdx)
                 {
                     result = magic;
                     break;
@@ -1764,7 +1764,7 @@ namespace GameSvr.World
             for (var i = 0; i < MagicList.Count; i++)
             {
                 MagicInfo magic = MagicList[i];
-                if (magic.sMagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
+                if (magic.MagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
                 {
                     result = magic;
                     break;

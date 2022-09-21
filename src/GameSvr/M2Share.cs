@@ -182,6 +182,7 @@ namespace GameSvr
         /// </summary>
         public static Dictionary<int, string> g_DisableTakeOffList = null;
         public static IList<TItemBind> g_ItemBindIPaddr = null;
+        public static IList<TItemBind> g_ItemBindDieNoDropName = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
         public static IList<TItemBind> g_ItemBindCharName = null;
         /// <summary>
@@ -505,7 +506,7 @@ namespace GameSvr
         private const string sSTATUS_FAIL = "+FL/{0}";
         private const string sSTATUS_GOOD = "+GD/{0}";
 
-        public const ushort MAXUPLEVEL = ushort.MaxValue;
+        public const byte MAXUPLEVEL = byte.MaxValue;
         public const ushort MAXHUMPOWER = 1000;
         public const ushort BODYLUCKUNIT = 5000;
         public const ushort DEFHIT = 5;
@@ -1623,6 +1624,7 @@ namespace GameSvr
             if (File.Exists(sFileName))
             {
                 g_UnForceMasterList.Clear();
+                LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -1717,6 +1719,7 @@ namespace GameSvr
             {
                 try
                 {
+                    LoadList = new StringList();
                     g_DisableSellOffList.Clear();
                     LoadList.LoadFromFile(sFileName);
                     for (var i = 0; i < LoadList.Count; i++)
@@ -1731,6 +1734,7 @@ namespace GameSvr
             }
             else
             {
+                LoadList = new StringList();
                 LoadList.SaveToFile(sFileName);
             }
             return result;
@@ -2185,8 +2189,7 @@ namespace GameSvr
 
         public static bool GetDenyChrNameList(string sChrName)
         {
-            bool result;
-            result = false;
+            bool result = false;
             try
             {
                 //for (I = 0; I < g_DenyChrNameList.Count; I ++ )
@@ -2206,28 +2209,23 @@ namespace GameSvr
 
         public static bool SaveDenyChrNameList()
         {
-            bool result;
-            string sFileName;
-            sFileName = M2Share.BasePath + Config.EnvirDir + "DenyChrNameList.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DenyChrNameList.txt";
             //SaveList = new StringList();
             //g_DenyChrNameList.__Lock();
             //try {
             //    for (I = 0; I < g_DenyChrNameList.Count; I ++ )
             //    {
-
             //        if (((int)g_DenyChrNameList.Values[I]) != 0)
             //        {
             //            SaveList.Add(g_DenyChrNameList[I]);
             //        }
             //    }
-
             //    SaveList.SaveToFile(sFileName);
             //} finally {
             //    g_DenyChrNameList.UnLock();
             //}
             //SaveList.Free;
-            result = true;
-            return result;
+            return true;
         }
 
         public static bool LoadDenyAccountList()

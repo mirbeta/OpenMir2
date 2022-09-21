@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class ZilKinZombi : AtMonster
     {
-        private int ReAliveTick;
+        //private int ReAliveTick;
         private int ZilKillCount;
         private int ZilkinDieTick;
 

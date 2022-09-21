@@ -28,10 +28,10 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            PlayObject.UseItems[Grobal2.U_WEAPON].btValue[0] = (byte)nDc;
-            PlayObject.UseItems[Grobal2.U_WEAPON].btValue[1] = (byte)nMc;
-            PlayObject.UseItems[Grobal2.U_WEAPON].btValue[2] = (byte)nSc;
-            PlayObject.UseItems[Grobal2.U_WEAPON].btValue[5] = (byte)nHit;
+            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[0] = (byte)nDc;
+            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[1] = (byte)nMc;
+            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[2] = (byte)nSc;
+            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[5] = (byte)nHit;
             PlayObject.SendUpdateItem(PlayObject.UseItems[Grobal2.U_WEAPON]);
             PlayObject.RecalcAbilitys();
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");

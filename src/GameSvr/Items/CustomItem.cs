@@ -115,7 +115,7 @@ namespace GameSvr.Items
         public static string GetItemName(UserItem userItem)
         {
             var result = string.Empty;
-            if (userItem.btValue[13] == 1)
+            if (userItem.Desc[13] == 1)
             {
                 result = M2Share.ItemUnit.GetCustomItemName(userItem.MakeIndex, userItem.wIndex);
             }

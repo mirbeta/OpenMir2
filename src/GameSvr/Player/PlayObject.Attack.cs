@@ -139,7 +139,7 @@ namespace GameSvr.Player
                         }
                         if (AttackSkillCount <= 0)
                         {
-                            AttackSkillCount = (byte)(7 - MagicArr[MagicConst.SKILL_YEDO].btLevel);
+                            AttackSkillCount = (byte)(7 - MagicArr[MagicConst.SKILL_YEDO].Level);
                             AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         }
                     }
@@ -263,7 +263,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            var boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx);
+            var boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx);
             if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -309,11 +309,11 @@ namespace GameSvr.Player
             SpellTick = HUtil32._MAX(0, SpellTick);
             if (!boIsWarrSkill)
             {
-                m_dwMagicAttackInterval = UserMagic.MagicInfo.dwDelayTime + M2Share.Config.MagicHitIntervalTime;
+                m_dwMagicAttackInterval = UserMagic.Magic.DelayTime + M2Share.Config.MagicHitIntervalTime;
             }
             m_dwMagicAttackTick = HUtil32.GetTickCount();
             ushort nSpellPoint;
-            switch (UserMagic.wMagIdx)
+            switch (UserMagic.MagIdx)
             {
                 case MagicConst.SKILL_ERGUM:
                     if (MagicArr[MagicConst.SKILL_ERGUM] != null)
@@ -396,16 +396,16 @@ namespace GameSvr.Player
                                 DamageSpell(nSpellPoint);
                                 HealthSpellChanged();
                             }
-                            if (DoMotaebo(Direction, UserMagic.btLevel))
+                            if (DoMotaebo(Direction, UserMagic.Level))
                             {
-                                if (UserMagic.btLevel < 3)
+                                if (UserMagic.Level < 3)
                                 {
-                                    if (UserMagic.MagicInfo.TrainLevel[UserMagic.btLevel] < Abil.Level)
+                                    if (UserMagic.Magic.TrainLevel[UserMagic.Level] < Abil.Level)
                                     {
                                         TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
                                         if (!CheckMagicLevelup(UserMagic))
                                         {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "", 1000);
+                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 1000);
                                         }
                                     }
                                 }

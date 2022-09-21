@@ -178,10 +178,10 @@ namespace GameSvr.Player
                         {
                             if (merchant.ClientSellItem(this, userItem))
                             {
-                                if (userItem.btValue[13] == 1)
+                                if (userItem.Desc[13] == 1)
                                 {
                                     M2Share.ItemUnit.DelCustomItemName(userItem.MakeIndex, userItem.wIndex);
-                                    userItem.btValue[13] = 0;
+                                    userItem.Desc[13] = 0;
                                 }
                                 userItem = null; //物品加到NPC物品列表中了
                                 ItemList.RemoveAt(i);
@@ -432,7 +432,7 @@ namespace GameSvr.Player
                                 var stdItem20 = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
                                 if (stdItem20 != null && M2Share.StdModeMap.Contains(stdItem20.StdMode))
                                 {
-                                    if (!UserUnLockDurg && UseItems[btWhere].btValue[7] != 0)
+                                    if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                                     {
                                         // '无法取下物品!!!'
                                         SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
@@ -462,9 +462,9 @@ namespace GameSvr.Player
                                 }
                                 takeOffItem = UseItems[btWhere];
                             }
-                            if (M2Share.StdModeMap.Contains(stdItem.StdMode) && userItem.btValue[8] != 0)
+                            if (M2Share.StdModeMap.Contains(stdItem.StdMode) && userItem.Desc[8] != 0)
                             {
-                                userItem.btValue[8] = 0;
+                                userItem.Desc[8] = 0;
                             }
                             UseItems[btWhere] = userItem;
                             DelBagItem(n14);
@@ -510,7 +510,7 @@ namespace GameSvr.Player
                         var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[btWhere].wIndex);
                         if (stdItem != null && M2Share.StdModeMap.Contains(stdItem.StdMode))
                         {
-                            if (!UserUnLockDurg && UseItems[btWhere].btValue[7] != 0)
+                            if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                             {
                                 // '无法取下物品!!!'
                                 SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
@@ -772,9 +772,9 @@ namespace GameSvr.Player
             for (var i = 0; i < MagicList.Count; i++)
             {
                 var userMagic = MagicList[i];
-                if (userMagic.MagicInfo.wMagicID == nSkillIdx)
+                if (userMagic.Magic.MagicId == nSkillIdx)
                 {
-                    userMagic.btKey = (byte)nKey;
+                    userMagic.Key = (byte)nKey;
                     break;
                 }
             }

@@ -11,12 +11,9 @@ namespace SystemModule.Packet.ClientPackets
         public ushort NameColor;
         public string GuildName;
         public string GuildRankName;
-        public byte btGender;
-        public byte btHumAttr;
-        public byte btResver1;
-        public byte btResver2;
         public ClientItem[] UseItems;
-        public byte ActiveTitle;
+        public bool ExistLover;
+        public string LoverName;
         
         public UserStateInfo()
         {
@@ -31,14 +28,16 @@ namespace SystemModule.Packet.ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(Feature);
-            writer.WriteAsciiString(UserName, 15);
+            writer.WriteAsciiString(UserName, 14);
             writer.Write(NameColor);
-            writer.WriteAsciiString(GuildName, 14);
-            writer.WriteAsciiString(GuildRankName, 15);
+            writer.WriteAsciiString(GuildName, 20);
+            writer.WriteAsciiString(GuildRankName, 14);
             for (var i = 0; i < UseItems.Length; i++)
             {
                 writer.Write(UseItems[i].GetBuffer());
             }
+            writer.Write(ExistLover);
+            writer.WriteAsciiString(GuildName, 14);
         }
     }
 }

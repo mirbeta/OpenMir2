@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class TAddAbility
+    public class AddAbility
     {
         public ushort wHP;
         public ushort wMP;

@@ -1,5 +1,4 @@
 using System.IO;
-using SystemModule.Data;
 using SystemModule.Extensions;
 
 namespace SystemModule.Packet.ClientPackets
@@ -10,34 +9,49 @@ namespace SystemModule.Packet.ClientPackets
         public byte StdMode;
         public byte Shape;
         public byte Weight;
-        public ushort AniCount;
-        public sbyte Source;
-        public byte Reserved;
-        public byte NeedIdentify;
+        public byte AniCount;
+        public sbyte SpecialPwr;
+        public byte ItemDesc;
         public ushort Looks;
         public ushort DuraMax;
-        public int AC;
-        public int MAC;
-        public int DC;
-        public int MC;
-        public int SC;
-        public int Need;
-        public int NeedLevel;
+        public ushort AC;
+        public ushort MAC;
+        public ushort DC;
+        public ushort MC;
+        public ushort SC;
+        public byte Need;
+        public byte NeedLevel;
+        public byte NeedIdentify;
         public int Price;
+        public int Stock;
+        public byte AtkSpd;
+        public byte Agility;
+        public byte Accurate;
+        public byte MgAvoid;
+        public byte Strong;
+        public byte Undead;
+        public int HpAdd;
+        public int MpAdd;
+        public int ExpAdd;
+        public byte EffType1;
+        public byte EffRate1;
+        public byte EffValue1;
+        public byte EffType2;
+        public byte EffRate2;
+        public byte EffValue2;
+        public byte Slowdown;
+        public byte Tox;
+        public byte ToxAvoid;
         public byte UniqueItem;
-        public byte Overlap;
+        public byte OverlapItem;
+        public byte Light;
         public byte ItemType;
         public ushort ItemSet;
-        public byte Binded;
-        public byte[] Reserve;
-        public byte[] AddOn;
-        public TEvaluation Eva;
+        public string Reference;
 
         public ClientStdItem()
         {
-            Reserve = new byte[9];
-            AddOn = new byte[10];
-            Eva = new TEvaluation();
+
         }
 
         protected override void ReadPacket(BinaryReader reader)
@@ -52,9 +66,9 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(Shape);
             writer.Write(Weight);
             writer.Write(AniCount);
-            writer.Write(Source);
-            writer.Write(Reserved);
-            writer.Write(NeedIdentify);
+            writer.Write(SpecialPwr);
+            writer.Write(ItemDesc);
+            writer.Write((byte)0);
             writer.Write(Looks);
             writer.Write(DuraMax);
             writer.Write(AC);
@@ -64,15 +78,45 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(SC);
             writer.Write(Need);
             writer.Write(NeedLevel);
+            writer.Write(NeedIdentify);
+            writer.Write((byte)0);
             writer.Write(Price);
+            writer.Write(Stock);
+            writer.Write(AtkSpd);
+            writer.Write(Agility);
+            writer.Write(Accurate);
+            writer.Write(MgAvoid);
+            writer.Write(Strong);
+            writer.Write(Undead);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
+            writer.Write(HpAdd);
+            writer.Write(MpAdd);
+            writer.Write(ExpAdd);
+            writer.Write(EffType1);
+            writer.Write(EffRate1);
+            writer.Write(EffValue1);
+            writer.Write(EffType2);
+            writer.Write(EffRate2);
+            writer.Write(EffValue2);
+            writer.Write(Slowdown);
+            writer.Write(Tox);
+            writer.Write(ToxAvoid);
             writer.Write(UniqueItem);
-            writer.Write(Overlap);
+            writer.Write(OverlapItem);
+            writer.Write(Light);
             writer.Write(ItemType);
+            writer.Write((byte)0);
             writer.Write(ItemSet);
-            writer.Write(Binded);
-            writer.Write(Reserve);
-            writer.Write(AddOn);
-            writer.Write(Eva.GetBuffer());
+            if (string.IsNullOrEmpty(Reference))
+            {
+                writer.WriteAsciiString("", PacketConst.ItemNameLen);
+            }
+            else
+            {
+                writer.WriteAsciiString(Reference, PacketConst.ItemNameLen);
+            }
+            writer.Write((byte)0);
         }
     }
 }

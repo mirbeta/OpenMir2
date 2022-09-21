@@ -242,24 +242,24 @@ namespace DBSvr.Services
         public bool CopyHumData(string sSrcChrName, string sDestChrName, string sUserID)
         {
             bool result = false;
-            bool bo15 = false;
+            bool find = false;
             try
             {
-                int n14 = _playDataStorage.Index(sSrcChrName);
+                int chrIndex = _playDataStorage.Index(sSrcChrName);
                 THumDataInfo HumanRCD = null;
-                if ((n14 >= 0) && (_playDataStorage.Get(n14, ref HumanRCD) >= 0))
+                if ((chrIndex >= 0) && (_playDataStorage.Get(sSrcChrName, ref HumanRCD)))
                 {
-                    bo15 = true;
+                    find = true;
                 }
-                if (bo15)
+                if (find)
                 {
-                    n14 = _playDataStorage.Index(sDestChrName);
-                    if ((n14 >= 0))
+                    chrIndex = _playDataStorage.Index(sDestChrName);
+                    if ((chrIndex >= 0))
                     {
                         HumanRCD.Header.sName = sDestChrName;
                         HumanRCD.Data.sCharName = sDestChrName;
                         HumanRCD.Data.sAccount = sUserID;
-                        _playDataStorage.Update(n14, ref HumanRCD);
+                        _playDataStorage.Update(chrIndex, ref HumanRCD);
                         result = true;
                     }
                 }
@@ -318,7 +318,7 @@ namespace DBSvr.Services
                 int nIndex = _playDataStorage.Index(loadHumanPacket.sChrName);
                 if (nIndex >= 0)
                 {
-                    if (_playDataStorage.Get(nIndex, ref HumanRCD) < 0)
+                    if (!_playDataStorage.Get(loadHumanPacket.sChrName, ref HumanRCD))
                     {
                         nCheckCode = -2;
                     }

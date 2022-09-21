@@ -152,14 +152,14 @@ namespace GameSvr.DataStores
                     {
                         Magic = new SystemModule.Packet.ServerPackets.MagicInfo
                         {
-                            wMagicID = dr.GetUInt16("MagId"),
-                            sMagicName = dr.GetString("MagName"),
-                            btEffectType = (byte)dr.GetInt32("EffectType"),
-                            btEffect = (byte)dr.GetInt32("Effect"),
-                            wSpell = dr.GetUInt16("Spell"),
-                            wPower = dr.GetUInt16("Power"),
-                            wMaxPower = dr.GetUInt16("MaxPower"),
-                            btJob = (byte)dr.GetInt32("Job")
+                            MagicId = dr.GetUInt16("MagId"),
+                            MagicName = dr.GetString("MagName"),
+                            EffectType = (byte)dr.GetInt32("EffectType"),
+                            Effect = (byte)dr.GetInt32("Effect"),
+                            Spell = dr.GetUInt16("Spell"),
+                            Power = dr.GetUInt16("Power"),
+                            MaxPower = dr.GetUInt16("MaxPower"),
+                            Job = (byte)dr.GetInt32("Job")
                         };
                         Magic.TrainLevel[0] = (byte)dr.GetInt32("NeedL1");
                         Magic.TrainLevel[1] = (byte)dr.GetInt32("NeedL2");
@@ -169,13 +169,13 @@ namespace GameSvr.DataStores
                         Magic.MaxTrain[1] = dr.GetInt32("L2Train");
                         Magic.MaxTrain[2] = dr.GetInt32("L3Train");
                         Magic.MaxTrain[3] = Magic.MaxTrain[2];
-                        Magic.btTrainLv = 3;
-                        Magic.dwDelayTime = dr.GetInt32("Delay");
-                        Magic.btDefSpell = (byte)dr.GetInt32("DefSpell");
-                        Magic.btDefPower = (byte)dr.GetInt32("DefPower");
-                        Magic.btDefMaxPower = (byte)dr.GetInt32("DefMaxPower");
-                        Magic.sDescr = dr.GetString("Descr");
-                        if (Magic.wMagicID > 0)
+                        Magic.TrainLv = 3;
+                        Magic.DelayTime = dr.GetInt32("Delay");
+                        Magic.DefSpell = (byte)dr.GetInt32("DefSpell");
+                        Magic.DefPower = (byte)dr.GetInt32("DefPower");
+                        Magic.DefMaxPower = (byte)dr.GetInt32("DefMaxPower");
+                        Magic.Desc = dr.GetString("Descr");
+                        if (Magic.MagicId > 0)
                         {
                             M2Share.WorldEngine.MagicList.Add(Magic);
                         }

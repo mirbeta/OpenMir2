@@ -221,7 +221,7 @@ namespace GameSvr.Player
             }
             if (M2Share.StdModeMap.Contains(StdItem.StdMode))
             {
-                if (UserItem.btValue[8] == 0)
+                if (UserItem.Desc[8] == 0)
                 {
                     ClientItem.Item.Shape = 0;
                 }
@@ -998,13 +998,13 @@ namespace GameSvr.Player
                 var Magic = M2Share.WorldEngine.MagicList[i];
                 var UserMagic = new UserMagic
                 {
-                    MagicInfo = Magic,
-                    wMagIdx = Magic.wMagicID,
-                    btLevel = 2,
-                    btKey = 0
+                    Magic = Magic,
+                    MagIdx = Magic.MagicId,
+                    Level = 2,
+                    Key = 0
                 };
-                UserMagic.btLevel = 0;
-                UserMagic.nTranPoint = 100000;
+                UserMagic.Level = 0;
+                UserMagic.TranPoint = 100000;
                 MagicList.Add(UserMagic);
                 SendAddMagic(UserMagic);
             }
@@ -1159,10 +1159,10 @@ namespace GameSvr.Player
             {
                 var userMagic = MagicList[i];
                 var clientMagic = new ClientMagic();
-                clientMagic.Key = (char)userMagic.btKey;
-                clientMagic.Level = userMagic.btLevel;
-                clientMagic.CurTrain = userMagic.nTranPoint;
-                clientMagic.Def = userMagic.MagicInfo;
+                clientMagic.Key = (char)userMagic.Key;
+                clientMagic.Level = userMagic.Level;
+                clientMagic.CurTrain = userMagic.TranPoint;
+                clientMagic.Def = userMagic.Magic;
                 sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientMagic) + '/';
             }
             if (!string.IsNullOrEmpty(sSendMsg))
@@ -1467,7 +1467,7 @@ namespace GameSvr.Player
 
         protected ushort GetSpellPoint(UserMagic UserMagic)
         {
-            return (ushort)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
+            return (ushort)(HUtil32.Round(UserMagic.Magic.Spell / (UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1)) + UserMagic.Magic.DefSpell);
         }
 
         private bool DoMotaeboCanMotaebo(BaseObject BaseObject, int nMagicLevel)
@@ -1607,7 +1607,7 @@ namespace GameSvr.Player
             var result = false;
             try
             {
-                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.wMagIdx))
+                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx))
                 {
                     var nSpellPoint = GetSpellPoint(UserMagic);
                     if (nSpellPoint > 0)
@@ -1624,7 +1624,7 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
+                M2Share.Log.Error(Format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.MagIdx, nTargetX, nTargetY));
                 M2Share.Log.Error(e.Message);
             }
             return result;
@@ -2217,19 +2217,19 @@ namespace GameSvr.Player
             var magic = M2Share.WorldEngine.FindMagic(StdItem.Name);
             if (magic != null)
             {
-                if (!IsTrainingSkill(magic.wMagicID))
+                if (!IsTrainingSkill(magic.MagicId))
                 {
-                    if (magic.btJob == 99 || magic.btJob == (byte)Job)
+                    if (magic.Job == 99 || magic.Job == (byte)Job)
                     {
                         if (Abil.Level >= magic.TrainLevel[0])
                         {
                             var UserMagic = new UserMagic
                             {
-                                MagicInfo = magic,
-                                wMagIdx = magic.wMagicID,
-                                btKey = 0,
-                                btLevel = 0,
-                                nTranPoint = 0
+                                Magic = magic,
+                                MagIdx = magic.MagicId,
+                                Key = 0,
+                                Level = 0,
+                                TranPoint = 0
                             };
                             MagicList.Add(UserMagic);
                             RecalcAbilitys();
@@ -2249,10 +2249,10 @@ namespace GameSvr.Player
         {
             var clientMagic = new ClientMagic
             {
-                Key = (char)UserMagic.btKey,
-                Level = UserMagic.btLevel,
-                CurTrain = UserMagic.nTranPoint,
-                Def = UserMagic.MagicInfo
+                Key = (char)UserMagic.Key,
+                Level = UserMagic.Level,
+                CurTrain = UserMagic.TranPoint,
+                Def = UserMagic.Magic
             };
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDMAGIC, 0, 0, 0, 1);
             SendSocket(m_DefMsg, EDCode.EncodeBuffer(clientMagic));
@@ -2260,7 +2260,7 @@ namespace GameSvr.Player
 
         internal void SendDelMagic(UserMagic UserMagic)
         {
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELMAGIC, UserMagic.wMagIdx, 0, 0, 1);
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELMAGIC, UserMagic.MagIdx, 0, 0, 1);
             SendSocket(m_DefMsg);
         }
 
@@ -2823,10 +2823,10 @@ namespace GameSvr.Player
                 {
                     HumMagic[i] = new TMagicRcd();
                 }
-                HumMagic[i].wMagIdx = UserMagic.wMagIdx;
-                HumMagic[i].btLevel = UserMagic.btLevel;
-                HumMagic[i].btKey = UserMagic.btKey;
-                HumMagic[i].nTranPoint = UserMagic.nTranPoint;
+                HumMagic[i].wMagIdx = UserMagic.MagIdx;
+                HumMagic[i].btLevel = UserMagic.Level;
+                HumMagic[i].btKey = UserMagic.Key;
+                HumMagic[i].nTranPoint = UserMagic.TranPoint;
             }
             for (var i = 0; i < HumMagic.Length; i++)
             {

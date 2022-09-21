@@ -1497,16 +1497,16 @@ namespace GameSvr.Player
                             {
                                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, ProcessMsg.BaseObject, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ProcessMsg.wParam);
                                 MessageBodyWL = new MessageBodyWL();
-                                MessageBodyWL.lParam1 = BaseObject.GetFeature(this);
-                                MessageBodyWL.lParam2 = BaseObject.CharStatus;
-                                MessageBodyWL.lTag1 = ProcessMsg.nParam3;
+                                MessageBodyWL.Param1 = BaseObject.GetFeature(this);
+                                MessageBodyWL.Param2 = BaseObject.CharStatus;
+                                MessageBodyWL.Tag1 = ProcessMsg.nParam3;
                                 if (ProcessMsg.wIdent == Grobal2.RM_STRUCK_MAG)
                                 {
-                                    MessageBodyWL.lTag2 = 1;
+                                    MessageBodyWL.Tag2 = 1;
                                 }
                                 else
                                 {
-                                    MessageBodyWL.lTag2 = 0;
+                                    MessageBodyWL.Tag2 = 0;
                                 }
                                 SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyWL));
                             }
@@ -1776,10 +1776,10 @@ namespace GameSvr.Player
                 case Grobal2.RM_DIGUP:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
                     MessageBodyWL = new MessageBodyWL();
-                    MessageBodyWL.lParam1 = BaseObject.GetFeature(this);
-                    MessageBodyWL.lParam2 = BaseObject.CharStatus;
-                    MessageBodyWL.lTag1 = ProcessMsg.nParam3;
-                    MessageBodyWL.lTag1 = 0;
+                    MessageBodyWL.Param1 = BaseObject.GetFeature(this);
+                    MessageBodyWL.Param2 = BaseObject.CharStatus;
+                    MessageBodyWL.Tag1 = ProcessMsg.nParam3;
+                    MessageBodyWL.Tag1 = 0;
                     sendMsg = EDCode.EncodeBuffer(MessageBodyWL);
                     SendSocket(m_DefMsg, sendMsg);
                     break;
@@ -1803,10 +1803,10 @@ namespace GameSvr.Player
                     if (M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
                     {
                         MessageBodyWL = new MessageBodyWL();
-                        MessageBodyWL.lParam1 = M2Share.ActorMgr.Get(ProcessMsg.nParam3).CurrX;
-                        MessageBodyWL.lParam2 = M2Share.ActorMgr.Get(ProcessMsg.nParam3).CurrY;
-                        MessageBodyWL.lTag1 = ProcessMsg.nParam3;
-                        MessageBodyWL.lTag2 = ProcessMsg.wParam;
+                        MessageBodyWL.Param1 = M2Share.ActorMgr.Get(ProcessMsg.nParam3).CurrX;
+                        MessageBodyWL.Param2 = M2Share.ActorMgr.Get(ProcessMsg.nParam3).CurrY;
+                        MessageBodyWL.Tag1 = ProcessMsg.nParam3;
+                        MessageBodyWL.Tag2 = ProcessMsg.wParam;
                         m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LIGHTING, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, BaseObject.Direction);
                         SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyWL));
                     }
@@ -1918,9 +1918,9 @@ namespace GameSvr.Player
                     break;
                 case Grobal2.RM_PLAYDICE:
                     MessageBodyWL = new MessageBodyWL();
-                    MessageBodyWL.lParam1 = ProcessMsg.nParam1;
-                    MessageBodyWL.lParam2 = ProcessMsg.nParam2;
-                    MessageBodyWL.lTag1 = ProcessMsg.nParam3;
+                    MessageBodyWL.Param1 = ProcessMsg.nParam1;
+                    MessageBodyWL.Param2 = ProcessMsg.nParam2;
+                    MessageBodyWL.Tag1 = ProcessMsg.nParam3;
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PLAYDICE, ProcessMsg.BaseObject, ProcessMsg.wParam, 0, 0);
                     SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyWL) + EDCode.EncodeString(ProcessMsg.Msg));
                     break;

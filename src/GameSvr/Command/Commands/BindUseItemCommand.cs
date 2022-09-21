@@ -96,13 +96,10 @@ namespace GameSvr.Command.Commands
                         return;
                     }
                     M2Share.SaveItemBindAccount();
-                    PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", M2Share.GetUseItemName(nItem),
-                        M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    m_PlayObject.SysMsg(string.Format("你的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex),
-                        sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
-
                 case 1:
                     sBindName = m_PlayObject.CharName;
                     boFind = false;
@@ -137,15 +134,11 @@ namespace GameSvr.Command.Commands
                         return;
                     }
                     M2Share.SaveItemBindCharName();
-                    PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", M2Share.GetUseItemName(nItem),
-                        M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    m_PlayObject.SysMsg(string.Format("你的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex),
-                        sType, sBindName), MsgColor.Blue, MsgType.Hint);
-
-                    // PlayObject.SendUpdateItem(UserItem);
+                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SendUpdateItem(UserItem);
                     m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
-
                 case 2:
                     boFind = false;
                     sBindName = m_PlayObject.m_sIPaddr;
@@ -180,44 +173,33 @@ namespace GameSvr.Command.Commands
                         return;
                     }
                     M2Share.SaveItemBindIPaddr();
-                    PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，绑定到%s成功。", M2Share.GetUseItemName(nItem),
-                        M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    m_PlayObject.SysMsg(string.Format("你的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex),
-                        sType, sBindName), MsgColor.Blue, MsgType.Hint);
-
-                    // PlayObject.SendUpdateItem(UserItem);
+                    PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SendUpdateItem(UserItem);
                     m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
-                    //case 3:// 人物装备死亡不爆绑定
-                    //    sBindName = PlayObject.m_sCharName;
-                    //    M2Share.g_ItemBindDieNoDropName.__Lock();
-                    //    try
-                    //    {
-                    //        for (var i = 0; i < M2Share.g_ItemBindDieNoDropName.Count; i++)
-                    //        {
-                    //            //ItemBind = M2Share.g_ItemBindDieNoDropName[i];
-                    //            //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))
-                    //            //{
-                    //            //    this.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
-                    //            //    return;
-                    //            //}
-                    //        }
-                    //        ItemBind = new TItemBind
-                    //        {
-                    //            nItemIdx = nItemIdx,
-                    //            nMakeIdex = 0,
-                    //            sBindName = sBindName
-                    //        };
-                    //        //M2Share.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
-                    //    }
-                    //    finally
-                    //    {
-                    //        M2Share.g_ItemBindDieNoDropName.UnLock();
-                    //    }
-                    //    M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
-                    //    m_PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，死亡不爆绑定到%s成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
-                    //    PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
-                    //    break;
+                case 3:// 人物装备死亡不爆绑定
+                    sBindName = PlayObject.CharName;
+                    for (var i = 0; i < M2Share.g_ItemBindDieNoDropName.Count; i++)
+                    {
+                        //ItemBind = M2Share.g_ItemBindDieNoDropName[i];
+                        //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))
+                        //{
+                        //    this.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
+                        //    return;
+                        //}
+                    }
+                    ItemBind = new TItemBind
+                    {
+                        nItemIdx = nItemIdx,
+                        nMakeIdex = 0,
+                        sBindName = sBindName
+                    };
+                    //M2Share.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
+                    //M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
+                    m_PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    break;
             }
         }
     }

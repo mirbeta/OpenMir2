@@ -122,7 +122,7 @@ namespace DBSvr.Storage.MySQL
             }
             return -1;
         }
-
+        
         public int Get(int nIndex, ref THumDataInfo HumanRCD)
         {
             int result = -1;
@@ -139,6 +139,23 @@ namespace DBSvr.Storage.MySQL
                 result = nIndex;
             }
             return result;
+        }
+        
+        public bool Get(string chrName, ref THumDataInfo HumanRCD)
+        {
+            if (string.IsNullOrEmpty(chrName))
+            {
+                return false;
+            }
+            if (_mirQuickMap.TryGetValue(chrName, out var nIndex))
+            {
+                if (GetRecord(nIndex, ref HumanRCD))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
 
         public bool Update(int nIndex, ref THumDataInfo HumanRCD)
@@ -508,7 +525,7 @@ namespace DBSvr.Storage.MySQL
                         HumanRCD.Data.HumItems[nPosition].DuraMax = dr.GetUInt16("FLD_DURAMAX");
                         for (var ii = 0; ii < 14; ii++)
                         {
-                            HumanRCD.Data.HumItems[nPosition].btValue[ii] = (byte)dr.GetInt32($"FLD_VALUE{ii}");
+                            HumanRCD.Data.HumItems[nPosition].Desc[ii] = (byte)dr.GetInt32($"FLD_VALUE{ii}");
                         }
                     }
                     else
@@ -523,7 +540,7 @@ namespace DBSvr.Storage.MySQL
                         HumanRCD.Data.BagItems[i].DuraMax = dr.GetUInt16("FLD_DURAMAX");
                         for (var ii = 0; ii < 14; ii++)
                         {
-                            HumanRCD.Data.BagItems[i].btValue[ii] = (byte)dr.GetInt32($"FLD_VALUE{ii}");
+                            HumanRCD.Data.BagItems[i].Desc[ii] = (byte)dr.GetInt32($"FLD_VALUE{ii}");
                         }
                         i++;
                     }
@@ -569,7 +586,7 @@ namespace DBSvr.Storage.MySQL
                     HumanRCD.Data.StorageItems[i].DuraMax = dr.GetUInt16("FLD_DURAMAX");
                     for (var ii = 0; ii < 14; ii++)
                     {
-                        HumanRCD.Data.StorageItems[i].btValue[ii] = dr.GetByte(string.Format("FLD_VALUE{0}", ii));
+                        HumanRCD.Data.StorageItems[i].Desc[ii] = dr.GetByte(string.Format("FLD_VALUE{0}", ii));
                     }
                     i++;
                 }
@@ -917,20 +934,20 @@ namespace DBSvr.Storage.MySQL
                         command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
                         command.Parameters.AddWithValue("@FLD_DURA", hd.BagItems[i].Dura);
                         command.Parameters.AddWithValue("@FLD_DURAMAX", hd.BagItems[i].DuraMax);
-                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].btValue[0]);
-                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.BagItems[i].btValue[1]);
-                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.BagItems[i].btValue[2]);
-                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.BagItems[i].btValue[3]);
-                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.BagItems[i].btValue[4]);
-                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.BagItems[i].btValue[5]);
-                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.BagItems[i].btValue[6]);
-                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].btValue[7]);
-                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].btValue[8]);
-                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].btValue[9]);
-                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[ItemAttr.WeaponUpgrade]);
-                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].btValue[11]);
-                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].btValue[12]);
-                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].btValue[13]);
+                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].Desc[0]);
+                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.BagItems[i].Desc[1]);
+                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.BagItems[i].Desc[2]);
+                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.BagItems[i].Desc[3]);
+                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.BagItems[i].Desc[4]);
+                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.BagItems[i].Desc[5]);
+                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.BagItems[i].Desc[6]);
+                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].Desc[7]);
+                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].Desc[8]);
+                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].Desc[9]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].Desc[ItemAttr.WeaponUpgrade]);
+                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].Desc[11]);
+                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].Desc[12]);
+                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].Desc[13]);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -956,20 +973,20 @@ namespace DBSvr.Storage.MySQL
                         command.Parameters.AddWithValue("@FLD_STDINDEX", hd.HumItems[i].wIndex);
                         command.Parameters.AddWithValue("@FLD_DURA", hd.HumItems[i].Dura);
                         command.Parameters.AddWithValue("@FLD_DURAMAX", hd.HumItems[i].DuraMax);
-                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.HumItems[i].btValue[0]);
-                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.HumItems[i].btValue[1]);
-                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.HumItems[i].btValue[2]);
-                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.HumItems[i].btValue[3]);
-                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.HumItems[i].btValue[4]);
-                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.HumItems[i].btValue[5]);
-                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.HumItems[i].btValue[6]);
-                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.HumItems[i].btValue[7]);
-                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.HumItems[i].btValue[8]);
-                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.HumItems[i].btValue[9]);
-                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.HumItems[i].btValue[ItemAttr.WeaponUpgrade]);
-                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.HumItems[i].btValue[11]);
-                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.HumItems[i].btValue[12]);
-                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.HumItems[i].btValue[13]);
+                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.HumItems[i].Desc[0]);
+                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.HumItems[i].Desc[1]);
+                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.HumItems[i].Desc[2]);
+                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.HumItems[i].Desc[3]);
+                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.HumItems[i].Desc[4]);
+                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.HumItems[i].Desc[5]);
+                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.HumItems[i].Desc[6]);
+                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.HumItems[i].Desc[7]);
+                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.HumItems[i].Desc[8]);
+                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.HumItems[i].Desc[9]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.HumItems[i].Desc[ItemAttr.WeaponUpgrade]);
+                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.HumItems[i].Desc[11]);
+                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.HumItems[i].Desc[12]);
+                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.HumItems[i].Desc[13]);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -1033,20 +1050,20 @@ namespace DBSvr.Storage.MySQL
                         command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
                         command.Parameters.AddWithValue("@FLD_DURA", hd.BagItems[i].Dura);
                         command.Parameters.AddWithValue("@FLD_DURAMAX", hd.BagItems[i].DuraMax);
-                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].btValue[0]);
-                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.BagItems[i].btValue[1]);
-                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.BagItems[i].btValue[2]);
-                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.BagItems[i].btValue[3]);
-                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.BagItems[i].btValue[4]);
-                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.BagItems[i].btValue[5]);
-                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.BagItems[i].btValue[6]);
-                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].btValue[7]);
-                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].btValue[8]);
-                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].btValue[9]);
-                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[ItemAttr.WeaponUpgrade]);
-                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].btValue[11]);
-                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].btValue[12]);
-                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].btValue[13]);
+                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].Desc[0]);
+                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.BagItems[i].Desc[1]);
+                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.BagItems[i].Desc[2]);
+                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.BagItems[i].Desc[3]);
+                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.BagItems[i].Desc[4]);
+                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.BagItems[i].Desc[5]);
+                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.BagItems[i].Desc[6]);
+                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].Desc[7]);
+                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].Desc[8]);
+                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].Desc[9]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].Desc[ItemAttr.WeaponUpgrade]);
+                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].Desc[11]);
+                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].Desc[12]);
+                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].Desc[13]);
                         command.ExecuteNonQuery();
                     }
                 }

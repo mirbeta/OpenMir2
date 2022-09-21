@@ -14,7 +14,9 @@ namespace DBSvr.Storage
         int Index(string sName);
 
         int Get(int nIndex, ref THumDataInfo HumanRCD);
-
+        
+        bool Get(string chrName, ref THumDataInfo HumanRCD);
+        
         int GetQryChar(int nIndex, ref QueryChr QueryChrRcd);
 
         bool Update(int nIndex, ref THumDataInfo HumanRCD);

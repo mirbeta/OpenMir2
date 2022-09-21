@@ -658,17 +658,17 @@ namespace GameSvr.Player
         {
             var MessageBodyWL = new MessageBodyWL();
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
-            MessageBodyWL.lParam1 = GetFeatureToLong();
-            MessageBodyWL.lParam2 = CharStatus;
+            MessageBodyWL.Param1 = GetFeatureToLong();
+            MessageBodyWL.Param2 = CharStatus;
             if (AllowGroup)
             {
-                MessageBodyWL.lTag1 = HUtil32.MakeLong(HUtil32.MakeWord(1, 0), GetFeatureEx());
+                MessageBodyWL.Tag1 = HUtil32.MakeLong(HUtil32.MakeWord(1, 0), GetFeatureEx());
             }
             else
             {
-                MessageBodyWL.lTag1 = 0;
+                MessageBodyWL.Tag1 = 0;
             }
-            MessageBodyWL.lTag2 = 0;
+            MessageBodyWL.Tag2 = 0;
             SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyWL));
             var nRecog = GetFeatureToLong();
             SendDefMessage(Grobal2.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
@@ -1038,27 +1038,27 @@ namespace GameSvr.Player
             else
             {
                 var boMakeLuck = false;
-                if (UseItems[Grobal2.U_WEAPON].btValue[4] > 0)
+                if (UseItems[Grobal2.U_WEAPON].Desc[4] > 0)
                 {
-                    UseItems[Grobal2.U_WEAPON].btValue[4] -= 1;
+                    UseItems[Grobal2.U_WEAPON].Desc[4] -= 1;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.WeaponMakeLuckPoint1)
+                else if (UseItems[Grobal2.U_WEAPON].Desc[3] < M2Share.Config.WeaponMakeLuckPoint1)
                 {
-                    UseItems[Grobal2.U_WEAPON].btValue[3]++;
+                    UseItems[Grobal2.U_WEAPON].Desc[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1)
+                else if (UseItems[Grobal2.U_WEAPON].Desc[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1)
                 {
-                    UseItems[Grobal2.U_WEAPON].btValue[3]++;
+                    UseItems[Grobal2.U_WEAPON].Desc[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1)
+                else if (UseItems[Grobal2.U_WEAPON].Desc[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1)
                 {
-                    UseItems[Grobal2.U_WEAPON].btValue[3]++;
+                    UseItems[Grobal2.U_WEAPON].Desc[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
@@ -1288,10 +1288,6 @@ namespace GameSvr.Player
                                 if (cellInfo.Count <= nIdx)
                                 {
                                     break;
-                                }
-                                if (cellInfo.Count > 1000)
-                                {
-                                    var s = "0";
                                 }
                                 var osObject = cellInfo.ObjList[nIdx];
                                 if (osObject != null)

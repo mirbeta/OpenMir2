@@ -114,7 +114,7 @@ namespace GameSvr.Npc
                                         //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
                                         sUserItemName = "";
-                                        if (DealOffInfo.UseItems[j].btValue[13] == 1)
+                                        if (DealOffInfo.UseItems[j].Desc[13] == 1)
                                         {
                                             sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[j].MakeIndex, DealOffInfo.UseItems[j].wIndex);
                                         }
@@ -130,7 +130,7 @@ namespace GameSvr.Npc
                                             case 15:
                                             case 19:
                                             case 26:
-                                                if (DealOffInfo.UseItems[j].btValue[8] != 0)
+                                                if (DealOffInfo.UseItems[j].Desc[8] != 0)
                                                 {
                                                     sClientDealOffInfo.UseItems[j].Item.Shape = 130;
                                                 }
@@ -228,7 +228,7 @@ namespace GameSvr.Npc
                                         sClientDealOffInfo.UseItems[k] = new ClientItem();
                                         StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].Item);
                                         sUserItemName = "";
-                                        if (DealOffInfo.UseItems[k].btValue[13] == 1)
+                                        if (DealOffInfo.UseItems[k].Desc[13] == 1)
                                         {
                                             sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[k].MakeIndex, DealOffInfo.UseItems[k].wIndex);
                                         }
@@ -245,7 +245,7 @@ namespace GameSvr.Npc
                                             case 15:
                                             case 19:
                                             case 26:
-                                                if (DealOffInfo.UseItems[k].btValue[8] != 0)
+                                                if (DealOffInfo.UseItems[k].Desc[8] != 0)
                                                 {
                                                     sClientDealOffInfo.UseItems[k].Item.Shape = 130;
                                                 }
@@ -375,20 +375,20 @@ namespace GameSvr.Npc
             var Magic = M2Share.WorldEngine.FindMagic(QuestActionInfo.sParam1);
             if (Magic != null)
             {
-                if (!PlayObject.IsTrainingSkill(Magic.wMagicID))
+                if (!PlayObject.IsTrainingSkill(Magic.MagicId))
                 {
                     var UserMagic = new UserMagic();
-                    UserMagic.MagicInfo = Magic;
-                    UserMagic.wMagIdx = Magic.wMagicID;
-                    UserMagic.btKey = 0;
-                    UserMagic.btLevel = (byte)nLevel;
-                    UserMagic.nTranPoint = 0;
+                    UserMagic.Magic = Magic;
+                    UserMagic.MagIdx = Magic.MagicId;
+                    UserMagic.Key = 0;
+                    UserMagic.Level = (byte)nLevel;
+                    UserMagic.TranPoint = 0;
                     PlayObject.MagicList.Add(UserMagic);
                     PlayObject.SendAddMagic(UserMagic);
                     PlayObject.RecalcAbilitys();
                     if (M2Share.Config.ShowScriptActionMsg)
                     {
-                        PlayObject.SysMsg(Magic.sMagicName + "练习成功。", MsgColor.Green, MsgType.Hint);
+                        PlayObject.SysMsg(Magic.MagicName + "练习成功。", MsgColor.Green, MsgType.Hint);
                     }
                 }
             }
@@ -762,7 +762,7 @@ namespace GameSvr.Npc
             for (var i = PlayObject.MagicList.Count - 1; i >= 0; i--)
             {
                 var UserMagic = PlayObject.MagicList[i];
-                if (UserMagic.MagicInfo.btJob != (byte)PlayObject.Job)
+                if (UserMagic.Magic.Job != (byte)PlayObject.Job)
                 {
                     PlayObject.SendDelMagic(UserMagic);
                     Dispose(UserMagic);
@@ -784,7 +784,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < PlayObject.MagicList.Count; i++)
             {
                 UserMagic = PlayObject.MagicList[i];
-                if (UserMagic.MagicInfo == Magic)
+                if (UserMagic.Magic == Magic)
                 {
                     PlayObject.MagicList.RemoveAt(i);
                     PlayObject.SendDelMagic(UserMagic);
@@ -1274,7 +1274,7 @@ namespace GameSvr.Npc
                 for (var i = 0; i < PlayObject.MagicList.Count; i++)
                 {
                     UserMagic = PlayObject.MagicList[i];
-                    if (UserMagic.MagicInfo == Magic)
+                    if (UserMagic.Magic == Magic)
                     {
                         switch (cMethod)
                         {
@@ -1282,31 +1282,31 @@ namespace GameSvr.Npc
                                 if (nLevel >= 0)
                                 {
                                     nLevel = HUtil32._MAX(3, nLevel);
-                                    UserMagic.btLevel = (byte)nLevel;
+                                    UserMagic.Level = (byte)nLevel;
                                 }
                                 break;
                             case '-':
-                                if (UserMagic.btLevel >= nLevel)
+                                if (UserMagic.Level >= nLevel)
                                 {
-                                    UserMagic.btLevel -= (byte)nLevel;
+                                    UserMagic.Level -= (byte)nLevel;
                                 }
                                 else
                                 {
-                                    UserMagic.btLevel = 0;
+                                    UserMagic.Level = 0;
                                 }
                                 break;
                             case '+':
-                                if (UserMagic.btLevel + nLevel <= 3)
+                                if (UserMagic.Level + nLevel <= 3)
                                 {
-                                    UserMagic.btLevel += (byte)nLevel;
+                                    UserMagic.Level += (byte)nLevel;
                                 }
                                 else
                                 {
-                                    UserMagic.btLevel = 3;
+                                    UserMagic.Level = 3;
                                 }
                                 break;
                         }
-                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "", 100);
+                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 100);
                         break;
                     }
                 }
@@ -1759,15 +1759,15 @@ namespace GameSvr.Npc
             else
             {
                 nAddPoint = nPoint;
-                if (UserItem.btValue[nValType] + nAddPoint > byte.MaxValue)
+                if (UserItem.Desc[nValType] + nAddPoint > byte.MaxValue)
                 {
-                    nAddPoint = byte.MaxValue - UserItem.btValue[nValType];
+                    nAddPoint = byte.MaxValue - UserItem.Desc[nValType];
                 }
-                UserItem.btValue[nValType] = (byte)(UserItem.btValue[nValType] + nAddPoint);
+                UserItem.Desc[nValType] = (byte)(UserItem.Desc[nValType] + nAddPoint);
             }
             PlayObject.SendUpdateItem(UserItem);
             PlayObject.SysMsg("装备升级成功", MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '/' + UserItem.btValue[0] + '/' + UserItem.btValue[1] + '/' + UserItem.btValue[2] + '/' + UserItem.btValue[3] + '/' + UserItem.btValue[4] + '/' + UserItem.btValue[5] + '/' + UserItem.btValue[6] + '/' + UserItem.btValue[7] + '/' + UserItem.btValue[8] + '/' + UserItem.btValue[9] + '/' + UserItem.btValue[ItemAttr.WeaponUpgrade] + '/' + UserItem.btValue[11] + '/' + UserItem.btValue[12] + '/' + UserItem.btValue[13], MsgColor.Blue, MsgType.Hint);
+            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '/' + UserItem.Desc[0] + '/' + UserItem.Desc[1] + '/' + UserItem.Desc[2] + '/' + UserItem.Desc[3] + '/' + UserItem.Desc[4] + '/' + UserItem.Desc[5] + '/' + UserItem.Desc[6] + '/' + UserItem.Desc[7] + '/' + UserItem.Desc[8] + '/' + UserItem.Desc[9] + '/' + UserItem.Desc[ItemAttr.WeaponUpgrade] + '/' + UserItem.Desc[11] + '/' + UserItem.Desc[12] + '/' + UserItem.Desc[13], MsgColor.Blue, MsgType.Hint);
         }
 
         private void ActionOfUpgradeItemsEx(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -1808,7 +1808,7 @@ namespace GameSvr.Npc
                         PlayObject.SysMsg("装备升级失败，装备属性恢复默认!!!", MsgColor.Red, MsgType.Hint);
                         if (nValType != 14)
                         {
-                            UserItem.btValue[nValType] = 0;
+                            UserItem.Desc[nValType] = 0;
                         }
                         break;
                 }
@@ -1826,15 +1826,15 @@ namespace GameSvr.Npc
             else
             {
                 nAddPoint = nPoint;
-                if (UserItem.btValue[nValType] + nAddPoint > byte.MaxValue)
+                if (UserItem.Desc[nValType] + nAddPoint > byte.MaxValue)
                 {
-                    nAddPoint = byte.MaxValue - UserItem.btValue[nValType];
+                    nAddPoint = byte.MaxValue - UserItem.Desc[nValType];
                 }
-                UserItem.btValue[nValType] = (byte)(UserItem.btValue[nValType] + nAddPoint);
+                UserItem.Desc[nValType] = (byte)(UserItem.Desc[nValType] + nAddPoint);
             }
             PlayObject.SendUpdateItem(UserItem);
             PlayObject.SysMsg("装备升级成功", MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '-' + UserItem.btValue[0] + '/' + UserItem.btValue[1] + '/' + UserItem.btValue[2] + '/' + UserItem.btValue[3] + '/' + UserItem.btValue[4] + '/' + UserItem.btValue[5] + '/' + UserItem.btValue[6] + '/' + UserItem.btValue[7] + '/' + UserItem.btValue[8] + '/' + UserItem.btValue[9] + '/' + UserItem.btValue[ItemAttr.WeaponUpgrade] + '/' + UserItem.btValue[11] + '/' + UserItem.btValue[12] + '/' + UserItem.btValue[13], MsgColor.Blue, MsgType.Hint);
+            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '-' + UserItem.Desc[0] + '/' + UserItem.Desc[1] + '/' + UserItem.Desc[2] + '/' + UserItem.Desc[3] + '/' + UserItem.Desc[4] + '/' + UserItem.Desc[5] + '/' + UserItem.Desc[6] + '/' + UserItem.Desc[7] + '/' + UserItem.Desc[8] + '/' + UserItem.Desc[9] + '/' + UserItem.Desc[ItemAttr.WeaponUpgrade] + '/' + UserItem.Desc[11] + '/' + UserItem.Desc[12] + '/' + UserItem.Desc[13], MsgColor.Blue, MsgType.Hint);
         }
 
         /// <summary>
@@ -3484,7 +3484,7 @@ namespace GameSvr.Npc
                                 MapItem.Name = StdItem.Name;
                                 var NameCorlr = "@" + M2Share.ItemUnit.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
                                 var sUserItemName = "";
-                                if (UserItem.btValue[13] == 1)
+                                if (UserItem.Desc[13] == 1)
                                 {
                                     sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
                                     if (sUserItemName != "")

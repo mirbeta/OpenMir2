@@ -8,27 +8,27 @@ namespace SystemModule.Packet.ServerPackets
         /// <summary>
         /// 技能ID
         /// </summary>
-        public ushort wMagicID;
+        public ushort MagicId;
         /// <summary>
         /// 技能名称
         /// </summary>
-        public string sMagicName;
+        public string MagicName;
         /// <summary>
         /// 动作效果
         /// </summary>
-        public byte btEffectType;
+        public byte EffectType;
         /// <summary>
         /// 魔法效果
         /// </summary>
-        public byte btEffect;
+        public byte Effect;
         /// <summary>
         /// 魔法消耗
         /// </summary>
-        public ushort wSpell;
+        public ushort Spell;
         /// <summary>
         /// 基本威力
         /// </summary>
-        public ushort wPower;
+        public ushort Power;
         /// <summary>
         /// 技能等级
         /// </summary>
@@ -40,36 +40,35 @@ namespace SystemModule.Packet.ServerPackets
         /// <summary>
         /// 修炼等级
         /// </summary>
-        public byte btTrainLv;
+        public byte TrainLv;
         /// <summary>
         /// 职业 0-战 1-法 2-道
         /// </summary>
-        public byte btJob;
+        public byte Job;
         /// <summary>
         /// 技能使用延时
         /// </summary>
-        public int dwDelayTime;
+        public int DelayTime;
         /// <summary>
         /// 升级魔法
         /// </summary>
-        public byte btDefSpell;
+        public byte DefSpell;
         /// <summary>
         /// 升级威力
         /// </summary>
-        public byte btDefPower;
+        public byte DefPower;
         /// <summary>
         /// 最大威力
         /// </summary>
-        public ushort wMaxPower;
+        public ushort MaxPower;
         /// <summary>
         /// 升级最大威力
         /// </summary>
-        public byte btDefMaxPower;
+        public byte DefMaxPower;
         /// <summary>
         /// 备注说明
         /// </summary>
-        public string sDescr;
-        public byte btClass;
+        public string Desc;
 
         public MagicInfo()
         {
@@ -84,12 +83,12 @@ namespace SystemModule.Packet.ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(wMagicID);
-            writer.WriteAsciiString(sMagicName, 12);
-            writer.Write(btEffectType);
-            writer.Write(btEffect);
-            writer.Write(wSpell);
-            writer.Write(wPower);
+            writer.Write(MagicId);
+            writer.WriteAsciiString(MagicName, 14);
+            writer.Write(EffectType);
+            writer.Write(Effect);
+            writer.Write(Spell);
+            writer.Write(Power);
             writer.Write(TrainLevel[0]);
             writer.Write(TrainLevel[1]);
             writer.Write(TrainLevel[2]);
@@ -98,15 +97,14 @@ namespace SystemModule.Packet.ServerPackets
             writer.Write(MaxTrain[1]);
             writer.Write(MaxTrain[2]);
             writer.Write(MaxTrain[3]);
-            writer.Write(btTrainLv);
-            writer.Write(btJob);
-            writer.Write(dwDelayTime);
-            writer.Write(btDefSpell);
-            writer.Write(btDefPower);
-            writer.Write(wMaxPower);
-            writer.Write(btDefMaxPower);
-            writer.WriteAsciiString(sDescr, 14);
-            writer.Write(btClass);
+            writer.Write(TrainLv);
+            writer.Write(Job);
+            writer.Write(DelayTime);
+            writer.Write(DefSpell);
+            writer.Write(DefPower);
+            writer.Write(MaxPower);
+            writer.Write(DefMaxPower);
+            writer.WriteAsciiString(Desc, 15);
         }
     }
 }

@@ -1,7 +1,6 @@
-using SystemModule.Data;
 using SystemModule.Packet.ServerPackets;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Data
 {
     public class UserOpenInfo
     {
