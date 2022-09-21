@@ -25,52 +25,6 @@ namespace GameSvr
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
-            var ClientItem = new ClientStdItem();
-            ClientItem.Name="召唤神兽召唤神兽召唤神兽";
-            ClientItem.StdMode     =1;
-            ClientItem. Shape 	   =2;
-            ClientItem. Weight       =3;
-            ClientItem. AniCount    =4;
-            ClientItem.SpecialPwr  =5;
-            ClientItem. ItemDesc     =6;
-            ClientItem.Looks     =7;
-            ClientItem.      DuraMax      =8;
-            ClientItem. AC     =9;
-            ClientItem.MAC     =10;
-            ClientItem.DC    =11;
-            ClientItem.MC     =12;
-            ClientItem.SC     =13;
-            ClientItem.Need      =14;
-            ClientItem.NeedLevel      =15;
-            ClientItem.NeedIdentify     =16;
-            ClientItem.Price      =17;
-            ClientItem.Stock     =18;
-            ClientItem.AtkSpd       =19;
-            ClientItem.Agility    =20;
-            ClientItem.Accurate   =21;
-            ClientItem.MgAvoid   =22;
-            ClientItem.Strong   =23;
-            ClientItem.Undead    =24;
-            ClientItem.HpAdd     =25;
-            ClientItem.MpAdd     =26;
-            ClientItem.ExpAdd     =27;
-            ClientItem.EffType1    =28;
-            ClientItem. EffRate1    =29;
-            ClientItem.EffValue1    =30;
-            ClientItem. EffType2     =31;
-            ClientItem. EffRate2     =32;
-            ClientItem. EffValue2      =33;
-            ClientItem. Slowdown   =34;
-            ClientItem.Tox          =35;
-            ClientItem.ToxAvoid       =36;
-            ClientItem.UniqueItem    =37;
-            ClientItem.OverlapItem   =38;
-            ClientItem.Light     =39;
-            ClientItem.ItemType  =40;
-            ClientItem.ItemSet  =41;
-            ClientItem.Reference = "test";
-            var str = EDCode.EncodeBuffer(ClientItem);
-
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()

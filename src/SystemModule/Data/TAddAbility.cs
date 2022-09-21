@@ -6,11 +6,11 @@
         public ushort wMP;
         public ushort wHitPoint;
         public ushort wSpeedPoint;
-        public ushort wAC;
-        public ushort wMAC;
-        public ushort wDC;
-        public ushort wMC;
-        public ushort wSC;
+        public ushort AC;
+        public ushort MAC;
+        public ushort DC;
+        public ushort MC;
+        public ushort SC;
         public ushort wAntiPoison;
         public ushort wPoisonRecover;
         public ushort wHealthRecover;
