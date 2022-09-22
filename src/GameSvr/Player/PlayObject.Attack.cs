@@ -159,7 +159,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientHorseRunXY(short wIdent, int nX, int nY, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientHorseRunXY(int wIdent, int nX, int nY, bool boLateDelivery, ref int dwDelayTime)
         {
             var result = false;
             byte n14;
@@ -247,7 +247,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientSpellXY(short wIdent, int nKey, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientSpellXY(int wIdent, int nKey, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
         {
             var result = false;
             dwDelayTime = 0;

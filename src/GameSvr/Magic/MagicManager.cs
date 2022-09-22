@@ -171,7 +171,7 @@ namespace GameSvr.Magic
                             if (TargeTBaseObject.AntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                             {
                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
-                                PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
+                                PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
                                 if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
                                 {
                                     boTrain = true;
@@ -287,7 +287,7 @@ namespace GameSvr.Magic
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
-                            PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
+                            PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
                             if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
                             {
                                 boTrain = true;
@@ -326,7 +326,7 @@ namespace GameSvr.Magic
                                             if (Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                                             {
                                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.SC), HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC) + 1);
-                                                PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 1200);
+                                                PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 1200);
                                                 if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
                                                 {
                                                     boTrain = true;
@@ -561,7 +561,7 @@ namespace GameSvr.Magic
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
-                            PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
+                            PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
                             if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
                             {
                                 boTrain = true;
@@ -963,7 +963,7 @@ namespace GameSvr.Magic
                     if (nPower > 0)
                     {
                         BaseObject.StruckDamage(nPower);
-                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 1, BaseObject.ActorId, "", 200);
+                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 1, BaseObject.ActorId, "", 200);
                     }
                     if (BaseObject.Race >= Grobal2.RC_ANIMAL)
                     {
@@ -1000,7 +1000,7 @@ namespace GameSvr.Magic
                         {
                             nPower = (ushort)HUtil32.Round(nPower * 1.5);
                         }
-                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 2, BaseObject.ActorId, "", 600);
+                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 2, BaseObject.ActorId, "", 600);
                         if (BaseObject.Race >= Grobal2.RC_ANIMAL)
                         {
                             result = true;
@@ -1036,7 +1036,7 @@ namespace GameSvr.Magic
                 return result;
             }
             var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
-            PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargetBaseObject.ActorId, "", 600);
+            PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargetBaseObject.ActorId, "", 600);
             if (TargetBaseObject.Race >= Grobal2.RC_ANIMAL)
             {
                 result = true;
@@ -1256,7 +1256,7 @@ namespace GameSvr.Magic
                 {
                     if (TargeTBaseObject.AntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                     {
-                        BaseObject.SendDelayMsg(BaseObject, Grobal2.RM_DELAYMAGIC, (short)(nPower / 3), HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
+                        BaseObject.SendDelayMsg(BaseObject, Grobal2.RM_DELAYMAGIC, nPower / 3, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
                         if (M2Share.RandomNumber.Random(2) + (BaseObject.Abil.Level - 1) > TargeTBaseObject.Abil.Level)
                         {
                             var nLv = BaseObject.Abil.Level - TargeTBaseObject.Abil.Level;
