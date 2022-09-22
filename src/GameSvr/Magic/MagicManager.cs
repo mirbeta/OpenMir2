@@ -111,13 +111,13 @@ namespace GameSvr.Magic
         private ushort DoSpell_GetRPow(int wInt)
         {
             ushort result;
-            if (HUtil32.HiWord(wInt) > HUtil32.LoWord(wInt))
+            if (HUtil32.HiByte(wInt) > HUtil32.LoByte(wInt))
             {
-                result = (ushort)(M2Share.RandomNumber.Random(HUtil32.HiWord(wInt) - HUtil32.LoWord(wInt) + 1) + HUtil32.LoWord(wInt));
+                result = (ushort)(M2Share.RandomNumber.Random(HUtil32.HiByte(wInt) - HUtil32.LoByte(wInt) + 1) + HUtil32.LoByte(wInt));
             }
             else
             {
-                result = HUtil32.LoWord(wInt);
+                result = HUtil32.LoByte(wInt);
             }
             return result;
         }
@@ -170,7 +170,7 @@ namespace GameSvr.Magic
                         {
                             if (TargeTBaseObject.AntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                             {
-                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1);
+                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
                                 PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
                                 if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
                                 {
@@ -201,7 +201,7 @@ namespace GameSvr.Magic
                     }
                     if (PlayObject.IsProperFriend(TargeTBaseObject))
                     {
-                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.SC) * 2, (HUtil32.HiWord(PlayObject.WAbil.SC) - HUtil32.LoWord(PlayObject.WAbil.SC)) * 2 + 1);
+                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.SC) * 2, (HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC)) * 2 + 1);
                         if (TargeTBaseObject.WAbil.HP < TargeTBaseObject.WAbil.MaxHP)
                         {
                             TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_MAGHEALING, 0, nPower, 0, 0, "", 800);
@@ -258,7 +258,7 @@ namespace GameSvr.Magic
                     if (PlayObject.Envir.GetNextPosition(PlayObject.CurrX, PlayObject.CurrY, n1C, 1, ref n14, ref n18))
                     {
                         PlayObject.Envir.GetNextPosition(PlayObject.CurrX, PlayObject.CurrY, n1C, 5, ref nTargetX, ref nTargetY);
-                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1);
+                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
                         if (PlayObject.MagPassThroughMagic(n14, n18, nTargetX, nTargetY, n1C, nPower, false) > 0)
                         {
                             boTrain = true;
@@ -270,7 +270,7 @@ namespace GameSvr.Magic
                     if (PlayObject.Envir.GetNextPosition(PlayObject.CurrX, PlayObject.CurrY, n1C, 1, ref n14, ref n18))
                     {
                         PlayObject.Envir.GetNextPosition(PlayObject.CurrX, PlayObject.CurrY, n1C, 8, ref nTargetX, ref nTargetY);
-                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), (ushort)(HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1));
+                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), (ushort)(HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1));
                         if (PlayObject.MagPassThroughMagic(n14, n18, nTargetX, nTargetY, n1C, nPower, true) > 0)
                         {
                             boTrain = true;
@@ -282,7 +282,7 @@ namespace GameSvr.Magic
                     {
                         if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.AntiMagic)
                         {
-                            nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1);
+                            nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
                             if (TargeTBaseObject.LifeAttrib == Grobal2.LA_UNDEAD)
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
@@ -325,7 +325,7 @@ namespace GameSvr.Magic
                                         {
                                             if (Math.Abs(TargeTBaseObject.CurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.CurrY - nTargetY) <= 1)
                                             {
-                                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.SC), HUtil32.HiWord(PlayObject.WAbil.SC) - HUtil32.LoWord(PlayObject.WAbil.SC) + 1);
+                                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.SC), HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC) + 1);
                                                 PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 1200);
                                                 if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
                                                 {
@@ -341,14 +341,14 @@ namespace GameSvr.Magic
                                 }
                                 break;
                             case MagicConst.SKILL_HANGMAJINBUB:
-                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.WAbil.SC) * 10, HUtil32.HiWord(PlayObject.WAbil.SC) - HUtil32.LoWord(PlayObject.WAbil.SC) + 1);
+                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoByte(PlayObject.WAbil.SC) * 10, HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC) + 1);
                                 if (PlayObject.MagMakeDefenceArea(nTargetX, nTargetY, 3, nPower, 1) > 0)
                                 {
                                     boTrain = true;
                                 }
                                 break;
                             case MagicConst.SKILL_DEJIWONHO:
-                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.WAbil.SC) * 10, HUtil32.HiWord(PlayObject.WAbil.SC) - HUtil32.LoWord(PlayObject.WAbil.SC) + 1);
+                                nPower = PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoByte(PlayObject.WAbil.SC) * 10, HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC) + 1);
                                 if (PlayObject.MagMakeDefenceArea(nTargetX, nTargetY, 3, nPower, 0) > 0)
                                 {
                                     boTrain = true;
@@ -401,20 +401,20 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_EARTHFIRE:
-                    if (MagMakeFireCross(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1), (ushort)(DoSpell_GetPower(UserMagic, 10) + (DoSpell_GetRPow(PlayObject.WAbil.MC) >> 1)), nTargetX, nTargetY))
+                    if (MagMakeFireCross(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1), (ushort)(DoSpell_GetPower(UserMagic, 10) + (DoSpell_GetRPow(PlayObject.WAbil.MC) >> 1)), nTargetX, nTargetY))
                     {
                         boTrain = true;
                     }
                     break;
                 case MagicConst.SKILL_FIREBOOM:
-                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.FireBoomRage))
+                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.FireBoomRage))
                     {
                         boTrain = true;
                     }
                     break;
                 case MagicConst.SKILL_LIGHTFLOWER:
-                    if (MagElecBlizzard(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC),
-                        HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1)))
+                    if (MagElecBlizzard(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC),
+                        HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1)))
                     {
                         boTrain = true;
                     }
@@ -432,7 +432,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_BIGHEALLING:
-                    nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.SC) * 2, (HUtil32.HiWord(PlayObject.WAbil.SC) - HUtil32.LoWord(PlayObject.WAbil.SC)) * 2 + 1);
+                    nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.SC) * 2, (HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC)) * 2 + 1);
                     if (MagBigHealing(PlayObject, nPower, nTargetX, nTargetY))
                     {
                         boTrain = true;
@@ -478,7 +478,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_SNOWWIND:
-                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.SnowWindRange))
+                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.SnowWindRange))
                     {
                         boTrain = true;
                     }
@@ -519,7 +519,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_MABE:
-                    nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1);
+                    nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
                     if (MabMabe(PlayObject, TargeTBaseObject, nPower, UserMagic.Level, nTargetX, nTargetY))
                     {
                         boTrain = true;
@@ -556,7 +556,7 @@ namespace GameSvr.Magic
                     {
                         if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.AntiMagic)
                         {
-                            nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1);
+                            nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
                             if (TargeTBaseObject.LifeAttrib == Grobal2.LA_UNDEAD)
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
@@ -584,7 +584,7 @@ namespace GameSvr.Magic
                     }
                     break;
                 case MagicConst.SKILL_47:
-                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.FireBoomRage))
+                    if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1), nTargetX, nTargetY, M2Share.Config.FireBoomRage))
                     {
                         boTrain = true;
                     }
@@ -612,7 +612,7 @@ namespace GameSvr.Magic
                         {
                             MagicBase.UseAmulet(PlayObject, 1, 1, ref nAmuletIdx);
                             nPower = (ushort)(UserMagic.Level + 1 + M2Share.RandomNumber.Random(UserMagic.Level));
-                            n14 = (short)PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.WAbil.SC) * 10, HUtil32.HiWord(PlayObject.WAbil.SC) - HUtil32.LoWord(PlayObject.WAbil.SC) + 1);
+                            n14 = (short)PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoByte(PlayObject.WAbil.SC) * 10, HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC) + 1);
                             if (TargeTBaseObject.AttPowerUp(nPower, n14))
                             {
                                 boTrain = true;
@@ -951,7 +951,7 @@ namespace GameSvr.Magic
                 }
                 if (PlayObject.IsProperTarget(BaseObject))
                 {
-                    var nPower = PlayObject.GetAttackPower(HUtil32.LoWord(PlayObject.WAbil.DC), HUtil32.HiWord(PlayObject.WAbil.DC) - HUtil32.LoWord(PlayObject.WAbil.DC));
+                    var nPower = PlayObject.GetAttackPower(HUtil32.LoByte(PlayObject.WAbil.DC), HUtil32.HiByte(PlayObject.WAbil.DC) - HUtil32.LoByte(PlayObject.WAbil.DC));
                     if (M2Share.RandomNumber.Random(BaseObject.SpeedPoint) >= PlayObject.HitPoint)
                     {
                         nPower = 0;
@@ -995,7 +995,7 @@ namespace GameSvr.Magic
                 {
                     if (M2Share.RandomNumber.Random(10) >= BaseObject.AntiMagic)
                     {
-                        var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1);
+                        var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
                         if (BaseObject.LifeAttrib == Grobal2.LA_UNDEAD)
                         {
                             nPower = (ushort)HUtil32.Round(nPower * 1.5);
@@ -1035,7 +1035,7 @@ namespace GameSvr.Magic
                 TargetBaseObject = null;
                 return result;
             }
-            var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoWord(PlayObject.WAbil.MC), HUtil32.HiWord(PlayObject.WAbil.MC) - HUtil32.LoWord(PlayObject.WAbil.MC) + 1);
+            var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
             PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargetBaseObject.ActorId, "", 600);
             if (TargetBaseObject.Race >= Grobal2.RC_ANIMAL)
             {

@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg(PlayObject.GeTBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(PlayObject.GetBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
         }
     }
 }
