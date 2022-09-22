@@ -4703,14 +4703,14 @@ namespace GameSvr.Actor
         public ushort GetHitStruckDamage(BaseObject target, int nDamage)
         {
             int nArmor;
-            var nRnd = HUtil32.HiWord(Abil.AC) - HUtil32.LoWord(Abil.AC) + 1;
+            var nRnd = HUtil32.HiWord(WAbil.AC) - HUtil32.LoWord(WAbil.AC) + 1;
             if (nRnd > 0)
             {
-                nArmor = HUtil32.LoWord(Abil.AC) + M2Share.RandomNumber.Random(nRnd);
+                nArmor = HUtil32.LoWord(WAbil.AC) + M2Share.RandomNumber.Random(nRnd);
             }
             else
             {
-                nArmor = HUtil32.LoWord(Abil.AC);
+                nArmor = HUtil32.LoWord(WAbil.AC);
             }
             nDamage = HUtil32._MAX(0, nDamage - nArmor);
             if (nDamage > 0)
@@ -4730,7 +4730,7 @@ namespace GameSvr.Actor
 
         public int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            var n14 = HUtil32.LoWord(Abil.MAC) + M2Share.RandomNumber.Random(HUtil32.HiWord(Abil.MAC) - HUtil32.LoWord(Abil.MAC) + 1);
+            var n14 = HUtil32.LoWord(WAbil.MAC) + M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.MAC) - HUtil32.LoWord(WAbil.MAC) + 1);
             nDamage = HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {

@@ -142,219 +142,6 @@ namespace GameSvr.Actor
             }
         }
 
-        protected void SendAttackMsg(short wIdent, byte btDir, short nX, short nY)
-        {
-            SendRefMsg(wIdent, btDir, nX, nY, 0, "");
-        }
-
-        /// <summary>
-        /// 检查武器升级状态
-        /// </summary>
-        /// <param name="UserItem"></param>
-        private void CheckWeaponUpgradeStatus(ref UserItem UserItem)
-        {
-            if ((UserItem.Desc[0] + UserItem.Desc[1] + UserItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
-            {
-                if (UserItem.Desc[ItemAttr.WeaponUpgrade] == 1)
-                {
-                    UserItem.Index = 0;
-                }
-                if (HUtil32.RangeInDefined(UserItem.Desc[ItemAttr.WeaponUpgrade], 10, 13))
-                {
-                    UserItem.Desc[0] = (byte)(UserItem.Desc[0] + UserItem.Desc[ItemAttr.WeaponUpgrade] - 9);
-                }
-                if (HUtil32.RangeInDefined(UserItem.Desc[ItemAttr.WeaponUpgrade], 20, 23))
-                {
-                    UserItem.Desc[1] = (byte)(UserItem.Desc[1] + UserItem.Desc[ItemAttr.WeaponUpgrade] - 19);
-                }
-                if (HUtil32.RangeInDefined(UserItem.Desc[ItemAttr.WeaponUpgrade], 30, 33))
-                {
-                    UserItem.Desc[2] = (byte)(UserItem.Desc[2] + UserItem.Desc[ItemAttr.WeaponUpgrade] - 29);
-                }
-            }
-            else
-            {
-                UserItem.Index = 0;
-            }
-            UserItem.Desc[ItemAttr.WeaponUpgrade] = 0;
-        }
-
-        private void CheckWeaponUpgrade()
-        {
-            if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0) //检车武器是否升级
-            {
-                var useItems = new UserItem(UseItems[Grobal2.U_WEAPON]);
-                CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
-                PlayObject PlayObject = null;
-                StdItem StdItem = null;
-                if (UseItems[Grobal2.U_WEAPON].Index == 0)
-                {
-                    SysMsg(M2Share.g_sTheWeaponBroke, MsgColor.Red, MsgType.Hint);
-                    PlayObject = this as PlayObject;
-                    PlayObject.SendDelItems(useItems);
-                    SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
-                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
-                    if (StdItem != null)
-                    {
-                        if (StdItem.NeedIdentify == 1)
-                        {
-                            M2Share.AddGameDataLog("21" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
-                        }
-                    }
-                    FeatureChanged();
-                }
-                else
-                {
-                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
-                    PlayObject = this as PlayObject;
-                    PlayObject.SendUpdateItem(UseItems[Grobal2.U_WEAPON]);
-                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
-                    if (StdItem.NeedIdentify == 1)
-                    {
-                        M2Share.AddGameDataLog("20" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
-                    }
-                    RecalcAbilitys();
-                    SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                    SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                }
-            }
-        }
-
-        // 攻击角色
-        private bool _Attack_DirectAttack(BaseObject BaseObject, int nSecPwr)
-        {
-            bool result = false;
-            if ((Race == Grobal2.RC_PLAYOBJECT) || (BaseObject.Race == Grobal2.RC_PLAYOBJECT) || !(InSafeZone() && BaseObject.InSafeZone()))
-            {
-                if (IsProperTarget(BaseObject))
-                {
-                    if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
-                    {
-                        BaseObject.StruckDamage(nSecPwr);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ActorId, "", 500);
-                        if (BaseObject.Race != Grobal2.RC_PLAYOBJECT)
-                        {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ActorId, "");
-                        }
-                        result = true;
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 刺杀前面一个位置的攻击
-        /// </summary>
-        /// <param name="nSecPwr"></param>
-        /// <returns></returns>
-        private bool SwordLongAttack(ref int nSecPwr)
-        {
-            bool result = false;
-            short nX = 0;
-            short nY = 0;
-            nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.SwordLongPowerRate / 100);
-            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
-            {
-                BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
-                if (BaseObject != null)
-                {
-                    if ((nSecPwr > 0) && IsProperTarget(BaseObject))
-                    {
-                        result = _Attack_DirectAttack(BaseObject, nSecPwr);
-                        SetTargetCreat(BaseObject);
-                    }
-                    result = true;
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 半月攻击
-        /// </summary>
-        /// <param name="nSecPwr"></param>
-        /// <returns></returns>
-        private bool SwordWideAttack(ref int nSecPwr)
-        {
-            bool result = false;
-            byte nC = 0;
-            short nX = 0;
-            short nY = 0;
-            while (true)
-            {
-                var nDir = (byte)((Direction + M2Share.Config.WideAttack[nC]) % 8);
-                if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
-                {
-                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
-                    if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
-                    {
-                        result = _Attack_DirectAttack(BaseObject, nSecPwr);
-                        SetTargetCreat(BaseObject);
-                    }
-                }
-                nC++;
-                if (nC >= 3)
-                {
-                    break;
-                }
-            }
-            return result;
-        }
-
-        private bool CrsWideAttack(int nSecPwr)
-        {
-            bool result = false;
-            int nC = 0;
-            short nX = 0;
-            short nY = 0;
-            while (true)
-            {
-                byte nDir = (byte)((Direction + M2Share.Config.CrsAttack[nC]) % 8);
-                if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
-                {
-                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
-                    if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
-                    {
-                        result = _Attack_DirectAttack(BaseObject, nSecPwr);
-                        SetTargetCreat(BaseObject);
-                    }
-                }
-                nC++;
-                if (nC >= 7)
-                {
-                    break;
-                }
-            }
-            return result;
-        }
-
-        private void _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject BaseObject, byte btDir, ref short nX, ref short nY, int nSecPwr)
-        {
-            if (Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY))
-            {
-                BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
-                if ((nSecPwr > 0) && (BaseObject != null))
-                {
-                    _Attack_DirectAttack(BaseObject, nSecPwr);
-                }
-            }
-        }
-
-        private void _Attack_sub_4C1E5C(int nSecPwr)
-        {
-            short nX = 0;
-            short nY = 0;
-            BaseObject BaseObject = null;
-            byte btDir = Direction;
-            Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY);
-            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
-            btDir = M2Share.sub_4B2F80(Direction, 2);
-            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
-            btDir = M2Share.sub_4B2F80(Direction, 6);
-            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
-        }
-
         protected bool _Attack(ref short wHitMode, BaseObject AttackTarget)
         {
             int n20;
@@ -367,7 +154,7 @@ namespace GameSvr.Actor
                 int nSecPwr = 0;
                 if (AttackTarget != null)
                 {
-                    nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
+                    nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
@@ -391,7 +178,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    nPower = GetAttackPower(HUtil32.LoWord(Abil.DC), HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC));
+                    nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
                     if ((wHitMode == 3) && PowerHit)
                     {
                         PowerHit = false;
@@ -710,6 +497,219 @@ namespace GameSvr.Actor
                 M2Share.Log.Error(e.Message);
             }
             return result;
+        }
+
+        protected void SendAttackMsg(short wIdent, byte btDir, short nX, short nY)
+        {
+            SendRefMsg(wIdent, btDir, nX, nY, 0, "");
+        }
+
+        /// <summary>
+        /// 检查武器升级状态
+        /// </summary>
+        /// <param name="UserItem"></param>
+        private void CheckWeaponUpgradeStatus(ref UserItem UserItem)
+        {
+            if ((UserItem.Desc[0] + UserItem.Desc[1] + UserItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
+            {
+                if (UserItem.Desc[ItemAttr.WeaponUpgrade] == 1)
+                {
+                    UserItem.Index = 0;
+                }
+                if (HUtil32.RangeInDefined(UserItem.Desc[ItemAttr.WeaponUpgrade], 10, 13))
+                {
+                    UserItem.Desc[0] = (byte)(UserItem.Desc[0] + UserItem.Desc[ItemAttr.WeaponUpgrade] - 9);
+                }
+                if (HUtil32.RangeInDefined(UserItem.Desc[ItemAttr.WeaponUpgrade], 20, 23))
+                {
+                    UserItem.Desc[1] = (byte)(UserItem.Desc[1] + UserItem.Desc[ItemAttr.WeaponUpgrade] - 19);
+                }
+                if (HUtil32.RangeInDefined(UserItem.Desc[ItemAttr.WeaponUpgrade], 30, 33))
+                {
+                    UserItem.Desc[2] = (byte)(UserItem.Desc[2] + UserItem.Desc[ItemAttr.WeaponUpgrade] - 29);
+                }
+            }
+            else
+            {
+                UserItem.Index = 0;
+            }
+            UserItem.Desc[ItemAttr.WeaponUpgrade] = 0;
+        }
+
+        private void CheckWeaponUpgrade()
+        {
+            if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0) //检车武器是否升级
+            {
+                var useItems = new UserItem(UseItems[Grobal2.U_WEAPON]);
+                CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
+                PlayObject PlayObject = null;
+                StdItem StdItem = null;
+                if (UseItems[Grobal2.U_WEAPON].Index == 0)
+                {
+                    SysMsg(M2Share.g_sTheWeaponBroke, MsgColor.Red, MsgType.Hint);
+                    PlayObject = this as PlayObject;
+                    PlayObject.SendDelItems(useItems);
+                    SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
+                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
+                    if (StdItem != null)
+                    {
+                        if (StdItem.NeedIdentify == 1)
+                        {
+                            M2Share.AddGameDataLog("21" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        }
+                    }
+                    FeatureChanged();
+                }
+                else
+                {
+                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
+                    PlayObject = this as PlayObject;
+                    PlayObject.SendUpdateItem(UseItems[Grobal2.U_WEAPON]);
+                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
+                    if (StdItem.NeedIdentify == 1)
+                    {
+                        M2Share.AddGameDataLog("20" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                    }
+                    RecalcAbilitys();
+                    SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                    SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+                }
+            }
+        }
+
+        // 攻击角色
+        private bool _Attack_DirectAttack(BaseObject BaseObject, int nSecPwr)
+        {
+            bool result = false;
+            if ((Race == Grobal2.RC_PLAYOBJECT) || (BaseObject.Race == Grobal2.RC_PLAYOBJECT) || !(InSafeZone() && BaseObject.InSafeZone()))
+            {
+                if (IsProperTarget(BaseObject))
+                {
+                    if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
+                    {
+                        BaseObject.StruckDamage(nSecPwr);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ActorId, "", 500);
+                        if (BaseObject.Race != Grobal2.RC_PLAYOBJECT)
+                        {
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, ActorId, "");
+                        }
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 刺杀前面一个位置的攻击
+        /// </summary>
+        /// <param name="nSecPwr"></param>
+        /// <returns></returns>
+        private bool SwordLongAttack(ref int nSecPwr)
+        {
+            bool result = false;
+            short nX = 0;
+            short nY = 0;
+            nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.SwordLongPowerRate / 100);
+            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
+            {
+                BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                if (BaseObject != null)
+                {
+                    if ((nSecPwr > 0) && IsProperTarget(BaseObject))
+                    {
+                        result = _Attack_DirectAttack(BaseObject, nSecPwr);
+                        SetTargetCreat(BaseObject);
+                    }
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 半月攻击
+        /// </summary>
+        /// <param name="nSecPwr"></param>
+        /// <returns></returns>
+        private bool SwordWideAttack(ref int nSecPwr)
+        {
+            bool result = false;
+            byte nC = 0;
+            short nX = 0;
+            short nY = 0;
+            while (true)
+            {
+                var nDir = (byte)((Direction + M2Share.Config.WideAttack[nC]) % 8);
+                if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
+                {
+                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
+                    {
+                        result = _Attack_DirectAttack(BaseObject, nSecPwr);
+                        SetTargetCreat(BaseObject);
+                    }
+                }
+                nC++;
+                if (nC >= 3)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private bool CrsWideAttack(int nSecPwr)
+        {
+            bool result = false;
+            int nC = 0;
+            short nX = 0;
+            short nY = 0;
+            while (true)
+            {
+                byte nDir = (byte)((Direction + M2Share.Config.CrsAttack[nC]) % 8);
+                if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
+                {
+                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
+                    {
+                        result = _Attack_DirectAttack(BaseObject, nSecPwr);
+                        SetTargetCreat(BaseObject);
+                    }
+                }
+                nC++;
+                if (nC >= 7)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private void _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject BaseObject, byte btDir, ref short nX, ref short nY, int nSecPwr)
+        {
+            if (Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY))
+            {
+                BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                if ((nSecPwr > 0) && (BaseObject != null))
+                {
+                    _Attack_DirectAttack(BaseObject, nSecPwr);
+                }
+            }
+        }
+
+        private void _Attack_sub_4C1E5C(int nSecPwr)
+        {
+            short nX = 0;
+            short nY = 0;
+            BaseObject BaseObject = null;
+            byte btDir = Direction;
+            Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY);
+            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
+            btDir = M2Share.sub_4B2F80(Direction, 2);
+            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
+            btDir = M2Share.sub_4B2F80(Direction, 6);
+            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
         }
 
         private void TrainCurrentSkill(int wHitMode)
