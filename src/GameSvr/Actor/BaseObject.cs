@@ -1262,8 +1262,7 @@ namespace GameSvr.Actor
                     }
                     if (Master != null)
                     {
-                        Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, 1,
-                            ref n20, ref n24);
+                        Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, 1, ref n20, ref n24);
                         if (newX == n20 && newY == n24)
                         {
                             bo29 = false;
@@ -1302,7 +1301,6 @@ namespace GameSvr.Actor
                 M2Share.Log.Error(sExceptionMsg);
                 M2Share.Log.Error(ex.StackTrace);
             }
-
             return result;
         }
 
@@ -3034,8 +3032,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 发送延时消息
         /// </summary>
-        public void SendDelayMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
-            string sMsg, int dwDelay)
+        public void SendDelayMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
             {

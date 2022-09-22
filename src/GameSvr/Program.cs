@@ -28,31 +28,6 @@ namespace GameSvr
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
-
-            var aaa = new Ability();
-            aaa.Level = 1;
-            aaa.Reserved1 = 2;
-            aaa.AC = 3;
-            aaa.MAC = 4;
-            aaa.DC = 5;
-            aaa.MC = 6;
-            aaa.SC = 7;
-            aaa.HP = 8;
-            aaa.MP = 9;
-            aaa.MaxHP = 10;
-            aaa.MaxMP = 11;
-            aaa.ExpCount = 12;
-            aaa.ExpMaxCount = 13;
-            aaa.Exp = 14;
-            aaa.MaxExp = 15;
-            aaa.Weight = 16;
-            aaa.MaxWeight = 17;
-            aaa.WearWeight = 18;
-            aaa.MaxWearWeight = 19;
-            aaa.HandWeight = 20;
-            aaa.MaxHandWeight = 21;
-            var sss = EDCode.EncodeBuffer(aaa);
-
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()
