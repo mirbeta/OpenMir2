@@ -21,7 +21,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     TargetX = TargetCret.CurrX;
                     TargetY = TargetCret.CurrY;
-                    if (Abil.HP <= HUtil32.Round(Abil.MaxHP / 2))
+                    if (WAbil.HP <= HUtil32.Round(WAbil.MaxHP / 2))
                     {
                         GetFrontPosition(ref nx, ref ny);
                         SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -30,7 +30,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (Abil.HP >= HUtil32.Round(Abil.MaxHP / 2))
+                        if (WAbil.HP >= HUtil32.Round(WAbil.MaxHP / 2))
                         {
                             borunaway = false;
                         }

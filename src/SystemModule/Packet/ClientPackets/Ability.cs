@@ -4,9 +4,8 @@ using System.IO;
 
 namespace SystemModule.Packet.ClientPackets
 {
-    [Serializable]
     [ProtoContract]
-    public class Ability : Packets,ICloneable
+    public class Ability : Packets, ICloneable
     {
         [ProtoMember(1)]
         public byte Level;

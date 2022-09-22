@@ -40,8 +40,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
-            var wAbil = Abil;
-            var nPower = GetAttackPower(HUtil32.LoWord(wAbil.DC), HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC));
+            var nPower = GetAttackPower(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC));
             HitMagAttackTarget(targeTBaseObject, 0, nPower, true);
         }
 
@@ -53,12 +52,12 @@ namespace GameSvr.Monster.Monsters
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
-                    if (DangerLevel > Abil.HP / Abil.MaxHP * 5 && DangerLevel > 0)
+                    if (DangerLevel > WAbil.HP / WAbil.MaxHP * 5 && DangerLevel > 0)
                     {
                         DangerLevel -= 1;
                         CallSlave();
                     }
-                    if (Abil.HP == Abil.MaxHP)
+                    if (WAbil.HP == WAbil.MaxHP)
                     {
                         DangerLevel = 5;
                     }

@@ -6,6 +6,7 @@ using GameSvr.RobotPlay;
 using System;
 using System.Collections;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
@@ -41,8 +42,8 @@ namespace GameSvr.Actor
             {
                 if (SuperMan)
                 {
-                    Abil.HP = Abil.MaxHP;
-                    Abil.MP = Abil.MaxMP;
+                    WAbil.HP = WAbil.MaxHP;
+                    WAbil.MP = WAbil.MaxMP;
                 }
                 int dwC = (HUtil32.GetTickCount() - MDwHpmpTick) / 20;
                 MDwHpmpTick = HUtil32.GetTickCount();
@@ -51,43 +52,43 @@ namespace GameSvr.Actor
                 if (!Death)
                 {
                     ushort n18;
-                    if ((Abil.HP < Abil.MaxHP) && (HealthTick >= M2Share.Config.HealthFillTime))
+                    if ((WAbil.HP < WAbil.MaxHP) && (HealthTick >= M2Share.Config.HealthFillTime))
                     {
-                        n18 = (ushort)((Abil.MaxHP / 75) + 1);
-                        if ((Abil.HP + n18) < Abil.MaxHP)
+                        n18 = (ushort)((WAbil.MaxHP / 75) + 1);
+                        if ((WAbil.HP + n18) < WAbil.MaxHP)
                         {
-                            Abil.HP += n18;
+                            WAbil.HP += n18;
                         }
                         else
                         {
-                            Abil.HP = Abil.MaxHP;
+                            WAbil.HP = WAbil.MaxHP;
                         }
                         HealthSpellChanged();
                     }
-                    if ((Abil.MP < Abil.MaxMP) && (SpellTick >= M2Share.Config.SpellFillTime))
+                    if ((WAbil.MP < WAbil.MaxMP) && (SpellTick >= M2Share.Config.SpellFillTime))
                     {
-                        n18 = (ushort)((Abil.MaxMP / 18) + 1);
-                        if ((Abil.MP + n18) < Abil.MaxMP)
+                        n18 = (ushort)((WAbil.MaxMP / 18) + 1);
+                        if ((WAbil.MP + n18) < WAbil.MaxMP)
                         {
-                            Abil.MP += n18;
+                            WAbil.MP += n18;
                         }
                         else
                         {
-                            Abil.MP = Abil.MaxMP;
+                            WAbil.MP = WAbil.MaxMP;
                         }
                         HealthSpellChanged();
                     }
-                    if (Abil.HP == 0)
+                    if (WAbil.HP == 0)
                     {
                         if (((LastHiter == null) || !LastHiter.UnRevival) && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))// 60 * 1000
                         {
                             RevivalTick = HUtil32.GetTickCount();
                             ItemDamageRevivalRing();
-                            Abil.HP = Abil.MaxHP;
+                            WAbil.HP = WAbil.MaxHP;
                             HealthSpellChanged();
                             SysMsg(M2Share.g_sRevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
                         }
-                        if (Abil.HP == 0)
+                        if (WAbil.HP == 0)
                         {
                             Die();
                         }
@@ -133,7 +134,7 @@ namespace GameSvr.Actor
             {
                 if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
                 {
-                    int dwInChsTime = 600 - HUtil32._MIN(400, Abil.Level * 10);
+                    int dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
                     if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
                     {
                         int dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
@@ -184,16 +185,16 @@ namespace GameSvr.Actor
                                 nHP += PerHealing;
                                 IncHealing -= PerHealing;
                             }
-                            PerHealth = Abil.Level / 10 + 5;
-                            PerSpell = Abil.Level / 10 + 5;
+                            PerHealth = WAbil.Level / 10 + 5;
+                            PerSpell = WAbil.Level / 10 + 5;
                             PerHealing = 5;
                             IncHealthSpell(nHP, nMP);
-                            if (Abil.HP == Abil.MaxHP)
+                            if (WAbil.HP == WAbil.MaxHP)
                             {
                                 IncHealth = 0;
                                 IncHealing = 0;
                             }
-                            if (Abil.MP == Abil.MaxMP)
+                            if (WAbil.MP == WAbil.MaxMP)
                             {
                                 IncSpell = 0;
                             }
@@ -204,23 +205,23 @@ namespace GameSvr.Actor
                 {
                     IncHealthSpellTick = HUtil32.GetTickCount();
                 }
-                if ((HealthTick < -M2Share.Config.HealthFillTime) && (Abil.HP > 1))
+                if ((HealthTick < -M2Share.Config.HealthFillTime) && (WAbil.HP > 1))
                 {
-                    Abil.HP -= 1;
+                    WAbil.HP -= 1;
                     HealthTick += M2Share.Config.HealthFillTime;
                     HealthSpellChanged();
                 }
                 // 检查HP/MP值是否大于最大值，大于则降低到正常大小
                 bool boNeedRecalc = false;
-                if (Abil.HP > Abil.MaxHP)
+                if (WAbil.HP > WAbil.MaxHP)
                 {
                     boNeedRecalc = true;
-                    Abil.HP = (ushort)(Abil.MaxHP - 1);
+                    WAbil.HP = (ushort)(WAbil.MaxHP - 1);
                 }
-                if (Abil.MP > Abil.MaxMP)
+                if (WAbil.MP > WAbil.MaxMP)
                 {
                     boNeedRecalc = true;
-                    Abil.MP = (ushort)(Abil.MaxMP - 1);
+                    WAbil.MP = (ushort)(WAbil.MaxMP - 1);
                 }
                 if (boNeedRecalc)
                 {
@@ -241,9 +242,9 @@ namespace GameSvr.Actor
                         int nCount;
                         int dCount;
                         int bCount;
-                        Items.StdItem StdItem;
+                        StdItem StdItem;
                         // 加HP
-                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((Abil.HP / Abil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
+                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
                         {
                             IncHpStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
@@ -251,7 +252,7 @@ namespace GameSvr.Actor
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
                                 bCount = Convert.ToInt32(nCount / M2Share.Config.HPStoneAddRate);
-                                dCount = Abil.MaxHP - Abil.HP;
+                                dCount = WAbil.MaxHP - WAbil.HP;
                                 if (dCount > bCount)
                                 {
                                     dCount = bCount;
@@ -286,7 +287,7 @@ namespace GameSvr.Actor
                             }
                         }
                         // 加MP
-                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((Abil.MP / Abil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
+                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
                         {
                             IncMpStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
@@ -294,7 +295,7 @@ namespace GameSvr.Actor
                             {
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
                                 bCount = Convert.ToInt32(nCount / M2Share.Config.MPStoneAddRate);
-                                dCount = Abil.MaxMP - Abil.MP;
+                                dCount = WAbil.MaxMP - WAbil.MP;
                                 if (dCount > bCount)
                                 {
                                     dCount = bCount;
@@ -372,29 +373,29 @@ namespace GameSvr.Actor
                         switch (AutoChangeIdx)
                         {
                             case 0:
-                                nInteger = Grobal2.STATE_TRANSPARENT;
+                                nInteger = StatuStateConst.STATE_TRANSPARENT;
                                 break;
                             case 1:
-                                nInteger = Grobal2.POISON_STONE;
+                                nInteger = StatuStateConst.POISON_STONE;
                                 break;
                             case 2:
-                                nInteger = Grobal2.POISON_DONTMOVE;
+                                nInteger = StatuStateConst.POISON_DONTMOVE;
                                 break;
                             case 3:
-                                nInteger = Grobal2.POISON_68;
+                                nInteger = StatuStateConst.POISON_68;
                                 break;
                             case 4:
-                                nInteger = Grobal2.POISON_DECHEALTH;
+                                nInteger = StatuStateConst.POISON_DECHEALTH;
                                 break;
                             case 5:
-                                nInteger = Grobal2.POISON_LOCKSPELL;
+                                nInteger = StatuStateConst.POISON_LOCKSPELL;
                                 break;
                             case 6:
-                                nInteger = Grobal2.POISON_DAMAGEARMOR;
+                                nInteger = StatuStateConst.POISON_DAMAGEARMOR;
                                 break;
                             default:
                                 AutoChangeIdx = 0;
-                                nInteger = Grobal2.STATE_TRANSPARENT;
+                                nInteger = StatuStateConst.STATE_TRANSPARENT;
                                 break;
                         }
                         AutoChangeIdx++;
@@ -406,29 +407,29 @@ namespace GameSvr.Actor
                         switch (FixColorIdx)
                         {
                             case 0:
-                                nInteger = Grobal2.STATE_TRANSPARENT;
+                                nInteger = StatuStateConst.STATE_TRANSPARENT;
                                 break;
                             case 1:
-                                nInteger = Grobal2.POISON_STONE;
+                                nInteger = StatuStateConst.POISON_STONE;
                                 break;
                             case 2:
-                                nInteger = Grobal2.POISON_DONTMOVE;
+                                nInteger = StatuStateConst.POISON_DONTMOVE;
                                 break;
                             case 3:
-                                nInteger = Grobal2.POISON_68;
+                                nInteger = StatuStateConst.POISON_68;
                                 break;
                             case 4:
-                                nInteger = Grobal2.POISON_DECHEALTH;
+                                nInteger = StatuStateConst.POISON_DECHEALTH;
                                 break;
                             case 5:
-                                nInteger = Grobal2.POISON_LOCKSPELL;
+                                nInteger = StatuStateConst.POISON_LOCKSPELL;
                                 break;
                             case 6:
-                                nInteger = Grobal2.POISON_DAMAGEARMOR;
+                                nInteger = StatuStateConst.POISON_DAMAGEARMOR;
                                 break;
                             default:
                                 FixColorIdx = 0;
-                                nInteger = Grobal2.STATE_TRANSPARENT;
+                                nInteger = StatuStateConst.STATE_TRANSPARENT;
                                 break;
                         }
                         CharStatus = (int)(CharStatusEx | ((0x80000000 >> nInteger) | 0));
@@ -443,14 +444,14 @@ namespace GameSvr.Actor
                             Master = null;
                             SlaveExpLevel = (byte)M2Share.Config.SlaveColor.Length;
                             RecalcAbilitys();
-                            Abil.DC = HUtil32.MakeLong(HUtil32.LoWord(Abil.DC) * M2Share.Config.MasterDieMutinyPower, HUtil32.HiWord(Abil.DC) * M2Share.Config.MasterDieMutinyPower);
+                            WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC) * M2Share.Config.MasterDieMutinyPower, HUtil32.HiWord(WAbil.DC) * M2Share.Config.MasterDieMutinyPower);
                             WalkSpeed = WalkSpeed / M2Share.Config.MasterDieMutinySpeed;
                             RefNameColor();
                             RefShowName();
                         }
                         else
                         {
-                            Abil.HP = 0;
+                            WAbil.HP = 0;
                         }
                     }
                     if (Master.Ghost && ((HUtil32.GetTickCount() - Master.GhostTick) > 1000))
@@ -523,14 +524,14 @@ namespace GameSvr.Actor
                                 }
                             }
                             Master = null;
-                            Abil.HP = (ushort)(Abil.HP / 10);
+                            WAbil.HP = (ushort)(WAbil.HP / 10);
                             RefShowName();
                         }
                         if (MasterTick != 0)
                         {
                             if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000)
                             {
-                                Abil.HP = 0;
+                                WAbil.HP = 0;
                             }
                         }
                     }
@@ -592,30 +593,30 @@ namespace GameSvr.Actor
                                 boChg = true;
                                 switch (i)
                                 {
-                                    case Grobal2.STATE_DEFENCEUP:
+                                    case StatuStateConst.STATE_DEFENCEUP:
                                         boNeedRecalc = true;
                                         SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
-                                    case Grobal2.STATE_MAGDEFENCEUP:
+                                    case StatuStateConst.STATE_MAGDEFENCEUP:
                                         boNeedRecalc = true;
                                         SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
-                                    case Grobal2.STATE_BUBBLEDEFENCEUP:
+                                    case StatuStateConst.STATE_BUBBLEDEFENCEUP:
                                         AbilMagBubbleDefence = false;
                                         break;
-                                    case Grobal2.STATE_TRANSPARENT:
+                                    case StatuStateConst.STATE_TRANSPARENT:
                                         HideMode = false;
                                         break;
                                 }
                             }
                             else if (StatusArr[i] == 10)
                             {
-                                if (i == Grobal2.STATE_DEFENCEUP)
+                                if (i == StatuStateConst.STATE_DEFENCEUP)
                                 {
                                     SysMsg("防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 }
-                                if (i == Grobal2.STATE_MAGDEFENCEUP)
+                                if (i == StatuStateConst.STATE_MAGDEFENCEUP)
                                 {
                                     SysMsg("魔法防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
@@ -705,13 +706,13 @@ namespace GameSvr.Actor
                 if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
                 {
                     PoisoningTick = HUtil32.GetTickCount();
-                    if (StatusArr[Grobal2.POISON_DECHEALTH] > 0)
+                    if (StatusArr[StatuStateConst.POISON_DECHEALTH] > 0)
                     {
                         if (Animal)
                         {
                             MeatQuality -= 1000;
                         }
-                        DamageHealth(GreenPoisoningPoint + 1);
+                        DamageHealth((ushort)(GreenPoisoningPoint + 1));
                         HealthTick = 0;
                         SpellTick = 0;
                         HealthSpellChanged();
@@ -785,7 +786,7 @@ namespace GameSvr.Actor
                             {
                                 M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject, "@PlayKillMob", false);
                             }
-                            tExp = ExpHitter.CalcGetExp(Abil.Level, FightExp);
+                            tExp = ExpHitter.CalcGetExp(WAbil.Level, FightExp);
                             if (!M2Share.Config.VentureServer)
                             {
                                 if (ExpHitter.IsRobot)
@@ -832,8 +833,8 @@ namespace GameSvr.Actor
                         {
                             if (ExpHitter.Master != null)
                             {
-                                ExpHitter.GainSlaveExp(Abil.Level);
-                                tExp = ExpHitter.Master.CalcGetExp(Abil.Level, FightExp);
+                                ExpHitter.GainSlaveExp(WAbil.Level);
+                                tExp = ExpHitter.Master.CalcGetExp(WAbil.Level, FightExp);
                                 if (!M2Share.Config.VentureServer)
                                 {
                                     if (ExpHitter.Master.IsRobot)
@@ -856,7 +857,7 @@ namespace GameSvr.Actor
                             {
                                 M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@PlayKillMob", false);
                             }
-                            tExp = LastHiter.CalcGetExp(Abil.Level, FightExp);
+                            tExp = LastHiter.CalcGetExp(WAbil.Level, FightExp);
                             if (!M2Share.Config.VentureServer)
                             {
                                 if (LastHiter.IsRobot)
@@ -950,24 +951,24 @@ namespace GameSvr.Actor
                         {
                             if (LastHiter.PkDieLostExp > 0)
                             {
-                                if (Abil.Exp >= LastHiter.PkDieLostExp)
+                                if (WAbil.Exp >= LastHiter.PkDieLostExp)
                                 {
-                                    Abil.Exp -= (short)LastHiter.PkDieLostExp;
+                                    WAbil.Exp -= (short)LastHiter.PkDieLostExp;
                                 }
                                 else
                                 {
-                                    Abil.Exp = 0;
+                                    WAbil.Exp = 0;
                                 }
                             }
                             if (LastHiter.PkDieLostLevel > 0)
                             {
-                                if (Abil.Level >= LastHiter.PkDieLostLevel)
+                                if (WAbil.Level >= LastHiter.PkDieLostLevel)
                                 {
-                                    Abil.Level -= (byte)LastHiter.PkDieLostLevel;
+                                    WAbil.Level -= (byte)LastHiter.PkDieLostLevel;
                                 }
                                 else
                                 {
-                                    Abil.Level = 0;
+                                    WAbil.Level = 0;
                                 }
                             }
                         }
@@ -1023,7 +1024,7 @@ namespace GameSvr.Actor
                                 ScatterGolds(null);
                             }
                         }
-                        AddBodyLuck(-(50 - (50 - Abil.Level * 5)));
+                        AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
                     }
                 }
                 string tStr;
@@ -1102,18 +1103,18 @@ namespace GameSvr.Actor
             {
                 if (M2Share.Config.boPKLevelProtect)// 新人保护
                 {
-                    if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
+                    if (WAbil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
                     {
-                        if (!BaseObject.PvpFlag && BaseObject.Abil.Level <= M2Share.Config.nPKProtectLevel &&
+                        if (!BaseObject.PvpFlag && BaseObject.WAbil.Level <= M2Share.Config.nPKProtectLevel &&
                             BaseObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                         {
                             result = false;
                             return result;
                         }
                     }
-                    if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
+                    if (WAbil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
                     {
-                        if (!BaseObject.PvpFlag && BaseObject.Abil.Level > M2Share.Config.nPKProtectLevel && BaseObject.PvpLevel() < 2)
+                        if (!BaseObject.PvpFlag && BaseObject.WAbil.Level > M2Share.Config.nPKProtectLevel && BaseObject.PvpLevel() < 2)
                         {
                             result = false;
                             return result;
@@ -1121,18 +1122,18 @@ namespace GameSvr.Actor
                     }
                 }
                 // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                if (PvpLevel() >= 2 && WAbil.Level > M2Share.Config.nRedPKProtectLevel)
                 {
-                    if (BaseObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && BaseObject.PvpLevel() < 2)
+                    if (BaseObject.WAbil.Level <= M2Share.Config.nRedPKProtectLevel && BaseObject.PvpLevel() < 2)
                     {
                         result = false;
                         return result;
                     }
                 }
                 // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
+                if (WAbil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
                 {
-                    if (BaseObject.PvpLevel() >= 2 && BaseObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                    if (BaseObject.PvpLevel() >= 2 && BaseObject.WAbil.Level > M2Share.Config.nRedPKProtectLevel)
                     {
                         result = false;
                         return result;
@@ -1427,22 +1428,22 @@ namespace GameSvr.Actor
                 {
                     case Grobal2.RM_MAGSTRUCK:
                     case Grobal2.RM_MAGSTRUCK_MINE:
-                        if ((ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= Grobal2.RC_ANIMAL) && !Bo2Bf && (Abil.Level < 50))
+                        if ((ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= Grobal2.RC_ANIMAL) && !Bo2Bf && (WAbil.Level < 50))
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
                         nDamage = GetMagStruckDamage(null, ProcessMsg.nParam1);
                         if (nDamage > 0)
                         {
-                            StruckDamage(nDamage);
+                            StruckDamage((ushort)nDamage);
                             HealthSpellChanged();
-                            SendRefMsg(Grobal2.RM_STRUCK_MAG, (short)nDamage, Abil.HP, Abil.MaxHP, ProcessMsg.BaseObject, "");
+                            SendRefMsg(Grobal2.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, ProcessMsg.BaseObject, "");
                             TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.BaseObject);
                             if (M2Share.Config.MonDelHptoExp)
                             {
                                 if (TargetBaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    if ((TargetBaseObject as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if ((TargetBaseObject as PlayObject).WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(CharName))
                                         {
@@ -1461,7 +1462,7 @@ namespace GameSvr.Actor
                                 {
                                     if (TargetBaseObject.Master != null)
                                     {
-                                        if ((TargetBaseObject.Master as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                        if ((TargetBaseObject.Master as PlayObject).WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                         {
                                             if (!M2Share.GetNoHptoexpMonList(CharName))
                                             {
@@ -1484,12 +1485,12 @@ namespace GameSvr.Actor
                                 {
                                     MeatQuality -= (ushort)(nDamage * 1000);
                                 }
-                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, Abil.HP, Abil.MaxHP, ProcessMsg.BaseObject, "");
+                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, ProcessMsg.BaseObject, "");
                             }
                         }
                         if (FastParalysis)
                         {
-                            StatusArr[Grobal2.POISON_STONE] = 1;
+                            StatusArr[StatuStateConst.POISON_STONE] = 1;
                             FastParalysis = false;
                         }
                         break;
@@ -1520,7 +1521,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            StatusArr[Grobal2.POISON_STONE] = 1;
+                            StatusArr[StatuStateConst.POISON_STONE] = 1;
                             FastParalysis = false;
                         }
                         break;

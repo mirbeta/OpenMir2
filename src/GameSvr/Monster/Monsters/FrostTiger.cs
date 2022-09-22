@@ -1,4 +1,6 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -15,14 +17,14 @@ namespace GameSvr.Monster.Monsters
             {
                 if (TargetCret == null)
                 {
-                    if (StatusArr[Grobal2.STATE_TRANSPARENT] == 0)
+                    if (StatusArr[StatuStateConst.STATE_TRANSPARENT] == 0)
                     {
                         M2Share.MagicMgr.MagMakePrivateTransparent(this, 180);
                     }
                 }
                 else
                 {
-                    StatusArr[Grobal2.STATE_TRANSPARENT] = 0;
+                    StatusArr[StatuStateConst.STATE_TRANSPARENT] = 0;
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {

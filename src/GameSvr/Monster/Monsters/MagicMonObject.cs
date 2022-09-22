@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
         {
             if (CanWalk())
             {
-                if (Abil.HP < Abil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
+                if (WAbil.HP < WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
                     UseMagic = true;
                 }

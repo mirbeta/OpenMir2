@@ -2156,82 +2156,82 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$HP":
-                    nValue = PlayObject.Abil.HP;
+                    nValue = PlayObject.WAbil.HP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXHP":
-                    nValue = PlayObject.Abil.MaxHP;
+                    nValue = PlayObject.WAbil.MaxHP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MP":
-                    nValue = PlayObject.Abil.MP;
+                    nValue = PlayObject.WAbil.MP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXMP":
-                    nValue = PlayObject.Abil.MaxMP;
+                    nValue = PlayObject.WAbil.MaxMP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$AC":
-                    nValue = HUtil32.LoWord(PlayObject.Abil.AC);
+                    nValue = HUtil32.LoWord(PlayObject.WAbil.AC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXAC":
-                    nValue = HUtil32.HiWord(PlayObject.Abil.AC);
+                    nValue = HUtil32.HiWord(PlayObject.WAbil.AC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAC":
-                    nValue = HUtil32.LoWord(PlayObject.Abil.MAC);
+                    nValue = HUtil32.LoWord(PlayObject.WAbil.MAC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXMAC":
-                    nValue = HUtil32.HiWord(PlayObject.Abil.MAC);
+                    nValue = HUtil32.HiWord(PlayObject.WAbil.MAC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$DC":
-                    nValue = HUtil32.LoWord(PlayObject.Abil.DC);
+                    nValue = HUtil32.LoWord(PlayObject.WAbil.DC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXDC":
-                    nValue = HUtil32.HiWord(PlayObject.Abil.DC);
+                    nValue = HUtil32.HiWord(PlayObject.WAbil.DC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MC":
-                    nValue = HUtil32.LoWord(PlayObject.Abil.MC);
+                    nValue = HUtil32.LoWord(PlayObject.WAbil.MC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXMC":
-                    nValue = HUtil32.HiWord(PlayObject.Abil.MC);
+                    nValue = HUtil32.HiWord(PlayObject.WAbil.MC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$SC":
-                    nValue = HUtil32.LoWord(PlayObject.Abil.SC);
+                    nValue = HUtil32.LoWord(PlayObject.WAbil.SC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXSC":
-                    nValue = HUtil32.HiWord(PlayObject.Abil.SC);
+                    nValue = HUtil32.HiWord(PlayObject.WAbil.SC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$EXP":
-                    nValue = (int)PlayObject.Abil.Exp;
+                    nValue = PlayObject.Abil.Exp;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXEXP":
-                    nValue = (int)PlayObject.Abil.MaxExp;
+                    nValue = PlayObject.Abil.MaxExp;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2246,32 +2246,32 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$HW":
-                    nValue = PlayObject.Abil.HandWeight;
+                    nValue = PlayObject.WAbil.HandWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXHW":
-                    nValue = PlayObject.Abil.MaxHandWeight;
+                    nValue = PlayObject.WAbil.MaxHandWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$BW":
-                    nValue = PlayObject.Abil.Weight;
+                    nValue = PlayObject.WAbil.Weight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXBW":
-                    nValue = PlayObject.Abil.MaxWeight;
+                    nValue = PlayObject.WAbil.MaxWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$WW":
-                    nValue = PlayObject.Abil.WearWeight;
+                    nValue = PlayObject.WAbil.WearWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXWW":
-                    nValue = PlayObject.Abil.MaxWearWeight;
+                    nValue = PlayObject.WAbil.MaxWearWeight;
                     nDataType = 1;
                     result = true;
                     return result;

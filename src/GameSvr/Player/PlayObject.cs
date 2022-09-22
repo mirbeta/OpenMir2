@@ -198,7 +198,7 @@ namespace GameSvr.Player
         /// <returns></returns>
         public bool IsAddWeightAvailable(int nWeight)
         {
-            return Abil.Weight + nWeight <= Abil.MaxWeight;
+            return WAbil.Weight + nWeight <= WAbil.MaxWeight;
         }
 
         public void SendAddItem(UserItem UserItem)
@@ -679,8 +679,8 @@ namespace GameSvr.Player
 
         protected void SkillTwinOnOff(bool boSwitch)
         {
-            MBoTwinHitSkill = boSwitch;
-            if (MBoTwinHitSkill)
+            TwinHitSkill = boSwitch;
+            if (TwinHitSkill)
             {
                 SysMsg(M2Share.sTwinHitOn, MsgColor.Green, MsgType.Hint);
             }
@@ -705,9 +705,9 @@ namespace GameSvr.Player
 
         private bool AllowFireHitSkill()
         {
-            if (HUtil32.GetTickCount() - MDwLatestFireHitTick > 10 * 1000)
+            if (HUtil32.GetTickCount() - LatestFireHitTick > 10 * 1000)
             {
-                MDwLatestFireHitTick = HUtil32.GetTickCount();
+                LatestFireHitTick = HUtil32.GetTickCount();
                 FireHitSkill = true;
                 SysMsg(M2Share.sFireSpiritsSummoned, MsgColor.Green, MsgType.Hint);
                 return true;
@@ -718,8 +718,8 @@ namespace GameSvr.Player
 
         private bool AllowTwinHitSkill()
         {
-            MDwLatestTwinHitTick = HUtil32.GetTickCount();
-            MBoTwinHitSkill = true;
+            LatestTwinHitTick = HUtil32.GetTickCount();
+            TwinHitSkill = true;
             SysMsg("twin hit skill charged", MsgColor.Green, MsgType.Hint);
             return true;
         }
@@ -904,11 +904,11 @@ namespace GameSvr.Player
             return this.CharName + " 标识:" + this.ActorId + " 权限等级: " + this.Permission + " 管理模式: " + HUtil32.BoolToStr(this.AdminMode)
                 + " 隐身模式: " + HUtil32.BoolToStr(this.ObMode) + " 无敌模式: " + HUtil32.BoolToStr(this.SuperMan) + " 地图:" + this.MapName + '(' + this.Envir.MapDesc + ')'
                 + " 座标:" + this.CurrX + ':' + this.CurrY + " 等级:" + this.Abil.Level + " 转生等级:" + m_btReLevel
-                + " 经验:" + this.Abil.Exp + " 生命值: " + this.Abil.HP + '-' + this.Abil.MaxHP + " 魔法值: " + this.Abil.MP + '-' + this.Abil.MaxMP
-                + " 攻击力: " + HUtil32.LoWord(this.Abil.DC) + '-' + HUtil32.HiWord(this.Abil.DC) + " 魔法力: " + HUtil32.LoWord(this.Abil.MC) + '-'
-                + HUtil32.HiWord(this.Abil.MC) + " 道术: " + HUtil32.LoWord(this.Abil.SC) + '-' + HUtil32.HiWord(this.Abil.SC)
-                + " 防御力: " + HUtil32.LoWord(this.Abil.AC) + '-' + HUtil32.HiWord(this.Abil.AC) + " 魔防力: " + HUtil32.LoWord(this.Abil.MAC)
-                + '-' + HUtil32.HiWord(this.Abil.MAC) + " 准确:" + this.HitPoint + " 敏捷:" + this.SpeedPoint + " 速度:" + this.HitSpeed
+                + " 经验:" + this.Abil.Exp + " 生命值: " + this.WAbil.HP + '-' + this.WAbil.MaxHP + " 魔法值: " + this.WAbil.MP + '-' + this.WAbil.MaxMP
+                + " 攻击力: " + HUtil32.LoWord(this.WAbil.DC) + '-' + HUtil32.HiWord(this.WAbil.DC) + " 魔法力: " + HUtil32.LoWord(this.WAbil.MC) + '-'
+                + HUtil32.HiWord(this.WAbil.MC) + " 道术: " + HUtil32.LoWord(this.WAbil.SC) + '-' + HUtil32.HiWord(this.WAbil.SC)
+                + " 防御力: " + HUtil32.LoWord(this.WAbil.AC) + '-' + HUtil32.HiWord(this.WAbil.AC) + " 魔防力: " + HUtil32.LoWord(this.WAbil.MAC)
+                + '-' + HUtil32.HiWord(this.WAbil.MAC) + " 准确:" + this.HitPoint + " 敏捷:" + this.SpeedPoint + " 速度:" + this.HitSpeed
                 + " 仓库密码:" + m_sStoragePwd + " 登录IP:" + m_sIPaddr + '(' + m_sIPLocal + ')' + " 登录帐号:" + m_sUserID + " 登录时间:" + m_dLogonTime
                 + " 在线时长(分钟):" + (HUtil32.GetTickCount() - m_dwLogonTick) / 60000 + " 登录模式:" + m_nPayMent + ' ' + M2Share.Config.GameGoldName + ':' + m_nGameGold
                 + ' ' + M2Share.Config.GamePointName + ':' + m_nGamePoint + ' ' + M2Share.Config.PayMentPointName + ':' + m_nPayMentPoint + " 会员类型:" + m_nMemberType
@@ -1575,11 +1575,11 @@ namespace GameSvr.Player
                 }
                 nDmg = M2Share.RandomNumber.Random((n24 + 1) * 10) + (n24 + 1) * 10;
                 nDmg = BaseObject_34.GetHitStruckDamage(this, nDmg);
-                BaseObject_34.StruckDamage(nDmg);
-                BaseObject_34.SendRefMsg(Grobal2.RM_STRUCK, (short)nDmg, BaseObject_34.Abil.HP, BaseObject_34.Abil.MaxHP, ActorId, "");
+                BaseObject_34.StruckDamage((ushort)nDmg);
+                BaseObject_34.SendRefMsg(Grobal2.RM_STRUCK, nDmg, BaseObject_34.WAbil.HP, BaseObject_34.WAbil.MaxHP, ActorId, "");
                 if (BaseObject_34.Race != Grobal2.RC_PLAYOBJECT)
                 {
-                    BaseObject_34.SendMsg(BaseObject_34, Grobal2.RM_STRUCK, (short)nDmg, BaseObject_34.Abil.HP, BaseObject_34.Abil.MaxHP, ActorId, "");
+                    BaseObject_34.SendMsg(BaseObject_34, Grobal2.RM_STRUCK, nDmg, BaseObject_34.WAbil.HP, BaseObject_34.WAbil.MaxHP, ActorId, "");
                 }
             }
             if (bo35)
@@ -1596,8 +1596,8 @@ namespace GameSvr.Player
                 }
                 nDmg = M2Share.RandomNumber.Random(n24 * 10) + (n24 + 1) * 3;
                 nDmg = GetHitStruckDamage(this, nDmg);
-                StruckDamage(nDmg);
-                SendRefMsg(Grobal2.RM_STRUCK, (short)nDmg, Abil.HP, Abil.MaxHP, 0, "");
+                StruckDamage((ushort)nDmg);
+                SendRefMsg(Grobal2.RM_STRUCK, nDmg, WAbil.HP, WAbil.MaxHP, 0, "");
             }
             return result;
         }
@@ -1612,7 +1612,7 @@ namespace GameSvr.Player
                     var nSpellPoint = GetSpellPoint(UserMagic);
                     if (nSpellPoint > 0)
                     {
-                        if (Abil.MP < nSpellPoint)
+                        if (WAbil.MP < nSpellPoint)
                         {
                             return result;
                         }
@@ -1789,7 +1789,7 @@ namespace GameSvr.Player
             }
             if (nWhere == 1 || nWhere == 2)
             {
-                if (StdItem.Item.Weight > Abil.MaxHandWeight)
+                if (StdItem.Item.Weight > WAbil.MaxHandWeight)
                 {
                     SysMsg(M2Share.sHandWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
@@ -1797,7 +1797,7 @@ namespace GameSvr.Player
             }
             else
             {
-                if (StdItem.Item.Weight + GetUserItemWeitht(nWhere) > Abil.MaxWearWeight)
+                if (StdItem.Item.Weight + GetUserItemWeitht(nWhere) > WAbil.MaxWearWeight)
                 {
                     SysMsg(M2Share.sWearWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
@@ -1816,7 +1816,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 1:
-                    if (HUtil32.HiWord(Abil.DC) >= StdItem.Item.NeedLevel)
+                    if (HUtil32.HiByte(WAbil.DC) >= StdItem.Item.NeedLevel)
                     {
                         result = true;
                     }
@@ -1826,7 +1826,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 10:
-                    if (Job == (PlayJob)HUtil32.LoWord(StdItem.Item.NeedLevel) && Abil.Level >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                    if (Job == (PlayJob)HUtil32.LoByte(StdItem.Item.NeedLevel) && Abil.Level >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -1836,7 +1836,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 11:
-                    if (Job == (PlayJob)HUtil32.LoWord(StdItem.Item.NeedLevel) && HUtil32.HiWord(Abil.DC) >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                    if (Job == (PlayJob)HUtil32.LoByte(StdItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.DC) >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -1846,7 +1846,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 12:
-                    if (Job == (PlayJob)HUtil32.LoWord(StdItem.Item.NeedLevel) && HUtil32.HiWord(Abil.MC) >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                    if (Job == (PlayJob)HUtil32.LoByte(StdItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.MC) >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -1856,7 +1856,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 13:
-                    if (Job == (PlayJob)HUtil32.LoWord(StdItem.Item.NeedLevel) && HUtil32.HiWord(Abil.SC) >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                    if (Job == (PlayJob)HUtil32.LoByte(StdItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.SC) >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -1866,7 +1866,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 2:
-                    if (HUtil32.HiWord(Abil.MC) >= StdItem.Item.NeedLevel)
+                    if (HUtil32.HiByte(WAbil.MC) >= StdItem.Item.NeedLevel)
                     {
                         result = true;
                     }
@@ -1876,7 +1876,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 3:
-                    if (HUtil32.HiWord(Abil.SC) >= StdItem.Item.NeedLevel)
+                    if (HUtil32.HiByte(WAbil.SC) >= StdItem.Item.NeedLevel)
                     {
                         result = true;
                     }
@@ -1896,9 +1896,9 @@ namespace GameSvr.Player
                     }
                     break;
                 case 40:
-                    if (m_btReLevel >= HUtil32.LoWord(StdItem.Item.NeedLevel))
+                    if (m_btReLevel >= HUtil32.LoByte(StdItem.Item.NeedLevel))
                     {
-                        if (Abil.Level >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                        if (Abil.Level >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                         {
                             result = true;
                         }
@@ -1913,9 +1913,9 @@ namespace GameSvr.Player
                     }
                     break;
                 case 41:
-                    if (m_btReLevel >= HUtil32.LoWord(StdItem.Item.NeedLevel))
+                    if (m_btReLevel >= HUtil32.LoByte(StdItem.Item.NeedLevel))
                     {
-                        if (HUtil32.HiWord(Abil.DC) >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                        if (HUtil32.HiByte(WAbil.DC) >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                         {
                             result = true;
                         }
@@ -1930,9 +1930,9 @@ namespace GameSvr.Player
                     }
                     break;
                 case 42:
-                    if (m_btReLevel >= HUtil32.LoWord(StdItem.Item.NeedLevel))
+                    if (m_btReLevel >= HUtil32.LoByte(StdItem.Item.NeedLevel))
                     {
-                        if (HUtil32.HiWord(Abil.MC) >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                        if (HUtil32.HiByte(WAbil.MC) >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                         {
                             result = true;
                         }
@@ -1947,9 +1947,9 @@ namespace GameSvr.Player
                     }
                     break;
                 case 43:
-                    if (m_btReLevel >= HUtil32.LoWord(StdItem.Item.NeedLevel))
+                    if (m_btReLevel >= HUtil32.LoByte(StdItem.Item.NeedLevel))
                     {
-                        if (HUtil32.HiWord(Abil.SC) >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                        if (HUtil32.HiByte(WAbil.SC) >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                         {
                             result = true;
                         }
@@ -1964,9 +1964,9 @@ namespace GameSvr.Player
                     }
                     break;
                 case 44:
-                    if (m_btReLevel >= HUtil32.LoWord(StdItem.Item.NeedLevel))
+                    if (m_btReLevel >= HUtil32.LoByte(StdItem.Item.NeedLevel))
                     {
-                        if (m_btCreditPoint >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                        if (m_btCreditPoint >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                         {
                             result = true;
                         }
@@ -2048,7 +2048,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 81:
-                    if (m_nMemberType == HUtil32.LoWord(StdItem.Item.NeedLevel) && m_nMemberLevel >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                    if (m_nMemberType == HUtil32.LoByte(StdItem.Item.NeedLevel) && m_nMemberLevel >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -2058,7 +2058,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 82:
-                    if (m_nMemberType >= HUtil32.LoWord(StdItem.Item.NeedLevel) && m_nMemberLevel >= HUtil32.HiWord(StdItem.Item.NeedLevel))
+                    if (m_nMemberType >= HUtil32.LoByte(StdItem.Item.NeedLevel) && m_nMemberLevel >= HUtil32.HiByte(StdItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -2114,7 +2114,7 @@ namespace GameSvr.Player
                             result = true;
                             break;
                         case 3:
-                            IncHealthSpell(HUtil32.Round(Abil.MaxHP / 100 * StdItem.AC), HUtil32.Round(Abil.MaxMP / 100 * StdItem.MAC));
+                            IncHealthSpell(HUtil32.Round(WAbil.MaxHP / 100 * StdItem.AC), HUtil32.Round(WAbil.MaxMP / 100 * StdItem.MAC));
                             result = true;
                             break;
                         default:
@@ -2397,8 +2397,8 @@ namespace GameSvr.Player
             {
                 BaseObject.KillMonCount = slaveInfo.KillCount;
                 BaseObject.SlaveExpLevel = slaveInfo.SlaveExpLevel;
-                BaseObject.Abil.HP = slaveInfo.nHP;
-                BaseObject.Abil.MP = slaveInfo.nMP;
+                BaseObject.WAbil.HP = slaveInfo.nHP;
+                BaseObject.WAbil.MP = slaveInfo.nMP;
                 if (1500 - slaveInfo.SlaveLevel * 200 < BaseObject.WalkSpeed)
                 {
                     BaseObject.WalkSpeed = (1500 - slaveInfo.SlaveLevel) * 200;
@@ -2720,20 +2720,20 @@ namespace GameSvr.Player
             HumData.btJob = (byte)Job;
             HumData.nGold = Gold;
             HumData.Abil.Level = Abil.Level;
-            HumData.Abil.HP = Abil.HP;
-            HumData.Abil.MP = Abil.MP;
-            HumData.Abil.MaxHP = Abil.MaxHP;
-            HumData.Abil.MaxMP = Abil.MaxMP;
+            HumData.Abil.HP = WAbil.HP;
+            HumData.Abil.MP = WAbil.MP;
+            HumData.Abil.MaxHP = WAbil.MaxHP;
+            HumData.Abil.MaxMP = WAbil.MaxMP;
             HumData.Abil.Exp = Abil.Exp;
             HumData.Abil.MaxExp = Abil.MaxExp;
-            HumData.Abil.Weight = Abil.Weight;
-            HumData.Abil.MaxWeight = Abil.MaxWeight;
-            HumData.Abil.WearWeight = Abil.WearWeight;
-            HumData.Abil.MaxWearWeight = Abil.MaxWearWeight;
-            HumData.Abil.HandWeight = Abil.HandWeight;
-            HumData.Abil.MaxHandWeight = Abil.MaxHandWeight;
-            HumData.Abil.HP = Abil.HP;
-            HumData.Abil.MP = Abil.MP;
+            HumData.Abil.Weight = WAbil.Weight;
+            HumData.Abil.MaxWeight = WAbil.MaxWeight;
+            HumData.Abil.WearWeight = WAbil.WearWeight;
+            HumData.Abil.MaxWearWeight = WAbil.MaxWearWeight;
+            HumData.Abil.HandWeight = WAbil.HandWeight;
+            HumData.Abil.MaxHandWeight = WAbil.MaxHandWeight;
+            HumData.Abil.HP = WAbil.HP;
+            HumData.Abil.MP = WAbil.MP;
             HumData.StatusTimeArr = StatusArr;
             HumData.sHomeMap = HomeMap;
             HumData.wHomeX = HomeX;
@@ -3471,16 +3471,16 @@ namespace GameSvr.Player
             sMyInfo = sMyInfo.Replace("%level", Abil.Level.ToString());
             sMyInfo = sMyInfo.Replace("%gold", Gold.ToString());
             sMyInfo = sMyInfo.Replace("%pk", PkPoint.ToString());
-            sMyInfo = sMyInfo.Replace("%minhp", Abil.HP.ToString());
-            sMyInfo = sMyInfo.Replace("%maxhp", Abil.MaxHP.ToString());
-            sMyInfo = sMyInfo.Replace("%minmp", Abil.MP.ToString());
-            sMyInfo = sMyInfo.Replace("%maxmp", Abil.MaxMP.ToString());
-            sMyInfo = sMyInfo.Replace("%mindc", HUtil32.LoWord(Abil.DC).ToString());
-            sMyInfo = sMyInfo.Replace("%maxdc", HUtil32.HiWord(Abil.DC).ToString());
-            sMyInfo = sMyInfo.Replace("%minmc", HUtil32.LoWord(Abil.MC).ToString());
-            sMyInfo = sMyInfo.Replace("%maxmc", HUtil32.HiWord(Abil.MC).ToString());
-            sMyInfo = sMyInfo.Replace("%minsc", HUtil32.LoWord(Abil.SC).ToString());
-            sMyInfo = sMyInfo.Replace("%maxsc", HUtil32.HiWord(Abil.SC).ToString());
+            sMyInfo = sMyInfo.Replace("%minhp", WAbil.HP.ToString());
+            sMyInfo = sMyInfo.Replace("%maxhp", WAbil.MaxHP.ToString());
+            sMyInfo = sMyInfo.Replace("%minmp", WAbil.MP.ToString());
+            sMyInfo = sMyInfo.Replace("%maxmp", WAbil.MaxMP.ToString());
+            sMyInfo = sMyInfo.Replace("%mindc", HUtil32.LoWord(WAbil.DC).ToString());
+            sMyInfo = sMyInfo.Replace("%maxdc", HUtil32.HiWord(WAbil.DC).ToString());
+            sMyInfo = sMyInfo.Replace("%minmc", HUtil32.LoWord(WAbil.MC).ToString());
+            sMyInfo = sMyInfo.Replace("%maxmc", HUtil32.HiWord(WAbil.MC).ToString());
+            sMyInfo = sMyInfo.Replace("%minsc", HUtil32.LoWord(WAbil.SC).ToString());
+            sMyInfo = sMyInfo.Replace("%maxsc", HUtil32.HiWord(WAbil.SC).ToString());
             sMyInfo = sMyInfo.Replace("%logontime", m_dLogonTime.ToString());
             sMyInfo = sMyInfo.Replace("%logonint", ((HUtil32.GetTickCount() - m_dwLogonTick) / 60000).ToString());
             return sMyInfo;

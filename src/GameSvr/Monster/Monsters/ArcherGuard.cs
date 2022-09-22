@@ -18,8 +18,7 @@ namespace GameSvr.Monster.Monsters
         private void AttackTarger(BaseObject targeTBaseObject)
         {
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
-            Ability wAbil = Abil;
-            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
+            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
             if (nDamage > 0)
             {
                 nDamage = targeTBaseObject.GetHitStruckDamage(this, nDamage);
@@ -28,8 +27,8 @@ namespace GameSvr.Monster.Monsters
             {
                 targeTBaseObject.SetLastHiter(this);
                 targeTBaseObject.ExpHitter = null;
-                targeTBaseObject.StruckDamage(nDamage);
-                targeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, targeTBaseObject.Abil.HP, targeTBaseObject.Abil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targeTBaseObject.CurrX), Math.Abs(CurrY - targeTBaseObject.CurrY)) * 50 + 600);
+                targeTBaseObject.StruckDamage((ushort)nDamage);
+                targeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, targeTBaseObject.WAbil.HP, targeTBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targeTBaseObject.CurrX), Math.Abs(CurrY - targeTBaseObject.CurrY)) * 50 + 600);
             }
             SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, targeTBaseObject.ActorId, "");
         }

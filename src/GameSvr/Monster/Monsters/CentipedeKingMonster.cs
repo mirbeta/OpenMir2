@@ -1,4 +1,6 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -47,8 +49,7 @@ namespace GameSvr.Monster.Monsters
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
-                var wAbil = Abil;
-                var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
+                var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     var baseObject = VisibleActors[i].BaseObject;
@@ -66,11 +67,11 @@ namespace GameSvr.Monster.Monsters
                             {
                                 if (M2Share.RandomNumber.Random(3) != 0)
                                 {
-                                    baseObject.MakePosion(Grobal2.POISON_DECHEALTH, 60, 3);
+                                    baseObject.MakePosion(StatuStateConst.POISON_DECHEALTH, 60, 3);
                                 }
                                 else
                                 {
-                                    baseObject.MakePosion(Grobal2.POISON_STONE, 5, 0);
+                                    baseObject.MakePosion(StatuStateConst.POISON_STONE, 5, 0);
                                 }
                                 TargetCret = baseObject;
                             }
@@ -84,7 +85,7 @@ namespace GameSvr.Monster.Monsters
         protected override void FindAttackTarget()
         {
             base.FindAttackTarget();
-            Abil.HP = Abil.MaxHP;
+            WAbil.HP = WAbil.MaxHP;
         }
 
         public override void Run()

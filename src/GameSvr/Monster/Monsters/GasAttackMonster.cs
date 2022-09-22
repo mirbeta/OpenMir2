@@ -1,5 +1,6 @@
 ﻿using GameSvr.Actor;
 using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -11,12 +12,11 @@ namespace GameSvr.Monster.Monsters
             Animal = true;
         }
 
-        protected virtual BaseObject sub_4A9C78(byte bt05)
+        protected virtual BaseObject GasAttack(byte bt05)
         {
             BaseObject result = null;
             Direction = bt05;
-            var wAbil = Abil;
-            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
+            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
             if (nPower > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
@@ -26,11 +26,11 @@ namespace GameSvr.Monster.Monsters
                     nPower = baseObject.GetMagStruckDamage(this, nPower);
                     if (nPower > 0)
                     {
-                        baseObject.StruckDamage(nPower);
-                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, baseObject.Abil.HP, baseObject.Abil.MaxHP, ActorId, "", 300);
+                        baseObject.StruckDamage((ushort)nPower);
+                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
                         if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0)
                         {
-                            baseObject.MakePosion(Grobal2.POISON_STONE, 5, 0);
+                            baseObject.MakePosion(StatuStateConst.POISON_STONE, 5, 0);
                         }
                         result = baseObject;
                     }
@@ -53,7 +53,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     AttackTick = HUtil32.GetTickCount();
                     TargetFocusTick = HUtil32.GetTickCount();
-                    sub_4A9C78(btDir);
+                    GasAttack(btDir);
                     BreakHolySeizeMode();
                 }
                 result = true;

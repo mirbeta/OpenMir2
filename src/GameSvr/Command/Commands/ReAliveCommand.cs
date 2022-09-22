@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
             m_PlayObject.ReAlive();
-            m_PlayObject.Abil.HP = m_PlayObject.Abil.MaxHP;
+            m_PlayObject.WAbil.HP = m_PlayObject.WAbil.MaxHP;
             m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandReAliveMsg, sHumanName), MsgColor.Green, MsgType.Hint);
             PlayObject.SysMsg(sHumanName + " 已获重生。", MsgColor.Green, MsgType.Hint);

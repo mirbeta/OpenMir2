@@ -149,9 +149,9 @@ namespace GameSvr.Npc
                     case 1:
                         if (PlayObject.Abil.Level >= nParam3)
                         {
-                            if (PlayObject.Abil.Level - nParam3 > short.MaxValue - PlayObject.Abil.Level)
+                            if (PlayObject.Abil.Level - nParam3 > byte.MaxValue - PlayObject.Abil.Level)
                             {
-                                dwInt = short.MaxValue - PlayObject.Abil.Level;
+                                dwInt = byte.MaxValue - PlayObject.Abil.Level;
                             }
                             else
                             {
@@ -160,9 +160,9 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            if (nParam3 - PlayObject.Abil.Level > int.MaxValue - nParam3)
+                            if (nParam3 - PlayObject.Abil.Level > byte.MaxValue - nParam3)
                             {
-                                dwInt = int.MaxValue - nParam3;
+                                dwInt = byte.MaxValue - nParam3;
                             }
                             else
                             {
@@ -484,59 +484,59 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$LEVEL>", sText);
                     return;
                 case "$HP":
-                    sText = PlayObject.Abil.HP.ToString();
+                    sText = PlayObject.WAbil.HP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$HP>", sText);
                     return;
                 case "$MAXHP":
-                    sText = PlayObject.Abil.MaxHP.ToString();
+                    sText = PlayObject.WAbil.MaxHP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXHP>", sText);
                     return;
                 case "$MP":
-                    sText = PlayObject.Abil.MP.ToString();
+                    sText = PlayObject.WAbil.MP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MP>", sText);
                     return;
                 case "$MAXMP":
-                    sText = PlayObject.Abil.MaxMP.ToString();
+                    sText = PlayObject.WAbil.MaxMP.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMP>", sText);
                     return;
                 case "$AC":
-                    sText = HUtil32.LoWord(PlayObject.Abil.AC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.WAbil.AC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$AC>", sText);
                     return;
                 case "$MAXAC":
-                    sText = HUtil32.HiWord(PlayObject.Abil.AC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.WAbil.AC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXAC>", sText);
                     return;
                 case "$MAC":
-                    sText = HUtil32.LoWord(PlayObject.Abil.MAC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.WAbil.MAC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAC>", sText);
                     return;
                 case "$MAXMAC":
-                    sText = HUtil32.HiWord(PlayObject.Abil.MAC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.WAbil.MAC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMAC>", sText);
                     return;
                 case "$DC":
-                    sText = HUtil32.LoWord(PlayObject.Abil.DC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.WAbil.DC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$DC>", sText);
                     return;
                 case "$MAXDC":
-                    sText = HUtil32.HiWord(PlayObject.Abil.DC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.WAbil.DC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXDC>", sText);
                     return;
                 case "$MC":
-                    sText = HUtil32.LoWord(PlayObject.Abil.MC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.WAbil.MC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MC>", sText);
                     return;
                 case "$MAXMC":
-                    sText = HUtil32.HiWord(PlayObject.Abil.MC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.WAbil.MC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXMC>", sText);
                     return;
                 case "$SC":
-                    sText = HUtil32.LoWord(PlayObject.Abil.SC).ToString();
+                    sText = HUtil32.LoWord(PlayObject.WAbil.SC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$SC>", sText);
                     return;
                 case "$MAXSC":
-                    sText = HUtil32.HiWord(PlayObject.Abil.SC).ToString();
+                    sText = HUtil32.HiWord(PlayObject.WAbil.SC).ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXSC>", sText);
                     return;
                 case "$EXP":
@@ -556,27 +556,27 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$CREDITPOINT>", sText);
                     return;
                 case "$HW":
-                    sText = PlayObject.Abil.HandWeight.ToString();
+                    sText = PlayObject.WAbil.HandWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$HW>", sText);
                     return;
                 case "$MAXHW":
-                    sText = PlayObject.Abil.MaxHandWeight.ToString();
+                    sText = PlayObject.WAbil.MaxHandWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXHW>", sText);
                     return;
                 case "$BW":
-                    sText = PlayObject.Abil.Weight.ToString();
+                    sText = PlayObject.WAbil.Weight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$BW>", sText);
                     return;
                 case "$MAXBW":
-                    sText = PlayObject.Abil.MaxWeight.ToString();
+                    sText = PlayObject.WAbil.MaxWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXBW>", sText);
                     return;
                 case "$WW":
-                    sText = PlayObject.Abil.WearWeight.ToString();
+                    sText = PlayObject.WAbil.WearWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$WW>", sText);
                     return;
                 case "$MAXWW":
-                    sText = PlayObject.Abil.MaxWearWeight.ToString();
+                    sText = PlayObject.WAbil.MaxWearWeight.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$MAXWW>", sText);
                     return;
                 case "$GOLDCOUNT":

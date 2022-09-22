@@ -23,9 +23,9 @@ namespace GameSvr.Monster.Monsters
         public void RefStatus()
         {
             byte n08;
-            if (this.Abil.HP > 0)
+            if (this.WAbil.HP > 0)
             {
-                n08 = (byte)(3 - HUtil32.Round(this.Abil.HP / this.Abil.MaxHP * 3));
+                n08 = (byte)(3 - HUtil32.Round(this.WAbil.HP / this.WAbil.MaxHP * 3));
             }
             else
             {
@@ -65,9 +65,9 @@ namespace GameSvr.Monster.Monsters
                     SetMapFlaged = true;
                 }
             }
-            if (this.Abil.HP > 0)
+            if (this.WAbil.HP > 0)
             {
-                n08 = 3 - HUtil32.Round(this.Abil.HP / this.Abil.MaxHP * 3);
+                n08 = 3 - HUtil32.Round(this.WAbil.HP / this.WAbil.MaxHP * 3);
             }
             else
             {

@@ -480,8 +480,7 @@ namespace GameSvr.World
                     Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
-                        _logger.Warn(string.Format(sChangeServerFail3,
-                            new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
+                        _logger.Warn(string.Format(sChangeServerFail3, new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
                         playObject.MapName = M2Share.Config.HomeMap;
                         envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                         playObject.CurrX = M2Share.Config.HomeX;
@@ -491,8 +490,7 @@ namespace GameSvr.World
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
-                            _logger.Warn(string.Format(sChangeServerFail4,
-                                new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
+                            _logger.Warn(string.Format(sChangeServerFail4, new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
                             playObject.MapName = M2Share.Config.HomeMap;
                             envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                             playObject.CurrX = M2Share.Config.HomeX;

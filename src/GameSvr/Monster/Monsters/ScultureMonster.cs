@@ -1,5 +1,6 @@
 ﻿using GameSvr.Actor;
 using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -10,7 +11,7 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 7;
             StoneMode = true;
-            CharStatusEx = Grobal2.STATE_STONE_MODE;
+            CharStatusEx = StatuStateConst.STATE_STONE_MODE;
         }
 
         private void MeltStone()

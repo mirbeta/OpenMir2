@@ -42,8 +42,7 @@ namespace GameSvr.Monster.Monsters
         private void DoubleAttack(byte btDir)
         {
             Direction = btDir;
-            var wAbil = Abil;
-            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC))) + HUtil32.LoWord(wAbil.DC);
+            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC))) + HUtil32.LoWord(WAbil.DC);
             if (nDamage <= 0)
             {
                 return;
@@ -63,8 +62,8 @@ namespace GameSvr.Monster.Monsters
                             nDamage = baseObject.GetHitStruckDamage(this, nDamage);
                             if (nDamage > 0)
                             {
-                                baseObject.StruckDamage(nDamage);
-                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, Abil.HP, Abil.MaxHP, ActorId, "", 300);
+                                baseObject.StruckDamage((ushort)nDamage);
+                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                             }
                         }
                     }

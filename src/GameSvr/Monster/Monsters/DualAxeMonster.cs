@@ -16,16 +16,15 @@ namespace GameSvr.Monster.Monsters
             if (Envir.CanFly(CurrX, CurrY, target.CurrX, target.CurrY))
             {
                 Direction = M2Share.GetNextDirection(CurrX, CurrY, target.CurrX, target.CurrY);
-                var wAbil = Abil;
-                var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
+                var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
                 if (nDamage > 0)
                 {
                     nDamage = target.GetHitStruckDamage(this, nDamage);
                 }
                 if (nDamage > 0)
                 {
-                    target.StruckDamage(nDamage);
-                    target.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, target.Abil.HP, target.Abil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - target.CurrX), Math.Abs(CurrY - target.CurrY)) * 50 + 600);
+                    target.StruckDamage((ushort)nDamage);
+                    target.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, target.WAbil.HP, target.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - target.CurrX), Math.Abs(CurrY - target.CurrY)) * 50 + 600);
                 }
                 SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, target.ActorId, "");
             }

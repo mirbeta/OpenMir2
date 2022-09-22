@@ -1,4 +1,6 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -28,13 +30,13 @@ namespace GameSvr.Monster.Monsters
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6)
                             {
-                                TargetCret.MakePosion(Grobal2.POISON_DECHEALTH, 35, 2);
+                                TargetCret.MakePosion(StatuStateConst.POISON_DECHEALTH, 35, 2);
                                 return;
                             }
                         }
                         else
                         {
-                            if (TargetCret.Abil.HP <= TargetCret.Abil.MaxHP / 2)
+                            if (TargetCret.WAbil.HP <= TargetCret.WAbil.MaxHP / 2)
                             {
                                 GetFrontPosition(ref nX, ref nY);
                             }
@@ -42,7 +44,7 @@ namespace GameSvr.Monster.Monsters
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6)
                             {
-                                TargetCret.MakePosion(Grobal2.POISON_DECHEALTH, 35, 2);
+                                TargetCret.MakePosion(StatuStateConst.POISON_DECHEALTH, 35, 2);
                                 return;
                             }
                         }

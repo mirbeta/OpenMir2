@@ -72,7 +72,6 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\SystemModule\SystemModule.csproj">
-		</ProjectReference>
+		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
 	</ItemGroup>
 </Project>

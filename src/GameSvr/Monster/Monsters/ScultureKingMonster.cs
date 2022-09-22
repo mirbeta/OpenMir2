@@ -1,6 +1,7 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Event;
 using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -14,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             StoneMode = true;
-            CharStatusEx = Grobal2.STATE_STONE_MODE;
+            CharStatusEx = StatuStateConst.STATE_STONE_MODE;
             Direction = 5;
             _mNDangerLevel = 5;
             _mSlaveObjectList = new List<BaseObject>();
@@ -52,7 +53,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override void Attack(BaseObject targeTBaseObject, byte nDir)
         {
-            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC))) + HUtil32.LoWord(Abil.DC);
+            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC))) + HUtil32.LoWord(WAbil.DC);
             HitMagAttackTarget(targeTBaseObject, 0, nPower, true);
         }
 
@@ -89,12 +90,12 @@ namespace GameSvr.Monster.Monsters
                     {
                         SearchEnemyTick = HUtil32.GetTickCount();
                         SearchTarget();
-                        if (_mNDangerLevel > Abil.HP / Abil.MaxHP * 5 && _mNDangerLevel > 0)
+                        if (_mNDangerLevel > WAbil.HP / WAbil.MaxHP * 5 && _mNDangerLevel > 0)
                         {
                             _mNDangerLevel -= 1;
                             CallSlave();
                         }
-                        if (Abil.HP == Abil.MaxHP)
+                        if (WAbil.HP == WAbil.MaxHP)
                         {
                             _mNDangerLevel = 5;
                         }

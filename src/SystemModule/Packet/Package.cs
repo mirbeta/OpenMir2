@@ -4,7 +4,6 @@ using System.Text;
 
 namespace SystemModule.Packet
 {
-    [Serializable]
     public abstract class Packets
     {
         private readonly BinaryReader binaryReader;
