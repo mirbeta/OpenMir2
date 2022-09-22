@@ -4865,14 +4865,14 @@ namespace GameSvr.Actor
             DamageHealth(nDamage);
         }
 
-        public virtual string GeTBaseObjectInfo()
+        public virtual string GetBaseObjectInfo()
         {
             var result = CharName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
                          '/' + CurrY + ' ' + "等级:" + Abil.Level + ' ' + "经验:" + Abil.Exp + ' ' + "生命值: " + WAbil.HP + '-' + WAbil.MaxHP + ' ' + "魔法值: " + WAbil.MP + '-' +
-                         WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(WAbil.DC) + '-' +
-                         HUtil32.HiWord(WAbil.DC) + ' ' + "魔法力: " + HUtil32.LoWord(WAbil.MC) + '-' + HUtil32.HiWord(WAbil.MC) + ' ' + "道术: " +
-                         HUtil32.LoWord(WAbil.SC) + '-' + HUtil32.HiWord(WAbil.SC) + ' ' + "防御力: " + HUtil32.LoWord(WAbil.AC) + '-' + HUtil32.HiWord(WAbil.AC) + ' ' + "魔防力: " +
-                         HUtil32.LoWord(WAbil.MAC) + '-' + HUtil32.HiWord(WAbil.MAC) + ' ' + "准确:" + HitPoint + ' ' + "敏捷:" + SpeedPoint;
+                         WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoByte(WAbil.DC) + '-' +
+                         HUtil32.HiByte(WAbil.DC) + ' ' + "魔法力: " + HUtil32.LoByte(WAbil.MC) + '-' + HUtil32.HiByte(WAbil.MC) + ' ' + "道术: " +
+                         HUtil32.LoByte(WAbil.SC) + '-' + HUtil32.HiByte(WAbil.SC) + ' ' + "防御力: " + HUtil32.LoByte(WAbil.AC) + '-' + HUtil32.HiByte(WAbil.AC) + ' ' + "魔防力: " +
+                         HUtil32.LoByte(WAbil.MAC) + '-' + HUtil32.HiByte(WAbil.MAC) + ' ' + "准确:" + HitPoint + ' ' + "敏捷:" + SpeedPoint;
             return result;
         }
 

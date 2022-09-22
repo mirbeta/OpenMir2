@@ -17,7 +17,7 @@ namespace GameSvr.Command.Commands
             PlayObject.Envir.GetRangeBaseObject(PlayObject.CurrX, PlayObject.CurrY, 2, true, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
-                PlayObject.SysMsg(BaseObjectList[i].GeTBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(BaseObjectList[i].GetBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
             }
             BaseObjectList.Clear();
             BaseObjectList = null;

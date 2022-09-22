@@ -899,7 +899,7 @@ namespace GameSvr.Player
             DealSuccess = false;
         }
 
-        public override string GeTBaseObjectInfo()
+        public override string GetBaseObjectInfo()
         {
             return this.CharName + " 标识:" + this.ActorId + " 权限等级: " + this.Permission + " 管理模式: " + HUtil32.BoolToStr(this.AdminMode)
                 + " 隐身模式: " + HUtil32.BoolToStr(this.ObMode) + " 无敌模式: " + HUtil32.BoolToStr(this.SuperMan) + " 地图:" + this.MapName + '(' + this.Envir.MapDesc + ')'

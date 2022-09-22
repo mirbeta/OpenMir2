@@ -27,13 +27,13 @@ namespace GameSvr.Magic
         public static ushort GetRPow(int wInt)
         {
             ushort result;
-            if (HUtil32.HiWord(wInt) > HUtil32.LoWord(wInt))
+            if (HUtil32.HiByte(wInt) > HUtil32.LoByte(wInt))
             {
-                result = (ushort)(M2Share.RandomNumber.Random(HUtil32.HiWord(wInt) - HUtil32.LoWord(wInt) + 1) + HUtil32.LoWord(wInt));
+                result = (ushort)(M2Share.RandomNumber.Random(HUtil32.HiByte(wInt) - HUtil32.LoByte(wInt) + 1) + HUtil32.LoByte(wInt));
             }
             else
             {
-                result = HUtil32.LoWord(wInt);
+                result = HUtil32.LoByte(wInt);
             }
             return result;
         }
