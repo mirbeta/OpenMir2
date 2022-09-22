@@ -32,7 +32,7 @@ namespace SystemModule.Packet.ServerPackets
         /// <summary>
         /// 技能等级
         /// </summary>
-        public short[] TrainLevel;
+        public byte[] TrainLevel;
         /// <summary>
         /// 技能等级最高修炼点
         /// </summary>
@@ -72,7 +72,7 @@ namespace SystemModule.Packet.ServerPackets
 
         public MagicInfo()
         {
-            TrainLevel = new short[4];
+            TrainLevel = new byte[4];
             MaxTrain = new int[4];
         }
 
@@ -87,6 +87,7 @@ namespace SystemModule.Packet.ServerPackets
             writer.WriteAsciiString(MagicName, 14);
             writer.Write(EffectType);
             writer.Write(Effect);
+            writer.Write((byte)0);
             writer.Write(Spell);
             writer.Write(Power);
             writer.Write(TrainLevel[0]);
@@ -99,12 +100,24 @@ namespace SystemModule.Packet.ServerPackets
             writer.Write(MaxTrain[3]);
             writer.Write(TrainLv);
             writer.Write(Job);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
             writer.Write(DelayTime);
             writer.Write(DefSpell);
             writer.Write(DefPower);
             writer.Write(MaxPower);
             writer.Write(DefMaxPower);
-            writer.WriteAsciiString(Desc, 15);
+            if (string.IsNullOrEmpty(Desc))
+            {
+                writer.WriteAsciiString("", 15);
+            }
+            else
+            {
+                writer.WriteAsciiString(Desc, 15);
+            }
+            writer.Write((byte)0);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
         }
     }
 }
