@@ -2712,12 +2712,12 @@ namespace GameSvr.Player
             var HumData = HumanRcd.Data;
             HumData.sCharName = CharName;
             HumData.sCurMap = MapName;
-            HumData.wCurX = CurrX;
-            HumData.wCurY = CurrY;
-            HumData.btDir = Direction;
+            HumData.CurX = CurrX;
+            HumData.CurY = CurrY;
+            HumData.Dir = Direction;
             HumData.btHair = Hair;
-            HumData.btSex = (byte)Gender;
-            HumData.btJob = (byte)Job;
+            HumData.Sex = (byte)Gender;
+            HumData.Job = (byte)Job;
             HumData.nGold = Gold;
             HumData.Abil.Level = Abil.Level;
             HumData.Abil.HP = WAbil.HP;
@@ -2763,7 +2763,7 @@ namespace GameSvr.Player
             HumData.btIncSpell = (byte)IncSpell;
             HumData.btIncHealing = (byte)IncHealing;
             HumData.btFightZoneDieCount = (byte)FightZoneDieCount;
-            HumData.sAccount = m_sUserID;
+            HumData.Account = m_sUserID;
             HumData.boLockLogon = m_boLockLogon;
             HumData.wContribution = m_wContribution;
             HumData.nHungerStatus = HungerStatus;

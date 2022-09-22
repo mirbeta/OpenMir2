@@ -248,9 +248,9 @@ namespace DBSvr.Services
                 chrRecord.Header.sName = sChrName;
                 chrRecord.Header.sAccount = sAccount;
                 chrRecord.Data.sCharName = sChrName;
-                chrRecord.Data.sAccount = sAccount;
-                chrRecord.Data.btSex = (byte)nSex;
-                chrRecord.Data.btJob = (byte)nJob;
+                chrRecord.Data.Account = sAccount;
+                chrRecord.Data.Sex = (byte)nSex;
+                chrRecord.Data.Job = (byte)nJob;
                 chrRecord.Data.btHair = (byte)nHair;
                 _playDataStorage.Add(ref chrRecord);
                 result = true;
@@ -599,7 +599,7 @@ namespace DBSvr.Services
                                 {
                                     sSendMsg = sSendMsg + "*";
                                 }
-                                sSendMsg = sSendMsg + sChrName + "/" + chrRecord.Data.btJob + "/" + chrRecord.Data.btHair + "/" + chrRecord.Data.Abil.Level + "/" + chrRecord.Data.btSex + "/";
+                                sSendMsg = sSendMsg + sChrName + "/" + chrRecord.Data.Job + "/" + chrRecord.Data.btHair + "/" + chrRecord.Data.Abil.Level + "/" + chrRecord.Data.Sex + "/";
                                 nChrCount++;
                             }
                         }

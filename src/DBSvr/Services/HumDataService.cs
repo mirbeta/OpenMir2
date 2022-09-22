@@ -258,8 +258,8 @@ namespace DBSvr.Services
                     {
                         HumanRCD.Header.sName = sDestChrName;
                         HumanRCD.Data.sCharName = sDestChrName;
-                        HumanRCD.Data.sAccount = sUserID;
-                        _playDataStorage.Update(chrIndex, ref HumanRCD);
+                        HumanRCD.Data.Account = sUserID;
+                        _playDataStorage.Update(sDestChrName, ref HumanRCD);
                         result = true;
                     }
                 }
@@ -372,7 +372,7 @@ namespace DBSvr.Services
                 if (nIndex >= 0)
                 {
                     humanRcd.Header.sName = sChrName;
-                    _playDataStorage.Update(nIndex, ref humanRcd);
+                    _playDataStorage.Update(sChrName, ref humanRcd);
                     bo21 = false;
                 }
                 _loginSvrService.SetSessionSaveRcd(sUserID);

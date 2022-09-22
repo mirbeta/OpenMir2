@@ -5,12 +5,12 @@ using SystemModule;
 namespace GameSvr.Actor
 {
     /// <summary>
-    /// 对象管理系统
+    /// 精灵管理
     /// </summary>
     public class ActorMgr
     {
         /// <summary>
-        /// 精灵对象列表
+        /// 精灵列表
         /// </summary>
         private readonly ConcurrentDictionary<int, BaseObject> _actorsMap = new ConcurrentDictionary<int, BaseObject>();
         /// <summary>
