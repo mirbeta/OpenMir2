@@ -951,24 +951,24 @@ namespace GameSvr.Actor
                         {
                             if (LastHiter.PkDieLostExp > 0)
                             {
-                                if (WAbil.Exp >= LastHiter.PkDieLostExp)
+                                if (Abil.Exp >= LastHiter.PkDieLostExp)
                                 {
-                                    WAbil.Exp -= (short)LastHiter.PkDieLostExp;
+                                    Abil.Exp -= (short)LastHiter.PkDieLostExp;
                                 }
                                 else
                                 {
-                                    WAbil.Exp = 0;
+                                    Abil.Exp = 0;
                                 }
                             }
                             if (LastHiter.PkDieLostLevel > 0)
                             {
-                                if (WAbil.Level >= LastHiter.PkDieLostLevel)
+                                if (Abil.Level >= LastHiter.PkDieLostLevel)
                                 {
-                                    WAbil.Level -= (byte)LastHiter.PkDieLostLevel;
+                                    Abil.Level -= (byte)LastHiter.PkDieLostLevel;
                                 }
                                 else
                                 {
-                                    WAbil.Level = 0;
+                                    Abil.Level = 0;
                                 }
                             }
                         }

@@ -389,11 +389,11 @@ namespace GameSvr.Player
 
         private void ClientTakeOnItems(byte btWhere, int nItemIdx, string sItemName)
         {
-            var n14 = -1;
+            var itemIndex = -1;
             var n18 = 0;
             UserItem userItem = null;
             StdItem stdItem = null;
-            ClientItem stdItem58 = null;
+            ClientItem clientItem = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
@@ -405,7 +405,7 @@ namespace GameSvr.Player
                     {
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            n14 = i;
+                            itemIndex = i;
                             break;
                         }
                     }
@@ -416,9 +416,9 @@ namespace GameSvr.Player
             {
                 if (M2Share.CheckUserItems(btWhere, stdItem))
                 {
-                    stdItem.GetUpgradeStdItem(userItem, ref stdItem58);
-                    stdItem58.Item.Name = CustomItem.GetItemName(userItem);
-                    if (CheckTakeOnItems(btWhere, ref stdItem58) && CheckItemBindUse(userItem))
+                    stdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                    clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                    if (CheckTakeOnItems(btWhere, ref clientItem) && CheckItemBindUse(userItem))
                     {
                         UserItem takeOffItem = null;
                         if (btWhere <= 12)
@@ -430,7 +430,6 @@ namespace GameSvr.Player
                                 {
                                     if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                                     {
-                                        // '无法取下物品!!!'
                                         SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                         n18 = -4;
                                         goto FailExit;
@@ -438,21 +437,18 @@ namespace GameSvr.Player
                                 }
                                 if (!UserUnLockDurg && (stdItem20.ItemDesc & 2) != 0)
                                 {
-                                    // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if ((stdItem20.ItemDesc & 4) != 0)
                                 {
-                                    // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                                 {
-                                    // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     goto FailExit;
                                 }
@@ -463,7 +459,7 @@ namespace GameSvr.Player
                                 userItem.Desc[8] = 0;
                             }
                             UseItems[btWhere] = userItem;
-                            DelBagItem(n14);
+                            DelBagItem(itemIndex);
                             if (takeOffItem != null)
                             {
                                 AddItemToBag(takeOffItem);
@@ -508,7 +504,6 @@ namespace GameSvr.Player
                         {
                             if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                             {
-                                // '无法取下物品!!!'
                                 SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                 n10 = -4;
                                 goto FailExit;
@@ -516,26 +511,22 @@ namespace GameSvr.Player
                         }
                         if (!UserUnLockDurg && (stdItem.ItemDesc & 2) != 0)
                         {
-                            // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if ((stdItem.ItemDesc & 4) != 0)
                         {
-                            // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                         {
-                            // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             goto FailExit;
                         }
-                        // 取自定义物品名称
-                        var sUserItemName = CustomItem.GetItemName(UseItems[btWhere]);
+                        var sUserItemName = CustomItem.GetItemName(UseItems[btWhere]);// 取自定义物品名称
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             var userItem = UseItems[btWhere];
@@ -578,7 +569,7 @@ namespace GameSvr.Player
             }
         }
 
-        private string ClientUseItems_GetUnbindItemName(int nShape)
+        private string ClientUseItemsGetUnbindItemName(int nShape)
         {
             if (M2Share.g_UnbindList.TryGetValue(nShape, out var result))
             {
@@ -587,7 +578,7 @@ namespace GameSvr.Player
             return string.Empty;
         }
 
-        private bool ClientUseItems_GetUnBindItems(string sItemName, int nCount)
+        private bool ClientUseItemsGetUnBindItems(string sItemName, int nCount)
         {
             var result = false;
             for (var i = 0; i < nCount; i++)
@@ -615,7 +606,7 @@ namespace GameSvr.Player
         {
             var boEatOk = false;
             StdItem stdItem = null;
-            UserItem userItem34 = null;
+            int itemIndex = 0;
             if (m_boCanUseItem)
             {
                 if (!Death)
@@ -625,7 +616,7 @@ namespace GameSvr.Player
                         var userItem = ItemList[i];
                         if (userItem != null && userItem.MakeIndex == nItemIdx)
                         {
-                            userItem34 = userItem;
+                            itemIndex = userItem.MakeIndex;
                             stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem != null)
                             {
@@ -672,7 +663,7 @@ namespace GameSvr.Player
                                             {
                                                 Dispose(userItem);
                                                 ItemList.RemoveAt(i);
-                                                ClientUseItems_GetUnBindItems(ClientUseItems_GetUnbindItemName(stdItem.Shape), 6);
+                                                ClientUseItemsGetUnBindItems(ClientUseItemsGetUnbindItemName(stdItem.Shape), 6);
                                                 boEatOk = true;
                                             }
                                         }
@@ -703,7 +694,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_EAT_OK, 0, 0, 0, 0, "");
                 if (stdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("11" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem34.MakeIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("11" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + itemIndex + "\t" + '1' + "\t" + '0');
                 }
             }
             else
