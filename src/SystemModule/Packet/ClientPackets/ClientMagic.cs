@@ -24,9 +24,9 @@ namespace SystemModule.Packet.ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Key);
-            writer.Write((byte)'0');
             writer.Write(Level);
-            writer.Write((byte)'0');
+            writer.Write((byte)0);
+            writer.Write((byte)0);
             writer.Write(CurTrain);
             writer.Write(Def.GetBuffer());
         }
