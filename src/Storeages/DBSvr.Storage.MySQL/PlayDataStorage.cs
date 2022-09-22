@@ -627,9 +627,9 @@ namespace DBSvr.Storage.MySQL
                     while (!string.IsNullOrEmpty(sTmp))
                     {
                         sTmp = HUtil32.GetValidStr3(sTmp, ref str, new[] { "/" });
-                        HumanRCD.Data.wStatusTimeArr[i] = Convert.ToUInt16(str);
+                        HumanRCD.Data.StatusTimeArr[i] = Convert.ToUInt16(str);
                         i++;
-                        if (i > HumanRCD.Data.wStatusTimeArr.Length)
+                        if (i > HumanRCD.Data.StatusTimeArr.Length)
                         {
                             break;
                         }
@@ -1214,7 +1214,7 @@ namespace DBSvr.Storage.MySQL
                 command.CommandText = sSqlStr5;
                 command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
                 command.Parameters.AddWithValue("@FLD_CharName", HumanRCD.Data.sCharName);
-                command.Parameters.AddWithValue("@FLD_Status", string.Join("/", HumanRCD.Data.wStatusTimeArr));
+                command.Parameters.AddWithValue("@FLD_Status", string.Join("/", HumanRCD.Data.StatusTimeArr));
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)

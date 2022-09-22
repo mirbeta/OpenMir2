@@ -66,7 +66,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(10)]
         public Ability Abil;
         [ProtoMember(11)]
-        public ushort[] wStatusTimeArr;
+        public ushort[] StatusTimeArr;
         [ProtoMember(12)]
         public string sHomeMap;
         [ProtoMember(13)]
@@ -164,7 +164,7 @@ namespace SystemModule.Packet.ServerPackets
             Magic = new TMagicRcd[20];
             Abil = new Ability();
             BonusAbil = new NakedAbility();
-            wStatusTimeArr = new ushort[12];
+            StatusTimeArr = new ushort[15];
         }
     }
 }

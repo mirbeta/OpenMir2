@@ -1617,7 +1617,7 @@ namespace GameSvr.Player
                     break;
                 case Grobal2.RM_ABILITY:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(Abil));
+                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(WAbil));
                     break;
                 case Grobal2.RM_HEALTHSPELLCHANGED:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEALTHSPELLCHANGED, ProcessMsg.BaseObject, BaseObject.Abil.HP, BaseObject.Abil.MP, BaseObject.Abil.MaxHP);

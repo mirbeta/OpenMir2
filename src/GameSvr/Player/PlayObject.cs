@@ -961,7 +961,7 @@ namespace GameSvr.Player
 
         public void ClearStatusTime()
         {
-            this.StatusArr = new ushort[12];
+            this.StatusArr = new ushort[15];
         }
 
         private void SendMapDescription()
@@ -2734,7 +2734,7 @@ namespace GameSvr.Player
             HumData.Abil.MaxHandWeight = Abil.MaxHandWeight;
             HumData.Abil.HP = Abil.HP;
             HumData.Abil.MP = Abil.MP;
-            HumData.wStatusTimeArr = StatusArr;
+            HumData.StatusTimeArr = StatusArr;
             HumData.sHomeMap = HomeMap;
             HumData.wHomeX = HomeX;
             HumData.wHomeY = HomeY;

@@ -1,10 +1,12 @@
 ﻿using ProtoBuf;
+using System;
 using System.IO;
 
 namespace SystemModule.Packet.ClientPackets
 {
+    [Serializable]
     [ProtoContract]
-    public class Ability : Packets
+    public class Ability : Packets,ICloneable
     {
         [ProtoMember(1)]
         public byte Level;
@@ -86,6 +88,11 @@ namespace SystemModule.Packet.ClientPackets
         public byte MaxHandWeight;
 
         public Ability() { }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
         protected override void ReadPacket(BinaryReader reader)
         {
