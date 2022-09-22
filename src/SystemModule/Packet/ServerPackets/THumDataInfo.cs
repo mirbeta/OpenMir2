@@ -50,17 +50,17 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(2)]
         public string sCurMap;
         [ProtoMember(3)]
-        public short wCurX;
+        public short CurX;
         [ProtoMember(4)]
-        public short wCurY;
+        public short CurY;
         [ProtoMember(5)]
-        public byte btDir;
+        public byte Dir;
         [ProtoMember(6)]
         public byte btHair;
         [ProtoMember(7)]
-        public byte btSex;
+        public byte Sex;
         [ProtoMember(8)]
-        public byte btJob;
+        public byte Job;
         [ProtoMember(9)]
         public int nGold;
         [ProtoMember(10)]
@@ -116,7 +116,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(35)]
         public byte btEF;
         [ProtoMember(36)]
-        public string sAccount;
+        public string Account;
         [ProtoMember(37)]
         public bool boLockLogon;
         [ProtoMember(38)]

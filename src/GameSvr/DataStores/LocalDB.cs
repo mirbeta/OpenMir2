@@ -157,7 +157,7 @@ namespace GameSvr.DataStores
         }
 
         /// <summary>
-        /// 炼药列表
+        /// 读取物品合成配置
         /// </summary>
         public void LoadMakeItem()
         {

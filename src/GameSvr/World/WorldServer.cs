@@ -1466,12 +1466,12 @@ namespace GameSvr.World
             humData = humanRcd.Data;
             playObject.CharName = humData.sCharName;
             playObject.MapName = humData.sCurMap;
-            playObject.CurrX = humData.wCurX;
-            playObject.CurrY = humData.wCurY;
-            playObject.Direction = humData.btDir;
+            playObject.CurrX = humData.CurX;
+            playObject.CurrY = humData.CurY;
+            playObject.Direction = humData.Dir;
             playObject.Hair = humData.btHair;
-            playObject.Gender = Enum.Parse<PlayGender>(humData.btSex.ToString());
-            playObject.Job = (PlayJob)humData.btJob;
+            playObject.Gender = Enum.Parse<PlayGender>(humData.Sex.ToString());
+            playObject.Job = (PlayJob)humData.Job;
             playObject.Gold = humData.nGold;
             playObject.Abil.Level = humData.Abil.Level;
             playObject.Abil.HP = humData.Abil.HP;
@@ -1520,7 +1520,7 @@ namespace GameSvr.World
             playObject.IncSpell = humData.btIncSpell;
             playObject.IncHealing = humData.btIncHealing;
             playObject.FightZoneDieCount = humData.btFightZoneDieCount;
-            playObject.m_sUserID = humData.sAccount;
+            playObject.m_sUserID = humData.Account;
             playObject.m_boLockLogon = humData.boLockLogon;
             playObject.m_wContribution = humData.wContribution;
             playObject.HungerStatus = humData.nHungerStatus;

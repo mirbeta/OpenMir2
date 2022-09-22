@@ -152,16 +152,15 @@ namespace DBSvr.Storage.MySQL
             using var dr = command.ExecuteReader();
             if (dr.Read())
             {
-                var HumRecord = new HumRecordData();
-                HumRecord.sAccount = dr.GetString("FLD_Account");
-                HumRecord.sChrName = dr.GetString("FLD_CharName");
-                HumRecord.Selected = (byte)dr.GetUInt32("FLD_SelectID");
-                HumRecord.Deleted = dr.GetBoolean("FLD_IsDeleted");
-                HumRecord.Header = new TRecordHeader();
-                HumRecord.Header.sAccount = HumRecord.sAccount;
-                HumRecord.Header.sName = HumRecord.sChrName;
-                HumRecord.Header.SelectID = HumRecord.Selected;
-                HumRecord.Header.Deleted = HumRecord.Deleted;
+                humRecord.sAccount = dr.GetString("FLD_Account");
+                humRecord.sChrName = dr.GetString("FLD_CharName");
+                humRecord.Selected = (byte)dr.GetUInt32("FLD_SelectID");
+                humRecord.Deleted = dr.GetBoolean("FLD_IsDeleted");
+                humRecord.Header = new TRecordHeader();
+                humRecord.Header.sAccount = humRecord.sAccount;
+                humRecord.Header.sName = humRecord.sChrName;
+                humRecord.Header.SelectID = humRecord.Selected;
+                humRecord.Header.Deleted = humRecord.Deleted;
                 success = true;
             }
             Close(dbConnection);

@@ -50,7 +50,6 @@ namespace DBSvr.Storage.MySQL
             }
             try
             {
-
                 var command = new MySqlCommand();
                 command.CommandText = sSQLString;
                 command.Connection = dbConnection;
@@ -158,17 +157,17 @@ namespace DBSvr.Storage.MySQL
             return false;
         }
 
-        public bool Update(int nIndex, ref THumDataInfo HumanRCD)
+        public bool Update(string chrName, ref THumDataInfo HumanRCD)
         {
-            bool result = false;
-            if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))
+            if (_mirQuickMap.TryGetValue(chrName, out var nIndex))
             {
                 if (UpdateRecord(nIndex, ref HumanRCD))
                 {
-                    result = true;
+                    return true;
                 }
+                return false;
             }
-            return result;
+            return false;
         }
 
         public bool UpdateQryChar(int nIndex, QueryChr QueryChrRcd)
@@ -186,6 +185,7 @@ namespace DBSvr.Storage.MySQL
 
         private bool UpdateChrRecord(int playerId, QueryChr QueryChrRcd)
         {
+            const string sStrString = "UPDATE TBL_CHARACTER SET FLD_SEX=@FLD_SEX, FLD_JOB=@FLD_JOB WHERE ID=@ID";
             bool result = false;
             MySqlConnection dbConnection = Open(ref result);
             try
@@ -194,7 +194,6 @@ namespace DBSvr.Storage.MySQL
                 {
                     return false;
                 }
-                const string sStrString = "UPDATE TBL_CHARACTER SET FLD_SEX=@FLD_SEX, FLD_JOB=@FLD_JOB WHERE ID=@ID";
                 var command = new MySqlCommand();
                 command.CommandText = sStrString;
                 command.Parameters.AddWithValue("@FLD_SEX", QueryChrRcd.btSex);
@@ -208,7 +207,7 @@ namespace DBSvr.Storage.MySQL
                 }
                 catch
                 {
-                    _logger.Error("[Exception] MySqlHumDB.UpdateChrRecord");
+                    _logger.Error("[Exception] UpdateChrRecord");
                     result = false;
                 }
             }
@@ -285,7 +284,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     HumanRCD = new THumDataInfo();
                     HumanRCD.Data.Initialization();
-                    HumanRCD.Data.sAccount = dr.GetString("FLD_LOGINID");
+                    HumanRCD.Data.Account = dr.GetString("FLD_LOGINID");
                     HumanRCD.Header.sName = dr.GetString("FLD_CHARNAME");
                     HumanRCD.Header.Deleted = dr.GetBoolean("FLD_DELETED");
                     HumanRCD.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("FLD_CREATEDATE"));
@@ -294,12 +293,12 @@ namespace DBSvr.Storage.MySQL
                     {
                         HumanRCD.Data.sCurMap = dr.GetString("FLD_MAPNAME");
                     }
-                    HumanRCD.Data.wCurX = dr.GetInt16("FLD_CX");
-                    HumanRCD.Data.wCurY = dr.GetInt16("FLD_CY");
-                    HumanRCD.Data.btDir = dr.GetByte("FLD_DIR");
+                    HumanRCD.Data.CurX = dr.GetInt16("FLD_CX");
+                    HumanRCD.Data.CurY = dr.GetInt16("FLD_CY");
+                    HumanRCD.Data.Dir = dr.GetByte("FLD_DIR");
                     HumanRCD.Data.btHair = dr.GetByte("FLD_HAIR");
-                    HumanRCD.Data.btSex = dr.GetByte("FLD_SEX");
-                    HumanRCD.Data.btJob = dr.GetByte("FLD_JOB");
+                    HumanRCD.Data.Sex = dr.GetByte("FLD_SEX");
+                    HumanRCD.Data.Job = dr.GetByte("FLD_JOB");
                     HumanRCD.Data.nGold = dr.GetInt32("FLD_GOLD");
                     if (!dr.IsDBNull(dr.GetOrdinal("FLD_HOMEMAP")))
                     {
@@ -672,16 +671,16 @@ namespace DBSvr.Storage.MySQL
             }
             var command = new MySqlCommand();
             command.Parameters.AddWithValue("@FLD_ServerNum", 1);
-            command.Parameters.AddWithValue("@FLD_LoginID", hd.sAccount);
+            command.Parameters.AddWithValue("@FLD_LoginID", hd.Account);
             command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
             command.Parameters.AddWithValue("@FLD_MapName", hd.sCurMap);
-            command.Parameters.AddWithValue("@FLD_CX", hd.wCurX);
-            command.Parameters.AddWithValue("@FLD_CY", hd.wCurY);
+            command.Parameters.AddWithValue("@FLD_CX", hd.CurX);
+            command.Parameters.AddWithValue("@FLD_CY", hd.CurY);
             command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
-            command.Parameters.AddWithValue("@FLD_Dir", hd.btDir);
+            command.Parameters.AddWithValue("@FLD_Dir", hd.Dir);
             command.Parameters.AddWithValue("@FLD_Hair", hd.btHair);
-            command.Parameters.AddWithValue("@FLD_Sex", hd.btSex);
-            command.Parameters.AddWithValue("@FLD_Job", hd.btJob);
+            command.Parameters.AddWithValue("@FLD_Sex", hd.Sex);
+            command.Parameters.AddWithValue("@FLD_Job", hd.Job);
             command.Parameters.AddWithValue("@FLD_Gold", hd.nGold);
             command.Parameters.AddWithValue("@FLD_GamePoint", hd.nGamePoint);
             command.Parameters.AddWithValue("@FLD_HomeMap", hd.sHomeMap);
@@ -801,13 +800,13 @@ namespace DBSvr.Storage.MySQL
             command.Parameters.AddWithValue("@FLD_ServerNum", 1);
             command.Parameters.AddWithValue("@FLD_LoginID", 1);
             command.Parameters.AddWithValue("@FLD_MapName", hd.sCurMap);
-            command.Parameters.AddWithValue("@FLD_CX", hd.wCurX);
-            command.Parameters.AddWithValue("@FLD_CY", hd.wCurY);
+            command.Parameters.AddWithValue("@FLD_CX", hd.CurX);
+            command.Parameters.AddWithValue("@FLD_CY", hd.CurY);
             command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
-            command.Parameters.AddWithValue("@FLD_Dir", hd.btDir);
+            command.Parameters.AddWithValue("@FLD_Dir", hd.Dir);
             command.Parameters.AddWithValue("@FLD_Hair", hd.btHair);
-            command.Parameters.AddWithValue("@FLD_Sex", hd.btSex);
-            command.Parameters.AddWithValue("@FLD_Job", hd.btJob);
+            command.Parameters.AddWithValue("@FLD_Sex", hd.Sex);
+            command.Parameters.AddWithValue("@FLD_Job", hd.Job);
             command.Parameters.AddWithValue("@FLD_Gold", hd.nGold);
             command.Parameters.AddWithValue("@FLD_GamePoint", hd.nGamePoint);
             command.Parameters.AddWithValue("@FLD_HomeMap", hd.sHomeMap);

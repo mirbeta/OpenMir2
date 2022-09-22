@@ -218,7 +218,8 @@ namespace GameSvr
         {
             if (AnsiConsole.Confirm("Do you really want to exit?"))
             {
-                _cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));//延时5分钟关闭游戏服务.
+                // _cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));//延时5分钟关闭游戏服务.
+                Environment.Exit(Environment.ExitCode);
             }
         }
 

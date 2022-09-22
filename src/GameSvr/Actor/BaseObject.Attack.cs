@@ -11,7 +11,7 @@ namespace GameSvr.Actor
 {
     public partial class BaseObject
     {
-        protected virtual void AttackDir(BaseObject TargeTBaseObject, short wHitMode, byte nDir)
+        protected virtual void AttackDir(BaseObject TargeBaseObject, short wHitMode, byte nDir)
         {
             BaseObject AttackTarget;
             const string sExceptionMsg = "[Exception] TBaseObject::AttackDir";
@@ -54,13 +54,13 @@ namespace GameSvr.Actor
                         break;
                 }
                 Direction = nDir;
-                if (TargeTBaseObject == null)
+                if (TargeBaseObject == null)
                 {
                     AttackTarget = GetPoseCreate();
                 }
                 else
                 {
-                    AttackTarget = TargeTBaseObject;
+                    AttackTarget = TargeBaseObject;
                 }
                 if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
                 {
@@ -76,7 +76,7 @@ namespace GameSvr.Actor
                 {
                     SetTargetCreat(AttackTarget);
                 }
-                short wIdent = Grobal2.RM_HIT;
+                int wIdent = Grobal2.RM_HIT;
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
                     switch (wHitMode)
@@ -947,7 +947,7 @@ namespace GameSvr.Actor
             return MagicArr[magicId];
         }
         
-        protected void SendAttackMsg(short wIdent, byte btDir, short nX, short nY)
+        protected void SendAttackMsg(int wIdent, byte btDir, short nX, short nY)
         {
             SendRefMsg(wIdent, btDir, nX, nY, 0, "");
         }

@@ -133,16 +133,16 @@ namespace DBSvr.Storage.MongoDB
             throw new NotImplementedException();
         }
 
-        public bool Update(int nIndex, ref THumDataInfo HumanRCD)
+        public bool Update(string nIndex, ref THumDataInfo HumanRCD)
         {
             bool result = false;
-            if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))
-            {
-                if (UpdateRecord(nIndex, ref HumanRCD))
-                {
-                    result = true;
-                }
-            }
+            //if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))
+            //{
+            //    if (UpdateRecord(nIndex, ref HumanRCD))
+            //    {
+            //        result = true;
+            //    }
+            //}
             return result;
         }
 

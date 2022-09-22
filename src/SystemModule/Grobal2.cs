@@ -79,7 +79,7 @@ namespace SystemModule
         public const int HOWMANYMAGICS = 20;
 
         //摆摊
-        public const int CM_SENDSELL = 9050;   //开始摆摊
+        public const int CM_SENDSELL = 9050;   
         public const int SM_SENDSELL = 9051;
         public const int RM_SENDSELL = 9052;
         public const int CM_MYSHOPEXIT = 9053;
@@ -767,7 +767,6 @@ namespace SystemModule
         public const int RM_43 = 9043;
         public const int RM_MOVEMESSAGE = 10099;
 
-        // -------Start Inter Server Msg-------
         public const int ISM_GROUPSERVERHEART = 100;
         public const int ISM_USERSERVERCHANGE = 200;
         public const int ISM_USERLOGON = 201;
@@ -783,23 +782,19 @@ namespace SystemModule
         public const int ISM_CHANGECASTLEOWNER = 211;
         public const int ISM_RELOADCASTLEINFO = 212;
         public const int ISM_RELOADADMIN = 213;
-        // -------End Inter Server Msg-------
-        // Friend System -------------
+
         public const int ISM_FRIEND_INFO = 214;
         public const int ISM_FRIEND_DELETE = 215;
         public const int ISM_FRIEND_OPEN = 216;
         public const int ISM_FRIEND_CLOSE = 217;
         public const int ISM_FRIEND_RESULT = 218;
-        // Tag System ----------------
         public const int ISM_TAG_SEND = 219;
         public const int ISM_TAG_RESULT = 220;
-        // User System --------------
         public const int ISM_USER_INFO = 221;
         public const int ISM_CHANGESERVERRECIEVEOK = 222;
         public const int ISM_RELOADCHATLOG = 223;
         public const int ISM_MARKETOPEN = 224;
         public const int ISM_MARKETCLOSE = 225;
-        // relationship --------------
         public const int ISM_LM_DELETE = 226;
         public const int ISM_RELOADMAKEITEMLIST = 227;
         public const int ISM_GUILDMEMBER_RECALL = 228;
