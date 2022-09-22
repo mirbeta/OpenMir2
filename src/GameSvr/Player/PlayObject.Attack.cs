@@ -2,6 +2,7 @@ using GameSvr.Actor;
 using GameSvr.Items;
 using GameSvr.Magic;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Data;
 
 namespace GameSvr.Player
@@ -21,7 +22,7 @@ namespace GameSvr.Player
                 {
                     return result;
                 }
-                if (Death || StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanHit)// 防麻
+                if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanHit)// 防麻
                 {
                     return result;
                 }
@@ -168,7 +169,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)// 防麻
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)// 防麻
             {
                 return result;
             }
@@ -226,7 +227,7 @@ namespace GameSvr.Player
             {
                 if (Transparent && HideMode)
                 {
-                    StatusArr[Grobal2.STATE_TRANSPARENT] = 1;
+                    StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
                 }
                 if (MBo316 || CurrX == nX && CurrY == nY)
                 {
@@ -254,7 +255,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)// 防麻
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)// 防麻
             {
                 return result;
             }
@@ -369,7 +370,7 @@ namespace GameSvr.Player
                         if (AllowFireHitSkill())
                         {
                             nSpellPoint = GetSpellPoint(UserMagic);
-                            if (Abil.MP >= nSpellPoint)
+                            if (WAbil.MP >= nSpellPoint)
                             {
                                 if (nSpellPoint > 0)
                                 {
@@ -384,12 +385,12 @@ namespace GameSvr.Player
                     break;
                 case MagicConst.SKILL_MOOTEBO:
                     result = true;
-                    if ((HUtil32.GetTickCount() - MDwDoMotaeboTick) > 3 * 1000)
+                    if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3 * 1000)
                     {
-                        MDwDoMotaeboTick = HUtil32.GetTickCount();
+                        DoMotaeboTick = HUtil32.GetTickCount();
                         Direction = (byte)nTargetX;
                         nSpellPoint = GetSpellPoint(UserMagic);
-                        if (Abil.MP >= nSpellPoint)
+                        if (WAbil.MP >= nSpellPoint)
                         {
                             if (nSpellPoint > 0)
                             {
@@ -435,7 +436,7 @@ namespace GameSvr.Player
                         if (AllowTwinHitSkill())
                         {
                             nSpellPoint = GetSpellPoint(UserMagic);
-                            if (Abil.MP >= nSpellPoint)
+                            if (WAbil.MP >= nSpellPoint)
                             {
                                 if (nSpellPoint > 0)
                                 {
@@ -492,7 +493,7 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            if (Death || StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
             {
                 return false;
             }
@@ -544,7 +545,7 @@ namespace GameSvr.Player
             {
                 if (Transparent && HideMode)
                 {
-                    StatusArr[Grobal2.STATE_TRANSPARENT] = 1;
+                    StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
                 }
                 if (MBo316 || CurrX == nX && CurrY == nY)
                 {
@@ -575,7 +576,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanWalk)
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanWalk)
             {
                 return result; // 防麻
             }

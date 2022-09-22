@@ -1,5 +1,6 @@
 ﻿using GameSvr.Maps;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Data;
 
 namespace GameSvr.Actor
@@ -36,7 +37,7 @@ namespace GameSvr.Actor
         /// <returns></returns>
         protected bool CanWalk()
         {
-            return !Ghost && !Death && StatusArr[Grobal2.POISON_STONE] == 0;
+            return !Ghost && !Death && StatusArr[StatuStateConst.POISON_STONE] == 0;
         }
 
         protected virtual void Attack(BaseObject TargeTBaseObject, byte nDir)
@@ -188,8 +189,8 @@ namespace GameSvr.Actor
                     nDamage += BaseObject.GetMagStruckDamage(this, nMagPower);
                     if (nDamage > 0)
                     {
-                        BaseObject.StruckDamage(nDamage);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (ushort)nDamage, BaseObject.Abil.HP, BaseObject.Abil.MaxHP, this.ActorId, "", 200);
+                        BaseObject.StruckDamage((ushort)nDamage);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, this.ActorId, "", 200);
                     }
                 }
             }

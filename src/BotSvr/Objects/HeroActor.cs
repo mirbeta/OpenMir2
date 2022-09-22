@@ -1,5 +1,6 @@
 using System;
 using SystemModule;
+using SystemModule.Consts;
 
 namespace BotSvr.Objects
 {
@@ -384,7 +385,7 @@ namespace BotSvr.Objects
         {
             return Actor != null && Actor.m_btRace != 0 && !string.IsNullOrEmpty(Actor.m_sUserName) &&
                    (Actor.m_btRace != 12 || Actor.m_btRace != 50) && !Actor.m_boDeath && Actor.m_btRace != 12 &&
-                   (Actor.m_nState & Grobal2.STATE_STONE_MODE) == 0 && Actor.m_sUserName.IndexOf("(", StringComparison.Ordinal) == -1 &&
+                   (Actor.m_nState & StatuStateConst.STATE_STONE_MODE) == 0 && Actor.m_sUserName.IndexOf("(", StringComparison.Ordinal) == -1 &&
                    Actor.m_boVisible && !Actor.m_boDelActor && !Actor.m_btAFilter && MShare.g_gcAss[6] &&
                    !MShare.g_APMobList.ContainsKey(Actor.m_sUserName);
         }

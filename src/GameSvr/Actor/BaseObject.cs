@@ -9,6 +9,7 @@ using GameSvr.Monster.Monsters;
 using GameSvr.Player;
 using System.Collections;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
@@ -767,11 +768,11 @@ namespace GameSvr.Actor
         protected bool RedUseHalfMoon;
         protected bool FireHitSkill;
         protected bool CrsHitkill = false;
-        public bool MBoTwinHitSkill;
+        public bool TwinHitSkill;
         public bool MBo43Kill = false;
-        public int MDwLatestFireHitTick = 0;
-        public int MDwDoMotaeboTick = 0;
-        public int MDwLatestTwinHitTick = 0;
+        public int LatestFireHitTick = 0;
+        public int DoMotaeboTick = 0;
+        public int LatestTwinHitTick = 0;
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
@@ -862,7 +863,7 @@ namespace GameSvr.Actor
             UseHalfMoon = false;
             RedUseHalfMoon = false;
             FireHitSkill = false;
-            MBoTwinHitSkill = false;
+            TwinHitSkill = false;
             HitPoint = 5;
             SpeedPoint = 15;
             HitSpeed = 0;
@@ -1192,7 +1193,7 @@ namespace GameSvr.Actor
             Abil.MaxExp = GetLevelExp(Abil.Level);
             RecalcLevelAbilitys();
             RecalcAbilitys();
-            SendMsg(this, Grobal2.RM_LEVELUP, 0, (int)Abil.Exp, 0, 0, "");
+            SendMsg(this, Grobal2.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
             if (M2Share.g_FunctionNPC != null)
             {
                 M2Share.g_FunctionNPC.GotoLable(this as PlayObject, "@LevelUp", false);
@@ -1283,7 +1284,7 @@ namespace GameSvr.Actor
                     {
                         if (Transparent && HideMode)
                         {
-                            StatusArr[Grobal2.STATE_TRANSPARENT] = 1;
+                            StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
                         }
                         result = true;
                     }
@@ -1607,45 +1608,44 @@ namespace GameSvr.Actor
         /// 减少生命值
         /// </summary>
         /// <param name="nDamage"></param>
-        private void DamageHealth(int nDamage)
+        private void DamageHealth(ushort nDamage)
         {
-            if (((LastHiter == null) || !LastHiter.UnMagicShield) && MagicShield && (nDamage > 0) &&
-                (Abil.MP > 0))
+            if (((LastHiter == null) || !LastHiter.UnMagicShield) && MagicShield && (nDamage > 0) && (WAbil.MP > 0))
             {
                 var nSpdam = HUtil32.Round(nDamage * 1.5);
-                if (Abil.MP >= nSpdam)
+                if (WAbil.MP >= nSpdam)
                 {
-                    Abil.MP = (ushort)(Abil.MP - nSpdam);
+                    WAbil.MP = (ushort)(WAbil.MP - nSpdam);
                     nSpdam = 0;
                 }
                 else
                 {
-                    nSpdam = nSpdam - Abil.MP;
-                    Abil.MP = 0;
+                    nSpdam = nSpdam - WAbil.MP;
+                    WAbil.MP = 0;
                 }
-                nDamage = HUtil32.Round(nSpdam / 1.5);
+                nDamage = (ushort)HUtil32.Round(nSpdam / 1.5);
                 HealthSpellChanged();
             }
             if (nDamage > 0)
             {
-                if ((Abil.HP - nDamage) > 0)
+                if ((WAbil.HP - nDamage) > 0)
                 {
-                    Abil.HP = (ushort)(Abil.HP - nDamage);
+                    WAbil.HP = (ushort)(WAbil.HP - nDamage);
                 }
                 else
                 {
-                    Abil.HP = 0;
+                    WAbil.HP = 0;
                 }
             }
             else
             {
-                if ((Abil.HP - nDamage) < Abil.MaxHP)
+                if ((WAbil.HP - nDamage) < WAbil.MaxHP)
                 {
-                    Abil.HP = (ushort)(Abil.HP - nDamage);
+                    WAbil.HP = (ushort)(WAbil.HP - nDamage);
                 }
                 else
                 {
-                    Abil.HP = Abil.MaxHP;
+                    WAbil.HP = WAbil.MaxHP;
                 }
             }
         }
@@ -1771,7 +1771,7 @@ namespace GameSvr.Actor
             if (ShowHp)
             {
                 ShowHp = false;
-                CharStatusEx = CharStatusEx ^ Grobal2.STATE_OPENHEATH;
+                CharStatusEx = CharStatusEx ^ StatuStateConst.STATE_OPENHEATH;
                 CharStatus = GetCharStatus();
                 SendRefMsg(Grobal2.RM_CLOSEHEALTH, 0, 0, 0, 0, "");
             }
@@ -1780,9 +1780,9 @@ namespace GameSvr.Actor
         private void MakeOpenHealth()
         {
             ShowHp = true;
-            CharStatusEx = CharStatusEx | Grobal2.STATE_OPENHEATH;
+            CharStatusEx = CharStatusEx | StatuStateConst.STATE_OPENHEATH;
             CharStatus = GetCharStatus();
-            SendRefMsg(Grobal2.RM_OPENHEALTH, 0, Abil.HP, Abil.MaxHP, 0, "");
+            SendRefMsg(Grobal2.RM_OPENHEALTH, 0, WAbil.HP, WAbil.MaxHP, 0, "");
         }
 
         protected void IncHealthSpell(int nHp, int nMp)
@@ -1791,21 +1791,21 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            if ((Abil.HP + nHp) >= Abil.MaxHP)
+            if ((WAbil.HP + nHp) >= WAbil.MaxHP)
             {
-                Abil.HP = Abil.MaxHP;
+                WAbil.HP = WAbil.MaxHP;
             }
             else
             {
-                Abil.HP += (ushort)nHp;
+                WAbil.HP += (ushort)nHp;
             }
-            if ((Abil.MP + nMp) >= Abil.MaxMP)
+            if ((WAbil.MP + nMp) >= WAbil.MaxMP)
             {
-                Abil.MP = Abil.MaxMP;
+                WAbil.MP = WAbil.MaxMP;
             }
             else
             {
-                Abil.MP += (ushort)nMp;
+                WAbil.MP += (ushort)nMp;
             }
             HealthSpellChanged();
         }
@@ -2080,9 +2080,9 @@ namespace GameSvr.Actor
                     monObj.SlaveMakeLevel = (byte)nMakeLevel;
                     monObj.SlaveExpLevel = (byte)nExpLevel;
                     monObj.RecalcAbilitys();
-                    if (monObj.Abil.HP < monObj.Abil.MaxHP)
+                    if (monObj.WAbil.HP < monObj.WAbil.MaxHP)
                     {
-                        monObj.Abil.HP = (ushort)(monObj.Abil.HP + (monObj.Abil.MaxHP - monObj.Abil.HP) / 2);
+                        monObj.WAbil.HP = (ushort)(monObj.WAbil.HP + (monObj.WAbil.MaxHP - monObj.WAbil.HP) / 2);
                     }
                     monObj.RefNameColor();
                     SlaveList.Add(monObj);
@@ -2593,8 +2593,7 @@ namespace GameSvr.Actor
         /// <returns></returns>
         private ushort GetMagicSpell(UserMagic userMagic)
         {
-            return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) *
-                                         (userMagic.Level + 1));
+            return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
         }
 
         private void CheckPkStatus()
@@ -2614,24 +2613,24 @@ namespace GameSvr.Actor
         {
             if (nSpellPoint > 0)
             {
-                if ((Abil.MP - nSpellPoint) > 0)
+                if ((WAbil.MP - nSpellPoint) > 0)
                 {
-                    Abil.MP -= nSpellPoint;
+                    WAbil.MP -= nSpellPoint;
                 }
                 else
                 {
-                    Abil.MP = 0;
+                    WAbil.MP = 0;
                 }
             }
             else
             {
-                if ((Abil.MP - nSpellPoint) < Abil.MaxMP)
+                if ((WAbil.MP - nSpellPoint) < WAbil.MaxMP)
                 {
-                    Abil.MP -= nSpellPoint;
+                    WAbil.MP -= nSpellPoint;
                 }
                 else
                 {
-                    Abil.MP = Abil.MaxMP;
+                    WAbil.MP = WAbil.MaxMP;
                 }
             }
         }
@@ -2955,15 +2954,15 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    WAbil.MaxHP = Abil.MaxHP;
+                    WAbil.MaxHP = WAbil.MaxHP;
                 }
             }
             else
             {
-                n8 = Abil.MaxHP;
+                n8 = WAbil.MaxHP;
                 WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
-                n8 = n8 + HUtil32.Round(Abil.MaxHP * 0.15) * SlaveExpLevel;
-                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(Abil.MaxHP + SlaveExpLevel * 60), n8);
+                n8 = n8 + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
+                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60), n8);
             }
         }
 
@@ -4483,7 +4482,7 @@ namespace GameSvr.Actor
 
         protected void WeightChanged()
         {
-            Abil.Weight = RecalcBagWeight();
+            WAbil.Weight = RecalcBagWeight();
             SendUpdateMsg(this, Grobal2.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
         }
 
@@ -4703,14 +4702,14 @@ namespace GameSvr.Actor
         public ushort GetHitStruckDamage(BaseObject target, int nDamage)
         {
             int nArmor;
-            var nRnd = HUtil32.HiWord(WAbil.AC) - HUtil32.LoWord(WAbil.AC) + 1;
+            var nRnd = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.AC) - HUtil32.LoByte(WAbil.AC)) + 1);
             if (nRnd > 0)
             {
-                nArmor = HUtil32.LoWord(WAbil.AC) + M2Share.RandomNumber.Random(nRnd);
+                nArmor = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(nRnd);
             }
             else
             {
-                nArmor = HUtil32.LoWord(WAbil.AC);
+                nArmor = HUtil32.LoByte(WAbil.AC);
             }
             nDamage = HUtil32._MAX(0, nDamage - nArmor);
             if (nDamage > 0)
@@ -4730,7 +4729,7 @@ namespace GameSvr.Actor
 
         public int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            var n14 = HUtil32.LoWord(WAbil.MAC) + M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.MAC) - HUtil32.LoWord(WAbil.MAC) + 1);
+            var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC) + 1);
             nDamage = HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
@@ -4744,7 +4743,7 @@ namespace GameSvr.Actor
             return nDamage;
         }
 
-        public void StruckDamage(int nDamage)
+        public void StruckDamage(ushort nDamage)
         {
             int nDam;
             int nDura;
@@ -4761,25 +4760,25 @@ namespace GameSvr.Actor
                 switch (LastHiter.Job)
                 {
                     case PlayJob.Warrior:
-                        nDamage = nDamage * M2Share.Config.WarrMon / 10;
+                        nDamage = (ushort)(nDamage * M2Share.Config.WarrMon / 10);
                         break;
                     case PlayJob.Wizard:
-                        nDamage = nDamage * M2Share.Config.WizardMon / 10;
+                        nDamage = (ushort)(nDamage * M2Share.Config.WizardMon / 10);
                         break;
                     case PlayJob.Taoist:
-                        nDamage = nDamage * M2Share.Config.TaosMon / 10;
+                        nDamage = (ushort)(nDamage * M2Share.Config.TaosMon / 10);
                         break;
                 }
             }
             if ((Race == Grobal2.RC_PLAYOBJECT) && (LastHiter != null) && (LastHiter.Master != null)) // 怪物攻击人
             {
-                nDamage = nDamage * M2Share.Config.MonHum / 10;
+                nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
             }
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
-            if (StatusArr[Grobal2.POISON_DAMAGEARMOR] > 0)
+            if (StatusArr[StatuStateConst.POISON_DAMAGEARMOR] > 0)
             {
                 nDam = HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
-                nDamage = HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
+                nDamage = (ushort)HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
             }
             bo19 = false;
             if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0)
@@ -4816,8 +4815,7 @@ namespace GameSvr.Actor
 
                 if (nOldDura != HUtil32.Round(nDura / 1000))
                 {
-                    SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0,
-                        "");
+                    SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0,"");
                 }
             }
 
@@ -4870,16 +4868,11 @@ namespace GameSvr.Actor
         public virtual string GeTBaseObjectInfo()
         {
             var result = CharName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
-                         '/' + CurrY + ' ' + "等级:" + Abil.Level + ' ' + "经验:" + Abil.Exp + ' '
-                         + "生命值: " + Abil.HP + '-' + Abil.MaxHP + ' ' + "魔法值: " + Abil.MP + '-' +
-                         Abil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(Abil.DC) + '-' +
-                         HUtil32.HiWord(Abil.DC) + ' '
-                         + "魔法力: " + HUtil32.LoWord(Abil.MC) + '-' + HUtil32.HiWord(Abil.MC) + ' ' + "道术: " +
-                         HUtil32.LoWord(Abil.SC) + '-' + HUtil32.HiWord(Abil.SC) + ' '
-                         + "防御力: " + HUtil32.LoWord(Abil.AC) + '-' + HUtil32.HiWord(Abil.AC) + ' ' + "魔防力: " +
-                         HUtil32.LoWord(Abil.MAC) + '-' + HUtil32.HiWord(Abil.MAC) + ' ' + "准确:" +
-                         HitPoint + ' '
-                         + "敏捷:" + SpeedPoint;
+                         '/' + CurrY + ' ' + "等级:" + Abil.Level + ' ' + "经验:" + Abil.Exp + ' ' + "生命值: " + WAbil.HP + '-' + WAbil.MaxHP + ' ' + "魔法值: " + WAbil.MP + '-' +
+                         WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(WAbil.DC) + '-' +
+                         HUtil32.HiWord(WAbil.DC) + ' ' + "魔法力: " + HUtil32.LoWord(WAbil.MC) + '-' + HUtil32.HiWord(WAbil.MC) + ' ' + "道术: " +
+                         HUtil32.LoWord(WAbil.SC) + '-' + HUtil32.HiWord(WAbil.SC) + ' ' + "防御力: " + HUtil32.LoWord(WAbil.AC) + '-' + HUtil32.HiWord(WAbil.AC) + ' ' + "魔防力: " +
+                         HUtil32.LoWord(WAbil.MAC) + '-' + HUtil32.HiWord(WAbil.MAC) + ' ' + "准确:" + HitPoint + ' ' + "敏捷:" + SpeedPoint;
             return result;
         }
 
@@ -5087,15 +5080,15 @@ namespace GameSvr.Actor
 
         private void DamageBubbleDefence(int nInt)
         {
-            if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 0)
+            if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] > 0)
             {
-                if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 3)
+                if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] > 3)
                 {
-                    StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] -= 3;
+                    StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] -= 3;
                 }
                 else
                 {
-                    StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] = 1;
+                    StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] = 1;
                 }
             }
         }
@@ -5308,21 +5301,21 @@ namespace GameSvr.Actor
         private bool DefenceUp(ushort nSec)
         {
             var result = false;
-            if (StatusArr[Grobal2.STATE_DEFENCEUP] > 0)
+            if (StatusArr[StatuStateConst.STATE_DEFENCEUP] > 0)
             {
-                if (StatusArr[Grobal2.STATE_DEFENCEUP] < nSec)
+                if (StatusArr[StatuStateConst.STATE_DEFENCEUP] < nSec)
                 {
-                    StatusArr[Grobal2.STATE_DEFENCEUP] = nSec;
+                    StatusArr[StatuStateConst.STATE_DEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusArr[Grobal2.STATE_DEFENCEUP] = nSec;
+                StatusArr[StatuStateConst.STATE_DEFENCEUP] = nSec;
                 result = true;
             }
 
-            StatusArrTick[Grobal2.STATE_DEFENCEUP] = HUtil32.GetTickCount();
+            StatusArrTick[StatuStateConst.STATE_DEFENCEUP] = HUtil32.GetTickCount();
             SysMsg(Format(M2Share.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -5344,21 +5337,20 @@ namespace GameSvr.Actor
         private bool MagDefenceUp(ushort nSec)
         {
             var result = false;
-            if (StatusArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
+            if (StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] > 0)
             {
-                if (StatusArr[Grobal2.STATE_MAGDEFENCEUP] < nSec)
+                if (StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] < nSec)
                 {
-                    StatusArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
+                    StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusArr[Grobal2.STATE_MAGDEFENCEUP] = nSec;
+                StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] = nSec;
                 result = true;
             }
-
-            StatusArrTick[Grobal2.STATE_MAGDEFENCEUP] = HUtil32.GetTickCount();
+            StatusArrTick[StatuStateConst.STATE_MAGDEFENCEUP] = HUtil32.GetTickCount();
             SysMsg(Format(M2Share.g_sMagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -5371,20 +5363,18 @@ namespace GameSvr.Actor
         /// <returns></returns>
         public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
         {
-            if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] != 0)
+            if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] != 0)
             {
                 return false;
             }
-
             var nOldStatus = CharStatus;
-            StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] = nSec;
-            StatusArrTick[Grobal2.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
+            StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] = nSec;
+            StatusArrTick[StatuStateConst.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
             if (nOldStatus != CharStatus)
             {
                 StatusChanged();
             }
-
             AbilMagBubbleDefence = true;
             MagBubbleDefenceLevel = nLevel;
             return true;
@@ -5872,7 +5862,7 @@ namespace GameSvr.Actor
             if (this is ScultureKingMonster)
             {
                 this.StoneMode = true;
-                this.CharStatusEx = Grobal2.STATE_STONE_MODE;
+                this.CharStatusEx = StatuStateConst.STATE_STONE_MODE;
             }
 
             if (this is ElfMonster)

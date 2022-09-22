@@ -1,5 +1,7 @@
+using GameSvr.Actor;
 using GameSvr.Magic;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.RobotPlay
@@ -63,11 +65,11 @@ namespace GameSvr.RobotPlay
             try
             {
                 m_wHitMode = 0;
-                if (Abil.MP > 0)
+                if (WAbil.MP > 0)
                 {
                     if (TargetCret != null)
                     {
-                        if (Abil.HP <= Math.Round(Abil.MaxHP * 0.25) || TargetCret.CrazyMode)
+                        if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.25) || TargetCret.CrazyMode)
                         {
                             // 注释,战不躲避
                             if (AllowUseMagic(12))
@@ -223,7 +225,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪 
                     {
-                        if (TargetCret.Abil.MaxHP >= 700)
+                        if (TargetCret.WAbil.MaxHP >= 700)
                         {
                             SearchMagic();// 查询魔法
                         }
@@ -258,7 +260,7 @@ namespace GameSvr.RobotPlay
                             // 魔法不能打到怪
                             if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
                             {
-                                if (TargetCret.Abil.MaxHP >= 700)
+                                if (TargetCret.WAbil.MaxHP >= 700)
                                 {
                                     GetGotoXY(TargetCret, 3); // 道只走向目标3格范围
                                     GotoTargetXY(TargetX, TargetY, 0);
@@ -274,7 +276,7 @@ namespace GameSvr.RobotPlay
                     switch (m_nSelectMagic)
                     {
                         case MagicConst.SKILL_HEALLING:// 治愈术 
-                            if (Abil.HP <= Math.Round(Abil.MaxHP * 0.7))
+                            if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
                                 if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
@@ -283,7 +285,7 @@ namespace GameSvr.RobotPlay
                                     AttackTick = HUtil32.GetTickCount();
                                     if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
                                     {
-                                        if (TargetCret.Abil.MaxHP >= 700)
+                                        if (TargetCret.WAbil.MaxHP >= 700)
                                         {
                                             m_boIsUseMagic = true;
                                             return result;
@@ -302,7 +304,7 @@ namespace GameSvr.RobotPlay
                             }
                             break;
                         case MagicConst.SKILL_BIGHEALLING:// 群体治疗术
-                            if (Abil.HP <= Math.Round(Abil.MaxHP * 0.7))
+                            if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
                                 if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
@@ -311,7 +313,7 @@ namespace GameSvr.RobotPlay
                                     AttackTick = HUtil32.GetTickCount();
                                     if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
                                     {
-                                        if (TargetCret.Abil.MaxHP >= 700)
+                                        if (TargetCret.WAbil.MaxHP >= 700)
                                         {
                                             m_boIsUseMagic = true;// 能躲避
                                             return result;
@@ -338,11 +340,11 @@ namespace GameSvr.RobotPlay
                             break;
                         case MagicConst.SKILL_AMYOUNSUL:
                         case MagicConst.SKILL_GROUPAMYOUNSUL:
-                            if (TargetCret.StatusArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
+                            if (TargetCret.StatusArr[StatuStateConst.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
                             {
                                 n_AmuletIndx = 1;
                             }
-                            else if (TargetCret.StatusArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0)
+                            else if (TargetCret.StatusArr[StatuStateConst.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0)
                             {
                                 n_AmuletIndx = 2;
                             }
@@ -356,7 +358,7 @@ namespace GameSvr.RobotPlay
                                 AttackTick = HUtil32.GetTickCount();
                                 if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
                                 {
-                                    if (TargetCret.Abil.MaxHP >= 700)
+                                    if (TargetCret.WAbil.MaxHP >= 700)
                                     {
                                         m_boIsUseMagic = false;
                                         return result;
@@ -383,7 +385,7 @@ namespace GameSvr.RobotPlay
                                 if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
                                 {
                                     // 22级砍血量的怪
-                                    if (TargetCret.Abil.MaxHP >= 700)
+                                    if (TargetCret.WAbil.MaxHP >= 700)
                                     {
                                         m_boIsUseMagic = true; // 能躲避
                                         return result;
@@ -408,7 +410,7 @@ namespace GameSvr.RobotPlay
                         {
                             AttackTick = HUtil32.GetTickCount();
                             result = UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
-                            if (TargetCret.Abil.MaxHP >= 700 || !M2Share.Config.boHeroAttackTao)
+                            if (TargetCret.WAbil.MaxHP >= 700 || !M2Share.Config.boHeroAttackTao)
                             {
                                 return result;
                             }
@@ -416,13 +418,13 @@ namespace GameSvr.RobotPlay
                     }
                 }
                 AttackTick = HUtil32.GetTickCount();
-                if (Abil.HP <= Math.Round(Abil.MaxHP * 0.15))
+                if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.15))
                 {
                     m_boIsUseMagic = true;
                 }
                 // 是否能躲避 
                 // 增加人形条件
-                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || TargetCret.Abil.MaxHP < 700 && M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || TargetCret.WAbil.MaxHP < 700 && M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
                 {
                     // 20090106 道士22级前是否物理攻击  怪等级小于英雄时
                     if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)

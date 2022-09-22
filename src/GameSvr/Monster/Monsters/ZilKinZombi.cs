@@ -1,4 +1,6 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -33,12 +35,12 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (this.Death && !this.Ghost && this.StatusArr[Grobal2.POISON_STONE] == 0 && ZilKillCount >= 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - ReAliveTick) >= ZilkinDieTick)
+            if (this.Death && !this.Ghost && this.StatusArr[StatuStateConst.POISON_STONE] == 0 && ZilKillCount >= 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - ReAliveTick) >= ZilkinDieTick)
             {
                 this.Abil.MaxHP = (ushort)(this.Abil.MaxHP >> 1);
                 this.FightExp = this.FightExp / 2;
                 this.Abil.HP = this.Abil.MaxHP;
-                this.Abil.HP = this.Abil.MaxHP;
+                this.WAbil.HP = this.Abil.MaxHP;
                 this.ReAlive();
                 this.WalkTick = HUtil32.GetTickCount() + 1000;
             }

@@ -2,6 +2,7 @@
 using GameSvr.Magic;
 using GameSvr.Player;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
@@ -402,7 +403,7 @@ namespace GameSvr.Actor
                                     {
                                         if (stdItem.Shape == ItemShapeConst.RING_TRANSPARENT_ITEM)
                                         {
-                                            StatusArr[Grobal2.STATE_TRANSPARENT] = 60000;
+                                            StatusArr[StatuStateConst.STATE_TRANSPARENT] = 60000;
                                             HideMode = true;
                                         }
                                         if (stdItem.Shape == ItemShapeConst.RING_SPACEMOVE_ITEM)
@@ -965,7 +966,7 @@ namespace GameSvr.Actor
                 }
                 WAbil.Weight = RecalcBagWeight();
             }
-            if (Transparent && (StatusArr[Grobal2.STATE_TRANSPARENT] > 0))
+            if (Transparent && (StatusArr[StatuStateConst.STATE_TRANSPARENT] > 0))
             {
                 HideMode = true;
             }
@@ -981,7 +982,7 @@ namespace GameSvr.Actor
             {
                 if (oldhmode)
                 {
-                    StatusArr[Grobal2.STATE_TRANSPARENT] = 0;
+                    StatusArr[StatuStateConst.STATE_TRANSPARENT] = 0;
                     CharStatus = GetCharStatus();
                     StatusChanged();
                 }
@@ -1019,13 +1020,13 @@ namespace GameSvr.Actor
             WAbil.DC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
             WAbil.MC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
             WAbil.SC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
-            if (StatusArr[Grobal2.STATE_DEFENCEUP] > 0)
+            if (StatusArr[StatuStateConst.STATE_DEFENCEUP] > 0)
             {
-                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[Grobal2.STATE_DEFENCEUP]));
+                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[StatuStateConst.STATE_DEFENCEUP]));
             }
-            if (StatusArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
+            if (StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] > 0)
             {
-                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[Grobal2.STATE_MAGDEFENCEUP]));
+                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[StatuStateConst.STATE_MAGDEFENCEUP]));
             }
             if (ExtraAbil[AbilConst.EABIL_DCUP] > 0)
             {
@@ -1116,11 +1117,11 @@ namespace GameSvr.Actor
                 }
                 if (fastmoveflag)
                 {
-                    StatusArr[Grobal2.STATE_FASTMOVE] = 60000;
+                    StatusArr[StatuStateConst.STATE_FASTMOVE] = 60000;
                 }
                 else
                 {
-                    StatusArr[Grobal2.STATE_FASTMOVE] = 0;
+                    StatusArr[StatuStateConst.STATE_FASTMOVE] = 0;
                 }
                 //if ((Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL))
                 //{

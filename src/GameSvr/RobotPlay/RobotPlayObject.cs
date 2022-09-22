@@ -7,6 +7,7 @@ using GameSvr.Player;
 using System.Collections;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
@@ -336,8 +337,7 @@ namespace GameSvr.RobotPlay
                 }
                 HasLevelUp(Abil.Level - 1);
                 AddBodyLuck(100);
-                M2Share.AddGameDataLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp +
-                                       "\t" + CharName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
+                M2Share.AddGameDataLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + CharName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
                 IncHealthSpell(2000, 2000);
             }
         }
@@ -864,9 +864,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[Grobal2.POISON_DONTMOVE] != 0 || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动 
             }
@@ -1083,7 +1083,7 @@ namespace GameSvr.RobotPlay
         {
             short nX = 0;
             short nY = 0;
-            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[Grobal2.POISON_STONE] == 0)
+            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[StatuStateConst.POISON_STONE] == 0)
             {
                 nX = CurrX;
                 nY = CurrY;
@@ -1924,11 +1924,11 @@ namespace GameSvr.RobotPlay
             {
                 return result;
             }
-            if (Death || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (Death || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
             {
                 return result; // 防麻
             }
-            if (StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)
+            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)
             {
                 return result;// 防麻
             }
@@ -1980,9 +1980,9 @@ namespace GameSvr.RobotPlay
                     break;
                 case MagicConst.SKILL_MOOTEBO:
                     result = true;
-                    if ((HUtil32.GetTickCount() - MDwDoMotaeboTick) > 3000)
+                    if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3000)
                     {
-                        MDwDoMotaeboTick = HUtil32.GetTickCount();
+                        DoMotaeboTick = HUtil32.GetTickCount();
                         if (GetAttackDir(TargeTBaseObject, ref Direction))
                         {
                             DoMotaebo(Direction, UserMagic.Level);
@@ -2065,9 +2065,9 @@ namespace GameSvr.RobotPlay
             {
                 if (BaseObject != null)
                 {
-                    if (BaseObject.Ghost || BaseObject.Death || BaseObject.Abil.HP <= 0)
+                    if (BaseObject.Ghost || BaseObject.Death || BaseObject.WAbil.HP <= 0)
                     {
-                        return result;
+                        return false;
                     }
                 }
                 if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx))
@@ -2479,8 +2479,6 @@ namespace GameSvr.RobotPlay
         /// <summary>
         /// 跑到目标坐标
         /// </summary>
-        /// <param name="nTargetX"></param>
-        /// <param name="nTargetY"></param>
         /// <returns></returns>
         private bool RunToTargetXY(short nTargetX, short nTargetY)
         {
@@ -2489,15 +2487,15 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[Grobal2.POISON_STONE] > 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[Grobal2.POISON_DONTMOVE] != 0 || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
+            if (StatusArr[StatuStateConst.POISON_STONE] > 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
             {
-                return result; // 麻痹不能跑动 
+                return false; // 麻痹不能跑动 
             }
             if (!m_boCanRun) // 禁止跑,则退出
             {
-                return result;
+                return false;
             }
             if (HUtil32.GetTickCount() - dwTick5F4 > m_dwRunIntervalTime) // 跑步使用单独的变量计数
             {
@@ -2653,9 +2651,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[Grobal2.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[Grobal2.POISON_DONTMOVE] != 0 || StatusArr[Grobal2.POISON_LOCKSPELL] != 0)
+            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动
             }
@@ -2765,7 +2763,7 @@ namespace GameSvr.RobotPlay
                 case 0:// 正常模式
                     if (Math.Abs(CurrX - nTargetX) > 2 || Math.Abs(CurrY - nTargetY) > 2)
                     {
-                        if (StatusArr[Grobal2.STATE_LOCKRUN] == 0)
+                        if (StatusArr[StatuStateConst.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -2782,7 +2780,7 @@ namespace GameSvr.RobotPlay
                 case 1:// 躲避模式
                     if (Math.Abs(CurrX - nTargetX) > 1 || Math.Abs(CurrY - nTargetY) > 1)
                     {
-                        if (StatusArr[Grobal2.STATE_LOCKRUN] == 0)
+                        if (StatusArr[StatuStateConst.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -2827,7 +2825,7 @@ namespace GameSvr.RobotPlay
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    if (AllowUseMagic(26) && HUtil32.GetTickCount() - MDwLatestFireHitTick > 9000)// 烈火
+                    if (AllowUseMagic(26) && HUtil32.GetTickCount() - LatestFireHitTick > 9000)// 烈火
                     {
                         FireHitSkill = true;
                         result = 26;
@@ -2847,7 +2845,7 @@ namespace GameSvr.RobotPlay
                     else
                     {
                         // 打怪使用 
-                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 10000 && TargetCret.Abil.Level < Abil.Level && Abil.HP <= Math.Round(Abil.MaxHP * 0.85))
+                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 10000 && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.85))
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
@@ -3072,7 +3070,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     // 从高到低使用魔法
-                    if (AllowUseMagic(26) && (HUtil32.GetTickCount() - MDwLatestFireHitTick) > 9000)// 烈火
+                    if (AllowUseMagic(26) && (HUtil32.GetTickCount() - LatestFireHitTick) > 9000)// 烈火
                     {
                         FireHitSkill = true;
                         result = 26;
@@ -3128,7 +3126,7 @@ namespace GameSvr.RobotPlay
                         result = 7;
                         return result;
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && Abil.HP <= Math.Round(Abil.MaxHP * 0.6))
+                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(WAbil.MaxHP * 0.6))
                     {
                         // PK时,使用野蛮冲撞
                         if (AllowUseMagic(27) && (HUtil32.GetTickCount() - m_SkillUseTick[27]) > 3000)
@@ -3140,7 +3138,7 @@ namespace GameSvr.RobotPlay
                     }
                     else
                     {
-                        if (AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && Abil.HP <= Math.Round(Abil.MaxHP * 0.6) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000)
+                        if (AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.6) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000)
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
@@ -3155,7 +3153,7 @@ namespace GameSvr.RobotPlay
                     }
                     break;
                 case PlayJob.Wizard: // 法师
-                    if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
+                    if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
@@ -3855,7 +3853,7 @@ namespace GameSvr.RobotPlay
                         }
                         return result;
                     }
-                    if (StatusArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
+                    if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
                     {
                         if (AllowUseMagic(73)) // 道力盾
                         {
@@ -3884,8 +3882,8 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     // 绿毒
-                    if (TargetCret.StatusArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
-                        || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
+                    if (TargetCret.StatusArr[StatuStateConst.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
+                                                                                                                                                     || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
                         // 对于血量超过800的怪用 不毒城墙
@@ -3940,8 +3938,8 @@ namespace GameSvr.RobotPlay
                                 break;
                         }
                     }
-                    if (TargetCret.StatusArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.Abil.HP >= 700
-                        || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
+                    if (TargetCret.StatusArr[StatuStateConst.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
+                                                                                                                                                       || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
                         // 对于血量超过100的怪用 不毒城墙

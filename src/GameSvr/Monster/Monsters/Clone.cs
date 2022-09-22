@@ -17,17 +17,17 @@ namespace GameSvr.Monster.Monsters
             {
                 if (Master != null)
                 {
-                    if (Master.Abil.MP <= 0)
+                    if (Master.WAbil.MP <= 0)
                     {
-                        Abil.HP = 0;
+                        WAbil.HP = 0;
                     }
                     if (processMsg.wIdent == Grobal2.RM_SPELL)
                     {
-                        Master.Abil.MP -= (ushort)processMsg.nParam3;
+                        Master.WAbil.MP -= (ushort)processMsg.nParam3;
                     }
                     else
                     {
-                        Master.Abil.MP -= (ushort)processMsg.wParam;
+                        Master.WAbil.MP -= (ushort)processMsg.wParam;
                     }
                 }
             }
@@ -45,8 +45,7 @@ namespace GameSvr.Monster.Monsters
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSx, ref nSy))
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTx, ref nTy);
-                var wAbil = Abil;
-                var nPwr = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
+                var nPwr = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
                 MagPassThroughMagic(nSx, nSy, nTx, nTy, nDir, nPwr, true);
             }
             BreakHolySeizeMode();

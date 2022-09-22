@@ -22,7 +22,7 @@ namespace GameSvr.Monster.Monsters
                         {
                             if (Math.Abs(TargetX - CurrX) <= 8 && Math.Abs(TargetY - CurrY) <= 8)
                             {
-                                var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(Abil.DC) - HUtil32.LoWord(Abil.DC) + 1)) + HUtil32.LoWord(Abil.DC);
+                                var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
                                 if (nPower > 0)
                                 {
                                     var baseObject = GetPoseCreate();
@@ -31,7 +31,7 @@ namespace GameSvr.Monster.Monsters
                                         nPower = baseObject.GetMagStruckDamage(this, nPower);
                                         if (nPower > 0)
                                         {
-                                            baseObject.StruckDamage(nPower);
+                                            baseObject.StruckDamage((ushort)nPower);
                                             if ((HUtil32.GetTickCount() - SpellTick) > NextHitTime)
                                             {
                                                 SpellTick = HUtil32.GetTickCount();

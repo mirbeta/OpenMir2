@@ -1,5 +1,6 @@
 ﻿using GameSvr.Actor;
 using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -17,8 +18,7 @@ namespace GameSvr.Monster.Monsters
         private void SpitAttack(byte btDir)
         {
             Direction = btDir;
-            var wAbil = Abil;
-            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC) + 1)) + HUtil32.LoWord(wAbil.DC);
+            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
             if (nDamage <= 0)
             {
                 return;
@@ -38,13 +38,13 @@ namespace GameSvr.Monster.Monsters
                             nDamage = baseObject.GetMagStruckDamage(this, nDamage);
                             if (nDamage > 0)
                             {
-                                baseObject.StruckDamage(nDamage);
-                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, Abil.HP, Abil.MaxHP, ActorId, "", 300);
+                                baseObject.StruckDamage((ushort)nDamage);
+                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                                 if (UsePoison)
                                 {
                                     if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0)
                                     {
-                                        baseObject.MakePosion(Grobal2.POISON_DECHEALTH, 30, 1);
+                                        baseObject.MakePosion(StatuStateConst.POISON_DECHEALTH, 30, 1);
                                     }
                                 }
                             }

@@ -1,5 +1,6 @@
 ﻿using GameSvr.Actor;
 using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -10,12 +11,12 @@ namespace GameSvr.Monster.Monsters
             ViewRange = 7;
         }
 
-        protected override BaseObject sub_4A9C78(byte bt05)
+        protected override BaseObject GasAttack(byte bt05)
         {
-            var baseObject = base.sub_4A9C78(bt05);
+            var baseObject = base.GasAttack(bt05);
             if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.HideMode)
             {
-                baseObject.StatusArr[Grobal2.STATE_TRANSPARENT] = 1;
+                baseObject.StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
             }
             return baseObject;
         }

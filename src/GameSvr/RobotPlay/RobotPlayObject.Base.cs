@@ -4,6 +4,7 @@ using GameSvr.Items;
 using GameSvr.Maps;
 using System.Collections;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.RobotPlay
@@ -21,7 +22,7 @@ namespace GameSvr.RobotPlay
             bool boFind = false;
             try
             {
-                if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[Grobal2.POISON_STONE] == 0)
+                if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[StatuStateConst.POISON_STONE] == 0)
                 {
                     if (HUtil32.GetTickCount() - WalkTick > WalkSpeed)
                     {
@@ -105,7 +106,7 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (Job > 0)
                                     {
-                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.Abil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
                                         {
                                             // 道法22前是否物理攻击
                                             if (Master != null)
@@ -133,7 +134,7 @@ namespace GameSvr.RobotPlay
                         {
                             if (M2Share.Config.boHPAutoMoveMap)
                             {
-                                if (Abil.HP <= Math.Round(Abil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
+                                if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
                                     m_dwHPToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
@@ -252,30 +253,30 @@ namespace GameSvr.RobotPlay
                                 if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000)
                                 {
                                     m_dwAutoAddHealthTick = HUtil32.GetTickCount();
-                                    nPercent = Abil.HP * 100 / Abil.MaxHP;
-                                    nValue = Abil.MaxHP / 10;
+                                    nPercent = WAbil.HP * 100 / WAbil.MaxHP;
+                                    nValue = WAbil.MaxHP / 10;
                                     if (nPercent < M2Share.Config.nRenewPercent)
                                     {
-                                        if (Abil.HP + nValue >= Abil.MaxHP)
+                                        if (WAbil.HP + nValue >= WAbil.MaxHP)
                                         {
-                                            Abil.HP = Abil.MaxHP;
+                                            WAbil.HP = WAbil.MaxHP;
                                         }
                                         else
                                         {
-                                            Abil.HP += (ushort)nValue;
+                                            WAbil.HP += (ushort)nValue;
                                         }
                                     }
-                                    nValue = Abil.MaxMP / 10;
-                                    nPercent = Abil.MP * 100 / Abil.MaxMP;
+                                    nValue = WAbil.MaxMP / 10;
+                                    nPercent = WAbil.MP * 100 / WAbil.MaxMP;
                                     if (nPercent < M2Share.Config.nRenewPercent)
                                     {
-                                        if (Abil.MP + nValue >= Abil.MaxMP)
+                                        if (WAbil.MP + nValue >= WAbil.MaxMP)
                                         {
-                                            Abil.MP = Abil.MaxMP;
+                                            WAbil.MP = WAbil.MaxMP;
                                         }
                                         else
                                         {
-                                            Abil.MP += (ushort)nValue;
+                                            WAbil.MP += (ushort)nValue;
                                         }
                                     }
                                 }
@@ -283,7 +284,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
 
-                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[Grobal2.POISON_STONE] == 0)
+                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[StatuStateConst.POISON_STONE] == 0)
                     {
                         if (m_boProtectStatus && TargetCret == null)// 守护状态
                         {

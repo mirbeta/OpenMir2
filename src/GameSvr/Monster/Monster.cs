@@ -1,6 +1,7 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Maps;
 using SystemModule;
+using SystemModule.Consts;
 using SystemModule.Data;
 
 namespace GameSvr.Monster
@@ -116,7 +117,7 @@ namespace GameSvr.Monster
 
         public override void Run()
         {
-            if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[Grobal2.POISON_STONE] == 0)
+            if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[StatuStateConst.POISON_STONE] == 0)
             {
                 if (Think())
                 {

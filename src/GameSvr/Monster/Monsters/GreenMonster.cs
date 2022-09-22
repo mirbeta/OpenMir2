@@ -1,4 +1,6 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using SystemModule;
+using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -19,9 +21,9 @@ namespace GameSvr.Monster.Monsters
                     TargetY = TargetCret.CurrY;
                     if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1)
                     {
-                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.StatusArr[Grobal2.POISON_DECHEALTH] == 0)
+                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.StatusArr[StatuStateConst.POISON_DECHEALTH] == 0)
                         {
-                            TargetCret.MakePosion(Grobal2.POISON_DECHEALTH, 30, 1);
+                            TargetCret.MakePosion(StatuStateConst.POISON_DECHEALTH, 30, 1);
                         }
                     }
                 }

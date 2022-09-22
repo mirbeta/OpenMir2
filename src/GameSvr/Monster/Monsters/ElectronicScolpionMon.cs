@@ -15,18 +15,17 @@ namespace GameSvr.Monster.Monsters
         private void LightingAttack(byte nDir)
         {
             Direction = nDir;
-            var wAbil = Abil;
-            int nPower = GetAttackPower(HUtil32.LoWord(wAbil.MC), HUtil32.HiWord(wAbil.MC) - HUtil32.LoWord(wAbil.MC));
+            int nPower = GetAttackPower(HUtil32.LoWord(WAbil.MC), HUtil32.HiWord(WAbil.MC) - HUtil32.LoWord(WAbil.MC));
             var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {
-                int btGetBackHp = HUtil32.LoByte(Abil.MP);
+                int btGetBackHp = HUtil32.LoByte(WAbil.MP);
                 if (btGetBackHp != 0)
                 {
-                    Abil.HP += (ushort)(nDamage / btGetBackHp);
+                    WAbil.HP += (ushort)(nDamage / btGetBackHp);
                 }
-                TargetCret.StruckDamage(nDamage);
-                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, TargetCret.Abil.HP, TargetCret.Abil.MaxHP, ActorId, "", 200);
+                TargetCret.StruckDamage((ushort)nDamage);
+                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, TargetCret.WAbil.HP, TargetCret.WAbil.MaxHP, ActorId, "", 200);
             }
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
         }
@@ -35,7 +34,7 @@ namespace GameSvr.Monster.Monsters
         {
             if (CanWalk())
             {
-                if (Abil.HP < Abil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
+                if (WAbil.HP < WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {
                     UseMagic = true;
                 }
