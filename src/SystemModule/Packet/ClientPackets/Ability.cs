@@ -133,6 +133,8 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(MaxMP);
             writer.Write(ExpCount);
             writer.Write(ExpMaxCount);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
             writer.Write(Exp);
             writer.Write(MaxExp);
             writer.Write(Weight);
