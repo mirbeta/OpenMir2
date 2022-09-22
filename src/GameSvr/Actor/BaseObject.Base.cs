@@ -696,7 +696,7 @@ namespace GameSvr.Actor
                     SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 M2Share.Log.Error(sExceptionMsg5);
             }

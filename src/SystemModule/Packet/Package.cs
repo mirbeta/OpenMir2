@@ -4,9 +4,7 @@ using System.Text;
 
 namespace SystemModule.Packet
 {
-    /// <summary>
-    /// Reads primitive data types from an array of binary data.
-    /// </summary>
+    [Serializable]
     public abstract class Packets
     {
         private readonly BinaryReader binaryReader;

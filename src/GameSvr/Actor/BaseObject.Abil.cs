@@ -150,7 +150,7 @@ namespace GameSvr.Actor
             bool[] cghi = new bool[4] { false, false, false, false };
             AddAbil = new AddAbility();
             var temp = WAbil;
-            WAbil = Abil;
+            WAbil = (Ability)Abil.Clone();
             WAbil.HP = temp.HP;
             WAbil.MP = temp.MP;
             WAbil.Weight = 0;
@@ -259,7 +259,7 @@ namespace GameSvr.Actor
             {
                 for (var i = 0; i <= 12; i++)
                 {
-                    if ((UseItems[i].Index > 0))
+                    if (UseItems[i] != null && (UseItems[i].Index > 0))
                     {
                         StdItem stdItem;
                         if (UseItems[i].Dura == 0)
@@ -1634,7 +1634,7 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.DC) + 4));
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 4));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             break;
@@ -1652,15 +1652,15 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(std.Item.DC) + 2));
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.AC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.AC) + 1));
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
                             break;
                         case PlayJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.AC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.AC) + 1));
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
                             break;
                         case PlayJob.Taoist:
                             std.Item.MC = 0;
@@ -1726,26 +1726,26 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(std.Item.DC) + 28));
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 28));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.AC) - 2, HUtil32.HiByte(std.Item.AC));
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC) - 2, HUtil32.HiByte(item.AC));
                             break;
                         case PlayJob.Wizard:
                             std.Item.SC = 0;
-                            if (HUtil32.HiByte(std.Item.MAC) > 12)
+                            if (HUtil32.HiByte(item.MAC) > 12)
                             {
-                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.MAC), HUtil32.HiByte(std.Item.MAC) - 12);
+                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC), HUtil32.HiByte(item.MAC) - 12);
                             }
                             else
                             {
-                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.MAC), 0);
+                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC), 0);
                             }
                             break;
                         case PlayJob.Taoist:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.DC) + 2, HUtil32._MIN(255, HUtil32.HiByte(std.Item.DC) + 10));
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC) + 2, HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 10));
                             std.Item.MC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.AC) - 2, HUtil32.HiByte(std.Item.AC));
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC) - 2, HUtil32.HiByte(item.AC));
                             break;
                     }
                 }
@@ -1756,45 +1756,44 @@ namespace GameSvr.Actor
                         switch (Job)
                         {
                             case PlayJob.Warrior:
-                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.DC) + 2));
+                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                                 std.Item.MC = 0;
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Wizard:
                                 std.Item.DC = 0;
-                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.MC) + 2));
+                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), HUtil32._MIN(255, HUtil32.HiByte(item.MC) + 2));
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Taoist:
                                 std.Item.DC = 0;
                                 std.Item.MC = 0;
-                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.SC) + 2));
+                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), HUtil32._MIN(255, HUtil32.HiByte(item.SC) + 2));
                                 break;
                         }
                     }
-                    else if ((std.Item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || (std.Item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || (std.Item.Shape == ShapeConst.BRONZEMEDAL_SHAPE))
+                    else if ((item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || (item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || (item.Shape == ShapeConst.BRONZEMEDAL_SHAPE))
                     {
                         switch (Job)
                         {
                             case PlayJob.Warrior:
-                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.DC)));
+                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
                                 std.Item.MC = 0;
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Wizard:
                                 std.Item.DC = 0;
-                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.MC)));
+                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), HUtil32._MIN(255, HUtil32.HiByte(item.MC)));
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Taoist:
                                 std.Item.DC = 0;
                                 std.Item.MC = 0;
-                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(std.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(std.Item.SC)));
+                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), HUtil32._MIN(255, HUtil32.HiByte(item.SC)));
                                 break;
                         }
                     }
                 }
-
                 if (((item.StdMode == 10) || (item.StdMode == 11)) && (item.Shape == ItemShapeConst.DRESS_SHAPE_PBKING))
                 {
                     switch (Job)
@@ -1863,15 +1862,13 @@ namespace GameSvr.Actor
             //AccuracyPoint = 15;
         }
 
-        private int GetMyLight_CheckLightValue()
+        public int GetMyLight()
         {
-            StdItem ps;
-            PlayObject hum;
             var CurrentLight = 0;
             if (Race == Grobal2.RC_PLAYOBJECT)
             {
-                hum = ((this) as PlayObject);
-                if (hum != null)
+                PlayObject playObject = ((this) as PlayObject);
+                if (playObject != null)
                 {
                     if (true)//BoHighLevelEffect
                     {
@@ -1881,29 +1878,26 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-            }
-            for (var i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
-            {
-                if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0))
+                for (var i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
                 {
-                    ps = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                    if (ps != null)
+                    if (UseItems[i] == null)
                     {
-                        if (CurrentLight < ps.Light)
+                        continue;
+                    }
+                    if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0))
+                    {
+                        StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                        if (stdItem != null)
                         {
-                            CurrentLight = ps.Light;
+                            if (CurrentLight < stdItem.Light)
+                            {
+                                CurrentLight = stdItem.Light;
+                            }
                         }
                     }
                 }
             }
-            var result = CurrentLight;
-            return result;
+            return CurrentLight;
         }
-
-        public int GetMyLight()
-        {
-            return GetMyLight_CheckLightValue();
-        }
-
     }
 }

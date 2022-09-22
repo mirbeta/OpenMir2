@@ -887,11 +887,11 @@ namespace GameSvr.Actor
             GoldMax = M2Share.Config.HumanMaxGold;
             CharStatus = 0;
             CharStatusEx = 0;
-            StatusArr = new ushort[12];
-            StatusArrTick = new int[12];
-            ExtraAbil = new ushort[6];
-            ExtraAbilTimes = new int[6];
-            ExtraAbilFlag = new byte[6];
+            StatusArr = new ushort[15];
+            StatusArrTick = new int[15];
+            ExtraAbil = new ushort[7];
+            ExtraAbilTimes = new int[7];
+            ExtraAbilFlag = new byte[7];
             BonusAbil = new NakedAbility();
             CurBonusAbil = new NakedAbility();
             AllowGroup = false;
@@ -5973,7 +5973,6 @@ namespace GameSvr.Actor
             {
                 ItemList[i] = null;
             }
-
             ItemList.Clear();
 
             OnEnvirnomentChanged();
