@@ -833,6 +833,9 @@ namespace GameSvr.Player
                 CharStatus = GetCharStatus();
                 RecalcLevelAbilitys();
                 RecalcAbilitys();
+                Abil.MaxExp = GetLevelExp(Abil.Level);// 登录重新取得升级所需经验值
+                WAbil.Exp = Abil.Exp;
+                WAbil.MaxExp = Abil.MaxExp;
                 if (BtB2 == 0)
                 {
                     PkPoint = 0;
@@ -905,9 +908,6 @@ namespace GameSvr.Player
                     }
                 }
                 m_btBright = (byte)M2Share.g_nGameTime;
-                Abil.MaxExp = GetLevelExp(Abil.Level);// 登录重新取得升级所需经验值
-                WAbil.Exp = Abil.Exp;
-                WAbil.MaxExp = Abil.MaxExp;
                 SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
