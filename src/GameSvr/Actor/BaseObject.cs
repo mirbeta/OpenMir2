@@ -4726,7 +4726,7 @@ namespace GameSvr.Actor
 
         public int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC) + 1);
+            var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
