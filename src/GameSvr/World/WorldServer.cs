@@ -189,7 +189,7 @@ namespace GameSvr.World
             var result = -1;
             if (MonsterList.ContainsKey(sMonName))
             {
-                return MonsterList[sMonName].btRace;
+                return MonsterList[sMonName].Race;
             }
             return result;
         }
