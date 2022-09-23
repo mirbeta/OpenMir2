@@ -1248,8 +1248,8 @@ namespace GameSvr.Player
             Abil.SC = HUtil32.MakeLong(HUtil32.LoWord(Abil.SC) + lsc, HUtil32.HiWord(Abil.SC) + hsc);
             Abil.AC = HUtil32.MakeLong(HUtil32.LoWord(Abil.AC) + lac, HUtil32.HiWord(Abil.AC) + hac);
             Abil.MAC = HUtil32.MakeLong(HUtil32.LoWord(Abil.MAC) + lmac, HUtil32.HiWord(Abil.MAC) + hmac);
-            Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, Abil.MaxHP + BonusAbil.HP / BonusTick.HP);
-            Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, Abil.MaxMP + BonusAbil.MP / BonusTick.MP);
+            Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxHP + BonusAbil.HP / BonusTick.HP);
+            Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxMP + BonusAbil.MP / BonusTick.MP);
         }
 
         private void ClientAdjustBonus(int nPoint, string sMsg)

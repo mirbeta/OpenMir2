@@ -17,6 +17,9 @@ namespace GameSvr.Items
         public string Name;
         public byte StdMode;
         public byte Shape;
+        /// <summary>
+        /// 物品重量
+        /// </summary>
         public byte Weight;
         public byte AniCount;
         public sbyte SpecialPwr;
