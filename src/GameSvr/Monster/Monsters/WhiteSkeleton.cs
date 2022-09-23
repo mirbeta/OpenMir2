@@ -1,7 +1,11 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using SystemModule;
 
 namespace GameSvr.Monster.Monsters
 {
+    /// <summary>
+    /// 变异骷髅
+    /// </summary>
     public class WhiteSkeleton : AtMonster
     {
         public bool MBoIsFirst;
@@ -31,7 +35,7 @@ namespace GameSvr.Monster.Monsters
                 this.FixedHideMode = false;
                 this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
             }
-            base.Run();
+            SavleAttackTarget();
         }
     }
 }
