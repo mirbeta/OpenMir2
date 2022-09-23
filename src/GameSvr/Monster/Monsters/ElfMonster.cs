@@ -70,9 +70,9 @@ namespace GameSvr.Monster.Monsters
                     if (elfMon != null)
                     {
                         elfMon.AutoChangeColor = AutoChangeColor;
-                        if (elfMon is ElfWarriorMonster)
+                        if (elfMon is ElfWarriorMonster monster)
                         {
-                            (elfMon as ElfWarriorMonster).AppearNow();
+                            monster.AppearNow();
                         }
                         Master = null;
                         KickException();

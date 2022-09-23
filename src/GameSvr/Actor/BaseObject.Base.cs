@@ -1093,7 +1093,7 @@ namespace GameSvr.Actor
             var result = true;
             if (BaseObject == null)
             {
-                return result;
+                return true;
             }
             if (InSafeZone() || BaseObject.InSafeZone())
             {
@@ -1103,40 +1103,35 @@ namespace GameSvr.Actor
             {
                 if (M2Share.Config.boPKLevelProtect)// 新人保护
                 {
-                    if (WAbil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
+                    if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
                     {
-                        if (!BaseObject.PvpFlag && BaseObject.WAbil.Level <= M2Share.Config.nPKProtectLevel &&
-                            BaseObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                        if (!BaseObject.PvpFlag && BaseObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && BaseObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                         {
-                            result = false;
-                            return result;
+                            return false;
                         }
                     }
-                    if (WAbil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
+                    if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
                     {
                         if (!BaseObject.PvpFlag && BaseObject.WAbil.Level > M2Share.Config.nPKProtectLevel && BaseObject.PvpLevel() < 2)
                         {
-                            result = false;
-                            return result;
+                            return false;
                         }
                     }
                 }
                 // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                if (PvpLevel() >= 2 && WAbil.Level > M2Share.Config.nRedPKProtectLevel)
+                if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
                 {
-                    if (BaseObject.WAbil.Level <= M2Share.Config.nRedPKProtectLevel && BaseObject.PvpLevel() < 2)
+                    if (BaseObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && BaseObject.PvpLevel() < 2)
                     {
-                        result = false;
-                        return result;
+                        return false;
                     }
                 }
                 // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                if (WAbil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
+                if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
                 {
-                    if (BaseObject.PvpLevel() >= 2 && BaseObject.WAbil.Level > M2Share.Config.nRedPKProtectLevel)
+                    if (BaseObject.PvpLevel() >= 2 && BaseObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
                     {
-                        result = false;
-                        return result;
+                        return false;
                     }
                 }
                 if (((HUtil32.GetTickCount() - MapMoveTick) < 3000) || ((HUtil32.GetTickCount() - BaseObject.MapMoveTick) < 3000))
