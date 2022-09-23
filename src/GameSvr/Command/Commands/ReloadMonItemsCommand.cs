@@ -18,7 +18,7 @@ namespace GameSvr.Command.Commands
                 for (var i = 0; i < keyList.Count; i++)
                 {
                     var Monster = M2Share.WorldEngine.MonsterList[keyList[i]];
-                    M2Share.LocalDb.LoadMonitems(Monster.sName, ref Monster.ItemList);
+                    M2Share.LocalDb.LoadMonitems(Monster.Name, ref Monster.ItemList);
                 }
                 PlayObject.SysMsg("怪物爆物品列表重加载完成...", MsgColor.Green, MsgType.Hint);
             }

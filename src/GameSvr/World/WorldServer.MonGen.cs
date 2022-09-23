@@ -84,9 +84,9 @@ namespace GameSvr.World
             for (int i = 0; i < monsterName.Count; i++)
             {
                 var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
-                if (!MonsterThreadMap.ContainsKey(MonsterList[monsterName[i].sName].sName))
+                if (!MonsterThreadMap.ContainsKey(MonsterList[monsterName[i].Name].Name))
                 {
-                    MonsterThreadMap.Add(MonsterList[monsterName[i].sName].sName, threadId);
+                    MonsterThreadMap.Add(MonsterList[monsterName[i].Name].Name, threadId);
                 }
             }
 
@@ -718,7 +718,7 @@ namespace GameSvr.World
 
             if (cert != null)
             {
-                MonInitialize(cert, sMonName);
+                ApplyMonsterAbility(cert, sMonName);
                 cert.Envir = map;
                 cert.MapName = sMapName;
                 cert.CurrX = nX;
@@ -861,33 +861,35 @@ namespace GameSvr.World
             return result;
         }
 
-        private void MonInitialize(BaseObject baseObject, string sMonName)
+        private void ApplyMonsterAbility(BaseObject baseObject, string sMonName)
         {
             if (MonsterList.TryGetValue(sMonName, out var monster))
             {
-                baseObject.Race = monster.btRace;
-                baseObject.RaceImg = monster.btRaceImg;
-                baseObject.Appr = monster.wAppr;
-                baseObject.Abil.Level = (byte)monster.wLevel;
+                baseObject.Race = monster.Race;
+                baseObject.RaceImg = monster.RaceImg;
+                baseObject.Appr = monster.Appr;
+                baseObject.Abil.Level = monster.Level;
                 baseObject.LifeAttrib = monster.btLifeAttrib;
-                baseObject.CoolEyeCode = (byte)monster.wCoolEye;
-                baseObject.FightExp = monster.dwExp;
-                baseObject.Abil.HP = monster.wHP;
-                baseObject.Abil.MaxHP = monster.wHP;
-                baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
+                baseObject.CoolEyeCode = monster.CoolEye;
+                baseObject.FightExp = monster.Exp;
+                baseObject.Abil.HP = monster.HP;
+                baseObject.Abil.MaxHP = monster.HP;
+                baseObject.MonsterWeapon = HUtil32.LoByte(monster.MP);
                 baseObject.Abil.MP = 0;
-                baseObject.Abil.MaxMP = monster.wMP;
-                baseObject.Abil.AC = (ushort)HUtil32.MakeLong(monster.wAC, monster.wAC);
-                baseObject.Abil.MAC = (ushort)HUtil32.MakeLong(monster.wMAC, monster.wMAC);
-                baseObject.Abil.DC = (ushort)HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
-                baseObject.Abil.MC = (ushort)HUtil32.MakeLong(monster.wMC, monster.wMC);
-                baseObject.Abil.SC = (ushort)HUtil32.MakeLong(monster.wSC, monster.wSC);
-                baseObject.SpeedPoint = (byte)monster.wSpeed;
-                baseObject.HitPoint = (byte)monster.wHitPoint;
-                baseObject.WalkSpeed = monster.wWalkSpeed;
-                baseObject.WalkStep = monster.wWalkStep;
-                baseObject.WalkWait = monster.wWalkWait;
-                baseObject.NextHitTime = monster.wAttackSpeed;
+                baseObject.Abil.MaxMP = monster.MP;
+                baseObject.Abil.AC = HUtil32.MakeWord(monster.AC, monster.AC);
+                baseObject.Abil.MAC = HUtil32.MakeWord(monster.MAC, monster.MAC);
+                baseObject.Abil.DC = HUtil32.MakeWord(monster.DC, monster.MaxDC);
+                baseObject.Abil.MC = HUtil32.MakeWord(monster.MC, monster.MC);
+                baseObject.Abil.SC = HUtil32.MakeWord(monster.SC, monster.SC);
+                baseObject.SpeedPoint = monster.Speed;
+                baseObject.HitPoint = monster.HitPoint;
+
+                baseObject.WalkSpeed = monster.WalkSpeed;
+                baseObject.WalkStep = monster.WalkStep;
+                baseObject.WalkWait = monster.WalkWait;
+                baseObject.NextHitTime = monster.AttackSpeed;
+
                 baseObject.NastyMode = monster.boAggro;
                 baseObject.NoTame = monster.boTame;
             }

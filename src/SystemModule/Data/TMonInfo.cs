@@ -7,23 +7,23 @@ namespace SystemModule.Data
         /// <summary>
         /// 怪物名
         /// </summary>
-        public string sName;
+        public string Name;
         /// <summary>
         /// 种族
         /// </summary>
-        public byte btRace;
+        public byte Race;
         /// <summary>
         /// 种族图像
         /// </summary>
-        public byte btRaceImg;
+        public byte RaceImg;
         /// <summary>
         /// 形像代码
         /// </summary>
-        public ushort wAppr;
+        public ushort Appr;
         /// <summary>
         /// 怪物等级
         /// </summary>
-        public ushort wLevel;
+        public byte Level;
         /// <summary>
         /// 不死系
         /// </summary>
@@ -31,41 +31,41 @@ namespace SystemModule.Data
         /// <summary>
         /// 视线范围
         /// </summary>
-        public short wCoolEye;
+        public byte CoolEye;
         /// <summary>
         /// 经验点数
         /// </summary>
-        public int dwExp;
-        public ushort wHP;
-        public ushort wMP;
-        public ushort wAC;
-        public ushort wMAC;
-        public ushort wDC;
-        public ushort wMaxDC;
-        public ushort wMC;
-        public ushort wSC;
-        public ushort wSpeed;
+        public int Exp;
+        public ushort HP;
+        public ushort MP;
+        public ushort AC;
+        public ushort MAC;
+        public ushort DC;
+        public ushort MaxDC;
+        public ushort MC;
+        public ushort SC;
+        public byte Speed;
         /// <summary>
         /// 命中率
         /// </summary>
-        public ushort wHitPoint;
+        public byte HitPoint;
         /// <summary>
         /// 行走速度
         /// </summary>
-        public ushort wWalkSpeed;
+        public ushort WalkSpeed;
         /// <summary>
         /// 行走步伐
         /// </summary>
-        public ushort wWalkStep;
+        public ushort WalkStep;
         /// <summary>
         /// 行走等待
         /// </summary>
-        public ushort wWalkWait;
+        public ushort WalkWait;
         /// <summary>
         /// 攻击速度
         /// </summary>
-        public ushort wAttackSpeed;
-        public ushort wAntiPush;
+        public ushort AttackSpeed;
+        public ushort AntiPush;
         public bool boAggro;
         public bool boTame;
         /// <summary>
