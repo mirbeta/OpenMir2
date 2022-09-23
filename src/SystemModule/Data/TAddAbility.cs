@@ -20,6 +20,9 @@
         public byte UnLuck;
         public byte WeaponStrong;
         public byte UndeadPower;
+        /// <summary>
+        /// 攻击速度
+        /// </summary>
         public ushort HitSpeed;
         public byte Slowdown;
         public byte Poison;

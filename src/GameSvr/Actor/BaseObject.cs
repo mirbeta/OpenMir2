@@ -2521,7 +2521,7 @@ namespace GameSvr.Actor
         }
 
         /// <summary>
-        /// 计算包裹物品重量
+        /// 计算包裹物品总重量
         /// </summary>
         /// <returns></returns>
         protected ushort RecalcBagWeight()
@@ -2529,8 +2529,7 @@ namespace GameSvr.Actor
             ushort result = 0;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                var userItem = ItemList[i];
-                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     result += stdItem.Weight;
