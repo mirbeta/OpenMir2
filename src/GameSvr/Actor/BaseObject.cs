@@ -4163,15 +4163,9 @@ namespace GameSvr.Actor
             return cert.PvpFlag;
         }
 
-        private bool IsAttackTarget_sub_4C88E4()
-        {
-            return true;
-        }
-
         /// <summary>
         /// 是否可以攻击的目标
         /// </summary>
-        /// <param name="baseObject"></param>
         /// <returns></returns>
         protected virtual bool IsAttackTarget(BaseObject baseObject)
         {
@@ -4180,127 +4174,104 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-
-            if (Race >= Grobal2.RC_ANIMAL)
+            switch (Race)
             {
-                if (Master != null)
-                {
-                    if ((Master.LastHiter == baseObject) || (Master.ExpHitter == baseObject) ||
-                        (Master.TargetCret == baseObject))
+                case >= Grobal2.RC_ANIMAL:
                     {
-                        result = true;
-                    }
-
-                    if (baseObject.TargetCret != null)
-                    {
-                        if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) &&
-                            (baseObject.Race != Grobal2.RC_PLAYOBJECT))
+                        if (Master != null)
                         {
-                            result = true;
-                        }
-                    }
-
-                    if ((baseObject.TargetCret == this) && (baseObject.Race >= Grobal2.RC_ANIMAL))
-                    {
-                        result = true;
-                    }
-
-                    if (baseObject.Master != null)
-                    {
-                        if ((baseObject.Master == Master.LastHiter) ||
-                            (baseObject.Master == Master.TargetCret))
-                        {
-                            result = true;
-                        }
-                    }
-
-                    if (baseObject.Master == Master)
-                    {
-                        result = false;
-                    }
-
-                    if (baseObject.HolySeize)
-                    {
-                        result = false;
-                    }
-
-                    if (Master.SlaveRelax)
-                    {
-                        result = false;
-                    }
-
-                    if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
-                    {
-                        if (baseObject.InSafeZone())
-                        {
-                            result = false;
-                        }
-                    }
-
-                    BreakCrazyMode();
-                }
-                else
-                {
-                    if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
-                    {
-                        result = true;
-                    }
-
-                    if ((Race > Grobal2.RC_PEACENPC) && (Race < Grobal2.RC_ANIMAL))
-                    {
-                        result = true;
-                    }
-
-                    if (baseObject.Master != null)
-                    {
-                        result = true;
-                    }
-                }
-
-                if (CrazyMode && ((baseObject.Race == Grobal2.RC_PLAYOBJECT) ||
-                                      (baseObject.Race > Grobal2.RC_PEACENPC)))
-                {
-                    result = true;
-                }
-
-                if (NastyMode && ((baseObject.Race < Grobal2.RC_NPC) ||
-                                      (baseObject.Race > Grobal2.RC_PEACENPC)))
-                {
-                    result = true;
-                }
-            }
-            else
-            {
-                if (Race == Grobal2.RC_PLAYOBJECT)
-                {
-                    switch (AttatckMode)
-                    {
-                        case AttackMode.HAM_ALL:
-                            if ((baseObject.Race < Grobal2.RC_NPC) ||
-                                (baseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((Master.LastHiter == baseObject) || (Master.ExpHitter == baseObject) || (Master.TargetCret == baseObject))
                             {
                                 result = true;
                             }
-
+                            if (baseObject.TargetCret != null)
+                            {
+                                if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) && (baseObject.Race != Grobal2.RC_PLAYOBJECT))
+                                {
+                                    result = true;
+                                }
+                            }
+                            if ((baseObject.TargetCret == this) && (baseObject.Race >= Grobal2.RC_ANIMAL))
+                            {
+                                result = true;
+                            }
+                            if (baseObject.Master != null)
+                            {
+                                if ((baseObject.Master == Master.LastHiter) || (baseObject.Master == Master.TargetCret))
+                                {
+                                    result = true;
+                                }
+                            }
+                            if (baseObject.Master == Master)
+                            {
+                                result = false;
+                            }
+                            if (baseObject.HolySeize)
+                            {
+                                result = false;
+                            }
+                            if (Master.SlaveRelax)
+                            {
+                                result = false;
+                            }
+                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            {
+                                if (baseObject.InSafeZone())
+                                {
+                                    result = false;
+                                }
+                            }
+                            BreakCrazyMode();
+                        }
+                        else
+                        {
+                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            {
+                                result = true;
+                            }
+                            if ((Race > Grobal2.RC_PEACENPC) && (Race < Grobal2.RC_ANIMAL))
+                            {
+                                result = true;
+                            }
+                            if (baseObject.Master != null)
+                            {
+                                result = true;
+                            }
+                        }
+                        if (CrazyMode && ((baseObject.Race == Grobal2.RC_PLAYOBJECT) || (baseObject.Race > Grobal2.RC_PEACENPC)))
+                        {
+                            result = true;
+                        }
+                        if (NastyMode && ((baseObject.Race < Grobal2.RC_NPC) || (baseObject.Race > Grobal2.RC_PEACENPC)))
+                        {
+                            result = true;
+                        }
+                        break;
+                    }
+                case Grobal2.RC_PLAYOBJECT:
+                    switch (AttatckMode)
+                    {
+                        case AttackMode.HAM_ALL:
+                            if ((baseObject.Race < Grobal2.RC_NPC) || (baseObject.Race > Grobal2.RC_PEACENPC))
+                            {
+                                result = true;
+                            }
                             if (M2Share.Config.PveServer)
                             {
-                                result = IsAttackTarget_sub_4C88E4();
+                                result = true;
                             }
-
                             break;
                         case AttackMode.HAM_PEACE:
                             if (baseObject.Race >= Grobal2.RC_ANIMAL)
                             {
                                 result = true;
                             }
-
                             break;
                         case AttackMode.HAM_DEAR:
                             if (baseObject != (this as PlayObject).m_DearHuman)
                             {
                                 result = true;
                             }
-
                             break;
                         case AttackMode.HAM_MASTER:
                             if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
@@ -4317,7 +4288,6 @@ namespace GameSvr.Actor
                                         }
                                     }
                                 }
-
                                 if ((baseObject as PlayObject).m_boMaster)
                                 {
                                     for (var i = 0; i < (baseObject as PlayObject).m_MasterList.Count; i++)
@@ -4334,7 +4304,6 @@ namespace GameSvr.Actor
                             {
                                 result = true;
                             }
-
                             break;
                         case AttackMode.HAM_GROUP:
                             if ((baseObject.Race < Grobal2.RC_NPC) ||
@@ -4353,7 +4322,7 @@ namespace GameSvr.Actor
 
                             if (M2Share.Config.PveServer)
                             {
-                                result = IsAttackTarget_sub_4C88E4();
+                                result = true;
                             }
 
                             break;
@@ -4385,17 +4354,15 @@ namespace GameSvr.Actor
 
                             if (M2Share.Config.PveServer)
                             {
-                                result = IsAttackTarget_sub_4C88E4();
+                                result = true;
                             }
 
                             break;
                         case AttackMode.HAM_PKATTACK:
-                            if ((baseObject.Race < Grobal2.RC_NPC) ||
-                                (baseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < Grobal2.RC_NPC) || (baseObject.Race > Grobal2.RC_PEACENPC))
                             {
                                 result = true;
                             }
-
                             if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
                             {
                                 if (PvpLevel() >= 2)
@@ -4421,26 +4388,21 @@ namespace GameSvr.Actor
                                     }
                                 }
                             }
-
                             if (M2Share.Config.PveServer)
                             {
-                                result = IsAttackTarget_sub_4C88E4();
+                                result = true;
                             }
-
                             break;
                     }
-                }
-                else
-                {
+                    break;
+                default:
                     result = true;
-                }
+                    break;
             }
-
             if (baseObject.AdminMode || baseObject.StoneMode)
             {
                 result = false;
             }
-
             return result;
         }
 
@@ -4454,9 +4416,7 @@ namespace GameSvr.Actor
                     result = IsProtectTarget(baseObject);
                 }
             }
-
-            if ((baseObject != null) && (Race == Grobal2.RC_PLAYOBJECT) && (baseObject.Master != null) &&
-                (baseObject.Race != Grobal2.RC_PLAYOBJECT))
+            if ((baseObject != null) && (Race == Grobal2.RC_PLAYOBJECT) && (baseObject.Master != null) && (baseObject.Race != Grobal2.RC_PLAYOBJECT))
             {
                 if (baseObject.Master == this)
                 {

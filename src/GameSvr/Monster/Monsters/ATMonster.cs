@@ -24,7 +24,10 @@ namespace GameSvr.Monster.Monsters
             base.Run();
         }
 
-        public void SavleAttackTarget()
+        /// <summary>
+        /// 属下攻击
+        /// </summary>
+        protected void SlaveAttackTarget()
         {
             if (TargetCret != null)
             {
@@ -33,12 +36,13 @@ namespace GameSvr.Monster.Monsters
                     TargetCret = null;
                 }
                 base.Run();
+                return;
             }
             if (Master != null && (Master.TargetCret != null || Master.LastHiter != null))
             {
-                BaseObject BaseObject18 = null;
+                BaseObject attackTarget = null;
                 var n10 = 999;
-                for (var i = 0; i < Master.VisibleActors.Count; i++)
+                for (var i = 0; i < Master.VisibleActors.Count; i++) //共享主人的视野
                 {
                     var baseObject = Master.VisibleActors[i].BaseObject;
                     if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15))
@@ -46,22 +50,19 @@ namespace GameSvr.Monster.Monsters
                         ClearTargetCreat(baseObject);
                         continue;
                     }
-                    if (!baseObject.Death)
+                    if (this.IsProperTarget(baseObject) && (!baseObject.HideMode || this.CoolEye))
                     {
-                        if (this.IsProperTarget(baseObject) && (!baseObject.HideMode || this.CoolEye))
+                        var nC = Math.Abs(this.CurrX - baseObject.CurrX) + Math.Abs(this.CurrY - baseObject.CurrY);
+                        if (nC < n10)
                         {
-                            var nC = Math.Abs(this.CurrX - baseObject.CurrX) + Math.Abs(this.CurrY - baseObject.CurrY);
-                            if (nC < n10)
-                            {
-                                n10 = nC;
-                                BaseObject18 = baseObject;
-                            }
+                            n10 = nC;
+                            attackTarget = baseObject;
                         }
                     }
                 }
-                if (BaseObject18 != null)
+                if (attackTarget != null)
                 {
-                    this.SetTargetCreat(BaseObject18);
+                    this.SetTargetCreat(attackTarget);
                 }
             }
             base.Run();
