@@ -562,7 +562,7 @@ namespace GameSvr.Maps
                 _path = value;
             }
         }
-        
+
         private PointInfo[] _path;
         private Envirnoment _pathEnvir;
         public int BeginX;

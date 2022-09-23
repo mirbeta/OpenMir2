@@ -1,6 +1,5 @@
 ﻿using GameSvr.Actor;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Monster.Monsters
 {

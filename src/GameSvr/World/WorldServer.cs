@@ -193,7 +193,7 @@ namespace GameSvr.World
             }
             return result;
         }
-        
+
         private int GetMonsterThreadId(string sMonName)
         {
             if (MonsterThreadMap.TryGetValue(sMonName, out var threadId))
@@ -746,8 +746,8 @@ namespace GameSvr.World
             }
             catch (Exception ex)
             {
-               _logger.Error(sExceptionMsg);
-               _logger.Error(ex.StackTrace);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(ex.StackTrace);
             }
         }
 
@@ -1693,7 +1693,7 @@ namespace GameSvr.World
                             var osObject = cellInfo.ObjList[i];
                             if (osObject != null && osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                             {
-                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
@@ -2008,10 +2008,10 @@ namespace GameSvr.World
 
         public void StartAi()
         {
-           // if (_processRobotTimer.ThreadState != ThreadState.Running)
-           // {
-           //     _processRobotTimer.Start();
-           // }
+            // if (_processRobotTimer.ThreadState != ThreadState.Running)
+            // {
+            //     _processRobotTimer.Start();
+            // }
         }
 
         public void AddAiLogon(RoBotLogon ai)

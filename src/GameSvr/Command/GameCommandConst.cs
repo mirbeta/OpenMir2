@@ -128,6 +128,6 @@
         public static string PleaseInputPassword = "请输入密码:";
         public static string TheMapDisableMove = "地图{0}({1})不允许传送!!!";
         public static string TheMapNotFound = "{0} 此地图号不存在!!!";
-       
+
     }
 }
