@@ -2,12 +2,10 @@
 using GameSvr.Event;
 using GameSvr.Guild;
 using GameSvr.Items;
-using GameSvr.Magic;
 using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
 using GameSvr.Player;
-using System.Collections;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -1187,7 +1185,7 @@ namespace GameSvr.Actor
                 SendUpdateMsg(this, Grobal2.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
             }
         }
-        
+
         public void HasLevelUp(int nLevel)
         {
             Abil.MaxExp = GetLevelExp(Abil.Level);
@@ -2537,7 +2535,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         private void AddItemSkill(int nIndex)
         {
             MagicInfo magic = null;
@@ -4771,7 +4769,7 @@ namespace GameSvr.Actor
 
                 if (nOldDura != HUtil32.Round(nDura / 1000))
                 {
-                    SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0,"");
+                    SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
                 }
             }
 

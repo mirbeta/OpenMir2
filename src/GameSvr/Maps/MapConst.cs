@@ -34,7 +34,7 @@ namespace GameSvr.Maps
         public int CanPickUpTick;
         public UserItem UserItem;
     }
-    
+
     /// <summary>
     /// 地图连接
     /// </summary>

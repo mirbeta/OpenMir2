@@ -1,7 +1,5 @@
 ﻿using GameSvr.Actor;
-using GameSvr.Maps;
 using SystemModule;
-using SystemModule.Consts;
 using SystemModule.Data;
 
 namespace GameSvr.Monster
@@ -23,7 +21,6 @@ namespace GameSvr.Monster
 
         protected BaseObject MakeClone(string sMonName, BaseObject OldMon)
         {
-            BaseObject result = null;
             var ElfMon = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
@@ -33,10 +30,6 @@ namespace GameSvr.Monster
                 ElfMon.SlaveExpLevel = OldMon.SlaveExpLevel;
                 ElfMon.RecalcAbilitys();
                 ElfMon.RefNameColor();
-                if (OldMon.Master != null)
-                {
-                    OldMon.Master.SlaveList.Add(ElfMon);
-                }
                 ElfMon.Abil = OldMon.Abil;
                 ElfMon.StatusArr = OldMon.StatusArr;
                 ElfMon.TargetCret = OldMon.TargetCret;
@@ -44,9 +37,13 @@ namespace GameSvr.Monster
                 ElfMon.LastHiter = OldMon.LastHiter;
                 ElfMon.LastHiterTick = OldMon.LastHiterTick;
                 ElfMon.Direction = OldMon.Direction;
-                result = ElfMon;
+                if (OldMon.Master != null)
+                {
+                    OldMon.Master.SlaveList.Add(ElfMon);
+                }
+                return ElfMon;
             }
-            return result;
+            return null;
         }
 
         protected override bool Operate(ProcessMessage ProcessMsg)
@@ -85,7 +82,6 @@ namespace GameSvr.Monster
 
         protected virtual bool AttackTarget()
         {
-            var result = false;
             byte btDir = 0;
             if (TargetCret != null)
             {
@@ -98,7 +94,7 @@ namespace GameSvr.Monster
                         Attack(TargetCret, btDir);
                         BreakHolySeizeMode();
                     }
-                    result = true;
+                    return true;
                 }
                 else
                 {
@@ -112,12 +108,12 @@ namespace GameSvr.Monster
                     }
                 }
             }
-            return result;
+            return false;
         }
 
         public override void Run()
         {
-            if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[StatuStateConst.POISON_STONE] == 0)
+            if (CanWalk() && !FixedHideMode && !StoneMode)
             {
                 if (Think())
                 {

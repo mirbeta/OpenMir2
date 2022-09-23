@@ -60,7 +60,7 @@ namespace GameSvr.Items
         public byte ItemType;
         public ushort ItemSet;
         public string Reference;
-        
+
         public int GetUpgrade(int count, int ran)
         {
             var result = 0;
@@ -1134,13 +1134,13 @@ namespace GameSvr.Items
             int iTemp = RealAttackSpeed(bUserAtkSpd) + iUpValue;
             return ((byte)NaturalAttackSpeed(iTemp));
         }
-        
+
         public void RandomUpgradeItem(UserItem pu)
         {
             StdItem pstd = M2Share.WorldEngine.GetStdItem(pu.Index);
             if (pstd != null)
             {
-                switch(pstd.StdMode)
+                switch (pstd.StdMode)
                 {
                     case 5:
                     case 6:
@@ -1173,13 +1173,13 @@ namespace GameSvr.Items
                 }
             }
         }
-        
+
         public void RandomSetUnknownItem(UserItem pu)
         {
             StdItem pstd = M2Share.WorldEngine.GetStdItem(pu.Index);
             if (pstd != null)
             {
-                switch(pstd.StdMode)
+                switch (pstd.StdMode)
                 {
                     case 15:
                         RandomSetUnknownHelmet(pu);

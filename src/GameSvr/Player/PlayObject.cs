@@ -1,5 +1,4 @@
 ﻿using GameSvr.Actor;
-using GameSvr.Castle;
 using GameSvr.Command;
 using GameSvr.Event.Events;
 using GameSvr.Guild;
@@ -7,8 +6,6 @@ using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Services;
-using System;
-using System.Collections;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
@@ -1140,7 +1137,7 @@ namespace GameSvr.Player
                         clientItem.Dura = UseItems[i].Dura;
                         clientItem.DuraMax = UseItems[i].DuraMax;
                         clientItem.MakeIndex = UseItems[i].MakeIndex;
-                        ChangeItemByJob (ref clientItem, Abil.Level);
+                        ChangeItemByJob(ref clientItem, Abil.Level);
                         sSendMsg = sSendMsg + i + '/' + EDCode.EncodeBuffer(clientItem) + '/';
                     }
                 }
@@ -2174,9 +2171,9 @@ namespace GameSvr.Player
                             }
                             if (HUtil32.HiByte(StdItem.AC) > 0)
                             {
-                                ExtraAbil[AbilConst.EABIL_HITSPEEDUP] =(ushort) HUtil32._MAX(ExtraAbil[AbilConst.EABIL_HITSPEEDUP], HUtil32.HiByte(StdItem.AC));
+                                ExtraAbil[AbilConst.EABIL_HITSPEEDUP] = (ushort)HUtil32._MAX(ExtraAbil[AbilConst.EABIL_HITSPEEDUP], HUtil32.HiByte(StdItem.AC));
                                 ExtraAbilFlag[AbilConst.EABIL_HITSPEEDUP] = 0;
-                                ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP] =HUtil32. _MAX(ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP], HUtil32.GetTickCount() + HUtil32.HiByte(StdItem.DC) * 60 * 1000 + HUtil32.HiByte(StdItem.MAC) * 1000);
+                                ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP] = HUtil32._MAX(ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP], HUtil32.GetTickCount() + HUtil32.HiByte(StdItem.DC) * 60 * 1000 + HUtil32.HiByte(StdItem.MAC) * 1000);
                                 SysMsg("攻速瞬间提高" + (HUtil32.HiByte(StdItem.DC) + HUtil32.HiByte(StdItem.MAC) / 60) + "分" + (HUtil32.HiByte(StdItem.MAC) % 60) + "秒。", MsgColor.Blue, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
@@ -3883,7 +3880,8 @@ namespace GameSvr.Player
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         nTemp = 0;
                     }
                     SendDefMessage(Grobal2.SM_ITEMDLGSELECT, 1, nTemp, 0, 0, "");

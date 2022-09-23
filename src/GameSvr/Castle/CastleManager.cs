@@ -2,7 +2,6 @@
 using GameSvr.Command;
 using GameSvr.Maps;
 using NLog;
-using System.Collections;
 using SystemModule.Common;
 
 namespace GameSvr.Castle

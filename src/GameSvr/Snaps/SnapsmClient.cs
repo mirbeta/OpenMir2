@@ -110,8 +110,8 @@ namespace GameSvr.Snaps
             }
             catch (Exception ex)
             {
-               _logger.Error(sExceptionMsg);
-               _logger.Error(ex.StackTrace);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(ex.StackTrace);
             }
         }
 

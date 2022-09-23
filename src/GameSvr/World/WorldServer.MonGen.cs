@@ -3,8 +3,6 @@ using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
-using System.Collections;
-using System.Threading;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
@@ -879,7 +877,7 @@ namespace GameSvr.World
                 baseObject.MonsterWeapon = HUtil32.LoByte(monster.wMP);
                 baseObject.Abil.MP = 0;
                 baseObject.Abil.MaxMP = monster.wMP;
-                baseObject.Abil.AC =(ushort) HUtil32.MakeLong(monster.wAC, monster.wAC);
+                baseObject.Abil.AC = (ushort)HUtil32.MakeLong(monster.wAC, monster.wAC);
                 baseObject.Abil.MAC = (ushort)HUtil32.MakeLong(monster.wMAC, monster.wMAC);
                 baseObject.Abil.DC = (ushort)HUtil32.MakeLong(monster.wDC, monster.wMaxDC);
                 baseObject.Abil.MC = (ushort)HUtil32.MakeLong(monster.wMC, monster.wMC);

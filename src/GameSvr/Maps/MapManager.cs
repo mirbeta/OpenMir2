@@ -181,7 +181,7 @@ namespace GameSvr.Maps
 
         public void ProcessMapDoor()
         {
-            
+
         }
 
         public void ReSetMinMap()
