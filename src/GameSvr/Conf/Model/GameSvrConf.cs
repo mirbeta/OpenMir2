@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using Spectre.Console;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
@@ -1174,12 +1175,12 @@ namespace GameSvr.Conf.Model
             ReNewNameColorTime = 2000;
             ReNewChangeColor = true;
             ReNewLevelClearExp = true;
-            BonusAbilofWarr = new NakedAbility { DC = 17, MC = 20, SC = 20, AC = 20, MAC = 20, HP = 1, MP = 3, Hit = 20, Speed = 35, X2 = 0 };
-            BonusAbilofWizard = new NakedAbility { DC = 17, MC = 25, SC = 30, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 25, Speed = 35, X2 = 0 };
-            BonusAbilofTaos = new NakedAbility { DC = 20, MC = 30, SC = 17, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 30, Speed = 30, X2 = 0 };
-            NakedAbilofWarr = new NakedAbility { DC = 512, MC = 2560, SC = 20, AC = 768, MAC = 1280, HP = 0, MP = 0, Hit = 0, Speed = 0, X2 = 0 };
-            NakedAbilofWizard = new NakedAbility { DC = 512, MC = 512, SC = 2560, AC = 1280, MAC = 768, HP = 0, MP = 0, Hit = 5, Speed = 0, X2 = 0 };
-            NakedAbilofTaos = new NakedAbility { DC = 20, MC = 30, SC = 17, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 30, Speed = 30, X2 = 0 };
+            BonusAbilofWarr = new NakedAbility { DC = 17, MC = 20, SC = 20, AC = 20, MAC = 20, HP = 1, MP = 3, Hit = 20, Speed = 35, Reserved = 0 };
+            BonusAbilofWizard = new NakedAbility { DC = 17, MC = 25, SC = 30, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 25, Speed = 35, Reserved = 0 };
+            BonusAbilofTaos = new NakedAbility { DC = 20, MC = 30, SC = 17, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 30, Speed = 30, Reserved = 0 };
+            NakedAbilofWarr = new NakedAbility { DC = 512, MC = 2560, SC = 20, AC = 768, MAC = 1280, HP = 0, MP = 0, Hit = 0, Speed = 0, Reserved = 0 };
+            NakedAbilofWizard = new NakedAbility { DC = 512, MC = 512, SC = 2560, AC = 1280, MAC = 768, HP = 0, MP = 0, Hit = 5, Speed = 0, Reserved = 0 };
+            NakedAbilofTaos = new NakedAbility { DC = 20, MC = 30, SC = 17, AC = 20, MAC = 15, HP = 2, MP = 1, Hit = 30, Speed = 30, Reserved = 0 };
             UpgradeWeaponMaxPoint = 20;
             UpgradeWeaponPrice = 10000;
             UPgradeWeaponGetBackTime = 60 * 60 * 1000;
@@ -1629,27 +1630,16 @@ namespace GameSvr.Conf.Model
             MPStoneDecDura = 1000; //魔血石
             ClientConf = new ClientConf()
             {
-                boClientCanSet = true,
-                boRunHuman = false,
-                boRunMon = false,
-                boRunNpc = false,
-                boWarRunAll = false,
-                btDieColor = 5,
-                wSpellTime = 500,
-                wHitIime = 1400,
-                wItemFlashTime = 5 * 100,
-                btItemSpeed = 25,
-                boCanStartRun = false,
-                boParalyCanRun = false,
-                boParalyCanWalk = false,
-                boParalyCanHit = false,
-                boParalyCanSpell = false,
-                boShowRedHPLable = false,
-                boShowHPNumber = false,
-                boShowJobLevel = true,
-                boDuraAlert = true,
-                boMagicLock = false,
-                boAutoPuckUpItem = false
+                boGameAssist = true,
+                boWhisperRecord = true,
+                boMaketSystem = true,
+                boNoFog = false,
+                boStallSystem = true,
+                boShowHpBar = true,
+                boShowHpNumber = true,
+                boNoStruck = false,
+                boFastMove = false,
+                boShowGameShop = true
             };
             WeaponMakeUnLuckRate = 20;
             WeaponMakeLuckPoint1 = 1;

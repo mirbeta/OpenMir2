@@ -432,7 +432,7 @@ namespace DBSvr.Storage.MySQL
                     HumanRCD.Data.BonusAbil.MP = dr.GetUInt16("FLD_MP");
                     HumanRCD.Data.BonusAbil.Hit = dr.GetByte("FLD_HIT");
                     HumanRCD.Data.BonusAbil.Speed = dr.GetInt32("FLD_SPEED");
-                    HumanRCD.Data.BonusAbil.X2 = dr.GetByte("FLD_RESERVED");
+                    HumanRCD.Data.BonusAbil.Reserved = dr.GetByte("FLD_RESERVED");
                 }
                 dr.Close();
                 dr.Dispose();
@@ -1141,7 +1141,7 @@ namespace DBSvr.Storage.MySQL
             command.Parameters.AddWithValue("@FLD_MP", bonusAbil.MP);
             command.Parameters.AddWithValue("@FLD_HIT", bonusAbil.Hit);
             command.Parameters.AddWithValue("@FLD_SPEED", bonusAbil.Speed);
-            command.Parameters.AddWithValue("@FLD_RESERVED", bonusAbil.X2);
+            command.Parameters.AddWithValue("@FLD_RESERVED", bonusAbil.Reserved);
             command.CommandText = sSqlStr;
             try
             {

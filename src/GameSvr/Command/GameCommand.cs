@@ -42,7 +42,7 @@ namespace GameSvr.Command
         public readonly GameCmd Gsa;
         public readonly GameCmd Recall;
         public readonly GameCmd Regoto;
-        
+
         [ConvertToBinary(typeof(SearchMasterCommand))]
         public readonly GameCmd Master;
         [ConvertToBinary(typeof(SearchDearCommand))]
@@ -175,7 +175,7 @@ namespace GameSvr.Command
         public readonly GameCmd SueprMan;
         [ConvertToBinary(typeof(ChangeLevelCommand))]
         public readonly GameCmd Level;
-        [ConvertToBinary(typeof(ShowHumanFlagCommand))] 
+        [ConvertToBinary(typeof(ShowHumanFlagCommand))]
         public readonly GameCmd Showflag;
         [ConvertToBinary(typeof(MobCommand))]
         public readonly GameCmd Mob;

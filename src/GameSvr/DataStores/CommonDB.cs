@@ -205,54 +205,54 @@ namespace GameSvr.DataStores
                         Monster = new MonsterInfo
                         {
                             ItemList = new List<TMonItem>(),
-                            sName = dr.GetString("NAME").Trim(),
-                            btRace = (byte)dr.GetInt32("Race"),
-                            btRaceImg = (byte)dr.GetInt32("RaceImg"),
-                            wAppr = dr.GetUInt16("Appr"),
-                            wLevel = dr.GetUInt16("Lvl"),
+                            Name = dr.GetString("NAME").Trim(),
+                            Race = (byte)dr.GetInt32("Race"),
+                            RaceImg = (byte)dr.GetInt32("RaceImg"),
+                            Appr = dr.GetUInt16("Appr"),
+                            Level = dr.GetByte("Lvl"),
                             btLifeAttrib = (byte)dr.GetInt32("Undead"),
-                            wCoolEye = dr.GetInt16("CoolEye"),
-                            dwExp = dr.GetInt32("Exp")
+                            CoolEye = dr.GetByte("CoolEye"),
+                            Exp = dr.GetInt32("Exp")
                         };
                         // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
-                        if (Monster.btRace == 110 || Monster.btRace == 111)
+                        if (Monster.Race == 110 || Monster.Race == 111)
                         {
                             // 如果为城墙或城门由HP不加倍
-                            Monster.wHP = dr.GetUInt16("HP");
+                            Monster.HP = dr.GetUInt16("HP");
                         }
                         else
                         {
-                            Monster.wHP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.MonsterPowerRate / 10));
+                            Monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.MonsterPowerRate / 10));
                         }
-                        Monster.wMP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.wAC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.wMAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.wDC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.wMaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.wMC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.wSC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.wSpeed = dr.GetUInt16("SPEED");
-                        Monster.wHitPoint = dr.GetUInt16("HIT");
-                        Monster.wWalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
-                        Monster.wWalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
-                        Monster.wWalkWait = (ushort)dr.GetInt32("WalkWait");
-                        Monster.wAttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
-                        if (Monster.wWalkSpeed < 200)
+                        Monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.MonsterPowerRate / 10));
+                        Monster.Speed = dr.GetByte("SPEED");
+                        Monster.HitPoint = dr.GetByte("HIT");
+                        Monster.WalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
+                        Monster.WalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
+                        Monster.WalkWait = (ushort)dr.GetInt32("WalkWait");
+                        Monster.AttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
+                        if (Monster.WalkSpeed < 200)
                         {
-                            Monster.wWalkSpeed = 200;
+                            Monster.WalkSpeed = 200;
                         }
-                        if (Monster.wAttackSpeed < 200)
+                        if (Monster.AttackSpeed < 200)
                         {
-                            Monster.wAttackSpeed = 200;
+                            Monster.AttackSpeed = 200;
                         }
                         Monster.ItemList = null;
-                        M2Share.LocalDb.LoadMonitems(Monster.sName, ref Monster.ItemList);
-                        if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.sName))
+                        M2Share.LocalDb.LoadMonitems(Monster.Name, ref Monster.ItemList);
+                        if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.Name))
                         {
-                            M2Share.Log.Error($"怪物名称[{Monster.sName}]重复,请确认数据是否正常.");
+                            M2Share.Log.Error($"怪物名称[{Monster.Name}]重复,请确认数据是否正常.");
                             continue;
                         }
-                        M2Share.WorldEngine.MonsterList.Add(Monster.sName, Monster);
+                        M2Share.WorldEngine.MonsterList.Add(Monster.Name, Monster);
                         result = 1;
                     }
                 }

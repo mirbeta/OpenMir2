@@ -1,5 +1,4 @@
 ﻿using GameSvr.Actor;
-using GameSvr.Castle;
 using GameSvr.Command;
 using GameSvr.Event.Events;
 using GameSvr.Guild;
@@ -7,8 +6,6 @@ using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Services;
-using System;
-using System.Collections;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
@@ -1059,17 +1056,10 @@ namespace GameSvr.Player
                     nWarRunAll = 1;
                 }
             }
-            var ClientConf = M2Share.Config.ClientConf;
-            ClientConf.boRunHuman = nRunHuman == 1;
-            ClientConf.boRunMon = nRunMon == 1;
-            ClientConf.boRunNpc = nRunNpc == 1;
-            ClientConf.boWarRunAll = nWarRunAll == 1;
-            ClientConf.wSpellTime = (ushort)(M2Share.Config.MagicHitIntervalTime + 300);
-            ClientConf.wHitIime = (ushort)(M2Share.Config.HitIntervalTime + 500);
-            var sMsg = EDCode.EncodeBuffer(ClientConf);
-            var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
-            var nParam = (short)HUtil32.MakeWord(5, 0);
-            SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, nParam, 0, 0, sMsg);
+            var sMsg = EDCode.EncodeBuffer(M2Share.Config.ClientConf);
+            //var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
+            //var nParam = (short)HUtil32.MakeWord(5, 0);
+            SendDefMessage(Grobal2.SM_SERVERCONFIG, 0, 0, 0, 0, sMsg);
         }
 
         private void SendServerStatus()
@@ -1140,7 +1130,11 @@ namespace GameSvr.Player
                         clientItem.Dura = UseItems[i].Dura;
                         clientItem.DuraMax = UseItems[i].DuraMax;
                         clientItem.MakeIndex = UseItems[i].MakeIndex;
-                        ChangeItemByJob (ref clientItem, Abil.Level);
+                        if (i == Grobal2.U_DRESS)
+                        {
+                            ChangeItemWithLevel(ref clientItem, Abil.Level);
+                        }
+                        ChangeItemByJob(ref clientItem, Abil.Level);
                         sSendMsg = sSendMsg + i + '/' + EDCode.EncodeBuffer(clientItem) + '/';
                     }
                 }
@@ -1255,7 +1249,7 @@ namespace GameSvr.Player
         private void ClientAdjustBonus(int nPoint, string sMsg)
         {
             var BonusAbil = new NakedAbility();
-            var nTotleUsePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.X2;
+            var nTotleUsePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.Reserved;
             if (nPoint + nTotleUsePoint == BonusPoint)
             {
                 BonusPoint = nPoint;
@@ -1268,7 +1262,7 @@ namespace GameSvr.Player
                 this.BonusAbil.MP += BonusAbil.MP;
                 this.BonusAbil.Hit += BonusAbil.Hit;
                 this.BonusAbil.Speed += BonusAbil.Speed;
-                this.BonusAbil.X2 += BonusAbil.X2;
+                this.BonusAbil.Reserved += BonusAbil.Reserved;
                 RecalcAbilitys();
                 SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
@@ -1768,7 +1762,48 @@ namespace GameSvr.Player
                 {
                     clientItem.Item.Name = clientItem.Item.Name + " #" + UserItem.Dura;
                 }
-                ChangeItemByJob(ref clientItem, Abil.Level);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
+                SendSocket(m_DefMsg, EDCode.EncodeBuffer(clientItem));
+            }
+        }
+
+        public void SendUpdateItemWithLevel(UserItem UserItem, byte level)
+        {
+            var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+            if (stdItem != null)
+            {
+                var clientItem = new ClientItem();
+                stdItem.GetUpgradeStdItem(UserItem, ref clientItem);
+                clientItem.Item.Name = CustomItem.GetItemName(UserItem);
+                clientItem.MakeIndex = UserItem.MakeIndex;
+                clientItem.Dura = UserItem.Dura;
+                clientItem.DuraMax = UserItem.DuraMax;
+                if (stdItem.StdMode == 50)
+                {
+                    clientItem.Item.Name = clientItem.Item.Name + " #" + UserItem.Dura;
+                }
+                ChangeItemWithLevel(ref clientItem, level);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
+                SendSocket(m_DefMsg, EDCode.EncodeBuffer(clientItem));
+            }
+        }
+
+        public void SendUpdateItemByJob(UserItem UserItem, byte level)
+        {
+            var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+            if (stdItem != null)
+            {
+                var clientItem = new ClientItem();
+                stdItem.GetUpgradeStdItem(UserItem, ref clientItem);
+                clientItem.Item.Name = CustomItem.GetItemName(UserItem);
+                clientItem.MakeIndex = UserItem.MakeIndex;
+                clientItem.Dura = UserItem.Dura;
+                clientItem.DuraMax = UserItem.DuraMax;
+                if (stdItem.StdMode == 50)
+                {
+                    clientItem.Item.Name = clientItem.Item.Name + " #" + UserItem.Dura;
+                }
+                ChangeItemByJob(ref clientItem, level);
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
                 SendSocket(m_DefMsg, EDCode.EncodeBuffer(clientItem));
             }
@@ -2174,9 +2209,9 @@ namespace GameSvr.Player
                             }
                             if (HUtil32.HiByte(StdItem.AC) > 0)
                             {
-                                ExtraAbil[AbilConst.EABIL_HITSPEEDUP] =(ushort) HUtil32._MAX(ExtraAbil[AbilConst.EABIL_HITSPEEDUP], HUtil32.HiByte(StdItem.AC));
+                                ExtraAbil[AbilConst.EABIL_HITSPEEDUP] = (ushort)HUtil32._MAX(ExtraAbil[AbilConst.EABIL_HITSPEEDUP], HUtil32.HiByte(StdItem.AC));
                                 ExtraAbilFlag[AbilConst.EABIL_HITSPEEDUP] = 0;
-                                ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP] =HUtil32. _MAX(ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP], HUtil32.GetTickCount() + HUtil32.HiByte(StdItem.DC) * 60 * 1000 + HUtil32.HiByte(StdItem.MAC) * 1000);
+                                ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP] = HUtil32._MAX(ExtraAbilTimes[AbilConst.EABIL_HITSPEEDUP], HUtil32.GetTickCount() + HUtil32.HiByte(StdItem.DC) * 60 * 1000 + HUtil32.HiByte(StdItem.MAC) * 1000);
                                 SysMsg("攻速瞬间提高" + (HUtil32.HiByte(StdItem.DC) + HUtil32.HiByte(StdItem.MAC) / 60) + "分" + (HUtil32.HiByte(StdItem.MAC) % 60) + "秒。", MsgColor.Blue, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
@@ -3883,7 +3918,8 @@ namespace GameSvr.Player
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         nTemp = 0;
                     }
                     SendDefMessage(Grobal2.SM_ITEMDLGSELECT, 1, nTemp, 0, 0, "");

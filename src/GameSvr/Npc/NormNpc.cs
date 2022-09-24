@@ -46,12 +46,12 @@ namespace GameSvr.Npc
             this.FGotoLable = new int[100];
             this.MapCell = CellType.Merchant;
         }
-        
+
         ~NormNpc()
         {
             ClearScript();
         }
-        
+
         public virtual void ClearScript()
         {
             m_ScriptList.Clear();

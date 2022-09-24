@@ -501,7 +501,7 @@ namespace GameSvr.Npc
                     {
                         PlayObject = Human;
                         if (!string.IsNullOrEmpty(QuestConditionInfo.sOpHName) && string.Compare(QuestConditionInfo.sOpHName, "H", true) == 0)
-                        { 
+                        {
                             //todo 待支持英雄
                         }
                     }
@@ -510,15 +510,15 @@ namespace GameSvr.Npc
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam1))
                     QuestConditionInfo.nParam1 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam2))
-                    QuestConditionInfo.nParam2= HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 1);
+                    QuestConditionInfo.nParam2 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 1);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam3))
-                    QuestConditionInfo.nParam3= HUtil32.Str_ToInt(QuestConditionInfo.sParam3, 1);
+                    QuestConditionInfo.nParam3 = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, 1);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam4))
-                    QuestConditionInfo.nParam4= HUtil32.Str_ToInt(QuestConditionInfo.sParam4, 0);
+                    QuestConditionInfo.nParam4 = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, 0);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam5))
-                    QuestConditionInfo.nParam5= HUtil32.Str_ToInt(QuestConditionInfo.sParam5, 0);
-                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam6)) 
-                    QuestConditionInfo.nParam6= HUtil32.Str_ToInt(QuestConditionInfo.sParam6, 0);
+                    QuestConditionInfo.nParam5 = HUtil32.Str_ToInt(QuestConditionInfo.sParam5, 0);
+                if (HUtil32.IsStringNumber(QuestConditionInfo.sParam6))
+                    QuestConditionInfo.nParam6 = HUtil32.Str_ToInt(QuestConditionInfo.sParam6, 0);
 
                 switch (QuestConditionInfo.nCmdCode)
                 {
@@ -2517,8 +2517,8 @@ namespace GameSvr.Npc
         }
 
         private void ActionOfUpgradeDlgItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
-        { 
-            
+        {
+
         }
 
         private void ActionOfQueryItemDlg(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)

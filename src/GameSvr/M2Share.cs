@@ -478,6 +478,14 @@ namespace GameSvr
         public const string U_BOOTSNAME = "鞋子";
         public const string U_CHARMNAME = "宝石";
 
+        public static bool boSecondCardSystem = false;
+        public static byte g_nExpErienceLevel = 7;
+        public static string BADMANHOMEMAP = "3";
+        public static short BADMANSTARTX = 845;
+        public static short BADMANSTARTY = 674;
+        public static string RECHARGINGMAP = "kaiqu";  //充值地图名称
+        public static bool boSafeZoneStall = false;
+
         public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
 
         public static bool LoadLineNotice(string FileName)

@@ -73,7 +73,7 @@ namespace GameSvr
                 ctx.Spinner(Spinner.Known.Dots);
             });
         }
-        
+
         static void PrintUsage()
         {
             AnsiConsole.WriteLine();

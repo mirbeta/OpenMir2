@@ -3,11 +3,9 @@ using GameSvr.Command;
 using GameSvr.Event.Events;
 using GameSvr.Items;
 using GameSvr.Maps;
-using GameSvr.Monster;
 using GameSvr.Player;
 using GameSvr.Script;
 using GameSvr.Services;
-using System.Collections;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -3092,7 +3090,7 @@ namespace GameSvr.Npc
 
         private void ActionOfRestBonusPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.X2;
+            var nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.Reserved;
             PlayObject.BonusPoint += nTotleUsePoint;
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             PlayObject.HasLevelUp(0);
@@ -3440,7 +3438,7 @@ namespace GameSvr.Npc
                         MapItem.Name = Grobal2.sSTRING_GOLDNAME;
                         MapItem.Count = nCount;
                         MapItem.Looks = M2Share.GetGoldShape(nCount);
-                        MapItem.OfBaseObject = PlayObject.ActorId; 
+                        MapItem.OfBaseObject = PlayObject.ActorId;
                         MapItem.CanPickUpTick = HUtil32.GetTickCount();
                         MapItem.DropBaseObject = PlayObject.ActorId;
                         MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.Item, MapItem);
