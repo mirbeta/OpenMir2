@@ -32,7 +32,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (CanWalk())
+            if (CanMove())
             {
                 if (WAbil.HP < WAbil.MaxHP / 2)// 血量低于一半时开始用魔法攻击
                 {

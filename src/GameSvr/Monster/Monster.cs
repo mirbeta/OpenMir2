@@ -113,7 +113,7 @@ namespace GameSvr.Monster
 
         public override void Run()
         {
-            if (CanWalk() && !FixedHideMode && !StoneMode)
+            if (CanMove() && !FixedHideMode && !StoneMode)
             {
                 if (Think())
                 {

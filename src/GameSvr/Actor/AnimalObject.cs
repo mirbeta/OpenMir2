@@ -35,7 +35,7 @@ namespace GameSvr.Actor
         /// 是否可以走动
         /// </summary>
         /// <returns></returns>
-        protected bool CanWalk()
+        protected bool CanMove()
         {
             return !Ghost && !Death && StatusArr[StatuStateConst.POISON_STONE] == 0;
         }

@@ -42,7 +42,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (CanWalk())
+            if (CanMove())
             {
                 if (VisibleActors.Count > 0)
                 {

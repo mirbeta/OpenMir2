@@ -36,7 +36,7 @@ namespace GameSvr.Monster.Monsters
         {
             int nRage = 9999;
             BaseObject targetBaseObject = null;
-            if (CanWalk())
+            if (CanMove())
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {

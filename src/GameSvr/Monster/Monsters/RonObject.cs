@@ -34,7 +34,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (CanWalk())
+            if (CanMove())
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {

@@ -1,6 +1,7 @@
 using GameSvr.Actor;
 using GameSvr.Items;
 using GameSvr.Magic;
+using System.Diagnostics;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -20,11 +21,11 @@ namespace GameSvr.Player
             {
                 if (!m_boCanHit)
                 {
-                    return result;
+                    return false;
                 }
-                if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanHit)// 防麻
+                if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
                 {
-                    return result;
+                    return false;
                 }
                 if (!M2Share.Config.CloseSpeedHackCheck)
                 {
@@ -33,10 +34,10 @@ namespace GameSvr.Player
                         if (!CheckActionStatus(wIdent, ref dwDelayTime))
                         {
                             m_boFilterAction = false;
-                            return result;
+                            return false;
                         }
                         m_boFilterAction = true;
-                        int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ClientConf.btItemSpeed);
+                        int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ItemSpeed);
                         int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
                         if (dwCheckTime < dwAttackTime)
                         {
@@ -51,23 +52,20 @@ namespace GameSvr.Player
                                     dwDelayTime = M2Share.Config.DropOverSpeed;
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg("攻击攻击忙复位忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                                        SysMsg($"攻击忙!!!{dwDelayTime}", MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     m_dwAttackCount = 0;
                                 }
-                                return result;
+                                return false;
                             }
-                            else
+                            if (m_boTestSpeedMode)
                             {
-                                if (m_boTestSpeedMode)
-                                {
-                                    SysMsg("攻击步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
-                                }
-                                return result;
+                                SysMsg($"攻击步忙!!!{dwDelayTime}", MsgColor.Red, MsgType.Hint);
                             }
+                            return false;
                         }
 
                     }
@@ -154,7 +152,7 @@ namespace GameSvr.Player
             catch (Exception e)
             {
                 M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
+                M2Share.Log.Error(e.StackTrace);
             }
             return result;
         }
@@ -169,7 +167,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)// 防麻
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
             {
                 return result;
             }
@@ -219,9 +217,6 @@ namespace GameSvr.Player
             }
             m_dwMoveTick = HUtil32.GetTickCount();
             MBo316 = false;
-#if Debug
-            Debug.WriteLine(format("当前X:{0} 当前Y:{1} 目标X:{2} 目标Y:{3}", new object[] {this.m_nCurrX, this.m_nCurrY, nX, nY}), TMsgColor.c_Green, TMsgType.t_Hint);
-#endif
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (HorseRunTo(n14, false))
             {
@@ -253,16 +248,16 @@ namespace GameSvr.Player
             dwDelayTime = 0;
             if (!m_boCanSpell)
             {
-                return result;
+                return false;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)// 防麻
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
             {
-                return result;
+                return false;
             }
             var UserMagic = GetMagicInfo(nKey);
             if (UserMagic == null)
             {
-                return result;
+                return false;
             }
             var boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx);
             if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
@@ -270,7 +265,7 @@ namespace GameSvr.Player
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
                     m_boFilterAction = false;
-                    return result;
+                    return false;
                 }
                 m_boFilterAction = true;
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwMagicAttackTick;
@@ -294,16 +289,13 @@ namespace GameSvr.Player
                         {
                             m_dwMagicAttackCount = 0;
                         }
-                        return result;
+                        return false;
                     }
-                    else
+                    if (m_boTestSpeedMode)
                     {
-                        if (m_boTestSpeedMode)
-                        {
-                            SysMsg("魔法忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
-                        }
-                        return result;
+                        SysMsg("魔法忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                     }
+                    return false;
                 }
             }
             SpellTick -= 450;
@@ -493,7 +485,7 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanRun)
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)
             {
                 return false;
             }
@@ -505,7 +497,7 @@ namespace GameSvr.Player
                     return false;
                 }
                 m_boFilterAction = true;
-                int dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
+                var dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
                 if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
                     m_dwMoveCount++;
@@ -528,14 +520,11 @@ namespace GameSvr.Player
                         }
                         return result;
                     }
-                    else
+                    if (m_boTestSpeedMode)
                     {
-                        if (m_boTestSpeedMode)
-                        {
-                            SysMsg("跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
-                        }
-                        return result;
+                        SysMsg("跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                     }
+                    return result;
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
@@ -574,18 +563,18 @@ namespace GameSvr.Player
             dwDelayTime = 0;
             if (!m_boCanWalk)
             {
-                return result;
+                return false;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanWalk)
+            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)
             {
-                return result; // 防麻
+                return false; // 防麻
             }
             if (!boLateDelivery && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
                     m_boFilterAction = false;
-                    return result;
+                    return false;
                 }
                 m_boFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
@@ -609,16 +598,13 @@ namespace GameSvr.Player
                         {
                             m_dwMoveCount = 0;
                         }
-                        return result;
+                        return false;
                     }
-                    else
+                    if (m_boTestSpeedMode)
                     {
-                        if (m_boTestSpeedMode)
-                        {
-                            SysMsg("走路忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
-                        }
-                        return result;
+                        SysMsg("走路忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                     }
+                    return false;
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
@@ -628,43 +614,23 @@ namespace GameSvr.Player
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (!m_boClientFlag)
             {
-                if (n14 == 0 && m_nStep == 0)
+                switch (n14)
                 {
-                    m_nStep++;
-                }
-                else if (n14 == 4 && m_nStep == 1)
-                {
-                    m_nStep++;
-                }
-                else if (n14 == 6 && m_nStep == 2)
-                {
-                    m_nStep++;
-                }
-                else if (n14 == 2 && m_nStep == 3)
-                {
-                    m_nStep++;
-                }
-                else if (n14 == 1 && m_nStep == 4)
-                {
-                    m_nStep++;
-                }
-                else if (n14 == 5 && m_nStep == 5)
-                {
-                    m_nStep++;
-                }
-                else if (n14 == 7 && m_nStep == 6)
-                {
-                    m_nStep++;
-                }
-                else if (n14 == 3 && m_nStep == 7)
-                {
-                    m_nStep++;
-                }
-                else
-                {
-                    m_nGameGold -= m_nStep;
-                    GameGoldChanged();
-                    m_nStep = 0;
+                    case 0 when m_nStep == 0:
+                    case 4 when m_nStep == 1:
+                    case 6 when m_nStep == 2:
+                    case 2 when m_nStep == 3:
+                    case 1 when m_nStep == 4:
+                    case 5 when m_nStep == 5:
+                    case 7 when m_nStep == 6:
+                    case 3 when m_nStep == 7:
+                        m_nStep++;
+                        break;
+                    default:
+                        m_nGameGold -= m_nStep;
+                        GameGoldChanged();
+                        m_nStep = 0;
+                        break;
                 }
                 if (m_nStep != 0)
                 {
