@@ -4,27 +4,24 @@ namespace SystemModule.Packet.ClientPackets
 {
     public class ClientConf : Packets
     {
-        public bool boClientCanSet;
-        public bool boRunHuman;
-        public bool boRunMon;
-        public bool boRunNpc;
-        public bool boWarRunAll;
-        public byte btDieColor;
-        public ushort wSpellTime;
-        public ushort wHitIime;
-        public ushort wItemFlashTime;
-        public byte btItemSpeed;
-        public bool boCanStartRun;
-        public bool boParalyCanRun;
-        public bool boParalyCanWalk;
-        public bool boParalyCanHit;
-        public bool boParalyCanSpell;
-        public bool boShowRedHPLable;
-        public bool boShowHPNumber;
-        public bool boShowJobLevel;
-        public bool boDuraAlert;
-        public bool boMagicLock;
-        public bool boAutoPuckUpItem;
+        public bool boGameAssist;
+        public bool boWhisperRecord;
+        public bool boMaketSystem;
+        public bool boNoFog;
+        public bool boStallSystem;
+        public bool boShowHpBar;
+        public bool boShowHpNumber;
+        public bool boNoStruck;
+        public bool boFastMove;
+        public bool boNoWeight;
+        public bool boShowFriend;
+        public bool boShowRelationship;
+        public bool boShowMail;
+        public bool boShowRecharging;
+        public bool boShowHelp;
+        public bool boShowGameShop;
+        public bool boGamepath;
+
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -33,27 +30,23 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(boClientCanSet);
-            writer.Write(boRunHuman);
-            writer.Write(boRunMon);
-            writer.Write(boRunNpc);
-            writer.Write(boWarRunAll);
-            writer.Write(btDieColor);
-            writer.Write(wSpellTime);
-            writer.Write(wHitIime);
-            writer.Write(wItemFlashTime);
-            writer.Write(btItemSpeed);
-            writer.Write(boCanStartRun);
-            writer.Write(boParalyCanRun);
-            writer.Write(boParalyCanWalk);
-            writer.Write(boParalyCanHit);
-            writer.Write(boParalyCanSpell);
-            writer.Write(boShowRedHPLable);
-            writer.Write(boShowHPNumber);
-            writer.Write(boShowJobLevel);
-            writer.Write(boDuraAlert);
-            writer.Write(boMagicLock);
-            writer.Write(boAutoPuckUpItem);
+            writer.Write(boGameAssist);
+            writer.Write(boWhisperRecord);
+            writer.Write(boMaketSystem);
+            writer.Write(boNoFog);
+            writer.Write(boStallSystem);
+            writer.Write(boShowHpBar);
+            writer.Write(boShowHpNumber);
+            writer.Write(boNoStruck);
+            writer.Write(boFastMove);
+            writer.Write(boNoWeight);
+            writer.Write(boShowFriend);
+            writer.Write(boShowRelationship);
+            writer.Write(boShowMail);
+            writer.Write(boShowRecharging);
+            writer.Write(boShowHelp);
+            writer.Write(boShowGameShop);
+            writer.Write(boGamepath);
         }
     }
 }

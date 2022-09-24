@@ -497,7 +497,7 @@ namespace SystemModule
         /// <summary>
         /// 发送服务器配置信息
         /// </summary>
-        public const int SM_SERVERCONFIG = 5007;
+        public const int SM_SERVERCONFIG = 11029;
         public const int SM_GAMEGOLDNAME = 5008;
         public const int SM_PASSWORD = 5009;
         public const int SM_HORSERUN = 5010;
