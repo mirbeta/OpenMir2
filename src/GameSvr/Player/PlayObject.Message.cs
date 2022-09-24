@@ -2015,7 +2015,7 @@ namespace GameSvr.Player
         protected override void DropUseItems(BaseObject BaseObject)
         {
             const string sExceptionMsg = "[Exception] TPlayObject::DropUseItems";
-            IList<DeleteItem> delList = null;
+            IList<DeleteItem> delList = new List<DeleteItem>();
             try
             {
                 if (AngryRing || NoDropUseItem)
@@ -2034,10 +2034,6 @@ namespace GameSvr.Player
                     {
                         if ((StdItem.ItemDesc & 8) != 0)
                         {
-                            if (delList == null)
-                            {
-                                delList = new List<DeleteItem>();
-                            }
                             delList.Add(new DeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
                             if (StdItem.NeedIdentify == 1)
                             {
@@ -2068,10 +2064,6 @@ namespace GameSvr.Player
                             {
                                 if (Race == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    if (delList == null)
-                                    {
-                                        delList = new List<DeleteItem>();
-                                    }
                                     delList.Add(new DeleteItem()
                                     {
                                         ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index),

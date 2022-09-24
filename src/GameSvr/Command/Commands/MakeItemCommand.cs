@@ -51,17 +51,14 @@ namespace GameSvr.Command.Commands
                 UserItem UserItem = null;
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
-                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                    if (StdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5)
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    if (stdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5)
                     {
-                        UserItem = null;
+                        return;
                     }
-                    else
+                    if (M2Share.RandomNumber.Random(M2Share.Config.MakeRandomAddValue) == 0)
                     {
-                        if (M2Share.RandomNumber.Random(M2Share.Config.MakeRandomAddValue) == 0)
-                        {
-                            StdItem.RandomUpgradeItem(UserItem);
-                        }
+                        stdItem.RandomUpgradeItem(UserItem);
                     }
                     if (PlayObject.Permission >= GameCommand.nPermissionMax)
                     {
@@ -73,13 +70,13 @@ namespace GameSvr.Command.Commands
                     {
                         M2Share.Log.Warn("[制造物品] " + PlayObject.CharName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
                     }
-                    if (StdItem.NeedIdentify == 1)
+                    if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog("5" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX +
-                           "\09" + PlayObject.CurrY + "\09" + PlayObject.CharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
-                           HUtil32.LoByte(StdItem.DC) + "/" + HUtil32.HiByte(StdItem.DC) + ")" + "(" + HUtil32.LoByte(StdItem.MC) + "/" + HUtil32.HiByte(StdItem.MC) + ")" + "(" +
-                           HUtil32.LoByte(StdItem.SC) + "/" + HUtil32.HiByte(StdItem.SC) + ")" + "(" + HUtil32.LoByte(StdItem.AC) + "/" +
-                           HUtil32.HiByte(StdItem.AC) + ")" + "(" + HUtil32.LoByte(StdItem.MAC) + "/" + HUtil32.HiByte(StdItem.MAC) + ")" + UserItem.Desc[0]
+                           "\09" + PlayObject.CurrY + "\09" + PlayObject.CharName + "\09" + stdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
+                           HUtil32.LoByte(stdItem.DC) + "/" + HUtil32.HiByte(stdItem.DC) + ")" + "(" + HUtil32.LoByte(stdItem.MC) + "/" + HUtil32.HiByte(stdItem.MC) + ")" + "(" +
+                           HUtil32.LoByte(stdItem.SC) + "/" + HUtil32.HiByte(stdItem.SC) + ")" + "(" + HUtil32.LoByte(stdItem.AC) + "/" +
+                           HUtil32.HiByte(stdItem.AC) + ")" + "(" + HUtil32.LoByte(stdItem.MAC) + "/" + HUtil32.HiByte(stdItem.MAC) + ")" + UserItem.Desc[0]
                            + "/" + UserItem.Desc[1] + "/" + UserItem.Desc[2] + "/" + UserItem.Desc[3] + "/" + UserItem.Desc[4] + "/" + UserItem.Desc[5] + "/" + UserItem.Desc[6]
                            + "/" + UserItem.Desc[7] + "/" + UserItem.Desc[8] + "/" + UserItem.Desc[14] + "\09" + PlayObject.CharName);
                     }

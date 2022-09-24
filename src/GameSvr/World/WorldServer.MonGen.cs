@@ -21,11 +21,11 @@ namespace GameSvr.World
         /// 怪物刷新列表
         /// </summary>
         public readonly IList<MonGenInfo> MonGenList;
-        public readonly Dictionary<string, int> MonGenCountInfo;
+        private readonly Dictionary<string, int> MonGenCountInfo;
         /// <summary>
         /// 怪物对应线程
         /// </summary>
-        public readonly Dictionary<string, int> MonsterThreadMap;
+        private readonly Dictionary<string, int> MonsterThreadMap;
 
         public MonsterThread[] MobThreads;
         private Thread[] MobThreading;
@@ -112,11 +112,9 @@ namespace GameSvr.World
         {
             lock (_locker)
             {
-                // changing a blocking condition. (this makes the threads wake up!)
                 Monitor.PulseAll(_locker);
             }
 
-            //simply intterupt all the mob threads if they are running (will give an invisible error on them but fastest way of getting rid of them on shutdowns)
             for (var i = 0; i < MobThreading.Length; i++)
             {
                 if (MobThreads[i] != null)
@@ -161,7 +159,6 @@ namespace GameSvr.World
             }
         }
 
-
         /// <summary>
         /// 取怪物刷新时间
         /// </summary>
@@ -175,7 +172,7 @@ namespace GameSvr.World
                 if (d10 > 0)
                 {
                     if (d10 > 6) d10 = 6;
-                    result = (int)(dwTime - Math.Round(dwTime / 10 * (double)d10));
+                    result = dwTime - dwTime / 10 * d10;
                 }
                 else
                 {
@@ -314,6 +311,7 @@ namespace GameSvr.World
                                                     {
                                                         monster.SearchViewRange();
                                                     }
+                                                    //todo 下属也主动搜索目标？待测试和验证
                                                 }
                                                 else
                                                 {
