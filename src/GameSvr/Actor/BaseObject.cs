@@ -5396,152 +5396,81 @@ namespace GameSvr.Actor
 
         public bool CanRun(short nCurrX, short nCurrY, short nX, short nY, bool boFlag)
         {
-            var result = false;
             var btDir = M2Share.GetNextDirection(nCurrX, nCurrY, nX, nY);
+            var canWalk = (M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Grobal2.DR_UP:
                     if (nCurrY > 1)
                     {
-                        if ((Envir.CanWalkEx(nCurrX, nCurrY - 1,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone()))
-                            && (Envir.CanWalkEx(nCurrX, nCurrY - 2,
-                                    M2Share.Config.DiableHumanRun ||
-                                    ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                                (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if ((Envir.CanWalkEx(nCurrX, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX, nCurrY - 2, canWalk)))
                         {
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
-
                     break;
                 case Grobal2.DR_UPRIGHT:
                     if (nCurrX < Envir.Width - 2 && nCurrY > 1)
                     {
-                        if ((Envir.CanWalkEx(nCurrX + 1, nCurrY - 1,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                            (Envir.CanWalkEx(nCurrX + 2, nCurrY - 2,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if ((Envir.CanWalkEx(nCurrX + 1, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX + 2, nCurrY - 2, canWalk)))
                         {
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
-
                     break;
                 case Grobal2.DR_RIGHT:
                     if (nCurrX < Envir.Width - 2)
                     {
-                        if (Envir.CanWalkEx(nCurrX + 1, nCurrY,
-                                M2Share.Config.DiableHumanRun ||
-                                ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                            M2Share.Config.boSafeAreaLimited && InSafeZone() &&
-                            (Envir.CanWalkEx(nCurrX + 2, nCurrY,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if (Envir.CanWalkEx(nCurrX + 1, nCurrY, canWalk) && (Envir.CanWalkEx(nCurrX + 2, nCurrY, canWalk)))
                         {
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
-
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    if ((nCurrX < Envir.Width - 2) && (nCurrY < Envir.Height - 2) &&
-                        (Envir.CanWalkEx(nCurrX + 1, nCurrY + 1,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        (Envir.CanWalkEx(nCurrX + 2, nCurrY + 2,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((nCurrX < Envir.Width - 2) && (nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX + 1, nCurrY + 1, canWalk) && (Envir.CanWalkEx(nCurrX + 2, nCurrY + 2, canWalk))))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_DOWN:
-                    if ((nCurrY < Envir.Height - 2) &&
-                        (Envir.CanWalkEx(nCurrX, nCurrY + 1,
-                             M2Share.Config.DiableHumanRun ||
-                             ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         M2Share.Config.boSafeAreaLimited && InSafeZone() &&
-                         (Envir.CanWalkEx(nCurrX, nCurrY + 2,
-                              M2Share.Config.DiableHumanRun ||
-                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                          (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
+                    if ((nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX, nCurrY + 1, canWalk && (Envir.CanWalkEx(nCurrX, nCurrY + 2, canWalk)))))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    if ((nCurrX > 1) && (nCurrY < Envir.Height - 2) &&
-                        (Envir.CanWalkEx(nCurrX - 1, nCurrY + 1,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(nCurrX - 2, nCurrY + 2,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((nCurrX > 1) && (nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX - 1, nCurrY + 1, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY + 2, canWalk)))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_LEFT:
-                    if ((nCurrX > 1) &&
-                        (Envir.CanWalkEx(nCurrX - 1, nCurrY,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(nCurrX - 2, nCurrY,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((nCurrX > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY, canWalk)))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_UPLEFT:
-                    if ((nCurrX > 1) && (nCurrY > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY - 1,
-                                                             M2Share.Config.DiableHumanRun ||
-                                                             ((Permission > 9) && M2Share.Config.boGMRunAll))
-                                                         || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(nCurrX - 2, nCurrY - 2,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((nCurrX > 1) && (nCurrY > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY - 2, canWalk)))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
             }
-
             return false;
         }
 
         private bool CanRun(short nX, short nY, bool boFlag)
         {
-            var result = false;
             var btDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            var canWalk = (M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Grobal2.DR_UP:
                     if (CurrY > 1)
                     {
-                        if ((Envir.CanWalkEx(CurrX, CurrY - 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                            (Envir.CanWalkEx(CurrX, CurrY - 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if ((Envir.CanWalkEx(CurrX, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX, CurrY - 2, canWalk)))
                         {
                             return true;
                         }
@@ -5550,9 +5479,7 @@ namespace GameSvr.Actor
                 case Grobal2.DR_UPRIGHT:
                     if (CurrX < Envir.Width - 2 && CurrY > 1)
                     {
-                        if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone()))
-                            && (Envir.CanWalkEx(CurrX + 2, CurrY - 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited
-                            && InSafeZone())))
+                        if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk)))
                         {
                             return true;
                         }
@@ -5561,48 +5488,39 @@ namespace GameSvr.Actor
                 case Grobal2.DR_RIGHT:
                     if (CurrX < Envir.Width - 2)
                     {
-                        if (Envir.CanWalkEx(CurrX + 1, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || M2Share.Config.boSafeAreaLimited && InSafeZone()
-                            && (Envir.CanWalkEx(CurrX + 2, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if (Envir.CanWalkEx(CurrX + 1, CurrY, canWalk && (Envir.CanWalkEx(CurrX + 2, CurrY, canWalk))))
                         {
                             return true;
                         }
                     }
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2)
-                        && (Envir.CanWalkEx(CurrX + 1, CurrY + 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        (Envir.CanWalkEx(CurrX + 2, CurrY + 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2) && (Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && (Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk))))
                     {
                         return true;
                     }
                     break;
                 case Grobal2.DR_DOWN:
                     if ((CurrY < Envir.Height - 2)
-                        && (Envir.CanWalkEx(CurrX, CurrY + 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || M2Share.Config.boSafeAreaLimited && InSafeZone() &&
-                        (Envir.CanWalkEx(CurrX, CurrY + 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
+                        && (Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && (Envir.CanWalkEx(CurrX, CurrY + 2, canWalk))))
                     {
                         return true;
                     }
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    if ((CurrX > 1) && (CurrY < Envir.Height - 2) &&
-                        (Envir.CanWalkEx(CurrX - 1, CurrY + 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(CurrX - 2, CurrY + 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((CurrX > 1) && (CurrY < Envir.Height - 2) && (Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk)))
                     {
                         return true;
                     }
                     break;
                 case Grobal2.DR_LEFT:
-                    if ((CurrX > 1) &&
-                        (Envir.CanWalkEx(CurrX - 1, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(CurrX - 2, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((CurrX > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY, canWalk)))
                     {
                         return true;
                     }
                     break;
                 case Grobal2.DR_UPLEFT:
-                    if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(CurrX - 2, CurrY - 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk)))
                     {
                         return true;
                     }
@@ -5630,10 +5548,8 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-
                 return masterObject;
             }
-
             return null;
         }
 
