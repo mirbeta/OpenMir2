@@ -6,7 +6,6 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameSvr.Player
 {

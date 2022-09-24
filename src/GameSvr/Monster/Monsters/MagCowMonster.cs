@@ -23,7 +23,7 @@ namespace GameSvr.Monster.Monsters
                     if (nPower > 0)
                     {
                         baseObject.StruckDamage((ushort)nPower);
-                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
+                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
                     }
                 }
             }

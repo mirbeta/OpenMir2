@@ -146,7 +146,7 @@ namespace SystemModule
         public const int CM_USERBUYITEM = 1014;
         public const int CM_USERGETDETAILITEM = 1015;
         public const int CM_DROPGOLD = 1016;
-        public const int CM_1017 = 1017;
+        public const int CM_TEST = 1017;
         /// <summary>
         /// 检测客户是否有下载好的client
         /// </summary>
@@ -656,7 +656,7 @@ namespace SystemModule
         public const int RM_ABILITY = 10051;
         public const int RM_HEALTHSPELLCHANGED = 10052;
         public const int RM_DAYCHANGING = 10053;
-        public const int RM_10101 = 10101;
+        public const int RM_REFMESSAGE = 10101;
         public const int RM_WEIGHTCHANGED = 10115;
         public const int RM_FEATURECHANGED = 10116;
         public const int RM_BUTCH = 10119;
@@ -691,7 +691,7 @@ namespace SystemModule
         public const int RM_MAKEDRUG_SUCCESS = 10150;
         public const int RM_MAKEDRUG_FAIL = 10151;
         public const int RM_ALIVE = 10153;
-        public const int RM_10155 = 10155;
+        public const int RM_RANDOMSPACEMOVE = 10155;
         public const int RM_DIGUP = 10200;
         public const int RM_DIGDOWN = 10201;
         public const int RM_FLYAXE = 10202;

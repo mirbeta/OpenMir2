@@ -27,7 +27,7 @@ namespace GameSvr.Monster.Monsters
                 targeTBaseObject.SetLastHiter(this);
                 targeTBaseObject.ExpHitter = null;
                 targeTBaseObject.StruckDamage((ushort)nDamage);
-                targeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, targeTBaseObject.WAbil.HP, targeTBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targeTBaseObject.CurrX), Math.Abs(CurrY - targeTBaseObject.CurrY)) * 50 + 600);
+                targeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, targeTBaseObject.WAbil.HP, targeTBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targeTBaseObject.CurrX), Math.Abs(CurrY - targeTBaseObject.CurrY)) * 50 + 600);
             }
             SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, targeTBaseObject.ActorId, "");
         }

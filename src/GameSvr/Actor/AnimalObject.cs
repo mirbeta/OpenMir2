@@ -190,7 +190,7 @@ namespace GameSvr.Actor
                     if (nDamage > 0)
                     {
                         BaseObject.StruckDamage((ushort)nDamage);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, this.ActorId, "", 200);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, this.ActorId, "", 200);
                     }
                 }
             }

@@ -36,7 +36,7 @@ namespace GameSvr.Monster.Monsters
                         if (damage > 0)
                         {
                             baseObject.StruckDamage((ushort)damage);
-                            baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, damage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 700);
+                            baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, damage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 700);
                         }
                     }
                 }
