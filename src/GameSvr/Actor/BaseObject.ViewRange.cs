@@ -256,6 +256,10 @@ namespace GameSvr.Actor
             {
                 return;
             }
+            if (VisibleActors.Count <= 0)
+            {
+                return;
+            }
             IsVisibleActive = false;
             for (var i = 0; i < VisibleActors.Count; i++)
             {
