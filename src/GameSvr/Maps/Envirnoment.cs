@@ -38,7 +38,7 @@ namespace GameSvr.Maps
         /// <summary>
         /// 门
         /// </summary>
-        public readonly IList<TDoorInfo> DoorList;
+        public readonly IList<DoorInfo> DoorList;
         public Merchant QuestNpc = null;
         /// <summary>
         /// 任务
@@ -56,7 +56,7 @@ namespace GameSvr.Maps
             Flag = new TMapFlag();
             _monCount = 0;
             _humCount = 0;
-            DoorList = new List<TDoorInfo>();
+            DoorList = new List<DoorInfo>();
             _questList = new List<TMapQuestInfo>();
             WhisperTick = 0;
             PointList = new List<PointInfo>();
@@ -727,7 +727,7 @@ namespace GameSvr.Maps
             int n24;
             byte[] buffer;
             int point;
-            TDoorInfo door;
+            DoorInfo door;
             var muiSize = 12;//固定大小
             try
             {
@@ -779,7 +779,7 @@ namespace GameSvr.Maps
                                     point = buffer[buffIndex + 6] & 0x7F;
                                     if (point > 0)
                                     {
-                                        door = new TDoorInfo
+                                        door = new DoorInfo
                                         {
                                             nX = nW,
                                             nY = nH,
@@ -803,12 +803,12 @@ namespace GameSvr.Maps
                                         }
                                         if (door.Status == null)
                                         {
-                                            door.Status = new TDoorStatus
+                                            door.Status = new DoorStatus
                                             {
-                                                boOpened = false,
+                                                Opened = false,
                                                 bo01 = false,
                                                 n04 = 0,
-                                                dwOpenTick = 0,
+                                                OpenTick = 0,
                                                 nRefCount = 1
                                             };
                                         }
@@ -846,7 +846,7 @@ namespace GameSvr.Maps
                                     point = buffer[buffIndex + 6] & 0x7F;
                                     if (point > 0)
                                     {
-                                        door = new TDoorInfo
+                                        door = new DoorInfo
                                         {
                                             nX = nW,
                                             nY = nH,
@@ -870,12 +870,12 @@ namespace GameSvr.Maps
                                         }
                                         if (door.Status == null)
                                         {
-                                            door.Status = new TDoorStatus
+                                            door.Status = new DoorStatus
                                             {
-                                                boOpened = false,
+                                                Opened = false,
                                                 bo01 = false,
                                                 n04 = 0,
-                                                dwOpenTick = 0,
+                                                OpenTick = 0,
                                                 nRefCount = 1
                                             };
                                         }
@@ -1111,7 +1111,7 @@ namespace GameSvr.Maps
                 var door = DoorList[i];
                 if (Math.Abs(door.nX - nX) <= 1 && Math.Abs(door.nY - nY) <= 1)
                 {
-                    if (!door.Status.boOpened)
+                    if (!door.Status.Opened)
                     {
                         result = false;
                         break;
@@ -1226,7 +1226,7 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public TDoorInfo GetDoor(int nX, int nY)
+        public DoorInfo GetDoor(int nX, int nY)
         {
             for (var i = 0; i < DoorList.Count; i++)
             {

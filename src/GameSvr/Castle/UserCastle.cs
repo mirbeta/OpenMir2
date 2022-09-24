@@ -39,7 +39,7 @@ namespace GameSvr.Castle
         /// <summary>
         /// 城门状态
         /// </summary>
-        public TDoorStatus DoorStatus;
+        public DoorStatus DoorStatus;
         /// <summary>
         /// 是否已显示攻城结束信息
         /// </summary>
@@ -170,7 +170,7 @@ namespace GameSvr.Castle
         public void Initialize()
         {
             ArcherUnit ObjUnit;
-            TDoorInfo Door;
+            DoorInfo Door;
             LoadConfig();
             LoadAttackSabukWall();
             if (M2Share.MapMgr.GetMapOfServerIndex(MapName) == M2Share.ServerIndex)
