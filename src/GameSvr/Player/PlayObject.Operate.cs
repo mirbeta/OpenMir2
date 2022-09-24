@@ -981,7 +981,7 @@ namespace GameSvr.Player
                 // 折分物品名称(信件物品的名称后面加了使用次数)
                 HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { " " });
             }
-            var bo11 = false;
+            var dealSuccess = false;
             if (!DealCreat.DealSuccess)
             {
                 for (var i = 0; i < ItemList.Count; i++)
@@ -995,13 +995,13 @@ namespace GameSvr.Player
                             DealItemList.Add(userItem);
                             this.SendAddDealItem(userItem);
                             ItemList.RemoveAt(i);
-                            bo11 = true;
+                            dealSuccess = true;
                             break;
                         }
                     }
                 }
             }
-            if (!bo11)
+            if (!dealSuccess)
             {
                 SendDefMessage(Grobal2.SM_DEALADDITEM_FAIL, 0, 0, 0, 0, "");
             }
@@ -1078,7 +1078,7 @@ namespace GameSvr.Player
                         Gold = Gold + DealGolds - nGold;
                         DealGolds = nGold;
                         SendDefMessage(Grobal2.SM_DEALCHGGOLD_OK, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
-                        (DealCreat as PlayObject).SendDefMessage(Grobal2.SM_DEALREMOTECHGGOLD, DealGolds, 0, 0, 0, "");
+                        DealCreat.SendDefMessage(Grobal2.SM_DEALREMOTECHGGOLD, DealGolds, 0, 0, 0, "");
                         DealCreat.DealLastTick = HUtil32.GetTickCount();
                         bo09 = true;
                         DealLastTick = HUtil32.GetTickCount();
@@ -1135,7 +1135,7 @@ namespace GameSvr.Player
                     {
                         userItem = DealItemList[i];
                         DealCreat.AddItemToBag(userItem);
-                        (DealCreat as PlayObject).SendAddItem(userItem);
+                        DealCreat.SendAddItem(userItem);
                         stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
@@ -1183,7 +1183,7 @@ namespace GameSvr.Player
                             M2Share.AddGameDataLog('8' + "\t" + DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + CharName);
                         }
                     }
-                    var playObject = DealCreat as PlayObject;
+                    var playObject = DealCreat;
                     playObject.SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
                     playObject.SysMsg(M2Share.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     playObject.DealCreat = null;

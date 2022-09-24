@@ -1443,7 +1443,7 @@ namespace GameSvr.World
                 HumanRcd = new THumDataInfo()
             };
             saveRcd.HumanRcd.Data.Initialization();
-            playObject.MakeSaveRcd(ref saveRcd.HumanRcd);
+            MakeSaveRcd(playObject, ref saveRcd.HumanRcd);
             M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
         }
 
@@ -1597,6 +1597,152 @@ namespace GameSvr.World
                         userItem = storageItems[i];
                         playObject.StorageItemList.Add(userItem);
                     }
+                }
+            }
+        }
+
+        private void MakeSaveRcd(PlayObject playObject, ref THumDataInfo humanRcd)
+        {
+            humanRcd.Data.sCharName = playObject.CharName;
+            humanRcd.Data.sCurMap = playObject.MapName;
+            humanRcd.Data.CurX = playObject.CurrX;
+            humanRcd.Data.CurY = playObject.CurrY;
+            humanRcd.Data.Dir = playObject.Direction;
+            humanRcd.Data.btHair = playObject.Hair;
+            humanRcd.Data.Sex = (byte)playObject.Gender;
+            humanRcd.Data.Job = (byte)playObject.Job;
+            humanRcd.Data.nGold = playObject.Gold;
+            humanRcd.Data.Abil.Level = playObject.Abil.Level;
+            humanRcd.Data.Abil.HP = playObject.WAbil.HP;
+            humanRcd.Data.Abil.MP = playObject.WAbil.MP;
+            humanRcd.Data.Abil.MaxHP = playObject.WAbil.MaxHP;
+            humanRcd.Data.Abil.MaxMP = playObject.WAbil.MaxMP;
+            humanRcd.Data.Abil.Exp = playObject.Abil.Exp;
+            humanRcd.Data.Abil.MaxExp = playObject.Abil.MaxExp;
+            humanRcd.Data.Abil.Weight = playObject.WAbil.Weight;
+            humanRcd.Data.Abil.MaxWeight = playObject.WAbil.MaxWeight;
+            humanRcd.Data.Abil.WearWeight = playObject.WAbil.WearWeight;
+            humanRcd.Data.Abil.MaxWearWeight = playObject.WAbil.MaxWearWeight;
+            humanRcd.Data.Abil.HandWeight = playObject.WAbil.HandWeight;
+            humanRcd.Data.Abil.MaxHandWeight = playObject.WAbil.MaxHandWeight;
+            humanRcd.Data.Abil.HP = playObject.WAbil.HP;
+            humanRcd.Data.Abil.MP = playObject.WAbil.MP;
+            humanRcd.Data.StatusTimeArr = playObject.StatusArr;
+            humanRcd.Data.sHomeMap = playObject.HomeMap;
+            humanRcd.Data.wHomeX = playObject.HomeX;
+            humanRcd.Data.wHomeY = playObject.HomeY;
+            humanRcd.Data.nPKPoint = playObject.PkPoint;
+            humanRcd.Data.BonusAbil = playObject.BonusAbil;
+            humanRcd.Data.nBonusPoint = playObject.BonusPoint;
+            humanRcd.Data.sStoragePwd = playObject.m_sStoragePwd;
+            humanRcd.Data.btCreditPoint = playObject.m_btCreditPoint;
+            humanRcd.Data.btReLevel = playObject.m_btReLevel;
+            humanRcd.Data.sMasterName = playObject.m_sMasterName;
+            humanRcd.Data.boMaster = playObject.m_boMaster;
+            humanRcd.Data.sDearName = playObject.m_sDearName;
+            humanRcd.Data.nGameGold = playObject.m_nGameGold;
+            humanRcd.Data.nGamePoint = playObject.m_nGamePoint;
+            humanRcd.Data.btAllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
+            humanRcd.Data.btF9 = playObject.BtB2;
+            humanRcd.Data.btAttatckMode = (byte)playObject.AttatckMode;
+            humanRcd.Data.btIncHealth = (byte)playObject.IncHealth;
+            humanRcd.Data.btIncSpell = (byte)playObject.IncSpell;
+            humanRcd.Data.btIncHealing = (byte)playObject.IncHealing;
+            humanRcd.Data.btFightZoneDieCount = (byte)playObject.FightZoneDieCount;
+            humanRcd.Data.Account = playObject.m_sUserID;
+            humanRcd.Data.boLockLogon = playObject.m_boLockLogon;
+            humanRcd.Data.wContribution = playObject.m_wContribution;
+            humanRcd.Data.nHungerStatus = playObject.HungerStatus;
+            humanRcd.Data.boAllowGuildReCall = playObject.AllowGuildReCall;
+            humanRcd.Data.wGroupRcallTime = playObject.GroupRcallTime;
+            humanRcd.Data.dBodyLuck = playObject.BodyLuck;
+            humanRcd.Data.boAllowGroupReCall = playObject.AllowGroupReCall;
+            humanRcd.Data.QuestUnitOpen = playObject.QuestUnitOpen;
+            humanRcd.Data.QuestUnit = playObject.QuestUnit;
+            humanRcd.Data.QuestFlag = playObject.QuestFlag;
+            var HumItems = humanRcd.Data.HumItems;
+            if (HumItems == null)
+            {
+                HumItems = new UserItem[13];
+            }
+            HumItems[Grobal2.U_DRESS] = playObject.UseItems[Grobal2.U_DRESS] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_DRESS];
+            HumItems[Grobal2.U_WEAPON] = playObject.UseItems[Grobal2.U_WEAPON] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_WEAPON];
+            HumItems[Grobal2.U_RIGHTHAND] = playObject.UseItems[Grobal2.U_RIGHTHAND] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_RIGHTHAND];
+            HumItems[Grobal2.U_HELMET] = playObject.UseItems[Grobal2.U_NECKLACE] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_NECKLACE];
+            HumItems[Grobal2.U_NECKLACE] = playObject.UseItems[Grobal2.U_HELMET] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_HELMET];
+            HumItems[Grobal2.U_ARMRINGL] = playObject.UseItems[Grobal2.U_ARMRINGL] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_ARMRINGL];
+            HumItems[Grobal2.U_ARMRINGR] = playObject.UseItems[Grobal2.U_ARMRINGR] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_ARMRINGR];
+            HumItems[Grobal2.U_RINGL] = playObject.UseItems[Grobal2.U_RINGL] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_RINGL];
+            HumItems[Grobal2.U_RINGR] = playObject.UseItems[Grobal2.U_RINGR] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_RINGR];
+            HumItems[Grobal2.U_BUJUK] = playObject.UseItems[Grobal2.U_BUJUK] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_BUJUK];
+            HumItems[Grobal2.U_BELT] = playObject.UseItems[Grobal2.U_BELT] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_BELT];
+            HumItems[Grobal2.U_BOOTS] = playObject.UseItems[Grobal2.U_BOOTS] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_BOOTS];
+            HumItems[Grobal2.U_CHARM] = playObject.UseItems[Grobal2.U_CHARM] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_CHARM];
+            var BagItems = humanRcd.Data.BagItems;
+            if (BagItems == null)
+            {
+                BagItems = new UserItem[46];
+            }
+            for (var i = 0; i < playObject.ItemList.Count; i++)
+            {
+                if (i <= 46)
+                {
+                    BagItems[i] = playObject.ItemList[i];
+                }
+            }
+            for (var i = 0; i < BagItems.Length; i++)
+            {
+                if (BagItems[i] == null)
+                {
+                    BagItems[i] = HUtil32.DelfautItem;
+                }
+            }
+            var HumMagic = humanRcd.Data.Magic;
+            if (HumMagic == null)
+            {
+                HumMagic = new TMagicRcd[Grobal2.MaxMagicCount];
+            }
+            for (var i = 0; i < playObject.MagicList.Count; i++)
+            {
+                if (i >= Grobal2.MaxMagicCount)
+                {
+                    break;
+                }
+                var userMagic = playObject.MagicList[i];
+                if (HumMagic[i] == null)
+                {
+                    HumMagic[i] = new TMagicRcd();
+                }
+                HumMagic[i].wMagIdx = userMagic.MagIdx;
+                HumMagic[i].btLevel = userMagic.Level;
+                HumMagic[i].btKey = userMagic.Key;
+                HumMagic[i].nTranPoint = userMagic.TranPoint;
+            }
+            for (var i = 0; i < HumMagic.Length; i++)
+            {
+                if (HumMagic[i] == null)
+                {
+                    HumMagic[i] = HUtil32.DetailtMagicRcd;
+                }
+            }
+            var StorageItems = humanRcd.Data.StorageItems;
+            if (StorageItems == null)
+            {
+                StorageItems = new UserItem[50];
+            }
+            for (var i = 0; i < playObject.StorageItemList.Count; i++)
+            {
+                if (i >= StorageItems.Length)
+                {
+                    break;
+                }
+                StorageItems[i] = playObject.StorageItemList[i];
+            }
+            for (var i = 0; i < StorageItems.Length; i++)
+            {
+                if (StorageItems[i] == null)
+                {
+                    StorageItems[i] = HUtil32.DelfautItem;
                 }
             }
         }

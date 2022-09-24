@@ -471,7 +471,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 交易对象
         /// </summary>
-        protected BaseObject DealCreat;
+        protected PlayObject DealCreat;
         public GuildInfo MyGuild;
         public int GuildRankNo;
         public string GuildRankName = string.Empty;

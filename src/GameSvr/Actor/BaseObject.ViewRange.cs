@@ -10,7 +10,7 @@ namespace GameSvr.Actor
         /// 更新怪物视野
         /// </summary>
         /// <param name="baseObject"></param>
-        public virtual void UpdateMonsterVisible(BaseObject baseObject)
+        public void UpdateMonsterVisible(BaseObject baseObject)
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
@@ -131,7 +131,7 @@ namespace GameSvr.Actor
         public bool IsVisibleHuman()
         {
             bool result = false;
-            for (int i = 0; i < VisibleActors.Count; i++)
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
                 var visibleBaseObject = VisibleActors[i];
                 if ((visibleBaseObject.BaseObject.Race == Grobal2.RC_PLAYOBJECT) || (visibleBaseObject.BaseObject.Master != null))
@@ -143,7 +143,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public virtual void SearchViewRange() //这里应该只有NPC商人才会执行了,但是NPC商人貌似又不太需要执行这个方法
+        public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
             if (Envir == null)
