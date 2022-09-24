@@ -1,14 +1,10 @@
 ﻿using GameSvr.Items;
-using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Player;
 using GameSvr.RobotPlay;
-using System;
-using System.Collections;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Actor
 {
@@ -302,7 +298,6 @@ namespace GameSvr.Actor
                                 }
                                 if (nCount > dCount)
                                 {
-                                    // Dec(nCount,dCount);
                                     IncSpell += dCount;
                                     UseItems[Grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
                                 }
@@ -1231,7 +1226,7 @@ namespace GameSvr.Actor
             int nC;
             int nRate;
             StdItem StdItem;
-            IList<DeleteItem> DropItemList = null;
+            IList<DeleteItem> DropItemList;
             const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
             try
             {
@@ -1239,6 +1234,7 @@ namespace GameSvr.Actor
                 {
                     return;
                 }
+                DropItemList = new List<DeleteItem>();
                 if (Race == Grobal2.RC_PLAYOBJECT)
                 {
                     nC = 0;
@@ -1254,10 +1250,6 @@ namespace GameSvr.Actor
                         {
                             if ((StdItem.ItemDesc & 8) != 0)
                             {
-                                if (DropItemList == null)
-                                {
-                                    DropItemList = new List<DeleteItem>();
-                                }
                                 DropItemList.Add(new DeleteItem()
                                 {
                                     MakeIndex = UseItems[nC].MakeIndex
@@ -1303,10 +1295,6 @@ namespace GameSvr.Actor
                                 {
                                     if (Race == Grobal2.RC_PLAYOBJECT)
                                     {
-                                        if (DropItemList == null)
-                                        {
-                                            DropItemList = new List<DeleteItem>();
-                                        }
                                         DropItemList.Add(new DeleteItem()
                                         {
                                             ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].Index),
@@ -1372,73 +1360,75 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            if (Race >= Grobal2.RC_ANIMAL)
+            switch (Race)
             {
-                if (BaseObject.Race >= Grobal2.RC_ANIMAL)
-                {
+                case >= Grobal2.RC_ANIMAL:
+                    {
+                        if (BaseObject.Race >= Grobal2.RC_ANIMAL)
+                        {
+                            result = true;
+                        }
+                        if (BaseObject.Master != null)
+                        {
+                            result = false;
+                        }
+                        return result;
+                    }
+                case Grobal2.RC_PLAYOBJECT:
+                    {
+                        result = IsProperFriend_IsFriend(BaseObject);
+                        if (BaseObject.Race < Grobal2.RC_ANIMAL)
+                        {
+                            return result;
+                        }
+                        if (BaseObject.Master == this)
+                        {
+                            return true;
+                        }
+                        if (BaseObject.Master != null)
+                        {
+                            return IsProperFriend_IsFriend(BaseObject.Master);
+                        }
+                        break;
+                    }
+                default:
                     result = true;
-                }
-                if (BaseObject.Master != null)
-                {
-                    result = false;
-                }
-                return result;
-            }
-            if (Race == Grobal2.RC_PLAYOBJECT)
-            {
-                result = IsProperFriend_IsFriend(BaseObject);
-                if (BaseObject.Race < Grobal2.RC_ANIMAL)
-                {
-                    return result;
-                }
-                if (BaseObject.Master == this)
-                {
-                    return true;
-                }
-                if (BaseObject.Master != null)
-                {
-                    return IsProperFriend_IsFriend(BaseObject.Master);
-                }
-            }
-            else
-            {
-                result = true;
+                    break;
             }
             return result;
         }
 
-        protected virtual bool Operate(ProcessMessage ProcessMsg)
+        protected virtual bool Operate(ProcessMessage processMsg)
         {
-            int nDamage;
             int nTargetX;
             int nTargetY;
             int nPower;
             int nRage;
             BaseObject TargetBaseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::Operate ";
-            bool result = false;
+            var result = false;
             try
             {
-                switch (ProcessMsg.wIdent)
+                switch (processMsg.wIdent)
                 {
                     case Grobal2.RM_MAGSTRUCK:
                     case Grobal2.RM_MAGSTRUCK_MINE:
-                        if ((ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= Grobal2.RC_ANIMAL) && !Bo2Bf && (WAbil.Level < 50))
+                        if ((processMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= Grobal2.RC_ANIMAL) && !Bo2Bf && (WAbil.Level < 50))
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
-                        nDamage = GetMagStruckDamage(null, ProcessMsg.nParam1);
+                        var nDamage = GetMagStruckDamage(null, processMsg.nParam1);
                         if (nDamage > 0)
                         {
-                            StruckDamage((ushort)nDamage);
+                            StruckDamage(nDamage);
                             HealthSpellChanged();
-                            SendRefMsg(Grobal2.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, ProcessMsg.BaseObject, "");
-                            TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.BaseObject);
+                            SendRefMsg(Grobal2.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
+                            TargetBaseObject = M2Share.ActorMgr.Get(processMsg.BaseObject);
                             if (M2Share.Config.MonDelHptoExp)
                             {
                                 if (TargetBaseObject.Race == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    if ((TargetBaseObject as PlayObject).WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if (TargetBaseObject.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(CharName))
                                         {
@@ -1457,7 +1447,7 @@ namespace GameSvr.Actor
                                 {
                                     if (TargetBaseObject.Master != null)
                                     {
-                                        if ((TargetBaseObject.Master as PlayObject).WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                        if (TargetBaseObject.Master.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                         {
                                             if (!M2Share.GetNoHptoexpMonList(CharName))
                                             {
@@ -1480,7 +1470,7 @@ namespace GameSvr.Actor
                                 {
                                     MeatQuality -= (ushort)(nDamage * 1000);
                                 }
-                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, ProcessMsg.BaseObject, "");
+                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
                             }
                         }
                         if (FastParalysis)
@@ -1490,16 +1480,16 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_MAGHEALING:
-                        if ((IncHealing + ProcessMsg.nParam1) < 300)
+                        if ((IncHealing + processMsg.nParam1) < 300)
                         {
                             if (Race == Grobal2.RC_PLAYOBJECT)
                             {
-                                IncHealing += ProcessMsg.nParam1;
+                                IncHealing += processMsg.nParam1;
                                 PerHealing = 5;
                             }
                             else
                             {
-                                IncHealing += ProcessMsg.nParam1;
+                                IncHealing += processMsg.nParam1;
                                 PerHealing = 5;
                             }
                         }
@@ -1509,10 +1499,10 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_10101:
-                        SendRefMsg(ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.Msg);
-                        if ((ProcessMsg.BaseObject == Grobal2.RM_STRUCK) && (Race != Grobal2.RC_PLAYOBJECT))
+                        SendRefMsg(processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
+                        if ((processMsg.BaseObject == Grobal2.RM_STRUCK) && (Race != Grobal2.RC_PLAYOBJECT))
                         {
-                            SendMsg(this, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.Msg);
+                            SendMsg(this, processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         }
                         if (FastParalysis)
                         {
@@ -1521,11 +1511,11 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_DELAYMAGIC:
-                        nPower = ProcessMsg.wParam;
-                        nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
-                        nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
-                        nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
+                        nPower = processMsg.wParam;
+                        nTargetX = HUtil32.LoWord(processMsg.nParam1);
+                        nTargetY = HUtil32.HiWord(processMsg.nParam1);
+                        nRage = processMsg.nParam2;
+                        TargetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(TargetBaseObject);
@@ -1540,21 +1530,21 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_10155:
-                        MapRandomMove(ProcessMsg.Msg, ProcessMsg.wParam);
+                        MapRandomMove(processMsg.Msg, processMsg.wParam);
                         break;
                     case Grobal2.RM_DELAYPUSHED:
-                        nPower = ProcessMsg.wParam;
-                        nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
-                        nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
-                        nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        nPower = processMsg.wParam;
+                        nTargetX = HUtil32.LoWord(processMsg.nParam1);
+                        nTargetY = HUtil32.HiWord(processMsg.nParam1);
+                        nRage = processMsg.nParam2;
+                        TargetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
                         if (TargetBaseObject != null)
                         {
                             TargetBaseObject.CharPushed((byte)nPower, nRage);
                         }
                         break;
                     case Grobal2.RM_POISON:
-                        TargetBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
+                        TargetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
                         if (TargetBaseObject != null)
                         {
                             if (IsProperTarget(TargetBaseObject))
@@ -1566,15 +1556,15 @@ namespace GameSvr.Actor
                                 }
                                 SetLastHiter(TargetBaseObject);
                             }
-                            MakePosion(ProcessMsg.wParam, (ushort)ProcessMsg.nParam1, ProcessMsg.nParam3);// 中毒类型
+                            MakePosion(processMsg.wParam, (ushort)processMsg.nParam1, processMsg.nParam3);// 中毒类型
                         }
                         else
                         {
-                            MakePosion(ProcessMsg.wParam, (ushort)ProcessMsg.nParam1, ProcessMsg.nParam3);// 中毒类型
+                            MakePosion(processMsg.wParam, (ushort)processMsg.nParam1, processMsg.nParam3);// 中毒类型
                         }
                         break;
                     case Grobal2.RM_TRANSPARENT:
-                        M2Share.MagicMgr.MagMakePrivateTransparent(this, (ushort)ProcessMsg.nParam1);
+                        M2Share.MagicMgr.MagMakePrivateTransparent(this, (ushort)processMsg.nParam1);
                         break;
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
