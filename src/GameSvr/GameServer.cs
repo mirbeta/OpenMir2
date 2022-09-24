@@ -31,7 +31,7 @@ namespace GameSvr
             Task.Factory.StartNew(() =>
             {
                 while (M2Share.StartReady)
-                { 
+                {
                     Execute();
                     Thread.Sleep(20);
                 }

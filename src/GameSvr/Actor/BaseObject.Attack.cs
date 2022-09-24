@@ -503,7 +503,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         /// <summary>
         /// 检查武器升级状态
         /// </summary>
@@ -946,7 +946,7 @@ namespace GameSvr.Actor
         {
             return MagicArr[magicId];
         }
-        
+
         protected void SendAttackMsg(int wIdent, byte btDir, short nX, short nY)
         {
             SendRefMsg(wIdent, btDir, nX, nY, 0, "");

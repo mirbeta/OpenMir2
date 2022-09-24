@@ -7,7 +7,6 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Player
 {

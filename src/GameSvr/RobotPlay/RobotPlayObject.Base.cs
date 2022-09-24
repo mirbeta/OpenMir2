@@ -2,7 +2,6 @@ using GameSvr.Actor;
 using GameSvr.Event;
 using GameSvr.Items;
 using GameSvr.Maps;
-using System.Collections;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Packet.ClientPackets;
@@ -502,7 +501,7 @@ namespace GameSvr.RobotPlay
                         if (cellsuccess && cellInfo.IsAvailable)
                         {
                             nIdx = 0;
-                            while (cellInfo.Count>0)
+                            while (cellInfo.Count > 0)
                             {
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
@@ -549,7 +548,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);;
+                                                baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                                                 if (baseObject != null)
                                                 {
                                                     if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -600,7 +599,7 @@ namespace GameSvr.RobotPlay
                                                                     MapItem.OfBaseObject = 0;
                                                                 }
                                                             }
-                                                            if (MapItem.DropBaseObject >0)
+                                                            if (MapItem.DropBaseObject > 0)
                                                             {
                                                                 if (M2Share.ActorMgr.Get(MapItem.DropBaseObject).Ghost)
                                                                 {

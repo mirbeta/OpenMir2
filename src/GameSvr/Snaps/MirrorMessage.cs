@@ -2,7 +2,6 @@
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Snaps
 {

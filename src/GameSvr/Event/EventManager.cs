@@ -7,13 +7,13 @@ namespace GameSvr.Event
     {
         private readonly IList<MirEvent> _eventList;
         private readonly IList<MirEvent> _closedEventList;
-        
+
         public EventManager()
         {
             _eventList = new List<MirEvent>();
             _closedEventList = new List<MirEvent>();
         }
-        
+
         public void Run()
         {
             MirEvent executeEvent;

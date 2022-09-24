@@ -111,39 +111,39 @@ namespace GameSvr.Castle
             WriteDateTime("Setup", "ChangeDate", userCastle.ChangeDate);
             WriteDateTime("Setup", "WarDate", userCastle.m_WarDate);
             WriteDateTime("Setup", "IncomeToday", userCastle.IncomeToday);
-            if (userCastle.TotalGold != 0) 
+            if (userCastle.TotalGold != 0)
                 WriteInteger("Setup", "TotalGold", userCastle.TotalGold);
-            if (userCastle.TodayIncome != 0) 
+            if (userCastle.TodayIncome != 0)
                 WriteInteger("Setup", "TodayIncome", userCastle.TodayIncome);
             for (var i = 0; i < userCastle.EnvirList.Count; i++)
             {
                 sMapList = sMapList + userCastle.EnvirList[i] + ',';
             }
-            if (!string.IsNullOrEmpty(sMapList)) 
+            if (!string.IsNullOrEmpty(sMapList))
                 WriteString("Defense", "CastleMapList", sMapList);
-            if (userCastle.MapName != "") 
+            if (userCastle.MapName != "")
                 WriteString("Defense", "CastleMap", userCastle.MapName);
-            if (userCastle.HomeMap != "") 
+            if (userCastle.HomeMap != "")
                 WriteString("Defense", "CastleHomeMap", userCastle.HomeMap);
-            if (userCastle.HomeX != 0) 
+            if (userCastle.HomeX != 0)
                 WriteInteger("Defense", "CastleHomeX", userCastle.HomeX);
-            if (userCastle.HomeY != 0) 
+            if (userCastle.HomeY != 0)
                 WriteInteger("Defense", "CastleHomeY", userCastle.HomeY);
-            if (userCastle.WarRangeX != 0) 
+            if (userCastle.WarRangeX != 0)
                 WriteInteger("Defense", "CastleWarRangeX", userCastle.WarRangeX);
-            if (userCastle.WarRangeY != 0) 
+            if (userCastle.WarRangeY != 0)
                 WriteInteger("Defense", "CastleWarRangeY", userCastle.WarRangeY);
-            if (userCastle.PalaceMap != "") 
+            if (userCastle.PalaceMap != "")
                 WriteString("Defense", "CastlePlaceMap", userCastle.PalaceMap);
-            if (userCastle.SecretMap != "") 
+            if (userCastle.SecretMap != "")
                 WriteString("Defense", "CastleSecretMap", userCastle.SecretMap);
             if (userCastle.PalaceDoorX != 0)
                 WriteInteger("Defense", "CastlePalaceDoorX", userCastle.PalaceDoorX);
-            if (userCastle.PalaceDoorY != 0) 
+            if (userCastle.PalaceDoorY != 0)
                 WriteInteger("Defense", "CastlePalaceDoorY", userCastle.PalaceDoorY);
-            if (userCastle.MainDoor.nX != 0) 
+            if (userCastle.MainDoor.nX != 0)
                 WriteInteger("Defense", "MainDoorX", userCastle.MainDoor.nX);
-            if (userCastle.MainDoor.nY != 0) 
+            if (userCastle.MainDoor.nY != 0)
                 WriteInteger("Defense", "MainDoorY", userCastle.MainDoor.nY);
             if (userCastle.MainDoor.sName != "")
                 WriteString("Defense", "MainDoorName", userCastle.MainDoor.sName);

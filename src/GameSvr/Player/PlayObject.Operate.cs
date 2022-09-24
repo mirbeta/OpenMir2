@@ -6,6 +6,7 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameSvr.Player
 {
@@ -99,6 +100,14 @@ namespace GameSvr.Player
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
                     clientItem.DuraMax = playObject.UseItems[i].DuraMax;
+
+                    if (i == Grobal2.U_DRESS)
+                    {
+                        playObject.ChangeItemWithLevel(ref clientItem, playObject.Abil.Level);
+                    }
+
+                    playObject.ChangeItemByJob(ref clientItem, playObject.Abil.Level);
+
                     userState.UseItems[i] = clientItem;
                 }
             }
@@ -470,6 +479,26 @@ namespace GameSvr.Player
                             SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
                             SendDefMessage(Grobal2.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                             FeatureChanged();
+
+                            if ((stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_MAN) || (stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_WOMAN))
+                            {
+                                if (stdItem.Shape == ItemShapeConst.DRESS_SHAPE_WING)
+                                {
+                                    SendUpdateItemWithLevel(UseItems[btWhere], Abil.Level);
+                                }
+                                else if (stdItem.Shape == DragonConst.DRAGON_DRESS_SHAPE)
+                                {
+                                    SendUpdateItemByJob(UseItems[btWhere], Abil.Level);
+                                }
+                                else if (stdItem.Shape == ItemShapeConst.DRESS_SHAPE_PBKING)
+                                {
+                                    SendUpdateItemByJob(UseItems[btWhere], Abil.Level);
+                                }
+                                else
+                                {
+                                    SendUpdateItem(UseItems[btWhere]);
+                                }
+                            }
                             n18 = 1;
                         }
                     }

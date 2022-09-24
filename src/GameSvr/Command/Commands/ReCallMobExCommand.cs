@@ -1,5 +1,4 @@
-﻿using GameSvr.Actor;
-using GameSvr.Player;
+﻿using GameSvr.Player;
 using SystemModule.Data;
 
 namespace GameSvr.Command.Commands

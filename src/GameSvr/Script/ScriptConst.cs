@@ -4,7 +4,7 @@
     {
         public const string sMarket_Def = "Market_Def";
         public const string sNpc_def = "Npc_def";
-        
+
         public const string sMAN = "MAN";
         public const string sSUNRAISE = "SUNRAISE";
         public const string sDAY = "DAY";

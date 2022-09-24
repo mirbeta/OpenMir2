@@ -14,7 +14,7 @@ namespace GameSvr.Maps
         {
             _cellObject.TryAdd(cellId, cell);
         }
-        
+
         public EntityId Get(int cellId)
         {
             EntityId cell = null;

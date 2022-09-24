@@ -1,7 +1,6 @@
 using NLog;
 using System.Collections.Concurrent;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Services

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using GameSvr.Npc;
+﻿using GameSvr.Npc;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;

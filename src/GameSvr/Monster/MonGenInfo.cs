@@ -62,6 +62,6 @@ namespace GameSvr.Monster
     public class MonGenConst
     {
         public const int ThreadMonLimit = 40000;
-    
+
     }
 }
