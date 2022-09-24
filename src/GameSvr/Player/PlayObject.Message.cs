@@ -1663,14 +1663,7 @@ namespace GameSvr.Player
                     break;
                 case Grobal2.RM_MAGICFIRE:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MAGICFIRE, ProcessMsg.BaseObject, HUtil32.LoWord(ProcessMsg.nParam2), HUtil32.HiWord(ProcessMsg.nParam2), ProcessMsg.nParam1);
-                    var by = new byte[sizeof(int)];
-                    unsafe
-                    {
-                        fixed (byte* pb = by)
-                        {
-                            *(int*)pb = ProcessMsg.nParam3;
-                        }
-                    }
+                    var by = BitConverter.GetBytes(ProcessMsg.nParam3);
                     var sSendStr = EDCode.EncodeBuffer(by, by.Length);
                     SendSocket(m_DefMsg, sSendStr);
                     break;
