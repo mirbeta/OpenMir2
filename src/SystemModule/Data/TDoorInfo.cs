@@ -1,10 +1,10 @@
 ﻿namespace SystemModule.Data
 {
-    public class TDoorInfo : EntityId
+    public class DoorInfo : EntityId
     {
         public int nX;
         public int nY;
-        public TDoorStatus Status;
+        public DoorStatus Status;
         public int n08;
     }
 }

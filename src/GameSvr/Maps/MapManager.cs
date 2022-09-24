@@ -7,9 +7,13 @@ namespace GameSvr.Maps
 {
     public class MapManager
     {
-        private readonly Dictionary<string, Envirnoment> MapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Envirnoment> _mapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
+        /// <summary>
+        /// 地图上门列表
+        /// </summary>
+        private readonly IList<Envirnoment> _mapDoorList = new List<Envirnoment>();
 
-        public IList<Envirnoment> Maps => MapList.Values.ToList();
+        public IList<Envirnoment> Maps => _mapList.Values.ToList();
 
         public void MakeSafePkZone()
         {
@@ -44,7 +48,7 @@ namespace GameSvr.Maps
         public IList<Envirnoment> GetMineMaps()
         {
             var list = new List<Envirnoment>();
-            foreach (var item in MapList.Values)
+            foreach (var item in _mapList.Values)
             {
                 if (item.Flag.boMINE || item.Flag.boMINE2)
                 {
@@ -56,15 +60,7 @@ namespace GameSvr.Maps
 
         public IList<Envirnoment> GetDoorMapList()
         {
-            var list = new List<Envirnoment>();
-            foreach (var item in MapList.Values)
-            {
-                if (item.DoorList.Count > 0)
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
+            return _mapDoorList;
         }
 
         public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, Merchant QuestNPC)
@@ -102,13 +98,17 @@ namespace GameSvr.Maps
             }
             if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.MapDir, sMapFileName + ".map")))
             {
-                if (!MapList.ContainsKey(sMapName))
+                if (!_mapList.ContainsKey(sMapName))
                 {
-                    MapList.Add(sMapName, envirnoment);
+                    _mapList.Add(sMapName, envirnoment);
                 }
                 else
                 {
                     M2Share.Log.Error("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
+                }
+                if (envirnoment.DoorList.Count > 0)
+                {
+                    _mapDoorList.Add(envirnoment);
                 }
             }
             else
@@ -141,13 +141,13 @@ namespace GameSvr.Maps
         public Envirnoment FindMap(string sMapName)
         {
             Envirnoment Map = null;
-            return MapList.TryGetValue(sMapName, out Map) ? Map : null;
+            return _mapList.TryGetValue(sMapName, out Map) ? Map : null;
         }
 
         public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
             Envirnoment result = null;
-            if (MapList.TryGetValue(sMapName, out var envirnoment))
+            if (_mapList.TryGetValue(sMapName, out var envirnoment))
             {
                 if (envirnoment.ServerIndex == nServerIdx)
                 {
@@ -164,7 +164,7 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
-            if (MapList.TryGetValue(sMapName, out var envirnoment))
+            if (_mapList.TryGetValue(sMapName, out var envirnoment))
             {
                 return envirnoment.ServerIndex;
             }

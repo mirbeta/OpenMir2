@@ -1793,34 +1793,26 @@ namespace GameSvr.World
             return result;
         }
 
-        public bool OpenDoor(Envirnoment envir, int nX, int nY)
+        public void OpenDoor(Envirnoment envir, int nX, int nY)
         {
-            var result = false;
             var door = envir.GetDoor(nX, nY);
-            if (door != null && !door.Status.boOpened && !door.Status.bo01)
+            if (door != null && !door.Status.Opened && !door.Status.bo01)
             {
-                door.Status.boOpened = true;
-                door.Status.dwOpenTick = HUtil32.GetTickCount();
-                SendDoorStatus(envir, nX, nY, Grobal2.RM_DOOROPEN, 0, nX, nY, 0, "");
-                result = true;
+                door.Status.Opened = true;
+                door.Status.OpenTick = HUtil32.GetTickCount();
+                SendDoorStatus(envir, nX, nY, Grobal2.RM_DOOROPEN, 0, nX, nY);
             }
-            return result;
         }
 
-        private bool CloseDoor(Envirnoment envir, TDoorInfo door)
+        private void CloseDoor(Envirnoment envir, DoorInfo door)
         {
-            var result = false;
-            if (door != null && door.Status.boOpened)
-            {
-                door.Status.boOpened = false;
-                SendDoorStatus(envir, door.nX, door.nY, Grobal2.RM_DOORCLOSE, 0, door.nX, door.nY, 0, "");
-                result = true;
-            }
-            return result;
+            if (door == null || !door.Status.Opened)
+                return;
+            door.Status.Opened = false;
+            SendDoorStatus(envir, door.nX, door.nY, Grobal2.RM_DOORCLOSE, 0, door.nX, door.nY);
         }
-
-        private void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY,
-            int nA, string sStr)
+ 
+        private void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)
         {
             int n1C = nX - 12;
             int n24 = nX + 12;
@@ -1842,7 +1834,7 @@ namespace GameSvr.World
                                 var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
+                                    baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");
                                 }
                             }
                         }
@@ -1859,10 +1851,10 @@ namespace GameSvr.World
                 var envir = dorrList[i];
                 for (var j = 0; j < envir.DoorList.Count; j++)
                 {
-                    TDoorInfo door = envir.DoorList[j];
-                    if (door.Status.boOpened)
+                    DoorInfo door = envir.DoorList[j];
+                    if (door.Status.Opened)
                     {
-                        if ((HUtil32.GetTickCount() - door.Status.dwOpenTick) > 5 * 1000)
+                        if ((HUtil32.GetTickCount() - door.Status.OpenTick) > 5 * 1000)
                         {
                             CloseDoor(envir, door);
                         }
