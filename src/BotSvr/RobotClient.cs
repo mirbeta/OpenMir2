@@ -5606,20 +5606,20 @@ namespace BotSvr
             MShare.g_boCanRunAllInWarZone = HUtil32.HiByte(HUtil32.HiWord(msg.Recog)) == 1;
             sBody = EDCode.DeCodeString(sBody);
             var ClientConf = EDCode.DecodeBuffer<ClientConf>(sBody);
-            MShare.g_boCanRunHuman = ClientConf.boRunHuman;
-            MShare.g_boCanRunMon = ClientConf.boRunMon;
-            MShare.g_boCanRunNpc = ClientConf.boRunNpc;
-            MShare.g_boCanRunAllInWarZone = ClientConf.boWarRunAll;
-            MShare.g_boCanStartRun = ClientConf.boCanStartRun;
-            MShare.g_boParalyCanRun = ClientConf.boParalyCanRun;
-            MShare.g_boParalyCanWalk = ClientConf.boParalyCanWalk;
-            MShare.g_boParalyCanHit = ClientConf.boParalyCanHit;
-            MShare.g_boParalyCanSpell = ClientConf.boParalyCanSpell;
-            MShare.g_boShowRedHPLable = ClientConf.boShowRedHPLable;
-            MShare.g_boShowHPNumber = ClientConf.boShowHPNumber;
-            MShare.g_boShowJobLevel = ClientConf.boShowJobLevel;
-            MShare.g_boDuraAlert = ClientConf.boDuraAlert;
-            MShare.g_boMagicLock = ClientConf.boMagicLock;
+            //MShare.g_boCanRunHuman = ClientConf.boRunHuman;
+            //MShare.g_boCanRunMon = ClientConf.boRunMon;
+            //MShare.g_boCanRunNpc = ClientConf.boRunNpc;
+            //MShare.g_boCanRunAllInWarZone = ClientConf.boWarRunAll;
+            //MShare.g_boCanStartRun = ClientConf.boCanStartRun;
+            //MShare.g_boParalyCanRun = ClientConf.boParalyCanRun;
+            //MShare.g_boParalyCanWalk = ClientConf.boParalyCanWalk;
+            //MShare.g_boParalyCanHit = ClientConf.boParalyCanHit;
+            //MShare.g_boParalyCanSpell = ClientConf.boParalyCanSpell;
+            //MShare.g_boShowRedHPLable = ClientConf.boShowRedHPLable;
+            //MShare.g_boShowHPNumber = ClientConf.boShowHPNumber;
+            //MShare.g_boShowJobLevel = ClientConf.boShowJobLevel;
+            //MShare.g_boDuraAlert = ClientConf.boDuraAlert;
+            //MShare.g_boMagicLock = ClientConf.boMagicLock;
         }
 
         public ClientMagic GetMagicByID(int magid)
