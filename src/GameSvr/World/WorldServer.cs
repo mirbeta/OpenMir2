@@ -1356,10 +1356,9 @@ namespace GameSvr.World
         public int GetMapOfRangeHumanCount(Envirnoment envir, int nX, int nY, int nRange)
         {
             var result = 0;
-            PlayObject playObject;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = PlayObjectList[i];
+                var playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == envir)
                 {
                     if (Math.Abs(playObject.CurrX - nX) < nRange && Math.Abs(playObject.CurrY - nY) < nRange)
@@ -1404,10 +1403,9 @@ namespace GameSvr.World
 
         private void KickOnlineUser(string sChrName)
         {
-            PlayObject playObject;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = PlayObjectList[i];
+                var playObject = PlayObjectList[i];
                 if (string.Compare(playObject.CharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.m_boKickFlag = true;
@@ -1845,10 +1843,10 @@ namespace GameSvr.World
 
         private void ProcessMapDoor()
         {
-            var dorrList = M2Share.MapMgr.GetDoorMapList();
-            for (var i = 0; i < dorrList.Count; i++)
+            var doorList = M2Share.MapMgr.GetDoorMapList();
+            for (var i = 0; i < doorList.Count; i++)
             {
-                var envir = dorrList[i];
+                var envir = doorList[i];
                 for (var j = 0; j < envir.DoorList.Count; j++)
                 {
                     DoorInfo door = envir.DoorList[j];
@@ -1865,7 +1863,6 @@ namespace GameSvr.World
 
         private void ProcessEvents()
         {
-            int count;
             for (var i = MagicEventList.Count - 1; i >= 0; i--)
             {
                 MagicEvent magicEvent = MagicEventList[i];
@@ -1875,12 +1872,14 @@ namespace GameSvr.World
                     {
                         BaseObject baseObject = magicEvent.BaseObjectList[j];
                         if (baseObject.Death || baseObject.Ghost || !baseObject.HolySeize)
+                        {
                             magicEvent.BaseObjectList.RemoveAt(j);
+                        }
                     }
                     if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.dwStartTick) > magicEvent.dwTime ||
                         (HUtil32.GetTickCount() - magicEvent.dwStartTick) > 180000)
                     {
-                        count = 0;
+                        var count = 0;
                         while (true)
                         {
                             if (magicEvent.Events[count] != null) magicEvent.Events[count].Close();
@@ -1896,17 +1895,15 @@ namespace GameSvr.World
 
         public MagicInfo FindMagic(string sMagicName)
         {
-            MagicInfo result = null;
             for (var i = 0; i < MagicList.Count; i++)
             {
                 MagicInfo magic = MagicList[i];
                 if (magic.MagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
                 {
-                    result = magic;
-                    break;
+                    return magic;
                 }
             }
-            return result;
+            return null;
         }
 
         public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> list)
