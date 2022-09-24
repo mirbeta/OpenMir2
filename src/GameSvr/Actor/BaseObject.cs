@@ -4683,7 +4683,7 @@ namespace GameSvr.Actor
             return (ushort)nDamage;
         }
 
-        public int GetMagStruckDamage(BaseObject baseObject, int nDamage)
+        public ushort GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
             var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = HUtil32._MAX(0, nDamage - n14);
@@ -4696,7 +4696,7 @@ namespace GameSvr.Actor
                 nDamage = HUtil32.Round(nDamage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);
                 DamageBubbleDefence(nDamage);
             }
-            return nDamage;
+            return (ushort)nDamage;
         }
 
         public void StruckDamage(ushort nDamage)
