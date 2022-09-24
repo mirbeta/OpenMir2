@@ -362,7 +362,7 @@ namespace DBSvr.Services
             if (!bo21)
             {
                 bo21 = true;
-                int nIndex = _playDataStorage.Index(sChrName);
+                var nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex < 0)
                 {
                     humanRcd.Header.sName = sChrName;

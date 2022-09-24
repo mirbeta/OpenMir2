@@ -94,6 +94,7 @@ namespace GameSvr
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Unhandled exception!");
+                        _logger.LogError(ex.StackTrace);
                         _exitCode = 1;
                     }
                 }, stoppingToken);
