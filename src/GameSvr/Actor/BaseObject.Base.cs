@@ -1498,7 +1498,7 @@ namespace GameSvr.Actor
                             IncHealing = 300;
                         }
                         break;
-                    case Grobal2.RM_10101:
+                    case Grobal2.RM_REFMESSAGE:
                         SendRefMsg(processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         if ((processMsg.BaseObject == Grobal2.RM_STRUCK) && (Race != Grobal2.RC_PLAYOBJECT))
                         {
@@ -1529,7 +1529,7 @@ namespace GameSvr.Actor
                             }
                         }
                         break;
-                    case Grobal2.RM_10155:
+                    case Grobal2.RM_RANDOMSPACEMOVE:
                         MapRandomMove(processMsg.Msg, processMsg.wParam);
                         break;
                     case Grobal2.RM_DELAYPUSHED:
@@ -1569,9 +1569,9 @@ namespace GameSvr.Actor
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
-                        /*default:
-                            Debug.WriteLine(format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
-                            break;*/
+                    default:
+                        M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", CharName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
+                        break;
                 }
             }
             catch (Exception e)

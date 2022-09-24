@@ -2111,7 +2111,7 @@ namespace GameSvr.Npc
                         for (var k = 0; k < BatchParamsList.Count; k++)
                         {
                             var batchParam = BatchParamsList[k];
-                            PlayObject.SendDelayMsg(this.ActorId, Grobal2.RM_10155, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
+                            PlayObject.SendDelayMsg(this.ActorId, Grobal2.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
                             n20 += batchParam.nParams;
                         }
                         break;

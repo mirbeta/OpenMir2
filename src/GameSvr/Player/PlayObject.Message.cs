@@ -806,7 +806,7 @@ namespace GameSvr.Player
                         ClientDropGold(ProcessMsg.nParam1);
                     }
                     break;
-                case Grobal2.CM_1017:
+                case Grobal2.CM_TEST:
                     SendDefMessage(1, 0, 0, 0, 0, "");
                     break;
                 case Grobal2.CM_GROUPMODE:
@@ -1292,10 +1292,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_SAY:
-                    if (!string.IsNullOrEmpty(ProcessMsg.Msg))
-                    {
-                        ProcessUserLineMsg(ProcessMsg.Msg);
-                    }
+                    ProcessUserLineMsg(ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_PASSWORD:
                     ProcessClientPassword(ProcessMsg);

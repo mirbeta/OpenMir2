@@ -39,7 +39,7 @@ namespace GameSvr.Monster.Monsters
                             if (nDamage > 0)
                             {
                                 baseObject.StruckDamage((ushort)nDamage);
-                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
+                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                                 if (UsePoison)
                                 {
                                     if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0)

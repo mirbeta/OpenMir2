@@ -5815,18 +5815,15 @@ namespace GameSvr.Actor
                 {
                     CurrX = (short)nX;
                     CurrY = (short)nY;
-
                     addObj = Envir.AddToMap(nX, nY, MapCell, this);
                     break;
                 }
-
                 nC++;
                 if (nC > 46)
                 {
                     break;
                 }
             }
-
             if (addObj == null)
             {
                 CurrX = nX2;

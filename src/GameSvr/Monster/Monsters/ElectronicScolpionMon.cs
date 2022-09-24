@@ -25,7 +25,7 @@ namespace GameSvr.Monster.Monsters
                     WAbil.HP += (ushort)(nDamage / btGetBackHp);
                 }
                 TargetCret.StruckDamage((ushort)nDamage);
-                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, nDamage, TargetCret.WAbil.HP, TargetCret.WAbil.MaxHP, ActorId, "", 200);
+                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, TargetCret.WAbil.HP, TargetCret.WAbil.MaxHP, ActorId, "", 200);
             }
             SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
         }
