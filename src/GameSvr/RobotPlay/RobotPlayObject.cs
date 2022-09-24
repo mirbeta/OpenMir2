@@ -866,7 +866,7 @@ namespace GameSvr.RobotPlay
             {
                 StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
+            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动 
             }
@@ -1922,21 +1922,21 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (!m_boCanSpell)
             {
-                return result;
+                return false;
             }
             if (Death || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
             {
-                return result; // 防麻
+                return false; // 防麻
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell)
+            if (StatusArr[StatuStateConst.POISON_STONE] != 0)
             {
-                return result;// 防麻
+                return false;// 防麻
             }
             if (Envir != null)
             {
                 if (!Envir.AllowMagics(UserMagic.Magic.MagicName))
                 {
-                    return result;
+                    return false;
                 }
             }
             boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx); // 是否是战士技能
@@ -2202,7 +2202,7 @@ namespace GameSvr.RobotPlay
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ClientConf.btItemSpeed); // 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed); // 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
                                         m_wHitMode = 4;
@@ -2243,7 +2243,7 @@ namespace GameSvr.RobotPlay
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ClientConf.btItemSpeed);// 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed);// 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
                                         m_wHitMode = 9;
@@ -2277,7 +2277,7 @@ namespace GameSvr.RobotPlay
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ClientConf.btItemSpeed);
+                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed);
                                     // 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
@@ -2489,7 +2489,7 @@ namespace GameSvr.RobotPlay
             {
                 StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] > 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
+            if (StatusArr[StatuStateConst.POISON_STONE] > 0 && StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
             {
                 return false; // 麻痹不能跑动 
             }
@@ -2638,8 +2638,6 @@ namespace GameSvr.RobotPlay
         /// <summary>
         /// 走向目标
         /// </summary>
-        /// <param name="nTargetX"></param>
-        /// <param name="nTargetY"></param>
         /// <returns></returns>
         private bool WalkToTargetXY(int nTargetX, int nTargetY)
         {
@@ -2653,9 +2651,9 @@ namespace GameSvr.RobotPlay
             {
                 StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && !M2Share.Config.ClientConf.boParalyCanSpell || StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
+            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
             {
-                return result;// 麻痹不能跑动
+                return false;// 麻痹不能跑动
             }
             if (Math.Abs(nTargetX - CurrX) > 1 || Math.Abs(nTargetY - CurrY) > 1)
             {

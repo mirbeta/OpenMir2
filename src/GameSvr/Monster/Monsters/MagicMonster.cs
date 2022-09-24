@@ -99,7 +99,7 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (CanWalk() && !FixedHideMode && !StoneMode)
+            if (CanMove() && !FixedHideMode && !StoneMode)
             {
                 if (Think())
                 {

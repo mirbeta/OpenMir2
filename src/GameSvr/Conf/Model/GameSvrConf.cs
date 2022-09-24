@@ -999,6 +999,10 @@ namespace GameSvr.Conf.Model
         /// NPC名字颜色控制(0-255)
         /// </summary>
         public byte NpcNameColor;
+        /// <summary>
+        /// 物品攻击速度
+        /// </summary>
+        public byte ItemSpeed;
 
         public GameSvrConf()
         {
@@ -1687,6 +1691,7 @@ namespace GameSvr.Conf.Model
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
             sDBType = "MySQL";
             NpcNameColor = 255;
+            ItemSpeed = 60;
         }
     }
 }

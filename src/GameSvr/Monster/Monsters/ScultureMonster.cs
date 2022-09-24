@@ -42,7 +42,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (CanWalk() && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
+            if (CanMove() && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
             {
                 if (StoneMode)
                 {

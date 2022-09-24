@@ -99,7 +99,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (CanWalk())
+            if (CanMove())
             {
                 if ((HUtil32.GetTickCount() - this.WalkTick) > this.WalkSpeed)
                 {

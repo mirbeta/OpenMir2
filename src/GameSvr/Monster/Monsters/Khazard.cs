@@ -14,7 +14,7 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            if (CanWalk())
+            if (CanMove())
             {
                 if (TargetCret != null)
                 {

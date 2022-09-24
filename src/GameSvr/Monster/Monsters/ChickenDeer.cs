@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (CanWalk())
+            if (CanMove())
             {
                 int n10 = 9999;
                 BaseObject baseObject1C = null;

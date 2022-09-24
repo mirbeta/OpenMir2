@@ -21,7 +21,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (CanWalk())
+            if (CanMove())
             {
                 int nx = CurrX;
                 int ny = CurrY;

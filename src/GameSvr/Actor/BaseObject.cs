@@ -4703,7 +4703,7 @@ namespace GameSvr.Actor
             int nDura;
             int nOldDura;
             PlayObject playObject;
-            StdItem stdItem = null;
+            StdItem stdItem;
             bool bo19;
             if (nDamage <= 0)
             {
@@ -4832,9 +4832,7 @@ namespace GameSvr.Actor
 
         public bool GetBackPosition(ref short nX, ref short nY)
         {
-            bool result;
-            Envirnoment envir;
-            envir = this.Envir;
+            var envir = this.Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Direction)
@@ -4844,28 +4842,24 @@ namespace GameSvr.Actor
                     {
                         nY++;
                     }
-
                     break;
                 case Grobal2.DR_DOWN:
                     if (nY > 0)
                     {
                         nY -= 1;
                     }
-
                     break;
                 case Grobal2.DR_LEFT:
                     if (nX < (envir.Width - 1))
                     {
                         nX++;
                     }
-
                     break;
                 case Grobal2.DR_RIGHT:
                     if (nX > 0)
                     {
                         nX -= 1;
                     }
-
                     break;
                 case Grobal2.DR_UPLEFT:
                     if ((nX < (envir.Width - 1)) && (nY < (envir.Height - 1)))
@@ -4873,7 +4867,6 @@ namespace GameSvr.Actor
                         nX++;
                         nY++;
                     }
-
                     break;
                 case Grobal2.DR_UPRIGHT:
                     if ((nX < (envir.Width - 1)) && (nY > 0))
@@ -4881,7 +4874,6 @@ namespace GameSvr.Actor
                         nX -= 1;
                         nY++;
                     }
-
                     break;
                 case Grobal2.DR_DOWNLEFT:
                     if ((nX > 0) && (nY < (envir.Height - 1)))
@@ -4889,7 +4881,6 @@ namespace GameSvr.Actor
                         nX++;
                         nY -= 1;
                     }
-
                     break;
                 case Grobal2.DR_DOWNRIGHT:
                     if ((nX > 0) && (nY > 0))
@@ -4897,46 +4888,39 @@ namespace GameSvr.Actor
                         nX -= 1;
                         nY -= 1;
                     }
-
                     break;
             }
-
-            result = true;
-            return result;
+            return true;
         }
 
         public bool MakePosion(int nType, ushort nTime, int nPoint)
         {
-            var result = false;
-            if (nType < Grobal2.MAX_STATUS_ATTRIBUTE)
+            if (nType >= Grobal2.MAX_STATUS_ATTRIBUTE)
+                return false;
+            var nOldCharStatus = CharStatus;
+            if (StatusArr[nType] > 0)
             {
-                var nOldCharStatus = CharStatus;
-                if (StatusArr[nType] > 0)
-                {
-                    if (StatusArr[nType] < nTime)
-                    {
-                        StatusArr[nType] = nTime;
-                    }
-                }
-                else
+                if (StatusArr[nType] < nTime)
                 {
                     StatusArr[nType] = nTime;
                 }
-                StatusArrTick[nType] = HUtil32.GetTickCount();
-                CharStatus = GetCharStatus();
-                GreenPoisoningPoint = (byte)nPoint;
-                if (nOldCharStatus != CharStatus)
-                {
-                    StatusChanged();
-                }
-
-                if (Race == Grobal2.RC_PLAYOBJECT)
-                {
-                    SysMsg(Format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
-                }
-                result = true;
             }
-            return result;
+            else
+            {
+                StatusArr[nType] = nTime;
+            }
+            StatusArrTick[nType] = HUtil32.GetTickCount();
+            CharStatus = GetCharStatus();
+            GreenPoisoningPoint = (byte)nPoint;
+            if (nOldCharStatus != CharStatus)
+            {
+                StatusChanged();
+            }
+            if (Race == Grobal2.RC_PLAYOBJECT)
+            {
+                SysMsg(Format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
+            }
+            return true;
         }
 
         /// <summary>
@@ -4975,7 +4959,6 @@ namespace GameSvr.Actor
                 nDx = nX;
                 nDy = nY;
             }
-
             if (!result)
             {
                 for (var i = 0; i < nRange; i++)
@@ -4992,26 +4975,22 @@ namespace GameSvr.Actor
                                 break;
                             }
                         }
-
                         if (result)
                         {
                             break;
                         }
                     }
-
                     if (result)
                     {
                         break;
                     }
                 }
             }
-
             if (!result)
             {
                 nDx = nX;
                 nDy = nY;
             }
-
             return result;
         }
 
@@ -5052,47 +5031,40 @@ namespace GameSvr.Actor
             return (MyGuild != null) && (GuildRankNo == 1);
         }
 
-        public bool MagCanHitTarget(short nX, short nY, BaseObject targeTBaseObject)
+        public bool MagCanHitTarget(short nX, short nY, BaseObject targeBaseObject)
         {
             var result = false;
             int n18;
-            if (targeTBaseObject == null)
+            if (targeBaseObject == null)
             {
                 return result;
             }
-
-            var n20 = Math.Abs(nX - targeTBaseObject.CurrX) + Math.Abs(nY - targeTBaseObject.CurrY);
+            var n20 = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
             var n14 = 0;
             while (n14 < 13)
             {
-                n18 = M2Share.GetNextDirection(nX, nY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
+                n18 = M2Share.GetNextDirection(nX, nY, targeBaseObject.CurrX, targeBaseObject.CurrY);
                 if (Envir.GetNextPosition(nX, nY, n18, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
                 {
-                    if ((nX == targeTBaseObject.CurrX) && (nY == targeTBaseObject.CurrY))
+                    if ((nX == targeBaseObject.CurrX) && (nY == targeBaseObject.CurrY))
                     {
                         result = true;
                         break;
                     }
-                    else
+                    var n1C = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
+                    if (n1C > n20)
                     {
-                        var n1C = Math.Abs(nX - targeTBaseObject.CurrX) + Math.Abs(nY - targeTBaseObject.CurrY);
-                        if (n1C > n20)
-                        {
-                            result = true;
-                            break;
-                        }
-
-                        n1C = n20;
+                        result = true;
+                        break;
                     }
+                    n1C = n20;
                 }
                 else
                 {
                     break;
                 }
-
                 n14++;
             }
-
             return result;
         }
 
@@ -5114,7 +5086,6 @@ namespace GameSvr.Actor
                         {
                             result = true;
                         }
-
                         break;
                     case AttackMode.HAM_MASTER:
                         if (this == cret)
@@ -5268,7 +5239,6 @@ namespace GameSvr.Actor
                 StatusArr[StatuStateConst.STATE_DEFENCEUP] = nSec;
                 result = true;
             }
-
             StatusArrTick[StatuStateConst.STATE_DEFENCEUP] = HUtil32.GetTickCount();
             SysMsg(Format(M2Share.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
@@ -5344,7 +5314,6 @@ namespace GameSvr.Actor
                 {
                     continue;
                 }
-
                 var sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
                 if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -5352,31 +5321,24 @@ namespace GameSvr.Actor
                     nCount++;
                 }
             }
-
             return result;
         }
 
         public UserItem CheckItems(string sItemName)
         {
-            UserItem result = null;
-            UserItem userItem;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                userItem = ItemList[i];
+                var userItem = ItemList[i];
                 if (userItem == null)
                 {
                     continue;
                 }
-
-                if (string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName,
-                        StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    result = userItem;
-                    break;
+                    return userItem;
                 }
             }
-
-            return result;
+            return null;
         }
 
         protected void DelBagItem(int nIndex)
@@ -5385,21 +5347,18 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
             Dispose(ItemList[nIndex]);
             ItemList.RemoveAt(nIndex);
         }
 
         public bool DelBagItem(int nItemIndex, string sItemName)
         {
-            UserItem userItem;
             var result = false;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                userItem = ItemList[i];
+                var userItem = ItemList[i];
                 if ((userItem.MakeIndex == nItemIndex) &&
-                    string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName,
-                        StringComparison.OrdinalIgnoreCase) == 0)
+                    string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);
                     ItemList.RemoveAt(i);
@@ -5407,12 +5366,10 @@ namespace GameSvr.Actor
                     break;
                 }
             }
-
             if (result)
             {
                 WeightChanged();
             }
-
             return result;
         }
 
@@ -5422,7 +5379,6 @@ namespace GameSvr.Actor
             {
                 return Envir.CanWalkEx(nX, nY, boFlag);
             }
-
             return CanRun(nX, nY, boFlag);
         }
 
@@ -5584,131 +5540,74 @@ namespace GameSvr.Actor
                 case Grobal2.DR_UP:
                     if (CurrY > 1)
                     {
-                        if ((Envir.CanWalkEx(CurrX, CurrY - 1,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone()))
-                            && (Envir.CanWalkEx(CurrX, CurrY - 2,
-                                    M2Share.Config.DiableHumanRun ||
-                                    ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                                (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if ((Envir.CanWalkEx(CurrX, CurrY - 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
+                            (Envir.CanWalkEx(CurrX, CurrY - 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
-
                     break;
                 case Grobal2.DR_UPRIGHT:
                     if (CurrX < Envir.Width - 2 && CurrY > 1)
                     {
-                        if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                            (Envir.CanWalkEx(CurrX + 2, CurrY - 2,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone()))
+                            && (Envir.CanWalkEx(CurrX + 2, CurrY - 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited
+                            && InSafeZone())))
                         {
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
-
                     break;
                 case Grobal2.DR_RIGHT:
                     if (CurrX < Envir.Width - 2)
                     {
-                        if (Envir.CanWalkEx(CurrX + 1, CurrY,
-                                M2Share.Config.DiableHumanRun ||
-                                ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                            M2Share.Config.boSafeAreaLimited && InSafeZone() &&
-                            (Envir.CanWalkEx(CurrX + 2, CurrY,
-                                 M2Share.Config.DiableHumanRun ||
-                                 ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                             (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        if (Envir.CanWalkEx(CurrX + 1, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || M2Share.Config.boSafeAreaLimited && InSafeZone()
+                            && (Envir.CanWalkEx(CurrX + 2, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                         {
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
-
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2) &&
-                        (Envir.CanWalkEx(CurrX + 1, CurrY + 1,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        (Envir.CanWalkEx(CurrX + 2, CurrY + 2,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2)
+                        && (Envir.CanWalkEx(CurrX + 1, CurrY + 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
+                        (Envir.CanWalkEx(CurrX + 2, CurrY + 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_DOWN:
-                    if ((CurrY < Envir.Height - 2) &&
-                        (Envir.CanWalkEx(CurrX, CurrY + 1,
-                             M2Share.Config.DiableHumanRun ||
-                             ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         M2Share.Config.boSafeAreaLimited && InSafeZone() &&
-                         (Envir.CanWalkEx(CurrX, CurrY + 2,
-                              M2Share.Config.DiableHumanRun ||
-                              ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                          (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
+                    if ((CurrY < Envir.Height - 2)
+                        && (Envir.CanWalkEx(CurrX, CurrY + 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || M2Share.Config.boSafeAreaLimited && InSafeZone() &&
+                        (Envir.CanWalkEx(CurrX, CurrY + 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone()))))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_DOWNLEFT:
                     if ((CurrX > 1) && (CurrY < Envir.Height - 2) &&
-                        (Envir.CanWalkEx(CurrX - 1, CurrY + 1,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(CurrX - 2, CurrY + 2,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        (Envir.CanWalkEx(CurrX - 1, CurrY + 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
+                        (Envir.CanWalkEx(CurrX - 2, CurrY + 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_LEFT:
                     if ((CurrX > 1) &&
-                        (Envir.CanWalkEx(CurrX - 1, CurrY,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(CurrX - 2, CurrY,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                        (Envir.CanWalkEx(CurrX - 1, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
+                        (Envir.CanWalkEx(CurrX - 2, CurrY, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
                 case Grobal2.DR_UPLEFT:
-                    if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1,
-                                                                 M2Share.Config.DiableHumanRun ||
-                                                                 ((Permission > 9) && M2Share.Config.boGMRunAll))
-                                                             || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
-                        (Envir.CanWalkEx(CurrX - 2, CurrY - 2,
-                             M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) ||
-                         (M2Share.Config.boSafeAreaLimited && InSafeZone())))
+                    if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())) &&
+                        (Envir.CanWalkEx(CurrX - 2, CurrY - 2, M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone())))
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
-
                     break;
             }
-
             return false;
         }
 
