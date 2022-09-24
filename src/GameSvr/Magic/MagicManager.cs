@@ -67,7 +67,6 @@ namespace GameSvr.Magic
         /// <summary>
         /// 是否战士技能
         /// </summary>
-        /// <param name="wMagIdx"></param>
         /// <returns></returns>
         public bool IsWarrSkill(int wMagIdx)
         {
@@ -151,7 +150,7 @@ namespace GameSvr.Magic
             PlayObject.SendRefMsg(Grobal2.RM_SPELL, UserMagic.Magic.Effect, nTargetX, nTargetY, UserMagic.Magic.MagicId, "");
             if (TargeTBaseObject != null && TargeTBaseObject.Death)
             {
-                TargeTBaseObject = null;
+                return false;
             }
             var boTrain = false;
             var boSpellFail = false;
@@ -636,7 +635,7 @@ namespace GameSvr.Magic
             }
             if (boSpellFail)
             {
-                return result;
+                return false;
             }
             if (boSpellFire)
             {
@@ -865,21 +864,17 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagSaceMove(BaseObject BaseObject, int nLevel)
+        private bool MagSaceMove(PlayObject playObject, int nLevel)
         {
             var result = false;
             if (M2Share.RandomNumber.Random(11) < nLevel * 2 + 4)
             {
-                BaseObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE2, 0, 0, 0, 0, "");
-                if (BaseObject is PlayObject)
+                playObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE2, 0, 0, 0, 0, "");
+                var Envir = playObject.Envir;
+                playObject.MapRandomMove(playObject.HomeMap, 1);
+                if (Envir != playObject.Envir && playObject.Race == Grobal2.RC_PLAYOBJECT)
                 {
-                    var Envir = BaseObject.Envir;
-                    BaseObject.MapRandomMove(BaseObject.HomeMap, 1);
-                    if (Envir != BaseObject.Envir && BaseObject.Race == Grobal2.RC_PLAYOBJECT)
-                    {
-                        var PlayObject = (PlayObject)BaseObject;
-                        PlayObject.m_boTimeRecall = false;
-                    }
+                    playObject.m_boTimeRecall = false;
                 }
                 result = true;
             }
@@ -1023,17 +1018,17 @@ namespace GameSvr.Magic
             if (!PlayObject.MagCanHitTarget(PlayObject.CurrX, PlayObject.CurrY, TargetBaseObject))
             {
                 TargetBaseObject = null;
-                return result;
+                return false;
             }
             if (!PlayObject.IsProperTarget(TargetBaseObject))
             {
                 TargetBaseObject = null;
-                return result;
+                return false;
             }
             if (TargetBaseObject.AntiMagic > M2Share.RandomNumber.Random(10) || Math.Abs(TargetBaseObject.CurrX - nTargetX) > 1 || Math.Abs(TargetBaseObject.CurrY - nTargetY) > 1)
             {
                 TargetBaseObject = null;
-                return result;
+                return false;
             }
             var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
             PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargetBaseObject.ActorId, "", 600);
@@ -1237,16 +1232,6 @@ namespace GameSvr.Magic
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="BaseObject">魔法发起人</param>
-        /// <param name="TargeTBaseObject">受攻击角色</param>
-        /// <param name="nPower">魔法力大小</param>
-        /// <param name="nLevel">技能修炼等级</param>
-        /// <param name="nTargetX">目标座标X</param>
-        /// <param name="nTargetY">目标座标Y</param>
-        /// <returns></returns>
         private bool MabMabe(BaseObject BaseObject, BaseObject TargeTBaseObject, int nPower, int nLevel, int nTargetX, int nTargetY)
         {
             var result = false;

@@ -34,7 +34,8 @@ namespace GameSvr.Monster.Monsters
                 this.FixedHideMode = false;
                 this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
             }
-            SlaveAttackTarget();
+            //SlaveAttackTarget();
+            base.Run();
         }
     }
 }

@@ -280,6 +280,10 @@ namespace GameSvr.Actor
         /// </summary>
         public BaseObject Master;
         /// <summary>
+        /// 是否属下(玩家召唤出来才为True)
+        /// </summary>
+        public bool IsSlave;
+        /// <summary>
         /// 怪物叛变时间
         /// </summary>
         public int MasterRoyaltyTick;
@@ -2072,6 +2076,7 @@ namespace GameSvr.Actor
                 if (monObj != null)
                 {
                     monObj.Master = this;
+                    monObj.IsSlave = true;
                     monObj.MasterRoyaltyTick = HUtil32.GetTickCount() + (dwRoyaltySec * 1000);
                     monObj.SlaveMakeLevel = (byte)nMakeLevel;
                     monObj.SlaveExpLevel = (byte)nExpLevel;
