@@ -1336,13 +1336,13 @@ namespace GameSvr.Npc
                     for (var j = List20.Count - 1; j >= 0; j--)
                     {
                         UserItem = List20[j];
-                        ClientItem ClientItem = new ClientItem();
-                        Item.GetUpgradeStdItem(UserItem, ref ClientItem);
+                        ClientItem clientItem = new ClientItem();
+                        Item.GetUpgradeStdItem(UserItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                        ClientItem.Dura = UserItem.Dura;
-                        ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
-                        ClientItem.MakeIndex = UserItem.MakeIndex;
-                        sSendMsg = sSendMsg + EDCode.EncodeBuffer(ClientItem) + "/";
+                        clientItem.Dura = UserItem.Dura;
+                        clientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
+                        clientItem.MakeIndex = UserItem.MakeIndex;
+                        sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + "/";
                         nItemCount++;
                         if (nItemCount >= 10)
                         {

@@ -60,13 +60,10 @@ namespace GameSvr.Player
         /// <summary>
         /// 客户端增加寄售物品到出售框中
         /// </summary>
-        /// <param name="nItemIdx"></param>
-        /// <param name="sItemName"></param>        
         private void ClientAddSellOffItem(int nItemIdx, string sItemName)
         {
             bool bo11;
-            UserItem UserItem;
-            string sUserItemName;
+            string sUserItemName = string.Empty;
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
@@ -81,7 +78,7 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-                    UserItem = this.ItemList[i];
+                    var UserItem = this.ItemList[i];
                     if (UserItem == null)
                     {
                         continue;
@@ -89,12 +86,11 @@ namespace GameSvr.Player
                     if (UserItem.MakeIndex == nItemIdx)
                     {
                         // 取自定义物品名称
-                        sUserItemName = "";
                         if (UserItem.Desc[13] == 1)
                         {
                             sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(UserItem.MakeIndex, UserItem.Index);
                         }
-                        if (sUserItemName == "")
+                        if (string.IsNullOrEmpty(sUserItemName))
                         {
                             sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
                         }
@@ -127,11 +123,8 @@ namespace GameSvr.Player
         /// <summary>
         /// 客户端删除出售物品窗里的物品
         /// </summary>
-        /// <param name="nItemIdx"></param>
-        /// <param name="sItemName"></param>
         private void ClientDelSellOffItem(int nItemIdx, string sItemName)
         {
-            UserItem UserItem;
             string sUserItemName = string.Empty;
             if (sItemName.IndexOf(' ') >= 0)
             {
@@ -147,7 +140,7 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-                    UserItem = m_SellOffItemList[i];
+                    var UserItem = m_SellOffItemList[i];
                     if (UserItem == null)
                     {
                         continue;
