@@ -1395,7 +1395,41 @@ namespace GameSvr.Actor
             }
         }
 
-        protected void ChangeItemByJob(ref ClientItem citem, int lv)
+        protected void ChangeItemWithLevel(ref ClientItem citem, int level)
+        {
+            if (citem.Item.Shape == ItemShapeConst.DRESS_SHAPE_WING && (citem.Item.StdMode == ItemShapeConst.DRESS_STDMODE_MAN || citem.Item.StdMode == ItemShapeConst.DRESS_STDMODE_WOMAN))
+            {
+                if (level > 20)
+                {
+                    if (level < 40)
+                    {
+                        citem.Item.DC = (ushort)(citem.Item.DC + HUtil32.MakeWord(0, 1));
+                        citem.Item.MC = (ushort)(citem.Item.MC + HUtil32.MakeWord(0, 2));
+                        citem.Item.SC = (ushort)(citem.Item.SC + HUtil32.MakeWord(0, 2));
+                        citem.Item.AC = (ushort)(citem.Item.AC + HUtil32.MakeWord(2, 3));
+                        citem.Item.MAC = (ushort)(citem.Item.MAC + HUtil32.MakeWord(0, 2));
+                    }
+                    else if (level < 50)
+                    {
+                        citem.Item.DC = (ushort)(citem.Item.DC + HUtil32.MakeWord(0, 3));
+                        citem.Item.MC = (ushort)(citem.Item.MC + HUtil32.MakeWord(0, 4));
+                        citem.Item.SC = (ushort)(citem.Item.SC + HUtil32.MakeWord(0, 4));
+                        citem.Item.AC = (ushort)(citem.Item.AC + HUtil32.MakeWord(5, 5));
+                        citem.Item.MAC = (ushort)(citem.Item.MAC + HUtil32.MakeWord(1, 2));
+                    }
+                    else
+                    {
+                        citem.Item.DC = (ushort)(citem.Item.DC + HUtil32.MakeWord(0, 5));
+                        citem.Item.MC = (ushort)(citem.Item.MC + HUtil32.MakeWord(0, 6));
+                        citem.Item.SC = (ushort)(citem.Item.SC + HUtil32.MakeWord(0, 6));
+                        citem.Item.AC = (ushort)(citem.Item.AC + HUtil32.MakeWord(9, 7));
+                        citem.Item.MAC = (ushort)(citem.Item.MAC + HUtil32.MakeWord(2, 4));
+                    }
+                }
+            }
+        }
+
+        protected void ChangeItemByJob(ref ClientItem citem, int level)
         {
             if ((citem.Item.StdMode == 22) && (citem.Item.Shape == DragonConst.DRAGON_RING_SHAPE))
             {

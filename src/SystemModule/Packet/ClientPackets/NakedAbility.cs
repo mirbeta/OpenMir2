@@ -25,7 +25,7 @@ namespace SystemModule.Packet.ClientPackets
         [ProtoMember(9)]
         public int Speed;
         [ProtoMember(10)]
-        public byte X2;
+        public byte Reserved;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -38,7 +38,7 @@ namespace SystemModule.Packet.ClientPackets
             MP = reader.ReadUInt16();
             Hit = reader.ReadByte();
             Speed = reader.ReadInt32();
-            X2 = reader.ReadByte();
+            Reserved = reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -52,7 +52,7 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(MP);
             writer.Write(Hit);
             writer.Write(Speed);
-            writer.Write(X2);
+            writer.Write(Reserved);
             writer.Write(0);
         }
     }

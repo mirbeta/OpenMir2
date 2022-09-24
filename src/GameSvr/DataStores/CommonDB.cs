@@ -209,9 +209,9 @@ namespace GameSvr.DataStores
                             Race = (byte)dr.GetInt32("Race"),
                             RaceImg = (byte)dr.GetInt32("RaceImg"),
                             Appr = dr.GetUInt16("Appr"),
-                            Level = dr.GetUInt16("Lvl"),
+                            Level = dr.GetByte("Lvl"),
                             btLifeAttrib = (byte)dr.GetInt32("Undead"),
-                            CoolEye = dr.GetInt16("CoolEye"),
+                            CoolEye = dr.GetByte("CoolEye"),
                             Exp = dr.GetInt32("Exp")
                         };
                         // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
@@ -231,8 +231,8 @@ namespace GameSvr.DataStores
                         Monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.MonsterPowerRate / 10));
                         Monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.MonsterPowerRate / 10));
                         Monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.Speed = dr.GetUInt16("SPEED");
-                        Monster.HitPoint = dr.GetUInt16("HIT");
+                        Monster.Speed = dr.GetByte("SPEED");
+                        Monster.HitPoint = dr.GetByte("HIT");
                         Monster.WalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
                         Monster.WalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
                         Monster.WalkWait = (ushort)dr.GetInt32("WalkWait");

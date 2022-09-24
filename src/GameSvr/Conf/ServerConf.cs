@@ -495,8 +495,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "BonusAbilofWarrSpeed", M2Share.Config.BonusAbilofWarr.Speed);
             M2Share.Config.BonusAbilofWarr.Speed = ReadInteger("Setup", "BonusAbilofWarrSpeed", M2Share.Config.BonusAbilofWarr.Speed);
             if (ReadInteger("Setup", "BonusAbilofWarrX2", -1) < 0)
-                WriteInteger("Setup", "BonusAbilofWarrX2", M2Share.Config.BonusAbilofWarr.X2);
-            M2Share.Config.BonusAbilofWarr.X2 = Read<byte>("Setup", "BonusAbilofWarrX2", M2Share.Config.BonusAbilofWarr.X2);
+                WriteInteger("Setup", "BonusAbilofWarrX2", M2Share.Config.BonusAbilofWarr.Reserved);
+            M2Share.Config.BonusAbilofWarr.Reserved = Read<byte>("Setup", "BonusAbilofWarrX2", M2Share.Config.BonusAbilofWarr.Reserved);
             if (ReadInteger("Setup", "BonusAbilofWizardDC", -1) < 0)
                 WriteInteger("Setup", "BonusAbilofWizardDC", M2Share.Config.BonusAbilofWizard.DC);
             M2Share.Config.BonusAbilofWizard.DC = Read<ushort>("Setup", "BonusAbilofWizardDC", M2Share.Config.BonusAbilofWizard.DC);
@@ -525,8 +525,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "BonusAbilofWizardSpeed", M2Share.Config.BonusAbilofWizard.Speed);
             M2Share.Config.BonusAbilofWizard.Speed = ReadInteger("Setup", "BonusAbilofWizardSpeed", M2Share.Config.BonusAbilofWizard.Speed);
             if (ReadInteger("Setup", "BonusAbilofWizardX2", -1) < 0)
-                WriteInteger("Setup", "BonusAbilofWizardX2", M2Share.Config.BonusAbilofWizard.X2);
-            M2Share.Config.BonusAbilofWizard.X2 = Read<byte>("Setup", "BonusAbilofWizardX2", M2Share.Config.BonusAbilofWizard.X2);
+                WriteInteger("Setup", "BonusAbilofWizardX2", M2Share.Config.BonusAbilofWizard.Reserved);
+            M2Share.Config.BonusAbilofWizard.Reserved = Read<byte>("Setup", "BonusAbilofWizardX2", M2Share.Config.BonusAbilofWizard.Reserved);
             if (ReadInteger("Setup", "BonusAbilofTaosDC", -1) < 0)
                 WriteInteger("Setup", "BonusAbilofTaosDC", M2Share.Config.BonusAbilofTaos.DC);
             M2Share.Config.BonusAbilofTaos.DC = Read<byte>("Setup", "BonusAbilofTaosDC", M2Share.Config.BonusAbilofTaos.DC);
@@ -555,8 +555,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "BonusAbilofTaosSpeed", M2Share.Config.BonusAbilofTaos.Speed);
             M2Share.Config.BonusAbilofTaos.Speed = ReadInteger("Setup", "BonusAbilofTaosSpeed", M2Share.Config.BonusAbilofTaos.Speed);
             if (ReadInteger("Setup", "BonusAbilofTaosX2", -1) < 0)
-                WriteInteger("Setup", "BonusAbilofTaosX2", M2Share.Config.BonusAbilofTaos.X2);
-            M2Share.Config.BonusAbilofTaos.X2 = Read<byte>("Setup", "BonusAbilofTaosX2", M2Share.Config.BonusAbilofTaos.X2);
+                WriteInteger("Setup", "BonusAbilofTaosX2", M2Share.Config.BonusAbilofTaos.Reserved);
+            M2Share.Config.BonusAbilofTaos.Reserved = Read<byte>("Setup", "BonusAbilofTaosX2", M2Share.Config.BonusAbilofTaos.Reserved);
             if (ReadInteger("Setup", "NakedAbilofWarrDC", -1) < 0)
                 WriteInteger("Setup", "NakedAbilofWarrDC", M2Share.Config.NakedAbilofWarr.DC);
             M2Share.Config.NakedAbilofWarr.DC = Read<ushort>("Setup", "NakedAbilofWarrDC", M2Share.Config.NakedAbilofWarr.DC);
@@ -585,8 +585,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "NakedAbilofWarrSpeed", M2Share.Config.NakedAbilofWarr.Speed);
             M2Share.Config.NakedAbilofWarr.Speed = ReadInteger("Setup", "NakedAbilofWarrSpeed", M2Share.Config.NakedAbilofWarr.Speed);
             if (ReadInteger("Setup", "NakedAbilofWarrX2", -1) < 0)
-                WriteInteger("Setup", "NakedAbilofWarrX2", M2Share.Config.NakedAbilofWarr.X2);
-            M2Share.Config.NakedAbilofWarr.X2 = Read<byte>("Setup", "NakedAbilofWarrX2", M2Share.Config.NakedAbilofWarr.X2);
+                WriteInteger("Setup", "NakedAbilofWarrX2", M2Share.Config.NakedAbilofWarr.Reserved);
+            M2Share.Config.NakedAbilofWarr.Reserved = Read<byte>("Setup", "NakedAbilofWarrX2", M2Share.Config.NakedAbilofWarr.Reserved);
             if (ReadInteger("Setup", "NakedAbilofWizardDC", -1) < 0)
                 WriteInteger("Setup", "NakedAbilofWizardDC", M2Share.Config.NakedAbilofWizard.DC);
             M2Share.Config.NakedAbilofWizard.DC = Read<ushort>("Setup", "NakedAbilofWizardDC", M2Share.Config.NakedAbilofWizard.DC);
@@ -615,8 +615,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "NakedAbilofWizardSpeed", M2Share.Config.NakedAbilofWizard.Speed);
             M2Share.Config.NakedAbilofWizard.Speed = ReadInteger("Setup", "NakedAbilofWizardSpeed", M2Share.Config.NakedAbilofWizard.Speed);
             if (ReadInteger("Setup", "NakedAbilofWizardX2", -1) < 0)
-                WriteInteger("Setup", "NakedAbilofWizardX2", M2Share.Config.NakedAbilofWizard.X2);
-            M2Share.Config.NakedAbilofWizard.X2 = Read<byte>("Setup", "NakedAbilofWizardX2", M2Share.Config.NakedAbilofWizard.X2);
+                WriteInteger("Setup", "NakedAbilofWizardX2", M2Share.Config.NakedAbilofWizard.Reserved);
+            M2Share.Config.NakedAbilofWizard.Reserved = Read<byte>("Setup", "NakedAbilofWizardX2", M2Share.Config.NakedAbilofWizard.Reserved);
             if (ReadInteger("Setup", "NakedAbilofTaosDC", -1) < 0)
                 WriteInteger("Setup", "NakedAbilofTaosDC", M2Share.Config.NakedAbilofTaos.DC);
             M2Share.Config.NakedAbilofTaos.DC = Read<ushort>("Setup", "NakedAbilofTaosDC", M2Share.Config.NakedAbilofTaos.DC);
@@ -645,8 +645,8 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "NakedAbilofTaosSpeed", M2Share.Config.NakedAbilofTaos.Speed);
             M2Share.Config.NakedAbilofTaos.Speed = ReadInteger("Setup", "NakedAbilofTaosSpeed", M2Share.Config.NakedAbilofTaos.Speed);
             if (ReadInteger("Setup", "NakedAbilofTaosX2", -1) < 0)
-                WriteInteger("Setup", "NakedAbilofTaosX2", M2Share.Config.NakedAbilofTaos.X2);
-            M2Share.Config.NakedAbilofTaos.X2 = Read<byte>("Setup", "NakedAbilofTaosX2", M2Share.Config.NakedAbilofTaos.X2);
+                WriteInteger("Setup", "NakedAbilofTaosX2", M2Share.Config.NakedAbilofTaos.Reserved);
+            M2Share.Config.NakedAbilofTaos.Reserved = Read<byte>("Setup", "NakedAbilofTaosX2", M2Share.Config.NakedAbilofTaos.Reserved);
             if (ReadInteger("Setup", "GroupMembersMax", -1) < 0)
                 WriteInteger("Setup", "GroupMembersMax", M2Share.Config.GroupMembersMax);
             M2Share.Config.GroupMembersMax = ReadInteger("Setup", "GroupMembersMax", M2Share.Config.GroupMembersMax);
@@ -1674,21 +1674,6 @@ namespace GameSvr.Conf
             if (ReadInteger("Setup", "ThreadRun", -1) < 0)
                 WriteBool("Setup", "ThreadRun", M2Share.Config.ThreadRun);
             M2Share.Config.ThreadRun = ReadBool("Setup", "ThreadRun", M2Share.Config.ThreadRun);
-            if (ReadInteger("Setup", "DeathColorEffect", -1) < 0)
-                WriteInteger("Setup", "DeathColorEffect", M2Share.Config.ClientConf.btDieColor);
-            M2Share.Config.ClientConf.btDieColor = Read<byte>("Setup", "DeathColorEffect", M2Share.Config.ClientConf.btDieColor);
-            if (ReadInteger("Setup", "ParalyCanRun", -1) < 0)
-                WriteBool("Setup", "ParalyCanRun", M2Share.Config.ClientConf.boParalyCanRun);
-            M2Share.Config.ClientConf.boParalyCanRun = ReadBool("Setup", "ParalyCanRun", M2Share.Config.ClientConf.boParalyCanRun);
-            if (ReadInteger("Setup", "ParalyCanWalk", -1) < 0)
-                WriteBool("Setup", "ParalyCanWalk", M2Share.Config.ClientConf.boParalyCanWalk);
-            M2Share.Config.ClientConf.boParalyCanWalk = ReadBool("Setup", "ParalyCanWalk", M2Share.Config.ClientConf.boParalyCanWalk);
-            if (ReadInteger("Setup", "ParalyCanHit", -1) < 0)
-                WriteBool("Setup", "ParalyCanHit", M2Share.Config.ClientConf.boParalyCanHit);
-            M2Share.Config.ClientConf.boParalyCanHit = ReadBool("Setup", "ParalyCanHit", M2Share.Config.ClientConf.boParalyCanHit);
-            if (ReadInteger("Setup", "ParalyCanSpell", -1) < 0)
-                WriteBool("Setup", "ParalyCanSpell", M2Share.Config.ClientConf.boParalyCanSpell);
-            M2Share.Config.ClientConf.boParalyCanSpell = ReadBool("Setup", "ParalyCanSpell", M2Share.Config.ClientConf.boParalyCanSpell);
             if (ReadInteger("Setup", "ShowExceptionMsg", -1) < 0)
                 WriteBool("Setup", "ShowExceptionMsg", M2Share.Config.ShowExceptionMsg);
             M2Share.Config.ShowExceptionMsg = ReadBool("Setup", "ShowExceptionMsg", M2Share.Config.ShowExceptionMsg);
@@ -1914,9 +1899,7 @@ namespace GameSvr.Conf
             if (ReadInteger("Setup", "LineNoticeColor", -1) < 0)
                 WriteInteger("Setup", "LineNoticeColor", M2Share.Config.LineNoticeColor);
             M2Share.Config.LineNoticeColor = ReadInteger("Setup", "LineNoticeColor", M2Share.Config.LineNoticeColor);
-            if (ReadInteger("Setup", "ItemSpeedTime", -1) < 0)
-                WriteInteger("Setup", "ItemSpeedTime", M2Share.Config.ClientConf.btItemSpeed);
-            M2Share.Config.ClientConf.btItemSpeed = Read<byte>("Setup", "ItemSpeedTime", M2Share.Config.ClientConf.btItemSpeed);
+
             if (ReadInteger("Setup", "MaxHitMsgCount", -1) < 0)
                 WriteInteger("Setup", "MaxHitMsgCount", M2Share.Config.MaxHitMsgCount);
             M2Share.Config.MaxHitMsgCount = ReadInteger("Setup", "MaxHitMsgCount", M2Share.Config.MaxHitMsgCount);
@@ -2377,6 +2360,105 @@ namespace GameSvr.Conf
             WriteInteger("Setup", "WinLotteryLevel5", M2Share.Config.WinLotteryLevel5);
             WriteInteger("Setup", "WinLotteryLevel6", M2Share.Config.WinLotteryLevel6);
         }
+    }
 
+    public class GameSettingConf : IniFile
+    {
+        public GameSettingConf(string fileName) : base(fileName)
+        {
+            Load();
+        }
+
+        public void LoadConfig()
+        {
+            var nInteger = ReadInteger("Config", "WhisperRecord", -1);  //游戏私聊
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "WhisperRecord", M2Share.Config.ClientConf.boWhisperRecord);
+            }
+
+            nInteger = ReadInteger("Config", "NoFog", -1);
+            if (nInteger <= -1) WriteBool("Config", "NoFog", M2Share.Config.ClientConf.boNoFog);
+
+            nInteger = ReadInteger("Config", "StallSystem", -1);
+            if (nInteger <= -1) WriteBool("Config", "StallSystem", M2Share.Config.ClientConf.boStallSystem);
+
+            nInteger = ReadInteger("Config", "SafeZoneStall", -1);
+            if (nInteger <= -1) WriteBool("Config", "SafeZoneStall", M2Share.boSafeZoneStall);
+
+            nInteger = ReadInteger("Config", "ShowHpBar", -1);
+            if (nInteger <= -1) WriteBool("Config", "ShowHpBar", M2Share.Config.ClientConf.boShowHpBar);
+
+            nInteger = ReadInteger("Config", "ShowHpNumber", -1);
+            if (nInteger <= -1) WriteBool("Config", "ShowHpNumber", M2Share.Config.ClientConf.boShowHpNumber);
+
+            nInteger = ReadInteger("Config", "NoStruck", -1);
+            if (nInteger <= -1) WriteBool("Config", "NoStruck", M2Share.Config.ClientConf.boNoStruck);
+
+            nInteger = ReadInteger("Config", "FastMove", -1);
+            if (nInteger <= -1) WriteBool("Config", "FastMove", M2Share.Config.ClientConf.boFastMove);
+
+            nInteger = ReadInteger("Config", "ShowFriend", -1);
+            if (nInteger <= -1) WriteBool("Config", "ShowFriend", M2Share.Config.ClientConf.boShowFriend);
+
+            nInteger = ReadInteger("Config", "ShowRelationship", -1);
+            if (nInteger <= -1) WriteBool("Config", "ShowRelationship", M2Share.Config.ClientConf.boShowRelationship);
+
+            nInteger = ReadInteger("Config", "ShowMail", -1);
+            if (nInteger <= -1) WriteBool("Config", "ShowMail", M2Share.Config.ClientConf.boShowMail);
+
+            nInteger = ReadInteger("Config", "ShowRecharging", -1);
+            if (nInteger <= -1) WriteBool("Config", "ShowRecharging", M2Share.Config.ClientConf.boShowRecharging);
+
+            nInteger = ReadInteger("Config", "ShowHelp", -1);
+            if (nInteger <= -1) WriteBool("Config", "ShowHelp", M2Share.Config.ClientConf.boShowHelp);
+
+            nInteger = ReadInteger("Config", "SecondCardSystem", -1);
+            if (nInteger <= -1) WriteBool("Config", "SecondCardSystem", M2Share.boSecondCardSystem);
+
+            nInteger = ReadInteger("Config", "ExpErienceLevel", -1);
+            if (nInteger <= -1) WriteInteger("Config", "ExpErienceLevel", M2Share.g_nExpErienceLevel);
+
+
+            var sString = ReadString("Config", "BadManHomeMap", "");
+            if (string.IsNullOrEmpty(sString))
+            {
+                WriteString("Config", "BadManHomeMap", "3");
+            }
+            nInteger = ReadInteger("Config", "BadManStartX", -1);
+            if (nInteger <= -1) WriteInteger("Config", "BadManStartX", M2Share.BADMANSTARTX);
+            nInteger = ReadInteger("Config", "BadManStartY", -1);
+            if (nInteger <= -1) WriteInteger("Config", "BadManStartY", M2Share.BADMANSTARTY);
+
+            sString = ReadString("Config", "RECHARGINGMAP", ""); //充值地图
+            if (string.IsNullOrEmpty(sString))
+            {
+                WriteString("Config", "RECHARGINGMAP", "kaiqu");
+            }
+
+            M2Share.Config.ClientConf.boWhisperRecord = ReadBool("Config", "WhisperRecord", M2Share.Config.ClientConf.boWhisperRecord);  //游戏私聊
+            M2Share.Config.ClientConf.boNoFog = ReadBool("Config", "NoFog", M2Share.Config.ClientConf.boNoFog);
+            M2Share.Config.ClientConf.boStallSystem = ReadBool("Config", "StallSystem", M2Share.Config.ClientConf.boStallSystem);
+            M2Share.boSafeZoneStall = ReadBool("Config", "SafeZoneStall", M2Share.boSafeZoneStall);
+            M2Share.Config.ClientConf.boShowHpBar = ReadBool("Config", "ShowHpBar", M2Share.Config.ClientConf.boShowHpBar);
+            M2Share.Config.ClientConf.boShowHpNumber = ReadBool("Config", "ShowHpNumber", M2Share.Config.ClientConf.boShowHpNumber);
+            M2Share.Config.ClientConf.boNoStruck = ReadBool("Config", "NoStruck", M2Share.Config.ClientConf.boNoStruck);
+            M2Share.Config.ClientConf.boFastMove = ReadBool("Config", "FastMove", M2Share.Config.ClientConf.boFastMove);
+
+            M2Share.Config.ClientConf.boShowFriend = ReadBool("Config", "ShowFriend", M2Share.Config.ClientConf.boShowFriend);
+            M2Share.Config.ClientConf.boShowRelationship = ReadBool("Config", "ShowRelationship", M2Share.Config.ClientConf.boShowRelationship);
+            M2Share.Config.ClientConf.boShowMail = ReadBool("Config", "ShowMail", M2Share.Config.ClientConf.boShowMail);
+            M2Share.Config.ClientConf.boShowRecharging = ReadBool("Config", "ShowRecharging", M2Share.Config.ClientConf.boShowRecharging);
+            M2Share.Config.ClientConf.boShowHelp = ReadBool("Config", "ShowHelp", M2Share.Config.ClientConf.boShowHelp);
+
+            M2Share.boSecondCardSystem = ReadBool("Config", "SecondCardSystem", M2Share.boSecondCardSystem);
+            M2Share.g_nExpErienceLevel = (byte)ReadInteger("Config", "ExpErienceLevel", M2Share.g_nExpErienceLevel);
+
+            M2Share.BADMANHOMEMAP = ReadString("Config", "BadManHomeMap", M2Share.BADMANHOMEMAP);
+            M2Share.BADMANSTARTX = (short)ReadInteger("Config", "BadManStartX", M2Share.BADMANSTARTX);
+            M2Share.BADMANSTARTY = (short)ReadInteger("Config", "BadManStartY", M2Share.BADMANSTARTY);
+            M2Share.Config.ClientConf.boGamepath = ReadBool("Config", "Gamepath", M2Share.Config.ClientConf.boGamepath);
+            M2Share.RECHARGINGMAP = ReadString("Config", "RECHARGINGMAP", M2Share.RECHARGINGMAP); //充值
+        }
     }
 }
