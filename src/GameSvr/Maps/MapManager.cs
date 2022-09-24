@@ -12,6 +12,10 @@ namespace GameSvr.Maps
         /// 地图上门列表
         /// </summary>
         private readonly IList<Envirnoment> _mapDoorList = new List<Envirnoment>();
+        /// <summary>
+        /// 矿物地图列表
+        /// </summary>
+        private readonly IList<Envirnoment> _mapMineList = new List<Envirnoment>();
 
         public IList<Envirnoment> Maps => _mapList.Values.ToList();
 
@@ -47,15 +51,7 @@ namespace GameSvr.Maps
 
         public IList<Envirnoment> GetMineMaps()
         {
-            var list = new List<Envirnoment>();
-            foreach (var item in _mapList.Values)
-            {
-                if (item.Flag.boMINE || item.Flag.boMINE2)
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
+            return _mapMineList;
         }
 
         public IList<Envirnoment> GetDoorMapList()
@@ -109,6 +105,10 @@ namespace GameSvr.Maps
                 if (envirnoment.DoorList.Count > 0)
                 {
                     _mapDoorList.Add(envirnoment);
+                }
+                if (envirnoment.Flag.boMINE || envirnoment.Flag.boMINE2)
+                {
+                    _mapMineList.Add(envirnoment);
                 }
             }
             else
