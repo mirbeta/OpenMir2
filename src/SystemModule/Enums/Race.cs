@@ -7,6 +7,10 @@ namespace GameSvr
         /// </summary>
         public const byte Play = 0;
         /// <summary>
+        /// NPC
+        /// </summary>
+        public const byte NPC = 10;
+        /// <summary>
         /// 守卫
         /// </summary>
         public const byte Guard = 11;
@@ -35,9 +39,13 @@ namespace GameSvr
         /// </summary>
         public const byte SlaveMonster = 115;
         /// <summary>
-        /// NPC
+        /// 沙巴克城门
         /// </summary>
-        public const byte NPC = 10;
+        public const byte SabukDoor = 110;
+        /// <summary>
+        /// 沙巴克城墙
+        /// </summary>
+        public const byte SabukWall = 111;
         /// <summary>
         /// 守卫(弓箭手)
         /// </summary>

@@ -215,7 +215,7 @@ namespace GameSvr.DataStores
                             Exp = dr.GetInt32("Exp")
                         };
                         // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
-                        if (Monster.Race == 110 || Monster.Race == 111)
+                        if (Monster.Race == ActorRace.SabukWall || Monster.Race == ActorRace.SabukDoor)
                         {
                             // 如果为城墙或城门由HP不加倍
                             Monster.HP = dr.GetUInt16("HP");

@@ -351,13 +351,13 @@ namespace GameSvr.RobotPlay
                                 result = false;
                             }
                             break;
-                        case 10:
-                        case 11:
+                        case ActorRace.NPC:
+                        case ActorRace.Guard:
                         case 12: // 不攻击大刀卫士
                             result = false;
                             break;
-                        case 110:
-                        case 111:
+                        case ActorRace.SabukDoor:
+                        case ActorRace.SabukWall:
                         case 158: // 沙巴克城门,沙巴克左城墙,宠物类
                             result = false;
                             break;
@@ -448,8 +448,8 @@ namespace GameSvr.RobotPlay
                             case 12:// 不攻击大刀卫士
                                 result = false;
                                 break;
-                            case 110:
-                            case 111:
+                            case ActorRace.SabukDoor:
+                            case ActorRace.SabukWall:
                             case 158:// 沙巴克城门,沙巴克左城墙,宠物类
                                 result = false;
                                 break;
