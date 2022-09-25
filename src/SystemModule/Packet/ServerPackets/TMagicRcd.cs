@@ -10,37 +10,37 @@ namespace SystemModule.Packet.ServerPackets
         /// 技能ID
         /// </summary>
         [ProtoMember(1)]
-        public ushort wMagIdx;
+        public ushort MagIdx;
         /// <summary>
         /// 等级
         /// </summary>
         [ProtoMember(2)]
-        public byte btLevel;
+        public byte Level;
         /// <summary>
         /// 技能快捷键
         /// </summary>
         [ProtoMember(3)]
-        public byte btKey;
+        public char MagicKey;
         /// <summary>
         /// 当前修练值
         /// </summary>
         [ProtoMember(4)]
-        public int nTranPoint;
+        public int TranPoint;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            wMagIdx = reader.ReadUInt16();
-            btLevel = reader.ReadByte();
-            btKey = reader.ReadByte();
-            nTranPoint = reader.ReadInt32();
+            MagIdx = reader.ReadUInt16();
+            Level = reader.ReadByte();
+            MagicKey = reader.ReadChar();
+            TranPoint = reader.ReadInt32();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(wMagIdx);
-            writer.Write(btLevel);
-            writer.Write(btKey);
-            writer.Write(nTranPoint);
+            writer.Write(MagIdx);
+            writer.Write(Level);
+            writer.Write(MagicKey);
+            writer.Write(TranPoint);
         }
     }
 }

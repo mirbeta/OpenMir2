@@ -67,7 +67,7 @@ namespace GameSvr.Conf
                                     UserMagic.Magic = Magic;
                                     UserMagic.MagIdx = Magic.MagicId;
                                     UserMagic.Level = 3;
-                                    UserMagic.Key = 0;
+                                    UserMagic.Key = (char)0;
                                     UserMagic.TranPoint = Magic.MaxTrain[3];
                                     playObject.MagicList.Add(UserMagic);
                                 }

@@ -469,10 +469,10 @@ namespace DBSvr.Storage.MySQL
                 var position = 0;
                 while (dr.Read())
                 {
-                    HumanRCD.Data.Magic[position].wMagIdx = dr.GetUInt16("FLD_MAGICID");
-                    HumanRCD.Data.Magic[position].btKey = (byte)dr.GetChar("FLD_USEKEY");
-                    HumanRCD.Data.Magic[position].btLevel = (byte)dr.GetInt32("FLD_LEVEL");
-                    HumanRCD.Data.Magic[position].nTranPoint = dr.GetInt32("FLD_CURRTRAIN");
+                    HumanRCD.Data.Magic[position].MagIdx = dr.GetUInt16("FLD_MAGICID");
+                    HumanRCD.Data.Magic[position].MagicKey = dr.GetChar("FLD_USEKEY");
+                    HumanRCD.Data.Magic[position].Level = (byte)dr.GetInt32("FLD_LEVEL");
+                    HumanRCD.Data.Magic[position].TranPoint = dr.GetInt32("FLD_CURRTRAIN");
                     position++;
                 }
                 dr.Close();
@@ -1095,14 +1095,14 @@ namespace DBSvr.Storage.MySQL
                 const string sStrSql = "INSERT INTO TBL_CHARACTER_MAGIC(FLD_PLAYERID, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES (@FLD_PLAYERID, @FLD_MAGICID, @FLD_LEVEL, @FLD_USEKEY, @FLD_CURRTRAIN)";
                 for (var i = 0; i < HumanRCD.Data.Magic.Length; i++)
                 {
-                    if (HumanRCD.Data.Magic[i].wMagIdx > 0)
+                    if (HumanRCD.Data.Magic[i].MagIdx > 0)
                     {
                         command.Parameters.Clear();
                         command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
-                        command.Parameters.AddWithValue("@FLD_MAGICID", hd.Magic[i].wMagIdx);
-                        command.Parameters.AddWithValue("@FLD_LEVEL", hd.Magic[i].btLevel);
-                        command.Parameters.AddWithValue("@FLD_USEKEY", hd.Magic[i].btKey);
-                        command.Parameters.AddWithValue("@FLD_CURRTRAIN", hd.Magic[i].nTranPoint);
+                        command.Parameters.AddWithValue("@FLD_MAGICID", hd.Magic[i].MagIdx);
+                        command.Parameters.AddWithValue("@FLD_LEVEL", hd.Magic[i].Level);
+                        command.Parameters.AddWithValue("@FLD_USEKEY", hd.Magic[i].MagicKey);
+                        command.Parameters.AddWithValue("@FLD_CURRTRAIN", hd.Magic[i].TranPoint);
                         command.CommandText = sStrSql;
                         command.ExecuteNonQuery();
                     }

@@ -769,7 +769,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_MAGICKEYCHANGE:
-                    ClientChangeMagicKey(ProcessMsg.nParam1, ProcessMsg.nParam2);
+                    ClientChangeMagicKey(ProcessMsg.nParam1, (char)ProcessMsg.nParam2);
                     break;
                 case Grobal2.CM_SOFTCLOSE:
                     if (!OffLineFlag)
