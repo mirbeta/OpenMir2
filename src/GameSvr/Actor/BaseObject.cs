@@ -3053,7 +3053,6 @@ namespace GameSvr.Actor
                     {
                         sendMessage.Buff = sMsg;
                     }
-
                     MsgList.Add(sendMessage);
                 }
             }

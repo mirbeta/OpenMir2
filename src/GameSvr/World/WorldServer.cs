@@ -2143,10 +2143,7 @@ namespace GameSvr.World
 
         public void StartAi()
         {
-            // if (_processRobotTimer.ThreadState != ThreadState.Running)
-            // {
-            //     _processRobotTimer.Start();
-            // }
+           
         }
 
         public void AddAiLogon(RoBotLogon ai)
