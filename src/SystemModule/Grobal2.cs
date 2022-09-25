@@ -584,58 +584,6 @@ namespace SystemModule
         public const ushort SlaveMaxLevel = 50;
         public const ushort LOG_GAMEGOLD = 1;
         public const ushort LOG_GAMEPOINT = 2;
-        /// <summary>
-        /// 玩家
-        /// </summary>
-        public const byte RC_PLAYOBJECT = 0;
-        /// <summary>
-        /// 守卫
-        /// </summary>
-        public const byte RC_GUARD = 11;
-        /// <summary>
-        /// NPC
-        /// </summary>
-        public const byte RC_PEACENPC = 15;
-        /// <summary>
-        /// 怪物
-        /// </summary>
-        public const byte RC_ANIMAL = 50;
-        /// <summary>
-        /// 练功师
-        /// </summary>
-        public const byte RC_EXERCISE = 55;
-        /// <summary>
-        /// 人型怪物
-        /// </summary>
-        public const byte RC_PLAYCLONE = 60;
-        /// <summary>
-        /// 普通怪物
-        /// </summary>
-        public const byte RC_MONSTER = 80;
-        /// <summary>
-        /// NPC
-        /// </summary>
-        public const byte RC_NPC = 10;
-        /// <summary>
-        /// 守卫(弓箭手)
-        /// </summary>
-        public const byte RC_ARCHERGUARD = 112;
-        /// <summary>
-        /// 魔王岭弓箭手
-        /// </summary>
-        public const byte RC_135 = 135;
-        /// <summary>
-        /// 魔王岭弓箭手
-        /// </summary>        
-        public const byte RC_136 = 136;
-        /// <summary>
-        /// 任务怪物
-        /// </summary>
-        public const byte RC_153 = 153;
-        public const byte RC_WHITESKELETON = 100;
-        public const byte RC_ELFMON = 113;
-        public const byte RC_ELFWARRIORMON = 114;
-        
         public const int RM_TURN = 10001;
         public const int RM_WALK = 10002;
         public const int RM_HORSERUN = 50003;

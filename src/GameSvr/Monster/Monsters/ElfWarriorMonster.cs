@@ -19,7 +19,7 @@ namespace GameSvr.Monster.Monsters
             RecalcAbilitys();
             WalkTick = WalkTick + 800;
             _dwDigDownTick = HUtil32.GetTickCount();
-            Race = Grobal2.RC_ELFWARRIORMON;
+            Race = ActorRace.ElfWarriormon;
         }
 
         public ElfWarriorMonster()

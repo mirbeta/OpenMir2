@@ -14,7 +14,7 @@ namespace GameSvr.Monster.Monsters
             MBoIsFirst = true;
             this.FixedHideMode = true;
             this.ViewRange = 6;
-            Race = Grobal2.RC_WHITESKELETON;
+            Race = ActorRace.WhiteSkeleton;
         }
 
         public override void RecalcAbilitys()

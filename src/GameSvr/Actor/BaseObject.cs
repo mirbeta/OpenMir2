@@ -839,7 +839,7 @@ namespace GameSvr.Actor
             DeathTick = 0;
             SendRefMsgTick = HUtil32.GetTickCount();
             Direction = 4;
-            Race = Grobal2.RC_ANIMAL;
+            Race = ActorRace.Animal;
             RaceImg = 0;
             Hair = 0;
             Job = PlayJob.Warrior;
@@ -1161,7 +1161,7 @@ namespace GameSvr.Actor
                         if (stdItem.NeedIdentify == 1)
                         {
                             M2Share.AddGameDataLog(logcap + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
-                                                   HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                                                   HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                         }
                     }
                     result = true;
@@ -1176,7 +1176,7 @@ namespace GameSvr.Actor
 
         public void GoldChanged()
         {
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 SendUpdateMsg(this, Grobal2.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
@@ -1184,7 +1184,7 @@ namespace GameSvr.Actor
 
         public void GameGoldChanged()
         {
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 SendUpdateMsg(this, Grobal2.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
             }
@@ -1331,7 +1331,7 @@ namespace GameSvr.Actor
 
         protected void HealthSpellChanged()
         {
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 SendUpdateMsg(this, Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
@@ -1419,7 +1419,7 @@ namespace GameSvr.Actor
                     mapItem = mapItemA;
                 }
                 SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, nX, nY, mapItem.Name);
-                if (Race == Grobal2.RC_PLAYOBJECT)
+                if (Race == ActorRace.Play)
                 {
                     if (boFalg)
                     {
@@ -1431,7 +1431,7 @@ namespace GameSvr.Actor
                     }
                     if (M2Share.g_boGameLogGold)
                     {
-                        M2Share.AddGameDataLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                        M2Share.AddGameDataLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -1547,7 +1547,7 @@ namespace GameSvr.Actor
                     SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
             }
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 RecalcAbilitys();
                 SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -1584,7 +1584,7 @@ namespace GameSvr.Actor
                     }
                 }
             }
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 PlayObject playObject = this as PlayObject;
                 result = HUtil32.Round(result * (playObject.m_nPowerRate / 100));
@@ -1705,7 +1705,7 @@ namespace GameSvr.Actor
                         CurrY = ny;
                         SendRefMsg(Grobal2.RM_PUSH, nBackDir, CurrX, CurrY, 0, "");
                         result++;
-                        if (Race >= Grobal2.RC_ANIMAL)
+                        if (Race >= ActorRace.Animal)
                         {
                             WalkTick = WalkTick + 800;
                         }
@@ -1828,7 +1828,7 @@ namespace GameSvr.Actor
                             {
                                 nDura = 0;
                                 UseItems[i].Dura = nDura;
-                                if (Race == Grobal2.RC_PLAYOBJECT)
+                                if (Race == ActorRace.Play)
                                 {
                                     var playObject = this as PlayObject;
                                     playObject.SendDelItems(UseItems[i]);
@@ -2038,7 +2038,7 @@ namespace GameSvr.Actor
                 {
                     if (SpaceMove_GetRandXY(envir, ref nX, ref nY))
                     {
-                        if (Race == Grobal2.RC_PLAYOBJECT)
+                        if (Race == ActorRace.Play)
                         {
                             DisappearA();
                             MBo316 = true;
@@ -2299,11 +2299,11 @@ namespace GameSvr.Actor
             {
                 if ((M2Share.g_FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
                 {
-                    if (Race != Grobal2.RC_PLAYOBJECT)
+                    if (Race != ActorRace.Play)
                     {
                         if (ExpHitter != null)
                         {
-                            if (ExpHitter.Race == Grobal2.RC_PLAYOBJECT)
+                            if (ExpHitter.Race == ActorRace.Play)
                             {
                                 M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject,
                                     "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
@@ -2319,7 +2319,7 @@ namespace GameSvr.Actor
                         {
                             if (LastHiter != null)
                             {
-                                if (LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                                if (LastHiter.Race == ActorRace.Play)
                                 {
                                     M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject,
                                         "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
@@ -2335,7 +2335,7 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        if ((LastHiter != null) && (LastHiter.Race == Grobal2.RC_PLAYOBJECT))
+                        if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                         {
                             M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject,
                                 "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
@@ -2381,7 +2381,7 @@ namespace GameSvr.Actor
                     if (nDura <= 0)
                     {
                         UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
-                        if (Race == Grobal2.RC_PLAYOBJECT)
+                        if (Race == ActorRace.Play)
                         {
                             var playObject = this as PlayObject;
                             playObject.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
@@ -2567,7 +2567,7 @@ namespace GameSvr.Actor
                         TranPoint = 0
                     };
                     MagicList.Add(userMagic);
-                    if (Race == Grobal2.RC_PLAYOBJECT)
+                    if (Race == ActorRace.Play)
                     {
                         (this as PlayObject).SendAddMagic(userMagic);
                     }
@@ -2653,7 +2653,7 @@ namespace GameSvr.Actor
 
         private void DelItemSkill(int nIndex)
         {
-            if (Race != Grobal2.RC_PLAYOBJECT)
+            if (Race != ActorRace.Play)
             {
                 return;
             }
@@ -2724,7 +2724,7 @@ namespace GameSvr.Actor
             {
                 nDura = 0;
                 UseItems[Grobal2.U_WEAPON].Dura = (ushort)nDura;
-                if (Race == Grobal2.RC_PLAYOBJECT)
+                if (Race == ActorRace.Play)
                 {
                     var playObject = this as PlayObject;
                     playObject.SendDelItems(UseItems[Grobal2.U_WEAPON]);
@@ -2734,7 +2734,7 @@ namespace GameSvr.Actor
                         M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
                                                CharName + "\t" + stdItem.Name + "\t" +
                                                UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" +
-                                               HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" +
+                                               HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" +
                                                '0');
                     }
                 }
@@ -2756,7 +2756,7 @@ namespace GameSvr.Actor
         {
             TUserCastle castle;
             var result = baseObject.GetNamecolor();
-            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+            if (baseObject.Race == ActorRace.Play)
             {
                 if (baseObject.PvpLevel() < 2)
                 {
@@ -2833,7 +2833,7 @@ namespace GameSvr.Actor
                     }
                 }
             }
-            else if (baseObject.Race == Grobal2.RC_NPC) //增加NPC名字颜色单独控制
+            else if (baseObject.Race == ActorRace.NPC) //增加NPC名字颜色单独控制
             {
                 result = M2Share.Config.NpcNameColor;
                 if (baseObject.CrazyMode) //疯狂模式(红名)
@@ -3364,7 +3364,7 @@ namespace GameSvr.Actor
                                                         baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
                                                         if ((baseObject != null) && !baseObject.Ghost)
                                                         {
-                                                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                                            if (baseObject.Race == ActorRace.Play)
                                                             {
                                                                 baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                                                                 VisibleHumanList.Add(baseObject);
@@ -3411,7 +3411,7 @@ namespace GameSvr.Actor
                     if ((baseObject.Envir == Envir) && (Math.Abs(baseObject.CurrX - CurrX) < 11) &&
                         (Math.Abs(baseObject.CurrY - CurrY) < 11))
                     {
-                        if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                        if (baseObject.Race == ActorRace.Play)
                         {
                             baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                         }
@@ -3454,7 +3454,7 @@ namespace GameSvr.Actor
 
         public int GetFeature(BaseObject baseObject)
         {
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 byte nDress = 0;
                 StdItem stdItem = null;
@@ -3605,7 +3605,7 @@ namespace GameSvr.Actor
 
         protected void KickException()
         {
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 MapName = M2Share.Config.HomeMap;
                 CurrX = M2Share.Config.HomeX;
@@ -3649,7 +3649,7 @@ namespace GameSvr.Actor
                                 var gateObj = (GateObject)M2Share.CellObjectSystem.Get(osObject.CellObjId);
                                 if (gateObj != null)
                                 {
-                                    if (Race == Grobal2.RC_PLAYOBJECT)
+                                    if (Race == ActorRace.Play)
                                     {
                                         if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                         {
@@ -3755,7 +3755,7 @@ namespace GameSvr.Actor
                     return false;
                 }
                 var castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
-                if ((castle != null) && (Race == Grobal2.RC_PLAYOBJECT))
+                if ((castle != null) && (Race == ActorRace.Play))
                 {
                     if (!castle.CheckInPalace(CurrX, CurrY, this))
                     {
@@ -3803,7 +3803,7 @@ namespace GameSvr.Actor
                     this.Envir.AddToMap(CurrX, CurrY, MapCell, this);
                 }
                 OnEnvirnomentChanged();
-                if (Race == Grobal2.RC_PLAYOBJECT) // 复位泡点，及金币，时间
+                if (Race == ActorRace.Play) // 复位泡点，及金币，时间
                 {
                     (this as PlayObject).m_dwIncGamePointTick = HUtil32.GetTickCount();
                     (this as PlayObject).m_dwIncGameGoldTick = HUtil32.GetTickCount();
@@ -3974,7 +3974,7 @@ namespace GameSvr.Actor
                 return;
             }
 
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 return;
             }
@@ -3982,7 +3982,7 @@ namespace GameSvr.Actor
             var sAttackName = string.Empty;
             if (attackBaseObject != null)
             {
-                if ((attackBaseObject.Race != Grobal2.RC_PLAYOBJECT) && (attackBaseObject.Master == null))
+                if ((attackBaseObject.Race != ActorRace.Play) && (attackBaseObject.Master == null))
                 {
                     return;
                 }
@@ -4178,7 +4178,7 @@ namespace GameSvr.Actor
             }
             switch (Race)
             {
-                case >= Grobal2.RC_ANIMAL:
+                case >= ActorRace.Animal:
                     {
                         if (Master != null)
                         {
@@ -4188,12 +4188,12 @@ namespace GameSvr.Actor
                             }
                             if (baseObject.TargetCret != null)
                             {
-                                if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) && (baseObject.Race != Grobal2.RC_PLAYOBJECT))
+                                if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) && (baseObject.Race != ActorRace.Play))
                                 {
                                     result = true;
                                 }
                             }
-                            if ((baseObject.TargetCret == this) && (baseObject.Race >= Grobal2.RC_ANIMAL))
+                            if ((baseObject.TargetCret == this) && (baseObject.Race >= ActorRace.Animal))
                             {
                                 result = true;
                             }
@@ -4216,7 +4216,7 @@ namespace GameSvr.Actor
                             {
                                 result = false;
                             }
-                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == ActorRace.Play)
                             {
                                 if (baseObject.InSafeZone())
                                 {
@@ -4227,11 +4227,11 @@ namespace GameSvr.Actor
                         }
                         else
                         {
-                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == ActorRace.Play)
                             {
                                 result = true;
                             }
-                            if ((Race > Grobal2.RC_PEACENPC) && (Race < Grobal2.RC_ANIMAL))
+                            if ((Race > ActorRace.PeaceNpc) && (Race < ActorRace.Animal))
                             {
                                 result = true;
                             }
@@ -4240,21 +4240,21 @@ namespace GameSvr.Actor
                                 result = true;
                             }
                         }
-                        if (CrazyMode && ((baseObject.Race == Grobal2.RC_PLAYOBJECT) || (baseObject.Race > Grobal2.RC_PEACENPC)))
+                        if (CrazyMode && ((baseObject.Race == ActorRace.Play) || (baseObject.Race > ActorRace.PeaceNpc)))
                         {
                             result = true;
                         }
-                        if (NastyMode && ((baseObject.Race < Grobal2.RC_NPC) || (baseObject.Race > Grobal2.RC_PEACENPC)))
+                        if (NastyMode && ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc)))
                         {
                             result = true;
                         }
                         break;
                     }
-                case Grobal2.RC_PLAYOBJECT:
+                case ActorRace.Play:
                     switch (AttatckMode)
                     {
                         case AttackMode.HAM_ALL:
-                            if ((baseObject.Race < Grobal2.RC_NPC) || (baseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
                             {
                                 result = true;
                             }
@@ -4264,7 +4264,7 @@ namespace GameSvr.Actor
                             }
                             break;
                         case AttackMode.HAM_PEACE:
-                            if (baseObject.Race >= Grobal2.RC_ANIMAL)
+                            if (baseObject.Race >= ActorRace.Animal)
                             {
                                 result = true;
                             }
@@ -4276,7 +4276,7 @@ namespace GameSvr.Actor
                             }
                             break;
                         case AttackMode.HAM_MASTER:
-                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == ActorRace.Play)
                             {
                                 result = true;
                                 if ((this as PlayObject).m_boMaster)
@@ -4308,13 +4308,11 @@ namespace GameSvr.Actor
                             }
                             break;
                         case AttackMode.HAM_GROUP:
-                            if ((baseObject.Race < Grobal2.RC_NPC) ||
-                                (baseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
                             {
                                 result = true;
                             }
-
-                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == ActorRace.Play)
                             {
                                 if (IsGroupMember(baseObject))
                                 {
@@ -4329,13 +4327,12 @@ namespace GameSvr.Actor
 
                             break;
                         case AttackMode.HAM_GUILD:
-                            if ((baseObject.Race < Grobal2.RC_NPC) ||
-                                (baseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
                             {
                                 result = true;
                             }
 
-                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == ActorRace.Play)
                             {
                                 if (MyGuild != null)
                                 {
@@ -4361,11 +4358,11 @@ namespace GameSvr.Actor
 
                             break;
                         case AttackMode.HAM_PKATTACK:
-                            if ((baseObject.Race < Grobal2.RC_NPC) || (baseObject.Race > Grobal2.RC_PEACENPC))
+                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
                             {
                                 result = true;
                             }
-                            if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (baseObject.Race == ActorRace.Play)
                             {
                                 if (PvpLevel() >= 2)
                                 {
@@ -4413,12 +4410,12 @@ namespace GameSvr.Actor
             var result = IsAttackTarget(baseObject);
             if (result)
             {
-                if ((Race == Grobal2.RC_PLAYOBJECT) && (baseObject.Race == Grobal2.RC_PLAYOBJECT))
+                if ((Race == ActorRace.Play) && (baseObject.Race == ActorRace.Play))
                 {
                     result = IsProtectTarget(baseObject);
                 }
             }
-            if ((baseObject != null) && (Race == Grobal2.RC_PLAYOBJECT) && (baseObject.Master != null) && (baseObject.Race != Grobal2.RC_PLAYOBJECT))
+            if ((baseObject != null) && (Race == ActorRace.Play) && (baseObject.Master != null) && (baseObject.Race != ActorRace.Play))
             {
                 if (baseObject.Master == this)
                 {
@@ -4714,7 +4711,7 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == Grobal2.RC_PLAYOBJECT)) // 人攻击怪物
+            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 人攻击怪物
             {
                 switch (LastHiter.Job)
                 {
@@ -4729,7 +4726,7 @@ namespace GameSvr.Actor
                         break;
                 }
             }
-            if ((Race == Grobal2.RC_PLAYOBJECT) && (LastHiter != null) && (LastHiter.Master != null)) // 怪物攻击人
+            if ((Race == ActorRace.Play) && (LastHiter != null) && (LastHiter.Master != null)) // 怪物攻击人
             {
                 nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
             }
@@ -4747,7 +4744,7 @@ namespace GameSvr.Actor
                 nDura -= nDam;
                 if (nDura <= 0)
                 {
-                    if (Race == Grobal2.RC_PLAYOBJECT)
+                    if (Race == ActorRace.Play)
                     {
                         playObject = this as PlayObject;
                         playObject.SendDelItems(UseItems[Grobal2.U_DRESS]);
@@ -4757,7 +4754,7 @@ namespace GameSvr.Actor
                             M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
                                                    CharName + "\t" + stdItem.Name + "\t" +
                                                    UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
-                                                   + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
+                                                   + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
                                                    "\t" + '0');
                         }
                         UseItems[Grobal2.U_DRESS].Index = 0;
@@ -4787,7 +4784,7 @@ namespace GameSvr.Actor
                     nDura -= nDam;
                     if (nDura <= 0)
                     {
-                        if (Race == Grobal2.RC_PLAYOBJECT)
+                        if (Race == ActorRace.Play)
                         {
                             playObject = this as PlayObject;
                             playObject.SendDelItems(UseItems[i]);
@@ -4797,7 +4794,7 @@ namespace GameSvr.Actor
                                 M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
                                                        "\t" + CharName + "\t" + stdItem.Name + "\t" +
                                                        UseItems[i].MakeIndex + "\t"
-                                                       + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) +
+                                                       + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
                                                        "\t" + '0');
                             }
                             UseItems[i].Index = 0;
@@ -4921,7 +4918,7 @@ namespace GameSvr.Actor
             {
                 StatusChanged();
             }
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 SysMsg(Format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
             }
@@ -5076,7 +5073,7 @@ namespace GameSvr.Actor
         private bool IsProperFriend_IsFriend(BaseObject cret)
         {
             var result = false;
-            if (cret.Race == Grobal2.RC_PLAYOBJECT)
+            if (cret.Race == ActorRace.Play)
             {
                 switch (AttatckMode)
                 {
@@ -5536,7 +5533,7 @@ namespace GameSvr.Actor
 
         public BaseObject GetMaster()
         {
-            if (Race != Grobal2.RC_PLAYOBJECT)
+            if (Race != ActorRace.Play)
             {
                 var masterObject = Master;
                 if (masterObject != null)
@@ -5872,9 +5869,9 @@ namespace GameSvr.Actor
             //{
             //    if (m_nLastMapSecret != m_PEnvir.Flag.nSecret)
             //    {
-            //        if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+            //        if (m_btRaceServer == ActorRace.Play)
             //        {
-            //            if ((m_btRaceServer = Grobal2.RC_PLAYOBJECT) && (m_nLastMapSecret != -1))
+            //            if ((m_btRaceServer = ActorRace.Play) && (m_nLastMapSecret != -1))
             //            {
             //                var i = GetFeatureToLong();
             //                var sSENDMSG = string.Empty;
@@ -5909,7 +5906,7 @@ namespace GameSvr.Actor
             //        m_CurSafeZoneList.Add(StartPointInfo);
             //    }
             //}
-            //if ((m_btRaceServer == Grobal2.RC_PLAYOBJECT) && !((TPlayObject)(this)).m_boOffLineFlag)
+            //if ((m_btRaceServer == ActorRace.Play) && !((TPlayObject)(this)).m_boOffLineFlag)
             //{
             //   ((TPlayObject)(this)).CheckMapEvent(5, "");
             //}

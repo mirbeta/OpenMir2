@@ -35,7 +35,7 @@ namespace GameSvr.Npc
         public NormNpc() : base()
         {
             this.SuperMan = true;
-            this.Race = Grobal2.RC_NPC;
+            this.Race = ActorRace.NPC;
             this.Light = 2;
             this.AntiPoison = 99;
             this.m_ScriptList = new List<TScript>();
@@ -430,7 +430,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.LastHiter != null)
                         {
-                            if (PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT)
+                            if (PlayObject.LastHiter.Race != ActorRace.Play)
                             {
                                 sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", PlayObject.LastHiter.CharName);
                             }
@@ -450,7 +450,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.LastHiter != null)
                         {
-                            if (PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                            if (PlayObject.LastHiter.Race == ActorRace.Play)
                             {
                                 sMsg = ReplaceVariableText(sMsg, "<$KILLER>", PlayObject.LastHiter.CharName);
                             }

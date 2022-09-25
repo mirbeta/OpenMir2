@@ -311,7 +311,7 @@ namespace GameSvr.World
                                                         monster.SearchViewRange();
                                                         continue;
                                                     }
-                                                    if (monster.Race is Grobal2.RC_GUARD or Grobal2.RC_ARCHERGUARD) //守卫才主动搜索附近的精灵
+                                                    if (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster) //守卫才主动搜索附近的精灵
                                                     {
                                                         monster.SearchViewRange();
                                                     }

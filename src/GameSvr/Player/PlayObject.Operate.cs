@@ -389,7 +389,7 @@ namespace GameSvr.Player
                 return;
             }
             var castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
-            if (castle == null || castle.DoorStatus != door.Status || Race != Grobal2.RC_PLAYOBJECT || castle.CheckInPalace(CurrX, CurrY, this))
+            if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, this))
             {
                 M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
             }
@@ -615,7 +615,7 @@ namespace GameSvr.Player
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
                     ItemList.Add(userItem);
-                    if (Race == Grobal2.RC_PLAYOBJECT)
+                    if (Race == ActorRace.Play)
                     {
                         SendAddItem(userItem);
                     }
@@ -761,7 +761,7 @@ namespace GameSvr.Player
                         }
                         if (baseObject.BodyLeathery <= 0)
                         {
-                            if (baseObject.Race >= Grobal2.RC_ANIMAL && baseObject.Race < Grobal2.RC_MONSTER)
+                            if (baseObject.Race >= ActorRace.Animal && baseObject.Race < ActorRace.Monster)
                             {
                                 baseObject.Skeleton = true;
                                 ApplyMeatQuality();
@@ -944,7 +944,7 @@ namespace GameSvr.Player
             {
                 if (targetPlayObject.GetPoseCreate() == this && !targetPlayObject.Dealing)
                 {
-                    if (targetPlayObject.Race == Grobal2.RC_PLAYOBJECT)
+                    if (targetPlayObject.Race == ActorRace.Play)
                     {
                         if (targetPlayObject.AllowDeal && targetPlayObject.m_boCanDeal)
                         {
@@ -1479,7 +1479,7 @@ namespace GameSvr.Player
             {
                 var n8 = -1;
                 BaseObject baseObjectC = GetPoseCreate();
-                if (baseObjectC != null && baseObjectC.MyGuild != null && baseObjectC.Race == Grobal2.RC_PLAYOBJECT && baseObjectC.GetPoseCreate() == this)
+                if (baseObjectC != null && baseObjectC.MyGuild != null && baseObjectC.Race == ActorRace.Play && baseObjectC.GetPoseCreate() == this)
                 {
                     if (baseObjectC.MyGuild.m_boEnableAuthAlly)
                     {

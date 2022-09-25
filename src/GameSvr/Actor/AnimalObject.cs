@@ -21,7 +21,7 @@ namespace GameSvr.Actor
         {
             m_nNotProcessCount = 0;
             TargetX = -1;
-            this.Race = Grobal2.RC_ANIMAL;
+            this.Race = ActorRace.Animal;
             this.AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.SearchEnemyTick = HUtil32.GetTickCount();
@@ -130,7 +130,7 @@ namespace GameSvr.Actor
                     this.SetLastHiter(struckObject);
                     Struck(struckObject);
                     this.BreakHolySeizeMode();
-                    if (this.Master != null && struckObject != this.Master && struckObject.Race == Grobal2.RC_PLAYOBJECT)
+                    if (this.Master != null && struckObject != this.Master && struckObject.Race == ActorRace.Play)
                     {
                         this.Master.SetPkFlag(struckObject);
                     }

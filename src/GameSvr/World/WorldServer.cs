@@ -324,7 +324,7 @@ namespace GameSvr.World
                 if (switchDataInfo == null)
                 {
                     GetHumData(playObject, ref userOpenInfo.HumanRcd);
-                    playObject.Race = Grobal2.RC_PLAYOBJECT;
+                    playObject.Race = ActorRace.Play;
                     if (string.IsNullOrEmpty(playObject.HomeMap))
                     {
                         playObject.HomeMap = GetHomeInfo(playObject.Job, ref playObject.HomeX, ref playObject.HomeY);
@@ -1830,7 +1830,7 @@ namespace GameSvr.World
                             if (osObject != null && osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
                             {
                                 var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
-                                if (baseObject != null && !baseObject.Ghost && baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");
                                 }

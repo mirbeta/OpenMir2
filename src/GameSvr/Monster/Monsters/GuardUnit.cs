@@ -69,7 +69,7 @@ namespace GameSvr.Monster.Monsters
                         }
                     }
                 }
-                if (baseObject.AdminMode || baseObject.StoneMode || baseObject.Race >= Grobal2.RC_NPC && baseObject.Race < Grobal2.RC_ANIMAL || baseObject == this || baseObject.Castle == Castle)
+                if (baseObject.AdminMode || baseObject.StoneMode || baseObject.Race >= ActorRace.NPC && baseObject.Race < ActorRace.Animal || baseObject == this || baseObject.Castle == Castle)
                 {
                     result = false;
                 }

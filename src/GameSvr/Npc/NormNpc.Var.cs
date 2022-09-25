@@ -2045,7 +2045,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.Death && (PlayObject.LastHiter != null))
                         {
-                            if (PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                            if (PlayObject.LastHiter.Race == ActorRace.Play)
                             {
                                 sValue = PlayObject.LastHiter.CharName;
                             }
@@ -2062,7 +2062,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.Death && (PlayObject.LastHiter != null))
                         {
-                            if (PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT)
+                            if (PlayObject.LastHiter.Race != ActorRace.Play)
                             {
                                 sValue = PlayObject.LastHiter.CharName;
                             }

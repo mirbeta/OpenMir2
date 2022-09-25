@@ -64,7 +64,7 @@ namespace GameSvr.Command.Commands
                                     {
                                         if (BaseObject.Master != null && BaseObject.Race != 135)// 除135怪外，其它宝宝不清除
                                         {
-                                            if (BaseObject.Master.Race == Grobal2.RC_PLAYOBJECT)
+                                            if (BaseObject.Master.Race == ActorRace.Play)
                                             {
                                                 continue;
                                             }

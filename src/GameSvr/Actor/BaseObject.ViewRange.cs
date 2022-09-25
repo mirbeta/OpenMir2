@@ -14,7 +14,7 @@ namespace GameSvr.Actor
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
-            if ((baseObject.Race == Grobal2.RC_PLAYOBJECT) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
+            if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
             }
@@ -49,7 +49,7 @@ namespace GameSvr.Actor
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
-            if ((baseObject.Race == Grobal2.RC_PLAYOBJECT) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
+            if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
             }
@@ -134,7 +134,7 @@ namespace GameSvr.Actor
             for (var i = 0; i < VisibleActors.Count; i++)
             {
                 var visibleBaseObject = VisibleActors[i];
-                if ((visibleBaseObject.BaseObject.Race == Grobal2.RC_PLAYOBJECT) || (visibleBaseObject.BaseObject.Master != null))
+                if ((visibleBaseObject.BaseObject.Race == ActorRace.Play) || (visibleBaseObject.BaseObject.Master != null))
                 {
                     result = true;
                     break;
@@ -201,8 +201,8 @@ namespace GameSvr.Actor
                                             {
                                                 if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                 {
-                                                    if ((Race < Grobal2.RC_ANIMAL) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null)
-                                                        && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || (baseObject.Race == Grobal2.RC_PLAYOBJECT))
+                                                    if ((Race < ActorRace.Animal) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null)
+                                                        && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || (baseObject.Race == ActorRace.Play))
                                                     {
                                                         UpdateVisibleGay(baseObject);
                                                     }
@@ -297,7 +297,7 @@ namespace GameSvr.Actor
                                             break;
                                         }
                                     }
-                                    if ((OSObject.CellType == CellType.Item) && !Death && (Race > Grobal2.RC_MONSTER))
+                                    if ((OSObject.CellType == CellType.Item) && !Death && (Race > ActorRace.Monster))
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
                                         {

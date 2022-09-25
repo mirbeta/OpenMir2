@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
             WantRefMsg = true;
             Castle = null;
             GuardDirection = -1;
-            Race = Grobal2.RC_ARCHERGUARD;
+            Race = ActorRace.ArcherGuard;
         }
 
         private void AttackTarger(BaseObject targeTBaseObject)

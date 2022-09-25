@@ -442,7 +442,7 @@ namespace GameSvr.Player
 
         public PlayObject() : base()
         {
-            Race = Grobal2.RC_PLAYOBJECT;
+            Race = ActorRace.Play;
             m_boEmergencyClose = false;
             m_boSwitchData = false;
             m_boReconnection = false;
@@ -1064,7 +1064,7 @@ namespace GameSvr.Player
                     SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                if (Race == Grobal2.RC_PLAYOBJECT)
+                if (Race == ActorRace.Play)
                 {
                     RecalcAbilitys();
                     SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -1226,7 +1226,7 @@ namespace GameSvr.Player
         {
             var boIsVisible = false;
             VisibleBaseObject VisibleBaseObject;
-            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Master != null)
+            if (BaseObject.Race == ActorRace.Play || BaseObject.Master != null)
             {
                 IsVisibleActive = true;// 如果是人物或宝宝则置TRUE
             }
@@ -1250,7 +1250,7 @@ namespace GameSvr.Player
                 BaseObject = BaseObject
             };
             VisibleActors.Add(VisibleBaseObject);
-            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+            if (BaseObject.Race == ActorRace.Play)
             {
                 SendWhisperMsg(BaseObject as PlayObject);
             }
@@ -1311,7 +1311,7 @@ namespace GameSvr.Player
                                         {
                                             if (!BaseObject.Ghost && !BaseObject.FixedHideMode && !BaseObject.ObMode)
                                             {
-                                                if (Race < Grobal2.RC_ANIMAL || Master != null || CrazyMode || NastyMode || WantRefMsg || BaseObject.Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                                if (Race < ActorRace.Animal || Master != null || CrazyMode || NastyMode || WantRefMsg || BaseObject.Master != null && Math.Abs(BaseObject.CurrX - CurrX) <= 3 && Math.Abs(BaseObject.CurrY - CurrY) <= 3 || BaseObject.Race == ActorRace.Play)
                                                 {
                                                     UpdateVisibleGay(BaseObject);
                                                     if (BaseObject.MapCell == CellType.Monster && this.MapCell == CellType.Play && !this.ObMode && !BaseObject.FixedHideMode)
@@ -1322,7 +1322,7 @@ namespace GameSvr.Player
                                             }
                                         }
                                     }
-                                    if (Race == Grobal2.RC_PLAYOBJECT)
+                                    if (Race == ActorRace.Play)
                                     {
                                         if (osObject.CellType == CellType.Item)
                                         {
@@ -1389,7 +1389,7 @@ namespace GameSvr.Player
                     var VisibleBaseObject = VisibleActors[n18];
                     if (VisibleBaseObject.VisibleFlag == 0)
                     {
-                        if (Race == Grobal2.RC_PLAYOBJECT)
+                        if (Race == ActorRace.Play)
                         {
                             var BaseObject = VisibleBaseObject.BaseObject;
                             if (!BaseObject.FixedHideMode && !BaseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
@@ -1401,7 +1401,7 @@ namespace GameSvr.Player
                         Dispose(VisibleBaseObject);
                         continue;
                     }
-                    if (Race == Grobal2.RC_PLAYOBJECT && VisibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
+                    if (Race == ActorRace.Play && VisibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
                     {
                         var BaseObject = VisibleBaseObject.BaseObject;
                         if (BaseObject != this)
@@ -1697,7 +1697,7 @@ namespace GameSvr.Player
                         if (DropItemDown(ItemList[i], DropWide, true, ItemOfCreat, this))
                         {
                             pu = ItemList[i];
-                            if (Race == Grobal2.RC_PLAYOBJECT)
+                            if (Race == ActorRace.Play)
                             {
                                 if (DelList == null)
                                 {

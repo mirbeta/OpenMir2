@@ -45,7 +45,7 @@ namespace GameSvr.RobotPlay
                                 case PlayJob.Taoist:
                                     if (TargetCret != null)
                                     {
-                                        if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪
+                                        if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪
                                         {
                                             if (TargetCret.WAbil.MaxHP >= 700)
                                             {
