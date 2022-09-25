@@ -2986,7 +2986,6 @@ namespace GameSvr.Actor
                     {
                         sendMessage.Buff = sMsg;
                     }
-
                     MsgList.Insert(0, sendMessage);
                 }
             }
