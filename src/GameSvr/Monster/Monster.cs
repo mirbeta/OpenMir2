@@ -24,6 +24,10 @@ namespace GameSvr.Monster
             var ElfMon = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
+                if (OldMon.TargetCret == null)
+                {
+                    OldMon.TargetCret = OldMon.Master.TargetCret == null ? OldMon.Master.LastHiter : OldMon.Master.TargetCret;
+                }
                 ElfMon.Master = OldMon.Master;
                 ElfMon.MasterRoyaltyTick = OldMon.MasterRoyaltyTick;
                 ElfMon.SlaveMakeLevel = OldMon.SlaveMakeLevel;
@@ -37,6 +41,7 @@ namespace GameSvr.Monster
                 ElfMon.LastHiter = OldMon.LastHiter;
                 ElfMon.LastHiterTick = OldMon.LastHiterTick;
                 ElfMon.Direction = OldMon.Direction;
+                ElfMon.IsSlave = true;
                 if (OldMon.Master != null)
                 {
                     OldMon.Master.SlaveList.Add(ElfMon);

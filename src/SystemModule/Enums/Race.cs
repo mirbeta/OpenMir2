@@ -37,7 +37,7 @@ namespace GameSvr
         /// <summary>
         /// 宠物怪
         /// </summary>
-        public const byte SlaveMonster = 115;
+        public const byte SlaveMonster = 254;
         /// <summary>
         /// 沙巴克城门
         /// </summary>
