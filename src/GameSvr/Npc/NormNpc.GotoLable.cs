@@ -1337,13 +1337,13 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_KILLBYHUM:
-                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race != Grobal2.RC_PLAYOBJECT))
+                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race != ActorRace.Play))
                         {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_KILLBYMON:
-                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race == Grobal2.RC_PLAYOBJECT))
+                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race == ActorRace.Play))
                         {
                             result = false;
                         }

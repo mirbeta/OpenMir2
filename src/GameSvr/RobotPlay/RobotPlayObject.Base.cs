@@ -105,7 +105,7 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (Job > 0)
                                     {
-                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != ActorRace.Play)
                                         {
                                             // 道法22前是否物理攻击
                                             if (Master != null)
@@ -344,8 +344,8 @@ namespace GameSvr.RobotPlay
                     }
                     switch (BaseObject.Race)
                     {
-                        case Grobal2.RC_ARCHERGUARD:
-                        case 55:// 不主动攻击练功师 弓箭手
+                        case ActorRace.ArcherGuard:
+                        case ActorRace.Exercise:// 不主动攻击练功师 弓箭手
                             if (BaseObject.TargetCret != this)
                             {
                                 result = false;
@@ -367,7 +367,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (AttatckMode == AttackMode.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
                     {
-                        if (BaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                        if (BaseObject.Race == ActorRace.Play)
                         {
                             if (PvpLevel() >= 2)
                             {
@@ -394,7 +394,7 @@ namespace GameSvr.RobotPlay
                         }
                         if (IsRobot && !result)
                         {
-                            if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Master != null)
+                            if (BaseObject.Race == ActorRace.Play || BaseObject.Master != null)
                             {
                                 if (BaseObject.TargetCret != null)
                                 {
@@ -419,7 +419,7 @@ namespace GameSvr.RobotPlay
                                 }
                             }
                         }
-                        if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Master != null)// 安全区不能打人物和英雄
+                        if (BaseObject.Race == ActorRace.Play || BaseObject.Master != null)// 安全区不能打人物和英雄
                         {
                             if (BaseObject.InSafeZone() || InSafeZone())
                             {
@@ -436,8 +436,8 @@ namespace GameSvr.RobotPlay
                         }
                         switch (BaseObject.Race)
                         {
-                            case Grobal2.RC_ARCHERGUARD:
-                            case 55:// 不主动攻击练功师 弓箭手
+                            case ActorRace.ArcherGuard:
+                            case ActorRace.Exercise:// 不主动攻击练功师 弓箭手
                                 if (BaseObject.TargetCret != this)
                                 {
                                     result = false;
@@ -553,7 +553,7 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                     {
-                                                        if (Race < Grobal2.RC_ANIMAL || Master != null || CrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                                        if (Race < ActorRace.Animal || Master != null || CrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
                                                         {
                                                             UpdateVisibleGay(baseObject);
                                                         }
@@ -561,7 +561,7 @@ namespace GameSvr.RobotPlay
                                                 }
                                                 break;
                                             case CellType.Item:
-                                                if (Race == Grobal2.RC_PLAYOBJECT)
+                                                if (Race == ActorRace.Play)
                                                 {
                                                     if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
                                                     {
@@ -611,7 +611,7 @@ namespace GameSvr.RobotPlay
                                                 }
                                                 break;
                                             case CellType.Event:
-                                                if (Race == Grobal2.RC_PLAYOBJECT)
+                                                if (Race == ActorRace.Play)
                                                 {
                                                     if (osObject.CellObjId < 0)
                                                     {
@@ -663,7 +663,7 @@ namespace GameSvr.RobotPlay
                         switch (VisibleBaseObject.VisibleFlag)
                         {
                             case VisibleFlag.Visible:
-                                if (Race == Grobal2.RC_PLAYOBJECT)
+                                if (Race == ActorRace.Play)
                                 {
                                     baseObject = VisibleBaseObject.BaseObject;
                                     if (baseObject != null)
@@ -681,7 +681,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 continue;
                             case VisibleFlag.Hidden:
-                                if (Race == Grobal2.RC_PLAYOBJECT)
+                                if (Race == ActorRace.Play)
                                 {
                                     baseObject = VisibleBaseObject.BaseObject;
                                     if (baseObject != null)
@@ -842,9 +842,9 @@ namespace GameSvr.RobotPlay
                 }
                 else
                 {
-                    if (hiter.Race == Grobal2.RC_PLAYOBJECT || hiter.Master != null && hiter.GetMaster().Race == Grobal2.RC_PLAYOBJECT)
+                    if (hiter.Race == ActorRace.Play || hiter.Master != null && hiter.GetMaster().Race == ActorRace.Play)
                     {
-                        if (TargetCret != null && (TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null && TargetCret.GetMaster().Race == Grobal2.RC_PLAYOBJECT))
+                        if (TargetCret != null && (TargetCret.Race == ActorRace.Play || TargetCret.Master != null && TargetCret.GetMaster().Race == ActorRace.Play))
                         {
                             if (Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
                             {
@@ -870,7 +870,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                 }
-                if (hiter.Race == Grobal2.RC_PLAYOBJECT && !hiter.IsRobot && TargetCret == hiter)
+                if (hiter.Race == ActorRace.Play && !hiter.IsRobot && TargetCret == hiter)
                 {
                     if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0)
                     {
@@ -908,7 +908,7 @@ namespace GameSvr.RobotPlay
             if ((TargetCret == null || HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000) && m_boAIStart)
             {
                 m_dwSearchTargetTick = HUtil32.GetTickCount();
-                if (TargetCret == null || !(TargetCret != null && TargetCret.Race == Grobal2.RC_PLAYOBJECT) || TargetCret.Master != null && TargetCret.Master.Race == Grobal2.RC_PLAYOBJECT || (HUtil32.GetTickCount() - StruckTick) > 15000)
+                if (TargetCret == null || !(TargetCret != null && TargetCret.Race == ActorRace.Play) || TargetCret.Master != null && TargetCret.Master.Race == ActorRace.Play || (HUtil32.GetTickCount() - StruckTick) > 15000)
                 {
                     base.SearchTarget();
                 }

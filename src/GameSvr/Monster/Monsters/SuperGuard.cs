@@ -58,7 +58,7 @@ namespace GameSvr.Monster.Monsters
         private bool CanAttckTarget(BaseObject baseObject)
         {
             //todo 最好加个字段直接判断是否能被攻击，减少判断
-            return baseObject.Race == Grobal2.RC_ARCHERGUARD || baseObject.Race == Grobal2.RC_GUARD || baseObject.Race == Grobal2.RC_PEACENPC || baseObject.Race == Grobal2.RC_NPC;
+            return baseObject.Race == ActorRace.ArcherGuard || baseObject.Race == ActorRace.Guard || baseObject.Race == ActorRace.PeaceNpc || baseObject.Race == ActorRace.NPC;
         }
 
         public override void Run()
@@ -77,7 +77,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         continue;
                     }
-                    if (baseObject.PvpLevel() >= 2 || baseObject.Race >= Grobal2.RC_MONSTER && !baseObject.Mission)
+                    if (baseObject.PvpLevel() >= 2 || baseObject.Race >= ActorRace.Monster && !baseObject.Mission)
                     {
                         if (AttackPet)
                         {

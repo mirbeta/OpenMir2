@@ -449,7 +449,7 @@ namespace GameSvr.Maps
                                 }
                                 else
                                 {
-                                    if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                    if (baseObject.Race == ActorRace.Play)
                                     {
                                         if (M2Share.Config.boRunHuman || Flag.boRUNHUMAN)
                                         {
@@ -458,7 +458,7 @@ namespace GameSvr.Maps
                                     }
                                     else
                                     {
-                                        if (baseObject.Race == Grobal2.RC_NPC)
+                                        if (baseObject.Race == ActorRace.NPC)
                                         {
                                             if (M2Share.Config.boRunNpc)
                                             {
@@ -467,7 +467,7 @@ namespace GameSvr.Maps
                                         }
                                         else
                                         {
-                                            if (baseObject.Race == Grobal2.RC_GUARD || baseObject.Race == Grobal2.RC_ARCHERGUARD)
+                                            if (baseObject.Race == ActorRace.Guard || baseObject.Race == ActorRace.ArcherGuard)
                                             {
                                                 if (M2Share.Config.boRunGuard)
                                                 {
@@ -1404,7 +1404,7 @@ namespace GameSvr.Maps
                     if (osObject.CellType == CellType.Play)
                     {
                         var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
-                        if (baseObject.Race == Grobal2.RC_PLAYOBJECT)
+                        if (baseObject.Race == ActorRace.Play)
                         {
                             result = true;
                             break;
@@ -1446,11 +1446,11 @@ namespace GameSvr.Maps
         public void AddObject(BaseObject baseObject)
         {
             var btRaceServer = baseObject.Race;
-            if (btRaceServer == Grobal2.RC_PLAYOBJECT)
+            if (btRaceServer == ActorRace.Play)
             {
                 _humCount++;
             }
-            if (btRaceServer >= Grobal2.RC_ANIMAL)
+            if (btRaceServer >= ActorRace.Animal)
             {
                 _monCount++;
             }
@@ -1459,11 +1459,11 @@ namespace GameSvr.Maps
         public void DelObjectCount(BaseObject baseObject)
         {
             var btRaceServer = baseObject.Race;
-            if (btRaceServer == Grobal2.RC_PLAYOBJECT)
+            if (btRaceServer == ActorRace.Play)
             {
                 _humCount--;
             }
-            if (btRaceServer >= Grobal2.RC_ANIMAL)
+            if (btRaceServer >= ActorRace.Animal)
             {
                 _monCount--;
             }

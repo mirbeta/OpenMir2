@@ -233,7 +233,7 @@ namespace GameSvr.Actor
             {
                 if (UseItems.Length >= Grobal2.U_CHARM && UseItems[Grobal2.U_CHARM] != null)
                 {
-                    if (!Death && Race == Grobal2.RC_PLAYOBJECT || Race == Grobal2.RC_PLAYCLONE)
+                    if (!Death && Race == ActorRace.Play || Race == ActorRace.PlayClone)
                     {
                         int nCount;
                         int dCount;
@@ -266,7 +266,7 @@ namespace GameSvr.Actor
                                 }
                                 if (UseItems[Grobal2.U_CHARM].Dura >= 1000)
                                 {
-                                    if (Race == Grobal2.RC_PLAYOBJECT)
+                                    if (Race == ActorRace.Play)
                                     {
                                         SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
                                     }
@@ -274,7 +274,7 @@ namespace GameSvr.Actor
                                 else
                                 {
                                     UseItems[Grobal2.U_CHARM].Dura = 0;
-                                    if (Race == Grobal2.RC_PLAYOBJECT)
+                                    if (Race == ActorRace.Play)
                                     {
                                         (this as PlayObject).SendDelItems(UseItems[Grobal2.U_CHARM]);
                                     }
@@ -309,7 +309,7 @@ namespace GameSvr.Actor
                                 }
                                 if (UseItems[Grobal2.U_CHARM].Dura >= 1000)
                                 {
-                                    if (Race == Grobal2.RC_PLAYOBJECT)
+                                    if (Race == ActorRace.Play)
                                     {
                                         SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
                                     }
@@ -317,7 +317,7 @@ namespace GameSvr.Actor
                                 else
                                 {
                                     UseItems[Grobal2.U_CHARM].Dura = 0;
-                                    if (Race == Grobal2.RC_PLAYOBJECT)
+                                    if (Race == ActorRace.Play)
                                     {
                                         (this as PlayObject).SendDelItems(UseItems[Grobal2.U_CHARM]);
                                     }
@@ -493,7 +493,7 @@ namespace GameSvr.Actor
                 if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
                 {
                     DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
-                    if (Race == Grobal2.RC_PLAYOBJECT)
+                    if (Race == ActorRace.Play)
                     {
                         UseLamp();
                         CheckPkStatus();
@@ -767,7 +767,7 @@ namespace GameSvr.Actor
             KillFunc();
             try
             {
-                if (Race != Grobal2.RC_PLAYOBJECT && LastHiter != null)
+                if (Race != ActorRace.Play && LastHiter != null)
                 {
                     if (M2Share.Config.MonSayMsg)
                     {
@@ -775,7 +775,7 @@ namespace GameSvr.Actor
                     }
                     if (ExpHitter != null)
                     {
-                        if (ExpHitter.Race == Grobal2.RC_PLAYOBJECT)
+                        if (ExpHitter.Race == ActorRace.Play)
                         {
                             if (M2Share.g_FunctionNPC != null)
                             {
@@ -846,7 +846,7 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        if (LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                        if (LastHiter.Race == ActorRace.Play)
                         {
                             if (M2Share.g_FunctionNPC != null)
                             {
@@ -867,7 +867,7 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                if (M2Share.Config.MonSayMsg && Race == Grobal2.RC_PLAYOBJECT && LastHiter != null)
+                if (M2Share.Config.MonSayMsg && Race == ActorRace.Play && LastHiter != null)
                 {
                     LastHiter.MonsterSayMsg(this, MonStatus.KillHuman);
                 }
@@ -883,15 +883,15 @@ namespace GameSvr.Actor
                 var boPK = false;
                 if (!M2Share.Config.VentureServer && !Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone)
                 {
-                    if (Race == Grobal2.RC_PLAYOBJECT && LastHiter != null && PvpLevel() < 2)
+                    if (Race == ActorRace.Play && LastHiter != null && PvpLevel() < 2)
                     {
-                        if ((LastHiter.Race == Grobal2.RC_PLAYOBJECT) || (LastHiter.Race == Grobal2.RC_NPC))//允许NPC杀死人物
+                        if ((LastHiter.Race == ActorRace.Play) || (LastHiter.Race == ActorRace.NPC))//允许NPC杀死人物
                         {
                             boPK = true;
                         }
                         if (LastHiter.Master != null)
                         {
-                            if (LastHiter.Master.Race == Grobal2.RC_PLAYOBJECT)
+                            if (LastHiter.Master.Race == ActorRace.Play)
                             {
                                 LastHiter = LastHiter.Master;
                                 boPK = true;
@@ -916,7 +916,7 @@ namespace GameSvr.Actor
                     }
                     if (!guildwarkill)
                     {
-                        if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP) && LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                        if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP) && LastHiter.Race == ActorRace.Play)
                         {
                             (this as PlayObject).PKDie(LastHiter as PlayObject);
                         }
@@ -942,7 +942,7 @@ namespace GameSvr.Actor
                             }
                         }
                         // 检查攻击人是否用了着经验或等级装备
-                        if (LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                        if (LastHiter.Race == ActorRace.Play)
                         {
                             if (LastHiter.PkDieLostExp > 0)
                             {
@@ -983,14 +983,14 @@ namespace GameSvr.Actor
                     {
                         AttackBaseObject = ExpHitter.Master;
                     }
-                    if (Race != Grobal2.RC_PLAYOBJECT)
+                    if (Race != ActorRace.Play)
                     {
                         DropUseItems(AttackBaseObject);
                         if (Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
                         {
                             ScatterBagItems(AttackBaseObject);
                         }
-                        if (Race >= Grobal2.RC_ANIMAL && Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
+                        if (Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
                         {
                             ScatterGolds(AttackBaseObject);
                         }
@@ -1001,7 +1001,7 @@ namespace GameSvr.Actor
                         {
                             if (AttackBaseObject != null)
                             {
-                                if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == Grobal2.RC_PLAYOBJECT || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != Grobal2.RC_PLAYOBJECT)
+                                if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
                                 {
                                     DropUseItems(null);
                                 }
@@ -1040,7 +1040,7 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                if (Race == Grobal2.RC_PLAYOBJECT)
+                if (Race == ActorRace.Play)
                 {
                     if (GroupOwner != null)
                     {
@@ -1048,7 +1048,7 @@ namespace GameSvr.Actor
                     }
                     if (LastHiter != null)
                     {
-                        if (LastHiter.Race == Grobal2.RC_PLAYOBJECT)
+                        if (LastHiter.Race == ActorRace.Play)
                         {
                             tStr = LastHiter.CharName;
                         }
@@ -1140,7 +1140,7 @@ namespace GameSvr.Actor
         protected virtual void ProcessSayMsg(string sMsg)
         {
             string sCharName;
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 sCharName = CharName;
             }
@@ -1177,7 +1177,7 @@ namespace GameSvr.Actor
             try
             {
                 var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
-                if ((Race == Grobal2.RC_PLAYCLONE) && (Master != null))
+                if ((Race == ActorRace.PlayClone) && (Master != null))
                 {
                     return;
                 }
@@ -1235,7 +1235,7 @@ namespace GameSvr.Actor
                     return;
                 }
                 DropItemList = new List<DeleteItem>();
-                if (Race == Grobal2.RC_PLAYOBJECT)
+                if (Race == ActorRace.Play)
                 {
                     nC = 0;
                     while (true)
@@ -1256,7 +1256,7 @@ namespace GameSvr.Actor
                                 });
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                                    M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                                 }
                                 UseItems[nC].Index = 0;
                             }
@@ -1293,7 +1293,7 @@ namespace GameSvr.Actor
                             {
                                 if ((StdItem.ItemDesc & 10) == 0)
                                 {
-                                    if (Race == Grobal2.RC_PLAYOBJECT)
+                                    if (Race == ActorRace.Play)
                                     {
                                         DropItemList.Add(new DeleteItem()
                                         {
@@ -1362,9 +1362,9 @@ namespace GameSvr.Actor
             }
             switch (Race)
             {
-                case >= Grobal2.RC_ANIMAL:
+                case >= ActorRace.Animal:
                     {
-                        if (BaseObject.Race >= Grobal2.RC_ANIMAL)
+                        if (BaseObject.Race >= ActorRace.Animal)
                         {
                             result = true;
                         }
@@ -1374,10 +1374,10 @@ namespace GameSvr.Actor
                         }
                         return result;
                     }
-                case Grobal2.RC_PLAYOBJECT:
+                case ActorRace.Play:
                     {
                         result = IsProperFriend_IsFriend(BaseObject);
-                        if (BaseObject.Race < Grobal2.RC_ANIMAL)
+                        if (BaseObject.Race < ActorRace.Animal)
                         {
                             return result;
                         }
@@ -1413,7 +1413,7 @@ namespace GameSvr.Actor
                 {
                     case Grobal2.RM_MAGSTRUCK:
                     case Grobal2.RM_MAGSTRUCK_MINE:
-                        if ((processMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= Grobal2.RC_ANIMAL) && !Bo2Bf && (WAbil.Level < 50))
+                        if ((processMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= ActorRace.Animal) && !Bo2Bf && (WAbil.Level < 50))
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
@@ -1426,7 +1426,7 @@ namespace GameSvr.Actor
                             TargetBaseObject = M2Share.ActorMgr.Get(processMsg.BaseObject);
                             if (M2Share.Config.MonDelHptoExp)
                             {
-                                if (TargetBaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                if (TargetBaseObject.Race == ActorRace.Play)
                                 {
                                     if (TargetBaseObject.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
@@ -1443,7 +1443,7 @@ namespace GameSvr.Actor
                                         }
                                     }
                                 }
-                                if (TargetBaseObject.Race == Grobal2.RC_PLAYCLONE)
+                                if (TargetBaseObject.Race == ActorRace.PlayClone)
                                 {
                                     if (TargetBaseObject.Master != null)
                                     {
@@ -1464,7 +1464,7 @@ namespace GameSvr.Actor
                                     }
                                 }
                             }
-                            if (Race != Grobal2.RC_PLAYOBJECT)
+                            if (Race != ActorRace.Play)
                             {
                                 if (Animal)
                                 {
@@ -1482,7 +1482,7 @@ namespace GameSvr.Actor
                     case Grobal2.RM_MAGHEALING:
                         if ((IncHealing + processMsg.nParam1) < 300)
                         {
-                            if (Race == Grobal2.RC_PLAYOBJECT)
+                            if (Race == ActorRace.Play)
                             {
                                 IncHealing += processMsg.nParam1;
                                 PerHealing = 5;
@@ -1500,7 +1500,7 @@ namespace GameSvr.Actor
                         break;
                     case Grobal2.RM_REFMESSAGE:
                         SendRefMsg(processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
-                        if ((processMsg.BaseObject == Grobal2.RM_STRUCK) && (Race != Grobal2.RC_PLAYOBJECT))
+                        if ((processMsg.BaseObject == Grobal2.RM_STRUCK) && (Race != ActorRace.Play))
                         {
                             SendMsg(this, processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         }
@@ -1519,7 +1519,7 @@ namespace GameSvr.Actor
                         if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(TargetBaseObject);
-                            if (TargetBaseObject.Race >= Grobal2.RC_ANIMAL)
+                            if (TargetBaseObject.Race >= ActorRace.Animal)
                             {
                                 nPower = HUtil32.Round(nPower / 1.2);
                             }
@@ -1550,7 +1550,7 @@ namespace GameSvr.Actor
                             if (IsProperTarget(TargetBaseObject))
                             {
                                 SetTargetCreat(TargetBaseObject);
-                                if ((Race == Grobal2.RC_PLAYOBJECT) && (TargetBaseObject.Race == Grobal2.RC_PLAYOBJECT))
+                                if ((Race == ActorRace.Play) && (TargetBaseObject.Race == ActorRace.Play))
                                 {
                                     SetPkFlag(TargetBaseObject);
                                 }

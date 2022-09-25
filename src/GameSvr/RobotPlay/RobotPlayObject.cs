@@ -1334,7 +1334,7 @@ namespace GameSvr.RobotPlay
                         AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
                         {
-                            if (AttackBaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                            if (AttackBaseObject.Race == ActorRace.Play)
                             {
                                 SetPkFlag(AttackBaseObject);
                             }
@@ -2188,7 +2188,7 @@ namespace GameSvr.RobotPlay
                         return true;
                     }
                     if ((M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.Abil.MaxHP < 700 &&
-                        TargetCret.Race != Grobal2.RC_PLAYOBJECT && Job == PlayJob.Taoist) && (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
+                        TargetCret.Race != ActorRace.Play && Job == PlayJob.Taoist) && (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
                     {
                         return true;
                     }
@@ -2829,7 +2829,7 @@ namespace GameSvr.RobotPlay
                         result = 26;
                         return result;
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level)
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level)
                     {
                         // PK时,使用野蛮冲撞 
                         if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 10000)
@@ -2859,7 +2859,7 @@ namespace GameSvr.RobotPlay
                         switch (M2Share.RandomNumber.Random(3))
                         {
                             case 0:// 被怪物包围
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != Grobal2.RC_PLAYOBJECT || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
@@ -2910,7 +2910,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != Grobal2.RC_PLAYOBJECT || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount(); // 狮子吼
                                     result = 41;
@@ -2961,7 +2961,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != Grobal2.RC_PLAYOBJECT || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
@@ -3015,7 +3015,7 @@ namespace GameSvr.RobotPlay
                     }
                     else
                     {
-                        if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && CheckTargetXYCount1(CurrX, CurrY, 1) > 1)
+                        if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXYCount1(CurrX, CurrY, 1) > 1)
                         {
                             // PK  身边超过2个目标才使用
                             if (AllowUseMagic(40) && (HUtil32.GetTickCount() - m_SkillUseTick[40]) > 3000)// 英雄抱月刀法
@@ -3124,7 +3124,7 @@ namespace GameSvr.RobotPlay
                         result = 7;
                         return result;
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(WAbil.MaxHP * 0.6))
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(WAbil.MaxHP * 0.6))
                     {
                         // PK时,使用野蛮冲撞
                         if (AllowUseMagic(27) && (HUtil32.GetTickCount() - m_SkillUseTick[27]) > 3000)
@@ -3143,7 +3143,7 @@ namespace GameSvr.RobotPlay
                             return result;
                         }
                     }
-                    if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != Grobal2.RC_PLAYOBJECT || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                    if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                     {
                         m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                         result = 41;
@@ -3164,7 +3164,7 @@ namespace GameSvr.RobotPlay
                             return result;
                         }
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
                     {
                         // PK时,旁边有人贴身,使用抗拒火环
                         if (AllowUseMagic(8) && HUtil32.GetTickCount() - m_SkillUseTick[8] > 3000)
@@ -3192,7 +3192,7 @@ namespace GameSvr.RobotPlay
                     }
                     if (HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY))
                     {
-                        if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && GetDirBaseObjectsCount(Direction, 5) > 0 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
+                        if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && GetDirBaseObjectsCount(Direction, 5) > 0 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                         {
                             if (AllowUseMagic(10))
                             {
@@ -3859,7 +3859,7 @@ namespace GameSvr.RobotPlay
                             return result;
                         }
                     }
-                    if ((TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXYCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
                     {
                         // PK时,旁边有人贴身,使用气功波
                         if (AllowUseMagic(48) && HUtil32.GetTickCount() - m_SkillUseTick[48] > 3000)
@@ -3881,7 +3881,7 @@ namespace GameSvr.RobotPlay
                     }
                     // 绿毒
                     if (TargetCret.StatusArr[StatuStateConst.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
-                                                                                                                                                     || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
+                                                                                                                                                     || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
                         // 对于血量超过800的怪用 不毒城墙
@@ -3937,7 +3937,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     if (TargetCret.StatusArr[StatuStateConst.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
-                                                                                                                                                       || TargetCret.Race == Grobal2.RC_PLAYOBJECT) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
+                                                                                                                                                       || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
                         // 对于血量超过100的怪用 不毒城墙

@@ -171,7 +171,7 @@ namespace GameSvr.Magic
                             {
                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
                                 PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
-                                if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
+                                if (TargeTBaseObject.Race >= ActorRace.Animal)
                                 {
                                     boTrain = true;
                                 }
@@ -235,7 +235,7 @@ namespace GameSvr.Magic
                                             TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, StatuStateConst.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                     }
-                                    if (TargeTBaseObject.Race == Grobal2.RC_PLAYOBJECT || TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
+                                    if (TargeTBaseObject.Race == ActorRace.Play || TargeTBaseObject.Race >= ActorRace.Animal)
                                     {
                                         boTrain = true;
                                     }
@@ -287,7 +287,7 @@ namespace GameSvr.Magic
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
                             PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
-                            if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
+                            if (TargeTBaseObject.Race >= ActorRace.Animal)
                             {
                                 boTrain = true;
                             }
@@ -326,7 +326,7 @@ namespace GameSvr.Magic
                                             {
                                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoByte(PlayObject.WAbil.SC), HUtil32.HiByte(PlayObject.WAbil.SC) - HUtil32.LoByte(PlayObject.WAbil.SC) + 1);
                                                 PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 1200);
-                                                if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
+                                                if (TargeTBaseObject.Race >= ActorRace.Animal)
                                                 {
                                                     boTrain = true;
                                                 }
@@ -561,7 +561,7 @@ namespace GameSvr.Magic
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
                             PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
-                            if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL)
+                            if (TargeTBaseObject.Race >= ActorRace.Animal)
                             {
                                 boTrain = true;
                             }
@@ -673,7 +673,7 @@ namespace GameSvr.Magic
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 var TargeTBaseObject = BaseObjectList[i];
-                if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL && TargeTBaseObject.TargetCret == BaseObject)
+                if (TargeTBaseObject.Race >= ActorRace.Animal && TargeTBaseObject.TargetCret == BaseObject)
                 {
                     if (Math.Abs(TargeTBaseObject.CurrX - BaseObject.CurrX) > 1 || Math.Abs(TargeTBaseObject.CurrY - BaseObject.CurrY) > 1 || M2Share.RandomNumber.Random(2) == 0)
                     {
@@ -694,7 +694,7 @@ namespace GameSvr.Magic
         private bool MagTamming(BaseObject BaseObject, BaseObject TargeTBaseObject, int nTargetX, int nTargetY, int nMagicLevel)
         {
             var result = false;
-            if (TargeTBaseObject.Race != Grobal2.RC_PLAYOBJECT && M2Share.RandomNumber.Random(4 - nMagicLevel) == 0)
+            if (TargeTBaseObject.Race != ActorRace.Play && M2Share.RandomNumber.Random(4 - nMagicLevel) == 0)
             {
                 TargeTBaseObject.TargetCret = null;
                 if (TargeTBaseObject.Master == BaseObject)
@@ -872,7 +872,7 @@ namespace GameSvr.Magic
                 playObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE2, 0, 0, 0, 0, "");
                 var Envir = playObject.Envir;
                 playObject.MapRandomMove(playObject.HomeMap, 1);
-                if (Envir != playObject.Envir && playObject.Race == Grobal2.RC_PLAYOBJECT)
+                if (Envir != playObject.Envir && playObject.Race == ActorRace.Play)
                 {
                     playObject.m_boTimeRecall = false;
                 }
@@ -916,7 +916,7 @@ namespace GameSvr.Magic
                                         BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, StatuStateConst.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                 }
-                                if (BaseObject.Race == Grobal2.RC_PLAYOBJECT || BaseObject.Race >= Grobal2.RC_ANIMAL)
+                                if (BaseObject.Race == ActorRace.Play || BaseObject.Race >= ActorRace.Animal)
                                 {
                                     result = true;
                                 }
@@ -960,7 +960,7 @@ namespace GameSvr.Magic
                         BaseObject.StruckDamage(nPower);
                         PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 1, BaseObject.ActorId, "", 200);
                     }
-                    if (BaseObject.Race >= Grobal2.RC_ANIMAL)
+                    if (BaseObject.Race >= ActorRace.Animal)
                     {
                         result = true;
                     }
@@ -996,7 +996,7 @@ namespace GameSvr.Magic
                             nPower = (ushort)HUtil32.Round(nPower * 1.5);
                         }
                         PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(BaseObject.CurrX, BaseObject.CurrY), 2, BaseObject.ActorId, "", 600);
-                        if (BaseObject.Race >= Grobal2.RC_ANIMAL)
+                        if (BaseObject.Race >= ActorRace.Animal)
                         {
                             result = true;
                         }
@@ -1032,7 +1032,7 @@ namespace GameSvr.Magic
             }
             var nPower = PlayObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(UserMagic), UserMagic) + HUtil32.LoByte(PlayObject.WAbil.MC), HUtil32.HiByte(PlayObject.WAbil.MC) - HUtil32.LoByte(PlayObject.WAbil.MC) + 1);
             PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargetBaseObject.ActorId, "", 600);
-            if (TargetBaseObject.Race >= Grobal2.RC_ANIMAL)
+            if (TargetBaseObject.Race >= ActorRace.Animal)
             {
                 result = true;
             }
@@ -1151,7 +1151,7 @@ namespace GameSvr.Magic
                 for (var i = 0; i < BaseObjectList.Count; i++)
                 {
                     var TargeTBaseObject = BaseObjectList[i];
-                    if (TargeTBaseObject.Race >= Grobal2.RC_ANIMAL && M2Share.RandomNumber.Random(4) + (BaseObject.Abil.Level - 1) > TargeTBaseObject.Abil.Level && TargeTBaseObject.Master == null)
+                    if (TargeTBaseObject.Race >= ActorRace.Animal && M2Share.RandomNumber.Random(4) + (BaseObject.Abil.Level - 1) > TargeTBaseObject.Abil.Level && TargeTBaseObject.Master == null)
                     {
                         TargeTBaseObject.OpenHolySeizeMode(nPower * 1000);
                         if (MagicEvent == null)
@@ -1249,7 +1249,7 @@ namespace GameSvr.Magic
                             {
                                 if (M2Share.RandomNumber.Random(M2Share.Config.MabMabeHitSucessRate) < nLevel * 2 + 4)
                                 {
-                                    if (TargeTBaseObject.Race == Grobal2.RC_PLAYOBJECT)
+                                    if (TargeTBaseObject.Race == ActorRace.Play)
                                     {
                                         BaseObject.SetPkFlag(BaseObject);
                                         BaseObject.SetTargetCreat(TargeTBaseObject);

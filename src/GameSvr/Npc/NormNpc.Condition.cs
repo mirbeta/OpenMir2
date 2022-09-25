@@ -1461,7 +1461,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == PlayObject) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == PlayObject) && (PoseHuman.Race == ActorRace.Play))
             {
                 switch (QuestConditionInfo.nParam1)
                 {
@@ -1506,7 +1506,7 @@ namespace GameSvr.Npc
                 btSex = 1;
             }
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if (PoseHuman.Gender == Enum.Parse<PlayGender>(btSex.ToString()))
                 {
@@ -1520,7 +1520,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if ((((PlayObject)PoseHuman).m_sMasterName != "") && ((PlayObject)PoseHuman).m_boMaster)
                 {
@@ -1541,7 +1541,7 @@ namespace GameSvr.Npc
             }
             var cMethod = QuestConditionInfo.sParam1[0];
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 switch (cMethod)
                 {
@@ -1578,7 +1578,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if (((PlayObject)PoseHuman).m_sDearName != "")
                 {
@@ -1592,7 +1592,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if ((((PlayObject)PoseHuman).m_sMasterName != "") && !((PlayObject)PoseHuman).m_boMaster)
                 {
@@ -1812,7 +1812,7 @@ namespace GameSvr.Npc
             for (var i = MonList.Count - 1; i >= 0; i--)
             {
                 BaseObject = MonList[i];
-                if ((BaseObject.Race < Grobal2.RC_ANIMAL) || (BaseObject.Race == Grobal2.RC_ARCHERGUARD) || (BaseObject.Master != null))
+                if ((BaseObject.Race < ActorRace.Animal) || (BaseObject.Race == ActorRace.ArcherGuard) || (BaseObject.Master != null))
                 {
                     MonList.RemoveAt(i);
                 }
@@ -2035,7 +2035,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.Race == Grobal2.RC_PLAYOBJECT))
+            if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if (((PlayObject)PoseHuman).m_sMasterName != "")
                 {

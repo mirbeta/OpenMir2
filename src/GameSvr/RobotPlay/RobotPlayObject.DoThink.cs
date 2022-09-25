@@ -39,7 +39,7 @@ namespace GameSvr.RobotPlay
 
         public bool DoThink_TargetNeedRunPos()
         {
-            return TargetCret.Race == Grobal2.RC_PLAYOBJECT || TargetCret.Race == 108;
+            return TargetCret.Race == ActorRace.Play || TargetCret.Race == 108;
         }
 
         public bool DoThink_CanRunPos(int nAttackCount)

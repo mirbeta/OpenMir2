@@ -81,7 +81,7 @@ namespace GameSvr.Actor
             {
                 if (_actorsMap.TryGetValue(actorId, out actor))
                 {
-                    if (actor.Race == Grobal2.RC_PLAYOBJECT)
+                    if (actor.Race == ActorRace.Play)
                     {
                         playCount++;
                     }

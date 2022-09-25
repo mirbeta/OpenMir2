@@ -109,7 +109,7 @@ namespace GameSvr.Player
                             }
                         }
                         Dispose(mapItem);
-                        if (Race == Grobal2.RC_PLAYOBJECT)
+                        if (Race == ActorRace.Play)
                         {
                             this.SendAddItem(UserItem);
                         }
@@ -1571,7 +1571,7 @@ namespace GameSvr.Player
                 nDmg = BaseObject_34.GetHitStruckDamage(this, nDmg);
                 BaseObject_34.StruckDamage((ushort)nDmg);
                 BaseObject_34.SendRefMsg(Grobal2.RM_STRUCK, nDmg, BaseObject_34.WAbil.HP, BaseObject_34.WAbil.MaxHP, ActorId, "");
-                if (BaseObject_34.Race != Grobal2.RC_PLAYOBJECT)
+                if (BaseObject_34.Race != ActorRace.Play)
                 {
                     BaseObject_34.SendMsg(BaseObject_34, Grobal2.RM_STRUCK, nDmg, BaseObject_34.WAbil.HP, BaseObject_34.WAbil.MaxHP, ActorId, "");
                 }
@@ -2272,7 +2272,7 @@ namespace GameSvr.Player
                             };
                             MagicList.Add(UserMagic);
                             RecalcAbilitys();
-                            if (Race == Grobal2.RC_PLAYOBJECT)
+                            if (Race == ActorRace.Play)
                             {
                                 this.SendAddMagic(UserMagic);
                             }
@@ -2408,7 +2408,7 @@ namespace GameSvr.Player
                 MapRandomMove(sMap, 0);
             }
             var envir = Envir;
-            if (envir != Envir && Race == Grobal2.RC_PLAYOBJECT)
+            if (envir != Envir && Race == ActorRace.Play)
             {
                 m_boTimeRecall = false;
             }

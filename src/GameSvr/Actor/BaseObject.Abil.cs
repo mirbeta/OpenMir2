@@ -256,7 +256,7 @@ namespace GameSvr.Actor
             var dragonsetBelt = false;
             var dsetWingdress = false;
             RecallSuite = false;
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 for (var i = 0; i < UseItems.Length; i++)
                 {
@@ -1034,20 +1034,20 @@ namespace GameSvr.Actor
                 }
                 WAbil.MaxMP = (ushort)(WAbil.MaxMP - MoXieSuite);
                 WAbil.MaxHP = (ushort)(WAbil.MaxHP + MoXieSuite);
-                if ((Race == Grobal2.RC_PLAYOBJECT) && (WAbil.HP > WAbil.MaxHP))
+                if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP))
                 {
                     WAbil.HP = WAbil.MaxHP;
                 }
             }
-            if ((Race == Grobal2.RC_PLAYOBJECT) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
+            if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
             {
                 WAbil.HP = WAbil.MaxHP;
             }
-            if ((Race == Grobal2.RC_PLAYOBJECT) && (WAbil.MP > WAbil.MaxMP))
+            if ((Race == ActorRace.Play) && (WAbil.MP > WAbil.MaxMP))
             {
                 WAbil.MP = WAbil.MaxMP;
             }
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 var fastmoveflag = false;
                 if ((UseItems[Grobal2.U_BOOTS].Dura > 0) && (UseItems[Grobal2.U_BOOTS].Index == M2Share.INDEX_MIRBOOTS))
@@ -1080,11 +1080,11 @@ namespace GameSvr.Actor
                 CharStatus = GetCharStatus();
                 StatusChanged();
             }
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 SendUpdateMsg(this, Grobal2.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
             }
-            if (Race >= Grobal2.RC_ANIMAL)
+            if (Race >= ActorRace.Animal)
             {
                 ApplySlaveLevelAbilitys();
             }
@@ -1805,7 +1805,7 @@ namespace GameSvr.Actor
             //    return;
             //}
             ushort chp = 0;
-            if ((Race == Grobal2.RC_WHITESKELETON) || (Race == Grobal2.RC_ELFMON) || (Race == Grobal2.RC_ELFWARRIORMON))
+            if ((Race == ActorRace.WhiteSkeleton) || (Race == ActorRace.ElfMonster) || (Race == ActorRace.ElfWarriormon))
             {
                 WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(Abil.DC));
                 WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (int)Math.Round(HUtil32.HiByte(WAbil.DC) + (3 * (0.3 + SlaveExpLevel * 0.1) * SlaveExpLevel)));
@@ -1839,7 +1839,7 @@ namespace GameSvr.Actor
         private int GetMyLight()
         {
             var currentLight = 0;
-            if (Race == Grobal2.RC_PLAYOBJECT)
+            if (Race == ActorRace.Play)
             {
                 if (this is PlayObject)
                 {

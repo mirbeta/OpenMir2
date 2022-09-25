@@ -222,7 +222,7 @@ namespace GameSvr.RobotPlay
                 m_wHitMode = 0;
                 if (TargetCret != null)
                 {
-                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪 
+                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪 
                     {
                         if (TargetCret.WAbil.MaxHP >= 700)
                         {
@@ -257,7 +257,7 @@ namespace GameSvr.RobotPlay
                         if (!MagCanHitTarget(CurrX, CurrY, TargetCret) || Math.Abs(TargetCret.CurrX - CurrX) > 7 || Math.Abs(TargetCret.CurrY - CurrY) > 7)
                         {
                             // 魔法不能打到怪
-                            if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
+                            if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
                             {
                                 if (TargetCret.WAbil.MaxHP >= 700)
                                 {
@@ -282,7 +282,7 @@ namespace GameSvr.RobotPlay
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, null);
                                     AttackTick = HUtil32.GetTickCount();
-                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
+                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
                                     {
                                         if (TargetCret.WAbil.MaxHP >= 700)
                                         {
@@ -310,7 +310,7 @@ namespace GameSvr.RobotPlay
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, this);
                                     AttackTick = HUtil32.GetTickCount();
-                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
+                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
                                     {
                                         if (TargetCret.WAbil.MaxHP >= 700)
                                         {
@@ -355,7 +355,7 @@ namespace GameSvr.RobotPlay
                             {
                                 UseSpell(UserMagic, CurrX, CurrY, this);
                                 AttackTick = HUtil32.GetTickCount();
-                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
+                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
                                 {
                                     if (TargetCret.WAbil.MaxHP >= 700)
                                     {
@@ -381,7 +381,7 @@ namespace GameSvr.RobotPlay
                             {
                                 UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
                                 AttackTick = HUtil32.GetTickCount();
-                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)
                                 {
                                     // 22级砍血量的怪
                                     if (TargetCret.WAbil.MaxHP >= 700)
@@ -423,7 +423,7 @@ namespace GameSvr.RobotPlay
                 }
                 // 是否能躲避 
                 // 增加人形条件
-                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || TargetCret.WAbil.MaxHP < 700 && M2Share.Config.boHeroAttackTao && TargetCret.Race != Grobal2.RC_PLAYOBJECT)
+                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || TargetCret.WAbil.MaxHP < 700 && M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)
                 {
                     // 20090106 道士22级前是否物理攻击  怪等级小于英雄时
                     if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
@@ -451,7 +451,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (InSafeZone())// 英雄进入安全区内就不打PK目标
                     {
-                        if (TargetCret.Race == Grobal2.RC_PLAYOBJECT)
+                        if (TargetCret.Race == ActorRace.Play)
                         {
                             TargetCret = null;
                             return result;

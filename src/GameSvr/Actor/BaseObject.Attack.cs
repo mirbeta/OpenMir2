@@ -77,7 +77,7 @@ namespace GameSvr.Actor
                     SetTargetCreat(AttackTarget);
                 }
                 int wIdent = Grobal2.RM_HIT;
-                if (Race == Grobal2.RC_PLAYOBJECT)
+                if (Race == ActorRace.Play)
                 {
                     switch (wHitMode)
                     {
@@ -201,7 +201,7 @@ namespace GameSvr.Actor
                 {
                     case 4:// 刺杀
                         nSecPwr = 0;
-                        if (Race == Grobal2.RC_PLAYOBJECT)
+                        if (Race == ActorRace.Play)
                         {
                             if (MagicArr[MagicConst.SKILL_ERGUM] != null)
                             {
@@ -219,7 +219,7 @@ namespace GameSvr.Actor
                     case 5:
                         {
                             nSecPwr = 0;
-                            if (Race == Grobal2.RC_PLAYOBJECT)
+                            if (Race == ActorRace.Play)
                             {
                                 if (MagicArr[MagicConst.SKILL_BANWOL] != null)
                                 {
@@ -235,7 +235,7 @@ namespace GameSvr.Actor
                     case 12:
                         {
                             nSecPwr = 0;
-                            if (Race == Grobal2.RC_PLAYOBJECT)
+                            if (Race == ActorRace.Play)
                             {
                                 if (MagicArr[MagicConst.SKILL_REDBANWOL] != null)
                                 {
@@ -260,7 +260,7 @@ namespace GameSvr.Actor
                     case 8:
                         {
                             nSecPwr = 0;
-                            if (Race == Grobal2.RC_PLAYOBJECT)
+                            if (Race == ActorRace.Play)
                             {
                                 if (MagicArr[MagicConst.SKILL_CROSSMOON] != null)
                                 {
@@ -315,7 +315,7 @@ namespace GameSvr.Actor
                             DamageHealth((ushort)-n20);
                         }
                     }
-                    if (Race == Grobal2.RC_PLAYOBJECT)
+                    if (Race == ActorRace.Play)
                     {
                         UserMagic attackMagic = null;
                         if (MagicArr[MagicConst.SKILL_ILKWANG] != null)
@@ -433,7 +433,7 @@ namespace GameSvr.Actor
                     result = true;
                     if (M2Share.Config.MonDelHptoExp)
                     {
-                        if (Race == Grobal2.RC_PLAYOBJECT)
+                        if (Race == ActorRace.Play)
                         {
                             if (this.IsRobot)
                             {
@@ -456,7 +456,7 @@ namespace GameSvr.Actor
                                 }
                             }
                         }
-                        if (Race == Grobal2.RC_PLAYCLONE)
+                        if (Race == ActorRace.PlayClone)
                         {
                             if (Master != null)
                             {
@@ -484,7 +484,7 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                if (Race == Grobal2.RC_PLAYOBJECT)
+                if (Race == ActorRace.Play)
                 {
                     TrainCurrentSkill(wHitMode);
                 }
@@ -492,7 +492,7 @@ namespace GameSvr.Actor
                 {
                     DoDamageWeapon(nWeaponDamage);
                 }
-                if (AttackTarget.Race != Grobal2.RC_PLAYOBJECT)
+                if (AttackTarget.Race != ActorRace.Play)
                 {
                     AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "");
                 }
@@ -581,7 +581,7 @@ namespace GameSvr.Actor
         private bool _Attack_DirectAttack(BaseObject BaseObject, int nSecPwr)
         {
             bool result = false;
-            if ((Race == Grobal2.RC_PLAYOBJECT) || (BaseObject.Race == Grobal2.RC_PLAYOBJECT) || !(InSafeZone() && BaseObject.InSafeZone()))
+            if ((Race == ActorRace.Play) || (BaseObject.Race == ActorRace.Play) || !(InSafeZone() && BaseObject.InSafeZone()))
             {
                 if (IsProperTarget(BaseObject))
                 {
@@ -589,7 +589,7 @@ namespace GameSvr.Actor
                     {
                         BaseObject.StruckDamage((ushort)nSecPwr);
                         BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "", 500);
-                        if (BaseObject.Race != Grobal2.RC_PLAYOBJECT)
+                        if (BaseObject.Race != ActorRace.Play)
                         {
                             BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "");
                         }
@@ -715,7 +715,7 @@ namespace GameSvr.Actor
         private void TrainCurrentSkill(int wHitMode)
         {
             int nCLevel = Abil.Level;
-            if (Race != Grobal2.RC_PLAYOBJECT)
+            if (Race != ActorRace.Play)
             {
                 return;
             }

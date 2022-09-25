@@ -870,7 +870,7 @@ namespace GameSvr.Npc
         private void ActionOfGetMarry(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var PoseBaseObject = PlayObject.GetPoseCreate();
-            if (PoseBaseObject != null && PoseBaseObject.Race == Grobal2.RC_PLAYOBJECT && PoseBaseObject.Gender != PlayObject.Gender)
+            if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
             {
                 PlayObject.m_sDearName = PoseBaseObject.CharName;
                 PlayObject.RefShowName();
@@ -885,7 +885,7 @@ namespace GameSvr.Npc
         private void ActionOfGetMaster(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var PoseBaseObject = PlayObject.GetPoseCreate();
-            if (PoseBaseObject != null && PoseBaseObject.Race == Grobal2.RC_PLAYOBJECT && PoseBaseObject.Gender != PlayObject.Gender)
+            if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
             {
                 PlayObject.m_sMasterName = PoseBaseObject.CharName;
                 PlayObject.RefShowName();
@@ -964,7 +964,7 @@ namespace GameSvr.Npc
             }
             if (QuestActionInfo.sParam1 == "")
             {
-                if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
+                if (PoseHuman.Race != ActorRace.Play)
                 {
                     GotoLable(PlayObject, "@HumanTypeErr", false);
                     return;
@@ -1083,7 +1083,7 @@ namespace GameSvr.Npc
             }
             if (QuestActionInfo.sParam1 == "")
             {
-                if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
+                if (PoseHuman.Race != ActorRace.Play)
                 {
                     GotoLable(PlayObject, "@HumanTypeErr", false);
                     return;
@@ -1345,7 +1345,7 @@ namespace GameSvr.Npc
             {
                 if (QuestActionInfo.sParam1 == "")
                 {
-                    if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
+                    if (PoseHuman.Race != ActorRace.Play)
                     {
                         GotoLable(PlayObject, "@UnMarryTypeErr", false);
                         return;
@@ -2095,7 +2095,7 @@ namespace GameSvr.Npc
             {
                 if (QuestActionInfo.sParam1 == "")
                 {
-                    if (PoseHuman.Race != Grobal2.RC_PLAYOBJECT)
+                    if (PoseHuman.Race != ActorRace.Play)
                     {
                         GotoLable(PlayObject, "@UnMasterTypeErr", false);
                         return;

@@ -1467,7 +1467,7 @@ namespace GameSvr.Player
                         {
                             if (M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
                             {
-                                if (M2Share.ActorMgr.Get(ProcessMsg.nParam3).Race == Grobal2.RC_PLAYOBJECT)
+                                if (M2Share.ActorMgr.Get(ProcessMsg.nParam3).Race == ActorRace.Play)
                                 {
                                     SetPkFlag(M2Share.ActorMgr.Get(ProcessMsg.nParam3));
                                 }
@@ -1486,7 +1486,7 @@ namespace GameSvr.Player
                         }
                         if (ProcessMsg.BaseObject != 0)
                         {
-                            if (ProcessMsg.BaseObject == ActorId && M2Share.Config.DisableSelfStruck || BaseObject.Race == Grobal2.RC_PLAYOBJECT && M2Share.Config.DisableStruck)
+                            if (ProcessMsg.BaseObject == ActorId && M2Share.Config.DisableSelfStruck || BaseObject.Race == ActorRace.Play && M2Share.Config.DisableStruck)
                             {
                                 BaseObject.SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
                             }
@@ -2037,7 +2037,7 @@ namespace GameSvr.Player
                             delList.Add(new DeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                                M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                             }
                             UseItems[i].Index = 0;
                         }
@@ -2062,7 +2062,7 @@ namespace GameSvr.Player
                         {
                             if ((StdItem.ItemDesc & 10) == 0)
                             {
-                                if (Race == Grobal2.RC_PLAYOBJECT)
+                                if (Race == ActorRace.Play)
                                 {
                                     delList.Add(new DeleteItem()
                                     {
