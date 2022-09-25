@@ -360,7 +360,7 @@ namespace GameSvr.World
                 }
                 finally
                 {
-                    Thread.Sleep(50);
+                    Thread.Sleep(20);
                 }
             }
         }
