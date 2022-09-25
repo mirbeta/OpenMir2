@@ -928,13 +928,12 @@ namespace GameSvr.Player
         private int GetDigUpMsgCount()
         {
             var result = 0;
-            SendMessage SendMessage;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (var i = 0; i < MsgList.Count; i++)
                 {
-                    SendMessage = MsgList[i];
+                    var SendMessage = MsgList[i];
                     if (SendMessage.wIdent == Grobal2.CM_BUTCH)
                     {
                         result++;
@@ -1087,11 +1086,8 @@ namespace GameSvr.Player
         // 检查角色的座标是否在指定误差范围以内
         // TargeTBaseObject 为要检查的角色，nX,nY 为比较的座标
         // 检查角色是否在指定座标的1x1 范围以内，如果在则返回True 否则返回 False
-        protected bool CretInNearXY(BaseObject TargeTBaseObject, int nX, int nY)
+        protected bool CretInNearXY(BaseObject TargeBaseObject, int nX, int nY)
         {
-            MapCellInfo cellInfo;
-            CellObject OSObject;
-            BaseObject BaseObject;
             if (Envir == null)
             {
                 M2Share.Log.Error("CretInNearXY nil PEnvir");
@@ -1102,18 +1098,18 @@ namespace GameSvr.Player
                 for (var cY = nY - 1; cY <= nY + 1; cY++)
                 {
                     var cellsuccess = false;
-                    cellInfo = Envir.GetCellInfo(cX, cY, ref cellsuccess);
+                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellsuccess);
                     if (cellsuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
-                            OSObject = cellInfo.ObjList[i];
+                            var OSObject = cellInfo.ObjList[i];
                             if (OSObject.ActorObject)
                             {
-                                BaseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
-                                if (BaseObject != null)
+                                var baseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
+                                if (baseObject != null)
                                 {
-                                    if (!BaseObject.Ghost && BaseObject == TargeTBaseObject)
+                                    if (!baseObject.Ghost && baseObject == TargeBaseObject)
                                     {
                                         return true;
                                     }
