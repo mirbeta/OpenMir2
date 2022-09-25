@@ -2562,7 +2562,7 @@ namespace GameSvr.Actor
                     {
                         Magic = magic,
                         MagIdx = magic.MagicId,
-                        Key = 0,
+                        Key = (char)0,
                         Level = 1,
                         TranPoint = 0
                     };

@@ -378,7 +378,7 @@ namespace GameSvr.Npc
                     var UserMagic = new UserMagic();
                     UserMagic.Magic = Magic;
                     UserMagic.MagIdx = Magic.MagicId;
-                    UserMagic.Key = 0;
+                    UserMagic.Key = (char)0;
                     UserMagic.Level = (byte)nLevel;
                     UserMagic.TranPoint = 0;
                     PlayObject.MagicList.Add(UserMagic);

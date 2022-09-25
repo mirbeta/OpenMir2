@@ -8,7 +8,7 @@ namespace SystemModule.Packet.ClientPackets
         public MagicInfo Magic;
         public ushort MagIdx;
         public byte Level;
-        public byte Key;
+        public char Key;
         public int TranPoint;
 
         public UserMagic()

@@ -782,14 +782,14 @@ namespace GameSvr.Player
             return false;
         }
 
-        private void ClientChangeMagicKey(int nSkillIdx, int nKey)
+        private void ClientChangeMagicKey(int nSkillIdx, char nKey)
         {
             for (var i = 0; i < MagicList.Count; i++)
             {
                 var userMagic = MagicList[i];
                 if (userMagic.Magic.MagicId == nSkillIdx)
                 {
-                    userMagic.Key = (byte)nKey;
+                    userMagic.Key = nKey;
                     break;
                 }
             }

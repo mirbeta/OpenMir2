@@ -49,7 +49,7 @@ namespace GameSvr.Command.Commands
             UserMagic.Magic = Magic;
             UserMagic.MagIdx = Magic.MagicId;
             UserMagic.Level = (byte)nLevel;
-            UserMagic.Key = 0;
+            UserMagic.Key = (char)0;
             UserMagic.TranPoint = 0;
             m_PlayObject.MagicList.Add(UserMagic);
             m_PlayObject.SendAddMagic(UserMagic);

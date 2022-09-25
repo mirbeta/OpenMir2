@@ -1009,7 +1009,7 @@ namespace GameSvr.Player
                     Magic = Magic,
                     MagIdx = Magic.MagicId,
                     Level = 2,
-                    Key = 0
+                    Key = (char)0
                 };
                 UserMagic.Level = 0;
                 UserMagic.TranPoint = 100000;
@@ -2275,7 +2275,7 @@ namespace GameSvr.Player
                             {
                                 Magic = magic,
                                 MagIdx = magic.MagicId,
-                                Key = 0,
+                                Key = (char)0,
                                 Level = 0,
                                 TranPoint = 0
                             };
