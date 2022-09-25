@@ -443,8 +443,8 @@ namespace GameSvr.RobotPlay
                                     result = false;
                                 }
                                 break;
-                            case 10:
-                            case 11:
+                            case ActorRace.NPC:
+                            case ActorRace.Guard:
                             case 12:// 不攻击大刀卫士
                                 result = false;
                                 break;
