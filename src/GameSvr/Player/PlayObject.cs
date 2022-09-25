@@ -244,7 +244,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        internal void SendSocket(string sMsg)
+        private void SendSocket(string sMsg)
         {
             if (OffLineFlag)
             {
@@ -349,25 +349,25 @@ namespace GameSvr.Player
         private byte DayBright()
         {
             byte result;
-            if (Envir.Flag.boDarkness)
-            {
-                result = 1;
-            }
-            else if (m_btBright == 1)
-            {
-                result = 0;
-            }
-            else if (m_btBright == 3)
-            {
-                result = 1;
-            }
-            else
-            {
-                result = 2;
-            }
             if (Envir.Flag.boDayLight)
             {
-                result = 0;
+              return 0;
+            }
+            if (Envir.Flag.boDarkness)
+            {
+                return 1;
+            }
+            switch (m_btBright)
+            {
+                case 1:
+                    result = 0;
+                    break;
+                case 3:
+                    result = 1;
+                    break;
+                default:
+                    result = 2;
+                    break;
             }
             return result;
         }
