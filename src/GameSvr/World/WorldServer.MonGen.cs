@@ -503,16 +503,16 @@ namespace GameSvr.World
             if (map == null) return null;
             switch (nMonRace)
             {
-                case MonsterConst.Supreguard:
+                case ActorRace.Supreguard:
                     cert = new SuperGuard();
                     break;
-                case MonsterConst.Petsupreguard:
+                case ActorRace.Petsupreguard:
                     cert = new PetSuperGuard();
                     break;
-                case MonsterConst.ArcherPolice:
+                case ActorRace.ArcherPolice:
                     cert = new ArcherPolice();
                     break;
-                case MonsterConst.AnimalChicken:
+                case ActorRace.AnimalChicken:
                     cert = new MonsterObject
                     {
                         Animal = true,
@@ -520,7 +520,7 @@ namespace GameSvr.World
                         BodyLeathery = 50
                     };
                     break;
-                case MonsterConst.AnimalDeer:
+                case ActorRace.AnimalDeer:
                     if (M2Share.RandomNumber.Random(30) == 0)
                     {
                         cert = new ChickenDeer
@@ -540,7 +540,7 @@ namespace GameSvr.World
                         };
                     }
                     break;
-                case MonsterConst.AnimalWolf:
+                case ActorRace.AnimalWolf:
                     cert = new AtMonster
                     {
                         Animal = true,
@@ -548,16 +548,16 @@ namespace GameSvr.World
                         BodyLeathery = 150
                     };
                     break;
-                case MonsterConst.Trainer:
+                case ActorRace.Trainer:
                     cert = new Trainer();
                     break;
-                case MonsterConst.MonsterOma:
+                case ActorRace.MonsterOma:
                     cert = new MonsterObject();
                     break;
-                case MonsterConst.MonsterOmaknight:
+                case ActorRace.MonsterOmaknight:
                     cert = new AtMonster();
                     break;
-                case MonsterConst.MonsterSpitspider:
+                case ActorRace.MonsterSpitspider:
                     cert = new SpitSpider();
                     break;
                 case 83:
@@ -566,13 +566,13 @@ namespace GameSvr.World
                 case 84:
                     cert = new Scorpion();
                     break;
-                case MonsterConst.MonsterStick:
+                case ActorRace.MonsterStick:
                     cert = new StickMonster();
                     break;
                 case 86:
                     cert = new AtMonster();
                     break;
-                case MonsterConst.MonsterDualaxe:
+                case ActorRace.MonsterDualaxe:
                     cert = new DualAxeMonster();
                     break;
                 case 88:
@@ -590,17 +590,17 @@ namespace GameSvr.World
                 case 92:
                     cert = new CowKingMonster();
                     break;
-                case MonsterConst.MonsterThonedark:
+                case ActorRace.MonsterThonedark:
                     cert = new ThornDarkMonster();
                     break;
-                case MonsterConst.MonsterLightzombi:
+                case ActorRace.MonsterLightzombi:
                     cert = new LightingZombi();
                     break;
-                case MonsterConst.MonsterDigoutzombi:
+                case ActorRace.MonsterDigoutzombi:
                     cert = new DigOutZombi();
                     if (M2Share.RandomNumber.Random(2) == 0) cert.Bo2Ba = true;
                     break;
-                case MonsterConst.MonsterZilkinzombi:
+                case ActorRace.MonsterZilkinzombi:
                     cert = new ZilKinZombi();
                     if (M2Share.RandomNumber.Random(4) == 0) cert.Bo2Ba = true;
                     break;
@@ -608,19 +608,19 @@ namespace GameSvr.World
                     cert = new CowMonster();
                     if (M2Share.RandomNumber.Random(2) == 0) cert.Bo2Ba = true;
                     break;
-                case MonsterConst.MonsterWhiteskeleton:
+                case ActorRace.MonsterWhiteskeleton:
                     cert = new WhiteSkeleton();
                     break;
-                case MonsterConst.MonsterSculture:
+                case ActorRace.MonsterSculture:
                     cert = new ScultureMonster
                     {
                         Bo2Ba = true
                     };
                     break;
-                case MonsterConst.MonsterScultureking:
+                case ActorRace.MonsterScultureking:
                     cert = new ScultureKingMonster();
                     break;
-                case MonsterConst.MonsterBeequeen:
+                case ActorRace.MonsterBeequeen:
                     cert = new BeeQueen();
                     break;
                 case 104:
@@ -635,19 +635,19 @@ namespace GameSvr.World
                 case 107:
                     cert = new CentipedeKingMonster();
                     break;
-                case 110:
+                case ActorRace.SabukDoor:
                     cert = new CastleDoor();
                     break;
-                case 111:
+                case ActorRace.SabukWall:
                     cert = new WallStructure();
                     break;
-                case MonsterConst.MonsterArcherguard:
+                case ActorRace.MonsterArcherguard:
                     cert = new ArcherGuard();
                     break;
-                case MonsterConst.MonsterElfmonster:
+                case ActorRace.MonsterElfmonster:
                     cert = new ElfMonster();
                     break;
-                case MonsterConst.MonsterElfwarrior:
+                case ActorRace.MonsterElfwarrior:
                     cert = new ElfWarriorMonster();
                     break;
                 case 115:
