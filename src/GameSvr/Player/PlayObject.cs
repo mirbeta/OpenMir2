@@ -461,55 +461,59 @@ namespace GameSvr.Player
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 Direction = btDir;
+                var canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
-                        if (CurrY > 1 && Envir.CanWalkEx(CurrX, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true) > 0)
+                        if (CurrY > 1 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true) > 0)
                         {
                             CurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        if (CurrX < Envir.Width - 2 && CurrY > 1 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true) > 0)
+                        if (CurrX < Envir.Width - 2 && CurrY > 1 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true) > 0)
                         {
                             CurrX += 2;
                             CurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_RIGHT:
-                        if (CurrX < Envir.Width - 2 && Envir.CanWalkEx(CurrX + 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true) > 0)
+                        if (CurrX < Envir.Width - 2 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true) > 0)
                         {
                             CurrX += 2;
                         }
                         break;
                     case Grobal2.DR_DOWNRIGHT:
-                        if (CurrX < Envir.Width - 2 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX + 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true) > 0)
+                        if (CurrX < Envir.Width - 2 && CurrY < Envir.Height - 2 &&
+                            Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) &&
+                            Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true) > 0)
                         {
                             CurrX += 2;
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWN:
-                        if (CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true) > 0)
+                        if (CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true) > 0)
                         {
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWNLEFT:
-                        if (CurrX > 1 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true) > 0)
+                        if (CurrX > 1 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true) > 0)
                         {
                             CurrX -= 2;
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_LEFT:
-                        if (CurrX > 1 && Envir.CanWalkEx(CurrX - 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true) > 0)
+                        if (CurrX > 1 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true) > 0)
                         {
                             CurrX -= 2;
                         }
                         break;
                     case Grobal2.DR_UPLEFT:
-                        if (CurrX > 1 && CurrY > 1 && Envir.CanWalkEx(CurrX - 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true) > 0)
+                        if (CurrX > 1 && CurrY > 1 &&
+                            Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true) > 0)
                         {
                             CurrX -= 2;
                             CurrY -= 2;
@@ -546,55 +550,64 @@ namespace GameSvr.Player
                 int n10 = CurrX;
                 int n14 = CurrY;
                 Direction = btDir;
+                var canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
-                        if (CurrY > 2 && Envir.CanWalkEx(CurrX, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX, CurrY - 3, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 3, true) > 0)
+                        if (CurrY > 2 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 3, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 3, true) > 0)
                         {
                             CurrY -= 3;
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        if (CurrX < Envir.Width - 3 && CurrY > 2 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 3, CurrY - 3, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY - 3, true) > 0)
+                        if (CurrX < Envir.Width - 3 && CurrY > 2 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY - 3, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY - 3, true) > 0)
                         {
                             CurrX += 3;
                             CurrY -= 3;
                         }
                         break;
                     case Grobal2.DR_RIGHT:
-                        if (CurrX < Envir.Width - 3 && Envir.CanWalkEx(CurrX + 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 3, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY, true) > 0)
+                        if (CurrX < Envir.Width - 3 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY, true) > 0)
                         {
                             CurrX += 3;
                         }
                         break;
                     case Grobal2.DR_DOWNRIGHT:
-                        if (CurrX < Envir.Width - 3 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX + 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX + 3, CurrY + 3, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY + 3, true) > 0)
+                        if (CurrX < Envir.Width - 3 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY + 3, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY + 3, true) > 0)
                         {
                             CurrX += 3;
                             CurrY += 3;
                         }
                         break;
                     case Grobal2.DR_DOWN:
-                        if (CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX, CurrY + 3, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 3, true) > 0)
+                        if (CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 3, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 3, true) > 0)
                         {
                             CurrY += 3;
                         }
                         break;
                     case Grobal2.DR_DOWNLEFT:
-                        if (CurrX > 2 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 3, CurrY + 3, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY + 3, true) > 0)
+                        if (CurrX > 2 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY + 3, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY + 3, true) > 0)
                         {
                             CurrX -= 3;
                             CurrY += 3;
                         }
                         break;
                     case Grobal2.DR_LEFT:
-                        if (CurrX > 2 && Envir.CanWalkEx(CurrX - 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 3, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY, true) > 0)
+                        if (CurrX > 2 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY, true) > 0)
                         {
                             CurrX -= 3;
                         }
                         break;
                     case Grobal2.DR_UPLEFT:
-                        if (CurrX > 2 && CurrY > 2 && Envir.CanWalkEx(CurrX - 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.CanWalkEx(CurrX - 3, CurrY - 3, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY - 3, true) > 0)
+                        if (CurrX > 2 && CurrY > 2 && Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY - 3, canWalk) &&
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY - 3, true) > 0)
                         {
                             CurrX -= 3;
                             CurrY -= 3;

@@ -527,7 +527,7 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if ((HUtil32.GetTickCount() - dwTick5F4) > M2Share.Config.nAIRunIntervalTime)
             {
-                result = RunTo1(M2Share.GetNextDirection(CurrX, CurrY, nX, nY), false, nX, nY);
+                result = RobotRunTo(M2Share.GetNextDirection(CurrX, CurrY, nX, nY), false, nX, nY);
                 dwTick5F4 = HUtil32.GetTickCount();
                 //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
             }
@@ -620,7 +620,7 @@ namespace GameSvr.RobotPlay
             base.Initialize();
         }
 
-        public void SearchPickUpItem_SetHideItem(MapItem MapItem)
+        private void SearchPickUpItem_SetHideItem(MapItem MapItem)
         {
             VisibleMapItem VisibleMapItem;
             for (var i = 0; i < VisibleItems.Count; i++)
@@ -637,7 +637,7 @@ namespace GameSvr.RobotPlay
             }
         }
 
-        public bool SearchPickUpItem_PickUpItem(int nX, int nY)
+        private bool SearchPickUpItem_PickUpItem(int nX, int nY)
         {
             bool result = false;
             UserItem UserItem = null;
@@ -1018,7 +1018,7 @@ namespace GameSvr.RobotPlay
                 if (Math.Abs(CurrX - m_nProtectTargetX) >= 3 || Math.Abs(CurrY - m_nProtectTargetY) >= 3)
                 {
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
-                    if (!RunTo1(nDir, false, m_nProtectTargetX, m_nProtectTargetY))
+                    if (!RobotRunTo(nDir, false, m_nProtectTargetX, m_nProtectTargetY))
                     {
                         WalkTo(nDir, false);
                         n20 = M2Share.RandomNumber.Random(3);
@@ -1081,12 +1081,10 @@ namespace GameSvr.RobotPlay
 
         protected override void Wondering()
         {
-            short nX = 0;
-            short nY = 0;
             if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[StatuStateConst.POISON_STONE] == 0)
             {
-                nX = CurrX;
-                nY = CurrY;
+                var nX = CurrX;
+                var nY = CurrY;
                 if (m_Path != null && m_Path.Length > 0 && m_nPostion < m_Path.Length)
                 {
                     if (!GotoNextOne(m_Path[m_nPostion].nX, m_Path[m_nPostion].nY, true))
@@ -1179,7 +1177,7 @@ namespace GameSvr.RobotPlay
             }
         }
 
-        public BaseObject Struck_MINXY(BaseObject AObject, BaseObject BObject)
+        private BaseObject Struck_MINXY(BaseObject AObject, BaseObject BObject)
         {
             BaseObject result;
             int nA = Math.Abs(CurrX - AObject.CurrX) + Math.Abs(CurrY - AObject.CurrY);
@@ -1324,14 +1322,13 @@ namespace GameSvr.RobotPlay
         protected override bool Operate(ProcessMessage ProcessMsg)
         {
             bool result = false;
-            BaseObject AttackBaseObject;
             try
             {
                 if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
                 {
                     if (ProcessMsg.BaseObject == this.ActorId)
                     {
-                        AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
+                        var AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
                         {
                             if (AttackBaseObject.Race == ActorRace.Play)
@@ -2353,16 +2350,13 @@ namespace GameSvr.RobotPlay
         /// <summary>
         /// 走向目标
         /// </summary>
-        /// <param name="BaseObject"></param>
-        /// <param name="nCode"></param>
         /// <returns></returns>
         private bool GetGotoXY(BaseObject BaseObject, byte nCode)
         {
             bool result = false;
             switch (nCode)
             {
-                case 2:
-                    // 刺杀位
+                case 2:// 刺杀位
                     if (CurrX - 2 <= BaseObject.CurrX && CurrX + 2 >= BaseObject.CurrX && CurrY - 2 <= BaseObject.CurrY && CurrY + 2 >= BaseObject.CurrY && (CurrX != BaseObject.CurrX || CurrY != BaseObject.CurrY))
                     {
                         result = true;
@@ -2416,9 +2410,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     break;
-                case 3:
-                    // 2
-                    // 3格
+                case 3:// 3格
                     if (CurrX - 3 <= BaseObject.CurrX && CurrX + 3 >= BaseObject.CurrX && CurrY - 3 <= BaseObject.CurrY && CurrY + 3 >= BaseObject.CurrY && (CurrX != BaseObject.CurrX || CurrY != BaseObject.CurrY))
                     {
                         result = true;
@@ -2502,7 +2494,7 @@ namespace GameSvr.RobotPlay
                 n10 = nTargetX;
                 n14 = nTargetY;
                 byte nDir = M2Share.GetNextDirection(CurrX, CurrY, n10, n14);
-                if (!RunTo1(nDir, false, nTargetX, nTargetY))
+                if (!RobotRunTo(nDir, false, nTargetX, nTargetY))
                 {
                     result = WalkToTargetXY(nTargetX, nTargetY);
                     if (result)
@@ -2522,7 +2514,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool RunTo1(byte btDir, bool boFlag, short nDestX, short nDestY)
+        private bool RobotRunTo(byte btDir, bool boFlag, short nDestX, short nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
             var result = false;
@@ -2531,63 +2523,43 @@ namespace GameSvr.RobotPlay
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 Direction = btDir;
+                var canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll || M2Share.Config.boSafeAreaLimited && InSafeZone();
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
-                        if (CurrY > 1 &&
-                          (Envir.CanWalkEx(CurrX, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        (Envir.CanWalkEx(CurrX, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true) > 0)
+                        if (CurrY > 1 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true) > 0)
                         {
                             CurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        if (CurrX < Envir.Width - 2 &&
-                          CurrY > 1 &&
-                          (Envir.CanWalkEx(CurrX + 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        (Envir.CanWalkEx(CurrX + 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-                        Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true) > 0)
+                        if (CurrX < Envir.Width - 2 && CurrY > 1 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true) > 0)
                         {
                             CurrX += 2;
                             CurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_RIGHT:
-                        if (CurrX < Envir.Width - 2 &&
-  (Envir.CanWalkEx(CurrX + 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX + 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-    Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true) > 0)
+                        if (CurrX < Envir.Width - 2 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true) > 0)
                         {
                             CurrX += 2;
                         }
                         break;
                     case Grobal2.DR_DOWNRIGHT:
-                        if (CurrX < Envir.Width - 2 &&
-  CurrY < Envir.Height - 2 &&
-  (Envir.CanWalkEx(CurrX + 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX + 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-    Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true) > 0)
+                        if (CurrX < Envir.Width - 2 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true) > 0)
                         {
                             CurrX += 2;
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWN:
-                        if (CurrY < Envir.Height - 2 &&
-  (Envir.CanWalkEx(CurrX, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-    Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true) > 0)
+                        if (CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true) > 0)
                         {
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWNLEFT:
-                        if (CurrX > 1 &&
-  CurrY < Envir.Height - 2 &&
-  (Envir.CanWalkEx(CurrX - 1, CurrY + 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX - 2, CurrY + 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-    Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true) > 0)
+                        if (CurrX > 1 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true) > 0)
                         {
                             CurrX -= 2;
                             CurrY += 2;
@@ -2595,19 +2567,13 @@ namespace GameSvr.RobotPlay
 
                         break;
                     case Grobal2.DR_LEFT:
-                        if (CurrX > 1 &&
-  (Envir.CanWalkEx(CurrX - 1, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX - 2, CurrY, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-    Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true) > 0)
+                        if (CurrX > 1 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true) > 0)
                         {
                             CurrX -= 2;
                         }
                         break;
                     case Grobal2.DR_UPLEFT:
-                        if (CurrX > 1 && CurrY > 1 &&
- (Envir.CanWalkEx(CurrX - 1, CurrY - 1, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-  (Envir.CanWalkEx(CurrX - 2, CurrY - 2, M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll) || M2Share.Config.boSafeAreaLimited && InSafeZone()) &&
-    Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true) > 0)
+                        if (CurrX > 1 && CurrY > 1 && Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true) > 0)
                         {
                             CurrX -= 2;
                             CurrY -= 2;
