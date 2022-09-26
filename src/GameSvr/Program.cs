@@ -22,7 +22,7 @@ namespace GameSvr
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-            
+
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()

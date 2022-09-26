@@ -248,15 +248,6 @@ namespace GameSvr.Actor
                             }
                             break;
                         }
-                    case 6:
-                        {
-                            nSecPwr = 0;
-                            if (nSecPwr > 0)
-                            {
-                                _Attack_sub_4C1E5C(nSecPwr);
-                            }
-                            break;
-                        }
                     case 8:
                         {
                             nSecPwr = 0;
@@ -684,32 +675,6 @@ namespace GameSvr.Actor
                 }
             }
             return result;
-        }
-
-        private void _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject BaseObject, byte btDir, ref short nX, ref short nY, int nSecPwr)
-        {
-            if (Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY))
-            {
-                BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
-                if ((nSecPwr > 0) && (BaseObject != null))
-                {
-                    _Attack_DirectAttack(BaseObject, nSecPwr);
-                }
-            }
-        }
-
-        private void _Attack_sub_4C1E5C(int nSecPwr)
-        {
-            short nX = 0;
-            short nY = 0;
-            BaseObject BaseObject = null;
-            byte btDir = Direction;
-            Envir.GetNextPosition(CurrX, CurrY, btDir, 1, ref nX, ref nY);
-            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
-            btDir = M2Share.sub_4B2F80(Direction, 2);
-            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
-            btDir = M2Share.sub_4B2F80(Direction, 6);
-            _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
         }
 
         private void TrainCurrentSkill(int wHitMode)

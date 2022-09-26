@@ -128,9 +128,9 @@ namespace GameSvr.Maps
                 var GateObj = new GateObject
                 {
                     boFlag = false,
-                    DEnvir = DEnvir,
-                    nDMapX = (short)nDMapX,
-                    nDMapY = (short)nDMapY
+                    Envir = DEnvir,
+                    nX = (short)nDMapX,
+                    nY = (short)nDMapY
                 };
                 SEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, GateObj);
                 result = true;

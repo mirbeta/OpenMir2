@@ -166,7 +166,7 @@ namespace GameSvr.Actor
         /// </summary>
         public ushort Appr;
         /// <summary>
-        /// 角色类型
+        /// 种族
         /// </summary>
         public byte Race;
         /// <summary>
@@ -3644,11 +3644,11 @@ namespace GameSvr.Actor
                                     {
                                         if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                         {
-                                            if ((!gateObj.DEnvir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
+                                            if ((!gateObj.Envir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
                                             {
-                                                if (M2Share.ServerIndex == gateObj.DEnvir.ServerIndex)
+                                                if (M2Share.ServerIndex == gateObj.Envir.ServerIndex)
                                                 {
-                                                    if (!EnterAnotherMap(gateObj.DEnvir, gateObj.nDMapX, gateObj.nDMapY))
+                                                    if (!EnterAnotherMap(gateObj.Envir, gateObj.nX, gateObj.nY))
                                                     {
                                                         result = false;
                                                     }
@@ -3658,11 +3658,11 @@ namespace GameSvr.Actor
                                                     DisappearA();
                                                     MBo316 = true;
                                                     var playObject = this as PlayObject;
-                                                    playObject.m_sSwitchMapName = gateObj.DEnvir.MapName;
-                                                    playObject.m_nSwitchMapX = gateObj.nDMapX;
-                                                    playObject.m_nSwitchMapY = gateObj.nDMapY;
+                                                    playObject.m_sSwitchMapName = gateObj.Envir.MapName;
+                                                    playObject.m_nSwitchMapX = gateObj.nX;
+                                                    playObject.m_nSwitchMapY = gateObj.nY;
                                                     playObject.m_boSwitchData = true;
-                                                    playObject.m_nServerIndex = gateObj.DEnvir.ServerIndex;
+                                                    playObject.m_nServerIndex = gateObj.Envir.ServerIndex;
                                                     playObject.m_boEmergencyClose = true;
                                                     playObject.m_boReconnection = true;
                                                 }
@@ -4165,6 +4165,10 @@ namespace GameSvr.Actor
             {
                 return false;
             }
+            if (baseObject.AdminMode || baseObject.StoneMode)
+            {
+                return false;
+            }
             switch (Race)
             {
                 case >= ActorRace.Animal:
@@ -4386,10 +4390,6 @@ namespace GameSvr.Actor
                 default:
                     result = true;
                     break;
-            }
-            if (baseObject.AdminMode || baseObject.StoneMode)
-            {
-                result = false;
             }
             return result;
         }
