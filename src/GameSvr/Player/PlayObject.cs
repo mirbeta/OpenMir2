@@ -2285,7 +2285,7 @@ namespace GameSvr.Player
         {
             var clientMagic = new ClientMagic
             {
-                Key = (char)UserMagic.Key,
+                Key = UserMagic.Key,
                 Level = UserMagic.Level,
                 CurTrain = UserMagic.TranPoint,
                 Def = UserMagic.Magic
@@ -3010,9 +3010,6 @@ namespace GameSvr.Player
         {
             var sText = string.Empty;
             m_CanJmpScriptLableList.Clear();
-            const string start = "<";
-            const string end = ">";
-            var rg = new Regex("(?<=(" + start + "))[.\\s\\S]*?(?=(" + end + "))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
             while (true)
             {
                 if (string.IsNullOrEmpty(sMsg))
@@ -3022,7 +3019,7 @@ namespace GameSvr.Player
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
                 if (!string.IsNullOrEmpty(sText))
                 {
-                    var match = rg.Matches(sText);
+                    var match = M2Share.MatchScriptLabel(sText);
                     if (match.Count > 0)
                     {
                         foreach (Match item in match)

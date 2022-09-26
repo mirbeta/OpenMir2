@@ -19,6 +19,7 @@ using GameSvr.World;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -521,9 +522,6 @@ namespace GameSvr
         /// <summary>
         /// 随机获取其他服务器
         /// </summary>
-        /// <param name="serverIndex"></param>
-        /// <param name="sIPaddr"></param>
-        /// <param name="nPort"></param>
         /// <returns></returns>
         public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort)
         {
@@ -547,6 +545,13 @@ namespace GameSvr
                 }
             }
             return result;
+        }
+
+        public static Regex scriptRegex = new Regex("(?<=(<))[.\\s\\S]*?(?=(>))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
+
+        public static MatchCollection MatchScriptLabel(string script)
+        {
+            return scriptRegex.Matches(script);
         }
 
         private static string GetRandpmRoute(TRouteInfo RouteInfo, ref int nGatePort)
