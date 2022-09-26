@@ -48,8 +48,9 @@ namespace GameSvr.Magic
             {
                 return false;
             }
-            StdItem amuletStdItem = null;
+
             Idx = 0;
+            StdItem amuletStdItem;
             if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0)
             {
                 amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);

@@ -48,7 +48,6 @@ namespace GameSvr.Command.Commands
                 {
                     m_PlayObject.SendDelItems(UserItem);
                     m_PlayObject.ItemList.RemoveAt(i);
-                    UserItem = null;
                     nItemCount++;
                     if (nItemCount >= nCount)
                     {

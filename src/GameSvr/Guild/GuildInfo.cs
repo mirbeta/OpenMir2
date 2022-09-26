@@ -205,10 +205,8 @@ namespace GameSvr.Guild
         public bool LoadGuildFile(string sGuildFileName)
         {
             StringList LoadList;
-            var s18 = string.Empty;
             var s1C = string.Empty;
             var s20 = string.Empty;
-            var s24 = string.Empty;
             int n28;
             int n2C;
             WarGuild GuildWar;
@@ -229,12 +227,12 @@ namespace GameSvr.Guild
             GuildAllList.Clear();
             n28 = 0;
             n2C = 0;
-            s24 = "";
+            string s24 = "";
             LoadList = new StringList();
             LoadList.LoadFromFile(sFileName);
             for (var i = 0; i < LoadList.Count; i++)
             {
-                s18 = LoadList[i];
+                string s18 = LoadList[i];
                 if (s18 == "" || s18[0] == ';')
                 {
                     continue;
@@ -293,7 +291,6 @@ namespace GameSvr.Guild
                             }
                             else
                             {
-                                GuildWar = null;
                             }
                         }
                         break;
@@ -394,9 +391,6 @@ namespace GameSvr.Guild
         {
             StringList SaveList = new StringList();
             SaveList.Add(M2Share.Config.GuildNotice);
-            WarGuild WarGuild = null;
-            long n14 = 0;
-            TGuildRank GuildRank = null;
             for (var i = 0; i < NoticeList.Count; i++)
             {
                 SaveList.Add("+" + NoticeList[i]);
@@ -405,8 +399,8 @@ namespace GameSvr.Guild
             SaveList.Add(M2Share.Config.GuildWar);
             for (var i = 0; i < GuildWarList.Count; i++)
             {
-                WarGuild = GuildWarList[i];
-                n14 = WarGuild.dwWarTime - (HUtil32.GetTickCount() - WarGuild.dwWarTick);
+                WarGuild WarGuild = GuildWarList[i];
+                long n14 = WarGuild.dwWarTime - (HUtil32.GetTickCount() - WarGuild.dwWarTick);
                 if (n14 <= 0)
                 {
                     continue;
@@ -423,7 +417,7 @@ namespace GameSvr.Guild
             SaveList.Add(M2Share.Config.GuildMember);
             for (var i = 0; i < m_RankList.Count; i++)
             {
-                GuildRank = m_RankList[i];
+                TGuildRank GuildRank = m_RankList[i];
                 SaveList.Add("#" + GuildRank.nRankNo + ' ' + GuildRank.sRankName);
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
@@ -623,7 +617,6 @@ namespace GameSvr.Guild
                     }
                 }
                 GuildRank.MemberList = null;
-                GuildRank = null;
             }
             m_RankList.Clear();
             NoticeList.Clear();
@@ -722,13 +715,11 @@ namespace GameSvr.Guild
             {
                 GuildRank = RankList[i];
                 GuildRank.MemberList = null;
-                GuildRank = null;
             }
         }
 
         public int UpdateRank(string sRankData)
         {
-            int result = -1;
             TGuildRank NewGuildRank;
             var sRankInfo = string.Empty;
             var sRankNo = string.Empty;
@@ -806,6 +797,7 @@ namespace GameSvr.Guild
             {
                 GuildRankList.Add(GuildRank);
             }
+            int result;
             // 校验成员列表是否有改变，如果未修改则退出
             if (m_RankList.Count == GuildRankList.Count)
             {

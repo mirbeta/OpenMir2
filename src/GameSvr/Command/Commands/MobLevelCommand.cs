@@ -20,7 +20,6 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(BaseObjectList[i].GetBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
         }
     }
 }

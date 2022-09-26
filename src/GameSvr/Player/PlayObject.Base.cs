@@ -604,7 +604,7 @@ namespace GameSvr.Player
                     sNoticeMsg = sNoticeMsg + LoadList[i] + "\x20\x1B";
                 }
             }
-            LoadList = null;
+
             SendDefMessage(Grobal2.SM_SENDNOTICE, 2000, 0, 0, 0, sNoticeMsg.Replace("/r/n/r/n ", ""));
         }
 

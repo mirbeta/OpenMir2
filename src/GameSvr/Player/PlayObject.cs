@@ -295,10 +295,10 @@ namespace GameSvr.Player
                 SessionId = m_nGSocketIdx,
                 Ident = Grobal2.GM_DATA
             };
-            var nSendBytes = 0;
             using var memoryStream = new MemoryStream();
             using var backingStream = new BinaryWriter(memoryStream);
             byte[] bMsg = null;
+            int nSendBytes;
             if (defMsg != null)
             {
                 bMsg = HUtil32.GetBytes(sMsg);
@@ -1038,34 +1038,23 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var nRunHuman = 0;
-            var nRunMon = 0;
-            var nRunNpc = 0;
-            var nWarRunAll = 0;
+
             if (M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll)
             {
-                nRunHuman = 1;
-                nRunMon = 1;
-                nRunNpc = 1;
-                nWarRunAll = 1;
             }
             else
             {
                 if (M2Share.Config.boRunHuman || Envir.Flag.boRUNHUMAN)
                 {
-                    nRunHuman = 1;
                 }
                 if (M2Share.Config.boRunMon || Envir.Flag.boRUNMON)
                 {
-                    nRunMon = 1;
                 }
                 if (M2Share.Config.boRunNpc)
                 {
-                    nRunNpc = 1;
                 }
                 if (M2Share.Config.boWarDisHumRun)
                 {
-                    nWarRunAll = 1;
                 }
             }
             var sMsg = EDCode.EncodeBuffer(M2Share.Config.ClientConf);
@@ -1492,7 +1481,6 @@ namespace GameSvr.Player
         protected bool DoMotaebo(byte nDir, int nMagicLevel)
         {
             int nDmg;
-            BaseObject BaseObject_30 = null;
             BaseObject BaseObject_34 = null;
             short nX = 0;
             short nY = 0;
@@ -1518,7 +1506,7 @@ namespace GameSvr.Player
                         {
                             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
                             {
-                                BaseObject_30 = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                                BaseObject BaseObject_30 = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                                 if (BaseObject_30 != null && DoMotaeboCanMotaebo(BaseObject_30, nMagicLevel))
                                 {
                                     BaseObject_30.CharPushed(Direction, 1);
@@ -2425,7 +2413,7 @@ namespace GameSvr.Player
 
         private void ChangeServerMakeSlave(SlaveInfo slaveInfo)
         {
-            var nSlavecount = 0;
+            int nSlavecount;
             if (Job == PlayJob.Taoist)
             {
                 nSlavecount = 1;
@@ -3146,7 +3134,6 @@ namespace GameSvr.Player
                 }
                 LoadList.SaveToFile(sUnMarryFileName);
                 LoadList.Dispose();
-                LoadList = null;
             }
             if (boIsfound)
             {
@@ -3670,7 +3657,6 @@ namespace GameSvr.Player
 
         private void ProcessQueryValue(int Npc, string sData)
         {
-            const string sIsInQVFilterListMsg = "你输入的文本中包含了非法字符，请重新出入";
             NormNpc NormNpc;
             var sRefMsg = string.Empty;
             if (!Ghost && !string.IsNullOrEmpty(m_sGotoNpcLabel))
@@ -3728,12 +3714,11 @@ namespace GameSvr.Player
             DlgItemIndex = 0;
             if (!Death && !Ghost)
             {
-                NormNpc Npc = null;
                 if (nParam1 == 0)
                 {
                     return;
                 }
-                Npc = (NormNpc)M2Share.WorldEngine.FindMerchant(nParam1);
+                NormNpc Npc = (NormNpc)M2Share.WorldEngine.FindMerchant(nParam1);
                 if (Npc == null)
                 {
                     Npc = (NormNpc)M2Share.WorldEngine.FindNpc(nParam1);
@@ -3749,7 +3734,7 @@ namespace GameSvr.Player
                 if (Npc.Envir == Envir && Math.Abs(Npc.CurrX - CurrX) < 15 && Math.Abs(Npc.CurrY - CurrY) < 15 || Npc.m_boIsHide)
                 {
                     DlgItemIndex = HUtil32.MakeLong(nParam2, nParam3);
-                    var nTemp = 0;
+                    int nTemp;
                     if (TakeDlgItem && DlgItemIndex > 0)
                     {
                         nTemp = 255;
@@ -3765,7 +3750,6 @@ namespace GameSvr.Player
                                     {
                                         // M2Share.AddGameDataLog('10' + #9 + m_sMapName + #9 +inttostr(m_nCurrX) + #9 + inttostr(m_nCurrY) + #9 +m_sCharName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sCharName);
                                         SendDelItems(UserItem);
-                                        UserItem = null;
                                         ItemList.RemoveAt(i);
                                         DlgItemIndex = 0;
                                     }

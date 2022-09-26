@@ -662,7 +662,6 @@ namespace GameSvr.DataStores
         /// </summary>
         public void LoadNpcs()
         {
-            var sData = string.Empty;
             var charName = string.Empty;
             var type = string.Empty;
             var mapName = string.Empty;
@@ -677,7 +676,7 @@ namespace GameSvr.DataStores
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sData = LoadList[i].Trim();
+                    string sData = LoadList[i].Trim();
                     if (!string.IsNullOrEmpty(sData) && sData[0] != ';')
                     {
                         sData = HUtil32.GetValidStrCap(sData, ref charName, new[] { " ", "\t" });
@@ -743,7 +742,6 @@ namespace GameSvr.DataStores
         {
             var result = 1;
             var s18 = string.Empty;
-            var s1C = string.Empty;
             var s20 = string.Empty;
             var bo2D = false;
             var nC = 1;
@@ -760,7 +758,7 @@ namespace GameSvr.DataStores
                     LoadList.LoadFromFile(sFileName);
                     for (var i = 0; i < LoadList.Count; i++)
                     {
-                        s1C = LoadList[i];
+                        string s1C = LoadList[i];
                         if (!string.IsNullOrEmpty(s1C) && s1C[0] != ';')
                         {
                             if (s1C[0] == '[' && s1C.Length > 2)

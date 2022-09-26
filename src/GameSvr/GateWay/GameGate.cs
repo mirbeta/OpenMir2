@@ -312,7 +312,6 @@ namespace GameSvr.GateWay
 
         private void DoClientCertification(int GateIdx, GateUserInfo GateUser, int nSocket, string sMsg)
         {
-            var sData = string.Empty;
             var sAccount = string.Empty;
             var sChrName = string.Empty;
             var nSessionID = 0;
@@ -330,7 +329,7 @@ namespace GameSvr.GateWay
                 {
                     if (HUtil32.TagCount(sMsg, '!') > 0)
                     {
-                        sData = HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
+                        string sData = HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
                         sMsg = sMsg.Substring(1, sMsg.Length - 1);
                         if (GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag, ref HWID))
                         {

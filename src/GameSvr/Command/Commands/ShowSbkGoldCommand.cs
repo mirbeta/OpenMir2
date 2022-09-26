@@ -33,7 +33,7 @@ namespace GameSvr.Command.Commands
                 {
                     PlayObject.SysMsg(List[i], MsgColor.Green, MsgType.Hint);
                 }
-                List = null;
+
                 return;
             }
             var Castle = M2Share.CastleMgr.Find(sCastleName);

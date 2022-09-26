@@ -244,7 +244,6 @@ namespace GameSvr.Player
 
         private bool ClientSpellXY(int wIdent, int nKey, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
         {
-            var result = false;
             dwDelayTime = 0;
             if (!m_boCanSpell)
             {
@@ -306,6 +305,7 @@ namespace GameSvr.Player
             }
             m_dwMagicAttackTick = HUtil32.GetTickCount();
             ushort nSpellPoint;
+            bool result;
             switch (UserMagic.MagIdx)
             {
                 case MagicConst.SKILL_ERGUM:
@@ -558,8 +558,6 @@ namespace GameSvr.Player
         {
             bool result = false;
             int n14;
-            int n18;
-            int n1C;
             dwDelayTime = 0;
             if (!m_boCanWalk)
             {
@@ -609,8 +607,6 @@ namespace GameSvr.Player
             }
             m_dwMoveTick = HUtil32.GetTickCount();
             MBo316 = false;
-            n18 = CurrX;
-            n1C = CurrY;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (!m_boClientFlag)
             {

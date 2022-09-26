@@ -14,7 +14,6 @@ namespace GameSvr.RobotPlay
             int nMastrRange;
             int nMonCount;
             TMapWalkXY MapWalkXY = null;
-            TMapWalkXY MapWalkXYA = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
@@ -32,7 +31,7 @@ namespace GameSvr.RobotPlay
                 nMonCount = MapWalkXY.nMonCount;
                 nMastrRange = MapWalkXY.nMastrRange;
                 n10 = int.MaxValue;
-                MapWalkXYA = MapWalkXY;
+                TMapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
@@ -113,7 +112,6 @@ namespace GameSvr.RobotPlay
             int n1C;
             int nMonCount;
             TMapWalkXY MapWalkXY = null;
-            TMapWalkXY MapWalkXYA = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
@@ -130,7 +128,7 @@ namespace GameSvr.RobotPlay
             if (MapWalkXY != null)
             {
                 nMonCount = MapWalkXY.nMonCount;
-                MapWalkXYA = MapWalkXY;
+                TMapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {

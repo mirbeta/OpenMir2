@@ -54,11 +54,9 @@ namespace GameSvr.Snaps
 
         private void DecodeSocStr(TServerMsgInfo ps)
         {
-            var BufStr = string.Empty;
             var Str = string.Empty;
             var sNumStr = string.Empty;
             var Head = string.Empty;
-            var Body = string.Empty;
             int Ident;
             int sNum;
             if (string.IsNullOrEmpty(ps.SocData))
@@ -71,7 +69,7 @@ namespace GameSvr.Snaps
             }
             try
             {
-                BufStr = ps.SocData;
+                string BufStr = ps.SocData;
                 ps.SocData = "";
                 while (BufStr.IndexOf(')') > 0)
                 {
@@ -79,7 +77,7 @@ namespace GameSvr.Snaps
                     if (!string.IsNullOrEmpty(Str))
                     {
                         DecodeSocStr_SendOtherServer(ps, Str);
-                        Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
+                        string Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, HUtil32.Backslash);
                         Ident = HUtil32.Str_ToInt(Head, 0);
                         sNum = HUtil32.Str_ToInt(sNumStr, -1);

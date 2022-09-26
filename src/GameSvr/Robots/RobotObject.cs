@@ -255,7 +255,6 @@ namespace GameSvr.Robots
                         }
                     }
                 }
-                LoadList = null;
             }
         }
 

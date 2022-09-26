@@ -38,7 +38,6 @@ namespace GameSvr.Event
                 if ((HUtil32.GetTickCount() - executeEvent.CloseTick) > 5 * 60 * 1000)
                 {
                     _closedEventList.RemoveAt(i);
-                    executeEvent = null;
                 }
             }
         }

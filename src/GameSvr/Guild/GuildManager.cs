@@ -136,7 +136,6 @@ namespace GameSvr.Guild
             {
                 _logger.Error("行会信息保存失败!!!");
             }
-            SaveList = null;
         }
 
         public void Run()
@@ -152,7 +151,6 @@ namespace GameSvr.Guild
                     {
                         Guild.EndGuildWar(WarGuild.Guild);
                         Guild.GuildWarList.RemoveAt(j);
-                        WarGuild = null;
                         boChanged = true;
                     }
                 }

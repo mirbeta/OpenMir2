@@ -84,7 +84,6 @@ namespace GameSvr.Command.Commands
             }
             finally
             {
-                MonList = null;
             }
             if (Envir == null)
             {

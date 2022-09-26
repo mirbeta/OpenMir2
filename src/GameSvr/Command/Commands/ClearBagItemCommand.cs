@@ -42,7 +42,6 @@ namespace GameSvr.Command.Commands
                         ItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index),
                         MakeIndex = UserItem.MakeIndex
                     });
-                    UserItem = null;
                     m_PlayObject.ItemList.RemoveAt(i);
                 }
                 m_PlayObject.ItemList.Clear();

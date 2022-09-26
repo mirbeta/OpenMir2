@@ -20,7 +20,6 @@ namespace GameSvr.Command.Commands
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sSkillName = @Params.Length > 1 ? @Params[1] : "";
             var nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
-            UserMagic UserMagic = null;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -45,7 +44,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg($"{sSkillName} 技能已修炼过了!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            UserMagic = new UserMagic();
+            UserMagic UserMagic = new UserMagic();
             UserMagic.Magic = Magic;
             UserMagic.MagIdx = Magic.MagicId;
             UserMagic.Level = (byte)nLevel;

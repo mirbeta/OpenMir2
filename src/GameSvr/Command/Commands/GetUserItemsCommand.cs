@@ -26,7 +26,6 @@ namespace GameSvr.Command.Commands
 
             int nItemCount;
             StdItem StdItem;
-            UserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || sItemCount == "" || sType == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -40,6 +39,7 @@ namespace GameSvr.Command.Commands
             }
             var nCount = HUtil32.Str_ToInt(sItemCount, 0);
             var nType = HUtil32.Str_ToInt(sType, 0);
+            UserItem UserItem;
             switch (nType)
             {
                 case 0:

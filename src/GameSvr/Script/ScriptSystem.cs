@@ -50,7 +50,6 @@ namespace GameSvr.Script
                             {
                                 if (sLine[0] == '}')
                                 {
-                                    bo1D = false;
                                     result = true;
                                     break;
                                 }
@@ -150,14 +149,12 @@ namespace GameSvr.Script
         private string LoadScriptFile_LoadDefineInfo(StringList LoadList, IList<TDefineInfo> List)
         {
             var result = string.Empty;
-            var s14 = string.Empty;
-            var s28 = string.Empty;
             var s1C = string.Empty;
             var s20 = string.Empty;
             var s24 = string.Empty;
             for (var i = 0; i < LoadList.Count; i++)
             {
-                s14 = LoadList[i].Trim();
+                string s14 = LoadList[i].Trim();
                 if (s14 != "" && s14[0] == '#')
                 {
                     if (HUtil32.CompareLStr(s14, "#SETHOME"))
@@ -180,7 +177,7 @@ namespace GameSvr.Script
                     }
                     if (HUtil32.CompareLStr(s14, "#INCLUDE"))
                     {
-                        s28 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
+                        string s28 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
                         s28 = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Defines", s28);
                         if (File.Exists(s28))
                         {
@@ -991,7 +988,6 @@ namespace GameSvr.Script
                     nCMDCode = ScriptConst.nSENDMSG;
                     goto L001;
                 case ScriptConst.sCHANGEMODE:
-                    nCMDCode = ScriptConst.nCHANGEMODE;
                     nCMDCode = ScriptConst.nSC_CHANGEMODE;
                     goto L001;
                 case ScriptConst.sPKPOINT:
@@ -1499,7 +1495,6 @@ namespace GameSvr.Script
         {
             var s30 = string.Empty;
             var sScript = string.Empty;
-            var s38 = string.Empty;
             var s3C = string.Empty;
             var s40 = string.Empty;
             var s44 = string.Empty;
@@ -1508,21 +1503,13 @@ namespace GameSvr.Script
             var s50 = string.Empty;
             StringList LoadList;
             IList<TDefineInfo> DefineList;
-            TQuestConditionInfo QuestConditionInfo = null;
             TQuestActionInfo QuestActionInfo = null;
-            var s54 = string.Empty;
-            var s58 = string.Empty;
-            var s5C = string.Empty;
             var slabName = string.Empty;
             TDefineInfo DefineInfo;
             var bo8D = false;
             TScript Script = null;
             TSayingRecord SayingRecord = null;
             TSayingProcedure SayingProcedure = null;
-            IList<string> ScriptNameList = null;
-            List<TQuestActionInfo> GotoList = null;
-            List<TQuestActionInfo> DelayGotoList = null;
-            List<TQuestActionInfo> PlayDiceList = null;
             var n6C = 0;
             var n70 = 0;
             var sScritpFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
@@ -1538,11 +1525,11 @@ namespace GameSvr.Script
                 }
 
                 DefineList = new List<TDefineInfo>();
-                ScriptNameList = new List<string>();
-                GotoList = new List<TQuestActionInfo>();
-                DelayGotoList = new List<TQuestActionInfo>();
-                PlayDiceList = new List<TQuestActionInfo>();
-                s54 = LoadScriptFile_LoadDefineInfo(LoadList, DefineList);
+                IList<string> ScriptNameList = new List<string>();
+                List<TQuestActionInfo> GotoList = new List<TQuestActionInfo>();
+                List<TQuestActionInfo> DelayGotoList = new List<TQuestActionInfo>();
+                List<TQuestActionInfo> PlayDiceList = new List<TQuestActionInfo>();
+                string s54 = LoadScriptFile_LoadDefineInfo(LoadList, DefineList);
                 DefineInfo = new TDefineInfo
                 {
                     sName = "@HOME"
@@ -1586,8 +1573,9 @@ namespace GameSvr.Script
                                             {
                                                 break;
                                             }
-                                            s58 = sScript.Substring(0, n24);
-                                            s5C = sScript.Substring(DefineInfo.sName.Length + n24);
+
+                                            string s58 = sScript.Substring(0, n24);
+                                            string s5C = sScript.Substring(DefineInfo.sName.Length + n24);
                                             sScript = s58 + DefineInfo.sText + s5C;
                                             LoadList[i] = sScript;
                                             n1C++;
@@ -1722,6 +1710,7 @@ namespace GameSvr.Script
                         }
                         // 增加处理NPC可执行命令设置
                     }
+                    string s38;
                     if (sScript.StartsWith("{"))
                     {
                         if (HUtil32.CompareLStr(sScript, "{Quest"))
@@ -1835,14 +1824,13 @@ namespace GameSvr.Script
                         }
                         if (n6C == 11)
                         {
-                            QuestConditionInfo = new TQuestConditionInfo();
+                            TQuestConditionInfo QuestConditionInfo = new TQuestConditionInfo();
                             if (LoadScriptFileQuestCondition(sScript.Trim(), QuestConditionInfo))
                             {
                                 SayingProcedure.ConditionList.Add(QuestConditionInfo);
                             }
                             else
                             {
-                                QuestConditionInfo = null;
                                 _logger.Error("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }

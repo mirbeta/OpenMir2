@@ -10,10 +10,9 @@ namespace GameSvr.World
         private SwitchDataInfo GetSwitchData(string sChrName, int nCode)
         {
             SwitchDataInfo result = null;
-            SwitchDataInfo SwitchData = null;
             for (var i = 0; i < _mChangeServerList.Count; i++)
             {
-                SwitchData = _mChangeServerList[i];
+                SwitchDataInfo SwitchData = _mChangeServerList[i];
                 if (string.Compare(SwitchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && SwitchData.nCode == nCode)
                 {
                     result = SwitchData;
@@ -81,7 +80,6 @@ namespace GameSvr.World
                 SwitchDataInfo = _mChangeServerList[i];
                 if (SwitchDataInfo == SwitchData)
                 {
-                    SwitchDataInfo = null;
                     _mChangeServerList.RemoveAt(i);
                     break;
                 }
@@ -118,10 +116,10 @@ namespace GameSvr.World
             {
                 SwitchData.BlockWhisperArr.Add(PlayObject.LockWhisperList[i]);
             }
-            BaseObject BaseObject = null;
+
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
-                BaseObject = PlayObject.SlaveList[i];
+                BaseObject BaseObject = PlayObject.SlaveList[i];
                 if (i <= 4)
                 {
                     SwitchData.SlaveArr[i].SlaveName = BaseObject.CharName;

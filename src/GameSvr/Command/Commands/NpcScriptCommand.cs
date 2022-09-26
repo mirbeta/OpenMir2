@@ -67,7 +67,6 @@ namespace GameSvr.Command.Commands
                     sScriptLine = HUtil32.ReplaceChar(sScriptLine, ' ', ',');
                     PlayObject.SysMsg(i + "," + sScriptLine, MsgColor.Blue, MsgType.Hint);
                 }
-                LoadList = null;
             }
         }
     }

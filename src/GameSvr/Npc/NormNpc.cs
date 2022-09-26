@@ -255,10 +255,10 @@ namespace GameSvr.Npc
         /// </summary>
         protected virtual void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
-            string sText = string.Empty;
             string s14 = string.Empty;
             TDynamicVar DynamicVar;
             bool boFoundVar;
+            string sText;
             switch (sVariable)
             {
                 case "$SERVERNAME":
@@ -810,7 +810,6 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            sText = "????";
                         }
                         return;
                     }
@@ -1059,8 +1058,6 @@ namespace GameSvr.Npc
             }
             if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[")) // 地图怪物数量
             {
-                MonGenInfo MonGen = null;
-                BaseObject BaseObject = null;
                 int MonGenCount = 0;
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
                 var MapName = HUtil32.GetValidStr3(s14, ref s14, new string[] { "/" });
@@ -1073,6 +1070,8 @@ namespace GameSvr.Npc
                 {
                     MonsterName = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
                 }
+                MonGenInfo MonGen;
+                BaseObject BaseObject;
                 if (string.Compare(MapName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部地图
                 {
                     if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物

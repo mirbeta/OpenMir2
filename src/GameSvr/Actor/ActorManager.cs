@@ -30,7 +30,7 @@ namespace GameSvr.Actor
 
         public object GetOhter(int objectId)
         {
-            object obj = null;
+            object obj;
             if (_ohter.TryGetValue(objectId, out obj))
             {
                 return obj;
@@ -40,7 +40,7 @@ namespace GameSvr.Actor
 
         public BaseObject Get(int actorId)
         {
-            BaseObject actor = null;
+            BaseObject actor;
             if (_actorsMap.TryGetValue(actorId, out actor))
             {
                 return actor;
@@ -50,7 +50,7 @@ namespace GameSvr.Actor
 
         public void Remove(int actorId)
         {
-            BaseObject ghostactor = null;
+            BaseObject ghostactor;
             _actorsMap.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
@@ -60,7 +60,7 @@ namespace GameSvr.Actor
 
         public void RevomeOhter(int actorId)
         {
-            object actor = null;
+            object actor;
             _ohter.TryRemove(actorId, out actor);
             if (actor != null)
             {
@@ -74,11 +74,11 @@ namespace GameSvr.Actor
         public void ClearObject()
         {
             var actorIds = _actorsMap.Keys;
-            BaseObject actor = null;
             var playCount = 0;
             var monsterCount = 0;
             foreach (var actorId in actorIds)
             {
+                BaseObject actor;
                 if (_actorsMap.TryGetValue(actorId, out actor))
                 {
                     if (actor.Race == ActorRace.Play)

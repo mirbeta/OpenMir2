@@ -307,15 +307,10 @@ namespace GameSvr
         private void LoadServerTable()
         {
             var nRouteIdx = 0;
-            var sLineText = string.Empty;
             var sIdx = string.Empty;
             var sSelGateIPaddr = string.Empty;
             var sGameGateIPaddr = string.Empty;
-            var sGameGate = string.Empty;
             var sGameGatePort = string.Empty;
-            var sMapName = string.Empty;
-            var sMapInfo = string.Empty;
-            var sServerIndex = string.Empty;
             var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
@@ -323,11 +318,11 @@ namespace GameSvr
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLineText = LoadList[i];
+                    string sLineText = LoadList[i];
                     if (sLineText != "" && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIdx, new[] { " ", "\09" });
-                        sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
+                        string sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
                         if (sIdx == "" || sGameGate == "" || sSelGateIPaddr == "")
                         {
                             continue;

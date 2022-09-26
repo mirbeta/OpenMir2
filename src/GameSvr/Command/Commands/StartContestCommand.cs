@@ -72,8 +72,6 @@ namespace GameSvr.Command.Commands
                 s20 = s20 + Guild.sGuildName + ' ';
             }
             M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, " -参加的门派:" + s20);
-            List10 = null;
-            List14 = null;
         }
     }
 }

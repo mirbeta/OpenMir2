@@ -95,7 +95,6 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        n10++;
                     }
                     return;
                 }
@@ -439,7 +438,6 @@ namespace GameSvr.Npc
             }
             if (DuraList != null)
             {
-                DuraList = null;
             }
         }
 
@@ -1227,7 +1225,6 @@ namespace GameSvr.Npc
         {
             IList<UserItem> List20;
             UserItem UserItem;
-            StdItem StdItem = null;
             int nPrice;
             string sUserItemName;
             var bo29 = false;
@@ -1240,7 +1237,7 @@ namespace GameSvr.Npc
                 }
                 List20 = GoodsList[i];
                 UserItem = List20[0];
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null)
                 {
                     sUserItemName = CustomItem.GetItemName(UserItem);
@@ -1447,15 +1444,14 @@ namespace GameSvr.Npc
         {
             bool result = false;
             IList<MakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
-            UserItem UserItem = null;
             IList<DeleteItem> List28;
-            string s20 = string.Empty;
-            int n1C = 0;
             if (List10 == null)
             {
                 return result;
             }
             result = true;
+            string s20;
+            int n1C;
             for (var i = 0; i < List10.Count; i++)
             {
                 s20 = List10[i].ItemName;
@@ -1486,7 +1482,7 @@ namespace GameSvr.Npc
                         {
                             break;
                         }
-                        UserItem = PlayObject.ItemList[j];
+                        UserItem UserItem = PlayObject.ItemList[j];
                         if (M2Share.WorldEngine.GetStdItemName(UserItem.Index) == s20)
                         {
                             if (List28 == null)
@@ -1822,7 +1818,6 @@ namespace GameSvr.Npc
 
         private void DisPose(object obj)
         {
-            obj = null;
         }
     }
 }

@@ -102,7 +102,8 @@ namespace GameSvr.Event
 
         public void Dispose()
         {
-            //GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
+            GC.Collect();
         }
     }
 }

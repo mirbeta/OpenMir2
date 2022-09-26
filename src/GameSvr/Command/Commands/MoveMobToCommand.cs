@@ -89,7 +89,6 @@ namespace GameSvr.Command.Commands
                     }
                 }
             }
-            MonList = null;
         }
     }
 }

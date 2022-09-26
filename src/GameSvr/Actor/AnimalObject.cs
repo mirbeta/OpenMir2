@@ -195,7 +195,6 @@ namespace GameSvr.Actor
                 }
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
         }
 

@@ -1168,7 +1168,6 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    mapItem = null;
                 }
             }
             return result;
@@ -1438,7 +1437,6 @@ namespace GameSvr.Actor
             }
             else
             {
-                mapItem = null;
             }
             return result;
         }
@@ -1690,8 +1688,6 @@ namespace GameSvr.Actor
             short ny = 0;
             var result = 0;
             var olddir = Direction;
-            int oldx = CurrX;
-            int oldy = CurrY;
             Direction = nDir;
             var nBackDir = GetBackDir(nDir);
             for (var i = 0; i < nPushCount; i++)
@@ -2644,7 +2640,6 @@ namespace GameSvr.Actor
                 {
                     var playObject = this as PlayObject;
                     playObject.SendDelMagic(userMagic);
-                    userMagic = null;
                     MagicList.RemoveAt(i);
                     break;
                 }
@@ -3453,7 +3448,7 @@ namespace GameSvr.Actor
             if (Race == ActorRace.Play)
             {
                 byte nDress = 0;
-                StdItem stdItem = null;
+                StdItem stdItem;
                 if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0) // 衣服
                 {
                     stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
@@ -3993,12 +3988,10 @@ namespace GameSvr.Actor
                 }
             }
 
-            TMonSayMsg monSayMsg = null;
-            var sMsg = string.Empty;
             for (var i = 0; i < SayMsgList.Count; i++)
             {
-                monSayMsg = SayMsgList[i];
-                sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(CharName));
+                TMonSayMsg monSayMsg = SayMsgList[i];
+                string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(CharName));
                 sMsg = sMsg.Replace("%d", sAttackName);
                 if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))
                 {
@@ -5055,7 +5048,6 @@ namespace GameSvr.Actor
                         result = true;
                         break;
                     }
-                    n1C = n20;
                 }
                 else
                 {
@@ -5910,7 +5902,6 @@ namespace GameSvr.Actor
 
         protected void Dispose(object obj)
         {
-            obj = null;
         }
 
         protected string Format(string str, params object[] par)

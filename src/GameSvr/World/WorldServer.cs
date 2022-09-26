@@ -300,7 +300,6 @@ namespace GameSvr.World
         {
             PlayObject result = null;
             PlayObject playObject = null;
-            SwitchDataInfo switchDataInfo = null;
             const string sExceptionMsg = "[Exception] TUserEngine::MakeNewHuman";
             const string sChangeServerFail1 = "chg-server-fail-1 [{0}] -> [{1}] [{2}]";
             const string sChangeServerFail2 = "chg-server-fail-2 [{0}] -> [{1}] [{2}]";
@@ -311,6 +310,7 @@ namespace GameSvr.World
             try
             {
                 playObject = new PlayObject();
+                SwitchDataInfo switchDataInfo;
                 if (!M2Share.Config.VentureServer)
                 {
                     userOpenInfo.sChrName = string.Empty;
@@ -1886,7 +1886,7 @@ namespace GameSvr.World
                             count++;
                             if (count >= 8) break;
                         }
-                        magicEvent = null;
+
                         MagicEventList.RemoveAt(i);
                     }
                 }
