@@ -52,7 +52,6 @@ namespace GameSvr.Command.Commands
                 {
                     if (boDelAll)
                     {
-                        UserMagic = null;
                         m_PlayObject.MagicList.RemoveAt(i);
                     }
                     else
@@ -60,7 +59,6 @@ namespace GameSvr.Command.Commands
                         if (string.Compare(UserMagic.Magic.Desc, sSkillName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             m_PlayObject.SendDelMagic(UserMagic);
-                            UserMagic = null;
                             m_PlayObject.MagicList.RemoveAt(i);
                             m_PlayObject.SysMsg($"技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);
                             PlayObject.SysMsg($"{sHumanName}的技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);

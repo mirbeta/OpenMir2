@@ -127,7 +127,6 @@ namespace GameSvr.Services
         private void ProcessGameDate()
         {
             IList<TGoldChangeInfo> ChangeGoldList = null;
-            TSaveRcd SaveRcd = null;
             var boReTryLoadDB = false;
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
@@ -160,7 +159,7 @@ namespace GameSvr.Services
             {
                 for (var i = 0; i < m_SaveRcdTempList.Count; i++)
                 {
-                    SaveRcd = m_SaveRcdTempList[i];
+                    TSaveRcd SaveRcd = m_SaveRcdTempList[i];
                     if (SaveRcd == null)
                     {
                         continue;
@@ -262,7 +261,6 @@ namespace GameSvr.Services
                     ChangeUserGoldInDB(GoldChangeInfo);
                     DisPose(GoldChangeInfo);
                 }
-                ChangeGoldList = null;
             }
         }
 
@@ -448,7 +446,6 @@ namespace GameSvr.Services
 
         private void DisPose(object obj)
         {
-            obj = null;
         }
     }
 }

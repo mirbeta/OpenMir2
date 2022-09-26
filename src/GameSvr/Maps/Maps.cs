@@ -13,16 +13,13 @@ namespace GameSvr.Maps
             var s34 = string.Empty;
             var sLine = string.Empty;
             var sMapName = string.Empty;
-            var s44 = string.Empty;
             var sMapDesc = string.Empty;
-            var s4C = string.Empty;
             var sReConnectMap = string.Empty;
             int nX;
             int n18;
             int n1C;
             int n20;
             int nServerIndex;
-            TMapFlag MapFlag = null;
             Merchant QuestNPC;
             string sMapInfoFile;
             var result = -1;
@@ -61,7 +58,7 @@ namespace GameSvr.Maps
                     if (!string.IsNullOrEmpty(sFlag) && sFlag[0] == '[')
                     {
                         sMapName = "";
-                        MapFlag = new TMapFlag
+                        TMapFlag MapFlag = new TMapFlag
                         {
                             boSAFE = false
                         };
@@ -71,7 +68,7 @@ namespace GameSvr.Maps
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
-                        s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new[] { " ", ",", "\t" }).Trim();
+                        string s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new[] { " ", ",", "\t" }).Trim();
                         nServerIndex = HUtil32.Str_ToInt(s4C, 0);
                         if (sMapName == "")
                         {
@@ -131,7 +128,6 @@ namespace GameSvr.Maps
                                 MapFlag.sNoReConnectMap = sReConnectMap;
                                 if (MapFlag.sNoReConnectMap == "")
                                 {
-                                    result = -11;
                                 }
                                 continue;
                             }
@@ -345,7 +341,6 @@ namespace GameSvr.Maps
                         }
                         if (M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
                         {
-                            result = -10;
                         }
                         result = 1;
                     }
@@ -364,7 +359,7 @@ namespace GameSvr.Maps
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
                         n18 = HUtil32.Str_ToInt(s34, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", "-", ">", "\t" });
-                        s44 = s34;
+                        string s44 = s34;
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
                         n1C = HUtil32.Str_ToInt(s34, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", ";", "\t" });
@@ -372,7 +367,6 @@ namespace GameSvr.Maps
                         M2Share.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
                 }
-                LoadList = null;
             }
             return result;
         }
@@ -447,7 +441,6 @@ namespace GameSvr.Maps
                 {
                     LoadList.Add(LoadMapList[i]);
                 }
-                LoadMapList = null;
             }
         }
 

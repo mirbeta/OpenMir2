@@ -63,7 +63,6 @@ namespace GameSvr.Items
                 var itemName = ItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
                 {
-                    itemName = null;
                     ItemNameList.RemoveAt(i);
                     return;
                 }
@@ -104,7 +103,6 @@ namespace GameSvr.Items
             {
                 loadList.SaveToFile(sFileName);
             }
-            loadList = null;
         }
 
         /// <summary>
@@ -139,7 +137,6 @@ namespace GameSvr.Items
                 saveList.Add(itemName.nMakeIndex + "\t" + itemName.nItemIndex + "\t" + itemName.sItemName);
             }
             saveList.SaveToFile(sFileName);
-            saveList = null;
         }
 
         /// <summary>

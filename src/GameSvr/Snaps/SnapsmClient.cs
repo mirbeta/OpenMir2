@@ -74,11 +74,9 @@ namespace GameSvr.Snaps
 
         private void DecodeSocStr()
         {
-            string BufStr = string.Empty;
             string Str = string.Empty;
             string sNumStr = string.Empty;
             string Head = string.Empty;
-            string Body = string.Empty;
             int Ident;
             int sNum;
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::DecodeSocStr";
@@ -88,14 +86,14 @@ namespace GameSvr.Snaps
             }
             try
             {
-                BufStr = sRecvMsg;
+                string BufStr = sRecvMsg;
                 sRecvMsg = string.Empty;
                 while (BufStr.IndexOf(')') > -1)
                 {
                     BufStr = HUtil32.ArrestStringEx(BufStr, "(", ")", ref Str);
                     if (!string.IsNullOrEmpty(Str))
                     {
-                        Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
+                        string Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, HUtil32.Backslash);
                         Ident = HUtil32.Str_ToInt(Head, 0);
                         sNum = HUtil32.Str_ToInt(sNumStr, -1);

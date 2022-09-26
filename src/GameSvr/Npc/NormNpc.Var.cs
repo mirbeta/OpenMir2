@@ -15,8 +15,8 @@ namespace GameSvr.Npc
         /// <param name="QuestActionInfo"></param>
         private void MovrData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var n14 = 0;
             var s34 = string.Empty;
+            int n14;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
             {
                 HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
@@ -314,7 +314,6 @@ namespace GameSvr.Npc
             {
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
-                    n10 = 1;
                     boVarFound = false;
                     DynamicVarList = GetDynamicVarList(PlayObject, sParam2, ref sName);
                     if (DynamicVarList == null)
@@ -448,7 +447,6 @@ namespace GameSvr.Npc
                 {
                     if ((sParam3 != "") && (!HUtil32.IsStringNumber(sParam3)))
                     {
-                        n10 = 1;
                         n14 = M2Share.GetValNameNo(sParam3);
                         if (n14 >= 0)
                         {
@@ -721,9 +719,6 @@ namespace GameSvr.Npc
             Dictionary<string, TDynamicVar> DynamicVarList;
             string sName = string.Empty;
             string s01 = string.Empty;
-            string s02 = string.Empty;
-            string s03 = string.Empty;
-            bool boVarFound = false;
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;
             string sParam3 = string.Empty;
@@ -759,11 +754,13 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sDEC);
                 return;
             }
+            string s02;
+            string s03;
             if (sParam3 != "")
             {
+                bool boVarFound;
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
-                    n10 = 1;
                     boVarFound = false;
                     DynamicVarList = GetDynamicVarList(PlayObject, sParam2, ref sName);
                     if (DynamicVarList == null)
@@ -906,7 +903,6 @@ namespace GameSvr.Npc
                 {
                     if ((sParam3 != "") && (!HUtil32.IsStringNumber(sParam3)))
                     {
-                        n10 = 1;
                         n14 = M2Share.GetValNameNo(sParam3);
                         if (n14 >= 0)
                         {
@@ -1678,10 +1674,10 @@ namespace GameSvr.Npc
         private void SumData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var n18 = 0;
-            var n14 = 0;
             var s34 = string.Empty;
             var s44 = string.Empty;
             var s48 = string.Empty;
+            int n14;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) //  SUM 支持字符串变量
             {
                 HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
@@ -2020,12 +2016,10 @@ namespace GameSvr.Npc
                                 }
                                 else
                                 {
-                                    sMsg = "暂时没有行会攻城！！！\\ \\<返回/@main>";
                                 }
                             }
                             else
                             {
-                                sMsg = "现正在攻城中！！！\\ \\<返回/@main>";
                             }
                         }
                         else

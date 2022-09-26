@@ -493,10 +493,9 @@ namespace GameSvr
             var result = false;
             int i;
             string sText;
-            StringList LoadList = null;
             if (File.Exists(FileName))
             {
-                LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(FileName);
                 i = 0;
                 while (true)
@@ -874,7 +873,6 @@ namespace GameSvr
         public static string FilterShowName(string sName)
         {
             var result = "";
-            var sC = "";
             var bo11 = false;
             if (string.IsNullOrEmpty(sName))
             {
@@ -885,7 +883,7 @@ namespace GameSvr
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {
                     result = sName.Substring(0, i);
-                    sC = sName.Substring(i, sName.Length - i);
+                    string sC = sName.Substring(i, sName.Length - i);
                     bo11 = true;
                     break;
                 }
@@ -1344,7 +1342,6 @@ namespace GameSvr
         public static bool SaveItemBindIPaddr()
         {
             bool result;
-            result = false;
             var sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindIPaddr.txt";
             //SaveList = new StringList();
             //try {
@@ -1416,7 +1413,6 @@ namespace GameSvr
 
         public static bool SaveItemBindAccount()
         {
-            var result = false;
             var sFileName = Config.EnvirDir + "ItemBindAccount.txt";
             //SaveList = new StringList();
             //g_ItemBindAccount.__Lock();
@@ -1433,7 +1429,7 @@ namespace GameSvr
             //SaveList.SaveToFile(sFileName);
 
             //SaveList.Free;
-            result = true;
+            bool result = true;
             return result;
         }
 
@@ -1673,7 +1669,7 @@ namespace GameSvr
         {
             var result = false;
             var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableSellOffItem.txt");
-            StringList LoadList = null;
+            StringList LoadList;
             if (File.Exists(sFileName))
             {
                 try
@@ -1859,7 +1855,6 @@ namespace GameSvr
 
         public static bool LoadMonDropLimitList()
         {
-            var sLineText = string.Empty;
             var sItemName = string.Empty;
             var sItemCount = string.Empty;
             var result = false;
@@ -1871,7 +1866,7 @@ namespace GameSvr
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if ((sLineText == "") || (sLineText[0] == ';'))
                     {
                         continue;

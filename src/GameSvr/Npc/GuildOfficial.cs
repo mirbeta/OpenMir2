@@ -58,7 +58,6 @@ namespace GameSvr.Npc
 
         public override void UserSelect(PlayObject PlayObject, string sData)
         {
-            var sMsg = string.Empty;
             var sLabel = string.Empty;
             const string sExceptionMsg = "[Exception] TGuildOfficial::UserSelect... ";
             base.UserSelect(PlayObject, sData);
@@ -66,7 +65,7 @@ namespace GameSvr.Npc
             {
                 if (!string.IsNullOrEmpty(sData) && sData.StartsWith("@"))
                 {
-                    sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
+                    string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
                     var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                     this.GotoLable(PlayObject, sLabel, !boCanJmp);
                     if (!boCanJmp)

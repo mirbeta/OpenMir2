@@ -41,7 +41,6 @@ namespace GameSvr.Command.Commands
                         MoveHuman.MapRandomMove(MoveHuman.HomeMap, 0);
                     }
                 }
-                HumanList = null;
             }
             else
             {

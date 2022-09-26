@@ -172,15 +172,15 @@ namespace GameSvr.Command
 
         public void ExecCmd(string line)
         {
-            var output = string.Empty;
             string command;
             string parameters;
             var found = false;
 
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return;
+            string output;
 
-            BaseCommond commond = null;
+            BaseCommond commond;
             if (CommandMaps.TryGetValue(command, out commond))
             {
                 output = commond.Handle(parameters);

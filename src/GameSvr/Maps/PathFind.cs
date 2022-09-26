@@ -432,7 +432,6 @@ namespace GameSvr.Maps
         private void FillPathMap_ExchangeWaves(Wave oldWave, Wave newWave)
         {
             var w = oldWave;
-            oldWave = newWave;
             newWave = w;
             newWave.Clear();
         }

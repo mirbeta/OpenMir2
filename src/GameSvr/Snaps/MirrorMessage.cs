@@ -477,7 +477,6 @@ namespace GameSvr.Snaps
 
         private void MsgGetLoverLoginReply(int sNum, string Body)
         {
-            var uname = string.Empty;
         }
 
         private void MsgGetLoverKilledMsg(int sNum, string Body)

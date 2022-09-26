@@ -667,7 +667,6 @@ namespace GameSvr.Player
             CharDesc CharDesc;
             int nObjCount;
             string sendMsg;
-            MessageBodyWL MessageBodyWL = null;
             var dwDelayTime = 0;
             int nMsgCount;
             var result = true;
@@ -676,6 +675,7 @@ namespace GameSvr.Player
             {
                 BaseObject = M2Share.ActorMgr.Get(ProcessMsg.BaseObject);
             }
+            MessageBodyWL MessageBodyWL;
             switch (ProcessMsg.wIdent)
             {
                 case Grobal2.CM_QUERYUSERNAME:

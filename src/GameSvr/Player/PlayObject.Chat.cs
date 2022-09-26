@@ -105,8 +105,6 @@ namespace GameSvr.Player
         protected override void ProcessSayMsg(string sData)
         {
             bool boDisableSayMsg;
-            var sC = string.Empty;
-            var sCryCryMsg = string.Empty;
             var sParam1 = string.Empty;
             const string sExceptionMsg = "[Exception] TPlayObject.ProcessSayMsg Msg = {0}";
             try
@@ -148,6 +146,7 @@ namespace GameSvr.Player
                         M2Share.g_FunctionNPC.GotoLable(this, "@加速处理", false);
                         return;
                     }
+                    string sC;
                     switch (sData[0])
                     {
                         case '/':
@@ -210,7 +209,7 @@ namespace GameSvr.Player
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
                                         sC = sData.Substring(1, sData.Length - 1);
-                                        sCryCryMsg = "(!)" + CharName + ": " + sC;
+                                        string sCryCryMsg = "(!)" + CharName + ": " + sC;
                                         if (m_boFilterSendMsg)
                                         {
                                             SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);

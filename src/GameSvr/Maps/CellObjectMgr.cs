@@ -17,7 +17,7 @@ namespace GameSvr.Maps
 
         public EntityId Get(int cellId)
         {
-            EntityId cell = null;
+            EntityId cell;
             if (_cellObject.TryGetValue(cellId, out cell))
             {
                 return cell;
@@ -40,7 +40,6 @@ namespace GameSvr.Maps
         {
             if (_cellObject.TryGetValue(cellId, out var cell))
             {
-                cell = null;
             }
         }
 
@@ -50,7 +49,6 @@ namespace GameSvr.Maps
         public void ClearObject()
         {
             var actorIds = _cellObject.Keys;
-            BaseObject actor = null;
             var playCount = 0;
             var monsterCount = 0;
 

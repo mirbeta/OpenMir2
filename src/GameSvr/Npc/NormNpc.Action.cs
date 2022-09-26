@@ -58,8 +58,6 @@ namespace GameSvr.Npc
             DealOffInfo DealOffInfo;
             string sSendStr;
             string sUserItemName;
-            ClientDealOffInfo sClientDealOffInfo = null;
-            StdItem StdItem = null;
             StdItem StdItem80;
             bool bo12;
             try
@@ -71,7 +69,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.sSellOffItemList.Count > 0)
                         {
-                            sClientDealOffInfo = new ClientDealOffInfo();
+                            ClientDealOffInfo sClientDealOffInfo = new ClientDealOffInfo();
                             sClientDealOffInfo.UseItems = new ClientItem[9];
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
@@ -84,7 +82,8 @@ namespace GameSvr.Npc
                                         {
                                             continue;
                                         }
-                                        StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
+
+                                        StdItem StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
                                         if (StdItem == null)
                                         {
                                             // 是金刚石
@@ -171,8 +170,6 @@ namespace GameSvr.Npc
             DealOffInfo DealOffInfo;
             string sSendStr;
             string sUserItemName;
-            ClientDealOffInfo sClientDealOffInfo = null;
-            StdItem StdItem = null;
             StdItem StdItem80;
             bool bo12;
             try
@@ -185,7 +182,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.sSellOffItemList.Count > 0)
                         {
-                            sClientDealOffInfo = new ClientDealOffInfo();
+                            ClientDealOffInfo sClientDealOffInfo = new ClientDealOffInfo();
                             sClientDealOffInfo.UseItems = new ClientItem[9];
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
@@ -198,7 +195,8 @@ namespace GameSvr.Npc
                                         {
                                             continue;
                                         }
-                                        StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[k].Index);
+
+                                        StdItem StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[k].Index);
                                         if (StdItem == null)
                                         {
                                             // 是金刚石
@@ -548,7 +546,6 @@ namespace GameSvr.Npc
                     if (nExp > 0)
                     {
                         PlayObject.Abil.Exp = nExp;
-                        dwInt = nExp;
                     }
                     break;
                 case '-':
@@ -1992,13 +1989,13 @@ namespace GameSvr.Npc
         private void ActionOfClearNeedItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            StdItem StdItem = null;
             var nNeed = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CLEARNEEDITEMS);
                 return;
             }
+            StdItem StdItem;
             for (var i = PlayObject.ItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = PlayObject.ItemList[i];
@@ -2025,7 +2022,6 @@ namespace GameSvr.Npc
         private void ActionOfClearMakeItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            StdItem StdItem = null;
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
             var boMatchName = QuestActionInfo.sParam3 == "1";
@@ -2034,6 +2030,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CLEARMAKEITEMS);
                 return;
             }
+            StdItem StdItem;
             for (var i = PlayObject.ItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = PlayObject.ItemList[i];
@@ -2616,7 +2613,6 @@ namespace GameSvr.Npc
         private void ActionOfGiveItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            StdItem StdItem = null;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
             if (string.IsNullOrEmpty(sItemName) || nItemCount <= 0)
@@ -2642,6 +2638,7 @@ namespace GameSvr.Npc
                 }
                 for (var i = 0; i < nItemCount; i++)
                 {
+                    StdItem StdItem;
                     // nItemCount 为0时出死循环
                     if (PlayObject.IsEnoughBag())
                     {
@@ -3388,7 +3385,6 @@ namespace GameSvr.Npc
             Envirnoment Envir;
             MapItem MapItem;
             MapItem MapItemA;
-            StdItem StdItem = null;
             UserItem UserItem = null;
             try
             {
@@ -3464,7 +3460,7 @@ namespace GameSvr.Npc
                     {
                         if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
-                            StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem != null)
                             {
                                 if (StdItem.StdMode == 40)

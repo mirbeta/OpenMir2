@@ -23,12 +23,11 @@ namespace GameSvr.Command.Commands
             var nValueType = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;//参数16为吸伤属性
             var nValue = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
             string sShowMsg;
-            StdItem StdItem = null;
             if (nWhere >= 0 && nWhere <= 12 && nValueType >= 0 && nValueType <= 15 && nValue >= 0 && nValue <= 255)
             {
                 if (PlayObject.UseItems[nWhere].Index > 0)
                 {
-                    StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nWhere].Index);
+                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[nWhere].Index);
                     if (StdItem == null)
                     {
                         return;

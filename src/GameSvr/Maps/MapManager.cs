@@ -140,7 +140,7 @@ namespace GameSvr.Maps
 
         public Envirnoment FindMap(string sMapName)
         {
-            Envirnoment Map = null;
+            Envirnoment Map;
             return _mapList.TryGetValue(sMapName, out Map) ? Map : null;
         }
 

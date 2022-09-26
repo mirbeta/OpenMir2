@@ -17,7 +17,6 @@ namespace GameSvr.Npc
             bool bo11;
             string sSendMsg;
             TScript Script = null;
-            TScript Script3C = null;
             TSayingRecord SayingRecord;
             TSayingProcedure SayingProcedure;
             UserItem UserItem = null;
@@ -31,7 +30,7 @@ namespace GameSvr.Npc
             {
                 for (var i = 0; i < m_ScriptList.Count; i++)
                 {
-                    Script3C = m_ScriptList[i];
+                    TScript Script3C = m_ScriptList[i];
                     if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord))
                     {
                         Script = Script3C;
@@ -264,7 +263,6 @@ namespace GameSvr.Npc
                         break;
                     }
                 }
-                LoadList = null;
             }
             else
             {
@@ -332,9 +330,7 @@ namespace GameSvr.Npc
 
         private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
         {
-            string sText = string.Empty;
             string Name = string.Empty;
-            string ssDay = string.Empty;
             var result = false;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
@@ -354,12 +350,12 @@ namespace GameSvr.Npc
                 var nDay = HUtil32.Str_ToInt(sDay, 0);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sText = LoadList[i].Trim();
+                    string sText = LoadList[i].Trim();
                     sText = HUtil32.GetValidStrCap(sText, ref Name, new string[] { " ", "\t" });
                     Name = Name.Trim();
                     if (charName == Name)
                     {
-                        ssDay = sText.Trim();
+                        string ssDay = sText.Trim();
                         var nnday = HUtil32.Str_ToDate(ssDay);
                         var UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
                         var LastDay = nDay - UseDay;
@@ -385,16 +381,9 @@ namespace GameSvr.Npc
         {
             bool result = true;
             TQuestConditionInfo QuestConditionInfo;
-            int n10 = 0;
-            int n14 = 0;
-            int n18 = 0;
             int n1C = 0;
             int nMaxDura = 0;
             int nDura = 0;
-            int Hour = 0;
-            int Min = 0;
-            int Sec = 0;
-            int MSec = 0;
             Envirnoment Envir;
             StdItem StdItem;
             for (var i = 0; i < ConditionList.Count; i++)
@@ -520,6 +509,13 @@ namespace GameSvr.Npc
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam6))
                     QuestConditionInfo.nParam6 = HUtil32.Str_ToInt(QuestConditionInfo.sParam6, 0);
 
+                int n10;
+                int n14;
+                int n18;
+                int Hour;
+                int Min;
+                int Sec;
+                int MSec;
                 switch (QuestConditionInfo.nCmdCode)
                 {
                     case ScriptConst.nCHECKUSERDATE:
@@ -1496,7 +1492,6 @@ namespace GameSvr.Npc
 
         private void GotoLable_AddList(string sHumName, string sListFileName)
         {
-            string s10 = string.Empty;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
@@ -1513,7 +1508,7 @@ namespace GameSvr.Npc
             var bo15 = false;
             for (var i = 0; i < LoadList.Count; i++)
             {
-                s10 = LoadList[i].Trim();
+                string s10 = LoadList[i].Trim();
                 if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;
@@ -1564,7 +1559,6 @@ namespace GameSvr.Npc
 
         private void GotoLable_DelList(string sHumName, string sListFileName)
         {
-            string s10 = string.Empty;
             bool bo15;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
@@ -1582,7 +1576,7 @@ namespace GameSvr.Npc
             bo15 = false;
             for (var i = 0; i < LoadList.Count; i++)
             {
-                s10 = LoadList[i].Trim();
+                string s10 = LoadList[i].Trim();
                 if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList.RemoveAt(i);
@@ -1693,8 +1687,7 @@ namespace GameSvr.Npc
 
         private void GotoLable_TakeWItem(PlayObject PlayObject, string sItemName, int nItemCount)
         {
-            string sName = string.Empty;
-            string sC = string.Empty;
+            string sC;
             if (HUtil32.CompareLStr(sItemName, "[NECKLACE]", 4))
             {
                 if (PlayObject.UseItems[Grobal2.U_NECKLACE].Index > 0)
@@ -1817,7 +1810,7 @@ namespace GameSvr.Npc
                 }
                 if (PlayObject.UseItems[i].Index > 0)
                 {
-                    sName = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[i].Index);
+                    string sName = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[i].Index);
                     if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendDelItems(PlayObject.UseItems[i]);
@@ -1836,11 +1829,7 @@ namespace GameSvr.Npc
             int n2C;
             int n20X;
             int n24Y;
-            string s4C = string.Empty;
-            string s50 = string.Empty;
-            string s34 = string.Empty;
             string s44 = string.Empty;
-            string s48 = string.Empty;
             Envirnoment Envir;
             IList<BaseObject> List58;
             PlayObject User;
@@ -1852,6 +1841,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < ActionList.Count; i++)
             {
                 QuestActionInfo = ActionList[i];
+                string s50;
                 switch (QuestActionInfo.nCmdCode)
                 {
                     case ScriptConst.nSET:
@@ -1909,11 +1899,11 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nSC_PARAM2:
                         n38 = QuestActionInfo.nParam1;
-                        s48 = QuestActionInfo.sParam1;
+                        string s48 = QuestActionInfo.sParam1;
                         break;
                     case ScriptConst.nSC_PARAM3:
                         n3C = QuestActionInfo.nParam1;
-                        s4C = QuestActionInfo.sParam1;
+                        string s4C = QuestActionInfo.sParam1;
                         break;
                     case ScriptConst.nSC_PARAM4:
                         n40 = QuestActionInfo.nParam1;
@@ -1962,7 +1952,6 @@ namespace GameSvr.Npc
                             List58[k].MakeGhost();
                         }
                         List58.Clear();
-                        List58 = null;
                         break;
                     case ScriptConst.nMOV:
                         MovData(PlayObject, QuestActionInfo);

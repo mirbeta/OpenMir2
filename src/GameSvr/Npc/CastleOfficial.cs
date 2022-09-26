@@ -33,13 +33,13 @@ namespace GameSvr.Npc
 
         protected override void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
-            var sText = string.Empty;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
             if (this.Castle == null)
             {
                 sMsg = "????";
                 return;
             }
+            string sText;
             switch (sVariable)
             {
                 case "$CASTLEGOLD":

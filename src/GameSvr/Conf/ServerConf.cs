@@ -12,8 +12,6 @@ namespace GameSvr.Conf
 
         public void LoadConfig()
         {
-            var nLoadInteger = 0;
-            var sLoadString = string.Empty;
             //数据库设置
             if (ReadString("DataBase", "ConnctionString", "") == "")
             {
@@ -194,7 +192,7 @@ namespace GameSvr.Conf
                 WriteString("Share", "NoticeDir", M2Share.Config.NoticeDir);
             }
             M2Share.Config.NoticeDir = ReadString("Share", "NoticeDir", M2Share.Config.NoticeDir);
-            sLoadString = ReadString("Share", "LogDir", "");
+            string sLoadString = ReadString("Share", "LogDir", "");
             if (sLoadString == "")
             {
                 WriteString("Share", "LogDir", M2Share.Config.LogDir);
@@ -414,7 +412,7 @@ namespace GameSvr.Conf
             if (ReadInteger("Setup", "TaoistHomeY", -1) < 0)
                 WriteInteger("Setup", "TaoistHomeY", M2Share.Config.TaoistHomeY);
             M2Share.Config.TaoistHomeY = Read<short>("Setup", "TaoistHomeY", M2Share.Config.TaoistHomeY);
-            nLoadInteger = ReadInteger("Setup", "HealthFillTime", -1);
+            int nLoadInteger = ReadInteger("Setup", "HealthFillTime", -1);
             if (nLoadInteger < 0)
                 WriteInteger("Setup", "HealthFillTime", M2Share.Config.HealthFillTime);
             else

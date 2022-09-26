@@ -33,7 +33,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var playSex = PlayGender.Man;
+            PlayGender playSex;
             if (!Enum.TryParse(nSex.ToString(), out playSex))
             {
                 return;

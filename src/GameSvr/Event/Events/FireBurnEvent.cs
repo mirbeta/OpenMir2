@@ -38,7 +38,6 @@ namespace GameSvr.Event.Events
                     }
                 }
                 BaseObjectList.Clear();
-                BaseObjectList = null;
             }
             base.Run();
         }

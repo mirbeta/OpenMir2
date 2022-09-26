@@ -1671,11 +1671,9 @@ namespace GameSvr.Npc
         private bool ConditionOfReviveSlave(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
-            int resultc = -1;
             string s18;
             FileInfo myFile;
             StringList LoadList;
-            string SLineText = string.Empty;
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
@@ -1693,7 +1691,6 @@ namespace GameSvr.Npc
                         s18 = HUtil32.GetValidStr3(s18, ref lvl, HUtil32.Backslash);
                         s18 = HUtil32.GetValidStr3(s18, ref lvlexp, HUtil32.Backslash);
                         // PlayObject.ReviveSlave(PetName,str_ToInt(lvl,0),str_ToInt(lvlexp,0),nslavecount,10 * 24 * 60 * 60);
-                        resultc = i;
                     }
                 }
                 if (LoadList.Count > 0)
@@ -2556,9 +2553,9 @@ namespace GameSvr.Npc
 
         private bool LargeData(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             int n14 = 0;
             int n18 = 0;
+            bool result;
             if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))
             {
                 result = n14 > n18;
@@ -2580,9 +2577,9 @@ namespace GameSvr.Npc
 
         private bool Smalldata(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             int n14 = 0;
             int n18 = 0;
+            bool result;
             if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))
             {
                 result = n14 < n18;
@@ -2604,11 +2601,11 @@ namespace GameSvr.Npc
 
         private bool EqualData(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             int n14 = 0;
             int n18 = 0;
             var s01 = string.Empty;
             var s02 = string.Empty;
+            bool result;
             if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))// 比较数值
             {
                 result = n14 == n18;

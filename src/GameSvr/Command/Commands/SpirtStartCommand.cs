@@ -19,7 +19,7 @@ namespace GameSvr.Command.Commands
             }
             var sParam1 = @Params.Length > 0 ? @Params[0] : "";
             var nTime = HUtil32.Str_ToInt(sParam1, -1);
-            var dwTime = 0;
+            int dwTime;
             if (nTime > 0)
             {
                 dwTime = nTime * 1000;

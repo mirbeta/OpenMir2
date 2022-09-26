@@ -188,7 +188,7 @@ namespace GameSvr.Player
                                     M2Share.CustomItemMgr.DelCustomItemName(userItem.MakeIndex, userItem.Index);
                                     userItem.Desc[13] = 0;
                                 }
-                                userItem = null; //物品加到NPC物品列表中了
+
                                 ItemList.RemoveAt(i);
                                 WeightChanged();
                             }
@@ -1130,7 +1130,7 @@ namespace GameSvr.Player
                 if (bo11)
                 {
                     UserItem userItem;
-                    StdItem stdItem = null;
+                    StdItem stdItem;
                     for (var i = 0; i < DealItemList.Count; i++)
                     {
                         userItem = DealItemList[i];

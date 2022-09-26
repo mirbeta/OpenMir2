@@ -133,11 +133,9 @@ namespace GameSvr.Magic
 
         public bool DoSpell(PlayObject PlayObject, UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject TargeTBaseObject)
         {
-            var result = false;
             short n14 = 0;
             short n18 = 0;
             int n1C;
-            ushort nPower = 0;
             short nAmuletIdx = 0;
             if (IsWarrSkill(UserMagic.MagIdx))
             {
@@ -159,6 +157,7 @@ namespace GameSvr.Magic
             {
                 return false;
             }
+            ushort nPower;
             switch (UserMagic.Magic.MagicId)
             {
                 case MagicConst.SKILL_FIREBALL:
@@ -682,7 +681,6 @@ namespace GameSvr.Magic
                 }
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             BaseObject.StatusArr[StatuStateConst.STATE_TRANSPARENT] = nHTime;
             BaseObject.CharStatus = BaseObject.GetCharStatus();
             BaseObject.StatusChanged();
@@ -927,7 +925,6 @@ namespace GameSvr.Magic
                 }
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             return result;
         }
 
@@ -968,7 +965,6 @@ namespace GameSvr.Magic
                 PlayObject.SendRefMsg(Grobal2.RM_10205, 0, BaseObject.CurrX, BaseObject.CurrY, 1, "");
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             return result;
         }
 
@@ -1008,7 +1004,6 @@ namespace GameSvr.Magic
                 }
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             return result;
         }
 
@@ -1108,7 +1103,6 @@ namespace GameSvr.Magic
                 }
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             return result;
         }
 
@@ -1136,7 +1130,6 @@ namespace GameSvr.Magic
                 }
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             return result;
         }
 
@@ -1171,7 +1164,7 @@ namespace GameSvr.Magic
                         result = 0;
                     }
                 }
-                BaseObjectList = null;
+
                 if (result > 0 && MagicEvent != null)
                 {
                     var HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX - 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
@@ -1204,7 +1197,6 @@ namespace GameSvr.Magic
                 {
                     if (MagicEvent == null) return result;
                     MagicEvent.BaseObjectList = null;
-                    MagicEvent = null;
                 }
             }
             return result;
@@ -1228,7 +1220,6 @@ namespace GameSvr.Magic
                 }
             }
             BaseObjectList.Clear();
-            BaseObjectList = null;
             return result;
         }
 

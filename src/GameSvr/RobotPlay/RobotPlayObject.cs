@@ -184,7 +184,6 @@ namespace GameSvr.RobotPlay
         /// <returns></returns>
         private string GetRandomConfigFileName(string sName, byte nType)
         {
-            string result = string.Empty;
             int nIndex;
             string sFileName;
             string Str;
@@ -194,6 +193,7 @@ namespace GameSvr.RobotPlay
                 Directory.CreateDirectory(m_sFilePath + "RobotIni");
             }
             sFileName = Path.Combine(m_sFilePath, "RobotIni", sName + ".txt");
+            string result;
             if (File.Exists(sFileName))
             {
                 result = sFileName;
@@ -641,7 +641,6 @@ namespace GameSvr.RobotPlay
         {
             bool result = false;
             UserItem UserItem = null;
-            StdItem StdItem = null;
             MapItem MapItem = Envir.GetItem(nX, nY);
             if (MapItem == null)
             {
@@ -672,7 +671,7 @@ namespace GameSvr.RobotPlay
             else
             {
                 // 捡物品
-                StdItem = M2Share.WorldEngine.GetStdItem(MapItem.UserItem.Index);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(MapItem.UserItem.Index);
                 if (StdItem != null)
                 {
                     if (Envir.DeleteFromMap(nX, nY, CellType.Item, MapItem) == 1)
@@ -1255,7 +1254,7 @@ namespace GameSvr.RobotPlay
                 {
                     return result;
                 }
-                Path = null;
+
                 result = true;
             }
             else
@@ -1312,7 +1311,6 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    Path = null;
                 }
             }
             m_RunPos.nAttackCount = 0;
