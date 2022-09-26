@@ -169,13 +169,14 @@ namespace GameSvr
             }
             _logger.LogInformation($"加载技能数据库成功({M2Share.WorldEngine.MagicList.Count})...");
             _logger.LogInformation("正在加载怪物刷新配置信息...");
-            nCode = M2Share.LocalDb.LoadMonGen();
+            var mongenCount = 0;
+            nCode = M2Share.LocalDb.LoadMonGen(out mongenCount);
             if (nCode < 0)
             {
                 _logger.LogInformation("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
                 return;
             }
-            _logger.LogInformation($"加载怪物刷新配置信息成功({M2Share.WorldEngine.MonGenList.Count})...");
+            _logger.LogInformation($"加载怪物刷新配置信息成功({mongenCount})...");
             _logger.LogInformation("初始化怪物处理线程...");
             M2Share.WorldEngine.InitializeMonster();
             _logger.LogInformation("初始化怪物处理完成...");

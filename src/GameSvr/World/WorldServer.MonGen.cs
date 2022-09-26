@@ -33,10 +33,6 @@ namespace GameSvr.World
 
         public void InitializeMonster()
         {
-            //todo 这里需要想办法归类怪物，把怪物名称一样的归类到一个列表，方便后续管理和维护怪物刷新列表
-
-            //线程ID -> 怪物名称-> 怪物刷新信息  结果大概是这样
-
             var monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,这样也能知道每一个怪要刷新几个和统计
 
             for (int i = 0; i < MonGenList.Count; i++)
