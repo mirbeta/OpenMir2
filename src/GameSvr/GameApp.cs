@@ -116,9 +116,13 @@ namespace GameSvr
 
         public void Initialize()
         {
+            _logger.LogInformation("读取游戏引擎数据配置文件...");
             M2Share.LoadConfig();
             LoadServerTable();
+            _logger.LogInformation("读取游戏引擎数据配置文件完成...");
+            _logger.LogInformation("读取游戏命令配置文件...");
             M2Share.CommandMgr.RegisterCommand();
+            _logger.LogInformation("读取游戏命令配置文件完成...");
             M2Share.LoadGameLogItemNameList();
             M2Share.LoadDenyIPAddrList();
             M2Share.LoadDenyAccountList();

@@ -53,6 +53,7 @@ namespace GameSvr
         private static StringConf StringConf;
         private static ExpsConf ExpConf;
         private static GlobalConf GlobalConf;
+        private static GameSettingConf GameSetting;
         /// <summary>
         /// 寻路
         /// </summary>
@@ -584,6 +585,7 @@ namespace GameSvr
             StringConf = new StringConf(Path.Combine(BasePath, ConfConst.sStringFileName));
             ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
             GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.sGlobalConfigFileName));
+            GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.sGameSettingFileName));
             Log = new MirLog();
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
@@ -2464,6 +2466,7 @@ namespace GameSvr
             StringConf.LoadString();
             ExpConf.LoadConfig();
             GlobalConf.LoadConfig();
+            GameSetting.LoadConfig();
         }
 
         public static string GetIPLocal(string sIPaddr)
