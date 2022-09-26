@@ -37,7 +37,7 @@ namespace GameSvr
             {
                 M2Share.DataServer.CheckConnected();
                 IdSrvClient.Instance.CheckConnected();
-                SnapsmClient.Instance.CheckConnected();
+                PlanesClient.Instance.CheckConnected();
                 _checkIntervalTime = HUtil32.GetTickCount();
             }
             if ((HUtil32.GetTickCount() - _saveIntervalTime) > 50000) //保存游戏变量等

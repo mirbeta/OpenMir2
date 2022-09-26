@@ -1207,11 +1207,11 @@ namespace GameSvr.World
         {
             if (M2Share.ServerIndex == 0)
             {
-                SnapsmService.Instance.SendServerSocket(nCode + "/" + nServerIdx + "/" + sMsg);
+                PlanesServer.Instance.SendServerSocket(nCode + "/" + nServerIdx + "/" + sMsg);
             }
             else
             {
-                SnapsmClient.Instance.SendSocket(nCode + "/" + nServerIdx + "/" + sMsg);
+                PlanesClient.Instance.SendSocket(nCode + "/" + nServerIdx + "/" + sMsg);
             }
         }
 

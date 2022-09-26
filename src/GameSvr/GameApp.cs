@@ -265,12 +265,12 @@ namespace GameSvr
                 _logger.LogInformation("游戏处理引擎初始化成功...");
                 if (M2Share.ServerIndex == 0)
                 {
-                    SnapsmService.Instance.StartSnapsServer();
+                    PlanesServer.Instance.StartSnapsServer();
                     _logger.LogDebug("当前服务器运行主节点模式...");
                 }
                 else
                 {
-                    SnapsmClient.Instance.ConnectMsgServer();
+                    PlanesClient.Instance.ConnectMsgServer();
                     _logger.LogInformation($"当前运行从节点模式...[{M2Share.Config.MsgSrvAddr}:{M2Share.Config.MsgSrvPort}]");
                 }
                 IdSrvClient.Instance.Initialize();
