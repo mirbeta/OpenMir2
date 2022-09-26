@@ -11,16 +11,26 @@ namespace GameSvr.Monster
         public string MapName;
         public int X;
         public int Y;
+        /// <summary>
+        /// 怪物名称
+        /// </summary>
         public string MonName;
+        /// <summary>
+        /// 范围
+        /// </summary>
         public int Range;
+        /// <summary>
+        /// 刷新数量
+        /// </summary>
         public int Count;
         public int ActiveCount;
+        /// <summary>
+        /// 刷新时间
+        /// </summary>
         public int ZenTime;
         public int MissionGenRate;
         /// <summary>
         /// 对象列表
-        /// Key:线程ID
-        /// Values:怪物列表
         /// </summary>
         public IList<BaseObject> CertList;
         public int CertCount;

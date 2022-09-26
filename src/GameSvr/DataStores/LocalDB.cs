@@ -508,12 +508,13 @@ namespace GameSvr.DataStores
         /// 读取怪物刷新配置信息
         /// </summary>
         /// <returns></returns>
-        public int LoadMonGen()
+        public int LoadMonGen(out int mongenCount)
         {
             var sLineText = string.Empty;
             var sData = string.Empty;
             int i;
             var result = 0;
+            mongenCount = 0;
             var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MonGen.txt");
             if (File.Exists(sFileName))
             {
@@ -593,6 +594,7 @@ namespace GameSvr.DataStores
                     M2Share.WorldEngine.MonGenInfoThreadMap.Add(0, new List<MonGenInfo>() { MonGenInfo });
                 }
                 result = 1;
+                mongenCount = M2Share.WorldEngine.MonGenList.Sum(x => x.Count);
             }
             return result;
         }
