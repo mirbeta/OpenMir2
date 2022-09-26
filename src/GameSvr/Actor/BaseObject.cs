@@ -2705,20 +2705,19 @@ namespace GameSvr.Actor
             }
         }
 
-        protected void DoDamageWeapon(int nWeaponDamage)
+        protected void DoDamageWeapon(ushort nWeaponDamage)
         {
             if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0)
             {
                 return;
             }
-
-            int nDura = UseItems[Grobal2.U_WEAPON].Dura;
+            ushort nDura = UseItems[Grobal2.U_WEAPON].Dura;
             var nDuraPoint = HUtil32.Round(nDura / 1.03);
             nDura -= nWeaponDamage;
             if (nDura <= 0)
             {
                 nDura = 0;
-                UseItems[Grobal2.U_WEAPON].Dura = (ushort)nDura;
+                UseItems[Grobal2.U_WEAPON].Dura = nDura;
                 if (Race == ActorRace.Play)
                 {
                     var playObject = this as PlayObject;
@@ -2738,18 +2737,16 @@ namespace GameSvr.Actor
             }
             else
             {
-                UseItems[Grobal2.U_WEAPON].Dura = (ushort)nDura;
+                UseItems[Grobal2.U_WEAPON].Dura = nDura;
             }
             if ((nDura / 1.03) != nDuraPoint)
             {
-                SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura,
-                    UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+                SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
         }
 
         protected byte GetCharColor(BaseObject baseObject)
         {
-            TUserCastle castle;
             var result = baseObject.GetNamecolor();
             if (baseObject.Race == ActorRace.Play)
             {
@@ -2759,7 +2756,6 @@ namespace GameSvr.Actor
                     {
                         result = M2Share.Config.btPKFlagNameColor;
                     }
-
                     var n10 = GetGuildRelation(this, baseObject);
                     switch (n10)
                     {
@@ -2771,7 +2767,6 @@ namespace GameSvr.Actor
                             result = M2Share.Config.WarGuildNameColor;
                             break;
                     }
-
                     if (baseObject.Envir.Flag.boFight3Zone)
                     {
                         if (MyGuild == baseObject.MyGuild)
@@ -2784,8 +2779,7 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-
-                castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
                 if ((castle != null) && castle.UnderWar && InFreePkArea && baseObject.InFreePkArea)
                 {
                     result = M2Share.Config.InFreePKAreaNameColor;
@@ -2794,7 +2788,6 @@ namespace GameSvr.Actor
                     {
                         return result;
                     }
-
                     if (castle.IsMasterGuild(MyGuild))
                     {
                         if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
@@ -2835,7 +2828,6 @@ namespace GameSvr.Actor
                 {
                     result = 0xF9;
                 }
-
                 if (baseObject.HolySeize) //不能走动模式(困魔咒)
                 {
                     result = 0x7D;
@@ -2851,18 +2843,15 @@ namespace GameSvr.Actor
                 {
                     result = 255;
                 }
-
                 if (baseObject.CrazyMode)
                 {
                     result = 0xF9;
                 }
-
                 if (baseObject.HolySeize)
                 {
                     result = 0x7D;
                 }
             }
-
             return result;
         }
 
@@ -3013,7 +3002,6 @@ namespace GameSvr.Actor
                     {
                         sendMessage.Buff = sMsg;
                     }
-
                     MsgList.Add(sendMessage);
                 }
             }
@@ -3086,12 +3074,10 @@ namespace GameSvr.Actor
                     {
                         sendMessage.BaseObject = baseObject;
                     }
-
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         sendMessage.Buff = sMsg;
                     }
-
                     MsgList.Add(sendMessage);
                 }
             }
@@ -3129,7 +3115,6 @@ namespace GameSvr.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-
             SendDelayMsg(baseObject.ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
         }
 
@@ -3147,7 +3132,6 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-
                     var sendMessage = MsgList[i];
                     if (sendMessage.wIdent == wIdent)
                     {
@@ -3155,16 +3139,13 @@ namespace GameSvr.Actor
                         Dispose(sendMessage);
                         continue;
                     }
-
                     i++;
                 }
             }
             finally
             {
-
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-
             SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
@@ -3201,7 +3182,6 @@ namespace GameSvr.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-
             SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
@@ -3303,13 +3283,11 @@ namespace GameSvr.Actor
                 M2Share.Log.Error(CharName + " SendRefMsg nil PEnvir ");
                 return;
             }
-
             if (ObMode || FixedHideMode)
             {
                 SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg); // 如果隐身模式则只发送信息给自己
                 return;
             }
-
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
@@ -3398,9 +3376,7 @@ namespace GameSvr.Actor
                     {
                         continue;
                     }
-
-                    if ((baseObject.Envir == Envir) && (Math.Abs(baseObject.CurrX - CurrX) < 11) &&
-                        (Math.Abs(baseObject.CurrY - CurrY) < 11))
+                    if ((baseObject.Envir == Envir) && (Math.Abs(baseObject.CurrX - CurrX) < 11) && (Math.Abs(baseObject.CurrY - CurrY) < 11))
                     {
                         if (baseObject.Race == ActorRace.Play)
                         {
@@ -3408,8 +3384,7 @@ namespace GameSvr.Actor
                         }
                         else if (baseObject.WantRefMsg)
                         {
-                            if ((wIdent == Grobal2.RM_STRUCK) || (wIdent == Grobal2.RM_HEAR) ||
-                                (wIdent == Grobal2.RM_DEATH))
+                            if ((wIdent == Grobal2.RM_STRUCK) || (wIdent == Grobal2.RM_HEAR) || (wIdent == Grobal2.RM_DEATH))
                             {
                                 baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                             }
@@ -3439,7 +3414,6 @@ namespace GameSvr.Actor
             {
                 result = HUtil32.MakeWord(0, DressEffType);
             }
-
             return result;
         }
 
@@ -3457,7 +3431,6 @@ namespace GameSvr.Actor
                         nDress = (byte)(stdItem.Shape * 2);
                     }
                 }
-
                 nDress += (byte)Gender;
                 byte nWeapon = 0;
                 if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Index > 0) // 武器
@@ -3468,12 +3441,10 @@ namespace GameSvr.Actor
                         nWeapon = (byte)(stdItem.Shape * 2);
                     }
                 }
-
                 nWeapon += (byte)Gender;
                 var nHair = (byte)(Hair * 2 + (byte)Gender);
                 return Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
             }
-
             var bo25 = baseObject != null && baseObject.BoRace;
             if (bo25)
             {
@@ -3532,7 +3503,7 @@ namespace GameSvr.Actor
 
         public void AbilCopyToWAbil()
         {
-            WAbil = Abil;
+            WAbil = (Ability)Abil.Clone();
         }
 
         public virtual void Initialize()
@@ -3809,7 +3780,6 @@ namespace GameSvr.Actor
             {
                 M2Share.Log.Error(sExceptionMsg);
             }
-
             return result;
         }
 
@@ -3845,7 +3815,6 @@ namespace GameSvr.Actor
                         break;
                 }
             }
-
             if (msgType == MsgType.Notice) // 如果发的是公告
             {
                 var str = string.Empty;
@@ -3860,9 +3829,7 @@ namespace GameSvr.Actor
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
-
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255),
-                        HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255), HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
                 }
                 else if (sMsg[0] == '<') // 聊天框彩色公告
                 {
@@ -3872,9 +3839,7 @@ namespace GameSvr.Actor
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
-
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255),
-                        HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
+                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255), HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
                 }
                 else if (sMsg[0] == '{') // 屏幕居中公告
                 {
@@ -3886,9 +3851,7 @@ namespace GameSvr.Actor
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
-
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(fColor, 255),
-                        HUtil32.Str_ToInt(bColor, 255), HUtil32.Str_ToInt(nTime, 0), sMsg);
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(fColor, 255), HUtil32.Str_ToInt(bColor, 255), HUtil32.Str_ToInt(nTime, 0), sMsg);
                 }
                 else
                 {
@@ -3899,27 +3862,21 @@ namespace GameSvr.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor,
-                                M2Share.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Green:
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor,
-                                M2Share.Config.GreenMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                             break;
                         case MsgColor.Blue:
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor,
-                                M2Share.Config.BlueMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                             break;
                     }
                 }
@@ -3929,25 +3886,20 @@ namespace GameSvr.Actor
                 switch (msgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor,
-                            M2Share.Config.GreenMsgBColor, 0, sMsg);
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor,
-                            M2Share.Config.BlueMsgBColor, 0, sMsg);
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (msgType == MsgType.Cust)
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor,
-                                M2Share.Config.CustMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor,
-                                M2Share.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                         }
-
                         break;
                 }
             }

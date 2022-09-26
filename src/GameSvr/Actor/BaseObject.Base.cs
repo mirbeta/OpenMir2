@@ -526,7 +526,6 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-
                 if ((HUtil32.GetTickCount() - VerifyTick) > 30 * 1000)
                 {
                     VerifyTick = HUtil32.GetTickCount();
@@ -742,7 +741,6 @@ namespace GameSvr.Actor
                 ExpHitter = null;
                 LastHiter = null;
             }
-
             if (CanReAlive)
             {
                 if ((MonGen != null) && (MonGen.Envir != Envir))
@@ -755,7 +753,6 @@ namespace GameSvr.Actor
                     MonGen = null;
                 }
             }
-
             IncSpell = 0;
             IncHealth = 0;
             IncHealing = 0;
@@ -1401,7 +1398,6 @@ namespace GameSvr.Actor
             int nRage;
             BaseObject TargetBaseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::Operate ";
-            var result = false;
             try
             {
                 switch (processMsg.wIdent)
@@ -1421,42 +1417,43 @@ namespace GameSvr.Actor
                             TargetBaseObject = M2Share.ActorMgr.Get(processMsg.BaseObject);
                             if (M2Share.Config.MonDelHptoExp)
                             {
-                                if (TargetBaseObject.Race == ActorRace.Play)
+                                switch (TargetBaseObject.Race)
                                 {
-                                    if (TargetBaseObject.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
-                                    {
-                                        if (!M2Share.GetNoHptoexpMonList(CharName))
-                                        {
-                                            if (TargetBaseObject.IsRobot)
-                                            {
-                                                (TargetBaseObject as RobotPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
-                                            }
-                                            else
-                                            {
-                                                (TargetBaseObject as PlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
-                                            }
-                                        }
-                                    }
-                                }
-                                if (TargetBaseObject.Race == ActorRace.PlayClone)
-                                {
-                                    if (TargetBaseObject.Master != null)
-                                    {
-                                        if (TargetBaseObject.Master.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    case ActorRace.Play:
+                                        if (TargetBaseObject.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                         {
                                             if (!M2Share.GetNoHptoexpMonList(CharName))
                                             {
-                                                if (TargetBaseObject.Master.IsRobot)
+                                                if (TargetBaseObject.IsRobot)
                                                 {
-                                                    (TargetBaseObject.Master as RobotPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    (TargetBaseObject as RobotPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
                                                 }
                                                 else
                                                 {
-                                                    (TargetBaseObject.Master as PlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    (TargetBaseObject as PlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
                                                 }
                                             }
                                         }
-                                    }
+                                        break;
+                                    case ActorRace.PlayClone:
+                                        if (TargetBaseObject.Master != null)
+                                        {
+                                            if (TargetBaseObject.Master.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                            {
+                                                if (!M2Share.GetNoHptoexpMonList(CharName))
+                                                {
+                                                    if (TargetBaseObject.Master.IsRobot)
+                                                    {
+                                                        (TargetBaseObject.Master as RobotPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    }
+                                                    else
+                                                    {
+                                                        (TargetBaseObject.Master as PlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        break;
                                 }
                             }
                             if (Race != ActorRace.Play)
@@ -1532,14 +1529,14 @@ namespace GameSvr.Actor
                         nTargetX = HUtil32.LoWord(processMsg.nParam1);
                         nTargetY = HUtil32.HiWord(processMsg.nParam1);
                         nRage = processMsg.nParam2;
-                        TargetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        TargetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if (TargetBaseObject != null)
                         {
                             TargetBaseObject.CharPushed((byte)nPower, nRage);
                         }
                         break;
                     case Grobal2.RM_POISON:
-                        TargetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
+                        TargetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam2);
                         if (TargetBaseObject != null)
                         {
                             if (IsProperTarget(TargetBaseObject))
@@ -1574,7 +1571,7 @@ namespace GameSvr.Actor
                 M2Share.Log.Error(sExceptionMsg);
                 M2Share.Log.Error(e.Message);
             }
-            return result;
+            return false;
         }
 
         public virtual string GetShowName()
