@@ -235,19 +235,18 @@ namespace GameSvr.Actor
                 {
                     if (!Death && Race == ActorRace.Play || Race == ActorRace.PlayClone)
                     {
-                        int nCount;
-                        int dCount;
-                        int bCount;
-                        StdItem StdItem;
-                        // 加HP
-                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
+                        StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
+                        if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
                         {
-                            IncHpStoneTime = HUtil32.GetTickCount();
-                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
-                            if ((StdItem.StdMode == 7) && (StdItem.Shape == 1 || StdItem.Shape == 3))
+                            int nCount;
+                            int dCount;
+                            int bCount;
+                            // 加HP
+                            if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
                             {
+                                IncHpStoneTime = HUtil32.GetTickCount();
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
-                                bCount = Convert.ToInt32(nCount / M2Share.Config.HPStoneAddRate);
+                                bCount = nCount / M2Share.Config.HPStoneAddRate;
                                 dCount = WAbil.MaxHP - WAbil.HP;
                                 if (dCount > bCount)
                                 {
@@ -281,16 +280,12 @@ namespace GameSvr.Actor
                                     UseItems[Grobal2.U_CHARM].Index = 0;
                                 }
                             }
-                        }
-                        // 加MP
-                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
-                        {
-                            IncMpStoneTime = HUtil32.GetTickCount();
-                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
-                            if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
+                            // 加MP
+                            if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
                             {
+                                IncMpStoneTime = HUtil32.GetTickCount();
                                 nCount = UseItems[Grobal2.U_CHARM].Dura * 10;
-                                bCount = Convert.ToInt32(nCount / M2Share.Config.MPStoneAddRate);
+                                bCount = nCount / M2Share.Config.MPStoneAddRate;
                                 dCount = WAbil.MaxMP - WAbil.MP;
                                 if (dCount > bCount)
                                 {
