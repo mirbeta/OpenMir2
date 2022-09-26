@@ -40,9 +40,9 @@ namespace GameSvr.Maps
     /// </summary>
     public class GateObject : EntityId
     {
-        public Envirnoment DEnvir;
-        public short nDMapX;
-        public short nDMapY;
+        public Envirnoment Envir;
+        public short nX;
+        public short nY;
         public bool boFlag;
     }
 

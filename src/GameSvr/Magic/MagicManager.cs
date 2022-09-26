@@ -153,7 +153,7 @@ namespace GameSvr.Magic
             var boTrain = false;
             var boSpellFail = false;
             var boSpellFire = true;
-            if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0 && UserMagic.Magic.MagicId > 40)
+            if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0)
             {
                 return false;
             }

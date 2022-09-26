@@ -878,12 +878,11 @@ namespace GameSvr
             {
                 return sName;
             }
-            for (var i = 0; i < sName.Length - 1; i++)
+            for (var i = 0; i < sName.Length; i++)
             {
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {
                     result = sName.Substring(0, i);
-                    string sC = sName.Substring(i, sName.Length - i);
                     bo11 = true;
                     break;
                 }
@@ -893,11 +892,6 @@ namespace GameSvr
                 result = sName;
             }
             return result;
-        }
-
-        public static byte sub_4B2F80(int nDir, int nRage)
-        {
-            return (byte)((nDir + nRage) % 8);
         }
 
         /// <summary>
