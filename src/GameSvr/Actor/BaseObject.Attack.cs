@@ -13,7 +13,6 @@ namespace GameSvr.Actor
     {
         protected virtual void AttackDir(BaseObject TargeBaseObject, short wHitMode, byte nDir)
         {
-            BaseObject AttackTarget;
             const string sExceptionMsg = "[Exception] TBaseObject::AttackDir";
             try
             {
@@ -54,6 +53,7 @@ namespace GameSvr.Actor
                         break;
                 }
                 Direction = nDir;
+                BaseObject AttackTarget;
                 if (TargeBaseObject == null)
                 {
                     AttackTarget = GetPoseCreate();
@@ -150,7 +150,7 @@ namespace GameSvr.Actor
             try
             {
                 bool bo21 = false;
-                int nWeaponDamage = 0;
+                ushort nWeaponDamage = 0;
                 ushort nPower = 0;
                 int nSecPwr = 0;
                 if (AttackTarget != null)
@@ -286,7 +286,7 @@ namespace GameSvr.Actor
                 if (nPower > 0)
                 {
                     nPower = AttackTarget.GetHitStruckDamage(this, nPower);
-                    nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong;
+                    nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
                 }
                 if (nPower > 0)
                 {
@@ -308,7 +308,7 @@ namespace GameSvr.Actor
                     }
                     if (Race == ActorRace.Play)
                     {
-                        UserMagic attackMagic = null;
+                        UserMagic attackMagic;
                         if (MagicArr[MagicConst.SKILL_ILKWANG] != null)
                         {
                             attackMagic = GetAttrackMagic(MagicConst.SKILL_ILKWANG);
@@ -424,54 +424,55 @@ namespace GameSvr.Actor
                     result = true;
                     if (M2Share.Config.MonDelHptoExp)
                     {
-                        if (Race == ActorRace.Play)
+                        switch (Race)
                         {
-                            if (this.IsRobot)
-                            {
-                                if ((this as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                            case ActorRace.Play:
+                                if (this.IsRobot)
                                 {
-                                    if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
-                                    {
-                                        (this as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if ((this as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
-                                {
-                                    if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
-                                    {
-                                        (this as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
-                                    }
-                                }
-                            }
-                        }
-                        if (Race == ActorRace.PlayClone)
-                        {
-                            if (Master != null)
-                            {
-                                if (Master.IsRobot)
-                                {
-                                    if ((Master as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if ((this as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
-                                            (Master as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                            (this as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    if ((Master as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if ((this as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
                                         {
-                                            (Master as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                            (this as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                         }
                                     }
                                 }
-                            }
+                                break;
+                            case ActorRace.PlayClone:
+                                if (Master != null)
+                                {
+                                    if (Master.IsRobot)
+                                    {
+                                        if ((Master as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                        {
+                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
+                                            {
+                                                (Master as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ((Master as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                        {
+                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
+                                            {
+                                                (Master as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -485,7 +486,7 @@ namespace GameSvr.Actor
                 }
                 if (AttackTarget.Race != ActorRace.Play)
                 {
-                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, (short)nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "");
+                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "");
                 }
             }
             catch (Exception e)

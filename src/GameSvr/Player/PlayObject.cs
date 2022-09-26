@@ -1662,7 +1662,7 @@ namespace GameSvr.Player
                             }
                         }
                         s1C = "1";
-                        DoDamageWeapon(M2Share.RandomNumber.Random(15) + 5);
+                        DoDamageWeapon((ushort)(M2Share.RandomNumber.Random(15) + 5));
                         result = true;
                     }
                 }
