@@ -210,7 +210,7 @@ namespace GameSvr.Actor
         /// </summary>
         protected virtual void SearchTarget()
         {
-            BaseObject BaseObject18 = null;
+            BaseObject searchTarget = null;
             var n10 = 999;
             for (var i = 0; i < this.VisibleActors.Count; i++)
             {
@@ -228,37 +228,14 @@ namespace GameSvr.Actor
                         if (nC < n10)
                         {
                             n10 = nC;
-                            BaseObject18 = baseObject;
+                            searchTarget = baseObject;
                         }
                     }
                 }
             }
-            if (BaseObject18 != null)
+            if (searchTarget != null)
             {
-                this.SetTargetCreat(BaseObject18);
-            }
-        }
-
-        protected void sub_4C959C()
-        {
-            BaseObject Creat = null;
-            var n10 = 999;
-            for (var i = 0; i < this.VisibleActors.Count; i++)
-            {
-                var BaseObject = this.VisibleActors[i].BaseObject;
-                if (BaseObject.Death)
-                {
-                    continue;
-                }
-                if (!this.IsProperTarget(BaseObject)) continue;
-                var nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
-                if (nC >= n10) continue;
-                n10 = nC;
-                Creat = BaseObject;
-            }
-            if (Creat != null)
-            {
-                this.SetTargetCreat(Creat);
+                this.SetTargetCreat(searchTarget);
             }
         }
 

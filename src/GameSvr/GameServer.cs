@@ -52,11 +52,11 @@ namespace GameSvr
             ProcessGameRun();
             if (M2Share.ServerIndex == 0)
             {
-                SnapsmService.Instance.Run();
+                PlanesServer.Instance.Run();
             }
             else
             {
-                SnapsmClient.Instance.Run();
+                PlanesClient.Instance.Run();
             }
         }
 

@@ -6,19 +6,19 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace GameSvr.Snaps
 {
     /// <summary>
-    /// 镜像服务器
+    /// 位面服务器
     /// </summary>
-    public class SnapsmService
+    public class PlanesServer
     {
         private readonly TServerMsgInfo[] m_SrvArray;
         private readonly SocketServer _msgServer;
-        private readonly SpapsMessage _groupMessageHandle;
+        private readonly PlanesMessage _groupMessageHandle;
 
-        private static SnapsmService instance;
+        private static PlanesServer instance;
 
-        public static SnapsmService Instance => instance ??= new SnapsmService();
+        public static PlanesServer Instance => instance ??= new PlanesServer();
 
-        private SnapsmService()
+        private PlanesServer()
         {
             m_SrvArray = new TServerMsgInfo[10];
             _msgServer = new SocketServer(10, 512);
@@ -26,7 +26,7 @@ namespace GameSvr.Snaps
             _msgServer.OnClientDisconnect += MsgServerClientDisconnect;
             _msgServer.OnClientRead += MsgServerClientRead;
             _msgServer.Init();
-            _groupMessageHandle = new SpapsMessage();
+            _groupMessageHandle = new PlanesMessage();
         }
 
         public void StartSnapsServer()

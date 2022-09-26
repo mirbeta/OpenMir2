@@ -28,10 +28,33 @@ namespace GameSvr.Monster.Monsters
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
-                    sub_4C959C();
+                    GasMothAttack();
                 }
             }
             base.Run();
+        }
+
+        protected void GasMothAttack()
+        {
+            BaseObject Creat = null;
+            var n10 = 999;
+            for (var i = 0; i < this.VisibleActors.Count; i++)
+            {
+                var BaseObject = this.VisibleActors[i].BaseObject;
+                if (BaseObject.Death)
+                {
+                    continue;
+                }
+                if (!this.IsProperTarget(BaseObject)) continue;
+                var nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
+                if (nC >= n10) continue;
+                n10 = nC;
+                Creat = BaseObject;
+            }
+            if (Creat != null)
+            {
+                this.SetTargetCreat(Creat);
+            }
         }
     }
 }

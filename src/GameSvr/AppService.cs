@@ -176,7 +176,7 @@ namespace GameSvr
                                         playerCount--;
                                         continue;
                                     }
-                                    playObject.ChangeSnapsServer(sIPaddr, nPort);
+                                    playObject.ChangePlanesServer(sIPaddr, nPort);
                                     playerCount--;
                                 }
                                 break;
