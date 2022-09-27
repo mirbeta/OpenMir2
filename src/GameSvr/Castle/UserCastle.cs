@@ -24,7 +24,7 @@ namespace GameSvr.Castle
         /// <summary>
         /// 攻城列表
         /// </summary>
-        private readonly IList<TAttackerInfo> AttackWarList;
+        private readonly IList<AttackerInfo> AttackWarList;
         /// <summary>
         /// 是否显示攻城战役结束消息
         /// </summary>
@@ -141,7 +141,7 @@ namespace GameSvr.Castle
             IsStartWar = false;
             UnderWar = false;
             ShowOverMsg = false;
-            AttackWarList = new List<TAttackerInfo>();
+            AttackWarList = new List<AttackerInfo>();
             AttackGuildList = new List<GuildInfo>();
             SaveTick = 0;
             WarRangeX = M2Share.Config.CastleWarRangeX;
@@ -303,7 +303,7 @@ namespace GameSvr.Castle
                 var s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { " ", "\t" });
                 var guild = M2Share.GuildMgr.FindGuild(guildName);
                 if (guild == null) continue;
-                var attackerInfo = new TAttackerInfo();
+                var attackerInfo = new AttackerInfo();
                 HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
                 if (DateTime.TryParse(s20, out var time))
                 {
@@ -648,7 +648,7 @@ namespace GameSvr.Castle
 
         public string GetAttackWarList()
         {
-            TAttackerInfo AttackerInfo;
+            AttackerInfo AttackerInfo;
             var result = string.Empty;
             short wYear = 0;
             short wMonth = 0;
@@ -906,7 +906,7 @@ namespace GameSvr.Castle
         public bool AddAttackerInfo(GuildInfo Guild)
         {
             if (InAttackerList(Guild)) return false;
-            var AttackerInfo = new TAttackerInfo();
+            var AttackerInfo = new AttackerInfo();
             AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.Config.StartCastleWarDays);
             AttackerInfo.sGuildName = Guild.sGuildName;
             AttackerInfo.Guild = Guild;
