@@ -455,12 +455,15 @@ namespace GameSvr.Castle
             {
                 return false;
             }
-            if (envir == CastleEnvir && Math.Abs(HomeX - nX) < WarRangeX &&
-                Math.Abs(HomeY - nY) < WarRangeY) return true;
+            if (envir == CastleEnvir && Math.Abs(HomeX - nX) < WarRangeX && Math.Abs(HomeY - nY) < WarRangeY) return true;
             if (envir == PalaceEnvir || envir == SecretEnvir) return true;
-            for (var i = 0; i < EnvirList.Count; i++) // 增加取得城堡所有地图列表
-                if (EnvirList[i] == envir.MapName)
+            for (var i = 0; i < EnvirList.Count; i++)// 增加取得城堡所有地图列表
+            {
+                if (string.Compare(EnvirList[i], envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
+                {
                     return true;
+                }
+            }
             return false;
         }
 
