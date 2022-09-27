@@ -1086,16 +1086,16 @@ namespace GameSvr.Player
             {
                 for (var cY = nY - 1; cY <= nY + 1; cY++)
                 {
-                    var cellsuccess = false;
-                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellsuccess);
-                    if (cellsuccess && cellInfo.IsAvailable)
+                    var cellSuccess = false;
+                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
+                    if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
-                            var OSObject = cellInfo.ObjList[i];
-                            if (OSObject.ActorObject)
+                            var cellObject = cellInfo.ObjList[i];
+                            if (cellObject.ActorObject)
                             {
-                                var baseObject = M2Share.ActorMgr.Get(OSObject.CellObjId);
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
                                     if (!baseObject.Ghost && baseObject == TargeBaseObject)

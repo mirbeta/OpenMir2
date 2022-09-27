@@ -22,9 +22,9 @@ namespace GameSvr.Command.Commands
                 var Map = M2Share.MapMgr.FindMap(sMap);
                 if (Map != null)
                 {
-                    var cellsuccess = false;
-                    var cellInfo = Map.GetCellInfo(nX, nY, ref cellsuccess);
-                    if (cellsuccess)
+                    var cellSuccess = false;
+                    var cellInfo = Map.GetCellInfo(nX, nY, ref cellSuccess);
+                    if (cellSuccess)
                     {
                         playObject.SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);
                         if (cellInfo.IsAvailable)
