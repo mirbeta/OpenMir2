@@ -23,7 +23,7 @@ namespace GameSvr.Castle
         public const string SabukWFileName = "SabukW.txt";
     }
 
-    public class TAttackerInfo
+    public class AttackerInfo
     {
         public DateTime AttackDate;
         public string sGuildName;
