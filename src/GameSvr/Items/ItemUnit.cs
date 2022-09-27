@@ -145,8 +145,8 @@ namespace GameSvr.Items
             if ((new System.Random(3)).Next() < 2)
             {
                 var n = (1 + up) * 2000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
             up = GetUpgrade(12, 15);
             if ((new System.Random(10)).Next() == 0)
@@ -189,8 +189,8 @@ namespace GameSvr.Items
             if ((new System.Random(8)).Next() < 6)
             {
                 n = (1 + up) * 2000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
@@ -228,8 +228,8 @@ namespace GameSvr.Items
             if ((new System.Random(20)).Next() < 15)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
@@ -267,8 +267,8 @@ namespace GameSvr.Items
             if ((new System.Random(20)).Next() < 15)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
@@ -306,8 +306,8 @@ namespace GameSvr.Items
             if ((new System.Random(4)).Next() < 3)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
@@ -335,8 +335,8 @@ namespace GameSvr.Items
             if ((new System.Random(4)).Next() < 3)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
@@ -374,8 +374,8 @@ namespace GameSvr.Items
             if ((new System.Random(4)).Next() < 3)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
@@ -413,8 +413,8 @@ namespace GameSvr.Items
             if ((new System.Random(4)).Next() < 3)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
@@ -458,8 +458,8 @@ namespace GameSvr.Items
             if (up > 0)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
             if ((new System.Random(30)).Next() == 0)
             {
@@ -524,8 +524,8 @@ namespace GameSvr.Items
             if (up > 0)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
             if ((new System.Random(30)).Next() == 0)
             {
@@ -596,8 +596,8 @@ namespace GameSvr.Items
             if (up > 0)
             {
                 n = (1 + up) * 1000;
-                pu.DuraMax = (ushort)HUtil32._MIN(65000, ((int)pu.DuraMax) + n);
-                pu.Dura = (ushort)HUtil32._MIN(65000, ((int)pu.Dura) + n);
+                pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
+                pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
             if ((new System.Random(30)).Next() == 0)
             {

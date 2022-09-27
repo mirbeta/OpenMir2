@@ -12,7 +12,7 @@ namespace SystemModule
         public const string Backslash = "/";
         public static readonly string[] Separator =  { " ", ",", "\t" };
         public static readonly UserItem DelfautItem = new UserItem();
-        public static readonly TMagicRcd DetailtMagicRcd = new TMagicRcd();
+        public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
 
         /// <summary>
         /// 根据GUID获取唯一数字序列

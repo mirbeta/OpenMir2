@@ -1827,7 +1827,7 @@ namespace GameSvr.Actor
                 {
                     chp = Abil.MaxHP;
                     WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(Abil.DC));
-                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (int)Math.Abs(HUtil32.HiByte(WAbil.DC) + (2 * SlaveExpLevel)));
+                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) + (2 * SlaveExpLevel)));
                     chp = (ushort)(chp + Math.Round(Abil.MaxHP * 0.15) * SlaveExpLevel);
                     WAbil.MaxHP = (ushort)HUtil32._MIN(Math.Abs(Abil.MaxHP + 60 * SlaveExpLevel), chp);
                     WAbil.MAC = 0;

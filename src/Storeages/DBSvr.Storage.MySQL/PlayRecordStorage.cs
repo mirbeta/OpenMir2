@@ -51,7 +51,7 @@ namespace DBSvr.Storage.MySQL
             {
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
-                command.CommandText = "select * from TBL_HUMRECORD";
+                command.CommandText = "select * from tbl_character_index";
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -145,7 +145,7 @@ namespace DBSvr.Storage.MySQL
                 return default;
             }
             var command = new MySqlCommand();
-            command.CommandText = "select * from TBL_HUMRECORD where Id=@Id";
+            command.CommandText = "select * from tbl_character_index where Id=@Id";
             command.Connection = dbConnection;
             command.Parameters.AddWithValue("@Id", nIndex);
             var humRecord = new HumRecordData();
@@ -270,7 +270,7 @@ namespace DBSvr.Storage.MySQL
                 if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
                 {
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO TBL_HUMRECORD (FLD_Account, FLD_CharName, FLD_SelectID, FLD_IsDeleted, FLD_CreateDate, FLD_ModifyDate) VALUES ");
+                    strSql.AppendLine("INSERT INTO tbl_character_index (FLD_Account, FLD_CharName, FLD_SelectID, FLD_IsDeleted, FLD_CreateDate, FLD_ModifyDate) VALUES ");
                     strSql.AppendLine("(@FLD_Account, @FLD_CharName, @FLD_SelectID, @FLD_IsDeleted, now(), now());");
                     var command = new MySqlCommand();
                     command.Connection = dbConnection;
@@ -288,7 +288,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     HumRecord.Header.Deleted = false;
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE TBL_HUMRECORD SET FLD_Account = @FLD_Account, FLD_CharName = @FLD_CharName, FLD_SelectID = @FLD_SelectID, FLD_IsDeleted = @FLD_IsDeleted, ");
+                    strSql.AppendLine("UPDATE tbl_character_index SET FLD_Account = @FLD_Account, FLD_CharName = @FLD_CharName, FLD_SelectID = @FLD_SelectID, FLD_IsDeleted = @FLD_IsDeleted, ");
                     strSql.AppendLine(" FLD_ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
                     command.Connection = dbConnection;

@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
-    public class TMagicRcd : Packets
+    public class MagicRcd : Packets
     {
         /// <summary>
         /// 技能ID
