@@ -3248,16 +3248,16 @@ namespace GameSvr.Actor
                 {
                     for (var y = nStartY; y <= nEndY; y++)
                     {
-                        var cellsuccess = false;
-                        var cellInfo = envir.GetCellInfo(x, y, ref cellsuccess);
-                        if (cellsuccess && cellInfo.IsAvailable)
+                        var cellSuccess = false;
+                        var cellInfo = envir.GetCellInfo(x, y, ref cellSuccess);
+                        if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
-                                var osObject = cellInfo.ObjList[i];
-                                if (osObject != null && osObject.ActorObject)
+                                var cellObject = cellInfo.ObjList[i];
+                                if (cellObject != null && cellObject.ActorObject)
                                 {
-                                    var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                    var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
                                     {
                                         rList.Add(baseObject);
@@ -3304,22 +3304,22 @@ namespace GameSvr.Actor
                     {
                         for (var nCy = nLy; nCy <= nHy; nCy++)
                         {
-                            var cellsuccess = false;
-                            var cellInfo = Envir.GetCellInfo(nCx, nCy, ref cellsuccess);
-                            if (cellsuccess)
+                            var cellSuccess = false;
+                            var cellInfo = Envir.GetCellInfo(nCx, nCy, ref cellSuccess);
+                            if (cellSuccess)
                             {
                                 if (cellInfo.IsAvailable)
                                 {
                                     for (var i = 0; i < cellInfo.Count; i++)
                                     {
-                                        var osObject = cellInfo.ObjList[i];
-                                        if (osObject != null)
+                                        var cellObject = cellInfo.ObjList[i];
+                                        if (cellObject != null)
                                         {
-                                            if (osObject.ActorObject)
+                                            if (cellObject.ActorObject)
                                             {
-                                                if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
+                                                if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                                 {
-                                                    cellInfo.Remove(osObject);
+                                                    cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Dispose();
@@ -3330,7 +3330,7 @@ namespace GameSvr.Actor
                                                 {
                                                     try
                                                     {
-                                                        baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                                        baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                                         if ((baseObject != null) && !baseObject.Ghost)
                                                         {
                                                             if (baseObject.Race == ActorRace.Play)
@@ -3350,7 +3350,7 @@ namespace GameSvr.Actor
                                                     }
                                                     catch (Exception e)
                                                     {
-                                                        cellInfo.Remove(osObject);
+                                                        cellInfo.Remove(cellObject);
                                                         if (cellInfo.Count <= 0)
                                                         {
                                                             cellInfo.Dispose();
@@ -3594,21 +3594,21 @@ namespace GameSvr.Actor
             }
             try
             {
-                var cellsuccess = false;
-                var cellInfo = Envir.GetCellInfo(CurrX, CurrY, ref cellsuccess);
-                if (cellsuccess && cellInfo.IsAvailable)
+                var cellSuccess = false;
+                var cellInfo = Envir.GetCellInfo(CurrX, CurrY, ref cellSuccess);
+                if (cellSuccess && cellInfo.IsAvailable)
                 {
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
-                        var osObject = cellInfo.ObjList[i];
-                        if (osObject == null)
+                        var cellObject = cellInfo.ObjList[i];
+                        if (cellObject == null)
                         {
                             continue;
                         }
-                        switch (osObject.CellType)
+                        switch (cellObject.CellType)
                         {
                             case CellType.Route:
-                                var gateObj = (GateObject)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                var gateObj = (GateObject)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                 if (gateObj != null)
                                 {
                                     if (Race == ActorRace.Play)
@@ -3649,10 +3649,10 @@ namespace GameSvr.Actor
                             case CellType.Event:
                                 {
                                     MirEvent mapEvent = null;
-                                    var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                    var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                     if (owinEvent.OwnBaseObject != null)
                                     {
-                                        mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                        mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                     }
                                     if (mapEvent != null)
                                     {
@@ -3710,9 +3710,9 @@ namespace GameSvr.Actor
                         return false;
                     }
                 }
-                var cellsuccess = false;
-                envir.GetCellInfo(nDMapX, nDMapY, ref cellsuccess);
-                if (!cellsuccess)
+                var cellSuccess = false;
+                envir.GetCellInfo(nDMapX, nDMapY, ref cellSuccess);
+                if (!cellSuccess)
                 {
                     return false;
                 }
@@ -5132,16 +5132,16 @@ namespace GameSvr.Actor
             {
                 for (var cY = nStartY; cY <= nEndY; cY++)
                 {
-                    var cellsuccess = false;
-                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellsuccess);
-                    if (cellsuccess && cellInfo.IsAvailable)
+                    var cellSuccess = false;
+                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
+                    if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (var k = 0; k < cellInfo.Count; k++)
                         {
-                            var osObject = cellInfo.ObjList[k];
-                            if ((osObject != null) && (osObject.CellType == CellType.Play || osObject.CellType == CellType.Monster))
+                            var cellObject = cellInfo.ObjList[k];
+                            if ((cellObject != null) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
                             {
-                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if ((baseObject != null) && (!baseObject.Ghost))
                                 {
                                     if (IsProperFriend(baseObject))

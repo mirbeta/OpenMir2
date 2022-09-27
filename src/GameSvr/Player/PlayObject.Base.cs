@@ -1280,9 +1280,9 @@ namespace GameSvr.Player
                 {
                     for (var nY = nStartY; nY <= nEndY; nY++)
                     {
-                        var cellsuccess = false;
-                        var cellInfo = Envir.GetCellInfo(nX, nY, ref cellsuccess);
-                        if (cellsuccess && cellInfo.IsAvailable)
+                        var cellSuccess = false;
+                        var cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
+                        if (cellSuccess && cellInfo.IsAvailable)
                         {
                             var nIdx = 0;
                             while (true)
@@ -1291,14 +1291,14 @@ namespace GameSvr.Player
                                 {
                                     break;
                                 }
-                                var osObject = cellInfo.ObjList[nIdx];
-                                if (osObject != null)
+                                var cellObject = cellInfo.ObjList[nIdx];
+                                if (cellObject != null)
                                 {
-                                    if (osObject.ActorObject)
+                                    if (cellObject.ActorObject)
                                     {
-                                        if ((HUtil32.GetTickCount() - osObject.AddTime) >= 60 * 1000)
+                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                         {
-                                            cellInfo.Remove(osObject);
+                                            cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
@@ -1306,7 +1306,7 @@ namespace GameSvr.Player
                                             cellInfo.Dispose();
                                             break;
                                         }
-                                        BaseObject BaseObject = M2Share.ActorMgr.Get(osObject.CellObjId);
+                                        BaseObject BaseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                         if (BaseObject != null && !BaseObject.Invisible)
                                         {
                                             if (!BaseObject.Ghost && !BaseObject.FixedHideMode && !BaseObject.ObMode)
@@ -1324,11 +1324,11 @@ namespace GameSvr.Player
                                     }
                                     if (Race == ActorRace.Play)
                                     {
-                                        if (osObject.CellType == CellType.Item)
+                                        if (cellObject.CellType == CellType.Item)
                                         {
-                                            if ((HUtil32.GetTickCount() - osObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
+                                            if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
-                                                cellInfo.Remove(osObject);
+                                                cellInfo.Remove(cellObject);
                                                 if (cellInfo.Count > 0)
                                                 {
                                                     continue;
@@ -1336,7 +1336,7 @@ namespace GameSvr.Player
                                                 cellInfo.Dispose();
                                                 break;
                                             }
-                                            var mapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId); ;
+                                            var mapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId); ;
                                             UpdateVisibleItem(nX, nY, mapItem);
                                             if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
                                             {
@@ -1364,9 +1364,9 @@ namespace GameSvr.Player
                                                 }
                                             }
                                         }
-                                        if (osObject.CellType == CellType.Event)
+                                        if (cellObject.CellType == CellType.Event)
                                         {
-                                            MirEvent MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                            MirEvent MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                             if (MapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(nX, nY, MapEvent);

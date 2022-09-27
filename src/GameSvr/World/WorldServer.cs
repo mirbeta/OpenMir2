@@ -1820,16 +1820,16 @@ namespace GameSvr.World
             {
                 for (var n14 = n20; n14 <= n28; n14++)
                 {
-                    var cellsuccess = false;
-                    var cellInfo = envir.GetCellInfo(n10, n14, ref cellsuccess);
-                    if (cellsuccess && cellInfo.IsAvailable)
+                    var cellSuccess = false;
+                    var cellInfo = envir.GetCellInfo(n10, n14, ref cellSuccess);
+                    if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
-                            var osObject = cellInfo.ObjList[i];
-                            if (osObject != null && osObject.CellType == CellType.Monster || osObject.CellType == CellType.Play)
+                            var cellObject = cellInfo.ObjList[i];
+                            if (cellObject != null && cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play)
                             {
-                                var baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");

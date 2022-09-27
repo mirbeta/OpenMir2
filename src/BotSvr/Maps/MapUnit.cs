@@ -8,7 +8,7 @@ namespace BotSvr.Maps
         public bool TCellActor;
     }
 
-    public struct TPathcellsuccess
+    public struct TPathcellSuccess
     {
         /// <summary>
         /// 离起点的距离

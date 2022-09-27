@@ -469,7 +469,7 @@ namespace GameSvr.RobotPlay
         {
             int nIdx;
             MapCellInfo cellInfo;
-            CellObject osObject = null;
+            CellObject cellObject = null;
             BaseObject baseObject;
             MirEvent MapEvent;
             VisibleFlag nVisibleFlag;
@@ -496,9 +496,9 @@ namespace GameSvr.RobotPlay
                 {
                     for (var nY = nStartY; nY <= nEndY; nY++)
                     {
-                        var cellsuccess = false;
-                        cellInfo = Envir.GetCellInfo(nX, nY, ref cellsuccess);
-                        if (cellsuccess && cellInfo.IsAvailable)
+                        var cellSuccess = false;
+                        cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
+                        if (cellSuccess && cellInfo.IsAvailable)
                         {
                             nIdx = 0;
                             while (cellInfo.Count > 0)
@@ -522,25 +522,25 @@ namespace GameSvr.RobotPlay
                                 }
                                 try
                                 {
-                                    osObject = cellInfo.ObjList[nIdx];
+                                    cellObject = cellInfo.ObjList[nIdx];
                                 }
                                 catch
                                 {
-                                    cellInfo.Remove(osObject);
+                                    cellInfo.Remove(cellObject);
                                     continue;
                                 }
-                                if (osObject != null)
+                                if (cellObject != null)
                                 {
-                                    if (!osObject.Dispose)
+                                    if (!cellObject.Dispose)
                                     {
-                                        switch (osObject.CellType)
+                                        switch (cellObject.CellType)
                                         {
                                             case CellType.Play:
                                             case CellType.Monster:
-                                                if (HUtil32.GetTickCount() - osObject.AddTime >= 60000)
+                                                if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000)
                                                 {
-                                                    osObject.Dispose = true;
-                                                    cellInfo.Remove(osObject);
+                                                    cellObject.Dispose = true;
+                                                    cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Dispose();
@@ -548,7 +548,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                baseObject = M2Share.ActorMgr.Get(osObject.CellObjId); ;
+                                                baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                                                 if (baseObject != null)
                                                 {
                                                     if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -563,17 +563,17 @@ namespace GameSvr.RobotPlay
                                             case CellType.Item:
                                                 if (Race == ActorRace.Play)
                                                 {
-                                                    if (HUtil32.GetTickCount() - osObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
+                                                    if (HUtil32.GetTickCount() - cellObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
                                                     {
-                                                        if (osObject.CellObjId > 0)
+                                                        if (cellObject.CellObjId > 0)
                                                         {
-                                                            M2Share.CellObjectSystem.Dispose(osObject.CellObjId);
+                                                            M2Share.CellObjectSystem.Dispose(cellObject.CellObjId);
                                                         }
-                                                        if (osObject != null)
+                                                        if (cellObject != null)
                                                         {
-                                                            osObject.Dispose = true;
+                                                            cellObject.Dispose = true;
                                                         }
-                                                        cellInfo.Remove(osObject);
+                                                        cellInfo.Remove(cellObject);
                                                         if (cellInfo.Count <= 0)
                                                         {
                                                             cellInfo.Dispose();
@@ -581,7 +581,7 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         continue;
                                                     }
-                                                    var MapItem = (MapItem)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                                    var MapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                                     UpdateVisibleItem(nX, nY, MapItem);
                                                     if (MapItem.OfBaseObject != 0 || MapItem.DropBaseObject != 0)
                                                     {
@@ -613,9 +613,9 @@ namespace GameSvr.RobotPlay
                                             case CellType.Event:
                                                 if (Race == ActorRace.Play)
                                                 {
-                                                    if (osObject.CellObjId < 0)
+                                                    if (cellObject.CellObjId < 0)
                                                     {
-                                                        MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(osObject.CellObjId);
+                                                        MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                                         UpdateVisibleEvent(nX, nY, MapEvent);
                                                     }
                                                 }

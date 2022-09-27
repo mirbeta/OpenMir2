@@ -227,16 +227,16 @@ namespace GameSvr.World
                         {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var GenModCount = (int)Math.Ceiling(monGen.Count / (decimal)(M2Share.Config.MonGenRate * 10));
+                            var genModCount = (int)Math.Ceiling(monGen.Count / (decimal)(M2Share.Config.MonGenRate * 10));
                             var map = M2Share.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 canCreate = false;
                             else
                                 canCreate = true;
-                            if (GenModCount > nGenCount && canCreate)// 增加 控制刷怪数量比例
+                            if (genModCount > nGenCount && canCreate)// 增加 控制刷怪数量比例
                             {
-                                boRegened = RegenMonsters(monGen, GenModCount - nGenCount);
+                                boRegened = RegenMonsters(monGen, genModCount - nGenCount);
                             }
                             if (boRegened)
                             {

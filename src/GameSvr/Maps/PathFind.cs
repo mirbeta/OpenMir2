@@ -36,7 +36,7 @@
 namespace GameSvr.Maps
 {
     // 路径数组
-    public class Pathcellsuccess
+    public class PathcellSuccess
     {
         // 路径图元
         public int Distance;
@@ -46,7 +46,7 @@ namespace GameSvr.Maps
 
     public class PathMap
     {
-        protected Pathcellsuccess[,] PathMapArray;
+        protected PathcellSuccess[,] PathMapArray;
         /// <summary>
         /// 地图高(X最大值)
         /// </summary>
@@ -398,16 +398,16 @@ namespace GameSvr.Maps
         /// 初始化PathMapArray
         /// </summary>
         /// <param name="result"></param>
-        private void FillPathMap_PreparePathMap(ref Pathcellsuccess[,] result)
+        private void FillPathMap_PreparePathMap(ref PathcellSuccess[,] result)
         {
             int nWidth = ClientRect.Right - ClientRect.Left;
             int nHeight = ClientRect.Bottom - ClientRect.Top;
-            result = new Pathcellsuccess[nHeight, nWidth];
+            result = new PathcellSuccess[nHeight, nWidth];
             for (var y = 0; y < nHeight; y++)
             {
                 for (var x = 0; x < nWidth; x++)
                 {
-                    result[y, x] = new Pathcellsuccess();
+                    result[y, x] = new PathcellSuccess();
                     result[y, x].Distance = -1;
                 }
             }
@@ -415,7 +415,7 @@ namespace GameSvr.Maps
 
         // 计算相邻8个节点的权cost，并合法点加入NewWave(),并更新最小cost
         // 合法点是指非障碍物且Result[X，Y]中未访问的点
-        private void FillPathMap_TestNeighbours(Wave oldWave, Wave newWave, ref Pathcellsuccess[,] result)
+        private void FillPathMap_TestNeighbours(Wave oldWave, Wave newWave, ref PathcellSuccess[,] result)
         {
             for (var i = 0; i < 8; i++)
             {
@@ -440,9 +440,9 @@ namespace GameSvr.Maps
         // 寻路算法
         // X1,Y1为路径运算起点，X2，Y2为路径运算终点
         // *************************************************************
-        protected Pathcellsuccess[,] FillPathMap(short x1, short y1, short x2, short y2)
+        protected PathcellSuccess[,] FillPathMap(short x1, short y1, short x2, short y2)
         {
-            Pathcellsuccess[,] result = null;
+            PathcellSuccess[,] result = null;
             Wave oldWave;
             Wave newWave;
             bool finished;
@@ -464,7 +464,7 @@ namespace GameSvr.Maps
             {
                 if ((Math.Abs(nX1 - nX2) > (ClientRect.Right - ClientRect.Left)) || (Math.Abs(nY1 - nY2) > (ClientRect.Bottom - ClientRect.Top)))
                 {
-                    result = new Pathcellsuccess[0, 0];
+                    result = new PathcellSuccess[0, 0];
                     return result;
                 }
             }
@@ -581,7 +581,7 @@ namespace GameSvr.Maps
             BeginY = -1;
             EndX = -1;
             EndY = -1;
-            this.PathMapArray = new Pathcellsuccess[0, 0];
+            this.PathMapArray = new PathcellSuccess[0, 0];
             this.PathMapArray = null;
         }
 
