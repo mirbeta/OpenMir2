@@ -146,7 +146,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(50)]
         public UserItem[] StorageItems;
         [ProtoMember(51)]
-        public TMagicRcd[] Magic;
+        public MagicRcd[] Magic;
 
         public THumInfoData()
         {
@@ -161,7 +161,7 @@ namespace SystemModule.Packet.ServerPackets
             HumItems = new UserItem[13];
             BagItems = new UserItem[46];
             StorageItems = new UserItem[50];
-            Magic = new TMagicRcd[20];
+            Magic = new MagicRcd[20];
             Abil = new Ability();
             BonusAbil = new NakedAbility();
             StatusTimeArr = new ushort[15];

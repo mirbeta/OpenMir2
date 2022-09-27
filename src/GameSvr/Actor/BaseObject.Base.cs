@@ -231,7 +231,7 @@ namespace GameSvr.Actor
             // 血气石处理开始
             try
             {
-                if (UseItems.Length >= Grobal2.U_CHARM && UseItems[Grobal2.U_CHARM] != null)
+                if (UseItems.Length >= Grobal2.U_CHARM && UseItems[Grobal2.U_CHARM] != null && UseItems[Grobal2.U_CHARM].Index > 0)
                 {
                     if (!Death && Race == ActorRace.Play || Race == ActorRace.PlayClone)
                     {

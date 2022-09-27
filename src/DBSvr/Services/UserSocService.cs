@@ -518,7 +518,7 @@ namespace DBSvr.Services
                     if ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 1000)
                     {
                         userInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((userInfo.sAccount != "") && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
+                        if ((!string.IsNullOrEmpty(userInfo.sAccount )) && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
                             DeleteChr(sText, ref userInfo);
                             userInfo.boChrQueryed = false;
@@ -536,7 +536,7 @@ namespace DBSvr.Services
                 case Grobal2.CM_SELCHR:
                     if (userInfo.boChrQueryed)
                     {
-                        if ((userInfo.sAccount != "") && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
+                        if ((!string.IsNullOrEmpty(userInfo.sAccount)) && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
                             if (SelectChr(sText, gateInfo, ref userInfo))
                             {

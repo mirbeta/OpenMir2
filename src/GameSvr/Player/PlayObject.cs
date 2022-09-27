@@ -1151,7 +1151,7 @@ namespace GameSvr.Player
             {
                 var userMagic = MagicList[i];
                 var clientMagic = new ClientMagic();
-                clientMagic.Key = (char)userMagic.Key;
+                clientMagic.Key = userMagic.Key;
                 clientMagic.Level = userMagic.Level;
                 clientMagic.CurTrain = userMagic.TranPoint;
                 clientMagic.Def = userMagic.Magic;

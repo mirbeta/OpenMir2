@@ -1456,7 +1456,7 @@ namespace GameSvr.World
             THumInfoData humData;
             UserItem[] humItems;
             UserItem[] bagItems;
-            TMagicRcd[] humMagic;
+            MagicRcd[] humMagic;
             MagicInfo magicInfo;
             UserMagic userMagic;
             UserItem[] storageItems;
@@ -1698,7 +1698,7 @@ namespace GameSvr.World
             var HumMagic = humanRcd.Data.Magic;
             if (HumMagic == null)
             {
-                HumMagic = new TMagicRcd[Grobal2.MaxMagicCount];
+                HumMagic = new MagicRcd[Grobal2.MaxMagicCount];
             }
             for (var i = 0; i < playObject.MagicList.Count; i++)
             {
@@ -1709,7 +1709,7 @@ namespace GameSvr.World
                 var userMagic = playObject.MagicList[i];
                 if (HumMagic[i] == null)
                 {
-                    HumMagic[i] = new TMagicRcd();
+                    HumMagic[i] = new MagicRcd();
                 }
                 HumMagic[i].MagIdx = userMagic.MagIdx;
                 HumMagic[i].Level = userMagic.Level;
