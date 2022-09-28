@@ -186,7 +186,7 @@ namespace DBSvr.Storage.MariaDB
 
         private bool UpdateChrRecord(int playerId, QueryChr queryChrRcd)
         {
-            const string sStrString = "UPDATE characters SET SEX=@SEX, JOB=@JOB WHERE ID=@ID";
+            const string sStrString = "UPDATE characters SET Sex=@Sex, Job=@Job WHERE ID=@Id";
             var result = false;
             var dbConnection = Open(ref result);
             try
@@ -197,9 +197,9 @@ namespace DBSvr.Storage.MariaDB
                 }
                 var command = new MySqlCommand();
                 command.CommandText = sStrString;
-                command.Parameters.AddWithValue("@SEX", queryChrRcd.btSex);
-                command.Parameters.AddWithValue("@JOB", queryChrRcd.btJob);
-                command.Parameters.AddWithValue("@ID", playerId);
+                command.Parameters.AddWithValue("@Sex", queryChrRcd.btSex);
+                command.Parameters.AddWithValue("@Job", queryChrRcd.btJob);
+                command.Parameters.AddWithValue("@Id", playerId);
                 command.Connection = dbConnection;
                 try
                 {
@@ -1139,6 +1139,7 @@ namespace DBSvr.Storage.MariaDB
                             continue;
                         }
                         var command = new MySqlCommand();
+                        command.Connection = dbConnection;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
