@@ -46,106 +46,108 @@ namespace SystemModule.Packet.ServerPackets
     public class THumInfoData
     {
         [ProtoMember(1)]
-        public string sCharName;
+        public byte ServerIndex;
         [ProtoMember(2)]
-        public string sCurMap;
+        public string sCharName;
         [ProtoMember(3)]
-        public short CurX;
+        public string sCurMap;
         [ProtoMember(4)]
-        public short CurY;
+        public short CurX;
         [ProtoMember(5)]
-        public byte Dir;
+        public short CurY;
         [ProtoMember(6)]
-        public byte btHair;
+        public byte Dir;
         [ProtoMember(7)]
-        public byte Sex;
+        public byte btHair;
         [ProtoMember(8)]
-        public byte Job;
+        public byte Sex;
         [ProtoMember(9)]
-        public int nGold;
+        public byte Job;
         [ProtoMember(10)]
-        public Ability Abil;
+        public int nGold;
         [ProtoMember(11)]
-        public ushort[] StatusTimeArr;
+        public Ability Abil;
         [ProtoMember(12)]
-        public string sHomeMap;
+        public ushort[] StatusTimeArr;
         [ProtoMember(13)]
-        public short wHomeX;
+        public string sHomeMap;
         [ProtoMember(14)]
-        public short wHomeY;
+        public short wHomeX;
         [ProtoMember(15)]
-        public NakedAbility BonusAbil;
+        public short wHomeY;
         [ProtoMember(16)]
-        public int nBonusPoint;
+        public NakedAbility BonusAbil;
         [ProtoMember(17)]
-        public byte btCreditPoint;
+        public int nBonusPoint;
         [ProtoMember(18)]
-        public byte btReLevel;
+        public byte btCreditPoint;
         [ProtoMember(19)]
-        public string sMasterName;
+        public byte btReLevel;
         [ProtoMember(20)]
-        public bool boMaster;
+        public string sMasterName;
         [ProtoMember(21)]
-        public string sDearName;
+        public bool boMaster;
         [ProtoMember(22)]
-        public string sStoragePwd;
+        public string sDearName;
         [ProtoMember(23)]
-        public int nGameGold;
+        public string sStoragePwd;
         [ProtoMember(24)]
-        public int nGamePoint;
+        public int nGameGold;
         [ProtoMember(25)]
-        public int nPayMentPoint;
+        public int nGamePoint;
         [ProtoMember(26)]
-        public int nPKPoint;
+        public int nPayMentPoint;
         [ProtoMember(27)]
-        public byte btAllowGroup;
+        public int nPKPoint;
         [ProtoMember(28)]
-        public byte btF9;
+        public byte btAllowGroup;
         [ProtoMember(29)]
-        public byte btAttatckMode;
+        public byte btF9;
         [ProtoMember(30)]
-        public byte btIncHealth;
+        public byte btAttatckMode;
         [ProtoMember(31)]
-        public byte btIncSpell;
+        public byte btIncHealth;
         [ProtoMember(32)]
-        public byte btIncHealing;
+        public byte btIncSpell;
         [ProtoMember(33)]
-        public byte btFightZoneDieCount;
+        public byte btIncHealing;
         [ProtoMember(34)]
-        public byte btEE;
+        public byte btFightZoneDieCount;
         [ProtoMember(35)]
-        public byte btEF;
+        public byte btEE;
         [ProtoMember(36)]
-        public string Account;
+        public byte btEF;
         [ProtoMember(37)]
-        public bool boLockLogon;
+        public string Account;
         [ProtoMember(38)]
-        public short wContribution;
+        public bool boLockLogon;
         [ProtoMember(39)]
-        public int nHungerStatus;
+        public short wContribution;
         [ProtoMember(40)]
-        public bool boAllowGuildReCall;
+        public int nHungerStatus;
         [ProtoMember(41)]
-        public short wGroupRcallTime;
+        public bool boAllowGuildReCall;
         [ProtoMember(42)]
-        public double dBodyLuck;
+        public short wGroupRcallTime;
         [ProtoMember(43)]
-        public bool boAllowGroupReCall;
+        public double dBodyLuck;
         [ProtoMember(44)]
-        public byte[] QuestUnitOpen;
+        public bool boAllowGroupReCall;
         [ProtoMember(45)]
-        public byte[] QuestUnit;
+        public byte[] QuestUnitOpen;
         [ProtoMember(46)]
-        public byte[] QuestFlag;
+        public byte[] QuestUnit;
         [ProtoMember(47)]
-        public byte MarryCount;
+        public byte[] QuestFlag;
         [ProtoMember(48)]
-        public UserItem[] HumItems;
+        public byte MarryCount;
         [ProtoMember(49)]
-        public UserItem[] BagItems;
+        public UserItem[] HumItems;
         [ProtoMember(50)]
-        public UserItem[] StorageItems;
+        public UserItem[] BagItems;
         [ProtoMember(51)]
+        public UserItem[] StorageItems;
+        [ProtoMember(52)]
         public MagicRcd[] Magic;
 
         public THumInfoData()

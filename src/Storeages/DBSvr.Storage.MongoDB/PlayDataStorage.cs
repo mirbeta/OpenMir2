@@ -49,7 +49,7 @@ namespace DBSvr.Storage.MongoDB
             IList<string> ChrNameList;
             string sAccount;
             string sChrName;
-            const string sSQLString = "SELECT * FROM TBL_CHARACTER WHERE FLD_Deleted=0";
+            const string sSQLString = "SELECT * FROM TBL_CHARACTER WHERE Deleted=0";
             _mirQuickMap.Clear();
             _mirQuickIdList.Clear();
             _recordCount = -1;
@@ -295,15 +295,15 @@ namespace DBSvr.Storage.MongoDB
 
         private void UpdateQuest(int Id, THumDataInfo HumanRCD)
         {
-            const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE FLD_PLAYERID='{0}'";
-            const string sSqlStr5 = "INSERT INTO TBL_QUEST (FLD_PLAYERID, FLD_QUESTOPENINDEX, FLD_QUESTFININDEX, FLD_QUEST) VALUES(@FLD_PLAYERID, @FLD_QUESTOPENINDEX, @FLD_QUESTFININDEX, @FLD_QUEST)";
+            const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE PLAYERID='{0}'";
+            const string sSqlStr5 = "INSERT INTO TBL_QUEST (PLAYERID, QUESTOPENINDEX, QUESTFININDEX, QUEST) VALUES(@PLAYERID, @QUESTOPENINDEX, @QUESTFININDEX, @QUEST)";
             bool success = false;
         }
 
         private void UpdateStatus(int playerId, THumDataInfo HumanRCD)
         {
-            const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE FLD_PlayerId={0}";
-            const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (FLD_PlayerId, FLD_CharName, FLD_Status) VALUES(@FLD_PlayerId, @FLD_CharName, @FLD_Status)";
+            const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE PlayerId={0}";
+            const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (PlayerId, CharName, Status) VALUES(@PlayerId, @CharName, @Status)";
             bool success = false;
         }
 

@@ -85,7 +85,7 @@ namespace LoginSvr.DB
             int nIndex = 0;
             bool boDeleted;
             string sAccount;
-            const string sSQL = "SELECT Id,FLD_DELETED,FLD_LOGINID FROM TBL_ACCOUNT";
+            const string sSQL = "SELECT Id,DELETED,LOGINID FROM TBL_ACCOUNT";
             _quickList.Clear();
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -102,8 +102,8 @@ namespace LoginSvr.DB
                 while (dr.Read())
                 {
                     nIndex = dr.GetInt32("Id");
-                    boDeleted = dr.GetBoolean("FLD_DELETED");
-                    sAccount = dr.GetString("FLD_LOGINID");
+                    boDeleted = dr.GetBoolean("DELETED");
+                    sAccount = dr.GetString("LOGINID");
                     if (!boDeleted && (!string.IsNullOrEmpty(sAccount)))
                     {
                         _quickList.Add(new AccountQuick(sAccount, nIndex));
@@ -177,24 +177,24 @@ namespace LoginSvr.DB
                 }
                 if (dr.Read())
                 {
-                    DBRecord.Header.sAccount = dr.GetString("FLD_LOGINID");
-                    DBRecord.Header.boDeleted = dr.GetBoolean(dr.GetOrdinal("FLD_DELETED"));
-                    DBRecord.Header.CreateDate = dr.GetDateTime("FLD_CREATEDATE");
-                    DBRecord.Header.UpdateDate = dr.GetDateTime("FLD_LASTUPDATE");
-                    DBRecord.nErrorCount = dr.GetInt32("FLD_ERRORCOUNT");
-                    DBRecord.dwActionTick = dr.GetInt32("FLD_ACTIONTICK");
-                    DBRecord.UserEntry.sAccount = dr.GetString("FLD_LOGINID");
-                    DBRecord.UserEntry.sPassword = dr.GetString("FLD_PASSWORD");
-                    DBRecord.UserEntry.sUserName = dr.GetString("FLD_USERNAME");
-                    DBRecord.UserEntry.sSSNo = dr.GetString("FLD_SSNO");
-                    DBRecord.UserEntry.sPhone = dr.GetString("FLD_PHONE");
-                    DBRecord.UserEntry.sQuiz = dr.GetString("FLD_QUIZ1");
-                    DBRecord.UserEntry.sAnswer = dr.GetString("FLD_ANSWER1");
-                    DBRecord.UserEntry.sEMail = dr.GetString("FLD_EMAIL");
-                    DBRecord.UserEntryAdd.sQuiz2 = dr.GetString("FLD_QUIZ2");
-                    DBRecord.UserEntryAdd.sAnswer2 = dr.GetString("FLD_ANSWER2");
-                    DBRecord.UserEntryAdd.sBirthDay = dr.GetString("FLD_BIRTHDAY");
-                    DBRecord.UserEntryAdd.sMobilePhone = dr.GetString("FLD_MOBILEPHONE");
+                    DBRecord.Header.sAccount = dr.GetString("LOGINID");
+                    DBRecord.Header.boDeleted = dr.GetBoolean(dr.GetOrdinal("DELETED"));
+                    DBRecord.Header.CreateDate = dr.GetDateTime("CREATEDATE");
+                    DBRecord.Header.UpdateDate = dr.GetDateTime("LASTUPDATE");
+                    DBRecord.nErrorCount = dr.GetInt32("ERRORCOUNT");
+                    DBRecord.dwActionTick = dr.GetInt32("ACTIONTICK");
+                    DBRecord.UserEntry.sAccount = dr.GetString("LOGINID");
+                    DBRecord.UserEntry.sPassword = dr.GetString("PASSWORD");
+                    DBRecord.UserEntry.sUserName = dr.GetString("USERNAME");
+                    DBRecord.UserEntry.sSSNo = dr.GetString("SSNO");
+                    DBRecord.UserEntry.sPhone = dr.GetString("PHONE");
+                    DBRecord.UserEntry.sQuiz = dr.GetString("QUIZ1");
+                    DBRecord.UserEntry.sAnswer = dr.GetString("ANSWER1");
+                    DBRecord.UserEntry.sEMail = dr.GetString("EMAIL");
+                    DBRecord.UserEntryAdd.sQuiz2 = dr.GetString("QUIZ2");
+                    DBRecord.UserEntryAdd.sAnswer2 = dr.GetString("ANSWER2");
+                    DBRecord.UserEntryAdd.sBirthDay = dr.GetString("BIRTHDAY");
+                    DBRecord.UserEntryAdd.sMobilePhone = dr.GetString("MOBILEPHONE");
                     DBRecord.UserEntryAdd.sMemo = "";
                     DBRecord.UserEntryAdd.sMemo2 = "";
                 }
@@ -256,9 +256,9 @@ namespace LoginSvr.DB
         {
             var result = 0;
             string sdt = "now()";
-            const string sUpdateRecord1 = "INSERT INTO TBL_ACCOUNT (FLD_LOGINID, FLD_PASSWORD, FLD_USERNAME, FLD_CREATEDATE, FLD_LASTUPDATE, FLD_DELETED, FLD_ERRORCOUNT, FLD_ACTIONTICK, FLD_SSNO, FLD_BIRTHDAY, FLD_PHONE, FLD_MOBILEPHONE, FLD_EMAIL, FLD_QUIZ1, FLD_ANSWER1, FLD_QUIZ2, FLD_ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
-            const string sUpdateRecord2 = "UPDATE TBL_ACCOUNT SET FLD_DELETED=1, FLD_CREATEDATE='{0}' WHERE FLD_LOGINID='{1}'";
-            const string sUpdateRecord0 = "UPDATE TBL_ACCOUNT SET FLD_PASSWORD='{0}', FLD_USERNAME='{1}',FLD_LASTUPDATE={2}, FLD_ERRORCOUNT={3}, FLD_ACTIONTICK={4},FLD_SSNO='{5}', FLD_BIRTHDAY='{6}', FLD_PHONE='{7}',FLD_MOBILEPHONE='{8}', FLD_EMAIL='{9}', FLD_QUIZ1='{10}', FLD_ANSWER1='{11}', FLD_QUIZ2='{12}',FLD_ANSWER2='{13}' WHERE FLD_LOGINID='{14}'";
+            const string sUpdateRecord1 = "INSERT INTO TBL_ACCOUNT (LOGINID, PASSWORD, USERNAME, CREATEDATE, LASTUPDATE, DELETED, ERRORCOUNT, ACTIONTICK, SSNO, BIRTHDAY, PHONE, MOBILEPHONE, EMAIL, QUIZ1, ANSWER1, QUIZ2, ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
+            const string sUpdateRecord2 = "UPDATE TBL_ACCOUNT SET DELETED=1, CREATEDATE='{0}' WHERE LOGINID='{1}'";
+            const string sUpdateRecord0 = "UPDATE TBL_ACCOUNT SET PASSWORD='{0}', USERNAME='{1}',LASTUPDATE={2}, ERRORCOUNT={3}, ACTIONTICK={4},SSNO='{5}', BIRTHDAY='{6}', PHONE='{7}',MOBILEPHONE='{8}', EMAIL='{9}', QUIZ1='{10}', ANSWER1='{11}', QUIZ2='{12}',ANSWER2='{13}' WHERE LOGINID='{14}'";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
