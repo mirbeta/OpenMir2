@@ -1601,6 +1601,7 @@ namespace GameSvr.World
 
         private void MakeSaveRcd(PlayObject playObject, ref THumDataInfo humanRcd)
         {
+            humanRcd.Data.ServerIndex = M2Share.ServerIndex;
             humanRcd.Data.sCharName = playObject.CharName;
             humanRcd.Data.sCurMap = playObject.MapName;
             humanRcd.Data.CurX = playObject.CurrX;

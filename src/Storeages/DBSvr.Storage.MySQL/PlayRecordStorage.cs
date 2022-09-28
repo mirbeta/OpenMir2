@@ -51,16 +51,16 @@ namespace DBSvr.Storage.MySQL
             {
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
-                command.CommandText = "select * from tbl_character_index";
+                command.CommandText = "select * from character_Indexes";
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     var DBRecord = new HumRecordData();
                     DBRecord.Id = dr.GetInt32("Id");
-                    DBRecord.sAccount = dr.GetString("FLD_Account");
-                    DBRecord.sChrName = dr.GetString("FLD_CharName");
-                    DBRecord.Selected = (byte)dr.GetInt32("FLD_SelectID");
-                    DBRecord.Deleted = dr.GetBoolean("FLD_IsDeleted");
+                    DBRecord.sAccount = dr.GetString("Account");
+                    DBRecord.sChrName = dr.GetString("CharName");
+                    DBRecord.Selected = (byte)dr.GetInt32("SelectID");
+                    DBRecord.Deleted = dr.GetBoolean("IsDeleted");
                     DBRecord.Header = new TRecordHeader();
                     DBRecord.Header.sAccount = DBRecord.sAccount;
                     DBRecord.Header.sName = DBRecord.sChrName;
@@ -145,17 +145,17 @@ namespace DBSvr.Storage.MySQL
                 return default;
             }
             var command = new MySqlCommand();
-            command.CommandText = "select * from tbl_character_index where Id=@Id";
+            command.CommandText = "select * from character_Indexes where Id=@Id";
             command.Connection = dbConnection;
             command.Parameters.AddWithValue("@Id", nIndex);
             var humRecord = new HumRecordData();
             using var dr = command.ExecuteReader();
             if (dr.Read())
             {
-                humRecord.sAccount = dr.GetString("FLD_Account");
-                humRecord.sChrName = dr.GetString("FLD_CharName");
-                humRecord.Selected = (byte)dr.GetUInt32("FLD_SelectID");
-                humRecord.Deleted = dr.GetBoolean("FLD_IsDeleted");
+                humRecord.sAccount = dr.GetString("Account");
+                humRecord.sChrName = dr.GetString("CharName");
+                humRecord.Selected = (byte)dr.GetUInt32("SelectID");
+                humRecord.Deleted = dr.GetBoolean("IsDeleted");
                 humRecord.Header = new TRecordHeader();
                 humRecord.Header.sAccount = humRecord.sAccount;
                 humRecord.Header.sName = humRecord.sChrName;
@@ -270,15 +270,15 @@ namespace DBSvr.Storage.MySQL
                 if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
                 {
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO tbl_character_index (FLD_Account, FLD_CharName, FLD_SelectID, FLD_IsDeleted, FLD_CreateDate, FLD_ModifyDate) VALUES ");
-                    strSql.AppendLine("(@FLD_Account, @FLD_CharName, @FLD_SelectID, @FLD_IsDeleted, now(), now());");
+                    strSql.AppendLine("INSERT INTO character_Indexes (Account, CharName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
+                    strSql.AppendLine("(@Account, @CharName, @SelectID, @IsDeleted, now(), now());");
                     var command = new MySqlCommand();
                     command.Connection = dbConnection;
                     command.CommandText = strSql.ToString();
-                    command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
-                    command.Parameters.AddWithValue("@FLD_CharName", HumRecord.sChrName);
-                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.Selected);
-                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.Deleted);
+                    command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
+                    command.Parameters.AddWithValue("@CharName", HumRecord.sChrName);
+                    command.Parameters.AddWithValue("@SelectID", HumRecord.Selected);
+                    command.Parameters.AddWithValue("@IsDeleted", HumRecord.Deleted);
                     command.ExecuteNonQuery();
                     var id = command.LastInsertedId;
                     nIndex = (int)id;
@@ -288,15 +288,15 @@ namespace DBSvr.Storage.MySQL
                 {
                     HumRecord.Header.Deleted = false;
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE tbl_character_index SET FLD_Account = @FLD_Account, FLD_CharName = @FLD_CharName, FLD_SelectID = @FLD_SelectID, FLD_IsDeleted = @FLD_IsDeleted, ");
-                    strSql.AppendLine(" FLD_ModifyDate = now() WHERE Id = @Id;");
+                    strSql.AppendLine("UPDATE character_Indexes SET Account = @Account, CharName = @CharName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
+                    strSql.AppendLine(" ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
                     command.Connection = dbConnection;
                     command.CommandText = strSql.ToString();
-                    command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
-                    command.Parameters.AddWithValue("@FLD_CharName", HumRecord.sChrName);
-                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.Selected);
-                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.Deleted);
+                    command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
+                    command.Parameters.AddWithValue("@CharName", HumRecord.sChrName);
+                    command.Parameters.AddWithValue("@SelectID", HumRecord.Selected);
+                    command.Parameters.AddWithValue("@IsDeleted", HumRecord.Deleted);
                     command.Parameters.AddWithValue("@Id", nIndex);
                     command.ExecuteNonQuery();
                     result = true;
