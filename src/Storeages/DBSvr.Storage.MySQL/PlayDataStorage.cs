@@ -4,13 +4,14 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 
-namespace DBSvr.Storage.MySQL
+namespace DBSvr.Storage.MariaDB
 {
     public class PlayDataStorage : IPlayDataStorage
     {
@@ -32,17 +33,16 @@ namespace DBSvr.Storage.MySQL
 
         public void LoadQuickList()
         {
-            bool boDeleted;
-            IList<QuickId> accountList;
-            IList<string> chrNameList;
-            string sAccount;
-            string sChrName;
             const string sSqlString = "SELECT * FROM characters WHERE Deleted=0";
+            _quickIndexIdMap.Clear();
             _mirQuickMap.Clear();
             _mirQuickIdList.Clear();
+            bool boDeleted;
+            string sAccount;
+            string sChrName;
             _recordCount = -1;
-            accountList = new List<QuickId>();
-            chrNameList = new List<string>();
+            IList<QuickId> accountList = new List<QuickId>();
+            IList<string> chrNameList = new List<string>();
             var success = false;
             var dbConnection = Open(ref success);
             if (!success)
@@ -160,9 +160,9 @@ namespace DBSvr.Storage.MySQL
 
         public bool Update(string chrName, ref THumDataInfo humanRcd)
         {
-            if (_mirQuickMap.TryGetValue(chrName, out var PlayerId))
+            if (_mirQuickMap.TryGetValue(chrName, out var playerId))
             {
-                if (UpdateRecord(PlayerId, ref humanRcd))
+                if (UpdateRecord(playerId, ref humanRcd))
                 {
                     return true;
                 }
@@ -184,7 +184,7 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private bool UpdateChrRecord(int PlayerId, QueryChr queryChrRcd)
+        private bool UpdateChrRecord(int playerId, QueryChr queryChrRcd)
         {
             const string sStrString = "UPDATE characters SET SEX=@SEX, JOB=@JOB WHERE ID=@ID";
             var result = false;
@@ -199,7 +199,7 @@ namespace DBSvr.Storage.MySQL
                 command.CommandText = sStrString;
                 command.Parameters.AddWithValue("@SEX", queryChrRcd.btSex);
                 command.Parameters.AddWithValue("@JOB", queryChrRcd.btJob);
-                command.Parameters.AddWithValue("@ID", PlayerId);
+                command.Parameters.AddWithValue("@ID", playerId);
                 command.Connection = dbConnection;
                 try
                 {
@@ -247,27 +247,27 @@ namespace DBSvr.Storage.MySQL
 
         private bool GetRecord(int nIndex, ref THumDataInfo humanRcd)
         {
-            var PlayerId = 0;
+            var playerId = 0;
             if (humanRcd == null)
             {
-                PlayerId = _quickIndexIdMap[nIndex];
+                playerId = _quickIndexIdMap[nIndex];
             }
-            if (PlayerId == 0)
+            if (playerId == 0)
             {
                 return false;
             }
-            GetChrRecord(PlayerId, ref humanRcd);
-            GetAbilGetRecord(PlayerId, ref humanRcd);
-            GetBonusAbilRecord(PlayerId, ref humanRcd);
-            GetMagicRecord(PlayerId, ref humanRcd);
-            GetItemRecord(PlayerId, true, ref humanRcd);
-            GetBagItemRecord(PlayerId, ref humanRcd);
-            GetStorageRecord(PlayerId, ref humanRcd);
-            GetPlayerStatus(PlayerId, ref humanRcd);
+            GetChrRecord(playerId, ref humanRcd);
+            GetAbilGetRecord(playerId, ref humanRcd);
+            GetBonusAbilRecord(playerId, ref humanRcd);
+            GetMagicRecord(playerId, ref humanRcd);
+            GetItemRecord(playerId, ref humanRcd);
+            GetBagItemRecord(playerId, ref humanRcd);
+            GetStorageRecord(playerId, ref humanRcd);
+            GetPlayerStatus(playerId, ref humanRcd);
             return true;
         }
 
-        private void GetChrRecord(int PlayerId, ref THumDataInfo humanRcd)
+        private void GetChrRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -280,7 +280,7 @@ namespace DBSvr.Storage.MySQL
             try
             {
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@Id", PlayerId);
+                command.Parameters.AddWithValue("@Id", playerId);
                 command.Connection = dbConnection;
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
@@ -355,7 +355,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetAbilGetRecord(int PlayerId, ref THumDataInfo humanRcd)
+        private void GetAbilGetRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -368,7 +368,7 @@ namespace DBSvr.Storage.MySQL
             try
             {
                 command.CommandText = $"select * from characters_ablity where PlayerId=@PlayerId";
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Connection = dbConnection;
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
@@ -406,7 +406,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetBonusAbilRecord(int PlayerId, ref THumDataInfo humanRcd)
+        private void GetBonusAbilRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -420,7 +420,7 @@ namespace DBSvr.Storage.MySQL
             try
             {
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
@@ -452,7 +452,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetMagicRecord(int PlayerId, ref THumDataInfo humanRcd)
+        private void GetMagicRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -470,23 +470,23 @@ namespace DBSvr.Storage.MySQL
                 }
                 command.Connection = dbConnection;
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 using var dr = command.ExecuteReader();
-                var Position = 0;
+                var position = 0;
                 while (dr.Read())
                 {
-                    humanRcd.Data.Magic[Position].MagIdx = dr.GetUInt16("MAGICID");
-                    humanRcd.Data.Magic[Position].MagicKey = dr.GetChar("USEKEY");
-                    humanRcd.Data.Magic[Position].Level = (byte)dr.GetInt32("Level");
-                    humanRcd.Data.Magic[Position].TranPoint = dr.GetInt32("CURRTRAIN");
-                    Position++;
+                    humanRcd.Data.Magic[position].MagIdx = dr.GetUInt16("MAGICID");
+                    humanRcd.Data.Magic[position].MagicKey = dr.GetChar("USEKEY");
+                    humanRcd.Data.Magic[position].Level = (byte)dr.GetInt32("Level");
+                    humanRcd.Data.Magic[position].TranPoint = dr.GetInt32("CURRTRAIN");
+                    position++;
                 }
                 dr.Close();
                 dr.Dispose();
             }
             catch (Exception ex)
             {
-                _logger.Error($"[Exception] GetPlayMagicRecord ChrId:{PlayerId}");
+                _logger.Error($"[Exception] GetPlayMagicRecord ChrId:{playerId}");
                 _logger.Error(ex.StackTrace);
             }
             finally
@@ -495,7 +495,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetItemRecord(int PlayerId, bool initData, ref THumDataInfo humanRcd)
+        private void GetItemRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -507,26 +507,20 @@ namespace DBSvr.Storage.MySQL
             var command = new MySqlCommand();
             try
             {
-                if (initData)
-                {
-                    for (var i = 0; i < humanRcd.Data.HumItems.Length; i++)
-                    {
-                        humanRcd.Data.HumItems[i] = new UserItem();
-                    }
-                }
                 command.Connection = dbConnection;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.CommandText = sSqlString;
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     var nPosition = dr.GetInt32("Position");
+                    humanRcd.Data.HumItems[nPosition] = new UserItem();
                     humanRcd.Data.HumItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.HumItems[nPosition].Index = dr.GetUInt16("StdIndex");
                     humanRcd.Data.HumItems[nPosition].Dura = dr.GetUInt16("Dura");
                     humanRcd.Data.HumItems[nPosition].DuraMax = dr.GetUInt16("DuraMax");
                 }
-                QueryItemAttr(PlayerId, ref humanRcd.Data.HumItems);
+                QueryItemAttr(playerId, ref humanRcd.Data.HumItems);
             }
             catch (Exception ex)
             {
@@ -538,7 +532,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetBagItemRecord(int PlayerId, ref THumDataInfo humanRcd)
+        private void GetBagItemRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -546,27 +540,24 @@ namespace DBSvr.Storage.MySQL
             {
                 return;
             }
-            for (var i = 0; i < humanRcd.Data.BagItems.Length; i++)
-            {
-                humanRcd.Data.BagItems[i] = new UserItem();
-            }
             const string sSqlString = "SELECT * FROM characters_bagitem WHERE PlayerId=@PlayerId";
             var command = new MySqlCommand();
             try
             {
                 command.Connection = dbConnection;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.CommandText = sSqlString;
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     var nPosition = dr.GetInt32("Position");
+                    humanRcd.Data.BagItems[nPosition] = new UserItem();
                     humanRcd.Data.BagItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.BagItems[nPosition].Index = dr.GetUInt16("StdIndex");
                     humanRcd.Data.BagItems[nPosition].Dura = dr.GetUInt16("Dura");
                     humanRcd.Data.BagItems[nPosition].DuraMax = dr.GetUInt16("DuraMax");
                 }
-                QueryItemAttr(PlayerId, ref humanRcd.Data.BagItems);
+                QueryItemAttr(playerId, ref humanRcd.Data.BagItems);
             }
             catch
             {
@@ -578,7 +569,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetStorageRecord(int PlayerId, ref THumDataInfo humanRcd)
+        private void GetStorageRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -586,28 +577,24 @@ namespace DBSvr.Storage.MySQL
             {
                 return;
             }
-            for (var i = 0; i < humanRcd.Data.StorageItems.Length; i++)
-            {
-                humanRcd.Data.StorageItems[i] = new UserItem();
-            }
             const string sSqlString = "SELECT * FROM characters_storageitem WHERE PlayerId=@PlayerId";
             var command = new MySqlCommand();
             try
             {
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Connection = dbConnection;
                 using  var dr = command.ExecuteReader();
-                var i = 0;
                 while (dr.Read())
                 {
-                    humanRcd.Data.StorageItems[i].MakeIndex = dr.GetInt32("MakeIndex");
-                    humanRcd.Data.StorageItems[i].Index = dr.GetUInt16("StdIndex");
-                    humanRcd.Data.StorageItems[i].Dura = dr.GetUInt16("Dura");
-                    humanRcd.Data.StorageItems[i].DuraMax = dr.GetUInt16("DuraMax");
-                    i++;
+                    var nPosition = dr.GetInt32("Position");
+                    humanRcd.Data.StorageItems[nPosition] = new UserItem();
+                    humanRcd.Data.StorageItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
+                    humanRcd.Data.StorageItems[nPosition].Index = dr.GetUInt16("StdIndex");
+                    humanRcd.Data.StorageItems[nPosition].Dura = dr.GetUInt16("Dura");
+                    humanRcd.Data.StorageItems[nPosition].DuraMax = dr.GetUInt16("DuraMax");
                 }
-                QueryItemAttr(PlayerId, ref humanRcd.Data.StorageItems);
+                QueryItemAttr(playerId, ref humanRcd.Data.StorageItems);
             }
             catch (Exception ex)
             {
@@ -620,7 +607,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetPlayerStatus(int PlayerId, ref THumDataInfo humanRcd)
+        private void GetPlayerStatus(int playerId, ref THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -633,7 +620,7 @@ namespace DBSvr.Storage.MySQL
             command.Connection = dbConnection;
             try
             {
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.CommandText = sSqlString;
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
@@ -774,19 +761,19 @@ namespace DBSvr.Storage.MySQL
             return true;
         }
 
-        private bool UpdateRecord(int PlayerId, ref THumDataInfo humanRcd)
+        private bool UpdateRecord(int playerId, ref THumDataInfo humanRcd)
         {
             var result = true;
             try
             {
-                SaveRecord(PlayerId, humanRcd);
-                SaveAblity(PlayerId, humanRcd);
-                SaveItem(PlayerId, humanRcd);
-                SaveBagItem(PlayerId, humanRcd);
-                SaveStorageItem(PlayerId, humanRcd);
-                SaveMagics(PlayerId, humanRcd.Data.Magic);
-                SaveStatus(PlayerId, humanRcd);
-                SaveBonusability(PlayerId, humanRcd);
+                SaveRecord(playerId, humanRcd);
+                SaveAblity(playerId, humanRcd);
+                SaveItem(playerId, humanRcd);
+                SaveBagItem(playerId, humanRcd);
+                SaveStorageItem(playerId, humanRcd);
+                SaveMagics(playerId, humanRcd.Data.Magic);
+                SaveStatus(playerId, humanRcd);
+                SaveBonusability(playerId, humanRcd);
             }
             catch (Exception ex)
             {
@@ -796,7 +783,7 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private void SaveRecord(int PlayerId, THumDataInfo humanRcd)
+        private void SaveRecord(int playerId, THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -814,7 +801,7 @@ namespace DBSvr.Storage.MySQL
             command.CommandText = strSql.ToString();
             command.Connection = dbConnection;
             command.Parameters.Clear();
-            command.Parameters.AddWithValue("@Id", PlayerId);
+            command.Parameters.AddWithValue("@Id", playerId);
             command.Parameters.AddWithValue("@ServerIndex", hd.ServerIndex);
             command.Parameters.AddWithValue("@LoginID", hd.Account);
             command.Parameters.AddWithValue("@MapName", hd.sCurMap);
@@ -866,7 +853,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveAblity(int PlayerId, THumDataInfo humanRcd)
+        private void SaveAblity(int playerId, THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -883,7 +870,7 @@ namespace DBSvr.Storage.MySQL
             var command = new MySqlCommand();
             command.Connection = dbConnection;
             command.CommandText = strSql.ToString();
-            command.Parameters.AddWithValue("@PlayerId", PlayerId);
+            command.Parameters.AddWithValue("@PlayerId", playerId);
             command.Parameters.AddWithValue("@Level", hd.Abil.Level);
             command.Parameters.AddWithValue("@Ac", hd.Abil.Level);
             command.Parameters.AddWithValue("@Mac", hd.Abil.MAC);
@@ -916,85 +903,83 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveItem(int PlayerId, THumDataInfo humanRcd)
+        private void SaveItem(int playerId, THumDataInfo humanRcd)
         {
+            var playData = new THumDataInfo();
+            playData.Data.Initialization();
+            GetItemRecord(playerId, ref playData);
+            var useSize = playData.Data.HumItems.Length;
+            var oldItems = playData.Data.HumItems;
+            var newItems = humanRcd.Data.HumItems;
+            var addItem = new UserItem[useSize];
+            var delItem = new UserItem[useSize];
+            var chgList = new UserItem[useSize];
+
+            var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
+
+            for (var i = 0; i < newItems.Length; i++)
+            {
+                if (oldItems[i] == null)
+                {
+                    continue;
+                }
+                if (newItems[i].MakeIndex == 0 && oldItems[i].MakeIndex > 0)
+                {
+                    delItem[i] = oldItems[i];
+                    continue;
+                }
+                if (newItems[i].MakeIndex > 0 || newItems[i].MakeIndex > oldItems[i].MakeIndex)
+                {
+                    chgList[i] = newItems[i]; //差异化的数据
+                    continue;
+                }
+                if (oldItems[i] == null && newItems[i].MakeIndex > 0) //历史位置没有物品，但是需要保存的位置有物品时，对数据进行更新操作
+                {
+                    chgList[i] = newItems[i]; //差异化的数据
+                    continue;
+                }
+                if (oldItems[i].Index == 0 && oldItems[i].MakeIndex == 0 && newItems[i].MakeIndex > 0 && newItems[i].Index > 0) //穿戴位置没有任何数据
+                {
+                    delItem[i] = newItems[i];
+                    continue;
+                }
+            }
             var success = false;
             var dbConnection = Open(ref success);
             if (!success)
             {
                 return;
             }
+
             try
             {
-                var playData = new THumDataInfo();
-                playData.Data.Initialization();
-                GetItemRecord(PlayerId, true, ref playData);
-                var useSize = playData.Data.HumItems.Length;
-                var oldItems = playData.Data.HumItems;
-                var newItems = humanRcd.Data.HumItems;
-                var addItem = new UserItem[useSize];
-                var delItem = new UserItem[useSize];
-                var chgList = new UserItem[useSize];
-                var useItemCount = QueryUseItemCount(PlayerId);
-                
-                for (var i = 0; i < newItems.Length; i++)
-                {
-                    if (newItems[i].MakeIndex == 0 && oldItems[i].MakeIndex > 0)
-                    {
-                        delItem[i] = oldItems[i];
-                        continue;
-                    }
-                    if (newItems[i].MakeIndex > 0 || newItems[i].MakeIndex > oldItems[i].MakeIndex)
-                    {
-                        chgList[i] = newItems[i]; //差异化的数据
-                        continue;
-                    }
-                    if (oldItems[i] == null && newItems[i].MakeIndex > 0) //历史位置没有物品，但是需要保存的位置有物品时，对数据进行更新操作
-                    {
-                        chgList[i] = newItems[i]; //差异化的数据
-                        continue;
-                    }
-                    if (oldItems[i].Index == 0 && oldItems[i].MakeIndex == 0 && newItems[i].MakeIndex > 0 && newItems[i].Index > 0) //穿戴位置没有任何数据
-                    {
-                        delItem[i] = newItems[i];
-                        continue;
-                    }
-                }
-
                 if (delItem.Length > 0)
                 {
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE characters_item SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0");
-                    strSql.AppendLine("WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;");
-                    var batch = new MySqlBatch(dbConnection);
-
+                    strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;");
                     for (var i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
                         {
                             continue;
                         }
-                        var batchCommand = new MySqlBatchCommand();
-                        batchCommand.CommandText = strSql.ToString();
-                        batchCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        batchCommand.Parameters.AddWithValue("@Position", i);
-                        batchCommand.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
-                        batchCommand.Parameters.AddWithValue("@StdIndex", delItem[i].Index);
-                        batch.BatchCommands.Add(batchCommand);
+                        var command = new MySqlCommand(strSql.ToString());
+                        command.Connection = dbConnection;
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", delItem[i].Index);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        ClearItemAttr(PlayerId, delItem.Select(x => x.MakeIndex));
+                        ClearItemAttr(playerId, delItem.Where(x => x != null).Select(x => x.MakeIndex));
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.SaveItem (Clear Item)");
                         _logger.Error(ex.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
 
@@ -1003,7 +988,6 @@ namespace DBSvr.Storage.MySQL
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE characters_item SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax ");
                     strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position");
-                    var batch = new MySqlBatch(dbConnection);
 
                     for (var i = 0; i < chgList.Length; i++)
                     {
@@ -1011,30 +995,26 @@ namespace DBSvr.Storage.MySQL
                         {
                             continue;
                         }
-                        var batchCommand = new MySqlBatchCommand();
-                        batchCommand.CommandText = strSql.ToString();
-                        batchCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        batchCommand.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
-                        batchCommand.Parameters.AddWithValue("@Position", i);
-                        batchCommand.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
-                        batchCommand.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
-                        batchCommand.Parameters.AddWithValue("@Dura", chgList[i].Dura);
-                        batchCommand.Parameters.AddWithValue("@DuraMax", chgList[i].DuraMax);
-                        batch.BatchCommands.Add(batchCommand);
+                        var command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
+                        command.Parameters.AddWithValue("@Dura", chgList[i].Dura);
+                        command.Parameters.AddWithValue("@DuraMax", chgList[i].DuraMax);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        UpdateItemAttr(PlayerId, chgList);
+                        UpdateItemAttr(playerId, chgList);
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.SaveItem (Update Item)");
                         _logger.Error(ex.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
 
@@ -1055,11 +1035,9 @@ namespace DBSvr.Storage.MySQL
                     }
 
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_item (PlayerId,CharName, Position, MakeIndex, StdIndex, Dura, DuraMax)");
+                    strSql.AppendLine("INSERT INTO characters_item (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax)");
                     strSql.AppendLine(" VALUES ");
-                    strSql.AppendLine("(@PlayerId,@CharName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax)");
-
-                    var batch = new MySqlBatch(dbConnection);
+                    strSql.AppendLine("(@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax)");
 
                     for (var i = 0; i < addItem.Length; i++)
                     {
@@ -1067,34 +1045,30 @@ namespace DBSvr.Storage.MySQL
                         {
                             continue;
                         }
-                        var batchCommand = new MySqlBatchCommand();
-                        batchCommand.CommandText = strSql.ToString();
-                        batchCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        batchCommand.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
-                        batchCommand.Parameters.AddWithValue("@Position", i);
-                        batchCommand.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
-                        batchCommand.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
-                        batchCommand.Parameters.AddWithValue("@Dura", addItem[i].Dura);
-                        batchCommand.Parameters.AddWithValue("@DuraMax", addItem[i].DuraMax);
-                        batch.BatchCommands.Add(batchCommand);
+                        var command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
+                        command.Parameters.AddWithValue("@Dura", addItem[i].Dura);
+                        command.Parameters.AddWithValue("@DuraMax", addItem[i].DuraMax);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        CreateItemAttr(PlayerId, addItem);
+                        CreateItemAttr(playerId, addItem);
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.SaveItem (Insert Item)");
                         _logger.Error(ex.StackTrace);
                     }
-                    finally
-                    {
-                        batch.Dispose();
-                    }
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 _logger.Error("[Exception] PlayDataStorage.UpdateRecord");
             }
@@ -1104,7 +1078,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveBagItem(int PlayerId, THumDataInfo humanRcd)
+        private void SaveBagItem(int playerId, THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1116,17 +1090,21 @@ namespace DBSvr.Storage.MySQL
             {
                 var playData = new THumDataInfo();
                 playData.Data.Initialization();
-                GetBagItemRecord(PlayerId, ref playData);
+                GetBagItemRecord(playerId, ref playData);
                 var bagSize = humanRcd.Data.BagItems.Length;
                 var oldItems = playData.Data.BagItems;
                 var newItems = humanRcd.Data.BagItems;
-                var bagItemCount = QueryBagItemCount(PlayerId);
+                var bagItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
                 var addItem = new UserItem[bagSize];
                 var delItem = new UserItem[bagSize];
                 var chgList = new UserItem[bagSize];
 
                 for (var i = 0; i < newItems.Length; i++)
                 {
+                    if (oldItems[i] == null)
+                    {
+                        continue;
+                    }
                     if (newItems[i].MakeIndex == 0 && oldItems[i].MakeIndex > 0)
                     {
                         delItem[i] = oldItems[i];
@@ -1154,34 +1132,28 @@ namespace DBSvr.Storage.MySQL
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE characters_bagitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0");
                     strSql.AppendLine("WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;");
-                    var batch = new MySqlBatch(dbConnection);
                     for (var i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
                         {
                             continue;
                         }
-                        var batchCommand = new MySqlBatchCommand();
-                        batchCommand.CommandText = strSql.ToString();
-                        batchCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        batchCommand.Parameters.AddWithValue("@Position", i);
-                        batchCommand.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
-                        batchCommand.Parameters.AddWithValue("@StdIndex", delItem[i].Index);
-                        batch.BatchCommands.Add(batchCommand);
+                        var command = new MySqlCommand();
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", delItem[i].Index);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        ClearItemAttr(PlayerId, delItem.Select(x => x.MakeIndex));
+                        ClearItemAttr(playerId, delItem.Where(x => x != null).Select(x => x.MakeIndex));
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.UpdateBagItem (Delete Item)");
                         _logger.Error(ex.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
                 if (chgList.Length > 0)
@@ -1189,38 +1161,32 @@ namespace DBSvr.Storage.MySQL
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE characters_bagitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax ");
                     strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position;");
-                    var batch = new MySqlBatch(dbConnection);
                     for (var i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
                         {
                             continue;
                         }
-                        var batchCommand = new MySqlBatchCommand();
-                        batchCommand.CommandText = strSql.ToString();
-                        batchCommand.Parameters.Clear();
-                        batchCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        batchCommand.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
-                        batchCommand.Parameters.AddWithValue("@Position", i);
-                        batchCommand.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
-                        batchCommand.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
-                        batchCommand.Parameters.AddWithValue("@Dura", chgList[i].Dura);
-                        batchCommand.Parameters.AddWithValue("@DuraMax", chgList[i].DuraMax);
-                        batch.BatchCommands.Add(batchCommand);
+                        var command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
+                        command.Parameters.AddWithValue("@Dura", chgList[i].Dura);
+                        command.Parameters.AddWithValue("@DuraMax", chgList[i].DuraMax);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        UpdateItemAttr(PlayerId, chgList);
+                        UpdateItemAttr(playerId, chgList);
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.UpdateBagItem (Update Item)");
                         _logger.Error(ex.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
                 if (bagItemCount <= 0)
@@ -1240,37 +1206,32 @@ namespace DBSvr.Storage.MySQL
                     }
 
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_bagitem (PlayerId,CharName, Position, MakeIndex, StdIndex, Dura, DuraMax)");
+                    strSql.AppendLine("INSERT INTO characters_bagitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax)");
                     strSql.AppendLine(" VALUES ");
-                    strSql.AppendLine("(@PlayerId,@CharName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);");
-                    var batch = new MySqlBatch(dbConnection);
+                    strSql.AppendLine("(@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);");
 
                     for (var i = 0; i < addItem.Length; i++)
                     {
-                        var batchCommand = new MySqlBatchCommand();
-                        batchCommand.CommandText = strSql.ToString();
-                        batchCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        batchCommand.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
-                        batchCommand.Parameters.AddWithValue("@Position", i);
-                        batchCommand.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
-                        batchCommand.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
-                        batchCommand.Parameters.AddWithValue("@Dura", addItem[i].Dura);
-                        batchCommand.Parameters.AddWithValue("@DuraMax", addItem[i].DuraMax);
-                        batch.BatchCommands.Add(batchCommand);
+                        var command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
+                        command.Parameters.AddWithValue("@Dura", addItem[i].Dura);
+                        command.Parameters.AddWithValue("@DuraMax", addItem[i].DuraMax);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        CreateItemAttr(PlayerId, addItem);
+                        CreateItemAttr(playerId, addItem);
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.UpdateBagItem (Insert Item)");
                         _logger.Error(ex.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
             }
@@ -1284,7 +1245,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveStorageItem(int PlayerId, THumDataInfo humanRcd)
+        private void SaveStorageItem(int playerId, THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1296,17 +1257,21 @@ namespace DBSvr.Storage.MySQL
             {
                 var playData = new THumDataInfo();
                 playData.Data.Initialization();
-                GetStorageRecord(PlayerId, ref playData);
+                GetStorageRecord(playerId, ref playData);
                 var storageSize = humanRcd.Data.StorageItems.Length;
                 var oldItems = playData.Data.StorageItems;
                 var newItems = humanRcd.Data.StorageItems;
-                var storageItemCount = QueryStorageItemCount(PlayerId);
+                var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
                 var addItem = new UserItem[storageSize];
                 var delItem = new UserItem[storageSize];
                 var chgList = new UserItem[storageSize];
 
                 for (var i = 0; i < newItems.Length; i++)
                 {
+                    if (oldItems[i] == null)
+                    {
+                        continue;
+                    }
                     if (newItems[i].MakeIndex == 0 && oldItems[i].MakeIndex > 0)
                     {
                         delItem[i] = oldItems[i];
@@ -1334,34 +1299,29 @@ namespace DBSvr.Storage.MySQL
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0");
                     strSql.AppendLine("WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;");
-                    var batch = new MySqlBatch(dbConnection);
                     for (var i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
                         {
                             continue;
                         }
-                        var btachCommand = new MySqlBatchCommand();
-                        btachCommand.CommandText = strSql.ToString();
-                        btachCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        btachCommand.Parameters.AddWithValue("@Position", i);
-                        btachCommand.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
-                        btachCommand.Parameters.AddWithValue("@StdIndex", delItem[i].Index);
-                        batch.BatchCommands.Add(btachCommand);
+                        var command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", delItem[i].Index);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        ClearItemAttr(PlayerId, delItem.Select(x => x.MakeIndex));
+                        ClearItemAttr(playerId, delItem.Where(x => x != null).Select(x => x.MakeIndex));
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.SaveStorageItem (Delete Item)");
                         _logger.Error(ex.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
 
@@ -1370,38 +1330,33 @@ namespace DBSvr.Storage.MySQL
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE characters_storageitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax ");
                     strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position;");
-                    var batch = new MySqlBatch(dbConnection);
                     for (var i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
                         {
                             continue;
                         }
-                        var btachCommand = new MySqlBatchCommand();
-                        btachCommand.CommandText = strSql.ToString();
-                        btachCommand.Parameters.Clear();
-                        btachCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        btachCommand.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
-                        btachCommand.Parameters.AddWithValue("@Position", i);
-                        btachCommand.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
-                        btachCommand.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
-                        btachCommand.Parameters.AddWithValue("@Dura", chgList[i].Dura);
-                        btachCommand.Parameters.AddWithValue("@DuraMax", chgList[i].DuraMax);
-                        batch.BatchCommands.Add(btachCommand);
+                        var command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
+                        command.Parameters.AddWithValue("@Dura", chgList[i].Dura);
+                        command.Parameters.AddWithValue("@DuraMax", chgList[i].DuraMax);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        UpdateItemAttr(PlayerId, chgList);
+                        UpdateItemAttr(playerId, chgList);
                     }
                     catch (Exception ex)
                     {
                         _logger.Error("[Exception] PlayDataStorage.SaveStorageItem (Update Item)");
                         _logger.Error(ex.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
 
@@ -1422,38 +1377,32 @@ namespace DBSvr.Storage.MySQL
                     }
 
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_storageitem (PlayerId,CharName, Position, MakeIndex, StdIndex, Dura, DuraMax)");
+                    strSql.AppendLine("INSERT INTO characters_storageitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax)");
                     strSql.AppendLine(" VALUES ");
-                    strSql.AppendLine("(@PlayerId,@CharName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);");
-
-                    var batch = new MySqlBatch(dbConnection);
+                    strSql.AppendLine("(@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);");
 
                     for (var i = 0; i < addItem.Length; i++)
                     {
-                        var btachCommand = new MySqlBatchCommand();
-                        btachCommand.CommandText = strSql.ToString();
-                        btachCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        btachCommand.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
-                        btachCommand.Parameters.AddWithValue("@Position", i);
-                        btachCommand.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
-                        btachCommand.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
-                        btachCommand.Parameters.AddWithValue("@Dura", addItem[i].Dura);
-                        btachCommand.Parameters.AddWithValue("@DuraMax", addItem[i].DuraMax);
-                        batch.BatchCommands.Add(btachCommand);
+                        var command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@Position", i);
+                        command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
+                        command.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
+                        command.Parameters.AddWithValue("@Dura", addItem[i].Dura);
+                        command.Parameters.AddWithValue("@DuraMax", addItem[i].DuraMax);
+                        command.ExecuteNonQuery();
                     }
                     try
                     {
-                        batch.ExecuteNonQuery();
-                        CreateItemAttr(PlayerId, addItem);
+                        CreateItemAttr(playerId, addItem);
                     }
                     catch (Exception e)
                     {
                         _logger.Error("[Exception] PlayDataStorage.SaveStorageItem (Insert Item)");
                         _logger.Error(e.StackTrace);
-                    }
-                    finally
-                    {
-                        batch.Dispose();
                     }
                 }
             }
@@ -1467,7 +1416,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveMagics(int PlayerId, MagicRcd[] magicRcds)
+        private void SaveMagics(int playerId, MagicRcd[] magicRcds)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1478,27 +1427,26 @@ namespace DBSvr.Storage.MySQL
             var command = new MySqlCommand();
             command.Connection = dbConnection;
             command.CommandText = "DELETE FROM characters_magic WHERE PlayerId=@PlayerId";
-            command.Parameters.AddWithValue("@PlayerId", PlayerId);
+            command.Parameters.AddWithValue("@PlayerId", playerId);
             command.ExecuteNonQuery();
             try
             {
-                using var batch = new MySqlBatch(dbConnection);
-                const string sStrSql = "INSERT INTO characters_magic(PlayerId, MAGICID, Level, USEKEY, CurrTrain) VALUES (@PlayerId, @MAGICID, @Level, @USEKEY, @CurrTrain)";
+                const string sStrSql = "INSERT INTO characters_magic(PlayerId, MagicId, Level, USEKEY, CurrTrain) VALUES (@PlayerId, @MagicId, @Level, @USEKEY, @CurrTrain)";
                 for (var i = 0; i < magicRcds.Length; i++)
                 {
                     if (magicRcds[i].MagIdx > 0)
                     {
-                        var batchCommand = new MySqlBatchCommand();
-                        batchCommand.Parameters.AddWithValue("@PlayerId", PlayerId);
-                        batchCommand.Parameters.AddWithValue("@Magicid", magicRcds[i].MagIdx);
-                        batchCommand.Parameters.AddWithValue("@Level", magicRcds[i].Level);
-                        batchCommand.Parameters.AddWithValue("@Usekey", magicRcds[i].MagicKey);
-                        batchCommand.Parameters.AddWithValue("@CurrTrain", magicRcds[i].TranPoint);
-                        batchCommand.CommandText = sStrSql;
-                        batch.BatchCommands.Add(batchCommand);
+                        command = new MySqlCommand();
+                        command.Connection = dbConnection;
+                        command.Parameters.AddWithValue("@PlayerId", playerId);
+                        command.Parameters.AddWithValue("@MagicId", magicRcds[i].MagIdx);
+                        command.Parameters.AddWithValue("@Level", magicRcds[i].Level);
+                        command.Parameters.AddWithValue("@Usekey", magicRcds[i].MagicKey);
+                        command.Parameters.AddWithValue("@CurrTrain", magicRcds[i].TranPoint);
+                        command.CommandText = sStrSql;
+                        command.ExecuteNonQuery();
                     }
                 }
-                batch.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -1511,7 +1459,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveBonusability(int PlayerId, THumDataInfo humanRcd)
+        private void SaveBonusability(int playerId, THumDataInfo humanRcd)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1523,7 +1471,7 @@ namespace DBSvr.Storage.MySQL
             const string sSqlStr = "UPDATE characters_bonusability SET AC=@AC, MAC=@MAC, DC=@DC, MC=@MC, SC=@SC, HP=@HP, MP=@MP, HIT=@HIT, SPEED=@SPEED, RESERVED=@RESERVED WHERE PlayerId=@PlayerId";
             var command = new MySqlCommand();
             command.Connection = dbConnection;
-            command.Parameters.AddWithValue("@PlayerId", PlayerId);
+            command.Parameters.AddWithValue("@PlayerId", playerId);
             command.Parameters.AddWithValue("@AC", bonusAbil.AC);
             command.Parameters.AddWithValue("@MAC", bonusAbil.MAC);
             command.Parameters.AddWithValue("@DC", bonusAbil.DC);
@@ -1578,7 +1526,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveStatus(int PlayerId, THumDataInfo humanRcd)
+        private void SaveStatus(int playerId, THumDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_status WHERE PlayerId=@PlayerId";
             const string sSqlStr5 = "INSERT INTO characters_status (PlayerId, CharName, Status) VALUES(@PlayerId, @CharName, @Status)";
@@ -1589,14 +1537,15 @@ namespace DBSvr.Storage.MySQL
                 return;
             }
             var command = new MySqlCommand();
-            command.Parameters.AddWithValue("@PlayerId", PlayerId);
+            command.Parameters.AddWithValue("@PlayerId", playerId);
             command.Connection = dbConnection;
             command.CommandText = sSqlStr4;
             try
             {
                 command.ExecuteNonQuery();
                 command.CommandText = sSqlStr5;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
                 command.Parameters.AddWithValue("@Status", string.Join("/", humanRcd.Data.StatusTimeArr));
                 command.ExecuteNonQuery();
@@ -1622,8 +1571,7 @@ namespace DBSvr.Storage.MySQL
                 //    List.Add(m_MirQuickList[i], m_MirQuickList.Values[i]);
                 //}
             }
-            result = list.Count;
-            return result;
+            return list.Count;
         }
 
         public bool Delete(int nIndex)
@@ -1647,17 +1595,17 @@ namespace DBSvr.Storage.MySQL
         private bool DeleteRecord(int nIndex)
         {
             var result = true;
-            var PlayerId = _quickIndexIdMap[nIndex];
+            var playerId = _quickIndexIdMap[nIndex];
             var success = false;
             var dbConnection = Open(ref success);
             if (!success)
             {
                 return false;
             }
-            const string SqlString = "UPDATE characters SET DELETED=1, LastUpdate=now() WHERE ID=@Id";
+            const string sqlString = "UPDATE characters SET DELETED=1, LastUpdate=now() WHERE ID=@Id";
             var command = new MySqlCommand();
-            command.CommandText = SqlString;
-            command.Parameters.AddWithValue("@Id", PlayerId);
+            command.CommandText = sqlString;
+            command.Parameters.AddWithValue("@Id", playerId);
             command.Connection = dbConnection;
             try
             {
@@ -1701,13 +1649,13 @@ namespace DBSvr.Storage.MySQL
             const string sSql = "SELECT * FROM characters WHERE ID=@Id";
             if (nIndex < 0)
             {
-                return result;
+                return -1;
             }
             if (_quickIndexIdMap.Count <= nIndex)
             {
-                return result;
+                return -1;
             }
-            var PlayerId = _quickIndexIdMap[nIndex];
+            var playerId = _quickIndexIdMap[nIndex];
             var success = false;
             var dbConnection = Open(ref success);
             if (!success)
@@ -1720,15 +1668,15 @@ namespace DBSvr.Storage.MySQL
                 try
                 {
                     command.CommandText = sSql;
-                    command.Parameters.AddWithValue("@Id", nIndex);
+                    command.Parameters.AddWithValue("@Id", playerId);
                     command.Connection = dbConnection;
                     using var dr = command.ExecuteReader();
                     while (dr.Read())
                     {
                         queryChrRcd.sName = dr.GetString("CharName");
-                        queryChrRcd.btJob = dr.GetByte("JOB");
-                        queryChrRcd.btHair = dr.GetByte("HAIR");
-                        queryChrRcd.btSex = dr.GetByte("SEX");
+                        queryChrRcd.btJob = dr.GetByte("Job");
+                        queryChrRcd.btHair = dr.GetByte("Hair");
+                        queryChrRcd.btSex = dr.GetByte("Sec");
                         queryChrRcd.wLevel = dr.GetUInt16("Level");
                     }
                 }
@@ -1742,11 +1690,10 @@ namespace DBSvr.Storage.MySQL
             {
                 Close(dbConnection);
             }
-            result = nIndex;
-            return result;
+            return nIndex;
         }
         
-        private long QueryUseItemCount(int PlayerId)
+        private long QueryUseItemCount(int playerId)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1761,12 +1708,12 @@ namespace DBSvr.Storage.MySQL
             {
                 command.Connection = dbConnection;
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 result = (long)command.ExecuteScalar();
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetItemRecord:" + ex.StackTrace);
+                _logger.Error("[Exception] PlayDataStorage.QueryUseItemCount:" + ex.StackTrace);
             }
             finally
             {
@@ -1775,7 +1722,7 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private long QueryBagItemCount(int PlayerId)
+        private long QueryBagItemCount(int playerId)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1790,12 +1737,12 @@ namespace DBSvr.Storage.MySQL
             {
                 command.Connection = dbConnection;
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 result = (long)command.ExecuteScalar();
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetBagItemCount:" + ex.StackTrace);
+                _logger.Error("[Exception] PlayDataStorage.QueryBagItemCount:" + ex.StackTrace);
             }
             finally
             {
@@ -1804,7 +1751,7 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private long QueryStorageItemCount(int PlayerId)
+        private long QueryStorageItemCount(int playerId)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1819,12 +1766,12 @@ namespace DBSvr.Storage.MySQL
             {
                 command.Connection = dbConnection;
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 result = (long)command.ExecuteScalar();
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetStorageItemCount:" + ex.StackTrace);
+                _logger.Error("[Exception] PlayDataStorage.QueryStorageItemCount:" + ex.StackTrace);
             }
             finally
             {
@@ -1833,8 +1780,12 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private void ClearItemAttr(int PlayerId,IEnumerable<int> MakeIndex)
+        private void ClearItemAttr(int playerId,IEnumerable<int> makeIndex)
         {
+            if (!makeIndex.Any())
+            {
+                return;
+            }
             var success = false;
             var dbConnection = Open(ref success);
             if (!success)
@@ -1843,12 +1794,11 @@ namespace DBSvr.Storage.MySQL
             }
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters_item_attr SET MakeIndex = 0,VALUE0 = 0, VALUE1 = 0, VALUE2 = 0, VALUE3 = 0, VALUE4 = 0, VALUE5 = 0");
-            strSql.AppendLine(", VALUE6 = 0, VALUE7 = 0, VALUE8 = 0, VALUE9 = 0, VALUE10 = 0, VALUE11 = 0, VALUE12 = 0, VALUE13 = 0 WHERE PlayerId = @PlayerId AND MakeIndex in @MakeIndex;");
+            strSql.AppendLine(", VALUE6 = 0, VALUE7 = 0, VALUE8 = 0, VALUE9 = 0, VALUE10 = 0, VALUE11 = 0, VALUE12 = 0, VALUE13 = 0 WHERE PlayerId = @PlayerId AND MakeIndex in (@MakeIndex);");
             var command = new MySqlCommand();
             command.CommandText = strSql.ToString();
-            command.Parameters.Clear();
-            command.Parameters.AddWithValue("@PlayerId", PlayerId);
-            command.Parameters.AddWithValue("@StdIndex", MakeIndex);
+            command.Parameters.AddWithValue("@PlayerId", playerId);
+            command.Parameters.AddWithValue("@StdIndex", string.Join(",", makeIndex));
             try
             {
                 command.ExecuteNonQuery();
@@ -1864,7 +1814,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void UpdateItemAttr(int PlayerId, UserItem[] userItems)
+        private void UpdateItemAttr(int playerId, UserItem[] userItems)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1877,7 +1827,6 @@ namespace DBSvr.Storage.MySQL
             strSql.AppendLine("VALUE0 = @VALUE0, VALUE1 = @VALUE1, VALUE2 =@VALUE2, VALUE3 = @VALUE3, VALUE4 = @VALUE4,VALUE5 = @VALUE5, VALUE6 = @VALUE6, VALUE7 = @VALUE7, ");
             strSql.AppendLine("VALUE8 = @VALUE8, VALUE9 = @VALUE9, VALUE10 = @VALUE10, VALUE11 = @VALUE11, VALUE12 = @VALUE12, VALUE13 = @VALUE13");
             strSql.AppendLine("WHERE PlayerId = @PlayerId AND MakeIndex = @MakeIndex");
-            MySqlBatch batchs = new MySqlBatch(dbConnection);
             try
             {
                 for (var i = 0; i < userItems.Length; i++)
@@ -1886,9 +1835,9 @@ namespace DBSvr.Storage.MySQL
                     {
                         continue;
                     }
-                    var command = new MySqlBatchCommand();
+                    var command = new MySqlCommand();
                     command.CommandText = strSql.ToString();
-                    command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                    command.Parameters.AddWithValue("@PlayerId", playerId);
                     command.Parameters.AddWithValue("@MakeIndex", userItems[i].MakeIndex);
                     command.Parameters.AddWithValue("@VALUE0", userItems[i].Desc[0]);
                     command.Parameters.AddWithValue("@VALUE1", userItems[i].Desc[1]);
@@ -1904,9 +1853,8 @@ namespace DBSvr.Storage.MySQL
                     command.Parameters.AddWithValue("@VALUE11", userItems[i].Desc[11]);
                     command.Parameters.AddWithValue("@VALUE12", userItems[i].Desc[12]);
                     command.Parameters.AddWithValue("@VALUE13", userItems[i].Desc[13]);
-                    batchs.BatchCommands.Add(command);
+                    command.ExecuteNonQuery();
                 }
-                batchs.ExecuteNonQuery();
             }
             catch (Exception e)
             {
@@ -1919,7 +1867,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void CreateItemAttr(int PlayerId, UserItem[] userItems)
+        private void CreateItemAttr(int playerId, UserItem[] userItems)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1931,7 +1879,6 @@ namespace DBSvr.Storage.MySQL
             strSql.AppendLine("INSERT INTO characters_item_attr (PlayerId,MakeIndex,VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, VALUE10, VALUE11, VALUE12, VALUE13)");
             strSql.AppendLine(" VALUES ");
             strSql.AppendLine("(@PlayerId, @MakeIndex,@VALUE0, @VALUE1, @VALUE2, @VALUE3, @VALUE4, @VALUE5,@VALUE6, @VALUE7, @VALUE8, @VALUE9, @VALUE10, @VALUE11, @VALUE12, @VALUE13)");
-            MySqlBatch batchs = new MySqlBatch(dbConnection);
             try
             {
                 for (var i = 0; i < userItems.Length; i++)
@@ -1940,9 +1887,9 @@ namespace DBSvr.Storage.MySQL
                     {
                         continue;
                     }
-                    var command = new MySqlBatchCommand();
+                    var command = new MySqlCommand();
                     command.CommandText = strSql.ToString();
-                    command.Parameters.AddWithValue("@PlayerId", PlayerId);
+                    command.Parameters.AddWithValue("@PlayerId", playerId);
                     command.Parameters.AddWithValue("@MakeIndex", userItems[i].MakeIndex);
                     command.Parameters.AddWithValue("@VALUE0", userItems[i].Desc[0]);
                     command.Parameters.AddWithValue("@VALUE1", userItems[i].Desc[1]);
@@ -1958,9 +1905,8 @@ namespace DBSvr.Storage.MySQL
                     command.Parameters.AddWithValue("@VALUE11", userItems[i].Desc[11]);
                     command.Parameters.AddWithValue("@VALUE12", userItems[i].Desc[12]);
                     command.Parameters.AddWithValue("@VALUE13", userItems[i].Desc[13]);
-                    batchs.BatchCommands.Add(command);
+                    command.ExecuteNonQuery();
                 }
-                batchs.ExecuteNonQuery();
             }
             catch (Exception e)
             {
@@ -1973,7 +1919,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void DeleteItemAttr(int PlayerId, IEnumerable<int> MakeIndex)
+        private void DeleteItemAttr(int playerId, IEnumerable<int> makeIndex)
         {
             var success = false;
             var dbConnection = Open(ref success);
@@ -1985,10 +1931,10 @@ namespace DBSvr.Storage.MySQL
             command.Connection = dbConnection;
             try
             {
-                command.CommandText = "DELETE FROM characters_item_attr WHERE PlayerId=@PlayerId AND MakeIndex in @MakeIndex";
+                command.CommandText = "DELETE FROM characters_item_attr WHERE PlayerId=@PlayerId AND MakeIndex in (@MakeIndex)";
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
-                command.Parameters.AddWithValue("@MakeIndex", MakeIndex);
+                command.Parameters.AddWithValue("@PlayerId", playerId);
+                command.Parameters.AddWithValue("@MakeIndex", string.Join(",", makeIndex));
                 command.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -2002,22 +1948,27 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void QueryItemAttr(int PlayerId, ref UserItem[] userItems)
+        private void QueryItemAttr(int playerId, ref UserItem[] userItems)
         {
+            var makeIndexs = userItems.Where(x => x != null).Select(x => x.MakeIndex);
+            if (makeIndexs == null || makeIndexs.Count() <= 0)
+            {
+                return;
+            }
             var success = false;
             var dbConnection = Open(ref success);
             if (!success)
             {
                 return;
             }
-            const string sSqlString = "SELECT * FROM characters_item_attr WHERE PlayerId=@PlayerId and MakeIndex in @MakeIndex";
+            const string sSqlString = "SELECT * FROM characters_item_attr WHERE PlayerId=@PlayerId and MakeIndex in (@MakeIndex)";
             var command = new MySqlCommand();
             command.Connection = dbConnection;
             try
             {
                 command.CommandText = sSqlString;
-                command.Parameters.AddWithValue("@PlayerId", PlayerId);
-                command.Parameters.AddWithValue("@MakeIndex", userItems.Select(x => x.MakeIndex));
+                command.Parameters.AddWithValue("@PlayerId", playerId);
+                command.Parameters.AddWithValue("@MakeIndex", string.Join(",", userItems.Select(x => x.MakeIndex)));
                 using var dr = command.ExecuteReader();
                 var nPosition = 0;
                 while (dr.Read())
