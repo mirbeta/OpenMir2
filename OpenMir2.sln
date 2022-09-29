@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudGate", "src\CloudGate\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clouds", "Clouds", "{D1A90098-6CA7-4C99-93F0-AF26E4A15260}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.MySQL", "src\Storeages\DBSvr.Storage.MySQL\DBSvr.Storage.MySQL.csproj", "{EF22FC3B-2298-4B25-B826-31E79DF29573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.MariaDB", "src\Storeages\DBSvr.Storage.MySQL\DBSvr.Storage.MariaDB.csproj", "{EF22FC3B-2298-4B25-B826-31E79DF29573}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.LocalFile", "src\Storeages\DBSvr.Storage.LocalFile\DBSvr.Storage.LocalFile.csproj", "{FCE845E3-1A1D-44F2-B008-CC01182FB10E}"
 EndProject
@@ -45,7 +45,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storages", "Storages", "{3D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DBSvr", "DBSvr", "{6E1CC18F-2BBE-4CBA-903A-267FB4C218EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBSvr.Storage.MongoDB", "src\Storeages\DBSvr.Storage.MongoDB\DBSvr.Storage.MongoDB.csproj", "{647E768C-E6EB-421B-BBD8-9BAC5162590D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.MongoDB", "src\Storeages\DBSvr.Storage.MongoDB\DBSvr.Storage.MongoDB.csproj", "{647E768C-E6EB-421B-BBD8-9BAC5162590D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
