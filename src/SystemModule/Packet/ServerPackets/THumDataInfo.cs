@@ -48,7 +48,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(1)]
         public byte ServerIndex;
         [ProtoMember(2)]
-        public string sCharName;
+        public string sChrName;
         [ProtoMember(3)]
         public string sCurMap;
         [ProtoMember(4)]

@@ -246,7 +246,7 @@ namespace DBSvr.Services
                 chrRecord.Data = new HumInfoData();
                 chrRecord.Header.sName = sChrName;
                 chrRecord.Header.sAccount = sAccount;
-                chrRecord.Data.sCharName = sChrName;
+                chrRecord.Data.sChrName = sChrName;
                 chrRecord.Data.Account = sAccount;
                 chrRecord.Data.Sex = (byte)nSex;
                 chrRecord.Data.Job = (byte)nJob;

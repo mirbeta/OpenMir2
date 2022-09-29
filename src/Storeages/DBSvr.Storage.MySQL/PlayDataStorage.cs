@@ -1,4 +1,3 @@
-using DBSvr.Storage.MariaDB.EqualityComparer;
 using DBSvr.Storage.Model;
 using MySqlConnector;
 using NLog;
@@ -11,7 +10,7 @@ using SystemModule;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 
-namespace DBSvr.Storage.MariaDB
+namespace DBSvr.Storage.MySQL
 {
     public class PlayDataStorage : IPlayDataStorage
     {
@@ -303,7 +302,7 @@ namespace DBSvr.Storage.MariaDB
                     humanRcd.Header.sName = dr.GetString("CharName");
                     humanRcd.Header.Deleted = dr.GetBoolean("DELETED");
                     humanRcd.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("CREATEDATE"));
-                    humanRcd.Data.sCharName = dr.GetString("CharName");
+                    humanRcd.Data.sChrName = dr.GetString("CharName");
                     if (!dr.IsDBNull(dr.GetOrdinal("MapName")))
                     {
                         humanRcd.Data.sCurMap = dr.GetString("MapName");
@@ -457,10 +456,10 @@ namespace DBSvr.Storage.MariaDB
                 var position = 0;
                 while (dr.Read())
                 {
-                    humanRcd.Data.Magic[position].MagIdx = dr.GetUInt16("MAGICID");
-                    humanRcd.Data.Magic[position].MagicKey = dr.GetChar("USEKEY");
+                    humanRcd.Data.Magic[position].MagIdx = dr.GetUInt16("MagicId");
+                    humanRcd.Data.Magic[position].MagicKey = dr.GetChar("UseKey");
                     humanRcd.Data.Magic[position].Level = (byte)dr.GetInt32("Level");
-                    humanRcd.Data.Magic[position].TranPoint = dr.GetInt32("CURRTRAIN");
+                    humanRcd.Data.Magic[position].TranPoint = dr.GetInt32("CurrTrain");
                     position++;
                 }
                 dr.Close();
@@ -468,7 +467,7 @@ namespace DBSvr.Storage.MariaDB
             }
             catch (Exception ex)
             {
-                _logger.Error($"[Exception] GetPlayMagicRecord ChrId:{playerId}");
+                _logger.Error($"[Exception] GetMagicRecord");
                 _logger.Error(ex.StackTrace);
             }
         }
@@ -602,9 +601,105 @@ namespace DBSvr.Storage.MariaDB
                 return false;
             }
             var result = false;
+            _transaction = _connection.BeginTransaction();
             try
             {
-                result = CreateRecord(humanRcd.Data, ref nIndex);
+                var hd = humanRcd.Data;
+                var strSql = new StringBuilder();
+                strSql.AppendLine("INSERT INTO CHARACTERS (ServerIndex, LoginID, CharName, MapName, CX, CY, Level, Dir, Hair, Sex, Job, Gold, GamePoint, HomeMap,");
+                strSql.AppendLine("HomeX, HomeY, PkPoint, ReLevel, AttatckMode, FightZoneDieCount, BodyLuck, IncHealth,IncSpell, IncHealing, CreditPoint, BonusPoint,");
+                strSql.AppendLine("HungerStatus, PayMentPoint, LockLogon, MarryCount, AllowGroupReCall, GroupRcallTime, AllowGuildReCall, IsMaster, MasterName, DearName");
+                strSql.AppendLine(",StoragePwd, Deleted, CREATEDATE, LASTUPDATE) VALUES ");
+                strSql.AppendLine("(@ServerIndex, @LoginID, @CharName, @MapName, @CX, @CY, @Level, @Dir, @Hair, @Sex, @Job, @Gold, @GamePoint, @HomeMap,");
+                strSql.AppendLine("@HomeX, @HomeY, @PkPoint, @ReLevel, @AttatckMode, @FightZoneDieCount, @BodyLuck, @IncHealth,@IncSpell, @IncHealing, @CreditPoint, @BonusPoint,");
+                strSql.AppendLine("@HungerStatus, @PayMentPoint, @LockLogon, @MarryCount, @AllowGroupReCall, @GroupRcallTime, @AllowGuildReCall, @IsMaster, @MasterName, @DearName");
+                strSql.AppendLine(",@StoragePwd, @Deleted, now(), now()) ");
+
+                var command = new MySqlCommand();
+                command.Connection = _connection;
+                command.Transaction = _transaction;
+                command.CommandText = strSql.ToString();
+                command.Parameters.AddWithValue("@ServerIndex", hd.ServerIndex);
+                command.Parameters.AddWithValue("@LoginID", hd.Account);
+                command.Parameters.AddWithValue("@CharName", hd.sChrName);
+                command.Parameters.AddWithValue("@MapName", hd.sCurMap);
+                command.Parameters.AddWithValue("@CX", hd.CurX);
+                command.Parameters.AddWithValue("@CY", hd.CurY);
+                command.Parameters.AddWithValue("@Level", hd.Abil.Level);
+                command.Parameters.AddWithValue("@Dir", hd.Dir);
+                command.Parameters.AddWithValue("@Hair", hd.btHair);
+                command.Parameters.AddWithValue("@Sex", hd.Sex);
+                command.Parameters.AddWithValue("@Job", hd.Job);
+                command.Parameters.AddWithValue("@Gold", hd.nGold);
+                command.Parameters.AddWithValue("@GamePoint", hd.nGamePoint);
+                command.Parameters.AddWithValue("@HomeMap", hd.sHomeMap);
+                command.Parameters.AddWithValue("@HomeX", hd.wHomeX);
+                command.Parameters.AddWithValue("@HomeY", hd.wHomeY);
+                command.Parameters.AddWithValue("@PkPoint", hd.nPKPoint);
+                command.Parameters.AddWithValue("@ReLevel", hd.btReLevel);
+                command.Parameters.AddWithValue("@AttatckMode", hd.btAttatckMode);
+                command.Parameters.AddWithValue("@FightZoneDieCount", hd.btFightZoneDieCount);
+                command.Parameters.AddWithValue("@BodyLuck", hd.dBodyLuck);
+                command.Parameters.AddWithValue("@IncHealth", hd.btIncHealth);
+                command.Parameters.AddWithValue("@IncSpell", hd.btIncSpell);
+                command.Parameters.AddWithValue("@IncHealing", hd.btIncHealing);
+                command.Parameters.AddWithValue("@CreditPoint", hd.btCreditPoint);
+                command.Parameters.AddWithValue("@BonusPoint", hd.nBonusPoint);
+                command.Parameters.AddWithValue("@HungerStatus", hd.nHungerStatus);
+                command.Parameters.AddWithValue("@PayMentPoint", hd.nPayMentPoint);
+                command.Parameters.AddWithValue("@LockLogon", hd.boLockLogon);
+                command.Parameters.AddWithValue("@MarryCount", hd.MarryCount);
+                command.Parameters.AddWithValue("@AllowGroupReCall", hd.btAllowGroup);
+                command.Parameters.AddWithValue("@GroupRcallTime", hd.wGroupRcallTime);
+                command.Parameters.AddWithValue("@AllowGuildReCall", hd.boAllowGuildReCall);
+                command.Parameters.AddWithValue("@IsMaster", hd.boMaster);
+                command.Parameters.AddWithValue("@MasterName", hd.sMasterName);
+                command.Parameters.AddWithValue("@DearName", hd.sDearName);
+                command.Parameters.AddWithValue("@StoragePwd", hd.sStoragePwd);
+                command.Parameters.AddWithValue("@Deleted", 0);
+                try
+                {
+                    command.ExecuteNonQuery();
+                    nIndex = (int)command.LastInsertedId;
+
+                    strSql.Clear();
+                    strSql.AppendLine("INSERT INTO characters_ablity (PlayerId, Level, Ac, Mac, Dc, Mc, Sc, Hp, Mp, MaxHP, MAxMP, Exp, MaxExp,");
+                    strSql.AppendLine(" Weight, MaxWeight, WearWeight,MaxWearWeight, HandWeight, MaxHandWeight) VALUES ");
+                    strSql.AppendLine(" (@PlayerId, @Level, @Ac, @Mac, @Dc, @Mc, @Sc, @Hp, @Mp, @MaxHP, @MAxMP, @Exp, @MaxExp, @Weight, @MaxWeight, @WearWeight, @MaxWearWeight, @HandWeight, @MaxHandWeight) ");
+
+                    command.CommandText = strSql.ToString();
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@PlayerId", nIndex);
+                    command.Parameters.AddWithValue("@Level", hd.Abil.Level);
+                    command.Parameters.AddWithValue("@Ac", hd.Abil.Level);
+                    command.Parameters.AddWithValue("@Mac", hd.Abil.MAC);
+                    command.Parameters.AddWithValue("@Dc", hd.Abil.DC);
+                    command.Parameters.AddWithValue("@Mc", hd.Abil.MC);
+                    command.Parameters.AddWithValue("@Sc", hd.Abil.SC);
+                    command.Parameters.AddWithValue("@Hp", hd.Abil.HP);
+                    command.Parameters.AddWithValue("@Mp", hd.Abil.MP);
+                    command.Parameters.AddWithValue("@MaxHP", hd.Abil.MaxHP);
+                    command.Parameters.AddWithValue("@MAxMP", hd.Abil.MaxMP);
+                    command.Parameters.AddWithValue("@Exp", hd.Abil.Exp);
+                    command.Parameters.AddWithValue("@MaxExp", hd.Abil.MaxExp);
+                    command.Parameters.AddWithValue("@Weight", hd.Abil.Weight);
+                    command.Parameters.AddWithValue("@MaxWeight", hd.Abil.MaxWeight);
+                    command.Parameters.AddWithValue("@WearWeight", hd.Abil.WearWeight);
+                    command.Parameters.AddWithValue("@MaxWearWeight", hd.Abil.MaxWearWeight);
+                    command.Parameters.AddWithValue("@HandWeight", hd.Abil.HandWeight);
+                    command.Parameters.AddWithValue("@MaxHandWeight", hd.Abil.MaxHandWeight);
+                    command.ExecuteNonQuery();
+
+                    _transaction.Commit();
+                    result = true;
+                }
+                catch (Exception ex)
+                {
+                    _transaction.Rollback();
+                    _logger.Error("[Exception] PlayDataStorage.InsertRecord");
+                    _logger.Error(ex.StackTrace);
+                    return false;
+                }
             }
             catch (Exception e)
             {
@@ -612,103 +707,10 @@ namespace DBSvr.Storage.MariaDB
             }
             finally
             {
+                _transaction.Dispose();
                 Close(_connection);
             }
             return result;
-        }
-
-        private bool CreateRecord(HumInfoData hd, ref int nIndex)
-        {
-            var strSql = new StringBuilder();
-            strSql.AppendLine("INSERT INTO CHARACTERS (ServerIndex, LoginID, CharName, MapName, CX, CY, Level, Dir, Hair, Sex, Job, Gold, GamePoint, HomeMap,");
-            strSql.AppendLine("HomeX, HomeY, PkPoint, ReLevel, AttatckMode, FightZoneDieCount, BodyLuck, IncHealth,IncSpell, IncHealing, CreditPoint, BonusPoint,");
-            strSql.AppendLine("HungerStatus, PayMentPoint, LockLogon, MarryCount, AllowGroupReCall, GroupRcallTime, AllowGuildReCall, IsMaster, MasterName, DearName");
-            strSql.AppendLine(",StoragePwd, Deleted, CREATEDATE, LASTUPDATE) VALUES ");
-            strSql.AppendLine("(@ServerIndex, @LoginID, @CharName, @MapName, @CX, @CY, @Level, @Dir, @Hair, @Sex, @Job, @Gold, @GamePoint, @HomeMap,");
-            strSql.AppendLine("@HomeX, @HomeY, @PkPoint, @ReLevel, @AttatckMode, @FightZoneDieCount, @BodyLuck, @IncHealth,@IncSpell, @IncHealing, @CreditPoint, @BonusPoint,");
-            strSql.AppendLine("@HungerStatus, @PayMentPoint, @LockLogon, @MarryCount, @AllowGroupReCall, @GroupRcallTime, @AllowGuildReCall, @IsMaster, @MasterName, @DearName");
-            strSql.AppendLine(",@StoragePwd, @Deleted, now(), now()) ");
-            var command = new MySqlCommand();
-            command.Connection = _connection;
-            command.Parameters.AddWithValue("@ServerIndex", hd.ServerIndex);
-            command.Parameters.AddWithValue("@LoginID", hd.Account);
-            command.Parameters.AddWithValue("@CharName", hd.sCharName);
-            command.Parameters.AddWithValue("@MapName", hd.sCurMap);
-            command.Parameters.AddWithValue("@CX", hd.CurX);
-            command.Parameters.AddWithValue("@CY", hd.CurY);
-            command.Parameters.AddWithValue("@Level", hd.Abil.Level);
-            command.Parameters.AddWithValue("@Dir", hd.Dir);
-            command.Parameters.AddWithValue("@Hair", hd.btHair);
-            command.Parameters.AddWithValue("@Sex", hd.Sex);
-            command.Parameters.AddWithValue("@Job", hd.Job);
-            command.Parameters.AddWithValue("@Gold", hd.nGold);
-            command.Parameters.AddWithValue("@GamePoint", hd.nGamePoint);
-            command.Parameters.AddWithValue("@HomeMap", hd.sHomeMap);
-            command.Parameters.AddWithValue("@HomeX", hd.wHomeX);
-            command.Parameters.AddWithValue("@HomeY", hd.wHomeY);
-            command.Parameters.AddWithValue("@PkPoint", hd.nPKPoint);
-            command.Parameters.AddWithValue("@ReLevel", hd.btReLevel);
-            command.Parameters.AddWithValue("@AttatckMode", hd.btAttatckMode);
-            command.Parameters.AddWithValue("@FightZoneDieCount", hd.btFightZoneDieCount);
-            command.Parameters.AddWithValue("@BodyLuck", hd.dBodyLuck);
-            command.Parameters.AddWithValue("@IncHealth", hd.btIncHealth);
-            command.Parameters.AddWithValue("@IncSpell", hd.btIncSpell);
-            command.Parameters.AddWithValue("@IncHealing", hd.btIncHealing);
-            command.Parameters.AddWithValue("@CreditPoint", hd.btCreditPoint);
-            command.Parameters.AddWithValue("@BonusPoint", hd.nBonusPoint);
-            command.Parameters.AddWithValue("@HungerStatus", hd.nHungerStatus);
-            command.Parameters.AddWithValue("@PayMentPoint", hd.nPayMentPoint);
-            command.Parameters.AddWithValue("@LockLogon", hd.boLockLogon);
-            command.Parameters.AddWithValue("@MarryCount", hd.MarryCount);
-            command.Parameters.AddWithValue("@AllowGroupReCall", hd.btAllowGroup);
-            command.Parameters.AddWithValue("@GroupRcallTime", hd.wGroupRcallTime);
-            command.Parameters.AddWithValue("@AllowGuildReCall", hd.boAllowGuildReCall);
-            command.Parameters.AddWithValue("@IsMaster", hd.boMaster);
-            command.Parameters.AddWithValue("@MasterName", hd.sMasterName);
-            command.Parameters.AddWithValue("@DearName", hd.sDearName);
-            command.Parameters.AddWithValue("@StoragePwd", hd.sStoragePwd);
-            command.Parameters.AddWithValue("@Deleted", 0);
-            command.CommandText = strSql.ToString();
-            try
-            {
-                command.ExecuteNonQuery();
-                nIndex = (int)command.LastInsertedId;
-
-                strSql.Clear();
-                strSql.AppendLine("INSERT INTO characters_ablity (PlayerId, Level, Ac, Mac, Dc, Mc, Sc, Hp, Mp, MaxHP, MAxMP, Exp, MaxExp,");
-                strSql.AppendLine(" Weight, MaxWeight, WearWeight,MaxWearWeight, HandWeight, MaxHandWeight) VALUES ");
-                strSql.AppendLine(" (@PlayerId, @Level, @Ac, @Mac, @Dc, @Mc, @Sc, @Hp, @Mp, @MaxHP, @MAxMP, @Exp, @MaxExp, @Weight, @MaxWeight, @WearWeight, @MaxWearWeight, @HandWeight, @MaxHandWeight) ");
-
-                command.CommandText = strSql.ToString();
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@PlayerId", nIndex);
-                command.Parameters.AddWithValue("@Level", hd.Abil.Level);
-                command.Parameters.AddWithValue("@Ac", hd.Abil.Level);
-                command.Parameters.AddWithValue("@Mac", hd.Abil.MAC);
-                command.Parameters.AddWithValue("@Dc", hd.Abil.DC);
-                command.Parameters.AddWithValue("@Mc", hd.Abil.MC);
-                command.Parameters.AddWithValue("@Sc", hd.Abil.SC);
-                command.Parameters.AddWithValue("@Hp", hd.Abil.HP);
-                command.Parameters.AddWithValue("@Mp", hd.Abil.MP);
-                command.Parameters.AddWithValue("@MaxHP", hd.Abil.MaxHP);
-                command.Parameters.AddWithValue("@MAxMP", hd.Abil.MaxMP);
-                command.Parameters.AddWithValue("@Exp", hd.Abil.Exp);
-                command.Parameters.AddWithValue("@MaxExp", hd.Abil.MaxExp);
-                command.Parameters.AddWithValue("@Weight", hd.Abil.Weight);
-                command.Parameters.AddWithValue("@MaxWeight", hd.Abil.MaxWeight);
-                command.Parameters.AddWithValue("@WearWeight", hd.Abil.WearWeight);
-                command.Parameters.AddWithValue("@MaxWearWeight", hd.Abil.MaxWearWeight);
-                command.Parameters.AddWithValue("@HandWeight", hd.Abil.HandWeight);
-                command.Parameters.AddWithValue("@MaxHandWeight", hd.Abil.MaxHandWeight);
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("[Exception] PlayDataStorage.InsertRecord");
-                _logger.Error(ex.StackTrace);
-                return false;
-            }
-            return true;
         }
 
         private bool UpdateRecord(int playerId, ref HumDataInfo humanRcd)
@@ -944,7 +946,7 @@ namespace DBSvr.Storage.MariaDB
                         command.Transaction = _transaction;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sChrName);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
                         command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
@@ -996,7 +998,7 @@ namespace DBSvr.Storage.MariaDB
                         command.Transaction = _transaction;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sChrName);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
                         command.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
@@ -1084,7 +1086,7 @@ namespace DBSvr.Storage.MariaDB
                         command.Transaction = _transaction;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sChrName);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
                         command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
@@ -1131,7 +1133,7 @@ namespace DBSvr.Storage.MariaDB
                         command.Transaction = _transaction;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sChrName);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
                         command.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
@@ -1219,7 +1221,7 @@ namespace DBSvr.Storage.MariaDB
                         command.Transaction = _transaction;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sChrName);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
                         command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
@@ -1268,7 +1270,7 @@ namespace DBSvr.Storage.MariaDB
                             command.Transaction = _transaction;
                             command.CommandText = strSql.ToString();
                             command.Parameters.AddWithValue("@PlayerId", playerId);
-                            command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sCharName);
+                            command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sChrName);
                             command.Parameters.AddWithValue("@Position", i);
                             command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
                             command.Parameters.AddWithValue("@StdIndex", addItem[i].Index);
@@ -1377,7 +1379,7 @@ namespace DBSvr.Storage.MariaDB
         private void SaveStatus(int playerId, HumDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_status WHERE PlayerId=@PlayerId";
-            const string sSqlStr5 = "INSERT INTO characters_status (PlayerId, CharName, Status) VALUES(@PlayerId, @CharName, @Status)";
+            const string sSqlStr5 = "INSERT INTO characters_status (PlayerId, ChrName, Status) VALUES(@PlayerId, @ChrName, @Status)";
             var command = new MySqlCommand();
             command.Connection = _connection;
             command.Transaction = _transaction;
@@ -1389,7 +1391,7 @@ namespace DBSvr.Storage.MariaDB
                 command.CommandText = sSqlStr5;
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                command.Parameters.AddWithValue("@CharName", humanRcd.Data.sCharName);
+                command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sChrName);
                 command.Parameters.AddWithValue("@Status", string.Join("/", humanRcd.Data.StatusTimeArr));
                 command.ExecuteNonQuery();
             }

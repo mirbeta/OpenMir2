@@ -69,9 +69,9 @@ namespace DBSvr
                     services.AddSingleton<HumDataService>();
                     switch (storagePolicy)
                     {
-                        case StoragePolicy.MariaDB:
-                            LoadAssembly(services, "MariaDB");
-                            _logger.Info("当前使用[MariaDB]数据存储.");
+                        case StoragePolicy.MySQL:
+                            LoadAssembly(services, "MySQL");
+                            _logger.Info("当前使用[MySQL]数据存储.");
                             break;
                         case StoragePolicy.MongoDB:
                             LoadAssembly(services, "MongoDB");
