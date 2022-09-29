@@ -728,7 +728,7 @@ namespace DBSvr.Storage.MariaDB
                 SaveItem(playerId, humanRcd);
                 SaveBagItem(playerId, humanRcd);
                 SaveStorageItem(playerId, humanRcd);
-                SaveMagics(playerId, humanRcd.Data.Magic);
+                SaveMagics(playerId, humanRcd);
                 SaveStatus(playerId, humanRcd);
                 SaveBonusability(playerId, humanRcd);
                 _transaction.Commit();
@@ -741,6 +741,7 @@ namespace DBSvr.Storage.MariaDB
             }
             finally
             {
+                _transaction.Dispose();
                 Close(_connection);
             }
             return result;
@@ -891,7 +892,6 @@ namespace DBSvr.Storage.MariaDB
             
             var delItem = new UserItem[useSize];
             var chgList = new UserItem[useSize];
-
             UserItemComparer(newItems, oldItems, ref chgList, ref delItem);
             try
             {
@@ -1017,7 +1017,7 @@ namespace DBSvr.Storage.MariaDB
             }
             catch(Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateRecord");
+                _logger.Error("[Exception] PlayDataStorage.SaveItem");
                 _logger.Error(ex.StackTrace);
             }
         }
@@ -1291,7 +1291,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveMagics(int playerId, MagicRcd[] magicRcds)
+        private void SaveMagics(int playerId, HumDataInfo humanRcd)
         {
             var command = new MySqlCommand();
             command.Connection = _connection;
@@ -1302,18 +1302,18 @@ namespace DBSvr.Storage.MariaDB
             try
             {
                 const string sStrSql = "INSERT INTO characters_magic(PlayerId, MagicId, Level, USEKEY, CurrTrain) VALUES (@PlayerId, @MagicId, @Level, @USEKEY, @CurrTrain)";
-                for (var i = 0; i < magicRcds.Length; i++)
+                for (var i = 0; i < humanRcd.Data.Magic.Length; i++)
                 {
-                    if (magicRcds[i].MagIdx > 0)
+                    if (humanRcd.Data.Magic[i].MagIdx > 0)
                     {
                         command = new MySqlCommand();
                         command.CommandText = sStrSql;
                         command.Connection = _connection;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@MagicId", magicRcds[i].MagIdx);
-                        command.Parameters.AddWithValue("@Level", magicRcds[i].Level);
-                        command.Parameters.AddWithValue("@Usekey", magicRcds[i].MagicKey);
-                        command.Parameters.AddWithValue("@CurrTrain", magicRcds[i].TranPoint);
+                        command.Parameters.AddWithValue("@MagicId", humanRcd.Data.Magic[i].MagIdx);
+                        command.Parameters.AddWithValue("@Level", humanRcd.Data.Magic[i].Level);
+                        command.Parameters.AddWithValue("@Usekey", humanRcd.Data.Magic[i].MagicKey);
+                        command.Parameters.AddWithValue("@CurrTrain", humanRcd.Data.Magic[i].TranPoint);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -1677,7 +1677,7 @@ namespace DBSvr.Storage.MariaDB
             {
                 for (var i = 0; i < userItems.Length; i++)
                 {
-                    if (userItems[i] == null)
+                    if (userItems[i] == null || userItems[i].MakeIndex <= 0)
                     {
                         continue;
                     }
