@@ -22,7 +22,7 @@ namespace GameSvr.DataStores
             int result = -1;
             int Idx;
             StdItem Item;
-            const string sSQLString = "SELECT * FROM tbl_stditems";
+            const string sSQLString = "SELECT * FROM stditems";
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
@@ -122,7 +122,7 @@ namespace GameSvr.DataStores
         public int LoadMagicDB()
         {
             SystemModule.Packet.ServerPackets.MagicInfo Magic;
-            const string sSQLString = "select * from TBL_Magics";
+            const string sSQLString = "select * from Magics";
             var result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
@@ -189,7 +189,7 @@ namespace GameSvr.DataStores
         {
             var result = 0;
             MonsterInfo Monster;
-            const string sSQLString = "select * from TBL_Monsters";
+            const string sSQLString = "select * from Monsters";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -278,7 +278,7 @@ namespace GameSvr.DataStores
             try
             {
                 DealOffInfo DealOffInfo;
-                const string sSQLString = "select * from TBL_GOLDSALES";
+                const string sSQLString = "select * from GOLDSALES";
                 using (var dr = Query(sSQLString))
                 {
                     while (dr.Read())
@@ -289,7 +289,7 @@ namespace GameSvr.DataStores
                         var nState = dr.GetByte("State");
                         var nSellGold = dr.GetInt16("SellGold");
                         var sUseItems = dr.GetString("UseItems");
-                        if ((sDealCharName != "") && (sBuyCharName != "") && (nState < 4))
+                        if ((!string.IsNullOrEmpty(sDealCharName)) && (!string.IsNullOrEmpty(sBuyCharName)) && (nState < 4))
                         {
                             DealOffInfo = new DealOffInfo();
                             DealOffInfo.sDealCharName = sDealCharName;
@@ -324,7 +324,7 @@ namespace GameSvr.DataStores
                 return;
             }
             DealOffInfo DealOffInfo;
-            const string sSQLString = "delete from TBL_GOLDSALES";
+            const string sSQLString = "delete from GOLDSALES";
             try
             {
                 if (M2Share.sSellOffItemList.Count > 0)
