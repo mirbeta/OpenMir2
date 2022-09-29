@@ -417,7 +417,7 @@ namespace GameSvr.Npc
             if (PlayObject.m_boSendMsgFlag)
             {
                 PlayObject.m_boSendMsgFlag = false;
-                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.CharName + ": " + sMsg, MsgType.Castle);
+                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
             }
         }
     }

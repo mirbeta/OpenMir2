@@ -104,7 +104,7 @@ namespace GameSvr
             M2Share.g_NoHptoexpMonLIst = new List<string>();
             M2Share.g_ItemBindIPaddr = new List<TItemBind>();
             M2Share.g_ItemBindAccount = new List<TItemBind>();
-            M2Share.g_ItemBindCharName = new List<TItemBind>();
+            M2Share.g_ItemBindChrName = new List<TItemBind>();
             M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.Config.UserIDSection = new object();
@@ -193,7 +193,7 @@ namespace GameSvr
             M2Share.LoadDisableSendMsgList();
             M2Share.LoadItemBindIPaddr();
             M2Share.LoadItemBindAccount();
-            M2Share.LoadItemBindCharName();
+            M2Share.LoadItemBindChrName();
             M2Share.LoadUnMasterList();
             M2Share.LoadUnForceMasterList();
             _logger.LogInformation("正在加载捆装物品信息...");

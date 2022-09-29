@@ -306,7 +306,7 @@ namespace GameSvr.Npc
         private bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
-            if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.CharName == MonName))
+            if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.ChrName == MonName))
             {
                 result = true;
             }
@@ -316,7 +316,7 @@ namespace GameSvr.Npc
         private bool GotoLable_QuestCheckCondition_CheckKillMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
-            if ((PlayObject.TargetCret != null) && (PlayObject.TargetCret.CharName == MonName))
+            if ((PlayObject.TargetCret != null) && (PlayObject.TargetCret.ChrName == MonName))
             {
                 result = true;
             }
@@ -328,7 +328,7 @@ namespace GameSvr.Npc
             return PlayObject.m_sRandomNo == sNumber;
         }
 
-        private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
+        private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string ChrName, string sListFileName, string sDay, string param1, string param2)
         {
             string Name = string.Empty;
             var result = false;
@@ -353,7 +353,7 @@ namespace GameSvr.Npc
                     string sText = LoadList[i].Trim();
                     sText = HUtil32.GetValidStrCap(sText, ref Name, new string[] { " ", "\t" });
                     Name = Name.Trim();
-                    if (charName == Name)
+                    if (ChrName == Name)
                     {
                         string ssDay = sText.Trim();
                         var nnday = HUtil32.Str_ToDate(ssDay);
@@ -519,7 +519,7 @@ namespace GameSvr.Npc
                 switch (QuestConditionInfo.nCmdCode)
                 {
                     case ScriptConst.nCHECKUSERDATE:
-                        result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.CharName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
+                        result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
                         break;
                     case ScriptConst.nSC_CHECKRANDOMNO:
                         M2Share.Log.Error("TODO nSC_CHECKRANDOMNO...");
@@ -855,7 +855,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKNAMELIST:
-                        if (!GotoLable_CheckStringList(PlayObject.CharName, m_sPath + QuestConditionInfo.sParam1))
+                        if (!GotoLable_CheckStringList(PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
@@ -1600,7 +1600,7 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.CharName);
+                    M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
                 }
                 return;
             }
@@ -1616,7 +1616,7 @@ namespace GameSvr.Npc
                     StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
+                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                     }
                     PlayObject.SendDelItems(UserItem);
                     sC = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
@@ -1637,7 +1637,7 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.CharName);
+                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
                 }
                 return;
             }
@@ -1659,7 +1659,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                         }
                         else
@@ -1675,7 +1675,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }
@@ -2110,16 +2110,16 @@ namespace GameSvr.Npc
                         bo11 = true;
                         break;
                     case ScriptConst.nADDNAMELIST:
-                        GotoLable_AddList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_AddList(PlayObject.ChrName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nDELNAMELIST:
-                        GotoLable_DelList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_DelList(PlayObject.ChrName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nADDUSERDATE:
-                        GotoLable_AddUseDateList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_AddUseDateList(PlayObject.ChrName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nDELUSERDATE:
-                        GotoLable_DELUseDateList(PlayObject.CharName, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_DELUseDateList(PlayObject.ChrName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nADDGUILDLIST:
                         if (PlayObject.MyGuild != null)
@@ -2159,7 +2159,7 @@ namespace GameSvr.Npc
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
                         {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
-                            M2Share.Log.Error("[脚本死循环] NPC:" + this.CharName + " 位置:" + this.MapName + '(' + this.CurrX + ':' + this.CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            M2Share.Log.Error("[脚本死循环] NPC:" + this.ChrName + " 位置:" + this.MapName + '(' + this.CurrX + ':' + this.CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
                             return result;
                         }
@@ -2538,7 +2538,7 @@ namespace GameSvr.Npc
             for (int i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 var BaseObject = PlayObject.SlaveList[i];
-                if (!Death && (string.Compare(sSlaveName, BaseObject.CharName, StringComparison.OrdinalIgnoreCase) == 0))
+                if (!Death && (string.Compare(sSlaveName, BaseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     BaseObject.WAbil.HP = 0;
                 }
@@ -2600,11 +2600,11 @@ namespace GameSvr.Npc
             PlayObject.GetScriptLabel(sMsg);
             if (boFlag)
             {
-                PlayObject.SendFirstMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + '/' + sMsg);
+                PlayObject.SendFirstMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + '/' + sMsg);
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + '/' + sMsg);
+                PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + '/' + sMsg);
             }
         }
     }

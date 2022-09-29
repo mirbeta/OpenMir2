@@ -287,7 +287,7 @@ namespace GameSvr.Services
             var LoadRcdInfo = new TLoadDBInfo
             {
                 sAccount = sAccount,
-                sCharName = sChrName,
+                sChrName = sChrName,
                 sIPaddr = sIPaddr,
                 nSessionID = nSessionID,
                 nSoftVersionDate = nSoftVersionDate,
@@ -316,18 +316,18 @@ namespace GameSvr.Services
             HumDataInfo HumanRcd = null;
             var result = false;
             boReTry = false;
-            if (InSaveRcdList(LoadUser.sCharName))
+            if (InSaveRcdList(LoadUser.sChrName))
             {
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.sCharName) != null)
+            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.sChrName) != null)
             {
-                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.sCharName);
+                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.sChrName);
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (!HumDataService.LoadHumRcdFromDB(LoadUser.sAccount, LoadUser.sCharName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
+            if (!HumDataService.LoadHumRcdFromDB(LoadUser.sAccount, LoadUser.sChrName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
             {
                 M2Share.GateMgr.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
             }
@@ -335,7 +335,7 @@ namespace GameSvr.Services
             {
                 var userOpenInfo = new UserOpenInfo
                 {
-                    sChrName = LoadUser.sCharName,
+                    sChrName = LoadUser.sChrName,
                     LoadUser = LoadUser,
                     HumanRcd = HumanRcd
                 };

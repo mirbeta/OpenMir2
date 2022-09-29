@@ -355,8 +355,8 @@ namespace DBSvr.Services
                 Console.WriteLine("保存玩家数据出错.");
                 return;
             }
-            var sUserID = saveHumDataPacket.sAccount;
-            var sChrName = saveHumDataPacket.sCharName;
+            var sUserID = saveHumDataPacket.Account;
+            var sChrName = saveHumDataPacket.ChrName;
             var humanRcd = saveHumDataPacket.HumDataInfo;
             bool bo21 = humanRcd == null;
             if (!bo21)
@@ -410,7 +410,7 @@ namespace DBSvr.Services
                 Console.WriteLine("保存玩家数据出错.");
                 return;
             }
-            var sChrName = saveHumDataPacket.sCharName;
+            var sChrName = saveHumDataPacket.ChrName;
             for (var i = 0; i < _playSessionList.Count; i++)
             {
                 THumSession HumSession = _playSessionList[i];

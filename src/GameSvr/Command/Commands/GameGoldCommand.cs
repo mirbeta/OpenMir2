@@ -54,7 +54,7 @@ namespace GameSvr.Command.Commands
             if (M2Share.g_boGameLogGameGold)
             {
                 M2Share.AddGameDataLog(string.Format(GameCommandConst.GameLogMsg1, Grobal2.LOG_GAMEGOLD, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
-                    m_PlayObject.CharName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayObject.CharName));
+                    m_PlayObject.ChrName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayObject.ChrName));
             }
             PlayObject.GameGoldChanged();
             m_PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandGameGoldHumanMsg, M2Share.Config.GameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);

@@ -303,7 +303,7 @@ namespace DBSvr.Storage.MongoDB
         private void UpdateStatus(int playerId, HumDataInfo HumanRCD)
         {
             const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE PlayerId={0}";
-            const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (PlayerId, CharName, Status) VALUES(@PlayerId, @CharName, @Status)";
+            const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (PlayerId, ChrName, Status) VALUES(@PlayerId, @ChrName, @Status)";
             bool success = false;
         }
 

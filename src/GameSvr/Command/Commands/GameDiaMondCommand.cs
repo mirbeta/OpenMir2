@@ -55,10 +55,10 @@ namespace GameSvr.Command.Commands
             //{
             //    M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameDiaMond,
             //        TargetObject.m_sMapName,
-            //        TargetObject.m_nCurrX, TargetObject.m_nCurrY, TargetObject.m_sCharName,
+            //        TargetObject.m_nCurrX, TargetObject.m_nCurrY, TargetObject.m_sChrName,
             //        M2Share.g_Config.sGameDiaMond,
             //        TargetObject.m_nGAMEDIAMOND, sCtr[1] + "(" + (nGameDiaMond).ToString() + ")",
-            //        PlayObject.m_sCharName));
+            //        PlayObject.m_sChrName));
             //}
             //TargetObject.GameGoldChanged();
             //TargetObject.SysMsg(

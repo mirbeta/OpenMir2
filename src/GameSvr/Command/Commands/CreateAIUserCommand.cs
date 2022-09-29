@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
                 var sMapName = M2Share.WorldEngine.GetHomeInfo(ref nX, ref nY);
                 M2Share.WorldEngine.AddAiLogon(new RoBotLogon()
                 {
-                    sCharName = "玩家" + RandomNumber.GetInstance().Random() + "号",
+                    sChrName = "玩家" + RandomNumber.GetInstance().Random() + "号",
                     sConfigFileName = "",
                     sHeroConfigFileName = "",
                     sFilePath = M2Share.Config.EnvirDir,

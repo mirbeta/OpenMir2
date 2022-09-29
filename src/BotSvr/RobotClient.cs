@@ -47,7 +47,7 @@ namespace BotSvr
         public bool NewAccount = false;
         public string LoginID = string.Empty;
         public string LoginPasswd = string.Empty;
-        public string CharName = string.Empty;
+        public string ChrName = string.Empty;
         public int Certification = 0;
         public int m_nEatRetIdx = 0;
         public bool ActionLock = false;
@@ -2357,7 +2357,7 @@ namespace BotSvr
         {
             MainOutMessage("进入游戏");
             DScreen.CurrentScene.m_ConnectionStep = TConnectionStep.cnsPlay;
-            var sSendMsg = $"**{LoginID}/{CharName}/{Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{0}";
+            var sSendMsg = $"**{LoginID}/{ChrName}/{Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{0}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
@@ -3228,7 +3228,7 @@ namespace BotSvr
                     {
                         DScreen.AddChatBoardString("您当前通过计时帐号充值", GetRGB(219));
                     }
-                    MShare.LoadUserConfig(CharName);
+                    MShare.LoadUserConfig(ChrName);
                     MShare.LoadItemFilter2();
                     //SendClientMessage(Grobal2.CM_HIDEDEATHBODY, MShare.g_MySelf.m_nRecogId, (int)MShare.g_gcGeneral[8], 0, 0);
                     MainOutMessage("成功进入游戏");
@@ -4796,7 +4796,7 @@ namespace BotSvr
                 cu = EDCode.DecodeBuffer<ClientItem>(Str);
                 ClFunc.AddItemBag(cu);
             }
-            //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sCharName + ".itm-plus", ItemSaveArr);
+            //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sChrName + ".itm-plus", ItemSaveArr);
             //if (ClientGetBagItmes_CompareItemArr())
             //{
             //    Move(ItemSaveArr, MShare.g_ItemArr * MShare.MAXBAGITEMCL);
@@ -5272,7 +5272,7 @@ namespace BotSvr
             //    if ((gname != "") && (glevel != "") && (gsex != ""))
             //    {
             //        pcg = new TDelChar();
-            //        pcg.sCharName = gname;
+            //        pcg.sChrName = gname;
             //        pcg.nLevel = HUtil32.Str_ToInt(glevel, 1);
             //        pcg.btJob = HUtil32.Str_ToInt(gjob, 0);
             //        pcg.btSex = HUtil32.Str_ToInt(gsex, 0);

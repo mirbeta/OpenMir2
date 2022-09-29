@@ -5,7 +5,7 @@
         public int nGateIdx;
         public int nSocket;
         public string sAccount;
-        public string sCharName;
+        public string sChrName;
         public int nSessionID;
         public string sIPaddr;
         public int nSoftVersionDate;

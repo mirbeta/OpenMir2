@@ -18,7 +18,7 @@ namespace GameSvr.Npc
             string sLine;
             string sName = string.Empty;
             string sIPaddr;
-            var sCharName = PlayObject.CharName;
+            var sChrName = PlayObject.ChrName;
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             var LoadList = new StringList();
@@ -1254,7 +1254,7 @@ namespace GameSvr.Npc
             string sLine;
             var result = false;
             var nNamePostion = -1;
-            var sCharName = PlayObject.CharName;
+            var sChrName = PlayObject.ChrName;
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
                 var LoadList = new StringList();
@@ -1266,7 +1266,7 @@ namespace GameSvr.Npc
                     {
                         continue;
                     }
-                    if (string.Compare(sLine, sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(sLine, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         nNamePostion = i;
                         break;
@@ -1427,7 +1427,7 @@ namespace GameSvr.Npc
             string sName = string.Empty;
             string sIPaddr;
             var result = false;
-            var sCharName = PlayObject.CharName;
+            var sChrName = PlayObject.ChrName;
             var sCharAccount = PlayObject.m_sUserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             LoadList = new StringList();
@@ -1443,7 +1443,7 @@ namespace GameSvr.Npc
                     }
                     sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\t" });
                     sIPaddr = sIPaddr.Trim();
-                    if ((sName == sCharName) && (sIPaddr == sCharIPaddr))
+                    if ((sName == sChrName) && (sIPaddr == sCharIPaddr))
                     {
                         result = true;
                         break;
@@ -1677,7 +1677,7 @@ namespace GameSvr.Npc
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "PetData", PlayObject.CharName + ".txt");
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "PetData", PlayObject.ChrName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -2300,7 +2300,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 BaseObject = PlayObject.SlaveList[i];
-                if (string.Compare(sSlaveName, BaseObject.CharName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sSlaveName, BaseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                     break;
@@ -2348,7 +2348,7 @@ namespace GameSvr.Npc
                     sLineText = LoadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                    if ((string.Compare(sHumName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
+                    if ((string.Compare(sHumName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
                     {
                         nDay = int.MaxValue;
                         //if (TryStrToDateTime(sDate, dOldDate))

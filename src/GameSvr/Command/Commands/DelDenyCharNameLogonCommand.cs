@@ -3,18 +3,18 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("DelDenyCharNameLogon", "", "人物名称", 10)]
-    public class DelDenyCharNameLogonCommand : BaseCommond
+    [GameCommand("DelDenyChrNameLogon", "", "人物名称", 10)]
+    public class DelDenyChrNameLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelDenyCharNameLogon(string[] @Params, PlayObject PlayObject)
+        public void DelDenyChrNameLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {
                 return;
             }
-            var sCharName = @Params.Length > 0 ? @Params[0] : "";
-            if (sCharName == "")
+            var sChrName = @Params.Length > 0 ? @Params[0] : "";
+            if (sChrName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
@@ -24,14 +24,14 @@ namespace GameSvr.Command.Commands
             {
                 for (var i = 0; i < M2Share.g_DenyChrNameList.Count; i++)
                 {
-                    //if ((sCharName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
+                    //if ((sChrName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyChrNameList[i]) != 0)
                     //    //{
                     //    //    M2Share.SaveDenyChrNameList();
                     //    //}
                     //    M2Share.g_DenyChrNameList.RemoveAt(i);
-                    //    PlayObject.SysMsg(sCharName + "已从禁止登录人物列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    //    PlayObject.SysMsg(sChrName + "已从禁止登录人物列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
                     //    boDelete = true;
                     //    break;
                     //}
@@ -42,7 +42,7 @@ namespace GameSvr.Command.Commands
             }
             if (!boDelete)
             {
-                PlayObject.SysMsg(sCharName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(sChrName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

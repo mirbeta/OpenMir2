@@ -68,17 +68,17 @@ namespace GameSvr.Command.Commands
                     PlayObject.SendAddItem(UserItem);
                     if (PlayObject.Permission >= 6)
                     {
-                        M2Share.Log.Warn("[制造物品] " + PlayObject.CharName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
+                        M2Share.Log.Warn("[制造物品] " + PlayObject.ChrName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
                     }
                     if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog("5" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX +
-                           "\09" + PlayObject.CurrY + "\09" + PlayObject.CharName + "\09" + stdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
+                           "\09" + PlayObject.CurrY + "\09" + PlayObject.ChrName + "\09" + stdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
                            HUtil32.LoByte(stdItem.DC) + "/" + HUtil32.HiByte(stdItem.DC) + ")" + "(" + HUtil32.LoByte(stdItem.MC) + "/" + HUtil32.HiByte(stdItem.MC) + ")" + "(" +
                            HUtil32.LoByte(stdItem.SC) + "/" + HUtil32.HiByte(stdItem.SC) + ")" + "(" + HUtil32.LoByte(stdItem.AC) + "/" +
                            HUtil32.HiByte(stdItem.AC) + ")" + "(" + HUtil32.LoByte(stdItem.MAC) + "/" + HUtil32.HiByte(stdItem.MAC) + ")" + UserItem.Desc[0]
                            + "/" + UserItem.Desc[1] + "/" + UserItem.Desc[2] + "/" + UserItem.Desc[3] + "/" + UserItem.Desc[4] + "/" + UserItem.Desc[5] + "/" + UserItem.Desc[6]
-                           + "/" + UserItem.Desc[7] + "/" + UserItem.Desc[8] + "/" + UserItem.Desc[14] + "\09" + PlayObject.CharName);
+                           + "/" + UserItem.Desc[7] + "/" + UserItem.Desc[8] + "/" + UserItem.Desc[14] + "\09" + PlayObject.ChrName);
                     }
                 }
                 else

@@ -25,7 +25,7 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.bo_YBDEAL)
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
                     return;// 如已开通元宝服务则退出
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref nGameGold))
@@ -37,11 +37,11 @@ namespace GameSvr.Npc
                     // 玩家的元宝数大于或等于开通所需的元宝数
                     PlayObject.m_nGameGold -= nGameGold;
                     PlayObject.bo_YBDEAL = true;
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您身上没有" + M2Share.Config.GameGoldName + ",或" + M2Share.Config.GameGoldName + "数不够!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + "/您身上没有" + M2Share.Config.GameGoldName + ",或" + M2Share.Config.GameGoldName + "数不够!!!\\ \\<返回/@main>");
                 }
             }
             catch
@@ -74,7 +74,7 @@ namespace GameSvr.Npc
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if (string.Compare(DealOffInfo.sDealCharName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
+                                if (string.Compare(DealOffInfo.sDealChrName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
                                 {
                                     for (var j = 0; j < 9; j++)
                                     {
@@ -134,8 +134,8 @@ namespace GameSvr.Npc
                                                 break;
                                         }
                                     }
-                                    sClientDealOffInfo.DealCharName = DealOffInfo.sDealCharName;
-                                    sClientDealOffInfo.BuyCharName = DealOffInfo.sBuyCharName;
+                                    sClientDealOffInfo.DealChrName = DealOffInfo.sDealChrName;
+                                    sClientDealOffInfo.BuyChrName = DealOffInfo.sBuyChrName;
                                     sClientDealOffInfo.SellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.Flag;
@@ -187,7 +187,7 @@ namespace GameSvr.Npc
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if (string.Compare(DealOffInfo.sBuyCharName, PlayObject.CharName, StringComparison.Ordinal) == 0 && DealOffInfo.Flag == 0)
+                                if (string.Compare(DealOffInfo.sBuyChrName, PlayObject.ChrName, StringComparison.Ordinal) == 0 && DealOffInfo.Flag == 0)
                                 {
                                     for (var k = 0; k < 9; k++)
                                     {
@@ -248,8 +248,8 @@ namespace GameSvr.Npc
                                                 break;
                                         }
                                     }
-                                    sClientDealOffInfo.DealCharName = DealOffInfo.sDealCharName;
-                                    sClientDealOffInfo.BuyCharName = DealOffInfo.sBuyCharName;
+                                    sClientDealOffInfo.DealChrName = DealOffInfo.sDealChrName;
+                                    sClientDealOffInfo.BuyChrName = DealOffInfo.sBuyChrName;
                                     sClientDealOffInfo.SellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.Flag;
@@ -300,16 +300,16 @@ namespace GameSvr.Npc
                 sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { " ", "\t" });
-                if (string.Compare(sHumName, PlayObject.CharName, StringComparison.Ordinal) == 0)
+                if (string.Compare(sHumName, PlayObject.ChrName, StringComparison.Ordinal) == 0)
                 {
-                    LoadList[i] = PlayObject.CharName + "\t" + DateTime.Today;
+                    LoadList[i] = PlayObject.ChrName + "\t" + DateTime.Today;
                     boFound = true;
                     break;
                 }
             }
             if (!boFound)
             {
-                LoadList.Add(PlayObject.CharName + "\t" + DateTime.Today);
+                LoadList.Add(PlayObject.ChrName + "\t" + DateTime.Today);
             }
             try
             {
@@ -345,7 +345,7 @@ namespace GameSvr.Npc
                 sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { " ", "\t" });
-                if (string.Compare(sHumName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sHumName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList.RemoveAt(i);
                     boFound = true;
@@ -714,7 +714,7 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                if (M2Share.GetNoClearMonList(Mon.CharName))
+                if (M2Share.GetNoClearMonList(Mon.ChrName))
                 {
                     continue;
                 }
@@ -819,7 +819,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(Format(GameCommandConst.GameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.GameGoldName, nGameGold, cMethod, this.CharName));
+                M2Share.AddGameDataLog(Format(GameCommandConst.GameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, this.ChrName));
             }
             if (nOldGameGold != PlayObject.m_nGameGold)
             {
@@ -856,7 +856,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGamePoint)
             {
-                M2Share.AddGameDataLog(Format(GameCommandConst.GameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.CharName, M2Share.Config.GamePointName, nGamePoint, cMethod, this.CharName));
+                M2Share.AddGameDataLog(Format(GameCommandConst.GameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, this.ChrName));
             }
             if (nOldGamePoint != PlayObject.m_nGamePoint)
             {
@@ -869,7 +869,7 @@ namespace GameSvr.Npc
             var PoseBaseObject = PlayObject.GetPoseCreate();
             if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
             {
-                PlayObject.m_sDearName = PoseBaseObject.CharName;
+                PlayObject.m_sDearName = PoseBaseObject.ChrName;
                 PlayObject.RefShowName();
                 PoseBaseObject.RefShowName();
             }
@@ -884,7 +884,7 @@ namespace GameSvr.Npc
             var PoseBaseObject = PlayObject.GetPoseCreate();
             if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
             {
-                PlayObject.m_sMasterName = PoseBaseObject.CharName;
+                PlayObject.m_sMasterName = PoseBaseObject.ChrName;
                 PlayObject.RefShowName();
                 PoseBaseObject.RefShowName();
             }
@@ -897,8 +897,8 @@ namespace GameSvr.Npc
         private void ActionOfLineMsg(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var sMsg = GetLineVariableText(PlayObject, QuestActionInfo.sParam2);
-            sMsg = sMsg.Replace("%s", PlayObject.CharName);
-            sMsg = sMsg.Replace("%d", this.CharName);
+            sMsg = sMsg.Replace("%s", PlayObject.ChrName);
+            sMsg = sMsg.Replace("%d", this.ChrName);
             switch (QuestActionInfo.nParam1)
             {
                 case 0:
@@ -908,10 +908,10 @@ namespace GameSvr.Npc
                     M2Share.WorldEngine.SendBroadCastMsg("(*) " + sMsg, MsgType.System);
                     break;
                 case 2:
-                    M2Share.WorldEngine.SendBroadCastMsg('[' + this.CharName + ']' + sMsg, MsgType.System);
+                    M2Share.WorldEngine.SendBroadCastMsg('[' + this.ChrName + ']' + sMsg, MsgType.System);
                     break;
                 case 3:
-                    M2Share.WorldEngine.SendBroadCastMsg('[' + PlayObject.CharName + ']' + sMsg, MsgType.System);
+                    M2Share.WorldEngine.SendBroadCastMsg('[' + PlayObject.ChrName + ']' + sMsg, MsgType.System);
                     break;
                 case 4:
                     this.ProcessSayMsg(sMsg);
@@ -932,7 +932,7 @@ namespace GameSvr.Npc
                     if (PlayObject.MyGuild != null)
                     {
                         PlayObject.MyGuild.SendGuildMsg(sMsg);
-                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.CharName + "/" + sMsg);
+                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.ChrName + "/" + sMsg);
                     }
                     break;
                 default:
@@ -974,16 +974,16 @@ namespace GameSvr.Npc
                         GotoLable(PoseHuman, "@StartMarry", false);
                         if (PlayObject.Gender == PlayGender.Man && PoseHuman.Gender == PlayGender.WoMan)
                         {
-                            sSayMsg = string.Format(M2Share.g_sStartMarryManMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sStartMarryManMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sStartMarryManAskQuestionMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sStartMarryManAskQuestionMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         else if (PlayObject.Gender == PlayGender.WoMan && PoseHuman.Gender == PlayGender.Man)
                         {
-                            sSayMsg = string.Format(M2Share.g_sStartMarryWoManMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sStartMarryWoManMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sStartMarryWoManAskQuestionMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sStartMarryWoManAskQuestionMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         PlayObject.m_boStartMarry = true;
@@ -1009,13 +1009,13 @@ namespace GameSvr.Npc
                 {
                     if (PlayObject.Gender == PlayGender.Man && PoseHuman.Gender == PlayGender.WoMan)
                     {
-                        sSayMsg = M2Share.g_sMarryManAnswerQuestionMsg.Replace("%n", this.CharName);
-                        sSayMsg = sSayMsg.Replace("%s", PlayObject.CharName);
-                        sSayMsg = sSayMsg.Replace("%d", PoseHuman.CharName);
+                        sSayMsg = M2Share.g_sMarryManAnswerQuestionMsg.Replace("%n", this.ChrName);
+                        sSayMsg = sSayMsg.Replace("%s", PlayObject.ChrName);
+                        sSayMsg = sSayMsg.Replace("%d", PoseHuman.ChrName);
                         M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                        sSayMsg = M2Share.g_sMarryManAskQuestionMsg.Replace("%n", this.CharName);
-                        sSayMsg = sSayMsg.Replace("%s", PlayObject.CharName);
-                        sSayMsg = sSayMsg.Replace("%d", PoseHuman.CharName);
+                        sSayMsg = M2Share.g_sMarryManAskQuestionMsg.Replace("%n", this.ChrName);
+                        sSayMsg = sSayMsg.Replace("%s", PlayObject.ChrName);
+                        sSayMsg = sSayMsg.Replace("%d", PoseHuman.ChrName);
                         M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         GotoLable(PlayObject, "@WateMarry", false);
                         GotoLable(PoseHuman, "@RevMarry", false);
@@ -1032,17 +1032,17 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.m_boStartMarry && PoseHuman.m_boStartMarry)
                         {
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManAnswerQuestionMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sMarryWoManAnswerQuestionMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManGetMarryMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sMarryWoManGetMarryMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             GotoLable(PlayObject, "@EndMarry", false);
                             GotoLable(PoseHuman, "@EndMarry", false);
                             PlayObject.m_boStartMarry = false;
                             PoseHuman.m_boStartMarry = false;
-                            PlayObject.m_sDearName = PoseHuman.CharName;
+                            PlayObject.m_sDearName = PoseHuman.ChrName;
                             PlayObject.m_DearHuman = PoseHuman;
-                            PoseHuman.m_sDearName = PlayObject.CharName;
+                            PoseHuman.m_sDearName = PlayObject.ChrName;
                             PoseHuman.m_DearHuman = PlayObject;
                             PlayObject.RefShowName();
                             PoseHuman.RefShowName();
@@ -1056,9 +1056,9 @@ namespace GameSvr.Npc
                             GotoLable(PoseHuman, "@EndMarryFail", false);
                             PlayObject.m_boStartMarry = false;
                             PoseHuman.m_boStartMarry = false;
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManDenyMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sMarryWoManDenyMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManCancelMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sSayMsg = string.Format(M2Share.g_sMarryWoManCancelMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                     }
@@ -1124,11 +1124,11 @@ namespace GameSvr.Npc
                             PoseHuman.m_boStartMaster = false;
                             if (PlayObject.m_sMasterName == "")
                             {
-                                PlayObject.m_sMasterName = PoseHuman.CharName;
+                                PlayObject.m_sMasterName = PoseHuman.ChrName;
                                 PlayObject.m_boMaster = true;
                             }
                             PlayObject.m_MasterList.Add(PoseHuman);
-                            PoseHuman.m_sMasterName = PlayObject.CharName;
+                            PoseHuman.m_sMasterName = PlayObject.ChrName;
                             PoseHuman.m_boMaster = false;
                             PlayObject.RefShowName();
                             PoseHuman.RefShowName();
@@ -1350,7 +1350,7 @@ namespace GameSvr.Npc
                     if (PoseHuman.GetPoseCreate() == PlayObject)
                     {
                         // and (PosHum.AddInfo.sDearName = Hum.sName)
-                        if (PlayObject.m_sDearName == PoseHuman.CharName)
+                        if (PlayObject.m_sDearName == PoseHuman.ChrName)
                         {
                             GotoLable(PlayObject, "@StartUnMarry", false);
                             GotoLable(PoseHuman, "@StartUnMarry", false);
@@ -1372,7 +1372,7 @@ namespace GameSvr.Npc
                             // sUnMarryMsg8
                             // sMarryMsg0
                             // sUnMarryMsg9
-                            M2Share.WorldEngine.SendBroadCastMsg('[' + this.CharName + "]: " + "我宣布" + PoseHuman.CharName + ' ' + '与' + PlayObject.CharName + ' ' + ' ' + "正式脱离夫妻关系。", MsgType.Say);
+                            M2Share.WorldEngine.SendBroadCastMsg('[' + this.ChrName + "]: " + "我宣布" + PoseHuman.ChrName + ' ' + '与' + PlayObject.ChrName + ' ' + ' ' + "正式脱离夫妻关系。", MsgType.Say);
                             PlayObject.m_sDearName = "";
                             PoseHuman.m_sDearName = "";
                             PlayObject.m_btMarryCount++;
@@ -1397,7 +1397,7 @@ namespace GameSvr.Npc
                     // 强行离婚
                     if (string.Compare(QuestActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        M2Share.WorldEngine.SendBroadCastMsg('[' + this.CharName + "]: " + "我宣布" + PlayObject.CharName + ' ' + '与' + PlayObject.m_sDearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", MsgType.Say);
+                        M2Share.WorldEngine.SendBroadCastMsg('[' + this.ChrName + "]: " + "我宣布" + PlayObject.ChrName + ' ' + '与' + PlayObject.m_sDearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", MsgType.Say);
                         PoseHuman = M2Share.WorldEngine.GetPlayObject(PlayObject.m_sDearName);
                         if (PoseHuman != null)
                         {
@@ -1635,7 +1635,7 @@ namespace GameSvr.Npc
                 for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {
                     PlayObject = PlayObject.GroupMembers[i];
-                    // AddListEx(PlayObject.m_sCharName,ffile);
+                    // AddListEx(PlayObject.m_sChrName,ffile);
                 }
             }
         }
@@ -2099,14 +2099,14 @@ namespace GameSvr.Npc
                     }
                     if (PoseHuman.GetPoseCreate() == PlayObject)
                     {
-                        if (PlayObject.m_sMasterName == PoseHuman.CharName)
+                        if (PlayObject.m_sMasterName == PoseHuman.ChrName)
                         {
                             if (PlayObject.m_boMaster)
                             {
                                 GotoLable(PlayObject, "@UnIsMaster", false);
                                 return;
                             }
-                            if (PlayObject.m_sMasterName != PoseHuman.CharName)
+                            if (PlayObject.m_sMasterName != PoseHuman.ChrName)
                             {
                                 GotoLable(PlayObject, "@UnMasterError", false);
                                 return;
@@ -2128,7 +2128,7 @@ namespace GameSvr.Npc
                         PlayObject.m_boStartUnMaster = true;
                         if (PlayObject.m_boStartUnMaster && PoseHuman.m_boStartUnMaster)
                         {
-                            sMsg = string.Format(M2Share.g_sNPCSayUnMasterOKMsg, this.CharName, PlayObject.CharName, PoseHuman.CharName);
+                            sMsg = string.Format(M2Share.g_sNPCSayUnMasterOKMsg, this.ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                             PlayObject.m_sMasterName = "";
                             PoseHuman.m_sMasterName = "";
@@ -2152,7 +2152,7 @@ namespace GameSvr.Npc
                     // 强行出师
                     if (QuestActionInfo.sParam2.CompareTo("FORCE") == 0)
                     {
-                        sMsg = string.Format(M2Share.g_sNPCSayForceUnMasterMsg, this.CharName, PlayObject.CharName, PlayObject.m_sMasterName);
+                        sMsg = string.Format(M2Share.g_sNPCSayForceUnMasterMsg, this.ChrName, PlayObject.ChrName, PlayObject.m_sMasterName);
                         M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                         PoseHuman = M2Share.WorldEngine.GetPlayObject(PlayObject.m_sMasterName);
                         if (PoseHuman != null)
@@ -2626,7 +2626,7 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.CharName);
+                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
                 }
                 return;
             }
@@ -2650,7 +2650,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                         }
                         else
@@ -2666,7 +2666,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.CharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }
@@ -2686,7 +2686,7 @@ namespace GameSvr.Npc
             string sParam6 = QuestActionInfo.sParam6;
             if (sParam2.CompareTo("Self") == 0)
             {
-                sParam2 = PlayObject.CharName;
+                sParam2 = PlayObject.ChrName;
             }
             string sData = Format("@{0} {1} {2} {3} {4} {5}", sParam1, sParam2, sParam3, sParam4, sParam5, sParam6);
             byte btOldPermission = PlayObject.Permission;

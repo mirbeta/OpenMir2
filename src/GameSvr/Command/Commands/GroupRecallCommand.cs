@@ -40,16 +40,16 @@ namespace GameSvr.Command.Commands
                             {
                                 if (m_PlayObject.Envir.Flag.boNORECALL)
                                 {
-                                    PlayObject.SysMsg($"{m_PlayObject.CharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
+                                    PlayObject.SysMsg($"{m_PlayObject.ChrName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                                 }
                                 else
                                 {
-                                    PlayObject.RecallHuman(m_PlayObject.CharName);
+                                    PlayObject.RecallHuman(m_PlayObject.ChrName);
                                 }
                             }
                             else
                             {
-                                PlayObject.SysMsg($"{m_PlayObject.CharName} 不允许天地合一!!!", MsgColor.Red, MsgType.Hint);
+                                PlayObject.SysMsg($"{m_PlayObject.ChrName} 不允许天地合一!!!", MsgColor.Red, MsgType.Hint);
                             }
                         }
                         PlayObject.GroupRcallTick = HUtil32.GetTickCount();

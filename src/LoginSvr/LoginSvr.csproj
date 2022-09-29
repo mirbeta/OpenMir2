@@ -3,12 +3,13 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net6.0</TargetFramework>
-		<DebugType>embedded</DebugType>
-		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
+
 	<Choose>
 		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
 			<PropertyGroup>
@@ -42,10 +43,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Remove="MySql.Data" />
 	</ItemGroup>
 
 	<ItemGroup>

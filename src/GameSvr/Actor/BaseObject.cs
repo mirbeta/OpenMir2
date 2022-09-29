@@ -21,7 +21,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 名称
         /// </summary>
-        public string CharName;
+        public string ChrName;
         /// <summary>
         /// 所在座标X
         /// </summary>
@@ -1160,7 +1160,7 @@ namespace GameSvr.Actor
                     {
                         if (stdItem.NeedIdentify == 1)
                         {
-                            M2Share.AddGameDataLog(logcap + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
+                            M2Share.AddGameDataLog(logcap + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
                                                    HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                         }
                     }
@@ -1430,7 +1430,7 @@ namespace GameSvr.Actor
                     }
                     if (M2Share.g_boGameLogGold)
                     {
-                        M2Share.AddGameDataLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                        M2Share.AddGameDataLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -2726,7 +2726,7 @@ namespace GameSvr.Actor
                     if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                               CharName + "\t" + stdItem.Name + "\t" +
+                                               ChrName + "\t" + stdItem.Name + "\t" +
                                                UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" +
                                                HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" +
                                                '0');
@@ -3280,7 +3280,7 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (Envir == null)
             {
-                M2Share.Log.Error(CharName + " SendRefMsg nil PEnvir ");
+                M2Share.Log.Error(ChrName + " SendRefMsg nil PEnvir ");
                 return;
             }
             if (ObMode || FixedHideMode)
@@ -3355,7 +3355,7 @@ namespace GameSvr.Actor
                                                         {
                                                             cellInfo.Dispose();
                                                         }
-                                                        M2Share.Log.Error(Format(sExceptionMsg, CharName));
+                                                        M2Share.Log.Error(Format(sExceptionMsg, ChrName));
                                                         M2Share.Log.Error(e.Message);
                                                     }
                                                 }
@@ -3537,7 +3537,7 @@ namespace GameSvr.Actor
         {
             for (var i = 0; i < M2Share.g_MonSayMsgList.Count; i++)
             {
-                if (M2Share.g_MonSayMsgList.TryGetValue(CharName, out SayMsgList))
+                if (M2Share.g_MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
                 {
                     break;
                 }
@@ -3679,7 +3679,7 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, CharName, MapName, CurrX, CurrY));
+                M2Share.Log.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
                 M2Share.Log.Error(e.Message);
             }
             return result;
@@ -3932,18 +3932,18 @@ namespace GameSvr.Actor
 
                 if (attackBaseObject.Master != null)
                 {
-                    sAttackName = attackBaseObject.Master.CharName;
+                    sAttackName = attackBaseObject.Master.ChrName;
                 }
                 else
                 {
-                    sAttackName = attackBaseObject.CharName;
+                    sAttackName = attackBaseObject.ChrName;
                 }
             }
 
             for (var i = 0; i < SayMsgList.Count; i++)
             {
                 TMonSayMsg monSayMsg = SayMsgList[i];
-                string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(CharName));
+                string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(ChrName));
                 sMsg = sMsg.Replace("%d", sAttackName);
                 if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))
                 {
@@ -4281,7 +4281,7 @@ namespace GameSvr.Actor
                             {
                                 if (MyGuild != null)
                                 {
-                                    if (MyGuild.IsMember(baseObject.CharName))
+                                    if (MyGuild.IsMember(baseObject.ChrName))
                                     {
                                         result = false;
                                     }
@@ -4497,7 +4497,7 @@ namespace GameSvr.Actor
         private void LeaveGroup()
         {
             const string sExitGropMsg = "{0} 已经退出了本组.";
-            SendGroupText(Format(sExitGropMsg, CharName));
+            SendGroupText(Format(sExitGropMsg, ChrName));
             GroupOwner = null;
             SendMsg(this, Grobal2.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
@@ -4581,14 +4581,14 @@ namespace GameSvr.Actor
             {
                 if (nFlag == 1)
                 {
-                    if ((SlaveList[i].CharName == M2Share.Config.Dragon) ||
-                        (SlaveList[i].CharName == M2Share.Config.Dragon1))
+                    if ((SlaveList[i].ChrName == M2Share.Config.Dragon) ||
+                        (SlaveList[i].ChrName == M2Share.Config.Dragon1))
                     {
                         SlaveList[i].SpaceMove(Envir.MapName, nX, nY, 1);
                         break;
                     }
                 }
-                else if (SlaveList[i].CharName == sSlaveName)
+                else if (SlaveList[i].ChrName == sSlaveName)
                 {
                     SlaveList[i].SpaceMove(Envir.MapName, nX, nY, 1);
                     break;
@@ -4693,7 +4693,7 @@ namespace GameSvr.Actor
                         if (stdItem.NeedIdentify == 1)
                         {
                             M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                                   CharName + "\t" + stdItem.Name + "\t" +
+                                                   ChrName + "\t" + stdItem.Name + "\t" +
                                                    UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
                                                    + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
                                                    "\t" + '0');
@@ -4733,7 +4733,7 @@ namespace GameSvr.Actor
                             if (stdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
-                                                       "\t" + CharName + "\t" + stdItem.Name + "\t" +
+                                                       "\t" + ChrName + "\t" + stdItem.Name + "\t" +
                                                        UseItems[i].MakeIndex + "\t"
                                                        + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
                                                        "\t" + '0');
@@ -4764,7 +4764,7 @@ namespace GameSvr.Actor
 
         public virtual string GetBaseObjectInfo()
         {
-            var result = CharName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
+            var result = ChrName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
                          '/' + CurrY + ' ' + "等级:" + Abil.Level + ' ' + "经验:" + Abil.Exp + ' ' + "生命值: " + WAbil.HP + '-' + WAbil.MaxHP + ' ' + "魔法值: " + WAbil.MP + '-' +
                          WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoByte(WAbil.DC) + '-' +
                          HUtil32.HiByte(WAbil.DC) + ' ' + "魔法力: " + HUtil32.LoByte(WAbil.MC) + '-' + HUtil32.HiByte(WAbil.MC) + ' ' + "道术: " +
@@ -5078,7 +5078,7 @@ namespace GameSvr.Actor
 
                         if (MyGuild != null)
                         {
-                            if (MyGuild.IsMember(cret.CharName))
+                            if (MyGuild.IsMember(cret.ChrName))
                             {
                                 result = true;
                             }

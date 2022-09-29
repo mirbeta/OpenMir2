@@ -60,7 +60,7 @@ namespace MakePlayer
                             playClient.m_boNewAccount = _options.NewAccount;
                             playClient.m_sLoginAccount = string.Concat(_options.LoginAccount, _loginIndex);
                             playClient.m_sLoginPasswd = playClient.m_sLoginAccount;
-                            playClient.m_sCharName = playClient.m_sLoginAccount;
+                            playClient.m_sChrName = playClient.m_sLoginAccount;
                             playClient.m_sServerName = _options.ServerName;
                             //playClient.ClientSocket.Close();
                             playClient.ClientSocket.Host = _options.Address;

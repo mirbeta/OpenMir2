@@ -62,7 +62,7 @@ namespace DBSvr.Storage.MySQL
                     nIndex = dr.GetInt32("Id");
                     boDeleted = dr.GetBoolean("Deleted");
                     sAccount = dr.GetString("LoginID");
-                    sChrName = dr.GetString("CharName");
+                    sChrName = dr.GetString("ChrName");
                     if (!boDeleted && (!string.IsNullOrEmpty(sChrName)))
                     {
                         _mirQuickMap.Add(sChrName, nIndex);
@@ -198,7 +198,7 @@ namespace DBSvr.Storage.MySQL
                 var command = new MySqlCommand();
                 command.CommandText = sStrString;
                 command.Parameters.AddWithValue("@Sex", queryChrRcd.btSex);
-                command.Parameters.AddWithValue("@Job", queryChrRcd.btJob);
+                command.Parameters.AddWithValue("@Job", queryChrRcd.Job);
                 command.Parameters.AddWithValue("@Id", playerId);
                 command.Connection = _connection;
                 try
@@ -299,10 +299,10 @@ namespace DBSvr.Storage.MySQL
                 {
                     humanRcd = new HumDataInfo();
                     humanRcd.Data.Account = dr.GetString("LOGINID");
-                    humanRcd.Header.sName = dr.GetString("CharName");
+                    humanRcd.Header.sName = dr.GetString("ChrName");
                     humanRcd.Header.Deleted = dr.GetBoolean("DELETED");
                     humanRcd.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("CREATEDATE"));
-                    humanRcd.Data.sChrName = dr.GetString("CharName");
+                    humanRcd.Data.sChrName = dr.GetString("ChrName");
                     if (!dr.IsDBNull(dr.GetOrdinal("MapName")))
                     {
                         humanRcd.Data.sCurMap = dr.GetString("MapName");
@@ -606,11 +606,11 @@ namespace DBSvr.Storage.MySQL
             {
                 var hd = humanRcd.Data;
                 var strSql = new StringBuilder();
-                strSql.AppendLine("INSERT INTO CHARACTERS (ServerIndex, LoginID, CharName, MapName, CX, CY, Level, Dir, Hair, Sex, Job, Gold, GamePoint, HomeMap,");
+                strSql.AppendLine("INSERT INTO CHARACTERS (ServerIndex, LoginID, ChrName, MapName, CX, CY, Level, Dir, Hair, Sex, Job, Gold, GamePoint, HomeMap,");
                 strSql.AppendLine("HomeX, HomeY, PkPoint, ReLevel, AttatckMode, FightZoneDieCount, BodyLuck, IncHealth,IncSpell, IncHealing, CreditPoint, BonusPoint,");
                 strSql.AppendLine("HungerStatus, PayMentPoint, LockLogon, MarryCount, AllowGroupReCall, GroupRcallTime, AllowGuildReCall, IsMaster, MasterName, DearName");
                 strSql.AppendLine(",StoragePwd, Deleted, CREATEDATE, LASTUPDATE) VALUES ");
-                strSql.AppendLine("(@ServerIndex, @LoginID, @CharName, @MapName, @CX, @CY, @Level, @Dir, @Hair, @Sex, @Job, @Gold, @GamePoint, @HomeMap,");
+                strSql.AppendLine("(@ServerIndex, @LoginID, @ChrName, @MapName, @CX, @CY, @Level, @Dir, @Hair, @Sex, @Job, @Gold, @GamePoint, @HomeMap,");
                 strSql.AppendLine("@HomeX, @HomeY, @PkPoint, @ReLevel, @AttatckMode, @FightZoneDieCount, @BodyLuck, @IncHealth,@IncSpell, @IncHealing, @CreditPoint, @BonusPoint,");
                 strSql.AppendLine("@HungerStatus, @PayMentPoint, @LockLogon, @MarryCount, @AllowGroupReCall, @GroupRcallTime, @AllowGuildReCall, @IsMaster, @MasterName, @DearName");
                 strSql.AppendLine(",@StoragePwd, @Deleted, now(), now()) ");
@@ -621,7 +621,7 @@ namespace DBSvr.Storage.MySQL
                 command.CommandText = strSql.ToString();
                 command.Parameters.AddWithValue("@ServerIndex", hd.ServerIndex);
                 command.Parameters.AddWithValue("@LoginID", hd.Account);
-                command.Parameters.AddWithValue("@CharName", hd.sChrName);
+                command.Parameters.AddWithValue("@ChrName", hd.sChrName);
                 command.Parameters.AddWithValue("@MapName", hd.sCurMap);
                 command.Parameters.AddWithValue("@CX", hd.CurX);
                 command.Parameters.AddWithValue("@CY", hd.CurY);
@@ -946,7 +946,7 @@ namespace DBSvr.Storage.MySQL
                         command.Transaction = _transaction;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sChrName);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sChrName);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
                         command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
@@ -1086,7 +1086,7 @@ namespace DBSvr.Storage.MySQL
                         command.Transaction = _transaction;
                         command.CommandText = strSql.ToString();
                         command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@CharName", humanRcd.Data.sChrName);
+                        command.Parameters.AddWithValue("@ChrName", humanRcd.Data.sChrName);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
                         command.Parameters.AddWithValue("@StdIndex", chgList[i].Index);
@@ -1507,11 +1507,11 @@ namespace DBSvr.Storage.MySQL
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    queryChrRcd.sName = dr.GetString("CharName");
-                    queryChrRcd.btJob = dr.GetByte("Job");
-                    queryChrRcd.btHair = dr.GetByte("Hair");
+                    queryChrRcd.Name = dr.GetString("ChrName");
+                    queryChrRcd.Job = dr.GetByte("Job");
+                    queryChrRcd.Hair = dr.GetByte("Hair");
                     queryChrRcd.btSex = dr.GetByte("Sec");
-                    queryChrRcd.wLevel = dr.GetUInt16("Level");
+                    queryChrRcd.Level = dr.GetUInt16("Level");
                 }
             }
             catch (Exception)

@@ -970,7 +970,7 @@ namespace GameSvr.Maps
                 MapName = "0",
                 CurrX = 0,
                 CurrY = 0,
-                CharName = sQuest,
+                ChrName = sQuest,
                 m_nFlag = 0,
                 Appr = 0,
                 m_sFilePath = "MapQuest_def",
@@ -1149,7 +1149,7 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public Merchant GetQuestNpc(BaseObject baseObject, string sCharName, string sItem, bool boFlag)
+        public Merchant GetQuestNpc(BaseObject baseObject, string sChrName, string sItem, bool boFlag)
         {
             bool bo1D;
             for (var i = 0; i < _questList.Count; i++)
@@ -1163,14 +1163,14 @@ namespace GameSvr.Maps
                         bo1D = false;
                         if (!string.IsNullOrEmpty(mapQuestFlag.sMonName) && !string.IsNullOrEmpty(mapQuestFlag.sItemName))
                         {
-                            if (mapQuestFlag.sMonName == sCharName && mapQuestFlag.sItemName == sItem)
+                            if (mapQuestFlag.sMonName == sChrName && mapQuestFlag.sItemName == sItem)
                             {
                                 bo1D = true;
                             }
                         }
                         if (!string.IsNullOrEmpty(mapQuestFlag.sMonName) && string.IsNullOrEmpty(mapQuestFlag.sItemName))
                         {
-                            if (mapQuestFlag.sMonName == sCharName && string.IsNullOrEmpty(sItem))
+                            if (mapQuestFlag.sMonName == sChrName && string.IsNullOrEmpty(sItem))
                             {
                                 bo1D = true;
                             }
