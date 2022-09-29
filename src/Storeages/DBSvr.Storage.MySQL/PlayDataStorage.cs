@@ -278,6 +278,10 @@ namespace DBSvr.Storage.MariaDB
                 _logger.Error("获取角色数据失败." + e.StackTrace);
                 return false;
             }
+            finally
+            {
+                Close(_connection);
+            }
             return true;
         }
 
@@ -403,10 +407,10 @@ namespace DBSvr.Storage.MariaDB
         private void GetBonusAbilRecord(int playerId, ref THumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bonusability WHERE PlayerId=@PlayerId";
-            var command = new MySqlCommand();
-            command.Connection = _connection;
             try
             {
+                var command = new MySqlCommand();
+                command.Connection = _connection;
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 using var dr = command.ExecuteReader();
@@ -439,13 +443,13 @@ namespace DBSvr.Storage.MariaDB
         private void GetMagicRecord(int playerId, ref THumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_magic WHERE PlayerId=@PlayerId";
-            var command = new MySqlCommand();
             try
             {
                 for (var i = 0; i < humanRcd.Data.Magic.Length; i++)
                 {
                     humanRcd.Data.Magic[i] = new MagicRcd();
                 }
+                var command = new MySqlCommand();
                 command.Connection = _connection;
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
@@ -472,13 +476,13 @@ namespace DBSvr.Storage.MariaDB
         private void GetItemRecord(int playerId, ref THumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_item WHERE PlayerId=@PlayerId";
-            var command = new MySqlCommand();
             try
             {
+                var command = new MySqlCommand();
                 command.Connection = _connection;
                 command.Transaction = _transaction;
-                command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.CommandText = sSqlString;
+                command.Parameters.AddWithValue("@PlayerId", playerId);
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -500,9 +504,9 @@ namespace DBSvr.Storage.MariaDB
         private void GetBagItemRecord(int playerId, ref THumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bagitem WHERE PlayerId=@PlayerId";
-            var command = new MySqlCommand();
             try
             {
+                var command = new MySqlCommand();
                 command.Connection = _connection;
                 command.Transaction = _transaction;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
@@ -855,7 +859,6 @@ namespace DBSvr.Storage.MariaDB
             var addItem = new UserItem[useSize];
             var delItem = new UserItem[useSize];
             var chgList = new UserItem[useSize];
-
             var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
 
             for (var i = 0; i < newItems.Length; i++)
@@ -1023,10 +1026,10 @@ namespace DBSvr.Storage.MariaDB
                 var bagSize = humanRcd.Data.BagItems.Length;
                 var oldItems = playData.Data.BagItems;
                 var newItems = humanRcd.Data.BagItems;
-                var bagItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
                 var addItem = new UserItem[bagSize];
                 var delItem = new UserItem[bagSize];
                 var chgList = new UserItem[bagSize];
+                var bagItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
 
                 for (var i = 0; i < newItems.Length; i++)
                 {
@@ -1184,10 +1187,10 @@ namespace DBSvr.Storage.MariaDB
                 var storageSize = humanRcd.Data.StorageItems.Length;
                 var oldItems = playData.Data.StorageItems;
                 var newItems = humanRcd.Data.StorageItems;
-                var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
                 var addItem = new UserItem[storageSize];
                 var delItem = new UserItem[storageSize];
                 var chgList = new UserItem[storageSize];
+                var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
 
                 for (var i = 0; i < newItems.Length; i++)
                 {
