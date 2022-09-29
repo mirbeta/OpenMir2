@@ -50,7 +50,7 @@
         /// </summary>
         public bool DynamicIpMode = false;
         public string MapFile = string.Empty;
-        public string StoreageType = "MySQL";
+        public string StoreageType = "MariaDB";
         public string ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
     }
 }

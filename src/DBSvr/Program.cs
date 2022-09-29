@@ -17,6 +17,7 @@ using System.Runtime.Loader;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr
 {
@@ -68,9 +69,9 @@ namespace DBSvr
                     services.AddSingleton<HumDataService>();
                     switch (storagePolicy)
                     {
-                        case StoragePolicy.MySQL:
-                            LoadAssembly(services, "MySQL");
-                            _logger.Info("当前使用[MySQL]数据存储.");
+                        case StoragePolicy.MariaDB:
+                            LoadAssembly(services, "MariaDB");
+                            _logger.Info("当前使用[MariaDB]数据存储.");
                             break;
                         case StoragePolicy.MongoDB:
                             LoadAssembly(services, "MongoDB");
@@ -127,6 +128,12 @@ namespace DBSvr
             {
                 services.AddSingleton(playRecordStorage);
             }
+
+            playDataStorage.LoadQuickList();
+            THumDataInfo humDataInfo = null;
+            var ss = playDataStorage.Get(1, ref humDataInfo);
+
+            playDataStorage.Update("gm01", ref humDataInfo);
         }
 
         /// <summary>

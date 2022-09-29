@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using SystemModule.Packet.ServerPackets;
 
-namespace DBSvr.Storage.MySQL
+namespace DBSvr.Storage.MariaDB
 {
     public class PlayRecordStorage : IPlayRecordStorage
     {
@@ -51,7 +51,7 @@ namespace DBSvr.Storage.MySQL
             {
                 var command = new MySqlCommand();
                 command.Connection = _connection;
-                command.CommandText = "select * from character_Indexes";
+                command.CommandText = "select * from characters_indexes";
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -144,7 +144,7 @@ namespace DBSvr.Storage.MySQL
                 return default;
             }
             var command = new MySqlCommand();
-            command.CommandText = "select * from character_Indexes where Id=@Id";
+            command.CommandText = "select * from characters_indexes where Id=@Id";
             command.Connection = _connection;
             command.Parameters.AddWithValue("@Id", nIndex);
             var humRecord = new HumRecordData();
@@ -269,7 +269,7 @@ namespace DBSvr.Storage.MySQL
                 if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
                 {
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO character_Indexes (Account, CharName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
+                    strSql.AppendLine("INSERT INTO characters_indexes (Account, CharName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
                     strSql.AppendLine("(@Account, @CharName, @SelectID, @IsDeleted, now(), now());");
                     var command = new MySqlCommand();
                     command.Connection = _connection;
@@ -287,7 +287,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     HumRecord.Header.Deleted = false;
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE character_Indexes SET Account = @Account, CharName = @CharName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
+                    strSql.AppendLine("UPDATE characters_indexes SET Account = @Account, CharName = @CharName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
                     strSql.AppendLine(" ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
                     command.Connection = _connection;

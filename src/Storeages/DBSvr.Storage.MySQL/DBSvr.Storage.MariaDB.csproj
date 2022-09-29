@@ -8,6 +8,14 @@
 		<Nullable>disable</Nullable>
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+	  <DefineConstants>TRACE;NET6_0_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+	  <DefineConstants>TRACE;NET6_0_OR_GREATER</DefineConstants>
+	</PropertyGroup>
 	<Choose>
 		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
 			<PropertyGroup>
@@ -27,7 +35,7 @@
 	</Choose>
 
 	<ItemGroup>
-		<PackageReference Include="MySqlConnector" Version="2.1.13" />
+		<PackageReference Include="MySqlConnector" Version="2.2.0-beta.1" />
 		<PackageReference Include="NLog" Version="5.0.4" />
 	</ItemGroup>
 
