@@ -20,8 +20,8 @@ namespace DBSvr.Storage.MySQL
         /// 已被删除的记录号
         /// </summary>
         private readonly IList<int> _deletedList;
-
         private readonly StorageOption _storageOption;
+        private MySqlConnection _connection;
 
         public PlayRecordStorage(StorageOption option)
         {
@@ -42,7 +42,7 @@ namespace DBSvr.Storage.MySQL
             IList<QuickId> AccountList = new List<QuickId>();
             IList<string> ChrNameList = new List<string>();
             bool result = false;
-            MySqlConnection dbConnection = Open(ref result);
+            Open(ref result);
             if (!result)
             {
                 return;
@@ -50,7 +50,7 @@ namespace DBSvr.Storage.MySQL
             try
             {
                 var command = new MySqlCommand();
-                command.Connection = dbConnection;
+                command.Connection = _connection;
                 command.CommandText = "select * from character_Indexes";
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
@@ -88,7 +88,7 @@ namespace DBSvr.Storage.MySQL
             }
             finally
             {
-                Close(dbConnection);
+                Close(_connection);
             }
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
@@ -98,19 +98,19 @@ namespace DBSvr.Storage.MySQL
             ChrNameList = null;
         }
 
-        private void Close(MySqlConnection dbConnection)
+        private void Close(MySqlConnection _connection)
         {
-            if (dbConnection == null) return;
-            dbConnection.Close();
-            dbConnection.Dispose();
+            if (_connection == null) return;
+            _connection.Close();
+            _connection.Dispose();
         }
 
-        private MySqlConnection Open(ref bool succes)
+        private void Open(ref bool succes)
         {
-            var dbConnection = new MySqlConnection(_storageOption.ConnectionString);
+            _connection = new MySqlConnection(_storageOption.ConnectionString);
             try
             {
-                dbConnection.Open();
+                _connection.Open();
                 succes = true;
             }
             catch (Exception e)
@@ -119,7 +119,6 @@ namespace DBSvr.Storage.MySQL
                 _logger.Error(e.StackTrace);
                 succes = false;
             }
-            return dbConnection;
         }
 
         public int Index(string sName)
@@ -138,7 +137,7 @@ namespace DBSvr.Storage.MySQL
 
         private HumRecordData GetRecord(int nIndex, ref bool success)
         {
-            MySqlConnection dbConnection = Open(ref success);
+            Open(ref success);
             if (!success)
             {
                 success = false;
@@ -146,7 +145,7 @@ namespace DBSvr.Storage.MySQL
             }
             var command = new MySqlCommand();
             command.CommandText = "select * from character_Indexes where Id=@Id";
-            command.Connection = dbConnection;
+            command.Connection = _connection;
             command.Parameters.AddWithValue("@Id", nIndex);
             var humRecord = new HumRecordData();
             using var dr = command.ExecuteReader();
@@ -163,7 +162,7 @@ namespace DBSvr.Storage.MySQL
                 humRecord.Header.Deleted = humRecord.Deleted;
                 success = true;
             }
-            Close(dbConnection);
+            Close(_connection);
             return humRecord;
         }
 
@@ -260,7 +259,7 @@ namespace DBSvr.Storage.MySQL
         private bool UpdateRecord(HumRecordData HumRecord, bool boNew, ref int nIndex)
         {
             bool result = false;
-            MySqlConnection dbConnection = Open(ref result);
+            Open(ref result);
             if (!result)
             {
                 return false;
@@ -273,7 +272,7 @@ namespace DBSvr.Storage.MySQL
                     strSql.AppendLine("INSERT INTO character_Indexes (Account, CharName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
                     strSql.AppendLine("(@Account, @CharName, @SelectID, @IsDeleted, now(), now());");
                     var command = new MySqlCommand();
-                    command.Connection = dbConnection;
+                    command.Connection = _connection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@CharName", HumRecord.sChrName);
@@ -291,7 +290,7 @@ namespace DBSvr.Storage.MySQL
                     strSql.AppendLine("UPDATE character_Indexes SET Account = @Account, CharName = @CharName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
                     strSql.AppendLine(" ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
-                    command.Connection = dbConnection;
+                    command.Connection = _connection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@CharName", HumRecord.sChrName);
@@ -308,7 +307,7 @@ namespace DBSvr.Storage.MySQL
             }
             finally
             {
-                Close(dbConnection);
+                Close(_connection);
             }
             return result;
         }
