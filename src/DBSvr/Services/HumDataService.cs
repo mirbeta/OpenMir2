@@ -246,7 +246,7 @@ namespace DBSvr.Services
             try
             {
                 int chrIndex = _playDataStorage.Index(sSrcChrName);
-                THumDataInfo HumanRCD = null;
+                HumDataInfo HumanRCD = null;
                 if ((chrIndex >= 0) && (_playDataStorage.Get(sSrcChrName, ref HumanRCD)))
                 {
                     find = true;
@@ -302,7 +302,7 @@ namespace DBSvr.Services
             {
                 return;
             }
-            THumDataInfo HumanRCD = null;
+            HumDataInfo HumanRCD = null;
             bool boFoundSession = false;
             int nCheckCode = -1;
             if ((!string.IsNullOrEmpty(loadHumanPacket.sAccount)) && (!string.IsNullOrEmpty(loadHumanPacket.sChrName)))

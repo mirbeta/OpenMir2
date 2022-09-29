@@ -13,17 +13,17 @@ namespace DBSvr.Storage
 
         int Index(string sName);
 
-        int Get(int nIndex, ref THumDataInfo HumanRCD);
+        int Get(int nIndex, ref HumDataInfo HumanRCD);
         
-        bool Get(string chrName, ref THumDataInfo HumanRCD);
+        bool Get(string chrName, ref HumDataInfo HumanRCD);
         
         int GetQryChar(int nIndex, ref QueryChr QueryChrRcd);
 
-        bool Update(string chrName, ref THumDataInfo HumanRCD);
+        bool Update(string chrName, ref HumDataInfo HumanRCD);
 
         bool UpdateQryChar(int nIndex, QueryChr QueryChrRcd);
 
-        bool Add(ref THumDataInfo HumanRCD);
+        bool Add(ref HumDataInfo HumanRCD);
 
         int Find(string sChrName, StringDictionary List);
 

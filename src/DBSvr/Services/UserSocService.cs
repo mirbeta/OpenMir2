@@ -241,9 +241,9 @@ namespace DBSvr.Services
             var result = false;
             if ((_playDataStorage.Index(sChrName) == -1))
             {
-                var chrRecord = new THumDataInfo();
-                chrRecord.Header = new TRecordHeader();
-                chrRecord.Data = new THumInfoData();
+                var chrRecord = new HumDataInfo();
+                chrRecord.Header = new RecordHeader();
+                chrRecord.Data = new HumInfoData();
                 chrRecord.Header.sName = sChrName;
                 chrRecord.Header.sAccount = sAccount;
                 chrRecord.Data.sCharName = sChrName;
@@ -591,7 +591,7 @@ namespace DBSvr.Services
                             {
                                 continue;
                             }
-                            THumDataInfo chrRecord = null;
+                            HumDataInfo chrRecord = null;
                             if (_playDataStorage.Get(sChrName, ref chrRecord))
                             {
                                 if (humRecord.Selected == 1)
@@ -628,7 +628,7 @@ namespace DBSvr.Services
 
         private int DelChrSnameToLevel(string sName)
         {
-            THumDataInfo chrRecord = null;
+            HumDataInfo chrRecord = null;
             var nIndex = _playDataStorage.Index(sName);
             if (nIndex < 0)
                 return 0;
@@ -742,7 +742,7 @@ namespace DBSvr.Services
                     humRecord.sChrName = sChrName;
                     humRecord.sAccount = sAccount;
                     humRecord.Deleted = false;
-                    humRecord.Header = new TRecordHeader();
+                    humRecord.Header = new RecordHeader();
                     humRecord.Header.sName = sChrName;
                     humRecord.Header.SelectID = userInfo.nSelGateID;
                     if (!string.IsNullOrEmpty(humRecord.Header.sName))
@@ -826,7 +826,7 @@ namespace DBSvr.Services
                 nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex >= 0)
                 {
-                    THumDataInfo chrRecord = null;
+                    HumDataInfo chrRecord = null;
                     if (_playDataStorage.Get(sChrName, ref chrRecord))
                     {
                         sCurMap = chrRecord.Data.sCurMap;

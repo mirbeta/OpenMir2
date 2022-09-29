@@ -8,12 +8,12 @@ namespace SystemModule.Packet.ServerPackets
         public string sChrName;
         public int nSessionID;
         public object PlayObject;
-        public THumDataInfo HumanRcd;
+        public HumDataInfo HumanRcd;
         public int nReTryCount;
 
         public TSaveRcd()
         {
-            HumanRcd = new THumDataInfo();
+            HumanRcd = new HumDataInfo();
         }
     }
 }

@@ -130,7 +130,7 @@ namespace DBSvr
             }
 
             playDataStorage.LoadQuickList();
-            THumDataInfo humDataInfo = null;
+            HumDataInfo humDataInfo = null;
             var ss = playDataStorage.Get(1, ref humDataInfo);
 
             playDataStorage.Update("gm01", ref humDataInfo);

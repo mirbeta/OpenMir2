@@ -92,6 +92,6 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(1)]
         public string sChrName { get; set; }
         [ProtoMember(2)]
-        public THumDataInfo HumDataInfo { get; set; }
+        public HumDataInfo HumDataInfo { get; set; }
     }
 }

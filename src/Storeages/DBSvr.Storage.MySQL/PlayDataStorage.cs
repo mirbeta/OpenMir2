@@ -1,3 +1,4 @@
+using DBSvr.Storage.MariaDB.EqualityComparer;
 using DBSvr.Storage.Model;
 using MySqlConnector;
 using NLog;
@@ -123,7 +124,7 @@ namespace DBSvr.Storage.MariaDB
             return -1;
         }
 
-        public int Get(int nIndex, ref THumDataInfo humanRcd)
+        public int Get(int nIndex, ref HumDataInfo humanRcd)
         {
             var result = -1;
             if (nIndex < 0)
@@ -141,7 +142,7 @@ namespace DBSvr.Storage.MariaDB
             return result;
         }
 
-        public bool Get(string chrName, ref THumDataInfo humanRcd)
+        public bool Get(string chrName, ref HumDataInfo humanRcd)
         {
             if (string.IsNullOrEmpty(chrName))
             {
@@ -158,7 +159,7 @@ namespace DBSvr.Storage.MariaDB
             return false;
         }
 
-        public bool Update(string chrName, ref THumDataInfo humanRcd)
+        public bool Update(string chrName, ref HumDataInfo humanRcd)
         {
             if (_mirQuickMap.TryGetValue(chrName, out var playerId))
             {
@@ -219,7 +220,7 @@ namespace DBSvr.Storage.MariaDB
             return result;
         }
 
-        public bool Add(ref THumDataInfo humanRcd)
+        public bool Add(ref HumDataInfo humanRcd)
         {
             var result = false;
             int nIndex;
@@ -245,7 +246,7 @@ namespace DBSvr.Storage.MariaDB
             return result;
         }
 
-        private bool GetRecord(int nIndex, ref THumDataInfo humanRcd)
+        private bool GetRecord(int nIndex, ref HumDataInfo humanRcd)
         {
             var playerId = 0;
             if (humanRcd == null)
@@ -285,7 +286,7 @@ namespace DBSvr.Storage.MariaDB
             return true;
         }
 
-        private void GetChrRecord(int playerId, ref THumDataInfo humanRcd)
+        private void GetChrRecord(int playerId, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters WHERE ID=@ID";
             var command = new MySqlCommand();
@@ -297,7 +298,7 @@ namespace DBSvr.Storage.MariaDB
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    humanRcd = new THumDataInfo();
+                    humanRcd = new HumDataInfo();
                     humanRcd.Data.Account = dr.GetString("LOGINID");
                     humanRcd.Header.sName = dr.GetString("CharName");
                     humanRcd.Header.Deleted = dr.GetBoolean("DELETED");
@@ -362,7 +363,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void GetAbilGetRecord(int playerId, ref THumDataInfo humanRcd)
+        private void GetAbilGetRecord(int playerId, ref HumDataInfo humanRcd)
         {
             int dw;
             try
@@ -403,7 +404,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void GetBonusAbilRecord(int playerId, ref THumDataInfo humanRcd)
+        private void GetBonusAbilRecord(int playerId, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bonusability WHERE PlayerId=@PlayerId";
             try
@@ -439,7 +440,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void GetMagicRecord(int playerId, ref THumDataInfo humanRcd)
+        private void GetMagicRecord(int playerId, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_magic WHERE PlayerId=@PlayerId";
             try
@@ -472,7 +473,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void GetItemRecord(int playerId, ref THumDataInfo humanRcd)
+        private void GetItemRecord(int playerId, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_item WHERE PlayerId=@PlayerId";
             try
@@ -500,7 +501,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void GetBagItemRecord(int playerId, ref THumDataInfo humanRcd)
+        private void GetBagItemRecord(int playerId, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bagitem WHERE PlayerId=@PlayerId";
             try
@@ -528,7 +529,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void GetStorageRecord(int playerId, ref THumDataInfo humanRcd)
+        private void GetStorageRecord(int playerId, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_storageitem WHERE PlayerId=@PlayerId";
             try
@@ -557,7 +558,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void GetPlayerStatus(int playerId, ref THumDataInfo humanRcd)
+        private void GetPlayerStatus(int playerId, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_status WHERE PlayerId=@PlayerId";
             var command = new MySqlCommand();
@@ -592,7 +593,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private bool AddRecord(ref int nIndex, ref THumDataInfo humanRcd)
+        private bool AddRecord(ref int nIndex, ref HumDataInfo humanRcd)
         {
             var success = false;
             Open(ref success);
@@ -616,7 +617,7 @@ namespace DBSvr.Storage.MariaDB
             return result;
         }
 
-        private bool CreateRecord(THumInfoData hd, ref int nIndex)
+        private bool CreateRecord(HumInfoData hd, ref int nIndex)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("INSERT INTO CHARACTERS (ServerIndex, LoginID, CharName, MapName, CX, CY, Level, Dir, Hair, Sex, Job, Gold, GamePoint, HomeMap,");
@@ -710,7 +711,7 @@ namespace DBSvr.Storage.MariaDB
             return true;
         }
 
-        private bool UpdateRecord(int playerId, ref THumDataInfo humanRcd)
+        private bool UpdateRecord(int playerId, ref HumDataInfo humanRcd)
         {
             var success = false;
             Open(ref success);
@@ -745,7 +746,7 @@ namespace DBSvr.Storage.MariaDB
             return result;
         }
 
-        private void SaveRecord(int playerId, THumDataInfo humanRcd)
+        private void SaveRecord(int playerId, HumDataInfo humanRcd)
         {
             var hd = humanRcd.Data;
             var strSql = new StringBuilder();
@@ -806,7 +807,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveAblity(int playerId, THumDataInfo humanRcd)
+        private void SaveAblity(int playerId, HumDataInfo humanRcd)
         {
             var hd = humanRcd.Data;
             var strSql = new StringBuilder();
@@ -847,18 +848,8 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveItem(int playerId, THumDataInfo humanRcd)
+        private void UserItemComparer(UserItem[] newItems, UserItem[] oldItems, ref UserItem[] chg, ref UserItem[] del)
         {
-            var playData = new THumDataInfo();
-            GetItemRecord(playerId, ref playData);
-            var useSize = playData.Data.HumItems.Length;
-            var oldItems = playData.Data.HumItems;
-            var newItems = humanRcd.Data.HumItems;
-            var addItem = new UserItem[useSize];
-            var delItem = new UserItem[useSize];
-            var chgList = new UserItem[useSize];
-            var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
-
             for (var i = 0; i < newItems.Length; i++)
             {
                 if (oldItems[i] == null)
@@ -867,25 +858,41 @@ namespace DBSvr.Storage.MariaDB
                 }
                 if (newItems[i].MakeIndex == 0 && oldItems[i].MakeIndex > 0)
                 {
-                    delItem[i] = oldItems[i];
+                    del[i] = oldItems[i];
                     continue;
                 }
                 if (newItems[i].MakeIndex > 0 || newItems[i].MakeIndex > oldItems[i].MakeIndex)
                 {
-                    chgList[i] = newItems[i]; //差异化的数据
+                    chg[i] = newItems[i];//差异化的数据
                     continue;
                 }
-                if (oldItems[i] == null && newItems[i].MakeIndex > 0) //历史位置没有物品，但是需要保存的位置有物品时，对数据进行更新操作
+                if (oldItems[i] == null && newItems[i].MakeIndex > 0)//历史位置没有物品，但是需要保存的位置有物品时，对数据进行更新操作
                 {
-                    chgList[i] = newItems[i]; //差异化的数据
+                    chg[i] = newItems[i];//差异化的数据
                     continue;
                 }
-                if (oldItems[i].Index == 0 && oldItems[i].MakeIndex == 0 && newItems[i].MakeIndex > 0 && newItems[i].Index > 0) //穿戴位置没有任何数据
+                if (oldItems[i].Index == 0 && oldItems[i].MakeIndex == 0 && newItems[i].MakeIndex > 0 && newItems[i].Index > 0)//穿戴位置没有任何数据
                 {
-                    delItem[i] = newItems[i];
-                    continue;
+                    del[i] = newItems[i];
                 }
             }
+        }
+
+        private void SaveItem(int playerId, HumDataInfo humanRcd)
+        {
+            var newItems = humanRcd.Data.HumItems;
+            var useSize = newItems.Length;
+            
+            var playData = new HumDataInfo();
+            GetItemRecord(playerId, ref playData);
+            var oldItems = playData.Data.HumItems;
+            
+            var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
+            
+            var delItem = new UserItem[useSize];
+            var chgList = new UserItem[useSize];
+
+            UserItemComparer(newItems, oldItems, ref chgList, ref delItem);
             try
             {
                 if (delItem.Length > 0)
@@ -958,6 +965,7 @@ namespace DBSvr.Storage.MariaDB
 
                 if (useItemCount <= 0)
                 {
+                    var addItem = new UserItem[useSize];
                     var addItemCount = 0;
                     if (useItemCount == 0)
                     {
@@ -1014,47 +1022,20 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveBagItem(int playerId, THumDataInfo humanRcd)
+        private void SaveBagItem(int playerId, HumDataInfo humanRcd)
         {
             try
             {
-                var playData = new THumDataInfo();
+                var playData = new HumDataInfo();
                 GetBagItemRecord(playerId, ref playData);
                 var bagSize = humanRcd.Data.BagItems.Length;
                 var oldItems = playData.Data.BagItems;
                 var newItems = humanRcd.Data.BagItems;
-                var addItem = new UserItem[bagSize];
                 var delItem = new UserItem[bagSize];
                 var chgList = new UserItem[bagSize];
                 var bagItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
 
-                for (var i = 0; i < newItems.Length; i++)
-                {
-                    if (oldItems[i] == null)
-                    {
-                        continue;
-                    }
-                    if (newItems[i].MakeIndex == 0 && oldItems[i].MakeIndex > 0)
-                    {
-                        delItem[i] = oldItems[i];
-                        continue;
-                    }
-                    if (newItems[i].MakeIndex > 0 || newItems[i].MakeIndex > oldItems[i].MakeIndex)
-                    {
-                        chgList[i] = newItems[i]; //差异化的数据
-                        continue;
-                    }
-                    if (oldItems[i] == null && newItems[i].MakeIndex > 0) //历史位置没有物品，但是需要保存的位置有物品时，对数据进行更新操作
-                    {
-                        chgList[i] = newItems[i]; //差异化的数据
-                        continue;
-                    }
-                    if (oldItems[i].Index == 0 && oldItems[i].MakeIndex == 0 && newItems[i].MakeIndex > 0 && newItems[i].Index > 0) //穿戴位置没有任何数据
-                    {
-                        delItem[i] = newItems[i];
-                        continue;
-                    }
-                }
+                UserItemComparer(newItems, oldItems, ref chgList, ref delItem);
 
                 if (delItem.Length > 0)
                 {
@@ -1123,6 +1104,7 @@ namespace DBSvr.Storage.MariaDB
                 }
                 if (bagItemCount <= 0)
                 {
+                    var addItem = new UserItem[bagSize];
                     var addItemCount = 0;
                     if (bagItemCount == 0)
                     {
@@ -1174,47 +1156,20 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveStorageItem(int playerId, THumDataInfo humanRcd)
+        private void SaveStorageItem(int playerId, HumDataInfo humanRcd)
         {
             try
             {
-                var playData = new THumDataInfo();
+                var playData = new HumDataInfo();
                 GetStorageRecord(playerId, ref playData);
                 var storageSize = humanRcd.Data.StorageItems.Length;
                 var oldItems = playData.Data.StorageItems;
                 var newItems = humanRcd.Data.StorageItems;
-                var addItem = new UserItem[storageSize];
                 var delItem = new UserItem[storageSize];
                 var chgList = new UserItem[storageSize];
                 var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
 
-                for (var i = 0; i < newItems.Length; i++)
-                {
-                    if (oldItems[i] == null)
-                    {
-                        continue;
-                    }
-                    if (newItems[i].MakeIndex == 0 && oldItems[i].MakeIndex > 0)
-                    {
-                        delItem[i] = oldItems[i];
-                        continue;
-                    }
-                    if (newItems[i].MakeIndex > 0 || newItems[i].MakeIndex > oldItems[i].MakeIndex)
-                    {
-                        chgList[i] = newItems[i]; //差异化的数据
-                        continue;
-                    }
-                    if (oldItems[i] == null && newItems[i].MakeIndex > 0) //历史位置没有物品，但是需要保存的位置有物品时，对数据进行更新操作
-                    {
-                        chgList[i] = newItems[i]; //差异化的数据
-                        continue;
-                    }
-                    if (oldItems[i].Index == 0 && oldItems[i].MakeIndex == 0 && newItems[i].MakeIndex > 0 && newItems[i].Index > 0) //穿戴位置没有任何数据
-                    {
-                        delItem[i] = newItems[i];
-                        continue;
-                    }
-                }
+                UserItemComparer(newItems, oldItems, ref chgList, ref delItem);
 
                 if (delItem.Length > 0)
                 {
@@ -1285,6 +1240,7 @@ namespace DBSvr.Storage.MariaDB
 
                 if (storageItemCount <= 0)
                 {
+                    var addItem = new UserItem[storageSize];
                     var addItemCount = 0;
                     if (storageItemCount == 0)
                     {
@@ -1369,7 +1325,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveBonusability(int playerId, THumDataInfo humanRcd)
+        private void SaveBonusability(int playerId, HumDataInfo humanRcd)
         {
             const string sSqlStr = "UPDATE characters_bonusability SET AC=@AC, MAC=@MAC, DC=@DC, MC=@MC, SC=@SC, HP=@HP, MP=@MP, HIT=@HIT, SPEED=@SPEED, RESERVED=@RESERVED WHERE PlayerId=@PlayerId";
             var command = new MySqlCommand();
@@ -1399,7 +1355,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveQuest(int id, THumDataInfo humanRcd)
+        private void SaveQuest(int id, HumDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_quest WHERE PlayerId=@PlayerId";
             const string sSqlStr5 = "INSERT INTO characters_quest (PlayerId, QUESTOPENINDEX, QUESTFININDEX, QUEST) VALUES(@PlayerId, @QUESTOPENINDEX, @QUESTFININDEX, @QUEST)";
@@ -1418,7 +1374,7 @@ namespace DBSvr.Storage.MariaDB
             }
         }
 
-        private void SaveStatus(int playerId, THumDataInfo humanRcd)
+        private void SaveStatus(int playerId, HumDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_status WHERE PlayerId=@PlayerId";
             const string sSqlStr5 = "INSERT INTO characters_status (PlayerId, CharName, Status) VALUES(@PlayerId, @CharName, @Status)";

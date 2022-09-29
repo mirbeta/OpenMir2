@@ -3,7 +3,7 @@
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
-    public class TRecordHeader
+    public class RecordHeader
     {
         [ProtoMember(1)]
         public string sAccount;

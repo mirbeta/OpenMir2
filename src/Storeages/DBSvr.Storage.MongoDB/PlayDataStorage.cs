@@ -15,7 +15,7 @@ namespace DBSvr.Storage.MongoDB
         private readonly Dictionary<int, int> _quickIndexIdMap;
         private readonly QuickIdList _mirQuickIdList;
         private readonly StorageOption _storageOption;
-        private IMongoCollection<THumDataInfo> humDataInfo;
+        private IMongoCollection<HumDataInfo> humDataInfo;
         private int _recordCount;
 
         public PlayDataStorage(StorageOption storageOption)
@@ -39,7 +39,7 @@ namespace DBSvr.Storage.MongoDB
             }
             MongoClient client = new MongoClient(_storageOption.ConnectionString);
             IMongoDatabase db = client.GetDatabase("mir2");
-            humDataInfo = db.GetCollection<THumDataInfo>("PlayObject");
+            humDataInfo = db.GetCollection<HumDataInfo>("PlayObject");
         }
 
         public void LoadQuickList()
@@ -110,7 +110,7 @@ namespace DBSvr.Storage.MongoDB
             return -1;
         }
 
-        public int Get(int nIndex, ref THumDataInfo HumanRCD)
+        public int Get(int nIndex, ref HumDataInfo HumanRCD)
         {
             int result = -1;
             if (nIndex < 0)
@@ -128,12 +128,12 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
-        public bool Get(string sName, ref THumDataInfo HumanRCD)
+        public bool Get(string sName, ref HumDataInfo HumanRCD)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(string nIndex, ref THumDataInfo HumanRCD)
+        public bool Update(string nIndex, ref HumDataInfo HumanRCD)
         {
             bool result = false;
             //if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))
@@ -165,7 +165,7 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
-        public bool Add(ref THumDataInfo HumanRCD)
+        public bool Add(ref HumDataInfo HumanRCD)
         {
             bool result = false;
             int nIndex;
@@ -191,7 +191,7 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
-        private bool GetRecord(int nIndex, ref THumDataInfo HumanRCD)
+        private bool GetRecord(int nIndex, ref HumDataInfo HumanRCD)
         {
             int playerId = 0;
             if (HumanRCD == null)
@@ -212,95 +212,95 @@ namespace DBSvr.Storage.MongoDB
             return true;
         }
 
-        private void GetChrRecord(int playerId, ref THumDataInfo HumanRCD)
+        private void GetChrRecord(int playerId, ref HumDataInfo HumanRCD)
         {
             var success = false;
         }
 
-        private void GetAbilGetRecord(int playerId, ref THumDataInfo HumanRCD)
+        private void GetAbilGetRecord(int playerId, ref HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void GetBonusAbilRecord(int playerId, ref THumDataInfo HumanRCD)
+        private void GetBonusAbilRecord(int playerId, ref HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void GetMagicRecord(int playerId, ref THumDataInfo HumanRCD)
+        private void GetMagicRecord(int playerId, ref HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void GetItemRecord(int playerId, ref THumDataInfo HumanRCD)
+        private void GetItemRecord(int playerId, ref HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void GetStorageRecord(int playerId, ref THumDataInfo HumanRCD)
+        private void GetStorageRecord(int playerId, ref HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void GetPlayerStatus(int playerId, ref THumDataInfo HumanRCD)
+        private void GetPlayerStatus(int playerId, ref HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private bool AddRecord(ref int nIndex, ref THumDataInfo HumanRCD)
+        private bool AddRecord(ref int nIndex, ref HumDataInfo HumanRCD)
         {
             return InsertRecord(HumanRCD.Data, ref nIndex);
         }
 
-        private bool InsertRecord(THumInfoData hd, ref int nIndex)
+        private bool InsertRecord(HumInfoData hd, ref int nIndex)
         {
             return true;
         }
 
-        private bool UpdateRecord(int nIndex, ref THumDataInfo HumanRCD)
+        private bool UpdateRecord(int nIndex, ref HumDataInfo HumanRCD)
         {
             bool result = true;
             return result;
         }
 
-        private void UpdateRecord(int Id, THumDataInfo HumanRCD)
+        private void UpdateRecord(int Id, HumDataInfo HumanRCD)
         {
             
         }
 
-        private void UpdateAblity(int playerId, THumDataInfo HumanRCD)
+        private void UpdateAblity(int playerId, HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void UpdateItem(int playerId, THumDataInfo HumanRCD)
+        private void UpdateItem(int playerId, HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void SaveItemStorge(int playerId, THumDataInfo HumanRCD)
+        private void SaveItemStorge(int playerId, HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void SavePlayerMagic(int playerId, THumDataInfo HumanRCD)
+        private void SavePlayerMagic(int playerId, HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void UpdateBonusability(int playerId, THumDataInfo HumanRCD)
+        private void UpdateBonusability(int playerId, HumDataInfo HumanRCD)
         {
             bool success = false;
         }
 
-        private void UpdateQuest(int Id, THumDataInfo HumanRCD)
+        private void UpdateQuest(int Id, HumDataInfo HumanRCD)
         {
             const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE PLAYERID='{0}'";
             const string sSqlStr5 = "INSERT INTO TBL_QUEST (PLAYERID, QUESTOPENINDEX, QUESTFININDEX, QUEST) VALUES(@PLAYERID, @QUESTOPENINDEX, @QUESTFININDEX, @QUEST)";
             bool success = false;
         }
 
-        private void UpdateStatus(int playerId, THumDataInfo HumanRCD)
+        private void UpdateStatus(int playerId, HumDataInfo HumanRCD)
         {
             const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE PlayerId={0}";
             const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (PlayerId, CharName, Status) VALUES(@PlayerId, @CharName, @Status)";
