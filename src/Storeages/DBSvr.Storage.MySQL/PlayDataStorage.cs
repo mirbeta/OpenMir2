@@ -298,7 +298,6 @@ namespace DBSvr.Storage.MariaDB
                 while (dr.Read())
                 {
                     humanRcd = new THumDataInfo();
-                    humanRcd.Data.Initialization();
                     humanRcd.Data.Account = dr.GetString("LOGINID");
                     humanRcd.Header.sName = dr.GetString("CharName");
                     humanRcd.Header.Deleted = dr.GetBoolean("DELETED");
@@ -851,7 +850,6 @@ namespace DBSvr.Storage.MariaDB
         private void SaveItem(int playerId, THumDataInfo humanRcd)
         {
             var playData = new THumDataInfo();
-            playData.Data.Initialization();
             GetItemRecord(playerId, ref playData);
             var useSize = playData.Data.HumItems.Length;
             var oldItems = playData.Data.HumItems;
@@ -1021,7 +1019,6 @@ namespace DBSvr.Storage.MariaDB
             try
             {
                 var playData = new THumDataInfo();
-                playData.Data.Initialization();
                 GetBagItemRecord(playerId, ref playData);
                 var bagSize = humanRcd.Data.BagItems.Length;
                 var oldItems = playData.Data.BagItems;
@@ -1182,7 +1179,6 @@ namespace DBSvr.Storage.MariaDB
             try
             {
                 var playData = new THumDataInfo();
-                playData.Data.Initialization();
                 GetStorageRecord(playerId, ref playData);
                 var storageSize = humanRcd.Data.StorageItems.Length;
                 var oldItems = playData.Data.StorageItems;

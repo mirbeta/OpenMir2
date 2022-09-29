@@ -1440,7 +1440,6 @@ namespace GameSvr.World
                 PlayObject = playObject,
                 HumanRcd = new THumDataInfo()
             };
-            saveRcd.HumanRcd.Data.Initialization();
             MakeSaveRcd(playObject, ref saveRcd.HumanRcd);
             M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
         }

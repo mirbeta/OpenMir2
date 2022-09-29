@@ -244,7 +244,6 @@ namespace DBSvr.Services
                 var chrRecord = new THumDataInfo();
                 chrRecord.Header = new TRecordHeader();
                 chrRecord.Data = new THumInfoData();
-                chrRecord.Data.Initialization();
                 chrRecord.Header.sName = sChrName;
                 chrRecord.Header.sAccount = sAccount;
                 chrRecord.Data.sCharName = sChrName;
