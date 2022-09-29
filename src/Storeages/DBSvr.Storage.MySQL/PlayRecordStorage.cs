@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using SystemModule.Packet.ServerPackets;
 
-namespace DBSvr.Storage.MariaDB
+namespace DBSvr.Storage.MySQL
 {
     public class PlayRecordStorage : IPlayRecordStorage
     {
@@ -58,7 +58,7 @@ namespace DBSvr.Storage.MariaDB
                     var DBRecord = new HumRecordData();
                     DBRecord.Id = dr.GetInt32("Id");
                     DBRecord.sAccount = dr.GetString("Account");
-                    DBRecord.sChrName = dr.GetString("CharName");
+                    DBRecord.sChrName = dr.GetString("ChrName");
                     DBRecord.Selected = (byte)dr.GetInt32("SelectID");
                     DBRecord.Deleted = dr.GetBoolean("IsDeleted");
                     DBRecord.Header = new RecordHeader();
@@ -152,7 +152,7 @@ namespace DBSvr.Storage.MariaDB
             if (dr.Read())
             {
                 humRecord.sAccount = dr.GetString("Account");
-                humRecord.sChrName = dr.GetString("CharName");
+                humRecord.sChrName = dr.GetString("ChrName");
                 humRecord.Selected = (byte)dr.GetUInt32("SelectID");
                 humRecord.Deleted = dr.GetBoolean("IsDeleted");
                 humRecord.Header = new RecordHeader();
@@ -269,13 +269,13 @@ namespace DBSvr.Storage.MariaDB
                 if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
                 {
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_indexes (Account, CharName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
-                    strSql.AppendLine("(@Account, @CharName, @SelectID, @IsDeleted, now(), now());");
+                    strSql.AppendLine("INSERT INTO characters_indexes (Account, ChrName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
+                    strSql.AppendLine("(@Account, @ChrName, @SelectID, @IsDeleted, now(), now());");
                     var command = new MySqlCommand();
                     command.Connection = _connection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
-                    command.Parameters.AddWithValue("@CharName", HumRecord.sChrName);
+                    command.Parameters.AddWithValue("@ChrName", HumRecord.sChrName);
                     command.Parameters.AddWithValue("@SelectID", HumRecord.Selected);
                     command.Parameters.AddWithValue("@IsDeleted", HumRecord.Deleted);
                     command.ExecuteNonQuery();
@@ -287,13 +287,13 @@ namespace DBSvr.Storage.MariaDB
                 {
                     HumRecord.Header.Deleted = false;
                     var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_indexes SET Account = @Account, CharName = @CharName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
+                    strSql.AppendLine("UPDATE characters_indexes SET Account = @Account, ChrName = @ChrName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
                     strSql.AppendLine(" ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
                     command.Connection = _connection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
-                    command.Parameters.AddWithValue("@CharName", HumRecord.sChrName);
+                    command.Parameters.AddWithValue("@ChrName", HumRecord.sChrName);
                     command.Parameters.AddWithValue("@SelectID", HumRecord.Selected);
                     command.Parameters.AddWithValue("@IsDeleted", HumRecord.Deleted);
                     command.Parameters.AddWithValue("@Id", nIndex);

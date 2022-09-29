@@ -22,7 +22,7 @@ namespace GameSvr.DataStores
             int result = -1;
             int Idx;
             StdItem Item;
-            const string sSQLString = "SELECT * FROM TBL_StdItems";
+            const string sSQLString = "SELECT * FROM tbl_stditems";
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);

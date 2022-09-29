@@ -3,7 +3,7 @@
     public enum StoragePolicy
     {
         Local,
-        MariaDB,
+        MySQL,
         Sqlite,
         MongoDB
     }

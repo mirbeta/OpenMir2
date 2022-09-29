@@ -85,7 +85,7 @@ namespace LoginSvr.DB
             int nIndex = 0;
             bool boDeleted;
             string sAccount;
-            const string sSQL = "SELECT Id,DELETED,LOGINID FROM ACCOUNT";
+            const string sSQL = "SELECT Id,DELETED,LOGINID FROM account";
             _quickList.Clear();
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -154,7 +154,7 @@ namespace LoginSvr.DB
 
         private bool GetRecord(int nIndex, ref TAccountDBRecord DBRecord)
         {
-            const string sSQL = "SELECT * FROM ACCOUNT WHERE ID={0}";
+            const string sSQL = "SELECT * FROM account WHERE ID={0}";
             var result = true;
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -256,9 +256,9 @@ namespace LoginSvr.DB
         {
             var result = 0;
             string sdt = "now()";
-            const string sUpdateRecord1 = "INSERT INTO ACCOUNT (LOGINID, PASSWORD, USERNAME, CREATEDATE, LASTUPDATE, DELETED, ERRORCOUNT, ACTIONTICK, SSNO, BIRTHDAY, PHONE, MOBILEPHONE, EMAIL, QUIZ1, ANSWER1, QUIZ2, ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
-            const string sUpdateRecord2 = "UPDATE ACCOUNT SET DELETED=1, CREATEDATE='{0}' WHERE LOGINID='{1}'";
-            const string sUpdateRecord0 = "UPDATE ACCOUNT SET PASSWORD='{0}', USERNAME='{1}',LASTUPDATE={2}, ERRORCOUNT={3}, ACTIONTICK={4},SSNO='{5}', BIRTHDAY='{6}', PHONE='{7}',MOBILEPHONE='{8}', EMAIL='{9}', QUIZ1='{10}', ANSWER1='{11}', QUIZ2='{12}',ANSWER2='{13}' WHERE LOGINID='{14}'";
+            const string sUpdateRecord1 = "INSERT INTO account (LOGINID, PASSWORD, USERNAME, CREATEDATE, LASTUPDATE, DELETED, ERRORCOUNT, ACTIONTICK, SSNO, BIRTHDAY, PHONE, MOBILEPHONE, EMAIL, QUIZ1, ANSWER1, QUIZ2, ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
+            const string sUpdateRecord2 = "UPDATE account SET DELETED=1, CREATEDATE='{0}' WHERE LOGINID='{1}'";
+            const string sUpdateRecord0 = "UPDATE account SET PASSWORD='{0}', USERNAME='{1}',LASTUPDATE={2}, ERRORCOUNT={3}, ACTIONTICK={4},SSNO='{5}', BIRTHDAY='{6}', PHONE='{7}',MOBILEPHONE='{8}', EMAIL='{9}', QUIZ1='{10}', ANSWER1='{11}', QUIZ2='{12}',ANSWER2='{13}' WHERE LOGINID='{14}'";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {

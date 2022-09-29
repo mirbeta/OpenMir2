@@ -1461,7 +1461,7 @@ namespace GameSvr.World
             UserItem[] storageItems;
             UserItem userItem;
             humData = humanRcd.Data;
-            playObject.CharName = humData.sCharName;
+            playObject.CharName = humData.sChrName;
             playObject.MapName = humData.sCurMap;
             playObject.CurrX = humData.CurX;
             playObject.CurrY = humData.CurY;
@@ -1601,7 +1601,7 @@ namespace GameSvr.World
         private void MakeSaveRcd(PlayObject playObject, ref HumDataInfo humanRcd)
         {
             humanRcd.Data.ServerIndex = M2Share.ServerIndex;
-            humanRcd.Data.sCharName = playObject.CharName;
+            humanRcd.Data.sChrName = playObject.CharName;
             humanRcd.Data.sCurMap = playObject.MapName;
             humanRcd.Data.CurX = playObject.CurrX;
             humanRcd.Data.CurY = playObject.CurrY;

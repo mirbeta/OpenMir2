@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using SystemModule.Packet.ClientPackets;
 
-namespace DBSvr.Storage.MariaDB.EqualityComparer
+namespace DBSvr.Storage.MySQL.EqualityComparer
 {
     public class UserItemComparer : IEqualityComparer<UserItem>
     {
