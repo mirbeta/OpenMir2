@@ -152,11 +152,6 @@ namespace SystemModule.Packet.ServerPackets
 
         public THumInfoData()
         {
-
-        }
-
-        public void Initialization()
-        {
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
