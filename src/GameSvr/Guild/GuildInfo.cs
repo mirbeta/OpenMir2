@@ -496,7 +496,7 @@ namespace GameSvr.Guild
                 GuildRank = m_RankList[i];
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    if (GuildRank.MemberList[j].sMemberName == PlayObject.CharName)
+                    if (GuildRank.MemberList[j].sMemberName == PlayObject.ChrName)
                     {
                         GuildRank.MemberList[j].PlayObject = PlayObject;
                         nRankNo = GuildRank.nRankNo;
@@ -546,7 +546,7 @@ namespace GameSvr.Guild
                 var guildRank = m_RankList[i];
                 for (var j = 0; j < guildRank.MemberList.Count; j++)
                 {
-                    if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.CharName, StringComparison.OrdinalIgnoreCase) == 1)
+                    if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 1)
                     {
                         guildRank.MemberList[j] = null;
                         return;
@@ -655,7 +655,7 @@ namespace GameSvr.Guild
             GuildRank18.MemberList.Add(new GuildMember()
             {
                 PlayObject = PlayObject,
-                sMemberName = PlayObject.CharName
+                sMemberName = PlayObject.ChrName
             });
             UpdateGuildFile();
         }

@@ -33,11 +33,11 @@ namespace GameSvr.Command.Commands
             var nFlag = HUtil32.Str_ToInt(sFlag, 0);
             if (m_PlayObject.GetQuestFalgStatus(nFlag) == 1)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandShowHumanFlagONMsg, m_PlayObject.CharName, nFlag), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandShowHumanFlagONMsg, m_PlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandShowHumanFlagOFFMsg, m_PlayObject.CharName, nFlag), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandShowHumanFlagOFFMsg, m_PlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
             }
         }
     }

@@ -83,21 +83,21 @@ namespace GameSvr.Services
             return result;
         }
 
-        public static bool LoadHumRcdFromDB(string sAccount, string sCharName, string sStr, ref HumDataInfo HumanRcd, int nCertCode)
+        public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref HumDataInfo HumanRcd, int nCertCode)
         {
             var result = false;
             var loadHum = new LoadHumDataPacket()
             {
                 sAccount = sAccount,
-                sChrName = sCharName,
+                sChrName = sChrName,
                 sUserAddr = sStr,
                 nSessionID = nCertCode
             };
             if (LoadRcd(loadHum, ref HumanRcd))
             {
-                HumanRcd.Data.sChrName = sCharName;
+                HumanRcd.Data.sChrName = sChrName;
                 HumanRcd.Data.Account = sAccount;
-                if (HumanRcd.Data.sChrName == sCharName && (string.IsNullOrEmpty(HumanRcd.Data.Account) || HumanRcd.Data.Account == sAccount))
+                if (HumanRcd.Data.sChrName == sChrName && (string.IsNullOrEmpty(HumanRcd.Data.Account) || HumanRcd.Data.Account == sAccount))
                 {
                     result = true;
                 }
@@ -110,13 +110,13 @@ namespace GameSvr.Services
         /// 保存玩家数据到DB
         /// </summary>
         /// <returns></returns>
-        public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, HumDataInfo HumanRcd)
+        public static bool SaveHumRcdToDB(string sAccount, string sChrName, int nSessionID, HumDataInfo HumanRcd)
         {
             M2Share.Config.nSaveDBCount++;
-            return SaveRcd(sAccount, sCharName, nSessionID, HumanRcd);
+            return SaveRcd(sAccount, sChrName, nSessionID, HumanRcd);
         }
 
-        private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, HumDataInfo HumanRcd)
+        private static bool SaveRcd(string sAccount, string sChrName, int nSessionID, HumDataInfo HumanRcd)
         {
             var nIdent = 0;
             var nRecog = 0;
@@ -125,8 +125,8 @@ namespace GameSvr.Services
             var result = false;
             var packet = new ServerMessagePacket(Grobal2.DB_SAVEHUMANRCD, nSessionID, 0, 0, 0);
             var saveHumData = new SaveHumDataPacket();
-            saveHumData.sAccount = sAccount;
-            saveHumData.sCharName = sCharName;
+            saveHumData.Account = sAccount;
+            saveHumData.ChrName = sChrName;
             saveHumData.HumDataInfo = HumanRcd;
             if (M2Share.DataServer.SendRequest(nQueryId, packet, saveHumData))
             {
@@ -138,7 +138,7 @@ namespace GameSvr.Services
                     }
                     else
                     {
-                        _logger.Error($"[RunDB] 保存人物({sCharName})数据失败");
+                        _logger.Error($"[RunDB] 保存人物({sChrName})数据失败");
                     }
                 }
             }
@@ -167,8 +167,8 @@ namespace GameSvr.Services
                         {
                             humRespData = EDCode.DecodeBuff(humRespData);
                             var responsePacket = ProtoBufDecoder.DeSerialize<LoadHumanRcdResponsePacket>(humRespData);
-                            var sDBCharName = EDCode.DeCodeString(responsePacket.sChrName);
-                            if (sDBCharName == loadHuman.sChrName)
+                            var sDBChrName = EDCode.DeCodeString(responsePacket.sChrName);
+                            if (sDBChrName == loadHuman.sChrName)
                             {
                                 HumanRcd = new HumDataInfo();
                                 HumanRcd = responsePacket.HumDataInfo;

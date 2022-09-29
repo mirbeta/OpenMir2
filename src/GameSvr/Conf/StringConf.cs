@@ -433,14 +433,14 @@ namespace GameSvr.Conf
             {
                 M2Share.g_sItemIsNotThisIPaddr = LoadString;
             }
-            LoadString = ReadString("String", "ItemIsNotThisCharName", "");
+            LoadString = ReadString("String", "ItemIsNotThisChrName", "");
             if (LoadString == "")
             {
-                WriteString("String", "ItemIsNotThisCharName", M2Share.g_sItemIsNotThisCharName);
+                WriteString("String", "ItemIsNotThisChrName", M2Share.g_sItemIsNotThisChrName);
             }
             else
             {
-                M2Share.g_sItemIsNotThisCharName = LoadString;
+                M2Share.g_sItemIsNotThisChrName = LoadString;
             }
             LoadString = ReadString("String", "LevelNot", "");
             if (LoadString == "")
@@ -2026,14 +2026,14 @@ namespace GameSvr.Conf
             {
                 M2Share.g_sYourAccountDenyLogon = LoadString;
             }
-            LoadString = ReadString("String", "YourCharNameDenyLogon", "");
+            LoadString = ReadString("String", "YourChrNameDenyLogon", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourCharNameDenyLogon", M2Share.g_sYourCharNameDenyLogon);
+                WriteString("String", "YourChrNameDenyLogon", M2Share.g_sYourChrNameDenyLogon);
             }
             else
             {
-                M2Share.g_sYourCharNameDenyLogon = LoadString;
+                M2Share.g_sYourChrNameDenyLogon = LoadString;
             }
             LoadString = ReadString("String", "CanotPickUpItem", "");
             if (LoadString == "")

@@ -28,7 +28,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 玩家名称
         /// </summary>
-        public string sCharName;
+        public string sChrName;
         /// <summary>
         /// 客户端版本号
         /// </summary>

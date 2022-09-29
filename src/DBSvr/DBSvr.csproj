@@ -3,7 +3,6 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
-        <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
@@ -11,9 +10,6 @@
 		<AnalysisLevel>latest</AnalysisLevel>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE;NET6_0_OR_GREATER</DefineConstants>
-    </PropertyGroup>
     <Choose>
         <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
             <PropertyGroup>

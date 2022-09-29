@@ -22,9 +22,9 @@ namespace SystemModule.Packet.ServerPackets
     public class SaveHumDataPacket : CmdPacket
     {
         [ProtoMember(1)]
-        public string sAccount { get; set; }
+        public string Account { get; set; }
         [ProtoMember(2)]
-        public string sCharName { get; set; }
+        public string ChrName { get; set; }
         [ProtoMember(3)]
         public HumDataInfo HumDataInfo { get; set; }
     }

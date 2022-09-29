@@ -1,11 +1,11 @@
 ﻿namespace DBSvr.Storage.Model
 {
-    public abstract class QueryChr
+    public class QueryChr
     {
-        public byte btJob;
-        public byte btHair;
+        public byte Job;
+        public byte Hair;
         public byte btSex;
-        public ushort wLevel;
-        public string sName;
+        public ushort Level;
+        public string Name;
     }
 }

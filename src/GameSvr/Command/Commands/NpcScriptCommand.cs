@@ -48,7 +48,7 @@ namespace GameSvr.Command.Commands
             if (nNPCType == 1)
             {
                 var NormNpc = (NormNpc)BaseObject;
-                sScriptFileName = M2Share.BasePath + M2Share.Config.EnvirDir + ScriptConst.sNpc_def + NormNpc.CharName + "-" + NormNpc.MapName + ".txt";
+                sScriptFileName = M2Share.BasePath + M2Share.Config.EnvirDir + ScriptConst.sNpc_def + NormNpc.ChrName + "-" + NormNpc.MapName + ".txt";
             }
             if (File.Exists(sScriptFileName))
             {

@@ -432,7 +432,7 @@ namespace GameSvr.Npc
                         {
                             if (PlayObject.LastHiter.Race != ActorRace.Play)
                             {
-                                sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", PlayObject.LastHiter.CharName);
+                                sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", PlayObject.LastHiter.ChrName);
                             }
                         }
                         else
@@ -452,7 +452,7 @@ namespace GameSvr.Npc
                         {
                             if (PlayObject.LastHiter.Race == ActorRace.Play)
                             {
-                                sMsg = ReplaceVariableText(sMsg, "<$KILLER>", PlayObject.LastHiter.CharName);
+                                sMsg = ReplaceVariableText(sMsg, "<$KILLER>", PlayObject.LastHiter.ChrName);
                             }
                         }
                         else
@@ -462,7 +462,7 @@ namespace GameSvr.Npc
                         return;
                     }
                 case "$USERNAME":
-                    sMsg = ReplaceVariableText(sMsg, "<$USERNAME>", PlayObject.CharName);
+                    sMsg = ReplaceVariableText(sMsg, "<$USERNAME>", PlayObject.ChrName);
                     return;
                 case "$GUILDNAME":
                     {
@@ -971,7 +971,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.LastHiter != null)
                         {
-                            sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.LastHiter.CharName);
+                            sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.LastHiter.ChrName);
                         }
                         else
                         {
@@ -983,7 +983,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.TargetCret != null)
                         {
-                            sText = PlayObject.TargetCret.CharName;
+                            sText = PlayObject.TargetCret.ChrName;
                         }
                         else
                         {
@@ -1110,7 +1110,7 @@ namespace GameSvr.Npc
                                 for (var k = 0; k < MonGen.CertList.Count; k++)
                                 {
                                     BaseObject = MonGen.CertList[k];
-                                    if (BaseObject.Master == null && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                    if (BaseObject.Master == null && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
                                     {
                                         MonGenCount++;
                                     }
@@ -1161,7 +1161,7 @@ namespace GameSvr.Npc
                                     for (var k = 0; k < MonGen.CertList.Count; k++)
                                     {
                                         BaseObject = MonGen.CertList[k];
-                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.CharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
                                         {
                                             MonGenCount++;
                                         }
@@ -1575,13 +1575,13 @@ namespace GameSvr.Npc
             if (m_boIsQuest)
             {
                 m_sPath = ScriptConst.sNpc_def;
-                var s08 = this.CharName + '-' + this.MapName;
+                var s08 = this.ChrName + '-' + this.MapName;
                 M2Share.ScriptSystem.LoadNpcScript(this, m_sFilePath, s08);
             }
             else
             {
                 m_sPath = m_sFilePath;
-                M2Share.ScriptSystem.LoadNpcScript(this, m_sFilePath, this.CharName);
+                M2Share.ScriptSystem.LoadNpcScript(this, m_sFilePath, this.ChrName);
             }
         }
 
@@ -1602,19 +1602,19 @@ namespace GameSvr.Npc
         private void ScriptActionError(PlayObject PlayObject, string sErrMsg, TQuestActionInfo QuestActionInfo, string sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
-            var sMsg = Format(sOutMessage, sErrMsg, sCmd, this.CharName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            var sMsg = Format(sOutMessage, sErrMsg, sCmd, this.ChrName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.Log.Error(sMsg);
         }
 
         private void ScriptConditionError(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, string sCmd)
         {
-            var sMsg = "Cmd:" + sCmd + " NPC名称:" + this.CharName + " 地图:" + this.MapName + " 座标:" + this.CurrX + ':' + this.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
+            var sMsg = "Cmd:" + sCmd + " NPC名称:" + this.ChrName + " 地图:" + this.MapName + " 座标:" + this.CurrX + ':' + this.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.Log.Error("[脚本参数不正确] " + sMsg);
         }
 
         protected void SendMsgToUser(PlayObject PlayObject, string sMsg)
         {
-            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + '/' + sMsg);
+            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + '/' + sMsg);
         }
 
         protected string ReplaceVariableText(string sMsg, string sStr, string sText)
@@ -1673,7 +1673,7 @@ namespace GameSvr.Npc
             if (PlayObject.m_boSendMsgFlag)
             {
                 PlayObject.m_boSendMsgFlag = false;
-                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.CharName + ": " + sMsg, MsgType.Cust);
+                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Cust);
             }
         }
 
@@ -1689,7 +1689,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
             {
                 result = PlayObject.m_DynamicVarList;
-                sName = PlayObject.CharName;
+                sName = PlayObject.ChrName;
             }
             else if (HUtil32.CompareLStr(sType, "GUILD", 5))
             {

@@ -802,14 +802,14 @@ namespace GameSvr.Actor
                                         {
                                             tCheck = true;
                                         }
-                                        QuestNPC = Envir.GetQuestNpc(GroupHuman, CharName, "", tCheck);
+                                        QuestNPC = Envir.GetQuestNpc(GroupHuman, ChrName, "", tCheck);
                                         if (QuestNPC != null)
                                         {
                                             QuestNPC.Click(GroupHuman);
                                         }
                                     }
                                 }
-                                QuestNPC = Envir.GetQuestNpc(ExpHitter, CharName, "", false);
+                                QuestNPC = Envir.GetQuestNpc(ExpHitter, ChrName, "", false);
                                 if (QuestNPC != null)
                                 {
                                     QuestNPC.Click(ExpHitter as PlayObject);
@@ -918,7 +918,7 @@ namespace GameSvr.Actor
                             {
                                 LastHiter.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
                                 LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                                SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.CharName), MsgColor.Red, MsgType.Hint);
+                                SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
                                 LastHiter.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
                                 if (PvpLevel() < 1)
                                 {
@@ -1020,13 +1020,13 @@ namespace GameSvr.Actor
                     FightZoneDieCount++;
                     if (MyGuild != null)
                     {
-                        MyGuild.TeamFightWhoDead(CharName);
+                        MyGuild.TeamFightWhoDead(ChrName);
                     }
                     if (LastHiter != null)
                     {
                         if (LastHiter.MyGuild != null && MyGuild != null)
                         {
-                            LastHiter.MyGuild.TeamFightWhoWinPoint(LastHiter.CharName, 100);
+                            LastHiter.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
                             tStr = LastHiter.MyGuild.sGuildName + ':' + LastHiter.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
                             M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                         }
@@ -1042,18 +1042,18 @@ namespace GameSvr.Actor
                     {
                         if (LastHiter.Race == ActorRace.Play)
                         {
-                            tStr = LastHiter.CharName;
+                            tStr = LastHiter.ChrName;
                         }
                         else
                         {
-                            tStr = '#' + LastHiter.CharName;
+                            tStr = '#' + LastHiter.ChrName;
                         }
                     }
                     else
                     {
                         tStr = "####";
                     }
-                    M2Share.AddGameDataLog("19" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
+                    M2Share.AddGameDataLog("19" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
                 }
                 // 减少地图上怪物计数
                 if (Master == null && !DelFormMaped)
@@ -1131,16 +1131,16 @@ namespace GameSvr.Actor
 
         protected virtual void ProcessSayMsg(string sMsg)
         {
-            string sCharName;
+            string sChrName;
             if (Race == ActorRace.Play)
             {
-                sCharName = CharName;
+                sChrName = ChrName;
             }
             else
             {
-                sCharName = M2Share.FilterShowName(CharName);
+                sChrName = M2Share.FilterShowName(ChrName);
             }
-            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sCharName + ':' + sMsg);
+            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
         }
 
         /// <summary>
@@ -1248,7 +1248,7 @@ namespace GameSvr.Actor
                                 });
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                                    M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                                 }
                                 UseItems[nC].Index = 0;
                             }
@@ -1422,7 +1422,7 @@ namespace GameSvr.Actor
                                     case ActorRace.Play:
                                         if (TargetBaseObject.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                         {
-                                            if (!M2Share.GetNoHptoexpMonList(CharName))
+                                            if (!M2Share.GetNoHptoexpMonList(ChrName))
                                             {
                                                 if (TargetBaseObject.IsRobot)
                                                 {
@@ -1440,7 +1440,7 @@ namespace GameSvr.Actor
                                         {
                                             if (TargetBaseObject.Master.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
                                             {
-                                                if (!M2Share.GetNoHptoexpMonList(CharName))
+                                                if (!M2Share.GetNoHptoexpMonList(ChrName))
                                                 {
                                                     if (TargetBaseObject.Master.IsRobot)
                                                     {
@@ -1562,7 +1562,7 @@ namespace GameSvr.Actor
                         MakeOpenHealth();
                         break;
                     default:
-                        M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", CharName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
+                        M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
                         break;
                 }
             }
@@ -1576,11 +1576,11 @@ namespace GameSvr.Actor
 
         public virtual string GetShowName()
         {
-            var sShowName = CharName;
+            var sShowName = ChrName;
             var result = M2Share.FilterShowName(sShowName);
             if ((Master != null) && !Master.ObMode)
             {
-                result = result + '(' + Master.CharName + ')';
+                result = result + '(' + Master.ChrName + ')';
             }
             return result;
         }

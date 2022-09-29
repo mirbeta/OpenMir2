@@ -66,7 +66,7 @@ namespace GameSvr.Command.Commands
                     m_PlayObject = List10[i] as PlayObject;
                     if (m_PlayObject.MyGuild == Guild)
                     {
-                        Guild.AddTeamFightMember(m_PlayObject.CharName);
+                        Guild.AddTeamFightMember(m_PlayObject.ChrName);
                     }
                 }
                 s20 = s20 + Guild.sGuildName + ' ';

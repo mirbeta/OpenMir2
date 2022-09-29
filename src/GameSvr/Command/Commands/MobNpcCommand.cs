@@ -37,7 +37,7 @@ namespace GameSvr.Command.Commands
             short nX = 0;
             short nY = 0;
             Merchant Merchant = new Merchant();
-            Merchant.CharName = sParam1;
+            Merchant.ChrName = sParam1;
             Merchant.MapName = PlayObject.MapName;
             Merchant.Envir = PlayObject.Envir;
             Merchant.Appr = (ushort)nAppr;

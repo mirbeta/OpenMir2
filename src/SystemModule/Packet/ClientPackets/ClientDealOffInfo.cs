@@ -11,11 +11,11 @@ namespace SystemModule.Packet.ClientPackets
         /// <summary>
         /// 寄售人
         /// </summary>        
-        public string DealCharName;
+        public string DealChrName;
         /// <summary>
         /// 购买人
         /// </summary>        
-        public string BuyCharName;
+        public string BuyChrName;
         /// <summary>
         /// 寄售时间
         /// </summary>        
@@ -40,8 +40,8 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(DealCharName.ToByte(15));
-            writer.Write(BuyCharName.ToByte(15));
+            writer.Write(DealChrName.ToByte(15));
+            writer.Write(BuyChrName.ToByte(15));
             writer.Write(SellDateTime);
             writer.Write(SellGold);
             var nullItem = new ClientItem();

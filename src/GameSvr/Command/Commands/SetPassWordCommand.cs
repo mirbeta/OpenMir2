@@ -226,11 +226,11 @@ namespace GameSvr.Command.Commands
                 PlayObject.SetQuestFlagStatus(nFlag, nValue);
                 if (PlayObject.GetQuestFalgStatus(nFlag) == 1)
                 {
-                    playObject.SysMsg(PlayObject.CharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(PlayObject.CharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
@@ -262,11 +262,11 @@ namespace GameSvr.Command.Commands
                 PlayObject.SetQuestUnitOpenStatus(nFlag, nValue);
                 if (PlayObject.GetQuestUnitOpenStatus(nFlag) == 1)
                 {
-                    playObject.SysMsg(PlayObject.CharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(PlayObject.CharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
@@ -298,11 +298,11 @@ namespace GameSvr.Command.Commands
                 PlayObject.SetQuestUnitStatus(nFlag, nValue);
                 if (PlayObject.GetQuestUnitStatus(nFlag) == 1)
                 {
-                    playObject.SysMsg(PlayObject.CharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(PlayObject.CharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else

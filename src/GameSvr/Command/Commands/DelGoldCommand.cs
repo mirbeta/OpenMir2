@@ -46,7 +46,7 @@ namespace GameSvr.Command.Commands
                 if (M2Share.g_boGameLogGold)
                 {
                     M2Share.AddGameDataLog("13" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX.ToString() + "\09" + PlayObject.CurrY.ToString() + "\09"
-                        + PlayObject.CharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + nCount.ToString() + "\09" + "1" + "\09" + sHumName);
+                        + PlayObject.ChrName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + nCount.ToString() + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else
@@ -58,7 +58,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    M2Share.FrontEngine.AddChangeGoldList(PlayObject.CharName, sHumName, -nCount);
+                    M2Share.FrontEngine.AddChangeGoldList(PlayObject.ChrName, sHumName, -nCount);
                     PlayObject.SysMsg(sHumName + "现在不在线，等其上线时金币将自动减少", MsgColor.Green, MsgType.Hint);
                 }
             }

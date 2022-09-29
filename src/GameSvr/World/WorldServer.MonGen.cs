@@ -441,7 +441,7 @@ namespace GameSvr.World
         {
             IList<TMonItem> itemList = null;
             var itemName = string.Empty;
-            if (MonsterList.TryGetValue(mon.CharName, out var monster))
+            if (MonsterList.TryGetValue(mon.ChrName, out var monster))
             {
                 itemList = monster.ItemList;
             }
@@ -716,7 +716,7 @@ namespace GameSvr.World
                 cert.CurrX = nX;
                 cert.CurrY = nY;
                 cert.Direction = M2Share.RandomNumber.RandomByte(8);
-                cert.CharName = sMonName;
+                cert.ChrName = sMonName;
                 cert.WAbil = cert.Abil;
                 cert.OnEnvirnomentChanged();
                 if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;

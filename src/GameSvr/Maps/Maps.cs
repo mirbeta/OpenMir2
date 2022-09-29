@@ -412,7 +412,7 @@ namespace GameSvr.Maps
                 MapName = "0",
                 CurrX = 0,
                 CurrY = 0,
-                CharName = sName,
+                ChrName = sName,
                 m_nFlag = 0,
                 Appr = 0,
                 m_sFilePath = "MapQuest_def",

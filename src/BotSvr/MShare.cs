@@ -951,7 +951,7 @@ namespace BotSvr
             //bool b2;
             //bool b3;
             //bool b4;
-            //fn = ".\\Config\\" + g_sServerName + "." + ClMain.frmMain.m_sCharName + ".ItemFilter.txt";
+            //fn = ".\\Config\\" + g_sServerName + "." + ClMain.frmMain.m_sChrName + ".ItemFilter.txt";
             //// DScreen.AddChatBoardString(fn, clWhite, clBlue);
             //if (File.Exists(fn))
             //{
@@ -1002,7 +1002,7 @@ namespace BotSvr
             //TCItemRule p;
             //TCItemRule p2;
             //string fn;
-            //fn = ".\\Config\\" + g_sServerName + "." + ClMain.frmMain.m_sCharName + ".ItemFilter.txt";
+            //fn = ".\\Config\\" + g_sServerName + "." + ClMain.frmMain.m_sChrName + ".ItemFilter.txt";
             //ls = new ArrayList();
             //for (i = 0; i < g_ItemsFilter_All.Count; i++)
             //{

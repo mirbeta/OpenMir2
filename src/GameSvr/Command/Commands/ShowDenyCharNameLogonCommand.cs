@@ -3,11 +3,11 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ShowDenyCharNameLogon", "", 10)]
-    public class ShowDenyCharNameLogonCommand : BaseCommond
+    [GameCommand("ShowDenyChrNameLogon", "", 10)]
+    public class ShowDenyChrNameLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowDenyCharNameLogon(PlayObject PlayObject)
+        public void ShowDenyChrNameLogon(PlayObject PlayObject)
         {
             try
             {

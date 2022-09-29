@@ -631,7 +631,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, new object[] { CharName, MapName, CurrX, CurrY }));
+                M2Share.Log.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
                 KickException();
             }
             try
@@ -725,7 +725,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, new object[] { CharName, MapName, CurrX, CurrY }));
+                M2Share.Log.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
                 KickException();
             }
             try
@@ -826,7 +826,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.Error(CharName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
+                M2Share.Log.Error(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
                 KickException();
             }
         }
@@ -880,14 +880,14 @@ namespace GameSvr.RobotPlay
                         }
                         var boDisableSayMsg = m_boDisableSayMsg;
                         //g_DenySayMsgList.Lock;
-                        //if (g_DenySayMsgList.GetIndex(m_sCharName) >= 0)
+                        //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                         //{
                         //    boDisableSayMsg = true;
                         //}
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, CharName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
+                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
                         }
                     }
                 }
