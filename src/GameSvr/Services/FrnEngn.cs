@@ -313,7 +313,7 @@ namespace GameSvr.Services
 
         private bool LoadHumFromDB(TLoadDBInfo LoadUser, ref bool boReTry)
         {
-            THumDataInfo HumanRcd = null;
+            HumDataInfo HumanRcd = null;
             var result = false;
             boReTry = false;
             if (InSaveRcdList(LoadUser.sCharName))
@@ -427,7 +427,7 @@ namespace GameSvr.Services
 
         private bool ChangeUserGoldInDB(TGoldChangeInfo GoldChangeInfo)
         {
-            THumDataInfo HumanRcd = null;
+            HumDataInfo HumanRcd = null;
             var result = false;
             if (HumDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {

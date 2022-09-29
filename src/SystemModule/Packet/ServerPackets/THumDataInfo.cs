@@ -4,17 +4,17 @@ using SystemModule.Packet.ClientPackets;
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
-    public class THumDataInfo
+    public class HumDataInfo
     {
         [ProtoMember(1)] 
-        public TRecordHeader Header { get; set; }
+        public RecordHeader Header { get; set; }
         [ProtoMember(2)] 
-        public THumInfoData Data { get; set; }
+        public HumInfoData Data { get; set; }
 
-        public THumDataInfo()
+        public HumDataInfo()
         {
-            Header = new TRecordHeader();
-            Data = new THumInfoData();
+            Header = new RecordHeader();
+            Data = new HumInfoData();
         }
     }
 
@@ -26,7 +26,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(2)]
         public string sCharName { get; set; }
         [ProtoMember(3)]
-        public THumDataInfo HumDataInfo { get; set; }
+        public HumDataInfo HumDataInfo { get; set; }
     }
 
     [ProtoContract]
@@ -43,7 +43,7 @@ namespace SystemModule.Packet.ServerPackets
     }
 
     [ProtoContract]
-    public class THumInfoData
+    public class HumInfoData
     {
         [ProtoMember(1)]
         public byte ServerIndex;
@@ -150,7 +150,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(52)]
         public MagicRcd[] Magic;
 
-        public THumInfoData()
+        public HumInfoData()
         {
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];

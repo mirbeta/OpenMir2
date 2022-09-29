@@ -61,7 +61,7 @@ namespace DBSvr.Storage.MariaDB
                     DBRecord.sChrName = dr.GetString("CharName");
                     DBRecord.Selected = (byte)dr.GetInt32("SelectID");
                     DBRecord.Deleted = dr.GetBoolean("IsDeleted");
-                    DBRecord.Header = new TRecordHeader();
+                    DBRecord.Header = new RecordHeader();
                     DBRecord.Header.sAccount = DBRecord.sAccount;
                     DBRecord.Header.sName = DBRecord.sChrName;
                     DBRecord.Header.Deleted = DBRecord.Deleted;
@@ -155,7 +155,7 @@ namespace DBSvr.Storage.MariaDB
                 humRecord.sChrName = dr.GetString("CharName");
                 humRecord.Selected = (byte)dr.GetUInt32("SelectID");
                 humRecord.Deleted = dr.GetBoolean("IsDeleted");
-                humRecord.Header = new TRecordHeader();
+                humRecord.Header = new RecordHeader();
                 humRecord.Header.sAccount = humRecord.sAccount;
                 humRecord.Header.sName = humRecord.sChrName;
                 humRecord.Header.SelectID = humRecord.Selected;

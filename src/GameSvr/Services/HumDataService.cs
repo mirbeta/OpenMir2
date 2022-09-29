@@ -83,7 +83,7 @@ namespace GameSvr.Services
             return result;
         }
 
-        public static bool LoadHumRcdFromDB(string sAccount, string sCharName, string sStr, ref THumDataInfo HumanRcd, int nCertCode)
+        public static bool LoadHumRcdFromDB(string sAccount, string sCharName, string sStr, ref HumDataInfo HumanRcd, int nCertCode)
         {
             var result = false;
             var loadHum = new LoadHumDataPacket()
@@ -110,13 +110,13 @@ namespace GameSvr.Services
         /// 保存玩家数据到DB
         /// </summary>
         /// <returns></returns>
-        public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, THumDataInfo HumanRcd)
+        public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, HumDataInfo HumanRcd)
         {
             M2Share.Config.nSaveDBCount++;
             return SaveRcd(sAccount, sCharName, nSessionID, HumanRcd);
         }
 
-        private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, THumDataInfo HumanRcd)
+        private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, HumDataInfo HumanRcd)
         {
             var nIdent = 0;
             var nRecog = 0;
@@ -149,7 +149,7 @@ namespace GameSvr.Services
             return result;
         }
 
-        private static bool LoadRcd(LoadHumDataPacket loadHuman, ref THumDataInfo HumanRcd)
+        private static bool LoadRcd(LoadHumDataPacket loadHuman, ref HumDataInfo HumanRcd)
         {
             var result = false;
             var nIdent = 0;
@@ -170,7 +170,7 @@ namespace GameSvr.Services
                             var sDBCharName = EDCode.DeCodeString(responsePacket.sChrName);
                             if (sDBCharName == loadHuman.sChrName)
                             {
-                                HumanRcd = new THumDataInfo();
+                                HumanRcd = new HumDataInfo();
                                 HumanRcd = responsePacket.HumDataInfo;
                                 result = true;
                             }

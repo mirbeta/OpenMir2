@@ -6,7 +6,7 @@ namespace DBSvr.Storage.Model
     public struct HumRecordData
     {
         public int Id;
-        public TRecordHeader Header;
+        public RecordHeader Header;
         public string sChrName;
         public string sAccount;
         public bool Deleted;

@@ -1438,7 +1438,7 @@ namespace GameSvr.World
                 sChrName = playObject.CharName,
                 nSessionID = playObject.m_nSessionID,
                 PlayObject = playObject,
-                HumanRcd = new THumDataInfo()
+                HumanRcd = new HumDataInfo()
             };
             MakeSaveRcd(playObject, ref saveRcd.HumanRcd);
             M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
@@ -1450,9 +1450,9 @@ namespace GameSvr.World
             PlayObjectFreeList.Add(playObject);
         }
 
-        private void GetHumData(PlayObject playObject, ref THumDataInfo humanRcd)
+        private void GetHumData(PlayObject playObject, ref HumDataInfo humanRcd)
         {
-            THumInfoData humData;
+            HumInfoData humData;
             UserItem[] humItems;
             UserItem[] bagItems;
             MagicRcd[] humMagic;
@@ -1598,7 +1598,7 @@ namespace GameSvr.World
             }
         }
 
-        private void MakeSaveRcd(PlayObject playObject, ref THumDataInfo humanRcd)
+        private void MakeSaveRcd(PlayObject playObject, ref HumDataInfo humanRcd)
         {
             humanRcd.Data.ServerIndex = M2Share.ServerIndex;
             humanRcd.Data.sCharName = playObject.CharName;
