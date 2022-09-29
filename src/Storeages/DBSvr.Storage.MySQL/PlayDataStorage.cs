@@ -365,7 +365,7 @@ namespace DBSvr.Storage.MariaDB
             try
             {
                 var command = new MySqlCommand();
-                command.CommandText = "select * from CHARACTER_ABLITY where playerId=@playerId";
+                command.CommandText = "select * from characters_ablity where playerId=@playerId";
                 command.Parameters.AddWithValue("@playerId", playerId);
                 command.Connection = _connection;
                 using var dr = command.ExecuteReader();
@@ -476,6 +476,7 @@ namespace DBSvr.Storage.MariaDB
             try
             {
                 command.Connection = _connection;
+                command.Transaction = _transaction;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.CommandText = sSqlString;
                 using var dr = command.ExecuteReader();
@@ -503,6 +504,7 @@ namespace DBSvr.Storage.MariaDB
             try
             {
                 command.Connection = _connection;
+                command.Transaction = _transaction;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.CommandText = sSqlString;
                 using var dr = command.ExecuteReader();
@@ -526,9 +528,10 @@ namespace DBSvr.Storage.MariaDB
         private void GetStorageRecord(int playerId, ref THumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_storageitem WHERE PlayerId=@PlayerId";
-            var command = new MySqlCommand();
             try
             {
+                var command = new MySqlCommand();
+                command.Transaction = _transaction;
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Connection = _connection;
@@ -1775,19 +1778,20 @@ namespace DBSvr.Storage.MariaDB
 
         private void QueryItemAttr(int playerId, ref UserItem[] userItems)
         {
-            var makeIndexs = userItems.Where(x => x != null).Select(x => x.MakeIndex);
-            if (makeIndexs == null || makeIndexs.Count() <= 0)
+            var makeIndexCount = userItems.Where(x => x != null).Count(x => x.MakeIndex > 0);
+            if (makeIndexCount <= 0)
             {
                 return;
             }
             const string sSqlString = "SELECT * FROM characters_item_attr WHERE PlayerId=@PlayerId and MakeIndex in (@MakeIndex)";
-            var command = new MySqlCommand();
-            command.Connection = _connection;
             try
             {
+                var userItemIdx = userItems.Where(x => x != null).Select(x => x.MakeIndex).ToList();
+                var command = new MySqlCommand();
+                command.Connection = _connection;
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                command.Parameters.AddWithValue("@MakeIndex", string.Join(",", userItems.Select(x => x.MakeIndex)));
+                command.Parameters.AddWithValue("@MakeIndex", string.Join(",", userItemIdx));
                 using var dr = command.ExecuteReader();
                 var nPosition = 0;
                 while (dr.Read())
@@ -1798,7 +1802,7 @@ namespace DBSvr.Storage.MariaDB
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetStorageItemCount:" + ex.StackTrace);
+                _logger.Error("[Exception] PlayDataStorage.QueryItemAttr:" + ex.StackTrace);
             }
         }
     }
