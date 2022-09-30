@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
@@ -39,7 +38,7 @@ namespace DBSvr.Storage.MySQL
             _recordCount = -1;
             IList<QuickId> accountList = new List<QuickId>();
             IList<string> chrNameList = new List<string>();
-            using var context = new DBContext(_storageOption);
+            using var context = new StorageContext(_storageOption);
             var success = false;
             context.Open(ref success);
             if (!success)
@@ -135,7 +134,7 @@ namespace DBSvr.Storage.MySQL
             HumInfoData playData;
             try
             {
-                using var context = new DBContext(_storageOption);
+                using var context = new StorageContext(_storageOption);
                 var success = false;
                 context.Open(ref success);
                 if (!success)
@@ -180,7 +179,7 @@ namespace DBSvr.Storage.MySQL
         private bool UpdateChrRecord(int playerId, QueryChr queryChrRcd)
         {
             const string sStrString = "UPDATE characters SET Sex=@Sex, Job=@Job WHERE ID=@Id";
-            using var context = new DBContext(_storageOption);
+            using var context = new StorageContext(_storageOption);
             var success = false;
             context.Open(ref success);
             if (!success)
@@ -253,7 +252,7 @@ namespace DBSvr.Storage.MySQL
             try
             {
                 humanRcd = new HumDataInfo();
-                using var context = new DBContext(_storageOption);
+                using var context = new StorageContext(_storageOption);
                 var success = false;
                 context.Open(ref success);
                 if (!success)
@@ -279,7 +278,7 @@ namespace DBSvr.Storage.MySQL
             return true;
         }
 
-        private HumInfoData GetChrRecord(int playerId, DBContext context)
+        private HumInfoData GetChrRecord(int playerId, StorageContext context)
         {
             const string sSqlString = "SELECT * FROM characters WHERE ID=@ID";
             try
@@ -355,7 +354,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetAbilGetRecord(int playerId, DBContext context, ref HumDataInfo humanRcd)
+        private void GetAbilGetRecord(int playerId, StorageContext context, ref HumDataInfo humanRcd)
         {
             int dw;
             try
@@ -395,7 +394,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetBonusAbilRecord(int playerId, DBContext context, ref HumDataInfo humanRcd)
+        private void GetBonusAbilRecord(int playerId, StorageContext context, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bonusability WHERE PlayerId=@PlayerId";
             try
@@ -430,7 +429,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetMagicRecord(int playerId, DBContext context, ref HumDataInfo humanRcd)
+        private void GetMagicRecord(int playerId, StorageContext context, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_magic WHERE PlayerId=@PlayerId";
             try
@@ -462,7 +461,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetItemRecord(int playerId, DBContext context, ref HumDataInfo humanRcd)
+        private void GetItemRecord(int playerId, StorageContext context, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_item WHERE PlayerId=@PlayerId";
             try
@@ -490,7 +489,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetBagItemRecord(int playerId, DBContext context, ref HumDataInfo humanRcd)
+        private void GetBagItemRecord(int playerId, StorageContext context, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bagitem WHERE PlayerId=@PlayerId";
             try
@@ -518,7 +517,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetStorageRecord(int playerId, DBContext context, ref HumDataInfo humanRcd)
+        private void GetStorageRecord(int playerId, StorageContext context, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_storageitem WHERE PlayerId=@PlayerId";
             try
@@ -547,7 +546,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void GetPlayerStatus(int playerId, DBContext context, ref HumDataInfo humanRcd)
+        private void GetPlayerStatus(int playerId, StorageContext context, ref HumDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_status WHERE PlayerId=@PlayerId";
             try
@@ -574,9 +573,13 @@ namespace DBSvr.Storage.MySQL
 
         private bool AddRecord(ref int nIndex, ref HumDataInfo humanRcd)
         {
-            using var context = new DBContext(_storageOption);
+            using var context = new StorageContext(_storageOption);
             var success = false;
             context.Open(ref success);
+            if (!success)
+            {
+                return false;
+            }
             var result = false;
             try
             {
@@ -705,7 +708,7 @@ namespace DBSvr.Storage.MySQL
         /// <returns></returns>
         private bool SaveRecord(int playerId, ref HumDataInfo humanRcd)
         {
-            using var context = new DBContext(_storageOption);
+            using var context = new StorageContext(_storageOption);
             var success = false;
             context.Open(ref success);
             if (!success)
@@ -740,7 +743,7 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private void SaveRecord(DBContext context, int playerId, HumInfoData hd)
+        private void SaveRecord(StorageContext context, int playerId, HumInfoData hd)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters SET ServerIndex = @ServerIndex, LoginID = @LoginID,MapName = @MapName, CX = @CX, CY = @CY, Level = @Level, Dir = @Dir, Hair = @Hair, Sex = @Sex, Job = Job, Gold = @Gold, ");
@@ -797,7 +800,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveAblity(DBContext context, int playerId, Ability Abil)
+        private void SaveAblity(StorageContext context, int playerId, Ability Abil)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters_ablity SET Level = @Level,");
@@ -865,7 +868,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveItem(DBContext context, int playerId, UserItem[] userItems)
+        private void SaveItem(StorageContext context, int playerId, UserItem[] userItems)
         {
             var useSize = userItems.Length;
             var playData = new HumDataInfo();
@@ -996,7 +999,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveBagItem(DBContext context, int playerId, UserItem[] bagItems)
+        private void SaveBagItem(StorageContext context, int playerId, UserItem[] bagItems)
         {
             try
             {
@@ -1122,7 +1125,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveStorageItem(DBContext context, int playerId, UserItem[] storageItems)
+        private void SaveStorageItem(StorageContext context, int playerId, UserItem[] storageItems)
         {
             try
             {
@@ -1248,7 +1251,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveMagics(DBContext context, int playerId, MagicRcd[] humanRcd)
+        private void SaveMagics(StorageContext context, int playerId, MagicRcd[] humanRcd)
         {
             var delcommand = context.CreateCommand();
             delcommand.CommandText = "DELETE FROM characters_magic WHERE PlayerId=@PlayerId";
@@ -1279,7 +1282,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveBonusability(DBContext context, int playerId, NakedAbility bonusAbil)
+        private void SaveBonusability(StorageContext context, int playerId, NakedAbility bonusAbil)
         {
             const string sSqlStr = "UPDATE characters_bonusability SET AC=@AC, MAC=@MAC, DC=@DC, MC=@MC, SC=@SC, HP=@HP, MP=@MP, HIT=@HIT, SPEED=@SPEED, RESERVED=@RESERVED WHERE PlayerId=@PlayerId";
             try
@@ -1306,7 +1309,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveQuest(DBContext context, int id, HumDataInfo humanRcd)
+        private void SaveQuest(StorageContext context, int id, HumDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_quest WHERE PlayerId=@PlayerId";
             const string sSqlStr5 = "INSERT INTO characters_quest (PlayerId, QUESTOPENINDEX, QUESTFININDEX, QUEST) VALUES(@PlayerId, @QUESTOPENINDEX, @QUESTFININDEX, @QUEST)";
@@ -1323,7 +1326,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveStatus(DBContext context, int playerId, ushort[] statusTimeArr)
+        private void SaveStatus(StorageContext context, int playerId, ushort[] statusTimeArr)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters_status SET Status0 = @Status0, Status1 = @Status1, Status2 = @Status2, Status3 = @Status3, Status4 = @Status4, Status5 = @Status5, Status6 = @Status6, Status7 = @Status7,");
@@ -1394,7 +1397,7 @@ namespace DBSvr.Storage.MySQL
             const string sqlString = "UPDATE characters SET DELETED=1, LastUpdate=now() WHERE ID=@Id";
             var result = true;
             var playerId = _quickIndexIdMap[nIndex];
-            using var context = new DBContext(_storageOption);
+            using var context = new StorageContext(_storageOption);
             var success = false;
             context.Open(ref success);
             if (!success)
@@ -1453,7 +1456,7 @@ namespace DBSvr.Storage.MySQL
                 return false;
             }
             var playerId = _quickIndexIdMap[nIndex];
-            using var context = new DBContext(_storageOption);
+            using var context = new StorageContext(_storageOption);
             var success = false;
             context.Open(ref success);
             if (!success)
@@ -1490,7 +1493,7 @@ namespace DBSvr.Storage.MySQL
             return true;
         }
 
-        private void ClearItemAttr(DBContext context, int playerId, IEnumerable<int> makeIndex)
+        private void ClearItemAttr(StorageContext context, int playerId, IEnumerable<int> makeIndex)
         {
             if (!makeIndex.Any())
             {
@@ -1514,7 +1517,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void UpdateItemAttr(DBContext context, int playerId, UserItem[] userItems)
+        private void UpdateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters_item_attr SET ");
@@ -1557,7 +1560,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void CreateItemAttr(DBContext context, int playerId, UserItem[] userItems)
+        private void CreateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("INSERT INTO characters_item_attr (PlayerId,MakeIndex,VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, VALUE10, VALUE11, VALUE12, VALUE13)");
@@ -1599,7 +1602,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void DeleteItemAttr(DBContext context, int playerId, IEnumerable<int> makeIndex)
+        private void DeleteItemAttr(StorageContext context, int playerId, IEnumerable<int> makeIndex)
         {
             try
             {
@@ -1616,7 +1619,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void QueryItemAttr(DBContext context, int playerId, ref UserItem[] userItems)
+        private void QueryItemAttr(StorageContext context, int playerId, ref UserItem[] userItems)
         {
             var makeIndexs = userItems.Where(x => x != null && x.MakeIndex > 0).Select(x => x.MakeIndex);
             if (!makeIndexs.Any())
