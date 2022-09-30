@@ -33,12 +33,12 @@ namespace DBSvr.Services
         private readonly LoginSvrService _loginService;
         private readonly Channel<UsrSocMessage> _reviceQueue;
 
-        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecordStorage, IPlayDataStorage playDataStorage)
+        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _logger = logger;
             _loginService = loginService;
-            _playRecordStorage = playRecordStorage;
-            _playDataStorage = playDataStorage;
+            _playRecordStorage = playRecord;
+            _playDataStorage = playData;
             GateList = new List<TGateInfo>();
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _reviceQueue = Channel.CreateUnbounded<UsrSocMessage>();
@@ -745,12 +745,9 @@ namespace DBSvr.Services
                     humRecord.Header = new RecordHeader();
                     humRecord.Header.sName = sChrName;
                     humRecord.Header.SelectID = userInfo.nSelGateID;
-                    if (!string.IsNullOrEmpty(humRecord.Header.sName))
+                    if (!_playRecordStorage.Add(humRecord))
                     {
-                        if (!_playRecordStorage.Add(humRecord))
-                        {
-                            nCode = 2;
-                        }
+                        nCode = 2;
                     }
                 }
                 else

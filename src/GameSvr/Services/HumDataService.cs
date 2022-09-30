@@ -88,10 +88,10 @@ namespace GameSvr.Services
             var result = false;
             var loadHum = new LoadHumDataPacket()
             {
-                sAccount = sAccount,
-                sChrName = sChrName,
-                sUserAddr = sStr,
-                nSessionID = nCertCode
+                Account = sAccount,
+                ChrName = sChrName,
+                UserAddr = sStr,
+                SessionID = nCertCode
             };
             if (LoadRcd(loadHum, ref HumanRcd))
             {
@@ -168,7 +168,7 @@ namespace GameSvr.Services
                             humRespData = EDCode.DecodeBuff(humRespData);
                             var responsePacket = ProtoBufDecoder.DeSerialize<LoadHumanRcdResponsePacket>(humRespData);
                             var sDBChrName = EDCode.DeCodeString(responsePacket.sChrName);
-                            if (sDBChrName == loadHuman.sChrName)
+                            if (sDBChrName == loadHuman.ChrName)
                             {
                                 HumanRcd = new HumDataInfo();
                                 HumanRcd = responsePacket.HumDataInfo;
