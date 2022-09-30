@@ -1,4 +1,5 @@
 ﻿using ProtoBuf;
+using System.Runtime.Serialization;
 using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule.Packet.ServerPackets
@@ -162,6 +163,43 @@ namespace SystemModule.Packet.ServerPackets
             Abil = new Ability();
             BonusAbil = new NakedAbility();
             StatusTimeArr = new ushort[15];
+        }
+
+        [OnSerializing]
+        public void Serialized(StreamingContext streamingContext)
+        {
+            HumItems ??= new UserItem[13];
+            BagItems ??= new UserItem[46];
+            StorageItems ??= new UserItem[50];
+            Magic ??= new MagicRcd[20];
+            for (int i = 0; i < HumItems.Length; i++)
+            {
+                if (HumItems[i] == null)
+                {
+                    HumItems[i] = new UserItem();
+                }
+            }
+            for (int i = 0; i < BagItems.Length; i++)
+            {
+                if (BagItems[i] == null)
+                {
+                    BagItems[i] = new UserItem();
+                }
+            }
+            for (int i = 0; i < StorageItems.Length; i++)
+            {
+                if (StorageItems[i] == null)
+                {
+                    StorageItems[i] = new UserItem();
+                }
+            }
+            for (int i = 0; i < Magic.Length; i++)
+            {
+                if (Magic[i] == null)
+                {
+                    Magic[i] = new MagicRcd();
+                }
+            }
         }
     }
 }
