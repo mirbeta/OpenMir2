@@ -257,7 +257,7 @@ namespace DBSvr.Services
                     if ((chrIndex >= 0))
                     {
                         HumanRCD.Header.sName = sDestChrName;
-                        HumanRCD.Data.sChrName = sDestChrName;
+                        HumanRCD.Data.ChrName = sDestChrName;
                         HumanRCD.Data.Account = sUserID;
                         _playDataStorage.Update(sDestChrName, ref HumanRCD);
                         result = true;

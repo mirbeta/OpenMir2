@@ -1,10 +1,8 @@
 ﻿using ProtoBuf;
-using System;
 
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
-    [Serializable]
     public class RecordHeader
     {
         [ProtoMember(1)]

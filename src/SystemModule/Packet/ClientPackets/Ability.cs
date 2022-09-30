@@ -5,7 +5,6 @@ using System.IO;
 namespace SystemModule.Packet.ClientPackets
 {
     [ProtoContract]
-    [Serializable]
     public class Ability : Packets, ICloneable
     {
         [ProtoMember(1)]

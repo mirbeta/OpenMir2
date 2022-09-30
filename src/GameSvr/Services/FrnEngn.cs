@@ -431,9 +431,9 @@ namespace GameSvr.Services
             var result = false;
             if (HumDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {
-                if (HumanRcd.Data.nGold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.nGold + GoldChangeInfo.nGold < 2000000000)
+                if (HumanRcd.Data.Gold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.Gold + GoldChangeInfo.nGold < 2000000000)
                 {
-                    HumanRcd.Data.nGold += GoldChangeInfo.nGold;
+                    HumanRcd.Data.Gold += GoldChangeInfo.nGold;
                     if (HumDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
                     {
                         M2Share.WorldEngine.sub_4AE514(GoldChangeInfo);
