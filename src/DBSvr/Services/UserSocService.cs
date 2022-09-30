@@ -482,16 +482,16 @@ namespace DBSvr.Services
                         if (QueryChr(sText, ref userInfo, ref gateInfo))
                         {
                             userInfo.boChrQueryed = true;
-                            _logger.DebugLog("[QueryChr] Success " + sText);
+                            _logger.DebugLog("[QueryChr]:" + sText);
                         }
                         else
                         {
-                            _logger.DebugLog("[QueryChr] Fail " + sText);
+                            _logger.DebugLog("[QueryChr]:" + sText);
                         }
                     }
                     else
                     {
-                        _logger.LogWarning("[Hacker Attack] QueryChr " + userInfo.sUserIPaddr);
+                        _logger.LogWarning("[Hacker Attack] QueryChr:" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_NEWCHR:
@@ -844,7 +844,7 @@ namespace DBSvr.Services
                 SendUserSocket(userInfo.Socket, userInfo.sConnID, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
-                _logger.DebugLog($"发送游戏网关信息: GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
+                _logger.DebugLog($"玩家使用游戏网关信息 GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
             }
             else
             {
