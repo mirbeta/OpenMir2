@@ -100,7 +100,7 @@ namespace GameSvr.World
         private void MakeSwitchData(PlayObject PlayObject, ref SwitchDataInfo SwitchData)
         {
             SwitchData = new SwitchDataInfo();
-            SwitchData.sChrName = PlayObject.CharName;
+            SwitchData.sChrName = PlayObject.ChrName;
             SwitchData.sMap = PlayObject.MapName;
             SwitchData.wX = PlayObject.CurrX;
             SwitchData.wY = PlayObject.CurrY;
@@ -122,7 +122,7 @@ namespace GameSvr.World
                 BaseObject BaseObject = PlayObject.SlaveList[i];
                 if (i <= 4)
                 {
-                    SwitchData.SlaveArr[i].SlaveName = BaseObject.CharName;
+                    SwitchData.SlaveArr[i].SlaveName = BaseObject.ChrName;
                     SwitchData.SlaveArr[i].KillCount = BaseObject.KillMonCount;
                     SwitchData.SlaveArr[i].SalveLevel = BaseObject.SlaveMakeLevel;
                     SwitchData.SlaveArr[i].SlaveExpLevel = BaseObject.SlaveExpLevel;

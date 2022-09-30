@@ -54,7 +54,7 @@ namespace GameSvr.Actor
             _actorsMap.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
-                Debug.WriteLine($"清理死亡对象 名称:[{ghostactor.CharName}] 地图:{ghostactor.MapName} 坐标:{ghostactor.CurrX}:{ghostactor.CurrY}");
+                Debug.WriteLine($"清理死亡对象 名称:[{ghostactor.ChrName}] 地图:{ghostactor.MapName} 坐标:{ghostactor.CurrX}:{ghostactor.CurrY}");
             }
         }
 

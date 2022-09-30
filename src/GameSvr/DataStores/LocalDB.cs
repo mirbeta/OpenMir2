@@ -28,7 +28,7 @@ namespace GameSvr.DataStores
         public bool LoadAdminList()
         {
             var sIPaddr = string.Empty;
-            var sCharName = string.Empty;
+            var sChrName = string.Empty;
             var sData = string.Empty;
             var sfilename = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "AdminList.txt");
             if (!File.Exists(sfilename))
@@ -88,16 +88,16 @@ namespace GameSvr.DataStores
                     if (nLv > 0)
                     {
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { "/", "\\", " ", "\t" });
-                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sCharName, new[] { "/", "\\", " ", "\t" });
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sChrName, new[] { "/", "\\", " ", "\t" });
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new[] { "/", "\\", " ", "\t" });
-                        if (string.IsNullOrEmpty(sCharName) || sIPaddr == "")
+                        if (string.IsNullOrEmpty(sChrName) || sIPaddr == "")
                         {
                             continue;
                         }
                         var AdminInfo = new TAdminInfo
                         {
                             nLv = nLv,
-                            sChrName = sCharName,
+                            sChrName = sChrName,
                             sIPaddr = sIPaddr
                         };
                         M2Share.WorldEngine.AdminList.Add(AdminInfo);
@@ -226,7 +226,7 @@ namespace GameSvr.DataStores
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
-                        CharName = "QFunction",
+                        ChrName = "QFunction",
                         m_nFlag = 0,
                         Appr = 0,
                         m_sFilePath = ScriptConst.sMarket_Def,
@@ -284,7 +284,7 @@ namespace GameSvr.DataStores
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
-                        CharName = "QManage",
+                        ChrName = "QManage",
                         m_nFlag = 0,
                         Appr = 0,
                         m_sFilePath = "MapQuest_def",
@@ -328,7 +328,7 @@ namespace GameSvr.DataStores
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
-                        CharName = "RobotManage",
+                        ChrName = "RobotManage",
                         m_nFlag = 0,
                         Appr = 0,
                         m_sFilePath = "Robot_def",
@@ -467,7 +467,7 @@ namespace GameSvr.DataStores
                                 MapName = sMapName,
                                 CurrX = (short)HUtil32.Str_ToInt(sX, 0),
                                 CurrY = (short)HUtil32.Str_ToInt(sY, 0),
-                                CharName = sName,
+                                ChrName = sName,
                                 m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0),
                                 Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0),
                                 m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0)
@@ -664,7 +664,7 @@ namespace GameSvr.DataStores
         /// </summary>
         public void LoadNpcs()
         {
-            var charName = string.Empty;
+            var ChrName = string.Empty;
             var type = string.Empty;
             var mapName = string.Empty;
             var cX = string.Empty;
@@ -681,10 +681,10 @@ namespace GameSvr.DataStores
                     string sData = LoadList[i].Trim();
                     if (!string.IsNullOrEmpty(sData) && sData[0] != ';')
                     {
-                        sData = HUtil32.GetValidStrCap(sData, ref charName, new[] { " ", "\t" });
-                        if (!string.IsNullOrEmpty(charName) && charName[0] == '\"')
+                        sData = HUtil32.GetValidStrCap(sData, ref ChrName, new[] { " ", "\t" });
+                        if (!string.IsNullOrEmpty(ChrName) && ChrName[0] == '\"')
                         {
-                            HUtil32.ArrestStringEx(charName, "\"", "\"", ref charName);
+                            HUtil32.ArrestStringEx(ChrName, "\"", "\"", ref ChrName);
                         }
                         sData = HUtil32.GetValidStr3(sData, ref type, new[] { " ", "\t" });
                         sData = HUtil32.GetValidStr3(sData, ref mapName, new[] { " ", "\t" });
@@ -692,7 +692,7 @@ namespace GameSvr.DataStores
                         sData = HUtil32.GetValidStr3(sData, ref cY, new[] { " ", "\t" });
                         sData = HUtil32.GetValidStr3(sData, ref flag, new[] { " ", "\t" });
                         sData = HUtil32.GetValidStr3(sData, ref appr, new[] { " ", "\t" });
-                        if (!string.IsNullOrEmpty(charName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(appr))
+                        if (!string.IsNullOrEmpty(ChrName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(appr))
                         {
                             NormNpc NPC = null;
                             switch (HUtil32.Str_ToInt(type, 0))
@@ -712,7 +712,7 @@ namespace GameSvr.DataStores
                                 NPC.MapName = mapName;
                                 NPC.CurrX = (short)HUtil32.Str_ToInt(cX, 0);
                                 NPC.CurrY = (short)HUtil32.Str_ToInt(cY, 0);
-                                NPC.CharName = charName;
+                                NPC.ChrName = ChrName;
                                 NPC.m_nFlag = (short)HUtil32.Str_ToInt(flag, 0);
                                 NPC.Appr = (ushort)HUtil32.Str_ToInt(appr, 0);
                                 M2Share.WorldEngine.QuestNpcList.Add(NPC);
@@ -1003,7 +1003,7 @@ namespace GameSvr.DataStores
             var sMapName = string.Empty;
             var sX = string.Empty;
             var sY = string.Empty;
-            var sCharName = string.Empty;
+            var sChrName = string.Empty;
             var sFlag = string.Empty;
             var sAppr = string.Empty;
             var sCastle = string.Empty;
@@ -1034,10 +1034,10 @@ namespace GameSvr.DataStores
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, new[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sX, new[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sY, new[] { " ", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCharName, new[] { " ", "\t" });
-                    if (sCharName != "" && sCharName[0] == '\"')
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sChrName, new[] { " ", "\t" });
+                    if (sChrName != "" && sChrName[0] == '\"')
                     {
-                        HUtil32.ArrestStringEx(sCharName, "\"", "\"", ref sCharName);
+                        HUtil32.ArrestStringEx(sChrName, "\"", "\"", ref sChrName);
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, new[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, new[] { " ", "\t" });
@@ -1054,7 +1054,7 @@ namespace GameSvr.DataStores
                         {
                             boNewNpc = false;
                             Merchant.m_sScript = sScript;
-                            Merchant.CharName = sCharName;
+                            Merchant.ChrName = sChrName;
                             Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
                             Merchant.Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
@@ -1085,7 +1085,7 @@ namespace GameSvr.DataStores
                             Merchant.m_sScript = sScript;
                             Merchant.CurrX = (short)nX;
                             Merchant.CurrY = (short)nY;
-                            Merchant.CharName = sCharName;
+                            Merchant.ChrName = sChrName;
                             Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
                             Merchant.Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                             Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);

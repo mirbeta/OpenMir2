@@ -475,7 +475,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.Error("WalkToRightPos:" + CharName);
+                M2Share.Log.Error("WalkToRightPos:" + ChrName);
             }
             return result;
         }
@@ -896,7 +896,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.Error(Format("TAIPlayObject::ActThink Name:{0} Code:{1} ", new object[] { CharName, nCode }));
+                M2Share.Log.Error(Format("TAIPlayObject::ActThink Name:{0} Code:{1} ", new object[] { ChrName, nCode }));
             }
             return result;
         }

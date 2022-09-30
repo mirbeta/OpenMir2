@@ -144,14 +144,14 @@ namespace GameSvr.Npc
             }
             if (result == 0)
             {
-                if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.CharName))
+                if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.CharName);
+                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.WomaHorn);
                     PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
                     PlayObject.GoldChanged();
-                    PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.CharName);
+                    PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
                     if (PlayObject.MyGuild != null)
                     {
                         PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref PlayObject.GuildRankNo);

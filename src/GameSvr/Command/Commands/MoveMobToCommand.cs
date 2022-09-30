@@ -68,7 +68,7 @@ namespace GameSvr.Command.Commands
                         MoveMon = MonList[i];
                         if (MoveMon != PlayObject)
                         {
-                            if (string.Compare(MoveMon.CharName, sMonName, StringComparison.Ordinal) == 0) // 是否是指定名称的怪
+                            if (string.Compare(MoveMon.ChrName, sMonName, StringComparison.Ordinal) == 0) // 是否是指定名称的怪
                             {
                                 MoveMon.SpaceMove(NewMap, nX, nY, 0);
                             }

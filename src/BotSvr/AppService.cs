@@ -71,7 +71,7 @@ namespace BotSvr
                             playClient.NewAccount = _options.NewAccount;
                             playClient.LoginID = string.Concat(_options.LoginAccount, g_nLoginIndex);
                             playClient.LoginPasswd = playClient.LoginID;
-                            playClient.CharName = playClient.LoginID;
+                            playClient.ChrName = playClient.LoginID;
                             playClient.ServerName = _options.ServerName;
                             playClient.m_dwConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
                             _clientManager.AddClient(playClient.SessionId, playClient);

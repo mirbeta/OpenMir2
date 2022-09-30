@@ -16,8 +16,10 @@ namespace DBSvr.Storage
         int Get(int nIndex, ref HumDataInfo HumanRCD);
         
         bool Get(string chrName, ref HumDataInfo HumanRCD);
+
+        HumInfoData Query(int playerId);
         
-        int GetQryChar(int nIndex, ref QueryChr QueryChrRcd);
+        bool GetQryChar(int nIndex, ref QueryChr QueryChrRcd);
 
         bool Update(string chrName, ref HumDataInfo HumanRCD);
 

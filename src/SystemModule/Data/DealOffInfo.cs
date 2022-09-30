@@ -11,11 +11,11 @@ namespace SystemModule.Data
         /// <summary>
         /// 寄售人
         /// </summary>
-        public string sDealCharName;
+        public string sDealChrName;
         /// <summary>
         /// 购买人
         /// </summary>        
-        public string sBuyCharName;
+        public string sBuyChrName;
         /// <summary>
         /// 寄售时间
         /// </summary>        

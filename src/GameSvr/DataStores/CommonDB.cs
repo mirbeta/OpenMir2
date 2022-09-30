@@ -284,17 +284,17 @@ namespace GameSvr.DataStores
                 {
                     while (dr.Read())
                     {
-                        var sDealCharName = dr.GetString("DealCharName");
-                        var sBuyCharName = dr.GetString("BuyCharName");
+                        var sDealChrName = dr.GetString("DealChrName");
+                        var sBuyChrName = dr.GetString("BuyChrName");
                         var dSellDateTime = dr.GetDateTime("SellDateTime");
                         var nState = dr.GetByte("State");
                         var nSellGold = dr.GetInt16("SellGold");
                         var sUseItems = dr.GetString("UseItems");
-                        if ((!string.IsNullOrEmpty(sDealCharName)) && (!string.IsNullOrEmpty(sBuyCharName)) && (nState < 4))
+                        if ((!string.IsNullOrEmpty(sDealChrName)) && (!string.IsNullOrEmpty(sBuyChrName)) && (nState < 4))
                         {
                             DealOffInfo = new DealOffInfo();
-                            DealOffInfo.sDealCharName = sDealCharName;
-                            DealOffInfo.sBuyCharName = sBuyCharName;
+                            DealOffInfo.sDealChrName = sDealChrName;
+                            DealOffInfo.sBuyChrName = sBuyChrName;
                             DealOffInfo.dSellDateTime = dSellDateTime;
                             DealOffInfo.nSellGold = nSellGold;
                             DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
@@ -331,14 +331,13 @@ namespace GameSvr.DataStores
                 if (M2Share.sSellOffItemList.Count > 0)
                 {
                     Execute(sSQLString);
-
                     for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                     {
                         DealOffInfo = M2Share.sSellOffItemList[i];
                         if (DealOffInfo != null)
                         {
-                            string InsertSql = "INSERT INTO goldsales (DealCharName, BuyCharName, SellDateTime, State, SellGold,UseItems) values " +
-                                "(" + DealOffInfo.sDealCharName + "," + DealOffInfo.sBuyCharName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.Flag + ","
+                            string InsertSql = "INSERT INTO goldsales (DealChrName, BuyChrName, SellDateTime, State, SellGold,UseItems) values " +
+                                "(" + DealOffInfo.sDealChrName + "," + DealOffInfo.sBuyChrName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.Flag + ","
                                 + DealOffInfo.nSellGold + "," + JsonSerializer.Serialize(DealOffInfo.UseItems) + ")";
                             Execute(InsertSql);
                         }

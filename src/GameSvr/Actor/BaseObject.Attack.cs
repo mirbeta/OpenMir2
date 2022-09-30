@@ -431,7 +431,7 @@ namespace GameSvr.Actor
                                 {
                                     if ((this as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
-                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
+                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
                                         {
                                             (this as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                         }
@@ -441,7 +441,7 @@ namespace GameSvr.Actor
                                 {
                                     if ((this as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
-                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
+                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
                                         {
                                             (this as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                         }
@@ -455,7 +455,7 @@ namespace GameSvr.Actor
                                     {
                                         if ((Master as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                         {
-                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
+                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
                                             {
                                                 (Master as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                             }
@@ -465,7 +465,7 @@ namespace GameSvr.Actor
                                     {
                                         if ((Master as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                         {
-                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.CharName))
+                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
                                             {
                                                 (Master as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                             }
@@ -547,7 +547,7 @@ namespace GameSvr.Actor
                     {
                         if (StdItem.NeedIdentify == 1)
                         {
-                            M2Share.AddGameDataLog("21" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                            M2Share.AddGameDataLog("21" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                         }
                     }
                     FeatureChanged();
@@ -560,7 +560,7 @@ namespace GameSvr.Actor
                     StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("20" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        M2Share.AddGameDataLog("20" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     RecalcAbilitys();
                     SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");

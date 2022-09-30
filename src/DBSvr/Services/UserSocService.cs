@@ -33,12 +33,12 @@ namespace DBSvr.Services
         private readonly LoginSvrService _loginService;
         private readonly Channel<UsrSocMessage> _reviceQueue;
 
-        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecordStorage, IPlayDataStorage playDataStorage)
+        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _logger = logger;
             _loginService = loginService;
-            _playRecordStorage = playRecordStorage;
-            _playDataStorage = playDataStorage;
+            _playRecordStorage = playRecord;
+            _playDataStorage = playData;
             GateList = new List<TGateInfo>();
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _reviceQueue = Channel.CreateUnbounded<UsrSocMessage>();
@@ -246,11 +246,11 @@ namespace DBSvr.Services
                 chrRecord.Data = new HumInfoData();
                 chrRecord.Header.sName = sChrName;
                 chrRecord.Header.sAccount = sAccount;
-                chrRecord.Data.sChrName = sChrName;
+                chrRecord.Data.ChrName = sChrName;
                 chrRecord.Data.Account = sAccount;
                 chrRecord.Data.Sex = (byte)nSex;
                 chrRecord.Data.Job = (byte)nJob;
-                chrRecord.Data.btHair = (byte)nHair;
+                chrRecord.Data.Hair = (byte)nHair;
                 _playDataStorage.Add(ref chrRecord);
                 result = true;
             }
@@ -591,14 +591,14 @@ namespace DBSvr.Services
                             {
                                 continue;
                             }
-                            HumDataInfo chrRecord = null;
-                            if (_playDataStorage.Get(sChrName, ref chrRecord))
+                            QueryChr chrRecord = null;
+                            if (_playDataStorage.GetQryChar(nIndex, ref chrRecord))
                             {
                                 if (humRecord.Selected == 1)
                                 {
                                     sSendMsg = sSendMsg + "*";
                                 }
-                                sSendMsg = sSendMsg + sChrName + "/" + chrRecord.Data.Job + "/" + chrRecord.Data.btHair + "/" + chrRecord.Data.Abil.Level + "/" + chrRecord.Data.Sex + "/";
+                                sSendMsg = sSendMsg + sChrName + "/" + chrRecord.Job + "/" + chrRecord.Hair + "/" + chrRecord.Level + "/" + chrRecord.Sex + "/";
                                 nChrCount++;
                             }
                         }
@@ -628,13 +628,13 @@ namespace DBSvr.Services
 
         private int DelChrSnameToLevel(string sName)
         {
-            HumDataInfo chrRecord = null;
+            QueryChr chrRecord = null;
             var nIndex = _playDataStorage.Index(sName);
             if (nIndex < 0)
                 return 0;
-            if (_playDataStorage.Get(sName, ref chrRecord))
+            if (_playDataStorage.GetQryChar(nIndex, ref chrRecord))
             {
-                return chrRecord.Data.Abil.Level;
+                return chrRecord.Level;
             }
             return 0;
         }
@@ -745,12 +745,9 @@ namespace DBSvr.Services
                     humRecord.Header = new RecordHeader();
                     humRecord.Header.sName = sChrName;
                     humRecord.Header.SelectID = userInfo.nSelGateID;
-                    if (!string.IsNullOrEmpty(humRecord.Header.sName))
+                    if (!_playRecordStorage.Add(humRecord))
                     {
-                        if (!_playRecordStorage.Add(humRecord))
-                        {
-                            nCode = 2;
-                        }
+                        nCode = 2;
                     }
                 }
                 else
@@ -826,10 +823,10 @@ namespace DBSvr.Services
                 nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex >= 0)
                 {
-                    HumDataInfo chrRecord = null;
-                    if (_playDataStorage.Get(sChrName, ref chrRecord))
+                    var chrRecord = _playDataStorage.Query(nIndex);
+                    if (chrRecord != null)
                     {
-                        sCurMap = chrRecord.Data.sCurMap;
+                        sCurMap = chrRecord.CurMap;
                         boDataOk = true;
                     }
                 }

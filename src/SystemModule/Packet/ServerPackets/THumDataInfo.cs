@@ -1,4 +1,5 @@
 ﻿using ProtoBuf;
+using System.Runtime.Serialization;
 using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule.Packet.ServerPackets
@@ -6,9 +7,9 @@ namespace SystemModule.Packet.ServerPackets
     [ProtoContract]
     public class HumDataInfo
     {
-        [ProtoMember(1)] 
+        [ProtoMember(1)]
         public RecordHeader Header { get; set; }
-        [ProtoMember(2)] 
+        [ProtoMember(2)]
         public HumInfoData Data { get; set; }
 
         public HumDataInfo()
@@ -22,9 +23,9 @@ namespace SystemModule.Packet.ServerPackets
     public class SaveHumDataPacket : CmdPacket
     {
         [ProtoMember(1)]
-        public string sAccount { get; set; }
+        public string Account { get; set; }
         [ProtoMember(2)]
-        public string sCharName { get; set; }
+        public string ChrName { get; set; }
         [ProtoMember(3)]
         public HumDataInfo HumDataInfo { get; set; }
     }
@@ -33,13 +34,13 @@ namespace SystemModule.Packet.ServerPackets
     public class LoadHumDataPacket : CmdPacket
     {
         [ProtoMember(1)]
-        public string sAccount { get; set; }
+        public string Account { get; set; }
         [ProtoMember(2)]
-        public string sChrName { get; set; }
+        public string ChrName { get; set; }
         [ProtoMember(3)]
-        public string sUserAddr { get; set; }
+        public string UserAddr { get; set; }
         [ProtoMember(4)]
-        public int nSessionID { get; set; }
+        public int SessionID { get; set; }
     }
 
     [ProtoContract]
@@ -48,9 +49,9 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(1)]
         public byte ServerIndex;
         [ProtoMember(2)]
-        public string sChrName;
+        public string ChrName;
         [ProtoMember(3)]
-        public string sCurMap;
+        public string CurMap;
         [ProtoMember(4)]
         public short CurX;
         [ProtoMember(5)]
@@ -58,61 +59,61 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(6)]
         public byte Dir;
         [ProtoMember(7)]
-        public byte btHair;
+        public byte Hair;
         [ProtoMember(8)]
         public byte Sex;
         [ProtoMember(9)]
         public byte Job;
         [ProtoMember(10)]
-        public int nGold;
+        public int Gold;
         [ProtoMember(11)]
         public Ability Abil;
         [ProtoMember(12)]
         public ushort[] StatusTimeArr;
         [ProtoMember(13)]
-        public string sHomeMap;
+        public string HomeMap;
         [ProtoMember(14)]
-        public short wHomeX;
+        public short HomeX;
         [ProtoMember(15)]
-        public short wHomeY;
+        public short HomeY;
         [ProtoMember(16)]
         public NakedAbility BonusAbil;
         [ProtoMember(17)]
-        public int nBonusPoint;
+        public int BonusPoint;
         [ProtoMember(18)]
-        public byte btCreditPoint;
+        public byte CreditPoint;
         [ProtoMember(19)]
-        public byte btReLevel;
+        public byte ReLevel;
         [ProtoMember(20)]
-        public string sMasterName;
+        public string MasterName;
         [ProtoMember(21)]
         public bool boMaster;
         [ProtoMember(22)]
-        public string sDearName;
+        public string DearName;
         [ProtoMember(23)]
-        public string sStoragePwd;
+        public string StoragePwd;
         [ProtoMember(24)]
-        public int nGameGold;
+        public int GameGold;
         [ProtoMember(25)]
-        public int nGamePoint;
+        public int GamePoint;
         [ProtoMember(26)]
-        public int nPayMentPoint;
+        public int PayMentPoint;
         [ProtoMember(27)]
-        public int nPKPoint;
+        public int PKPoint;
         [ProtoMember(28)]
-        public byte btAllowGroup;
+        public byte AllowGroup;
         [ProtoMember(29)]
         public byte btF9;
         [ProtoMember(30)]
-        public byte btAttatckMode;
+        public byte AttatckMode;
         [ProtoMember(31)]
-        public byte btIncHealth;
+        public byte IncHealth;
         [ProtoMember(32)]
-        public byte btIncSpell;
+        public byte IncSpell;
         [ProtoMember(33)]
-        public byte btIncHealing;
+        public byte IncHealing;
         [ProtoMember(34)]
-        public byte btFightZoneDieCount;
+        public byte FightZoneDieCount;
         [ProtoMember(35)]
         public byte btEE;
         [ProtoMember(36)]
@@ -120,19 +121,19 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(37)]
         public string Account;
         [ProtoMember(38)]
-        public bool boLockLogon;
+        public bool LockLogon;
         [ProtoMember(39)]
-        public short wContribution;
+        public short Contribution;
         [ProtoMember(40)]
-        public int nHungerStatus;
+        public int HungerStatus;
         [ProtoMember(41)]
-        public bool boAllowGuildReCall;
+        public bool AllowGuildReCall;
         [ProtoMember(42)]
-        public short wGroupRcallTime;
+        public short GroupRcallTime;
         [ProtoMember(43)]
-        public double dBodyLuck;
+        public double BodyLuck;
         [ProtoMember(44)]
-        public bool boAllowGroupReCall;
+        public bool AllowGroupReCall;
         [ProtoMember(45)]
         public byte[] QuestUnitOpen;
         [ProtoMember(46)]
@@ -141,13 +142,13 @@ namespace SystemModule.Packet.ServerPackets
         public byte[] QuestFlag;
         [ProtoMember(48)]
         public byte MarryCount;
-        [ProtoMember(49)]
+        [ProtoMember(49, OverwriteList = true)]
         public UserItem[] HumItems;
-        [ProtoMember(50)]
+        [ProtoMember(50, OverwriteList = true)]
         public UserItem[] BagItems;
-        [ProtoMember(51)]
+        [ProtoMember(51, OverwriteList = true)]
         public UserItem[] StorageItems;
-        [ProtoMember(52)]
+        [ProtoMember(52, OverwriteList = true)]
         public MagicRcd[] Magic;
 
         public HumInfoData()
@@ -155,13 +156,50 @@ namespace SystemModule.Packet.ServerPackets
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
-            HumItems = new UserItem[13];
-            BagItems = new UserItem[46];
-            StorageItems = new UserItem[50];
-            Magic = new MagicRcd[20];
+            //HumItems = new UserItem[13];
+            //BagItems = new UserItem[46];
+            //StorageItems = new UserItem[50];
+            //Magic = new MagicRcd[20];
             Abil = new Ability();
             BonusAbil = new NakedAbility();
             StatusTimeArr = new ushort[15];
+        }
+
+        [OnSerializing]
+        public void Serialized(StreamingContext streamingContext)
+        {
+            HumItems ??= new UserItem[13];
+            BagItems ??= new UserItem[46];
+            StorageItems ??= new UserItem[50];
+            Magic ??= new MagicRcd[20];
+            for (int i = 0; i < HumItems.Length; i++)
+            {
+                if (HumItems[i] == null)
+                {
+                    HumItems[i] = new UserItem();
+                }
+            }
+            for (int i = 0; i < BagItems.Length; i++)
+            {
+                if (BagItems[i] == null)
+                {
+                    BagItems[i] = new UserItem();
+                }
+            }
+            for (int i = 0; i < StorageItems.Length; i++)
+            {
+                if (StorageItems[i] == null)
+                {
+                    StorageItems[i] = new UserItem();
+                }
+            }
+            for (int i = 0; i < Magic.Length; i++)
+            {
+                if (Magic[i] == null)
+                {
+                    Magic[i] = new MagicRcd();
+                }
+            }
         }
     }
 }

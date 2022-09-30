@@ -338,7 +338,7 @@ namespace GameSvr.GateWay
                             {
                                 GateUser.boCertification = true;
                                 GateUser.sAccount = sAccount.Trim();
-                                GateUser.sCharName = sChrName.Trim();
+                                GateUser.sChrName = sChrName.Trim();
                                 GateUser.nSessionID = nSessionID;
                                 GateUser.nClientVersion = nClientVersion;
                                 GateUser.SessInfo = SessInfo;
@@ -432,7 +432,7 @@ namespace GameSvr.GateWay
             var GateUser = new GateUserInfo
             {
                 sAccount = string.Empty,
-                sCharName = string.Empty,
+                sChrName = string.Empty,
                 sIPaddr = sIPaddr,
                 nSocket = socket,
                 SocketId = socketId,

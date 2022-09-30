@@ -17,7 +17,7 @@ namespace GameSvr.Command.Commands
             {
                 if (PlayObject.GuildRankNo > 1)
                 {
-                    if (PlayObject.MyGuild.IsMember(PlayObject.CharName) && PlayObject.MyGuild.DelMember(PlayObject.CharName))
+                    if (PlayObject.MyGuild.IsMember(PlayObject.ChrName) && PlayObject.MyGuild.DelMember(PlayObject.ChrName))
                     {
                         M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName);
                         PlayObject.MyGuild = null;

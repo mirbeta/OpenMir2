@@ -47,7 +47,7 @@ namespace GameSvr.Command.Commands
             }
             if (boAddState)
             {
-                Human.MyGuild = M2Share.GuildMgr.MemberOfGuild(Human.CharName);
+                Human.MyGuild = M2Share.GuildMgr.MemberOfGuild(Human.ChrName);
                 if (Human.MyGuild != null)
                 {
                     Human.GuildRankName = Human.MyGuild.GetRankName(PlayObject, ref Human.GuildRankNo);

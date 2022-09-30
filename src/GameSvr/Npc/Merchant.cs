@@ -228,7 +228,7 @@ namespace GameSvr.Npc
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, CharName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
+                M2Share.Log.Error(Format(sExceptionMsg, ChrName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
             }
         }
 
@@ -387,7 +387,7 @@ namespace GameSvr.Npc
                             });
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog("26" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                M2Share.AddGameDataLog("26" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                             DisPose(UserItem);
                             ItemList.RemoveAt(i);
@@ -436,7 +436,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
             {
                 upgradeInfo = UpgradeWeaponList[i];
-                if (upgradeInfo.sUserName == User.CharName)
+                if (upgradeInfo.sUserName == User.ChrName)
                 {
                     GotoLable(User, ScriptConst.sUPGRADEING, false);
                     return;
@@ -460,13 +460,13 @@ namespace GameSvr.Npc
                 User.GoldChanged();
                 upgradeInfo = new TUpgradeInfo
                 {
-                    sUserName = User.CharName,
+                    sUserName = User.ChrName,
                     UserItem = User.UseItems[Grobal2.U_WEAPON]
                 };
                 var StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[Grobal2.U_WEAPON].Index);
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("25" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.CharName + "\t" + StdItem.Name + "\t" + User.UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("25" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + User.UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.SendDelItems(User.UseItems[Grobal2.U_WEAPON]);
                 User.UseItems[Grobal2.U_WEAPON].Index = 0;
@@ -505,7 +505,7 @@ namespace GameSvr.Npc
             }
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
             {
-                if (UpgradeWeaponList[i].sUserName == User.CharName)
+                if (UpgradeWeaponList[i].sUserName == User.ChrName)
                 {
                     n18 = 1;
                     if (((HUtil32.GetTickCount() - UpgradeWeaponList[i].dwGetBackTick) > M2Share.Config.UPgradeWeaponGetBackTime) || User.Permission >= 4)
@@ -643,7 +643,7 @@ namespace GameSvr.Npc
                 var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("24" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("24" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.AddItemToBag(UserItem);
                 User.SendAddItem(UserItem);
@@ -784,12 +784,12 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
+                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
                 }
             }
             else
             {
-                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.CharName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
+                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
             }
         }
 
@@ -1258,7 +1258,7 @@ namespace GameSvr.Npc
                                             PlayObject.SendAddItem(UserItem);
                                             if (StdItem.NeedIdentify == 1)
                                             {
-                                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + CharName);
+                                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                                             }
                                             List20.RemoveAt(j);
                                             if (List20.Count <= 0)
@@ -1396,7 +1396,7 @@ namespace GameSvr.Npc
                     StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + CharName);
+                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                     }
                     result = true;
                 }
@@ -1521,7 +1521,7 @@ namespace GameSvr.Npc
                                 StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('2' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.CharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + CharName);
+                                    M2Share.AddGameDataLog('2' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                                 }
                                 n14 = 0;
                                 break;
@@ -1711,7 +1711,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("Failure in loading upgradinglist - " + CharName);
+                M2Share.Log.Error("Failure in loading upgradinglist - " + ChrName);
             }
         }
 
@@ -1723,7 +1723,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("Failure in saving upgradinglist - " + CharName);
+                M2Share.Log.Error("Failure in saving upgradinglist - " + ChrName);
             }
         }
 

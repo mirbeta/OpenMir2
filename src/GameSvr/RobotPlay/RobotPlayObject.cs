@@ -165,7 +165,7 @@ namespace GameSvr.RobotPlay
             WalkSpeed = 300;
             m_RunPos = new TRunPos();
             m_Path = new PointInfo[0];
-            var sFileName = GetRandomConfigFileName(CharName, 0);
+            var sFileName = GetRandomConfigFileName(ChrName, 0);
             if (sFileName == "" || !File.Exists(sFileName))
             {
                 if (m_sConfigFileName != "" && File.Exists(m_sConfigFileName))
@@ -337,7 +337,7 @@ namespace GameSvr.RobotPlay
                 }
                 HasLevelUp(Abil.Level - 1);
                 AddBodyLuck(100);
-                M2Share.AddGameDataLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + CharName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
+                M2Share.AddGameDataLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + ChrName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
                 IncHealthSpell(2000, 2000);
             }
         }
@@ -360,34 +360,34 @@ namespace GameSvr.RobotPlay
                 {
                     return;
                 }
-                if (!PlayObject.HearWhisper || PlayObject.IsBlockWhisper(CharName))
+                if (!PlayObject.HearWhisper || PlayObject.IsBlockWhisper(ChrName))
                 {
                     return;
                 }
                 if (Permission > 0)
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { CharName, Abil.Level, saystr }));
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
                     if (m_GetWhisperHuman != null && !m_GetWhisperHuman.Ghost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { CharName, Abil.Level, PlayObject.CharName, saystr }));
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                     if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.Ghost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { CharName, Abil.Level, PlayObject.CharName, saystr }));
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { CharName, Abil.Level, saystr }));
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
                     if (m_GetWhisperHuman != null && !m_GetWhisperHuman.Ghost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { CharName, Abil.Level, PlayObject.CharName, saystr }));
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                     if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.Ghost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { CharName, Abil.Level, PlayObject.CharName, saystr }));
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                 }
             }
@@ -413,7 +413,7 @@ namespace GameSvr.RobotPlay
                 }
                 var boDisableSayMsg = m_boDisableSayMsg;
                 //g_DenySayMsgList.Lock;
-                //if (g_DenySayMsgList.GetIndex(m_sCharName) >= 0)
+                //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                 //{
                 //    boDisableSayMsg = true;
                 //}
@@ -438,7 +438,7 @@ namespace GameSvr.RobotPlay
                             if (sData[1] == '!')//发送组队消息
                             {
                                 SC = sData.Substring(2, sData.Length - 2);
-                                SendGroupText(CharName + ": " + SC);
+                                SendGroupText(ChrName + ": " + SC);
                                 return;
                             }
                             if (sData[1] == '~') //发送行会消息
@@ -446,7 +446,7 @@ namespace GameSvr.RobotPlay
                                 if (MyGuild != null)
                                 {
                                     SC = sData.Substring(2, sData.Length - 2);
-                                    MyGuild.SendGuildMsg(CharName + ": " + SC);
+                                    MyGuild.SendGuildMsg(ChrName + ": " + SC);
                                 }
                                 return;
                             }
@@ -462,7 +462,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
                                 SC = sData.Substring(1, sData.Length - 1);
-                                string sCryCryMsg = "(!)" + CharName + ": " + SC;
+                                string sCryCryMsg = "(!)" + ChrName + ": " + SC;
                                 if (m_boFilterSendMsg)
                                 {
                                     SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
@@ -481,7 +481,7 @@ namespace GameSvr.RobotPlay
                     }
                     if (!m_boFilterSendMsg)
                     {
-                        SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, CharName + ':' + sData);
+                        SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + sData);
                     }
                 }
             }
@@ -584,7 +584,7 @@ namespace GameSvr.RobotPlay
                     }
                     boDisableSayMsg = m_boDisableSayMsg;
                     // g_DenySayMsgList.Lock;
-                    //if (g_DenySayMsgList.GetIndex(m_sCharName) >= 0)
+                    //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                     //{
                     //    boDisableSayMsg = true;
                     //}
