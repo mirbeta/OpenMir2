@@ -5,14 +5,14 @@ using System.Data;
 
 namespace DBSvr.Storage.MySQL
 {
-    public class DBContext : IDisposable
+    public class StorageContext : IDisposable
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly StorageOption _storageOption;
         private MySqlConnection? _connection;
         private MySqlTransaction? _transaction;
 
-        public DBContext(StorageOption storageOption)
+        public StorageContext(StorageOption storageOption)
         {
             _storageOption = storageOption;
         }
