@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Security;
 using System.Text;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
@@ -158,6 +159,25 @@ namespace DBSvr.Storage.MySQL
             return false;
         }
 
+        public HumInfoData Query(int playerId)
+        {
+            try
+            {
+                var result = false;
+                Open(ref result);
+                var playData = GetChrRecord(playerId);
+                return playData;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                Close(_connection);
+            }
+        }
+
         public bool Update(string chrName, ref HumDataInfo humanRcd)
         {
             if (_mirQuickMap.TryGetValue(chrName, out var playerId))
@@ -197,7 +217,7 @@ namespace DBSvr.Storage.MySQL
                 }
                 var command = new MySqlCommand();
                 command.CommandText = sStrString;
-                command.Parameters.AddWithValue("@Sex", queryChrRcd.btSex);
+                command.Parameters.AddWithValue("@Sex", queryChrRcd.Sex);
                 command.Parameters.AddWithValue("@Job", queryChrRcd.Job);
                 command.Parameters.AddWithValue("@Id", playerId);
                 command.Connection = _connection;
@@ -264,7 +284,11 @@ namespace DBSvr.Storage.MySQL
             }
             try
             {
-                GetChrRecord(playerId, ref humanRcd);
+                humanRcd.Data = GetChrRecord(playerId);
+                humanRcd.Header.sName = humanRcd.Data.sChrName;
+                //humanRcd.Header.Deleted = dr.GetBoolean("DELETED");
+                //humanRcd.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("CREATEDATE"));
+                
                 GetAbilGetRecord(playerId, ref humanRcd);
                 GetBonusAbilRecord(playerId, ref humanRcd);
                 GetMagicRecord(playerId, ref humanRcd);
@@ -285,7 +309,7 @@ namespace DBSvr.Storage.MySQL
             return true;
         }
 
-        private void GetChrRecord(int playerId, ref HumDataInfo humanRcd)
+        private HumInfoData GetChrRecord(int playerId)
         {
             const string sSqlString = "SELECT * FROM characters WHERE ID=@ID";
             var command = new MySqlCommand();
@@ -295,70 +319,70 @@ namespace DBSvr.Storage.MySQL
                 command.Parameters.AddWithValue("@Id", playerId);
                 command.Connection = _connection;
                 using var dr = command.ExecuteReader();
-                while (dr.Read())
+                HumInfoData humInfoData = null;
+                if (dr.Read())
                 {
-                    humanRcd = new HumDataInfo();
-                    humanRcd.Data.Account = dr.GetString("LOGINID");
-                    humanRcd.Header.sName = dr.GetString("ChrName");
-                    humanRcd.Header.Deleted = dr.GetBoolean("DELETED");
-                    humanRcd.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("CREATEDATE"));
-                    humanRcd.Data.sChrName = dr.GetString("ChrName");
+                    humInfoData = new HumInfoData();
+                    humInfoData.Account = dr.GetString("LOGINID");
+                    humInfoData.sChrName = dr.GetString("ChrName");
                     if (!dr.IsDBNull(dr.GetOrdinal("MapName")))
                     {
-                        humanRcd.Data.sCurMap = dr.GetString("MapName");
+                        humInfoData.sCurMap = dr.GetString("MapName");
                     }
-                    humanRcd.Data.CurX = dr.GetInt16("CX");
-                    humanRcd.Data.CurY = dr.GetInt16("CY");
-                    humanRcd.Data.Dir = dr.GetByte("DIR");
-                    humanRcd.Data.btHair = dr.GetByte("HAIR");
-                    humanRcd.Data.Sex = dr.GetByte("SEX");
-                    humanRcd.Data.Job = dr.GetByte("JOB");
-                    humanRcd.Data.nGold = dr.GetInt32("Gold");
+                    humInfoData.CurX = dr.GetInt16("CX");
+                    humInfoData.CurY = dr.GetInt16("CY");
+                    humInfoData.Dir = dr.GetByte("DIR");
+                    humInfoData.btHair = dr.GetByte("HAIR");
+                    humInfoData.Sex = dr.GetByte("SEX");
+                    humInfoData.Job = dr.GetByte("JOB");
+                    humInfoData.nGold = dr.GetInt32("Gold");
                     if (!dr.IsDBNull(dr.GetOrdinal("HomeMap")))
                     {
-                        humanRcd.Data.sHomeMap = dr.GetString("HomeMap");
+                        humInfoData.sHomeMap = dr.GetString("HomeMap");
                     }
-                    humanRcd.Data.wHomeX = dr.GetInt16("HOMEX");
-                    humanRcd.Data.wHomeY = dr.GetInt16("HOMEY");
+                    humInfoData.wHomeX = dr.GetInt16("HOMEX");
+                    humInfoData.wHomeY = dr.GetInt16("HOMEY");
                     if (!dr.IsDBNull(dr.GetOrdinal("DearName")))
                     {
-                        humanRcd.Data.sDearName = dr.GetString("DearName");
+                        humInfoData.sDearName = dr.GetString("DearName");
                     }
                     if (!dr.IsDBNull(dr.GetOrdinal("MasterName")))
                     {
-                        humanRcd.Data.sMasterName = dr.GetString("MasterName");
+                        humInfoData.sMasterName = dr.GetString("MasterName");
                     }
-                    humanRcd.Data.boMaster = dr.GetBoolean("IsMaster");
-                    humanRcd.Data.btCreditPoint = (byte)dr.GetInt32("CREDITPOINT");
+                    humInfoData.boMaster = dr.GetBoolean("IsMaster");
+                    humInfoData.btCreditPoint = (byte)dr.GetInt32("CREDITPOINT");
                     if (!dr.IsDBNull(dr.GetOrdinal("StoragePwd")))
                     {
-                        humanRcd.Data.sStoragePwd = dr.GetString("StoragePwd");
+                        humInfoData.sStoragePwd = dr.GetString("StoragePwd");
                     }
-                    humanRcd.Data.btReLevel = dr.GetByte("ReLevel");
-                    humanRcd.Data.boLockLogon = dr.GetBoolean("LOCKLOGON");
-                    humanRcd.Data.nBonusPoint = dr.GetInt32("BONUSPOINT");
-                    humanRcd.Data.nGameGold = dr.GetInt32("Gold");
-                    humanRcd.Data.nGamePoint = dr.GetInt32("GamePoint");
-                    humanRcd.Data.nPayMentPoint = dr.GetInt32("PayMentPoint");
-                    humanRcd.Data.nHungerStatus = dr.GetInt32("HungerStatus");
-                    humanRcd.Data.btAllowGroup = (byte)dr.GetInt32("AllowGroup");
-                    humanRcd.Data.btAttatckMode = dr.GetByte("AttatckMode");
-                    humanRcd.Data.btIncHealth = dr.GetByte("IncHealth");
-                    humanRcd.Data.btIncSpell = dr.GetByte("IncSpell");
-                    humanRcd.Data.btIncHealing = dr.GetByte("IncHealing");
-                    humanRcd.Data.btFightZoneDieCount = dr.GetByte("FightZoneDieCount");
-                    humanRcd.Data.boAllowGuildReCall = dr.GetBoolean("AllowGuildReCall");
-                    humanRcd.Data.boAllowGroupReCall = dr.GetBoolean("AllowGroupReCall");
-                    humanRcd.Data.wGroupRcallTime = dr.GetInt16("GroupRcallTime");
-                    humanRcd.Data.dBodyLuck = dr.GetDouble("BodyLuck");
+                    humInfoData.btReLevel = dr.GetByte("ReLevel");
+                    humInfoData.boLockLogon = dr.GetBoolean("LOCKLOGON");
+                    humInfoData.nBonusPoint = dr.GetInt32("BONUSPOINT");
+                    humInfoData.nGameGold = dr.GetInt32("Gold");
+                    humInfoData.nGamePoint = dr.GetInt32("GamePoint");
+                    humInfoData.nPayMentPoint = dr.GetInt32("PayMentPoint");
+                    humInfoData.nHungerStatus = dr.GetInt32("HungerStatus");
+                    humInfoData.btAllowGroup = (byte)dr.GetInt32("AllowGroup");
+                    humInfoData.btAttatckMode = dr.GetByte("AttatckMode");
+                    humInfoData.btIncHealth = dr.GetByte("IncHealth");
+                    humInfoData.btIncSpell = dr.GetByte("IncSpell");
+                    humInfoData.btIncHealing = dr.GetByte("IncHealing");
+                    humInfoData.btFightZoneDieCount = dr.GetByte("FightZoneDieCount");
+                    humInfoData.boAllowGuildReCall = dr.GetBoolean("AllowGuildReCall");
+                    humInfoData.boAllowGroupReCall = dr.GetBoolean("AllowGroupReCall");
+                    humInfoData.wGroupRcallTime = dr.GetInt16("GroupRcallTime");
+                    humInfoData.dBodyLuck = dr.GetDouble("BodyLuck");
                 }
                 dr.Close();
                 dr.Dispose();
+                return humInfoData;
             }
             catch (Exception ex)
             {
                 _logger.Error("[Exception] PlayDataStorage.GetChrRecord");
                 _logger.Error(ex.StackTrace);
+                return null;
             }
         }
 
@@ -1485,17 +1509,17 @@ namespace DBSvr.Storage.MySQL
             return false;
         }
 
-        public int GetQryChar(int nIndex, ref QueryChr queryChrRcd)
+        public bool GetQryChar(int nIndex, ref QueryChr queryChrRcd)
         {
             var result = -1;
             const string sSql = "SELECT * FROM characters WHERE ID=@Id";
             if (nIndex < 0)
             {
-                return -1;
+                return false;
             }
             if (_quickIndexIdMap.Count <= nIndex)
             {
-                return -1;
+                return false;
             }
             var playerId = _quickIndexIdMap[nIndex];
             var command = new MySqlCommand();
@@ -1510,16 +1534,16 @@ namespace DBSvr.Storage.MySQL
                     queryChrRcd.Name = dr.GetString("ChrName");
                     queryChrRcd.Job = dr.GetByte("Job");
                     queryChrRcd.Hair = dr.GetByte("Hair");
-                    queryChrRcd.btSex = dr.GetByte("Sec");
+                    queryChrRcd.Sex = dr.GetByte("Sec");
                     queryChrRcd.Level = dr.GetUInt16("Level");
                 }
             }
             catch (Exception)
             {
                 _logger.Error("[Exception] PlayDataStorage.GetQryChar");
-                return result;
+                return false;
             }
-            return nIndex;
+            return true;
         }
         
         private long QueryUseItemCount(int playerId)

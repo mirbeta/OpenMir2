@@ -133,6 +133,11 @@ namespace DBSvr.Storage.MongoDB
             throw new NotImplementedException();
         }
 
+        public HumInfoData Query(int playerId)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Update(string nIndex, ref HumDataInfo HumanRCD)
         {
             bool result = false;
@@ -367,11 +372,11 @@ namespace DBSvr.Storage.MongoDB
             return false;
         }
 
-        public int GetQryChar(int nIndex, ref QueryChr QueryChrRcd)
+        public bool GetQryChar(int nIndex, ref QueryChr QueryChrRcd)
         {
             int result = -1;
             const string sSQL = "SELECT * FROM TBL_CHARACTER WHERE ID={0}";
-            return result;
+            return false;
         }
     }
 }

@@ -591,14 +591,14 @@ namespace DBSvr.Services
                             {
                                 continue;
                             }
-                            HumDataInfo chrRecord = null;
-                            if (_playDataStorage.Get(sChrName, ref chrRecord))
+                            QueryChr chrRecord = null;
+                            if (_playDataStorage.GetQryChar(nIndex, ref chrRecord))
                             {
                                 if (humRecord.Selected == 1)
                                 {
                                     sSendMsg = sSendMsg + "*";
                                 }
-                                sSendMsg = sSendMsg + sChrName + "/" + chrRecord.Data.Job + "/" + chrRecord.Data.btHair + "/" + chrRecord.Data.Abil.Level + "/" + chrRecord.Data.Sex + "/";
+                                sSendMsg = sSendMsg + sChrName + "/" + chrRecord.Job + "/" + chrRecord.Hair + "/" + chrRecord.Level + "/" + chrRecord.Sex + "/";
                                 nChrCount++;
                             }
                         }
@@ -628,13 +628,13 @@ namespace DBSvr.Services
 
         private int DelChrSnameToLevel(string sName)
         {
-            HumDataInfo chrRecord = null;
+            QueryChr chrRecord = null;
             var nIndex = _playDataStorage.Index(sName);
             if (nIndex < 0)
                 return 0;
-            if (_playDataStorage.Get(sName, ref chrRecord))
+            if (_playDataStorage.GetQryChar(nIndex, ref chrRecord))
             {
-                return chrRecord.Data.Abil.Level;
+                return chrRecord.Level;
             }
             return 0;
         }
@@ -826,10 +826,10 @@ namespace DBSvr.Services
                 nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex >= 0)
                 {
-                    HumDataInfo chrRecord = null;
-                    if (_playDataStorage.Get(sChrName, ref chrRecord))
+                    var chrRecord = _playDataStorage.Query(nIndex);
+                    if (chrRecord != null)
                     {
-                        sCurMap = chrRecord.Data.sCurMap;
+                        sCurMap = chrRecord.sCurMap;
                         boDataOk = true;
                     }
                 }

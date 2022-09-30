@@ -4,7 +4,7 @@
     {
         public byte Job;
         public byte Hair;
-        public byte btSex;
+        public byte Sex;
         public ushort Level;
         public string Name;
     }
