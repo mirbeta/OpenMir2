@@ -95,7 +95,7 @@ namespace DBSvr.Services
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     if (serverInfo.DataLen == 0 && data[0] == (byte)'#')
                     {
-                        serverInfo.DataLen = BitConverter.ToInt32(data[1..5]);
+                        serverInfo.DataLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
                     }
                     if (serverInfo.Data != null && serverInfo.Data.Length > 0)
                     {
@@ -153,7 +153,7 @@ namespace DBSvr.Services
                         return;
                     }
                     serverInfo.Socket.Close();
-                    Console.WriteLine("关闭错误的查询请求.");
+                    _logger.LogWarning("关闭错误的查询请求.");
                     return;
                 }
             }
@@ -239,38 +239,6 @@ namespace DBSvr.Services
             }
         }
 
-        public bool CopyHumData(string sSrcChrName, string sDestChrName, string sUserID)
-        {
-            bool result = false;
-            bool find = false;
-            try
-            {
-                int chrIndex = _playDataStorage.Index(sSrcChrName);
-                HumDataInfo HumanRCD = null;
-                if ((chrIndex >= 0) && (_playDataStorage.Get(sSrcChrName, ref HumanRCD)))
-                {
-                    find = true;
-                }
-                if (find)
-                {
-                    chrIndex = _playDataStorage.Index(sDestChrName);
-                    if ((chrIndex >= 0))
-                    {
-                        HumanRCD.Header.sName = sDestChrName;
-                        HumanRCD.Data.ChrName = sDestChrName;
-                        HumanRCD.Data.Account = sUserID;
-                        _playDataStorage.Update(sDestChrName, ref HumanRCD);
-                        result = true;
-                    }
-                }
-            }
-            finally
-            {
-
-            }
-            return result;
-        }
-
         private void ProcessServerMsg(int nQueryId, ServerMessagePacket packet, byte[] sData, Socket Socket)
         {
             sData = EDCode.DecodeBuff(sData);
@@ -352,7 +320,7 @@ namespace DBSvr.Services
             var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
             if (saveHumDataPacket == null)
             {
-                Console.WriteLine("保存玩家数据出错.");
+                _logger.LogError("保存玩家数据出错.");
                 return;
             }
             var sUserID = saveHumDataPacket.Account;
@@ -407,7 +375,7 @@ namespace DBSvr.Services
             var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
             if (saveHumDataPacket == null)
             {
-                Console.WriteLine("保存玩家数据出错.");
+                _logger.LogError("保存玩家数据出错.");
                 return;
             }
             var sChrName = saveHumDataPacket.ChrName;

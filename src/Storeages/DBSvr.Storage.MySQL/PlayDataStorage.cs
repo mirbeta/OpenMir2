@@ -291,7 +291,7 @@ namespace DBSvr.Storage.MySQL
                 if (dr.Read())
                 {
                     humInfoData = new HumInfoData();
-                    humInfoData.Account = dr.GetString("LOGINID");
+                    humInfoData.Account = dr.GetString("LoginID");
                     humInfoData.ChrName = dr.GetString("ChrName");
                     if (!dr.IsDBNull(dr.GetOrdinal("MapName")))
                     {
@@ -299,17 +299,17 @@ namespace DBSvr.Storage.MySQL
                     }
                     humInfoData.CurX = dr.GetInt16("CX");
                     humInfoData.CurY = dr.GetInt16("CY");
-                    humInfoData.Dir = dr.GetByte("DIR");
-                    humInfoData.Hair = dr.GetByte("HAIR");
-                    humInfoData.Sex = dr.GetByte("SEX");
-                    humInfoData.Job = dr.GetByte("JOB");
+                    humInfoData.Dir = dr.GetByte("Dir");
+                    humInfoData.Hair = dr.GetByte("Hair");
+                    humInfoData.Sex = dr.GetByte("Sex");
+                    humInfoData.Job = dr.GetByte("Job");
                     humInfoData.Gold = dr.GetInt32("Gold");
                     if (!dr.IsDBNull(dr.GetOrdinal("HomeMap")))
                     {
                         humInfoData.HomeMap = dr.GetString("HomeMap");
                     }
-                    humInfoData.HomeX = dr.GetInt16("HOMEX");
-                    humInfoData.HomeY = dr.GetInt16("HOMEY");
+                    humInfoData.HomeX = dr.GetInt16("HomeX");
+                    humInfoData.HomeY = dr.GetInt16("HomeY");
                     if (!dr.IsDBNull(dr.GetOrdinal("DearName")))
                     {
                         humInfoData.DearName = dr.GetString("DearName");
@@ -319,14 +319,14 @@ namespace DBSvr.Storage.MySQL
                         humInfoData.MasterName = dr.GetString("MasterName");
                     }
                     humInfoData.boMaster = dr.GetBoolean("IsMaster");
-                    humInfoData.CreditPoint = (byte)dr.GetInt32("CREDITPOINT");
+                    humInfoData.CreditPoint = (byte)dr.GetInt32("CreditPoint");
                     if (!dr.IsDBNull(dr.GetOrdinal("StoragePwd")))
                     {
                         humInfoData.StoragePwd = dr.GetString("StoragePwd");
                     }
                     humInfoData.ReLevel = dr.GetByte("ReLevel");
-                    humInfoData.LockLogon = dr.GetBoolean("LOCKLOGON");
-                    humInfoData.BonusPoint = dr.GetInt32("BONUSPOINT");
+                    humInfoData.LockLogon = dr.GetBoolean("LockLogon");
+                    humInfoData.BonusPoint = dr.GetInt32("BonusPoint");
                     humInfoData.GameGold = dr.GetInt32("Gold");
                     humInfoData.GamePoint = dr.GetInt32("GamePoint");
                     humInfoData.PayMentPoint = dr.GetInt32("PayMentPoint");
@@ -1259,7 +1259,7 @@ namespace DBSvr.Storage.MySQL
             delcommand.ExecuteNonQuery();
             try
             {
-                const string sStrSql = "INSERT INTO characters_magic(PlayerId, MagicId, Level, USEKEY, CurrTrain) VALUES (@PlayerId, @MagicId, @Level, @USEKEY, @CurrTrain)";
+                const string sStrSql = "INSERT INTO characters_magic(PlayerId, MagicId, Level, Usekey, CurrTrain) VALUES (@PlayerId, @MagicId, @Level, @Usekey, @CurrTrain)";
                 for (var i = 0; i < humanRcd.Length; i++)
                 {
                     if (humanRcd[i].MagIdx > 0)
