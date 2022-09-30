@@ -246,11 +246,11 @@ namespace DBSvr.Services
                 chrRecord.Data = new HumInfoData();
                 chrRecord.Header.sName = sChrName;
                 chrRecord.Header.sAccount = sAccount;
-                chrRecord.Data.sChrName = sChrName;
+                chrRecord.Data.ChrName = sChrName;
                 chrRecord.Data.Account = sAccount;
                 chrRecord.Data.Sex = (byte)nSex;
                 chrRecord.Data.Job = (byte)nJob;
-                chrRecord.Data.btHair = (byte)nHair;
+                chrRecord.Data.Hair = (byte)nHair;
                 _playDataStorage.Add(ref chrRecord);
                 result = true;
             }
@@ -826,7 +826,7 @@ namespace DBSvr.Services
                     var chrRecord = _playDataStorage.Query(nIndex);
                     if (chrRecord != null)
                     {
-                        sCurMap = chrRecord.sCurMap;
+                        sCurMap = chrRecord.CurMap;
                         boDataOk = true;
                     }
                 }

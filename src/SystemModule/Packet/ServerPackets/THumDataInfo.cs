@@ -1,12 +1,9 @@
 ﻿using ProtoBuf;
-using System;
-using System.Runtime.Serialization;
 using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
-    [Serializable]
     public class HumDataInfo
     {
         [ProtoMember(1)]
@@ -46,15 +43,14 @@ namespace SystemModule.Packet.ServerPackets
     }
 
     [ProtoContract]
-    [Serializable]
     public class HumInfoData
     {
         [ProtoMember(1)]
         public byte ServerIndex;
         [ProtoMember(2)]
-        public string sChrName;
+        public string ChrName;
         [ProtoMember(3)]
-        public string sCurMap;
+        public string CurMap;
         [ProtoMember(4)]
         public short CurX;
         [ProtoMember(5)]
@@ -62,61 +58,61 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(6)]
         public byte Dir;
         [ProtoMember(7)]
-        public byte btHair;
+        public byte Hair;
         [ProtoMember(8)]
         public byte Sex;
         [ProtoMember(9)]
         public byte Job;
         [ProtoMember(10)]
-        public int nGold;
+        public int Gold;
         [ProtoMember(11)]
         public Ability Abil;
         [ProtoMember(12)]
         public ushort[] StatusTimeArr;
         [ProtoMember(13)]
-        public string sHomeMap;
+        public string HomeMap;
         [ProtoMember(14)]
-        public short wHomeX;
+        public short HomeX;
         [ProtoMember(15)]
-        public short wHomeY;
+        public short HomeY;
         [ProtoMember(16)]
         public NakedAbility BonusAbil;
         [ProtoMember(17)]
-        public int nBonusPoint;
+        public int BonusPoint;
         [ProtoMember(18)]
-        public byte btCreditPoint;
+        public byte CreditPoint;
         [ProtoMember(19)]
-        public byte btReLevel;
+        public byte ReLevel;
         [ProtoMember(20)]
-        public string sMasterName;
+        public string MasterName;
         [ProtoMember(21)]
         public bool boMaster;
         [ProtoMember(22)]
-        public string sDearName;
+        public string DearName;
         [ProtoMember(23)]
-        public string sStoragePwd;
+        public string StoragePwd;
         [ProtoMember(24)]
-        public int nGameGold;
+        public int GameGold;
         [ProtoMember(25)]
-        public int nGamePoint;
+        public int GamePoint;
         [ProtoMember(26)]
-        public int nPayMentPoint;
+        public int PayMentPoint;
         [ProtoMember(27)]
-        public int nPKPoint;
+        public int PKPoint;
         [ProtoMember(28)]
-        public byte btAllowGroup;
+        public byte AllowGroup;
         [ProtoMember(29)]
         public byte btF9;
         [ProtoMember(30)]
-        public byte btAttatckMode;
+        public byte AttatckMode;
         [ProtoMember(31)]
-        public byte btIncHealth;
+        public byte IncHealth;
         [ProtoMember(32)]
-        public byte btIncSpell;
+        public byte IncSpell;
         [ProtoMember(33)]
-        public byte btIncHealing;
+        public byte IncHealing;
         [ProtoMember(34)]
-        public byte btFightZoneDieCount;
+        public byte FightZoneDieCount;
         [ProtoMember(35)]
         public byte btEE;
         [ProtoMember(36)]
@@ -124,19 +120,19 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(37)]
         public string Account;
         [ProtoMember(38)]
-        public bool boLockLogon;
+        public bool LockLogon;
         [ProtoMember(39)]
-        public short wContribution;
+        public short Contribution;
         [ProtoMember(40)]
-        public int nHungerStatus;
+        public int HungerStatus;
         [ProtoMember(41)]
-        public bool boAllowGuildReCall;
+        public bool AllowGuildReCall;
         [ProtoMember(42)]
-        public short wGroupRcallTime;
+        public short GroupRcallTime;
         [ProtoMember(43)]
-        public double dBodyLuck;
+        public double BodyLuck;
         [ProtoMember(44)]
-        public bool boAllowGroupReCall;
+        public bool AllowGroupReCall;
         [ProtoMember(45)]
         public byte[] QuestUnitOpen;
         [ProtoMember(46)]

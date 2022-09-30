@@ -95,9 +95,9 @@ namespace GameSvr.Services
             };
             if (LoadRcd(loadHum, ref HumanRcd))
             {
-                HumanRcd.Data.sChrName = sChrName;
+                HumanRcd.Data.ChrName = sChrName;
                 HumanRcd.Data.Account = sAccount;
-                if (HumanRcd.Data.sChrName == sChrName && (string.IsNullOrEmpty(HumanRcd.Data.Account) || HumanRcd.Data.Account == sAccount))
+                if (HumanRcd.Data.ChrName == sChrName && (string.IsNullOrEmpty(HumanRcd.Data.Account) || HumanRcd.Data.Account == sAccount))
                 {
                     result = true;
                 }
