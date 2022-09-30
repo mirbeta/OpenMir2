@@ -156,10 +156,10 @@ namespace SystemModule.Packet.ServerPackets
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
-            //HumItems = new UserItem[13];
-            //BagItems = new UserItem[46];
-            //StorageItems = new UserItem[50];
-            //Magic = new MagicRcd[20];
+            HumItems = new UserItem[13];
+            BagItems = new UserItem[46];
+            StorageItems = new UserItem[50];
+            Magic = new MagicRcd[20];
             Abil = new Ability();
             BonusAbil = new NakedAbility();
             StatusTimeArr = new ushort[15];

@@ -1162,7 +1162,7 @@ namespace GameGate
                     var secretKey = _authenticator.GenerateSetupCode("openmir2", dyKey, SessionKey, 5);
                     LogQueue.Enqueue($"动态密钥:{secretKey.AccountSecretKey}", 1);
                     var code = secretKey.ManualEntryKey;
-                    LogQueue.Enqueue($"动态验证码为：{code}", 1);
+                    LogQueue.Enqueue($"动态验证码：{code}", 1);
                     LogQueue.Enqueue($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后验证新的密钥,容错5秒.", 1);
                 }
                 else
