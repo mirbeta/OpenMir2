@@ -1119,18 +1119,6 @@ namespace GameSvr.DataStores
             }
         }
 
-        public int LoadUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
-        {
-            //todo 加载武器升级数据
-            return -1;
-        }
-
-        public int SaveUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
-        {
-            //todo 保存武器升级数据
-            return -1;
-        }
-
         public int LoadGoodRecord(Merchant NPC, string sFile)
         {
             var result = -1;
