@@ -305,20 +305,20 @@ namespace DBSvr.Services
             HumDataInfo HumanRCD = null;
             bool boFoundSession = false;
             int nCheckCode = -1;
-            if ((!string.IsNullOrEmpty(loadHumanPacket.sAccount)) && (!string.IsNullOrEmpty(loadHumanPacket.sChrName)))
+            if ((!string.IsNullOrEmpty(loadHumanPacket.Account)) && (!string.IsNullOrEmpty(loadHumanPacket.ChrName)))
             {
-                nCheckCode = _loginSvrService.CheckSessionLoadRcd(loadHumanPacket.sAccount, loadHumanPacket.sUserAddr, loadHumanPacket.nSessionID, ref boFoundSession);
+                nCheckCode = _loginSvrService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    _logger.LogWarning("[非法请求] " + "帐号: " + loadHumanPacket.sAccount + " IP: " + loadHumanPacket.sUserAddr + " 标识: " + loadHumanPacket.nSessionID);
+                    _logger.LogWarning("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionID);
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)
             {
-                int nIndex = _playDataStorage.Index(loadHumanPacket.sChrName);
+                int nIndex = _playDataStorage.Index(loadHumanPacket.ChrName);
                 if (nIndex >= 0)
                 {
-                    if (!_playDataStorage.Get(loadHumanPacket.sChrName, ref HumanRCD))
+                    if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
                     {
                         nCheckCode = -2;
                     }
@@ -333,7 +333,7 @@ namespace DBSvr.Services
             if ((nCheckCode == 1) || boFoundSession)
             {
                 var loadHumData = new LoadHumanRcdResponsePacket();
-                loadHumData.sChrName = EDCode.EncodeString(loadHumanPacket.sChrName);
+                loadHumData.sChrName = EDCode.EncodeString(loadHumanPacket.ChrName);
                 loadHumData.HumDataInfo = HumanRCD;
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));

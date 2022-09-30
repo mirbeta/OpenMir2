@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
+using ProtoBuf.Meta;
 using Spectre.Console;
 using System;
 using System.IO;
@@ -17,6 +18,8 @@ using System.Runtime.Loader;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule;
+using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr
@@ -33,6 +36,15 @@ namespace DBSvr
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+            RuntimeTypeModel.Default.SkipZeroLengthPackedArrays = true;
+
+            HumDataInfo aaa = new HumDataInfo();
+            aaa.Data.BagItems = new UserItem[46];
+            aaa.Data.BagItems[0] = new UserItem();
+            aaa.Data.BagItems[0].MakeIndex = 123456;
+            var asdasd = ProtoBufDecoder.Serialize(aaa);
+            var qweqwe = ProtoBufDecoder.DeSerialize<HumDataInfo>(asdasd);
+            
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
@@ -128,12 +140,6 @@ namespace DBSvr
             {
                 services.AddSingleton(playRecordStorage);
             }
-
-            playDataStorage.LoadQuickList();
-            HumDataInfo humDataInfo = null;
-            var ss = playDataStorage.Get(1, ref humDataInfo);
-
-            playDataStorage.Update("gm01", ref humDataInfo);
         }
 
         /// <summary>

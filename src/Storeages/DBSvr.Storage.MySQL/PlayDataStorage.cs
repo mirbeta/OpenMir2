@@ -161,12 +161,12 @@ namespace DBSvr.Storage.MySQL
 
         public HumInfoData Query(int playerId)
         {
+            HumInfoData playData;
             try
             {
                 var result = false;
                 Open(ref result);
-                var playData = GetChrRecord(playerId);
-                return playData;
+                playData = GetChrRecord(playerId);
             }
             catch (Exception e)
             {
@@ -176,6 +176,7 @@ namespace DBSvr.Storage.MySQL
             {
                 Close(_connection);
             }
+            return playData;
         }
 
         public bool Update(string chrName, ref HumDataInfo humanRcd)
@@ -284,6 +285,7 @@ namespace DBSvr.Storage.MySQL
             }
             try
             {
+                humanRcd = new HumDataInfo();
                 humanRcd.Data = GetChrRecord(playerId);
                 humanRcd.Header.sName = humanRcd.Data.sChrName;
                 //humanRcd.Header.Deleted = dr.GetBoolean("DELETED");
@@ -1522,6 +1524,12 @@ namespace DBSvr.Storage.MySQL
                 return false;
             }
             var playerId = _quickIndexIdMap[nIndex];
+            var success = false;
+            Open(ref success);
+            if (!success)
+            {
+                return false;
+            }
             var command = new MySqlCommand();
             try
             {
@@ -1529,19 +1537,24 @@ namespace DBSvr.Storage.MySQL
                 command.CommandText = sSql;
                 command.Parameters.AddWithValue("@Id", playerId);
                 using var dr = command.ExecuteReader();
-                while (dr.Read())
+                if (dr.Read())
                 {
+                    queryChrRcd = new QueryChr();
                     queryChrRcd.Name = dr.GetString("ChrName");
                     queryChrRcd.Job = dr.GetByte("Job");
                     queryChrRcd.Hair = dr.GetByte("Hair");
-                    queryChrRcd.Sex = dr.GetByte("Sec");
+                    queryChrRcd.Sex = dr.GetByte("Sex");
                     queryChrRcd.Level = dr.GetUInt16("Level");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _logger.Error("[Exception] PlayDataStorage.GetQryChar");
                 return false;
+            }
+            finally
+            {
+                Close(_connection);
             }
             return true;
         }

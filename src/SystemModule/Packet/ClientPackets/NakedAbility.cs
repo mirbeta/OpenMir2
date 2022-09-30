@@ -1,9 +1,11 @@
 ﻿using ProtoBuf;
+using System;
 using System.IO;
 
 namespace SystemModule.Packet.ClientPackets
 {
     [ProtoContract]
+    [Serializable]
     public class NakedAbility : Packets
     {
         [ProtoMember(1)]

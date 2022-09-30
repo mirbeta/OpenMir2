@@ -1,14 +1,17 @@
 ﻿using ProtoBuf;
+using System;
+using System.Runtime.Serialization;
 using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
+    [Serializable]
     public class HumDataInfo
     {
-        [ProtoMember(1)] 
+        [ProtoMember(1)]
         public RecordHeader Header { get; set; }
-        [ProtoMember(2)] 
+        [ProtoMember(2)]
         public HumInfoData Data { get; set; }
 
         public HumDataInfo()
@@ -33,16 +36,17 @@ namespace SystemModule.Packet.ServerPackets
     public class LoadHumDataPacket : CmdPacket
     {
         [ProtoMember(1)]
-        public string sAccount { get; set; }
+        public string Account { get; set; }
         [ProtoMember(2)]
-        public string sChrName { get; set; }
+        public string ChrName { get; set; }
         [ProtoMember(3)]
-        public string sUserAddr { get; set; }
+        public string UserAddr { get; set; }
         [ProtoMember(4)]
-        public int nSessionID { get; set; }
+        public int SessionID { get; set; }
     }
 
     [ProtoContract]
+    [Serializable]
     public class HumInfoData
     {
         [ProtoMember(1)]
@@ -141,13 +145,13 @@ namespace SystemModule.Packet.ServerPackets
         public byte[] QuestFlag;
         [ProtoMember(48)]
         public byte MarryCount;
-        [ProtoMember(49)]
+        [ProtoMember(49, OverwriteList = true)]
         public UserItem[] HumItems;
-        [ProtoMember(50)]
+        [ProtoMember(50, OverwriteList = true)]
         public UserItem[] BagItems;
-        [ProtoMember(51)]
+        [ProtoMember(51, OverwriteList = true)]
         public UserItem[] StorageItems;
-        [ProtoMember(52)]
+        [ProtoMember(52, OverwriteList = true)]
         public MagicRcd[] Magic;
 
         public HumInfoData()
@@ -155,10 +159,10 @@ namespace SystemModule.Packet.ServerPackets
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
-            HumItems = new UserItem[13];
-            BagItems = new UserItem[46];
-            StorageItems = new UserItem[50];
-            Magic = new MagicRcd[20];
+            //HumItems = new UserItem[13];
+            //BagItems = new UserItem[46];
+            //StorageItems = new UserItem[50];
+            //Magic = new MagicRcd[20];
             Abil = new Ability();
             BonusAbil = new NakedAbility();
             StatusTimeArr = new ushort[15];
