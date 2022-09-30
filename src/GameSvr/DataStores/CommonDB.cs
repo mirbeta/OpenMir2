@@ -1,5 +1,6 @@
 using GameSvr.Command;
 using GameSvr.Items;
+using GameSvr.Npc;
 using MySqlConnector;
 using System.Data;
 using System.Text.Json;
@@ -278,7 +279,7 @@ namespace GameSvr.DataStores
             try
             {
                 DealOffInfo DealOffInfo;
-                const string sSQLString = "select * from GOLDSALES";
+                const string sSQLString = "select * from goldsales";
                 using (var dr = Query(sSQLString))
                 {
                     while (dr.Read())
@@ -324,7 +325,7 @@ namespace GameSvr.DataStores
                 return;
             }
             DealOffInfo DealOffInfo;
-            const string sSQLString = "delete from GOLDSALES";
+            const string sSQLString = "delete from goldsales";
             try
             {
                 if (M2Share.sSellOffItemList.Count > 0)
@@ -336,7 +337,7 @@ namespace GameSvr.DataStores
                         DealOffInfo = M2Share.sSellOffItemList[i];
                         if (DealOffInfo != null)
                         {
-                            string InsertSql = "INSERT INTO sales (DealCharName, BuyCharName, SellDateTime, State, SellGold,UseItems) values " +
+                            string InsertSql = "INSERT INTO goldsales (DealCharName, BuyCharName, SellDateTime, State, SellGold,UseItems) values " +
                                 "(" + DealOffInfo.sDealCharName + "," + DealOffInfo.sBuyCharName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.Flag + ","
                                 + DealOffInfo.nSellGold + "," + JsonSerializer.Serialize(DealOffInfo.UseItems) + ")";
                             Execute(InsertSql);
@@ -352,6 +353,18 @@ namespace GameSvr.DataStores
             {
                 Close();
             }
+        }
+
+        public int LoadUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
+        {
+            //todo 加载武器升级数据
+            return -1;
+        }
+
+        public int SaveUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
+        {
+            //todo 保存武器升级数据
+            return -1;
         }
 
         private IDataReader Query(string sSQLString)

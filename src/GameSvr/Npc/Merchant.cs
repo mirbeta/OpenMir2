@@ -272,18 +272,6 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void SaveUpgradingList()
-        {
-            try
-            {
-                M2Share.LocalDb.SaveUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
-            }
-            catch
-            {
-                M2Share.Log.Error("Failure in saving upgradinglist - " + CharName);
-            }
-        }
-
         private void UpgradeWaponAddValue(PlayObject User, IList<UserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
             ClientItem StdItem80 = null;
@@ -1719,11 +1707,23 @@ namespace GameSvr.Npc
             UpgradeWeaponList.Clear();
             try
             {
-                M2Share.LocalDb.LoadUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
+                M2Share.CommonDb.LoadUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {
                 M2Share.Log.Error("Failure in loading upgradinglist - " + CharName);
+            }
+        }
+
+        private void SaveUpgradingList()
+        {
+            try
+            {
+                M2Share.CommonDb.SaveUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
+            }
+            catch
+            {
+                M2Share.Log.Error("Failure in saving upgradinglist - " + CharName);
             }
         }
 
