@@ -143,8 +143,9 @@ namespace DBSvr.Storage.MySQL
                 success = false;
                 return default;
             }
+            const string sSqlStrig = "select * from characters_indexes where Id=@Id";
             var command = new MySqlCommand();
-            command.CommandText = "select * from characters_indexes where Id=@Id";
+            command.CommandText = sSqlStrig;
             command.Connection = _connection;
             command.Parameters.AddWithValue("@Id", nIndex);
             var humRecord = new HumRecordData();

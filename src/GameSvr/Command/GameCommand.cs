@@ -323,20 +323,20 @@ namespace GameSvr.Command
         public readonly GameCmd DenyipLogon;
         [ConvertToBinary(typeof(DenyAccountLogonCommand))]
         public readonly GameCmd DenyAccountLogon;
-        [ConvertToBinary(typeof(DenyCharNameLogonCommand))]
-        public readonly GameCmd DenyCharNameLogon;
+        [ConvertToBinary(typeof(DenyChrNameLogonCommand))]
+        public readonly GameCmd DenyChrNameLogon;
         [ConvertToBinary(typeof(DelDenyIPaddrLogonCommand))]
         public readonly GameCmd DelDenyIpLogon;
         [ConvertToBinary(typeof(DelDenyAccountLogonCommand))]
         public readonly GameCmd DelDenyAccountLogon;
-        [ConvertToBinary(typeof(DelDenyCharNameLogonCommand))]
-        public readonly GameCmd DelDenyCharNameLogon;
+        [ConvertToBinary(typeof(DelDenyChrNameLogonCommand))]
+        public readonly GameCmd DelDenyChrNameLogon;
         [ConvertToBinary(typeof(ShowDenyIPaddrLogonCommand))]
         public readonly GameCmd ShowDenyIpLogon;
         [ConvertToBinary(typeof(ShowDenyAccountLogonCommand))]
         public readonly GameCmd ShowDenyAccountLogon;
-        [ConvertToBinary(typeof(ShowDenyCharNameLogonCommand))]
-        public readonly GameCmd ShowDenyCharNameLogon;
+        [ConvertToBinary(typeof(ShowDenyChrNameLogonCommand))]
+        public readonly GameCmd ShowDenyChrNameLogon;
         [ConvertToBinary(typeof(ViewWhisperCommand))]
         public readonly GameCmd ViewWhisper;
         [ConvertToBinary(typeof(SpirtStartCommand))]
@@ -525,13 +525,13 @@ namespace GameSvr.Command
             RenewLevel = new GameCmd();
             DenyipLogon = new GameCmd();
             DenyAccountLogon = new GameCmd();
-            DenyCharNameLogon = new GameCmd();
+            DenyChrNameLogon = new GameCmd();
             DelDenyIpLogon = new GameCmd();
             DelDenyAccountLogon = new GameCmd();
-            DelDenyCharNameLogon = new GameCmd();
+            DelDenyChrNameLogon = new GameCmd();
             ShowDenyIpLogon = new GameCmd();
             ShowDenyAccountLogon = new GameCmd();
-            ShowDenyCharNameLogon = new GameCmd();
+            ShowDenyChrNameLogon = new GameCmd();
             ViewWhisper = new GameCmd();
             Spirit = new GameCmd();
             SpiritStop = new GameCmd();

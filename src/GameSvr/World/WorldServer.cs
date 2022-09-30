@@ -215,7 +215,7 @@ namespace GameSvr.World
                     merchant.Initialize();
                     if (merchant.AddtoMapSuccess && !merchant.m_boIsHide)
                     {
-                        _logger.Warn("Merchant Initalize fail..." + merchant.CharName + ' ' + merchant.MapName + '(' + merchant.CurrX + ':' + merchant.CurrY + ')');
+                        _logger.Warn("Merchant Initalize fail..." + merchant.ChrName + ' ' + merchant.MapName + '(' + merchant.CurrX + ':' + merchant.CurrY + ')');
                         MerchantList.RemoveAt(i);
                     }
                     else
@@ -226,7 +226,7 @@ namespace GameSvr.World
                 }
                 else
                 {
-                    _logger.Error(merchant.CharName + " - Merchant Initalize fail... (m.PEnvir=nil)");
+                    _logger.Error(merchant.ChrName + " - Merchant Initalize fail... (m.PEnvir=nil)");
                     MerchantList.RemoveAt(i);
                 }
             }
@@ -244,7 +244,7 @@ namespace GameSvr.World
                     normNpc.Initialize();
                     if (normNpc.AddtoMapSuccess && !normNpc.m_boIsHide)
                     {
-                        _logger.Warn(normNpc.CharName + " Npc Initalize fail... ");
+                        _logger.Warn(normNpc.ChrName + " Npc Initalize fail... ");
                         QuestNpcList.RemoveAt(i);
                     }
                     else
@@ -254,7 +254,7 @@ namespace GameSvr.World
                 }
                 else
                 {
-                    _logger.Error(normNpc.CharName + " Npc Initalize fail... (npc.PEnvir=nil) ");
+                    _logger.Error(normNpc.ChrName + " Npc Initalize fail... (npc.PEnvir=nil) ");
                     QuestNpcList.RemoveAt(i);
                 }
             }
@@ -286,7 +286,7 @@ namespace GameSvr.World
             {
                 for (var i = 0; i < PlayObjectList.Count; i++)
                 {
-                    if (string.Compare(PlayObjectList[i].CharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(PlayObjectList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                         break;
@@ -369,7 +369,7 @@ namespace GameSvr.World
                             }
                         }
                     }
-                    playObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(playObject.CharName);
+                    playObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(playObject.ChrName);
                     var userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
                     if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar))
                     {
@@ -567,7 +567,7 @@ namespace GameSvr.World
                                         PlayObjectList.Add(playObject);
                                     }
                                     NewHumanList.Add(playObject);
-                                    SendServerGroupMsg(Grobal2.ISM_USERLOGON, M2Share.ServerIndex, playObject.CharName);
+                                    SendServerGroupMsg(Grobal2.ISM_USERLOGON, M2Share.ServerIndex, playObject.ChrName);
                                 }
                             }
                             else
@@ -730,7 +730,7 @@ namespace GameSvr.World
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
                             M2Share.GateMgr.CloseUser(playObject.m_nGateIdx, playObject.m_nSocket);
-                            SendServerGroupMsg(Grobal2.SS_202, M2Share.ServerIndex, playObject.CharName);
+                            SendServerGroupMsg(Grobal2.SS_202, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
                     }
@@ -837,7 +837,7 @@ namespace GameSvr.World
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
                             M2Share.GateMgr.CloseUser(playObject.m_nGateIdx, playObject.m_nSocket);
-                            SendServerGroupMsg(Grobal2.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.CharName);
+                            SendServerGroupMsg(Grobal2.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
                     }
@@ -1236,7 +1236,7 @@ namespace GameSvr.World
             OtherUserNameList.Add(name, new ServerGruopInfo()
             {
                 nServerIdx = sNum,
-                sCharName = uname
+                sChrName = uname
             });
         }
 
@@ -1247,7 +1247,7 @@ namespace GameSvr.World
             OtherUserNameList.Remove(name);
             // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             // {
-            //     if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.OrdinalIgnoreCase) == 0 && m_OtherUserNameList[i].nServerIdx == sNum)
+            //     if (string.Compare(m_OtherUserNameList[i].sChrName, Name, StringComparison.OrdinalIgnoreCase) == 0 && m_OtherUserNameList[i].nServerIdx == sNum)
             //     {
             //         m_OtherUserNameList.RemoveAt(i);
             //         break;
@@ -1260,7 +1260,7 @@ namespace GameSvr.World
             PlayObject result = null;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                if (string.Compare(PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject playObject = PlayObjectList[i];
                     if (!playObject.Ghost)
@@ -1284,7 +1284,7 @@ namespace GameSvr.World
             {
                 for (var i = 0; i < PlayObjectList.Count; i++)
                 {
-                    if (string.Compare(PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         playObject = PlayObjectList[i];
                         playObject.m_boEmergencyClose = true;
@@ -1306,7 +1306,7 @@ namespace GameSvr.World
             {
                 for (var i = 0; i < PlayObjectList.Count; i++)
                 {
-                    if (string.Compare(PlayObjectList[i].CharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = PlayObjectList[i];
                         break;
@@ -1406,7 +1406,7 @@ namespace GameSvr.World
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
                 var playObject = PlayObjectList[i];
-                if (string.Compare(playObject.CharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(playObject.ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.m_boKickFlag = true;
                     break;
@@ -1435,7 +1435,7 @@ namespace GameSvr.World
             var saveRcd = new TSaveRcd
             {
                 sAccount = playObject.m_sUserID,
-                sChrName = playObject.CharName,
+                sChrName = playObject.ChrName,
                 nSessionID = playObject.m_nSessionID,
                 PlayObject = playObject,
                 HumanRcd = new HumDataInfo()
@@ -1461,15 +1461,15 @@ namespace GameSvr.World
             UserItem[] storageItems;
             UserItem userItem;
             humData = humanRcd.Data;
-            playObject.CharName = humData.sChrName;
-            playObject.MapName = humData.sCurMap;
+            playObject.ChrName = humData.ChrName;
+            playObject.MapName = humData.CurMap;
             playObject.CurrX = humData.CurX;
             playObject.CurrY = humData.CurY;
             playObject.Direction = humData.Dir;
-            playObject.Hair = humData.btHair;
+            playObject.Hair = humData.Hair;
             playObject.Gender = Enum.Parse<PlayGender>(humData.Sex.ToString());
             playObject.Job = (PlayJob)humData.Job;
-            playObject.Gold = humData.nGold;
+            playObject.Gold = humData.Gold;
             playObject.Abil.Level = humData.Abil.Level;
             playObject.Abil.HP = humData.Abil.HP;
             playObject.Abil.MP = humData.Abil.MP;
@@ -1484,26 +1484,26 @@ namespace GameSvr.World
             playObject.Abil.HandWeight = humData.Abil.HandWeight;
             playObject.Abil.MaxHandWeight = humData.Abil.MaxHandWeight;
             playObject.StatusArr = humData.StatusTimeArr;
-            playObject.HomeMap = humData.sHomeMap;
-            playObject.HomeX = humData.wHomeX;
-            playObject.HomeY = humData.wHomeY;
+            playObject.HomeMap = humData.HomeMap;
+            playObject.HomeX = humData.HomeX;
+            playObject.HomeY = humData.HomeY;
             playObject.BonusAbil = humData.BonusAbil;
-            playObject.BonusPoint = humData.nBonusPoint;
-            playObject.m_btCreditPoint = humData.btCreditPoint;
-            playObject.m_btReLevel = humData.btReLevel;
-            playObject.m_sMasterName = humData.sMasterName;
+            playObject.BonusPoint = humData.BonusPoint;
+            playObject.m_btCreditPoint = humData.CreditPoint;
+            playObject.m_btReLevel = humData.ReLevel;
+            playObject.m_sMasterName = humData.MasterName;
             playObject.m_boMaster = humData.boMaster;
-            playObject.m_sDearName = humData.sDearName;
-            playObject.m_sStoragePwd = humData.sStoragePwd;
+            playObject.m_sDearName = humData.DearName;
+            playObject.m_sStoragePwd = humData.StoragePwd;
             if (playObject.m_sStoragePwd != "")
             {
                 playObject.m_boPasswordLocked = true;
             }
-            playObject.m_nGameGold = humData.nGameGold;
-            playObject.m_nGamePoint = humData.nGamePoint;
-            playObject.m_nPayMentPoint = humData.nPayMentPoint;
-            playObject.PkPoint = humData.nPKPoint;
-            if (humData.btAllowGroup > 0)
+            playObject.m_nGameGold = humData.GameGold;
+            playObject.m_nGamePoint = humData.GamePoint;
+            playObject.m_nPayMentPoint = humData.PayMentPoint;
+            playObject.PkPoint = humData.PKPoint;
+            if (humData.AllowGroup > 0)
             {
                 playObject.AllowGroup = true;
             }
@@ -1512,19 +1512,19 @@ namespace GameSvr.World
                 playObject.AllowGroup = false;
             }
             playObject.BtB2 = humData.btF9;
-            playObject.AttatckMode = (AttackMode)humData.btAttatckMode;
-            playObject.IncHealth = humData.btIncHealth;
-            playObject.IncSpell = humData.btIncSpell;
-            playObject.IncHealing = humData.btIncHealing;
-            playObject.FightZoneDieCount = humData.btFightZoneDieCount;
+            playObject.AttatckMode = (AttackMode)humData.AttatckMode;
+            playObject.IncHealth = humData.IncHealth;
+            playObject.IncSpell = humData.IncSpell;
+            playObject.IncHealing = humData.IncHealing;
+            playObject.FightZoneDieCount = humData.FightZoneDieCount;
             playObject.m_sUserID = humData.Account;
-            playObject.m_boLockLogon = humData.boLockLogon;
-            playObject.m_wContribution = humData.wContribution;
-            playObject.HungerStatus = humData.nHungerStatus;
-            playObject.AllowGuildReCall = humData.boAllowGuildReCall;
-            playObject.GroupRcallTime = humData.wGroupRcallTime;
-            playObject.BodyLuck = humData.dBodyLuck;
-            playObject.AllowGroupReCall = humData.boAllowGroupReCall;
+            playObject.m_boLockLogon = humData.LockLogon;
+            playObject.m_wContribution = humData.Contribution;
+            playObject.HungerStatus = humData.HungerStatus;
+            playObject.AllowGuildReCall = humData.AllowGuildReCall;
+            playObject.GroupRcallTime = humData.GroupRcallTime;
+            playObject.BodyLuck = humData.BodyLuck;
+            playObject.AllowGroupReCall = humData.AllowGroupReCall;
             playObject.QuestUnitOpen = humData.QuestUnitOpen;
             playObject.QuestUnit = humData.QuestUnit;
             playObject.QuestFlag = humData.QuestFlag;
@@ -1601,15 +1601,15 @@ namespace GameSvr.World
         private void MakeSaveRcd(PlayObject playObject, ref HumDataInfo humanRcd)
         {
             humanRcd.Data.ServerIndex = M2Share.ServerIndex;
-            humanRcd.Data.sChrName = playObject.CharName;
-            humanRcd.Data.sCurMap = playObject.MapName;
+            humanRcd.Data.ChrName = playObject.ChrName;
+            humanRcd.Data.CurMap = playObject.MapName;
             humanRcd.Data.CurX = playObject.CurrX;
             humanRcd.Data.CurY = playObject.CurrY;
             humanRcd.Data.Dir = playObject.Direction;
-            humanRcd.Data.btHair = playObject.Hair;
+            humanRcd.Data.Hair = playObject.Hair;
             humanRcd.Data.Sex = (byte)playObject.Gender;
             humanRcd.Data.Job = (byte)playObject.Job;
-            humanRcd.Data.nGold = playObject.Gold;
+            humanRcd.Data.Gold = playObject.Gold;
             humanRcd.Data.Abil.Level = playObject.Abil.Level;
             humanRcd.Data.Abil.HP = playObject.WAbil.HP;
             humanRcd.Data.Abil.MP = playObject.WAbil.MP;
@@ -1626,35 +1626,35 @@ namespace GameSvr.World
             humanRcd.Data.Abil.HP = playObject.WAbil.HP;
             humanRcd.Data.Abil.MP = playObject.WAbil.MP;
             humanRcd.Data.StatusTimeArr = playObject.StatusArr;
-            humanRcd.Data.sHomeMap = playObject.HomeMap;
-            humanRcd.Data.wHomeX = playObject.HomeX;
-            humanRcd.Data.wHomeY = playObject.HomeY;
-            humanRcd.Data.nPKPoint = playObject.PkPoint;
+            humanRcd.Data.HomeMap = playObject.HomeMap;
+            humanRcd.Data.HomeX = playObject.HomeX;
+            humanRcd.Data.HomeY = playObject.HomeY;
+            humanRcd.Data.PKPoint = playObject.PkPoint;
             humanRcd.Data.BonusAbil = playObject.BonusAbil;
-            humanRcd.Data.nBonusPoint = playObject.BonusPoint;
-            humanRcd.Data.sStoragePwd = playObject.m_sStoragePwd;
-            humanRcd.Data.btCreditPoint = playObject.m_btCreditPoint;
-            humanRcd.Data.btReLevel = playObject.m_btReLevel;
-            humanRcd.Data.sMasterName = playObject.m_sMasterName;
+            humanRcd.Data.BonusPoint = playObject.BonusPoint;
+            humanRcd.Data.StoragePwd = playObject.m_sStoragePwd;
+            humanRcd.Data.CreditPoint = playObject.m_btCreditPoint;
+            humanRcd.Data.ReLevel = playObject.m_btReLevel;
+            humanRcd.Data.MasterName = playObject.m_sMasterName;
             humanRcd.Data.boMaster = playObject.m_boMaster;
-            humanRcd.Data.sDearName = playObject.m_sDearName;
-            humanRcd.Data.nGameGold = playObject.m_nGameGold;
-            humanRcd.Data.nGamePoint = playObject.m_nGamePoint;
-            humanRcd.Data.btAllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
+            humanRcd.Data.DearName = playObject.m_sDearName;
+            humanRcd.Data.GameGold = playObject.m_nGameGold;
+            humanRcd.Data.GamePoint = playObject.m_nGamePoint;
+            humanRcd.Data.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
             humanRcd.Data.btF9 = playObject.BtB2;
-            humanRcd.Data.btAttatckMode = (byte)playObject.AttatckMode;
-            humanRcd.Data.btIncHealth = (byte)playObject.IncHealth;
-            humanRcd.Data.btIncSpell = (byte)playObject.IncSpell;
-            humanRcd.Data.btIncHealing = (byte)playObject.IncHealing;
-            humanRcd.Data.btFightZoneDieCount = (byte)playObject.FightZoneDieCount;
+            humanRcd.Data.AttatckMode = (byte)playObject.AttatckMode;
+            humanRcd.Data.IncHealth = (byte)playObject.IncHealth;
+            humanRcd.Data.IncSpell = (byte)playObject.IncSpell;
+            humanRcd.Data.IncHealing = (byte)playObject.IncHealing;
+            humanRcd.Data.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
             humanRcd.Data.Account = playObject.m_sUserID;
-            humanRcd.Data.boLockLogon = playObject.m_boLockLogon;
-            humanRcd.Data.wContribution = playObject.m_wContribution;
-            humanRcd.Data.nHungerStatus = playObject.HungerStatus;
-            humanRcd.Data.boAllowGuildReCall = playObject.AllowGuildReCall;
-            humanRcd.Data.wGroupRcallTime = playObject.GroupRcallTime;
-            humanRcd.Data.dBodyLuck = playObject.BodyLuck;
-            humanRcd.Data.boAllowGroupReCall = playObject.AllowGroupReCall;
+            humanRcd.Data.LockLogon = playObject.m_boLockLogon;
+            humanRcd.Data.Contribution = playObject.m_wContribution;
+            humanRcd.Data.HungerStatus = playObject.HungerStatus;
+            humanRcd.Data.AllowGuildReCall = playObject.AllowGuildReCall;
+            humanRcd.Data.GroupRcallTime = playObject.GroupRcallTime;
+            humanRcd.Data.BodyLuck = playObject.BodyLuck;
+            humanRcd.Data.AllowGroupReCall = playObject.AllowGroupReCall;
             humanRcd.Data.QuestUnitOpen = playObject.QuestUnitOpen;
             humanRcd.Data.QuestUnit = playObject.QuestUnit;
             humanRcd.Data.QuestFlag = playObject.QuestFlag;
@@ -2157,7 +2157,7 @@ namespace GameSvr.World
             if (playObject != null)
             {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
-                playObject.m_sUserID = "假人" + ai.sCharName;
+                playObject.m_sUserID = "假人" + ai.sChrName;
                 playObject.Start(TPathType.t_Dynamic);
                 BotPlayObjectList.Add(playObject);
                 return true;
@@ -2182,7 +2182,7 @@ namespace GameSvr.World
             cert.CurrX = ai.nX;
             cert.CurrY = ai.nY;
             cert.Direction = (byte)M2Share.RandomNumber.Random(8);
-            cert.CharName = ai.sCharName;
+            cert.ChrName = ai.sChrName;
             cert.WAbil = cert.Abil;
             if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)
             {

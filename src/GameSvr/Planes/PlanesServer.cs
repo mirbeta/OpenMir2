@@ -221,7 +221,7 @@ namespace GameSvr.Snaps
     public class ServerGruopInfo
     {
         public int nServerIdx;
-        public string sCharName;
+        public string sChrName;
     }
 }
 

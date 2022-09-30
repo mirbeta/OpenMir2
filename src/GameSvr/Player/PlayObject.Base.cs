@@ -717,7 +717,7 @@ namespace GameSvr.Player
                 {
                     MapRandomMove(Envir.MapName, 0);
                 }
-                if (M2Share.WorldEngine.GetHumPermission(CharName, ref sIPaddr, ref Permission))
+                if (M2Share.WorldEngine.GetHumPermission(ChrName, ref sIPaddr, ref Permission))
                 {
                     if (M2Share.Config.PermissionSystem)
                     {
@@ -914,7 +914,7 @@ namespace GameSvr.Player
                 SendMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                 SendMsg(this, Grobal2.RM_SENDMYMAGIC, 0, 0, 0, 0, "");
-                MyGuild = M2Share.GuildMgr.MemberOfGuild(CharName);
+                MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {
                     GuildRankName = MyGuild.GetRankName(this, ref GuildRankNo);
@@ -969,7 +969,7 @@ namespace GameSvr.Player
                     CheckMarry();
                 }
                 CheckMaster();
-                m_boFilterSendMsg = M2Share.GetDisableSendMsgList(CharName);
+                m_boFilterSendMsg = M2Share.GetDisableSendMsgList(ChrName);
                 // 密码保护系统
                 if (M2Share.Config.PasswordLockSystem)
                 {
@@ -1483,7 +1483,7 @@ namespace GameSvr.Player
         {
             var result = string.Empty;
             string sShowName;
-            var sCharName = string.Empty;
+            var sChrName = string.Empty;
             var sGuildName = string.Empty;
             var sDearName = string.Empty;
             var sMasterName = string.Empty;
@@ -1516,24 +1516,24 @@ namespace GameSvr.Player
                         switch (Job)
                         {
                             case PlayJob.Warrior:
-                                sCharName = M2Share.g_sWarrReNewName.Replace("%chrname", CharName);
+                                sChrName = M2Share.g_sWarrReNewName.Replace("%chrname", ChrName);
                                 break;
                             case PlayJob.Wizard:
-                                sCharName = M2Share.g_sWizardReNewName.Replace("%chrname", CharName);
+                                sChrName = M2Share.g_sWizardReNewName.Replace("%chrname", ChrName);
                                 break;
                             case PlayJob.Taoist:
-                                sCharName = M2Share.g_sTaosReNewName.Replace("%chrname", CharName);
+                                sChrName = M2Share.g_sTaosReNewName.Replace("%chrname", ChrName);
                                 break;
                         }
                     }
                     else
                     {
-                        sCharName = CharName;
+                        sChrName = ChrName;
                     }
                 }
                 else
                 {
-                    sCharName = Format(m_sRankLevelName, CharName);
+                    sChrName = Format(m_sRankLevelName, ChrName);
                 }
                 if (!string.IsNullOrEmpty(m_sMasterName))
                 {
@@ -1557,7 +1557,7 @@ namespace GameSvr.Player
                         sDearName = Format(M2Share.g_sWoManDearName, m_sDearName);
                     }
                 }
-                sShowName = M2Share.g_sHumanShowName.Replace("%chrname", sCharName);
+                sShowName = M2Share.g_sHumanShowName.Replace("%chrname", sChrName);
                 sShowName = sShowName.Replace("%guildname", sGuildName);
                 sShowName = sShowName.Replace("%dearname", sDearName);
                 sShowName = sShowName.Replace("%mastername", sMasterName);
@@ -1608,7 +1608,7 @@ namespace GameSvr.Player
                     if (Gender == PlayGender.Man)
                     {
                         sSayMsg = M2Share.g_sManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
-                        sSayMsg = sSayMsg.Replace("%s", CharName);
+                        sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
@@ -1617,7 +1617,7 @@ namespace GameSvr.Player
                     else
                     {
                         sSayMsg = M2Share.g_sWoManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
-                        sSayMsg = sSayMsg.Replace("%s", CharName);
+                        sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
@@ -1633,7 +1633,7 @@ namespace GameSvr.Player
                         for (var i = m_MasterList.Count - 1; i >= 0; i--)
                         {
                             Human = m_MasterList[i];
-                            sSayMsg = M2Share.g_sMasterLongOutMasterListOnlineMsg.Replace("%s", CharName);
+                            sSayMsg = M2Share.g_sMasterLongOutMasterListOnlineMsg.Replace("%s", ChrName);
                             sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                             sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                             sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
@@ -1648,13 +1648,13 @@ namespace GameSvr.Player
                             return;
                         }
                         sSayMsg = M2Share.g_sMasterListLongOutMasterOnlineMsg.Replace("%d", m_sMasterName);
-                        sSayMsg = sSayMsg.Replace("%s", CharName);
+                        sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                         m_MasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         // 如果为大徒弟则将对方的记录清空
-                        if (m_MasterHuman.m_sMasterName == CharName)
+                        if (m_MasterHuman.m_sMasterName == ChrName)
                         {
                             m_MasterHuman.m_MasterHuman = null;
                         }

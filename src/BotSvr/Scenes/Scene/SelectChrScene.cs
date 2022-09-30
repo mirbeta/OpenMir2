@@ -44,7 +44,7 @@ namespace BotSvr.Scenes.Scene
             {
                 return;
             }
-            robotClient.CharName = chrname;
+            robotClient.ChrName = chrname;
             ClientPacket msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(robotClient.LoginID + "/" + chrname));
             MainOutMessage($"选择角色 {chrname}");
@@ -95,7 +95,7 @@ namespace BotSvr.Scenes.Scene
             //    {
             //        MShare.g_nAPReLogonWaitTick = MShare.GetTickCount();
             //        MShare.g_nAPReLogon = 3;
-            //        SendSelChr(robotClient.m_sCharName);
+            //        SendSelChr(robotClient.m_sChrName);
             //    }
             //}
         }
@@ -148,10 +148,10 @@ namespace BotSvr.Scenes.Scene
         private void NewChr()
         {
             m_ConnectionStep = TConnectionStep.cnsNewChr;
-            SelectChrCreateNewChr(robotClient.CharName);
+            SelectChrCreateNewChr(robotClient.ChrName);
         }
 
-        private void SelectChrCreateNewChr(string sCharName)
+        private void SelectChrCreateNewChr(string sChrName)
         {
             byte sHair = 0;
             switch (RandomNumber.GetInstance().Random(1))
@@ -173,8 +173,8 @@ namespace BotSvr.Scenes.Scene
             }
             var sJob = (byte)RandomNumber.GetInstance().Random(2);
             var sSex = (byte)RandomNumber.GetInstance().Random(1);
-            SendNewChr(robotClient.LoginID, sCharName, sHair, sJob, sSex);
-            MainOutMessage($"创建角色 {sCharName}");
+            SendNewChr(robotClient.LoginID, sChrName, sHair, sJob, sSex);
+            MainOutMessage($"创建角色 {sChrName}");
         }
 
         public void ClientGetStartPlay(string body)

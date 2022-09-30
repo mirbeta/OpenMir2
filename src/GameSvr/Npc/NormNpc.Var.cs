@@ -2031,7 +2031,7 @@ namespace GameSvr.Npc
                         return result;
                     }
                 case "$USERNAME":// 个人信息
-                    sValue = PlayObject.CharName;
+                    sValue = PlayObject.ChrName;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2041,7 +2041,7 @@ namespace GameSvr.Npc
                         {
                             if (PlayObject.LastHiter.Race == ActorRace.Play)
                             {
-                                sValue = PlayObject.LastHiter.CharName;
+                                sValue = PlayObject.LastHiter.ChrName;
                             }
                         }
                         else
@@ -2058,7 +2058,7 @@ namespace GameSvr.Npc
                         {
                             if (PlayObject.LastHiter.Race != ActorRace.Play)
                             {
-                                sValue = PlayObject.LastHiter.CharName;
+                                sValue = PlayObject.LastHiter.ChrName;
                             }
                         }
                         else

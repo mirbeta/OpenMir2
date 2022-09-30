@@ -1049,11 +1049,7 @@ namespace GameSvr.Actor
             }
             if (Race == ActorRace.Play)
             {
-                var fastmoveflag = false;
-                if ((UseItems[Grobal2.U_BOOTS].Dura > 0) && (UseItems[Grobal2.U_BOOTS].Index == M2Share.INDEX_MIRBOOTS))
-                {
-                    fastmoveflag = true;
-                }
+                var fastmoveflag = UseItems[Grobal2.U_BOOTS] != null && UseItems[Grobal2.U_BOOTS].Dura > 0 && UseItems[Grobal2.U_BOOTS].Index == M2Share.INDEX_MIRBOOTS;
                 if (fastmoveflag)
                 {
                     StatusArr[StatuStateConst.STATE_FASTMOVE] = 60000;

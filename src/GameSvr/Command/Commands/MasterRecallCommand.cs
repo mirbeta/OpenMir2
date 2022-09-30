@@ -38,11 +38,11 @@ namespace GameSvr.Command.Commands
                 var MasterHuman = PlayObject.m_MasterList[i];
                 if (MasterHuman.m_boCanMasterRecall)
                 {
-                    PlayObject.RecallHuman(MasterHuman.CharName);
+                    PlayObject.RecallHuman(MasterHuman.ChrName);
                 }
                 else
                 {
-                    PlayObject.SysMsg(MasterHuman.CharName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(MasterHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
         }

@@ -77,7 +77,7 @@ namespace GameSvr.Player
                         SendRefMsg(Grobal2.RM_ITEMHIDE, 0, mapItem.ActorId, CurrX, CurrY, "");
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + Grobal2.sSTRING_GOLDNAME
+                            M2Share.AddGameDataLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME
                                                    + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
@@ -104,7 +104,7 @@ namespace GameSvr.Player
                         {
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + StdItem.Name
+                                M2Share.AddGameDataLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name
                                                        + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
@@ -163,7 +163,7 @@ namespace GameSvr.Player
                 }
                 HasLevelUp(Abil.Level - 1);
                 AddBodyLuck(100);
-                M2Share.AddGameDataLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + CharName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
+                M2Share.AddGameDataLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + ChrName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
                 IncHealthSpell(2000, 2000);
             }
         }
@@ -444,7 +444,7 @@ namespace GameSvr.Player
             {
                 n08 = 0;
             }
-            var sC = m_sIPaddr + "\t" + m_sUserID + "\t" + CharName + "\t" + n08 + "\t" + m_dLogonTime.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + m_nPayMode;
+            var sC = m_sIPaddr + "\t" + m_sUserID + "\t" + ChrName + "\t" + n08 + "\t" + m_dLogonTime.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + m_nPayMode;
             M2Share.AddLogonCostLog(sC);
             if (m_nPayMode == 2)
             {
@@ -911,7 +911,7 @@ namespace GameSvr.Player
 
         public override string GetBaseObjectInfo()
         {
-            return this.CharName + " 标识:" + this.ActorId + " 权限等级: " + this.Permission + " 管理模式: " + HUtil32.BoolToStr(this.AdminMode)
+            return this.ChrName + " 标识:" + this.ActorId + " 权限等级: " + this.Permission + " 管理模式: " + HUtil32.BoolToStr(this.AdminMode)
                 + " 隐身模式: " + HUtil32.BoolToStr(this.ObMode) + " 无敌模式: " + HUtil32.BoolToStr(this.SuperMan) + " 地图:" + this.MapName + '(' + this.Envir.MapDesc + ')'
                 + " 座标:" + this.CurrX + ':' + this.CurrY + " 等级:" + this.Abil.Level + " 转生等级:" + m_btReLevel
                 + " 经验:" + this.Abil.Exp + " 生命值: " + this.WAbil.HP + '-' + this.WAbil.MaxHP + " 魔法值: " + this.WAbil.MP + '-' + this.WAbil.MaxMP
@@ -964,7 +964,7 @@ namespace GameSvr.Player
             SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, MsgColor.Green, MsgType.Hint);
             if (M2Share.g_boGameLogGold)
             {
-                M2Share.AddGameDataLog(s10 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
+                M2Share.AddGameDataLog(s10 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
             }
         }
 
@@ -1336,7 +1336,7 @@ namespace GameSvr.Player
                 {
                     PlayObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
                     PlayObject.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                    SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.CharName), MsgColor.Red, MsgType.Hint);
+                    SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
                     PlayObject.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
                     if (PvpLevel() < 1)
                     {
@@ -1448,7 +1448,7 @@ namespace GameSvr.Player
             for (var i = 0; i < GroupMembers.Count; i++)
             {
                 PlayObject = GroupMembers[i];
-                sSendMsg = sSendMsg + PlayObject.CharName + '/';
+                sSendMsg = sSendMsg + PlayObject.ChrName + '/';
             }
             for (var i = 0; i < GroupMembers.Count; i++)
             {
@@ -2498,14 +2498,14 @@ namespace GameSvr.Player
             }
             Dealing = true;
             GetBackDealItems();
-            SendDefMessage(Grobal2.SM_DEALMENU, 0, 0, 0, 0, DealCreat.CharName);
+            SendDefMessage(Grobal2.SM_DEALMENU, 0, 0, 0, 0, DealCreat.ChrName);
             DealLastTick = HUtil32.GetTickCount();
         }
 
         private void JoinGroup(PlayObject PlayObject)
         {
             GroupOwner = PlayObject;
-            SendGroupText(Format(M2Share.g_sJoinGroup, CharName));
+            SendGroupText(Format(M2Share.g_sJoinGroup, ChrName));
         }
 
         /// <summary>
@@ -3122,7 +3122,7 @@ namespace GameSvr.Player
                 LoadList.LoadFromFile(sUnMarryFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    if (string.Compare(LoadList[i], this.CharName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(LoadList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         LoadList.RemoveAt(i);
                         boIsfound = true;
@@ -3140,7 +3140,7 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    sSayMsg = string.Format(M2Share.g_sfUnMarryWoManLoginMsg, CharName, CharName);
+                    sSayMsg = string.Format(M2Share.g_sfUnMarryWoManLoginMsg, ChrName, ChrName);
                 }
                 SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 m_sDearName = "";
@@ -3152,16 +3152,16 @@ namespace GameSvr.Player
                 m_DearHuman.m_DearHuman = this;
                 if (Gender == PlayGender.Man)
                 {
-                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineSelfMsg, m_sDearName, CharName, m_DearHuman.Envir.MapDesc, m_DearHuman.CurrX, m_DearHuman.CurrY);
+                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineSelfMsg, m_sDearName, ChrName, m_DearHuman.Envir.MapDesc, m_DearHuman.CurrX, m_DearHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineDearMsg, m_sDearName, CharName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineDearMsg, m_sDearName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     m_DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineSelfMsg, m_sDearName, CharName, m_DearHuman.Envir.MapDesc, m_DearHuman.CurrX, m_DearHuman.CurrY);
+                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineSelfMsg, m_sDearName, ChrName, m_DearHuman.Envir.MapDesc, m_DearHuman.CurrX, m_DearHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineDearMsg, m_sDearName, CharName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineDearMsg, m_sDearName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     m_DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
             }
@@ -3184,7 +3184,7 @@ namespace GameSvr.Player
             string sSayMsg;
             for (var i = 0; i < M2Share.g_UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
             {
-                if (string.Compare(M2Share.g_UnForceMasterList[i], this.CharName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.g_UnForceMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     M2Share.g_UnForceMasterList.RemoveAt(i);
                     M2Share.SaveUnForceMasterList();
@@ -3213,10 +3213,10 @@ namespace GameSvr.Player
                     var Human = M2Share.WorldEngine.GetPlayObject(m_sMasterName);
                     if (Human != null && !Human.Death && !Human.Ghost)
                     {
-                        sSayMsg = string.Format(M2Share.g_sYourMasterListUnMasterOKMsg, CharName);
+                        sSayMsg = string.Format(M2Share.g_sYourMasterListUnMasterOKMsg, ChrName);
                         Human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         SysMsg(M2Share.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
-                        if (CharName == Human.m_sMasterName)// 如果大徒弟则将师父上的名字去掉
+                        if (ChrName == Human.m_sMasterName)// 如果大徒弟则将师父上的名字去掉
                         {
                             Human.m_sMasterName = "";
                             Human.RefShowName();
@@ -3244,7 +3244,7 @@ namespace GameSvr.Player
                         boIsfound = false;
                         for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
                         {
-                            if (string.Compare(M2Share.g_UnMasterList[i], this.CharName, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(M2Share.g_UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 boIsfound = true;
                                 break;
@@ -3268,7 +3268,7 @@ namespace GameSvr.Player
             boIsfound = false;
             for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
             {
-                if (string.Compare(M2Share.g_UnMasterList[i], this.CharName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.g_UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     M2Share.g_UnMasterList.RemoveAt(i);
                     M2Share.SaveUnMasterList();
@@ -3299,9 +3299,9 @@ namespace GameSvr.Player
                 {
                     m_MasterHuman.m_MasterHuman = this;
                     m_MasterList.Add(m_MasterHuman);
-                    sSayMsg = string.Format(M2Share.g_sMasterOnlineSelfMsg, m_sMasterName, CharName, m_MasterHuman.Envir.MapDesc, m_MasterHuman.CurrX, m_MasterHuman.CurrY);
+                    sSayMsg = string.Format(M2Share.g_sMasterOnlineSelfMsg, m_sMasterName, ChrName, m_MasterHuman.Envir.MapDesc, m_MasterHuman.CurrX, m_MasterHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(M2Share.g_sMasterOnlineMasterListMsg, m_sMasterName, CharName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(M2Share.g_sMasterOnlineMasterListMsg, m_sMasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     m_MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
@@ -3317,14 +3317,14 @@ namespace GameSvr.Player
                     m_MasterHuman = M2Share.WorldEngine.GetPlayObject(m_sMasterName);
                     if (m_MasterHuman != null)
                     {
-                        if (m_MasterHuman.m_sMasterName == CharName)
+                        if (m_MasterHuman.m_sMasterName == ChrName)
                         {
                             m_MasterHuman.m_MasterHuman = this;
                         }
                         m_MasterHuman.m_MasterList.Add(this);
-                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineSelfMsg, m_sMasterName, CharName, m_MasterHuman.Envir.MapDesc, m_MasterHuman.CurrX, m_MasterHuman.CurrY);
+                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineSelfMsg, m_sMasterName, ChrName, m_MasterHuman.Envir.MapDesc, m_MasterHuman.CurrX, m_MasterHuman.CurrY);
                         SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineMasterMsg, m_sMasterName, CharName, Envir.MapDesc, CurrX, CurrY);
+                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineMasterMsg, m_sMasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
                         m_MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
@@ -3338,7 +3338,7 @@ namespace GameSvr.Player
         public string GetMyInfo()
         {
             var sMyInfo = M2Share.g_sMyInfo;
-            sMyInfo = sMyInfo.Replace("%name", CharName);
+            sMyInfo = sMyInfo.Replace("%name", ChrName);
             sMyInfo = sMyInfo.Replace("%map", Envir.MapDesc);
             sMyInfo = sMyInfo.Replace("%x", CurrX.ToString());
             sMyInfo = sMyInfo.Replace("%y", CurrY.ToString());
@@ -3398,19 +3398,19 @@ namespace GameSvr.Player
                     return result;
                 }
             }
-            for (var i = 0; i < M2Share.g_ItemBindCharName.Count; i++)
+            for (var i = 0; i < M2Share.g_ItemBindChrName.Count; i++)
             {
-                ItemBind = M2Share.g_ItemBindCharName[i];
+                ItemBind = M2Share.g_ItemBindChrName[i];
                 if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.Index)
                 {
                     result = false;
-                    if (string.Compare(ItemBind.sBindName, CharName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(ItemBind.sBindName, ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sItemIsNotThisCharName, MsgColor.Red, MsgType.Hint);
+                        SysMsg(M2Share.g_sItemIsNotThisChrName, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3630,9 +3630,9 @@ namespace GameSvr.Player
                 SysMsg(M2Share.g_sYourAccountDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
-            else if (M2Share.GetDenyChrNameList(CharName))
+            else if (M2Share.GetDenyChrNameList(ChrName))
             {
-                SysMsg(M2Share.g_sYourCharNameDenyLogon, MsgColor.Red, MsgType.Hint);
+                SysMsg(M2Share.g_sYourChrNameDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             if (result)
@@ -3743,7 +3743,7 @@ namespace GameSvr.Player
                                 {
                                     if (StdItem.NeedIdentify == 1)
                                     {
-                                        // M2Share.AddGameDataLog('10' + #9 + m_sMapName + #9 +inttostr(m_nCurrX) + #9 + inttostr(m_nCurrY) + #9 +m_sCharName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sCharName);
+                                        // M2Share.AddGameDataLog('10' + #9 + m_sMapName + #9 +inttostr(m_nCurrX) + #9 + inttostr(m_nCurrY) + #9 +m_sChrName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sChrName);
                                         SendDelItems(UserItem);
                                         ItemList.RemoveAt(i);
                                         DlgItemIndex = 0;

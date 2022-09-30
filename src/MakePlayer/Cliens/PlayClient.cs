@@ -13,7 +13,7 @@ namespace MakePlayer.Cliens
         public string m_sLoginAccount = string.Empty;
         public string m_sLoginPasswd = string.Empty;
         public int m_nCertification = 0;
-        public string m_sCharName = string.Empty;
+        public string m_sChrName = string.Empty;
         /// <summary>
         /// 当前游戏网络连接步骤
         /// </summary>
@@ -66,7 +66,7 @@ namespace MakePlayer.Cliens
             m_sLoginAccount = "";
             m_sLoginPasswd = "";
             m_nCertification = 0;
-            m_sCharName = "";
+            m_sChrName = "";
             m_ConnectionStep = TConnectionStep.cnsConnect;
             m_ConnectionStatus = TConnectionStatus.cns_Success;
             m_boSendLogin = false;
@@ -88,7 +88,7 @@ namespace MakePlayer.Cliens
         private void NewChr()
         {
             m_ConnectionStep = TConnectionStep.cnsNewChr;
-            SelectChrCreateNewChr(m_sCharName);
+            SelectChrCreateNewChr(m_sChrName);
         }
 
         private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
@@ -197,7 +197,7 @@ namespace MakePlayer.Cliens
             SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue));
         }
 
-        private void SelectChrCreateNewChr(string sCharName)
+        private void SelectChrCreateNewChr(string sChrName)
         {
             byte sHair = 0;
             switch (RandomNumber.GetInstance().Random(1))
@@ -219,16 +219,16 @@ namespace MakePlayer.Cliens
             }
             var sJob = (byte)RandomNumber.GetInstance().Random(2);
             var sSex = (byte)RandomNumber.GetInstance().Random(1);
-            SendNewChr(m_sLoginAccount, sCharName, sHair, sJob, sSex);
+            SendNewChr(m_sLoginAccount, sChrName, sHair, sJob, sSex);
         }
 
-        private void SendSelChr(string sCharName)
+        private void SendSelChr(string sChrName)
         {
-            MainOutMessage($"[{m_sLoginAccount}] 选择人物：{sCharName}");
+            MainOutMessage($"[{m_sLoginAccount}] 选择人物：{sChrName}");
             m_ConnectionStep = TConnectionStep.cnsSelChr;
-            m_sCharName = sCharName;
+            m_sChrName = sChrName;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(m_sLoginAccount + "/" + sCharName));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(m_sLoginAccount + "/" + sChrName));
         }
 
         private void SendLogin(string sAccount, string sPassword)
@@ -268,7 +268,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{m_sLoginAccount}] 进入游戏");
             m_ConnectionStep = TConnectionStep.cnsPlay;
-            var sSendMsg = string.Format("**{0}/{1}/{2}/{3}/{4}", new object[] { m_sLoginAccount, m_sCharName, m_nCertification, Grobal2.CLIENT_VERSION_NUMBER, 2022080300 });
+            var sSendMsg = string.Format("**{0}/{1}/{2}/{3}/{4}", new object[] { m_sLoginAccount, m_sChrName, m_nCertification, Grobal2.CLIENT_VERSION_NUMBER, 2022080300 });
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 

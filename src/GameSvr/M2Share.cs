@@ -134,7 +134,7 @@ namespace GameSvr
         public static IList<TItemBind> g_ItemBindIPaddr = null;
         public static IList<TItemBind> g_ItemBindDieNoDropName = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
-        public static IList<TItemBind> g_ItemBindCharName = null;
+        public static IList<TItemBind> g_ItemBindChrName = null;
         /// <summary>
         /// 出师记录表
         /// </summary>
@@ -257,7 +257,7 @@ namespace GameSvr
         public static string sWearWeightNot = "负重力不够!!!";
         public static string g_sItemIsNotThisAccount = "此物品不为此帐号所有!!!";
         public static string g_sItemIsNotThisIPaddr = "此物品不为此IP所有!!!";
-        public static string g_sItemIsNotThisCharName = "此物品不为你所有!!!";
+        public static string g_sItemIsNotThisChrName = "此物品不为你所有!!!";
         public static string g_sLevelNot = "等级不够!!!";
         public static string g_sJobOrLevelNot = "职业不对或等级不够!!!";
         public static string g_sJobOrDCNot = "职业不对或攻击力不够!!!";
@@ -404,7 +404,7 @@ namespace GameSvr
         public static string g_sCanotGetItems = "无法携带更多的东西!!!";
         public static string g_sYourIPaddrDenyLogon = "你当前登录的IP地址已被禁止登录了!!!";
         public static string g_sYourAccountDenyLogon = "你当前登录的帐号已被禁止登录了!!!";
-        public static string g_sYourCharNameDenyLogon = "你当前登录的人物已被禁止登录了!!!";
+        public static string g_sYourChrNameDenyLogon = "你当前登录的人物已被禁止登录了!!!";
         public static string g_sCanotPickUpItem = "在一定时间以内无法捡起此物品!!!";
         public static string g_sQUERYBAGITEMS = "一定时间内不能连续刷新背包物品...";
         public static string g_sCanotSendmsg = "无法发送信息.";
@@ -1434,7 +1434,7 @@ namespace GameSvr
             return result;
         }
 
-        public static bool LoadItemBindCharName()
+        public static bool LoadItemBindChrName()
         {
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
@@ -1445,11 +1445,11 @@ namespace GameSvr
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
-                for (var I = 0; I < g_ItemBindCharName.Count; I++)
+                for (var I = 0; I < g_ItemBindChrName.Count; I++)
                 {
-                    g_ItemBindCharName[I] = null;
+                    g_ItemBindChrName[I] = null;
                 }
-                g_ItemBindCharName.Clear();
+                g_ItemBindChrName.Clear();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -1469,7 +1469,7 @@ namespace GameSvr
                         ItemBind.nMakeIdex = nMakeIndex;
                         ItemBind.nItemIdx = nItemIndex;
                         ItemBind.sBindName = sBindName;
-                        g_ItemBindCharName.Add(ItemBind);
+                        g_ItemBindChrName.Add(ItemBind);
                     }
                 }
                 result = true;
@@ -1481,19 +1481,19 @@ namespace GameSvr
             return result;
         }
 
-        public static bool SaveItemBindCharName()
+        public static bool SaveItemBindChrName()
         {
             var result = false;
             var sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindChrName.txt";
-            //g_ItemBindCharName.__Lock();
+            //g_ItemBindChrName.__Lock();
             //try {
-            //    for (I = 0; I < g_ItemBindCharName.Count; I++)
+            //    for (I = 0; I < g_ItemBindChrName.Count; I++)
             //    {
-            //        ItemBind = g_ItemBindCharName[I];
+            //        ItemBind = g_ItemBindChrName[I];
             //        SaveList.Add((ItemBind.nItemIdx).ToString() + "\t" + (ItemBind.nMakeIdex).ToString() + "\t" + ItemBind.sBindName);
             //    }
             //} finally {
-            //    g_ItemBindCharName.UnLock();
+            //    g_ItemBindChrName.UnLock();
             //}
             //SaveList.SaveToFile(sFileName);
             ////SaveList.Free;

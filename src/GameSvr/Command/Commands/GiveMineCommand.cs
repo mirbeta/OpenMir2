@@ -56,8 +56,8 @@ namespace GameSvr.Command.Commands
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog("5" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX + "\09" + PlayObject.CurrY + "\09" +
-                                                       PlayObject.CharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + UserItem.Dura + "/"
-                                    + UserItem.DuraMax + "\09" + PlayObject.CharName);
+                                                       PlayObject.ChrName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + UserItem.Dura + "/"
+                                    + UserItem.DuraMax + "\09" + PlayObject.ChrName);
                             }
                         }
                     }

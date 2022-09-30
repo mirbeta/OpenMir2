@@ -77,7 +77,7 @@ namespace GameSvr.Player
             }
             UserStateInfo userState = new UserStateInfo();
             userState.Feature = playObject.GetFeature(this);
-            userState.UserName = playObject.CharName;
+            userState.UserName = playObject.ChrName;
             userState.NameColor = GetCharColor(playObject);
             if (playObject.MyGuild != null)
             {
@@ -722,7 +722,7 @@ namespace GameSvr.Player
                 SendDefMessage(Grobal2.SM_EAT_OK, 0, 0, 0, 0, "");
                 if (stdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("11" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + itemIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("11" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + itemIndex + "\t" + '1' + "\t" + '0');
                 }
             }
             else
@@ -948,8 +948,8 @@ namespace GameSvr.Player
                     {
                         if (targetPlayObject.AllowDeal && targetPlayObject.m_boCanDeal)
                         {
-                            targetPlayObject.SysMsg(CharName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
-                            SysMsg(targetPlayObject.CharName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            targetPlayObject.SysMsg(ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            SysMsg(targetPlayObject.ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
                             this.OpenDealDlg(targetPlayObject);
                             targetPlayObject.OpenDealDlg(this);
                         }
@@ -1143,7 +1143,7 @@ namespace GameSvr.Player
                             {
                                 if (stdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('8' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + DealCreat.CharName);
+                                    M2Share.AddGameDataLog('8' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + DealCreat.ChrName);
                                 }
                             }
                         }
@@ -1154,7 +1154,7 @@ namespace GameSvr.Player
                         DealCreat.GoldChanged();
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('8' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + Gold + "\t" + '1' + "\t" + DealCreat.CharName);
+                            M2Share.AddGameDataLog('8' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + Gold + "\t" + '1' + "\t" + DealCreat.ChrName);
                         }
                     }
                     for (var i = 0; i < DealCreat.DealItemList.Count; i++)
@@ -1169,7 +1169,7 @@ namespace GameSvr.Player
                             {
                                 if (stdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('8' + "\t" + DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + CharName);
+                                    M2Share.AddGameDataLog('8' + "\t" + DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                                 }
                             }
                         }
@@ -1180,7 +1180,7 @@ namespace GameSvr.Player
                         GoldChanged();
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('8' + "\t" + DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.CharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + CharName);
+                            M2Share.AddGameDataLog('8' + "\t" + DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + ChrName);
                         }
                     }
                     var playObject = DealCreat;
@@ -1383,7 +1383,7 @@ namespace GameSvr.Player
             {
                 if (MyGuild.IsMember(sHumName))
                 {
-                    if (CharName != sHumName)
+                    if (ChrName != sHumName)
                     {
                         if (MyGuild.DelMember(sHumName))
                         {
@@ -1651,7 +1651,7 @@ namespace GameSvr.Player
                             var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('1' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                M2Share.AddGameDataLog('1' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
                         else
@@ -1707,7 +1707,7 @@ namespace GameSvr.Player
                                 var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('0' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + CharName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                    M2Share.AddGameDataLog('0' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
                                 }
                             }
                             else

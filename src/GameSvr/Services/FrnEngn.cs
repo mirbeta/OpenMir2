@@ -287,7 +287,7 @@ namespace GameSvr.Services
             var LoadRcdInfo = new TLoadDBInfo
             {
                 sAccount = sAccount,
-                sCharName = sChrName,
+                sChrName = sChrName,
                 sIPaddr = sIPaddr,
                 nSessionID = nSessionID,
                 nSoftVersionDate = nSoftVersionDate,
@@ -316,18 +316,18 @@ namespace GameSvr.Services
             HumDataInfo HumanRcd = null;
             var result = false;
             boReTry = false;
-            if (InSaveRcdList(LoadUser.sCharName))
+            if (InSaveRcdList(LoadUser.sChrName))
             {
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.sCharName) != null)
+            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.sChrName) != null)
             {
-                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.sCharName);
+                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.sChrName);
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (!HumDataService.LoadHumRcdFromDB(LoadUser.sAccount, LoadUser.sCharName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
+            if (!HumDataService.LoadHumRcdFromDB(LoadUser.sAccount, LoadUser.sChrName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
             {
                 M2Share.GateMgr.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
             }
@@ -335,7 +335,7 @@ namespace GameSvr.Services
             {
                 var userOpenInfo = new UserOpenInfo
                 {
-                    sChrName = LoadUser.sCharName,
+                    sChrName = LoadUser.sChrName,
                     LoadUser = LoadUser,
                     HumanRcd = HumanRcd
                 };
@@ -431,9 +431,9 @@ namespace GameSvr.Services
             var result = false;
             if (HumDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {
-                if (HumanRcd.Data.nGold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.nGold + GoldChangeInfo.nGold < 2000000000)
+                if (HumanRcd.Data.Gold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.Gold + GoldChangeInfo.nGold < 2000000000)
                 {
-                    HumanRcd.Data.nGold += GoldChangeInfo.nGold;
+                    HumanRcd.Data.Gold += GoldChangeInfo.nGold;
                     if (HumDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
                     {
                         M2Share.WorldEngine.sub_4AE514(GoldChangeInfo);

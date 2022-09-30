@@ -2779,23 +2779,23 @@ namespace GameSvr.Conf
             {
                 M2Share.GameCommand.DenyAccountLogon.nPerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DenyCharNameLogon", "");
+            LoadString = ReadString("Command", "DenyChrNameLogon", "");
             if (LoadString == "")
             {
-                WriteString("Command", "DenyCharNameLogon", M2Share.GameCommand.DenyCharNameLogon.CommandName);
+                WriteString("Command", "DenyChrNameLogon", M2Share.GameCommand.DenyChrNameLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DenyCharNameLogon.CommandName = LoadString;
+                M2Share.GameCommand.DenyChrNameLogon.CommandName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DenyCharNameLogon", -1);
+            nLoadInteger = ReadInteger("Permission", "DenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DenyCharNameLogon", M2Share.GameCommand.DenyCharNameLogon.nPerMissionMin);
+                WriteInteger("Permission", "DenyChrNameLogon", M2Share.GameCommand.DenyChrNameLogon.nPerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DenyCharNameLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DenyChrNameLogon.nPerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelDenyIPLogon", "");
             if (LoadString == "")
@@ -2833,23 +2833,23 @@ namespace GameSvr.Conf
             {
                 M2Share.GameCommand.DelDenyAccountLogon.nPerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelDenyCharNameLogon", "");
+            LoadString = ReadString("Command", "DelDenyChrNameLogon", "");
             if (LoadString == "")
             {
-                WriteString("Command", "DelDenyCharNameLogon", M2Share.GameCommand.DelDenyCharNameLogon.CommandName);
+                WriteString("Command", "DelDenyChrNameLogon", M2Share.GameCommand.DelDenyChrNameLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelDenyCharNameLogon.CommandName = LoadString;
+                M2Share.GameCommand.DelDenyChrNameLogon.CommandName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelDenyCharNameLogon", -1);
+            nLoadInteger = ReadInteger("Permission", "DelDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelDenyCharNameLogon", M2Share.GameCommand.DelDenyCharNameLogon.nPerMissionMin);
+                WriteInteger("Permission", "DelDenyChrNameLogon", M2Share.GameCommand.DelDenyChrNameLogon.nPerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelDenyCharNameLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelDenyChrNameLogon.nPerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowDenyIPLogon", "");
             if (LoadString == "")
@@ -2887,23 +2887,23 @@ namespace GameSvr.Conf
             {
                 M2Share.GameCommand.ShowDenyAccountLogon.nPerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShowDenyCharNameLogon", "");
+            LoadString = ReadString("Command", "ShowDenyChrNameLogon", "");
             if (LoadString == "")
             {
-                WriteString("Command", "ShowDenyCharNameLogon", M2Share.GameCommand.ShowDenyCharNameLogon.CommandName);
+                WriteString("Command", "ShowDenyChrNameLogon", M2Share.GameCommand.ShowDenyChrNameLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyCharNameLogon.CommandName = LoadString;
+                M2Share.GameCommand.ShowDenyChrNameLogon.CommandName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShowDenyCharNameLogon", -1);
+            nLoadInteger = ReadInteger("Permission", "ShowDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowDenyCharNameLogon", M2Share.GameCommand.ShowDenyCharNameLogon.nPerMissionMin);
+                WriteInteger("Permission", "ShowDenyChrNameLogon", M2Share.GameCommand.ShowDenyChrNameLogon.nPerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyCharNameLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShowDenyChrNameLogon.nPerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ViewWhisper", "");
             if (LoadString == "")

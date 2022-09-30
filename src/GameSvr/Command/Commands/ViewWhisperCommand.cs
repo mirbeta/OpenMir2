@@ -16,29 +16,29 @@ namespace GameSvr.Command.Commands
             {
                 return;
             }
-            var sCharName = @Params.Length > 0 ? @Params[0] : "";
-            if (sCharName == "" || sCharName != "" && sCharName[1] == '?')
+            var sChrName = @Params.Length > 0 ? @Params[0] : "";
+            if (sChrName == "" || sChrName != "" && sChrName[1] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sCharName);
+            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sChrName);
             if (m_PlayObject != null)
             {
                 if (m_PlayObject.m_GetWhisperHuman == PlayObject)
                 {
                     m_PlayObject.m_GetWhisperHuman = null;
-                    PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandViewWhisperMsg1, sCharName), MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandViewWhisperMsg1, sChrName), MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
                     m_PlayObject.m_GetWhisperHuman = PlayObject;
-                    PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandViewWhisperMsg2, sCharName), MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandViewWhisperMsg2, sChrName), MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sCharName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sChrName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

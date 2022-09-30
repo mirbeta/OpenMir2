@@ -43,7 +43,7 @@ namespace GameSvr.Command.Commands
                             Merchant = (Merchant)TmpMerList[i];
                             Merchant.ClearScript();
                             Merchant.LoadNPCScript();
-                            PlayObject.SysMsg(Merchant.CharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Merchant.ChrName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else
@@ -59,7 +59,7 @@ namespace GameSvr.Command.Commands
                             NPC = TmpNorList[i] as NormNpc;
                             NPC.ClearScript();
                             NPC.LoadNPCScript();
-                            PlayObject.SysMsg(NPC.CharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(NPC.ChrName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else
