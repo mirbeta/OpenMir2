@@ -2,7 +2,7 @@
 
 namespace DBSvr.Storage.Model
 {
-    public struct HumRecordData
+    public class HumRecordData
     {
         public int Id;
         public RecordHeader Header;

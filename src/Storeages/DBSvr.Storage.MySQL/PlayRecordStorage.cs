@@ -21,16 +21,15 @@ namespace DBSvr.Storage.MySQL
         /// </summary>
         private readonly IList<int> _deletedList;
         private readonly StorageOption _storageOption;
-        private MySqlConnection _connection;
 
-        public PlayRecordStorage(StorageOption option)
+        public PlayRecordStorage(StorageOption storageOption)
         {
             _quickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _indexQuickList = new Dictionary<int, string>();
             _quickIdList = new QuickIdList();
             _deletedList = new List<int>();
             _recordCount = 0;
-            _storageOption = option;
+            _storageOption = storageOption;
         }
 
         public void LoadQuickList()
@@ -38,19 +37,19 @@ namespace DBSvr.Storage.MySQL
             _quickList.Clear();
             _quickIdList.Clear();
             _deletedList.Clear();
-            var nRecordIndex = 1;
-            IList<QuickId> AccountList = new List<QuickId>();
-            IList<string> ChrNameList = new List<string>();
-            bool result = false;
-            Open(ref result);
-            if (!result)
+            var connSuccess = false;
+            var connection = Open(ref connSuccess);
+            if (!connSuccess)
             {
                 return;
             }
+            var nRecordIndex = 1;
+            IList<QuickId> AccountList = new List<QuickId>();
+            IList<string> ChrNameList = new List<string>();
             try
             {
                 var command = new MySqlCommand();
-                command.Connection = _connection;
+                command.Connection = connection;
                 command.CommandText = "select * from characters_indexes";
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
@@ -88,7 +87,8 @@ namespace DBSvr.Storage.MySQL
             }
             finally
             {
-                Close(_connection);
+                connection.Close();
+                connection.Dispose();
             }
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
@@ -98,19 +98,12 @@ namespace DBSvr.Storage.MySQL
             ChrNameList = null;
         }
 
-        private void Close(MySqlConnection _connection)
+        private MySqlConnection Open(ref bool succes)
         {
-            if (_connection == null) return;
-            _connection.Close();
-            _connection.Dispose();
-        }
-
-        private void Open(ref bool succes)
-        {
-            _connection = new MySqlConnection(_storageOption.ConnectionString);
+            var connection = new MySqlConnection(_storageOption.ConnectionString);
             try
             {
-                _connection.Open();
+                connection.Open();
                 succes = true;
             }
             catch (Exception e)
@@ -119,6 +112,7 @@ namespace DBSvr.Storage.MySQL
                 _logger.Error(e.StackTrace);
                 succes = false;
             }
+            return connection;
         }
 
         public int Index(string sName)
@@ -137,33 +131,43 @@ namespace DBSvr.Storage.MySQL
 
         private HumRecordData GetRecord(int nIndex, ref bool success)
         {
-            Open(ref success);
-            if (!success)
+            var connSuccess = false;
+            var connection = Open(ref connSuccess);
+            if (!connSuccess)
             {
-                success = false;
                 return default;
             }
             const string sSqlStrig = "select * from characters_indexes where Id=@Id";
-            var command = new MySqlCommand();
-            command.CommandText = sSqlStrig;
-            command.Connection = _connection;
-            command.Parameters.AddWithValue("@Id", nIndex);
-            var humRecord = new HumRecordData();
-            using var dr = command.ExecuteReader();
-            if (dr.Read())
+            HumRecordData humRecord = null;
+            try
             {
-                humRecord.sAccount = dr.GetString("Account");
-                humRecord.sChrName = dr.GetString("ChrName");
-                humRecord.Selected = (byte)dr.GetUInt32("SelectID");
-                humRecord.Deleted = dr.GetBoolean("IsDeleted");
-                humRecord.Header = new RecordHeader();
-                humRecord.Header.sAccount = humRecord.sAccount;
-                humRecord.Header.sName = humRecord.sChrName;
-                humRecord.Header.SelectID = humRecord.Selected;
-                humRecord.Header.Deleted = humRecord.Deleted;
-                success = true;
+                var command = new MySqlCommand();
+                command.CommandText = sSqlStrig;
+                command.Connection = connection;
+                command.Parameters.AddWithValue("@Id", nIndex);
+                using var dr = command.ExecuteReader();
+                if (dr.Read())
+                {
+                    humRecord = new HumRecordData();
+                    humRecord.sAccount = dr.GetString("Account");
+                    humRecord.sChrName = dr.GetString("ChrName");
+                    humRecord.Selected = (byte)dr.GetUInt32("SelectID");
+                    humRecord.Deleted = dr.GetBoolean("IsDeleted");
+                    humRecord.Header = new RecordHeader();
+                    humRecord.Header.sAccount = humRecord.sAccount;
+                    humRecord.Header.sName = humRecord.sChrName;
+                    humRecord.Header.SelectID = humRecord.Selected;
+                    humRecord.Header.Deleted = humRecord.Deleted;
+                    success = true;
+                }
+                dr.Close();
+                dr.Dispose();
             }
-            Close(_connection);
+            finally
+            {
+                connection.Close();
+                connection.Dispose();
+            }
             return humRecord;
         }
 
@@ -259,12 +263,13 @@ namespace DBSvr.Storage.MySQL
 
         private bool UpdateRecord(HumRecordData HumRecord, bool boNew, ref int nIndex)
         {
-            bool result = false;
-            Open(ref result);
-            if (!result)
+            var connSuccess = false;
+            var connection = Open(ref connSuccess);
+            if (!connSuccess)
             {
                 return false;
             }
+            var result = false;
             try
             {
                 if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
@@ -273,7 +278,7 @@ namespace DBSvr.Storage.MySQL
                     strSql.AppendLine("INSERT INTO characters_indexes (Account, ChrName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
                     strSql.AppendLine("(@Account, @ChrName, @SelectID, @IsDeleted, now(), now());");
                     var command = new MySqlCommand();
-                    command.Connection = _connection;
+                    command.Connection = connection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@ChrName", HumRecord.sChrName);
@@ -291,7 +296,7 @@ namespace DBSvr.Storage.MySQL
                     strSql.AppendLine("UPDATE characters_indexes SET Account = @Account, ChrName = @ChrName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
                     strSql.AppendLine(" ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
-                    command.Connection = _connection;
+                    command.Connection = connection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@ChrName", HumRecord.sChrName);
@@ -308,7 +313,8 @@ namespace DBSvr.Storage.MySQL
             }
             finally
             {
-                Close(_connection);
+                connection.Close();
+                connection.Dispose();
             }
             return result;
         }

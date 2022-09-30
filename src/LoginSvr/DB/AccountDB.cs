@@ -109,7 +109,6 @@ namespace LoginSvr.DB
                         _quickList.Add(new AccountQuick(sAccount, nIndex));
                     }
                 }
-
                 dr.Close();
                 dr.Dispose();
             }
@@ -210,6 +209,8 @@ namespace LoginSvr.DB
                 {
                     result = false;
                 }
+                dr.Close();
+                dr.Dispose();
             }
             catch
             {
