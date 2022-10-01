@@ -11,9 +11,6 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.DataStores
 {
-    /// <summary>
-    /// 数据库查询类
-    /// </summary>
     public class CommonDB
     {
         private IDbConnection _dbConnection;
