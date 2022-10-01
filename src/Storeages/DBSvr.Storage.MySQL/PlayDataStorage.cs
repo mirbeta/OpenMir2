@@ -132,9 +132,9 @@ namespace DBSvr.Storage.MySQL
         public HumInfoData Query(int playerId)
         {
             HumInfoData playData;
+            using var context = new StorageContext(_storageOption);
             try
             {
-                using var context = new StorageContext(_storageOption);
                 var success = false;
                 context.Open(ref success);
                 if (!success)
@@ -146,6 +146,10 @@ namespace DBSvr.Storage.MySQL
             catch (Exception e)
             {
                 return null;
+            }
+            finally
+            {
+                context.Dispose();
             }
             return playData;
         }
@@ -227,12 +231,12 @@ namespace DBSvr.Storage.MySQL
             else
             {
                 nIndex = _recordCount;
-                _recordCount++;
                 if (AddRecord(ref nIndex, ref humanRcd))
                 {
                     _mirQuickMap.Add(sChrName, nIndex);
                     _quickIndexIdMap.Add(nIndex, nIndex);
                     result = true;
+                    _recordCount++;
                 }
             }
             return result;
@@ -249,10 +253,10 @@ namespace DBSvr.Storage.MySQL
             {
                 return false;
             }
+            using var context = new StorageContext(_storageOption);
             try
             {
                 humanRcd = new HumDataInfo();
-                using var context = new StorageContext(_storageOption);
                 var success = false;
                 context.Open(ref success);
                 if (!success)
@@ -268,12 +272,15 @@ namespace DBSvr.Storage.MySQL
                 GetBagItemRecord(playerId, context, ref humanRcd);
                 GetStorageRecord(playerId, context, ref humanRcd);
                 GetPlayerStatus(playerId, context, ref humanRcd);
-                context.Dispose();
             }
             catch (Exception e)
             {
                 _logger.Error("获取角色数据失败." + e.StackTrace);
                 return false;
+            }
+            finally
+            {
+                context.Dispose();
             }
             return true;
         }
@@ -447,7 +454,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     humanRcd.Data.Magic[position].MagIdx = dr.GetUInt16("MagicId");
                     humanRcd.Data.Magic[position].MagicKey = dr.GetChar("UseKey");
-                    humanRcd.Data.Magic[position].Level = (byte)dr.GetInt32("Level");
+                    humanRcd.Data.Magic[position].Level = dr.GetByte("Level");
                     humanRcd.Data.Magic[position].TranPoint = dr.GetInt32("CurrTrain");
                     position++;
                 }
