@@ -27,15 +27,11 @@ namespace BotSvr.Maps
             {
                 return "/Volumes/Data/Mirserver/Mir200/Map/";
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
             {
                 return "/opt/MirServer/Mir200/Map/";
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return "D:/Mirserver/Mir200/Map/";
-            }
-            return string.Empty;
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "D:/Mirserver/Mir200/Map/" : string.Empty;
         }
 
         /// <summary>

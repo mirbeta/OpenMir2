@@ -91,8 +91,6 @@ namespace BotSvr.Maps
         public byte btAniTick;
         public byte btArea;
         public byte btLight;
-
-
         public byte btBkIndex;
         public byte btSmIndex;
         public ushort btTAnimImage;
