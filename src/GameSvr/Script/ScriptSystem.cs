@@ -12,6 +12,7 @@ namespace GameSvr.Script
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
+        private readonly string[] TextSpitConst = new[] { " ", "\t" };
 
         public int LoadNpcScript(NormNpc NPC, string sPatch, string sScritpName)
         {
@@ -159,14 +160,14 @@ namespace GameSvr.Script
                 {
                     if (HUtil32.CompareLStr(s14, "#SETHOME"))
                     {
-                        result = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
+                        result = HUtil32.GetValidStr3(s14, ref s1C, TextSpitConst).Trim();
                         LoadList[i] = "";
                     }
                     if (HUtil32.CompareLStr(s14, "#DEFINE"))
                     {
-                        s14 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" });
-                        s14 = HUtil32.GetValidStr3(s14, ref s20, new[] { " ", "\t" });
-                        s14 = HUtil32.GetValidStr3(s14, ref s24, new[] { " ", "\t" });
+                        s14 = HUtil32.GetValidStr3(s14, ref s1C, TextSpitConst);
+                        s14 = HUtil32.GetValidStr3(s14, ref s20, TextSpitConst);
+                        s14 = HUtil32.GetValidStr3(s14, ref s24, TextSpitConst);
                         TDefineInfo DefineInfo = new TDefineInfo
                         {
                             sName = s20.ToUpper(),
@@ -177,7 +178,7 @@ namespace GameSvr.Script
                     }
                     if (HUtil32.CompareLStr(s14, "#INCLUDE"))
                     {
-                        string s28 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
+                        string s28 = HUtil32.GetValidStr3(s14, ref s1C, TextSpitConst).Trim();
                         s28 = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Defines", s28);
                         if (File.Exists(s28))
                         {
@@ -206,7 +207,7 @@ namespace GameSvr.Script
             NPC.m_ScriptList.Add(ScriptInfo);
             return ScriptInfo;
         }
-
+        
         private bool LoadScriptFileQuestCondition(string sText, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
@@ -218,13 +219,13 @@ namespace GameSvr.Script
             var sParam5 = string.Empty;
             var sParam6 = string.Empty;
             var nCMDCode = 0;
-            sText = HUtil32.GetValidStrCap(sText, ref sCmd, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam1, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam2, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam3, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sCmd, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam1, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam2, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam3, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam4, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam5, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
             if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
@@ -499,280 +500,177 @@ namespace GameSvr.Script
                     goto L001;
             }
 
-            if (sCmd == ScriptConst.sCHECKCREDITPOINT)
+            switch (sCmd)
             {
-                nCMDCode = ScriptConst.nCHECKCREDITPOINT;
-                goto L001;
+                case ScriptConst.sCHECKCREDITPOINT:
+                    nCMDCode = ScriptConst.nCHECKCREDITPOINT;
+                    goto L001;
+                case ScriptConst.sDAYTIME:
+                    nCMDCode = ScriptConst.nDAYTIME;
+                    goto L001;
+                case ScriptConst.sCHECKITEMW:
+                    nCMDCode = ScriptConst.nCHECKITEMW;
+                    goto L001;
+                case ScriptConst.sISTAKEITEM:
+                    nCMDCode = ScriptConst.nISTAKEITEM;
+                    goto L001;
+                case ScriptConst.sCHECKDURA:
+                    nCMDCode = ScriptConst.nCHECKDURA;
+                    goto L001;
+                case ScriptConst.sCHECKDURAEVA:
+                    nCMDCode = ScriptConst.nCHECKDURAEVA;
+                    goto L001;
+                case ScriptConst.sDAYOFWEEK:
+                    nCMDCode = ScriptConst.nDAYOFWEEK;
+                    goto L001;
+                case ScriptConst.sHOUR:
+                    nCMDCode = ScriptConst.nHOUR;
+                    goto L001;
+                case ScriptConst.sMIN:
+                    nCMDCode = ScriptConst.nMIN;
+                    goto L001;
+                case ScriptConst.sCHECKLUCKYPOINT:
+                    nCMDCode = ScriptConst.nCHECKLUCKYPOINT;
+                    goto L001;
+                case ScriptConst.sCHECKMONMAP:
+                    nCMDCode = ScriptConst.nCHECKMONMAP;
+                    goto L001;
+                case ScriptConst.sCHECKMONAREA:
+                    nCMDCode = ScriptConst.nCHECKMONAREA;
+                    goto L001;
+                case ScriptConst.sCHECKHUM:
+                    nCMDCode = ScriptConst.nCHECKHUM;
+                    goto L001;
+                case ScriptConst.sEQUAL:
+                    nCMDCode = ScriptConst.nEQUAL;
+                    goto L001;
+                case ScriptConst.sLARGE:
+                    nCMDCode = ScriptConst.nLARGE;
+                    goto L001;
+                case ScriptConst.sSMALL:
+                    nCMDCode = ScriptConst.nSMALL;
+                    goto L001;
+                case ScriptConst.sSC_CHECKPOSEDIR:
+                    nCMDCode = ScriptConst.nSC_CHECKPOSEDIR;
+                    goto L001;
+                case ScriptConst.sSC_CHECKPOSELEVEL:
+                    nCMDCode = ScriptConst.nSC_CHECKPOSELEVEL;
+                    goto L001;
+                case ScriptConst.sSC_CHECKPOSEGENDER:
+                    nCMDCode = ScriptConst.nSC_CHECKPOSEGENDER;
+                    goto L001;
+                case ScriptConst.sSC_CHECKLEVELEX:
+                    nCMDCode = ScriptConst.nSC_CHECKLEVELEX;
+                    goto L001;
+                case ScriptConst.sSC_CHECKBONUSPOINT:
+                    nCMDCode = ScriptConst.nSC_CHECKBONUSPOINT;
+                    goto L001;
+                case ScriptConst.sSC_CHECKMARRY:
+                    nCMDCode = ScriptConst.nSC_CHECKMARRY;
+                    goto L001;
+                case ScriptConst.sSC_CHECKPOSEMARRY:
+                    nCMDCode = ScriptConst.nSC_CHECKPOSEMARRY;
+                    goto L001;
+                case ScriptConst.sSC_CHECKMARRYCOUNT:
+                    nCMDCode = ScriptConst.nSC_CHECKMARRYCOUNT;
+                    goto L001;
+                case ScriptConst.sSC_CHECKMASTER:
+                    nCMDCode = ScriptConst.nSC_CHECKMASTER;
+                    goto L001;
+                case ScriptConst.sSC_HAVEMASTER:
+                    nCMDCode = ScriptConst.nSC_HAVEMASTER;
+                    goto L001;
+                case ScriptConst.sSC_CHECKPOSEMASTER:
+                    nCMDCode = ScriptConst.nSC_CHECKPOSEMASTER;
+                    goto L001;
+                case ScriptConst.sSC_POSEHAVEMASTER:
+                    nCMDCode = ScriptConst.nSC_POSEHAVEMASTER;
+                    goto L001;
+                case ScriptConst.sSC_CHECKISMASTER:
+                    nCMDCode = ScriptConst.nSC_CHECKISMASTER;
+                    goto L001;
+                case ScriptConst.sSC_CHECKPOSEISMASTER:
+                    nCMDCode = ScriptConst.nSC_CHECKPOSEISMASTER;
+                    goto L001;
+                case ScriptConst.sSC_CHECKNAMEIPLIST:
+                    nCMDCode = ScriptConst.nSC_CHECKNAMEIPLIST;
+                    goto L001;
+                case ScriptConst.sSC_CHECKACCOUNTIPLIST:
+                    nCMDCode = ScriptConst.nSC_CHECKACCOUNTIPLIST;
+                    goto L001;
+                case ScriptConst.sSC_CHECKSLAVECOUNT:
+                    nCMDCode = ScriptConst.nSC_CHECKSLAVECOUNT;
+                    goto L001;
+                case ScriptConst.sSC_CHECKPOS:
+                    nCMDCode = ScriptConst.nSC_CHECKPOS;
+                    goto L001;
+                case ScriptConst.sSC_CHECKMAP:
+                    nCMDCode = ScriptConst.nSC_CHECKMAP;
+                    goto L001;
+                case ScriptConst.sSC_REVIVESLAVE:
+                    nCMDCode = ScriptConst.nSC_REVIVESLAVE;
+                    goto L001;
+                case ScriptConst.sSC_CHECKMAGICLVL:
+                    nCMDCode = ScriptConst.nSC_CHECKMAGICLVL;
+                    goto L001;
+                case ScriptConst.sSC_CHECKGROUPCLASS:
+                    nCMDCode = ScriptConst.nSC_CHECKGROUPCLASS;
+                    goto L001;
+                case ScriptConst.sSC_ISGROUPMASTER:
+                    nCMDCode = ScriptConst.nSC_ISGROUPMASTER;
+                    goto L001;
+                case ScriptConst.sCheckDiemon:
+                    nCMDCode = ScriptConst.nCheckDiemon;
+                    goto L001;
+                case ScriptConst.scheckkillplaymon:
+                    nCMDCode = ScriptConst.ncheckkillplaymon;
+                    goto L001;
+                case ScriptConst.sSC_CHECKRANDOMNO:
+                    nCMDCode = ScriptConst.nSC_CHECKRANDOMNO;
+                    goto L001;
+                case ScriptConst.sSC_CHECKISONMAP:
+                    nCMDCode = ScriptConst.nSC_CHECKISONMAP;
+                    goto L001;
+                // 检测是否安全区
+                case ScriptConst.sSC_CHECKINSAFEZONE:
+                    nCMDCode = ScriptConst.nSC_CHECKINSAFEZONE;
+                    goto L001;
+                case ScriptConst.sSC_KILLBYHUM:
+                    nCMDCode = ScriptConst.nSC_KILLBYHUM;
+                    goto L001;
+                case ScriptConst.sSC_KILLBYMON:
+                    nCMDCode = ScriptConst.nSC_KILLBYMON;
+                    goto L001;
+                // 增加挂机
+                case ScriptConst.sSC_OffLine:
+                    nCMDCode = ScriptConst.nSC_OffLine;
+                    goto L001;
+                // 增加脚本特修所有装备命令
+                case ScriptConst.sSC_REPAIRALL:
+                    nCMDCode = ScriptConst.nSC_REPAIRALL;
+                    goto L001;
+                // 刷新包裹物品命令
+                case ScriptConst.sSC_QUERYBAGITEMS:
+                    nCMDCode = ScriptConst.nSC_QUERYBAGITEMS;
+                    goto L001;
+                case ScriptConst.sSC_SETRANDOMNO:
+                    nCMDCode = ScriptConst.nSC_SETRANDOMNO;
+                    goto L001;
+                case ScriptConst.sSC_DELAYGOTO:
+                case "DELAYCALL":
+                    nCMDCode = ScriptConst.nSC_DELAYGOTO;
+                    goto L001;
+                case ScriptConst.sSCHECKDEATHPLAYMON:
+                    nCMDCode = ScriptConst.nSCHECKDEATHPLAYMON;
+                    goto L001;
+                case ScriptConst.sSCHECKKILLMOBNAME:
+                    nCMDCode = ScriptConst.nSCHECKDEATHPLAYMON;
+                    goto L001;
             }
-            if (sCmd == ScriptConst.sDAYTIME)
-            {
-                nCMDCode = ScriptConst.nDAYTIME;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCHECKITEMW)
-            {
-                nCMDCode = ScriptConst.nCHECKITEMW;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sISTAKEITEM)
-            {
-                nCMDCode = ScriptConst.nISTAKEITEM;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCHECKDURA)
-            {
-                nCMDCode = ScriptConst.nCHECKDURA;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCHECKDURAEVA)
-            {
-                nCMDCode = ScriptConst.nCHECKDURAEVA;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sDAYOFWEEK)
-            {
-                nCMDCode = ScriptConst.nDAYOFWEEK;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sHOUR)
-            {
-                nCMDCode = ScriptConst.nHOUR;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sMIN)
-            {
-                nCMDCode = ScriptConst.nMIN;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCHECKLUCKYPOINT)
-            {
-                nCMDCode = ScriptConst.nCHECKLUCKYPOINT;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCHECKMONMAP)
-            {
-                nCMDCode = ScriptConst.nCHECKMONMAP;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCHECKMONAREA)
-            {
-                nCMDCode = ScriptConst.nCHECKMONAREA;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCHECKHUM)
-            {
-                nCMDCode = ScriptConst.nCHECKHUM;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sEQUAL)
-            {
-                nCMDCode = ScriptConst.nEQUAL;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sLARGE)
-            {
-                nCMDCode = ScriptConst.nLARGE;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSMALL)
-            {
-                nCMDCode = ScriptConst.nSMALL;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKPOSEDIR)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKPOSEDIR;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKPOSELEVEL)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKPOSELEVEL;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKPOSEGENDER)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKPOSEGENDER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKLEVELEX)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKLEVELEX;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKBONUSPOINT)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKBONUSPOINT;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKMARRY)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKMARRY;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKPOSEMARRY)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKPOSEMARRY;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKMARRYCOUNT)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKMARRYCOUNT;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKMASTER)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKMASTER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_HAVEMASTER)
-            {
-                nCMDCode = ScriptConst.nSC_HAVEMASTER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKPOSEMASTER)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKPOSEMASTER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_POSEHAVEMASTER)
-            {
-                nCMDCode = ScriptConst.nSC_POSEHAVEMASTER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKISMASTER)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKISMASTER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKPOSEISMASTER)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKPOSEISMASTER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKNAMEIPLIST)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKNAMEIPLIST;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKACCOUNTIPLIST)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKACCOUNTIPLIST;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKSLAVECOUNT)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKSLAVECOUNT;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKPOS)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKPOS;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKMAP)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKMAP;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_REVIVESLAVE)
-            {
-                nCMDCode = ScriptConst.nSC_REVIVESLAVE;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKMAGICLVL)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKMAGICLVL;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKGROUPCLASS)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKGROUPCLASS;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_ISGROUPMASTER)
-            {
-                nCMDCode = ScriptConst.nSC_ISGROUPMASTER;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sCheckDiemon)
-            {
-                nCMDCode = ScriptConst.nCheckDiemon;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.scheckkillplaymon)
-            {
-                nCMDCode = ScriptConst.ncheckkillplaymon;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKRANDOMNO)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKRANDOMNO;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_CHECKISONMAP)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKISONMAP;
-                goto L001;
-            }
-            // 检测是否安全区
-            if (sCmd == ScriptConst.sSC_CHECKINSAFEZONE)
-            {
-                nCMDCode = ScriptConst.nSC_CHECKINSAFEZONE;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_KILLBYHUM)
-            {
-                nCMDCode = ScriptConst.nSC_KILLBYHUM;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_KILLBYMON)
-            {
-                nCMDCode = ScriptConst.nSC_KILLBYMON;
-                goto L001;
-            }
-            // 增加挂机
-            if (sCmd == ScriptConst.sSC_OffLine)
-            {
-                nCMDCode = ScriptConst.nSC_OffLine;
-                goto L001;
-            }
-            // 增加脚本特修所有装备命令
-            if (sCmd == ScriptConst.sSC_REPAIRALL)
-            {
-                nCMDCode = ScriptConst.nSC_REPAIRALL;
-                goto L001;
-            }
-            // 刷新包裹物品命令
-            if (sCmd == ScriptConst.sSC_QUERYBAGITEMS)
-            {
-                nCMDCode = ScriptConst.nSC_QUERYBAGITEMS;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_SETRANDOMNO)
-            {
-                nCMDCode = ScriptConst.nSC_SETRANDOMNO;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSC_DELAYGOTO || sCmd == "DELAYCALL")
-            {
-                nCMDCode = ScriptConst.nSC_DELAYGOTO;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSCHECKDEATHPLAYMON)
-            {
-                nCMDCode = ScriptConst.nSCHECKDEATHPLAYMON;
-                goto L001;
-            }
-            if (sCmd == ScriptConst.sSCHECKKILLMOBNAME)
-            {
-                nCMDCode = ScriptConst.nSCHECKDEATHPLAYMON;
-                goto L001;
-            }
-        // ------------------------------
         L001:
             if (nCMDCode > 0)
             {
-                QuestConditionInfo.nCmdCode = nCMDCode;
+                QuestConditionInfo.CmdCode = nCMDCode;
                 if (sParam1 != "" && sParam1[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam1, "\"", "\"", ref sParam1);
@@ -843,13 +741,13 @@ namespace GameSvr.Script
             var sParam6 = string.Empty;
             int nCMDCode;
             var result = false;
-            sText = HUtil32.GetValidStrCap(sText, ref sCmd, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam1, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam2, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam3, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sCmd, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam1, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam2, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam3, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam4, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam5, TextSpitConst);
+            sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
             if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
@@ -1768,7 +1666,7 @@ namespace GameSvr.Script
                             ProcedureList = new List<TSayingProcedure>(),
                             sLabel = slabName
                         };
-                        sScript = HUtil32.GetValidStrCap(sScript, ref slabName, new[] { " ", "\t" });
+                        sScript = HUtil32.GetValidStrCap(sScript, ref slabName, TextSpitConst);
                         if (slabName.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
                         {
                             SayingRecord.boExtJmp = true;
@@ -1867,9 +1765,9 @@ namespace GameSvr.Script
                     }
                     if (n6C == 20 && boFlag)
                     {
-                        sScript = HUtil32.GetValidStrCap(sScript, ref s48, new[] { " ", "\t" });
-                        sScript = HUtil32.GetValidStrCap(sScript, ref s4C, new[] { " ", "\t" });
-                        sScript = HUtil32.GetValidStrCap(sScript, ref s50, new[] { " ", "\t" });
+                        sScript = HUtil32.GetValidStrCap(sScript, ref s48, TextSpitConst);
+                        sScript = HUtil32.GetValidStrCap(sScript, ref s4C, TextSpitConst);
+                        sScript = HUtil32.GetValidStrCap(sScript, ref s50, TextSpitConst);
                         if (s48 != "" && s50 != "")
                         {
                             if (s48[0] == '\"')

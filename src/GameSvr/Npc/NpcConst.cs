@@ -51,7 +51,7 @@ namespace GameSvr.Npc
 
     public class TQuestConditionInfo
     {
-        public int nCmdCode;
+        public int CmdCode;
         public string sParam1;
         public int nParam1;
         public string sParam2;

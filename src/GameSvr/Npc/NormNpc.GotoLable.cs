@@ -516,7 +516,7 @@ namespace GameSvr.Npc
                 int Min;
                 int Sec;
                 int MSec;
-                switch (QuestConditionInfo.nCmdCode)
+                switch (QuestConditionInfo.CmdCode)
                 {
                     case ScriptConst.nCHECKUSERDATE:
                         result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
