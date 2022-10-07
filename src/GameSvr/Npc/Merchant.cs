@@ -1786,7 +1786,7 @@ namespace GameSvr.Npc
             }
             PlayObject.m_boChangeItemNameFlag = false;
             var sWhere = sLabel.Substring(ScriptConst.sUSEITEMNAME.Length, sLabel.Length - ScriptConst.sUSEITEMNAME.Length);
-            var btWhere = (byte)HUtil32.Str_ToInt(sWhere, -1);
+            var btWhere = (byte)HUtil32.StrToInt(sWhere, -1);
             if (btWhere >= 0 && btWhere <= PlayObject.UseItems.Length)
             {
                 var UserItem = PlayObject.UseItems[btWhere];

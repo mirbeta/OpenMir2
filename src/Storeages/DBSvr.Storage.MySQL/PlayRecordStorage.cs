@@ -260,7 +260,7 @@ namespace DBSvr.Storage.MySQL
             }
             return result;
         }
-
+        
         private bool UpdateRecord(HumRecordData HumRecord, bool boNew, ref int nIndex)
         {
             var connSuccess = false;
@@ -294,7 +294,7 @@ namespace DBSvr.Storage.MySQL
                     HumRecord.Header.Deleted = false;
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE characters_indexes SET Account = @Account, ChrName = @ChrName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
-                    strSql.AppendLine(" ModifyDate = now() WHERE Id = @Id;");
+                    strSql.AppendLine("ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
                     command.Connection = connection;
                     command.CommandText = strSql.ToString();

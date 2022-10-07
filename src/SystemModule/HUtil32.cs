@@ -251,7 +251,7 @@ namespace SystemModule
             return nLen;
         }
 
-        protected static string CaptureString(string source, ref string rdstr)
+        private static string CaptureString(string source, ref string rdstr)
         {
             string result;
             int st;
@@ -303,24 +303,18 @@ namespace SystemModule
             return result;
         }
 
-        public static int Str_ToInt(string str, int def)
+        public static int StrToInt(string str, int def)
         {
-            var result = def;
-            if (int.TryParse(str, out result))
-            {
-                return result;
-            }
-            return result;
+            return int.TryParse(str, out var result) ? result : def;
         }
 
-        public static DateTime Str_ToDate(string str)
+        public static DateTime StrToDate(string str)
         {
-            DateTime result;
-            if (str.Trim() == "")
-                result = DateTime.Today;
-            else
-                result = Convert.ToDateTime(str);
-            return result;
+            if (string.IsNullOrEmpty(str))
+            {
+                return DateTime.Today;
+            }
+            return Convert.ToDateTime(str);
         }
 
         public static DateTime Str_ToTime(string str)

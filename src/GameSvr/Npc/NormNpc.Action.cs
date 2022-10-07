@@ -30,7 +30,7 @@ namespace GameSvr.Npc
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref nGameGold))
                 {
-                    nGameGold = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);
+                    nGameGold = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);
                 }
                 if (PlayObject.m_nGameGold >= nGameGold)
                 {
@@ -367,7 +367,7 @@ namespace GameSvr.Npc
 
         private void ActionOfAddSkill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nLevel = HUtil32._MIN(3, HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0));
+            var nLevel = HUtil32._MIN(3, HUtil32.StrToInt(QuestActionInfo.sParam2, 0));
             var Magic = M2Share.WorldEngine.FindMagic(QuestActionInfo.sParam1);
             if (Magic != null)
             {
@@ -419,8 +419,8 @@ namespace GameSvr.Npc
         private void ActionOfAutoGetExp(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             Envirnoment Envir = null;
-            var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nTime = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             var boIsSafeZone = QuestActionInfo.sParam3[1] == '1';
             var sMap = QuestActionInfo.sParam4;
             if (sMap != "")
@@ -446,9 +446,9 @@ namespace GameSvr.Npc
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             PlayObject.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
             PlayObject.SendSocket(PlayObject.m_DefMsg, EDCode.EncodeString(sOffLineStartMsg));
-            var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 5);
-            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 500);
-            var nKickOffLine = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 1440 * 15);
+            var nTime = HUtil32.StrToInt(QuestActionInfo.sParam1, 5);
+            var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, 500);
+            var nKickOffLine = HUtil32.StrToInt(QuestActionInfo.sParam3, 1440 * 15);
             PlayObject.m_boAutoGetExpInSafeZone = true;
             PlayObject.m_AutoGetExpEnvir = PlayObject.Envir;
             PlayObject.m_nAutoGetExpTime = nTime * 1000;
@@ -482,7 +482,7 @@ namespace GameSvr.Npc
 
         private void ActionOfChangeCreditPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nCreditPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            int nCreditPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nCreditPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CREDITPOINT);
@@ -533,7 +533,7 @@ namespace GameSvr.Npc
         private void ActionOfChangeExp(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int dwInt;
-            var nExp = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nExp = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nExp < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CHANGEEXP);
@@ -590,7 +590,7 @@ namespace GameSvr.Npc
 
         private void ActionOfChangeHairStyle(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nHair = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nHair = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (QuestActionInfo.sParam1 != "" && nHair >= 0)
             {
                 PlayObject.Hair = (byte)nHair;
@@ -634,7 +634,7 @@ namespace GameSvr.Npc
             int nLv;
             var boChgOK = false;
             int nOldLevel = PlayObject.Abil.Level;
-            var nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nLevel = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CHANGELEVEL);
@@ -673,7 +673,7 @@ namespace GameSvr.Npc
         {
             int nPoint;
             var nOldPKLevel = PlayObject.PvpLevel();
-            var nPKPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nPKPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nPKPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CHANGEPKPOINT);
@@ -793,7 +793,7 @@ namespace GameSvr.Npc
         private void ActionOfGameGold(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nOldGameGold = PlayObject.m_nGameGold;
-            var nGameGold = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nGameGold = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_GAMEGOLD);
@@ -830,7 +830,7 @@ namespace GameSvr.Npc
         private void ActionOfGamePoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nOldGamePoint = PlayObject.m_nGamePoint;
-            var nGamePoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nGamePoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_GAMEPOINT);
@@ -1172,11 +1172,11 @@ namespace GameSvr.Npc
         private void ActionOfMobFireBurn(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var sMap = QuestActionInfo.sParam1;
-            var nX = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            var nY = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
-            var nType = HUtil32.Str_ToInt(QuestActionInfo.sParam4, -1);
-            var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam5, -1);
-            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam6, -1);
+            var nX = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            var nY = HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
+            var nType = HUtil32.StrToInt(QuestActionInfo.sParam4, -1);
+            var nTime = HUtil32.StrToInt(QuestActionInfo.sParam5, -1);
+            var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam6, -1);
             if (sMap == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_MOBFIREBURN);
@@ -1237,8 +1237,8 @@ namespace GameSvr.Npc
 
         private void ActionOfSetScriptFlag(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            var boFlag = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1) == 1;
+            var nWhere = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            var boFlag = HUtil32.StrToInt(QuestActionInfo.sParam2, -1) == 1;
             switch (nWhere)
             {
                 case 0:
@@ -1256,7 +1256,7 @@ namespace GameSvr.Npc
         private void ActionOfSkillLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserMagic UserMagic;
-            var nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 0);
+            var nLevel = HUtil32.StrToInt(QuestActionInfo.sParam3, 0);
             if (nLevel < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SKILLLEVEL);
@@ -1310,7 +1310,7 @@ namespace GameSvr.Npc
 
         private void ActionOfTakeCastleGold(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nGold = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nGold = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nGold < 0 || this.Castle == null)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_TAKECASTLEGOLD);
@@ -1519,7 +1519,7 @@ namespace GameSvr.Npc
             string sVarName = QuestActionInfo.sParam2;//自定义变量
             string sMethod = QuestActionInfo.sParam3;//操作符 +-*/=
             string sVarValue = QuestActionInfo.sParam4;//变量
-            int nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
+            int nVarValue = HUtil32.StrToInt(QuestActionInfo.sParam4, 0);
             if (sType == "" || sVarName == "" || sMethod == "")
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CALCVAR);
@@ -1556,13 +1556,13 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    nVarValue = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, sVarValue), 0);
+                    nVarValue = HUtil32.StrToInt(GetLineVariableText(PlayObject, sVarValue), 0);
                     sVarValue = GetLineVariableText(PlayObject, sVarValue);
                 }
             }
             else
             {
-                nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
+                nVarValue = HUtil32.StrToInt(QuestActionInfo.sParam4, 0);
             }
             char cMethod = sMethod[0];
             DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
@@ -1719,9 +1719,9 @@ namespace GameSvr.Npc
         private void ActionOfUpgradeItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int nAddPoint;
-            var nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            var nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
+            var nWhere = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            var nRate = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
             if (nWhere < 0 || nWhere > PlayObject.UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_UPGRADEITEMS);
@@ -1768,11 +1768,11 @@ namespace GameSvr.Npc
         private void ActionOfUpgradeItemsEx(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int nAddPoint;
-            var nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            var nValType = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            var nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
-            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam4, -1);
-            var nUpgradeItemStatus = HUtil32.Str_ToInt(QuestActionInfo.sParam5, -1);
+            var nWhere = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            var nValType = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            var nRate = HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
+            var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam4, -1);
+            var nUpgradeItemStatus = HUtil32.StrToInt(QuestActionInfo.sParam5, -1);
             if (nValType < 0 || nValType > 14 || nWhere < 0 || nWhere > PlayObject.UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_UPGRADEITEMSEX);
@@ -1849,7 +1849,7 @@ namespace GameSvr.Npc
             var sType = QuestActionInfo.sParam2;
             var sVarName = QuestActionInfo.sParam3;
             var sVarValue = QuestActionInfo.sParam4;
-            var nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
+            var nVarValue = HUtil32.StrToInt(QuestActionInfo.sParam4, 0);
             var VarType = SystemModule.Data.VarType.None;
             if (string.Compare(QuestActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -1989,7 +1989,7 @@ namespace GameSvr.Npc
         private void ActionOfClearNeedItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
-            var nNeed = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nNeed = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CLEARNEEDITEMS);
@@ -2269,7 +2269,7 @@ namespace GameSvr.Npc
                 if (sParam1 != "")
                 {
                     Envir.Flag.boMUSIC = true;
-                    Envir.Flag.nMUSICID = HUtil32.Str_ToInt(sParam1, -1);
+                    Envir.Flag.nMUSICID = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
@@ -2281,7 +2281,7 @@ namespace GameSvr.Npc
                 if (sParam1 != "")
                 {
                     Envir.Flag.boEXPRATE = true;
-                    Envir.Flag.nEXPRATE = HUtil32.Str_ToInt(sParam1, -1);
+                    Envir.Flag.nEXPRATE = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
@@ -2293,7 +2293,7 @@ namespace GameSvr.Npc
                 if (sParam1 != "")
                 {
                     Envir.Flag.boPKWINLEVEL = true;
-                    Envir.Flag.nPKWINLEVEL = HUtil32.Str_ToInt(sParam1, -1);
+                    Envir.Flag.nPKWINLEVEL = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
@@ -2305,7 +2305,7 @@ namespace GameSvr.Npc
                 if (sParam1 != "")
                 {
                     Envir.Flag.boPKWINEXP = true;
-                    Envir.Flag.nPKWINEXP = HUtil32.Str_ToInt(sParam1, -1);
+                    Envir.Flag.nPKWINEXP = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
@@ -2317,7 +2317,7 @@ namespace GameSvr.Npc
                 if (sParam1 != "")
                 {
                     Envir.Flag.boPKLOSTLEVEL = true;
-                    Envir.Flag.nPKLOSTLEVEL = HUtil32.Str_ToInt(sParam1, -1);
+                    Envir.Flag.nPKLOSTLEVEL = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
@@ -2329,7 +2329,7 @@ namespace GameSvr.Npc
                 if (sParam1 != "")
                 {
                     Envir.Flag.boPKLOSTEXP = true;
-                    Envir.Flag.nPKLOSTEXP = HUtil32.Str_ToInt(sParam1, -1);
+                    Envir.Flag.nPKLOSTEXP = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
@@ -2341,8 +2341,8 @@ namespace GameSvr.Npc
                 if (sParam1 != "" && sParam2 != "")
                 {
                     Envir.Flag.boDECHP = true;
-                    Envir.Flag.nDECHPTIME = HUtil32.Str_ToInt(sParam1, -1);
-                    Envir.Flag.nDECHPPOINT = HUtil32.Str_ToInt(sParam2, -1);
+                    Envir.Flag.nDECHPTIME = HUtil32.StrToInt(sParam1, -1);
+                    Envir.Flag.nDECHPPOINT = HUtil32.StrToInt(sParam2, -1);
                 }
                 else
                 {
@@ -2354,8 +2354,8 @@ namespace GameSvr.Npc
                 if (sParam1 != "" && sParam2 != "")
                 {
                     Envir.Flag.boDECGAMEGOLD = true;
-                    Envir.Flag.nDECGAMEGOLDTIME = HUtil32.Str_ToInt(sParam1, -1);
-                    Envir.Flag.nDECGAMEGOLD = HUtil32.Str_ToInt(sParam2, -1);
+                    Envir.Flag.nDECGAMEGOLDTIME = HUtil32.StrToInt(sParam1, -1);
+                    Envir.Flag.nDECGAMEGOLD = HUtil32.StrToInt(sParam2, -1);
                 }
                 else
                 {
@@ -2542,7 +2542,7 @@ namespace GameSvr.Npc
 
         private void ActionOfSetMemberLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            int nLevel = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SETMEMBERLEVEL);
@@ -2577,7 +2577,7 @@ namespace GameSvr.Npc
 
         private void ActionOfSetMemberType(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nType = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            int nType = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nType < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SETMEMBERTYPE);
@@ -2703,7 +2703,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGuildAuraePoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nAuraePoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            int nAuraePoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nAuraePoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_AURAEPOINT);
@@ -2750,7 +2750,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGuildBuildPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nBuildPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nBuildPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nBuildPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_BUILDPOINT);
@@ -2797,7 +2797,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGuildChiefItemCount(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nItemCount = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nItemCount = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nItemCount < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_GUILDCHIEFITEMCOUNT);
@@ -2844,7 +2844,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGuildFlourishPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nFlourishPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nFlourishPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nFlourishPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_FLOURISHPOINT);
@@ -2891,7 +2891,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGuildstabilityPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nStabilityPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nStabilityPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nStabilityPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_STABILITYPOINT);
@@ -2938,7 +2938,7 @@ namespace GameSvr.Npc
 
         private void ActionOfHumanHP(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nHP = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nHP = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nHP < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_HUMANHP);
@@ -2976,7 +2976,7 @@ namespace GameSvr.Npc
 
         private void ActionOfHumanMP(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nMP = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nMP = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nMP < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_HUMANMP);
@@ -3019,7 +3019,7 @@ namespace GameSvr.Npc
 
         private void ActionOfKill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nMode = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nMode = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nMode >= 0 && nMode <= 3)
             {
                 switch (nMode)
@@ -3050,7 +3050,7 @@ namespace GameSvr.Npc
 
         private void ActionOfBonusPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nBonusPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            int nBonusPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nBonusPoint < 0 || nBonusPoint > 10000)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_BONUSPOINT);
@@ -3127,11 +3127,11 @@ namespace GameSvr.Npc
             BaseObject Mon;
             if (QuestActionInfo.nParam3 <= 1)
             {
-                Mon = PlayObject.MakeSlave(QuestActionInfo.sParam1, 3, HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0), 100, 10 * 24 * 60 * 60);
+                Mon = PlayObject.MakeSlave(QuestActionInfo.sParam1, 3, HUtil32.StrToInt(QuestActionInfo.sParam2, 0), 100, 10 * 24 * 60 * 60);
             }
             else
             {
-                Mon = PlayObject.MakeSlave(QuestActionInfo.sParam1, 3, HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0), 100, QuestActionInfo.nParam3 * 60);
+                Mon = PlayObject.MakeSlave(QuestActionInfo.sParam1, 3, HUtil32.StrToInt(QuestActionInfo.sParam2, 0), 100, QuestActionInfo.nParam3 * 60);
             }
             if (Mon != null)
             {
@@ -3149,9 +3149,9 @@ namespace GameSvr.Npc
 
         private void ActionOfReNewLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nReLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            int nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            int nBounsuPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
+            int nReLevel = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            int nLevel = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            int nBounsuPoint = HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
             if (nReLevel < 0 || nLevel < 0 || nBounsuPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_RENEWLEVEL);
@@ -3177,7 +3177,7 @@ namespace GameSvr.Npc
 
         private void ActionOfChangeGender(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nGender = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nGender = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nGender > 1)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_CHANGEGENDER);
@@ -3199,8 +3199,8 @@ namespace GameSvr.Npc
 
         private void ActionOfKillMonExpRate(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            int nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            int nRate = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            int nTime = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nRate < 0 || nTime < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_KILLMONEXPRATE);
@@ -3217,8 +3217,8 @@ namespace GameSvr.Npc
         private void ActionOfMonGenEx(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sMapName = QuestActionInfo.sParam1;
-            int nMapX = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            int nMapY = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
+            int nMapX = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            int nMapY = HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
             string sMonName = QuestActionInfo.sParam4;
             int nRange = QuestActionInfo.nParam5;
             int nCount = QuestActionInfo.nParam6;
@@ -3260,10 +3260,10 @@ namespace GameSvr.Npc
         private void ActionOfPkZone(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             FireBurnEvent FireBurnEvent;
-            int nRange = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            int nType = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            int nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
-            int nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam4, -1);
+            int nRange = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            int nType = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            int nTime = HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
+            int nPoint = HUtil32.StrToInt(QuestActionInfo.sParam4, -1);
             if (nRange < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_PKZONE);
@@ -3289,8 +3289,8 @@ namespace GameSvr.Npc
 
         private void ActionOfPowerRate(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nRate = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
+            var nTime = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nRate < 0 || nTime < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_POWERRATE);
@@ -3307,7 +3307,7 @@ namespace GameSvr.Npc
         private void ActionOfChangeMode(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nMode = QuestActionInfo.nParam1;
-            var boOpen = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1) == 1;
+            var boOpen = HUtil32.StrToInt(QuestActionInfo.sParam2, -1) == 1;
             if (nMode >= 1 && nMode <= 3)
             {
                 switch (nMode)
@@ -3355,7 +3355,7 @@ namespace GameSvr.Npc
 
         private void ActionOfChangePerMission(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var nPermission = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nPermission = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nPermission >= 0 && nPermission <= 10)
             {
                 PlayObject.Permission = (byte)nPermission;
@@ -3394,15 +3394,15 @@ namespace GameSvr.Npc
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam2, ref nX))
                 {
-                    nX = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+                    nX = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam3, ref nY))
                 {
-                    nY = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+                    nY = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam4, ref nRange))
                 {
-                    nRange = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam4), -1);
+                    nRange = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam4), -1);
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam5, ref sItemName))
                 {
@@ -3410,7 +3410,7 @@ namespace GameSvr.Npc
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam6, ref nCount))
                 {
-                    nCount = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam6), -1);
+                    nCount = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam6), -1);
                 }
                 if (sMap == "" || nX < 0 || nY < 0 || nRange < 0 || string.IsNullOrEmpty(sItemName) || nCount <= 0)
                 {

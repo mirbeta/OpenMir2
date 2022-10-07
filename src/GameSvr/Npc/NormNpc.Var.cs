@@ -598,7 +598,7 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        n3C = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
+                        n3C = HUtil32.StrToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
                         s01 = sParam2;
                     }
                 }
@@ -1057,7 +1057,7 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        n3C = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
+                        n3C = HUtil32.StrToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
                         s01 = sParam2;
                     }
                 }
@@ -1188,7 +1188,7 @@ namespace GameSvr.Npc
         {
             var s34 = string.Empty;
             var n18 = 0;
-            var n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            var n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
@@ -1237,7 +1237,7 @@ namespace GameSvr.Npc
                 n18 = n14;
             }
             var n1C = 0;
-            n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3);
@@ -1336,7 +1336,7 @@ namespace GameSvr.Npc
         {
             var s34 = string.Empty;
             var n18 = 0;
-            var n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            var n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
@@ -1368,11 +1368,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n18 = HUtil32.Str_ToInt(PlayObject.m_sString[n14 - 600], 1);
+                        n18 = HUtil32.StrToInt(PlayObject.m_sString[n14 - 600], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        n18 = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
+                        n18 = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//A变量
                     {
@@ -1380,7 +1380,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599))//G变量
                     {
-                        n18 = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
+                        n18 = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else
                     {
@@ -1397,7 +1397,7 @@ namespace GameSvr.Npc
                 n18 = n14;
             }
             var n1C = 0;
-            n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3);
@@ -1429,11 +1429,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n1C = HUtil32.Str_ToInt(PlayObject.m_sString[n14 - 600], 1);
+                        n1C = HUtil32.StrToInt(PlayObject.m_sString[n14 - 600], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        n1C = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
+                        n1C = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199)) //G变量
                     {
@@ -1441,7 +1441,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量
                     {
-                        n1C = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
+                        n1C = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else
                     {
@@ -1520,7 +1520,7 @@ namespace GameSvr.Npc
         {
             var s34 = string.Empty;
             var n18 = 0;
-            var n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            var n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2); // 取第一个变量,并传值给n18
@@ -1569,7 +1569,7 @@ namespace GameSvr.Npc
                 n18 = n14;
             }
             var n1C = 0;
-            n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3); // 取第一个变量,并传值给n1C
@@ -2545,32 +2545,32 @@ namespace GameSvr.Npc
                     case 0:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
                         {
-                            PlayObject.m_nVal[n100] = HUtil32.Str_ToInt(sValue, 0);
+                            PlayObject.m_nVal[n100] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
                         {
-                            M2Share.Config.GlobalVal[n100 - 100] = HUtil32.Str_ToInt(sValue, 0);
+                            M2Share.Config.GlobalVal[n100 - 100] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
                         {
-                            PlayObject.m_DyVal[n100 - 200] = HUtil32.Str_ToInt(sValue, 0);
+                            PlayObject.m_DyVal[n100 - 200] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 300, 399))
                         {
-                            PlayObject.m_nMval[n100 - 300] = HUtil32.Str_ToInt(sValue, 0);
+                            PlayObject.m_nMval[n100 - 300] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
                         {
-                            M2Share.Config.GlobaDyMval[n100 - 400] = HUtil32.Str_ToInt(sValue, 0);
+                            M2Share.Config.GlobaDyMval[n100 - 400] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
                         {
-                            PlayObject.m_nInteger[n100 - 500] = HUtil32.Str_ToInt(sValue, 0);
+                            PlayObject.m_nInteger[n100 - 500] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
@@ -2585,7 +2585,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
                         {
-                            M2Share.Config.GlobalVal[n100 - 700] = HUtil32.Str_ToInt(sValue, 0);
+                            M2Share.Config.GlobalVal[n100 - 700] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量

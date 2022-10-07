@@ -24,7 +24,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nLevel = HUtil32.Str_ToInt(sLevel, -1);
+            var nLevel = HUtil32.StrToInt(sLevel, -1);
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {

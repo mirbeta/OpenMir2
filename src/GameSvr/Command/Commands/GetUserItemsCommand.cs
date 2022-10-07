@@ -37,8 +37,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nCount = HUtil32.Str_ToInt(sItemCount, 0);
-            var nType = HUtil32.Str_ToInt(sType, 0);
+            var nCount = HUtil32.StrToInt(sItemCount, 0);
+            var nType = HUtil32.StrToInt(sType, 0);
             UserItem UserItem;
             switch (nType)
             {

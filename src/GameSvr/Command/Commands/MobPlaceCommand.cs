@@ -22,13 +22,13 @@ namespace GameSvr.Command.Commands
             var sY = @Params.Length > 1 ? @Params[1] : "";
             var sMonName = @Params.Length > 2 ? @Params[2] : "";
             var sCount = @Params.Length > 3 ? @Params[3] : "";
-            var nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
-            var nX = (short)HUtil32.Str_ToInt(sX, 0);
-            var nY = (short)HUtil32.Str_ToInt(sY, 0);
+            var nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
+            var nX = (short)HUtil32.StrToInt(sX, 0);
+            var nY = (short)HUtil32.StrToInt(sY, 0);
             BaseObject mon = null;
-            nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
-            nX = (short)HUtil32.Str_ToInt(sX, 0);
-            nY = (short)HUtil32.Str_ToInt(sY, 0);
+            nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
+            nX = (short)HUtil32.StrToInt(sX, 0);
+            nY = (short)HUtil32.StrToInt(sY, 0);
             if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

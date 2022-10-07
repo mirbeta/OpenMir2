@@ -15,8 +15,8 @@ namespace GameSvr.Command.Commands
                 return;
             }
             var sMap = @params[2];
-            var nX = (short)HUtil32.Str_ToInt(@params[0], 0);
-            var nY = (short)HUtil32.Str_ToInt(@params[1], 0);
+            var nX = (short)HUtil32.StrToInt(@params[0], 0);
+            var nY = (short)HUtil32.StrToInt(@params[1], 0);
             if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0)
             {
                 var Map = M2Share.MapMgr.FindMap(sMap);

@@ -40,7 +40,7 @@ namespace DBSvr
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sID, new string[] { " ", "\09" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sIPaddr, new string[] { " ", "\09" });
-                    int nID = HUtil32.Str_ToInt(sID, -1);
+                    int nID = HUtil32.StrToInt(sID, -1);
                     if (nID < 0)
                     {
                         continue;

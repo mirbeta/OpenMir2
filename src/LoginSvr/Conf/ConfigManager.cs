@@ -170,7 +170,7 @@ namespace LoginSvr.Conf
                                     }
                                     sGatePort = HUtil32.GetValidStr3(sGate, ref sGate, new string[] { ":" });
                                     Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].sIPaddr = sGate;
-                                    Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].nPort = HUtil32.Str_ToInt(sGatePort, 0);
+                                    Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].nPort = HUtil32.StrToInt(sGatePort, 0);
                                     Config.GateRoute[nRouteIdx].nSelIdx = 0;
                                     nSelGateIdx++;
                                 }

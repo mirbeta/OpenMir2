@@ -106,7 +106,7 @@ namespace DBSvr.Services
                     break;
                 }
                 string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
-                int nIdent = HUtil32.Str_ToInt(sCode, 0);
+                int nIdent = HUtil32.StrToInt(sCode, 0);
                 switch (nIdent)
                 {
                     case Grobal2.SS_OPENSESSION:
@@ -278,7 +278,7 @@ namespace DBSvr.Services
             TGlobaSessionInfo globaSessionInfo = new TGlobaSessionInfo();
             globaSessionInfo.sAccount = sAccount;
             globaSessionInfo.sIPaddr = sIPaddr;
-            globaSessionInfo.nSessionID = HUtil32.Str_ToInt(s10, 0);
+            globaSessionInfo.nSessionID = HUtil32.StrToInt(s10, 0);
             //GlobaSessionInfo.n24 = HUtil32.Str_ToInt(s14, 0);
             globaSessionInfo.boStartPlay = false;
             globaSessionInfo.boLoadRcd = false;
@@ -294,7 +294,7 @@ namespace DBSvr.Services
             string sAccount = string.Empty;
             TGlobaSessionInfo globaSessionInfo;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-            int nSessionId = HUtil32.Str_ToInt(sData, 0);
+            int nSessionId = HUtil32.StrToInt(sData, 0);
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
                 globaSessionInfo = _globaSessionList[i];

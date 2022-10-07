@@ -57,7 +57,7 @@ namespace GameSvr.Conf
             for (var i = 0; i < M2Share.Config.NeedExps.Length; i++)
             {
                 LoadString = ReadString("Exp", "Level" + i, "");
-                LoadInteger = HUtil32.Str_ToInt(LoadString, 0);
+                LoadInteger = HUtil32.StrToInt(LoadString, 0);
                 if (LoadInteger == 0)
                 {
                     var oldNeedExp = M2Share.g_dwOldNeedExps[i];

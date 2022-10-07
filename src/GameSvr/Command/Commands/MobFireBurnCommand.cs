@@ -30,11 +30,11 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nX = HUtil32.Str_ToInt(sX, -1);
-            var nY = HUtil32.Str_ToInt(sY, -1);
-            var nType = HUtil32.Str_ToInt(sType, -1);
-            var nTime = HUtil32.Str_ToInt(sTime, -1);
-            var nPoint = HUtil32.Str_ToInt(sPoint, -1);
+            var nX = HUtil32.StrToInt(sX, -1);
+            var nY = HUtil32.StrToInt(sY, -1);
+            var nType = HUtil32.StrToInt(sType, -1);
+            var nTime = HUtil32.StrToInt(sTime, -1);
+            var nPoint = HUtil32.StrToInt(sPoint, -1);
             if (nPoint < 0)
             {
                 nPoint = 1;

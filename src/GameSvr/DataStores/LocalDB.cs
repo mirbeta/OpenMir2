@@ -26,6 +26,7 @@ namespace GameSvr.DataStores
     public class LocalDB
     {
         private readonly string[] TextSpitConst = new[] { " ", "\t" };
+        private readonly string[] MonsterSpitConst = new[] { " ", "/", "\t" };
         
         public bool LoadAdminList()
         {
@@ -86,7 +87,6 @@ namespace GameSvr.DataStores
                     {
                         nLv = 1;
                     }
-
                     if (nLv > 0)
                     {
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { "/", "\\", " ", "\t" });
@@ -142,10 +142,10 @@ namespace GameSvr.DataStores
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
                             {
-                                var guard = M2Share.WorldEngine.RegenMonsterByName(mapName, (short)HUtil32.Str_ToInt(cX, 0), (short)HUtil32.Str_ToInt(cY, 0), monName);
+                                var guard = M2Share.WorldEngine.RegenMonsterByName(mapName, (short)HUtil32.StrToInt(cX, 0), (short)HUtil32.StrToInt(cY, 0), monName);
                                 if (guard != null)
                                 {
-                                    guard.Direction = (byte)HUtil32.Str_ToInt(direction, 0);
+                                    guard.Direction = (byte)HUtil32.StrToInt(direction, 0);
                                 }
                             }
                         }
@@ -192,7 +192,7 @@ namespace GameSvr.DataStores
                         if (List28 != null)
                         {
                             sLine = HUtil32.GetValidStr3(sLine, ref sSubName, TextSpitConst);
-                            var nItemCount = HUtil32.Str_ToInt(sLine.Trim(), 1);
+                            var nItemCount = HUtil32.StrToInt(sLine.Trim(), 1);
                             List28.Add(new MakeItem() { ItemName = sSubName, ItemCount = nItemCount });
                         }
                     }
@@ -396,8 +396,8 @@ namespace GameSvr.DataStores
                             if (Map != null)
                             {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
-                                var n38 = HUtil32.Str_ToInt(s34, 0);
-                                var n3C = HUtil32.Str_ToInt(s20, 0);
+                                var n38 = HUtil32.StrToInt(s34, 0);
+                                var n3C = HUtil32.StrToInt(s20, 0);
                                 var boGrouped = HUtil32.CompareLStr(s30, "GROUP");
                                 if (!Map.CreateQuest(n38, n3C, sMonName, sItem, sQuest, boGrouped))
                                 {
@@ -467,18 +467,18 @@ namespace GameSvr.DataStores
                             {
                                 m_sScript = sScript,
                                 MapName = sMapName,
-                                CurrX = (short)HUtil32.Str_ToInt(sX, 0),
-                                CurrY = (short)HUtil32.Str_ToInt(sY, 0),
+                                CurrX = (short)HUtil32.StrToInt(sX, 0),
+                                CurrY = (short)HUtil32.StrToInt(sY, 0),
                                 ChrName = sName,
-                                m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0),
-                                Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0),
-                                m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0)
+                                m_nFlag = (short)HUtil32.StrToInt(sFlag, 0),
+                                Appr = (ushort)HUtil32.StrToInt(sAppr, 0),
+                                m_dwMoveTime = HUtil32.StrToInt(sMoveTime, 0)
                             };
-                            if (HUtil32.Str_ToInt(sIsCalste, 0) != 0)
+                            if (HUtil32.StrToInt(sIsCalste, 0) != 0)
                             {
                                 merchantNpc.CastleMerchant = true;
                             }
-                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && merchantNpc.m_dwMoveTime > 0)
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchantNpc.m_dwMoveTime > 0)
                             {
                                 merchantNpc.m_boCanMove = true;
                             }
@@ -550,9 +550,9 @@ namespace GameSvr.DataStores
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSpitConst);
                         MonGenInfo.MapName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSpitConst);
-                        MonGenInfo.X = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.X = HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSpitConst);
-                        MonGenInfo.Y = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.Y = HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, TextSpitConst);
                         if (!string.IsNullOrEmpty(sData) && sData[0] == '\"')
                         {
@@ -560,13 +560,13 @@ namespace GameSvr.DataStores
                         }
                         MonGenInfo.MonName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSpitConst);
-                        MonGenInfo.Range = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.Range = HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSpitConst);
-                        MonGenInfo.Count = HUtil32.Str_ToInt(sData, 0);
+                        MonGenInfo.Count = HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSpitConst);
-                        MonGenInfo.ZenTime = HUtil32.Str_ToInt(sData, -1) * 60 * 1000;
+                        MonGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSpitConst);
-                        MonGenInfo.MissionGenRate = HUtil32.Str_ToInt(sData, 0);// 集中座标刷新机率 1 -100
+                        MonGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
                         if (!string.IsNullOrEmpty(MonGenInfo.MapName) && !string.IsNullOrEmpty(MonGenInfo.MonName) && MonGenInfo.ZenTime != 0 && M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, MonGenInfo.MapName) != null)
                         {
                             MonGenInfo.CertList = new List<BaseObject>();
@@ -630,10 +630,10 @@ namespace GameSvr.DataStores
                     var s28 = LoadList[i];
                     if (!string.IsNullOrEmpty(s28) && s28[0] != ';')
                     {
-                        s28 = HUtil32.GetValidStr3(s28, ref sData, new[] { " ", "/", "\t" });
-                        var n18 = HUtil32.Str_ToInt(sData, -1);
-                        s28 = HUtil32.GetValidStr3(s28, ref sData, new[] { " ", "/", "\t" });
-                        var n1C = HUtil32.Str_ToInt(sData, -1);
+                        s28 = HUtil32.GetValidStr3(s28, ref sData, MonsterSpitConst);
+                        var n18 = HUtil32.StrToInt(sData, -1);
+                        s28 = HUtil32.GetValidStr3(s28, ref sData, MonsterSpitConst);
+                        var n1C = HUtil32.StrToInt(sData, -1);
                         s28 = HUtil32.GetValidStr3(s28, ref sData, TextSpitConst);
                         if (!string.IsNullOrEmpty(sData))
                         {
@@ -644,7 +644,7 @@ namespace GameSvr.DataStores
                         }
                         var itemName = sData;
                         s28 = HUtil32.GetValidStr3(s28, ref sData, TextSpitConst);
-                        var itemCount = HUtil32.Str_ToInt(sData, 1);
+                        var itemCount = HUtil32.StrToInt(sData, 1);
                         if (n18 > 0 && n1C > 0 && !string.IsNullOrEmpty(itemName))
                         {
                             var MonItem = new TMonItem
@@ -697,7 +697,7 @@ namespace GameSvr.DataStores
                         if (!string.IsNullOrEmpty(ChrName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(appr))
                         {
                             NormNpc NPC = null;
-                            switch (HUtil32.Str_ToInt(type, 0))
+                            switch (HUtil32.StrToInt(type, 0))
                             {
                                 case 0:
                                     NPC = new Merchant();
@@ -712,11 +712,11 @@ namespace GameSvr.DataStores
                             if (NPC != null)
                             {
                                 NPC.MapName = mapName;
-                                NPC.CurrX = (short)HUtil32.Str_ToInt(cX, 0);
-                                NPC.CurrY = (short)HUtil32.Str_ToInt(cY, 0);
+                                NPC.CurrX = (short)HUtil32.StrToInt(cX, 0);
+                                NPC.CurrY = (short)HUtil32.StrToInt(cY, 0);
                                 NPC.ChrName = ChrName;
-                                NPC.m_nFlag = (short)HUtil32.Str_ToInt(flag, 0);
-                                NPC.Appr = (ushort)HUtil32.Str_ToInt(appr, 0);
+                                NPC.m_nFlag = (short)HUtil32.StrToInt(flag, 0);
+                                NPC.Appr = (ushort)HUtil32.StrToInt(appr, 0);
                                 M2Share.WorldEngine.QuestNpcList.Add(NPC);
                             }
                         }
@@ -788,7 +788,7 @@ namespace GameSvr.DataStores
                                         HUtil32.ArrestStringEx(s20, "[", "]", ref s20);
                                         QDDinfo = new TQDDinfo
                                         {
-                                            n00 = HUtil32.Str_ToInt(s20, 0),
+                                            n00 = HUtil32.StrToInt(s20, 0),
                                             s04 = s1C,
                                             sList = new ArrayList()
                                         };
@@ -865,13 +865,13 @@ namespace GameSvr.DataStores
                             var startPoint = new StartPoint
                             {
                                 m_sMapName = mapName,
-                                m_nCurrX = (short)HUtil32.Str_ToInt(cX, 0),
-                                m_nCurrY = (short)HUtil32.Str_ToInt(cY, 0),
-                                m_boNotAllowSay = Convert.ToBoolean(HUtil32.Str_ToInt(allSay, 0)),
-                                m_nRange = HUtil32.Str_ToInt(range, 0),
-                                m_nType = HUtil32.Str_ToInt(type, 0),
-                                m_nPkZone = HUtil32.Str_ToInt(zone, 0),
-                                m_nPkFire = HUtil32.Str_ToInt(fire, 0)
+                                m_nCurrX = (short)HUtil32.StrToInt(cX, 0),
+                                m_nCurrY = (short)HUtil32.StrToInt(cY, 0),
+                                m_boNotAllowSay = Convert.ToBoolean(HUtil32.StrToInt(allSay, 0)),
+                                m_nRange = HUtil32.StrToInt(range, 0),
+                                m_nType = HUtil32.StrToInt(type, 0),
+                                m_nPkZone = HUtil32.StrToInt(zone, 0),
+                                m_nPkFire = HUtil32.StrToInt(fire, 0)
                             };
                             M2Share.StartPointList.Add(startPoint);
                         }
@@ -905,7 +905,7 @@ namespace GameSvr.DataStores
                         {
                             HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                         }
-                        var n10 = HUtil32.Str_ToInt(sData, 0);
+                        var n10 = HUtil32.StrToInt(sData, 0);
                         if (n10 > 0)
                         {
                             if (M2Share.g_UnbindList.ContainsKey(n10))
@@ -1046,8 +1046,8 @@ namespace GameSvr.DataStores
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sCastle, TextSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, TextSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, TextSpitConst);
-                    var nX = HUtil32.Str_ToInt(sX, 0);
-                    var nY = HUtil32.Str_ToInt(sY, 0);
+                    var nX = HUtil32.StrToInt(sX, 0);
+                    var nY = HUtil32.StrToInt(sY, 0);
                     var boNewNpc = true;
                     for (var j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++)
                     {
@@ -1057,10 +1057,10 @@ namespace GameSvr.DataStores
                             boNewNpc = false;
                             Merchant.m_sScript = sScript;
                             Merchant.ChrName = sChrName;
-                            Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                            Merchant.Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
-                            Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
-                            if (HUtil32.Str_ToInt(sCastle, 0) != 1)
+                            Merchant.m_nFlag = (short)HUtil32.StrToInt(sFlag, 0);
+                            Merchant.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
+                            Merchant.m_dwMoveTime = HUtil32.StrToInt(sMoveTime, 0);
+                            if (HUtil32.StrToInt(sCastle, 0) != 1)
                             {
                                 Merchant.CastleMerchant = true;
                             }
@@ -1068,7 +1068,7 @@ namespace GameSvr.DataStores
                             {
                                 Merchant.CastleMerchant = false;
                             }
-                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
                             {
                                 Merchant.m_boCanMove = true;
                             }
@@ -1088,10 +1088,10 @@ namespace GameSvr.DataStores
                             Merchant.CurrX = (short)nX;
                             Merchant.CurrY = (short)nY;
                             Merchant.ChrName = sChrName;
-                            Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                            Merchant.Appr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
-                            Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
-                            if (HUtil32.Str_ToInt(sCastle, 0) != 1)
+                            Merchant.m_nFlag = (short)HUtil32.StrToInt(sFlag, 0);
+                            Merchant.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
+                            Merchant.m_dwMoveTime = HUtil32.StrToInt(sMoveTime, 0);
+                            if (HUtil32.StrToInt(sCastle, 0) != 1)
                             {
                                 Merchant.CastleMerchant = true;
                             }
@@ -1099,7 +1099,7 @@ namespace GameSvr.DataStores
                             {
                                 Merchant.CastleMerchant = false;
                             }
-                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
                             {
                                 Merchant.m_boCanMove = true;
                             }

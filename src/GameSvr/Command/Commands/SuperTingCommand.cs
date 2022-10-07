@@ -27,7 +27,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nRange = HUtil32._MAX(10, HUtil32.Str_ToInt(sRange, 2));
+            var nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {

@@ -3829,7 +3829,7 @@ namespace GameSvr.Actor
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255), HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
                 }
                 else if (sMsg[0] == '<') // 聊天框彩色公告
                 {
@@ -3839,7 +3839,7 @@ namespace GameSvr.Actor
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(fColor, 255), HUtil32.Str_ToInt(bColor, 255), 0, sMsg);
+                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
                 }
                 else if (sMsg[0] == '{') // 屏幕居中公告
                 {
@@ -3851,7 +3851,7 @@ namespace GameSvr.Actor
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                     }
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(fColor, 255), HUtil32.Str_ToInt(bColor, 255), HUtil32.Str_ToInt(nTime, 0), sMsg);
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), HUtil32.StrToInt(nTime, 0), sMsg);
                 }
                 else
                 {

@@ -3669,7 +3669,7 @@ namespace GameSvr.Player
                     m_nSval[m_btValLabel] = sRefMsg;
                     break;
                 case 1:
-                    m_nMval[m_btValLabel] = HUtil32.Str_ToInt(sRefMsg, 0);
+                    m_nMval[m_btValLabel] = HUtil32.StrToInt(sRefMsg, 0);
                     break;
             }
             switch (m_btValNPCType)

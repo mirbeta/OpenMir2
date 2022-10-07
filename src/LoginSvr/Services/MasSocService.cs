@@ -125,20 +125,20 @@ namespace LoginSvr.Services
                             break;
                         }
                         sMsg = HUtil32.GetValidStr3(sMsg, ref sCode, new[] { "/" });
-                        var nCode = HUtil32.Str_ToInt(sCode, -1);
+                        var nCode = HUtil32.StrToInt(sCode, -1);
                         switch (nCode)
                         {
                             case Grobal2.SS_SOFTOUTSESSION:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
-                                CloseUser(sAccount, HUtil32.Str_ToInt(sMsg, 0));
+                                CloseUser(sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.SS_SERVERINFO:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, new[] { "/" });
                                 MsgServer.sServerName = sServerName;
-                                MsgServer.nServerIndex = HUtil32.Str_ToInt(sIndex, 0);
-                                MsgServer.nOnlineCount = HUtil32.Str_ToInt(sOnlineCount, 0);
+                                MsgServer.nServerIndex = HUtil32.StrToInt(sIndex, 0);
+                                MsgServer.nOnlineCount = HUtil32.StrToInt(sOnlineCount, 0);
                                 MsgServer.dwKeepAliveTick = HUtil32.GetTickCount();
                                 SortServerList(i);
                                 LsShare.nOnlineCountMin = GetOnlineHumCount();
@@ -416,7 +416,7 @@ namespace LoginSvr.Services
                         UserLimit[nC] = new LimitServerUserInfo();
                         UserLimit[nC].ServerName = sServerName;
                         UserLimit[nC].Name = s10;
-                        UserLimit[nC].LimitCountMax = HUtil32.Str_ToInt(s14, 3000);
+                        UserLimit[nC].LimitCountMax = HUtil32.StrToInt(s14, 3000);
                         UserLimit[nC].LimitCountMin = 0;
                         nC++;
                     }

@@ -155,7 +155,7 @@ namespace GameSvr.Npc
                         }
                         else if (string.Compare(sLabel, ScriptConst.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            switch (this.Castle.WithDrawalGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
+                            switch (this.Castle.WithDrawalGolds(PlayObject, HUtil32.StrToInt(sMsg, 0)))
                             {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -177,7 +177,7 @@ namespace GameSvr.Npc
                         }
                         else if (string.Compare(sLabel, ScriptConst.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            switch (this.Castle.ReceiptGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
+                            switch (this.Castle.ReceiptGolds(PlayObject, HUtil32.StrToInt(sMsg, 0)))
                             {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -272,7 +272,7 @@ namespace GameSvr.Npc
             }
             if (this.Castle.TotalGold >= M2Share.Config.HireGuardPrice)
             {
-                var n10 = HUtil32.Str_ToInt(sIndex, 0) - 1;
+                var n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCalsteGuard)
                 {
                     if (this.Castle.Guards[n10].BaseObject == null)
@@ -319,7 +319,7 @@ namespace GameSvr.Npc
             }
             if (this.Castle.TotalGold >= M2Share.Config.HireArcherPrice)
             {
-                var n10 = HUtil32.Str_ToInt(sIndex, 0) - 1;
+                var n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCastleArcher)
                 {
                     if (this.Castle.Archers[n10].BaseObject == null)

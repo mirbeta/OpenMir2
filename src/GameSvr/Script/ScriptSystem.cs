@@ -703,27 +703,27 @@ namespace GameSvr.Script
                 QuestConditionInfo.sParam6 = sParam6;
                 if (HUtil32.IsStringNumber(sParam1))
                 {
-                    QuestConditionInfo.nParam1 = HUtil32.Str_ToInt(sParam1, 0);
+                    QuestConditionInfo.nParam1 = HUtil32.StrToInt(sParam1, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam2))
                 {
-                    QuestConditionInfo.nParam2 = HUtil32.Str_ToInt(sParam2, 0);
+                    QuestConditionInfo.nParam2 = HUtil32.StrToInt(sParam2, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam3))
                 {
-                    QuestConditionInfo.nParam3 = HUtil32.Str_ToInt(sParam3, 0);
+                    QuestConditionInfo.nParam3 = HUtil32.StrToInt(sParam3, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam4))
                 {
-                    QuestConditionInfo.nParam4 = HUtil32.Str_ToInt(sParam4, 0);
+                    QuestConditionInfo.nParam4 = HUtil32.StrToInt(sParam4, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam5))
                 {
-                    QuestConditionInfo.nParam5 = HUtil32.Str_ToInt(sParam5, 0);
+                    QuestConditionInfo.nParam5 = HUtil32.StrToInt(sParam5, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam6))
                 {
-                    QuestConditionInfo.nParam6 = HUtil32.Str_ToInt(sParam6, 0);
+                    QuestConditionInfo.nParam6 = HUtil32.StrToInt(sParam6, 0);
                 }
                 result = true;
             }
@@ -1349,27 +1349,27 @@ namespace GameSvr.Script
                 QuestActionInfo.sParam6 = sParam6;
                 if (HUtil32.IsStringNumber(sParam1))
                 {
-                    QuestActionInfo.nParam1 = HUtil32.Str_ToInt(sParam1, 0);
+                    QuestActionInfo.nParam1 = HUtil32.StrToInt(sParam1, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam2))
                 {
-                    QuestActionInfo.nParam2 = HUtil32.Str_ToInt(sParam2, 1);
+                    QuestActionInfo.nParam2 = HUtil32.StrToInt(sParam2, 1);
                 }
                 if (HUtil32.IsStringNumber(sParam3))
                 {
-                    QuestActionInfo.nParam3 = HUtil32.Str_ToInt(sParam3, 1);
+                    QuestActionInfo.nParam3 = HUtil32.StrToInt(sParam3, 1);
                 }
                 if (HUtil32.IsStringNumber(sParam4))
                 {
-                    QuestActionInfo.nParam4 = HUtil32.Str_ToInt(sParam4, 0);
+                    QuestActionInfo.nParam4 = HUtil32.StrToInt(sParam4, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam5))
                 {
-                    QuestActionInfo.nParam5 = HUtil32.Str_ToInt(sParam5, 0);
+                    QuestActionInfo.nParam5 = HUtil32.StrToInt(sParam5, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam6))
                 {
-                    QuestActionInfo.nParam6 = HUtil32.Str_ToInt(sParam6, 0);
+                    QuestActionInfo.nParam6 = HUtil32.StrToInt(sParam6, 0);
                 }
                 result = true;
             }
@@ -1507,7 +1507,7 @@ namespace GameSvr.Script
                         if (sScript.StartsWith("%")) // 物品价格倍率
                         {
                             sScript = sScript.Substring(1, sScript.Length - 1);
-                            var nPriceRate = HUtil32.Str_ToInt(sScript, -1);
+                            var nPriceRate = HUtil32.StrToInt(sScript, -1);
                             if (nPriceRate >= 55)
                             {
                                 ((Merchant)NPC).PriceRate = nPriceRate;
@@ -1517,7 +1517,7 @@ namespace GameSvr.Script
                         if (sScript.StartsWith("+")) // 物品交易类型
                         {
                             sScript = sScript.Substring(1, sScript.Length - 1);
-                            var nItemType = HUtil32.Str_ToInt(sScript, -1);
+                            var nItemType = HUtil32.StrToInt(sScript, -1);
                             if (nItemType >= 0)
                             {
                                 ((Merchant)NPC).ItemTypeList.Add(nItemType);
@@ -1615,7 +1615,7 @@ namespace GameSvr.Script
                         {
                             s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { " ", "}", "\t" });
                             HUtil32.GetValidStr3(s38, ref s3C, new[] { " ", "}", "\t" });
-                            n70 = HUtil32.Str_ToInt(s3C, 0);
+                            n70 = HUtil32.StrToInt(s3C, 0);
                             Script = LoadScriptFile_MakeNewScript(NPC);
                             Script.nQuest = n70;
                             n70++;
@@ -1632,9 +1632,9 @@ namespace GameSvr.Script
                         if (HUtil32.CompareLStr(sScript, "#IF"))
                         {
                             HUtil32.ArrestStringEx(sScript, "[", "]", ref s40);
-                            Script.QuestInfo[nQuestIdx].wFlag = (short)HUtil32.Str_ToInt(s40, 0);
+                            Script.QuestInfo[nQuestIdx].wFlag = (short)HUtil32.StrToInt(s40, 0);
                             HUtil32.GetValidStr3(s38, ref s44, new[] { "=", " ", "\t" });
-                            n24 = HUtil32.Str_ToInt(s44, 0);
+                            n24 = HUtil32.StrToInt(s44, 0);
                             if (n24 != 0)
                             {
                                 n24 = 1;
@@ -1643,7 +1643,7 @@ namespace GameSvr.Script
                         }
                         if (HUtil32.CompareLStr(sScript, "#RAND"))
                         {
-                            Script.QuestInfo[nQuestIdx].nRandRage = HUtil32.Str_ToInt(s44, 0);
+                            Script.QuestInfo[nQuestIdx].nRandRage = HUtil32.StrToInt(s44, 0);
                         }
                         continue;
                     }
@@ -1779,8 +1779,8 @@ namespace GameSvr.Script
                                 var Goods = new TGoods
                                 {
                                     sItemName = s48,
-                                    nCount = HUtil32.Str_ToInt(s4C, 0),
-                                    dwRefillTime = HUtil32.Str_ToInt(s50, 0),
+                                    nCount = HUtil32.StrToInt(s4C, 0),
+                                    dwRefillTime = HUtil32.StrToInt(s50, 0),
                                     dwRefillTick = 0
                                 };
                                 ((Merchant)NPC).RefillGoodsList.Add(Goods);

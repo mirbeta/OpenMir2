@@ -77,7 +77,7 @@ namespace GameSvr.Npc
             // ================================================
             if (string.Compare(sParam1, "CHANGEEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                nInt1 = HUtil32.Str_ToInt(sParam2, -1);
+                nInt1 = HUtil32.StrToInt(sParam2, -1);
                 switch (nInt1)
                 {
                     case 0:
@@ -136,7 +136,7 @@ namespace GameSvr.Npc
             // ================================================
             if (string.Compare(sParam1, "CHANGELEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                nInt1 = HUtil32.Str_ToInt(sParam2, -1);
+                nInt1 = HUtil32.StrToInt(sParam2, -1);
                 switch (nInt1)
                 {
                     case 0:
@@ -196,7 +196,7 @@ namespace GameSvr.Npc
             // ================================================
             if (string.Compare(sParam1, "KILL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                nInt1 = HUtil32.Str_ToInt(sParam2, -1);
+                nInt1 = HUtil32.StrToInt(sParam2, -1);
                 switch (nInt1)
                 {
                     case 1:
@@ -1309,7 +1309,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$USEITEMMAKEINDEX("))// 显示n位置的装备ID
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
-                var n18 = HUtil32.Str_ToInt(s14, -1);
+                var n18 = HUtil32.StrToInt(s14, -1);
                 if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
                 {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.UseItems[n18].MakeIndex.ToString());
@@ -1323,7 +1323,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$USEITEMNAME("))// 显示n位置的装备名称
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
-                var n18 = HUtil32.Str_ToInt(s14, -1);
+                var n18 = HUtil32.StrToInt(s14, -1);
                 if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
                 {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[n18].Index));
@@ -1755,12 +1755,12 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 600, 699))
                 {
-                    nValue = HUtil32.Str_ToInt(PlayObject.m_sString[n01 - 600], 0);
+                    nValue = HUtil32.StrToInt(PlayObject.m_sString[n01 - 600], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 700, 799))
                 {
-                    nValue = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n01 - 700], 0);
+                    nValue = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n01 - 700], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 800, 1199))
@@ -1770,12 +1770,12 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                 {
-                    nValue = HUtil32.Str_ToInt(M2Share.Config.GlobalAVal[n01 - 1100], 0);
+                    nValue = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n01 - 1100], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                 {
-                    nValue = HUtil32.Str_ToInt(PlayObject.m_ServerStrVal[n01 - 1600], 0);
+                    nValue = HUtil32.StrToInt(PlayObject.m_ServerStrVal[n01 - 1600], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1700, 1799))

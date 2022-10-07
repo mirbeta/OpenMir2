@@ -3300,7 +3300,7 @@ namespace BotSvr
                                     }
                                 }
                             }
-                            Actor.m_btNameColor = (byte)HUtil32.Str_ToInt(Str, 0);
+                            Actor.m_btNameColor = (byte)HUtil32.StrToInt(Str, 0);
                             if (Actor.m_btRace == Grobal2.RCC_MERCHANT)
                             {
                                 Actor.m_nNameColor = Color.Lime.ToArgb();
@@ -3334,7 +3334,7 @@ namespace BotSvr
                         if (Actor != null)
                         {
                             Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.m_sUserName, new string[] { "\\" });
-                            Actor.m_btNameColor = (byte)HUtil32.Str_ToInt(Str, 0);
+                            Actor.m_btNameColor = (byte)HUtil32.StrToInt(Str, 0);
                             if (Actor.m_btRace == Grobal2.RCC_MERCHANT)
                             {
                                 Actor.m_nNameColor = (byte)Color.Lime.ToArgb();
@@ -3380,7 +3380,7 @@ namespace BotSvr
                         if (Actor != null)
                         {
                             Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.m_sUserName, new string[] { "\\" });
-                            Actor.m_btNameColor = (byte)HUtil32.Str_ToInt(Str, 0);
+                            Actor.m_btNameColor = (byte)HUtil32.StrToInt(Str, 0);
                             if (Actor.m_btRace == Grobal2.RCC_MERCHANT)
                             {
                                 Actor.m_nNameColor = Color.Lime.ToArgb();
@@ -3509,7 +3509,7 @@ namespace BotSvr
                     }
                     break;
                 case Grobal2.SM_SPELL:
-                    UseMagicSpell(msg.Recog, msg.Series, msg.Param, msg.Tag, HUtil32.Str_ToInt(body, 0));
+                    UseMagicSpell(msg.Recog, msg.Series, msg.Param, msg.Tag, HUtil32.StrToInt(body, 0));
                     break;
                 case Grobal2.SM_MAGICFIRE:
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
@@ -4673,7 +4673,7 @@ namespace BotSvr
                 body = HUtil32.GetValidStr3(body, ref Str, HUtil32.Backslash);
                 if ((iname != "") && (!string.IsNullOrEmpty(Str)))
                 {
-                    iindex = HUtil32.Str_ToInt(Str, 0);
+                    iindex = HUtil32.StrToInt(Str, 0);
                     ClFunc.DelItemBag(iname, iindex);
                     if (wOnlyBag == 0)
                     {
@@ -4955,7 +4955,7 @@ namespace BotSvr
                 }
                 body = HUtil32.GetValidStr3(body, ref Str, HUtil32.Backslash);
                 body = HUtil32.GetValidStr3(body, ref data, HUtil32.Backslash);
-                Index = HUtil32.Str_ToInt(Str, -1);
+                Index = HUtil32.StrToInt(Str, -1);
                 if (Index >= 0 && Index <= 13)
                 {
                     cu = EDCode.DecodeBuffer<ClientItem>(data);
@@ -6252,7 +6252,7 @@ namespace BotSvr
                 data = HUtil32.GetValidStr3(data, ref tagstr, HUtil32.Backslash);
                 if (data != "")
                 {
-                    var rtime = HUtil32.Str_ToInt(data, 0);
+                    var rtime = HUtil32.StrToInt(data, 0);
                     if (rtime <= 0)
                     {
                         return;

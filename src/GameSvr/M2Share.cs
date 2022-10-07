@@ -918,7 +918,7 @@ namespace GameSvr
                     case 'P':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo;
@@ -926,7 +926,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo;
@@ -936,7 +936,7 @@ namespace GameSvr
                     case 'G':
                         if (sText.Length == 4)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 3), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 3), -1);
                             if ((nValNo < 500) && (nValNo > 99))
                             {
                                 result = nValNo + 700;
@@ -944,7 +944,7 @@ namespace GameSvr
                         }
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 100;
@@ -952,7 +952,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 100;
@@ -962,7 +962,7 @@ namespace GameSvr
                     case 'M':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 300;
@@ -970,7 +970,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 300;
@@ -980,7 +980,7 @@ namespace GameSvr
                     case 'I':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 400;
@@ -988,7 +988,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 400;
@@ -998,7 +998,7 @@ namespace GameSvr
                     case 'D':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 200;
@@ -1006,7 +1006,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 200;
@@ -1016,7 +1016,7 @@ namespace GameSvr
                     case 'N':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 500;
@@ -1024,7 +1024,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 500;
@@ -1034,7 +1034,7 @@ namespace GameSvr
                     case 'S':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(2 - 1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 600;
@@ -1042,7 +1042,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 600;
@@ -1052,7 +1052,7 @@ namespace GameSvr
                     case 'A':
                         if (sText.Length == 4)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 3), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(1, 3), -1);
                             if ((nValNo < 500) && (nValNo > 99))
                             {
                                 result = nValNo + 1100;
@@ -1062,7 +1062,7 @@ namespace GameSvr
                         {
                             if (sText.Length == 3)
                             {
-                                nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                                nValNo = HUtil32.StrToInt(sText.Substring(1, 2), -1);
                                 if ((nValNo >= 0) && (nValNo < 100))
                                 {
                                     result = nValNo + 700;
@@ -1070,7 +1070,7 @@ namespace GameSvr
                             }
                             else
                             {
-                                nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                                nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                                 if ((nValNo >= 0) && (nValNo < 10))
                                 {
                                     result = nValNo + 700;
@@ -1081,7 +1081,7 @@ namespace GameSvr
                     case 'T':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 3), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(2 - 1, 3), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 700;
@@ -1089,7 +1089,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 700;
@@ -1099,7 +1099,7 @@ namespace GameSvr
                     case 'E':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(2 - 1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 1600;
@@ -1107,7 +1107,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 1600;
@@ -1117,7 +1117,7 @@ namespace GameSvr
                     case 'W':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
+                            nValNo = HUtil32.StrToInt(sText.Substring(2 - 1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 1700;
@@ -1125,7 +1125,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 1700;
@@ -1316,8 +1316,8 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
-                        var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-                        var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+                        var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                        var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
                         {
                             var ItemBind = new TItemBind();
@@ -1388,8 +1388,8 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
-                        var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-                        var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+                        var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                        var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
                         {
                             var ItemBind = new TItemBind();
@@ -1461,8 +1461,8 @@ namespace GameSvr
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
-                    var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
                     {
                         var ItemBind = new TItemBind();
@@ -1874,7 +1874,7 @@ namespace GameSvr
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new string[] { " ", "/", ",", "\t" });
-                    var nItemCount = HUtil32.Str_ToInt(sItemCount, -1);
+                    var nItemCount = HUtil32.StrToInt(sItemCount, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
                     {
                         var MonDrop = new TMonDrop();
@@ -1928,7 +1928,7 @@ namespace GameSvr
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new string[] { " ", "/", ",", "\t" });
-                    var nItemIdx = HUtil32.Str_ToInt(sItemIdx, -1);
+                    var nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
                     {
                         g_DisableTakeOffList.Add(nItemIdx, sItemName);
@@ -2390,9 +2390,9 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new string[] { " ", "/", ",", "\t" });
                         if (sStatus != "" && sRate != "" && sColor != "" && sMonName != "" && sSayMsg != "")
                         {
-                            nStatus = HUtil32.Str_ToInt(sStatus, -1);
-                            nRate = HUtil32.Str_ToInt(sRate, -1);
-                            nColor = HUtil32.Str_ToInt(sColor, -1);
+                            nStatus = HUtil32.StrToInt(sStatus, -1);
+                            nRate = HUtil32.StrToInt(sRate, -1);
+                            nColor = HUtil32.StrToInt(sColor, -1);
                             if (nStatus >= 0 && nRate >= 0 && nColor >= 0)
                             {
                                 MonSayMsg = new TMonSayMsg();

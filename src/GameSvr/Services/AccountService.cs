@@ -159,7 +159,7 @@ namespace GameSvr.Services
                         break;
                     }
                     var sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
-                    switch (HUtil32.Str_ToInt(sCode, 0))
+                    switch (HUtil32.StrToInt(sCode, 0))
                     {
                         case Grobal2.SS_OPENSESSION:// 100
                             GetPasswdSuccess(sBody);
@@ -219,7 +219,7 @@ namespace GameSvr.Services
                 sData = HUtil32.GetValidStr3(sData, ref sPayCost, HUtil32.Backslash);// boPayCost
                 sData = HUtil32.GetValidStr3(sData, ref sPayMode, HUtil32.Backslash);// nPayMode
                 sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);// sIPaddr
-                NewSession(sAccount, sIPaddr, HUtil32.Str_ToInt(sSessionID, 0), HUtil32.Str_ToInt(sPayCost, 0), HUtil32.Str_ToInt(sPayMode, 0));
+                NewSession(sAccount, sIPaddr, HUtil32.StrToInt(sSessionID, 0), HUtil32.StrToInt(sPayCost, 0), HUtil32.StrToInt(sPayMode, 0));
             }
             catch
             {
@@ -234,7 +234,7 @@ namespace GameSvr.Services
             try
             {
                 var sSessionID = HUtil32.GetValidStr3(sData, ref sC, HUtil32.Backslash);
-                DelSession(HUtil32.Str_ToInt(sSessionID, 0));
+                DelSession(HUtil32.StrToInt(sSessionID, 0));
             }
             catch (Exception e)
             {
@@ -336,7 +336,7 @@ namespace GameSvr.Services
 
         private void SetTotalHumanCount(string sData)
         {
-            M2Share.g_nTotalHumCount = HUtil32.Str_ToInt(sData, 0);
+            M2Share.g_nTotalHumCount = HUtil32.StrToInt(sData, 0);
         }
 
         private void GetCancelAdmissionA(string sData)
@@ -346,7 +346,7 @@ namespace GameSvr.Services
             try
             {
                 var sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-                var nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
+                var nSessionID = HUtil32.StrToInt(sSessionID, 0);
                 if (!M2Share.Config.TestServer)
                 {
                     M2Share.WorldEngine.HumanExpire(sAccount);
