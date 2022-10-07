@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DBSvr.Storage
 {
     /// <summary>
-    /// 玩家数据服务接口
+    /// 角色记录
     /// </summary>
     public interface IPlayRecordStorage
     {
