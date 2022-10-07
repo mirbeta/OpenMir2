@@ -675,7 +675,6 @@ namespace DBSvr.Storage.MySQL
                     command.Parameters.AddWithValue("@MaxHandWeight", hd.Abil.MaxHandWeight);
                     command.ExecuteNonQuery();
 
-
                     strSql.Clear();
                     strSql.AppendLine("INSERT INTO characters_status (PlayerId, Status0, Status1, Status2, Status3, Status4, Status5, Status6, Status7, Status8, Status9, Status10, Status11, Status12, Status13, Status14, Status15) VALUES ");
                     strSql.AppendLine("(@PlayerId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);");
@@ -807,15 +806,12 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
+        private const string UpdateAblitySql = "UPDATE characters_ablity SET Level = @Level,Ac = @Ac, Mac = @Mac, Dc = @Dc, Mc = @Mc, Sc = @Sc, Hp = @Hp, Mp = @Mp, MaxHP = @MaxHP,MAxMP = @MAxMP, Exp = @Exp, MaxExp = @MaxExp, Weight = @Weight, MaxWeight = @MaxWeight, WearWeight = @WearWeight,MaxWearWeight = @MaxWearWeight, HandWeight = @HandWeight, MaxHandWeight = @MaxHandWeight,ModifyTime=now() WHERE PlayerId = @PlayerId;";
+        
         private void SaveAblity(StorageContext context, int playerId, Ability Abil)
         {
-            var strSql = new StringBuilder();
-            strSql.AppendLine("UPDATE characters_ablity SET Level = @Level,");
-            strSql.AppendLine("Ac = @Ac, Mac = @Mac, Dc = @Dc, Mc = @Mc, Sc = @Sc, Hp = @Hp, Mp = @Mp, MaxHP = @MaxHP,");
-            strSql.AppendLine("MAxMP = @MAxMP, Exp = @Exp, MaxExp = @MaxExp, Weight = @Weight, MaxWeight = @MaxWeight, WearWeight = @WearWeight,");
-            strSql.AppendLine("MaxWearWeight = @MaxWearWeight, HandWeight = @HandWeight, MaxHandWeight = @MaxHandWeight,ModifyTime=now() WHERE PlayerId = @PlayerId;");
             var command = context.CreateCommand();
-            command.CommandText = strSql.ToString();
+            command.CommandText = UpdateAblitySql;
             command.Parameters.AddWithValue("@PlayerId", playerId);
             command.Parameters.AddWithValue("@Level", Abil.Level);
             command.Parameters.AddWithValue("@Ac", Abil.Level);
@@ -845,7 +841,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void UserItemComparer(UserItem[] newItems, UserItem[] oldItems, ref UserItem[] chg, ref UserItem[] del)
+        private void ComparerUserItem(UserItem[] newItems, UserItem[] oldItems, ref UserItem[] chg, ref UserItem[] del)
         {
             for (var i = 0; i < newItems.Length; i++)
             {
@@ -875,6 +871,10 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
+        private const string ClearUseItemSql="UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
+        private const string UpdateUseItemSql = "UPDATE characters_storageitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
+        private const string InsertUseItemSql = "INSERT INTO characters_storageitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
+
         private void SaveItem(StorageContext context, int playerId, UserItem[] userItems)
         {
             var useSize = userItems.Length;
@@ -884,14 +884,11 @@ namespace DBSvr.Storage.MySQL
             var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
             var delItem = new UserItem[useSize];
             var chgList = new UserItem[useSize];
-            UserItemComparer(userItems, oldItems, ref chgList, ref delItem);
+            ComparerUserItem(userItems, oldItems, ref chgList, ref delItem);
             try
             {
                 if (delItem.Length > 0)
                 {
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_item SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0");
-                    strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;");
                     for (var i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
@@ -899,7 +896,7 @@ namespace DBSvr.Storage.MySQL
                             continue;
                         }
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = ClearUseItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
@@ -919,10 +916,6 @@ namespace DBSvr.Storage.MySQL
 
                 if (chgList.Length > 0)
                 {
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_item SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax ");
-                    strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position");
-
                     for (var i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
@@ -930,7 +923,7 @@ namespace DBSvr.Storage.MySQL
                             continue;
                         }
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = UpdateUseItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
@@ -966,12 +959,6 @@ namespace DBSvr.Storage.MySQL
                             addItem[i] = new UserItem();
                         }
                     }
-
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_item (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax)");
-                    strSql.AppendLine(" VALUES ");
-                    strSql.AppendLine("(@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax)");
-
                     for (var i = 0; i < addItem.Length; i++)
                     {
                         if (addItem[i] == null)
@@ -979,7 +966,7 @@ namespace DBSvr.Storage.MySQL
                             continue;
                         }
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = InsertUseItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
@@ -1006,6 +993,10 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
+        private const string ClearBagItemSql="UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
+        private const string UpdateBagItemSql = "UPDATE characters_storageitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
+        private const string InsertBagItemSql = "INSERT INTO characters_storageitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
+        
         private void SaveBagItem(StorageContext context, int playerId, UserItem[] bagItems)
         {
             try
@@ -1019,13 +1010,10 @@ namespace DBSvr.Storage.MySQL
                 var chgList = new UserItem[bagSize];
                 var bagItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
 
-                UserItemComparer(newItems, oldItems, ref chgList, ref delItem);
+                ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
 
                 if (delItem.Length > 0)
                 {
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_bagitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0");
-                    strSql.AppendLine("WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;");
                     for (var i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
@@ -1033,7 +1021,7 @@ namespace DBSvr.Storage.MySQL
                             continue;
                         }
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = ClearBagItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
@@ -1052,9 +1040,6 @@ namespace DBSvr.Storage.MySQL
                 }
                 if (chgList.Length > 0)
                 {
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_bagitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax ");
-                    strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position;");
                     for (var i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
@@ -1062,7 +1047,7 @@ namespace DBSvr.Storage.MySQL
                             continue;
                         }
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = UpdateBagItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
@@ -1097,16 +1082,10 @@ namespace DBSvr.Storage.MySQL
                             addItem[i] = new UserItem();
                         }
                     }
-
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_bagitem (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax)");
-                    strSql.AppendLine(" VALUES ");
-                    strSql.AppendLine("(@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);");
-
                     for (var i = 0; i < addItem.Length; i++)
                     {
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = InsertBagItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
@@ -1148,7 +1127,7 @@ namespace DBSvr.Storage.MySQL
                 var delItem = new UserItem[storageSize];
                 var chgList = new UserItem[storageSize];
                 var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
-                UserItemComparer(newItems, oldItems, ref chgList, ref delItem);
+                ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
 
                 if (delItem.Length > 0)
                 {
