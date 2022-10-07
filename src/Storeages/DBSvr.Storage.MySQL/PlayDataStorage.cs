@@ -1132,6 +1132,10 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
+        private const string ClearStorageItemSql="UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
+        private const string UpdateStorageItemSql = "UPDATE characters_storageitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
+        private const string InsertStorageItemSql = "INSERT INTO characters_storageitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
+        
         private void SaveStorageItem(StorageContext context, int playerId, UserItem[] storageItems)
         {
             try
@@ -1148,9 +1152,6 @@ namespace DBSvr.Storage.MySQL
 
                 if (delItem.Length > 0)
                 {
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0");
-                    strSql.AppendLine("WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;");
                     for (var i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
@@ -1158,7 +1159,7 @@ namespace DBSvr.Storage.MySQL
                             continue;
                         }
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = ClearStorageItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", delItem[i].MakeIndex);
@@ -1178,9 +1179,6 @@ namespace DBSvr.Storage.MySQL
 
                 if (chgList.Length > 0)
                 {
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_storageitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax ");
-                    strSql.AppendLine("WHERE PlayerId = @PlayerId AND Position = @Position;");
                     for (var i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
@@ -1188,7 +1186,7 @@ namespace DBSvr.Storage.MySQL
                             continue;
                         }
                         var command = context.CreateCommand();
-                        command.CommandText = strSql.ToString();
+                        command.CommandText = UpdateStorageItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
                         command.Parameters.AddWithValue("@MakeIndex", chgList[i].MakeIndex);
@@ -1224,17 +1222,12 @@ namespace DBSvr.Storage.MySQL
                             addItem[i] = new UserItem();
                         }
                     }
-
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_storageitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax)");
-                    strSql.AppendLine(" VALUES ");
-                    strSql.AppendLine("(@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);");
                     try
                     {
                         for (var i = 0; i < addItem.Length; i++)
                         {
                             var command = context.CreateCommand();
-                            command.CommandText = strSql.ToString();
+                            command.CommandText = InsertStorageItemSql;
                             command.Parameters.AddWithValue("@PlayerId", playerId);
                             command.Parameters.AddWithValue("@Position", i);
                             command.Parameters.AddWithValue("@MakeIndex", addItem[i].MakeIndex);
@@ -1333,15 +1326,14 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
+        private const string UpdatrStatusSql = "UPDATE characters_status SET Status0 = @Status0, Status1 = @Status1, Status2 = @Status2, Status3 = @Status3, Status4 = @Status4, Status5 = @Status5, Status6 = @Status6, Status7 = @Status7,Status8 = @Status8, Status9 = @Status9, Status10 = @Status10, Status11 = @Status11, Status12 = @Status12, Status13 = @Status13, Status14 = @Status14, Status15 = @Status15 WHERE PlayerId = @PlayerId;";
+        
         private void SaveStatus(StorageContext context, int playerId, ushort[] statusTimeArr)
         {
-            var strSql = new StringBuilder();
-            strSql.AppendLine("UPDATE characters_status SET Status0 = @Status0, Status1 = @Status1, Status2 = @Status2, Status3 = @Status3, Status4 = @Status4, Status5 = @Status5, Status6 = @Status6, Status7 = @Status7,");
-            strSql.AppendLine("Status8 = @Status8, Status9 = @Status9, Status10 = @Status10, Status11 = @Status11, Status12 = @Status12, Status13 = @Status13, Status14 = @Status14, Status15 = @Status15 WHERE PlayerId = @PlayerId;");
             try
             {
                 var command = context.CreateCommand();
-                command.CommandText = strSql.ToString();
+                command.CommandText = UpdatrStatusSql;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@Status0", statusTimeArr[0]);
                 command.Parameters.AddWithValue("@Status1", statusTimeArr[1]);
@@ -1506,13 +1498,10 @@ namespace DBSvr.Storage.MySQL
             {
                 return;
             }
-            var strSql = new StringBuilder();
-            strSql.AppendLine("UPDATE characters_item_attr SET MakeIndex = 0,VALUE0 = 0, VALUE1 = 0, VALUE2 = 0, VALUE3 = 0, VALUE4 = 0, VALUE5 = 0");
-            strSql.AppendLine(", VALUE6 = 0, VALUE7 = 0, VALUE8 = 0, VALUE9 = 0, VALUE10 = 0, VALUE11 = 0, VALUE12 = 0, VALUE13 = 0 WHERE PlayerId = @PlayerId AND MakeIndex in (@MakeIndex);");
             try
             {
                 var command = context.CreateCommand();
-                command.CommandText = strSql.ToString();
+                command.CommandText = ClearItemAttrSql;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@StdIndex", string.Join(",", makeIndex));
                 command.ExecuteNonQuery();
@@ -1526,11 +1515,6 @@ namespace DBSvr.Storage.MySQL
 
         private void UpdateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
         {
-            var strSql = new StringBuilder();
-            strSql.AppendLine("UPDATE characters_item_attr SET ");
-            strSql.AppendLine("VALUE0 = @VALUE0, VALUE1 = @VALUE1, VALUE2 =@VALUE2, VALUE3 = @VALUE3, VALUE4 = @VALUE4,VALUE5 = @VALUE5, VALUE6 = @VALUE6, VALUE7 = @VALUE7, ");
-            strSql.AppendLine("VALUE8 = @VALUE8, VALUE9 = @VALUE9, VALUE10 = @VALUE10, VALUE11 = @VALUE11, VALUE12 = @VALUE12, VALUE13 = @VALUE13");
-            strSql.AppendLine("WHERE PlayerId = @PlayerId AND MakeIndex = @MakeIndex");
             try
             {
                 for (var i = 0; i < userItems.Length; i++)
@@ -1540,7 +1524,7 @@ namespace DBSvr.Storage.MySQL
                         continue;
                     }
                     var command = context.CreateCommand();
-                    command.CommandText = strSql.ToString();
+                    command.CommandText = UpdateItemAttrSql;
                     command.Parameters.AddWithValue("@PlayerId", playerId);
                     command.Parameters.AddWithValue("@MakeIndex", userItems[i].MakeIndex);
                     command.Parameters.AddWithValue("@VALUE0", userItems[i].Desc[0]);
@@ -1567,12 +1551,12 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
+        private const string InsertItemAttrSql = "INSERT INTO characters_item_attr (PlayerId,MakeIndex,VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, VALUE10, VALUE11, VALUE12, VALUE13) VALUES (@PlayerId, @MakeIndex,@VALUE0, @VALUE1, @VALUE2, @VALUE3, @VALUE4, @VALUE5,@VALUE6, @VALUE7, @VALUE8, @VALUE9, @VALUE10, @VALUE11, @VALUE12, @VALUE13);";
+        private const string UpdateItemAttrSql = "UPDATE characters_item_attr SET VALUE0 = @VALUE0, VALUE1 = @VALUE1, VALUE2 =@VALUE2, VALUE3 = @VALUE3, VALUE4 = @VALUE4,VALUE5 = @VALUE5, VALUE6 = @VALUE6, VALUE7 = @VALUE7, VALUE8 = @VALUE8, VALUE9 = @VALUE9, VALUE10 = @VALUE10, VALUE11 = @VALUE11, VALUE12 = @VALUE12, VALUE13 = @VALUE13 WHERE PlayerId = @PlayerId AND MakeIndex = @MakeIndex";
+        private const string ClearItemAttrSql = "UPDATE characters_item_attr SET MakeIndex = 0,VALUE0 = 0, VALUE1 = 0, VALUE2 = 0, VALUE3 = 0, VALUE4 = 0, VALUE5 = 0 , VALUE6 = 0, VALUE7 = 0, VALUE8 = 0, VALUE9 = 0, VALUE10 = 0, VALUE11 = 0, VALUE12 = 0, VALUE13 = 0 WHERE PlayerId = @PlayerId AND MakeIndex in (@MakeIndex);";
+        
         private void CreateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
         {
-            var strSql = new StringBuilder();
-            strSql.AppendLine("INSERT INTO characters_item_attr (PlayerId,MakeIndex,VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, VALUE10, VALUE11, VALUE12, VALUE13)");
-            strSql.AppendLine(" VALUES ");
-            strSql.AppendLine("(@PlayerId, @MakeIndex,@VALUE0, @VALUE1, @VALUE2, @VALUE3, @VALUE4, @VALUE5,@VALUE6, @VALUE7, @VALUE8, @VALUE9, @VALUE10, @VALUE11, @VALUE12, @VALUE13)");
             try
             {
                 for (var i = 0; i < userItems.Length; i++)
@@ -1582,7 +1566,7 @@ namespace DBSvr.Storage.MySQL
                         continue;
                     }
                     var command = context.CreateCommand();
-                    command.CommandText = strSql.ToString();
+                    command.CommandText = InsertItemAttrSql;
                     command.Parameters.AddWithValue("@PlayerId", playerId);
                     command.Parameters.AddWithValue("@MakeIndex", userItems[i].MakeIndex);
                     command.Parameters.AddWithValue("@VALUE0", userItems[i].Desc[0]);

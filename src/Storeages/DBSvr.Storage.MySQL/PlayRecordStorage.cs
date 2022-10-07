@@ -4,7 +4,6 @@ using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
@@ -260,6 +259,9 @@ namespace DBSvr.Storage.MySQL
             }
             return result;
         }
+
+        private const string InsertChrIndexes = "INSERT INTO characters_indexes (Account, ChrName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES (@Account, @ChrName, @SelectID, @IsDeleted, now(), now());";
+        private const string UpdateChrIndexes = "UPDATE characters_indexes SET Account = @Account, ChrName = @ChrName, SelectID = @SelectID, IsDeleted = @IsDeleted,ModifyDate = now() WHERE Id = @Id;";
         
         private bool UpdateRecord(HumRecordData HumRecord, bool boNew, ref int nIndex)
         {
@@ -274,12 +276,9 @@ namespace DBSvr.Storage.MySQL
             {
                 if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
                 {
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("INSERT INTO characters_indexes (Account, ChrName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES ");
-                    strSql.AppendLine("(@Account, @ChrName, @SelectID, @IsDeleted, now(), now());");
                     var command = new MySqlCommand();
                     command.Connection = connection;
-                    command.CommandText = strSql.ToString();
+                    command.CommandText = InsertChrIndexes;
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@ChrName", HumRecord.sChrName);
                     command.Parameters.AddWithValue("@SelectID", HumRecord.Selected);
@@ -292,12 +291,9 @@ namespace DBSvr.Storage.MySQL
                 else
                 {
                     HumRecord.Header.Deleted = false;
-                    var strSql = new StringBuilder();
-                    strSql.AppendLine("UPDATE characters_indexes SET Account = @Account, ChrName = @ChrName, SelectID = @SelectID, IsDeleted = @IsDeleted, ");
-                    strSql.AppendLine("ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
                     command.Connection = connection;
-                    command.CommandText = strSql.ToString();
+                    command.CommandText = UpdateChrIndexes;
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@ChrName", HumRecord.sChrName);
                     command.Parameters.AddWithValue("@SelectID", HumRecord.Selected);
