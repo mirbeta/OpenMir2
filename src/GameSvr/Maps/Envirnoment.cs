@@ -919,8 +919,8 @@ namespace GameSvr.Maps
                         }
                         line = HUtil32.GetValidStr3(line, ref sX, new[] { ",", "\t" });
                         line = HUtil32.GetValidStr3(line, ref sY, new[] { ",", "\t" });
-                        var nX = (short)HUtil32.Str_ToInt(sX, -1);
-                        var nY = (short)HUtil32.Str_ToInt(sY, -1);
+                        var nX = (short)HUtil32.StrToInt(sX, -1);
+                        var nY = (short)HUtil32.StrToInt(sY, -1);
                         if (nX >= 0 && nY >= 0 && nX < Width && nY < Height)
                         {
                             PointList.Add(new PointInfo(nX, nY));

@@ -337,7 +337,7 @@ namespace GameSvr
                             M2Share.ServerTableList[nRouteIdx] = new TRouteInfo();
                         }
                         M2Share.ServerTableList[nRouteIdx].nGateCount = 0;
-                        M2Share.ServerTableList[nRouteIdx].nServerIdx = HUtil32.Str_ToInt(sIdx, 0);
+                        M2Share.ServerTableList[nRouteIdx].nServerIdx = HUtil32.StrToInt(sIdx, 0);
                         M2Share.ServerTableList[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
                         var nGateIdx = 0;
                         while (sGameGate != "")
@@ -345,7 +345,7 @@ namespace GameSvr
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
                             M2Share.ServerTableList[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                            M2Share.ServerTableList[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.Str_ToInt(sGameGatePort, 0);
+                            M2Share.ServerTableList[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
                             nGateIdx++;
                         }
                         M2Share.ServerTableList[nRouteIdx].nGateCount = nGateIdx;

@@ -19,7 +19,7 @@ namespace GameSvr.Command.Commands
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sPermission = @Params.Length > 1 ? @Params[1] : "";
-            var nPerission = HUtil32.Str_ToInt(sPermission, 0);
+            var nPerission = HUtil32.StrToInt(sPermission, 0);
             const string sOutFormatMsg = "[权限调整] {0} [{1} {2} -> {3}]";
             if (string.IsNullOrEmpty(sHumanName) || !(nPerission >= 0 && nPerission <= 10))
             {

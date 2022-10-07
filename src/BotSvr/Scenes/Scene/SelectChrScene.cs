@@ -131,7 +131,7 @@ namespace BotSvr.Scenes.Scene
                         select = i;
                         uname = uname.Substring(1, uname.Length - 1);
                     }
-                    AddChr(uname, HUtil32.Str_ToInt(sjob, 0), HUtil32.Str_ToInt(shair, 0), HUtil32.Str_ToInt(slevel, 0), HUtil32.Str_ToInt(ssex, 0));
+                    AddChr(uname, HUtil32.StrToInt(sjob, 0), HUtil32.StrToInt(shair, 0), HUtil32.StrToInt(slevel, 0), HUtil32.StrToInt(ssex, 0));
                     nChrCount++;
                 }
             }
@@ -183,7 +183,7 @@ namespace BotSvr.Scenes.Scene
             string addr = string.Empty;
             string Str = EDCode.DeCodeString(body);
             string sport = HUtil32.GetValidStr3(Str, ref addr, HUtil32.Backslash);
-            MShare.g_nRunServerPort = HUtil32.Str_ToInt(sport, 0);
+            MShare.g_nRunServerPort = HUtil32.StrToInt(sport, 0);
             MShare.g_sRunServerAddr = addr;
             MShare.g_ConnectionStep = TConnectionStep.cnsPlay;
         }

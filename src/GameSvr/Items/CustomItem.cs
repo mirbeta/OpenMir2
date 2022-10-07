@@ -89,8 +89,8 @@ namespace GameSvr.Items
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "\t" });
-                    var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if (nMakeIndex < 0 || nItemIndex < 0) continue;
                     var itemName = new TItemName();
                     itemName.nMakeIndex = nMakeIndex;

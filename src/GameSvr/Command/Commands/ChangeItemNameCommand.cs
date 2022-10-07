@@ -25,8 +25,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-            var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
+            var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+            var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
             if (nMakeIndex <= 0 || nItemIndex < 0)
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

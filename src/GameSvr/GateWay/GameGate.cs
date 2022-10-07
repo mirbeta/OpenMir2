@@ -285,7 +285,7 @@ namespace GameSvr.GateWay
                     sData = HUtil32.GetValidStr3(sData, ref sClientVersion, HUtil32.Backslash);
                     sData = HUtil32.GetValidStr3(sData, ref sIdx, HUtil32.Backslash);
                     sData = HUtil32.GetValidStr3(sData, ref sHWID, HUtil32.Backslash);
-                    nSessionID = HUtil32.Str_ToInt(sCodeStr, 0);
+                    nSessionID = HUtil32.StrToInt(sCodeStr, 0);
                     if (sIdx == "0")
                     {
                         boFlag = true;
@@ -296,7 +296,7 @@ namespace GameSvr.GateWay
                     }
                     if (!string.IsNullOrEmpty(sAccount) && !string.IsNullOrEmpty(sChrName) && nSessionID >= 2 && !string.IsNullOrEmpty(sHWID))
                     {
-                        nClientVersion = HUtil32.Str_ToInt(sClientVersion, 0);
+                        nClientVersion = HUtil32.StrToInt(sClientVersion, 0);
                         tHWID = MD5.MD5UnPrInt(sHWID);
                         result = true;
                     }

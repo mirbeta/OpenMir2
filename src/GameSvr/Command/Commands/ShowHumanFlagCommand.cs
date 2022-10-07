@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nFlag = HUtil32.Str_ToInt(sFlag, 0);
+            var nFlag = HUtil32.StrToInt(sFlag, 0);
             if (m_PlayObject.GetQuestFalgStatus(nFlag) == 1)
             {
                 PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandShowHumanFlagONMsg, m_PlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);

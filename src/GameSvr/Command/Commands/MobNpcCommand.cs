@@ -27,8 +27,8 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nAppr = HUtil32.Str_ToInt(sParam3, 0);
-            var boIsCastle = HUtil32.Str_ToInt(sParam4, 0) == 1;
+            var nAppr = HUtil32.StrToInt(sParam3, 0);
+            var boIsCastle = HUtil32.StrToInt(sParam4, 0) == 1;
             if (sParam1 == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

@@ -59,8 +59,8 @@ namespace LoginSvr
                                 s18 = HUtil32.GetValidStr3(s18, ref s1C, new string[] { " ", "\09" });//sid
                                 s18 = HUtil32.GetValidStr3(s18, ref s24, new string[] { " ", "\09" });//sday
                                 s18 = HUtil32.GetValidStr3(s18, ref s28, new string[] { " ", "\09" });//shour
-                                n10 = HUtil32.Str_ToInt(s24, 0);
-                                n14 = HUtil32.Str_ToInt(s28, 0);
+                                n10 = HUtil32.StrToInt(s24, 0);
+                                n14 = HUtil32.StrToInt(s28, 0);
                                 nC = HUtil32.MakeLong(HUtil32._MAX(n14, 0), HUtil32._MAX(n10, 0));
                                 _loginService.LoadAccountCostList(Config, new AccountConst(s1C, nC));
                                 if ((i % 100) == 0)
@@ -90,8 +90,8 @@ namespace LoginSvr
                                 s18 = HUtil32.GetValidStr3(s18, ref s1C, new string[] { " ", "\09" });
                                 s18 = HUtil32.GetValidStr3(s18, ref s24, new string[] { " ", "\09" });
                                 s18 = HUtil32.GetValidStr3(s18, ref s28, new string[] { " ", "\09" });
-                                n10 = HUtil32.Str_ToInt(s24, 0);
-                                n14 = HUtil32.Str_ToInt(s28, 0);
+                                n10 = HUtil32.StrToInt(s24, 0);
+                                n14 = HUtil32.StrToInt(s28, 0);
                                 nC = HUtil32.MakeLong(HUtil32._MAX(n14, 0), HUtil32._MAX(n10, 0));
                                 _loginService.LoadIPaddrCostList(Config, new AccountConst(s1C, nC));
                                 if ((i % 100) == 0)

@@ -208,7 +208,7 @@ namespace GameSvr.Npc
 
         private void ReQuestCastleWar(PlayObject PlayObject, string sIndex)
         {
-            var nIndex = HUtil32.Str_ToInt(sIndex, -1);
+            var nIndex = HUtil32.StrToInt(sIndex, -1);
             if (nIndex < 0)
             {
                 nIndex = 0;

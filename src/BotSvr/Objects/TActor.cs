@@ -292,7 +292,7 @@ namespace BotSvr.Objects
             Msg.Dir = ndir;
             Msg.Feature = nFeature;
             Msg.State = nState;
-            Msg.Saying = HUtil32.Str_ToInt(sStr, 0);
+            Msg.Saying = HUtil32.StrToInt(sStr, 0);
             Msg.Sound = nSound;
             if (dwDelay > 0)
             {

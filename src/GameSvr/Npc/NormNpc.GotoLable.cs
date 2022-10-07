@@ -347,7 +347,7 @@ namespace GameSvr.Npc
                         M2Share.Log.Error("loading fail.... => " + sListFileName);
                     }
                 }
-                var nDay = HUtil32.Str_ToInt(sDay, 0);
+                var nDay = HUtil32.StrToInt(sDay, 0);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     string sText = LoadList[i].Trim();
@@ -356,7 +356,7 @@ namespace GameSvr.Npc
                     if (ChrName == Name)
                     {
                         string ssDay = sText.Trim();
-                        var nnday = HUtil32.Str_ToDate(ssDay);
+                        var nnday = HUtil32.StrToDate(ssDay);
                         var UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
                         var LastDay = nDay - UseDay;
                         if (LastDay < 0)
@@ -491,23 +491,23 @@ namespace GameSvr.Npc
                         PlayObject = Human;
                         if (!string.IsNullOrEmpty(QuestConditionInfo.sOpHName) && string.Compare(QuestConditionInfo.sOpHName, "H", true) == 0)
                         {
-                            //todo 待支持英雄
+                            //todo 英雄
                         }
                     }
                 }
 
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam1))
-                    QuestConditionInfo.nParam1 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
+                    QuestConditionInfo.nParam1 = HUtil32.StrToInt(QuestConditionInfo.sParam1, 0);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam2))
-                    QuestConditionInfo.nParam2 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 1);
+                    QuestConditionInfo.nParam2 = HUtil32.StrToInt(QuestConditionInfo.sParam2, 1);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam3))
-                    QuestConditionInfo.nParam3 = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, 1);
+                    QuestConditionInfo.nParam3 = HUtil32.StrToInt(QuestConditionInfo.sParam3, 1);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam4))
-                    QuestConditionInfo.nParam4 = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, 0);
+                    QuestConditionInfo.nParam4 = HUtil32.StrToInt(QuestConditionInfo.sParam4, 0);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam5))
-                    QuestConditionInfo.nParam5 = HUtil32.Str_ToInt(QuestConditionInfo.sParam5, 0);
+                    QuestConditionInfo.nParam5 = HUtil32.StrToInt(QuestConditionInfo.sParam5, 0);
                 if (HUtil32.IsStringNumber(QuestConditionInfo.sParam6))
-                    QuestConditionInfo.nParam6 = HUtil32.Str_ToInt(QuestConditionInfo.sParam6, 0);
+                    QuestConditionInfo.nParam6 = HUtil32.StrToInt(QuestConditionInfo.sParam6, 0);
 
                 int n10;
                 int n14;
@@ -532,8 +532,8 @@ namespace GameSvr.Npc
                         result = GotoLable_QuestCheckCondition_CheckKillMon(PlayObject, QuestConditionInfo.sParam1);
                         break;
                     case ScriptConst.nCHECK:
-                        n14 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
-                        n18 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
+                        n14 = HUtil32.StrToInt(QuestConditionInfo.sParam1, 0);
+                        n18 = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestFalgStatus(n14);
                         if (n10 == 0)
                         {
@@ -603,8 +603,8 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKOPEN:
-                        n14 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
-                        n18 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
+                        n14 = HUtil32.StrToInt(QuestConditionInfo.sParam1, 0);
+                        n18 = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestUnitOpenStatus(n14);
                         if (n10 == 0)
                         {
@@ -622,8 +622,8 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKUNIT:
-                        n14 = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, 0);
-                        n18 = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, 0);
+                        n14 = HUtil32.StrToInt(QuestConditionInfo.sParam1, 0);
+                        n18 = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestUnitStatus(n14);
                         if (n10 == 0)
                         {
@@ -1824,7 +1824,6 @@ namespace GameSvr.Npc
         private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref UserItem UserItem, ref bool bo11)
         {
             bool result = true;
-            TQuestActionInfo QuestActionInfo;
             int n28;
             int n2C;
             int n20X;
@@ -1838,15 +1837,15 @@ namespace GameSvr.Npc
             var n38 = 0;
             var n3C = 0;
             var n40 = 0;
+            string s50;
             for (var i = 0; i < ActionList.Count; i++)
             {
-                QuestActionInfo = ActionList[i];
-                string s50;
+                var QuestActionInfo = ActionList[i];
                 switch (QuestActionInfo.nCmdCode)
                 {
                     case ScriptConst.nSET:
-                        n28 = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 0);
-                        n2C = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0);
+                        n28 = HUtil32.StrToInt(QuestActionInfo.sParam1, 0);
+                        n2C = HUtil32.StrToInt(QuestActionInfo.sParam2, 0);
                         PlayObject.SetQuestFlagStatus(n28, n2C);
                         break;
                     case ScriptConst.nTAKE:
@@ -1868,13 +1867,13 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSETOPEN:
-                        n28 = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 0);
-                        n2C = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0);
+                        n28 = HUtil32.StrToInt(QuestActionInfo.sParam1, 0);
+                        n2C = HUtil32.StrToInt(QuestActionInfo.sParam2, 0);
                         PlayObject.SetQuestUnitOpenStatus(n28, n2C);
                         break;
                     case ScriptConst.nSETUNIT:
-                        n28 = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 0);
-                        n2C = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0);
+                        n28 = HUtil32.StrToInt(QuestActionInfo.sParam1, 0);
+                        n2C = HUtil32.StrToInt(QuestActionInfo.sParam2, 0);
                         PlayObject.SetQuestUnitStatus(n28, n2C);
                         break;
                     case ScriptConst.nRESETUNIT:
@@ -2459,7 +2458,7 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nDELAYGOTO:
                         PlayObject.m_boTimeGoto = true;
-                        var m_DelayGoto = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
+                        var m_DelayGoto = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
                         if (m_DelayGoto == 0)
                         {
                             var delayCount = 0;

@@ -79,8 +79,8 @@ namespace GameSvr.Snaps
                         DecodeSocStr_SendOtherServer(ps, Str);
                         string Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, HUtil32.Backslash);
-                        Ident = HUtil32.Str_ToInt(Head, 0);
-                        sNum = HUtil32.Str_ToInt(sNumStr, -1);
+                        Ident = HUtil32.StrToInt(Head, 0);
+                        sNum = HUtil32.StrToInt(sNumStr, -1);
                         _groupMessageHandle.ProcessData(Ident, sNum, Body);
                     }
                     else

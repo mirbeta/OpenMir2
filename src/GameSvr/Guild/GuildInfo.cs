@@ -259,7 +259,7 @@ namespace GameSvr.Guild
                     {
                         s18 = s18.Substring(1, s18.Length - 1);
                         s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
-                        n2C = HUtil32.Str_ToInt(s1C, 0);
+                        n2C = HUtil32.StrToInt(s1C, 0);
                         s24 = s18.Trim();
                         GuildRank = null;
                     }
@@ -286,7 +286,7 @@ namespace GameSvr.Guild
                             if (GuildWar.Guild != null)
                             {
                                 GuildWar.dwWarTick = HUtil32.GetTickCount();
-                                GuildWar.dwWarTime = HUtil32.Str_ToInt(s20.Trim(), 0);
+                                GuildWar.dwWarTime = HUtil32.StrToInt(s20.Trim(), 0);
                                 GuildWarList.Add(GuildWar);
                             }
                             else
@@ -759,7 +759,7 @@ namespace GameSvr.Guild
                     }
                     GuildRank = new TGuildRank
                     {
-                        nRankNo = HUtil32.Str_ToInt(sRankNo, 99),
+                        nRankNo = HUtil32.StrToInt(sRankNo, 99),
                         sRankName = sRankName.Trim(),
                         MemberList = new List<GuildMember>()
                     };

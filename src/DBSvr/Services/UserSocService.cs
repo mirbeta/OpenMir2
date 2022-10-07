@@ -299,7 +299,7 @@ namespace DBSvr.Services
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
                         DBShare.RouteInfo[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                        DBShare.RouteInfo[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.Str_ToInt(sGameGatePort, 0);
+                        DBShare.RouteInfo[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
                         nGateIdx++;
                     }
                     DBShare.RouteInfo[nRouteIdx].nGateCount = nGateIdx;
@@ -321,7 +321,7 @@ namespace DBSvr.Services
                         sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
                         sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new[] { " ", "\09" });
                         sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\09" }).Trim();
-                        var nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
+                        var nServerIndex = HUtil32.StrToInt(sServerIndex, 0);
                         _mapList.Add(sMapName, nServerIndex);
                     }
                 }
@@ -365,7 +365,7 @@ namespace DBSvr.Services
                         break;
                     }
                     var sLineText = DBShare.ClearMakeIndex[i];
-                    var nIndex = HUtil32.Str_ToInt(sLineText, -1);
+                    var nIndex = HUtil32.StrToInt(sLineText, -1);
                     if (nIndex < 0)
                     {
                         DBShare.ClearMakeIndex.RemoveAt(i);
@@ -565,7 +565,7 @@ namespace DBSvr.Services
             var sSendMsg = string.Empty;
             var result = false;
             var sSessionId = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
-            var nSessionId = HUtil32.Str_ToInt(sSessionId, -2);
+            var nSessionId = HUtil32.StrToInt(sSessionId, -2);
             var nChrCount = 0;
             if (_loginService.CheckSession(sAccount, userInfo.sUserIPaddr, nSessionId))
             {
@@ -756,7 +756,7 @@ namespace DBSvr.Services
                 }
                 if (nCode == -1)
                 {
-                    if (NewChrData(sAccount, sChrName, HUtil32.Str_ToInt(sSex, 0), HUtil32.Str_ToInt(sJob, 0), HUtil32.Str_ToInt(sHair, 0)))
+                    if (NewChrData(sAccount, sChrName, HUtil32.StrToInt(sSex, 0), HUtil32.StrToInt(sJob, 0), HUtil32.StrToInt(sHair, 0)))
                     {
                         nCode = 1;
                     }

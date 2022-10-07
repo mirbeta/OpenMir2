@@ -221,8 +221,8 @@ namespace GameSvr.Command.Commands
             var PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (PlayObject != null)
             {
-                var nFlag = HUtil32.Str_ToInt(@params[1], 0);
-                var nValue = HUtil32.Str_ToInt(@params[2], 0);
+                var nFlag = HUtil32.StrToInt(@params[1], 0);
+                var nValue = HUtil32.StrToInt(@params[2], 0);
                 PlayObject.SetQuestFlagStatus(nFlag, nValue);
                 if (PlayObject.GetQuestFalgStatus(nFlag) == 1)
                 {
@@ -257,8 +257,8 @@ namespace GameSvr.Command.Commands
             var PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (PlayObject != null)
             {
-                var nFlag = HUtil32.Str_ToInt(@params[1], 0);
-                var nValue = HUtil32.Str_ToInt(@params[2], 0);
+                var nFlag = HUtil32.StrToInt(@params[1], 0);
+                var nValue = HUtil32.StrToInt(@params[2], 0);
                 PlayObject.SetQuestUnitOpenStatus(nFlag, nValue);
                 if (PlayObject.GetQuestUnitOpenStatus(nFlag) == 1)
                 {
@@ -293,8 +293,8 @@ namespace GameSvr.Command.Commands
             var PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (PlayObject != null)
             {
-                var nFlag = HUtil32.Str_ToInt(@params[1], 0);
-                var nValue = HUtil32.Str_ToInt(@params[2], 0);
+                var nFlag = HUtil32.StrToInt(@params[1], 0);
+                var nValue = HUtil32.StrToInt(@params[2], 0);
                 PlayObject.SetQuestUnitStatus(nFlag, nValue);
                 if (PlayObject.GetQuestUnitStatus(nFlag) == 1)
                 {

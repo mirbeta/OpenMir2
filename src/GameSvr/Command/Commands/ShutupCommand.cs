@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandParamUnKnow, this.GameCommand.Name, GameCommandConst.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var dwTime = (uint)HUtil32.Str_ToInt(sTime, 5);
+            var dwTime = (uint)HUtil32.StrToInt(sTime, 5);
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try
             {
