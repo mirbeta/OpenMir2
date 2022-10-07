@@ -1,6 +1,6 @@
 ﻿namespace GameSvr.Script
 {
-    public class ScriptConst
+    public static class ScriptConst
     {
         public const string sMarket_Def = "Market_Def";
         public const string sNpc_def = "Npc_def";
