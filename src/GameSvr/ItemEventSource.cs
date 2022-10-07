@@ -5,6 +5,9 @@ namespace GameSvr
     [EventSource(Name = "itemProvider")]
     public class ItemEventSource : EventSource
     {
-        public void TestEvent(int id) => WriteEvent(1, id);
+        public void AddGameLog(string log)
+        {
+            WriteEvent(1, log);
+        }
     }
 }
