@@ -73,7 +73,7 @@ namespace GameSvr
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GameGateMgr GateMgr = null;
-        public static ConcurrentQueue<string> ItemLogQueue = null;
+        public static ItemEventSource ItemEventSource;
         public static MapManager MapMgr = null;
         public static CustomItem CustomItemMgr = null;
         public static MagicManager MagicMgr = null;
@@ -153,7 +153,7 @@ namespace GameSvr
         public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
 
-        public static bool g_boGameLogGold = false;
+        public static bool g_boGameLogGold = true;
         public static bool g_boGameLogGameGold = false;
         public static bool g_boGameLogGamePoint = false;
         public static bool g_boGameLogHumanDie = false;
@@ -1181,7 +1181,7 @@ namespace GameSvr
 
         public static void AddGameDataLog(string sMsg)
         {
-            ItemLogQueue.Enqueue(sMsg);
+            ItemEventSource.AddGameLog(sMsg);
         }
 
         public static void AddLogonCostLog(string sMsg)

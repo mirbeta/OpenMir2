@@ -65,7 +65,7 @@ namespace GameSvr
             M2Share.FindPath = new FindPath();
             M2Share.CommandMgr = new CommandManager();
             M2Share.CellObjectSystem = new CellObjectMgr();
-            M2Share.ItemLogQueue = new();
+            M2Share.ItemEventSource = new ItemEventSource();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapMgr = new MapManager();
             M2Share.CustomItemMgr = new CustomItem();
