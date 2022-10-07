@@ -734,13 +734,13 @@ namespace DBSvr.Storage.MySQL
                 SaveBonusability(context, playerId, humanRcd.Data.BonusAbil);
                 SaveStatus(context, playerId, humanRcd.Data.StatusTimeArr);
                 context.Commit();
-                _logger.Debug($"保存玩家[{humanRcd.Header.sName}]数据成功");
+                _logger.Debug($"保存角色[{humanRcd.Header.sName}]数据成功");
             }
             catch (Exception ex)
             {
                 result = false;
                 context.RollBack();
-                _logger.Error($"保存玩家[{humanRcd.Header.sName}]数据失败. " + ex.Message);
+                _logger.Error($"保存角色[{humanRcd.Header.sName}]数据失败. " + ex.Message);
             }
             finally
             {
