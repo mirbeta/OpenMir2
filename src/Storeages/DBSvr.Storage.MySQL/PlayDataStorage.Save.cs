@@ -12,7 +12,7 @@ namespace DBSvr.Storage.MySQL
     {
         public bool Update(string chrName, ref HumDataInfo humanRcd)
         {
-            if (_mirQuickMap.TryGetValue(chrName, out var playerId))
+            if (_NameQuickMap.TryGetValue(chrName, out var playerId))
             {
                 if (SaveRecord(playerId, ref humanRcd))
                 {
@@ -26,7 +26,7 @@ namespace DBSvr.Storage.MySQL
         public bool UpdateQryChar(int nIndex, QueryChr queryChrRcd)
         {
             var result = false;
-            if ((nIndex >= 0) && (_mirQuickMap.Count > nIndex))
+            if ((nIndex >= 0) && (_NameQuickMap.Count > nIndex))
             {
                 if (UpdateChrRecord(nIndex, queryChrRcd))
                 {
