@@ -194,7 +194,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void UpgradeRandomNecklace(UserItem pu)
+        private void UpgradeRandomNecklace(UserItem pu)
         {
             int i;
             int n;
@@ -233,7 +233,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void UpgradeRandomBarcelet(UserItem pu)
+        private void UpgradeRandomBarcelet(UserItem pu)
         {
             int i;
             int n;
@@ -272,7 +272,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void UpgradeRandomNecklace19(UserItem pu)
+        private void UpgradeRandomNecklace19(UserItem pu)
         {
             int i;
             int n;
@@ -311,7 +311,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void UpgradeRandomRings(UserItem pu)
+        private void UpgradeRandomRings(UserItem pu)
         {
             int i;
             int n;
@@ -340,7 +340,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void UpgradeRandomRings23(UserItem pu)
+        private void UpgradeRandomRings23(UserItem pu)
         {
             int i;
             int n;
@@ -379,7 +379,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void UpgradeRandomHelmet(UserItem pu)
+        private void UpgradeRandomHelmet(UserItem pu)
         {
             int i;
             int n;
@@ -418,7 +418,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void RandomSetUnknownHelmet(UserItem pu)
+        private void RandomSetUnknownHelmet(UserItem pu)
         {
             int i;
             int n;
@@ -496,7 +496,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void RandomSetUnknownRing(UserItem pu)
+        private void RandomSetUnknownRing(UserItem pu)
         {
             int i;
             int n;
@@ -556,7 +556,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void RandomSetUnknownBracelet(UserItem pu)
+        private void RandomSetUnknownBracelet(UserItem pu)
         {
             int i;
             int n;
