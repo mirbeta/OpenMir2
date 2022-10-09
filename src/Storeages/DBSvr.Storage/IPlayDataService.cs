@@ -25,7 +25,7 @@ namespace DBSvr.Storage
 
         bool UpdateQryChar(int nIndex, QueryChr QueryChrRcd);
 
-        bool Add(ref HumDataInfo HumanRCD);
+        bool Add(HumDataInfo HumanRCD);
 
         int Find(string sChrName, StringDictionary List);
 

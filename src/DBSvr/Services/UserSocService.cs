@@ -251,7 +251,7 @@ namespace DBSvr.Services
                 chrRecord.Data.Sex = (byte)nSex;
                 chrRecord.Data.Job = (byte)nJob;
                 chrRecord.Data.Hair = (byte)nHair;
-                _playDataStorage.Add(ref chrRecord);
+                _playDataStorage.Add(chrRecord);
                 result = true;
             }
             return result;

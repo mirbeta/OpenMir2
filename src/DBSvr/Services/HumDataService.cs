@@ -334,7 +334,7 @@ namespace DBSvr.Services
                 if (nIndex < 0)
                 {
                     humanRcd.Header.sName = sChrName;
-                    _playDataStorage.Add(ref humanRcd);
+                    _playDataStorage.Add(humanRcd);
                     nIndex = _playDataStorage.Index(sChrName);
                 }
                 if (nIndex >= 0)
