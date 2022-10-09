@@ -766,6 +766,13 @@ namespace GameSvr.Player
 
         private void GetStartPoint()
         {
+            if (PvpLevel() >= 2)
+            {
+                HomeMap = M2Share.Config.RedHomeMap;
+                HomeX = M2Share.Config.RedHomeX;
+                HomeY = M2Share.Config.RedHomeY;
+                return;
+            }
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 if (M2Share.StartPointList[i].m_sMapName == Envir.MapName)
@@ -775,14 +782,9 @@ namespace GameSvr.Player
                         HomeMap = M2Share.StartPointList[i].m_sMapName;
                         HomeX = M2Share.StartPointList[i].m_nCurrX;
                         HomeY = M2Share.StartPointList[i].m_nCurrY;
+                        break;
                     }
                 }
-            }
-            if (PvpLevel() >= 2)
-            {
-                HomeMap = M2Share.Config.RedHomeMap;
-                HomeX = M2Share.Config.RedHomeX;
-                HomeY = M2Share.Config.RedHomeY;
             }
         }
 
