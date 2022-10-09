@@ -170,7 +170,7 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
-        public bool Add(ref HumDataInfo HumanRCD)
+        public bool Add(HumDataInfo HumanRCD)
         {
             bool result = false;
             int nIndex;
