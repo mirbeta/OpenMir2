@@ -90,10 +90,7 @@ namespace GameSvr.DataSource
                         }
                         else
                         {
-                            M2Share.Log.Error(string.Format("加载物品(Idx:{0} Name:{1})数据失败!!!", new object[]
-                            {
-                                Idx, Item.Name
-                            }));
+                            M2Share.Log.Error($"加载物品(Idx:{Idx} Name:{Item.Name})数据失败!!!");
                             result = -100;
                             return result;
                         }
@@ -311,6 +308,8 @@ namespace GameSvr.DataSource
             }
         }
 
+        private const string SaveSellItemSql = "INSERT INTO goldsales (DealChrName, BuyChrName, SellDateTime, State, SellGold,UseItems) values (@DealChrName, @BuyChrName, @SellDateTime, @State, @SellGold,@UseItems))";
+
         /// <summary>
         /// 保存寄售系统数据
         /// </summary>
@@ -333,10 +332,16 @@ namespace GameSvr.DataSource
                         DealOffInfo = M2Share.sSellOffItemList[i];
                         if (DealOffInfo != null)
                         {
-                            string InsertSql = "INSERT INTO goldsales (DealChrName, BuyChrName, SellDateTime, State, SellGold,UseItems) values " +
-                                "(" + DealOffInfo.sDealChrName + "," + DealOffInfo.sBuyChrName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.Flag + ","
-                                + DealOffInfo.nSellGold + "," + JsonSerializer.Serialize(DealOffInfo.UseItems) + ")";
-                            Execute(InsertSql);
+                            var command = new MySqlCommand();
+                            command.Connection = (MySqlConnection)_dbConnection;
+                            command.CommandText = SaveSellItemSql;
+                            command.Parameters.AddWithValue("@DealChrName", DealOffInfo.sDealChrName);
+                            command.Parameters.AddWithValue("@BuyChrName", DealOffInfo.sBuyChrName);
+                            command.Parameters.AddWithValue("@SellDateTime", DealOffInfo.dSellDateTime);
+                            command.Parameters.AddWithValue("@State", DealOffInfo.Flag);
+                            command.Parameters.AddWithValue("@SellGold", DealOffInfo.nSellGold);
+                            command.Parameters.AddWithValue("@UseItems", JsonSerializer.Serialize(DealOffInfo.UseItems));
+                            command.ExecuteNonQuery();
                         }
                     }
                 }
@@ -391,9 +396,7 @@ namespace GameSvr.DataSource
                 }
                 catch (Exception e)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
                     M2Share.Log.Error(e.StackTrace);
-                    Console.ResetColor();
                     return false;
                 }
             }

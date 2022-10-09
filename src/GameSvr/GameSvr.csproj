@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>GameSvr</RootNamespace>
 		<UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
 		<LangVersion>10</LangVersion>
@@ -39,7 +39,9 @@
 		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 		<Optimize>True</Optimize>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' " />
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' ">
+	  <ExternalConsole>true</ExternalConsole>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Collections.Pooled" Version="1.0.82" />
 		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.1" />
@@ -65,12 +67,6 @@
 		</None>
 	</ItemGroup>
 	
-	<ItemGroup>
-		<Content Update="Properties\launchSettings.json">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
 	</ItemGroup>
