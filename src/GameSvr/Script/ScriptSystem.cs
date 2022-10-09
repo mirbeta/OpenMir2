@@ -14,7 +14,7 @@ namespace GameSvr.Script
         private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
         private readonly string[] TextSpitConst = new[] { " ", "\t" };
 
-        public int LoadNpcScript(NormNpc NPC, string sPatch, string sScritpName)
+        public int LoadScript(NormNpc NPC, string sPatch, string sScritpName)
         {
             if (string.IsNullOrEmpty(sPatch))
             {
@@ -23,7 +23,7 @@ namespace GameSvr.Script
             return LoadScriptFile(NPC, sPatch, sScritpName, false); ;
         }
 
-        private bool LoadScriptFileCallScript(string sFileName, string sLabel, StringList List)
+        private bool LoadScriptCallScript(string sFileName, string sLabel, StringList List)
         {
             bool result = false;
             if (File.Exists(sFileName))
@@ -98,7 +98,6 @@ namespace GameSvr.Script
                 }
                 sCallScriptFile = sCallScriptFile.Replace("\\", "/");
             }
-
             return sCallScriptFile;
         }
 
@@ -123,7 +122,7 @@ namespace GameSvr.Script
                         callList.InsertText(i + 1, "goto " + sLabName);
                         break;
                     }
-                    if (LoadScriptFileCallScript(sFileName, sLabName, callList))
+                    if (LoadScriptCallScript(sFileName, sLabName, callList))
                     {
                         callList[i] = "#ACT";
                         callList.InsertText(i + 1, "goto " + sLabName);
@@ -147,7 +146,7 @@ namespace GameSvr.Script
             }
         }
 
-        private string LoadScriptFile_LoadDefineInfo(StringList LoadList, IList<TDefineInfo> List)
+        private string LoadScriptDefineInfo(StringList LoadList, IList<TDefineInfo> List)
         {
             var result = string.Empty;
             var s1C = string.Empty;
@@ -184,7 +183,7 @@ namespace GameSvr.Script
                         {
                             StringList LoadStrList = new StringList();
                             LoadStrList.LoadFromFile(s28);
-                            result = LoadScriptFile_LoadDefineInfo(LoadStrList, List);
+                            result = LoadScriptDefineInfo(LoadStrList, List);
                         }
                         else
                         {
@@ -197,7 +196,7 @@ namespace GameSvr.Script
             return result;
         }
 
-        private TScript LoadScriptFile_MakeNewScript(NormNpc NPC)
+        private TScript LoadMakeNewScript(NormNpc NPC)
         {
             TScript ScriptInfo = new TScript
             {
@@ -1427,7 +1426,7 @@ namespace GameSvr.Script
                 List<TQuestActionInfo> GotoList = new List<TQuestActionInfo>();
                 List<TQuestActionInfo> DelayGotoList = new List<TQuestActionInfo>();
                 List<TQuestActionInfo> PlayDiceList = new List<TQuestActionInfo>();
-                string s54 = LoadScriptFile_LoadDefineInfo(LoadList, DefineList);
+                string s54 = LoadScriptDefineInfo(LoadList, DefineList);
                 DefineInfo = new TDefineInfo
                 {
                     sName = "@HOME"
@@ -1616,7 +1615,7 @@ namespace GameSvr.Script
                             s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { " ", "}", "\t" });
                             HUtil32.GetValidStr3(s38, ref s3C, new[] { " ", "}", "\t" });
                             n70 = HUtil32.StrToInt(s3C, 0);
-                            Script = LoadScriptFile_MakeNewScript(NPC);
+                            Script = LoadMakeNewScript(NPC);
                             Script.nQuest = n70;
                             n70++;
                         }
@@ -1652,7 +1651,7 @@ namespace GameSvr.Script
                         n6C = 10;
                         if (Script == null)
                         {
-                            Script = LoadScriptFile_MakeNewScript(NPC);
+                            Script = LoadMakeNewScript(NPC);
                             Script.nQuest = n70;
                         }
                         if (sScript.Equals("[goods]", StringComparison.OrdinalIgnoreCase))

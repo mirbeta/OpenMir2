@@ -1,4 +1,3 @@
-#nullable enable
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -78,13 +77,8 @@ namespace GameSvr
                         _logger.LogInformation("正在读取配置信息...");
                         _mirApp.Initialize();
                         _logger.LogInformation("读取配置信息完成...");
+                        _mirApp.StartServer(stoppingToken);
                         _mirApp.StartWorld(stoppingToken);
-                        _mirApp.StartService();
-                        _mirApp.Start(stoppingToken);
-                        if (M2Share.StartReady)
-                        {
-                            M2Share.GateMgr.Start(stoppingToken);
-                        }
                         _exitCode = 0;
                     }
                     catch (TaskCanceledException)
@@ -125,12 +119,12 @@ namespace GameSvr
         {
             _logger.LogDebug("Application is stopping");
             M2Share.StartReady = false;
-            if (M2Share.WorldEngine.PlayObjectCount > 0)
+            if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 _logger.LogInformation("保存玩家数据");
-                foreach (var item in M2Share.WorldEngine.PlayObjects)
+                foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
-                    M2Share.WorldEngine.SaveHumanRcd(item);
+                    M2Share.WorldEngine.SaveHumanRcd(play);
                 }
                 _logger.LogInformation("数据保存完毕.");
             }

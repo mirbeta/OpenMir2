@@ -693,7 +693,7 @@ namespace GameSvr.Actor
         protected readonly IList<SendMessage> MsgList;
         private readonly IList<BaseObject> VisibleHumanList;
         protected readonly IList<VisibleMapItem> VisibleItems;
-        protected readonly IList<MirEvent> VisibleEvents;
+        protected readonly IList<EventInfo> VisibleEvents;
         protected int SendRefMsgTick;
         /// <summary>
         /// 是否在开行会战
@@ -927,7 +927,7 @@ namespace GameSvr.Actor
             VisibleHumanList = new List<BaseObject>();
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
-            VisibleEvents = new List<MirEvent>();
+            VisibleEvents = new List<EventInfo>();
             ItemList = new List<UserItem>();
             DealItemList = new List<UserItem>();
             IsVisibleActive = false;
@@ -3648,11 +3648,11 @@ namespace GameSvr.Actor
                                 break;
                             case CellType.Event:
                                 {
-                                    MirEvent mapEvent = null;
-                                    var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                    EventInfo mapEvent = null;
+                                    var owinEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                     if (owinEvent.OwnBaseObject != null)
                                     {
-                                        mapEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                        mapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                     }
                                     if (mapEvent != null)
                                     {

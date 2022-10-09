@@ -20,14 +20,11 @@ namespace GameSvr
             _runTimeTick = HUtil32.GetTickCount();
         }
 
-        public void StartService()
+        public void StartWorld(CancellationToken stoppingToken)
         {
             M2Share.DataServer.Start();
             M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
-        }
-
-        public void Start(CancellationToken stoppingToken)
-        {
+            M2Share.GateMgr.Start(stoppingToken);
             Task.Factory.StartNew(() =>
             {
                 while (M2Share.StartReady)

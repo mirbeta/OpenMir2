@@ -471,7 +471,7 @@ namespace GameSvr.RobotPlay
             MapCellInfo cellInfo;
             CellObject cellObject = null;
             BaseObject baseObject;
-            MirEvent MapEvent;
+            EventInfo MapEvent;
             VisibleFlag nVisibleFlag;
             const string sExceptionMsg = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             if (Ghost)
@@ -615,7 +615,7 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (cellObject.CellObjId < 0)
                                                     {
-                                                        MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                                        MapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                                         UpdateVisibleEvent(nX, nY, MapEvent);
                                                     }
                                                 }

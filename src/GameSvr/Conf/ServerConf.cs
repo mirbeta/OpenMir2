@@ -321,7 +321,7 @@ namespace GameSvr.Conf
             if (ReadString("Setup", "ClientFile3", "") == "")
                 WriteString("Setup", "ClientFile3", M2Share.Config.ClientFile3);
             M2Share.Config.ClientFile3 = ReadString("Setup", "ClientFile3", M2Share.Config.ClientFile3);
-            if (ReadInteger("Setup", "MonUpLvNeedKillBase", -1) < 0)
+            if (ReadInteger("Setup", "MonUpLvNeedKillBase", -1) < 0) 
                 WriteInteger("Setup", "MonUpLvNeedKillBase", M2Share.Config.MonUpLvNeedKillBase);
             M2Share.Config.MonUpLvNeedKillBase = ReadInteger("Setup", "MonUpLvNeedKillBase", M2Share.Config.MonUpLvNeedKillBase);
             if (ReadInteger("Setup", "MonUpLvRate", -1) < 0)

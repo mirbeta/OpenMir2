@@ -27,7 +27,7 @@ namespace GameSvr.Monster.Monsters
             CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;
-            var stoneEvent = new MirEvent(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
+            var stoneEvent = new EventInfo(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
             M2Share.EventMgr.AddEvent(stoneEvent);
         }
 

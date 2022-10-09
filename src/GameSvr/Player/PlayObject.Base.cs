@@ -1366,7 +1366,7 @@ namespace GameSvr.Player
                                         }
                                         if (cellObject.CellType == CellType.Event)
                                         {
-                                            MirEvent MapEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                            EventInfo MapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                             if (MapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(nX, nY, MapEvent);
@@ -1454,7 +1454,7 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-                    MirEvent MapEvent = VisibleEvents[I];
+                    EventInfo MapEvent = VisibleEvents[I];
                     if (MapEvent.VisibleFlag == VisibleFlag.Visible)
                     {
                         SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.nX, MapEvent.nY, "");

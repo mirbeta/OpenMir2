@@ -1575,13 +1575,13 @@ namespace GameSvr.Npc
             if (m_boIsQuest)
             {
                 m_sPath = ScriptConst.sNpc_def;
-                var s08 = this.ChrName + '-' + this.MapName;
-                M2Share.ScriptSystem.LoadNpcScript(this, m_sFilePath, s08);
+                var sScriptName = this.ChrName + '-' + this.MapName;
+                M2Share.ScriptSystem.LoadScript(this, m_sFilePath, sScriptName);
             }
             else
             {
                 m_sPath = m_sFilePath;
-                M2Share.ScriptSystem.LoadNpcScript(this, m_sFilePath, this.ChrName);
+                M2Share.ScriptSystem.LoadScript(this, m_sFilePath, this.ChrName);
             }
         }
 

@@ -4,7 +4,7 @@ using SystemModule;
 
 namespace GameSvr.Event
 {
-    public class MirEvent : EntityId, IDisposable
+    public class EventInfo : EntityId, IDisposable
     {
         /// <summary>
         /// 事件唯一ID
@@ -48,7 +48,7 @@ namespace GameSvr.Event
         /// </summary>
         public bool Active;
 
-        public MirEvent(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
+        public EventInfo(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
         {
             Id = HUtil32.Sequence();
             OpenStartTick = HUtil32.GetTickCount();
