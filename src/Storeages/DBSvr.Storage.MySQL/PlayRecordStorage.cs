@@ -42,7 +42,6 @@ namespace DBSvr.Storage.MySQL
             {
                 return;
             }
-            var nRecordIndex = 1;
             IList<QuickId> AccountList = new List<QuickId>();
             IList<string> ChrNameList = new List<string>();
             try
@@ -65,8 +64,8 @@ namespace DBSvr.Storage.MySQL
                     DBRecord.Header.Deleted = DBRecord.Deleted;
                     if (!DBRecord.Header.Deleted)
                     {
-                        _quickList.Add(DBRecord.Header.sName, nRecordIndex);
-                        _indexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
+                        _quickList.Add(DBRecord.Header.sName, DBRecord.Id);
+                        _indexQuickList.Add(DBRecord.Id, DBRecord.Header.sName);
                         AccountList.Add(new QuickId()
                         {
                             nIndex = DBRecord.Id,
@@ -79,7 +78,6 @@ namespace DBSvr.Storage.MySQL
                     {
                         _deletedList.Add(DBRecord.Id);
                     }
-                    nRecordIndex++;
                 }
                 dr.Close();
                 dr.Dispose();
@@ -287,6 +285,7 @@ namespace DBSvr.Storage.MySQL
                     var id = command.LastInsertedId;
                     nIndex = (int)id;
                     result = true;
+                    _indexQuickList.Add(nIndex, HumRecord.sChrName);
                 }
                 else
                 {
@@ -348,20 +347,19 @@ namespace DBSvr.Storage.MySQL
 
         public bool Update(int nIndex, ref HumRecordData HumDBRecord)
         {
-            var result = false;
             if (nIndex < 0)
             {
                 return false;
             }
-            if (_quickList.Count < nIndex)
+            if (!_indexQuickList.ContainsKey(nIndex))
             {
                 return false;
             }
             if (UpdateRecord(HumDBRecord, false, ref nIndex))
             {
-                result = true;
+                return true;
             }
-            return result;
+            return false;
         }
 
         public void UpdateBy(int nIndex, ref HumRecordData HumDBRecord)
