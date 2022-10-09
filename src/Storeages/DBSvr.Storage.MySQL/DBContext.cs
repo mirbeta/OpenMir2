@@ -49,7 +49,10 @@ namespace DBSvr.Storage.MySQL
             {
                 _transaction = _connection.BeginTransaction();
             }
-            _logger.Warn("[警告] 获取MySQL链接事物失败.");
+            else
+            {
+                _logger.Warn("[警告] 获取MySQL链接事物失败.");
+            }
         }
 
         public void Commit()
