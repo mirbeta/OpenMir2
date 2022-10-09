@@ -500,8 +500,10 @@ namespace DBSvr.Services
                         userInfo.dwChrTick = HUtil32.GetTickCount();
                         if ((!string.IsNullOrEmpty(userInfo.sAccount)) && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
-                            NewChr(sText, ref userInfo);
-                            userInfo.boChrQueryed = false;
+                            if (NewChr(sText, ref userInfo))
+                            {
+                                userInfo.boChrQueryed = false;
+                            }
                         }
                         else
                         {
@@ -679,7 +681,7 @@ namespace DBSvr.Services
         /// <summary>
         /// 新建角色
         /// </summary>
-        private void NewChr(string sData, ref TUserInfo userInfo)
+        private bool NewChr(string sData, ref TUserInfo userInfo)
         {
             var sAccount = string.Empty;
             var sChrName = string.Empty;
@@ -777,6 +779,7 @@ namespace DBSvr.Services
             }
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
+            return nCode == 1 ? true : false;
         }
 
         /// <summary>
