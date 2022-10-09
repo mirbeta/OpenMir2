@@ -358,7 +358,7 @@ namespace GameSvr.Services
             {
                 for (var i = 0; i < m_SaveRcdList.Count; i++)
                 {
-                    if (m_SaveRcdList[i].sChrName == sChrName)
+                    if (string.Compare(m_SaveRcdList[i].sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                         break;

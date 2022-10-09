@@ -5,18 +5,18 @@ namespace GameSvr.Event
 {
     public class EventManager
     {
-        private readonly IList<MirEvent> _eventList;
-        private readonly IList<MirEvent> _closedEventList;
+        private readonly IList<EventInfo> _eventList;
+        private readonly IList<EventInfo> _closedEventList;
 
         public EventManager()
         {
-            _eventList = new List<MirEvent>();
-            _closedEventList = new List<MirEvent>();
+            _eventList = new List<EventInfo>();
+            _closedEventList = new List<EventInfo>();
         }
 
         public void Run()
         {
-            MirEvent executeEvent;
+            EventInfo executeEvent;
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = _eventList[i];
@@ -43,7 +43,7 @@ namespace GameSvr.Event
             }
         }
 
-        public MirEvent GetEvent(Envirnoment Envir, int nX, int nY, int nType)
+        public EventInfo GetEvent(Envirnoment Envir, int nX, int nY, int nType)
         {
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
@@ -59,7 +59,7 @@ namespace GameSvr.Event
             return null;
         }
 
-        public void AddEvent(MirEvent @event)
+        public void AddEvent(EventInfo @event)
         {
             _eventList.Add(@event);
         }

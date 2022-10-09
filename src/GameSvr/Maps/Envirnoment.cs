@@ -1096,7 +1096,7 @@ namespace GameSvr.Maps
                     var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        var owinEvent = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                        var owinEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                         if (owinEvent.Damage > 0)
                         {
                             result = false;
@@ -1329,9 +1329,9 @@ namespace GameSvr.Maps
             return baseObjectList.Count;
         }
 
-        public MirEvent GetEvent(int nX, int nY)
+        public EventInfo GetEvent(int nX, int nY)
         {
-            MirEvent result = null;
+            EventInfo result = null;
             Bo2C = false;
             var cellSuccess = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
@@ -1342,7 +1342,7 @@ namespace GameSvr.Maps
                     var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        result = (MirEvent)M2Share.CellObjectSystem.Get(cellObject.CellObjId); ;
+                        result = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId); ;
                     }
                 }
             }

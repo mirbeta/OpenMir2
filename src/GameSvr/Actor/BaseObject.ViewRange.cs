@@ -105,7 +105,7 @@ namespace GameSvr.Actor
             VisibleItems.Add(visibleMapItem);
         }
 
-        protected void UpdateVisibleEvent(short wX, short wY, MirEvent MapEvent)
+        protected void UpdateVisibleEvent(short wX, short wY, EventInfo MapEvent)
         {
             bool boIsVisible = false;
             for (var i = 0; i < VisibleEvents.Count; i++)

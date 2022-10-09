@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr.Event.Events
 {
-    public class StoneMineEvent : MirEvent
+    public class StoneMineEvent : EventInfo
     {
         private readonly int _addStoneCount;
         public int MineCount;

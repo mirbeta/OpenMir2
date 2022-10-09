@@ -236,7 +236,7 @@ namespace GameSvr
             _logger.LogInformation("管理员列表加载成功...");
         }
 
-        public void StartWorld(CancellationToken stoppingToken)
+        public void StartServer(CancellationToken stoppingToken)
         {
             try
             {

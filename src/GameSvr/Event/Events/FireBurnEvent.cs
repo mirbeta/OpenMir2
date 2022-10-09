@@ -6,7 +6,7 @@ namespace GameSvr.Event.Events
     /// <summary>
     /// 火墙
     /// </summary>
-    public class FireBurnEvent : MirEvent
+    public class FireBurnEvent : EventInfo
     {
         /// <summary>
         /// 火墙运行时间

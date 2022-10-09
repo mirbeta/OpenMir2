@@ -7,11 +7,11 @@ namespace GameSvr.Event.Events
         public IList<BaseObject> BaseObjectList;
         public int dwStartTick;
         public int dwTime;
-        public MirEvent[] Events;
+        public EventInfo[] Events;
 
         public MagicEvent()
         {
-            Events = new MirEvent[8];
+            Events = new EventInfo[8];
         }
     }
 }
