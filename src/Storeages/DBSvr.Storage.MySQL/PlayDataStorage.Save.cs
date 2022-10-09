@@ -135,7 +135,6 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-
         private void SaveAblity(StorageContext context, int playerId, Ability Abil)
         {
             const string UpdateAblitySql = "UPDATE characters_ablity SET Level = @Level,Ac = @Ac, Mac = @Mac, Dc = @Dc, Mc = @Mc, Sc = @Sc, Hp = @Hp, Mp = @Mp, MaxHP = @MaxHP,MAxMP = @MAxMP, Exp = @Exp, MaxExp = @MaxExp, Weight = @Weight, MaxWeight = @MaxWeight, WearWeight = @WearWeight,MaxWearWeight = @MaxWearWeight, HandWeight = @HandWeight, MaxHandWeight = @MaxHandWeight,ModifyTime=now() WHERE PlayerId = @PlayerId;";
