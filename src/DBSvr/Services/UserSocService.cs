@@ -238,23 +238,19 @@ namespace DBSvr.Services
 
         private bool NewChrData(string sAccount, string sChrName, int nSex, int nJob, int nHair)
         {
-            var result = false;
-            if (_playDataStorage.Index(sChrName) == -1)
-            {
-                var chrRecord = new HumDataInfo();
-                chrRecord.Header = new RecordHeader();
-                chrRecord.Data = new HumInfoData();
-                chrRecord.Header.sName = sChrName;
-                chrRecord.Header.sAccount = sAccount;
-                chrRecord.Data.ChrName = sChrName;
-                chrRecord.Data.Account = sAccount;
-                chrRecord.Data.Sex = (byte)nSex;
-                chrRecord.Data.Job = (byte)nJob;
-                chrRecord.Data.Hair = (byte)nHair;
-                _playDataStorage.Add(chrRecord);
-                result = true;
-            }
-            return result;
+            if (_playDataStorage.Index(sChrName) != -1) return false;
+            var chrRecord = new HumDataInfo();
+            chrRecord.Header = new RecordHeader();
+            chrRecord.Header.sName = sChrName;
+            chrRecord.Header.sAccount = sAccount;
+            chrRecord.Data = new HumInfoData();
+            chrRecord.Data.ChrName = sChrName;
+            chrRecord.Data.Account = sAccount;
+            chrRecord.Data.Sex = (byte)nSex;
+            chrRecord.Data.Job = (byte)nJob;
+            chrRecord.Data.Hair = (byte)nHair;
+            _playDataStorage.Add(chrRecord);
+            return true;
         }
 
         private void LoadServerInfo()

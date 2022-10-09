@@ -16,6 +16,7 @@ namespace DBSvr
         private int _lastSocketTick;
         private int _lastKeepTick;
         private int _lastClearTick;
+        private int _makeDBTick;
 
         public TimedService(MirLog logger, UserSocService userSoc, LoginSvrService loginSoc, HumDataService dataService)
         {
@@ -30,6 +31,7 @@ namespace DBSvr
             _lastSocketTick = HUtil32.GetTickCount();
             _lastKeepTick = HUtil32.GetTickCount();
             _lastClearTick = HUtil32.GetTickCount();
+            _makeDBTick = HUtil32.GetTickCount();
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (HUtil32.GetTickCount() - _lastKeepTick > 7000)
@@ -48,8 +50,19 @@ namespace DBSvr
                     _lastClearTick = HUtil32.GetTickCount();
                     _dataService.ClearTimeoutSession();
                 }
+                if (HUtil32.GetTickCount() - _makeDBTick > 60 * 1000)
+                {
+                    ProcessMemeryStorage();
+                    _makeDBTick = HUtil32.GetTickCount();
+                }
                 await Task.Delay(TimeSpan.FromMilliseconds(1000), stoppingToken);
             }
+        }
+
+        private void ProcessMemeryStorage()
+        {
+            //todo 从内存获取数据，刷新到数据库，减少数据库压力，和防止大量数据保存超时
+            
         }
     }
 }
