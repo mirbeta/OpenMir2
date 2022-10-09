@@ -15,12 +15,11 @@ namespace GameSvr.RobotPlay
         {
             bool result = false;
             byte bt06 = 0;
-            bool boHit;
             try
             {
                 if (TargetCret != null)
                 {
-                    boHit = GetAttackDir(TargetCret, ref bt06);
+                    var boHit = GetAttackDir(TargetCret, ref bt06);
                     if (!boHit && (wHitMode == 4 || wHitMode == 15))
                     {
                         boHit = GetAttackDir(TargetCret, 2, ref bt06);// 防止隔位刺杀无效果
