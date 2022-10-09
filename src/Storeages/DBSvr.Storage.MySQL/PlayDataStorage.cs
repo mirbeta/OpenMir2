@@ -1,10 +1,10 @@
 using DBSvr.Storage.Model;
+using MySqlConnector;
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
@@ -245,11 +245,7 @@ namespace DBSvr.Storage.MySQL
 
         private bool GetRecord(int nIndex, ref HumDataInfo humanRcd)
         {
-            var playerId = 0;
-            if (humanRcd == null)
-            {
-                playerId = _quickIndexIdMap[nIndex];
-            }
+            var playerId = _quickIndexIdMap[nIndex];
             if (playerId == 0)
             {
                 return false;
@@ -257,13 +253,13 @@ namespace DBSvr.Storage.MySQL
             using var context = new StorageContext(_storageOption);
             try
             {
-                humanRcd = new HumDataInfo();
                 var success = false;
                 context.Open(ref success);
                 if (!success)
                 {
                     return false;
                 }
+                humanRcd = new HumDataInfo();
                 humanRcd.Data = GetChrRecord(playerId, context);
                 humanRcd.Header.sName = humanRcd.Data.ChrName;
                 GetAbilGetRecord(playerId, context, ref humanRcd);
@@ -276,7 +272,7 @@ namespace DBSvr.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error("获取角色数据失败." + e.StackTrace);
+                _logger.Error($"获取角色[{nIndex}]数据失败." + e.StackTrace);
                 return false;
             }
             finally
@@ -573,7 +569,7 @@ namespace DBSvr.Storage.MySQL
                 dr.Close();
                 dr.Dispose();
             }
-            catch (Exception ex)
+            catch
             {
                 _logger.Error("[Exception] PlayDataStorage.GetPlayerStatus");
             }
@@ -710,8 +706,6 @@ namespace DBSvr.Storage.MySQL
         /// 保存玩家数据
         /// todo 保存前要先获取一次数据，部分数据要进行对比
         /// </summary>
-        /// <param name="playerId"></param>
-        /// <param name="humanRcd"></param>
         /// <returns></returns>
         private bool SaveRecord(int playerId, ref HumDataInfo humanRcd)
         {
@@ -808,7 +802,7 @@ namespace DBSvr.Storage.MySQL
         }
 
         private const string UpdateAblitySql = "UPDATE characters_ablity SET Level = @Level,Ac = @Ac, Mac = @Mac, Dc = @Dc, Mc = @Mc, Sc = @Sc, Hp = @Hp, Mp = @Mp, MaxHP = @MaxHP,MAxMP = @MAxMP, Exp = @Exp, MaxExp = @MaxExp, Weight = @Weight, MaxWeight = @MaxWeight, WearWeight = @WearWeight,MaxWearWeight = @MaxWearWeight, HandWeight = @HandWeight, MaxHandWeight = @MaxHandWeight,ModifyTime=now() WHERE PlayerId = @PlayerId;";
-        
+
         private void SaveAblity(StorageContext context, int playerId, Ability Abil)
         {
             var command = context.CreateCommand();
@@ -872,7 +866,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private const string ClearUseItemSql= "UPDATE characters_item SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
+        private const string ClearUseItemSql = "UPDATE characters_item SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
         private const string UpdateUseItemSql = "UPDATE characters_item SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
         private const string InsertUseItemSql = "INSERT INTO characters_item (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
 
@@ -994,10 +988,10 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private const string ClearBagItemSql= "UPDATE characters_bagitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
+        private const string ClearBagItemSql = "UPDATE characters_bagitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
         private const string UpdateBagItemSql = "UPDATE characters_bagitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
         private const string InsertBagItemSql = "INSERT INTO characters_bagitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-        
+
         private void SaveBagItem(StorageContext context, int playerId, UserItem[] bagItems)
         {
             try
@@ -1112,10 +1106,10 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private const string ClearStorageItemSql="UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
+        private const string ClearStorageItemSql = "UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
         private const string UpdateStorageItemSql = "UPDATE characters_storageitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
         private const string InsertStorageItemSql = "INSERT INTO characters_storageitem (PlayerId,ChrName, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId,@ChrName, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-        
+
         private void SaveStorageItem(StorageContext context, int playerId, UserItem[] storageItems)
         {
             try
@@ -1312,9 +1306,9 @@ namespace DBSvr.Storage.MySQL
         {
             try
             {
-                const string UpdatrStatusSql = "UPDATE characters_status SET Status0=@Status0,Status1=@Status1,Status2=@Status2,Status3=@Status3,Status4=@Status4,Status5=@Status5,Status6=@Status6,Status7=@Status7,Status8=@Status8,Status9=@Status9,Status10=@Status10,Status11=@Status11,Status12=@Status12,Status13=@Status13,Status14=@Status14,Status15=@Status15 WHERE PlayerId=@PlayerId;";
+                const string updatrStatusSql = "UPDATE characters_status SET Status0=@Status0,Status1=@Status1,Status2=@Status2,Status3=@Status3,Status4=@Status4,Status5=@Status5,Status6=@Status6,Status7=@Status7,Status8=@Status8,Status9=@Status9,Status10=@Status10,Status11=@Status11,Status12=@Status12,Status13=@Status13,Status14=@Status14,Status15=@Status15 WHERE PlayerId=@PlayerId;";
                 var command = context.CreateCommand();
-                command.CommandText = UpdatrStatusSql;
+                command.CommandText = updatrStatusSql;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@Status0", statusTimeArr[0]);
                 command.Parameters.AddWithValue("@Status1", statusTimeArr[1]);
@@ -1430,11 +1424,6 @@ namespace DBSvr.Storage.MySQL
             {
                 return false;
             }
-            if (_quickIndexIdMap.Count <= nIndex)
-            {
-                return false;
-            }
-            var playerId = _quickIndexIdMap[nIndex];
             using var context = new StorageContext(_storageOption);
             var success = false;
             context.Open(ref success);
@@ -1446,7 +1435,7 @@ namespace DBSvr.Storage.MySQL
             {
                 var command = context.CreateCommand();
                 command.CommandText = sSql;
-                command.Parameters.AddWithValue("@Id", playerId);
+                command.Parameters.AddWithValue("@Id", nIndex);
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
@@ -1478,13 +1467,13 @@ namespace DBSvr.Storage.MySQL
             {
                 return;
             }
-            const string ClearItemAttrSql = "UPDATE characters_item_attr SET MakeIndex=0,VALUE0=0,VALUE1=0,VALUE2=0,VALUE3=0,VALUE4=0,VALUE5=0,VALUE6=0,VALUE7=0,VALUE8=0,VALUE9=0,VALUE10=0,VALUE11=0,VALUE12=0,VALUE13=0 WHERE PlayerId={0} AND MakeIndex ={1};";
+            const string clearItemAttrSql = "UPDATE characters_item_attr SET MakeIndex=0,VALUE0=0,VALUE1=0,VALUE2=0,VALUE3=0,VALUE4=0,VALUE5=0,VALUE6=0,VALUE7=0,VALUE8=0,VALUE9=0,VALUE10=0,VALUE11=0,VALUE12=0,VALUE13=0 WHERE PlayerId={0} AND MakeIndex ={1};";
             try
             {
                 var strSqlList = new List<string>();
-                for (int i = 0; i < makeIndex.Count(); i++)
+                for (var i = 0; i < makeIndex.Count(); i++)
                 {
-                    strSqlList.Add(string.Format(ClearItemAttrSql, playerId, makeIndex[i]));
+                    strSqlList.Add(string.Format(clearItemAttrSql, playerId, makeIndex[i]));
                 }
                 var command = context.CreateCommand();
                 command.CommandText = string.Join("\r\n", strSqlList);
@@ -1543,7 +1532,7 @@ namespace DBSvr.Storage.MySQL
                         continue;
                     }
                     var userItem = userItems[i];
-                    strSqlList.Add(string.Format(insertItemAttrSql, playerId, userItem.MakeIndex, userItem.Desc[0], userItem.Desc[1], userItem.Desc[2], userItem.Desc[3], userItem.Desc[4], userItem.Desc[5], userItem.Desc[6], userItem.Desc[7], userItem.Desc[8], userItem.Desc[9], userItem.Desc[10], userItem.Desc[11], userItem.Desc[12]));
+                    strSqlList.Add(string.Format(insertItemAttrSql, playerId, userItem.MakeIndex, userItem.Desc[0], userItem.Desc[1], userItem.Desc[2], userItem.Desc[3], userItem.Desc[4], userItem.Desc[5], userItem.Desc[6], userItem.Desc[7], userItem.Desc[8], userItem.Desc[9], userItem.Desc[10], userItem.Desc[11], userItem.Desc[12], userItem.Desc[13]));
                 }
                 if (strSqlList.Count <= 0)
                 {
@@ -1579,7 +1568,7 @@ namespace DBSvr.Storage.MySQL
 
         private void QueryItemAttr(StorageContext context, int playerId, ref UserItem[] userItems)
         {
-            var makeIndexs = userItems.Where(x => x != null && x.MakeIndex > 0).Select(x => x.MakeIndex);
+            var makeIndexs = userItems.Where(x => x != null && x.MakeIndex > 0).Select(x => x.MakeIndex).ToList();
             if (!makeIndexs.Any())
             {
                 return;
