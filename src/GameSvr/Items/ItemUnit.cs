@@ -66,7 +66,7 @@ namespace GameSvr.Items
             var result = 0;
             for (var i = 0; i < count; i++)
             {
-                if ((new System.Random(ran)).Next() == 0)
+                if (M2Share.RandomNumber.Random(ran) == 0)
                 {
                     result = result + 1;
                 }
@@ -87,14 +87,14 @@ namespace GameSvr.Items
                 if (i > x / 2)
                 {
                     // 犬伏捞 撤篮 芭 利侩
-                    iProb = Convert.ToInt32((Math.Sqrt(Math.Pow(a, 2.0) - Math.Pow(i, 2.0)) / (a * i + Math.Pow(i, 2.0))) * 100);
+                    iProb = Convert.ToInt32(Math.Sqrt(Math.Pow(a, 2.0) - Math.Pow(i, 2.0)) / (a * i + Math.Pow(i, 2.0)) * 100);
                 }
                 else
                 {
                     // 犬伏捞 臭篮 芭 利侩
-                    iProb = Convert.ToInt32((Math.Sqrt(1 - (Math.Pow(i, 2.0) / Math.Pow(a, 2.0))) * 100) / Math.Sqrt(i));
+                    iProb = Convert.ToInt32(Math.Sqrt(1 - Math.Pow(i, 2.0) / Math.Pow(a, 2.0)) * 100 / Math.Sqrt(i));
                 }
-                if ((new System.Random(100)).Next() < iProb)
+                if (M2Share.RandomNumber.Random(100) < iProb)
                 {
                     result = i / 3;
                     break;
@@ -106,17 +106,17 @@ namespace GameSvr.Items
         public void UpgradeRandomWeapon(UserItem pu)
         {
             var up = GetUpgrade(12, 15);
-            if ((new System.Random(15)).Next() == 0)
+            if (M2Share.RandomNumber.Random(15) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);//DC
             }
             up = GetUpgrade(12, 15);
-            if ((new System.Random(20)).Next() == 0)
+            if (M2Share.RandomNumber.Random(20) == 0)
             {
                 var incp = (1 + up) / 3;
                 if (incp > 0)
                 {
-                    if ((new System.Random(3)).Next() != 0)
+                    if (M2Share.RandomNumber.Random(3) != 0)
                     {
                         pu.Desc[6] = (byte)incp;
                     }
@@ -127,31 +127,31 @@ namespace GameSvr.Items
                 }
             }
             up = GetUpgrade(12, 15);
-            if ((new System.Random(15)).Next() == 0)
+            if (M2Share.RandomNumber.Random(15) == 0)
             {
                 pu.Desc[1] = (byte)(1 + up);//MC
             }
             up = GetUpgrade(12, 15);
-            if ((new System.Random(15)).Next() == 0)
+            if (M2Share.RandomNumber.Random(15) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up);//SC
             }
             up = GetUpgrade(12, 15);
-            if ((new System.Random(24)).Next() == 0)
+            if (M2Share.RandomNumber.Random(24) == 0)
             {
-                pu.Desc[5] = (byte)(1 + (up / 2));
+                pu.Desc[5] = (byte)(1 + up / 2);
             }
             up = GetUpgrade(12, 12);
-            if ((new System.Random(3)).Next() < 2)
+            if (M2Share.RandomNumber.Random(3) < 2)
             {
                 var n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
             up = GetUpgrade(12, 15);
-            if ((new System.Random(10)).Next() == 0)
+            if (M2Share.RandomNumber.Random(10) == 0)
             {
-                pu.Desc[7] = (byte)(1 + (up / 2));
+                pu.Desc[7] = (byte)(1 + up / 2);
             }
         }
 
@@ -161,32 +161,32 @@ namespace GameSvr.Items
             int n;
             int up;
             up = GetUpgrade(6, 15);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
             }
             up = GetUpgrade(6, 15);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[1] = (byte)(1 + up); // MAC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[3] = (byte)(1 + up); // MC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 10);
-            if ((new System.Random(8)).Next() < 6)
+            if (M2Share.RandomNumber.Random(8) < 6)
             {
                 n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
@@ -200,32 +200,32 @@ namespace GameSvr.Items
             int n;
             int up;
             up = GetUpgrade(6, 30);
-            if ((new System.Random(60)).Next() == 0)
+            if (M2Share.RandomNumber.Random(60) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC(HIT)
             }
             up = GetUpgrade(6, 30);
-            if ((new System.Random(60)).Next() == 0)
+            if (M2Share.RandomNumber.Random(60) == 0)
             {
                 pu.Desc[1] = (byte)(1 + up);// MAC(SPEED)
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if ((new System.Random(20)).Next() < 15)
+            if (M2Share.RandomNumber.Random(20) < 15)
             {
                 n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
@@ -239,32 +239,32 @@ namespace GameSvr.Items
             int n;
             int up;
             up = GetUpgrade(6, 20);
-            if ((new System.Random(20)).Next() == 0)
+            if (M2Share.RandomNumber.Random(20) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(20)).Next() == 0)
+            if (M2Share.RandomNumber.Random(20) == 0)
             {
                 pu.Desc[1] = (byte)(1 + up);// MAC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if ((new System.Random(20)).Next() < 15)
+            if (M2Share.RandomNumber.Random(20) < 15)
             {
                 n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
@@ -278,32 +278,32 @@ namespace GameSvr.Items
             int n;
             int up;
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[1] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up); // DC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 10);
-            if ((new System.Random(4)).Next() < 3)
+            if (M2Share.RandomNumber.Random(4) < 3)
             {
                 n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
@@ -317,22 +317,22 @@ namespace GameSvr.Items
             int n;
             int up;
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up); // DC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if ((new System.Random(4)).Next() < 3)
+            if (M2Share.RandomNumber.Random(4) < 3)
             {
                 n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
@@ -346,32 +346,32 @@ namespace GameSvr.Items
             int n;
             int up;
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[1] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[4] = (byte)(1 + up); // SC
             }
             up = GetUpgrade(6, 12);
-            if ((new System.Random(4)).Next() < 3)
+            if (M2Share.RandomNumber.Random(4) < 3)
             {
                 n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
@@ -385,32 +385,32 @@ namespace GameSvr.Items
             int n;
             int up;
             up = GetUpgrade(6, 20);
-            if ((new System.Random(40)).Next() == 0)
+            if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[1] = (byte)(1 + up);// MAC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if ((new System.Random(4)).Next() < 3)
+            if (M2Share.RandomNumber.Random(4) < 3)
             {
                 n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
@@ -461,32 +461,32 @@ namespace GameSvr.Items
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[7] = 1;
             }
             pu.Desc[8] = 1;
             if (sum >= 3)
             {
-                if ((pu.Desc[0] >= 5))
+                if (pu.Desc[0] >= 5)
                 {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(25 + pu.Desc[0] * 3);
                     return;
                 }
-                if ((pu.Desc[2] >= 2))
+                if (pu.Desc[2] >= 2)
                 {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(35 + pu.Desc[2] * 4);
                     return;
                 }
-                if ((pu.Desc[3] >= 2))
+                if (pu.Desc[3] >= 2)
                 {
                     pu.Desc[5] = 2;
                     pu.Desc[6] = (byte)(18 + pu.Desc[3] * 2);
                     return;
                 }
-                if ((pu.Desc[4] >= 2))
+                if (pu.Desc[4] >= 2)
                 {
                     pu.Desc[5] = 3;
                     pu.Desc[6] = (byte)(18 + pu.Desc[4] * 2);
@@ -527,26 +527,26 @@ namespace GameSvr.Items
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[7] = 1;
             }
             pu.Desc[8] = 1;
             if (sum >= 3)
             {
-                if ((pu.Desc[2] >= 3))
+                if (pu.Desc[2] >= 3)
                 {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(25 + pu.Desc[2] * 3);
                     return;
                 }
-                if ((pu.Desc[3] >= 3))
+                if (pu.Desc[3] >= 3)
                 {
                     pu.Desc[5] = 2;
                     pu.Desc[6] = (byte)(18 + pu.Desc[3] * 2);
                     return;
                 }
-                if ((pu.Desc[4] >= 3))
+                if (pu.Desc[4] >= 3)
                 {
                     pu.Desc[5] = 3;
                     pu.Desc[6] = (byte)(18 + pu.Desc[4] * 2);
@@ -599,32 +599,32 @@ namespace GameSvr.Items
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
-            if ((new System.Random(30)).Next() == 0)
+            if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[7] = 1;
             }
             pu.Desc[8] = 1;
             if (sum >= 2)
             {
-                if ((pu.Desc[0] >= 3))
+                if (pu.Desc[0] >= 3)
                 {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(25 + pu.Desc[0] * 3);
                     return;
                 }
-                if ((pu.Desc[2] >= 2))
+                if (pu.Desc[2] >= 2)
                 {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(30 + pu.Desc[2] * 3);
                     return;
                 }
-                if ((pu.Desc[3] >= 2))
+                if (pu.Desc[3] >= 2)
                 {
                     pu.Desc[5] = 2;
                     pu.Desc[6] = (byte)(20 + pu.Desc[3] * 2);
                     return;
                 }
-                if ((pu.Desc[4] >= 2))
+                if (pu.Desc[4] >= 2)
                 {
                     pu.Desc[5] = 3;
                     pu.Desc[6] = (byte)(20 + pu.Desc[4] * 2);
@@ -1126,13 +1126,13 @@ namespace GameSvr.Items
         public byte GetAttackSpeed(byte bStdAtkSpd, byte bUserAtkSpd)
         {
             int iTemp = RealAttackSpeed(bStdAtkSpd) + RealAttackSpeed(bUserAtkSpd);
-            return ((byte)NaturalAttackSpeed(iTemp));
+            return (byte)NaturalAttackSpeed(iTemp);
         }
 
         public byte UpgradeAttackSpeed(byte bUserAtkSpd, int iUpValue)
         {
             int iTemp = RealAttackSpeed(bUserAtkSpd) + iUpValue;
-            return ((byte)NaturalAttackSpeed(iTemp));
+            return (byte)NaturalAttackSpeed(iTemp);
         }
 
         public void RandomUpgradeItem(UserItem pu)
