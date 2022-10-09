@@ -1,4 +1,4 @@
-﻿using GameSvr.DataStores;
+﻿using GameSvr.DataSource;
 using GameSvr.Npc;
 using NLog;
 using System.Runtime.InteropServices;
@@ -115,26 +115,26 @@ namespace GameSvr.Script
                 {
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
                     var sCallScriptFile = GetCallScriptPath(sLable.Trim());
-                    var s18 = sLine.Trim();
+                    var sLabName = sLine.Trim();
                     var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "QuestDiary", sCallScriptFile);
                     if (sCallScriptDict.ContainsKey(sFileName))
                     {
                         callList[i] = "#ACT";
-                        callList.InsertText(i + 1, "goto " + s18);
+                        callList.InsertText(i + 1, "goto " + sLabName);
                         break;
                     }
-                    if (LoadScriptFileCallScript(sFileName, s18, callList))
+                    if (LoadScriptFileCallScript(sFileName, sLabName, callList))
                     {
                         callList[i] = "#ACT";
-                        callList.InsertText(i + 1, "goto " + s18);
-                        if (!sCallScriptDict.ContainsKey(s18))
+                        callList.InsertText(i + 1, "goto " + sLabName);
+                        if (!sCallScriptDict.ContainsKey(sLabName))
                         {
-                            sCallScriptDict.Add(sFileName, s18);
+                            sCallScriptDict.Add(sFileName, sLabName);
                         }
                     }
                     else
                     {
-                        _logger.Error("script error, load fail: " + sCallScriptFile + s18);
+                        _logger.Error("script error, load fail: " + sCallScriptFile + sLabName);
                     }
                 }
             }
@@ -155,19 +155,19 @@ namespace GameSvr.Script
             var s24 = string.Empty;
             for (var i = 0; i < LoadList.Count; i++)
             {
-                string s14 = LoadList[i].Trim();
-                if (s14 != "" && s14[0] == '#')
+                string sDefName = LoadList[i].Trim();
+                if (sDefName != "" && sDefName[0] == '#')
                 {
-                    if (HUtil32.CompareLStr(s14, "#SETHOME"))
+                    if (HUtil32.CompareLStr(sDefName, "#SETHOME"))
                     {
-                        result = HUtil32.GetValidStr3(s14, ref s1C, TextSpitConst).Trim();
+                        result = HUtil32.GetValidStr3(sDefName, ref s1C, TextSpitConst).Trim();
                         LoadList[i] = "";
                     }
-                    if (HUtil32.CompareLStr(s14, "#DEFINE"))
+                    if (HUtil32.CompareLStr(sDefName, "#DEFINE"))
                     {
-                        s14 = HUtil32.GetValidStr3(s14, ref s1C, TextSpitConst);
-                        s14 = HUtil32.GetValidStr3(s14, ref s20, TextSpitConst);
-                        s14 = HUtil32.GetValidStr3(s14, ref s24, TextSpitConst);
+                        sDefName = HUtil32.GetValidStr3(sDefName, ref s1C, TextSpitConst);
+                        sDefName = HUtil32.GetValidStr3(sDefName, ref s20, TextSpitConst);
+                        sDefName = HUtil32.GetValidStr3(sDefName, ref s24, TextSpitConst);
                         TDefineInfo DefineInfo = new TDefineInfo
                         {
                             sName = s20.ToUpper(),
@@ -176,9 +176,9 @@ namespace GameSvr.Script
                         List.Add(DefineInfo);
                         LoadList[i] = "";
                     }
-                    if (HUtil32.CompareLStr(s14, "#INCLUDE"))
+                    if (HUtil32.CompareLStr(sDefName, "#INCLUDE"))
                     {
-                        string s28 = HUtil32.GetValidStr3(s14, ref s1C, TextSpitConst).Trim();
+                        string s28 = HUtil32.GetValidStr3(sDefName, ref s1C, TextSpitConst).Trim();
                         s28 = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Defines", s28);
                         if (File.Exists(s28))
                         {

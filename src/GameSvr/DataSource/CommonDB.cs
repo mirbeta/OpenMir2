@@ -9,7 +9,7 @@ using SystemModule.Data;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.DataStores
+namespace GameSvr.DataSource
 {
     public class CommonDB
     {
