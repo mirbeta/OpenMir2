@@ -62,8 +62,8 @@ namespace GameSvr
             }
             if (currentTick - _scheduledSaveIntervalTime > 60 * 1000) //定时保存玩家数据
             {
-                _scheduledSaveIntervalTime = HUtil32.GetTickCount();
                 TimingSaveData();
+                _scheduledSaveIntervalTime = HUtil32.GetTickCount();
             }
         }
 
