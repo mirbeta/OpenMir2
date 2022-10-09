@@ -1239,21 +1239,22 @@ namespace DBSvr.Storage.MySQL
             delcommand.ExecuteNonQuery();
             try
             {
-                const string sStrSql = "INSERT INTO characters_magic(PlayerId, MagicId, Level, Usekey, CurrTrain) VALUES (@PlayerId, @MagicId, @Level, @Usekey, @CurrTrain)";
+                const string sStrSql = "INSERT INTO characters_magic(PlayerId,MagicId,Level,Usekey,CurrTrain) VALUES ({0},{1},{2},{3},{4});";
+                var strSqlList = new List<string>();
                 for (var i = 0; i < humanRcd.Length; i++)
                 {
                     if (humanRcd[i].MagIdx > 0)
                     {
-                        var command = context.CreateCommand();
-                        command.CommandText = sStrSql;
-                        command.Parameters.AddWithValue("@PlayerId", playerId);
-                        command.Parameters.AddWithValue("@MagicId", humanRcd[i].MagIdx);
-                        command.Parameters.AddWithValue("@Level", humanRcd[i].Level);
-                        command.Parameters.AddWithValue("@Usekey", humanRcd[i].MagicKey);
-                        command.Parameters.AddWithValue("@CurrTrain", humanRcd[i].TranPoint);
-                        command.ExecuteNonQuery();
+                        strSqlList.Add(string.Format(sStrSql, playerId, humanRcd[i].MagIdx, humanRcd[i].Level, humanRcd[i].MagicKey, humanRcd[i].TranPoint));
                     }
                 }
+                if (strSqlList.Count <= 0)
+                {
+                    return;
+                }
+                var command = context.CreateCommand();
+                command.CommandText = string.Join("\r\n", strSqlList);
+                command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {

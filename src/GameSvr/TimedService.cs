@@ -60,7 +60,7 @@ namespace GameSvr
                 M2Share.ActorMgr.ClearObject();
                 _clearIntervalTime = HUtil32.GetTickCount();
             }
-            if (currentTick - _scheduledSaveIntervalTime > 60 * 1000) //定时保存玩家数据
+            if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
             {
                 TimingSaveData();
                 _scheduledSaveIntervalTime = HUtil32.GetTickCount();
