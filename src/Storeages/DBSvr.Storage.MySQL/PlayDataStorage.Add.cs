@@ -10,6 +10,10 @@ namespace DBSvr.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
+        /// <summary>
+        /// 检查角色名称是否存在
+        /// </summary>
+        /// <returns></returns>
         private bool CheckChrExists(string sChrName)
         {
             if (_NameQuickMap.ContainsKey(sChrName))
@@ -18,17 +22,17 @@ namespace DBSvr.Storage.MySQL
             }
             if (_NameQuickMap.TryGetValue(sChrName, out var nIndex))
             {
-                if (nIndex >= 0)
+                if (nIndex == 0)
                 {
                     return false;
                 }
+                return true;
             }
-            return true;
+            return false;
         }
 
         public bool Add(HumDataInfo humanRcd)
         {
-            var result = false;
             var sChrName = humanRcd.Header.sName;
             if (CheckChrExists(sChrName))
             {
@@ -38,10 +42,10 @@ namespace DBSvr.Storage.MySQL
             if (AddRecord(ref nIndex, ref humanRcd))
             {
                 _NameQuickMap.Add(sChrName, nIndex);
-                _IndexQuickIdMap.Add(nIndex, nIndex);
-                result = true;
+                _IndexQuickIdMap.Add(nIndex, nIndex); 
+                return true;
             }
-            return result;
+            return false;
         }
 
         private bool AddRecord(ref int nIndex, ref HumDataInfo humanRcd)

@@ -48,7 +48,7 @@ namespace DBSvr.Storage.MySQL
             {
                 var command = new MySqlCommand();
                 command.Connection = connection;
-                command.CommandText = "select * from characters_indexes";
+                command.CommandText = "select * from characters_indexes where IsDeleted < 2"; //排除异常数据
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -318,17 +318,19 @@ namespace DBSvr.Storage.MySQL
         {
             IList<QuickId> ChrNameList = null;
             var result = false;
-            int n10 = _quickList[sName];
-            if (n10 < 0)
+            if (_quickList.TryGetValue(sName, out int nIndex))
             {
-                return result;
+                if (nIndex < 0)
+                {
+                    return true;
+                }
             }
-            HumRecordData HumRecord = Get(n10, ref result);
-            //if (DeleteRecord(m_IndexQuickList[n10]))
-            //{
-            //    m_QuickList.Remove(n10);
-            //    result = true;
-            //}
+            if (DeleteRecord(nIndex))
+            {
+                _indexQuickList.Remove(nIndex);
+                result = true;
+            }
+            HumRecordData HumRecord = Get(nIndex, ref result);
             if (result)
             {
                 var n14 = _quickIdList.GetChrList(HumRecord.sAccount, ref ChrNameList);
@@ -342,7 +344,33 @@ namespace DBSvr.Storage.MySQL
 
         private bool DeleteRecord(int nIndex)
         {
-            throw new NotImplementedException();
+            const string DeleteChrIndexes = "UPDATE characters_indexes SET IsDeleted = @IsDeleted,ModifyDate = now() WHERE Id = @Id;";
+            var connSuccess = false;
+            var connection = Open(ref connSuccess);
+            if (!connSuccess)
+            {
+                return false;
+            }
+            try
+            {
+                var command = new MySqlCommand();
+                command.Connection = connection;
+                command.CommandText = DeleteChrIndexes;
+                command.Parameters.AddWithValue("@IsDeleted", 2);
+                command.Parameters.AddWithValue("@Id", nIndex);
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Source);
+                return false;
+            }
+            finally
+            {
+                connection.Clone();
+                connection.Dispose();
+            }
         }
 
         public bool Update(int nIndex, ref HumRecordData HumDBRecord)
