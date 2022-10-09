@@ -1,6 +1,6 @@
-using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using SystemModule.Packet.ClientPackets;
@@ -10,40 +10,36 @@ namespace DBSvr.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly Dictionary<string, int> _mirQuickMap;
-        private readonly Dictionary<int, int> _quickIndexIdMap;
-        private readonly QuickIdList _mirQuickIdList;
-        private readonly StorageOption _storageOption;
-
-        public PlayDataStorage(StorageOption storageOption)
+        private bool CheckChrExists(string sChrName)
         {
-            _mirQuickMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _mirQuickIdList = new QuickIdList();
-            _quickIndexIdMap = new Dictionary<int, int>();
-            _storageOption = storageOption;
-        }
-
-        public bool Add(HumDataInfo humanRcd)
-        {
-            var result = false;
-            var sChrName = humanRcd.Header.sName;
-            int nIndex;
-            if (_mirQuickMap.TryGetValue(sChrName, out nIndex))
+            if (_NameQuickMap.ContainsKey(sChrName))
+            {
+                return true;
+            }
+            if (_NameQuickMap.TryGetValue(sChrName, out var nIndex))
             {
                 if (nIndex >= 0)
                 {
                     return false;
                 }
             }
-            else
+            return true;
+        }
+
+        public bool Add(HumDataInfo humanRcd)
+        {
+            var result = false;
+            var sChrName = humanRcd.Header.sName;
+            if (CheckChrExists(sChrName))
             {
-                if (AddRecord(ref nIndex, ref humanRcd))
-                {
-                    _mirQuickMap.Add(sChrName, nIndex);
-                    _quickIndexIdMap.Add(nIndex, nIndex);
-                    result = true;
-                }
+                return false;
+            }
+            var nIndex = 0;
+            if (AddRecord(ref nIndex, ref humanRcd))
+            {
+                _NameQuickMap.Add(sChrName, nIndex);
+                _IndexQuickIdMap.Add(nIndex, nIndex);
+                result = true;
             }
             return result;
         }
@@ -156,33 +152,40 @@ namespace DBSvr.Storage.MySQL
 
         private void CreateAblity(StorageContext context, int playerId, HumInfoData hd)
         {
-            var strSql = new StringBuilder();
-            strSql.AppendLine("INSERT INTO characters_ablity (PlayerId, Level, Ac, Mac, Dc, Mc, Sc, Hp, Mp, MaxHP, MAxMP, Exp, MaxExp,");
-            strSql.AppendLine(" Weight, MaxWeight, WearWeight,MaxWearWeight, HandWeight, MaxHandWeight) VALUES ");
-            strSql.AppendLine(" (@PlayerId, @Level, @Ac, @Mac, @Dc, @Mc, @Sc, @Hp, @Mp, @MaxHP, @MAxMP, @Exp, @MaxExp, @Weight, @MaxWeight, @WearWeight, @MaxWearWeight, @HandWeight, @MaxHandWeight) ");
-            var command = context.CreateCommand();
-            command.CommandText = strSql.ToString();
-            command.Parameters.Clear();
-            command.Parameters.AddWithValue("@PlayerId", playerId);
-            command.Parameters.AddWithValue("@Level", hd.Abil.Level);
-            command.Parameters.AddWithValue("@Ac", hd.Abil.Level);
-            command.Parameters.AddWithValue("@Mac", hd.Abil.MAC);
-            command.Parameters.AddWithValue("@Dc", hd.Abil.DC);
-            command.Parameters.AddWithValue("@Mc", hd.Abil.MC);
-            command.Parameters.AddWithValue("@Sc", hd.Abil.SC);
-            command.Parameters.AddWithValue("@Hp", hd.Abil.HP);
-            command.Parameters.AddWithValue("@Mp", hd.Abil.MP);
-            command.Parameters.AddWithValue("@MaxHP", hd.Abil.MaxHP);
-            command.Parameters.AddWithValue("@MAxMP", hd.Abil.MaxMP);
-            command.Parameters.AddWithValue("@Exp", hd.Abil.Exp);
-            command.Parameters.AddWithValue("@MaxExp", hd.Abil.MaxExp);
-            command.Parameters.AddWithValue("@Weight", hd.Abil.Weight);
-            command.Parameters.AddWithValue("@MaxWeight", hd.Abil.MaxWeight);
-            command.Parameters.AddWithValue("@WearWeight", hd.Abil.WearWeight);
-            command.Parameters.AddWithValue("@MaxWearWeight", hd.Abil.MaxWearWeight);
-            command.Parameters.AddWithValue("@HandWeight", hd.Abil.HandWeight);
-            command.Parameters.AddWithValue("@MaxHandWeight", hd.Abil.MaxHandWeight);
-            command.ExecuteNonQuery();
+            try
+            {
+                var strSql = new StringBuilder();
+                strSql.AppendLine("INSERT INTO characters_ablity (PlayerId, Level, Ac, Mac, Dc, Mc, Sc, Hp, Mp, MaxHP, MAxMP, Exp, MaxExp,");
+                strSql.AppendLine(" Weight, MaxWeight, WearWeight,MaxWearWeight, HandWeight, MaxHandWeight) VALUES ");
+                strSql.AppendLine(" (@PlayerId, @Level, @Ac, @Mac, @Dc, @Mc, @Sc, @Hp, @Mp, @MaxHP, @MAxMP, @Exp, @MaxExp, @Weight, @MaxWeight, @WearWeight, @MaxWearWeight, @HandWeight, @MaxHandWeight) ");
+                var command = context.CreateCommand();
+                command.CommandText = strSql.ToString();
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@PlayerId", playerId);
+                command.Parameters.AddWithValue("@Level", hd.Abil.Level);
+                command.Parameters.AddWithValue("@Ac", hd.Abil.Level);
+                command.Parameters.AddWithValue("@Mac", hd.Abil.MAC);
+                command.Parameters.AddWithValue("@Dc", hd.Abil.DC);
+                command.Parameters.AddWithValue("@Mc", hd.Abil.MC);
+                command.Parameters.AddWithValue("@Sc", hd.Abil.SC);
+                command.Parameters.AddWithValue("@Hp", hd.Abil.HP);
+                command.Parameters.AddWithValue("@Mp", hd.Abil.MP);
+                command.Parameters.AddWithValue("@MaxHP", hd.Abil.MaxHP);
+                command.Parameters.AddWithValue("@MAxMP", hd.Abil.MaxMP);
+                command.Parameters.AddWithValue("@Exp", hd.Abil.Exp);
+                command.Parameters.AddWithValue("@MaxExp", hd.Abil.MaxExp);
+                command.Parameters.AddWithValue("@Weight", hd.Abil.Weight);
+                command.Parameters.AddWithValue("@MaxWeight", hd.Abil.MaxWeight);
+                command.Parameters.AddWithValue("@WearWeight", hd.Abil.WearWeight);
+                command.Parameters.AddWithValue("@MaxWearWeight", hd.Abil.MaxWearWeight);
+                command.Parameters.AddWithValue("@HandWeight", hd.Abil.HandWeight);
+                command.Parameters.AddWithValue("@MaxHandWeight", hd.Abil.MaxHandWeight);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.StackTrace);
+            }
         }
 
         private void CreateStatus(StorageContext context, int playerId)
@@ -206,7 +209,7 @@ namespace DBSvr.Storage.MySQL
 
         private void CreateUseItem(StorageContext context, int playerId)
         {
-            const string InsertUseItemSql = "INSERT INTO characters_item (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
+            const string InsertUseItemSql = "INSERT INTO characters_item (PlayerId,Position,MakeIndex,StdIndex,Dura,DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
             var playData = new HumDataInfo();
             GetItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.HumItems;
@@ -307,7 +310,6 @@ namespace DBSvr.Storage.MySQL
         private void CreateStorageItem(StorageContext context, int playerId)
         {
             const string InsertStorageItemSql = "INSERT INTO characters_storageitem (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-
             var playData = new HumDataInfo();
             GetStorageRecord(playerId, context, ref playData);
             var oldItems = playData.Data.StorageItems;
