@@ -34,6 +34,11 @@ namespace GameSvr.Conf
             {
                 WriteString("Server", "ServerName", M2Share.Config.ServerName);
             }
+            if (ReadInteger("Server", "CloseCountdown", -1) < 0)
+            {
+                WriteInteger("Server", "CloseCountdown", M2Share.Config.CloseCountdown);
+            }
+            M2Share.Config.CloseCountdown = ReadInteger("Server", "CloseCountdown", M2Share.Config.CloseCountdown);
             M2Share.Config.ServerName = ReadString("Server", "ServerName", M2Share.Config.ServerName);
             if (ReadInteger("Server", "ServerNumber", -1) < 0)
                 WriteInteger("Server", "ServerNumber", M2Share.Config.nServerNumber);
