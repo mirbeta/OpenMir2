@@ -285,11 +285,14 @@ namespace DBSvr.Storage.MySQL
         {
             try
             {
+                var playData = new HumDataInfo();
+                GetBagItemRecord(playerId, context, ref playData);
+                var oldItems = playData.Data.BagItems;
                 var bagSize = bagItems.Length;
                 var newItems = bagItems;
                 var delItem = new UserItem[bagSize];
                 var chgList = new UserItem[bagSize];
-
+                ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
                 if (delItem.Length > 0)
                 {
                     for (var i = 0; i < delItem.Length; i++)
@@ -365,9 +368,7 @@ namespace DBSvr.Storage.MySQL
                 var newItems = storageItems;
                 var delItem = new UserItem[storageSize];
                 var chgList = new UserItem[storageSize];
-                var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
                 ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
-
                 if (delItem.Length > 0)
                 {
                     for (var i = 0; i < delItem.Length; i++)

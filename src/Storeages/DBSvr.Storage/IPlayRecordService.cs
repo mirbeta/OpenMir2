@@ -19,10 +19,18 @@ namespace DBSvr.Storage
 
         int FindByAccount(string sAccount, ref IList<QuickId> ChrList);
 
+        /// <summary>
+        /// 获取账号下角色数量
+        /// </summary>
+        /// <returns></returns>
         int ChrCountOfAccount(string sAccount);
 
         bool Add(HumRecordData HumRecord);
 
+        /// <summary>
+        /// 删除记录索引值
+        /// </summary>
+        /// <returns></returns>
         bool Delete(string sName);
 
         bool Update(int nIndex, ref HumRecordData HumDBRecord);

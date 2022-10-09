@@ -239,7 +239,7 @@ namespace DBSvr.Services
         private bool NewChrData(string sAccount, string sChrName, int nSex, int nJob, int nHair)
         {
             var result = false;
-            if ((_playDataStorage.Index(sChrName) == -1))
+            if (_playDataStorage.Index(sChrName) == -1)
             {
                 var chrRecord = new HumDataInfo();
                 chrRecord.Header = new RecordHeader();
@@ -761,6 +761,10 @@ namespace DBSvr.Services
                     if (NewChrData(sAccount, sChrName, HUtil32.StrToInt(sSex, 0), HUtil32.StrToInt(sJob, 0), HUtil32.StrToInt(sHair, 0)))
                     {
                         nCode = 1;
+                    }
+                    else
+                    {
+                        _playRecordStorage.Delete(sChrName); //创建角色数据失败，删除索引值
                     }
                 }
                 else
