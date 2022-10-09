@@ -3,7 +3,7 @@ using GameSvr.Castle;
 using GameSvr.Command;
 using GameSvr.Conf;
 using GameSvr.Conf.Model;
-using GameSvr.DataStores;
+using GameSvr.DataSource;
 using GameSvr.Event;
 using GameSvr.GateWay;
 using GameSvr.Guild;
