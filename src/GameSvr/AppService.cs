@@ -138,12 +138,12 @@ namespace GameSvr
             {
                 //todo 通知网关断开链接.停止新玩家进入游戏
                 _logger.LogInformation($"转移到新服务器[{sIPaddr}:{nPort}]");
-                var playerCount = M2Share.WorldEngine.PlayObjects.Count();
+                var playerCount = M2Share.WorldEngine.PlayObjectCount;
                 if (playerCount > 0)
                 {
                     Task.Factory.StartNew(async () =>
                     {
-                        var shutdownSeconds = 120;
+                        var shutdownSeconds = M2Share.Config.CloseCountdown;
                         while (true)
                         {
                             if (playerCount <= 0)
@@ -152,7 +152,7 @@ namespace GameSvr
                             }
                             foreach (var playObject in M2Share.WorldEngine.PlayObjects)
                             {
-                                var closeStr = $"服务器关闭倒计时 [{shutdownSeconds}].";
+                                var closeStr = $"服务器关闭倒计时[{shutdownSeconds}]. 关闭后自动转移到其他大区，请勿退出游戏。";
                                 playObject.SysMsg(closeStr, MsgColor.Red, MsgType.Notice);
                                 _logger.LogInformation(closeStr);
                                 shutdownSeconds--;

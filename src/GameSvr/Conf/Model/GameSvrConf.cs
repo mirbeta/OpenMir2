@@ -73,6 +73,10 @@ namespace GameSvr.Conf.Model
         /// Master节点服务器端口
         /// </summary>
         public int MsgSrvPort;
+        /// <summary>
+        /// 服务器关闭倒计时秒数
+        /// </summary>
+        public int CloseCountdown;
         public string LogServerAddr;
         public int LogServerPort;
         public bool DiscountForNightTime;
@@ -1692,6 +1696,7 @@ namespace GameSvr.Conf.Model
             sDBType = "MySQL";
             NpcNameColor = 255;
             ItemSpeed = 60;
+            CloseCountdown = 360;
         }
     }
 }
