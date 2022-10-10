@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using GameSvr.Command;
+using System.Globalization;
 using SystemModule;
 using SystemModule.Data;
 
@@ -428,7 +429,7 @@ namespace GameSvr.Player
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam7, new[] { " ", ":", ",", "\t" });
                 }
-                if (M2Share.CommandMgr.ExecCmd(sData, this))
+                if (CommandMgr.GetInstance().ExecCmd(sData, this))
                 {
                     return;
                 }

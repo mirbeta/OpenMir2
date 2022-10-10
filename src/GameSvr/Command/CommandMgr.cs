@@ -5,18 +5,32 @@ using SystemModule.Data;
 
 namespace GameSvr.Command
 {
-    public class CommandManager
+    public class CommandMgr
     {
+        private readonly GameCmdConf CommandConf;
         private static readonly Dictionary<string, BaseCommond> CommandMaps = new Dictionary<string, BaseCommond>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// 自定义游戏命令列表
         /// </summary>
         private static readonly Dictionary<string, string> CustomCommands = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        public GameCmdConf CommandConf;
-
-        public CommandManager()
+        private static CommandMgr instance = null;
+        private static readonly object locker = new object();
+        
+        private CommandMgr()
         {
             CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.sCommandFileName));
+        }
+
+        public static CommandMgr GetInstance()
+        {
+            lock (locker)
+            {
+                if (instance == null)
+                {
+                    instance = new CommandMgr();
+                }
+            }
+            return instance;
         }
 
         public void RegisterCommand()

@@ -27,7 +27,6 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
-
     public class TItemBind
     {
         public int nMakeIdex;
@@ -58,10 +57,6 @@ namespace GameSvr
         /// 寻路
         /// </summary>
         public static FindPath FindPath;
-        /// <summary>
-        /// 游戏命令
-        /// </summary>
-        public static CommandManager CommandMgr = null;
         /// <summary>
         /// 地图对象管理
         /// </summary>

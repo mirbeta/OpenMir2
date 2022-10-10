@@ -63,7 +63,6 @@ namespace GameSvr
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.GateMgr = new GameGateMgr();
             M2Share.FindPath = new FindPath();
-            M2Share.CommandMgr = new CommandManager();
             M2Share.CellObjectSystem = new CellObjectMgr();
             M2Share.ItemEventSource = new ItemEventSource();
             M2Share.LogonCostLogList = new ArrayList();
@@ -121,7 +120,7 @@ namespace GameSvr
             LoadServerTable();
             _logger.LogInformation("读取游戏引擎数据配置文件完成...");
             _logger.LogInformation("读取游戏命令配置文件...");
-            M2Share.CommandMgr.RegisterCommand();
+            CommandMgr.GetInstance().RegisterCommand();
             _logger.LogInformation("读取游戏命令配置文件完成...");
             M2Share.LoadGameLogItemNameList();
             M2Share.LoadDenyIPAddrList();
