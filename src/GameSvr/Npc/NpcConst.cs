@@ -2,35 +2,35 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Npc
 {
-    public class TUpgradeInfo
+    public class UpgradeInfo
     {
-        public string sUserName;
+        public string UserName;
         public UserItem UserItem;
-        public byte btDc;
-        public byte btSc;
-        public byte btMc;
-        public byte btDura;
+        public byte Dc;
+        public byte Sc;
+        public byte Mc;
+        public byte Dura;
         public int n2C;
         public DateTime dtTime;
-        public int dwGetBackTick;
+        public int GetBackTick;
         public int n3C;
     }
 
-    public struct TItemPrice
+    public struct ItemPrice
     {
         public ushort wIndex;
         public double nPrice;
     }
 
-    public struct TGoods
+    public struct Goods
     {
-        public string sItemName;
-        public int nCount;
-        public int dwRefillTime;
-        public int dwRefillTick;
+        public string ItemName;
+        public int Count;
+        public int RefillTime;
+        public int RefillTick;
     }
 
-    public class TQuestActionInfo
+    public class QuestActionInfo
     {
         public int nCmdCode;
         public string sParam1;
@@ -49,7 +49,7 @@ namespace GameSvr.Npc
         public string sOpHName;
     }
 
-    public class TQuestConditionInfo
+    public class QuestConditionInfo
     {
         public int CmdCode;
         public string sParam1;
@@ -67,39 +67,39 @@ namespace GameSvr.Npc
         public string sOpName;
         public string sOpHName;
     }
-
-    public class TSayingProcedure
+    
+    public class SayingProcedure
     {
-        public IList<TQuestConditionInfo> ConditionList;
-        public IList<TQuestActionInfo> ActionList;
+        public IList<QuestConditionInfo> ConditionList;
+        public IList<QuestActionInfo> ActionList;
         public string sSayMsg;
         public IList<string> SayOldLabelList;
         public IList<string> SayNewLabelList;
-        public IList<TQuestActionInfo> ElseActionList;
+        public IList<QuestActionInfo> ElseActionList;
         public string sElseSayMsg;
         public IList<string> ElseSayOldLabelList;
         public IList<string> ElseSayNewLabelList;
 
-        public TSayingProcedure()
+        public SayingProcedure()
         {
-            this.ConditionList = new List<TQuestConditionInfo>();
-            this.ActionList = new List<TQuestActionInfo>();
+            this.ConditionList = new List<QuestConditionInfo>();
+            this.ActionList = new List<QuestActionInfo>();
             this.SayOldLabelList = new List<string>();
             this.SayNewLabelList = new List<string>();
-            this.ElseActionList = new List<TQuestActionInfo>();
+            this.ElseActionList = new List<QuestActionInfo>();
             this.ElseSayOldLabelList = new List<string>();
             this.ElseSayNewLabelList = new List<string>();
         }
     }
 
-    public class TSayingRecord
+    public class SayingRecord
     {
         public string sLabel;
-        public IList<TSayingProcedure> ProcedureList;
+        public IList<SayingProcedure> ProcedureList;
         public bool boExtJmp;
     }
 
-    public class TScriptParams
+    public class ScriptParams
     {
         public string sParams;
         public int nParams;

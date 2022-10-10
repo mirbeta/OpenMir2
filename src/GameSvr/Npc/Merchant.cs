@@ -29,7 +29,7 @@ namespace GameSvr.Npc
         /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
         /// </summary>
         public IList<int> ItemTypeList;
-        public IList<TGoods> RefillGoodsList;
+        public IList<Goods> RefillGoodsList;
         /// <summary>
         /// 商品列表
         /// </summary>
@@ -37,11 +37,11 @@ namespace GameSvr.Npc
         /// <summary>
         /// 物品价格列表
         /// </summary>
-        private readonly IList<TItemPrice> ItemPriceList;
+        private readonly IList<ItemPrice> ItemPriceList;
         /// <summary>
         /// 物品升级列表
         /// </summary>
-        private readonly IList<TUpgradeInfo> UpgradeWeaponList;
+        private readonly IList<UpgradeInfo> UpgradeWeaponList;
         public bool m_boCanMove = false;
         public int m_dwMoveTime = 0;
         public int m_dwMoveTick;
@@ -70,8 +70,8 @@ namespace GameSvr.Npc
 
         private void AddItemPrice(ushort nIndex, double nPrice)
         {
-            TItemPrice ItemPrice;
-            ItemPrice = new TItemPrice
+            ItemPrice ItemPrice;
+            ItemPrice = new ItemPrice
             {
                 wIndex = nIndex,
                 nPrice = nPrice
@@ -163,7 +163,7 @@ namespace GameSvr.Npc
 
         private void RefillGoods()
         {
-            TGoods Goods;
+            Goods Goods;
             const string sExceptionMsg = "[Exception] TMerchant::RefillGoods {0}/{1}:{2} [{3}] Code:{4}";
             try
             {
@@ -171,10 +171,10 @@ namespace GameSvr.Npc
                 for (var i = 0; i < RefillGoodsList.Count; i++)
                 {
                     Goods = RefillGoodsList[i];
-                    if ((HUtil32.GetTickCount() - Goods.dwRefillTick) > (Goods.dwRefillTime * 60 * 1000))
+                    if ((HUtil32.GetTickCount() - Goods.RefillTick) > (Goods.RefillTime * 60 * 1000))
                     {
-                        Goods.dwRefillTick = HUtil32.GetTickCount();
-                        nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.sItemName);
+                        Goods.RefillTick = HUtil32.GetTickCount();
+                        nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
                         if (nIndex >= 0)
                         {
                             IList<UserItem> RefillList = GetRefillList(nIndex);
@@ -183,16 +183,16 @@ namespace GameSvr.Npc
                             {
                                 nRefillCount = RefillList.Count;
                             }
-                            if (Goods.nCount > nRefillCount)
+                            if (Goods.Count > nRefillCount)
                             {
                                 CheckItemPrice(nIndex);
-                                RefillGoods_RefillItems(ref RefillList, Goods.sItemName, Goods.nCount - nRefillCount);
+                                RefillGoods_RefillItems(ref RefillList, Goods.ItemName, Goods.Count - nRefillCount);
                                 M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
                                 M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
                             }
-                            if (Goods.nCount < nRefillCount)
+                            if (Goods.Count < nRefillCount)
                             {
-                                RefillGoods_DelReFillItem(ref RefillList, nRefillCount - Goods.nCount);
+                                RefillGoods_DelReFillItem(ref RefillList, nRefillCount - Goods.Count);
                                 M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
                                 M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
                             }
@@ -208,7 +208,7 @@ namespace GameSvr.Npc
                         for (var j = 0; j < RefillGoodsList.Count; j++)
                         {
                             Goods = RefillGoodsList[j];
-                            nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.sItemName);
+                            nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
                             if (RefillList20[0].Index == nIndex)
                             {
                                 bo21 = true;
@@ -251,7 +251,7 @@ namespace GameSvr.Npc
             double result = -1;
             for (var i = 0; i < ItemPriceList.Count; i++)
             {
-                TItemPrice ItemPrice = ItemPriceList[i];
+                ItemPrice ItemPrice = ItemPriceList[i];
                 if (ItemPrice.wIndex == nIndex)
                 {
                     result = ItemPrice.nPrice;
@@ -432,11 +432,11 @@ namespace GameSvr.Npc
         private void UpgradeWapon(PlayObject User)
         {
             var bo0D = false;
-            TUpgradeInfo upgradeInfo;
+            UpgradeInfo upgradeInfo;
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
             {
                 upgradeInfo = UpgradeWeaponList[i];
-                if (upgradeInfo.sUserName == User.ChrName)
+                if (upgradeInfo.UserName == User.ChrName)
                 {
                     GotoLable(User, ScriptConst.sUPGRADEING, false);
                     return;
@@ -458,9 +458,9 @@ namespace GameSvr.Npc
                     }
                 }
                 User.GoldChanged();
-                upgradeInfo = new TUpgradeInfo
+                upgradeInfo = new UpgradeInfo
                 {
-                    sUserName = User.ChrName,
+                    UserName = User.ChrName,
                     UserItem = User.UseItems[Grobal2.U_WEAPON]
                 };
                 var StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[Grobal2.U_WEAPON].Index);
@@ -473,9 +473,9 @@ namespace GameSvr.Npc
                 User.RecalcAbilitys();
                 User.FeatureChanged();
                 User.SendMsg(User, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                UpgradeWaponAddValue(User, User.ItemList, ref upgradeInfo.btDc, ref upgradeInfo.btSc, ref upgradeInfo.btMc, ref upgradeInfo.btDura);
+                UpgradeWaponAddValue(User, User.ItemList, ref upgradeInfo.Dc, ref upgradeInfo.Sc, ref upgradeInfo.Mc, ref upgradeInfo.Dura);
                 upgradeInfo.dtTime = DateTime.Now;
-                upgradeInfo.dwGetBackTick = HUtil32.GetTickCount();
+                upgradeInfo.GetBackTick = HUtil32.GetTickCount();
                 UpgradeWeaponList.Add(upgradeInfo);
                 SaveUpgradingList();
                 bo0D = true;
@@ -496,7 +496,7 @@ namespace GameSvr.Npc
         /// <param name="User"></param>
         private void GetBackupgWeapon(PlayObject User)
         {
-            TUpgradeInfo UpgradeInfo = null;
+            UpgradeInfo UpgradeInfo = null;
             int n18 = 0;
             if (!User.IsEnoughBag())
             {
@@ -505,10 +505,10 @@ namespace GameSvr.Npc
             }
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
             {
-                if (UpgradeWeaponList[i].sUserName == User.ChrName)
+                if (UpgradeWeaponList[i].UserName == User.ChrName)
                 {
                     n18 = 1;
-                    if (((HUtil32.GetTickCount() - UpgradeWeaponList[i].dwGetBackTick) > M2Share.Config.UPgradeWeaponGetBackTime) || User.Permission >= 4)
+                    if (((HUtil32.GetTickCount() - UpgradeWeaponList[i].GetBackTick) > M2Share.Config.UPgradeWeaponGetBackTime) || User.Permission >= 4)
                     {
                         UpgradeInfo = UpgradeWeaponList[i];
                         UpgradeWeaponList.RemoveAt(i);
@@ -520,7 +520,7 @@ namespace GameSvr.Npc
             }
             if (UpgradeInfo != null)
             {
-                if (HUtil32.RangeInDefined(UpgradeInfo.btDura, 0, 8))
+                if (HUtil32.RangeInDefined(UpgradeInfo.Dura, 0, 8))
                 {
                     if (UpgradeInfo.UserItem.DuraMax > 3000)
                     {
@@ -535,9 +535,9 @@ namespace GameSvr.Npc
                         UpgradeInfo.UserItem.Dura = UpgradeInfo.UserItem.DuraMax;
                     }
                 }
-                else if (HUtil32.RangeInDefined(UpgradeInfo.btDura, 9, 15))
+                else if (HUtil32.RangeInDefined(UpgradeInfo.Dura, 9, 15))
                 {
-                    if (M2Share.RandomNumber.Random(UpgradeInfo.btDura) < 6)
+                    if (M2Share.RandomNumber.Random(UpgradeInfo.Dura) < 6)
                     {
                         if (UpgradeInfo.UserItem.DuraMax > 1000)
                         {
@@ -549,9 +549,9 @@ namespace GameSvr.Npc
                         }
                     }
                 }
-                else if (HUtil32.RangeInDefined(UpgradeInfo.btDura, 18, 255))
+                else if (HUtil32.RangeInDefined(UpgradeInfo.Dura, 18, 255))
                 {
-                    var r = M2Share.RandomNumber.Random(UpgradeInfo.btDura - 18);
+                    var r = M2Share.RandomNumber.Random(UpgradeInfo.Dura - 18);
                     if (HUtil32.RangeInDefined(r, 1, 4))
                     {
                         UpgradeInfo.UserItem.DuraMax += 1000;
@@ -566,7 +566,7 @@ namespace GameSvr.Npc
                     }
                 }
                 int n1C;
-                if (UpgradeInfo.btDc == UpgradeInfo.btMc && UpgradeInfo.btMc == UpgradeInfo.btSc)
+                if (UpgradeInfo.Dc == UpgradeInfo.Mc && UpgradeInfo.Mc == UpgradeInfo.Sc)
                 {
                     n1C = M2Share.RandomNumber.Random(3);
                 }
@@ -576,9 +576,9 @@ namespace GameSvr.Npc
                 }
                 int n90;
                 int n10;
-                if (UpgradeInfo.btDc >= UpgradeInfo.btMc && (UpgradeInfo.btDc >= UpgradeInfo.btSc) || (n1C == 0))
+                if (UpgradeInfo.Dc >= UpgradeInfo.Mc && (UpgradeInfo.Dc >= UpgradeInfo.Sc) || (n1C == 0))
                 {
-                    n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
+                    n90 = HUtil32._MIN(11, UpgradeInfo.Dc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.Desc[3] - UpgradeInfo.UserItem.Desc[4] + User.BodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.UpgradeWeaponDCRate) < n10)
                     {
@@ -597,9 +597,9 @@ namespace GameSvr.Npc
                         UpgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 1;
                     }
                 }
-                if (UpgradeInfo.btMc >= UpgradeInfo.btDc && UpgradeInfo.btMc >= UpgradeInfo.btSc || n1C == 1)
+                if (UpgradeInfo.Mc >= UpgradeInfo.Dc && UpgradeInfo.Mc >= UpgradeInfo.Sc || n1C == 1)
                 {
-                    n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
+                    n90 = HUtil32._MIN(11, UpgradeInfo.Mc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.Desc[3] - UpgradeInfo.UserItem.Desc[4] + User.BodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.UpgradeWeaponMCRate) < n10)
                     {
@@ -618,9 +618,9 @@ namespace GameSvr.Npc
                         UpgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 1;
                     }
                 }
-                if (UpgradeInfo.btSc >= UpgradeInfo.btMc && UpgradeInfo.btSc >= UpgradeInfo.btDc || n1C == 2)
+                if (UpgradeInfo.Sc >= UpgradeInfo.Mc && UpgradeInfo.Sc >= UpgradeInfo.Dc || n1C == 2)
                 {
-                    n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
+                    n90 = HUtil32._MIN(11, UpgradeInfo.Mc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.Desc[3] - UpgradeInfo.UserItem.Desc[4] + User.BodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.Config.UpgradeWeaponSCRate) < n10)
                     {
@@ -1039,10 +1039,10 @@ namespace GameSvr.Npc
             PriceRate = 100;
             CastleMerchant = false;
             ItemTypeList = new List<int>();
-            RefillGoodsList = new List<TGoods>();
+            RefillGoodsList = new List<Goods>();
             GoodsList = new List<IList<UserItem>>();
-            ItemPriceList = new List<TItemPrice>();
-            UpgradeWeaponList = new List<TUpgradeInfo>();
+            ItemPriceList = new List<ItemPrice>();
+            UpgradeWeaponList = new List<UpgradeInfo>();
             dwRefillGoodsTick = HUtil32.GetTickCount();
             dwClearExpreUpgradeTick = HUtil32.GetTickCount();
             m_boBuy = false;
@@ -1067,7 +1067,7 @@ namespace GameSvr.Npc
         /// </summary>
         private void ClearExpreUpgradeListData()
         {
-            TUpgradeInfo UpgradeInfo;
+            UpgradeInfo UpgradeInfo;
             for (var i = UpgradeWeaponList.Count - 1; i >= 0; i--)
             {
                 UpgradeInfo = UpgradeWeaponList[i];
@@ -1749,7 +1749,7 @@ namespace GameSvr.Npc
         {
             UserItem UserItem;
             IList<UserItem> ItemList;
-            TItemPrice ItemPrice;
+            ItemPrice ItemPrice;
             const string sExceptionMsg = "[Exception] TMerchant::ClearData";
             try
             {

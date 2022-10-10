@@ -13,7 +13,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void MovrData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void MovrData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var s34 = string.Empty;
             int n14;
@@ -116,7 +116,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void MovData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void MovData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;
@@ -266,7 +266,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void IncInteger(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void IncInteger(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int n14;
             int n3C = 0;
@@ -711,7 +711,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void DecInteger(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void DecInteger(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int n14;
             int n3C = 0;
@@ -1184,7 +1184,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void DivData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void DivData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var s34 = string.Empty;
             var n18 = 0;
@@ -1332,7 +1332,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void MulData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void MulData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var s34 = string.Empty;
             var n18 = 0;
@@ -1516,7 +1516,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void PercentData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void PercentData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var s34 = string.Empty;
             var n18 = 0;
@@ -1671,7 +1671,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void SumData(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void SumData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var n18 = 0;
             var s34 = string.Empty;
@@ -2806,7 +2806,7 @@ namespace GameSvr.Npc
             return boVarFound;
         }
 
-        private int GetMovDataType(TQuestActionInfo QuestActionInfo)
+        private int GetMovDataType(QuestActionInfo QuestActionInfo)
         {
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;
