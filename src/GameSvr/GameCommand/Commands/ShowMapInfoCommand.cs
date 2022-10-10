@@ -1,0 +1,16 @@
+﻿using GameSvr.Player;
+using SystemModule.Data;
+
+namespace GameSvr.Command.Commands
+{
+    [Command("ShowMapInfo", "显示当前地图信息", 0)]
+    public class ShowMapInfoCommand : Command
+    {
+        [ExecuteCommand]
+        public void ShowMapInfo(PlayObject PlayObject)
+        {
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMapInfoMsg, PlayObject.Envir.MapName, PlayObject.Envir.MapDesc), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMapInfoSizeMsg, PlayObject.Envir.Width, PlayObject.Envir.Height), MsgColor.Green, MsgType.Hint);
+        }
+    }
+}
