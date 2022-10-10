@@ -497,6 +497,7 @@ namespace GameSvr
             string sText;
             if (File.Exists(FileName))
             {
+                LineNoticeList.Clear();
                 StringList LoadList = new StringList();
                 LoadList.LoadFromFile(FileName);
                 i = 0;
