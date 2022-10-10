@@ -3049,11 +3049,6 @@ namespace GameSvr.Conf
             {
                 M2Share.g_nGMREDMSGCMD = nLoadInteger;
             }
-
-            foreach (var item in M2Share.GameCommand.GetType().GetFields())
-            {
-                M2Share.CustomCommands.Add((GameCmd)item.GetValue(M2Share.GameCommand));
-            }
         }
     }
 }
