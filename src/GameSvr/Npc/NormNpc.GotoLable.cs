@@ -1,4 +1,5 @@
 using GameSvr.Actor;
+using GameSvr.Command;
 using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Player;
@@ -1952,13 +1953,13 @@ namespace GameSvr.Npc
                         switch (QuestActionInfo.nParam1)
                         {
                             case 1:
-                                M2Share.CommandMgr.ExecCmd("ChangeAdminMode", PlayObject);
+                                CommandMgr.GetInstance().ExecCmd("ChangeAdminMode", PlayObject);
                                 break;
                             case 2:
-                                M2Share.CommandMgr.ExecCmd("ChangeSuperManMode", PlayObject);
+                                CommandMgr.GetInstance().ExecCmd("ChangeSuperManMode", PlayObject);
                                 break;
                             case 3:
-                                M2Share.CommandMgr.ExecCmd("ChangeObMode", PlayObject);
+                                CommandMgr.GetInstance().ExecCmd("ChangeObMode", PlayObject);
                                 break;
                             default:
                                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sCHANGEMODE);

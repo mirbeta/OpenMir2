@@ -1,5 +1,6 @@
 ﻿using GameSvr.Player;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using SystemModule.Data;
 
 namespace GameSvr.Command
@@ -25,8 +26,6 @@ namespace GameSvr.Command
         /// <summary>
         /// 处理命令
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="playObject"></param>
         /// <returns></returns>
         public virtual string Handle(string parameters, PlayObject playObject = null)
         {

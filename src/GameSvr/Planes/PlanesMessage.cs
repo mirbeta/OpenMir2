@@ -1,4 +1,5 @@
-﻿using GameSvr.Guild;
+﻿using GameSvr.Command;
+using GameSvr.Guild;
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
@@ -357,7 +358,7 @@ namespace GameSvr.Snaps
             if (whostr != "")
             {
                 //PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, minstr);
-                M2Share.CommandMgr.ExecCmd("Shutup", PlayObject);
+                CommandMgr.GetInstance().ExecCmd("Shutup", PlayObject);
             }
         }
 
