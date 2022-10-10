@@ -6,7 +6,7 @@ namespace GameSvr.Script
     {
         public bool boQuest;
         public TScriptQuestInfo[] QuestInfo;
-        public Dictionary<string, TSayingRecord> RecordList;
+        public Dictionary<string, SayingRecord> RecordList;
         public int nQuest;
     }
 }

@@ -18,7 +18,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 开通元宝交易
         /// </summary>
-        private void ActionOfOPENYBDEAL(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfOPENYBDEAL(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nGameGold = 0;
             try
@@ -53,7 +53,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 查询正在出售的物品
         /// </summary>
-        private void ActionOfQUERYYBSELL(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfQUERYYBSELL(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             DealOffInfo DealOffInfo;
             string sSendStr;
@@ -165,7 +165,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 查询可以的购买物品
         /// </summary>
-        private void ActionOfQueryTrustDeal(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfQueryTrustDeal(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             DealOffInfo DealOffInfo;
             string sSendStr;
@@ -276,7 +276,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfAddNameDateList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfAddNameDateList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sLineText;
             var sHumName = string.Empty;
@@ -321,7 +321,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfDelNameDateList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfDelNameDateList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sLineText;
             string sHumName = string.Empty;
@@ -365,7 +365,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfAddSkill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfAddSkill(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nLevel = HUtil32._MIN(3, HUtil32.StrToInt(QuestActionInfo.sParam2, 0));
             var Magic = M2Share.WorldEngine.FindMagic(QuestActionInfo.sParam1);
@@ -394,7 +394,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfAutoAddGameGold(PlayObject PlayObject, TQuestActionInfo QuestActionInfo, int nPoint, int nTime)
+        private void ActionOfAutoAddGameGold(PlayObject PlayObject, QuestActionInfo QuestActionInfo, int nPoint, int nTime)
         {
             if (string.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -416,7 +416,7 @@ namespace GameSvr.Npc
         }
 
         // SETAUTOGETEXP 时间 点数 是否安全区 地图号
-        private void ActionOfAutoGetExp(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfAutoGetExp(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             Envirnoment Envir = null;
             var nTime = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
@@ -441,7 +441,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 增加挂机
         /// </summary>
-        private void ActionOfOffLine(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfOffLine(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             PlayObject.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
@@ -459,7 +459,7 @@ namespace GameSvr.Npc
             PlayObject.SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
         }
 
-        private void ActionOfAutoSubGameGold(PlayObject PlayObject, TQuestActionInfo QuestActionInfo, int nPoint, int nTime)
+        private void ActionOfAutoSubGameGold(PlayObject PlayObject, QuestActionInfo QuestActionInfo, int nPoint, int nTime)
         {
             if (string.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -480,7 +480,7 @@ namespace GameSvr.Npc
             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_AUTOSUBGAMEGOLD);
         }
 
-        private void ActionOfChangeCreditPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeCreditPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nCreditPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nCreditPoint < 0)
@@ -530,7 +530,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangeExp(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeExp(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int dwInt;
             var nExp = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -588,7 +588,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangeHairStyle(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeHairStyle(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nHair = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (QuestActionInfo.sParam1 != "" && nHair >= 0)
@@ -602,7 +602,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangeJob(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeJob(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayJob nJob = PlayJob.None;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, ScriptConst.sWarrior))
@@ -629,7 +629,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangeLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nLv;
             var boChgOK = false;
@@ -669,7 +669,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangePkPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangePkPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nPoint;
             var nOldPKLevel = PlayObject.PvpLevel();
@@ -703,7 +703,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearMapMon(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfClearMapMon(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             IList<BaseObject> MonList = new List<BaseObject>();
             var monsterCount = M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), MonList);
@@ -724,7 +724,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearNameList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfClearNameList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, m_sPath, QuestActionInfo.sParam1);
             using var LoadList = new StringList();
@@ -739,7 +739,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearSkill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfClearSkill(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             UserMagic UserMagic;
             for (var i = PlayObject.MagicList.Count - 1; i >= 0; i--)
@@ -752,7 +752,7 @@ namespace GameSvr.Npc
             PlayObject.RecalcAbilitys();
         }
 
-        private void ActionOfDelNoJobSkill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfDelNoJobSkill(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             for (var i = PlayObject.MagicList.Count - 1; i >= 0; i--)
             {
@@ -766,7 +766,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfDelSkill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfDelSkill(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             UserMagic UserMagic;
             var sMagicName = QuestActionInfo.sParam1;
@@ -790,7 +790,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGameGold(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGameGold(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nOldGameGold = PlayObject.m_nGameGold;
             var nGameGold = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -827,7 +827,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGamePoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGamePoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nOldGamePoint = PlayObject.m_nGamePoint;
             var nGamePoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -864,7 +864,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGetMarry(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGetMarry(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var PoseBaseObject = PlayObject.GetPoseCreate();
             if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
@@ -879,7 +879,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGetMaster(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGetMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var PoseBaseObject = PlayObject.GetPoseCreate();
             if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
@@ -894,7 +894,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfLineMsg(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfLineMsg(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sMsg = GetLineVariableText(PlayObject, QuestActionInfo.sParam2);
             sMsg = sMsg.Replace("%s", PlayObject.ChrName);
@@ -941,12 +941,12 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfMapTing(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfMapTing(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
 
         }
 
-        private void ActionOfMarry(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfMarry(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sSayMsg;
             if (PlayObject.m_sDearName != "")
@@ -1066,7 +1066,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfMaster(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             if (PlayObject.m_sMasterName != "")
             {
@@ -1149,12 +1149,12 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfMessageBox(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfMessageBox(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, GetLineVariableText(PlayObject, QuestActionInfo.sParam1));
         }
 
-        private void ActionOfMission(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfMission(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             if (QuestActionInfo.sParam1 != "" && QuestActionInfo.nParam2 > 0 && QuestActionInfo.nParam3 > 0)
             {
@@ -1169,7 +1169,7 @@ namespace GameSvr.Npc
         }
 
         // MOBFIREBURN MAP X Y TYPE TIME POINT
-        private void ActionOfMobFireBurn(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfMobFireBurn(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sMap = QuestActionInfo.sParam1;
             var nX = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -1195,7 +1195,7 @@ namespace GameSvr.Npc
             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_MOBFIREBURN);
         }
 
-        private void ActionOfMobPlace(PlayObject PlayObject, TQuestActionInfo QuestActionInfo, int nX, int nY, int nCount, int nRange)
+        private void ActionOfMobPlace(PlayObject PlayObject, QuestActionInfo QuestActionInfo, int nX, int nY, int nCount, int nRange)
         {
             short nRandX;
             short nRandY;
@@ -1219,11 +1219,11 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfRecallGroupMembers(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfRecallGroupMembers(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
         }
 
-        private void ActionOfSetRankLevelName(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfSetRankLevelName(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sRankLevelName = QuestActionInfo.sParam1;
             if (sRankLevelName == "")
@@ -1235,7 +1235,7 @@ namespace GameSvr.Npc
             PlayObject.RefShowName();
         }
 
-        private void ActionOfSetScriptFlag(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfSetScriptFlag(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nWhere = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             var boFlag = HUtil32.StrToInt(QuestActionInfo.sParam2, -1) == 1;
@@ -1253,7 +1253,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfSkillLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfSkillLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             UserMagic UserMagic;
             var nLevel = HUtil32.StrToInt(QuestActionInfo.sParam3, 0);
@@ -1308,7 +1308,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfTakeCastleGold(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfTakeCastleGold(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nGold = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nGold < 0 || this.Castle == null)
@@ -1326,7 +1326,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfUnMarry(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfUnMarry(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             if (PlayObject.m_sDearName == "")
             {
@@ -1433,7 +1433,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfSaveVar(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfSaveVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
@@ -1493,7 +1493,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfDelayCall(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfDelayCall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.m_nDelayCall = HUtil32._MAX(1, QuestActionInfo.nParam1);
             PlayObject.m_sDelayCallLabel = QuestActionInfo.sParam2;
@@ -1507,7 +1507,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfCalcVar(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfCalcVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
@@ -1619,7 +1619,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGuildRecall(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGuildRecall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             if (PlayObject.MyGuild != null)
             {
@@ -1627,7 +1627,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGroupAddList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGroupAddList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string ffile = QuestActionInfo.sParam1;
             if (PlayObject.GroupOwner != null)
@@ -1640,7 +1640,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearList(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfClearList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var ffile = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, QuestActionInfo.sParam1);
             if (File.Exists(ffile))
@@ -1651,7 +1651,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGroupRecall(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGroupRecall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             if (PlayObject.GroupOwner != null)
             {
@@ -1664,7 +1664,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfRepairAllItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfRepairAllItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sUserItemName;
             bool boIsHasItem = false;
@@ -1690,7 +1690,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGroupMoveMap(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGroupMoveMap(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject PlayObjectEx;
             bool boFlag = false;
@@ -1716,7 +1716,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfUpgradeItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfUpgradeItems(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nAddPoint;
             var nWhere = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
@@ -1765,7 +1765,7 @@ namespace GameSvr.Npc
             PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '/' + UserItem.Desc[0] + '/' + UserItem.Desc[1] + '/' + UserItem.Desc[2] + '/' + UserItem.Desc[3] + '/' + UserItem.Desc[4] + '/' + UserItem.Desc[5] + '/' + UserItem.Desc[6] + '/' + UserItem.Desc[7] + '/' + UserItem.Desc[8] + '/' + UserItem.Desc[9] + '/' + UserItem.Desc[ItemAttr.WeaponUpgrade] + '/' + UserItem.Desc[11] + '/' + UserItem.Desc[12] + '/' + UserItem.Desc[13], MsgColor.Blue, MsgType.Hint);
         }
 
-        private void ActionOfUpgradeItemsEx(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfUpgradeItemsEx(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nAddPoint;
             var nWhere = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
@@ -1838,7 +1838,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfVar(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar;
@@ -1910,7 +1910,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfLoadVar(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfLoadVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
@@ -1986,7 +1986,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearNeedItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfClearNeedItems(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
             var nNeed = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
@@ -2019,7 +2019,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearMakeItems(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfClearMakeItems(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
             string sItemName = QuestActionInfo.sParam1;
@@ -2075,7 +2075,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfUnMaster(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfUnMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sMsg;
             if (PlayObject.m_sMasterName == "")
@@ -2174,7 +2174,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfSetMapMode(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfSetMapMode(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sMapName = QuestActionInfo.sParam1;
             string sMapMode = QuestActionInfo.sParam2;
@@ -2540,7 +2540,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfSetMemberLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfSetMemberLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nLevel = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nLevel < 0)
@@ -2575,7 +2575,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfSetMemberType(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfSetMemberType(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nType = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nType < 0)
@@ -2610,7 +2610,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGiveItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGiveItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             UserItem UserItem;
             var sItemName = QuestActionInfo.sParam1;
@@ -2676,7 +2676,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGmExecute(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGmExecute(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sParam1 = QuestActionInfo.sParam1;
             string sParam2 = QuestActionInfo.sParam2;
@@ -2701,7 +2701,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGuildAuraePoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGuildAuraePoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nAuraePoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nAuraePoint < 0)
@@ -2748,7 +2748,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGuildBuildPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGuildBuildPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nBuildPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nBuildPoint < 0)
@@ -2795,7 +2795,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGuildChiefItemCount(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGuildChiefItemCount(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nItemCount = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nItemCount < 0)
@@ -2842,7 +2842,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGuildFlourishPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGuildFlourishPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nFlourishPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nFlourishPoint < 0)
@@ -2889,7 +2889,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGuildstabilityPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfGuildstabilityPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nStabilityPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nStabilityPoint < 0)
@@ -2936,7 +2936,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfHumanHP(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfHumanHP(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nHP = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nHP < 0)
@@ -2974,7 +2974,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfHumanMP(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfHumanMP(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nMP = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nMP < 0)
@@ -3012,12 +3012,12 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfKick(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfKick(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.m_boKickFlag = true;
         }
 
-        private void ActionOfKill(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfKill(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nMode = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nMode >= 0 && nMode <= 3)
@@ -3048,7 +3048,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfBonusPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfBonusPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nBonusPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nBonusPoint < 0 || nBonusPoint > 10000)
@@ -3073,19 +3073,19 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfDelMarry(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfDelMarry(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.m_sDearName = "";
             PlayObject.RefShowName();
         }
 
-        private void ActionOfDelMaster(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfDelMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.m_sMasterName = "";
             PlayObject.RefShowName();
         }
 
-        private void ActionOfRestBonusPoint(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfRestBonusPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.Reserved;
             PlayObject.BonusPoint += nTotleUsePoint;
@@ -3094,14 +3094,14 @@ namespace GameSvr.Npc
             PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
         }
 
-        private void ActionOfRestReNewLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfRestReNewLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.m_btReLevel = 0;
             PlayObject.HasLevelUp(0);
         }
 
 
-        private void ActionOfChangeNameColor(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeNameColor(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nColor = QuestActionInfo.nParam1;
             if (nColor < 0 || nColor > 255)
@@ -3113,7 +3113,7 @@ namespace GameSvr.Npc
             PlayObject.RefNameColor();
         }
 
-        private void ActionOfClearPassword(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfClearPassword(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.m_sStoragePwd = "";
             PlayObject.m_boPasswordLocked = false;
@@ -3122,7 +3122,7 @@ namespace GameSvr.Npc
         // 挂机的
         // RECALLMOB 怪物名称 等级 叛变时间 变色(0,1) 固定颜色(1 - 7)
         // 变色为0 时固定颜色才起作用
-        private void ActionOfRecallmob(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfRecallmob(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             BaseObject Mon;
             if (QuestActionInfo.nParam3 <= 1)
@@ -3147,7 +3147,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfReNewLevel(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfReNewLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nReLevel = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             int nLevel = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -3175,7 +3175,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangeGender(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeGender(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nGender = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nGender > 1)
@@ -3187,7 +3187,7 @@ namespace GameSvr.Npc
             PlayObject.FeatureChanged();
         }
 
-        private void ActionOfKillSlave(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfKillSlave(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             BaseObject Slave;
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
@@ -3197,7 +3197,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfKillMonExpRate(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfKillMonExpRate(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             int nRate = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             int nTime = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -3214,7 +3214,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfMonGenEx(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfMonGenEx(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sMapName = QuestActionInfo.sParam1;
             int nMapX = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -3238,7 +3238,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfOpenMagicBox(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfOpenMagicBox(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             short nX = 0;
             short nY = 0;
@@ -3257,7 +3257,7 @@ namespace GameSvr.Npc
             Monster.Die();
         }
 
-        private void ActionOfPkZone(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfPkZone(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             FireBurnEvent FireBurnEvent;
             int nRange = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
@@ -3287,7 +3287,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfPowerRate(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfPowerRate(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nRate = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             var nTime = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
@@ -3304,7 +3304,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangeMode(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangeMode(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nMode = QuestActionInfo.nParam1;
             var boOpen = HUtil32.StrToInt(QuestActionInfo.sParam2, -1) == 1;
@@ -3353,7 +3353,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfChangePerMission(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfChangePerMission(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nPermission = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nPermission >= 0 && nPermission <= 10)
@@ -3371,7 +3371,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfTHROWITEM(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfTHROWITEM(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sMap = string.Empty;
             string sItemName = string.Empty;

@@ -17,8 +17,8 @@ namespace GameSvr.Npc
             bool bo11;
             string sSendMsg;
             TScript Script = null;
-            TSayingRecord SayingRecord;
-            TSayingProcedure SayingProcedure;
+            SayingRecord SayingRecord;
+            SayingProcedure SayingProcedure;
             UserItem UserItem = null;
             string sC = string.Empty;
             if (PlayObject.m_NPC != this)
@@ -56,7 +56,7 @@ namespace GameSvr.Npc
                 {
                     for (var i = m_ScriptList.Count - 1; i >= 0; i--)
                     {
-                        if (GotoLable_CheckQuestStatus(PlayObject, m_ScriptList[i]))
+                        if (CheckGotoLableQuestStatus(PlayObject, m_ScriptList[i]))
                         {
                             Script = m_ScriptList[i];
                             PlayObject.m_Script = Script;
@@ -117,7 +117,7 @@ namespace GameSvr.Npc
             GotoLable(PlayObject, sLabel, boExtJmp, "");
         }
 
-        private bool GotoLable_CheckQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
+        private bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
         {
             bool result = true;
             int I;
@@ -147,7 +147,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private UserItem GotoLable_CheckItemW(PlayObject PlayObject, string sItemType, int nParam)
+        private UserItem CheckGotoLableItemW(PlayObject PlayObject, string sItemType, int nParam)
         {
             UserItem result = null;
             int nCount = 0;
@@ -239,14 +239,13 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLable_CheckStringList(string sHumName, string sListFileName)
+        private bool CheckGotoLableStringList(string sHumName, string sListFileName)
         {
             bool result = false;
-            StringList LoadList;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
             if (File.Exists(sListFileName))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 try
                 {
                     LoadList.LoadFromFile(sListFileName);
@@ -377,19 +376,15 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLableQuestCheckCondition(PlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref UserItem UserItem)
+        private bool GotoLableQuestCheckCondition(PlayObject PlayObject, IList<QuestConditionInfo> ConditionList, ref string sC, ref UserItem UserItem)
         {
             bool result = true;
-            TQuestConditionInfo QuestConditionInfo;
             int n1C = 0;
             int nMaxDura = 0;
             int nDura = 0;
-            Envirnoment Envir;
-            StdItem StdItem;
             for (var i = 0; i < ConditionList.Count; i++)
             {
-                QuestConditionInfo = ConditionList[i];
-
+                var QuestConditionInfo = ConditionList[i];
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam1))
                 {
                     if (QuestConditionInfo.sParam1[0] == '$')
@@ -489,7 +484,7 @@ namespace GameSvr.Npc
                     if (Human != null)
                     {
                         PlayObject = Human;
-                        if (!string.IsNullOrEmpty(QuestConditionInfo.sOpHName) && string.Compare(QuestConditionInfo.sOpHName, "H", true) == 0)
+                        if (!string.IsNullOrEmpty(QuestConditionInfo.sOpHName) && string.Compare(QuestConditionInfo.sOpHName, "H", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             //todo 英雄
                         }
@@ -685,7 +680,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKITEMW:
-                        UserItem = GotoLable_CheckItemW(PlayObject, QuestConditionInfo.sParam1, QuestConditionInfo.nParam2);
+                        UserItem = CheckGotoLableItemW(PlayObject, QuestConditionInfo.sParam1, QuestConditionInfo.nParam2);
                         if (UserItem == null)
                         {
                             result = false;
@@ -816,7 +811,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKMONMAP:
-                        Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
+                        var Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
                         if (Envir != null)
                         {
                             if (M2Share.WorldEngine.GetMapMonster(Envir, null) < QuestConditionInfo.nParam2)
@@ -839,7 +834,7 @@ namespace GameSvr.Npc
                             if (QuestConditionInfo.sParam1 != "")
                             {
                                 result = false;
-                                StdItem = M2Share.WorldEngine.GetStdItem(QuestConditionInfo.sParam1);
+                                var StdItem = M2Share.WorldEngine.GetStdItem(QuestConditionInfo.sParam1);
                                 if (StdItem != null)
                                 {
                                     if (PlayObject.IsAddWeightAvailable(StdItem.Weight))
@@ -855,19 +850,19 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKNAMELIST:
-                        if (!GotoLable_CheckStringList(PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1))
+                        if (!CheckGotoLableStringList(PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKACCOUNTLIST:
-                        if (!GotoLable_CheckStringList(PlayObject.m_sUserID, m_sPath + QuestConditionInfo.sParam1))
+                        if (!CheckGotoLableStringList(PlayObject.m_sUserID, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKIPLIST:
-                        if (!GotoLable_CheckStringList(PlayObject.m_sIPaddr, m_sPath + QuestConditionInfo.sParam1))
+                        if (!CheckGotoLableStringList(PlayObject.m_sIPaddr, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
@@ -1094,7 +1089,7 @@ namespace GameSvr.Npc
                     case ScriptConst.nSC_CHECKGUILDLIST:
                         if (PlayObject.MyGuild != null)
                         {
-                            if (!GotoLable_CheckStringList(PlayObject.MyGuild.sGuildName, m_sPath + QuestConditionInfo.sParam1))
+                            if (!CheckGotoLableStringList(PlayObject.MyGuild.sGuildName, m_sPath + QuestConditionInfo.sParam1))
                             {
                                 result = false;
                             }
@@ -1431,10 +1426,9 @@ namespace GameSvr.Npc
 
         private void GotoLable_GoToQuest(PlayObject PlayObject, int nQuest)
         {
-            TScript Script;
             for (var i = 0; i < m_ScriptList.Count; i++)
             {
-                Script = m_ScriptList[i];
+                var Script = m_ScriptList[i];
                 if (Script.nQuest == nQuest)
                 {
                     PlayObject.m_Script = Script;
@@ -1447,22 +1441,14 @@ namespace GameSvr.Npc
 
         private void GotoLable_AddUseDateList(string sHumName, string sListFileName)
         {
-            StringList LoadList;
             string s10 = string.Empty;
             string sText;
             bool bo15;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
-            LoadList = new StringList();
+            var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
-                try
-                {
-                    LoadList.LoadFromFile(sListFileName);
-                }
-                catch
-                {
-                    M2Share.Log.Error("loading fail.... => " + sListFileName);
-                }
+                LoadList.LoadFromFile(sListFileName);
             }
             bo15 = false;
             for (var i = 0; i < LoadList.Count; i++)
@@ -1496,14 +1482,7 @@ namespace GameSvr.Npc
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
-                try
-                {
-                    LoadList.LoadFromFile(sListFileName);
-                }
-                catch
-                {
-                    M2Share.Log.Error("loading fail.... => " + sListFileName);
-                }
+                LoadList.LoadFromFile(sListFileName);
             }
             var bo15 = false;
             for (var i = 0; i < LoadList.Count; i++)
@@ -1564,14 +1543,7 @@ namespace GameSvr.Npc
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
-                try
-                {
-                    LoadList.LoadFromFile(sListFileName);
-                }
-                catch
-                {
-                    M2Share.Log.Error("loading fail.... => " + sListFileName);
-                }
+                LoadList.LoadFromFile(sListFileName);
             }
             bo15 = false;
             for (var i = 0; i < LoadList.Count; i++)
@@ -1821,7 +1793,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref UserItem UserItem, ref bool bo11)
+        private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<QuestActionInfo> ActionList, ref string sC, ref UserItem UserItem, ref bool bo11)
         {
             bool result = true;
             int n28;
@@ -2083,9 +2055,9 @@ namespace GameSvr.Npc
                     case ScriptConst.nADDBATCH:
                         if (BatchParamsList == null)
                         {
-                            BatchParamsList = new List<TScriptParams>();
+                            BatchParamsList = new List<ScriptParams>();
                         }
-                        BatchParamsList.Add(new TScriptParams()
+                        BatchParamsList.Add(new ScriptParams()
                         {
                             sParams = QuestActionInfo.sParam1,
                             nParams = n18
@@ -2504,12 +2476,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void ActionOfUpgradeDlgItem(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfUpgradeDlgItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
 
         }
 
-        private void ActionOfQueryItemDlg(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfQueryItemDlg(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.TakeDlgItem = QuestActionInfo.nParam3 != 0;
             PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam2;
@@ -2518,7 +2490,7 @@ namespace GameSvr.Npc
             PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, this.ActorId, 0, 0, 0, sHint);
         }
 
-        private void ActionOfKillSlaveName(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfKillSlaveName(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sSlaveName = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sSlaveName))
@@ -2544,7 +2516,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfQueryValue(PlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        private void ActionOfQueryValue(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var btStrLabel = QuestActionInfo.nParam1;
             if (btStrLabel < 100)
@@ -2562,11 +2534,11 @@ namespace GameSvr.Npc
             PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam4;
             var sHint = QuestActionInfo.sParam5;
             PlayObject.m_btValNPCType = 0;
-            if (string.Compare(QuestActionInfo.sParam6, "QF", true) == 0)
+            if (string.Compare(QuestActionInfo.sParam6, "QF", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.m_btValNPCType = 1;
             }
-            else if (string.Compare(QuestActionInfo.sParam6, "QM", true) == 0)
+            else if (string.Compare(QuestActionInfo.sParam6, "QM", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.m_btValNPCType = 2;
             }

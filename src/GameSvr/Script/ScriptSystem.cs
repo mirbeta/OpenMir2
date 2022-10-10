@@ -201,13 +201,13 @@ namespace GameSvr.Script
             TScript ScriptInfo = new TScript
             {
                 boQuest = false,
-                RecordList = new Dictionary<string, TSayingRecord>(StringComparer.OrdinalIgnoreCase)
+                RecordList = new Dictionary<string, SayingRecord>(StringComparer.OrdinalIgnoreCase)
             };
             NPC.m_ScriptList.Add(ScriptInfo);
             return ScriptInfo;
         }
         
-        private bool LoadScriptFileQuestCondition(string sText, TQuestConditionInfo QuestConditionInfo)
+        private bool LoadScriptFileQuestCondition(string sText, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var sCmd = string.Empty;
@@ -729,7 +729,7 @@ namespace GameSvr.Script
             return result;
         }
 
-        private bool LoadScriptFileQuestAction(string sText, TQuestActionInfo QuestActionInfo)
+        private bool LoadScriptFileQuestAction(string sText, QuestActionInfo QuestActionInfo)
         {
             var sCmd = string.Empty;
             var sParam1 = string.Empty;
@@ -1400,13 +1400,13 @@ namespace GameSvr.Script
             var s50 = string.Empty;
             StringList LoadList;
             IList<TDefineInfo> DefineList;
-            TQuestActionInfo QuestActionInfo = null;
+            QuestActionInfo QuestActionInfo = null;
             var slabName = string.Empty;
             TDefineInfo DefineInfo;
             var bo8D = false;
             TScript Script = null;
-            TSayingRecord SayingRecord = null;
-            TSayingProcedure SayingProcedure = null;
+            SayingRecord SayingRecord = null;
+            SayingProcedure SayingProcedure = null;
             var n6C = 0;
             var n70 = 0;
             var sScritpFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
@@ -1423,9 +1423,9 @@ namespace GameSvr.Script
 
                 DefineList = new List<TDefineInfo>();
                 IList<string> ScriptNameList = new List<string>();
-                List<TQuestActionInfo> GotoList = new List<TQuestActionInfo>();
-                List<TQuestActionInfo> DelayGotoList = new List<TQuestActionInfo>();
-                List<TQuestActionInfo> PlayDiceList = new List<TQuestActionInfo>();
+                List<QuestActionInfo> GotoList = new List<QuestActionInfo>();
+                List<QuestActionInfo> DelayGotoList = new List<QuestActionInfo>();
+                List<QuestActionInfo> PlayDiceList = new List<QuestActionInfo>();
                 string s54 = LoadScriptDefineInfo(LoadList, DefineList);
                 DefineInfo = new TDefineInfo
                 {
@@ -1660,9 +1660,9 @@ namespace GameSvr.Script
                             continue;
                         }
                         sScript = HUtil32.ArrestStringEx(sScript, "[", "]", ref slabName);
-                        SayingRecord = new TSayingRecord
+                        SayingRecord = new SayingRecord
                         {
-                            ProcedureList = new List<TSayingProcedure>(),
+                            ProcedureList = new List<SayingProcedure>(),
                             sLabel = slabName
                         };
                         sScript = HUtil32.GetValidStrCap(sScript, ref slabName, TextSpitConst);
@@ -1674,7 +1674,7 @@ namespace GameSvr.Script
                         {
                             SayingRecord.boExtJmp = false;
                         }
-                        SayingProcedure = new TSayingProcedure();
+                        SayingProcedure = new SayingProcedure();
                         SayingRecord.ProcedureList.Add(SayingProcedure);
                         if (Script.RecordList.ContainsKey(SayingRecord.sLabel))
                         {
@@ -1692,7 +1692,7 @@ namespace GameSvr.Script
                             {
                                 if (SayingProcedure.ConditionList.Count > 0 || SayingProcedure.sSayMsg != "")
                                 {
-                                    SayingProcedure = new TSayingProcedure();
+                                    SayingProcedure = new SayingProcedure();
                                     SayingRecord.ProcedureList.Add(SayingProcedure);
                                 }
                                 n6C = 11;
@@ -1721,7 +1721,7 @@ namespace GameSvr.Script
                         }
                         if (n6C == 11)
                         {
-                            TQuestConditionInfo QuestConditionInfo = new TQuestConditionInfo();
+                            QuestConditionInfo QuestConditionInfo = new QuestConditionInfo();
                             if (LoadScriptFileQuestCondition(sScript.Trim(), QuestConditionInfo))
                             {
                                 SayingProcedure.ConditionList.Add(QuestConditionInfo);
@@ -1733,7 +1733,7 @@ namespace GameSvr.Script
                         }
                         if (n6C == 12)
                         {
-                            QuestActionInfo = new TQuestActionInfo();
+                            QuestActionInfo = new QuestActionInfo();
                             if (LoadScriptFileQuestAction(sScript.Trim(), QuestActionInfo))
                             {
                                 SayingProcedure.ActionList.Add(QuestActionInfo);
@@ -1746,7 +1746,7 @@ namespace GameSvr.Script
                         }
                         if (n6C == 13)
                         {
-                            QuestActionInfo = new TQuestActionInfo();
+                            QuestActionInfo = new QuestActionInfo();
                             if (LoadScriptFileQuestAction(sScript.Trim(), QuestActionInfo))
                             {
                                 SayingProcedure.ElseActionList.Add(QuestActionInfo);
@@ -1775,12 +1775,12 @@ namespace GameSvr.Script
                             }
                             if (M2Share.CanSellItem(s48))
                             {
-                                var Goods = new TGoods
+                                var Goods = new Goods
                                 {
-                                    sItemName = s48,
-                                    nCount = HUtil32.StrToInt(s4C, 0),
-                                    dwRefillTime = HUtil32.StrToInt(s50, 0),
-                                    dwRefillTick = 0
+                                    ItemName = s48,
+                                    Count = HUtil32.StrToInt(s4C, 0),
+                                    RefillTime = HUtil32.StrToInt(s50, 0),
+                                    RefillTick = 0
                                 };
                                 ((Merchant)NPC).RefillGoodsList.Add(Goods);
                             }
@@ -1801,7 +1801,7 @@ namespace GameSvr.Script
         /// <summary>
         /// 初始化脚本标签数组
         /// </summary>
-        private void InitializeLabel(NormNpc NPC, TQuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<TQuestActionInfo> PlayDiceList, List<TQuestActionInfo> GotoList, List<TQuestActionInfo> DelayGotoList)
+        private void InitializeLabel(NormNpc NPC, QuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<QuestActionInfo> PlayDiceList, List<QuestActionInfo> GotoList, List<QuestActionInfo> DelayGotoList)
         {
             for (var i = 0; i < NPC.FGotoLable.Length; i++)
             {
@@ -2327,15 +2327,15 @@ namespace GameSvr.Script
                     if (s10.IndexOf("/") > 0)
                     {
                         sLabel = HUtil32.GetValidStr3(s10, ref sname, '/');
-                        if (string.Compare(sLabel, "@close", true) == 0)
+                        if (string.Compare(sLabel, "@close", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             continue;
                         }
-                        if (string.Compare(sLabel, "@Exit", true) == 0)
+                        if (string.Compare(sLabel, "@Exit", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             continue;
                         }
-                        if (string.Compare(sLabel, "@main", true) == 0)
+                        if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             continue;
                         }

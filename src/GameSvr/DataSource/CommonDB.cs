@@ -356,13 +356,13 @@ namespace GameSvr.DataSource
             }
         }
 
-        public int LoadUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
+        public int LoadUpgradeWeaponRecord(string sNPCName, IList<UpgradeInfo> DataList)
         {
             //todo 加载武器升级数据
             return -1;
         }
 
-        public int SaveUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
+        public int SaveUpgradeWeaponRecord(string sNPCName, IList<UpgradeInfo> DataList)
         {
             //todo 保存武器升级数据
             return -1;

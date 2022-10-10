@@ -5,8 +5,8 @@ namespace GameSvr.Script
 {
     public class ScriptEngine
     {
-        public delegate void ScriptCondition(PlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, ref bool Result);
-        public delegate void ScriptAction(PlayObject PlayObject, TQuestActionInfo QuestActionInfo, ref bool Result);
+        public delegate void ScriptCondition(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo, ref bool Result);
+        public delegate void ScriptAction(PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool Result);
 
 
         public ScriptEngine()
@@ -14,12 +14,12 @@ namespace GameSvr.Script
 
         }
 
-        public void Condition(NormNpc normNpc, PlayObject playObject, TQuestConditionInfo questConditionInfo, ref bool result)
+        public void Condition(NormNpc normNpc, PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool result)
         {
 
         }
 
-        public void Action(NormNpc normNpc, PlayObject playObject, TQuestActionInfo questActionInfo, ref bool result)
+        public void Action(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool result)
         {
 
         }

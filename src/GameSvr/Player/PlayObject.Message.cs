@@ -2082,9 +2082,10 @@ namespace GameSvr.Player
                     this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(ex.StackTrace);
             }
         }
 
