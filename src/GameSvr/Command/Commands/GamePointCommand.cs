@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家声望
     /// </summary>
-    [GameCommand("GamePoint", "调整指定玩家声望", GameCommandConst.GameCommandGamePointHelpMsg, 10)]
-    public class GamePointCommand : BaseCommond
+    [Command("GamePoint", "调整指定玩家声望", CommandHelp.GameCommandGamePointHelpMsg, 10)]
+    public class GamePointCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GamePoint(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
@@ -38,7 +38,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[1])
@@ -61,8 +61,8 @@ namespace GameSvr.Command.Commands
                 //    m_PlayObject.m_sChrName, M2Share.g_Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));
             }
             PlayObject.GameGoldChanged();
-            m_PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandGamePointHumanMsg, nPoint, m_PlayObject.m_nGamePoint), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandGamePointGMMsg, sHumanName, nPoint, m_PlayObject.m_nGamePoint), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointHumanMsg, nPoint, m_PlayObject.m_nGamePoint), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointGMMsg, sHumanName, nPoint, m_PlayObject.m_nGamePoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

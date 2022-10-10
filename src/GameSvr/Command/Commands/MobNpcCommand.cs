@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 在当前XY坐标创建NPC
     /// </summary>
-    [GameCommand("MobNpc", "在当前XY坐标创建NPC", GameCommandConst.GameCommandMobNpcHelpMsg, 10)]
-    public class MobNpcCommand : BaseCommond
+    [Command("MobNpc", "在当前XY坐标创建NPC", CommandHelp.GameCommandMobNpcHelpMsg, 10)]
+    public class MobNpcCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MobNpc(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

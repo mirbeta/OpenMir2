@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("TakeOffHorse", desc: "下马命令，在骑马状态输入此命令下马。", 10)]
-    public class TakeOffHorseCommand : BaseCommond
+    [Command("TakeOffHorse", desc: "下马命令，在骑马状态输入此命令下马。", 10)]
+    public class TakeOffHorseCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TakeOffHorse(PlayObject PlayObject)
         {
             if (!PlayObject.OnHorse)

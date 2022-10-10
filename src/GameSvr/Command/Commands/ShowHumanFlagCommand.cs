@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 取用户任务状态
     /// </summary>
-    [GameCommand("ShowHumanFlag", "取用户任务状态", GameCommandConst.GameCommandShowHumanFlagHelpMsg, 10)]
-    public class ShowHumanFlagCommand : BaseCommond
+    [Command("ShowHumanFlag", "取用户任务状态", CommandHelp.GameCommandShowHumanFlagHelpMsg, 10)]
+    public class ShowHumanFlagCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowHumanFlag(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -27,17 +27,17 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nFlag = HUtil32.StrToInt(sFlag, 0);
             if (m_PlayObject.GetQuestFalgStatus(nFlag) == 1)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandShowHumanFlagONMsg, m_PlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandShowHumanFlagONMsg, m_PlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandShowHumanFlagOFFMsg, m_PlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandShowHumanFlagOFFMsg, m_PlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
             }
         }
     }

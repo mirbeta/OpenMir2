@@ -3577,7 +3577,7 @@ namespace GameSvr.Player
             }
             else
             {
-                SysMsg(Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                SysMsg(Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
 

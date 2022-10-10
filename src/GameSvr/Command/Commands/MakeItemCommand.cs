@@ -9,10 +9,10 @@ namespace GameSvr.Command.Commands
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)
     /// 要求权限默认等级：10
     /// </summary>
-    [GameCommand("Make", desc: "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", help: GameCommandConst.GamecommandMakeHelpMsg, minUserLevel: 10)]
-    public class MakeItemCommond : BaseCommond
+    [Command("Make", desc: "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", help: CommandHelp.GamecommandMakeHelpMsg, minUserLevel: 10)]
+    public class MakeItemCommond : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void CmdMakeItem(string[] Params, PlayObject PlayObject)
         {
             if (Params == null) return;
@@ -30,17 +30,17 @@ namespace GameSvr.Command.Commands
             {
                 if (!M2Share.CanMakeItem(sItemName))
                 {
-                    PlayObject.SysMsg(GameCommandConst.GamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(CommandHelp.GamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (M2Share.CastleMgr.InCastleWarArea(PlayObject) != null) // 攻城区域，禁止使用此功能
                 {
-                    PlayObject.SysMsg(GameCommandConst.GamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(CommandHelp.GamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!PlayObject.InSafeZone())
                 {
-                    PlayObject.SysMsg(GameCommandConst.GamecommandMakeInSafeZoneRange, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(CommandHelp.GamecommandMakeInSafeZoneRange, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 nCount = 1;
@@ -84,7 +84,7 @@ namespace GameSvr.Command.Commands
                 else
                 {
                     UserItem = null;
-                    PlayObject.SysMsg(string.Format(GameCommandConst.GamecommandMakeItemNameNotFound, sItemName), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(CommandHelp.GamecommandMakeItemNameNotFound, sItemName), MsgColor.Red, MsgType.Hint);
                     break;
                 }
             }

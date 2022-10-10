@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 将指定坐标的怪物移动到新坐标，名称为ALL则移动该坐标所有怪物
     /// </summary>
-    [GameCommand("MoveMobTo", "将指定坐标的怪物移动到新坐标", "怪物名称 原地图 原X 原Y 新地图 新X 新Y", 10)]
-    public class MoveMobToCommand : BaseCommond
+    [Command("MoveMobTo", "将指定坐标的怪物移动到新坐标", "怪物名称 原地图 原X 原Y 新地图 新X 新Y", 10)]
+    public class MoveMobToCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MoveMobTo(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

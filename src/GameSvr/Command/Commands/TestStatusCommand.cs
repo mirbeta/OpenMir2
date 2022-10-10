@@ -4,10 +4,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("TestStatus", "", 10)]
-    public class TestStatusCommand : BaseCommond
+    [Command("TestStatus", "", 10)]
+    public class TestStatusCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TestStatus(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

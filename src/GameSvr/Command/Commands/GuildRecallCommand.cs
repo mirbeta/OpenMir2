@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 行会传送，行会掌门人可以将整个行会成员全部集中。
     /// </summary>
-    [GameCommand("GuildRecall", "行会传送，行会掌门人可以将整个行会成员全部集中。", 0)]
-    public class GuildRecallCommand : BaseCommond
+    [Command("GuildRecall", "行会传送，行会掌门人可以将整个行会成员全部集中。", 0)]
+    public class GuildRecallCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GuildRecall(PlayObject PlayObject)
         {
             if (!PlayObject.GuildMove && PlayObject.Permission < 6)

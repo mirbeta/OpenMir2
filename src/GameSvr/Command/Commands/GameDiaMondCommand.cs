@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("GameDiaMond", "调整玩家金刚石", 10)]
-    public class GameDiaMondCommand : BaseCommond
+    [Command("GameDiaMond", "调整玩家金刚石", 10)]
+    public class GameDiaMondCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GameDiaMond(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";

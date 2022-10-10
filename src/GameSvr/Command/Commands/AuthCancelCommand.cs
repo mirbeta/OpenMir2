@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 此命令允许公会取消联盟
     /// </summary>
-    [GameCommand("AuthCancel", "", 0)]
-    public class AuthCancelCommand : BaseCommond
+    [Command("AuthCancel", "", 0)]
+    public class AuthCancelCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AuthCancel(string[] @params, PlayObject PlayObject)
         {
             if (@params == null || @params.Length <= 0)

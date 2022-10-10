@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 将指定玩家添加到禁止人物列表
     /// </summary>
-    [GameCommand("DenyChrNameLogon", "将指定玩家添加到禁止人物列表", "人物名称 是否永久封(0,1)", 10)]
-    public class DenyChrNameLogonCommand : BaseCommond
+    [Command("DenyChrNameLogon", "将指定玩家添加到禁止人物列表", "人物名称 是否永久封(0,1)", 10)]
+    public class DenyChrNameLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DenyChrNameLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

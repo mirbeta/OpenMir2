@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 搜索指定玩家所在地图XY坐标
     /// </summary>
-    [GameCommand("SearchHuman", "搜索指定玩家所在地图XY坐标", "人物名称", 0)]
-    public class SearchHumanCommand : BaseCommond
+    [Command("SearchHuman", "搜索指定玩家所在地图XY坐标", "人物名称", 0)]
+    public class SearchHumanCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SearchHuman(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

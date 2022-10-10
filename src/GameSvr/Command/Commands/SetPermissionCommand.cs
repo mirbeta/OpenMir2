@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家权限
     /// </summary>
-    [GameCommand("SetPermission", "调整指定玩家权限", "人物名称 权限等级(0 - 10)", 10)]
-    public class SetPermissionCommand : BaseCommond
+    [Command("SetPermission", "调整指定玩家权限", "人物名称 权限等级(0 - 10)", 10)]
+    public class SetPermissionCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SetPermission(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.Config.ShowMakeItemMsg)

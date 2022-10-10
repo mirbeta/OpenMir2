@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 查询师徒当前所在位置
     /// </summary>
-    [GameCommand("SearchMaster", "查询师徒当前所在位置", 0)]
-    public class SearchMasterCommand : BaseCommond
+    [Command("SearchMaster", "查询师徒当前所在位置", 0)]
+    public class SearchMasterCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SearchMaster(PlayObject PlayObject)
         {
             if (PlayObject.m_sMasterName == "")

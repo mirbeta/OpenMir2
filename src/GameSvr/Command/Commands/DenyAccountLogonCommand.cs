@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("DenyAccountLogon", "", "登录帐号 是否永久封(0,1)", 10)]
-    public class DenyAccountLogonCommand : BaseCommond
+    [Command("DenyAccountLogon", "", "登录帐号 是否永久封(0,1)", 10)]
+    public class DenyAccountLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DenyAccountLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

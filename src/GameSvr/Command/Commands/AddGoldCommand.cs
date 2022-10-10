@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家金币
     /// </summary>
-    [GameCommand("AddGold", "调整指定玩家金币", "人物名称  金币数量", 10)]
-    public class AddGoldCommand : BaseCommond
+    [Command("AddGold", "调整指定玩家金币", "人物名称  金币数量", 10)]
+    public class AddGoldCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AddGold(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

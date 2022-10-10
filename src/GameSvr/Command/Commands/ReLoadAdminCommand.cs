@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 重新加载管理员列表
     /// </summary>
-    [GameCommand("ReLoadAdmin", "重新加载管理员列表", 10)]
-    public class ReLoadAdminCommand : BaseCommond
+    [Command("ReLoadAdmin", "重新加载管理员列表", 10)]
+    public class ReLoadAdminCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReLoadAdmin(PlayObject playObject)
         {
             M2Share.LocalDb.LoadAdminList();

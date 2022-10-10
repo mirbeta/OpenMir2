@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ShowDenyAccountLogon", "", 10)]
-    public class ShowDenyAccountLogonCommand : BaseCommond
+    [Command("ShowDenyAccountLogon", "", 10)]
+    public class ShowDenyAccountLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowDenyAccountLogon(PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)

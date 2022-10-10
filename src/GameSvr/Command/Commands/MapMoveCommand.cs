@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 在指定地图随机移动
     /// </summary>
-    [GameCommand("MapMove", "在指定地图随机移动", GameCommandConst.GameCommandMoveHelpMsg, 10)]
-    public class MapMoveCommand : BaseCommond
+    [Command("MapMove", "在指定地图随机移动", CommandHelp.GameCommandMoveHelpMsg, 10)]
+    public class MapMoveCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MapMove(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
             var Envir = M2Share.MapMgr.FindMap(sMapName);
             if (Envir == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.TheMapNotFound, sMapName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.TheMapNotFound, sMapName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.Permission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
@@ -36,7 +36,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.TheMapDisableMove, sMapName, Envir.MapDesc), MsgColor.Red, MsgType.Hint);//不允许传送
+                PlayObject.SysMsg(string.Format(CommandHelp.TheMapDisableMove, sMapName, Envir.MapDesc), MsgColor.Red, MsgType.Hint);//不允许传送
             }
         }
     }

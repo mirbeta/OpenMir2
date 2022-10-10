@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 此命令用于改变客户端连接网关的
     /// </summary>
-    [GameCommand("Reconnection", "此命令用于改变客户端连接网关的IP及端口", " IP地址 端口", 10)]
-    public class ReconnectionCommand : BaseCommond
+    [Command("Reconnection", "此命令用于改变客户端连接网关的IP及端口", " IP地址 端口", 10)]
+    public class ReconnectionCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Reconnection(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)

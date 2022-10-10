@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 设置地图模式
     /// </summary>
-    [GameCommand("SetMapMode", "设置地图模式", 10)]
-    public class SetMapModeCommamd : BaseCommond
+    [Command("SetMapMode", "设置地图模式", 10)]
+    public class SetMapModeCommamd : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SetMapMode(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

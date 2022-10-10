@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("AddGameGold", "调整指定玩家游戏币", "人物名称  金币数量", 10)]
-    public class AddGameGoldCommand : BaseCommond
+    [Command("AddGameGold", "调整指定玩家游戏币", "人物名称  金币数量", 10)]
+    public class AddGameGoldCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AddGameGold(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
@@ -45,7 +45,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

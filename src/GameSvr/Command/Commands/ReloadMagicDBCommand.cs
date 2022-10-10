@@ -6,11 +6,11 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 重新加载物品数据库
     /// </summary>
-    [GameCommand("ReloadMagicDB", "重新加载技能数据库", 10)]
+    [Command("ReloadMagicDB", "重新加载技能数据库", 10)]
 
-    public class ReloadMagicDBCommand : BaseCommond
+    public class ReloadMagicDBCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReloadMonItems(PlayObject PlayObject)
         {
             M2Share.CommonDb.LoadMagicDB();

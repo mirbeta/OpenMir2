@@ -9,10 +9,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 开始行会争霸赛
     /// </summary>
-    [GameCommand("StartContest", "开始行会争霸赛", 10)]
-    public class StartContestCommand : BaseCommond
+    [Command("StartContest", "开始行会争霸赛", 10)]
+    public class StartContestCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void StartContest(PlayObject PlayObject)
         {
             PlayObject m_PlayObject;

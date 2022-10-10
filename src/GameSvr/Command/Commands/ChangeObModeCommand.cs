@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 进入/退出隐身模式(进入模式后别人看不到自己)(支持权限分配)
     /// </summary>
-    [GameCommand("ChangeObMode", "进入/退出隐身模式(进入模式后别人看不到自己)", 10)]
-    public class ChangeObModeCommand : BaseCommond
+    [Command("ChangeObMode", "进入/退出隐身模式(进入模式后别人看不到自己)", 10)]
+    public class ChangeObModeCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeObMode(PlayObject PlayObject)
         {
             var boFlag = !PlayObject.ObMode;

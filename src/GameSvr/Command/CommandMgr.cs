@@ -8,7 +8,7 @@ namespace GameSvr.Command
     public class CommandMgr
     {
         private readonly GameCmdConf CommandConf;
-        private static readonly Dictionary<string, BaseCommond> CommandMaps = new Dictionary<string, BaseCommond>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, Commond> CommandMaps = new Dictionary<string, Commond>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// 自定义游戏命令列表
         /// </summary>
@@ -53,7 +53,7 @@ namespace GameSvr.Command
             foreach (var command in M2Share.GameCommand.GetType().GetFields())
             {
                 cmdIndex++;
-                var attributes = (ConvertToBinaryAttribute)command.GetCustomAttribute(typeof(ConvertToBinaryAttribute), true);
+                var attributes = (CustomCommandAttribute)command.GetCustomAttribute(typeof(CustomCommandAttribute), true);
                 if (attributes == null) continue;
                 if (cmdIndex > M2Share.CustomCommands.Count)
                 {
@@ -64,7 +64,7 @@ namespace GameSvr.Command
                 {
                     continue;
                 }
-                var commandInfo = (GameCommandAttribute)attributes.CommandType.GetCustomAttribute(typeof(GameCommandAttribute), true);
+                var commandInfo = (CommandAttribute)attributes.CommandType.GetCustomAttribute(typeof(CommandAttribute), true);
                 if (CustomCommands.ContainsKey(commandInfo.Name))
                 {
                     M2Share.Log.Error($"重复定义游戏命令[{commandInfo.Name}]");
@@ -82,9 +82,9 @@ namespace GameSvr.Command
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (!type.IsSubclassOf(typeof(BaseCommond))) continue;//只有继承BaseCommond，才能添加到命令对象中
+                if (!type.IsSubclassOf(typeof(Commond))) continue;//只有继承BaseCommond，才能添加到命令对象中
 
-                var attributes = (GameCommandAttribute[])type.GetCustomAttributes(typeof(GameCommandAttribute), true);
+                var attributes = (CommandAttribute[])type.GetCustomAttributes(typeof(CommandAttribute), true);
                 if (attributes.Length == 0) continue;
 
                 var groupAttribute = attributes[0];
@@ -99,7 +99,7 @@ namespace GameSvr.Command
                     groupAttribute.Name = cmdName;
                 }
 
-                var commandGroup = (BaseCommond)Activator.CreateInstance(type);
+                var commandGroup = (Commond)Activator.CreateInstance(type);
                 if (commandGroup == null)
                 {
                     return;
@@ -107,7 +107,7 @@ namespace GameSvr.Command
                 MethodInfo methodInfo = null;
                 foreach (var method in commandGroup.GetType().GetMethods())
                 {
-                    var methodAttributes = method.GetCustomAttribute(typeof(DefaultCommand), true);
+                    var methodAttributes = method.GetCustomAttribute(typeof(ExecuteCommand), true);
                     if (methodAttributes != null)
                     {
                         methodInfo = method;
@@ -128,7 +128,7 @@ namespace GameSvr.Command
         /// </summary>
         /// <param name="OldCmd"></param>
         /// <param name="sCmd"></param>
-        public void UpdataRegisterCommandGroups(GameCommandAttribute OldCmd, string sCmd)
+        public void UpdataRegisterCommandGroups(CommandAttribute OldCmd, string sCmd)
         {
             if (CommandMaps.ContainsKey(OldCmd.Command))
             {
@@ -164,7 +164,7 @@ namespace GameSvr.Command
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return found;
 
-            BaseCommond commond;
+            Commond commond;
             if (CommandMaps.TryGetValue(command, out commond))
             {
                 output = commond.Handle(parameters, playObject);
@@ -194,7 +194,7 @@ namespace GameSvr.Command
                 return;
             string output;
 
-            BaseCommond commond;
+            Commond commond;
             if (CommandMaps.TryGetValue(command, out commond))
             {
                 output = commond.Handle(parameters);
@@ -233,8 +233,8 @@ namespace GameSvr.Command
             return true;
         }
 
-        [GameCommand("commands", "列出可用的命令")]
-        public class CommandsCommandGroup : BaseCommond
+        [Command("commands", "列出可用的命令")]
+        public class CommandsCommandGroup : Commond
         {
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {
@@ -250,8 +250,8 @@ namespace GameSvr.Command
             }
         }
 
-        [GameCommand("help", "帮助命令")]
-        public class HelpCommandGroup : BaseCommond
+        [Command("help", "帮助命令")]
+        public class HelpCommandGroup : Commond
         {
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {

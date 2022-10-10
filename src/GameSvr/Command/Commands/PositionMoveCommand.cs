@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 移动到某地图XY坐标处
     /// </summary>
-    [GameCommand("PositionMove", "移动到某地图XY坐标处", GameCommandConst.GameCommandPositionMoveHelpMsg, 10)]
-    public class PositionMoveCommand : BaseCommond
+    [Command("PositionMove", "移动到某地图XY坐标处", CommandHelp.GameCommandPositionMoveHelpMsg, 10)]
+    public class PositionMoveCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void PositionMove(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -42,13 +42,13 @@ namespace GameSvr.Command.Commands
                         }
                         else
                         {
-                            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandPositionMoveCanotMoveToMap, sMapName, sX, sY), MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandPositionMoveCanotMoveToMap, sMapName, sX, sY), MsgColor.Green, MsgType.Hint);
                         }
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg(string.Format(GameCommandConst.TheMapDisableMove, sMapName, Envir.MapDesc), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(CommandHelp.TheMapDisableMove, sMapName, Envir.MapDesc), MsgColor.Red, MsgType.Hint);
                 }
             }
             catch (Exception e)

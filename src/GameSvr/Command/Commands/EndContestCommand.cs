@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 结束行会争霸赛
     /// </summary>
-    [GameCommand("EndContest", "结束行会争霸赛", 10)]
-    public class EndContestCommand : BaseCommond
+    [Command("EndContest", "结束行会争霸赛", 10)]
+    public class EndContestCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void EndContest(string[] @Params, PlayObject PlayObject)
         {
             //string sParam1 = @Params.Length > 0 ? @Params[0] : "";

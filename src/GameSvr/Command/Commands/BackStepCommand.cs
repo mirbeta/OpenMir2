@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 推开范围内对象
     /// </summary>
-    [GameCommand("BackStep", "推开范围内对象", 10)]
-    public class BackStepCommand : BaseCommond
+    [Command("BackStep", "推开范围内对象", 10)]
+    public class BackStepCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void BackStep(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

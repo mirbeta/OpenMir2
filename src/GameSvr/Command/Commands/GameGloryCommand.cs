@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("GameGlory", "调整玩家灵符", 10)]
-    public class GameGloryCommand : BaseCommond
+    [Command("GameGlory", "调整玩家灵符", 10)]
+    public class GameGloryCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GameGlory(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";

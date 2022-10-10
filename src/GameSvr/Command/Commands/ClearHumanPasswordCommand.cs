@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 清楚指定玩家仓库密码
     /// </summary>
-    [GameCommand("ClearHumanPassword", "清楚指定玩家仓库密码", "人物名称", 10)]
-    public class ClearHumanPasswordCommand : BaseCommond
+    [Command("ClearHumanPassword", "清楚指定玩家仓库密码", "人物名称", 10)]
+    public class ClearHumanPasswordCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ClearHumanPassword(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

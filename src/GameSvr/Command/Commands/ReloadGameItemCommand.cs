@@ -6,11 +6,11 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 重新加载物品数据库
     /// </summary>
-    [GameCommand("ReloadItemDB", "重新加载物品数据库", 10)]
+    [Command("ReloadItemDB", "重新加载物品数据库", 10)]
 
-    public class ReloadGameItemCommand : BaseCommond
+    public class ReloadGameItemCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReloadMonItems(PlayObject PlayObject)
         {
             M2Share.CommonDb.LoadItemsDB();

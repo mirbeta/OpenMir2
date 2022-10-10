@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 查看行会战的得分数
     /// </summary>
-    [GameCommand("ContestPoint", "查看行会战的得分数", "行会名称", 10)]
-    public class ContestPointCommand : BaseCommond
+    [Command("ContestPoint", "查看行会战的得分数", "行会名称", 10)]
+    public class ContestPointCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ContestPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

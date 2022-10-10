@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("SbkDoorControl", "", 10)]
-    public class SbkDoorControlCommand : BaseCommond
+    [Command("SbkDoorControl", "", 10)]
+    public class SbkDoorControlCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SbkDoorControl(PlayObject PlayObject)
         {
         }

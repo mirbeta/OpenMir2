@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ReloadRobotManage", "重新加载机器人管理列表", 10)]
-    public class ReloadRobotManageCommand : BaseCommond
+    [Command("ReloadRobotManage", "重新加载机器人管理列表", 10)]
+    public class ReloadRobotManageCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReloadRobotManage(PlayObject PlayObject)
         {
             if (M2Share.g_RobotNPC != null)

@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 召唤指定怪物为宠物，宝宝等级直接为1级
     /// </summary>
-    [GameCommand("ReCallMobEx", "召唤宝宝", "怪物名称 名字颜色 X Y", 10)]
-    public class ReCallMobExCommand : BaseCommond
+    [Command("ReCallMobEx", "召唤宝宝", "怪物名称 名字颜色 X Y", 10)]
+    public class ReCallMobExCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReCallMobEx(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 从禁言列表中删除指定玩家
     /// </summary>
-    [GameCommand("EnableSendMsg", "从禁言列表中删除指定玩家", "人物名称", 10)]
-    public class EnableSendMsgCommand : BaseCommond
+    [Command("EnableSendMsg", "从禁言列表中删除指定玩家", "人物名称", 10)]
+    public class EnableSendMsgCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void EnableSendMsg(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)

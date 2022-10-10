@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家技能
     /// </summary>
-    [GameCommand("TrainingMagic", "调整指定玩家技能", "人物名称  技能名称 修炼等级(0-3)", 10)]
-    public class TrainingMagicCommand : BaseCommond
+    [Command("TrainingMagic", "调整指定玩家技能", "人物名称  技能名称 修炼等级(0-3)", 10)]
+    public class TrainingMagicCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TrainingMagic(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Magic = M2Share.WorldEngine.FindMagic(sSkillName);

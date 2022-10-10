@@ -2,7 +2,7 @@ using GameSvr.Command.Commands;
 
 namespace GameSvr.Command
 {
-    public class GameCommand
+    public class GameCommands
     {
         public readonly GameCmd Testserverconfig;
         public readonly GameCmd Serverstatus;
@@ -12,7 +12,6 @@ namespace GameSvr.Command
         public readonly GameCmd Mobfireburn;
         public readonly GameCmd Testspeedmode;
         public readonly GameCmd Reloadminmap;
-
         public readonly GameCmd Attack;
         public readonly GameCmd ReloadGuild;
         public readonly GameCmd Testgoldchange;
@@ -42,317 +41,316 @@ namespace GameSvr.Command
         public readonly GameCmd Gsa;
         public readonly GameCmd Recall;
         public readonly GameCmd Regoto;
-
-        [ConvertToBinary(typeof(SearchMasterCommand))]
+        [CustomCommand(typeof(SearchMasterCommand))]
         public readonly GameCmd Master;
-        [ConvertToBinary(typeof(SearchDearCommand))]
+        [CustomCommand(typeof(SearchDearCommand))]
         public readonly GameCmd Dear;
-        [ConvertToBinary(typeof(NpcScriptCommand))]
+        [CustomCommand(typeof(NpcScriptCommand))]
         public readonly GameCmd NpcScript;
-        [ConvertToBinary(typeof(GroupRecallCommand))]
+        [CustomCommand(typeof(GroupRecallCommand))]
         public readonly GameCmd GroupRecalll;
-        [ConvertToBinary(typeof(GuildRecallCommand))]
+        [CustomCommand(typeof(GuildRecallCommand))]
         public readonly GameCmd GuildRecalll;
-        [ConvertToBinary(typeof(SearchHumanCommand))]
+        [CustomCommand(typeof(SearchHumanCommand))]
         public readonly GameCmd Searching;
-        [ConvertToBinary(typeof(RecallMobCommand))]
+        [CustomCommand(typeof(RecallMobCommand))]
         public readonly GameCmd RecallMob;
-        [ConvertToBinary(typeof(ChangeSalveStatusCommand))]
+        [CustomCommand(typeof(ChangeSalveStatusCommand))]
         public readonly GameCmd Rest;
-        [ConvertToBinary(typeof(EndGuildCommand))]
+        [CustomCommand(typeof(EndGuildCommand))]
         public readonly GameCmd Endguild;
-        [ConvertToBinary(typeof(AuthallyCommand))]
+        [CustomCommand(typeof(AuthallyCommand))]
         public readonly GameCmd Authally;
-        [ConvertToBinary(typeof(LetGuildCommand))]
+        [CustomCommand(typeof(LetGuildCommand))]
         public readonly GameCmd Letguild;
-        [ConvertToBinary(typeof(BanGuildChatCommand))]
+        [CustomCommand(typeof(BanGuildChatCommand))]
         public readonly GameCmd BanGuildChat;
-        [ConvertToBinary(typeof(LetTradeCommand))]
+        [CustomCommand(typeof(LetTradeCommand))]
         public readonly GameCmd LetTrade;
-        [ConvertToBinary(typeof(LetShoutCommand))]
+        [CustomCommand(typeof(LetShoutCommand))]
         public readonly GameCmd Letshout;
-        [ConvertToBinary(typeof(AllowMsgCommand))]
+        [CustomCommand(typeof(AllowMsgCommand))]
         public readonly GameCmd AllowMsg;
-        [ConvertToBinary(typeof(ShowHumanUnitOpenCommand))]
+        [CustomCommand(typeof(ShowHumanUnitOpenCommand))]
         public readonly GameCmd ShowOpen;
-        [ConvertToBinary(typeof(ShowUnitCommand))]
+        [CustomCommand(typeof(ShowUnitCommand))]
         public readonly GameCmd ShowUnit;
-        [ConvertToBinary(typeof(AllowGuildRecallCommand))]
+        [CustomCommand(typeof(AllowGuildRecallCommand))]
         public readonly GameCmd AllowGuildRecall;
-        [ConvertToBinary(typeof(DelBonuPointCommand))]
+        [CustomCommand(typeof(DelBonuPointCommand))]
         public readonly GameCmd DelBonusPoint;
-        [ConvertToBinary(typeof(BonuPointCommand))]
+        [CustomCommand(typeof(BonuPointCommand))]
         public readonly GameCmd BonusPoint;
-        [ConvertToBinary(typeof(ShowSbkGoldCommand))]
+        [CustomCommand(typeof(ShowSbkGoldCommand))]
         public readonly GameCmd SabukwallGold;
-        [ConvertToBinary(typeof(MapInfoCommand))]
+        [CustomCommand(typeof(MapInfoCommand))]
         public readonly GameCmd Info;
-        [ConvertToBinary(typeof(SetPassWordCommand))]
+        [CustomCommand(typeof(SetPassWordCommand))]
         public readonly GameCmd SetPassword;
-        [ConvertToBinary(typeof(ChgpassWordCommand))]
+        [CustomCommand(typeof(ChgpassWordCommand))]
         public readonly GameCmd ChgPassword;
-        [ConvertToBinary(typeof(ClearHumanPasswordCommand))]
+        [CustomCommand(typeof(ClearHumanPasswordCommand))]
         public readonly GameCmd ClrPassword;
-        [ConvertToBinary(typeof(UnPasswWordCommand))]
+        [CustomCommand(typeof(UnPasswWordCommand))]
         public readonly GameCmd UnPassword;
-        [ConvertToBinary(typeof(UnlockStorageCommand))]
+        [CustomCommand(typeof(UnlockStorageCommand))]
         public readonly GameCmd UnlockStorage;
-        [ConvertToBinary(typeof(UnLockCommand))]
+        [CustomCommand(typeof(UnLockCommand))]
         public readonly GameCmd Unlock;
-        [ConvertToBinary(typeof(LockCommand))]
+        [CustomCommand(typeof(LockCommand))]
         public readonly GameCmd Lock;
-        [ConvertToBinary(typeof(SetFlagCommand))]
+        [CustomCommand(typeof(SetFlagCommand))]
         public readonly GameCmd SetFlag;
-        [ConvertToBinary(typeof(SetOpenCommand))]
+        [CustomCommand(typeof(SetOpenCommand))]
         public readonly GameCmd SetOpen;
-        [ConvertToBinary(typeof(SetUnitCommand))]
+        [CustomCommand(typeof(SetUnitCommand))]
         public readonly GameCmd SetUnit;
-        [ConvertToBinary(typeof(PasswordLockCommand))]
+        [CustomCommand(typeof(PasswordLockCommand))]
         public readonly GameCmd PasswordLock;
-        [ConvertToBinary(typeof(AuthCancelCommand))]
+        [CustomCommand(typeof(AuthCancelCommand))]
         public readonly GameCmd AuthCancel;
-        [ConvertToBinary(typeof(AuthCommand))]
+        [CustomCommand(typeof(AuthCommand))]
         public readonly GameCmd Auth;
-        [ConvertToBinary(typeof(DataCommand))]
+        [CustomCommand(typeof(DataCommand))]
         public readonly GameCmd Data;
-        [ConvertToBinary(typeof(PrvMsgCommand))]
+        [CustomCommand(typeof(PrvMsgCommand))]
         public readonly GameCmd Prvmsg;
-        [ConvertToBinary(typeof(UserMoveXYCommand))]
+        [CustomCommand(typeof(UserMoveXYCommand))]
         public readonly GameCmd UserMove;
-        [ConvertToBinary(typeof(AllowGroupReCallCommand))]
+        [CustomCommand(typeof(AllowGroupReCallCommand))]
         public readonly GameCmd AllowGroupCall;
-        [ConvertToBinary(typeof(MemberFunctionCommand))]
+        [CustomCommand(typeof(MemberFunctionCommand))]
         public readonly GameCmd MemberFunction;
-        [ConvertToBinary(typeof(MemberFunctionExCommand))]
+        [CustomCommand(typeof(MemberFunctionExCommand))]
         public readonly GameCmd MemberFunctioneX;
-        [ConvertToBinary(typeof(AllowDearRecallCommand))]
+        [CustomCommand(typeof(AllowDearRecallCommand))]
         public readonly GameCmd AllowDearRcall;
-        [ConvertToBinary(typeof(DearRecallCommond))]
+        [CustomCommand(typeof(DearRecallCommond))]
         public readonly GameCmd DearRecall;
-        [ConvertToBinary(typeof(AllowMasterRecallCommand))]
+        [CustomCommand(typeof(AllowMasterRecallCommand))]
         public readonly GameCmd AllowMasterRecall;
-        [ConvertToBinary(typeof(MasterRecallCommand))]
+        [CustomCommand(typeof(MasterRecallCommand))]
         public readonly GameCmd MasteRecall;
-        [ConvertToBinary(typeof(ChangeAttackModeCommand))]
+        [CustomCommand(typeof(ChangeAttackModeCommand))]
         public readonly GameCmd AttackMode;
-        [ConvertToBinary(typeof(TakeOnHorseCommand))]
+        [CustomCommand(typeof(TakeOnHorseCommand))]
         public readonly GameCmd TakeonHorse;
-        [ConvertToBinary(typeof(TakeOffHorseCommand))]
+        [CustomCommand(typeof(TakeOffHorseCommand))]
         public readonly GameCmd TakeofHorse;
-        [ConvertToBinary(typeof(HumanLocalCommand))]
+        [CustomCommand(typeof(HumanLocalCommand))]
         public readonly GameCmd HumanLocal;
-        [ConvertToBinary(typeof(PositionMoveCommand))]
+        [CustomCommand(typeof(PositionMoveCommand))]
         public readonly GameCmd Move;
-        [ConvertToBinary(typeof(PositionMoveCommand))]
+        [CustomCommand(typeof(PositionMoveCommand))]
         public readonly GameCmd PositionMove;
-        [ConvertToBinary(typeof(MobLevelCommand))]
+        [CustomCommand(typeof(MobLevelCommand))]
         public readonly GameCmd MobLevel;
-        [ConvertToBinary(typeof(MobCountCommand))]
+        [CustomCommand(typeof(MobCountCommand))]
         public readonly GameCmd MobCount;
-        [ConvertToBinary(typeof(HumanCountCommand))]
+        [CustomCommand(typeof(HumanCountCommand))]
         public readonly GameCmd HumanCount;
-        [ConvertToBinary(typeof(ShowMapInfoCommand))]
+        [CustomCommand(typeof(ShowMapInfoCommand))]
         public readonly GameCmd Map;
-        [ConvertToBinary(typeof(KickHumanCommand))]
+        [CustomCommand(typeof(KickHumanCommand))]
         public readonly GameCmd Kick;
-        [ConvertToBinary(typeof(TingCommand))]
+        [CustomCommand(typeof(TingCommand))]
         public readonly GameCmd Ting;
-        [ConvertToBinary(typeof(SuperTingCommand))]
+        [CustomCommand(typeof(SuperTingCommand))]
         public readonly GameCmd Superting;
-        [ConvertToBinary(typeof(MapMoveCommand))]
+        [CustomCommand(typeof(MapMoveCommand))]
         public readonly GameCmd MapMove;
-        [ConvertToBinary(typeof(ShutupCommand))]
+        [CustomCommand(typeof(ShutupCommand))]
         public readonly GameCmd ShutUp;
-        [ConvertToBinary(typeof(ShutupReleaseCommand))]
+        [CustomCommand(typeof(ShutupReleaseCommand))]
         public readonly GameCmd ReleaseShutup;
-        [ConvertToBinary(typeof(ShutupListCommand))]
+        [CustomCommand(typeof(ShutupListCommand))]
         public readonly GameCmd ShutupList;
-        [ConvertToBinary(typeof(ChangeAdminModeCommand))]
+        [CustomCommand(typeof(ChangeAdminModeCommand))]
         public readonly GameCmd GameMaster;
-        [ConvertToBinary(typeof(ChangeObModeCommand))]
+        [CustomCommand(typeof(ChangeObModeCommand))]
         public readonly GameCmd ObServer;
-        [ConvertToBinary(typeof(ChangeSuperManModeCommand))]
+        [CustomCommand(typeof(ChangeSuperManModeCommand))]
         public readonly GameCmd SueprMan;
-        [ConvertToBinary(typeof(ChangeLevelCommand))]
+        [CustomCommand(typeof(ChangeLevelCommand))]
         public readonly GameCmd Level;
-        [ConvertToBinary(typeof(ShowHumanFlagCommand))]
+        [CustomCommand(typeof(ShowHumanFlagCommand))]
         public readonly GameCmd Showflag;
-        [ConvertToBinary(typeof(MobCommand))]
+        [CustomCommand(typeof(MobCommand))]
         public readonly GameCmd Mob;
-        [ConvertToBinary(typeof(MobNpcCommand))]
+        [CustomCommand(typeof(MobNpcCommand))]
         public readonly GameCmd MobNpc;
-        [ConvertToBinary(typeof(DelNpcCommand))]
+        [CustomCommand(typeof(DelNpcCommand))]
         public readonly GameCmd DeleteNpc;
-        [ConvertToBinary(typeof(LuckPointCommand))]
+        [CustomCommand(typeof(LuckPointCommand))]
         public readonly GameCmd LuckyPoint;
-        [ConvertToBinary(typeof(LotteryTicketCommandL))]
+        [CustomCommand(typeof(LotteryTicketCommandL))]
         public readonly GameCmd LotteryTicket;
-        [ConvertToBinary(typeof(ReloadLineNoticeCommand))]
+        [CustomCommand(typeof(ReloadLineNoticeCommand))]
         public readonly GameCmd ReloadLineNotice;
-        [ConvertToBinary(typeof(ReloadAbuseCommand))]
+        [CustomCommand(typeof(ReloadAbuseCommand))]
         public readonly GameCmd ReloadAbuse;
-        [ConvertToBinary(typeof(BackStepCommand))]
+        [CustomCommand(typeof(BackStepCommand))]
         public readonly GameCmd BackStep;
-        [ConvertToBinary(typeof(FreePenaltyCommand))]
+        [CustomCommand(typeof(FreePenaltyCommand))]
         public readonly GameCmd FreePenalty;
-        [ConvertToBinary(typeof(PKpointCommand))]
+        [CustomCommand(typeof(PKpointCommand))]
         public readonly GameCmd PkPoint;
-        [ConvertToBinary(typeof(IncPkPointCommand))]
+        [CustomCommand(typeof(IncPkPointCommand))]
         public readonly GameCmd Incpkpoint;
-        [ConvertToBinary(typeof(HungerCommand))]
+        [CustomCommand(typeof(HungerCommand))]
         public readonly GameCmd Hunger;
-        [ConvertToBinary(typeof(HairCommand))]
+        [CustomCommand(typeof(HairCommand))]
         public readonly GameCmd Hair;
-        [ConvertToBinary(typeof(TrainingCommand))]
+        [CustomCommand(typeof(TrainingCommand))]
         public readonly GameCmd Training;
-        [ConvertToBinary(typeof(DelSkillCommand))]
+        [CustomCommand(typeof(DelSkillCommand))]
         public readonly GameCmd DeleteSkill;
-        [ConvertToBinary(typeof(ChangeJobCommand))]
+        [CustomCommand(typeof(ChangeJobCommand))]
         public readonly GameCmd ChangeJob;
-        [ConvertToBinary(typeof(ChangeGenderCommand))]
+        [CustomCommand(typeof(ChangeGenderCommand))]
         public readonly GameCmd ChangeGender;
-        [ConvertToBinary(typeof(MissionCommand))]
+        [CustomCommand(typeof(MissionCommand))]
         public readonly GameCmd Mission;
-        [ConvertToBinary(typeof(MobPlaceCommand))]
+        [CustomCommand(typeof(MobPlaceCommand))]
         public readonly GameCmd MobPlace;
-        [ConvertToBinary(typeof(DeleteItemCommand))]
+        [CustomCommand(typeof(DeleteItemCommand))]
         public readonly GameCmd DeleteItem;
-        [ConvertToBinary(typeof(ClearMissionCommand))]
+        [CustomCommand(typeof(ClearMissionCommand))]
         public readonly GameCmd ClearMission;
-        [ConvertToBinary(typeof(ReconnectionCommand))]
+        [CustomCommand(typeof(ReconnectionCommand))]
         public readonly GameCmd Reconnection;
-        [ConvertToBinary(typeof(DisableFilterCommand))]
+        [CustomCommand(typeof(DisableFilterCommand))]
         public readonly GameCmd DisableFilter;
-        [ConvertToBinary(typeof(ChangeUserFullCommand))]
+        [CustomCommand(typeof(ChangeUserFullCommand))]
         public readonly GameCmd ChguserFull;
-        [ConvertToBinary(typeof(ChangeZenFastStepCommand))]
+        [CustomCommand(typeof(ChangeZenFastStepCommand))]
         public readonly GameCmd ChgZenFastStep;
-        [ConvertToBinary(typeof(ContestPointCommand))]
+        [CustomCommand(typeof(ContestPointCommand))]
         public readonly GameCmd ContestPoint;
-        [ConvertToBinary(typeof(StartContestCommand))]
+        [CustomCommand(typeof(StartContestCommand))]
         public readonly GameCmd StartContest;
-        [ConvertToBinary(typeof(EndContestCommand))]
+        [CustomCommand(typeof(EndContestCommand))]
         public readonly GameCmd EndContest;
-        [ConvertToBinary(typeof(AnnouncementCommand))]
+        [CustomCommand(typeof(AnnouncementCommand))]
         public readonly GameCmd Announcement;
-        [ConvertToBinary(typeof(ChangeItemNameCommand))]
+        [CustomCommand(typeof(ChangeItemNameCommand))]
         public readonly GameCmd ChangeItemName;
-        [ConvertToBinary(typeof(DisableSendMsgCommand))]
+        [CustomCommand(typeof(DisableSendMsgCommand))]
         public readonly GameCmd DisableSendMsg;
-        [ConvertToBinary(typeof(EnableSendMsgCommand))]
+        [CustomCommand(typeof(EnableSendMsgCommand))]
         public readonly GameCmd EnableSendMsg;
-        [ConvertToBinary(typeof(DisableSendMsgListCommand))]
+        [CustomCommand(typeof(DisableSendMsgListCommand))]
         public readonly GameCmd DisableSendMsgList;
-        [ConvertToBinary(typeof(KillCommand))]
+        [CustomCommand(typeof(KillCommand))]
         public readonly GameCmd Kill;
-        [ConvertToBinary(typeof(MakeItemCommond))]
+        [CustomCommand(typeof(MakeItemCommond))]
         public readonly GameCmd Make;
-        [ConvertToBinary(typeof(SmakeItemCommand))]
+        [CustomCommand(typeof(SmakeItemCommand))]
         public readonly GameCmd Smake;
-        [ConvertToBinary(typeof(FireBurnCommand))]
+        [CustomCommand(typeof(FireBurnCommand))]
         public readonly GameCmd FireBurn;
-        [ConvertToBinary(typeof(TestFireCommand))]
+        [CustomCommand(typeof(TestFireCommand))]
         public readonly GameCmd TestFire;
-        [ConvertToBinary(typeof(TestStatusCommand))]
+        [CustomCommand(typeof(TestStatusCommand))]
         public readonly GameCmd TestStatus;
-        [ConvertToBinary(typeof(DelGoldCommand))]
+        [CustomCommand(typeof(DelGoldCommand))]
         public readonly GameCmd DelGold;
-        [ConvertToBinary(typeof(AddGoldCommand))]
+        [CustomCommand(typeof(AddGoldCommand))]
         public readonly GameCmd AddGold;
-        [ConvertToBinary(typeof(DelGameGoldCommand))]
+        [CustomCommand(typeof(DelGameGoldCommand))]
         public readonly GameCmd DelGameGold;
-        [ConvertToBinary(typeof(AddGameGoldCommand))]
+        [CustomCommand(typeof(AddGameGoldCommand))]
         public readonly GameCmd AddGameGold;
-        [ConvertToBinary(typeof(GameGoldCommand))]
+        [CustomCommand(typeof(GameGoldCommand))]
         public readonly GameCmd GameGold;
-        [ConvertToBinary(typeof(GamePointCommand))]
+        [CustomCommand(typeof(GamePointCommand))]
         public readonly GameCmd GamePoint;
-        [ConvertToBinary(typeof(CreditPointCommand))]
+        [CustomCommand(typeof(CreditPointCommand))]
         public readonly GameCmd CreditPoint;
-        [ConvertToBinary(typeof(RefineWeaponCommand))]
+        [CustomCommand(typeof(RefineWeaponCommand))]
         public readonly GameCmd RefineWeapon;
-        [ConvertToBinary(typeof(ReLoadAdminCommand))]
+        [CustomCommand(typeof(ReLoadAdminCommand))]
         public readonly GameCmd ReloadAdmin;
-        [ConvertToBinary(typeof(ReloadNpcCommand))]
+        [CustomCommand(typeof(ReloadNpcCommand))]
         public readonly GameCmd ReloadNpc;
-        [ConvertToBinary(typeof(ReloadManageCommand))]
+        [CustomCommand(typeof(ReloadManageCommand))]
         public readonly GameCmd ReloadManage;
-        [ConvertToBinary(typeof(ReloadManageCommand))]
+        [CustomCommand(typeof(ReloadManageCommand))]
         public readonly GameCmd ReloadRobotManage;
-        [ConvertToBinary(typeof(ReloadRobotCommand))]
+        [CustomCommand(typeof(ReloadRobotCommand))]
         public readonly GameCmd ReloadRobot;
-        [ConvertToBinary(typeof(ReloadMonItemsCommand))]
+        [CustomCommand(typeof(ReloadMonItemsCommand))]
         public readonly GameCmd ReloadMonItems;
-        [ConvertToBinary(typeof(ReloadMagicDBCommand))]
+        [CustomCommand(typeof(ReloadMagicDBCommand))]
         public readonly GameCmd ReloadMagicDb;
-        [ConvertToBinary(typeof(ReAliveCommand))]
+        [CustomCommand(typeof(ReAliveCommand))]
         public readonly GameCmd ReaLive;
-        [ConvertToBinary(typeof(AdjuestLevelCommand))]
+        [CustomCommand(typeof(AdjuestLevelCommand))]
         public readonly GameCmd AdjuestLevel;
-        [ConvertToBinary(typeof(AdjuestExpCommand))]
+        [CustomCommand(typeof(AdjuestExpCommand))]
         public readonly GameCmd AdjuestExp;
-        [ConvertToBinary(typeof(AddGuildCommand))]
+        [CustomCommand(typeof(AddGuildCommand))]
         public readonly GameCmd AddGuild;
-        [ConvertToBinary(typeof(DelGuildCommand))]
+        [CustomCommand(typeof(DelGuildCommand))]
         public readonly GameCmd DelGuild;
-        [ConvertToBinary(typeof(ChangeSabukLordCommand))]
+        [CustomCommand(typeof(ChangeSabukLordCommand))]
         public readonly GameCmd ChangeSabukLord;
-        [ConvertToBinary(typeof(ForcedWallconquestWarCommand))]
+        [CustomCommand(typeof(ForcedWallconquestWarCommand))]
         public readonly GameCmd ForcedWallConQuestWar;
-        [ConvertToBinary(typeof(TrainingSkillCommand))]
+        [CustomCommand(typeof(TrainingSkillCommand))]
         public readonly GameCmd TrainingSkill;
-        [ConvertToBinary(typeof(ReloadGuildCommand))]
+        [CustomCommand(typeof(ReloadGuildCommand))]
         public readonly GameCmd ReloadGuildAll;
-        [ConvertToBinary(typeof(ShowMapInfoCommand))]
+        [CustomCommand(typeof(ShowMapInfoCommand))]
         public readonly GameCmd MapInfo;
-        [ConvertToBinary(typeof(SbkDoorControlCommand))]
+        [CustomCommand(typeof(SbkDoorControlCommand))]
         public readonly GameCmd SbkDoor;
-        [ConvertToBinary(typeof(ChangeDearNameCommand))]
+        [CustomCommand(typeof(ChangeDearNameCommand))]
         public readonly GameCmd ChangeDearName;
-        [ConvertToBinary(typeof(ChangeMasterNameCommand))]
+        [CustomCommand(typeof(ChangeMasterNameCommand))]
         public readonly GameCmd ChangeMasterName;
-        [ConvertToBinary(typeof(StartQuestCommand))]
+        [CustomCommand(typeof(StartQuestCommand))]
         public readonly GameCmd StartQuest;
-        [ConvertToBinary(typeof(SetPermissionCommand))]
+        [CustomCommand(typeof(SetPermissionCommand))]
         public readonly GameCmd SetperMission;
-        [ConvertToBinary(typeof(ClearMapMonsterCommand))]
+        [CustomCommand(typeof(ClearMapMonsterCommand))]
         public readonly GameCmd ClearMon;
-        [ConvertToBinary(typeof(ReNewLevelCommand))]
+        [CustomCommand(typeof(ReNewLevelCommand))]
         public readonly GameCmd RenewLevel;
-        [ConvertToBinary(typeof(DenyIPaddrLogonCommand))]
+        [CustomCommand(typeof(DenyIPaddrLogonCommand))]
         public readonly GameCmd DenyipLogon;
-        [ConvertToBinary(typeof(DenyAccountLogonCommand))]
+        [CustomCommand(typeof(DenyAccountLogonCommand))]
         public readonly GameCmd DenyAccountLogon;
-        [ConvertToBinary(typeof(DenyChrNameLogonCommand))]
+        [CustomCommand(typeof(DenyChrNameLogonCommand))]
         public readonly GameCmd DenyChrNameLogon;
-        [ConvertToBinary(typeof(DelDenyIPaddrLogonCommand))]
+        [CustomCommand(typeof(DelDenyIPaddrLogonCommand))]
         public readonly GameCmd DelDenyIpLogon;
-        [ConvertToBinary(typeof(DelDenyAccountLogonCommand))]
+        [CustomCommand(typeof(DelDenyAccountLogonCommand))]
         public readonly GameCmd DelDenyAccountLogon;
-        [ConvertToBinary(typeof(DelDenyChrNameLogonCommand))]
+        [CustomCommand(typeof(DelDenyChrNameLogonCommand))]
         public readonly GameCmd DelDenyChrNameLogon;
-        [ConvertToBinary(typeof(ShowDenyIPaddrLogonCommand))]
+        [CustomCommand(typeof(ShowDenyIPaddrLogonCommand))]
         public readonly GameCmd ShowDenyIpLogon;
-        [ConvertToBinary(typeof(ShowDenyAccountLogonCommand))]
+        [CustomCommand(typeof(ShowDenyAccountLogonCommand))]
         public readonly GameCmd ShowDenyAccountLogon;
-        [ConvertToBinary(typeof(ShowDenyChrNameLogonCommand))]
+        [CustomCommand(typeof(ShowDenyChrNameLogonCommand))]
         public readonly GameCmd ShowDenyChrNameLogon;
-        [ConvertToBinary(typeof(ViewWhisperCommand))]
+        [CustomCommand(typeof(ViewWhisperCommand))]
         public readonly GameCmd ViewWhisper;
-        [ConvertToBinary(typeof(SpirtStartCommand))]
+        [CustomCommand(typeof(SpirtStartCommand))]
         public readonly GameCmd Spirit;
-        [ConvertToBinary(typeof(SpirtStopCommand))]
+        [CustomCommand(typeof(SpirtStopCommand))]
         public readonly GameCmd SpiritStop;
-        [ConvertToBinary(typeof(SetMapModeCommamd))]
+        [CustomCommand(typeof(SetMapModeCommamd))]
         public readonly GameCmd SetMapMode;
-        [ConvertToBinary(typeof(ShowMapModeCommand))]
+        [CustomCommand(typeof(ShowMapModeCommand))]
         public readonly GameCmd ShowMapMode;
-        [ConvertToBinary(typeof(ClearBagItemCommand))]
+        [CustomCommand(typeof(ClearBagItemCommand))]
         public readonly GameCmd ClearBag;
-        [ConvertToBinary(typeof(LockLoginCommand))]
+        [CustomCommand(typeof(LockLoginCommand))]
         public readonly GameCmd LockLogon;
 
-        public GameCommand()
+        public GameCommands()
         {
             Data = new GameCmd();
             Prvmsg = new GameCmd();
@@ -547,5 +545,21 @@ namespace GameSvr.Command
             Testspeedmode = new GameCmd();
             LockLogon = new GameCmd();
         }
+    }
+    
+    public class GameCmd
+    {
+        /// <summary>
+        /// 命令名称
+        /// </summary>
+        public string CommandName { get; set; }
+        /// <summary>
+        /// 最小权限
+        /// </summary>
+        public int PerMissionMin { get; set; }
+        /// <summary>
+        /// 最大权限
+        /// </summary>
+        public int PerMissionMax { get; set; }
     }
 }

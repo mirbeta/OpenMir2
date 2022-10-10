@@ -7,10 +7,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("NpcScript", "重新读取面对面NPC脚本", "重新读取面对面NPC脚本", 10)]
-    public class NpcScriptCommand : BaseCommond
+    [Command("NpcScript", "重新读取面对面NPC脚本", "重新读取面对面NPC脚本", 10)]
+    public class NpcScriptCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void NpcScript(PlayObject PlayObject)
         {
             var sScriptFileName = string.Empty;

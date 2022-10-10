@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 锁定登录
     /// </summary>
-    [GameCommand("LockLogin", "锁定登录", 0)]
-    public class LockLoginCommand : BaseCommond
+    [Command("LockLogin", "锁定登录", 0)]
+    public class LockLoginCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void LockLogin(PlayObject PlayObject)
         {
             if (!M2Share.Config.LockHumanLogin)

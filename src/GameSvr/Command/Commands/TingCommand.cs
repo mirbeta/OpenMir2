@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 将指定人物随机传送(支持权限分配)
     /// </summary>
-    [GameCommand("Ting", "将指定人物随机传送(支持权限分配)", GameCommandConst.GameCommandTingHelpMsg, 10)]
-    public class TingCommand : BaseCommond
+    [Command("Ting", "将指定人物随机传送(支持权限分配)", CommandHelp.GameCommandTingHelpMsg, 10)]
+    public class TingCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Ting(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

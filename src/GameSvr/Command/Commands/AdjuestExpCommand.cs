@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家经验值
     /// </summary>
-    [GameCommand("AdjuestExp", "调整指定人物的经验值", "物名称 经验值", 10)]
-    public class AdjuestExpCommand : BaseCommond
+    [Command("AdjuestExp", "调整指定人物的经验值", "物名称 经验值", 10)]
+    public class AdjuestExpCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AdjuestExp(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -39,7 +39,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

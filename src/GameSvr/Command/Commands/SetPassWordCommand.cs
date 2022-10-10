@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 设置密码
     /// </summary>
-    [GameCommand("SetPassWord", "设置登录密码", "", 0)]
-    public class SetPassWordCommand : BaseCommond
+    [Command("SetPassWord", "设置登录密码", "", 0)]
+    public class SetPassWordCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SetPassWord(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
@@ -34,10 +34,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 解除密码
     /// </summary>
-    [GameCommand("UnPassWord", "解除登录密码", "", 0)]
-    public class UnPasswWordCommand : BaseCommond
+    [Command("UnPassWord", "解除登录密码", "", 0)]
+    public class UnPasswWordCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void UnPassWord(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
@@ -60,10 +60,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 修改登录密码
     /// </summary>
-    [GameCommand("ChgpassWordCommand", "修改登录密码", "", 0)]
-    public class ChgpassWordCommand : BaseCommond
+    [Command("ChgpassWordCommand", "修改登录密码", "", 0)]
+    public class ChgpassWordCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChgpassWord(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
@@ -93,10 +93,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 解除仓库密码
     /// </summary>
-    [GameCommand("UnlockStorage", "解除仓库密码", "", 0)]
-    public class UnlockStorageCommand : BaseCommond
+    [Command("UnlockStorage", "解除仓库密码", "", 0)]
+    public class UnlockStorageCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void UnlockStorage(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
@@ -133,10 +133,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 解除密码
     /// </summary>
-    [GameCommand("UnLock", "解除密码", "", 0)]
-    public class UnLockCommand : BaseCommond
+    [Command("UnLock", "解除密码", "", 0)]
+    public class UnLockCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void UnLock(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
@@ -173,10 +173,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 锁定密码
     /// </summary>
-    [GameCommand("Lock", "锁定密码", "", 0)]
-    public class LockCommand : BaseCommond
+    [Command("Lock", "锁定密码", "", 0)]
+    public class LockCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Lock(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
@@ -208,10 +208,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// SetFlag
     /// </summary>
-    [GameCommand("SetFlag", "SetFlag", "", 4)]
-    public class SetFlagCommand : BaseCommond
+    [Command("SetFlag", "SetFlag", "", 4)]
+    public class SetFlagCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SetFlag(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
@@ -244,10 +244,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// SetOpen
     /// </summary>
-    [GameCommand("SetOpen", "SetOpen", "", 4)]
-    public class SetOpenCommand : BaseCommond
+    [Command("SetOpen", "SetOpen", "", 4)]
+    public class SetOpenCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SetOpen(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
@@ -280,10 +280,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// SetUnit
     /// </summary>
-    [GameCommand("SetUnit", "SetUnit", "", 4)]
-    public class SetUnitCommand : BaseCommond
+    [Command("SetUnit", "SetUnit", "", 4)]
+    public class SetUnitCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SetUnit(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)

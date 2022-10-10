@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家转生等级
     /// </summary>
-    [GameCommand("ReNewLevel", "调整指定玩家转生等级", "人物名称 点数(为空则查看)", 10)]
-    public class ReNewLevelCommand : BaseCommond
+    [Command("ReNewLevel", "调整指定玩家转生等级", "人物名称 点数(为空则查看)", 10)]
+    public class ReNewLevelCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReNewLevel(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

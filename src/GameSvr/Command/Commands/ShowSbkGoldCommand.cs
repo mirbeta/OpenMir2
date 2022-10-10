@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 显示沙巴克收入金币
     /// </summary>
-    [GameCommand("ShowSbkGold", "显示沙巴克收入金币", 10)]
-    public class ShowSbkGoldCommand : BaseCommond
+    [Command("ShowSbkGold", "显示沙巴克收入金币", 10)]
+    public class ShowSbkGoldCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowSbkGold(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -22,7 +22,7 @@ namespace GameSvr.Command.Commands
             var sGold = @Params.Length > 2 ? @Params[2] : "";
             if (sCastleName != "" && sCastleName[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandParamUnKnow, this.GameCommand.Name, ""), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.GameCommand.Name, ""), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sCastleName == "")
@@ -39,14 +39,14 @@ namespace GameSvr.Command.Commands
             var Castle = M2Share.CastleMgr.Find(sCastleName);
             if (Castle == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Ctr = sCtr[1];
             var nGold = HUtil32.StrToInt(sGold, -1);
             if (!new List<char>(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandParamUnKnow, this.GameCommand.Name, GameCommandConst.GameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.GameCommand.Name, CommandHelp.GameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (Ctr)

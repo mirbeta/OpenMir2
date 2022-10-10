@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("DelGold", "调整指定玩家游戏币", help: "人物名称 数量", 10)]
-    public class DelGoldCommand : BaseCommond
+    [Command("DelGold", "调整指定玩家游戏币", help: "人物名称 数量", 10)]
+    public class DelGoldCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelGold(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

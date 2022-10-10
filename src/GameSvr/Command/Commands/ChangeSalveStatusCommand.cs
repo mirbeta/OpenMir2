@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整当前玩家属下状态
     /// </summary>
-    [GameCommand("Rest", "调整当前玩家属下状态", 0)]
-    public class ChangeSalveStatusCommand : BaseCommond
+    [Command("Rest", "调整当前玩家属下状态", 0)]
+    public class ChangeSalveStatusCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeSalveStatus(PlayObject PlayObject)
         {
             PlayObject.SlaveRelax = !PlayObject.SlaveRelax;

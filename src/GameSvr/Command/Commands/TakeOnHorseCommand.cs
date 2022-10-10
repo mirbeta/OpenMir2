@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("TakeOnHorse", "", 10)]
-    public class TakeOnHorseCommand : BaseCommond
+    [Command("TakeOnHorse", "", 10)]
+    public class TakeOnHorseCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TakeOnHorse(PlayObject PlayObject)
         {
             if (PlayObject.OnHorse)

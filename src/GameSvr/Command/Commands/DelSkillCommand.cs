@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 删除指定玩家技能
     /// </summary>
-    [GameCommand("DelSkill", "删除指定玩家技能", "人物名称 技能名称", 10)]
-    public class DelSkillCommand : BaseCommond
+    [Command("DelSkill", "删除指定玩家技能", "人物名称 技能名称", 10)]
+    public class DelSkillCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelSkill(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -38,7 +38,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = m_PlayObject.MagicList.Count - 1; i >= 0; i--)

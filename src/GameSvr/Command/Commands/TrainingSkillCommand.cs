@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家技能等级
     /// </summary>
-    [GameCommand("TrainingSkill", "调整指定玩家技能等级", "人物名称  技能名称 修炼等级(0-3)", 10)]
-    public class TrainingSkillCommand : BaseCommond
+    [Command("TrainingSkill", "调整指定玩家技能等级", "人物名称  技能名称 修炼等级(0-3)", 10)]
+    public class TrainingSkillCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TrainingSkill(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

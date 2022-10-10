@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("GuildWar", "", 10)]
-    public class GuildWarCommand : BaseCommond
+    [Command("GuildWar", "", 10)]
+    public class GuildWarCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GuildWar(PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)

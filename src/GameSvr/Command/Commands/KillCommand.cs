@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 剔除制定玩家下线
     /// </summary>
-    [GameCommand("Kill", "剔除面对面玩家下线", "玩家名称", 10)]
-    public class KillCommand : BaseCommond
+    [Command("Kill", "剔除面对面玩家下线", "玩家名称", 10)]
+    public class KillCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Kill(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -24,7 +24,7 @@ namespace GameSvr.Command.Commands
                 BaseObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
                 if (BaseObject == null)
                 {
-                    PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }

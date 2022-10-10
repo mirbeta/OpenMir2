@@ -1,6 +1,6 @@
 ﻿namespace GameSvr.Command
 {
-    public static class GameCommandConst
+    public static class CommandHelp
     {
         public const string GameLogMsg1 = "{0}\09{1}\09{2}\09{3}\09{4}\09{5}\09{6}\09{7}\09{8}";
         public const string HumanDieEvent = "人物死亡事件";

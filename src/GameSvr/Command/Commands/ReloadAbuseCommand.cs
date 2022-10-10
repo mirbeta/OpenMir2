@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ReloadAbuse", "无用", 10)]
-    public class ReloadAbuseCommand : BaseCommond
+    [Command("ReloadAbuse", "无用", 10)]
+    public class ReloadAbuseCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReloadAbuse(PlayObject PlayObject)
         {
 

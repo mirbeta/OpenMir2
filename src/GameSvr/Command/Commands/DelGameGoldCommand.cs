@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("DelGameGold", "调整指定玩家游戏币", help: "人物名称 数量", 10)]
-    public class DelGameGoldCommand : BaseCommond
+    [Command("DelGameGold", "调整指定玩家游戏币", help: "人物名称 数量", 10)]
+    public class DelGameGoldCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelGameGold(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

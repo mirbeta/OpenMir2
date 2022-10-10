@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整物品属性
     /// </summary>
-    [GameCommand("RefineWeapon", "调整身上武器属性", "攻击力 魔法力 道术 准确度", 10)]
-    public class RefineWeaponCommand : BaseCommond
+    [Command("RefineWeapon", "调整身上武器属性", "攻击力 魔法力 道术 准确度", 10)]
+    public class RefineWeaponCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void RefineWeapon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

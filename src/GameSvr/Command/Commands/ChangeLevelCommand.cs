@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整自己的等级
     /// </summary>
-    [GameCommand("ChangeLevel", "调整自己的等级", "等级(1-65535)", 10)]
-    public class ChangeLevelCommand : BaseCommond
+    [Command("ChangeLevel", "调整自己的等级", "等级(1-65535)", 10)]
+    public class ChangeLevelCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeLevel(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
                 + "\09" + PlayObject.ChrName + "\09" + PlayObject.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
             if (M2Share.Config.ShowMakeItemMsg)
             {
-                M2Share.Log.Warn(string.Format(GameCommandConst.GameCommandLevelConsoleMsg, PlayObject.ChrName, nOLevel, PlayObject.Abil.Level));
+                M2Share.Log.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayObject.ChrName, nOLevel, PlayObject.Abil.Level));
             }
         }
     }

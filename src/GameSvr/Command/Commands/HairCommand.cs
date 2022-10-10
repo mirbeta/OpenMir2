@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("Hair", "修改玩家发型", "人物名称 类型值", 10)]
-    public class HairCommand : BaseCommond
+    [Command("Hair", "修改玩家发型", "人物名称 类型值", 10)]
+    public class HairCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Hair(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -29,7 +29,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 删除指定玩家包裹物品
     /// </summary>
-    [GameCommand("DeleteItem", "删除人物身上指定的物品", help: "人物名称 物品名称 数量", 10)]
-    public class DeleteItemCommand : BaseCommond
+    [Command("DeleteItem", "删除人物身上指定的物品", help: "人物名称 物品名称 数量", 10)]
+    public class DeleteItemCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DeleteItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -31,7 +31,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nItemCount = 0;

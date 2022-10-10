@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 开始工程战役
     /// </summary>
-    [GameCommand("ForcedWallconquestWar", "开始攻城战役", "城堡名称", 10)]
-    public class ForcedWallconquestWarCommand : BaseCommond
+    [Command("ForcedWallconquestWar", "开始攻城战役", "城堡名称", 10)]
+    public class ForcedWallconquestWarCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ForcedWallconquestWar(string[] @Params, PlayObject PlayObject)
         {
             if (Params == null)
@@ -46,7 +46,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

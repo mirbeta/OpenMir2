@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家属性点
     /// </summary>
-    [GameCommand("BonuPoint", "调整指定玩家属性点", "人物名称 属性点数(不输入为查看点数)", 10)]
-    public class BonuPointCommand : BaseCommond
+    [Command("BonuPoint", "调整指定玩家属性点", "人物名称 属性点数(不输入为查看点数)", 10)]
+    public class BonuPointCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void BonuPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -27,7 +27,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount > 0)

@@ -4,10 +4,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("FireBurn", "", 10)]
-    public class FireBurnCommand : BaseCommond
+    [Command("FireBurn", "", 10)]
+    public class FireBurnCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void FireBurn(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

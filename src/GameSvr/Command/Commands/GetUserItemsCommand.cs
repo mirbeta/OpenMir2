@@ -9,10 +9,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 取指定玩家物品
     /// </summary>
-    [GameCommand("GetUserItems", "取指定玩家物品", "人物名称 物品名称 数量 类型(0,1,2)", 10)]
-    public class GetUserItemsCommand : BaseCommond
+    [Command("GetUserItems", "取指定玩家物品", "人物名称 物品名称 数量 类型(0,1,2)", 10)]
+    public class GetUserItemsCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GetUserItems(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -34,7 +34,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nCount = HUtil32.StrToInt(sItemCount, 0);

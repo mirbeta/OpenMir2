@@ -4,10 +4,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ShutupRelease", "恢复禁言", GameCommandConst.GameCommandShutupReleaseHelpMsg, 10)]
-    public class ShutupReleaseCommand : BaseCommond
+    [Command("ShutupRelease", "恢复禁言", CommandHelp.GameCommandShutupReleaseHelpMsg, 10)]
+    public class ShutupReleaseCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShutupRelease(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)

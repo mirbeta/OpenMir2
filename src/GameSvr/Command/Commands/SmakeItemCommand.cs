@@ -9,10 +9,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整身上装备附加属性
     /// </summary>
-    [GameCommand("SmakeItem", "调整身上装备附加属性", 10)]
-    public class SmakeItemCommand : BaseCommond
+    [Command("SmakeItem", "调整身上装备附加属性", 10)]
+    public class SmakeItemCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SmakeItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -74,7 +74,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    PlayObject.SysMsg(GameCommandConst.GamecommandSuperMakeHelpMsg, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(CommandHelp.GamecommandSuperMakeHelpMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
