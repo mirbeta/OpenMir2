@@ -1,6 +1,6 @@
 ﻿namespace DBSvr.Conf
 {
-    public class SvrConf
+    public class DBSvrConf
     {
         public bool ShowDebugLog = false;
         public int ShowLogLevel = 1;

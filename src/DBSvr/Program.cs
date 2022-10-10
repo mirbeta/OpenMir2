@@ -1,6 +1,7 @@
 ﻿using DBSvr.Conf;
 using DBSvr.Services;
 using DBSvr.Storage;
+using DBSvr.Storage.Impl;
 using DBSvr.Storage.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ namespace DBSvr
         private static IHost _host;
         private static Logger _logger;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
-        private static SvrConf _config;
+        private static DBSvrConf _config;
 
         private static async Task Main(string[] args)
         {
@@ -66,6 +67,7 @@ namespace DBSvr
                     services.AddSingleton<LoginSvrService>();
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<HumDataService>();
+                    services.AddSingleton<IMemoryStorageServive, MemoryStorageServive>();
                     switch (storagePolicy)
                     {
                         case StoragePolicy.MySQL:

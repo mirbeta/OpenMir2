@@ -10,7 +10,7 @@ namespace DBSvr.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
-        public bool Update(string chrName, ref HumDataInfo humanRcd)
+        public bool Update(string chrName, HumDataInfo humanRcd)
         {
             if (_NameQuickMap.TryGetValue(chrName, out var playerId))
             {
@@ -22,7 +22,7 @@ namespace DBSvr.Storage.MySQL
             }
             return false;
         }
-        
+
         public bool UpdateQryChar(int nIndex, QueryChr queryChrRcd)
         {
             var result = false;

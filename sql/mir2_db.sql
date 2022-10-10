@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 10/10/2022 00:06:10
+ Date: 10/10/2022 00:09:51
 */
 
 SET NAMES utf8mb4;
@@ -65,7 +65,7 @@ CREATE TABLE `characters` (
   `CREATEDATE` datetime DEFAULT NULL COMMENT '创建日期',
   `LASTUPDATE` datetime DEFAULT NULL COMMENT '修改日期',
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6227 DEFAULT CHARSET=utf8 COMMENT='玩家';
+) ENGINE=InnoDB AUTO_INCREMENT=6227 DEFAULT CHARSET=utf8 COMMENT='角色信息';
 
 -- ----------------------------
 -- Records of characters
@@ -655,7 +655,7 @@ CREATE TABLE `characters_item_attr` (
   `Value12` tinyint(2) NOT NULL,
   `Value13` tinyint(2) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='装备附加属性';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='装备附加属性';
 
 -- ----------------------------
 -- Records of characters_item_attr
@@ -668,12 +668,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `characters_magic`;
 CREATE TABLE `characters_magic` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
   `PlayerId` bigint(20) NOT NULL,
   `MagicId` int(11) NOT NULL COMMENT '技能ID',
   `Level` tinyint(2) NOT NULL COMMENT '技能等级',
   `UseKey` char(2) NOT NULL COMMENT '技能按键',
   `CurrTrain` int(11) NOT NULL COMMENT '当前经验',
-  PRIMARY KEY (`PlayerId`)
+  PRIMARY KEY (`Id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='技能';
 
 -- ----------------------------

@@ -6,16 +6,16 @@ namespace DBSvr.Conf
 {
     public class ConfigManager : IniFile
     {
-        private readonly SvrConf _config;
+        private readonly DBSvrConf _config;
         private static readonly string ConfitFile = Path.Combine(AppContext.BaseDirectory, "dbsvr.conf");
 
         public ConfigManager() : base(ConfitFile)
         {
-            _config = new SvrConf();
+            _config = new DBSvrConf();
             Load();
         }
 
-        public SvrConf GetConfig => _config;
+        public DBSvrConf GetConfig => _config;
 
         public void LoadConfig()
         {
