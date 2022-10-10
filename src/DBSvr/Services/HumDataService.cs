@@ -21,15 +21,17 @@ namespace DBSvr.Services
         private readonly IList<TServerInfo> _serverList;
         private readonly IList<THumSession> _playSessionList;
         private readonly IPlayDataStorage _playDataStorage;
+        private readonly IMemoryStorageServive _memoryStorageServive;
         private readonly SocketServer _serverSocket;
         private readonly LoginSvrService _loginSvrService;
-        private readonly SvrConf _conf;
+        private readonly DBSvrConf _conf;
 
-        public HumDataService(MirLog logger, LoginSvrService loginSvrService, IPlayDataStorage playDataStorage, SvrConf conf)
+        public HumDataService(MirLog logger, DBSvrConf conf, LoginSvrService loginSvrService, IPlayDataStorage playDataStorage, IMemoryStorageServive memoryStorageServive)
         {
             _logger = logger;
             _loginSvrService = loginSvrService;
             _playDataStorage = playDataStorage;
+            _memoryStorageServive = memoryStorageServive;
             _serverList = new List<TServerInfo>();
             _playSessionList = new List<THumSession>();
             _serverSocket = new SocketServer(byte.MaxValue, 1024);
@@ -286,9 +288,13 @@ namespace DBSvr.Services
                 int nIndex = _playDataStorage.Index(loadHumanPacket.ChrName);
                 if (nIndex >= 0)
                 {
-                    if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
+                    HumanRCD = _memoryStorageServive.Get(loadHumanPacket.ChrName);
+                    if (HumanRCD == null)
                     {
-                        nCheckCode = -2;
+                        if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
+                        {
+                            nCheckCode = -2;
+                        }
                     }
                 }
                 else
@@ -340,7 +346,8 @@ namespace DBSvr.Services
                 if (nIndex >= 0)
                 {
                     humanRcd.Header.sName = sChrName;
-                    _playDataStorage.Update(sChrName, ref humanRcd);
+                    _memoryStorageServive.Add(sChrName, humanRcd);
+                    _playDataStorage.Update(sChrName, humanRcd);
                     bo21 = false;
                 }
                 _loginSvrService.SetSessionSaveRcd(sUserID);

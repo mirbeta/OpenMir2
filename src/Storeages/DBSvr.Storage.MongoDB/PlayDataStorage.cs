@@ -138,7 +138,7 @@ namespace DBSvr.Storage.MongoDB
             throw new NotImplementedException();
         }
 
-        public bool Update(string nIndex, ref HumDataInfo HumanRCD)
+        public bool Update(string nIndex, HumDataInfo HumanRCD)
         {
             bool result = false;
             //if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))

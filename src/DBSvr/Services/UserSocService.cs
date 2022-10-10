@@ -25,7 +25,7 @@ namespace DBSvr.Services
     public class UserSocService
     {
         private readonly MirLog _logger;
-        private readonly SvrConf _conf;
+        private readonly DBSvrConf _conf;
         private readonly Dictionary<string, int> _mapList;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
@@ -33,7 +33,7 @@ namespace DBSvr.Services
         private readonly LoginSvrService _loginService;
         private readonly Channel<UsrSocMessage> _reviceQueue;
 
-        public UserSocService(MirLog logger, SvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public UserSocService(MirLog logger, DBSvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _logger = logger;
             _loginService = loginService;

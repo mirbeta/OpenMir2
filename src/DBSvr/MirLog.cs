@@ -7,9 +7,9 @@ namespace DBSvr
     public class MirLog
     {
         private readonly ILogger<MirLog> _logger;
-        private readonly SvrConf _config;
+        private readonly DBSvrConf _config;
 
-        public MirLog(ILogger<MirLog> logger, SvrConf svrConf)
+        public MirLog(ILogger<MirLog> logger, DBSvrConf svrConf)
         {
             _logger = logger;
             _config = svrConf;
