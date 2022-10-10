@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 播放特效
     /// </summary>
-    [GameCommand("ShowEffect", "播放特效", 10)]
-    public class ShowEffectCommand : BaseCommond
+    [Command("ShowEffect", "播放特效", 10)]
+    public class ShowEffectCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowEffect(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

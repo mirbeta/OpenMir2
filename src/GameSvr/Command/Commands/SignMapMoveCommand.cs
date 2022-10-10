@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 回到上次死亡地点
     /// </summary>
-    [GameCommand("SignMapMove", "回到上次死亡地点", 10)]
-    public class SignMapMoveCommand : BaseCommond
+    [Command("SignMapMove", "回到上次死亡地点", 10)]
+    public class SignMapMoveCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SignMapMove(PlayObject PlayObject)
         {
             //try

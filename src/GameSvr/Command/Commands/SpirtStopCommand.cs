@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 此命令用于停止祈祷生效导致宝宝叛变
     /// </summary>
-    [GameCommand("SpirtStop", "此命令用于停止祈祷生效导致宝宝叛变", 10)]
-    public class SpirtStopCommand : BaseCommond
+    [Command("SpirtStop", "此命令用于停止祈祷生效导致宝宝叛变", 10)]
+    public class SpirtStopCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SpirtStop(PlayObject PlayObject)
         {
             M2Share.g_dwSpiritMutinyTick = 0;

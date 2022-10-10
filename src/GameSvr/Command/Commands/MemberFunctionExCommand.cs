@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("MemberFunctionEx", "", help: "打开会员功能窗口", 0)]
-    public class MemberFunctionExCommand : BaseCommond
+    [Command("MemberFunctionEx", "", help: "打开会员功能窗口", 0)]
+    public class MemberFunctionExCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MemberFunctionEx(PlayObject PlayObject)
         {
             if (M2Share.g_FunctionNPC != null)

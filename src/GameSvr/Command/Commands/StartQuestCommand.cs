@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("StartQuest", "", "问答名称", 10)]
-    public class StartQuestCommand : BaseCommond
+    [Command("StartQuest", "", "问答名称", 10)]
+    public class StartQuestCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void StartQuest(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)

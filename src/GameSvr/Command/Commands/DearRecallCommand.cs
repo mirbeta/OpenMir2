@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 夫妻传送，将对方传送到自己身边，对方必须允许传送。
     /// </summary>
-    [GameCommand("DearRecall", "夫妻传送", "(夫妻传送，将对方传送到自己身边，对方必须允许传送。)", 0)]
-    public class DearRecallCommond : BaseCommond
+    [Command("DearRecall", "夫妻传送", "(夫妻传送，将对方传送到自己身边，对方必须允许传送。)", 0)]
+    public class DearRecallCommond : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DearRecall(PlayObject PlayObject)
         {
             if (PlayObject.m_sDearName == "")

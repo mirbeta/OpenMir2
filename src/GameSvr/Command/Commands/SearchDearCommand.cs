@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 此命令用于查询配偶当前所在位置
     /// </summary>
-    [GameCommand("SearchDear", "此命令用于查询配偶当前所在位置", 0)]
-    public class SearchDearCommand : BaseCommond
+    [Command("SearchDear", "此命令用于查询配偶当前所在位置", 0)]
+    public class SearchDearCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void SearchDear(PlayObject PlayObject)
         {
             if (PlayObject.m_sDearName == "")

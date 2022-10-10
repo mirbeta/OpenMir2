@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("DelDenyChrNameLogon", "", "人物名称", 10)]
-    public class DelDenyChrNameLogonCommand : BaseCommond
+    [Command("DelDenyChrNameLogon", "", "人物名称", 10)]
+    public class DelDenyChrNameLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelDenyChrNameLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

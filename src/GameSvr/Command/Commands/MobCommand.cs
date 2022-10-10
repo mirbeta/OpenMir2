@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 刷指定怪物
     /// </summary>
-    [GameCommand("Mob", "刷指定怪物", "怪物名称 数量 等级(0-7)", 10)]
-    public class MobCommand : BaseCommond
+    [Command("Mob", "刷指定怪物", "怪物名称 数量 等级(0-7)", 10)]
+    public class MobCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Mob(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -50,7 +50,7 @@ namespace GameSvr.Command.Commands
                 }
                 else
                 {
-                    PlayObject.SysMsg(GameCommandConst.GameCommandMobMsg, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(CommandHelp.GameCommandMobMsg, MsgColor.Red, MsgType.Hint);
                     break;
                 }
             }

@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 组队传送
     /// </summary>
-    [GameCommand("GroupRecall", "组队传送", 0)]
-    public class GroupRecallCommand : BaseCommond
+    [Command("GroupRecall", "组队传送", 0)]
+    public class GroupRecallCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GroupRecall(PlayObject PlayObject)
         {
             if (PlayObject.RecallSuite || PlayObject.Permission >= 6)

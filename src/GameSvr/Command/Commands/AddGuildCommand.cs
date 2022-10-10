@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 创建行会
     /// </summary>
-    [GameCommand("AddGuild", "新建一个行会", "行会名称 掌门人名称", 10)]
-    public class AddGuildCommand : BaseCommond
+    [Command("AddGuild", "新建一个行会", "行会名称 掌门人名称", 10)]
+    public class AddGuildCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AddGuild(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -33,7 +33,7 @@ namespace GameSvr.Command.Commands
             var Human = M2Share.WorldEngine.GetPlayObject(sGuildChief);
             if (Human == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.GuildMgr.MemberOfGuild(sGuildChief) == null)

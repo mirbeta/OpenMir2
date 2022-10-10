@@ -6,20 +6,20 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 此命令用于允许或禁止编组传送功能
     /// </summary>
-    [GameCommand("AllowGroupReCall", "此命令用于允许或禁止编组传送功能", 0)]
-    public class AllowGroupReCallCommand : BaseCommond
+    [Command("AllowGroupReCall", "此命令用于允许或禁止编组传送功能", 0)]
+    public class AllowGroupReCallCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AllowGroupReCall(PlayObject PlayObject)
         {
             PlayObject.AllowGroupReCall = !PlayObject.AllowGroupReCall;
             if (PlayObject.AllowGroupReCall)
             {
-                PlayObject.SysMsg(GameCommandConst.EnableGroupRecall, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(CommandHelp.EnableGroupRecall, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(GameCommandConst.DisableGroupRecall, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(CommandHelp.DisableGroupRecall, MsgColor.Green, MsgType.Hint);
             }
         }
     }

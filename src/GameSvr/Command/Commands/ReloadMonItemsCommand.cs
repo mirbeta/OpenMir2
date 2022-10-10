@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 重新加载怪物爆率文件
     /// </summary>
-    [GameCommand("ReloadMonItems", "重新加载怪物爆率文件", 10)]
-    public class ReloadMonItemsCommand : BaseCommond
+    [Command("ReloadMonItems", "重新加载怪物爆率文件", 10)]
+    public class ReloadMonItemsCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReloadMonItems(PlayObject PlayObject)
         {
             try

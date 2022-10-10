@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("DelDenyIPaddrLogon", "", "IP地址", 10)]
-    public class DelDenyIPaddrLogonCommand : BaseCommond
+    [Command("DelDenyIPaddrLogon", "", "IP地址", 10)]
+    public class DelDenyIPaddrLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelDenyIPaddrLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

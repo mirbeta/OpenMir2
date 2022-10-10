@@ -28,11 +28,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Date", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Date", M2Share.GameCommand.Data.nPerMissionMin);
+                WriteInteger("Permission", "Date", M2Share.GameCommand.Data.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Data.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Data.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "PrvMsg", "");
             if (LoadString == "")
@@ -46,11 +46,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "PrvMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PrvMsg", M2Share.GameCommand.Prvmsg.nPerMissionMin);
+                WriteInteger("Permission", "PrvMsg", M2Share.GameCommand.Prvmsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Prvmsg.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Prvmsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AllowMsg", "");
             if (LoadString == "")
@@ -64,11 +64,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AllowMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AllowMsg", M2Share.GameCommand.AllowMsg.nPerMissionMin);
+                WriteInteger("Permission", "AllowMsg", M2Share.GameCommand.AllowMsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AllowMsg.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.AllowMsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LetShout", "");
             if (LoadString == "")
@@ -271,11 +271,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "StorageClearPassword", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StorageClearPassword", M2Share.GameCommand.ClrPassword.nPerMissionMin);
+                WriteInteger("Permission", "StorageClearPassword", M2Share.GameCommand.ClrPassword.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClrPassword.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ClrPassword.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StorageUserClearPassword", "");
             if (LoadString == "")
@@ -406,11 +406,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "HumanLocal", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "HumanLocal", M2Share.GameCommand.HumanLocal.nPerMissionMin);
+                WriteInteger("Permission", "HumanLocal", M2Share.GameCommand.HumanLocal.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.HumanLocal.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.HumanLocal.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Move", "");
             if (LoadString == "")
@@ -424,20 +424,20 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MoveMin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MoveMin", M2Share.GameCommand.Move.nPerMissionMin);
+                WriteInteger("Permission", "MoveMin", M2Share.GameCommand.Move.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Move.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Move.PerMissionMin = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Permission", "MoveMax", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MoveMax", M2Share.GameCommand.Move.nPerMissionMax);
+                WriteInteger("Permission", "MoveMax", M2Share.GameCommand.Move.PerMissionMax);
             }
             else
             {
-                M2Share.GameCommand.Move.nPerMissionMax = nLoadInteger;
+                M2Share.GameCommand.Move.PerMissionMax = nLoadInteger;
             }
             LoadString = ReadString("Command", "PositionMove", "");
             if (LoadString == "")
@@ -451,20 +451,20 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "PositionMoveMin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PositionMoveMin", M2Share.GameCommand.PositionMove.nPerMissionMin);
+                WriteInteger("Permission", "PositionMoveMin", M2Share.GameCommand.PositionMove.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.PositionMove.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.PositionMove.PerMissionMin = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Permission", "PositionMoveMax", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PositionMoveMax", M2Share.GameCommand.PositionMove.nPerMissionMax);
+                WriteInteger("Permission", "PositionMoveMax", M2Share.GameCommand.PositionMove.PerMissionMax);
             }
             else
             {
-                M2Share.GameCommand.PositionMove.nPerMissionMax = nLoadInteger;
+                M2Share.GameCommand.PositionMove.PerMissionMax = nLoadInteger;
             }
             LoadString = ReadString("Command", "Info", "");
             if (LoadString == "")
@@ -478,11 +478,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Info", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Info", M2Share.GameCommand.Info.nPerMissionMin);
+                WriteInteger("Permission", "Info", M2Share.GameCommand.Info.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Info.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Info.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobLevel", "");
             if (LoadString == "")
@@ -496,11 +496,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MobLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobLevel", M2Share.GameCommand.MobLevel.nPerMissionMin);
+                WriteInteger("Permission", "MobLevel", M2Share.GameCommand.MobLevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobLevel.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.MobLevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobCount", "");
             if (LoadString == "")
@@ -514,11 +514,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MobCount", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobCount", M2Share.GameCommand.MobCount.nPerMissionMin);
+                WriteInteger("Permission", "MobCount", M2Share.GameCommand.MobCount.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobCount.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.MobCount.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "HumanCount", "");
             if (LoadString == "")
@@ -532,11 +532,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "HumanCount", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "HumanCount", M2Share.GameCommand.HumanCount.nPerMissionMin);
+                WriteInteger("Permission", "HumanCount", M2Share.GameCommand.HumanCount.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.HumanCount.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.HumanCount.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Map", "");
             if (LoadString == "")
@@ -550,11 +550,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Map", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Map", M2Share.GameCommand.Map.nPerMissionMin);
+                WriteInteger("Permission", "Map", M2Share.GameCommand.Map.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Map.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Map.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Kick", "");
             if (LoadString == "")
@@ -568,11 +568,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Kick", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Kick", M2Share.GameCommand.Kick.nPerMissionMin);
+                WriteInteger("Permission", "Kick", M2Share.GameCommand.Kick.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Kick.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Kick.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Ting", "");
             if (LoadString == "")
@@ -586,11 +586,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Ting", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Ting", M2Share.GameCommand.Ting.nPerMissionMin);
+                WriteInteger("Permission", "Ting", M2Share.GameCommand.Ting.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Ting.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Ting.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SuperTing", "");
             if (LoadString == "")
@@ -604,11 +604,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SuperTing", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SuperTing", M2Share.GameCommand.Superting.nPerMissionMin);
+                WriteInteger("Permission", "SuperTing", M2Share.GameCommand.Superting.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Superting.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Superting.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MapMove", "");
             if (LoadString == "")
@@ -622,11 +622,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MapMove", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MapMove", M2Share.GameCommand.MapMove.nPerMissionMin);
+                WriteInteger("Permission", "MapMove", M2Share.GameCommand.MapMove.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MapMove.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.MapMove.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Shutup", "");
             if (LoadString == "")
@@ -640,11 +640,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Shutup", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Shutup", M2Share.GameCommand.ShutUp.nPerMissionMin);
+                WriteInteger("Permission", "Shutup", M2Share.GameCommand.ShutUp.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShutUp.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShutUp.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReleaseShutup", "");
             if (LoadString == "")
@@ -658,11 +658,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReleaseShutup", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReleaseShutup", M2Share.GameCommand.ReleaseShutup.nPerMissionMin);
+                WriteInteger("Permission", "ReleaseShutup", M2Share.GameCommand.ReleaseShutup.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReleaseShutup.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReleaseShutup.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShutupList", "");
             if (LoadString == "")
@@ -676,11 +676,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ShutupList", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShutupList", M2Share.GameCommand.ShutupList.nPerMissionMin);
+                WriteInteger("Permission", "ShutupList", M2Share.GameCommand.ShutupList.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShutupList.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShutupList.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GameMaster", "");
             if (LoadString == "")
@@ -694,11 +694,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "GameMaster", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "GameMaster", M2Share.GameCommand.GameMaster.nPerMissionMin);
+                WriteInteger("Permission", "GameMaster", M2Share.GameCommand.GameMaster.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.GameMaster.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.GameMaster.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ObServer", "");
             if (LoadString == "")
@@ -712,11 +712,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ObServer", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ObServer", M2Share.GameCommand.ObServer.nPerMissionMin);
+                WriteInteger("Permission", "ObServer", M2Share.GameCommand.ObServer.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ObServer.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ObServer.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SuperMan", "");
             if (LoadString == "")
@@ -730,11 +730,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SuperMan", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SuperMan", M2Share.GameCommand.SueprMan.nPerMissionMin);
+                WriteInteger("Permission", "SuperMan", M2Share.GameCommand.SueprMan.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SueprMan.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SueprMan.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Level", "");
             if (LoadString == "")
@@ -748,11 +748,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Level", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Level", M2Share.GameCommand.Level.nPerMissionMin);
+                WriteInteger("Permission", "Level", M2Share.GameCommand.Level.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Level.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Level.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SabukWallGold", "");
             if (LoadString == "")
@@ -766,11 +766,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SabukWallGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SabukWallGold", M2Share.GameCommand.SabukwallGold.nPerMissionMin);
+                WriteInteger("Permission", "SabukWallGold", M2Share.GameCommand.SabukwallGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SabukwallGold.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SabukwallGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Recall", "");
             if (LoadString == "")
@@ -784,11 +784,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Recall", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Recall", M2Share.GameCommand.Recall.nPerMissionMin);
+                WriteInteger("Permission", "Recall", M2Share.GameCommand.Recall.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Recall.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Recall.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReGoto", "");
             if (LoadString == "")
@@ -802,11 +802,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReGoto", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReGoto", M2Share.GameCommand.Regoto.nPerMissionMin);
+                WriteInteger("Permission", "ReGoto", M2Share.GameCommand.Regoto.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Regoto.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Regoto.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Flag", "");
             if (LoadString == "")
@@ -820,11 +820,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Flag", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Flag", M2Share.GameCommand.Showflag.nPerMissionMin);
+                WriteInteger("Permission", "Flag", M2Share.GameCommand.Showflag.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Showflag.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Showflag.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowOpen", "");
             if (LoadString == "")
@@ -838,11 +838,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ShowOpen", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowOpen", M2Share.GameCommand.ShowOpen.nPerMissionMin);
+                WriteInteger("Permission", "ShowOpen", M2Share.GameCommand.ShowOpen.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowOpen.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShowOpen.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowUnit", "");
             if (LoadString == "")
@@ -856,11 +856,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ShowUnit", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowUnit", M2Share.GameCommand.ShowUnit.nPerMissionMin);
+                WriteInteger("Permission", "ShowUnit", M2Share.GameCommand.ShowUnit.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowUnit.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShowUnit.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Attack", "");
             if (LoadString == "")
@@ -874,11 +874,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Attack", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Attack", M2Share.GameCommand.Attack.nPerMissionMin);
+                WriteInteger("Permission", "Attack", M2Share.GameCommand.Attack.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Attack.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Attack.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Mob", "");
             if (LoadString == "")
@@ -892,11 +892,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Mob", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Mob", M2Share.GameCommand.Mob.nPerMissionMin);
+                WriteInteger("Permission", "Mob", M2Share.GameCommand.Mob.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Mob.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Mob.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobNpc", "");
             if (LoadString == "")
@@ -910,11 +910,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MobNpc", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobNpc", M2Share.GameCommand.MobNpc.nPerMissionMin);
+                WriteInteger("Permission", "MobNpc", M2Share.GameCommand.MobNpc.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobNpc.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.MobNpc.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelNpc", "");
             if (LoadString == "")
@@ -928,11 +928,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelNpc", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelNpc", M2Share.GameCommand.DeleteNpc.nPerMissionMin);
+                WriteInteger("Permission", "DelNpc", M2Share.GameCommand.DeleteNpc.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DeleteNpc.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DeleteNpc.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "NpcScript", "");
             if (LoadString == "")
@@ -946,11 +946,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "NpcScript", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "NpcScript", M2Share.GameCommand.NpcScript.nPerMissionMin);
+                WriteInteger("Permission", "NpcScript", M2Share.GameCommand.NpcScript.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.NpcScript.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.NpcScript.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "RecallMob", "");
             if (LoadString == "")
@@ -964,11 +964,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "RecallMob", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "RecallMob", M2Share.GameCommand.RecallMob.nPerMissionMin);
+                WriteInteger("Permission", "RecallMob", M2Share.GameCommand.RecallMob.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.RecallMob.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.RecallMob.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LuckPoint", "");
             if (LoadString == "")
@@ -982,11 +982,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "LuckPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "LuckPoint", M2Share.GameCommand.LuckyPoint.nPerMissionMin);
+                WriteInteger("Permission", "LuckPoint", M2Share.GameCommand.LuckyPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.LuckyPoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.LuckyPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LotteryTicket", "");
             if (LoadString == "")
@@ -1000,11 +1000,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "LotteryTicket", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "LotteryTicket", M2Share.GameCommand.LotteryTicket.nPerMissionMin);
+                WriteInteger("Permission", "LotteryTicket", M2Share.GameCommand.LotteryTicket.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.LotteryTicket.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.LotteryTicket.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadGuild", "");
             if (LoadString == "")
@@ -1018,11 +1018,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadGuild", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadGuild", M2Share.GameCommand.ReloadGuild.nPerMissionMin);
+                WriteInteger("Permission", "ReloadGuild", M2Share.GameCommand.ReloadGuild.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadGuild.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadGuild.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadLineNotice", "");
             if (LoadString == "")
@@ -1036,11 +1036,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadLineNotice", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadLineNotice", M2Share.GameCommand.ReloadLineNotice.nPerMissionMin);
+                WriteInteger("Permission", "ReloadLineNotice", M2Share.GameCommand.ReloadLineNotice.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadLineNotice.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadLineNotice.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadAbuse", "");
             if (LoadString == "")
@@ -1054,11 +1054,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadAbuse", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadAbuse", M2Share.GameCommand.ReloadAbuse.nPerMissionMin);
+                WriteInteger("Permission", "ReloadAbuse", M2Share.GameCommand.ReloadAbuse.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadAbuse.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadAbuse.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "BackStep", "");
             if (LoadString == "")
@@ -1072,11 +1072,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "BackStep", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "BackStep", M2Share.GameCommand.BackStep.nPerMissionMin);
+                WriteInteger("Permission", "BackStep", M2Share.GameCommand.BackStep.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.BackStep.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.BackStep.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Ball", "");
             if (LoadString == "")
@@ -1090,11 +1090,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Ball", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Ball", M2Share.GameCommand.Ball.nPerMissionMin);
+                WriteInteger("Permission", "Ball", M2Share.GameCommand.Ball.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Ball.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Ball.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "FreePenalty", "");
             if (LoadString == "")
@@ -1108,11 +1108,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "FreePenalty", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "FreePenalty", M2Share.GameCommand.FreePenalty.nPerMissionMin);
+                WriteInteger("Permission", "FreePenalty", M2Share.GameCommand.FreePenalty.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.FreePenalty.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.FreePenalty.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "PkPoint", "");
             if (LoadString == "")
@@ -1126,11 +1126,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "PkPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PkPoint", M2Share.GameCommand.PkPoint.nPerMissionMin);
+                WriteInteger("Permission", "PkPoint", M2Share.GameCommand.PkPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.PkPoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.PkPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "IncPkPoint", "");
             if (LoadString == "")
@@ -1144,11 +1144,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "IncPkPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "IncPkPoint", M2Share.GameCommand.Incpkpoint.nPerMissionMin);
+                WriteInteger("Permission", "IncPkPoint", M2Share.GameCommand.Incpkpoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Incpkpoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Incpkpoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeLuck", "");
             if (LoadString == "")
@@ -1162,11 +1162,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeLuck", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeLuck", M2Share.GameCommand.ChangeLuck.nPerMissionMin);
+                WriteInteger("Permission", "ChangeLuck", M2Share.GameCommand.ChangeLuck.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeLuck.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChangeLuck.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Hunger", "");
             if (LoadString == "")
@@ -1180,11 +1180,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Hunger", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Hunger", M2Share.GameCommand.Hunger.nPerMissionMin);
+                WriteInteger("Permission", "Hunger", M2Share.GameCommand.Hunger.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Hunger.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Hunger.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Hair", "");
             if (LoadString == "")
@@ -1198,11 +1198,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Hair", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Hair", M2Share.GameCommand.Hair.nPerMissionMin);
+                WriteInteger("Permission", "Hair", M2Share.GameCommand.Hair.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Hair.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Hair.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Training", "");
             if (LoadString == "")
@@ -1216,11 +1216,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Training", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Training", M2Share.GameCommand.Training.nPerMissionMin);
+                WriteInteger("Permission", "Training", M2Share.GameCommand.Training.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Training.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Training.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DeleteSkill", "");
             if (LoadString == "")
@@ -1234,11 +1234,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DeleteSkill", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DeleteSkill", M2Share.GameCommand.DeleteSkill.nPerMissionMin);
+                WriteInteger("Permission", "DeleteSkill", M2Share.GameCommand.DeleteSkill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DeleteSkill.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DeleteSkill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeJob", "");
             if (LoadString == "")
@@ -1252,11 +1252,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeJob", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeJob", M2Share.GameCommand.ChangeJob.nPerMissionMin);
+                WriteInteger("Permission", "ChangeJob", M2Share.GameCommand.ChangeJob.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeJob.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChangeJob.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeGender", "");
             if (LoadString == "")
@@ -1270,11 +1270,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeGender", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeGender", M2Share.GameCommand.ChangeGender.nPerMissionMin);
+                WriteInteger("Permission", "ChangeGender", M2Share.GameCommand.ChangeGender.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeGender.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChangeGender.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "NameColor", "");
             if (LoadString == "")
@@ -1288,11 +1288,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "NameColor", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "NameColor", M2Share.GameCommand.Namecolor.nPerMissionMin);
+                WriteInteger("Permission", "NameColor", M2Share.GameCommand.Namecolor.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Namecolor.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Namecolor.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Mission", "");
             if (LoadString == "")
@@ -1306,11 +1306,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Mission", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Mission", M2Share.GameCommand.Mission.nPerMissionMin);
+                WriteInteger("Permission", "Mission", M2Share.GameCommand.Mission.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Mission.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Mission.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobPlace", "");
             if (LoadString == "")
@@ -1324,11 +1324,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MobPlace", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobPlace", M2Share.GameCommand.MobPlace.nPerMissionMin);
+                WriteInteger("Permission", "MobPlace", M2Share.GameCommand.MobPlace.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobPlace.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.MobPlace.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Transparecy", "");
             if (LoadString == "")
@@ -1342,11 +1342,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Transparecy", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Transparecy", M2Share.GameCommand.Transparecy.nPerMissionMin);
+                WriteInteger("Permission", "Transparecy", M2Share.GameCommand.Transparecy.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Transparecy.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Transparecy.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DeleteItem", "");
             if (LoadString == "")
@@ -1360,11 +1360,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DeleteItem", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DeleteItem", M2Share.GameCommand.DeleteItem.nPerMissionMin);
+                WriteInteger("Permission", "DeleteItem", M2Share.GameCommand.DeleteItem.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DeleteItem.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DeleteItem.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Level0", "");
             if (LoadString == "")
@@ -1378,11 +1378,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Level0", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Level0", M2Share.GameCommand.Level.nPerMissionMin);
+                WriteInteger("Permission", "Level0", M2Share.GameCommand.Level.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Level.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Level.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ClearMission", "");
             if (LoadString == "")
@@ -1396,11 +1396,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ClearMission", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ClearMission", M2Share.GameCommand.ClearMission.nPerMissionMin);
+                WriteInteger("Permission", "ClearMission", M2Share.GameCommand.ClearMission.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClearMission.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ClearMission.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetFlag", "");
             if (LoadString == "")
@@ -1414,11 +1414,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SetFlag", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetFlag", M2Share.GameCommand.SetFlag.nPerMissionMin);
+                WriteInteger("Permission", "SetFlag", M2Share.GameCommand.SetFlag.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetFlag.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SetFlag.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetOpen", "");
             if (LoadString == "")
@@ -1432,11 +1432,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SetOpen", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetOpen", M2Share.GameCommand.SetOpen.nPerMissionMin);
+                WriteInteger("Permission", "SetOpen", M2Share.GameCommand.SetOpen.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetOpen.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SetOpen.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetUnit", "");
             if (LoadString == "")
@@ -1450,11 +1450,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SetUnit", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetUnit", M2Share.GameCommand.SetUnit.nPerMissionMin);
+                WriteInteger("Permission", "SetUnit", M2Share.GameCommand.SetUnit.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetUnit.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SetUnit.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReConnection", "");
             if (LoadString == "")
@@ -1468,11 +1468,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReConnection", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReConnection", M2Share.GameCommand.Reconnection.nPerMissionMin);
+                WriteInteger("Permission", "ReConnection", M2Share.GameCommand.Reconnection.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reconnection.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Reconnection.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DisableFilter", "");
             if (LoadString == "")
@@ -1486,11 +1486,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DisableFilter", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DisableFilter", M2Share.GameCommand.DisableFilter.nPerMissionMin);
+                WriteInteger("Permission", "DisableFilter", M2Share.GameCommand.DisableFilter.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DisableFilter.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DisableFilter.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeUserFull", "");
             if (LoadString == "")
@@ -1504,11 +1504,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeUserFull", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeUserFull", M2Share.GameCommand.ChguserFull.nPerMissionMin);
+                WriteInteger("Permission", "ChangeUserFull", M2Share.GameCommand.ChguserFull.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChguserFull.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChguserFull.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeZenFastStep", "");
             if (LoadString == "")
@@ -1522,11 +1522,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeZenFastStep", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeZenFastStep", M2Share.GameCommand.ChgZenFastStep.nPerMissionMin);
+                WriteInteger("Permission", "ChangeZenFastStep", M2Share.GameCommand.ChgZenFastStep.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChgZenFastStep.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChgZenFastStep.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ContestPoint", "");
             if (LoadString == "")
@@ -1540,11 +1540,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ContestPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ContestPoint", M2Share.GameCommand.ContestPoint.nPerMissionMin);
+                WriteInteger("Permission", "ContestPoint", M2Share.GameCommand.ContestPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ContestPoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ContestPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartContest", "");
             if (LoadString == "")
@@ -1558,11 +1558,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "StartContest", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartContest", M2Share.GameCommand.StartContest.nPerMissionMin);
+                WriteInteger("Permission", "StartContest", M2Share.GameCommand.StartContest.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.StartContest.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.StartContest.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "EndContest", "");
             if (LoadString == "")
@@ -1576,11 +1576,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "EndContest", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "EndContest", M2Share.GameCommand.EndContest.nPerMissionMin);
+                WriteInteger("Permission", "EndContest", M2Share.GameCommand.EndContest.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.EndContest.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.EndContest.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Announcement", "");
             if (LoadString == "")
@@ -1594,11 +1594,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Announcement", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Announcement", M2Share.GameCommand.Announcement.nPerMissionMin);
+                WriteInteger("Permission", "Announcement", M2Share.GameCommand.Announcement.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Announcement.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Announcement.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "OXQuizRoom", "");
             if (LoadString == "")
@@ -1612,11 +1612,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "OXQuizRoom", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "OXQuizRoom", M2Share.GameCommand.Oxquizroom.nPerMissionMin);
+                WriteInteger("Permission", "OXQuizRoom", M2Share.GameCommand.Oxquizroom.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Oxquizroom.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Oxquizroom.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Gsa", "");
             if (LoadString == "")
@@ -1630,11 +1630,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Gsa", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Gsa", M2Share.GameCommand.Gsa.nPerMissionMin);
+                WriteInteger("Permission", "Gsa", M2Share.GameCommand.Gsa.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Gsa.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Gsa.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeItemName", "");
             if (LoadString == "")
@@ -1648,11 +1648,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeItemName", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeItemName", M2Share.GameCommand.ChangeItemName.nPerMissionMin);
+                WriteInteger("Permission", "ChangeItemName", M2Share.GameCommand.ChangeItemName.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeItemName.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChangeItemName.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DisableSendMsg", "");
             if (LoadString == "")
@@ -1666,11 +1666,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DisableSendMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DisableSendMsg", M2Share.GameCommand.DisableSendMsg.nPerMissionMin);
+                WriteInteger("Permission", "DisableSendMsg", M2Share.GameCommand.DisableSendMsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DisableSendMsg.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DisableSendMsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "EnableSendMsg", "");
             if (LoadString == "")
@@ -1684,11 +1684,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "EnableSendMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "EnableSendMsg", M2Share.GameCommand.EnableSendMsg.nPerMissionMin);
+                WriteInteger("Permission", "EnableSendMsg", M2Share.GameCommand.EnableSendMsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.EnableSendMsg.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.EnableSendMsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DisableSendMsgList", "");
             if (LoadString == "")
@@ -1702,11 +1702,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DisableSendMsgList", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DisableSendMsgList", M2Share.GameCommand.DisableSendMsgList.nPerMissionMin);
+                WriteInteger("Permission", "DisableSendMsgList", M2Share.GameCommand.DisableSendMsgList.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DisableSendMsgList.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DisableSendMsgList.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Kill", "");
             if (LoadString == "")
@@ -1720,11 +1720,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Kill", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Kill", M2Share.GameCommand.Kill.nPerMissionMin);
+                WriteInteger("Permission", "Kill", M2Share.GameCommand.Kill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Kill.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Kill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Make", "");
             if (LoadString == "")
@@ -1738,20 +1738,20 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MakeMin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MakeMin", M2Share.GameCommand.Make.nPerMissionMin);
+                WriteInteger("Permission", "MakeMin", M2Share.GameCommand.Make.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Make.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Make.PerMissionMin = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Permission", "MakeMax", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MakeMax", M2Share.GameCommand.Make.nPerMissionMax);
+                WriteInteger("Permission", "MakeMax", M2Share.GameCommand.Make.PerMissionMax);
             }
             else
             {
-                M2Share.GameCommand.Make.nPerMissionMax = nLoadInteger;
+                M2Share.GameCommand.Make.PerMissionMax = nLoadInteger;
             }
             LoadString = ReadString("Command", "SuperMake", "");
             if (LoadString == "")
@@ -1765,11 +1765,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SuperMake", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SuperMake", M2Share.GameCommand.Smake.nPerMissionMin);
+                WriteInteger("Permission", "SuperMake", M2Share.GameCommand.Smake.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Smake.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Smake.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "BonusPoint", "");
             if (LoadString == "")
@@ -1783,11 +1783,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "BonusPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "BonusPoint", M2Share.GameCommand.BonusPoint.nPerMissionMin);
+                WriteInteger("Permission", "BonusPoint", M2Share.GameCommand.BonusPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.BonusPoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.BonusPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelBonuPoint", "");
             if (LoadString == "")
@@ -1801,11 +1801,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelBonuPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelBonuPoint", M2Share.GameCommand.DelBonusPoint.nPerMissionMin);
+                WriteInteger("Permission", "DelBonuPoint", M2Share.GameCommand.DelBonusPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelBonusPoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelBonusPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "RestBonuPoint", "");
             if (LoadString == "")
@@ -1819,11 +1819,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "RestBonuPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "RestBonuPoint", M2Share.GameCommand.Restbonuspoint.nPerMissionMin);
+                WriteInteger("Permission", "RestBonuPoint", M2Share.GameCommand.Restbonuspoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Restbonuspoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Restbonuspoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "FireBurn", "");
             if (LoadString == "")
@@ -1837,11 +1837,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "FireBurn", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "FireBurn", M2Share.GameCommand.FireBurn.nPerMissionMin);
+                WriteInteger("Permission", "FireBurn", M2Share.GameCommand.FireBurn.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.FireBurn.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.FireBurn.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "TestStatus", "");
             if (LoadString == "")
@@ -1855,11 +1855,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "TestStatus", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "TestStatus", M2Share.GameCommand.TestStatus.nPerMissionMin);
+                WriteInteger("Permission", "TestStatus", M2Share.GameCommand.TestStatus.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.TestStatus.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.TestStatus.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelGold", "");
             if (LoadString == "")
@@ -1873,11 +1873,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelGold", M2Share.GameCommand.DelGold.nPerMissionMin);
+                WriteInteger("Permission", "DelGold", M2Share.GameCommand.DelGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelGold.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddGold", "");
             if (LoadString == "")
@@ -1891,11 +1891,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AddGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddGold", M2Share.GameCommand.AddGold.nPerMissionMin);
+                WriteInteger("Permission", "AddGold", M2Share.GameCommand.AddGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AddGold.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.AddGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelGameGold", "");
             if (LoadString == "")
@@ -1909,11 +1909,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelGameGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelGameGold", M2Share.GameCommand.DelGameGold.nPerMissionMin);
+                WriteInteger("Permission", "DelGameGold", M2Share.GameCommand.DelGameGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelGameGold.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelGameGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddGamePoint", "");
             if (LoadString == "")
@@ -1927,11 +1927,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AddGameGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddGameGold", M2Share.GameCommand.AddGameGold.nPerMissionMin);
+                WriteInteger("Permission", "AddGameGold", M2Share.GameCommand.AddGameGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AddGameGold.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.AddGameGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GameGold", "");
             if (LoadString == "")
@@ -1945,11 +1945,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "GameGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "GameGold", M2Share.GameCommand.GameGold.nPerMissionMin);
+                WriteInteger("Permission", "GameGold", M2Share.GameCommand.GameGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.GameGold.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.GameGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GamePoint", "");
             if (LoadString == "")
@@ -1963,11 +1963,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "GamePoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "GamePoint", M2Share.GameCommand.GamePoint.nPerMissionMin);
+                WriteInteger("Permission", "GamePoint", M2Share.GameCommand.GamePoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.GamePoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.GamePoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "CreditPoint", "");
             if (LoadString == "")
@@ -1981,11 +1981,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "CreditPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "CreditPoint", M2Share.GameCommand.CreditPoint.nPerMissionMin);
+                WriteInteger("Permission", "CreditPoint", M2Share.GameCommand.CreditPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.CreditPoint.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.CreditPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "TestGoldChange", "");
             if (LoadString == "")
@@ -1999,11 +1999,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "TestGoldChange", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "TestGoldChange", M2Share.GameCommand.Testgoldchange.nPerMissionMin);
+                WriteInteger("Permission", "TestGoldChange", M2Share.GameCommand.Testgoldchange.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Testgoldchange.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Testgoldchange.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "RefineWeapon", "");
             if (LoadString == "")
@@ -2017,11 +2017,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "RefineWeapon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "RefineWeapon", M2Share.GameCommand.RefineWeapon.nPerMissionMin);
+                WriteInteger("Permission", "RefineWeapon", M2Share.GameCommand.RefineWeapon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.RefineWeapon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.RefineWeapon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadAdmin", "");
             if (LoadString == "")
@@ -2035,11 +2035,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadAdmin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadAdmin", M2Share.GameCommand.ReloadAdmin.nPerMissionMin);
+                WriteInteger("Permission", "ReloadAdmin", M2Share.GameCommand.ReloadAdmin.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadAdmin.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadAdmin.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadNpc", "");
             if (LoadString == "")
@@ -2053,11 +2053,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadNpc", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadNpc", M2Share.GameCommand.ReloadNpc.nPerMissionMin);
+                WriteInteger("Permission", "ReloadNpc", M2Share.GameCommand.ReloadNpc.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadNpc.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadNpc.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadManage", "");
             if (LoadString == "")
@@ -2071,11 +2071,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadManage", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadManage", M2Share.GameCommand.ReloadManage.nPerMissionMin);
+                WriteInteger("Permission", "ReloadManage", M2Share.GameCommand.ReloadManage.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadManage.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadManage.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadRobotManage", "");
             if (LoadString == "")
@@ -2089,11 +2089,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadRobotManage", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadRobotManage", M2Share.GameCommand.ReloadRobotManage.nPerMissionMin);
+                WriteInteger("Permission", "ReloadRobotManage", M2Share.GameCommand.ReloadRobotManage.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadRobotManage.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadRobotManage.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadRobot", "");
             if (LoadString == "")
@@ -2107,11 +2107,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadRobot", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadRobot", M2Share.GameCommand.ReloadRobot.nPerMissionMin);
+                WriteInteger("Permission", "ReloadRobot", M2Share.GameCommand.ReloadRobot.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadRobot.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadRobot.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadMonitems", "");
             if (LoadString == "")
@@ -2125,11 +2125,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadMonitems", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadMonitems", M2Share.GameCommand.ReloadMonItems.nPerMissionMin);
+                WriteInteger("Permission", "ReloadMonitems", M2Share.GameCommand.ReloadMonItems.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadMonItems.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadMonItems.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadDiary", "");
             if (LoadString == "")
@@ -2143,11 +2143,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadDiary", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadDiary", M2Share.GameCommand.Reloaddiary.nPerMissionMin);
+                WriteInteger("Permission", "ReloadDiary", M2Share.GameCommand.Reloaddiary.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reloaddiary.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Reloaddiary.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadItemDB", "");
             if (LoadString == "")
@@ -2161,11 +2161,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadItemDB", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadItemDB", M2Share.GameCommand.Reloaditemdb.nPerMissionMin);
+                WriteInteger("Permission", "ReloadItemDB", M2Share.GameCommand.Reloaditemdb.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reloaditemdb.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Reloaditemdb.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadMagicDB", "");
             if (LoadString == "")
@@ -2179,11 +2179,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadMagicDB", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadMagicDB", M2Share.GameCommand.ReloadMagicDb.nPerMissionMin);
+                WriteInteger("Permission", "ReloadMagicDB", M2Share.GameCommand.ReloadMagicDb.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadMagicDb.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadMagicDb.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadMonsterDB", "");
             if (LoadString == "")
@@ -2197,11 +2197,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadMonsterDB", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadMonsterDB", M2Share.GameCommand.Reloadmonsterdb.nPerMissionMin);
+                WriteInteger("Permission", "ReloadMonsterDB", M2Share.GameCommand.Reloadmonsterdb.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reloadmonsterdb.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Reloadmonsterdb.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReAlive", "");
             if (LoadString == "")
@@ -2215,11 +2215,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReAlive", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReAlive", M2Share.GameCommand.ReaLive.nPerMissionMin);
+                WriteInteger("Permission", "ReAlive", M2Share.GameCommand.ReaLive.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReaLive.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReaLive.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AdjuestTLevel", "");
             if (LoadString == "")
@@ -2233,11 +2233,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AdjuestTLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AdjuestTLevel", M2Share.GameCommand.AdjuestLevel.nPerMissionMin);
+                WriteInteger("Permission", "AdjuestTLevel", M2Share.GameCommand.AdjuestLevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AdjuestLevel.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.AdjuestLevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AdjuestExp", "");
             if (LoadString == "")
@@ -2251,11 +2251,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AdjuestExp", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AdjuestExp", M2Share.GameCommand.AdjuestExp.nPerMissionMin);
+                WriteInteger("Permission", "AdjuestExp", M2Share.GameCommand.AdjuestExp.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AdjuestExp.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.AdjuestExp.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddGuild", "");
             if (LoadString == "")
@@ -2269,11 +2269,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AddGuild", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddGuild", M2Share.GameCommand.AddGuild.nPerMissionMin);
+                WriteInteger("Permission", "AddGuild", M2Share.GameCommand.AddGuild.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AddGuild.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.AddGuild.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelGuild", "");
             if (LoadString == "")
@@ -2287,11 +2287,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelGuild", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelGuild", M2Share.GameCommand.DelGuild.nPerMissionMin);
+                WriteInteger("Permission", "DelGuild", M2Share.GameCommand.DelGuild.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelGuild.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelGuild.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeSabukLord", "");
             if (LoadString == "")
@@ -2305,11 +2305,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeSabukLord", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeSabukLord", M2Share.GameCommand.ChangeSabukLord.nPerMissionMin);
+                WriteInteger("Permission", "ChangeSabukLord", M2Share.GameCommand.ChangeSabukLord.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeSabukLord.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChangeSabukLord.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ForcedWallConQuestWar", "");
             if (LoadString == "")
@@ -2323,11 +2323,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ForcedWallConQuestWar", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ForcedWallConQuestWar", M2Share.GameCommand.ForcedWallConQuestWar.nPerMissionMin);
+                WriteInteger("Permission", "ForcedWallConQuestWar", M2Share.GameCommand.ForcedWallConQuestWar.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ForcedWallConQuestWar.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ForcedWallConQuestWar.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddToItemEvent", "");
             if (LoadString == "")
@@ -2341,11 +2341,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AddToItemEvent", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddToItemEvent", M2Share.GameCommand.Addtoitemevent.nPerMissionMin);
+                WriteInteger("Permission", "AddToItemEvent", M2Share.GameCommand.Addtoitemevent.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Addtoitemevent.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Addtoitemevent.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddToItemEventAspieces", "");
             if (LoadString == "")
@@ -2359,11 +2359,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AddToItemEventAspieces", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddToItemEventAspieces", M2Share.GameCommand.Addtoitemeventaspieces.nPerMissionMin);
+                WriteInteger("Permission", "AddToItemEventAspieces", M2Share.GameCommand.Addtoitemeventaspieces.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Addtoitemeventaspieces.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Addtoitemeventaspieces.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ItemEventList", "");
             if (LoadString == "")
@@ -2377,11 +2377,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ItemEventList", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ItemEventList", M2Share.GameCommand.Itemeventlist.nPerMissionMin);
+                WriteInteger("Permission", "ItemEventList", M2Share.GameCommand.Itemeventlist.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Itemeventlist.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Itemeventlist.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartIngGiftNO", "");
             if (LoadString == "")
@@ -2395,11 +2395,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "StartIngGiftNO", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartIngGiftNO", M2Share.GameCommand.Startinggiftno.nPerMissionMin);
+                WriteInteger("Permission", "StartIngGiftNO", M2Share.GameCommand.Startinggiftno.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Startinggiftno.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Startinggiftno.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DeleteAllItemEvent", "");
             if (LoadString == "")
@@ -2413,11 +2413,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DeleteAllItemEvent", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DeleteAllItemEvent", M2Share.GameCommand.Deleteallitemevent.nPerMissionMin);
+                WriteInteger("Permission", "DeleteAllItemEvent", M2Share.GameCommand.Deleteallitemevent.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Deleteallitemevent.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Deleteallitemevent.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartItemEvent", "");
             if (LoadString == "")
@@ -2431,11 +2431,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "StartItemEvent", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartItemEvent", M2Share.GameCommand.Startitemevent.nPerMissionMin);
+                WriteInteger("Permission", "StartItemEvent", M2Share.GameCommand.Startitemevent.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Startitemevent.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Startitemevent.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ItemEventTerm", "");
             if (LoadString == "")
@@ -2449,11 +2449,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ItemEventTerm", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ItemEventTerm", M2Share.GameCommand.Itemeventterm.nPerMissionMin);
+                WriteInteger("Permission", "ItemEventTerm", M2Share.GameCommand.Itemeventterm.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Itemeventterm.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Itemeventterm.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AdjuestTestLevel", "");
             if (LoadString == "")
@@ -2467,11 +2467,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "AdjuestTestLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AdjuestTestLevel", M2Share.GameCommand.Adjuesttestlevel.nPerMissionMin);
+                WriteInteger("Permission", "AdjuestTestLevel", M2Share.GameCommand.Adjuesttestlevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Adjuesttestlevel.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Adjuesttestlevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "OpTraining", "");
             if (LoadString == "")
@@ -2485,11 +2485,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "OpTraining", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "OpTraining", M2Share.GameCommand.TrainingSkill.nPerMissionMin);
+                WriteInteger("Permission", "OpTraining", M2Share.GameCommand.TrainingSkill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.TrainingSkill.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.TrainingSkill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "OpDeleteSkill", "");
             if (LoadString == "")
@@ -2503,11 +2503,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "OpDeleteSkill", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "OpDeleteSkill", M2Share.GameCommand.Opdeleteskill.nPerMissionMin);
+                WriteInteger("Permission", "OpDeleteSkill", M2Share.GameCommand.Opdeleteskill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Opdeleteskill.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Opdeleteskill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeWeaponDura", "");
             if (LoadString == "")
@@ -2521,11 +2521,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeWeaponDura", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeWeaponDura", M2Share.GameCommand.Changeweapondura.nPerMissionMin);
+                WriteInteger("Permission", "ChangeWeaponDura", M2Share.GameCommand.Changeweapondura.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Changeweapondura.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Changeweapondura.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadGuildAll", "");
             if (LoadString == "")
@@ -2539,11 +2539,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReloadGuildAll", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadGuildAll", M2Share.GameCommand.ReloadGuildAll.nPerMissionMin);
+                WriteInteger("Permission", "ReloadGuildAll", M2Share.GameCommand.ReloadGuildAll.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadGuildAll.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ReloadGuildAll.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Who", "");
             if (LoadString == "")
@@ -2557,11 +2557,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Who", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Who", M2Share.GameCommand.Who.nPerMissionMin);
+                WriteInteger("Permission", "Who", M2Share.GameCommand.Who.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Who.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Who.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Total", "");
             if (LoadString == "")
@@ -2575,11 +2575,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "Total", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Total", M2Share.GameCommand.Total.nPerMissionMin);
+                WriteInteger("Permission", "Total", M2Share.GameCommand.Total.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Total.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Total.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "TestGa", "");
             if (LoadString == "")
@@ -2593,11 +2593,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "TestGa", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "TestGa", M2Share.GameCommand.Testga.nPerMissionMin);
+                WriteInteger("Permission", "TestGa", M2Share.GameCommand.Testga.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Testga.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Testga.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MapInfo", "");
             if (LoadString == "")
@@ -2611,11 +2611,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "MapInfo", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MapInfo", M2Share.GameCommand.MapInfo.nPerMissionMin);
+                WriteInteger("Permission", "MapInfo", M2Share.GameCommand.MapInfo.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MapInfo.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.MapInfo.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SbkDoor", "");
             if (LoadString == "")
@@ -2629,11 +2629,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SbkDoor", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SbkDoor", M2Share.GameCommand.SbkDoor.nPerMissionMin);
+                WriteInteger("Permission", "SbkDoor", M2Share.GameCommand.SbkDoor.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SbkDoor.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SbkDoor.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeDearName", "");
             if (LoadString == "")
@@ -2647,11 +2647,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeDearName", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeDearName", M2Share.GameCommand.ChangeDearName.nPerMissionMin);
+                WriteInteger("Permission", "ChangeDearName", M2Share.GameCommand.ChangeDearName.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeDearName.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChangeDearName.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeMasterName", "");
             if (LoadString == "")
@@ -2665,11 +2665,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ChangeMasterName", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeMasterName", M2Share.GameCommand.ChangeMasterName.nPerMissionMin);
+                WriteInteger("Permission", "ChangeMasterName", M2Share.GameCommand.ChangeMasterName.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeMasterName.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ChangeMasterName.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartQuest", "");
             if (LoadString == "")
@@ -2683,11 +2683,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "StartQuest", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartQuest", M2Share.GameCommand.StartQuest.nPerMissionMin);
+                WriteInteger("Permission", "StartQuest", M2Share.GameCommand.StartQuest.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.StartQuest.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.StartQuest.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetPermission", "");
             if (LoadString == "")
@@ -2701,11 +2701,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SetPermission", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetPermission", M2Share.GameCommand.SetperMission.nPerMissionMin);
+                WriteInteger("Permission", "SetPermission", M2Share.GameCommand.SetperMission.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetperMission.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SetperMission.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ClearMon", "");
             if (LoadString == "")
@@ -2719,11 +2719,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ClearMon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ClearMon", M2Share.GameCommand.ClearMon.nPerMissionMin);
+                WriteInteger("Permission", "ClearMon", M2Share.GameCommand.ClearMon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClearMon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ClearMon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReNewLevel", "");
             if (LoadString == "")
@@ -2737,11 +2737,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ReNewLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReNewLevel", M2Share.GameCommand.RenewLevel.nPerMissionMin);
+                WriteInteger("Permission", "ReNewLevel", M2Share.GameCommand.RenewLevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.RenewLevel.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.RenewLevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DenyIPaddrLogon", "");
             if (LoadString == "")
@@ -2755,11 +2755,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DenyIPaddrLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DenyIPaddrLogon", M2Share.GameCommand.DenyipLogon.nPerMissionMin);
+                WriteInteger("Permission", "DenyIPaddrLogon", M2Share.GameCommand.DenyipLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DenyipLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DenyipLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DenyAccountLogon", "");
             if (LoadString == "")
@@ -2773,11 +2773,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DenyAccountLogon", M2Share.GameCommand.DenyAccountLogon.nPerMissionMin);
+                WriteInteger("Permission", "DenyAccountLogon", M2Share.GameCommand.DenyAccountLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DenyAccountLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DenyAccountLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DenyChrNameLogon", "");
             if (LoadString == "")
@@ -2791,11 +2791,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DenyChrNameLogon", M2Share.GameCommand.DenyChrNameLogon.nPerMissionMin);
+                WriteInteger("Permission", "DenyChrNameLogon", M2Share.GameCommand.DenyChrNameLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DenyChrNameLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelDenyIPLogon", "");
             if (LoadString == "")
@@ -2809,11 +2809,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelDenyIPLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelDenyIPLogon", M2Share.GameCommand.DelDenyIpLogon.nPerMissionMin);
+                WriteInteger("Permission", "DelDenyIPLogon", M2Share.GameCommand.DelDenyIpLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelDenyIpLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelDenyIpLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelDenyAccountLogon", "");
             if (LoadString == "")
@@ -2827,11 +2827,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelDenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelDenyAccountLogon", M2Share.GameCommand.DelDenyAccountLogon.nPerMissionMin);
+                WriteInteger("Permission", "DelDenyAccountLogon", M2Share.GameCommand.DelDenyAccountLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelDenyAccountLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelDenyAccountLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelDenyChrNameLogon", "");
             if (LoadString == "")
@@ -2845,11 +2845,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "DelDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelDenyChrNameLogon", M2Share.GameCommand.DelDenyChrNameLogon.nPerMissionMin);
+                WriteInteger("Permission", "DelDenyChrNameLogon", M2Share.GameCommand.DelDenyChrNameLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelDenyChrNameLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.DelDenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowDenyIPLogon", "");
             if (LoadString == "")
@@ -2863,11 +2863,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ShowDenyIPLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowDenyIPLogon", M2Share.GameCommand.ShowDenyIpLogon.nPerMissionMin);
+                WriteInteger("Permission", "ShowDenyIPLogon", M2Share.GameCommand.ShowDenyIpLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyIpLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShowDenyIpLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowDenyAccountLogon", "");
             if (LoadString == "")
@@ -2881,11 +2881,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ShowDenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowDenyAccountLogon", M2Share.GameCommand.ShowDenyAccountLogon.nPerMissionMin);
+                WriteInteger("Permission", "ShowDenyAccountLogon", M2Share.GameCommand.ShowDenyAccountLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyAccountLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShowDenyAccountLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowDenyChrNameLogon", "");
             if (LoadString == "")
@@ -2899,11 +2899,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ShowDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowDenyChrNameLogon", M2Share.GameCommand.ShowDenyChrNameLogon.nPerMissionMin);
+                WriteInteger("Permission", "ShowDenyChrNameLogon", M2Share.GameCommand.ShowDenyChrNameLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyChrNameLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShowDenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ViewWhisper", "");
             if (LoadString == "")
@@ -2917,11 +2917,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ViewWhisper", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ViewWhisper", M2Share.GameCommand.ViewWhisper.nPerMissionMin);
+                WriteInteger("Permission", "ViewWhisper", M2Share.GameCommand.ViewWhisper.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ViewWhisper.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ViewWhisper.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SpiritStart", "");
             if (LoadString == "")
@@ -2935,11 +2935,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SpiritStart", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SpiritStart", M2Share.GameCommand.Spirit.nPerMissionMin);
+                WriteInteger("Permission", "SpiritStart", M2Share.GameCommand.Spirit.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Spirit.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.Spirit.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SpiritStop", "");
             if (LoadString == "")
@@ -2953,11 +2953,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SpiritStop", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SpiritStop", M2Share.GameCommand.SpiritStop.nPerMissionMin);
+                WriteInteger("Permission", "SpiritStop", M2Share.GameCommand.SpiritStop.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SpiritStop.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SpiritStop.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetMapMode", "");
             if (LoadString == "")
@@ -2971,11 +2971,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "SetMapMode", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetMapMode", M2Share.GameCommand.SetMapMode.nPerMissionMin);
+                WriteInteger("Permission", "SetMapMode", M2Share.GameCommand.SetMapMode.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetMapMode.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.SetMapMode.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShoweMapMode", "");
             if (LoadString == "")
@@ -2989,11 +2989,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ShoweMapMode", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShoweMapMode", M2Share.GameCommand.ShowMapMode.nPerMissionMin);
+                WriteInteger("Permission", "ShoweMapMode", M2Share.GameCommand.ShowMapMode.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowMapMode.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ShowMapMode.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ClearBag", "");
             if (LoadString == "")
@@ -3007,11 +3007,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "ClearBag", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ClearBag", M2Share.GameCommand.ClearBag.nPerMissionMin);
+                WriteInteger("Permission", "ClearBag", M2Share.GameCommand.ClearBag.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClearBag.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.ClearBag.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LockLogin", "");
             if (LoadString == "")
@@ -3025,11 +3025,11 @@ namespace GameSvr.Conf
             nLoadInteger = ReadInteger("Permission", "LockLogin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "LockLogin", M2Share.GameCommand.LockLogon.nPerMissionMin);
+                WriteInteger("Permission", "LockLogin", M2Share.GameCommand.LockLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.LockLogon.nPerMissionMin = nLoadInteger;
+                M2Share.GameCommand.LockLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GMRedMsgCmd", "");
             if (LoadString == "")

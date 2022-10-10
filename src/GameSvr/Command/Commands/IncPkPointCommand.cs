@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家PK值
     /// </summary>
-    [GameCommand("IncPkPoint", "调整指定玩家PK值", GameCommandConst.GameCommandIncPkPointHelpMsg, 10)]
-    public class IncPkPointCommand : BaseCommond
+    [Command("IncPkPoint", "调整指定玩家PK值", CommandHelp.GameCommandIncPkPointHelpMsg, 10)]
+    public class IncPkPointCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void IncPkPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -26,18 +26,18 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject.PkPoint += nPoint;
             m_PlayObject.RefNameColor();
             if (nPoint > 0)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandIncPkPointAddPointMsg, sHumanName, nPoint), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandIncPkPointAddPointMsg, sHumanName, nPoint), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandIncPkPointDecPointMsg, sHumanName, -nPoint), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandIncPkPointDecPointMsg, sHumanName, -nPoint), MsgColor.Green, MsgType.Hint);
             }
         }
     }

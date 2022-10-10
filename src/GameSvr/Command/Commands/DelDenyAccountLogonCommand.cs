@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("DelDenyAccountLogon", "", "登录帐号", 10)]
-    public class DelDenyAccountLogonCommand : BaseCommond
+    [Command("DelDenyAccountLogon", "", "登录帐号", 10)]
+    public class DelDenyAccountLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelDenyAccountLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

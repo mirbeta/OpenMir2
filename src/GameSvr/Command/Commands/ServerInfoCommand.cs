@@ -3,10 +3,10 @@ using System.Text;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ServerInfo", "查看服务器信息", 10)]
-    public class ServerInfoCommand : BaseCommond
+    [Command("ServerInfo", "查看服务器信息", 10)]
+    public class ServerInfoCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ServerInfo(string[] @Params, PlayObject PlayObject)
         {
             var sb = new StringBuilder();

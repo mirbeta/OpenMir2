@@ -1,13 +1,12 @@
 ﻿using GameSvr.Player;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using SystemModule.Data;
 
 namespace GameSvr.Command
 {
-    public class BaseCommond
+    public class Commond
     {
-        public GameCommandAttribute GameCommand { get; private set; }
+        public CommandAttribute GameCommand { get; private set; }
 
         private MethodInfo CommandMethod { get; set; }
 
@@ -16,7 +15,7 @@ namespace GameSvr.Command
         /// <summary>
         /// 注册命令
         /// </summary>
-        public void Register(GameCommandAttribute attributes, MethodInfo method)
+        public void Register(CommandAttribute attributes, MethodInfo method)
         {
             this.GameCommand = attributes;
             this.CommandMethod = method;
@@ -37,7 +36,7 @@ namespace GameSvr.Command
 #endif
                 if (playObject.Permission < this.GameCommand.nPermissionMin)// 检查用户是否有权限来调用命令。
                 {
-                    return GameCommandConst.GameCommandPermissionTooLow;
+                    return CommandHelp.GameCommandPermissionTooLow;
                 }
             }
             switch (MethodParameterCount)
@@ -60,7 +59,7 @@ namespace GameSvr.Command
         /// <param name="params"></param>
         /// <param name="PlayObject"></param>
         /// <returns></returns>
-        [DefaultCommand]
+        [ExecuteCommand]
         public virtual string Fallback(string[] @params = null, PlayObject PlayObject = null)
         {
             return string.Empty;

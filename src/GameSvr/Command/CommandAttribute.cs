@@ -1,7 +1,10 @@
 ﻿namespace GameSvr.Command
 {
+    /// <summary>
+    /// 命令定义
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class GameCommandAttribute : Attribute
+    public class CommandAttribute : Attribute
     {
         /// <summary>
         /// 命令名
@@ -30,7 +33,7 @@
         /// </summary>
         public byte nPermissionMax { get; private set; }
 
-        public GameCommandAttribute(string name, string desc, byte minUserLevel = 0, byte maxUserLevel = 10)
+        public CommandAttribute(string name, string desc, byte minUserLevel = 0, byte maxUserLevel = 10)
         {
             this.Name = name;
             this.Desc = desc;
@@ -38,7 +41,7 @@
             this.nPermissionMax = maxUserLevel;
         }
 
-        public GameCommandAttribute(string name, string desc, string help, byte minUserLevel = 0, byte maxUserLevel = 10)
+        public CommandAttribute(string name, string desc, string help, byte minUserLevel = 0, byte maxUserLevel = 10)
         {
             this.Name = name;
             this.Desc = desc;
@@ -50,8 +53,11 @@
         public string ShowHelp => $"命令格式: @{Name} {Help}";
     }
 
+    /// <summary>
+    /// 命令执行入口定义
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class CommandAttribute : Attribute
+    public class CommandExecuteAttribute : Attribute
     {
         /// <summary>
         /// 命令名称
@@ -73,7 +79,7 @@
         /// </summary>
         public byte MinUserLevel { get; private set; }
 
-        public CommandAttribute(string command, string desc, string help, byte minUserLevel = 0)
+        public CommandExecuteAttribute(string command, string desc, string help, byte minUserLevel = 0)
         {
             this.Name = command;
             this.Desc = desc;
@@ -89,20 +95,20 @@
     /// public void CmdTest(){}
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class DefaultCommand : CommandAttribute
+    public class ExecuteCommand : CommandExecuteAttribute
     {
-        public DefaultCommand(byte minUserLevel = 0) : base("", "", "", minUserLevel)
+        public ExecuteCommand(byte minUserLevel = 0) : base("", "", "", minUserLevel)
         {
 
         }
     }
 
     [AttributeUsage(AttributeTargets.Field)]
-    public class ConvertToBinaryAttribute : Attribute
+    public class CustomCommandAttribute : Attribute
     {
         public Type CommandType;
 
-        public ConvertToBinaryAttribute(Type commond)
+        public CustomCommandAttribute(Type commond)
         {
             CommandType = commond;
         }

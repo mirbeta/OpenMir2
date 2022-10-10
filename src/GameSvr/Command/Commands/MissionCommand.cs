@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 设置怪物集中目标
     /// </summary>
-    [GameCommand("Mission", "设置怪物集中目标", " X Y", 10)]
-    public class MissionCommand : BaseCommond
+    [Command("Mission", "设置怪物集中目标", " X Y", 10)]
+    public class MissionCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Mission(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

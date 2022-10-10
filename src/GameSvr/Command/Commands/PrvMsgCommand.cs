@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 拒绝发言
     /// </summary>
-    [GameCommand("PrvMsg", "拒绝发言", GameCommandConst.GameCommandPrvMsgHelpMsg, 10)]
-    public class PrvMsgCommand : BaseCommond
+    [Command("PrvMsg", "拒绝发言", CommandHelp.GameCommandPrvMsgHelpMsg, 10)]
+    public class PrvMsgCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void PrvMsg(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -36,7 +36,7 @@ namespace GameSvr.Command.Commands
                 //}
             }
             PlayObject.LockWhisperList.Add(sHumanName);
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandPrvMsgLimitMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandPrvMsgLimitMsg, sHumanName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

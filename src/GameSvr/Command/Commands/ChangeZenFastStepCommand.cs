@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 设置怪物行动速度
     /// </summary>
-    [GameCommand("ChangeZenFastStep", "设置怪物行动速度", "速度", 10)]
-    public class ChangeZenFastStepCommand : BaseCommond
+    [Command("ChangeZenFastStep", "设置怪物行动速度", "速度", 10)]
+    public class ChangeZenFastStepCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeZenFastStep(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

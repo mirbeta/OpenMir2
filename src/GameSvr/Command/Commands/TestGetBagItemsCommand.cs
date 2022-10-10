@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("TestGetBagItems", "", 10)]
-    public class TestGetBagItemsCommand : BaseCommond
+    [Command("TestGetBagItems", "", 10)]
+    public class TestGetBagItemsCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TestGetBagItems(PlayObject PlayObject)
         {
             byte btDc = 0;

@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 增加AI玩家
     /// </summary>
-    [GameCommand("AddRebotPlay", "增加机器人玩家", "数量", 0)]
-    public class CreateAIUserCommand : BaseCommond
+    [Command("AddRebotPlay", "增加机器人玩家", "数量", 0)]
+    public class CreateAIUserCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AddRebotPlay(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)

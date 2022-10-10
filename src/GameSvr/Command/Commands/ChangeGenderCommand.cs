@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家性别
     /// </summary>
-    [GameCommand("ChangeGender", "调整指定玩家性别", "人物名称 性别(男、女)", 10)]
-    public class ChangeGenderCommand : BaseCommond
+    [Command("ChangeGender", "调整指定玩家性别", "人物名称 性别(男、女)", 10)]
+    public class ChangeGenderCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeGender(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

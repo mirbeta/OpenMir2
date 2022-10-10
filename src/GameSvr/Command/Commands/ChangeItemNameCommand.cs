@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定物品名称
     /// </summary>
-    [GameCommand("ChangeItemName", "调整指定物品名称", 10, Help = "物品编号 物品ID号 物品名称")]
-    public class ChangeItemNameCommand : BaseCommond
+    [Command("ChangeItemName", "调整指定物品名称", 10, Help = "物品编号 物品ID号 物品名称")]
+    public class ChangeItemNameCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeItemName(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)

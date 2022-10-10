@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 删除指定玩家属性点
     /// </summary>
-    [GameCommand("DelBonuPoint", "删除指定玩家属性点", "人物名称", 10)]
-    public class DelBonuPointCommand : BaseCommond
+    [Command("DelBonuPoint", "删除指定玩家属性点", "人物名称", 10)]
+    public class DelBonuPointCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelBonuPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -34,7 +34,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

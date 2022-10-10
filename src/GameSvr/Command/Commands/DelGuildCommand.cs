@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 删除指定行会名称
     /// </summary>
-    [GameCommand("DelGuild", "删除指定行会名称", help: "行会名称", 10)]
-    public class DelGuildCommand : BaseCommond
+    [Command("DelGuild", "删除指定行会名称", help: "行会名称", 10)]
+    public class DelGuildCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelGuild(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 删除对面面NPC
     /// </summary>
-    [GameCommand("DelNpc", "删除对面面NPC", 10)]
-    public class DelNpcCommand : BaseCommond
+    [Command("DelNpc", "删除对面面NPC", 10)]
+    public class DelNpcCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DelNpc(PlayObject PlayObject)
         {
             const string sDelOK = "删除NPC成功...";
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
                     }
                 }
             }
-            PlayObject.SysMsg(GameCommandConst.GameCommandDelNpcMsg, MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(CommandHelp.GameCommandDelNpcMsg, MsgColor.Red, MsgType.Hint);
         }
     }
 }

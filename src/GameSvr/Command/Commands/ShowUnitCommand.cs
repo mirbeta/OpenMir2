@@ -1,10 +1,10 @@
 ﻿namespace GameSvr.Command.Commands
 {
 
-    [GameCommand("ShowUnit", "", "", 10)]
-    public class ShowUnitCommand : BaseCommond
+    [Command("ShowUnit", "", "", 10)]
+    public class ShowUnitCommand : Commond
     {
-        [DefaultCommand()]
+        [ExecuteCommand()]
         public void ShowUnit()
         {
 

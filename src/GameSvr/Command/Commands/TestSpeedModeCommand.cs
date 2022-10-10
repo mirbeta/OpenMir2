@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("TestSpeedMode", "", 10)]
-    public class TestSpeedModeCommand : BaseCommond
+    [Command("TestSpeedMode", "", 10)]
+    public class TestSpeedModeCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TestSpeedMode(PlayObject PlayObject)
         {
             PlayObject.m_boTestSpeedMode = !PlayObject.m_boTestSpeedMode;

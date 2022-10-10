@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家职业
     /// </summary>
-    [GameCommand("ChangeJob", "调整指定玩家职业", GameCommandConst.GameCommandChangeJobHelpMsg, 10)]
-    public class ChangeJobCommand : BaseCommond
+    [Command("ChangeJob", "调整指定玩家职业", CommandHelp.GameCommandChangeJobHelpMsg, 10)]
+    public class ChangeJobCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeJob(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
@@ -39,12 +39,12 @@ namespace GameSvr.Command.Commands
                     m_PlayObject.Job = PlayJob.Taoist;
                 }
                 m_PlayObject.HasLevelUp(1);
-                m_PlayObject.SysMsg(GameCommandConst.GameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+                m_PlayObject.SysMsg(CommandHelp.GameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

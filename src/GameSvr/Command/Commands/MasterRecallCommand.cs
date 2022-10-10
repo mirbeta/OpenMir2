@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。
     /// </summary>
-    [GameCommand("MasterRecall", "师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。", 0)]
-    public class MasterRecallCommand : BaseCommond
+    [Command("MasterRecall", "师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。", 0)]
+    public class MasterRecallCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MasterRecall(PlayObject PlayObject)
         {
             if (!PlayObject.m_boMaster)

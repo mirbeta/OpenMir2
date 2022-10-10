@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整当前玩家攻击模式
     /// </summary>
-    [GameCommand("AttackMode", "调整当前玩家攻击模式", 0)]
-    public class ChangeAttackModeCommand : BaseCommond
+    [Command("AttackMode", "调整当前玩家攻击模式", 0)]
+    public class ChangeAttackModeCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeAttackMode(PlayObject PlayObject)
         {
             if (PlayObject.AttatckMode >= AttackMode.HAM_PKATTACK)

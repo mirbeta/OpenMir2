@@ -6,13 +6,13 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 查看时间日期
     /// </summary>
-    [GameCommand("Date", "查看时间日期", "", 0)]
-    public class DataCommand : BaseCommond
+    [Command("Date", "查看时间日期", "", 0)]
+    public class DataCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Date(PlayObject PlayObject)
         {
-            PlayObject.SysMsg(GameCommandConst.NowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), MsgColor.Blue, MsgType.Hint);
+            PlayObject.SysMsg(CommandHelp.NowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), MsgColor.Blue, MsgType.Hint);
         }
     }
 }

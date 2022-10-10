@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("DisableSendMsg", "", "人物名称", 10)]
-    public class DisableSendMsgCommand : BaseCommond
+    [Command("DisableSendMsg", "", "人物名称", 10)]
+    public class DisableSendMsgCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DisableSendMsg(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

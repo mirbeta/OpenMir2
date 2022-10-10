@@ -5,10 +5,10 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ClearBagItem", "清理包裹物品", "人物名称", 10)]
-    public class ClearBagItemCommand : BaseCommond
+    [Command("ClearBagItem", "清理包裹物品", "人物名称", 10)]
+    public class ClearBagItemCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ClearBagItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -24,7 +24,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             IList<DeleteItem> DelList = null;

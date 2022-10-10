@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整沙巴克所属行会
     /// </summary>
-    [GameCommand("ChangeSabukLord", "调整沙巴克所属行会", "城堡名称 行会名称", 10)]
-    public class ChangeSabukLordCommand : BaseCommond
+    [Command("ChangeSabukLord", "调整沙巴克所属行会", "城堡名称 行会名称", 10)]
+    public class ChangeSabukLordCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeSabukLord(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -28,7 +28,7 @@ namespace GameSvr.Command.Commands
             var Castle = M2Share.CastleMgr.Find(sCastleName);
             if (Castle == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = M2Share.GuildMgr.FindGuild(sGuildName);

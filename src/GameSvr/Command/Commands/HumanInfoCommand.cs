@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 查看指定玩家信息
     /// </summary>
-    [GameCommand("HumanInfo", "查看指定玩家信息", GameCommandConst.GameCommandHumanLocalHelpMsg, 10)]
-    public class HumanInfoCommand : BaseCommond
+    [Command("HumanInfo", "查看指定玩家信息", CommandHelp.GameCommandHumanLocalHelpMsg, 10)]
+    public class HumanInfoCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void HumanInfo(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject.SysMsg(PlayObject.GetBaseObjectInfo(), MsgColor.Green, MsgType.Hint);

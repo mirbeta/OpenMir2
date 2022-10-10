@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家师傅名称
     /// </summary>
-    [GameCommand("ChangeMasterName", "调整指定玩家师傅名称", "人物名称 师徒名称(如果为 无 则清除)", 10)]
-    public class ChangeMasterNameCommand : BaseCommond
+    [Command("ChangeMasterName", "调整指定玩家师傅名称", "人物名称 师徒名称(如果为 无 则清除)", 10)]
+    public class ChangeMasterNameCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeMasterName(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -51,7 +51,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

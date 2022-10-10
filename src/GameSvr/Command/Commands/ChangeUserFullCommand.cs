@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整服务器最高上线人数
     /// </summary>
-    [GameCommand("ChangeUserFull", "调整服务器最高上限人数", "人数", 10)]
-    public class ChangeUserFullCommand : BaseCommond
+    [Command("ChangeUserFull", "调整服务器最高上限人数", "人数", 10)]
+    public class ChangeUserFullCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeUserFull(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

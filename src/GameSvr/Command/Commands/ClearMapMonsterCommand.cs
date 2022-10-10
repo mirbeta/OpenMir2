@@ -9,10 +9,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 清楚指定地图怪物
     /// </summary>
-    [GameCommand("ClearMapMonster", "清楚指定地图怪物", "地图号(* 为所有) 怪物名称(* 为所有) 掉物品(0,1)", 10)]
-    public class ClearMapMonsterCommand : BaseCommond
+    [Command("ClearMapMonster", "清楚指定地图怪物", "地图号(* 为所有) 怪物名称(* 为所有) 掉物品(0,1)", 10)]
+    public class ClearMapMonsterCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ClearMapMonster(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

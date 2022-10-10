@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("DisableSendMsgList", "", 10)]
-    public class DisableSendMsgListCommand : BaseCommond
+    [Command("DisableSendMsgList", "", 10)]
+    public class DisableSendMsgListCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DisableSendMsgList(PlayObject PlayObject)
         {
             if (M2Share.g_DisableSendMsgList.Count <= 0)

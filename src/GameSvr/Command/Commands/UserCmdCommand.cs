@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 自定义命令
     /// </summary>
-    [GameCommand("UserCmd", "自定义命令", 10)]
-    public class UserCmdCommand : BaseCommond
+    [Command("UserCmd", "自定义命令", 10)]
+    public class UserCmdCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void UserCmd(string[] @Params, PlayObject PlayObject)
         {
             // string sLable = @Params.Length > 0 ? @Params[0] : "";

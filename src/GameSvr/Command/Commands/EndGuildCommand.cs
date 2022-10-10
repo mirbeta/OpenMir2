@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 退出行会
     /// </summary>
-    [GameCommand("EndGuild", "退出行会", 0)]
-    public class EndGuildCommand : BaseCommond
+    [Command("EndGuild", "退出行会", 0)]
+    public class EndGuildCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void EndGuild(PlayObject PlayObject)
         {
             if (PlayObject.MyGuild != null)

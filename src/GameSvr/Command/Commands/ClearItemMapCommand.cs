@@ -2,10 +2,10 @@
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
-    public class ClearItemMapCommand : BaseCommond
+    [Command("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
+    public class ClearItemMapCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ClearItemMap(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

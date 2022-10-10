@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家属性的复位
     /// </summary>
-    [GameCommand("RestBonuPoint", "调整指定玩家属性的复位", "人物名称", 10)]
-    public class RestBonuPointCommand : BaseCommond
+    [Command("RestBonuPoint", "调整指定玩家属性的复位", "人物名称", 10)]
+    public class RestBonuPointCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void RestBonuPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -37,7 +37,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

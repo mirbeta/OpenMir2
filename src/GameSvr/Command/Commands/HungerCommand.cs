@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家能量值
     /// </summary>
-    [GameCommand("Hunger", "调整指定玩家能量值", "人物名称 能量值", 10)]
-    public class HungerCommand : BaseCommond
+    [Command("Hunger", "调整指定玩家能量值", "人物名称 能量值", 10)]
+    public class HungerCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Hunger(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

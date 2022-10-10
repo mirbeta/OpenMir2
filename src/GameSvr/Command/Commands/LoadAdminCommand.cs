@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 重新加载管理员列表
     /// </summary>
-    [GameCommand("LoadAdmin", "重新加载管理员列表", 10)]
-    public class LoadAdminCommand : BaseCommond
+    [Command("LoadAdmin", "重新加载管理员列表", 10)]
+    public class LoadAdminCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void LoadAdmin(PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)

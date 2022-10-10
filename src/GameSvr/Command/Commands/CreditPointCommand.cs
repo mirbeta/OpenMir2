@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家声望点
     /// </summary>
-    [GameCommand("CreditPoint", "调整指定玩家声望点", "人物名称 控制符(+,-,=) 声望点数(0-255)", 10)]
-    public class CreditPointCommand : BaseCommond
+    [Command("CreditPoint", "调整指定玩家声望点", "人物名称 控制符(+,-,=) 声望点数(0-255)", 10)]
+    public class CreditPointCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void CreditPoint(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[0])
@@ -63,8 +63,8 @@ namespace GameSvr.Command.Commands
                     }
                     break;
             }
-            m_PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandCreditPointHumanMsg, nPoint, m_PlayObject.m_btCreditPoint), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.m_btCreditPoint), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointHumanMsg, nPoint, m_PlayObject.m_btCreditPoint), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.m_btCreditPoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

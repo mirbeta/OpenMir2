@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家配偶名称
     /// </summary>
-    [GameCommand("ChangeDearName", "调整指定玩家配偶名称", help: "人物名称 配偶名称(如果为 无 则清除)", 10)]
-    public class ChangeDearNameCommand : BaseCommond
+    [Command("ChangeDearName", "调整指定玩家配偶名称", help: "人物名称 配偶名称(如果为 无 则清除)", 10)]
+    public class ChangeDearNameCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ChangeDearName(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

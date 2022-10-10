@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 解除指定玩家物品绑定属性
     /// </summary>
-    [GameCommand("UnBindUseItem", "解除指定玩家物品绑定属性", 10)]
-    public class UnBindUseItemCommand : BaseCommond
+    [Command("UnBindUseItem", "解除指定玩家物品绑定属性", 10)]
+    public class UnBindUseItemCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void UnBindUseItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

@@ -9,10 +9,10 @@ namespace GameSvr.Command.Commands
     /// 调整安全去光环
     /// MOBFIREBURN  3 329 329 3 60 0
     /// </summary>
-    [GameCommand("MobFireBurn", "调整安全去光环", 10)]
-    public class MobFireBurnCommand : BaseCommond
+    [Command("MobFireBurn", "调整安全去光环", 10)]
+    public class MobFireBurnCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MobFireBurn(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -27,7 +27,7 @@ namespace GameSvr.Command.Commands
             var sPoint = @Params.Length > 5 ? @Params[5] : "";//未知
             if (sMAP == "" || sMAP != "" && sMAP[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nX = HUtil32.StrToInt(sX, -1);
@@ -41,7 +41,7 @@ namespace GameSvr.Command.Commands
             }
             if (sMAP == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY,
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY,
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
@@ -55,7 +55,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.Envir = OldEnvir;
                 return;
             }
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandMobFireBurnMapNotFountMsg, this.GameCommand.Name, sMAP), MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnMapNotFountMsg, this.GameCommand.Name, sMAP), MsgColor.Red, MsgType.Hint);
         }
     }
 }

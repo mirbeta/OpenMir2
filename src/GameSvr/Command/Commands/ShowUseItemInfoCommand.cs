@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 显示物品信息
     /// </summary>
-    [GameCommand("ShowUseItem", "显示物品信息", GameCommandConst.GameCommandShowUseItemInfoHelpMsg, 10)]
-    public class ShowUseItemInfoCommand : BaseCommond
+    [Command("ShowUseItem", "显示物品信息", CommandHelp.GameCommandShowUseItemInfoHelpMsg, 10)]
+    public class ShowUseItemInfoCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowUseItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -26,7 +26,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = 0; i < m_PlayObject.UseItems.Length; i++)

@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 此命令用于允许或禁止编组传送功能
     /// </summary>
-    [GameCommand("GameGird", "调整指定玩家灵符", 10)]
-    public class GameGirdCommand : BaseCommond
+    [Command("GameGird", "调整指定玩家灵符", 10)]
+    public class GameGirdCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GameGird(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[0] : "";

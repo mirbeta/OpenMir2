@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 移动地图指定座标(需要戴传送装备)
     /// </summary>
-    [GameCommand("UserMoveXY", "移动地图指定座标(需要戴传送装备)", 0)]
-    public class UserMoveXYCommand : BaseCommond
+    [Command("UserMoveXY", "移动地图指定座标(需要戴传送装备)", 0)]
+    public class UserMoveXYCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void UserMoveXY(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -40,7 +40,7 @@ namespace GameSvr.Command.Commands
                     }
                     else
                     {
-                        PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandPositionMoveCanotMoveToMap, PlayObject.MapName, sX, sY), MsgColor.Green, MsgType.Hint);
+                        PlayObject.SysMsg(string.Format(CommandHelp.GameCommandPositionMoveCanotMoveToMap, PlayObject.MapName, sX, sY), MsgColor.Green, MsgType.Hint);
                     }
                 }
                 else

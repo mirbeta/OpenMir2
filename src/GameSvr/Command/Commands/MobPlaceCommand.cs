@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 设定怪物集中点
     /// </summary>
-    [GameCommand("MobPlace", "设定怪物集中点", "X  Y 怪物名称 怪物数量", 10)]
-    public class MobPlaceCommand : BaseCommond
+    [Command("MobPlace", "设定怪物集中点", "X  Y 怪物名称 怪物数量", 10)]
+    public class MobPlaceCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MobPlace(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

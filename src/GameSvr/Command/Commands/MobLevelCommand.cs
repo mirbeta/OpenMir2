@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 显示你屏幕上你近处所有怪与人的详细情况
     /// </summary>
-    [GameCommand("MobLevel", "显示你屏幕上你近处所有怪与人的详细情况", 10)]
-    public class MobLevelCommand : BaseCommond
+    [Command("MobLevel", "显示你屏幕上你近处所有怪与人的详细情况", 10)]
+    public class MobLevelCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void MobLevel(PlayObject PlayObject)
         {
             IList<BaseObject> BaseObjectList = new List<BaseObject>();

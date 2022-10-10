@@ -134,7 +134,7 @@ namespace GameSvr.Castle
             for (var i = 0; i < _castleList.Count; i++)
             {
                 var castle = _castleList[i];
-                List.Add(string.Format(GameCommandConst.GameCommandSbkGoldShowMsg, castle.sName, castle.TotalGold, castle.TodayIncome));
+                List.Add(string.Format(CommandHelp.GameCommandSbkGoldShowMsg, castle.sName, castle.TotalGold, castle.TodayIncome));
             }
         }
 

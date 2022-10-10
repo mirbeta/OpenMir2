@@ -819,7 +819,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(Format(GameCommandConst.GameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, this.ChrName));
+                M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, this.ChrName));
             }
             if (nOldGameGold != PlayObject.m_nGameGold)
             {
@@ -856,7 +856,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGamePoint)
             {
-                M2Share.AddGameDataLog(Format(GameCommandConst.GameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, this.ChrName));
+                M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, this.ChrName));
             }
             if (nOldGamePoint != PlayObject.m_nGamePoint)
             {

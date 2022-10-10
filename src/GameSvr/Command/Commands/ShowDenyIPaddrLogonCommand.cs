@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ShowDenyIPaddrLogon", "", 10)]
-    public class ShowDenyIPaddrLogonCommand : BaseCommond
+    [Command("ShowDenyIPaddrLogon", "", 10)]
+    public class ShowDenyIPaddrLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowDenyIPaddrLogon(PlayObject PlayObject)
         {
             int nCount;

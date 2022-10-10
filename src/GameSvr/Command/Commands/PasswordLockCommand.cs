@@ -7,10 +7,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 密码锁定
     /// </summary>
-    [GameCommand("PasswordLock", "锁定登录", "", 0)]
-    public class PasswordLockCommand : BaseCommond
+    [Command("PasswordLock", "锁定登录", "", 0)]
+    public class PasswordLockCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void PasswordLock(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)

@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 飞到指定玩家身边
     /// </summary>
-    [GameCommand("ReGotoHuman", "飞到指定玩家身边", GameCommandConst.GameCommandReGotoHelpMsg, 10)]
-    public class ReGotoHumanCommand : BaseCommond
+    [Command("ReGotoHuman", "飞到指定玩家身边", CommandHelp.GameCommandReGotoHelpMsg, 10)]
+    public class ReGotoHumanCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReGotoHuman(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject.SpaceMove(m_PlayObject.Envir.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY, 0);

@@ -4,10 +4,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("MapInfo", "显示当前地图信息", 10)]
-    public class MapInfoCommand : BaseCommond
+    [Command("MapInfo", "显示当前地图信息", 10)]
+    public class MapInfoCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowMapInfo(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)

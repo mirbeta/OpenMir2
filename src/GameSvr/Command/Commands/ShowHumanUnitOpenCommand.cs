@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// ShowOpen
     /// </summary>
-    [GameCommand("ShowOpen", "", "", 10)]
-    public class ShowHumanUnitOpenCommand : BaseCommond
+    [Command("ShowOpen", "", "", 10)]
+    public class ShowHumanUnitOpenCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowOpen(string[] @params, PlayObject playObject)
         {
 

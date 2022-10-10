@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 调整指定玩家等级
     /// </summary>
-    [GameCommand("AdjuestLevel", "调整指定玩家等级", "人物名称 等级", 10)]
-    public class AdjuestLevelCommand : BaseCommond
+    [Command("AdjuestLevel", "调整指定玩家等级", "人物名称 等级", 10)]
+    public class AdjuestLevelCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AdjuestLevel(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -38,7 +38,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, new object[] { sHumanName }), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, new object[] { sHumanName }), MsgColor.Red, MsgType.Hint);
             }
         }
     }

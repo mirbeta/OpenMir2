@@ -3,13 +3,13 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("LotteryTicket", "", 10)]
-    public class LotteryTicketCommandL : BaseCommond
+    [Command("LotteryTicket", "", 10)]
+    public class LotteryTicketCommandL : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void LotteryTicket(PlayObject PlayObject)
         {
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandLotteryTicketMsg, M2Share.Config.WinLotteryCount,
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandLotteryTicketMsg, M2Share.Config.WinLotteryCount,
                 M2Share.Config.NoWinLotteryCount, M2Share.Config.WinLotteryLevel1, M2Share.Config.WinLotteryLevel2,
                 M2Share.Config.WinLotteryLevel3, M2Share.Config.WinLotteryLevel4, M2Share.Config.WinLotteryLevel5,
                 M2Share.Config.WinLotteryLevel6), MsgColor.Green, MsgType.Hint);

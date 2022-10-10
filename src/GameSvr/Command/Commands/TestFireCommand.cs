@@ -3,10 +3,10 @@ using GameSvr.Player;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("TestFire", "", 10)]
-    public class TestFireCommand : BaseCommond
+    [Command("TestFire", "", 10)]
+    public class TestFireCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void TestFire(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)

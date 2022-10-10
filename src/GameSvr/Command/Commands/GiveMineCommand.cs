@@ -8,10 +8,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 给指定纯度的矿石
     /// </summary>
-    [GameCommand("GiveMine", "给指定纯度的矿石", "矿石名称 数量 持久", 10)]
-    public class GiveMineCommand : BaseCommond
+    [Command("GiveMine", "给指定纯度的矿石", "矿石名称 数量 持久", 10)]
+    public class GiveMineCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void GiveMine(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -23,7 +23,7 @@ namespace GameSvr.Command.Commands
             var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
             if (PlayObject.Permission < this.GameCommand.nPermissionMin)
             {
-                PlayObject.SysMsg(GameCommandConst.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sMineName == "" || sMineName != "" && sMineName[0] == '?' || nMineCount <= 0)

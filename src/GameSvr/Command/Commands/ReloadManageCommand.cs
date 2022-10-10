@@ -3,10 +3,10 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("ReloadManage", "重新加载脚本", 10)]
-    public class ReloadManageCommand : BaseCommond
+    [Command("ReloadManage", "重新加载脚本", 10)]
+    public class ReloadManageCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ReloadManage(PlayObject PlayObject)
         {
             if (M2Share.g_ManageNPC != null)

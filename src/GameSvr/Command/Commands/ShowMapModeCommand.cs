@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 显示指定地图信息
     /// </summary>
-    [GameCommand("ShowMapMode", "显示指定地图信息", "地图号", 10)]
-    public class ShowMapModeCommand : BaseCommond
+    [Command("ShowMapMode", "显示指定地图信息", "地图号", 10)]
+    public class ShowMapModeCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void ShowMapMode(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

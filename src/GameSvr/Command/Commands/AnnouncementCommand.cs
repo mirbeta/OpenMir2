@@ -5,10 +5,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 查看行会争霸赛结果
     /// </summary>
-    [GameCommand("Announcement", "查看行会争霸赛结果", 10)]
-    public class AnnouncementCommand : BaseCommond
+    [Command("Announcement", "查看行会争霸赛结果", 10)]
+    public class AnnouncementCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Announcement(string[] @Params, PlayObject PlayObject)
         {
             //string sGuildName = @Params.Length > 0 ? @Params[0] : "";

@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 启用/禁止文字过滤功能
     /// </summary>
-    [GameCommand("DisableFilter", "启用/禁止文字过滤功能", 10)]
-    public class DisableFilterCommand : BaseCommond
+    [Command("DisableFilter", "启用/禁止文字过滤功能", 10)]
+    public class DisableFilterCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DisableFilter(PlayObject PlayObject)
         {
             M2Share.boFilterWord = !M2Share.boFilterWord;

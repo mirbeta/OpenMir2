@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 查看指定玩家所在IP地址
     /// </summary>
-    [GameCommand("HumanLocal", "查看指定玩家所在IP地址", GameCommandConst.GameCommandHumanLocalHelpMsg, 10)]
-    public class HumanLocalCommand : BaseCommond
+    [Command("HumanLocal", "查看指定玩家所在IP地址", CommandHelp.GameCommandHumanLocalHelpMsg, 10)]
+    public class HumanLocalCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void HumanLocal(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
@@ -26,11 +26,11 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(GameCommandConst.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             // GetIPLocal(PlayObject.m_sIPaddr)
-            PlayObject.SysMsg(string.Format(GameCommandConst.GameCommandHumanLocalMsg, sHumanName, m_sIPLocal), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandHumanLocalMsg, sHumanName, m_sIPLocal), MsgColor.Green, MsgType.Hint);
         }
     }
 }

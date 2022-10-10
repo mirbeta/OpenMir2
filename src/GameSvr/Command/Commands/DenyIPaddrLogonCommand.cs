@@ -6,10 +6,10 @@ namespace GameSvr.Command.Commands
     /// <summary>
     /// 添加IP地址到禁止登录列表
     /// </summary>
-    [GameCommand("DenyIPaddrLogon", "添加IP地址到禁止登录列表", "IP地址 是否永久封(0,1)", 10)]
-    public class DenyIPaddrLogonCommand : BaseCommond
+    [Command("DenyIPaddrLogon", "添加IP地址到禁止登录列表", "IP地址 是否永久封(0,1)", 10)]
+    public class DenyIPaddrLogonCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void DenyIPaddrLogon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)

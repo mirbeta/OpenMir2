@@ -1795,218 +1795,218 @@ namespace GameSvr.Conf
             LoadString = ReadString("String", "EnableDearRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableDearRecall", GameCommandConst.EnableDearRecall);
+                WriteString("String", "EnableDearRecall", CommandHelp.EnableDearRecall);
             }
             else
             {
-                GameCommandConst.EnableDearRecall = LoadString;
+                CommandHelp.EnableDearRecall = LoadString;
             }
             LoadString = ReadString("String", "DisableDearRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableDearRecall", GameCommandConst.DisableDearRecall);
+                WriteString("String", "DisableDearRecall", CommandHelp.DisableDearRecall);
             }
             else
             {
-                GameCommandConst.DisableDearRecall = LoadString;
+                CommandHelp.DisableDearRecall = LoadString;
             }
             LoadString = ReadString("String", "EnableMasterRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableMasterRecall", GameCommandConst.EnableMasterRecall);
+                WriteString("String", "EnableMasterRecall", CommandHelp.EnableMasterRecall);
             }
             else
             {
-                GameCommandConst.EnableMasterRecall = LoadString;
+                CommandHelp.EnableMasterRecall = LoadString;
             }
             LoadString = ReadString("String", "DisableMasterRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableMasterRecall", GameCommandConst.DisableMasterRecall);
+                WriteString("String", "DisableMasterRecall", CommandHelp.DisableMasterRecall);
             }
             else
             {
-                GameCommandConst.DisableMasterRecall = LoadString;
+                CommandHelp.DisableMasterRecall = LoadString;
             }
             LoadString = ReadString("String", "NowCurrDateTime", "");
             if (LoadString == "")
             {
-                WriteString("String", "NowCurrDateTime", GameCommandConst.NowCurrDateTime);
+                WriteString("String", "NowCurrDateTime", CommandHelp.NowCurrDateTime);
             }
             else
             {
-                GameCommandConst.NowCurrDateTime = LoadString;
+                CommandHelp.NowCurrDateTime = LoadString;
             }
             LoadString = ReadString("String", "EnableHearWhisper", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableHearWhisper", GameCommandConst.EnableHearWhisper);
+                WriteString("String", "EnableHearWhisper", CommandHelp.EnableHearWhisper);
             }
             else
             {
-                GameCommandConst.EnableHearWhisper = LoadString;
+                CommandHelp.EnableHearWhisper = LoadString;
             }
             LoadString = ReadString("String", "DisableHearWhisper", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableHearWhisper", GameCommandConst.DisableHearWhisper);
+                WriteString("String", "DisableHearWhisper", CommandHelp.DisableHearWhisper);
             }
             else
             {
-                GameCommandConst.DisableHearWhisper = LoadString;
+                CommandHelp.DisableHearWhisper = LoadString;
             }
             LoadString = ReadString("String", "EnableShoutMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableShoutMsg", GameCommandConst.EnableShoutMsg);
+                WriteString("String", "EnableShoutMsg", CommandHelp.EnableShoutMsg);
             }
             else
             {
-                GameCommandConst.EnableShoutMsg = LoadString;
+                CommandHelp.EnableShoutMsg = LoadString;
             }
             LoadString = ReadString("String", "DisableShoutMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableShoutMsg", GameCommandConst.DisableShoutMsg);
+                WriteString("String", "DisableShoutMsg", CommandHelp.DisableShoutMsg);
             }
             else
             {
-                GameCommandConst.DisableShoutMsg = LoadString;
+                CommandHelp.DisableShoutMsg = LoadString;
             }
             LoadString = ReadString("String", "EnableDealMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableDealMsg", GameCommandConst.EnableDealMsg);
+                WriteString("String", "EnableDealMsg", CommandHelp.EnableDealMsg);
             }
             else
             {
-                GameCommandConst.EnableDealMsg = LoadString;
+                CommandHelp.EnableDealMsg = LoadString;
             }
             LoadString = ReadString("String", "DisableDealMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableDealMsg", GameCommandConst.DisableDealMsg);
+                WriteString("String", "DisableDealMsg", CommandHelp.DisableDealMsg);
             }
             else
             {
-                GameCommandConst.DisableDealMsg = LoadString;
+                CommandHelp.DisableDealMsg = LoadString;
             }
             LoadString = ReadString("String", "EnableGuildChat", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableGuildChat", GameCommandConst.EnableGuildChat);
+                WriteString("String", "EnableGuildChat", CommandHelp.EnableGuildChat);
             }
             else
             {
-                GameCommandConst.EnableGuildChat = LoadString;
+                CommandHelp.EnableGuildChat = LoadString;
             }
             LoadString = ReadString("String", "DisableGuildChat", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableGuildChat", GameCommandConst.DisableGuildChat);
+                WriteString("String", "DisableGuildChat", CommandHelp.DisableGuildChat);
             }
             else
             {
-                GameCommandConst.DisableGuildChat = LoadString;
+                CommandHelp.DisableGuildChat = LoadString;
             }
             LoadString = ReadString("String", "EnableJoinGuild", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableJoinGuild", GameCommandConst.EnableJoinGuild);
+                WriteString("String", "EnableJoinGuild", CommandHelp.EnableJoinGuild);
             }
             else
             {
-                GameCommandConst.EnableJoinGuild = LoadString;
+                CommandHelp.EnableJoinGuild = LoadString;
             }
             LoadString = ReadString("String", "DisableJoinGuild", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableJoinGuild", GameCommandConst.DisableJoinGuild);
+                WriteString("String", "DisableJoinGuild", CommandHelp.DisableJoinGuild);
             }
             else
             {
-                GameCommandConst.DisableJoinGuild = LoadString;
+                CommandHelp.DisableJoinGuild = LoadString;
             }
             LoadString = ReadString("String", "EnableAuthAllyGuild", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableAuthAllyGuild", GameCommandConst.EnableAuthAllyGuild);
+                WriteString("String", "EnableAuthAllyGuild", CommandHelp.EnableAuthAllyGuild);
             }
             else
             {
-                GameCommandConst.EnableAuthAllyGuild = LoadString;
+                CommandHelp.EnableAuthAllyGuild = LoadString;
             }
             LoadString = ReadString("String", "DisableAuthAllyGuild", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableAuthAllyGuild", GameCommandConst.DisableAuthAllyGuild);
+                WriteString("String", "DisableAuthAllyGuild", CommandHelp.DisableAuthAllyGuild);
             }
             else
             {
-                GameCommandConst.DisableAuthAllyGuild = LoadString;
+                CommandHelp.DisableAuthAllyGuild = LoadString;
             }
             LoadString = ReadString("String", "EnableGroupRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableGroupRecall", GameCommandConst.EnableGroupRecall);
+                WriteString("String", "EnableGroupRecall", CommandHelp.EnableGroupRecall);
             }
             else
             {
-                GameCommandConst.EnableGroupRecall = LoadString;
+                CommandHelp.EnableGroupRecall = LoadString;
             }
             LoadString = ReadString("String", "DisableGroupRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableGroupRecall", GameCommandConst.DisableGroupRecall);
+                WriteString("String", "DisableGroupRecall", CommandHelp.DisableGroupRecall);
             }
             else
             {
-                GameCommandConst.DisableGroupRecall = LoadString;
+                CommandHelp.DisableGroupRecall = LoadString;
             }
             LoadString = ReadString("String", "EnableGuildRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "EnableGuildRecall", GameCommandConst.EnableGuildRecall);
+                WriteString("String", "EnableGuildRecall", CommandHelp.EnableGuildRecall);
             }
             else
             {
-                GameCommandConst.EnableGuildRecall = LoadString;
+                CommandHelp.EnableGuildRecall = LoadString;
             }
             LoadString = ReadString("String", "DisableGuildRecall", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableGuildRecall", GameCommandConst.DisableGuildRecall);
+                WriteString("String", "DisableGuildRecall", CommandHelp.DisableGuildRecall);
             }
             else
             {
-                GameCommandConst.DisableGuildRecall = LoadString;
+                CommandHelp.DisableGuildRecall = LoadString;
             }
             LoadString = ReadString("String", "PleaseInputPassword", "");
             if (LoadString == "")
             {
-                WriteString("String", "PleaseInputPassword", GameCommandConst.PleaseInputPassword);
+                WriteString("String", "PleaseInputPassword", CommandHelp.PleaseInputPassword);
             }
             else
             {
-                GameCommandConst.PleaseInputPassword = LoadString;
+                CommandHelp.PleaseInputPassword = LoadString;
             }
             LoadString = ReadString("String", "TheMapDisableMove", "");
             if (LoadString == "")
             {
-                WriteString("String", "TheMapDisableMove", GameCommandConst.TheMapDisableMove);
+                WriteString("String", "TheMapDisableMove", CommandHelp.TheMapDisableMove);
             }
             else
             {
-                GameCommandConst.TheMapDisableMove = LoadString;
+                CommandHelp.TheMapDisableMove = LoadString;
             }
             LoadString = ReadString("String", "TheMapNotFound", "");
             if (LoadString == "")
             {
-                WriteString("String", "TheMapNotFound", GameCommandConst.TheMapNotFound);
+                WriteString("String", "TheMapNotFound", CommandHelp.TheMapNotFound);
             }
             else
             {
-                GameCommandConst.TheMapNotFound = LoadString;
+                CommandHelp.TheMapNotFound = LoadString;
             }
             LoadString = ReadString("String", "YourIPaddrDenyLogon", "");
             if (LoadString == "")

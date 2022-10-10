@@ -3,20 +3,20 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("Allowmsg", "", "", 0)]
-    public class AllowMsgCommand : BaseCommond
+    [Command("Allowmsg", "", "", 0)]
+    public class AllowMsgCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void AllowMsg(PlayObject playObject)
         {
             playObject.HearWhisper = !playObject.HearWhisper;
             if (playObject.HearWhisper)
             {
-                playObject.SysMsg(GameCommandConst.EnableHearWhisper, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.EnableHearWhisper, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(GameCommandConst.DisableHearWhisper, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.DisableHearWhisper, MsgColor.Green, MsgType.Hint);
             }
         }
     }

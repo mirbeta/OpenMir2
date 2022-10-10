@@ -3,20 +3,20 @@ using SystemModule.Data;
 
 namespace GameSvr.Command.Commands
 {
-    [GameCommand("Letshout", "", "", 0)]
-    public class LetShoutCommand : BaseCommond
+    [Command("Letshout", "", "", 0)]
+    public class LetShoutCommand : Commond
     {
-        [DefaultCommand]
+        [ExecuteCommand]
         public void Letshout(PlayObject playObject)
         {
             playObject.BanShout = !playObject.BanShout;
             if (playObject.BanShout)
             {
-                playObject.SysMsg(GameCommandConst.EnableShoutMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.EnableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(GameCommandConst.DisableShoutMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.DisableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
         }
     }
