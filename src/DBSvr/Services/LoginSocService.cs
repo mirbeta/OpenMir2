@@ -14,8 +14,8 @@ namespace DBSvr.Services
     public class LoginSvrService
     {
         private readonly MirLog _logger;
-        private readonly ClientScoket _loginSocket;
-        private readonly IList<TGlobaSessionInfo> _globaSessionList = null;
+        private readonly ClientScoket _clientScoket;
+        private readonly IList<GlobaSessionInfo> _globaSessionList = null;
         private readonly DBSvrConf _conf;
         private string _sockMsg = string.Empty;
 
@@ -23,12 +23,12 @@ namespace DBSvr.Services
         {
             _logger = logger;
             _conf = conf;
-            _loginSocket = new ClientScoket();
-            _loginSocket.ReceivedDatagram += LoginSocketRead;
-            _loginSocket.OnConnected += LoginSocketConnected;
-            _loginSocket.OnDisconnected += LoginSocketDisconnected;
-            _loginSocket.OnError += LoginSocketError;
-            _globaSessionList = new List<TGlobaSessionInfo>();
+            _clientScoket = new ClientScoket();
+            _clientScoket.ReceivedDatagram += LoginSocketRead;
+            _clientScoket.OnConnected += LoginSocketConnected;
+            _clientScoket.OnDisconnected += LoginSocketDisconnected;
+            _clientScoket.OnError += LoginSocketError;
+            _globaSessionList = new List<GlobaSessionInfo>();
         }
 
         private void LoginSocketError(object sender, DSCClientErrorEventArgs e)
@@ -59,7 +59,7 @@ namespace DBSvr.Services
 
         public void Start()
         {
-            _loginSocket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
+            _clientScoket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
         }
 
         public void Stop()
@@ -72,16 +72,16 @@ namespace DBSvr.Services
 
         public void CheckConnection()
         {
-            if (_loginSocket.IsConnected)
+            if (_clientScoket.IsConnected)
             {
                 return;
             }
-            if (_loginSocket.IsBusy)
+            if (_clientScoket.IsBusy)
             {
                 return;
             }
-            _logger.DebugLog($"重新链接账号服务器[{_loginSocket.EndPoint}].");
-            _loginSocket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
+            _logger.DebugLog($"重新链接账号服务器[{_clientScoket.EndPoint}].");
+            _clientScoket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
         }
 
         private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -127,9 +127,9 @@ namespace DBSvr.Services
         {
             const string sFormatMsg = "({0}/{1})";
             string sSendText = string.Format(sFormatMsg, wIdent, sMsg);
-            if (_loginSocket.IsConnected)
+            if (_clientScoket.IsConnected)
             {
-                _loginSocket.SendText(sSendText);
+                _clientScoket.SendText(sSendText);
             }
         }
 
@@ -275,7 +275,7 @@ namespace DBSvr.Services
             sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);
-            TGlobaSessionInfo globaSessionInfo = new TGlobaSessionInfo();
+            GlobaSessionInfo globaSessionInfo = new GlobaSessionInfo();
             globaSessionInfo.sAccount = sAccount;
             globaSessionInfo.sIPaddr = sIPaddr;
             globaSessionInfo.nSessionID = HUtil32.StrToInt(s10, 0);
@@ -292,12 +292,11 @@ namespace DBSvr.Services
         private void ProcessDelSession(string sData)
         {
             string sAccount = string.Empty;
-            TGlobaSessionInfo globaSessionInfo;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
             int nSessionId = HUtil32.StrToInt(sData, 0);
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                globaSessionInfo = _globaSessionList[i];
+                var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.nSessionID == nSessionId) && (globaSessionInfo.sAccount == sAccount))
@@ -313,10 +312,9 @@ namespace DBSvr.Services
         public bool GetSession(string sAccount, string sIPaddr)
         {
             bool result = false;
-            TGlobaSessionInfo globaSessionInfo;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
-                globaSessionInfo = _globaSessionList[i];
+                var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.sIPaddr == sIPaddr))
@@ -336,9 +334,9 @@ namespace DBSvr.Services
 
         public void SendKeepAlivePacket(int userCount)
         {
-            if (_loginSocket.IsConnected)
+            if (_clientScoket.IsConnected)
             {
-                _loginSocket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + _conf.ServerName + "/" + "99" + "/" + userCount + ")");
+                _clientScoket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + _conf.ServerName + "/" + "99" + "/" + userCount + ")");
             }
         }
     }

@@ -23,7 +23,6 @@ namespace DBSvr
 
         private static void LoadGateID()
         {
-            string sLineText;
             string sID = string.Empty;
             string sIPaddr = string.Empty;
             _gateIdList.Clear();
@@ -33,7 +32,7 @@ namespace DBSvr
                 LoadList.LoadFromFile(GateIdConfFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLineText = LoadList[i];
+                    var sLineText = LoadList[i];
                     if ((sLineText == "") || (sLineText[0] == ';'))
                     {
                         continue;
@@ -215,7 +214,7 @@ namespace DBSvr
         public long lastSessionTick;
     }
 
-    public class TGlobaSessionInfo
+    public class GlobaSessionInfo
     {
         public string sAccount;
         public string sIPaddr;

@@ -910,7 +910,6 @@ namespace DBSvr.Services
         /// <summary>
         /// 检查是否禁止名称
         /// </summary>
-        /// <param name="sChrName"></param>
         /// <returns></returns>
         private bool CheckDenyChrName(string sChrName)
         {
