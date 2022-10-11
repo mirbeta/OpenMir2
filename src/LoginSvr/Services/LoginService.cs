@@ -499,8 +499,8 @@ namespace LoginSvr.Services
             try
             {
                 var sMsg = EDCode.DeCodeString(sData);
-                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginID, new[] { "\09" });
-                var sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\09" });
+                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginID, new[] { "\09","\t" });
+                var sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\09","\t" });
                 var nCode = 0;
                 if (sNewPassword.Length >= 3)
                 {
