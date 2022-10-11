@@ -9,10 +9,10 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
-        private void sub_4A9F6C(byte btDir)
+        private void MagicAttack(byte btDir)
         {
             Direction = btDir;
-            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
+            var nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
@@ -43,7 +43,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     AttackTick = HUtil32.GetTickCount();
                     TargetFocusTick = HUtil32.GetTickCount();
-                    sub_4A9F6C(btDir);
+                    MagicAttack(btDir);
                     BreakHolySeizeMode();
                 }
                 result = true;

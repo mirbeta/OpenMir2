@@ -42,7 +42,7 @@ namespace GameSvr.Monster.Monsters
         private void DoubleAttack(byte btDir)
         {
             Direction = btDir;
-            var nDamage = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC))) + HUtil32.LoWord(WAbil.DC);
+            var nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage <= 0)
             {
                 return;
