@@ -14,8 +14,8 @@ namespace GameSvr.Npc
     {
         public GuildOfficial() : base()
         {
-            this.RaceImg = Grobal2.RCC_MERCHANT;
-            this.Appr = 8;
+            RaceImg = Grobal2.RCC_MERCHANT;
+            Appr = 8;
         }
 
         public override void Click(PlayObject PlayObject)
@@ -36,7 +36,7 @@ namespace GameSvr.Npc
                     sText = sText + Format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i.ToString(), sText);
                 }
                 sText = sText + "\\ \\";
-                sMsg = this.ReplaceVariableText(sMsg, "<$REQUESTCASTLELIST>", sText);
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLELIST>", sText);
             }
         }
 
@@ -44,13 +44,13 @@ namespace GameSvr.Npc
         {
             if (M2Share.RandomNumber.Random(40) == 0)
             {
-                this.TurnTo(M2Share.RandomNumber.RandomByte(8));
+                TurnTo(M2Share.RandomNumber.RandomByte(8));
             }
             else
             {
                 if (M2Share.RandomNumber.Random(30) == 0)
                 {
-                    this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
+                    SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 }
             }
             base.Run();
@@ -67,7 +67,7 @@ namespace GameSvr.Npc
                 {
                     string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
                     var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                    this.GotoLable(PlayObject, sLabel, !boCanJmp);
+                    GotoLable(PlayObject, sLabel, !boCanJmp);
                     if (!boCanJmp)
                     {
                         return;
@@ -90,7 +90,7 @@ namespace GameSvr.Npc
                     }
                     else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ActorId, 0, 0, "");
+                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                     }
                     else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -98,7 +98,7 @@ namespace GameSvr.Npc
                         {
                             PlayObject.m_sScriptGoBackLable = ScriptConst.sMAIN;
                         }
-                        this.GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                        GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
                     }
                 }
             }
@@ -155,7 +155,7 @@ namespace GameSvr.Npc
                     if (PlayObject.MyGuild != null)
                     {
                         PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref PlayObject.GuildRankNo);
-                        this.RefShowName();
+                        RefShowName();
                     }
                 }
                 else
@@ -223,7 +223,7 @@ namespace GameSvr.Npc
                     {
                         PlayObject.SendDelItems(UserItem);
                         PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.ZumaPiece);
-                        this.GotoLable(PlayObject, "~@request_ok", false);
+                        GotoLable(PlayObject, "~@request_ok", false);
                     }
                     else
                     {

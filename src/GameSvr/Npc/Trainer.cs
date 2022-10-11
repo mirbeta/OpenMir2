@@ -24,12 +24,12 @@ namespace GameSvr.Npc
             var result = false;
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
             {
-                if (ProcessMsg.BaseObject == this.ActorId)
+                if (ProcessMsg.BaseObject == ActorId)
                 {
                     _attackPower += ProcessMsg.wParam;
                     AttackTick = HUtil32.GetTickCount();
                     _attackCount++;
-                    this.ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + _attackPower / _attackCount);
+                    ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + _attackPower / _attackCount);
                 }
             }
             if (ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
@@ -45,7 +45,7 @@ namespace GameSvr.Npc
             {
                 if ((HUtil32.GetTickCount() - AttackTick) > 3 * 1000)
                 {
-                    this.ProcessSayMsg("总破坏力为  " + _attackPower + ",平均值为 " + _attackPower / _attackCount);
+                    ProcessSayMsg("总破坏力为  " + _attackPower + ",平均值为 " + _attackPower / _attackCount);
                     _attackCount = 0;
                     _attackPower = 0;
                 }

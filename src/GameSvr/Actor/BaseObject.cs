@@ -1147,21 +1147,21 @@ namespace GameSvr.Actor
                 if (pr == mapItem)
                 {
                     SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
-                    string logcap;
+                    int logcap;
                     if (boDieDrop)
                     {
-                        logcap = "15";
+                        logcap = 15;
                     }
                     else
                     {
-                        logcap = "7";
+                        logcap = 7;
                     }
                     if (!M2Share.IsCheapStuff(stdItem.StdMode))
                     {
                         if (stdItem.NeedIdentify == 1)
                         {
-                            M2Share.EventSource.AddEventLog(logcap + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
-                                                   HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                            M2Share.EventSource.AddEventLog(logcap, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
+                                                                    HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                         }
                     }
                     result = true;
@@ -1398,7 +1398,7 @@ namespace GameSvr.Actor
             var result = false;
             var nX = 0;
             var nY = 0;
-            string s20;
+            int s20;
             var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
             var mapItem = new MapItem
             {
@@ -1422,15 +1422,15 @@ namespace GameSvr.Actor
                 {
                     if (boFalg)
                     {
-                        s20 = "15";
+                        s20 = 15;
                     }
                     else
                     {
-                        s20 = "7";
+                        s20 = 7;
                     }
-                    if (M2Share.g_boGameLogGold)
+                    if (M2Share.GameLogGold)
                     {
-                        M2Share.EventSource.AddEventLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                        M2Share.EventSource.AddEventLog(s20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -2725,11 +2725,11 @@ namespace GameSvr.Actor
                     var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                               ChrName + "\t" + stdItem.Name + "\t" +
-                                               UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" +
-                                               HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" +
-                                               '0');
+                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
+                                                           ChrName + "\t" + stdItem.Name + "\t" +
+                                                           UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" +
+                                                           HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" +
+                                                           '0');
                     }
                 }
                 UseItems[Grobal2.U_WEAPON].Index = 0;
@@ -4692,11 +4692,11 @@ namespace GameSvr.Actor
                         stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
                         if (stdItem.NeedIdentify == 1)
                         {
-                            M2Share.EventSource.AddEventLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                                   ChrName + "\t" + stdItem.Name + "\t" +
-                                                   UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
-                                                   + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
-                                                   "\t" + '0');
+                            M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
+                                                               ChrName + "\t" + stdItem.Name + "\t" +
+                                                               UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
+                                                               + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
+                                                               "\t" + '0');
                         }
                         UseItems[Grobal2.U_DRESS].Index = 0;
                         FeatureChanged();
@@ -4732,7 +4732,7 @@ namespace GameSvr.Actor
                             stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
+                                M2Share.EventSource.AddEventLog(3,MapName + "\t" + CurrX + "\t" + CurrY +
                                                        "\t" + ChrName + "\t" + stdItem.Name + "\t" +
                                                        UseItems[i].MakeIndex + "\t"
                                                        + HUtil32.BoolToIntStr(Race == ActorRace.Play) +

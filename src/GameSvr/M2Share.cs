@@ -140,17 +140,18 @@ namespace GameSvr
         /// <summary>
         /// 游戏日志物品名
         /// </summary>
-        public static IList<string> g_GameLogItemNameList = null;
+        public static IList<string> GameLogItemNameList = null;
 
         public static readonly HashSet<byte> ItemDamageRevivalMap = new HashSet<byte>() { 114, 160, 161, 162 };
         public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
 
-        public static bool g_boGameLogGold = true;
-        public static bool g_boGameLogGameGold = false;
-        public static bool g_boGameLogGamePoint = false;
-        public static bool g_boGameLogHumanDie = false;
+        public static bool GameLogGold = true;
+        public static bool GameLogGameGold = true;
+        public static bool GameLogGamePoint = true;
+        public static bool boGameLogHumanDie = true;
+        
         public static IList<string> g_DenyIPAddrList = null;
         // IP过滤列表
         public static IList<string> g_DenyChrNameList = null;
@@ -1977,43 +1978,45 @@ namespace GameSvr
         public static bool LoadGameLogItemNameList()
         {
             var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "GameLogItemNameList.txt";
-            var LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_GameLogItemNameList.__Lock();
-            //    try {
-            //        g_GameLogItemNameList.Clear();
-
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            g_GameLogItemNameList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_GameLogItemNameList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "GameLogItemNameList.txt");
+            var LoadList = new StringList();
+            if (File.Exists(sFileName))
+            {
+                GameLogItemNameList.Clear();
+                LoadList.LoadFromFile(sFileName);
+                if (LoadList.Count == 1 && LoadList[0].StartsWith("*"))
+                {
+                    GameLogItemNameList.Add("*");
+                    return true;
+                }
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    GameLogItemNameList.Add(LoadList[i].Trim());
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static byte GetGameLogItemNameList(string sItemName)
         {
             byte result = 0;
-            //for (I = 0; I < g_GameLogItemNameList.Count; I ++ )
-            //{
-            //    if ((sItemName).CompareTo((g_GameLogItemNameList[I])) == 0)
-            //    {
-            //        result = 1;
-            //        break;
-            //    }
-            //}
+            if (GameLogItemNameList.Count == 1 && GameLogItemNameList[0].StartsWith("*"))
+            {
+                return 1;
+            }
+            for (var i = 0; i < GameLogItemNameList.Count; i ++ )
+            {
+                if (string.Compare(sItemName, GameLogItemNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = 1;
+                    break;
+                }
+            }
             return result;
         }
 

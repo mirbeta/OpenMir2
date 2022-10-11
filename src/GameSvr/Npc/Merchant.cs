@@ -387,7 +387,7 @@ namespace GameSvr.Npc
                             });
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog("26" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                M2Share.EventSource.AddEventLog(26, User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                             DisPose(UserItem);
                             ItemList.RemoveAt(i);
@@ -448,9 +448,9 @@ namespace GameSvr.Npc
                 User.DecGold(M2Share.Config.UpgradeWeaponPrice);
                 if (CastleMerchant || M2Share.Config.GetAllNpcTax)
                 {
-                    if (base.Castle != null)
+                    if (Castle != null)
                     {
-                        base.Castle.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
+                        Castle.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
                     }
                     else if (M2Share.Config.GetAllNpcTax)
                     {
@@ -466,7 +466,7 @@ namespace GameSvr.Npc
                 var StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[Grobal2.U_WEAPON].Index);
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.EventSource.AddEventLog("25" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + User.UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.EventSource.AddEventLog(25, User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + User.UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.SendDelItems(User.UseItems[Grobal2.U_WEAPON]);
                 User.UseItems[Grobal2.U_WEAPON].Index = 0;
@@ -643,7 +643,7 @@ namespace GameSvr.Npc
                 var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.EventSource.AddEventLog("24" + "\t" + User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.EventSource.AddEventLog(24, User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.AddItemToBag(UserItem);
                 User.SendAddItem(UserItem);
@@ -674,7 +674,7 @@ namespace GameSvr.Npc
             int result;
             if (CastleMerchant)
             {
-                if (base.Castle != null && base.Castle.IsMasterGuild(PlayObject.MyGuild)) //沙巴克成员修复物品打折
+                if (Castle != null && Castle.IsMasterGuild(PlayObject.MyGuild)) //沙巴克成员修复物品打折
                 {
                     var n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (M2Share.Config.CastleMemberPriceRate / 100)));//80%
                     result = HUtil32.Round(nPrice / 100 * n14);
@@ -779,17 +779,17 @@ namespace GameSvr.Npc
             {
                 if (!User.SellOffInTime(0))
                 {
-                    User.SendMsg(this, Grobal2.RM_SENDDEALOFFFORM, 0, this.ActorId, 0, 0, "");
+                    User.SendMsg(this, Grobal2.RM_SENDDEALOFFFORM, 0, ActorId, 0, 0, "");
                     User.GetBackSellOffItems();
                 }
                 else
                 {
-                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
+                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
                 }
             }
             else
             {
-                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
+                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
             }
         }
 
@@ -804,7 +804,7 @@ namespace GameSvr.Npc
             }
             try
             {
-                if (!CastleMerchant || !(base.Castle != null && base.Castle.UnderWar))
+                if (!CastleMerchant || !(Castle != null && Castle.UnderWar))
                 {
                     if (!PlayObject.Death && sData != "" && sData[0] == '@')
                     {
@@ -982,7 +982,7 @@ namespace GameSvr.Npc
                         SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                     }
                 }
-                if (CastleMerchant && base.Castle != null && base.Castle.UnderWar)
+                if (CastleMerchant && Castle != null && Castle.UnderWar)
                 {
                     if (!FixedHideMode)
                     {
@@ -1246,9 +1246,9 @@ namespace GameSvr.Npc
                                             PlayObject.Gold -= nPrice;
                                             if (CastleMerchant || M2Share.Config.GetAllNpcTax)
                                             {
-                                                if (base.Castle != null)
+                                                if (Castle != null)
                                                 {
-                                                    base.Castle.IncRateGold(nPrice);
+                                                    Castle.IncRateGold(nPrice);
                                                 }
                                                 else if (M2Share.Config.GetAllNpcTax)
                                                 {
@@ -1258,7 +1258,7 @@ namespace GameSvr.Npc
                                             PlayObject.SendAddItem(UserItem);
                                             if (StdItem.NeedIdentify == 1)
                                             {
-                                                M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                                                M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                                             }
                                             List20.RemoveAt(j);
                                             if (List20.Count <= 0)
@@ -1382,9 +1382,9 @@ namespace GameSvr.Npc
                 {
                     if (CastleMerchant || M2Share.Config.GetAllNpcTax)
                     {
-                        if (base.Castle != null)
+                        if (Castle != null)
                         {
-                            base.Castle.IncRateGold(nPrice);
+                            Castle.IncRateGold(nPrice);
                         }
                         else if (M2Share.Config.GetAllNpcTax)
                         {
@@ -1396,7 +1396,7 @@ namespace GameSvr.Npc
                     StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                        M2Share.EventSource.AddEventLog(10, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                     }
                     result = true;
                 }
@@ -1521,7 +1521,7 @@ namespace GameSvr.Npc
                                 StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.EventSource.AddEventLog('2' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                                    M2Share.EventSource.AddEventLog(2, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                                 }
                                 n14 = 0;
                                 break;
@@ -1643,9 +1643,9 @@ namespace GameSvr.Npc
                     {
                         if (CastleMerchant || M2Share.Config.GetAllNpcTax)
                         {
-                            if (base.Castle != null)
+                            if (Castle != null)
                             {
-                                base.Castle.IncRateGold(nRepairPrice);
+                                Castle.IncRateGold(nRepairPrice);
                             }
                             else if (M2Share.Config.GetAllNpcTax)
                             {
