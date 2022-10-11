@@ -13,6 +13,8 @@ namespace SystemModule.Packet.ClientPackets
         public string sQuiz;
         public string sAnswer;
         public string sEMail;
+
+        public const byte Size = 140 + 8;
         
         protected override void ReadPacket(BinaryReader reader)
         {

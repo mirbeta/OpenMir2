@@ -431,8 +431,9 @@ namespace LoginSvr.Services
                     _logger.Information("[新建账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
-                var ueBuff = EDCode.DecodeBuffer(sData[..198]);
-                var uaBuff = EDCode.DecodeBuffer(sData[198..]);
+                var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
+                var ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
+                var uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
