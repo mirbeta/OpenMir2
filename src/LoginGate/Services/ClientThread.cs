@@ -58,7 +58,7 @@ namespace LoginGate.Services
         {
             if (_clientSocket.IsConnected == false)
             {
-                _clientSocket.Connect();
+                _clientSocket.Connect(EndPoint);
             }
         }
 
