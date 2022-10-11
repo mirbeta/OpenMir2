@@ -52,7 +52,7 @@ namespace LogDataSvr
 
                         DiagnosticsClient client = new DiagnosticsClient(processes.First().Id);
                         
-                        Console.WriteLine($"系统进程监听成功.PID[{processes.First().Id}]");
+                        Console.WriteLine($"GameSvr进程监听成功.PID[{processes.First().Id}]");
 
                         var providers = new List<EventPipeProvider>()
                         {
@@ -66,7 +66,7 @@ namespace LogDataSvr
                         {
                             if (e.ProviderName == "GameProvider")
                             {
-                                Console.WriteLine($"{counter++} {e.EventName} {e.PayloadString(0)}");
+                                Console.WriteLine($"{counter++} {e.ID} {e.EventName} {e.PayloadString(0)}");
                             }
                             else
                             {
