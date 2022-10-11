@@ -73,6 +73,7 @@ namespace GameSvr.Guild
 
         public void LoadGuildInfo()
         {
+            GuildList.Clear();
             GuildInfo Guild;
             if (File.Exists(M2Share.Config.GuildFile))
             {

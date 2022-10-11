@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// <summary>
     /// 重新读取行会
     /// </summary>
-    [Command("ReloadGuild", "重新读取行会", 10)]
+    [Command("ReloadGuild", "重新读取指定行会", 10)]
     public class ReloadGuildCommand : Command
     {
         [ExecuteCommand]

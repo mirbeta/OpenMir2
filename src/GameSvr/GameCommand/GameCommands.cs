@@ -13,7 +13,6 @@ namespace GameSvr.GameCommand
         public readonly GameCmd Testspeedmode;
         public readonly GameCmd Reloadminmap;
         public readonly GameCmd Attack;
-        public readonly GameCmd ReloadGuild;
         public readonly GameCmd Testgoldchange;
         public readonly GameCmd Diary;
         public readonly GameCmd Namecolor;
@@ -28,19 +27,24 @@ namespace GameSvr.GameCommand
         public readonly GameCmd Startitemevent;
         public readonly GameCmd Itemeventterm;
         public readonly GameCmd Adjuesttestlevel;
-        public readonly GameCmd Who;
-        public readonly GameCmd Total;
         public readonly GameCmd Testga;
         public readonly GameCmd Opdeleteskill;
         public readonly GameCmd Changeweapondura;
         public readonly GameCmd Reloadmonsterdb;
         public readonly GameCmd Reloaddiary;
-        public readonly GameCmd Reloaditemdb;
+        public readonly GameCmd ReloadItemDB;
         public readonly GameCmd Restbonuspoint;
         public readonly GameCmd Oxquizroom;
         public readonly GameCmd Gsa;
         public readonly GameCmd Recall;
         public readonly GameCmd Regoto;
+
+        [CustomCommand(typeof(WhoCommand))]
+        public readonly GameCmd Who;
+        [CustomCommand(typeof(TotalCommand))]
+        public readonly GameCmd Total;
+        [CustomCommand((typeof(ReloadGuildCommand)))]
+        public readonly GameCmd ReloadGuild;
         [CustomCommand(typeof(SearchMasterCommand))]
         public readonly GameCmd Master;
         [CustomCommand(typeof(SearchDearCommand))]
@@ -299,7 +303,7 @@ namespace GameSvr.GameCommand
         public readonly GameCmd ForcedWallConQuestWar;
         [CustomCommand(typeof(TrainingSkillCommand))]
         public readonly GameCmd TrainingSkill;
-        [CustomCommand(typeof(ReloadGuildCommand))]
+        [CustomCommand(typeof(ReloadAllGuildCommand))]
         public readonly GameCmd ReloadGuildAll;
         [CustomCommand(typeof(ShowMapInfoCommand))]
         public readonly GameCmd MapInfo;
@@ -487,7 +491,7 @@ namespace GameSvr.GameCommand
             ReloadRobot = new GameCmd();
             ReloadMonItems = new GameCmd();
             Reloaddiary = new GameCmd();
-            Reloaditemdb = new GameCmd();
+            ReloadItemDB = new GameCmd();
             ReloadMagicDb = new GameCmd();
             Reloadmonsterdb = new GameCmd();
             Reloadminmap = new GameCmd();
@@ -552,7 +556,7 @@ namespace GameSvr.GameCommand
         /// <summary>
         /// 命令名称
         /// </summary>
-        public string CommandName { get; set; }
+        public string CmdName { get; set; }
         /// <summary>
         /// 最小权限
         /// </summary>

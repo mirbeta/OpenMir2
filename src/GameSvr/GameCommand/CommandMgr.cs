@@ -63,7 +63,7 @@ namespace GameSvr.GameCommand
                     break;
                 }
                 var customCmd = customCommandList[cmdIndex];
-                if (customCmd == null || string.IsNullOrEmpty(customCmd.CommandName))
+                if (customCmd == null || string.IsNullOrEmpty(customCmd.CmdName))
                 {
                     continue;
                 }
@@ -77,7 +77,7 @@ namespace GameSvr.GameCommand
                     M2Share.Log.Error($"重复定义游戏命令[{commandInfo.Name}]");
                     continue;
                 }
-                customCommandMap.Add(commandInfo.Name, customCmd.CommandName);
+                customCommandMap.Add(commandInfo.Name, customCmd.CmdName);
             }
             customCommandList.Clear();
             return customCommandMap;

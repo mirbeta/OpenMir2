@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace GameSvr.GameCommand.Commands
 {
-    [Command("Letguild", "退出公会", "", 0)]
+    [Command("Letguild", "加入公会", "", 0)]
     public class LetGuildCommand : Command
     {
         [ExecuteCommand]
