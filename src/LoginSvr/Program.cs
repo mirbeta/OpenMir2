@@ -53,7 +53,7 @@ namespace LoginSvr
                     services.AddSingleton<MirLog>();
                     services.AddSingleton<MasSocService>();
                     services.AddSingleton<LoginService>();
-                    services.AddSingleton<AccountDB>();
+                    services.AddSingleton<AccountStorage>();
                     services.AddSingleton<ThreadParseList>();
                     services.AddSingleton<AppServer>();
                     services.AddHostedService<TimedService>();

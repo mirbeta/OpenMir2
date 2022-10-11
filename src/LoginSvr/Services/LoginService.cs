@@ -24,18 +24,18 @@ namespace LoginSvr.Services
     {
         private readonly SocketServer _serverSocket;
         private readonly MirLog _logger;
-        private readonly AccountDB _accountDb;
+        private readonly AccountStorage _accountStorage;
         private readonly MasSocService _masSocService;
         private readonly ConfigManager _configManager;
         private readonly Channel<GatePacket> _messageQueue;
         private readonly Channel<ReceiveUserData> _userMessageQueue;
         private readonly IList<TGateInfo> _gateList;
 
-        public LoginService(MasSocService masSocService, MirLog logger, AccountDB accountDb, ConfigManager configManager)
+        public LoginService(MasSocService masSocService, MirLog logger, AccountStorage accountStorage, ConfigManager configManager)
         {
             _masSocService = masSocService;
             _logger = logger;
-            _accountDb = accountDb;
+            _accountStorage = accountStorage;
             _configManager = configManager;
             _messageQueue = Channel.CreateUnbounded<GatePacket>();
             _userMessageQueue = Channel.CreateUnbounded<ReceiveUserData>();
@@ -419,11 +419,13 @@ namespace LoginSvr.Services
             }
         }
 
+        /// <summary>
+        /// 账号注册
+        /// </summary>
         private void AccountCreate(ref TUserInfo UserInfo, string sData)
         {
             var bo21 = false;
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
-            UserFullEntry userFullEntry = null;
             try
             {
                 if (string.IsNullOrEmpty(sData) || sData.Length < 333)
@@ -437,8 +439,7 @@ namespace LoginSvr.Services
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                
-                userFullEntry = Packets.ToPacket<UserFullEntry>(accountBuff);
+                var userFullEntry = Packets.ToPacket<UserFullEntry>(accountBuff);
                 var nErrCode = -1;
                 if (LsShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                 {
@@ -446,7 +447,7 @@ namespace LoginSvr.Services
                 }
                 if (bo21)
                 {
-                    var n10 = _accountDb.Index(userFullEntry.UserEntry.sAccount);
+                    var n10 = _accountStorage.Index(userFullEntry.UserEntry.sAccount);
                     if (n10 <= 0)
                     {
                         var DBRecord = new TAccountDBRecord();
@@ -454,7 +455,7 @@ namespace LoginSvr.Services
                         DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
                         if (!string.IsNullOrEmpty(userFullEntry.UserEntry.sAccount))
                         {
-                            if (_accountDb.Add(ref DBRecord))
+                            if (_accountStorage.Add(ref DBRecord))
                             {
                                 nErrCode = 1;
                             }
@@ -491,6 +492,9 @@ namespace LoginSvr.Services
             }
         }
 
+        /// <summary>
+        /// 修改密码
+        /// </summary>
         private void AccountChangePassword(TUserInfo UserInfo, string sData)
         {
             var sLoginID = string.Empty;
@@ -505,8 +509,8 @@ namespace LoginSvr.Services
                 var nCode = 0;
                 if (sNewPassword.Length >= 3)
                 {
-                    var n10 = _accountDb.Index(sLoginID);
-                    if (n10 >= 0 && _accountDb.Get(n10, ref DBRecord) >= 0)
+                    var n10 = _accountStorage.Index(sLoginID);
+                    if (n10 >= 0 && _accountStorage.Get(n10, ref DBRecord) >= 0)
                     {
                         if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
                         {
@@ -522,7 +526,7 @@ namespace LoginSvr.Services
                                 DBRecord.dwActionTick = HUtil32.GetTickCount();
                                 nCode = -1;
                             }
-                            _accountDb.Update(n10, ref DBRecord);
+                            _accountStorage.Update(n10, ref DBRecord);
                         }
                         else
                         {
@@ -530,7 +534,7 @@ namespace LoginSvr.Services
                             if (HUtil32.GetTickCount() < DBRecord.dwActionTick)
                             {
                                 DBRecord.dwActionTick = HUtil32.GetTickCount();
-                                _accountDb.Update(n10, ref DBRecord);
+                                _accountStorage.Update(n10, ref DBRecord);
                             }
                         }
                     }
@@ -604,8 +608,8 @@ namespace LoginSvr.Services
                 var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginID, new[] { "/" });
                 var nCode = 0;
                 var boNeedUpdate = false;
-                var n10 = _accountDb.Index(sLoginID);
-                if (n10 >= 0 && _accountDb.Get(n10, ref DBRecord) >= 0)
+                var n10 = _accountStorage.Index(sLoginID);
+                if (n10 >= 0 && _accountStorage.Get(n10, ref DBRecord) >= 0)
                 {
                     if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 60000)
                     {
@@ -626,13 +630,13 @@ namespace LoginSvr.Services
                             DBRecord.dwActionTick = HUtil32.GetTickCount();
                             nCode = -1;
                         }
-                        _accountDb.Update(n10, ref DBRecord);
+                        _accountStorage.Update(n10, ref DBRecord);
                     }
                     else
                     {
                         nCode = -2;
                         DBRecord.dwActionTick = HUtil32.GetTickCount();
-                        _accountDb.Update(n10, ref DBRecord);
+                        _accountStorage.Update(n10, ref DBRecord);
                     }
                 }
                 if (nCode == 1 && IsLogin(Config, sLoginID))
@@ -883,14 +887,14 @@ namespace LoginSvr.Services
                 var nCode = -1;
                 if (UserInfo.sAccount == userFullEntry.UserEntry.sAccount && LsShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                 {
-                    var n10 = _accountDb.Index(userFullEntry.UserEntry.sAccount);
+                    var n10 = _accountStorage.Index(userFullEntry.UserEntry.sAccount);
                     if (n10 >= 0)
                     {
-                        if (_accountDb.Get(n10, ref DBRecord) >= 0)
+                        if (_accountStorage.Get(n10, ref DBRecord) >= 0)
                         {
                             DBRecord.UserEntry = userFullEntry.UserEntry;
                             DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
-                            _accountDb.Update(n10, ref DBRecord);
+                            _accountStorage.Update(n10, ref DBRecord);
                             nCode = 1;
                         }
                     }
@@ -940,8 +944,8 @@ namespace LoginSvr.Services
             var nCode = 0;
             if (!string.IsNullOrEmpty(sAccount))
             {
-                var nIndex = _accountDb.Index(sAccount);
-                if (nIndex >= 0 && _accountDb.Get(nIndex, ref DBRecord) >= 0)
+                var nIndex = _accountStorage.Index(sAccount);
+                if (nIndex >= 0 && _accountStorage.Get(nIndex, ref DBRecord) >= 0)
                 {
                     if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
                     {
@@ -979,7 +983,7 @@ namespace LoginSvr.Services
                         {
                             DBRecord.nErrorCount++;
                             DBRecord.dwActionTick = HUtil32.GetTickCount();
-                            _accountDb.Update(nIndex, ref DBRecord);
+                            _accountStorage.Update(nIndex, ref DBRecord);
                         }
                     }
                     else
@@ -988,7 +992,7 @@ namespace LoginSvr.Services
                         if (HUtil32.GetTickCount() < DBRecord.dwActionTick)
                         {
                             DBRecord.dwActionTick = HUtil32.GetTickCount();
-                            _accountDb.Update(nIndex, ref DBRecord);
+                            _accountStorage.Update(nIndex, ref DBRecord);
                         }
                     }
                 }
@@ -1139,7 +1143,7 @@ namespace LoginSvr.Services
         {
             _configManager.LoadConfig();
             _configManager.LoadAddrTable();
-            _accountDb.Initialization();
+            _accountStorage.Initialization();
         }
     }
 }
