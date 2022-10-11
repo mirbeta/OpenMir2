@@ -51,13 +51,13 @@ namespace LogDataSvr
                         int counter = 0;
 
                         DiagnosticsClient client = new DiagnosticsClient(processes.First().Id);
-            
+
                         var providers = new List<EventPipeProvider>()
                         {
                             new EventPipeProvider("itemProvider", System.Diagnostics.Tracing.EventLevel.Informational, (long)ClrTraceEventParser.Keywords.All)
                         };
                         var session = client.StartEventPipeSession(providers, false);
-  
+
                         var source = new EventPipeEventSource(session.EventStream);
 
                         source.Dynamic.All += (e) =>
@@ -71,7 +71,7 @@ namespace LogDataSvr
                                 Console.WriteLine($"{e.ProviderName} {e.EventName}");
                             }
                         };
-                        source.Process();   
+                        source.Process();
                         _exitCode = 0;
                     }
                     catch (TaskCanceledException)
