@@ -1,9 +1,8 @@
-﻿using GameSvr.Items;
-using GameSvr.Player;
+﻿using GameSvr.Player;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 给指定纯度的矿石

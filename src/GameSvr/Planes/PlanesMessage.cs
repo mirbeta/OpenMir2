@@ -1,10 +1,10 @@
-﻿using GameSvr.Command;
+﻿using GameSvr.GameCommand;
 using GameSvr.Guild;
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Snaps
+namespace GameSvr.Planes
 {
     public class PlanesMessage
     {

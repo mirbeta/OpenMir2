@@ -3,7 +3,7 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)

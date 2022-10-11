@@ -1,6 +1,6 @@
 ﻿using GameSvr.Actor;
-using GameSvr.Command;
 using GameSvr.Event.Events;
+using GameSvr.GameCommand;
 using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Player;

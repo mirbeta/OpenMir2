@@ -1,4 +1,4 @@
-﻿using GameSvr.Command;
+﻿using GameSvr.GameCommand;
 using GameSvr.Items;
 using SystemModule;
 using SystemModule.Data;

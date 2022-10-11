@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("DelDenyChrNameLogon", "", "人物名称", 10)]
     public class DelDenyChrNameLogonCommand : Command

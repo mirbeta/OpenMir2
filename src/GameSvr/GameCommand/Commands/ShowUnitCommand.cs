@@ -1,4 +1,4 @@
-﻿namespace GameSvr.Command.Commands
+﻿namespace GameSvr.GameCommand.Commands
 {
 
     [Command("ShowUnit", "", "", 10)]

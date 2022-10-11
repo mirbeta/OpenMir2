@@ -1,4 +1,4 @@
-﻿using GameSvr.Command;
+﻿using GameSvr.GameCommand;
 using SystemModule.Common;
 
 namespace GameSvr.Conf
@@ -15,3024 +15,3025 @@ namespace GameSvr.Conf
         /// </summary>
         public void LoadConfig()
         {
+            var gameCommands = CommandMgr.Commands;
             int nLoadInteger;
             string LoadString = ReadString("Command", "Date", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Date", M2Share.GameCommand.Data.CommandName);
+                WriteString("Command", "Date", gameCommands.Data.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Data.CommandName = LoadString;
+                gameCommands.Data.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Date", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Date", M2Share.GameCommand.Data.PerMissionMin);
+                WriteInteger("Permission", "Date", gameCommands.Data.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Data.PerMissionMin = nLoadInteger;
+                gameCommands.Data.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "PrvMsg", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "PrvMsg", M2Share.GameCommand.Prvmsg.CommandName);
+                WriteString("Command", "PrvMsg", gameCommands.Prvmsg.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Prvmsg.CommandName = LoadString;
+                gameCommands.Prvmsg.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "PrvMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PrvMsg", M2Share.GameCommand.Prvmsg.PerMissionMin);
+                WriteInteger("Permission", "PrvMsg", gameCommands.Prvmsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Prvmsg.PerMissionMin = nLoadInteger;
+                gameCommands.Prvmsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AllowMsg", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AllowMsg", M2Share.GameCommand.AllowMsg.CommandName);
+                WriteString("Command", "AllowMsg", gameCommands.AllowMsg.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AllowMsg.CommandName = LoadString;
+                gameCommands.AllowMsg.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AllowMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AllowMsg", M2Share.GameCommand.AllowMsg.PerMissionMin);
+                WriteInteger("Permission", "AllowMsg", gameCommands.AllowMsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AllowMsg.PerMissionMin = nLoadInteger;
+                gameCommands.AllowMsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LetShout", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "LetShout", M2Share.GameCommand.Letshout.CommandName);
+                WriteString("Command", "LetShout", gameCommands.Letshout.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Letshout.CommandName = LoadString;
+                gameCommands.Letshout.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "LetTrade", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "LetTrade", M2Share.GameCommand.LetTrade.CommandName);
+                WriteString("Command", "LetTrade", gameCommands.LetTrade.CommandName);
             }
             else
             {
-                M2Share.GameCommand.LetTrade.CommandName = LoadString;
+                gameCommands.LetTrade.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "LetGuild", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "LetGuild", M2Share.GameCommand.Letguild.CommandName);
+                WriteString("Command", "LetGuild", gameCommands.Letguild.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Letguild.CommandName = LoadString;
+                gameCommands.Letguild.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "EndGuild", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "EndGuild", M2Share.GameCommand.Endguild.CommandName);
+                WriteString("Command", "EndGuild", gameCommands.Endguild.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Endguild.CommandName = LoadString;
+                gameCommands.Endguild.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "BanGuildChat", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "BanGuildChat", M2Share.GameCommand.BanGuildChat.CommandName);
+                WriteString("Command", "BanGuildChat", gameCommands.BanGuildChat.CommandName);
             }
             else
             {
-                M2Share.GameCommand.BanGuildChat.CommandName = LoadString;
+                gameCommands.BanGuildChat.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "AuthAlly", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AuthAlly", M2Share.GameCommand.Authally.CommandName);
+                WriteString("Command", "AuthAlly", gameCommands.Authally.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Authally.CommandName = LoadString;
+                gameCommands.Authally.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "Auth", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Auth", M2Share.GameCommand.Auth.CommandName);
+                WriteString("Command", "Auth", gameCommands.Auth.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Auth.CommandName = LoadString;
+                gameCommands.Auth.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "AuthCancel", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AuthCancel", M2Share.GameCommand.AuthCancel.CommandName);
+                WriteString("Command", "AuthCancel", gameCommands.AuthCancel.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AuthCancel.CommandName = LoadString;
+                gameCommands.AuthCancel.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "ViewDiary", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ViewDiary", M2Share.GameCommand.Diary.CommandName);
+                WriteString("Command", "ViewDiary", gameCommands.Diary.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Diary.CommandName = LoadString;
+                gameCommands.Diary.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "UserMove", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "UserMove", M2Share.GameCommand.UserMove.CommandName);
+                WriteString("Command", "UserMove", gameCommands.UserMove.CommandName);
             }
             else
             {
-                M2Share.GameCommand.UserMove.CommandName = LoadString;
+                gameCommands.UserMove.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "Searching", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Searching", M2Share.GameCommand.Searching.CommandName);
+                WriteString("Command", "Searching", gameCommands.Searching.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Searching.CommandName = LoadString;
+                gameCommands.Searching.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "AllowGroupCall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AllowGroupCall", M2Share.GameCommand.AllowGroupCall.CommandName);
+                WriteString("Command", "AllowGroupCall", gameCommands.AllowGroupCall.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AllowGroupCall.CommandName = LoadString;
+                gameCommands.AllowGroupCall.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "GroupCall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "GroupCall", M2Share.GameCommand.GroupRecalll.CommandName);
+                WriteString("Command", "GroupCall", gameCommands.GroupRecalll.CommandName);
             }
             else
             {
-                M2Share.GameCommand.GroupRecalll.CommandName = LoadString;
+                gameCommands.GroupRecalll.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "AllowGuildReCall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AllowGuildReCall", M2Share.GameCommand.AllowGuildRecall.CommandName);
+                WriteString("Command", "AllowGuildReCall", gameCommands.AllowGuildRecall.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AllowGuildRecall.CommandName = LoadString;
+                gameCommands.AllowGuildRecall.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "GuildReCall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "GuildReCall", M2Share.GameCommand.GuildRecalll.CommandName);
+                WriteString("Command", "GuildReCall", gameCommands.GuildRecalll.CommandName);
             }
             else
             {
-                M2Share.GameCommand.GuildRecalll.CommandName = LoadString;
+                gameCommands.GuildRecalll.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "StorageUnLock", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StorageUnLock", M2Share.GameCommand.UnlockStorage.CommandName);
+                WriteString("Command", "StorageUnLock", gameCommands.UnlockStorage.CommandName);
             }
             else
             {
-                M2Share.GameCommand.UnlockStorage.CommandName = LoadString;
+                gameCommands.UnlockStorage.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "PasswordUnLock", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "PasswordUnLock", M2Share.GameCommand.Unlock.CommandName);
+                WriteString("Command", "PasswordUnLock", gameCommands.Unlock.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Unlock.CommandName = LoadString;
+                gameCommands.Unlock.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "StorageLock", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StorageLock", M2Share.GameCommand.Lock.CommandName);
+                WriteString("Command", "StorageLock", gameCommands.Lock.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Lock.CommandName = LoadString;
+                gameCommands.Lock.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "StorageSetPassword", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StorageSetPassword", M2Share.GameCommand.SetPassword.CommandName);
+                WriteString("Command", "StorageSetPassword", gameCommands.SetPassword.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SetPassword.CommandName = LoadString;
+                gameCommands.SetPassword.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "PasswordLock", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "PasswordLock", M2Share.GameCommand.PasswordLock.CommandName);
+                WriteString("Command", "PasswordLock", gameCommands.PasswordLock.CommandName);
             }
             else
             {
-                M2Share.GameCommand.PasswordLock.CommandName = LoadString;
+                gameCommands.PasswordLock.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "StorageChgPassword", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StorageChgPassword", M2Share.GameCommand.ChgPassword.CommandName);
+                WriteString("Command", "StorageChgPassword", gameCommands.ChgPassword.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChgPassword.CommandName = LoadString;
+                gameCommands.ChgPassword.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "StorageClearPassword", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StorageClearPassword", M2Share.GameCommand.ClrPassword.CommandName);
+                WriteString("Command", "StorageClearPassword", gameCommands.ClrPassword.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ClrPassword.CommandName = LoadString;
+                gameCommands.ClrPassword.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "StorageClearPassword", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StorageClearPassword", M2Share.GameCommand.ClrPassword.PerMissionMin);
+                WriteInteger("Permission", "StorageClearPassword", gameCommands.ClrPassword.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClrPassword.PerMissionMin = nLoadInteger;
+                gameCommands.ClrPassword.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StorageUserClearPassword", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StorageUserClearPassword", M2Share.GameCommand.UnPassword.CommandName);
+                WriteString("Command", "StorageUserClearPassword", gameCommands.UnPassword.CommandName);
             }
             else
             {
-                M2Share.GameCommand.UnPassword.CommandName = LoadString;
+                gameCommands.UnPassword.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "MemberFunc", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MemberFunc", M2Share.GameCommand.MemberFunction.CommandName);
+                WriteString("Command", "MemberFunc", gameCommands.MemberFunction.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MemberFunction.CommandName = LoadString;
+                gameCommands.MemberFunction.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "MemberFuncEx", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MemberFuncEx", M2Share.GameCommand.MemberFunctioneX.CommandName);
+                WriteString("Command", "MemberFuncEx", gameCommands.MemberFunctioneX.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MemberFunctioneX.CommandName = LoadString;
+                gameCommands.MemberFunctioneX.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "Dear", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Dear", M2Share.GameCommand.Dear.CommandName);
+                WriteString("Command", "Dear", gameCommands.Dear.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Dear.CommandName = LoadString;
+                gameCommands.Dear.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "Master", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Master", M2Share.GameCommand.Master.CommandName);
+                WriteString("Command", "Master", gameCommands.Master.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Master.CommandName = LoadString;
+                gameCommands.Master.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "DearRecall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DearRecall", M2Share.GameCommand.DearRecall.CommandName);
+                WriteString("Command", "DearRecall", gameCommands.DearRecall.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DearRecall.CommandName = LoadString;
+                gameCommands.DearRecall.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "MasterRecall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MasterRecall", M2Share.GameCommand.MasteRecall.CommandName);
+                WriteString("Command", "MasterRecall", gameCommands.MasteRecall.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MasteRecall.CommandName = LoadString;
+                gameCommands.MasteRecall.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "AllowDearRecall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AllowDearRecall", M2Share.GameCommand.AllowDearRcall.CommandName);
+                WriteString("Command", "AllowDearRecall", gameCommands.AllowDearRcall.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AllowDearRcall.CommandName = LoadString;
+                gameCommands.AllowDearRcall.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "AllowMasterRecall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AllowMasterRecall", M2Share.GameCommand.AllowMasterRecall.CommandName);
+                WriteString("Command", "AllowMasterRecall", gameCommands.AllowMasterRecall.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AllowMasterRecall.CommandName = LoadString;
+                gameCommands.AllowMasterRecall.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "AttackMode", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AttackMode", M2Share.GameCommand.AttackMode.CommandName);
+                WriteString("Command", "AttackMode", gameCommands.AttackMode.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AttackMode.CommandName = LoadString;
+                gameCommands.AttackMode.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "Rest", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Rest", M2Share.GameCommand.Rest.CommandName);
+                WriteString("Command", "Rest", gameCommands.Rest.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Rest.CommandName = LoadString;
+                gameCommands.Rest.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "TakeOnHorse", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "TakeOnHorse", M2Share.GameCommand.TakeonHorse.CommandName);
+                WriteString("Command", "TakeOnHorse", gameCommands.TakeonHorse.CommandName);
             }
             else
             {
-                M2Share.GameCommand.TakeonHorse.CommandName = LoadString;
+                gameCommands.TakeonHorse.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "TakeOffHorse", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "TakeOffHorse", M2Share.GameCommand.TakeofHorse.CommandName);
+                WriteString("Command", "TakeOffHorse", gameCommands.TakeofHorse.CommandName);
             }
             else
             {
-                M2Share.GameCommand.TakeofHorse.CommandName = LoadString;
+                gameCommands.TakeofHorse.CommandName = LoadString;
             }
             LoadString = ReadString("Command", "HumanLocal", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "HumanLocal", M2Share.GameCommand.HumanLocal.CommandName);
+                WriteString("Command", "HumanLocal", gameCommands.HumanLocal.CommandName);
             }
             else
             {
-                M2Share.GameCommand.HumanLocal.CommandName = LoadString;
+                gameCommands.HumanLocal.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "HumanLocal", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "HumanLocal", M2Share.GameCommand.HumanLocal.PerMissionMin);
+                WriteInteger("Permission", "HumanLocal", gameCommands.HumanLocal.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.HumanLocal.PerMissionMin = nLoadInteger;
+                gameCommands.HumanLocal.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Move", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Move", M2Share.GameCommand.Move.CommandName);
+                WriteString("Command", "Move", gameCommands.Move.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Move.CommandName = LoadString;
+                gameCommands.Move.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MoveMin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MoveMin", M2Share.GameCommand.Move.PerMissionMin);
+                WriteInteger("Permission", "MoveMin", gameCommands.Move.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Move.PerMissionMin = nLoadInteger;
+                gameCommands.Move.PerMissionMin = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Permission", "MoveMax", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MoveMax", M2Share.GameCommand.Move.PerMissionMax);
+                WriteInteger("Permission", "MoveMax", gameCommands.Move.PerMissionMax);
             }
             else
             {
-                M2Share.GameCommand.Move.PerMissionMax = nLoadInteger;
+                gameCommands.Move.PerMissionMax = nLoadInteger;
             }
             LoadString = ReadString("Command", "PositionMove", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "PositionMove", M2Share.GameCommand.PositionMove.CommandName);
+                WriteString("Command", "PositionMove", gameCommands.PositionMove.CommandName);
             }
             else
             {
-                M2Share.GameCommand.PositionMove.CommandName = LoadString;
+                gameCommands.PositionMove.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "PositionMoveMin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PositionMoveMin", M2Share.GameCommand.PositionMove.PerMissionMin);
+                WriteInteger("Permission", "PositionMoveMin", gameCommands.PositionMove.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.PositionMove.PerMissionMin = nLoadInteger;
+                gameCommands.PositionMove.PerMissionMin = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Permission", "PositionMoveMax", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PositionMoveMax", M2Share.GameCommand.PositionMove.PerMissionMax);
+                WriteInteger("Permission", "PositionMoveMax", gameCommands.PositionMove.PerMissionMax);
             }
             else
             {
-                M2Share.GameCommand.PositionMove.PerMissionMax = nLoadInteger;
+                gameCommands.PositionMove.PerMissionMax = nLoadInteger;
             }
             LoadString = ReadString("Command", "Info", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Info", M2Share.GameCommand.Info.CommandName);
+                WriteString("Command", "Info", gameCommands.Info.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Info.CommandName = LoadString;
+                gameCommands.Info.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Info", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Info", M2Share.GameCommand.Info.PerMissionMin);
+                WriteInteger("Permission", "Info", gameCommands.Info.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Info.PerMissionMin = nLoadInteger;
+                gameCommands.Info.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobLevel", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MobLevel", M2Share.GameCommand.MobLevel.CommandName);
+                WriteString("Command", "MobLevel", gameCommands.MobLevel.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MobLevel.CommandName = LoadString;
+                gameCommands.MobLevel.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MobLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobLevel", M2Share.GameCommand.MobLevel.PerMissionMin);
+                WriteInteger("Permission", "MobLevel", gameCommands.MobLevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobLevel.PerMissionMin = nLoadInteger;
+                gameCommands.MobLevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobCount", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MobCount", M2Share.GameCommand.MobCount.CommandName);
+                WriteString("Command", "MobCount", gameCommands.MobCount.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MobCount.CommandName = LoadString;
+                gameCommands.MobCount.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MobCount", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobCount", M2Share.GameCommand.MobCount.PerMissionMin);
+                WriteInteger("Permission", "MobCount", gameCommands.MobCount.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobCount.PerMissionMin = nLoadInteger;
+                gameCommands.MobCount.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "HumanCount", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "HumanCount", M2Share.GameCommand.HumanCount.CommandName);
+                WriteString("Command", "HumanCount", gameCommands.HumanCount.CommandName);
             }
             else
             {
-                M2Share.GameCommand.HumanCount.CommandName = LoadString;
+                gameCommands.HumanCount.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "HumanCount", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "HumanCount", M2Share.GameCommand.HumanCount.PerMissionMin);
+                WriteInteger("Permission", "HumanCount", gameCommands.HumanCount.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.HumanCount.PerMissionMin = nLoadInteger;
+                gameCommands.HumanCount.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Map", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Map", M2Share.GameCommand.Map.CommandName);
+                WriteString("Command", "Map", gameCommands.Map.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Map.CommandName = LoadString;
+                gameCommands.Map.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Map", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Map", M2Share.GameCommand.Map.PerMissionMin);
+                WriteInteger("Permission", "Map", gameCommands.Map.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Map.PerMissionMin = nLoadInteger;
+                gameCommands.Map.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Kick", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Kick", M2Share.GameCommand.Kick.CommandName);
+                WriteString("Command", "Kick", gameCommands.Kick.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Kick.CommandName = LoadString;
+                gameCommands.Kick.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Kick", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Kick", M2Share.GameCommand.Kick.PerMissionMin);
+                WriteInteger("Permission", "Kick", gameCommands.Kick.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Kick.PerMissionMin = nLoadInteger;
+                gameCommands.Kick.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Ting", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Ting", M2Share.GameCommand.Ting.CommandName);
+                WriteString("Command", "Ting", gameCommands.Ting.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Ting.CommandName = LoadString;
+                gameCommands.Ting.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Ting", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Ting", M2Share.GameCommand.Ting.PerMissionMin);
+                WriteInteger("Permission", "Ting", gameCommands.Ting.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Ting.PerMissionMin = nLoadInteger;
+                gameCommands.Ting.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SuperTing", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SuperTing", M2Share.GameCommand.Superting.CommandName);
+                WriteString("Command", "SuperTing", gameCommands.Superting.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Superting.CommandName = LoadString;
+                gameCommands.Superting.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SuperTing", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SuperTing", M2Share.GameCommand.Superting.PerMissionMin);
+                WriteInteger("Permission", "SuperTing", gameCommands.Superting.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Superting.PerMissionMin = nLoadInteger;
+                gameCommands.Superting.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MapMove", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MapMove", M2Share.GameCommand.MapMove.CommandName);
+                WriteString("Command", "MapMove", gameCommands.MapMove.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MapMove.CommandName = LoadString;
+                gameCommands.MapMove.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MapMove", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MapMove", M2Share.GameCommand.MapMove.PerMissionMin);
+                WriteInteger("Permission", "MapMove", gameCommands.MapMove.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MapMove.PerMissionMin = nLoadInteger;
+                gameCommands.MapMove.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Shutup", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Shutup", M2Share.GameCommand.ShutUp.CommandName);
+                WriteString("Command", "Shutup", gameCommands.ShutUp.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShutUp.CommandName = LoadString;
+                gameCommands.ShutUp.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Shutup", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Shutup", M2Share.GameCommand.ShutUp.PerMissionMin);
+                WriteInteger("Permission", "Shutup", gameCommands.ShutUp.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShutUp.PerMissionMin = nLoadInteger;
+                gameCommands.ShutUp.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReleaseShutup", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReleaseShutup", M2Share.GameCommand.ReleaseShutup.CommandName);
+                WriteString("Command", "ReleaseShutup", gameCommands.ReleaseShutup.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReleaseShutup.CommandName = LoadString;
+                gameCommands.ReleaseShutup.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReleaseShutup", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReleaseShutup", M2Share.GameCommand.ReleaseShutup.PerMissionMin);
+                WriteInteger("Permission", "ReleaseShutup", gameCommands.ReleaseShutup.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReleaseShutup.PerMissionMin = nLoadInteger;
+                gameCommands.ReleaseShutup.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShutupList", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ShutupList", M2Share.GameCommand.ShutupList.CommandName);
+                WriteString("Command", "ShutupList", gameCommands.ShutupList.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShutupList.CommandName = LoadString;
+                gameCommands.ShutupList.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ShutupList", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShutupList", M2Share.GameCommand.ShutupList.PerMissionMin);
+                WriteInteger("Permission", "ShutupList", gameCommands.ShutupList.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShutupList.PerMissionMin = nLoadInteger;
+                gameCommands.ShutupList.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GameMaster", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "GameMaster", M2Share.GameCommand.GameMaster.CommandName);
+                WriteString("Command", "GameMaster", gameCommands.GameMaster.CommandName);
             }
             else
             {
-                M2Share.GameCommand.GameMaster.CommandName = LoadString;
+                gameCommands.GameMaster.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "GameMaster", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "GameMaster", M2Share.GameCommand.GameMaster.PerMissionMin);
+                WriteInteger("Permission", "GameMaster", gameCommands.GameMaster.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.GameMaster.PerMissionMin = nLoadInteger;
+                gameCommands.GameMaster.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ObServer", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ObServer", M2Share.GameCommand.ObServer.CommandName);
+                WriteString("Command", "ObServer", gameCommands.ObServer.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ObServer.CommandName = LoadString;
+                gameCommands.ObServer.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ObServer", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ObServer", M2Share.GameCommand.ObServer.PerMissionMin);
+                WriteInteger("Permission", "ObServer", gameCommands.ObServer.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ObServer.PerMissionMin = nLoadInteger;
+                gameCommands.ObServer.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SuperMan", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SuperMan", M2Share.GameCommand.SueprMan.CommandName);
+                WriteString("Command", "SuperMan", gameCommands.SueprMan.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SueprMan.CommandName = LoadString;
+                gameCommands.SueprMan.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SuperMan", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SuperMan", M2Share.GameCommand.SueprMan.PerMissionMin);
+                WriteInteger("Permission", "SuperMan", gameCommands.SueprMan.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SueprMan.PerMissionMin = nLoadInteger;
+                gameCommands.SueprMan.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Level", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Level", M2Share.GameCommand.Level.CommandName);
+                WriteString("Command", "Level", gameCommands.Level.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Level.CommandName = LoadString;
+                gameCommands.Level.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Level", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Level", M2Share.GameCommand.Level.PerMissionMin);
+                WriteInteger("Permission", "Level", gameCommands.Level.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Level.PerMissionMin = nLoadInteger;
+                gameCommands.Level.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SabukWallGold", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SabukWallGold", M2Share.GameCommand.SabukwallGold.CommandName);
+                WriteString("Command", "SabukWallGold", gameCommands.SabukwallGold.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SabukwallGold.CommandName = LoadString;
+                gameCommands.SabukwallGold.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SabukWallGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SabukWallGold", M2Share.GameCommand.SabukwallGold.PerMissionMin);
+                WriteInteger("Permission", "SabukWallGold", gameCommands.SabukwallGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SabukwallGold.PerMissionMin = nLoadInteger;
+                gameCommands.SabukwallGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Recall", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Recall", M2Share.GameCommand.Recall.CommandName);
+                WriteString("Command", "Recall", gameCommands.Recall.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Recall.CommandName = LoadString;
+                gameCommands.Recall.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Recall", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Recall", M2Share.GameCommand.Recall.PerMissionMin);
+                WriteInteger("Permission", "Recall", gameCommands.Recall.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Recall.PerMissionMin = nLoadInteger;
+                gameCommands.Recall.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReGoto", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReGoto", M2Share.GameCommand.Regoto.CommandName);
+                WriteString("Command", "ReGoto", gameCommands.Regoto.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Regoto.CommandName = LoadString;
+                gameCommands.Regoto.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReGoto", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReGoto", M2Share.GameCommand.Regoto.PerMissionMin);
+                WriteInteger("Permission", "ReGoto", gameCommands.Regoto.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Regoto.PerMissionMin = nLoadInteger;
+                gameCommands.Regoto.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Flag", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Flag", M2Share.GameCommand.Showflag.CommandName);
+                WriteString("Command", "Flag", gameCommands.Showflag.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Showflag.CommandName = LoadString;
+                gameCommands.Showflag.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Flag", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Flag", M2Share.GameCommand.Showflag.PerMissionMin);
+                WriteInteger("Permission", "Flag", gameCommands.Showflag.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Showflag.PerMissionMin = nLoadInteger;
+                gameCommands.Showflag.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowOpen", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ShowOpen", M2Share.GameCommand.ShowOpen.CommandName);
+                WriteString("Command", "ShowOpen", gameCommands.ShowOpen.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShowOpen.CommandName = LoadString;
+                gameCommands.ShowOpen.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ShowOpen", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowOpen", M2Share.GameCommand.ShowOpen.PerMissionMin);
+                WriteInteger("Permission", "ShowOpen", gameCommands.ShowOpen.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowOpen.PerMissionMin = nLoadInteger;
+                gameCommands.ShowOpen.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowUnit", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ShowUnit", M2Share.GameCommand.ShowUnit.CommandName);
+                WriteString("Command", "ShowUnit", gameCommands.ShowUnit.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShowUnit.CommandName = LoadString;
+                gameCommands.ShowUnit.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ShowUnit", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowUnit", M2Share.GameCommand.ShowUnit.PerMissionMin);
+                WriteInteger("Permission", "ShowUnit", gameCommands.ShowUnit.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowUnit.PerMissionMin = nLoadInteger;
+                gameCommands.ShowUnit.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Attack", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Attack", M2Share.GameCommand.Attack.CommandName);
+                WriteString("Command", "Attack", gameCommands.Attack.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Attack.CommandName = LoadString;
+                gameCommands.Attack.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Attack", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Attack", M2Share.GameCommand.Attack.PerMissionMin);
+                WriteInteger("Permission", "Attack", gameCommands.Attack.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Attack.PerMissionMin = nLoadInteger;
+                gameCommands.Attack.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Mob", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Mob", M2Share.GameCommand.Mob.CommandName);
+                WriteString("Command", "Mob", gameCommands.Mob.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Mob.CommandName = LoadString;
+                gameCommands.Mob.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Mob", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Mob", M2Share.GameCommand.Mob.PerMissionMin);
+                WriteInteger("Permission", "Mob", gameCommands.Mob.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Mob.PerMissionMin = nLoadInteger;
+                gameCommands.Mob.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobNpc", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MobNpc", M2Share.GameCommand.MobNpc.CommandName);
+                WriteString("Command", "MobNpc", gameCommands.MobNpc.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MobNpc.CommandName = LoadString;
+                gameCommands.MobNpc.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MobNpc", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobNpc", M2Share.GameCommand.MobNpc.PerMissionMin);
+                WriteInteger("Permission", "MobNpc", gameCommands.MobNpc.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobNpc.PerMissionMin = nLoadInteger;
+                gameCommands.MobNpc.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelNpc", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelNpc", M2Share.GameCommand.DeleteNpc.CommandName);
+                WriteString("Command", "DelNpc", gameCommands.DeleteNpc.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DeleteNpc.CommandName = LoadString;
+                gameCommands.DeleteNpc.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelNpc", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelNpc", M2Share.GameCommand.DeleteNpc.PerMissionMin);
+                WriteInteger("Permission", "DelNpc", gameCommands.DeleteNpc.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DeleteNpc.PerMissionMin = nLoadInteger;
+                gameCommands.DeleteNpc.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "NpcScript", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "NpcScript", M2Share.GameCommand.NpcScript.CommandName);
+                WriteString("Command", "NpcScript", gameCommands.NpcScript.CommandName);
             }
             else
             {
-                M2Share.GameCommand.NpcScript.CommandName = LoadString;
+                gameCommands.NpcScript.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "NpcScript", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "NpcScript", M2Share.GameCommand.NpcScript.PerMissionMin);
+                WriteInteger("Permission", "NpcScript", gameCommands.NpcScript.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.NpcScript.PerMissionMin = nLoadInteger;
+                gameCommands.NpcScript.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "RecallMob", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "RecallMob", M2Share.GameCommand.RecallMob.CommandName);
+                WriteString("Command", "RecallMob", gameCommands.RecallMob.CommandName);
             }
             else
             {
-                M2Share.GameCommand.RecallMob.CommandName = LoadString;
+                gameCommands.RecallMob.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "RecallMob", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "RecallMob", M2Share.GameCommand.RecallMob.PerMissionMin);
+                WriteInteger("Permission", "RecallMob", gameCommands.RecallMob.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.RecallMob.PerMissionMin = nLoadInteger;
+                gameCommands.RecallMob.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LuckPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "LuckPoint", M2Share.GameCommand.LuckyPoint.CommandName);
+                WriteString("Command", "LuckPoint", gameCommands.LuckyPoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.LuckyPoint.CommandName = LoadString;
+                gameCommands.LuckyPoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "LuckPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "LuckPoint", M2Share.GameCommand.LuckyPoint.PerMissionMin);
+                WriteInteger("Permission", "LuckPoint", gameCommands.LuckyPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.LuckyPoint.PerMissionMin = nLoadInteger;
+                gameCommands.LuckyPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LotteryTicket", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "LotteryTicket", M2Share.GameCommand.LotteryTicket.CommandName);
+                WriteString("Command", "LotteryTicket", gameCommands.LotteryTicket.CommandName);
             }
             else
             {
-                M2Share.GameCommand.LotteryTicket.CommandName = LoadString;
+                gameCommands.LotteryTicket.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "LotteryTicket", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "LotteryTicket", M2Share.GameCommand.LotteryTicket.PerMissionMin);
+                WriteInteger("Permission", "LotteryTicket", gameCommands.LotteryTicket.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.LotteryTicket.PerMissionMin = nLoadInteger;
+                gameCommands.LotteryTicket.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadGuild", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadGuild", M2Share.GameCommand.ReloadGuild.CommandName);
+                WriteString("Command", "ReloadGuild", gameCommands.ReloadGuild.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadGuild.CommandName = LoadString;
+                gameCommands.ReloadGuild.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadGuild", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadGuild", M2Share.GameCommand.ReloadGuild.PerMissionMin);
+                WriteInteger("Permission", "ReloadGuild", gameCommands.ReloadGuild.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadGuild.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadGuild.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadLineNotice", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadLineNotice", M2Share.GameCommand.ReloadLineNotice.CommandName);
+                WriteString("Command", "ReloadLineNotice", gameCommands.ReloadLineNotice.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadLineNotice.CommandName = LoadString;
+                gameCommands.ReloadLineNotice.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadLineNotice", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadLineNotice", M2Share.GameCommand.ReloadLineNotice.PerMissionMin);
+                WriteInteger("Permission", "ReloadLineNotice", gameCommands.ReloadLineNotice.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadLineNotice.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadLineNotice.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadAbuse", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadAbuse", M2Share.GameCommand.ReloadAbuse.CommandName);
+                WriteString("Command", "ReloadAbuse", gameCommands.ReloadAbuse.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadAbuse.CommandName = LoadString;
+                gameCommands.ReloadAbuse.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadAbuse", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadAbuse", M2Share.GameCommand.ReloadAbuse.PerMissionMin);
+                WriteInteger("Permission", "ReloadAbuse", gameCommands.ReloadAbuse.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadAbuse.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadAbuse.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "BackStep", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "BackStep", M2Share.GameCommand.BackStep.CommandName);
+                WriteString("Command", "BackStep", gameCommands.BackStep.CommandName);
             }
             else
             {
-                M2Share.GameCommand.BackStep.CommandName = LoadString;
+                gameCommands.BackStep.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "BackStep", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "BackStep", M2Share.GameCommand.BackStep.PerMissionMin);
+                WriteInteger("Permission", "BackStep", gameCommands.BackStep.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.BackStep.PerMissionMin = nLoadInteger;
+                gameCommands.BackStep.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Ball", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Ball", M2Share.GameCommand.Ball.CommandName);
+                WriteString("Command", "Ball", gameCommands.Ball.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Ball.CommandName = LoadString;
+                gameCommands.Ball.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Ball", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Ball", M2Share.GameCommand.Ball.PerMissionMin);
+                WriteInteger("Permission", "Ball", gameCommands.Ball.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Ball.PerMissionMin = nLoadInteger;
+                gameCommands.Ball.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "FreePenalty", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "FreePenalty", M2Share.GameCommand.FreePenalty.CommandName);
+                WriteString("Command", "FreePenalty", gameCommands.FreePenalty.CommandName);
             }
             else
             {
-                M2Share.GameCommand.FreePenalty.CommandName = LoadString;
+                gameCommands.FreePenalty.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "FreePenalty", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "FreePenalty", M2Share.GameCommand.FreePenalty.PerMissionMin);
+                WriteInteger("Permission", "FreePenalty", gameCommands.FreePenalty.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.FreePenalty.PerMissionMin = nLoadInteger;
+                gameCommands.FreePenalty.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "PkPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "PkPoint", M2Share.GameCommand.PkPoint.CommandName);
+                WriteString("Command", "PkPoint", gameCommands.PkPoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.PkPoint.CommandName = LoadString;
+                gameCommands.PkPoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "PkPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "PkPoint", M2Share.GameCommand.PkPoint.PerMissionMin);
+                WriteInteger("Permission", "PkPoint", gameCommands.PkPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.PkPoint.PerMissionMin = nLoadInteger;
+                gameCommands.PkPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "IncPkPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "IncPkPoint", M2Share.GameCommand.Incpkpoint.CommandName);
+                WriteString("Command", "IncPkPoint", gameCommands.Incpkpoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Incpkpoint.CommandName = LoadString;
+                gameCommands.Incpkpoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "IncPkPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "IncPkPoint", M2Share.GameCommand.Incpkpoint.PerMissionMin);
+                WriteInteger("Permission", "IncPkPoint", gameCommands.Incpkpoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Incpkpoint.PerMissionMin = nLoadInteger;
+                gameCommands.Incpkpoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeLuck", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeLuck", M2Share.GameCommand.ChangeLuck.CommandName);
+                WriteString("Command", "ChangeLuck", gameCommands.ChangeLuck.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChangeLuck.CommandName = LoadString;
+                gameCommands.ChangeLuck.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeLuck", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeLuck", M2Share.GameCommand.ChangeLuck.PerMissionMin);
+                WriteInteger("Permission", "ChangeLuck", gameCommands.ChangeLuck.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeLuck.PerMissionMin = nLoadInteger;
+                gameCommands.ChangeLuck.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Hunger", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Hunger", M2Share.GameCommand.Hunger.CommandName);
+                WriteString("Command", "Hunger", gameCommands.Hunger.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Hunger.CommandName = LoadString;
+                gameCommands.Hunger.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Hunger", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Hunger", M2Share.GameCommand.Hunger.PerMissionMin);
+                WriteInteger("Permission", "Hunger", gameCommands.Hunger.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Hunger.PerMissionMin = nLoadInteger;
+                gameCommands.Hunger.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Hair", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Hair", M2Share.GameCommand.Hair.CommandName);
+                WriteString("Command", "Hair", gameCommands.Hair.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Hair.CommandName = LoadString;
+                gameCommands.Hair.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Hair", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Hair", M2Share.GameCommand.Hair.PerMissionMin);
+                WriteInteger("Permission", "Hair", gameCommands.Hair.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Hair.PerMissionMin = nLoadInteger;
+                gameCommands.Hair.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Training", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Training", M2Share.GameCommand.Training.CommandName);
+                WriteString("Command", "Training", gameCommands.Training.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Training.CommandName = LoadString;
+                gameCommands.Training.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Training", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Training", M2Share.GameCommand.Training.PerMissionMin);
+                WriteInteger("Permission", "Training", gameCommands.Training.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Training.PerMissionMin = nLoadInteger;
+                gameCommands.Training.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DeleteSkill", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DeleteSkill", M2Share.GameCommand.DeleteSkill.CommandName);
+                WriteString("Command", "DeleteSkill", gameCommands.DeleteSkill.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DeleteSkill.CommandName = LoadString;
+                gameCommands.DeleteSkill.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DeleteSkill", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DeleteSkill", M2Share.GameCommand.DeleteSkill.PerMissionMin);
+                WriteInteger("Permission", "DeleteSkill", gameCommands.DeleteSkill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DeleteSkill.PerMissionMin = nLoadInteger;
+                gameCommands.DeleteSkill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeJob", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeJob", M2Share.GameCommand.ChangeJob.CommandName);
+                WriteString("Command", "ChangeJob", gameCommands.ChangeJob.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChangeJob.CommandName = LoadString;
+                gameCommands.ChangeJob.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeJob", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeJob", M2Share.GameCommand.ChangeJob.PerMissionMin);
+                WriteInteger("Permission", "ChangeJob", gameCommands.ChangeJob.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeJob.PerMissionMin = nLoadInteger;
+                gameCommands.ChangeJob.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeGender", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeGender", M2Share.GameCommand.ChangeGender.CommandName);
+                WriteString("Command", "ChangeGender", gameCommands.ChangeGender.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChangeGender.CommandName = LoadString;
+                gameCommands.ChangeGender.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeGender", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeGender", M2Share.GameCommand.ChangeGender.PerMissionMin);
+                WriteInteger("Permission", "ChangeGender", gameCommands.ChangeGender.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeGender.PerMissionMin = nLoadInteger;
+                gameCommands.ChangeGender.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "NameColor", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "NameColor", M2Share.GameCommand.Namecolor.CommandName);
+                WriteString("Command", "NameColor", gameCommands.Namecolor.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Namecolor.CommandName = LoadString;
+                gameCommands.Namecolor.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "NameColor", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "NameColor", M2Share.GameCommand.Namecolor.PerMissionMin);
+                WriteInteger("Permission", "NameColor", gameCommands.Namecolor.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Namecolor.PerMissionMin = nLoadInteger;
+                gameCommands.Namecolor.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Mission", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Mission", M2Share.GameCommand.Mission.CommandName);
+                WriteString("Command", "Mission", gameCommands.Mission.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Mission.CommandName = LoadString;
+                gameCommands.Mission.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Mission", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Mission", M2Share.GameCommand.Mission.PerMissionMin);
+                WriteInteger("Permission", "Mission", gameCommands.Mission.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Mission.PerMissionMin = nLoadInteger;
+                gameCommands.Mission.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MobPlace", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MobPlace", M2Share.GameCommand.MobPlace.CommandName);
+                WriteString("Command", "MobPlace", gameCommands.MobPlace.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MobPlace.CommandName = LoadString;
+                gameCommands.MobPlace.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MobPlace", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MobPlace", M2Share.GameCommand.MobPlace.PerMissionMin);
+                WriteInteger("Permission", "MobPlace", gameCommands.MobPlace.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MobPlace.PerMissionMin = nLoadInteger;
+                gameCommands.MobPlace.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Transparecy", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Transparecy", M2Share.GameCommand.Transparecy.CommandName);
+                WriteString("Command", "Transparecy", gameCommands.Transparecy.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Transparecy.CommandName = LoadString;
+                gameCommands.Transparecy.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Transparecy", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Transparecy", M2Share.GameCommand.Transparecy.PerMissionMin);
+                WriteInteger("Permission", "Transparecy", gameCommands.Transparecy.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Transparecy.PerMissionMin = nLoadInteger;
+                gameCommands.Transparecy.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DeleteItem", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DeleteItem", M2Share.GameCommand.DeleteItem.CommandName);
+                WriteString("Command", "DeleteItem", gameCommands.DeleteItem.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DeleteItem.CommandName = LoadString;
+                gameCommands.DeleteItem.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DeleteItem", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DeleteItem", M2Share.GameCommand.DeleteItem.PerMissionMin);
+                WriteInteger("Permission", "DeleteItem", gameCommands.DeleteItem.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DeleteItem.PerMissionMin = nLoadInteger;
+                gameCommands.DeleteItem.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Level0", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Level0", M2Share.GameCommand.Level.CommandName);
+                WriteString("Command", "Level0", gameCommands.Level.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Level.CommandName = LoadString;
+                gameCommands.Level.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Level0", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Level0", M2Share.GameCommand.Level.PerMissionMin);
+                WriteInteger("Permission", "Level0", gameCommands.Level.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Level.PerMissionMin = nLoadInteger;
+                gameCommands.Level.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ClearMission", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ClearMission", M2Share.GameCommand.ClearMission.CommandName);
+                WriteString("Command", "ClearMission", gameCommands.ClearMission.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ClearMission.CommandName = LoadString;
+                gameCommands.ClearMission.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ClearMission", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ClearMission", M2Share.GameCommand.ClearMission.PerMissionMin);
+                WriteInteger("Permission", "ClearMission", gameCommands.ClearMission.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClearMission.PerMissionMin = nLoadInteger;
+                gameCommands.ClearMission.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetFlag", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SetFlag", M2Share.GameCommand.SetFlag.CommandName);
+                WriteString("Command", "SetFlag", gameCommands.SetFlag.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SetFlag.CommandName = LoadString;
+                gameCommands.SetFlag.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SetFlag", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetFlag", M2Share.GameCommand.SetFlag.PerMissionMin);
+                WriteInteger("Permission", "SetFlag", gameCommands.SetFlag.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetFlag.PerMissionMin = nLoadInteger;
+                gameCommands.SetFlag.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetOpen", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SetOpen", M2Share.GameCommand.SetOpen.CommandName);
+                WriteString("Command", "SetOpen", gameCommands.SetOpen.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SetOpen.CommandName = LoadString;
+                gameCommands.SetOpen.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SetOpen", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetOpen", M2Share.GameCommand.SetOpen.PerMissionMin);
+                WriteInteger("Permission", "SetOpen", gameCommands.SetOpen.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetOpen.PerMissionMin = nLoadInteger;
+                gameCommands.SetOpen.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetUnit", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SetUnit", M2Share.GameCommand.SetUnit.CommandName);
+                WriteString("Command", "SetUnit", gameCommands.SetUnit.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SetUnit.CommandName = LoadString;
+                gameCommands.SetUnit.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SetUnit", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetUnit", M2Share.GameCommand.SetUnit.PerMissionMin);
+                WriteInteger("Permission", "SetUnit", gameCommands.SetUnit.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetUnit.PerMissionMin = nLoadInteger;
+                gameCommands.SetUnit.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReConnection", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReConnection", M2Share.GameCommand.Reconnection.CommandName);
+                WriteString("Command", "ReConnection", gameCommands.Reconnection.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Reconnection.CommandName = LoadString;
+                gameCommands.Reconnection.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReConnection", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReConnection", M2Share.GameCommand.Reconnection.PerMissionMin);
+                WriteInteger("Permission", "ReConnection", gameCommands.Reconnection.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reconnection.PerMissionMin = nLoadInteger;
+                gameCommands.Reconnection.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DisableFilter", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DisableFilter", M2Share.GameCommand.DisableFilter.CommandName);
+                WriteString("Command", "DisableFilter", gameCommands.DisableFilter.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DisableFilter.CommandName = LoadString;
+                gameCommands.DisableFilter.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DisableFilter", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DisableFilter", M2Share.GameCommand.DisableFilter.PerMissionMin);
+                WriteInteger("Permission", "DisableFilter", gameCommands.DisableFilter.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DisableFilter.PerMissionMin = nLoadInteger;
+                gameCommands.DisableFilter.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeUserFull", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeUserFull", M2Share.GameCommand.ChguserFull.CommandName);
+                WriteString("Command", "ChangeUserFull", gameCommands.ChguserFull.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChguserFull.CommandName = LoadString;
+                gameCommands.ChguserFull.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeUserFull", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeUserFull", M2Share.GameCommand.ChguserFull.PerMissionMin);
+                WriteInteger("Permission", "ChangeUserFull", gameCommands.ChguserFull.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChguserFull.PerMissionMin = nLoadInteger;
+                gameCommands.ChguserFull.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeZenFastStep", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeZenFastStep", M2Share.GameCommand.ChgZenFastStep.CommandName);
+                WriteString("Command", "ChangeZenFastStep", gameCommands.ChgZenFastStep.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChgZenFastStep.CommandName = LoadString;
+                gameCommands.ChgZenFastStep.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeZenFastStep", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeZenFastStep", M2Share.GameCommand.ChgZenFastStep.PerMissionMin);
+                WriteInteger("Permission", "ChangeZenFastStep", gameCommands.ChgZenFastStep.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChgZenFastStep.PerMissionMin = nLoadInteger;
+                gameCommands.ChgZenFastStep.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ContestPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ContestPoint", M2Share.GameCommand.ContestPoint.CommandName);
+                WriteString("Command", "ContestPoint", gameCommands.ContestPoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ContestPoint.CommandName = LoadString;
+                gameCommands.ContestPoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ContestPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ContestPoint", M2Share.GameCommand.ContestPoint.PerMissionMin);
+                WriteInteger("Permission", "ContestPoint", gameCommands.ContestPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ContestPoint.PerMissionMin = nLoadInteger;
+                gameCommands.ContestPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartContest", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StartContest", M2Share.GameCommand.StartContest.CommandName);
+                WriteString("Command", "StartContest", gameCommands.StartContest.CommandName);
             }
             else
             {
-                M2Share.GameCommand.StartContest.CommandName = LoadString;
+                gameCommands.StartContest.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "StartContest", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartContest", M2Share.GameCommand.StartContest.PerMissionMin);
+                WriteInteger("Permission", "StartContest", gameCommands.StartContest.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.StartContest.PerMissionMin = nLoadInteger;
+                gameCommands.StartContest.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "EndContest", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "EndContest", M2Share.GameCommand.EndContest.CommandName);
+                WriteString("Command", "EndContest", gameCommands.EndContest.CommandName);
             }
             else
             {
-                M2Share.GameCommand.EndContest.CommandName = LoadString;
+                gameCommands.EndContest.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "EndContest", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "EndContest", M2Share.GameCommand.EndContest.PerMissionMin);
+                WriteInteger("Permission", "EndContest", gameCommands.EndContest.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.EndContest.PerMissionMin = nLoadInteger;
+                gameCommands.EndContest.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Announcement", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Announcement", M2Share.GameCommand.Announcement.CommandName);
+                WriteString("Command", "Announcement", gameCommands.Announcement.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Announcement.CommandName = LoadString;
+                gameCommands.Announcement.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Announcement", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Announcement", M2Share.GameCommand.Announcement.PerMissionMin);
+                WriteInteger("Permission", "Announcement", gameCommands.Announcement.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Announcement.PerMissionMin = nLoadInteger;
+                gameCommands.Announcement.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "OXQuizRoom", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "OXQuizRoom", M2Share.GameCommand.Oxquizroom.CommandName);
+                WriteString("Command", "OXQuizRoom", gameCommands.Oxquizroom.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Oxquizroom.CommandName = LoadString;
+                gameCommands.Oxquizroom.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "OXQuizRoom", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "OXQuizRoom", M2Share.GameCommand.Oxquizroom.PerMissionMin);
+                WriteInteger("Permission", "OXQuizRoom", gameCommands.Oxquizroom.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Oxquizroom.PerMissionMin = nLoadInteger;
+                gameCommands.Oxquizroom.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Gsa", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Gsa", M2Share.GameCommand.Gsa.CommandName);
+                WriteString("Command", "Gsa", gameCommands.Gsa.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Gsa.CommandName = LoadString;
+                gameCommands.Gsa.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Gsa", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Gsa", M2Share.GameCommand.Gsa.PerMissionMin);
+                WriteInteger("Permission", "Gsa", gameCommands.Gsa.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Gsa.PerMissionMin = nLoadInteger;
+                gameCommands.Gsa.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeItemName", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeItemName", M2Share.GameCommand.ChangeItemName.CommandName);
+                WriteString("Command", "ChangeItemName", gameCommands.ChangeItemName.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChangeItemName.CommandName = LoadString;
+                gameCommands.ChangeItemName.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeItemName", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeItemName", M2Share.GameCommand.ChangeItemName.PerMissionMin);
+                WriteInteger("Permission", "ChangeItemName", gameCommands.ChangeItemName.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeItemName.PerMissionMin = nLoadInteger;
+                gameCommands.ChangeItemName.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DisableSendMsg", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DisableSendMsg", M2Share.GameCommand.DisableSendMsg.CommandName);
+                WriteString("Command", "DisableSendMsg", gameCommands.DisableSendMsg.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DisableSendMsg.CommandName = LoadString;
+                gameCommands.DisableSendMsg.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DisableSendMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DisableSendMsg", M2Share.GameCommand.DisableSendMsg.PerMissionMin);
+                WriteInteger("Permission", "DisableSendMsg", gameCommands.DisableSendMsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DisableSendMsg.PerMissionMin = nLoadInteger;
+                gameCommands.DisableSendMsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "EnableSendMsg", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "EnableSendMsg", M2Share.GameCommand.EnableSendMsg.CommandName);
+                WriteString("Command", "EnableSendMsg", gameCommands.EnableSendMsg.CommandName);
             }
             else
             {
-                M2Share.GameCommand.EnableSendMsg.CommandName = LoadString;
+                gameCommands.EnableSendMsg.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "EnableSendMsg", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "EnableSendMsg", M2Share.GameCommand.EnableSendMsg.PerMissionMin);
+                WriteInteger("Permission", "EnableSendMsg", gameCommands.EnableSendMsg.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.EnableSendMsg.PerMissionMin = nLoadInteger;
+                gameCommands.EnableSendMsg.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DisableSendMsgList", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DisableSendMsgList", M2Share.GameCommand.DisableSendMsgList.CommandName);
+                WriteString("Command", "DisableSendMsgList", gameCommands.DisableSendMsgList.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DisableSendMsgList.CommandName = LoadString;
+                gameCommands.DisableSendMsgList.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DisableSendMsgList", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DisableSendMsgList", M2Share.GameCommand.DisableSendMsgList.PerMissionMin);
+                WriteInteger("Permission", "DisableSendMsgList", gameCommands.DisableSendMsgList.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DisableSendMsgList.PerMissionMin = nLoadInteger;
+                gameCommands.DisableSendMsgList.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Kill", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Kill", M2Share.GameCommand.Kill.CommandName);
+                WriteString("Command", "Kill", gameCommands.Kill.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Kill.CommandName = LoadString;
+                gameCommands.Kill.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Kill", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Kill", M2Share.GameCommand.Kill.PerMissionMin);
+                WriteInteger("Permission", "Kill", gameCommands.Kill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Kill.PerMissionMin = nLoadInteger;
+                gameCommands.Kill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Make", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Make", M2Share.GameCommand.Make.CommandName);
+                WriteString("Command", "Make", gameCommands.Make.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Make.CommandName = LoadString;
+                gameCommands.Make.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MakeMin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MakeMin", M2Share.GameCommand.Make.PerMissionMin);
+                WriteInteger("Permission", "MakeMin", gameCommands.Make.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Make.PerMissionMin = nLoadInteger;
+                gameCommands.Make.PerMissionMin = nLoadInteger;
             }
             nLoadInteger = ReadInteger("Permission", "MakeMax", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MakeMax", M2Share.GameCommand.Make.PerMissionMax);
+                WriteInteger("Permission", "MakeMax", gameCommands.Make.PerMissionMax);
             }
             else
             {
-                M2Share.GameCommand.Make.PerMissionMax = nLoadInteger;
+                gameCommands.Make.PerMissionMax = nLoadInteger;
             }
             LoadString = ReadString("Command", "SuperMake", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SuperMake", M2Share.GameCommand.Smake.CommandName);
+                WriteString("Command", "SuperMake", gameCommands.Smake.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Smake.CommandName = LoadString;
+                gameCommands.Smake.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SuperMake", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SuperMake", M2Share.GameCommand.Smake.PerMissionMin);
+                WriteInteger("Permission", "SuperMake", gameCommands.Smake.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Smake.PerMissionMin = nLoadInteger;
+                gameCommands.Smake.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "BonusPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "BonusPoint", M2Share.GameCommand.BonusPoint.CommandName);
+                WriteString("Command", "BonusPoint", gameCommands.BonusPoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.BonusPoint.CommandName = LoadString;
+                gameCommands.BonusPoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "BonusPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "BonusPoint", M2Share.GameCommand.BonusPoint.PerMissionMin);
+                WriteInteger("Permission", "BonusPoint", gameCommands.BonusPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.BonusPoint.PerMissionMin = nLoadInteger;
+                gameCommands.BonusPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelBonuPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelBonuPoint", M2Share.GameCommand.DelBonusPoint.CommandName);
+                WriteString("Command", "DelBonuPoint", gameCommands.DelBonusPoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelBonusPoint.CommandName = LoadString;
+                gameCommands.DelBonusPoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelBonuPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelBonuPoint", M2Share.GameCommand.DelBonusPoint.PerMissionMin);
+                WriteInteger("Permission", "DelBonuPoint", gameCommands.DelBonusPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelBonusPoint.PerMissionMin = nLoadInteger;
+                gameCommands.DelBonusPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "RestBonuPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "RestBonuPoint", M2Share.GameCommand.Restbonuspoint.CommandName);
+                WriteString("Command", "RestBonuPoint", gameCommands.Restbonuspoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Restbonuspoint.CommandName = LoadString;
+                gameCommands.Restbonuspoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "RestBonuPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "RestBonuPoint", M2Share.GameCommand.Restbonuspoint.PerMissionMin);
+                WriteInteger("Permission", "RestBonuPoint", gameCommands.Restbonuspoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Restbonuspoint.PerMissionMin = nLoadInteger;
+                gameCommands.Restbonuspoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "FireBurn", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "FireBurn", M2Share.GameCommand.FireBurn.CommandName);
+                WriteString("Command", "FireBurn", gameCommands.FireBurn.CommandName);
             }
             else
             {
-                M2Share.GameCommand.FireBurn.CommandName = LoadString;
+                gameCommands.FireBurn.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "FireBurn", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "FireBurn", M2Share.GameCommand.FireBurn.PerMissionMin);
+                WriteInteger("Permission", "FireBurn", gameCommands.FireBurn.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.FireBurn.PerMissionMin = nLoadInteger;
+                gameCommands.FireBurn.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "TestStatus", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "TestStatus", M2Share.GameCommand.TestStatus.CommandName);
+                WriteString("Command", "TestStatus", gameCommands.TestStatus.CommandName);
             }
             else
             {
-                M2Share.GameCommand.TestStatus.CommandName = LoadString;
+                gameCommands.TestStatus.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "TestStatus", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "TestStatus", M2Share.GameCommand.TestStatus.PerMissionMin);
+                WriteInteger("Permission", "TestStatus", gameCommands.TestStatus.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.TestStatus.PerMissionMin = nLoadInteger;
+                gameCommands.TestStatus.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelGold", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelGold", M2Share.GameCommand.DelGold.CommandName);
+                WriteString("Command", "DelGold", gameCommands.DelGold.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelGold.CommandName = LoadString;
+                gameCommands.DelGold.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelGold", M2Share.GameCommand.DelGold.PerMissionMin);
+                WriteInteger("Permission", "DelGold", gameCommands.DelGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelGold.PerMissionMin = nLoadInteger;
+                gameCommands.DelGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddGold", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AddGold", M2Share.GameCommand.AddGold.CommandName);
+                WriteString("Command", "AddGold", gameCommands.AddGold.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AddGold.CommandName = LoadString;
+                gameCommands.AddGold.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AddGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddGold", M2Share.GameCommand.AddGold.PerMissionMin);
+                WriteInteger("Permission", "AddGold", gameCommands.AddGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AddGold.PerMissionMin = nLoadInteger;
+                gameCommands.AddGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelGameGold", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelGameGold", M2Share.GameCommand.DelGameGold.CommandName);
+                WriteString("Command", "DelGameGold", gameCommands.DelGameGold.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelGameGold.CommandName = LoadString;
+                gameCommands.DelGameGold.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelGameGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelGameGold", M2Share.GameCommand.DelGameGold.PerMissionMin);
+                WriteInteger("Permission", "DelGameGold", gameCommands.DelGameGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelGameGold.PerMissionMin = nLoadInteger;
+                gameCommands.DelGameGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddGamePoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AddGamePoint", M2Share.GameCommand.AddGameGold.CommandName);
+                WriteString("Command", "AddGamePoint", gameCommands.AddGameGold.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AddGameGold.CommandName = LoadString;
+                gameCommands.AddGameGold.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AddGameGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddGameGold", M2Share.GameCommand.AddGameGold.PerMissionMin);
+                WriteInteger("Permission", "AddGameGold", gameCommands.AddGameGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AddGameGold.PerMissionMin = nLoadInteger;
+                gameCommands.AddGameGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GameGold", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "GameGold", M2Share.GameCommand.GameGold.CommandName);
+                WriteString("Command", "GameGold", gameCommands.GameGold.CommandName);
             }
             else
             {
-                M2Share.GameCommand.GameGold.CommandName = LoadString;
+                gameCommands.GameGold.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "GameGold", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "GameGold", M2Share.GameCommand.GameGold.PerMissionMin);
+                WriteInteger("Permission", "GameGold", gameCommands.GameGold.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.GameGold.PerMissionMin = nLoadInteger;
+                gameCommands.GameGold.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GamePoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "GamePoint", M2Share.GameCommand.GamePoint.CommandName);
+                WriteString("Command", "GamePoint", gameCommands.GamePoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.GamePoint.CommandName = LoadString;
+                gameCommands.GamePoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "GamePoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "GamePoint", M2Share.GameCommand.GamePoint.PerMissionMin);
+                WriteInteger("Permission", "GamePoint", gameCommands.GamePoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.GamePoint.PerMissionMin = nLoadInteger;
+                gameCommands.GamePoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "CreditPoint", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "CreditPoint", M2Share.GameCommand.CreditPoint.CommandName);
+                WriteString("Command", "CreditPoint", gameCommands.CreditPoint.CommandName);
             }
             else
             {
-                M2Share.GameCommand.CreditPoint.CommandName = LoadString;
+                gameCommands.CreditPoint.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "CreditPoint", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "CreditPoint", M2Share.GameCommand.CreditPoint.PerMissionMin);
+                WriteInteger("Permission", "CreditPoint", gameCommands.CreditPoint.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.CreditPoint.PerMissionMin = nLoadInteger;
+                gameCommands.CreditPoint.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "TestGoldChange", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "TestGoldChange", M2Share.GameCommand.Testgoldchange.CommandName);
+                WriteString("Command", "TestGoldChange", gameCommands.Testgoldchange.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Testgoldchange.CommandName = LoadString;
+                gameCommands.Testgoldchange.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "TestGoldChange", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "TestGoldChange", M2Share.GameCommand.Testgoldchange.PerMissionMin);
+                WriteInteger("Permission", "TestGoldChange", gameCommands.Testgoldchange.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Testgoldchange.PerMissionMin = nLoadInteger;
+                gameCommands.Testgoldchange.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "RefineWeapon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "RefineWeapon", M2Share.GameCommand.RefineWeapon.CommandName);
+                WriteString("Command", "RefineWeapon", gameCommands.RefineWeapon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.RefineWeapon.CommandName = LoadString;
+                gameCommands.RefineWeapon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "RefineWeapon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "RefineWeapon", M2Share.GameCommand.RefineWeapon.PerMissionMin);
+                WriteInteger("Permission", "RefineWeapon", gameCommands.RefineWeapon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.RefineWeapon.PerMissionMin = nLoadInteger;
+                gameCommands.RefineWeapon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadAdmin", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadAdmin", M2Share.GameCommand.ReloadAdmin.CommandName);
+                WriteString("Command", "ReloadAdmin", gameCommands.ReloadAdmin.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadAdmin.CommandName = LoadString;
+                gameCommands.ReloadAdmin.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadAdmin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadAdmin", M2Share.GameCommand.ReloadAdmin.PerMissionMin);
+                WriteInteger("Permission", "ReloadAdmin", gameCommands.ReloadAdmin.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadAdmin.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadAdmin.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadNpc", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadNpc", M2Share.GameCommand.ReloadNpc.CommandName);
+                WriteString("Command", "ReloadNpc", gameCommands.ReloadNpc.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadNpc.CommandName = LoadString;
+                gameCommands.ReloadNpc.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadNpc", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadNpc", M2Share.GameCommand.ReloadNpc.PerMissionMin);
+                WriteInteger("Permission", "ReloadNpc", gameCommands.ReloadNpc.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadNpc.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadNpc.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadManage", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadManage", M2Share.GameCommand.ReloadManage.CommandName);
+                WriteString("Command", "ReloadManage", gameCommands.ReloadManage.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadManage.CommandName = LoadString;
+                gameCommands.ReloadManage.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadManage", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadManage", M2Share.GameCommand.ReloadManage.PerMissionMin);
+                WriteInteger("Permission", "ReloadManage", gameCommands.ReloadManage.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadManage.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadManage.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadRobotManage", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadRobotManage", M2Share.GameCommand.ReloadRobotManage.CommandName);
+                WriteString("Command", "ReloadRobotManage", gameCommands.ReloadRobotManage.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadRobotManage.CommandName = LoadString;
+                gameCommands.ReloadRobotManage.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadRobotManage", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadRobotManage", M2Share.GameCommand.ReloadRobotManage.PerMissionMin);
+                WriteInteger("Permission", "ReloadRobotManage", gameCommands.ReloadRobotManage.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadRobotManage.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadRobotManage.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadRobot", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadRobot", M2Share.GameCommand.ReloadRobot.CommandName);
+                WriteString("Command", "ReloadRobot", gameCommands.ReloadRobot.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadRobot.CommandName = LoadString;
+                gameCommands.ReloadRobot.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadRobot", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadRobot", M2Share.GameCommand.ReloadRobot.PerMissionMin);
+                WriteInteger("Permission", "ReloadRobot", gameCommands.ReloadRobot.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadRobot.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadRobot.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadMonitems", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadMonitems", M2Share.GameCommand.ReloadMonItems.CommandName);
+                WriteString("Command", "ReloadMonitems", gameCommands.ReloadMonItems.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadMonItems.CommandName = LoadString;
+                gameCommands.ReloadMonItems.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadMonitems", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadMonitems", M2Share.GameCommand.ReloadMonItems.PerMissionMin);
+                WriteInteger("Permission", "ReloadMonitems", gameCommands.ReloadMonItems.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadMonItems.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadMonItems.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadDiary", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadDiary", M2Share.GameCommand.Reloaddiary.CommandName);
+                WriteString("Command", "ReloadDiary", gameCommands.Reloaddiary.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Reloaddiary.CommandName = LoadString;
+                gameCommands.Reloaddiary.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadDiary", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadDiary", M2Share.GameCommand.Reloaddiary.PerMissionMin);
+                WriteInteger("Permission", "ReloadDiary", gameCommands.Reloaddiary.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reloaddiary.PerMissionMin = nLoadInteger;
+                gameCommands.Reloaddiary.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadItemDB", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadItemDB", M2Share.GameCommand.Reloaditemdb.CommandName);
+                WriteString("Command", "ReloadItemDB", gameCommands.Reloaditemdb.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Reloaditemdb.CommandName = LoadString;
+                gameCommands.Reloaditemdb.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadItemDB", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadItemDB", M2Share.GameCommand.Reloaditemdb.PerMissionMin);
+                WriteInteger("Permission", "ReloadItemDB", gameCommands.Reloaditemdb.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reloaditemdb.PerMissionMin = nLoadInteger;
+                gameCommands.Reloaditemdb.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadMagicDB", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadMagicDB", M2Share.GameCommand.ReloadMagicDb.CommandName);
+                WriteString("Command", "ReloadMagicDB", gameCommands.ReloadMagicDb.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadMagicDb.CommandName = LoadString;
+                gameCommands.ReloadMagicDb.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadMagicDB", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadMagicDB", M2Share.GameCommand.ReloadMagicDb.PerMissionMin);
+                WriteInteger("Permission", "ReloadMagicDB", gameCommands.ReloadMagicDb.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadMagicDb.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadMagicDb.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadMonsterDB", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadMonsterDB", M2Share.GameCommand.Reloadmonsterdb.CommandName);
+                WriteString("Command", "ReloadMonsterDB", gameCommands.Reloadmonsterdb.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Reloadmonsterdb.CommandName = LoadString;
+                gameCommands.Reloadmonsterdb.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadMonsterDB", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadMonsterDB", M2Share.GameCommand.Reloadmonsterdb.PerMissionMin);
+                WriteInteger("Permission", "ReloadMonsterDB", gameCommands.Reloadmonsterdb.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Reloadmonsterdb.PerMissionMin = nLoadInteger;
+                gameCommands.Reloadmonsterdb.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReAlive", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReAlive", M2Share.GameCommand.ReaLive.CommandName);
+                WriteString("Command", "ReAlive", gameCommands.ReaLive.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReaLive.CommandName = LoadString;
+                gameCommands.ReaLive.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReAlive", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReAlive", M2Share.GameCommand.ReaLive.PerMissionMin);
+                WriteInteger("Permission", "ReAlive", gameCommands.ReaLive.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReaLive.PerMissionMin = nLoadInteger;
+                gameCommands.ReaLive.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AdjuestTLevel", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AdjuestTLevel", M2Share.GameCommand.AdjuestLevel.CommandName);
+                WriteString("Command", "AdjuestTLevel", gameCommands.AdjuestLevel.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AdjuestLevel.CommandName = LoadString;
+                gameCommands.AdjuestLevel.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AdjuestTLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AdjuestTLevel", M2Share.GameCommand.AdjuestLevel.PerMissionMin);
+                WriteInteger("Permission", "AdjuestTLevel", gameCommands.AdjuestLevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AdjuestLevel.PerMissionMin = nLoadInteger;
+                gameCommands.AdjuestLevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AdjuestExp", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AdjuestExp", M2Share.GameCommand.AdjuestExp.CommandName);
+                WriteString("Command", "AdjuestExp", gameCommands.AdjuestExp.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AdjuestExp.CommandName = LoadString;
+                gameCommands.AdjuestExp.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AdjuestExp", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AdjuestExp", M2Share.GameCommand.AdjuestExp.PerMissionMin);
+                WriteInteger("Permission", "AdjuestExp", gameCommands.AdjuestExp.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AdjuestExp.PerMissionMin = nLoadInteger;
+                gameCommands.AdjuestExp.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddGuild", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AddGuild", M2Share.GameCommand.AddGuild.CommandName);
+                WriteString("Command", "AddGuild", gameCommands.AddGuild.CommandName);
             }
             else
             {
-                M2Share.GameCommand.AddGuild.CommandName = LoadString;
+                gameCommands.AddGuild.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AddGuild", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddGuild", M2Share.GameCommand.AddGuild.PerMissionMin);
+                WriteInteger("Permission", "AddGuild", gameCommands.AddGuild.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.AddGuild.PerMissionMin = nLoadInteger;
+                gameCommands.AddGuild.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelGuild", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelGuild", M2Share.GameCommand.DelGuild.CommandName);
+                WriteString("Command", "DelGuild", gameCommands.DelGuild.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelGuild.CommandName = LoadString;
+                gameCommands.DelGuild.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelGuild", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelGuild", M2Share.GameCommand.DelGuild.PerMissionMin);
+                WriteInteger("Permission", "DelGuild", gameCommands.DelGuild.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelGuild.PerMissionMin = nLoadInteger;
+                gameCommands.DelGuild.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeSabukLord", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeSabukLord", M2Share.GameCommand.ChangeSabukLord.CommandName);
+                WriteString("Command", "ChangeSabukLord", gameCommands.ChangeSabukLord.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChangeSabukLord.CommandName = LoadString;
+                gameCommands.ChangeSabukLord.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeSabukLord", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeSabukLord", M2Share.GameCommand.ChangeSabukLord.PerMissionMin);
+                WriteInteger("Permission", "ChangeSabukLord", gameCommands.ChangeSabukLord.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeSabukLord.PerMissionMin = nLoadInteger;
+                gameCommands.ChangeSabukLord.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ForcedWallConQuestWar", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ForcedWallConQuestWar", M2Share.GameCommand.ForcedWallConQuestWar.CommandName);
+                WriteString("Command", "ForcedWallConQuestWar", gameCommands.ForcedWallConQuestWar.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ForcedWallConQuestWar.CommandName = LoadString;
+                gameCommands.ForcedWallConQuestWar.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ForcedWallConQuestWar", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ForcedWallConQuestWar", M2Share.GameCommand.ForcedWallConQuestWar.PerMissionMin);
+                WriteInteger("Permission", "ForcedWallConQuestWar", gameCommands.ForcedWallConQuestWar.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ForcedWallConQuestWar.PerMissionMin = nLoadInteger;
+                gameCommands.ForcedWallConQuestWar.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddToItemEvent", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AddToItemEvent", M2Share.GameCommand.Addtoitemevent.CommandName);
+                WriteString("Command", "AddToItemEvent", gameCommands.Addtoitemevent.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Addtoitemevent.CommandName = LoadString;
+                gameCommands.Addtoitemevent.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AddToItemEvent", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddToItemEvent", M2Share.GameCommand.Addtoitemevent.PerMissionMin);
+                WriteInteger("Permission", "AddToItemEvent", gameCommands.Addtoitemevent.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Addtoitemevent.PerMissionMin = nLoadInteger;
+                gameCommands.Addtoitemevent.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AddToItemEventAspieces", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AddToItemEventAspieces", M2Share.GameCommand.Addtoitemeventaspieces.CommandName);
+                WriteString("Command", "AddToItemEventAspieces", gameCommands.Addtoitemeventaspieces.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Addtoitemeventaspieces.CommandName = LoadString;
+                gameCommands.Addtoitemeventaspieces.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AddToItemEventAspieces", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AddToItemEventAspieces", M2Share.GameCommand.Addtoitemeventaspieces.PerMissionMin);
+                WriteInteger("Permission", "AddToItemEventAspieces", gameCommands.Addtoitemeventaspieces.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Addtoitemeventaspieces.PerMissionMin = nLoadInteger;
+                gameCommands.Addtoitemeventaspieces.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ItemEventList", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ItemEventList", M2Share.GameCommand.Itemeventlist.CommandName);
+                WriteString("Command", "ItemEventList", gameCommands.Itemeventlist.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Itemeventlist.CommandName = LoadString;
+                gameCommands.Itemeventlist.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ItemEventList", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ItemEventList", M2Share.GameCommand.Itemeventlist.PerMissionMin);
+                WriteInteger("Permission", "ItemEventList", gameCommands.Itemeventlist.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Itemeventlist.PerMissionMin = nLoadInteger;
+                gameCommands.Itemeventlist.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartIngGiftNO", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StartIngGiftNO", M2Share.GameCommand.Startinggiftno.CommandName);
+                WriteString("Command", "StartIngGiftNO", gameCommands.Startinggiftno.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Startinggiftno.CommandName = LoadString;
+                gameCommands.Startinggiftno.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "StartIngGiftNO", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartIngGiftNO", M2Share.GameCommand.Startinggiftno.PerMissionMin);
+                WriteInteger("Permission", "StartIngGiftNO", gameCommands.Startinggiftno.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Startinggiftno.PerMissionMin = nLoadInteger;
+                gameCommands.Startinggiftno.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DeleteAllItemEvent", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DeleteAllItemEvent", M2Share.GameCommand.Deleteallitemevent.CommandName);
+                WriteString("Command", "DeleteAllItemEvent", gameCommands.Deleteallitemevent.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Deleteallitemevent.CommandName = LoadString;
+                gameCommands.Deleteallitemevent.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DeleteAllItemEvent", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DeleteAllItemEvent", M2Share.GameCommand.Deleteallitemevent.PerMissionMin);
+                WriteInteger("Permission", "DeleteAllItemEvent", gameCommands.Deleteallitemevent.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Deleteallitemevent.PerMissionMin = nLoadInteger;
+                gameCommands.Deleteallitemevent.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartItemEvent", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StartItemEvent", M2Share.GameCommand.Startitemevent.CommandName);
+                WriteString("Command", "StartItemEvent", gameCommands.Startitemevent.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Startitemevent.CommandName = LoadString;
+                gameCommands.Startitemevent.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "StartItemEvent", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartItemEvent", M2Share.GameCommand.Startitemevent.PerMissionMin);
+                WriteInteger("Permission", "StartItemEvent", gameCommands.Startitemevent.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Startitemevent.PerMissionMin = nLoadInteger;
+                gameCommands.Startitemevent.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ItemEventTerm", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ItemEventTerm", M2Share.GameCommand.Itemeventterm.CommandName);
+                WriteString("Command", "ItemEventTerm", gameCommands.Itemeventterm.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Itemeventterm.CommandName = LoadString;
+                gameCommands.Itemeventterm.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ItemEventTerm", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ItemEventTerm", M2Share.GameCommand.Itemeventterm.PerMissionMin);
+                WriteInteger("Permission", "ItemEventTerm", gameCommands.Itemeventterm.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Itemeventterm.PerMissionMin = nLoadInteger;
+                gameCommands.Itemeventterm.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "AdjuestTestLevel", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "AdjuestTestLevel", M2Share.GameCommand.Adjuesttestlevel.CommandName);
+                WriteString("Command", "AdjuestTestLevel", gameCommands.Adjuesttestlevel.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Adjuesttestlevel.CommandName = LoadString;
+                gameCommands.Adjuesttestlevel.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "AdjuestTestLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "AdjuestTestLevel", M2Share.GameCommand.Adjuesttestlevel.PerMissionMin);
+                WriteInteger("Permission", "AdjuestTestLevel", gameCommands.Adjuesttestlevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Adjuesttestlevel.PerMissionMin = nLoadInteger;
+                gameCommands.Adjuesttestlevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "OpTraining", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "OpTraining", M2Share.GameCommand.TrainingSkill.CommandName);
+                WriteString("Command", "OpTraining", gameCommands.TrainingSkill.CommandName);
             }
             else
             {
-                M2Share.GameCommand.TrainingSkill.CommandName = LoadString;
+                gameCommands.TrainingSkill.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "OpTraining", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "OpTraining", M2Share.GameCommand.TrainingSkill.PerMissionMin);
+                WriteInteger("Permission", "OpTraining", gameCommands.TrainingSkill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.TrainingSkill.PerMissionMin = nLoadInteger;
+                gameCommands.TrainingSkill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "OpDeleteSkill", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "OpDeleteSkill", M2Share.GameCommand.Opdeleteskill.CommandName);
+                WriteString("Command", "OpDeleteSkill", gameCommands.Opdeleteskill.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Opdeleteskill.CommandName = LoadString;
+                gameCommands.Opdeleteskill.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "OpDeleteSkill", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "OpDeleteSkill", M2Share.GameCommand.Opdeleteskill.PerMissionMin);
+                WriteInteger("Permission", "OpDeleteSkill", gameCommands.Opdeleteskill.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Opdeleteskill.PerMissionMin = nLoadInteger;
+                gameCommands.Opdeleteskill.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeWeaponDura", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeWeaponDura", M2Share.GameCommand.Changeweapondura.CommandName);
+                WriteString("Command", "ChangeWeaponDura", gameCommands.Changeweapondura.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Changeweapondura.CommandName = LoadString;
+                gameCommands.Changeweapondura.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeWeaponDura", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeWeaponDura", M2Share.GameCommand.Changeweapondura.PerMissionMin);
+                WriteInteger("Permission", "ChangeWeaponDura", gameCommands.Changeweapondura.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Changeweapondura.PerMissionMin = nLoadInteger;
+                gameCommands.Changeweapondura.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReloadGuildAll", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReloadGuildAll", M2Share.GameCommand.ReloadGuildAll.CommandName);
+                WriteString("Command", "ReloadGuildAll", gameCommands.ReloadGuildAll.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ReloadGuildAll.CommandName = LoadString;
+                gameCommands.ReloadGuildAll.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReloadGuildAll", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReloadGuildAll", M2Share.GameCommand.ReloadGuildAll.PerMissionMin);
+                WriteInteger("Permission", "ReloadGuildAll", gameCommands.ReloadGuildAll.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ReloadGuildAll.PerMissionMin = nLoadInteger;
+                gameCommands.ReloadGuildAll.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Who", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Who", M2Share.GameCommand.Who.CommandName);
+                WriteString("Command", "Who", gameCommands.Who.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Who.CommandName = LoadString;
+                gameCommands.Who.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Who", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Who", M2Share.GameCommand.Who.PerMissionMin);
+                WriteInteger("Permission", "Who", gameCommands.Who.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Who.PerMissionMin = nLoadInteger;
+                gameCommands.Who.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "Total", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "Total", M2Share.GameCommand.Total.CommandName);
+                WriteString("Command", "Total", gameCommands.Total.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Total.CommandName = LoadString;
+                gameCommands.Total.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "Total", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "Total", M2Share.GameCommand.Total.PerMissionMin);
+                WriteInteger("Permission", "Total", gameCommands.Total.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Total.PerMissionMin = nLoadInteger;
+                gameCommands.Total.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "TestGa", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "TestGa", M2Share.GameCommand.Testga.CommandName);
+                WriteString("Command", "TestGa", gameCommands.Testga.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Testga.CommandName = LoadString;
+                gameCommands.Testga.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "TestGa", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "TestGa", M2Share.GameCommand.Testga.PerMissionMin);
+                WriteInteger("Permission", "TestGa", gameCommands.Testga.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Testga.PerMissionMin = nLoadInteger;
+                gameCommands.Testga.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "MapInfo", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "MapInfo", M2Share.GameCommand.MapInfo.CommandName);
+                WriteString("Command", "MapInfo", gameCommands.MapInfo.CommandName);
             }
             else
             {
-                M2Share.GameCommand.MapInfo.CommandName = LoadString;
+                gameCommands.MapInfo.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "MapInfo", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "MapInfo", M2Share.GameCommand.MapInfo.PerMissionMin);
+                WriteInteger("Permission", "MapInfo", gameCommands.MapInfo.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.MapInfo.PerMissionMin = nLoadInteger;
+                gameCommands.MapInfo.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SbkDoor", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SbkDoor", M2Share.GameCommand.SbkDoor.CommandName);
+                WriteString("Command", "SbkDoor", gameCommands.SbkDoor.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SbkDoor.CommandName = LoadString;
+                gameCommands.SbkDoor.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SbkDoor", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SbkDoor", M2Share.GameCommand.SbkDoor.PerMissionMin);
+                WriteInteger("Permission", "SbkDoor", gameCommands.SbkDoor.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SbkDoor.PerMissionMin = nLoadInteger;
+                gameCommands.SbkDoor.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeDearName", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeDearName", M2Share.GameCommand.ChangeDearName.CommandName);
+                WriteString("Command", "ChangeDearName", gameCommands.ChangeDearName.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChangeDearName.CommandName = LoadString;
+                gameCommands.ChangeDearName.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeDearName", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeDearName", M2Share.GameCommand.ChangeDearName.PerMissionMin);
+                WriteInteger("Permission", "ChangeDearName", gameCommands.ChangeDearName.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeDearName.PerMissionMin = nLoadInteger;
+                gameCommands.ChangeDearName.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ChangeMasterName", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ChangeMasterrName", M2Share.GameCommand.ChangeMasterName.CommandName);
+                WriteString("Command", "ChangeMasterrName", gameCommands.ChangeMasterName.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ChangeMasterName.CommandName = LoadString;
+                gameCommands.ChangeMasterName.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ChangeMasterName", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ChangeMasterName", M2Share.GameCommand.ChangeMasterName.PerMissionMin);
+                WriteInteger("Permission", "ChangeMasterName", gameCommands.ChangeMasterName.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ChangeMasterName.PerMissionMin = nLoadInteger;
+                gameCommands.ChangeMasterName.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "StartQuest", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "StartQuest", M2Share.GameCommand.StartQuest.CommandName);
+                WriteString("Command", "StartQuest", gameCommands.StartQuest.CommandName);
             }
             else
             {
-                M2Share.GameCommand.StartQuest.CommandName = LoadString;
+                gameCommands.StartQuest.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "StartQuest", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "StartQuest", M2Share.GameCommand.StartQuest.PerMissionMin);
+                WriteInteger("Permission", "StartQuest", gameCommands.StartQuest.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.StartQuest.PerMissionMin = nLoadInteger;
+                gameCommands.StartQuest.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetPermission", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SetPermission", M2Share.GameCommand.SetperMission.CommandName);
+                WriteString("Command", "SetPermission", gameCommands.SetperMission.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SetperMission.CommandName = LoadString;
+                gameCommands.SetperMission.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SetPermission", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetPermission", M2Share.GameCommand.SetperMission.PerMissionMin);
+                WriteInteger("Permission", "SetPermission", gameCommands.SetperMission.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetperMission.PerMissionMin = nLoadInteger;
+                gameCommands.SetperMission.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ClearMon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ClearMon", M2Share.GameCommand.ClearMon.CommandName);
+                WriteString("Command", "ClearMon", gameCommands.ClearMon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ClearMon.CommandName = LoadString;
+                gameCommands.ClearMon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ClearMon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ClearMon", M2Share.GameCommand.ClearMon.PerMissionMin);
+                WriteInteger("Permission", "ClearMon", gameCommands.ClearMon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClearMon.PerMissionMin = nLoadInteger;
+                gameCommands.ClearMon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ReNewLevel", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ReNewLevel", M2Share.GameCommand.RenewLevel.CommandName);
+                WriteString("Command", "ReNewLevel", gameCommands.RenewLevel.CommandName);
             }
             else
             {
-                M2Share.GameCommand.RenewLevel.CommandName = LoadString;
+                gameCommands.RenewLevel.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ReNewLevel", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ReNewLevel", M2Share.GameCommand.RenewLevel.PerMissionMin);
+                WriteInteger("Permission", "ReNewLevel", gameCommands.RenewLevel.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.RenewLevel.PerMissionMin = nLoadInteger;
+                gameCommands.RenewLevel.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DenyIPaddrLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DenyIPaddrLogon", M2Share.GameCommand.DenyipLogon.CommandName);
+                WriteString("Command", "DenyIPaddrLogon", gameCommands.DenyipLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DenyipLogon.CommandName = LoadString;
+                gameCommands.DenyipLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DenyIPaddrLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DenyIPaddrLogon", M2Share.GameCommand.DenyipLogon.PerMissionMin);
+                WriteInteger("Permission", "DenyIPaddrLogon", gameCommands.DenyipLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DenyipLogon.PerMissionMin = nLoadInteger;
+                gameCommands.DenyipLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DenyAccountLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DenyAccountLogon", M2Share.GameCommand.DenyAccountLogon.CommandName);
+                WriteString("Command", "DenyAccountLogon", gameCommands.DenyAccountLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DenyAccountLogon.CommandName = LoadString;
+                gameCommands.DenyAccountLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DenyAccountLogon", M2Share.GameCommand.DenyAccountLogon.PerMissionMin);
+                WriteInteger("Permission", "DenyAccountLogon", gameCommands.DenyAccountLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DenyAccountLogon.PerMissionMin = nLoadInteger;
+                gameCommands.DenyAccountLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DenyChrNameLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DenyChrNameLogon", M2Share.GameCommand.DenyChrNameLogon.CommandName);
+                WriteString("Command", "DenyChrNameLogon", gameCommands.DenyChrNameLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DenyChrNameLogon.CommandName = LoadString;
+                gameCommands.DenyChrNameLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DenyChrNameLogon", M2Share.GameCommand.DenyChrNameLogon.PerMissionMin);
+                WriteInteger("Permission", "DenyChrNameLogon", gameCommands.DenyChrNameLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DenyChrNameLogon.PerMissionMin = nLoadInteger;
+                gameCommands.DenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelDenyIPLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelDenyIPLogon", M2Share.GameCommand.DelDenyIpLogon.CommandName);
+                WriteString("Command", "DelDenyIPLogon", gameCommands.DelDenyIpLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelDenyIpLogon.CommandName = LoadString;
+                gameCommands.DelDenyIpLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelDenyIPLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelDenyIPLogon", M2Share.GameCommand.DelDenyIpLogon.PerMissionMin);
+                WriteInteger("Permission", "DelDenyIPLogon", gameCommands.DelDenyIpLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelDenyIpLogon.PerMissionMin = nLoadInteger;
+                gameCommands.DelDenyIpLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelDenyAccountLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelDenyAccountLogon", M2Share.GameCommand.DelDenyAccountLogon.CommandName);
+                WriteString("Command", "DelDenyAccountLogon", gameCommands.DelDenyAccountLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelDenyAccountLogon.CommandName = LoadString;
+                gameCommands.DelDenyAccountLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelDenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelDenyAccountLogon", M2Share.GameCommand.DelDenyAccountLogon.PerMissionMin);
+                WriteInteger("Permission", "DelDenyAccountLogon", gameCommands.DelDenyAccountLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelDenyAccountLogon.PerMissionMin = nLoadInteger;
+                gameCommands.DelDenyAccountLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "DelDenyChrNameLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "DelDenyChrNameLogon", M2Share.GameCommand.DelDenyChrNameLogon.CommandName);
+                WriteString("Command", "DelDenyChrNameLogon", gameCommands.DelDenyChrNameLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.DelDenyChrNameLogon.CommandName = LoadString;
+                gameCommands.DelDenyChrNameLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "DelDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "DelDenyChrNameLogon", M2Share.GameCommand.DelDenyChrNameLogon.PerMissionMin);
+                WriteInteger("Permission", "DelDenyChrNameLogon", gameCommands.DelDenyChrNameLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.DelDenyChrNameLogon.PerMissionMin = nLoadInteger;
+                gameCommands.DelDenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowDenyIPLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ShowDenyIPLogon", M2Share.GameCommand.ShowDenyIpLogon.CommandName);
+                WriteString("Command", "ShowDenyIPLogon", gameCommands.ShowDenyIpLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyIpLogon.CommandName = LoadString;
+                gameCommands.ShowDenyIpLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ShowDenyIPLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowDenyIPLogon", M2Share.GameCommand.ShowDenyIpLogon.PerMissionMin);
+                WriteInteger("Permission", "ShowDenyIPLogon", gameCommands.ShowDenyIpLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyIpLogon.PerMissionMin = nLoadInteger;
+                gameCommands.ShowDenyIpLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowDenyAccountLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ShowDenyAccountLogon", M2Share.GameCommand.ShowDenyAccountLogon.CommandName);
+                WriteString("Command", "ShowDenyAccountLogon", gameCommands.ShowDenyAccountLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyAccountLogon.CommandName = LoadString;
+                gameCommands.ShowDenyAccountLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ShowDenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowDenyAccountLogon", M2Share.GameCommand.ShowDenyAccountLogon.PerMissionMin);
+                WriteInteger("Permission", "ShowDenyAccountLogon", gameCommands.ShowDenyAccountLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyAccountLogon.PerMissionMin = nLoadInteger;
+                gameCommands.ShowDenyAccountLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShowDenyChrNameLogon", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ShowDenyChrNameLogon", M2Share.GameCommand.ShowDenyChrNameLogon.CommandName);
+                WriteString("Command", "ShowDenyChrNameLogon", gameCommands.ShowDenyChrNameLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyChrNameLogon.CommandName = LoadString;
+                gameCommands.ShowDenyChrNameLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ShowDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShowDenyChrNameLogon", M2Share.GameCommand.ShowDenyChrNameLogon.PerMissionMin);
+                WriteInteger("Permission", "ShowDenyChrNameLogon", gameCommands.ShowDenyChrNameLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowDenyChrNameLogon.PerMissionMin = nLoadInteger;
+                gameCommands.ShowDenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ViewWhisper", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ViewWhisper", M2Share.GameCommand.ViewWhisper.CommandName);
+                WriteString("Command", "ViewWhisper", gameCommands.ViewWhisper.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ViewWhisper.CommandName = LoadString;
+                gameCommands.ViewWhisper.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ViewWhisper", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ViewWhisper", M2Share.GameCommand.ViewWhisper.PerMissionMin);
+                WriteInteger("Permission", "ViewWhisper", gameCommands.ViewWhisper.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ViewWhisper.PerMissionMin = nLoadInteger;
+                gameCommands.ViewWhisper.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SpiritStart", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SpiritStart", M2Share.GameCommand.Spirit.CommandName);
+                WriteString("Command", "SpiritStart", gameCommands.Spirit.CommandName);
             }
             else
             {
-                M2Share.GameCommand.Spirit.CommandName = LoadString;
+                gameCommands.Spirit.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SpiritStart", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SpiritStart", M2Share.GameCommand.Spirit.PerMissionMin);
+                WriteInteger("Permission", "SpiritStart", gameCommands.Spirit.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.Spirit.PerMissionMin = nLoadInteger;
+                gameCommands.Spirit.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SpiritStop", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SpiritStop", M2Share.GameCommand.SpiritStop.CommandName);
+                WriteString("Command", "SpiritStop", gameCommands.SpiritStop.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SpiritStop.CommandName = LoadString;
+                gameCommands.SpiritStop.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SpiritStop", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SpiritStop", M2Share.GameCommand.SpiritStop.PerMissionMin);
+                WriteInteger("Permission", "SpiritStop", gameCommands.SpiritStop.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SpiritStop.PerMissionMin = nLoadInteger;
+                gameCommands.SpiritStop.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "SetMapMode", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "SetMapMode", M2Share.GameCommand.SetMapMode.CommandName);
+                WriteString("Command", "SetMapMode", gameCommands.SetMapMode.CommandName);
             }
             else
             {
-                M2Share.GameCommand.SetMapMode.CommandName = LoadString;
+                gameCommands.SetMapMode.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "SetMapMode", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "SetMapMode", M2Share.GameCommand.SetMapMode.PerMissionMin);
+                WriteInteger("Permission", "SetMapMode", gameCommands.SetMapMode.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.SetMapMode.PerMissionMin = nLoadInteger;
+                gameCommands.SetMapMode.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ShoweMapMode", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ShoweMapMode", M2Share.GameCommand.ShowMapMode.CommandName);
+                WriteString("Command", "ShoweMapMode", gameCommands.ShowMapMode.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ShowMapMode.CommandName = LoadString;
+                gameCommands.ShowMapMode.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ShoweMapMode", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ShoweMapMode", M2Share.GameCommand.ShowMapMode.PerMissionMin);
+                WriteInteger("Permission", "ShoweMapMode", gameCommands.ShowMapMode.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ShowMapMode.PerMissionMin = nLoadInteger;
+                gameCommands.ShowMapMode.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "ClearBag", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "ClearBag", M2Share.GameCommand.ClearBag.CommandName);
+                WriteString("Command", "ClearBag", gameCommands.ClearBag.CommandName);
             }
             else
             {
-                M2Share.GameCommand.ClearBag.CommandName = LoadString;
+                gameCommands.ClearBag.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "ClearBag", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "ClearBag", M2Share.GameCommand.ClearBag.PerMissionMin);
+                WriteInteger("Permission", "ClearBag", gameCommands.ClearBag.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.ClearBag.PerMissionMin = nLoadInteger;
+                gameCommands.ClearBag.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "LockLogin", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "LockLogin", M2Share.GameCommand.LockLogon.CommandName);
+                WriteString("Command", "LockLogin", gameCommands.LockLogon.CommandName);
             }
             else
             {
-                M2Share.GameCommand.LockLogon.CommandName = LoadString;
+                gameCommands.LockLogon.CommandName = LoadString;
             }
             nLoadInteger = ReadInteger("Permission", "LockLogin", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "LockLogin", M2Share.GameCommand.LockLogon.PerMissionMin);
+                WriteInteger("Permission", "LockLogin", gameCommands.LockLogon.PerMissionMin);
             }
             else
             {
-                M2Share.GameCommand.LockLogon.PerMissionMin = nLoadInteger;
+                gameCommands.LockLogon.PerMissionMin = nLoadInteger;
             }
             LoadString = ReadString("Command", "GMRedMsgCmd", "");
-            if (LoadString == "")
+            if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "GMRedMsgCmd", M2Share.g_GMRedMsgCmd);
             }

@@ -1,4 +1,4 @@
-﻿using GameSvr.Command;
+﻿using GameSvr.GameCommand;
 using System.Globalization;
 using SystemModule;
 using SystemModule.Data;

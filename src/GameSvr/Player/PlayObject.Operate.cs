@@ -1,4 +1,5 @@
 using GameSvr.Actor;
+using GameSvr.GameCommand;
 using GameSvr.Items;
 using GameSvr.Magic;
 using GameSvr.Npc;
@@ -1353,7 +1354,7 @@ namespace GameSvr.Player
                         else
                         {
                             nC = 5; // '对方不允许加入行会。'
-                            playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + M2Share.GameCommand.Letguild.CommandName + ']', MsgColor.Red, MsgType.Hint);
+                            playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + CommandMgr.Commands.Letguild.CommandName + ']', MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
@@ -1685,7 +1686,7 @@ namespace GameSvr.Player
             }
             if (!m_boCanGetBackItem)
             {
-                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + M2Share.GameCommand.UnlockStorage.CommandName + '\\' + "仓库加锁命令: @" + M2Share.GameCommand.Lock.CommandName + '\\' + "设置密码命令: @" + M2Share.GameCommand.SetPassword.CommandName + '\\' + "修改密码命令: @" + M2Share.GameCommand.ChgPassword.CommandName);
+                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.Commands.UnlockStorage.CommandName + '\\' + "仓库加锁命令: @" + CommandMgr.Commands.Lock.CommandName + '\\' + "设置密码命令: @" + CommandMgr.Commands.SetPassword.CommandName + '\\' + "修改密码命令: @" + CommandMgr.Commands.ChgPassword.CommandName);
                 return;
             }
             for (var i = 0; i < StorageItemList.Count; i++)

@@ -1,4 +1,4 @@
-﻿namespace GameSvr.Command
+﻿namespace GameSvr.GameCommand
 {
     /// <summary>
     /// 命令定义

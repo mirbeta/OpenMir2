@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 调整自己的等级

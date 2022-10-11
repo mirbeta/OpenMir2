@@ -2,7 +2,7 @@
 using System.Reflection;
 using SystemModule.Data;
 
-namespace GameSvr.Command
+namespace GameSvr.GameCommand
 {
     public class Command
     {

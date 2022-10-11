@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("DenyAccountLogon", "", "登录帐号 是否永久封(0,1)", 10)]
     public class DenyAccountLogonCommand : Command

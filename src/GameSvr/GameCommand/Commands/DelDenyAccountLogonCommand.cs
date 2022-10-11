@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("DelDenyAccountLogon", "", "登录帐号", 10)]
     public class DelDenyAccountLogonCommand : Command

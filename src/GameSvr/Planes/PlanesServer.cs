@@ -3,7 +3,7 @@ using SystemModule;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
-namespace GameSvr.Snaps
+namespace GameSvr.Planes
 {
     /// <summary>
     /// 位面服务器

@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 设置密码
@@ -235,7 +235,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                playObject.SysMsg('@' + M2Share.GameCommand.SetFlag.CommandName + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg('@' + this.GameCommand.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
             return;
         }
@@ -271,7 +271,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                playObject.SysMsg('@' + M2Share.GameCommand.SetOpen.CommandName + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg('@' + this.GameCommand.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
             return;
         }
@@ -307,7 +307,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                playObject.SysMsg('@' + M2Share.GameCommand.SetUnit.CommandName + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg('@' + this.GameCommand.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
             return;
         }

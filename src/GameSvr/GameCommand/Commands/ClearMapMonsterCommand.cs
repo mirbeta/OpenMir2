@@ -1,10 +1,9 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Maps;
 using GameSvr.Player;
-using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 清楚指定地图怪物

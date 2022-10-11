@@ -3,7 +3,7 @@ using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 在当前XY坐标创建NPC

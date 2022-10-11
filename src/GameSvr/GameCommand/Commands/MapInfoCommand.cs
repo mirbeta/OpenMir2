@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("MapInfo", "显示当前地图信息", 10)]
     public class MapInfoCommand : Command
@@ -40,7 +40,7 @@ namespace GameSvr.Command.Commands
             }
             else
             {
-                playObject.SysMsg("请按正确格式输入: " + M2Share.GameCommand.MapInfo.CommandName + " 地图号 X Y", MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg("请按正确格式输入: " + this.GameCommand.Name + " 地图号 X Y", MsgColor.Green, MsgType.Hint);
             }
         }
     }
