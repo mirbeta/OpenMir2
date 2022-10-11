@@ -395,7 +395,7 @@ namespace GameSvr.RobotPlay
 
         protected override void ProcessSayMsg(string sData)
         {
-            const string sExceptionMsg = "TAIPlayObject.ProcessSayMsg Msg:%s";
+            const string sExceptionMsg = "RobotPlayObject.ProcessSayMsg Msg:%s";
             if (string.IsNullOrEmpty(sData))
             {
                 return;
@@ -843,7 +843,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.Error(" TAIPlayObject.SearchPickUpItem");
+                M2Share.Log.Error("RobotPlayObject.SearchPickUpItem");
             }
             return result;
         }
@@ -2073,7 +2073,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.Error(Format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.MagIdx, nTargetX, nTargetY }));
+                M2Share.Log.Error(Format("RobotPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.MagIdx, nTargetX, nTargetY }));
             }
             return result;
         }
@@ -2131,7 +2131,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.Error("TAIPlayObject.Thinking");
+                M2Share.Log.Error("RobotPlayObject.Thinking");
             }
             return result;
         }
@@ -4300,7 +4300,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.Error("TAIPlayObject.CheckHeroAmulet");
+                M2Share.Log.Error("RobotPlayObject.CheckHeroAmulet");
             }
             return result;
         }

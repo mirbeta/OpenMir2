@@ -473,7 +473,7 @@ namespace GameSvr.RobotPlay
             BaseObject baseObject;
             EventInfo MapEvent;
             VisibleFlag nVisibleFlag;
-            const string sExceptionMsg = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
+            const string sExceptionMsg = "RobotPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             if (Ghost)
             {
                 return;
