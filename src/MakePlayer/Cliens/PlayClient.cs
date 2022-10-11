@@ -178,23 +178,24 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{m_sLoginAccount}] 创建帐号");
             m_ConnectionStep = TConnectionStep.cnsNewAccount;
-            var ue = new UserFullEntry();
-            ue.UserEntry.sAccount = sAccount;
-            ue.UserEntry.sPassword = sPassword;
-            ue.UserEntry.sUserName = sAccount;
-            ue.UserEntry.sSSNo = "650101-1455111";
-            ue.UserEntry.sQuiz = sAccount;
-            ue.UserEntry.sAnswer = sAccount;
-            ue.UserEntry.sPhone = "";
-            ue.UserEntry.sEMail = "";
-            ue.UserEntryAdd.sQuiz2 = sAccount;
-            ue.UserEntryAdd.sAnswer2 = sAccount;
-            ue.UserEntryAdd.sBirthDay = "1978/01/01";
-            ue.UserEntryAdd.sMobilePhone = "";
-            ue.UserEntryAdd.sMemo = "";
-            ue.UserEntryAdd.sMemo2 = "";
+            var ue = new UserEntry();
+            ue.sAccount = sAccount;
+            ue.sPassword = sPassword;
+            ue.sUserName = sAccount;
+            ue.sSSNo = "650101-1455111";
+            ue.sQuiz = sAccount;
+            ue.sAnswer = sAccount;
+            ue.sPhone = "";
+            ue.sEMail = "";
+            var ua = new UserEntryAdd();
+            ua.sQuiz2 = sAccount;
+            ua.sAnswer2 = sAccount;
+            ua.sBirthDay = "1978/01/01";
+            ua.sMobilePhone = "";
+            ua.sMemo = "";
+            ua.sMemo2 = "";
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue));
+            SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
 
         private void SelectChrCreateNewChr(string sChrName)
