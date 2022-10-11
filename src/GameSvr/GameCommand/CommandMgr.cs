@@ -42,15 +42,15 @@ namespace GameSvr.GameCommand
         /// </summary>
         private Dictionary<string, string> RegisterCustomCommand()
         {
-            var CustomCommandList = new List<GameCmd>();
-            foreach (var item in Commands.GetType().GetFields())
+            var customCommandList = new List<GameCmd>();
+            foreach (var command in Commands.GetType().GetFields())
             {
-                CustomCommandList.Add((GameCmd)item.GetValue(Commands));
+                customCommandList.Add((GameCmd)command.GetValue(Commands));
             }
-            var CustomCommandMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            if (CustomCommandList.Count <= 0)
+            var customCommandMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (customCommandList.Count <= 0)
             {
-                return CustomCommandMap;
+                return customCommandMap;
             }
             var cmdIndex = -1;
             foreach (var command in Commands.GetType().GetFields())
@@ -58,31 +58,35 @@ namespace GameSvr.GameCommand
                 cmdIndex++;
                 var attributes = (CustomCommandAttribute)command.GetCustomAttribute(typeof(CustomCommandAttribute), true);
                 if (attributes == null) continue;
-                if (cmdIndex > CustomCommandList.Count)
+                if (cmdIndex > customCommandList.Count)
                 {
                     break;
                 }
-                var customCmd = CustomCommandList[cmdIndex];
+                var customCmd = customCommandList[cmdIndex];
                 if (customCmd == null || string.IsNullOrEmpty(customCmd.CommandName))
                 {
                     continue;
                 }
                 var commandInfo = (CommandAttribute)attributes.CommandType.GetCustomAttribute(typeof(CommandAttribute), true);
-                if (CustomCommandMap.ContainsKey(commandInfo.Name))
+                if (commandInfo == null)
+                {
+                    continue;
+                }
+                if (customCommandMap.ContainsKey(commandInfo.Name))
                 {
                     M2Share.Log.Error($"重复定义游戏命令[{commandInfo.Name}]");
                     continue;
                 }
-                CustomCommandMap.Add(commandInfo.Name, customCmd.CommandName);
+                customCommandMap.Add(commandInfo.Name, customCmd.CommandName);
             }
-            CustomCommandList.Clear();
-            return CustomCommandMap;
+            customCommandList.Clear();
+            return customCommandMap;
         }
 
         /// <summary>
         /// 注册游戏命令
         /// </summary>
-        private void RegisterCommandGroups(IReadOnlyDictionary<string, string> CustomCommands)
+        private void RegisterCommandGroups(IReadOnlyDictionary<string, string> customCommands)
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
@@ -97,7 +101,7 @@ namespace GameSvr.GameCommand
                     M2Share.Log.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
 
-                if (CustomCommands.TryGetValue(groupAttribute.Name, out string cmdName))
+                if (customCommands.TryGetValue(groupAttribute.Name, out string cmdName))
                 {
                     groupAttribute.Command = groupAttribute.Command;
                     groupAttribute.Name = cmdName;
