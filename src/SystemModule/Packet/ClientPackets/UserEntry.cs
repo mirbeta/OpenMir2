@@ -47,7 +47,6 @@ namespace SystemModule.Packet.ClientPackets
             UserEntry.sQuiz = reader.ReadPascalString(20);
             UserEntry.sAnswer = reader.ReadPascalString(12);
             UserEntry.sEMail = reader.ReadPascalString(40);
-
             UserEntryAdd = new UserEntryAdd();
             UserEntryAdd.sQuiz2 = reader.ReadPascalString(20);
             UserEntryAdd.sAnswer2 = reader.ReadPascalString(12);

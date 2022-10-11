@@ -2,6 +2,7 @@ using LoginSvr.Conf;
 using LoginSvr.DB;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -425,13 +426,18 @@ namespace LoginSvr.Services
             UserFullEntry userFullEntry = null;
             try
             {
-                if (string.IsNullOrEmpty(sData))
+                if (string.IsNullOrEmpty(sData) || sData.Length < 333)
                 {
-                    _logger.Information("[新建账号失败] 数据包为空.");
+                    _logger.Information("[新建账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
-                var deBuffer = EDCode.DecodeBuffer(sData);
-                userFullEntry = Packets.ToPacket<UserFullEntry>(deBuffer);
+                var ueBuff = EDCode.DecodeBuffer(sData[..198]);
+                var uaBuff = EDCode.DecodeBuffer(sData[198..]);
+                var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
+                Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
+                Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
+                
+                userFullEntry = Packets.ToPacket<UserFullEntry>(accountBuff);
                 var nErrCode = -1;
                 if (LsShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                 {
