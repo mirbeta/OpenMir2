@@ -1,6 +1,6 @@
 ﻿using LoginSvr.Conf;
-using LoginSvr.DB;
 using LoginSvr.Services;
+using LoginSvr.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

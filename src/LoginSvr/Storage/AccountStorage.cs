@@ -8,7 +8,7 @@ using SystemModule;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
-namespace LoginSvr.DB
+namespace LoginSvr.Storage
 {
     public class AccountStorage
     {
