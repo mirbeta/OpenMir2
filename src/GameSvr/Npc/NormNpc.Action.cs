@@ -819,7 +819,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, this.ChrName));
+                M2Share.EventSource.AddEventLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, this.ChrName));
             }
             if (nOldGameGold != PlayObject.m_nGameGold)
             {
@@ -856,7 +856,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.g_boGameLogGamePoint)
             {
-                M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, this.ChrName));
+                M2Share.EventSource.AddEventLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, this.ChrName));
             }
             if (nOldGamePoint != PlayObject.m_nGamePoint)
             {
@@ -2626,7 +2626,7 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
+                    M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
                 }
                 return;
             }
@@ -2650,7 +2650,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                                M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                         }
                         else
@@ -2666,7 +2666,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                                M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }

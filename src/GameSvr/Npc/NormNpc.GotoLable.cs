@@ -1573,7 +1573,7 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
+                    M2Share.EventSource.AddEventLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
                 }
                 return;
             }
@@ -1589,7 +1589,7 @@ namespace GameSvr.Npc
                     StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                        M2Share.EventSource.AddEventLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                     }
                     PlayObject.SendDelItems(UserItem);
                     sC = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
@@ -1610,7 +1610,7 @@ namespace GameSvr.Npc
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
+                    M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
                 }
                 return;
             }
@@ -1632,7 +1632,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                                M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                         }
                         else
@@ -1648,7 +1648,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                                M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }

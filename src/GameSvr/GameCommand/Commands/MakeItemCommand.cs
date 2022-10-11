@@ -72,7 +72,7 @@ namespace GameSvr.GameCommand.Commands
                     }
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("5" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX +
+                        M2Share.EventSource.AddEventLog("5" + "\09" + PlayObject.MapName + "\09" + PlayObject.CurrX +
                            "\09" + PlayObject.CurrY + "\09" + PlayObject.ChrName + "\09" + stdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
                            HUtil32.LoByte(stdItem.DC) + "/" + HUtil32.HiByte(stdItem.DC) + ")" + "(" + HUtil32.LoByte(stdItem.MC) + "/" + HUtil32.HiByte(stdItem.MC) + ")" + "(" +
                            HUtil32.LoByte(stdItem.SC) + "/" + HUtil32.HiByte(stdItem.SC) + ")" + "(" + HUtil32.LoByte(stdItem.AC) + "/" +

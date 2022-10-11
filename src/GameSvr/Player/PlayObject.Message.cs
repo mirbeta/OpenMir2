@@ -296,7 +296,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.g_boGameLogGameGold)
                 {
-                    M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
+                    M2Share.EventSource.AddEventLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (m_boIncGameGold && (HUtil32.GetTickCount() - m_dwIncGameGoldTick) > m_dwIncGameGoldTime)
@@ -315,7 +315,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.g_boGameLogGameGold)
                 {
-                    M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
+                    M2Share.EventSource.AddEventLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (!m_boDecGameGold && Envir.Flag.boDECGAMEGOLD)
@@ -337,7 +337,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGameGold)
                     {
-                        M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Map"));
+                        M2Share.EventSource.AddEventLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Map"));
                     }
                 }
             }
@@ -358,7 +358,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGameGold)
                     {
-                        M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
+                        M2Share.EventSource.AddEventLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -383,7 +383,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.g_boGameLogGamePoint)
                     {
-                        M2Share.AddGameDataLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEPOINT, MapName, CurrX, CurrY, ChrName, M2Share.Config.GamePointName, nInteger, '+', "Map"));
+                        M2Share.EventSource.AddEventLog(Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEPOINT, MapName, CurrX, CurrY, ChrName, M2Share.Config.GamePointName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -2037,7 +2037,7 @@ namespace GameSvr.Player
                             delList.Add(new DeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                                M2Share.EventSource.AddEventLog("16" + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                             }
                             UseItems[i].Index = 0;
                         }

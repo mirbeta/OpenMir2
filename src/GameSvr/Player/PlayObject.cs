@@ -77,7 +77,7 @@ namespace GameSvr.Player
                         SendRefMsg(Grobal2.RM_ITEMHIDE, 0, mapItem.ActorId, CurrX, CurrY, "");
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME
+                            M2Share.EventSource.AddEventLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME
                                                    + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
@@ -104,7 +104,7 @@ namespace GameSvr.Player
                         {
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name
+                                M2Share.EventSource.AddEventLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name
                                                        + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
@@ -163,7 +163,7 @@ namespace GameSvr.Player
                 }
                 HasLevelUp(Abil.Level - 1);
                 AddBodyLuck(100);
-                M2Share.AddGameDataLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + ChrName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
+                M2Share.EventSource.AddEventLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + ChrName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
                 IncHealthSpell(2000, 2000);
             }
         }
@@ -966,7 +966,7 @@ namespace GameSvr.Player
             SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, MsgColor.Green, MsgType.Hint);
             if (M2Share.g_boGameLogGold)
             {
-                M2Share.AddGameDataLog(s10 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
+                M2Share.EventSource.AddEventLog(s10 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
             }
         }
 
@@ -3745,7 +3745,7 @@ namespace GameSvr.Player
                                 {
                                     if (StdItem.NeedIdentify == 1)
                                     {
-                                        // M2Share.AddGameDataLog('10' + #9 + m_sMapName + #9 +inttostr(m_nCurrX) + #9 + inttostr(m_nCurrY) + #9 +m_sChrName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sChrName);
+                                        // M2Share.ItemEventSource.AddGameLog('10' + #9 + m_sMapName + #9 +inttostr(m_nCurrX) + #9 + inttostr(m_nCurrY) + #9 +m_sChrName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sChrName);
                                         SendDelItems(UserItem);
                                         ItemList.RemoveAt(i);
                                         DlgItemIndex = 0;

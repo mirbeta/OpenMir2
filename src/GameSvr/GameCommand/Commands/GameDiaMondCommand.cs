@@ -53,7 +53,7 @@ namespace GameSvr.GameCommand.Commands
             //}
             //if (M2Share.g_boGameLogGameDiaMond)
             //{
-            //    M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameDiaMond,
+            //    M2Share.ItemEventSource.AddGameLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameDiaMond,
             //        TargetObject.m_sMapName,
             //        TargetObject.m_nCurrX, TargetObject.m_nCurrY, TargetObject.m_sChrName,
             //        M2Share.g_Config.sGameDiaMond,
