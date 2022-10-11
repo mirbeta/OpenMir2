@@ -55,11 +55,6 @@ namespace LogDataSvr
             Stop();
         }
 
-        static async Task TestEventSource()
-        {
-
-        }
-
         static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>

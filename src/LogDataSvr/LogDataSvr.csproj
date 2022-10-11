@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -30,7 +30,6 @@
     
     <ItemGroup>
         <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.328102" />
-        <PackageReference Include="Microsoft.Diagnostics.Tracing.EventRegister" Version="1.1.28" />
         <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.0.5" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
         <PackageReference Include="Spectre.Console" Version="0.45.0" />
@@ -39,5 +38,8 @@
         <PackageReference Include="NLog.Extensions.Logging" Version="5.0.4" />
         <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
     </ItemGroup>
-    
+
+	<ItemGroup>
+		<EmbeddedResource Include="..\..\logo.png" Link="logo.png" />
+	</ItemGroup>
 </Project>
