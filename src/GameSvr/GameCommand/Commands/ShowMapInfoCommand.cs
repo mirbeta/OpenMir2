@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("ShowMapInfo", "显示当前地图信息", 0)]
     public class ShowMapInfoCommand : Command

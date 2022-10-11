@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("ShowDenyChrNameLogon", "", 10)]
     public class ShowDenyChrNameLogonCommand : Command

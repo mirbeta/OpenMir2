@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 在指定地图随机移动

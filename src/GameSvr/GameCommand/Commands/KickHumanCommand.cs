@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 剔除指定玩家下线

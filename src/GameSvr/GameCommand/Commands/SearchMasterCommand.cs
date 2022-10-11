@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 查询师徒当前所在位置

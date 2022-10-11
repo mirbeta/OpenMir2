@@ -1,5 +1,6 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Event;
+using GameSvr.GameCommand;
 using GameSvr.Magic;
 using GameSvr.Maps;
 using GameSvr.Script;
@@ -989,19 +990,19 @@ namespace GameSvr.Player
                         m_boCanSendMsg = !M2Share.Config.LockSendMsgAction;
                         ObMode = M2Share.Config.LockInObModeAction;
                         AdminMode = M2Share.Config.LockInObModeAction;
-                        SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.GameCommand.LockLogon.CommandName, MsgColor.Red, MsgType.Hint);
-                        SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "密码命令: @" + M2Share.GameCommand.PasswordLock.CommandName);
+                        SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + CommandMgr.Commands.LockLogon.CommandName, MsgColor.Red, MsgType.Hint);
+                        SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.Commands.PasswordLock.CommandName);
                     }
                     if (!m_boPasswordLocked)
                     {
-                        SysMsg(Format(M2Share.g_sPasswordNotSetMsg, M2Share.GameCommand.PasswordLock.CommandName), MsgColor.Red, MsgType.Hint);
+                        SysMsg(Format(M2Share.g_sPasswordNotSetMsg, CommandMgr.Commands.PasswordLock.CommandName), MsgColor.Red, MsgType.Hint);
                     }
                     if (!m_boLockLogon && m_boPasswordLocked)
                     {
-                        SysMsg(Format(M2Share.g_sNotPasswordProtectMode, M2Share.GameCommand.LockLogon.CommandName), MsgColor.Red, MsgType.Hint);
+                        SysMsg(Format(M2Share.g_sNotPasswordProtectMode, CommandMgr.Commands.LockLogon.CommandName), MsgColor.Red, MsgType.Hint);
                     }
-                    SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.GameCommand.Unlock.CommandName, MsgColor.Red, MsgType.Hint);
-                    SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "开锁命令: @" + M2Share.GameCommand.Unlock.CommandName + '\\' + "加锁命令: @" + M2Share.GameCommand.Lock.CommandName + '\\' + "设置密码命令: @" + M2Share.GameCommand.SetPassword.CommandName + '\\' + "修改密码命令: @" + M2Share.GameCommand.ChgPassword.CommandName);
+                    SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + CommandMgr.Commands.Unlock.CommandName, MsgColor.Red, MsgType.Hint);
+                    SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.Commands.Unlock.CommandName + '\\' + "加锁命令: @" + CommandMgr.Commands.Lock.CommandName + '\\' + "设置密码命令: @" + CommandMgr.Commands.SetPassword.CommandName + '\\' + "修改密码命令: @" + CommandMgr.Commands.ChgPassword.CommandName);
                 }
                 // 重置泡点方面计时
                 m_dwIncGamePointTick = HUtil32.GetTickCount();

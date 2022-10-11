@@ -4,7 +4,7 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 取指定玩家物品

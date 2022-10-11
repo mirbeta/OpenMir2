@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 密码锁定

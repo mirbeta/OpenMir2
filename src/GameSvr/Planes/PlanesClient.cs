@@ -4,7 +4,7 @@ using SystemModule;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
-namespace GameSvr.Snaps
+namespace GameSvr.Planes
 {
     /// <summary>
     /// 位面服务器

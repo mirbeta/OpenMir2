@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 设置怪物集中目标

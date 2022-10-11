@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 移动地图指定座标(需要戴传送装备)

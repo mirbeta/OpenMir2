@@ -1,5 +1,5 @@
 ﻿using GameSvr.Actor;
-using GameSvr.Command;
+using GameSvr.GameCommand;
 using GameSvr.Maps;
 using NLog;
 using SystemModule.Common;

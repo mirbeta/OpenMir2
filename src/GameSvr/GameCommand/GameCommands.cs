@@ -1,6 +1,6 @@
-using GameSvr.Command.Commands;
+using GameSvr.GameCommand.Commands;
 
-namespace GameSvr.Command
+namespace GameSvr.GameCommand
 {
     public class GameCommands
     {

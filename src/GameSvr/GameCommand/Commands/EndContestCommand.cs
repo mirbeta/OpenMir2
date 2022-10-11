@@ -1,6 +1,6 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 结束行会争霸赛

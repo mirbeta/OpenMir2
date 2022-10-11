@@ -2,7 +2,7 @@
 using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 显示你屏幕上你近处所有怪与人的详细情况

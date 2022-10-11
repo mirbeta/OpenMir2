@@ -1,8 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 显示物品信息

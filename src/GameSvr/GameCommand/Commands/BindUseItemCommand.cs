@@ -3,7 +3,7 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("BindUseItem", "", CommandHelp.GameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : Command

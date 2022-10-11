@@ -4,7 +4,7 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 调整身上装备附加属性

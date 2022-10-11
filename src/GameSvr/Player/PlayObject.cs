@@ -1,6 +1,6 @@
 ﻿using GameSvr.Actor;
-using GameSvr.Command;
 using GameSvr.Event.Events;
+using GameSvr.GameCommand;
 using GameSvr.Guild;
 using GameSvr.Items;
 using GameSvr.Maps;
@@ -3424,7 +3424,7 @@ namespace GameSvr.Player
         {
             if (ProcessMsg.wParam == 0)
             {
-                ProcessUserLineMsg("@" + M2Share.GameCommand.Unlock.CommandName);
+                ProcessUserLineMsg("@" + CommandMgr.Commands.Unlock.CommandName);
                 return;
             }
             var sData = ProcessMsg.Msg;

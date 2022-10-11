@@ -1,6 +1,6 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("GameGlory", "调整玩家灵符", 10)]
     public class GameGloryCommand : Command

@@ -3,7 +3,7 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 调整指定玩家技能等级

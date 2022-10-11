@@ -3,7 +3,7 @@ using GameSvr.Npc;
 using GameSvr.Player;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 重新加载当前12格范围内NPC

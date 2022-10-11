@@ -3,7 +3,7 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 调整指定玩家游戏币

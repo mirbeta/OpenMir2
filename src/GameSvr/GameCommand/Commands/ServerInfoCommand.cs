@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using System.Text;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("ServerInfo", "查看服务器信息", 10)]
     public class ServerInfoCommand : Command

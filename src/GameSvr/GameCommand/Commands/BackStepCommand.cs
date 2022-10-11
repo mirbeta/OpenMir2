@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     /// <summary>
     /// 推开范围内对象

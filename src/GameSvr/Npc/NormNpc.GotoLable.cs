@@ -1,5 +1,5 @@
 using GameSvr.Actor;
-using GameSvr.Command;
+using GameSvr.GameCommand;
 using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Player;

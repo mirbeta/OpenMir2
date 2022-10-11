@@ -1,4 +1,4 @@
-﻿namespace GameSvr.Command
+﻿namespace GameSvr.GameCommand
 {
     public static class CommandHelp
     {

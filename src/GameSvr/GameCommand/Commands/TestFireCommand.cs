@@ -1,7 +1,7 @@
 ﻿using GameSvr.Event.Events;
 using GameSvr.Player;
 
-namespace GameSvr.Command.Commands
+namespace GameSvr.GameCommand.Commands
 {
     [Command("TestFire", "", 10)]
     public class TestFireCommand : Command

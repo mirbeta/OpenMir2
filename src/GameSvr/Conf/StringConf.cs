@@ -1,4 +1,4 @@
-﻿using GameSvr.Command;
+﻿using GameSvr.GameCommand;
 using SystemModule.Common;
 
 namespace GameSvr.Conf
