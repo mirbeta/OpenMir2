@@ -1571,9 +1571,9 @@ namespace GameSvr.Npc
             {
                 PlayObject.DecGold(nItemCount);
                 PlayObject.GoldChanged();
-                if (M2Share.g_boGameLogGold)
+                if (M2Share.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
+                    M2Share.EventSource.AddEventLog(10, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
@@ -1589,7 +1589,7 @@ namespace GameSvr.Npc
                     StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog("10" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                        M2Share.EventSource.AddEventLog(10, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                     }
                     PlayObject.SendDelItems(UserItem);
                     sC = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
@@ -1608,9 +1608,9 @@ namespace GameSvr.Npc
             {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
-                if (M2Share.g_boGameLogGold)
+                if (M2Share.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.ChrName);
+                    M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
@@ -1632,7 +1632,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                                M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
                         }
                         else
@@ -1648,7 +1648,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog('9' + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.ChrName);
+                                M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }
@@ -1831,7 +1831,7 @@ namespace GameSvr.Npc
                         GotoLable_TakeWItem(PlayObject, QuestActionInfo.sParam1, QuestActionInfo.nParam2);
                         break;
                     case ScriptConst.nCLOSE:
-                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ActorId, 0, 0, "");
+                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         break;
                     case ScriptConst.nRESET:
                         for (var k = 0; k < QuestActionInfo.nParam2; k++)
@@ -2022,7 +2022,7 @@ namespace GameSvr.Npc
                             if (List58.Count > 0)
                             {
                                 User = (PlayObject)List58[0];
-                                User.MapRandomMove(this.MapName, 0);
+                                User.MapRandomMove(MapName, 0);
                             }
                             PlayObject.MapRandomMove(QuestActionInfo.sParam1, 0);
                         }
@@ -2040,7 +2040,7 @@ namespace GameSvr.Npc
                             for (var k = 0; k < List58.Count; k++)
                             {
                                 User = (PlayObject)List58[k];
-                                User.MapRandomMove(this.MapName, 0);
+                                User.MapRandomMove(MapName, 0);
                                 if (k > 20)
                                 {
                                     break;
@@ -2072,7 +2072,7 @@ namespace GameSvr.Npc
                         for (var k = 0; k < BatchParamsList.Count; k++)
                         {
                             var batchParam = BatchParamsList[k];
-                            PlayObject.SendDelayMsg(this.ActorId, Grobal2.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
+                            PlayObject.SendDelayMsg(ActorId, Grobal2.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
                             n20 += batchParam.nParams;
                         }
                         break;
@@ -2131,7 +2131,7 @@ namespace GameSvr.Npc
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
                         {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
-                            M2Share.Log.Error("[脚本死循环] NPC:" + this.ChrName + " 位置:" + this.MapName + '(' + this.CurrX + ':' + this.CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            M2Share.Log.Error("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
                             return result;
                         }
@@ -2488,7 +2488,7 @@ namespace GameSvr.Npc
             PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam2;
             var sHint = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sHint)) sHint = "请输入:";
-            PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, this.ActorId, 0, 0, 0, sHint);
+            PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, ActorId, 0, 0, 0, sHint);
         }
 
         private void ActionOfKillSlaveName(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
@@ -2572,11 +2572,11 @@ namespace GameSvr.Npc
             PlayObject.GetScriptLabel(sMsg);
             if (boFlag)
             {
-                PlayObject.SendFirstMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + '/' + sMsg);
+                PlayObject.SendFirstMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + '/' + sMsg);
+                PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
             }
         }
     }

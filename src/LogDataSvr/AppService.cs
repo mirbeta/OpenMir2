@@ -51,6 +51,8 @@ namespace LogDataSvr
                         int counter = 0;
 
                         DiagnosticsClient client = new DiagnosticsClient(processes.First().Id);
+                        
+                        Console.WriteLine($"系统进程监听成功.PID[{processes.First().Id}]");
 
                         var providers = new List<EventPipeProvider>()
                         {
@@ -62,7 +64,7 @@ namespace LogDataSvr
 
                         source.Dynamic.All += (e) =>
                         {
-                            if (e.ProviderName == "itemProvider")
+                            if (e.ProviderName == "GameProvider")
                             {
                                 Console.WriteLine($"{counter++} {e.EventName} {e.PayloadString(0)}");
                             }

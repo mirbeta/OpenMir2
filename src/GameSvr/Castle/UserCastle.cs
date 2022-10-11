@@ -684,7 +684,6 @@ namespace GameSvr.Castle
         /// <summary>
         /// 增加每日收入
         /// </summary>
-        /// <param name="nGold"></param>
         public void IncRateGold(int nGold)
         {
             var nInGold = HUtil32.Round(nGold * (M2Share.Config.CastleTaxRate / 100));
@@ -714,9 +713,10 @@ namespace GameSvr.Castle
             if ((HUtil32.GetTickCount() - SaveTick) > 10 * 60 * 1000)
             {
                 SaveTick = HUtil32.GetTickCount();
-                if (M2Share.g_boGameLogGold)
-                    M2Share.EventSource.AddEventLog("23" + "\t" + '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" +
-                                           Grobal2.sSTRING_GOLDNAME + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
+                if (M2Share.GameLogGold)
+                {
+                    M2Share.EventSource.AddEventLog(GameEventLogType.CastleTodayIncome, '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
+                }
             }
         }
 
@@ -742,10 +742,10 @@ namespace GameSvr.Castle
                     {
                         TotalGold -= nGold;
                         PlayObject.IncGold(nGold);
-                        if (M2Share.g_boGameLogGold)
-                            M2Share.EventSource.AddEventLog("22" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX +
-                                                   "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" +
-                                                   Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                        if (M2Share.GameLogGold)
+                        {
+                            M2Share.EventSource.AddEventLog(22, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                        }
                         PlayObject.GoldChanged();
                         result = 1;
                     }
@@ -778,8 +778,10 @@ namespace GameSvr.Castle
                     {
                         PlayObject.Gold -= nGold;
                         TotalGold += nGold;
-                        if (M2Share.g_boGameLogGold)
-                            M2Share.EventSource.AddEventLog("23" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                        if (M2Share.GameLogGold)
+                        {
+                            M2Share.EventSource.AddEventLog(GameEventLogType.CastleReceiptGolds, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                        }
                         PlayObject.GoldChanged();
                         result = 1;
                     }

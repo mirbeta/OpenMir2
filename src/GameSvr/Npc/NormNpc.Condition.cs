@@ -67,8 +67,8 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckBonusPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
-            var nTotlePoint = this.BonusAbil.DC + this.BonusAbil.MC + this.BonusAbil.SC + this.BonusAbil.AC + this.BonusAbil.MAC + this.BonusAbil.HP + this.BonusAbil.MP + this.BonusAbil.Hit + this.BonusAbil.Speed + this.BonusAbil.Reserved;
-            nTotlePoint += this.BonusPoint;
+            var nTotlePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.Reserved;
+            nTotlePoint += BonusPoint;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -148,7 +148,7 @@ namespace GameSvr.Npc
             switch (cMethodMin)
             {
                 case '=':
-                    if (this.WAbil.HP == nMin)
+                    if (WAbil.HP == nMin)
                     {
                         result = ConditionOfCheckHPCheckHigh(PlayObject, cMethodMax, nMax);
                     }
@@ -223,7 +223,7 @@ namespace GameSvr.Npc
             switch (cMethodMin)
             {
                 case '=':
-                    if (this.WAbil.MP == nMin)
+                    if (WAbil.MP == nMin)
                     {
                         result = ConditionOfCheckMP_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
@@ -926,7 +926,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckIsAttackGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISATTACKGUILD);
                 return false;
@@ -935,19 +935,19 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.Castle.IsAttackGuild(PlayObject.MyGuild);
+            return Castle.IsAttackGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckCastleChageDay(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            if ((nDay < 0) || (this.Castle == null))
+            if ((nDay < 0) || (Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLECHANGEDAY);
                 return result;
             }
-            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, this.Castle.ChangeDate);
+            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, Castle.ChangeDate);
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -983,12 +983,12 @@ namespace GameSvr.Npc
         {
             var result = false;
             var nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            if ((nDay < 0) || (this.Castle == null))
+            if ((nDay < 0) || (Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLEWARDAY);
                 return false;
             }
-            var nWarDay = HUtil32.GetDayCount(DateTime.Now, this.Castle.m_WarDate);
+            var nWarDay = HUtil32.GetDayCount(DateTime.Now, Castle.m_WarDate);
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -1037,12 +1037,12 @@ namespace GameSvr.Npc
             {
                 nDoorStatus = 2;
             }
-            if ((nDay < 0) || (this.Castle == null) || (nDoorStatus < 0))
+            if ((nDay < 0) || (Castle == null) || (nDoorStatus < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCASTLEDOOR);
                 return result;
             }
-            var CastleDoor = (CastleDoor)this.Castle.MainDoor.BaseObject;
+            var CastleDoor = (CastleDoor)Castle.MainDoor.BaseObject;
             switch (nDoorStatus)
             {
                 case 0:
@@ -1069,7 +1069,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckIsAttackAllyGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISATTACKALLYGUILD);
                 return false;
@@ -1078,12 +1078,12 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.Castle.IsAttackAllyGuild(PlayObject.MyGuild);
+            return Castle.IsAttackAllyGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseAllyGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISDEFENSEALLYGUILD);
                 return false;
@@ -1092,12 +1092,12 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.Castle.IsDefenseAllyGuild(PlayObject.MyGuild);
+            return Castle.IsDefenseAllyGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISDEFENSEGUILD);
                 return false;
@@ -1106,7 +1106,7 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            return this.Castle.IsDefenseGuild(PlayObject.MyGuild);
+            return Castle.IsDefenseGuild(PlayObject.MyGuild);
         }
 
         private bool ConditionOfCheckIsCastleaGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -2046,7 +2046,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var nGold = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            if ((nGold < 0) || (this.Castle == null))
+            if ((nGold < 0) || (Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCASTLEGOLD);
                 return result;
@@ -2055,25 +2055,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (this.Castle.TotalGold == nGold)
+                    if (Castle.TotalGold == nGold)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (this.Castle.TotalGold > nGold)
+                    if (Castle.TotalGold > nGold)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (this.Castle.TotalGold < nGold)
+                    if (Castle.TotalGold < nGold)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (this.Castle.TotalGold >= nGold)
+                    if (Castle.TotalGold >= nGold)
                     {
                         result = true;
                     }

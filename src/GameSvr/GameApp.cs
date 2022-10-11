@@ -95,7 +95,7 @@ namespace GameSvr
             M2Share.g_DisableTakeOffList = new Dictionary<int, string>();
             M2Share.g_UnMasterList = new List<string>();
             M2Share.g_UnForceMasterList = new List<string>();
-            M2Share.g_GameLogItemNameList = new List<string>();
+            M2Share.GameLogItemNameList = new List<string>();
             M2Share.g_DenyIPAddrList = new List<string>();
             M2Share.g_DenyChrNameList = new List<string>();
             M2Share.g_DenyAccountList = new List<string>();

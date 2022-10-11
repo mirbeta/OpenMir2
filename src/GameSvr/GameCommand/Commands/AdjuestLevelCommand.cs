@@ -28,8 +28,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 int nOLevel = m_PlayObject.Abil.Level;
                 m_PlayObject.HasLevelUp(1);
-                M2Share.EventSource.AddEventLog("17" + "\09" + m_PlayObject.MapName + "\09" + m_PlayObject.CurrX + "\09" + m_PlayObject.CurrY + "\09"
-                    + m_PlayObject.ChrName + "\09" + m_PlayObject.Abil.Level + "\09" + PlayObject.ChrName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
+                M2Share.EventSource.AddEventLog(17, m_PlayObject.MapName + "\09" + m_PlayObject.CurrX + "\09" + m_PlayObject.CurrY + "\09"
+                                                    + m_PlayObject.ChrName + "\09" + m_PlayObject.Abil.Level + "\09" + PlayObject.ChrName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
                 PlayObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.Config.ShowMakeItemMsg)
                 {
@@ -38,7 +38,10 @@ namespace GameSvr.GameCommand.Commands
             }
             else
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, new object[] { sHumanName }), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, new object[]
+                {
+                    sHumanName
+                }), MsgColor.Red, MsgType.Hint);
             }
         }
     }

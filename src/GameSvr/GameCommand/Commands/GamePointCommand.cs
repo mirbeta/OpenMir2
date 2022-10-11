@@ -55,7 +55,7 @@ namespace GameSvr.GameCommand.Commands
                     m_PlayObject.m_nGamePoint -= (ushort)nPoint;
                     break;
             }
-            if (M2Share.g_boGameLogGamePoint)
+            if (M2Share.GameLogGamePoint)
             {
                 //M2Share.ItemEventSource.AddGameLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GAMEPOINT, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
                 //    m_PlayObject.m_sChrName, M2Share.g_Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));

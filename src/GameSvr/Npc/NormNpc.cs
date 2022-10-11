@@ -35,17 +35,17 @@ namespace GameSvr.Npc
 
         public NormNpc() : base()
         {
-            this.SuperMan = true;
-            this.Race = ActorRace.NPC;
-            this.Light = 2;
-            this.AntiPoison = 99;
-            this.m_ScriptList = new List<TScript>();
-            this.StickMode = true;
-            this.m_sFilePath = "";
-            this.m_boIsHide = false;
-            this.m_boIsQuest = true;
-            this.FGotoLable = new int[100];
-            this.MapCell = CellType.Merchant;
+            SuperMan = true;
+            Race = ActorRace.NPC;
+            Light = 2;
+            AntiPoison = 99;
+            m_ScriptList = new List<TScript>();
+            StickMode = true;
+            m_sFilePath = "";
+            m_boIsHide = false;
+            m_boIsQuest = true;
+            FGotoLable = new int[100];
+            MapCell = CellType.Merchant;
         }
 
         ~NormNpc()
@@ -730,9 +730,9 @@ namespace GameSvr.Npc
                     return;
                 case "$OWNERGUILD":
                     {
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            sText = this.Castle.OwnGuild;
+                            sText = Castle.OwnGuild;
                             if (sText == "")
                             {
                                 sText = "游戏管理";
@@ -747,9 +747,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLENAME":
                     {
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            sText = this.Castle.sName;
+                            sText = Castle.sName;
                         }
                         else
                         {
@@ -760,11 +760,11 @@ namespace GameSvr.Npc
                     }
                 case "$LORD":
                     {
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            if (this.Castle.MasterGuild != null)
+                            if (Castle.MasterGuild != null)
                             {
-                                sText = this.Castle.MasterGuild.GetChiefName();
+                                sText = Castle.MasterGuild.GetChiefName();
                             }
                             else
                             {
@@ -786,15 +786,15 @@ namespace GameSvr.Npc
                     return;
                 case "$CASTLEWARDATE":
                     {
-                        if (this.Castle == null)
+                        if (Castle == null)
                         {
-                            this.Castle = M2Share.CastleMgr.GetCastle(0);
+                            Castle = M2Share.CastleMgr.GetCastle(0);
                         }
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            if (!this.Castle.UnderWar)
+                            if (!Castle.UnderWar)
                             {
-                                sText = this.Castle.GetWarDate();
+                                sText = Castle.GetWarDate();
                                 if (sText != "")
                                 {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sText);
@@ -816,9 +816,9 @@ namespace GameSvr.Npc
                     }
                 case "$LISTOFWAR":
                     {
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            sText = this.Castle.GetAttackWarList();
+                            sText = Castle.GetAttackWarList();
                         }
                         else
                         {
@@ -836,9 +836,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLECHANGEDATE":
                     {
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            sText = this.Castle.ChangeDate.ToString();
+                            sText = Castle.ChangeDate.ToString();
                         }
                         else
                         {
@@ -849,9 +849,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLEWARLASTDATE":
                     {
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            sText = this.Castle.m_WarDate.ToString();
+                            sText = Castle.m_WarDate.ToString();
                         }
                         else
                         {
@@ -862,9 +862,9 @@ namespace GameSvr.Npc
                     }
                 case "$CASTLEGETDAYS":
                     {
-                        if (this.Castle != null)
+                        if (Castle != null)
                         {
-                            sText = HUtil32.GetDayCount(DateTime.Now, this.Castle.ChangeDate).ToString();
+                            sText = HUtil32.GetDayCount(DateTime.Now, Castle.ChangeDate).ToString();
                         }
                         else
                         {
@@ -1576,13 +1576,13 @@ namespace GameSvr.Npc
             if (m_boIsQuest)
             {
                 m_sPath = ScriptConst.sNpc_def;
-                var sScriptName = this.ChrName + '-' + this.MapName;
+                var sScriptName = ChrName + '-' + MapName;
                 M2Share.ScriptSystem.LoadScript(this, m_sFilePath, sScriptName);
             }
             else
             {
                 m_sPath = m_sFilePath;
-                M2Share.ScriptSystem.LoadScript(this, m_sFilePath, this.ChrName);
+                M2Share.ScriptSystem.LoadScript(this, m_sFilePath, ChrName);
             }
         }
 
@@ -1595,7 +1595,7 @@ namespace GameSvr.Npc
         {
             if (Master != null)// 不允许召唤为宝宝
             {
-                this.Master = null;
+                Master = null;
             }
             base.Run();
         }
@@ -1603,19 +1603,19 @@ namespace GameSvr.Npc
         private void ScriptActionError(PlayObject PlayObject, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
-            var sMsg = Format(sOutMessage, sErrMsg, sCmd, this.ChrName, this.MapName, this.CurrX, this.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            var sMsg = Format(sOutMessage, sErrMsg, sCmd, ChrName, MapName, CurrX, CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.Log.Error(sMsg);
         }
 
         private void ScriptConditionError(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo, string sCmd)
         {
-            var sMsg = "Cmd:" + sCmd + " NPC名称:" + this.ChrName + " 地图:" + this.MapName + " 座标:" + this.CurrX + ':' + this.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
+            var sMsg = "Cmd:" + sCmd + " NPC名称:" + ChrName + " 地图:" + MapName + " 座标:" + CurrX + ':' + CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.Log.Error("[脚本参数不正确] " + sMsg);
         }
 
         protected void SendMsgToUser(PlayObject PlayObject, string sMsg)
         {
-            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.ChrName + '/' + sMsg);
+            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
         }
 
         protected string ReplaceVariableText(string sMsg, string sStr, string sText)
@@ -1681,7 +1681,7 @@ namespace GameSvr.Npc
         public override void Initialize()
         {
             base.Initialize();
-            this.Castle = M2Share.CastleMgr.InCastleWarArea(this);
+            Castle = M2Share.CastleMgr.InCastleWarArea(this);
         }
 
         private Dictionary<string, TDynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)

@@ -20,12 +20,12 @@ namespace GameSvr.Npc
 
         public override void Click(PlayObject PlayObject)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.IsMasterGuild(PlayObject.MyGuild) || PlayObject.Permission >= 3)
+            if (Castle.IsMasterGuild(PlayObject.MyGuild) || PlayObject.Permission >= 3)
             {
                 base.Click(PlayObject);
             }
@@ -34,7 +34,7 @@ namespace GameSvr.Npc
         protected override void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
         {
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 sMsg = "????";
                 return;
@@ -43,16 +43,16 @@ namespace GameSvr.Npc
             switch (sVariable)
             {
                 case "$CASTLEGOLD":
-                    sText = this.Castle.TotalGold.ToString();
-                    sMsg = this.ReplaceVariableText(sMsg, "<$CASTLEGOLD>", sText);
+                    sText = Castle.TotalGold.ToString();
+                    sMsg = ReplaceVariableText(sMsg, "<$CASTLEGOLD>", sText);
                     break;
                 case "$TODAYINCOME":
-                    sText = this.Castle.TodayIncome.ToString();
-                    sMsg = this.ReplaceVariableText(sMsg, "<$TODAYINCOME>", sText);
+                    sText = Castle.TodayIncome.ToString();
+                    sMsg = ReplaceVariableText(sMsg, "<$TODAYINCOME>", sText);
                     break;
                 case "$CASTLEDOORSTATE":
                     {
-                        var castleDoor = (CastleDoor)this.Castle.MainDoor.BaseObject;
+                        var castleDoor = (CastleDoor)Castle.MainDoor.BaseObject;
                         if (castleDoor.Death)
                         {
                             sText = "destroyed";
@@ -65,28 +65,28 @@ namespace GameSvr.Npc
                         {
                             sText = "closed";
                         }
-                        sMsg = this.ReplaceVariableText(sMsg, "<$CASTLEDOORSTATE>", sText);
+                        sMsg = ReplaceVariableText(sMsg, "<$CASTLEDOORSTATE>", sText);
                         break;
                     }
                 case "$REPAIRDOORGOLD":
                     sText = M2Share.Config.RepairDoorPrice.ToString();
-                    sMsg = this.ReplaceVariableText(sMsg, "<$REPAIRDOORGOLD>", sText);
+                    sMsg = ReplaceVariableText(sMsg, "<$REPAIRDOORGOLD>", sText);
                     break;
                 case "$REPAIRWALLGOLD":
                     sText = M2Share.Config.RepairWallPrice.ToString();
-                    sMsg = this.ReplaceVariableText(sMsg, "<$REPAIRWALLGOLD>", sText);
+                    sMsg = ReplaceVariableText(sMsg, "<$REPAIRWALLGOLD>", sText);
                     break;
                 case "$GUARDFEE":
                     sText = M2Share.Config.HireGuardPrice.ToString();
-                    sMsg = this.ReplaceVariableText(sMsg, "<$GUARDFEE>", sText);
+                    sMsg = ReplaceVariableText(sMsg, "<$GUARDFEE>", sText);
                     break;
                 case "$ARCHERFEE":
                     sText = M2Share.Config.HireArcherPrice.ToString();
-                    sMsg = this.ReplaceVariableText(sMsg, "<$ARCHERFEE>", sText);
+                    sMsg = ReplaceVariableText(sMsg, "<$ARCHERFEE>", sText);
                     break;
                 case "$GUARDRULE":
                     sText = "无效";
-                    sMsg = this.ReplaceVariableText(sMsg, "<$GUARDRULE>", sText);
+                    sMsg = ReplaceVariableText(sMsg, "<$GUARDRULE>", sText);
                     break;
             }
         }
@@ -98,7 +98,7 @@ namespace GameSvr.Npc
             base.UserSelect(PlayObject, sData);
             try
             {
-                if (this.Castle == null)
+                if (Castle == null)
                 {
                     PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                     return;
@@ -109,7 +109,7 @@ namespace GameSvr.Npc
                     var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                     s18 = "";
                     PlayObject.ScriptLable = sData;
-                    if (this.Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster())
+                    if (Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster())
                     {
                         var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
@@ -119,7 +119,7 @@ namespace GameSvr.Npc
                                 return;
                             }
                         }
-                        this.GotoLable(PlayObject, sLabel, !boCanJmp);
+                        GotoLable(PlayObject, sLabel, !boCanJmp);
                         if (!boCanJmp)
                         {
                             return;
@@ -127,35 +127,35 @@ namespace GameSvr.Npc
                         string s20;
                         if (string.Compare(sLabel, ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (this.m_boOffLineMsg)
+                            if (m_boOffLineMsg)
                             {
-                                this.SetOffLineMsg(PlayObject, sMsg);
+                                SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             SendCustemMsg(PlayObject, sMsg);
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             sMsg = sMsg.Trim();
                             if (sMsg != "")
                             {
-                                this.Castle.sName = sMsg;
-                                this.Castle.Save();
-                                this.Castle.MasterGuild.RefMemberName();
+                                Castle.sName = sMsg;
+                                Castle.Save();
+                                Castle.MasterGuild.RefMemberName();
                                 s18 = "城堡名称更改成功...";
                             }
                             else
                             {
                                 s18 = "城堡名称更改失败!!!";
                             }
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            switch (this.Castle.WithDrawalGolds(PlayObject, HUtil32.StrToInt(sMsg, 0)))
+                            switch (Castle.WithDrawalGolds(PlayObject, HUtil32.StrToInt(sMsg, 0)))
                             {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -167,17 +167,17 @@ namespace GameSvr.Npc
                                     s18 = "该城内没有这么多金币.";
                                     break;
                                 case -1:
-                                    s18 = "只有行会 " + this.Castle.OwnGuild + " 的掌门人才能使用!!!";
+                                    s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    this.GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                                    GotoLable(PlayObject, ScriptConst.sMAIN, false);
                                     break;
                             }
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            switch (this.Castle.ReceiptGolds(PlayObject, HUtil32.StrToInt(sMsg, 0)))
+                            switch (Castle.ReceiptGolds(PlayObject, HUtil32.StrToInt(sMsg, 0)))
                             {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -189,57 +189,57 @@ namespace GameSvr.Npc
                                     s18 = "你没有那么多金币.";
                                     break;
                                 case -1:
-                                    s18 = "只有行会 " + this.Castle.OwnGuild + " 的掌门人才能使用!!!";
+                                    s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    this.GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                                    GotoLable(PlayObject, ScriptConst.sMAIN, false);
                                     break;
                             }
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sOPENMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            this.Castle.MainDoorControl(false);
+                            Castle.MainDoorControl(false);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sCLOSEMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            this.Castle.MainDoorControl(true);
+                            Castle.MainDoorControl(true);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sREPAIRDOORNOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairDoor(PlayObject);
-                            this.GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sREPAIRWALLNOW1, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(1, PlayObject);
-                            this.GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sREPAIRWALLNOW2, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(2, PlayObject);
-                            this.GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sREPAIRWALLNOW3, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(3, PlayObject);
-                            this.GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
                         }
                         else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREGUARDNOW))
                         {
                             s20 = sLabel.Substring(ScriptConst.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, "");
                         }
                         else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREARCHERNOW))
                         {
                             s20 = sLabel.Substring(ScriptConst.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -247,14 +247,14 @@ namespace GameSvr.Npc
                             {
                                 PlayObject.m_sScriptGoBackLable = ScriptConst.sMAIN;
                             }
-                            this.GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                            GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
                         }
                     }
                 }
                 else
                 {
                     s18 = "你没有权利使用.";
-                    PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, s18);
+                    PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                 }
             }
             catch
@@ -265,26 +265,26 @@ namespace GameSvr.Npc
 
         private void HireGuard(string sIndex, PlayObject PlayObject)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.TotalGold >= M2Share.Config.HireGuardPrice)
+            if (Castle.TotalGold >= M2Share.Config.HireGuardPrice)
             {
                 var n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCalsteGuard)
                 {
-                    if (this.Castle.Guards[n10].BaseObject == null)
+                    if (Castle.Guards[n10].BaseObject == null)
                     {
-                        if (!this.Castle.UnderWar)
+                        if (!Castle.UnderWar)
                         {
-                            var ObjUnit = this.Castle.Guards[n10];
-                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(this.Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            var ObjUnit = Castle.Guards[n10];
+                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
-                                this.Castle.TotalGold -= M2Share.Config.HireGuardPrice;
-                                ObjUnit.BaseObject.Castle = this.Castle;
+                                Castle.TotalGold -= M2Share.Config.HireGuardPrice;
+                                ObjUnit.BaseObject.Castle = Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
@@ -312,26 +312,26 @@ namespace GameSvr.Npc
 
         private void HireArcher(string sIndex, PlayObject PlayObject)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.TotalGold >= M2Share.Config.HireArcherPrice)
+            if (Castle.TotalGold >= M2Share.Config.HireArcherPrice)
             {
                 var n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCastleArcher)
                 {
-                    if (this.Castle.Archers[n10].BaseObject == null)
+                    if (Castle.Archers[n10].BaseObject == null)
                     {
-                        if (!this.Castle.UnderWar)
+                        if (!Castle.UnderWar)
                         {
-                            var ObjUnit = this.Castle.Archers[n10];
-                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(this.Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            var ObjUnit = Castle.Archers[n10];
+                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
-                                this.Castle.TotalGold -= M2Share.Config.HireArcherPrice;
-                                ObjUnit.BaseObject.Castle = this.Castle;
+                                Castle.TotalGold -= M2Share.Config.HireArcherPrice;
+                                ObjUnit.BaseObject.Castle = Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
@@ -359,16 +359,16 @@ namespace GameSvr.Npc
 
         private void RepairDoor(PlayObject PlayObject)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.TotalGold >= M2Share.Config.RepairDoorPrice)
+            if (Castle.TotalGold >= M2Share.Config.RepairDoorPrice)
             {
-                if (this.Castle.RepairDoor())
+                if (Castle.RepairDoor())
                 {
-                    this.Castle.TotalGold -= M2Share.Config.RepairDoorPrice;
+                    Castle.TotalGold -= M2Share.Config.RepairDoorPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
@@ -384,16 +384,16 @@ namespace GameSvr.Npc
 
         private void RepairWallNow(int nWallIndex, PlayObject PlayObject)
         {
-            if (this.Castle == null)
+            if (Castle == null)
             {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (this.Castle.TotalGold >= M2Share.Config.RepairWallPrice)
+            if (Castle.TotalGold >= M2Share.Config.RepairWallPrice)
             {
-                if (this.Castle.RepairWall(nWallIndex))
+                if (Castle.RepairWall(nWallIndex))
                 {
-                    this.Castle.TotalGold -= M2Share.Config.RepairWallPrice;
+                    Castle.TotalGold -= M2Share.Config.RepairWallPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else

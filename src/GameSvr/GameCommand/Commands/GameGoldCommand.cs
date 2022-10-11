@@ -42,18 +42,16 @@ namespace GameSvr.GameCommand.Commands
                 case '=':
                     m_PlayObject.m_nGameGold = nGold;
                     break;
-
                 case '+':
                     m_PlayObject.m_nGameGold += nGold;
                     break;
-
                 case '-':
                     m_PlayObject.m_nGameGold -= nGold;
                     break;
             }
-            if (M2Share.g_boGameLogGameGold)
+            if (M2Share.GameLogGameGold)
             {
-                M2Share.EventSource.AddEventLog(string.Format(CommandHelp.GameLogMsg1, Grobal2.LOG_GAMEGOLD, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
+                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
                     m_PlayObject.ChrName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayObject.ChrName));
             }
             PlayObject.GameGoldChanged();

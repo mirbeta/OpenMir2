@@ -75,10 +75,10 @@ namespace GameSvr.Player
                     if (IncGold(mapItem.Count))
                     {
                         SendRefMsg(Grobal2.RM_ITEMHIDE, 0, mapItem.ActorId, CurrX, CurrY, "");
-                        if (M2Share.g_boGameLogGold)
+                        if (M2Share.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME
-                                                   + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
+                            M2Share.EventSource.AddEventLog(4, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME
+                                                               + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
                         Dispose(mapItem);
@@ -104,8 +104,8 @@ namespace GameSvr.Player
                         {
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog('4' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name
-                                                       + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                M2Share.EventSource.AddEventLog(4, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name
+                                                                   + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
                         Dispose(mapItem);
@@ -163,7 +163,7 @@ namespace GameSvr.Player
                 }
                 HasLevelUp(Abil.Level - 1);
                 AddBodyLuck(100);
-                M2Share.EventSource.AddEventLog("12" + "\t" + MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + ChrName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
+                M2Share.EventSource.AddEventLog(12, MapName + "\t" + Abil.Level + "\t" + Abil.Exp + "\t" + ChrName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
                 IncHealthSpell(2000, 2000);
             }
         }
@@ -951,22 +951,22 @@ namespace GameSvr.Player
 
         public void GoldChange(string sChrName, int nGold)
         {
-            string s10;
+            int s10;
             string s14;
             if (nGold > 0)
             {
-                s10 = "14";
+                s10 = 14;
                 s14 = "增加完成";
             }
             else
             {
-                s10 = "13";
+                s10 = 13;
                 s14 = "以删减";
             }
             SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, MsgColor.Green, MsgType.Hint);
-            if (M2Share.g_boGameLogGold)
+            if (M2Share.GameLogGold)
             {
-                M2Share.EventSource.AddEventLog(s10 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
+                M2Share.EventSource.AddEventLog(s10, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
             }
         }
 
