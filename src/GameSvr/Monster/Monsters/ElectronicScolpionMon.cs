@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
         private void LightingAttack(byte nDir)
         {
             Direction = nDir;
-            int nPower = GetAttackPower(HUtil32.LoWord(WAbil.MC), HUtil32.HiWord(WAbil.MC) - HUtil32.LoWord(WAbil.MC));
+            int nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {

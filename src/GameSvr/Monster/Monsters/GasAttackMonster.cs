@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
         {
             BaseObject result = null;
             Direction = bt05;
-            var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
+            var nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");

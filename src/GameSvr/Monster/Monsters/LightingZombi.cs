@@ -2,6 +2,9 @@
 
 namespace GameSvr.Monster.Monsters
 {
+    /// <summary>
+    /// 电僵尸
+    /// </summary>
     public class LightingZombi : MonsterObject
     {
         public LightingZombi() : base()
@@ -20,7 +23,7 @@ namespace GameSvr.Monster.Monsters
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSx, ref nSy))
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTx, ref nTy);
-                var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
+                var nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 MagPassThroughMagic(nSx, nSy, nTx, nTy, nDir, nPower, true);
                 BreakHolySeizeMode();
             }

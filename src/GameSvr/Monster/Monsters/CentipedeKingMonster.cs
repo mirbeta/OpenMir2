@@ -48,7 +48,7 @@ namespace GameSvr.Monster.Monsters
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
-                var nPower = M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1)) + HUtil32.LoWord(WAbil.DC);
+                var nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     var baseObject = VisibleActors[i].BaseObject;
