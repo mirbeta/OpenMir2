@@ -53,7 +53,7 @@ namespace GameSvr.GameCommand.Commands
             //}
             //if (M2Share.g_boGameLogGameGird)
             //{
-            //    M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameGird, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, m_PlayObject.m_sChrName, M2Share.g_Config.sGameGird, m_PlayObject.m_nGAMEGIRD, sCtr[1] + "(" + (nGameGird).ToString() + ")", PlayObject.m_sChrName));
+            //    M2Share.ItemEventSource.AddGameLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameGird, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, m_PlayObject.m_sChrName, M2Share.g_Config.sGameGird, m_PlayObject.m_nGAMEGIRD, sCtr[1] + "(" + (nGameGird).ToString() + ")", PlayObject.m_sChrName));
             //}
             //PlayObject.GameGoldChanged();
             //m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGirdHumanMsg, M2Share.g_Config.sGameGird, nGameGird, m_PlayObject.m_nGAMEGIRD, M2Share.g_Config.sGameGird), TMsgColor.c_Green, TMsgType.t_Hint);

@@ -67,7 +67,7 @@ namespace GameSvr
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GameGateMgr GateMgr = null;
-        public static ItemEventSource ItemEventSource;
+        public static GameEventSource EventSource;
         public static MapManager MapMgr = null;
         public static CustomItem CustomItemMgr = null;
         public static MagicManager MagicMgr = null;
@@ -1170,11 +1170,6 @@ namespace GameSvr
                 }
             }
             return result;
-        }
-
-        public static void AddGameDataLog(string sMsg)
-        {
-            ItemEventSource.AddGameLog(sMsg);
         }
 
         public static void AddLogonCostLog(string sMsg)

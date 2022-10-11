@@ -1160,7 +1160,7 @@ namespace GameSvr.Actor
                     {
                         if (stdItem.NeedIdentify == 1)
                         {
-                            M2Share.AddGameDataLog(logcap + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
+                            M2Share.EventSource.AddEventLog(logcap + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
                                                    HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                         }
                     }
@@ -1430,7 +1430,7 @@ namespace GameSvr.Actor
                     }
                     if (M2Share.g_boGameLogGold)
                     {
-                        M2Share.AddGameDataLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                        M2Share.EventSource.AddEventLog(s20 + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -2725,7 +2725,7 @@ namespace GameSvr.Actor
                     var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
+                        M2Share.EventSource.AddEventLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
                                                ChrName + "\t" + stdItem.Name + "\t" +
                                                UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" +
                                                HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" +
@@ -4692,7 +4692,7 @@ namespace GameSvr.Actor
                         stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
                         if (stdItem.NeedIdentify == 1)
                         {
-                            M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
+                            M2Share.EventSource.AddEventLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
                                                    ChrName + "\t" + stdItem.Name + "\t" +
                                                    UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
                                                    + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
@@ -4732,7 +4732,7 @@ namespace GameSvr.Actor
                             stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
+                                M2Share.EventSource.AddEventLog('3' + "\t" + MapName + "\t" + CurrX + "\t" + CurrY +
                                                        "\t" + ChrName + "\t" + stdItem.Name + "\t" +
                                                        UseItems[i].MakeIndex + "\t"
                                                        + HUtil32.BoolToIntStr(Race == ActorRace.Play) +

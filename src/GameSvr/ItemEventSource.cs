@@ -2,10 +2,10 @@ using System.Diagnostics.Tracing;
 
 namespace GameSvr
 {
-    [EventSource(Name = "itemProvider")]
-    public class ItemEventSource : EventSource
+    [EventSource(Name = "GameProvider")]
+    public class GameEventSource : EventSource
     {
-        public void AddGameLog(string log)
+        public void AddEventLog(string log)
         {
             WriteEvent(1, log);
         }

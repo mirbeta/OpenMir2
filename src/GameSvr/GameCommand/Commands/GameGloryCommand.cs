@@ -56,7 +56,7 @@ namespace GameSvr.GameCommand.Commands
 
             //    if (M2Share.g_boGameLogGameGlory)
             //    {
-            //        M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameGlory,
+            //        M2Share.ItemEventSource.AddGameLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameGlory,
             //            TargerObject.m_sMapName, TargerObject.m_nCurrX, TargerObject.m_nCurrY, TargerObject.m_sChrName,
             //            M2Share.g_Config.sGameGlory, TargerObject.m_btGameGlory,
             //            sCtr[1] + "(" + (nGameGlory).ToString() + ")", PlayObject.m_sChrName));

@@ -28,7 +28,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 int nOLevel = m_PlayObject.Abil.Level;
                 m_PlayObject.HasLevelUp(1);
-                M2Share.AddGameDataLog("17" + "\09" + m_PlayObject.MapName + "\09" + m_PlayObject.CurrX + "\09" + m_PlayObject.CurrY + "\09"
+                M2Share.EventSource.AddEventLog("17" + "\09" + m_PlayObject.MapName + "\09" + m_PlayObject.CurrX + "\09" + m_PlayObject.CurrY + "\09"
                     + m_PlayObject.ChrName + "\09" + m_PlayObject.Abil.Level + "\09" + PlayObject.ChrName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
                 PlayObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.Config.ShowMakeItemMsg)

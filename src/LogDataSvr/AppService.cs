@@ -54,7 +54,7 @@ namespace LogDataSvr
 
                         var providers = new List<EventPipeProvider>()
                         {
-                            new EventPipeProvider("itemProvider", System.Diagnostics.Tracing.EventLevel.Informational, (long)ClrTraceEventParser.Keywords.All)
+                            new EventPipeProvider("GameProvider", System.Diagnostics.Tracing.EventLevel.Informational, (long)ClrTraceEventParser.Keywords.All)
                         };
                         var session = client.StartEventPipeSession(providers, false);
 

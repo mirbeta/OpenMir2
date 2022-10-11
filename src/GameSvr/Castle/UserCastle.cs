@@ -715,7 +715,7 @@ namespace GameSvr.Castle
             {
                 SaveTick = HUtil32.GetTickCount();
                 if (M2Share.g_boGameLogGold)
-                    M2Share.AddGameDataLog("23" + "\t" + '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" +
+                    M2Share.EventSource.AddEventLog("23" + "\t" + '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" +
                                            Grobal2.sSTRING_GOLDNAME + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
             }
         }
@@ -743,7 +743,7 @@ namespace GameSvr.Castle
                         TotalGold -= nGold;
                         PlayObject.IncGold(nGold);
                         if (M2Share.g_boGameLogGold)
-                            M2Share.AddGameDataLog("22" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX +
+                            M2Share.EventSource.AddEventLog("22" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX +
                                                    "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" +
                                                    Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         PlayObject.GoldChanged();
@@ -779,7 +779,7 @@ namespace GameSvr.Castle
                         PlayObject.Gold -= nGold;
                         TotalGold += nGold;
                         if (M2Share.g_boGameLogGold)
-                            M2Share.AddGameDataLog("23" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                            M2Share.EventSource.AddEventLog("23" + "\t" + PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         PlayObject.GoldChanged();
                         result = 1;
                     }
