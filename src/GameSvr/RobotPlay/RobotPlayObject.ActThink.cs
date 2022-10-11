@@ -896,7 +896,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.Error(Format("TAIPlayObject::ActThink Name:{0} Code:{1} ", new object[] { ChrName, nCode }));
+                M2Share.Log.Error(Format("RobotPlayObject::ActThink Name:{0} Code:{1} ", new object[] { ChrName, nCode }));
             }
             return result;
         }
