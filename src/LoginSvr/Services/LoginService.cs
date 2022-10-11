@@ -1,5 +1,5 @@
 using LoginSvr.Conf;
-using LoginSvr.DB;
+using LoginSvr.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
