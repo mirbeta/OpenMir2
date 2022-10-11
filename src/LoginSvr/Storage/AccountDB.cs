@@ -10,13 +10,13 @@ using SystemModule.Packet.ClientPackets;
 
 namespace LoginSvr.DB
 {
-    public class AccountDB
+    public class AccountStorage
     {
         private readonly MirLog _logger;
         private readonly ConfigManager _configManager;
         private readonly IList<AccountQuick> _quickList = null;
 
-        public AccountDB(MirLog logQueue, ConfigManager configManager)
+        public AccountStorage(MirLog logQueue, ConfigManager configManager)
         {
             _logger = logQueue;
             _configManager = configManager;
@@ -43,7 +43,7 @@ namespace LoginSvr.DB
             }
         }
 
-        public bool Open(ref MySqlConnection dbConnection)
+        private bool Open(ref MySqlConnection dbConnection)
         {
             bool result = false;
             if (dbConnection == null)
@@ -71,7 +71,7 @@ namespace LoginSvr.DB
             return result;
         }
 
-        public void Close(ref MySqlConnection dbConnection)
+        private void Close(ref MySqlConnection dbConnection)
         {
             if (dbConnection != null)
             {
@@ -256,7 +256,7 @@ namespace LoginSvr.DB
         private int UpdateRecord(TAccountDBRecord DBRecord, byte btFlag)
         {
             var result = 0;
-            string sdt = "now()";
+            const string sdt = "now()";
             const string sUpdateRecord1 = "INSERT INTO account (LOGINID, PASSWORD, USERNAME, CREATEDATE, LASTUPDATE, DELETED, ERRORCOUNT, ACTIONTICK, SSNO, BIRTHDAY, PHONE, MOBILEPHONE, EMAIL, QUIZ1, ANSWER1, QUIZ2, ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
             const string sUpdateRecord2 = "UPDATE account SET DELETED=1, CREATEDATE='{0}' WHERE LOGINID='{1}'";
             const string sUpdateRecord0 = "UPDATE account SET PASSWORD='{0}', USERNAME='{1}',LASTUPDATE={2}, ERRORCOUNT={3}, ACTIONTICK={4},SSNO='{5}', BIRTHDAY='{6}', PHONE='{7}',MOBILEPHONE='{8}', EMAIL='{9}', QUIZ1='{10}', ANSWER1='{11}', QUIZ2='{12}',ANSWER2='{13}' WHERE LOGINID='{14}'";
@@ -268,11 +268,11 @@ namespace LoginSvr.DB
             try
             {
                 var command = new MySqlCommand();
-                command.Connection = (MySqlConnection)dbConnection;
+                command.Connection = dbConnection;
                 switch (btFlag)
                 {
                     case 1:
-                        command.CommandText = string.Format(sUpdateRecord1, new object[] { DBRecord.UserEntry.sAccount, DBRecord.UserEntry.sPassword, DBRecord.UserEntry.sUserName, sdt, sdt, DBRecord.UserEntry.sSSNo, DBRecord.UserEntryAdd.sBirthDay, DBRecord.UserEntry.sPhone, DBRecord.UserEntryAdd.sMobilePhone, DBRecord.UserEntry.sEMail, DBRecord.UserEntry.sQuiz, DBRecord.UserEntry.sAnswer, DBRecord.UserEntryAdd.sQuiz2, DBRecord.UserEntryAdd.sAnswer2 });
+                        command.CommandText = string.Format(sUpdateRecord1, DBRecord.UserEntry.sAccount, DBRecord.UserEntry.sPassword, DBRecord.UserEntry.sUserName, sdt, sdt, DBRecord.UserEntry.sSSNo, DBRecord.UserEntryAdd.sBirthDay, DBRecord.UserEntry.sPhone, DBRecord.UserEntryAdd.sMobilePhone, DBRecord.UserEntry.sEMail, DBRecord.UserEntry.sQuiz, DBRecord.UserEntry.sAnswer, DBRecord.UserEntryAdd.sQuiz2, DBRecord.UserEntryAdd.sAnswer2);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -298,7 +298,7 @@ namespace LoginSvr.DB
                         }
                         break;
                     default:
-                        command.CommandText = string.Format(sUpdateRecord0, new object[] { DBRecord.UserEntry.sPassword, DBRecord.UserEntry.sUserName, sdt, DBRecord.nErrorCount, DBRecord.dwActionTick, DBRecord.UserEntry.sSSNo, DBRecord.UserEntryAdd.sBirthDay, DBRecord.UserEntry.sPhone, DBRecord.UserEntryAdd.sMobilePhone, DBRecord.UserEntry.sEMail, DBRecord.UserEntry.sQuiz, DBRecord.UserEntry.sAnswer, DBRecord.UserEntryAdd.sQuiz2, DBRecord.UserEntryAdd.sAnswer2, DBRecord.UserEntry.sAccount });
+                        command.CommandText = string.Format(sUpdateRecord0, DBRecord.UserEntry.sPassword, DBRecord.UserEntry.sUserName, sdt, DBRecord.nErrorCount, DBRecord.dwActionTick, DBRecord.UserEntry.sSSNo, DBRecord.UserEntryAdd.sBirthDay, DBRecord.UserEntry.sPhone, DBRecord.UserEntryAdd.sMobilePhone, DBRecord.UserEntry.sEMail, DBRecord.UserEntry.sQuiz, DBRecord.UserEntry.sAnswer, DBRecord.UserEntryAdd.sQuiz2, DBRecord.UserEntryAdd.sAnswer2, DBRecord.UserEntry.sAccount);
                         try
                         {
                             command.ExecuteNonQuery();
