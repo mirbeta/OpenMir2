@@ -168,10 +168,6 @@ namespace GameSvr.Player
         /// </summary>
         public int m_dwMoveCount;
         /// <summary>
-        /// 人物跑计数
-        /// </summary>
-        public int m_dwMoveCountA;
-        /// <summary>
         /// 超速计数
         /// </summary>
         public int m_nOverSpeedCount;
@@ -394,9 +390,6 @@ namespace GameSvr.Player
         public string m_sRankLevelName = string.Empty;
         // 显示名称格式串
         public bool m_boFilterAction = false;
-        public bool m_boClientFlag = false;
-        public byte m_nStep;
-        public int m_nClientFlagMode;
         public int m_dwAutoGetExpTick;
         public int m_nAutoGetExpTime = 0;
         public int m_nAutoGetExpPoint;
@@ -488,7 +481,6 @@ namespace GameSvr.Player
             m_dwAttackCountA = 0;
             m_dwMagicAttackCount = 0;
             m_dwMoveCount = 0;
-            m_dwMoveCountA = 0;
             m_nOverSpeedCount = 0;
             m_sOldSayMsg = "";
             m_dwSayMsgTick = HUtil32.GetTickCount();
@@ -555,7 +547,6 @@ namespace GameSvr.Player
             m_wContribution = 0;
             m_sRankLevelName = M2Share.g_sRankLevelName;
             FixedHideMode = true;
-            m_nStep = 0;
             m_nVal = new int[100];
             m_nMval = new int[100];
             m_DyVal = new int[100];
@@ -564,7 +555,6 @@ namespace GameSvr.Player
             m_sString = new string[100];
             m_ServerStrVal = new string[100];
             m_ServerIntVal = new int[100];
-            m_nClientFlagMode = -1;
             m_dwAutoGetExpTick = HUtil32.GetTickCount();
             m_nAutoGetExpPoint = 0;
             m_AutoGetExpEnvir = null;

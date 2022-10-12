@@ -639,18 +639,6 @@ namespace GameSvr.Player
                 M2Share.Log.Error(sExceptionMsg4);
                 M2Share.Log.Error(e.Message);
             }
-            if (!m_boClientFlag && m_nStep >= 9 && M2Share.Config.boCheckFail)
-            {
-                if (m_nClientFlagMode == 1)
-                {
-                    M2Share.Config.TestLevel = M2Share.RandomNumber.Random(M2Share.MAXUPLEVEL + 1);
-                }
-                else
-                {
-                    // Die();
-                    M2Share.WorldEngine.ClearItemList();
-                }
-            }
             if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - m_dwAutoGetExpTick) > m_nAutoGetExpTime)
             {
                 m_dwAutoGetExpTick = HUtil32.GetTickCount();
