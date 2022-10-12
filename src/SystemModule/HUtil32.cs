@@ -44,7 +44,12 @@ namespace SystemModule
         {
             return (int)(lowPart | (uint)(highPart << 16));
         }
-        
+
+        public static ushort MakeWord(byte low, byte high)
+        {
+            return (ushort)((high << 8) | low);
+        }
+
         public static ushort MakeWord(ushort bLow, ushort bHigh)
         {
             return (ushort)(bLow | (bHigh << 8));
