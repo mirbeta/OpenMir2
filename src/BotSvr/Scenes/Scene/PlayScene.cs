@@ -1016,7 +1016,7 @@ namespace BotSvr.Scenes.Scene
             return result;
         }
 
-        public void SendMsg(int ident, int chrid, ushort x, ushort y, int cdir, int feature, int state, string str, int ipInfo = 0)
+        public void SendMsg(int ident, int chrid, ushort x, ushort y, byte cdir, int feature, int state, string str, int ipInfo = 0)
         {
             TActor actor;
             MessageBodyW mbw;

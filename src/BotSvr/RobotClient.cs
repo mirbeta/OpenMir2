@@ -2051,7 +2051,7 @@ namespace BotSvr
                         ClearDropItems();
                         g_PlayScene.CleanObjects();
                         MShare.g_sMapTitle = "";
-                        g_PlayScene.SendMsg(Grobal2.SM_CHANGEMAP, 0, WaitingMsg.Param, WaitingMsg.Tag, WaitingMsg.Series, 0, 0, WaitingStr);
+                        g_PlayScene.SendMsg(Grobal2.SM_CHANGEMAP, 0, WaitingMsg.Param, WaitingMsg.Tag, (byte)WaitingMsg.Series, 0, 0, WaitingStr);
                         MShare.g_MySelf.CleanCharMapSetting((short)WaitingMsg.Param, (short)WaitingMsg.Tag);
                         MShare.g_nTargetX = -1;
                         MShare.g_TargetCret = null;
@@ -3191,7 +3191,7 @@ namespace BotSvr
                 case Grobal2.SM_NEWMAP:
                     MShare.g_sMapTitle = "";
                     Str = EDCode.DeCodeString(body);
-                    g_PlayScene.SendMsg(Grobal2.SM_NEWMAP, 0, msg.Param, msg.Tag, msg.Series, 0, 0, Str);
+                    g_PlayScene.SendMsg(Grobal2.SM_NEWMAP, 0, msg.Param, msg.Tag, (byte)msg.Series, 0, 0, Str);
                     break;
                 case Grobal2.SM_LOGON:
                     MShare.g_dwFirstServerTime = 0;
@@ -3201,7 +3201,7 @@ namespace BotSvr
                     {
                         msg.Series = (byte)RandomNumber.GetInstance().Random(8);
                     }
-                    g_PlayScene.SendMsg(Grobal2.SM_LOGON, msg.Recog, msg.Param, msg.Tag, msg.Series, wl.Param1, wl.Param2, "");
+                    g_PlayScene.SendMsg(Grobal2.SM_LOGON, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, wl.Param1, wl.Param2, "");
                     SendClientMessage(Grobal2.CM_QUERYBAGITEMS, 1, 0, 0, 0);
                     if (HUtil32.LoByte(HUtil32.LoWord(wl.Tag1)) == 1)
                     {
@@ -3273,7 +3273,7 @@ namespace BotSvr
                         data = "";
                     }
                     desc = EDCode.DecodeBuffer<CharDesc>(body2);
-                    g_PlayScene.SendMsg(Grobal2.SM_TURN, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                    g_PlayScene.SendMsg(Grobal2.SM_TURN, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     if (data != "")
                     {
                         Actor = g_PlayScene.FindActor(msg.Recog);
@@ -3327,7 +3327,7 @@ namespace BotSvr
                         data = "";
                     }
                     desc = EDCode.DecodeBuffer<CharDesc>(body2);
-                    g_PlayScene.SendMsg(Grobal2.SM_BACKSTEP, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                    g_PlayScene.SendMsg(Grobal2.SM_BACKSTEP, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     if (data != "")
                     {
                         Actor = g_PlayScene.FindActor(msg.Recog);
@@ -3373,7 +3373,7 @@ namespace BotSvr
                     {
                         g_PlayScene.NewActor(msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status);
                     }
-                    g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                    g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     if (data != "")
                     {
                         Actor = g_PlayScene.FindActor(msg.Recog);
@@ -3397,11 +3397,11 @@ namespace BotSvr
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
                     if (msg.Recog == MShare.g_MySelf.m_nRecogId)
                     {
-                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
                     else
                     {
-                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
                     if (msg.Ident == Grobal2.SM_RUSH)
                     {
@@ -3414,7 +3414,7 @@ namespace BotSvr
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
                     if (msg.Recog != MShare.g_MySelf.m_nRecogId)
                     {
-                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                        g_PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
                     break;
                 case Grobal2.SM_CHANGELIGHT:
@@ -3436,7 +3436,7 @@ namespace BotSvr
                     RecalcAutoMovePath();
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
                     ActionFailLock = false;
-                    g_PlayScene.SendMsg(Grobal2.SM_TURN, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                    g_PlayScene.SendMsg(Grobal2.SM_TURN, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     break;
                 case Grobal2.SM_BUTCH:// 挖肉动作封包
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
@@ -3534,16 +3534,16 @@ namespace BotSvr
                     }
                     else
                     {
-                        g_PlayScene.SendMsg(Grobal2.SM_DEATH, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                        g_PlayScene.SendMsg(Grobal2.SM_DEATH, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
                     break;
                 case Grobal2.SM_SKELETON:
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
-                    g_PlayScene.SendMsg(Grobal2.SM_SKELETON, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                    g_PlayScene.SendMsg(Grobal2.SM_SKELETON, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     break;
                 case Grobal2.SM_ALIVE:
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
-                    g_PlayScene.SendMsg(Grobal2.SM_ALIVE, msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
+                    g_PlayScene.SendMsg(Grobal2.SM_ALIVE, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     break;
                 case Grobal2.SM_ABILITY:
                     MShare.g_MySelf.m_nGold = msg.Recog;
@@ -3767,7 +3767,7 @@ namespace BotSvr
                 case Grobal2.SM_DISAPPEAR:
                     if (MShare.g_MySelf.m_nRecogId != msg.Recog)
                     {
-                        g_PlayScene.SendMsg(Grobal2.SM_HIDE, msg.Recog, msg.Param, msg.Tag, msg.Series, 0, 0, "");
+                        g_PlayScene.SendMsg(Grobal2.SM_HIDE, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, 0, 0, "");
                     }
                     break;
                 case Grobal2.SM_DIGUP:

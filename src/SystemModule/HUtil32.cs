@@ -10,7 +10,7 @@ namespace SystemModule
     public class HUtil32
     {
         public const string Backslash = "/";
-        public static readonly string[] Separator =  { " ", ",", "\t" };
+        public static readonly string[] Separator = { " ", ",", "\t" };
         public static readonly UserItem DelfautItem = new UserItem();
         public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
 
@@ -39,7 +39,7 @@ namespace SystemModule
         {
             return (int)(((ushort)lowPart) | (uint)(highPart << 16));
         }
-        
+
         public static int MakeLong(ushort lowPart, ushort highPart)
         {
             return (int)(lowPart | (uint)(highPart << 16));
@@ -59,7 +59,7 @@ namespace SystemModule
         {
             return (ushort)(dword >> 16);
         }
-        
+
         public static ushort HiWord(int dword)
         {
             return (ushort)(dword >> 16);
@@ -90,6 +90,26 @@ namespace SystemModule
             return (byte)w;
         }
 
+        public static ushort LoWord(uint nValue)
+        {
+            return (ushort)(nValue & 0xFFFF);
+        }
+
+        public static ushort HiWord(uint nValue)
+        {
+            return (ushort)(nValue >> 16);
+        }
+
+        public static byte LoByte(ushort nValue)
+        {
+            return (byte)(nValue & 0xFF);
+        }
+
+        public static byte HiByte(ushort nValue)
+        {
+            return (byte)(nValue >> 8);
+        }
+
         public static bool IsVarNumber(string str)
         {
             return (CompareLStr(str, "HUMAN", 5)) || (CompareLStr(str, "GUILD", 5)) || (CompareLStr(str, "GLOBAL", 6));
@@ -104,12 +124,12 @@ namespace SystemModule
         {
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
         }
-        
+
         public static int Round(int r)
         {
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
         }
-        
+
         public static int Round(double r)
         {
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
@@ -123,7 +143,7 @@ namespace SystemModule
         {
             return Math.Max(min, values) == Math.Min(values, max);
         }
-        
+
         /// <summary>
         /// 判断数值是否在范围之内
         /// </summary>
@@ -475,7 +495,7 @@ namespace SystemModule
             }
             return true;
         }
-        
+
         public static bool CompareLStr(string src, string targ, int compn)
         {
             if (compn <= 0) return false;
@@ -622,7 +642,7 @@ namespace SystemModule
         {
             return Encoding.GetEncoding("GB2312").GetBytes(str);
         }
-        
+
         /// <summary>
         /// 字符串转Byte字节数组
         /// </summary>
