@@ -147,9 +147,21 @@ namespace DBSvr.Services
                 if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0)
                 {
                     var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
+                    if (queryId <= 0)
+                    {
+                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
+                        return;
+                    }
+                    if (requestPacket.Sgin.Length <= 0)
+                    {
+                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
+                        return;
+                    }
+                    var signatureBuff = BitConverter.GetBytes(queryId);
+                    var signatureId = BitConverter.ToInt16(signatureBuff);
                     var sginBuff = EDCode.DecodeBuff(requestPacket.Sgin);
                     var sgin = BitConverter.ToInt16(sginBuff);
-                    if (sgin == queryId)
+                    if (sgin == signatureId)
                     {
                         ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
                         return;
