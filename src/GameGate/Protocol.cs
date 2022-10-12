@@ -1,10 +1,11 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace GameGate
 {
     public struct TMessageData
     {
-        public byte[] Buffer;
+        public Memory<byte> Buffer;
         public int BufferLen;
         public int MessageId;
     }

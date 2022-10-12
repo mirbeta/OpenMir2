@@ -35,7 +35,7 @@ namespace GameGate.Services
         /// <summary>
         /// 独立Buffer分区
         /// </summary>
-        private byte[] receiveBuffer = null;
+        private Memory<byte> receiveBuffer = null;
         /// <summary>
         /// 上次剩下多少字节未处理
         /// </summary>
@@ -192,20 +192,16 @@ namespace GameGate.Services
             {
                 if (buffLen > 0)
                 {
-                    //Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
-                    //tempBuff = receiveBuffer;// Buffer.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _buffLen);
-                    //for (int i = buffLen; i < data.Length; i++) // Buffer.BlockCopy(data, 0, tempBuff, _buffLen, data.Length);
-                    //{
-                    //    tempBuff[i] = data[i];
-                    //}
-                    //receiveBuffer = tempBuff.ToArray();
-
-                    var tempBuffs = new byte[buffLen + nMsgLen];
-                    Buffer.BlockCopy(receiveBuffer, 0, tempBuffs, 0, buffLen);
-                    Buffer.BlockCopy(data, 0, tempBuffs, buffLen, data.Length);
-                    receiveBuffer = tempBuffs;
-
-                    Console.WriteLine("哈哈哈");
+                    Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
+                    for (int i = 0; i < receiveBuffer.Length; i++)
+                    {
+                        tempBuff[i] = receiveBuffer.Span[i];
+                    }
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        tempBuff[i + buffLen] = data[i];
+                    }
+                    receiveBuffer = tempBuff.ToArray();
                 }
                 else
                 {
@@ -217,7 +213,7 @@ namespace GameGate.Services
                 {
                     while (true)
                     {
-                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff); //todo 这里内存消耗严重
+                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff.ToArray()); 
                         if (packetHeader.PacketCode == 0)
                         {
                             LogQueue.Enqueue("不应该出现这个文字", 5);
@@ -253,19 +249,16 @@ namespace GameGate.Services
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    byte[] msgBuff = packetHeader.PackLength > 0 ? new byte[packetHeader.PackLength] : new byte[dataBuff.Length - HeaderMessageSize];
-                                    Buffer.BlockCopy(dataBuff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
-
                                     var message = new TMessageData();
                                     message.MessageId = packetHeader.SessionId;
                                     if (packetHeader.PackLength > 0)
                                     {
-                                        message.Buffer = dataBuff.AsSpan().Slice(20, packetHeader.PackLength).ToArray();//20..packetHeader.PackLength
+                                        message.Buffer = dataBuff.Slice(20, packetHeader.PackLength);
                                     }
                                     else
                                     {
-                                        var sieze = dataBuff.Length - HeaderMessageSize;
-                                        message.Buffer = dataBuff.AsSpan().Slice(20, sieze).ToArray();
+                                        var packetSize = dataBuff.Length - HeaderMessageSize;
+                                        message.Buffer = dataBuff.Slice(20, packetSize);
                                     }
                                     message.BufferLen = packetHeader.PackLength;
                                     SessionManager.AddToQueue(message);
@@ -278,19 +271,15 @@ namespace GameGate.Services
                             {
                                 break;
                             }
-                            var tempBuff = new byte[nLen];
-                            Buffer.BlockCopy(receiveBuffer, nCheckMsgLen, tempBuff, 0, nLen);
-                            receiveBuffer = tempBuff;
-                            dataBuff = tempBuff;
+                            receiveBuffer = receiveBuffer.Slice(nCheckMsgLen, nLen);
+                            dataBuff = receiveBuffer;
                             buffLen = nLen;
                             srcOffset = 0;
                         }
                         else
                         {
                             srcOffset++;
-                            var messageBuff = new byte[dataBuff.Length - 1];
-                            Buffer.BlockCopy(dataBuff, srcOffset, messageBuff, 0, HeaderMessageSize);
-                            dataBuff = messageBuff;
+                            dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
                             nLen -= 1;
                             LogQueue.EnqueueDebugging("看到这行字也有点问题.");
                         }
@@ -302,9 +291,7 @@ namespace GameGate.Services
                 }
                 if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    var tempBuff = new byte[nLen];
-                    Buffer.BlockCopy(dataBuff, 0, tempBuff, 0, nLen);
-                    receiveBuffer = tempBuff;
+                    receiveBuffer = dataBuff[..nLen];
                     buffLen = nLen;
                 }
                 else
