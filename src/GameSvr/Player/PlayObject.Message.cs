@@ -789,13 +789,13 @@ namespace GameSvr.Player
                     ClientMerchantDlgSelect(ProcessMsg.nParam1, ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_MERCHANTQUERYSELLPRICE:
-                    ClientMerchantQuerySellPrice(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientMerchantQuerySellPrice(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERSELLITEM:
-                    ClientUserSellItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientUserSellItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERBUYITEM:
-                    ClientUserBuyItem(ProcessMsg.wIdent, ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), 0, ProcessMsg.Msg);
+                    ClientUserBuyItem(ProcessMsg.wIdent, ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), 0, ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERGETDETAILITEM:
                     ClientUserBuyItem(ProcessMsg.wIdent, ProcessMsg.nParam1, 0, ProcessMsg.nParam2, ProcessMsg.Msg);
@@ -837,10 +837,10 @@ namespace GameSvr.Player
                     ClientDelGroupMember(ProcessMsg.Msg.Trim());
                     break;
                 case Grobal2.CM_USERREPAIRITEM:
-                    ClientRepairItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientRepairItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2,(ushort) ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_MERCHANTQUERYREPAIRCOST:
-                    ClientQueryRepairCost(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientQueryRepairCost(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_DEALTRY:
                     ClientDealTry(ProcessMsg.Msg.Trim());
@@ -861,10 +861,10 @@ namespace GameSvr.Player
                     ClientDealEnd();
                     break;
                 case Grobal2.CM_USERSTORAGEITEM:
-                    ClientStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERTAKEBACKSTORAGEITEM:
-                    ClientTakeBackStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientTakeBackStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_WANTMINIMAP:
                     ClientGetMinMap();

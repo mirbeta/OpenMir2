@@ -130,12 +130,12 @@ namespace BotSvr
         public static int g_dwLatestRushRushTick = 0;
         public static int g_dwMagicDelayTime = 0;
         public static int g_dwMagicPKDelayTime = 0;
-        public static int g_nMouseCurrX = 0;
-        public static int g_nMouseCurrY = 0;
-        public static int g_nMouseX = 0;
-        public static int g_nMouseY = 0;
-        public static int g_nTargetX = 0;
-        public static int g_nTargetY = 0;
+        public static short g_nMouseCurrX = 0;
+        public static short g_nMouseCurrY = 0;
+        public static ushort g_nMouseX = 0;
+        public static ushort g_nMouseY = 0;
+        public static short g_nTargetX = 0;
+        public static short g_nTargetY = 0;
         public static TActor g_TargetCret = null;
         public static TActor g_FocusCret = null;
         public static TActor g_MagicTarget = null;
@@ -1782,8 +1782,8 @@ namespace BotSvr
     public record struct TChrMsg
     {
         public int Ident;
-        public int X;
-        public int Y;
+        public short X;
+        public short Y;
         public int Dir;
         public int State;
         public int Feature;
@@ -1794,8 +1794,8 @@ namespace BotSvr
 
     public class TDropItem
     {
-        public int X;
-        public int Y;
+        public short X;
+        public short Y;
         public int id;
         public int looks;
         public string Name;

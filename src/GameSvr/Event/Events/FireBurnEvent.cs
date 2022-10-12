@@ -13,7 +13,7 @@ namespace GameSvr.Event.Events
         /// </summary>
         protected int FireRunTick;
 
-        public FireBurnEvent(BaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.Envir, nX, nY, nType, nTime, true)
+        public FireBurnEvent(BaseObject Creat, short nX, short nY, byte nType, int nTime, int nDamage) : base(Creat.Envir, nX, nY, nType, nTime, true)
         {
             Damage = nDamage;
             OwnBaseObject = Creat;

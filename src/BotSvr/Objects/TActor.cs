@@ -92,8 +92,8 @@ namespace BotSvr.Objects
         public long m_dwWarModeTime;
         public bool m_fHideMode;
         public IList<TChrMsg> m_MsgList;
-        public int m_nActBeforeX;
-        public int m_nActBeforeY;
+        public short m_nActBeforeX;
+        public short m_nActBeforeY;
         public int m_nAppearSound = 0;
         public int m_nAttackSound;
         public int m_nBagSize = 0;
@@ -107,8 +107,8 @@ namespace BotSvr.Objects
         protected int m_nCurrentDefFrame;
         public int m_nCurrentEvent = 0;
         public int m_nCurrentFrame;
-        public int m_nCurrX;
-        public int m_nCurrY;
+        public short m_nCurrX;
+        public short m_nCurrY;
         protected int m_nCurTick;
         protected int m_nDefFrameCount;
         public int m_nDie2Sound;
@@ -155,30 +155,30 @@ namespace BotSvr.Objects
         public int m_nNormalSound;
         public bool m_noInstanceOpenHealth;
         protected int m_nOldDir;
-        protected int m_nOldx;
-        protected int m_nOldy;
-        public int m_nPx = 0;
-        public int m_nPy = 0;
+        protected short m_nOldx;
+        protected short m_nOldy;
+        public short m_nPx = 0;
+        public short m_nPy = 0;
         public int m_nRecogId;
         public int m_nRushDir = 0;
-        public int m_nRx;
-        public int m_nRy;
+        public short m_nRx;
+        public short m_nRy;
         public int m_nSayLineCount = 0;
-        public int m_nSayX = 0;
-        public int m_nSayY = 0;
+        public short m_nSayX = 0;
+        public short m_nSayY = 0;
         public int m_nScreamSound;
-        public int m_nShiftX;
-        public int m_nShiftY;
+        public short m_nShiftX;
+        public short m_nShiftY;
         protected int m_nSkipTick;
         public int m_nSpellFrame;
-        public int m_nSpx = 0;
-        public int m_nSpy = 0;
+        public short m_nSpx = 0;
+        public short m_nSpy = 0;
         protected int m_nStartFrame;
         public int m_nState;
         public int m_nStruckSound = 0;
         public int m_nStruckWeaponSound;
-        public int m_nTagX = 0;
-        public int m_nTagY = 0;
+        public short m_nTagX = 0;
+        public short m_nTagY = 0;
         public int m_nTargetRecog = 0;
         public int m_nTargetX = 0;
         public int m_nTargetY = 0;
@@ -283,12 +283,12 @@ namespace BotSvr.Objects
             m_Abil = new Ability();
         }
 
-        public void SendMsg(int wIdent, int nX, int nY, int ndir, int nFeature, int nState, string sStr, int nSound, int dwDelay = 0)
+        public void SendMsg(int wIdent, ushort nX, ushort nY, int ndir, int nFeature, int nState, string sStr, int nSound, int dwDelay = 0)
         {
             TChrMsg Msg = new TChrMsg();
             Msg.Ident = wIdent;
-            Msg.X = nX;
-            Msg.Y = nY;
+            Msg.X = (short)nX;
+            Msg.Y = (short)nY;
             Msg.Dir = ndir;
             Msg.Feature = nFeature;
             Msg.State = nState;
@@ -305,7 +305,7 @@ namespace BotSvr.Objects
             m_MsgList.Add(Msg);
         }
 
-        public void UpdateMsg(short wIdent, int nX, int nY, int ndir, int nFeature, int nState, string sStr, int nSound)
+        public void UpdateMsg(short wIdent, ushort nX, ushort nY, int ndir, int nFeature, int nState, string sStr, int nSound)
         {
             TChrMsg Msg;
             var i = 0;
@@ -669,10 +669,10 @@ namespace BotSvr.Objects
         {
             int ss;
             int v;
-            int funx;
-            int funy;
-            var unx = Grobal2.UNITX * step;
-            var uny = Grobal2.UNITY * step;
+            short funx;
+            short funy;
+            short unx = (short)(Grobal2.UNITX * step);
+            short uny = (short)(Grobal2.UNITY * step);
             if (cur > max) cur = max;
             m_nRx = m_nCurrX;
             m_nRy = m_nCurrY;
@@ -680,17 +680,17 @@ namespace BotSvr.Objects
             {
                 case Grobal2.DR_UP:
                     ss = HUtil32.Round((max - cur) / max) * step;
-                    m_nRy = m_nCurrY + ss;
+                    m_nRy = (short)(m_nCurrY + ss);
                     if (ss == step)
                     {
-                        funx = -HUtil32.Round(uny / max * cur);
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)-HUtil32.Round(uny / max * cur);
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftY = funx;
                     }
                     else
                     {
-                        funx = HUtil32.Round(uny / max * (max - cur));
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)HUtil32.Round(uny / max * (max - cur));
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftY = funx;
                     }
 
@@ -701,35 +701,35 @@ namespace BotSvr.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur + v) / max) * step;
-                    m_nRx = m_nCurrX - ss;
-                    m_nRy = m_nCurrY + ss;
+                    m_nRx = (short)(m_nCurrX - ss);
+                    m_nRy = (short)(m_nCurrY + ss);
                     if (ss == step)
                     {
-                        funx = HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)HUtil32.Round(unx / max * cur);
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = -HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)-HUtil32.Round(uny / max * cur);
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
                     else
                     {
-                        funx = -HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)-HUtil32.Round(unx / max * (max - cur));
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)HUtil32.Round(uny / max * (max - cur));
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
 
                     break;
                 case Grobal2.DR_RIGHT:
                     ss = HUtil32.Round((max - cur) / max) * step;
-                    m_nRx = m_nCurrX - ss;
+                    m_nRx = (short)(m_nCurrX - ss);
                     if (ss == step)
-                        m_nShiftX = HUtil32.Round(unx / max * cur);
+                        m_nShiftX = (short)HUtil32.Round(unx / max * cur);
                     else
-                        m_nShiftX = -HUtil32.Round(unx / max * (max - cur));
+                        m_nShiftX = (short)-HUtil32.Round(unx / max * (max - cur));
                     m_nShiftY = 0;
                     break;
                 case Grobal2.DR_DOWNRIGHT:
@@ -738,24 +738,24 @@ namespace BotSvr.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur - v) / max) * step;
-                    m_nRx = m_nCurrX - ss;
-                    m_nRy = m_nCurrY - ss;
+                    m_nRx = (short)(m_nCurrX - ss);
+                    m_nRy = (short)(m_nCurrY - ss);
                     if (ss == step)
                     {
-                        funx = HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)HUtil32.Round(unx / max * cur);
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)HUtil32.Round(uny / max * cur);
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
                     else
                     {
-                        funx = -HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)-HUtil32.Round(unx / max * (max - cur));
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = -HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)-HUtil32.Round(uny / max * (max - cur));
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
 
@@ -767,17 +767,17 @@ namespace BotSvr.Objects
                         v = 0;
                     ss = HUtil32.Round((max - cur - v) / max) * step;
                     m_nShiftX = 0;
-                    m_nRy = m_nCurrY - ss;
+                    m_nRy = (short)(m_nCurrY - ss);
                     if (ss == step)
                     {
-                        funy = HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)HUtil32.Round(uny / max * cur);
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
                     else
                     {
-                        funy = -HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)-HUtil32.Round(uny / max * (max - cur));
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
 
@@ -788,35 +788,35 @@ namespace BotSvr.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur - v) / max) * step;
-                    m_nRx = m_nCurrX + ss;
-                    m_nRy = m_nCurrY - ss;
+                    m_nRx = (short)(m_nCurrX + ss);
+                    m_nRy = (short)(m_nCurrY - ss);
                     if (ss == step)
                     {
-                        funx = -HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)-HUtil32.Round(unx / max * cur);
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)HUtil32.Round(uny / max * cur);
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
                     else
                     {
-                        funx = HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)HUtil32.Round(unx / max * (max - cur));
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = -HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)-HUtil32.Round(uny / max * (max - cur));
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
 
                     break;
                 case Grobal2.DR_LEFT:
                     ss = HUtil32.Round((max - cur) / max) * step;
-                    m_nRx = m_nCurrX + ss;
+                    m_nRx = (short)(m_nCurrX + ss);
                     if (ss == step)
-                        m_nShiftX = -HUtil32.Round(unx / max * cur);
+                        m_nShiftX = (short)-HUtil32.Round(unx / max * cur);
                     else
-                        m_nShiftX = HUtil32.Round(unx / max * (max - cur));
+                        m_nShiftX = (short)HUtil32.Round(unx / max * (max - cur));
                     m_nShiftY = 0;
                     break;
                 case Grobal2.DR_UPLEFT:
@@ -825,24 +825,24 @@ namespace BotSvr.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur + v) / max) * step;
-                    m_nRx = m_nCurrX + ss;
-                    m_nRy = m_nCurrY + ss;
+                    m_nRx = (short)(m_nCurrX + ss);
+                    m_nRy = (short)(m_nCurrY + ss);
                     if (ss == step)
                     {
-                        funx = -HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)-HUtil32.Round(unx / max * cur);
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = -HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)-HUtil32.Round(uny / max * cur);
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
                     else
                     {
-                        funx = HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = funx + 1;
+                        funx = (short)HUtil32.Round(unx / max * (max - cur));
+                        if (funx % 2 != 0) funx = (short)(funx + 1);
                         m_nShiftX = funx;
-                        funy = HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = funy + 1;
+                        funy = (short)HUtil32.Round(uny / max * (max - cur));
+                        if (funy % 2 != 0) funy = (short)(funy + 1);
                         m_nShiftY = funy;
                     }
 
@@ -1237,7 +1237,7 @@ namespace BotSvr.Objects
             m_boLockEndFrame = true;
         }
 
-        public void CleanCharMapSetting(int X, int Y)
+        public void CleanCharMapSetting(short X, short Y)
         {
             MShare.g_MySelf.m_nCurrX = X;
             MShare.g_MySelf.m_nCurrY = Y;

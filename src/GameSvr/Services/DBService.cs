@@ -61,9 +61,8 @@ namespace GameSvr.Services
             requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
             requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(requet));
 
-            var s = HUtil32.MakeLong(nQueryID ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
+            var s = HUtil32.MakeLong((ushort)(nQueryID ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
-
             _clientScoket.Send(requestPacket.GetBuffer());
 
             return true;
@@ -156,7 +155,7 @@ namespace GameSvr.Services
                     var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
                     if (nLen >= 12)
                     {
-                        var nCheckCode = HUtil32.MakeLong(respCheckCode ^ 170, nLen);
+                        var nCheckCode = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                         var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
                         if (nCheckCode == BitConverter.ToInt16(sginBuff))
                         {

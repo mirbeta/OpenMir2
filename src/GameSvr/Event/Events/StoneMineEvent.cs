@@ -10,7 +10,7 @@ namespace GameSvr.Event.Events
         public int AddStoneMineTick;
         public bool AddToMap;
 
-        public StoneMineEvent(Envirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, 0, false)
+        public StoneMineEvent(Envirnoment Envir, short nX, short nY, byte nType) : base(Envir, nX, nY, nType, 0, false)
         {
             AddToMap = true;
             if (nType is 55 or 56 or 57)

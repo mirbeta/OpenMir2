@@ -98,7 +98,7 @@ namespace GameGate.Auth
 
         private static int CharToValue(char c)
         {
-            int value = (int)c;
+            int value = c;
 
             //65-90 == uppercase letters
             if (value < 91 && value > 64)
