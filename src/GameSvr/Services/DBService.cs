@@ -64,7 +64,6 @@ namespace GameSvr.Services
             var s = HUtil32.MakeLong((ushort)(nQueryID ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
             _clientScoket.Send(requestPacket.GetBuffer());
-
             return true;
         }
 
@@ -105,7 +104,7 @@ namespace GameSvr.Services
                 var data = e.Buff;
                 if (_packetLen == 0 && data[0] == (byte)'#')
                 {
-                    _packetLen = BitConverter.ToInt32(data[1..5]);
+                    _packetLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
                 }
                 if (_recvBuff != null && _recvBuff.Length > 0)
                 {
@@ -155,9 +154,16 @@ namespace GameSvr.Services
                     var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
                     if (nLen >= 12)
                     {
-                        var nCheckCode = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
+                        var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
+                        if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
+                        {
+                            M2Share.Config.nLoadDBErrorCount++;
+                            return;
+                        }
+                        var signatureBuff = BitConverter.GetBytes(queryId);
+                        var signatureId = BitConverter.ToInt16(signatureBuff);
                         var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
-                        if (nCheckCode == BitConverter.ToInt16(sginBuff))
+                        if (signatureId == BitConverter.ToInt16(sginBuff))
                         {
                             HumDataService.AddToProcess(respCheckCode, responsePacket);
                         }

@@ -1237,7 +1237,7 @@ namespace GameGate
         }
     }
 
-    public enum TCheckStep
+    public enum TCheckStep : byte
     {
         CheckLogin,
         SendCheck,
