@@ -658,7 +658,7 @@ namespace GameSvr.Player
         private void SendLogon()
         {
             var MessageBodyWL = new MessageBodyWL();
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, (ushort)Light));
             MessageBodyWL.Param1 = GetFeatureToLong();
             MessageBodyWL.Param2 = CharStatus;
             if (AllowGroup)
@@ -1464,7 +1464,7 @@ namespace GameSvr.Player
                     }
                     if (MapEvent.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(this, Grobal2.RM_SHOWEVENT, (short)MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, (ushort)MapEvent.EventParam), MapEvent.nY, "");
+                        SendMsg(this, Grobal2.RM_SHOWEVENT, (short)MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, (short)MapEvent.EventParam), MapEvent.nY, "");
                     }
                     I++;
                 }

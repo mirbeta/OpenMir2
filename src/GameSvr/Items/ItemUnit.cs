@@ -658,11 +658,11 @@ namespace GameSvr.Items
             {
                 case 5:
                 case 6:
-                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[0]));
-                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[1]));
-                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[2]));
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC) + userItem.Desc[3], HUtil32.HiByte(AC) + userItem.Desc[5]);
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC) + userItem.Desc[4], HUtil32.HiByte(MAC));
+                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[0]));
+                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[1]));
+                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[2]));
+                    clientItem.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AC) + userItem.Desc[3]), (ushort)(HUtil32.HiByte(AC) + userItem.Desc[5]));
+                    clientItem.Item.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(MAC) + userItem.Desc[4]), HUtil32.HiByte(MAC));
                     clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), GetAttackSpeed(HUtil32.HiByte(MAC), userItem.Desc[6]));
                     if (userItem.Desc[7] >= 1 && userItem.Desc[7] <= 10)
                     {
@@ -720,11 +720,11 @@ namespace GameSvr.Items
                     break;
                 case 10:
                 case 11:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
-                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
-                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
-                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
+                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
+                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[11]);
                     clientItem.Item.MgAvoid = (byte)(MgAvoid + userItem.Desc[12]);
                     clientItem.Item.ToxAvoid = (byte)(ToxAvoid + userItem.Desc[13]);
@@ -762,11 +762,11 @@ namespace GameSvr.Items
                     }
                     break;
                 case 15:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
-                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
-                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
-                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
+                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
+                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
                     clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[11]);
                     clientItem.Item.MgAvoid = (byte)(MgAvoid + userItem.Desc[12]);
                     clientItem.Item.ToxAvoid = (byte)(ToxAvoid + userItem.Desc[13]);
@@ -814,11 +814,11 @@ namespace GameSvr.Items
                 case 19:
                 case 20:
                 case 21:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
-                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
-                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
-                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
+                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
+                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
                     clientItem.Item.AtkSpd = (byte)(AtkSpd + userItem.Desc[9]);
                     clientItem.Item.Slowdown = (byte)(Slowdown + userItem.Desc[12]);
                     clientItem.Item.Tox = (byte)(Tox + userItem.Desc[13]);
@@ -882,11 +882,11 @@ namespace GameSvr.Items
                     break;
                 case 22:
                 case 23:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
-                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
-                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
-                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
+                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
+                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
                     clientItem.Item.AtkSpd = (byte)(AtkSpd + userItem.Desc[9]);
                     clientItem.Item.Slowdown = (byte)(Slowdown + userItem.Desc[12]);
                     clientItem.Item.Tox = (byte)(Tox + userItem.Desc[13]);
@@ -932,11 +932,11 @@ namespace GameSvr.Items
                     }
                     break;
                 case 24:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
-                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
-                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
-                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
+                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
+                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
                     if (userItem.Desc[5] > 0)
                     {
                         clientItem.Item.Need = userItem.Desc[5];
@@ -967,11 +967,11 @@ namespace GameSvr.Items
                     }
                     break;
                 case 26:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
-                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
-                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
-                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
+                    clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
+                    clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
                     clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[11]);
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[12]);
                     if (userItem.Desc[5] > 0)
@@ -1013,8 +1013,8 @@ namespace GameSvr.Items
                     }
                     break;
                 case 52:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[3]);
                     if (userItem.Desc[0] > 0)
                     {
@@ -1030,8 +1030,8 @@ namespace GameSvr.Items
                     }
                     break;
                 case 54:
-                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
-                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
+                    clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
+                    clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
                     clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[2]);
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[3]);
                     clientItem.Item.ToxAvoid = (byte)(ToxAvoid + userItem.Desc[13]);
