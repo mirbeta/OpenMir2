@@ -31,13 +31,13 @@ namespace GameGate
         public string sChrName;
     }
 
-    public class TDelayMsg
+    public class DelayMessage
     {
         public int dwDelayTime;
-        public int nMag;
-        public int nCmd;
-        public int nDir;
-        public int nBufLen;
+        public int Mag;
+        public int Cmd;
+        public int Dir;
+        public int BufLen;
         public byte[] Buffer;
     }
 

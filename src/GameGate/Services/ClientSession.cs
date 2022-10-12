@@ -4,7 +4,6 @@ using GameGate.Packet;
 using GameGate.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
@@ -22,7 +21,7 @@ namespace GameGate
         private readonly ClientThread _clientThread;
         private readonly HardwareFilter _hwidFilter;
         private readonly SendQueue _sendQueue;
-        private readonly IList<TDelayMsg> _msgList;
+        private readonly IList<DelayMessage> MsgList;
         private int _lastDirection = -1;
         private byte _handleLogin = 0;
         private bool _fOverClientCount;
@@ -45,7 +44,7 @@ namespace GameGate
             _session = session;
             _clientThread = clientThread;
             _sendQueue = sendQueue;
-            _msgList = new List<TDelayMsg>();
+            MsgList = new List<DelayMessage>();
             _hwidFilter = GateShare.HWFilter;
             _fOverClientCount = false;
             _kickFlag = false;
@@ -646,14 +645,14 @@ namespace GameGate
             {
                 return;
             }
-            TDelayMsg delayMsg = null;
+            DelayMessage delayMsg = null;
             while (GetDelayMsg(ref delayMsg))
             {
-                if (delayMsg.nBufLen > 0)
+                if (delayMsg.BufLen > 0)
                 {
                     _clientThread.SendBuffer(delayMsg.Buffer);//发送消息到M2
                     var dwCurrentTick = HUtil32.GetTickCount();
-                    switch (delayMsg.nCmd)
+                    switch (delayMsg.Cmd)
                     {
                         case Grobal2.CM_BUTCH:
                             _gameSpeed.dwButchTick = dwCurrentTick;
@@ -672,7 +671,7 @@ namespace GameGate
                             {
                                 _gameSpeed.dwAttackTick = dwCurrentTick - Config.MoveNextAttackCompensate; //900
                             }
-                            _lastDirection = delayMsg.nDir;
+                            _lastDirection = delayMsg.Dir;
                             break;
                         case Grobal2.CM_HIT:
                         case Grobal2.CM_HEAVYHIT:
@@ -696,13 +695,13 @@ namespace GameGate
                                 _gameSpeed.dwMoveTick = dwCurrentTick - Config.AttackNextMoveCompensate; // 550
                                 _gameSpeed.dwSpellTick = dwCurrentTick - Config.AttackNextSpellCompensate;// 1150
                             }
-                            _lastDirection = delayMsg.nDir;
+                            _lastDirection = delayMsg.Dir;
                             break;
                         case Grobal2.CM_SPELL:
                             _gameSpeed.dwSpellTick = dwCurrentTick;
                             int nNextMov = 0;
                             int nNextAtt = 0;
-                            if (TableDef.MaigicAttackArray[delayMsg.nMag])
+                            if (TableDef.MaigicAttackArray[delayMsg.Mag])
                             {
                                 nNextMov = Config.SpellNextMoveCompensate;
                                 nNextAtt = Config.SpellNextAttackCompensate;
@@ -717,7 +716,7 @@ namespace GameGate
                             {
                                 _gameSpeed.dwAttackTick = dwCurrentTick - nNextAtt;
                             }
-                            _lastDirection = delayMsg.nDir;
+                            _lastDirection = delayMsg.Dir;
                             break;
                     }
                 }
@@ -728,9 +727,9 @@ namespace GameGate
         {
             var result = false;
             var i = 0;
-            while (_msgList.Count > i)
+            while (MsgList.Count > i)
             {
-                var iCmd = _msgList[i].nCmd;
+                var iCmd = MsgList[i].Cmd;
                 if (nCmd == Grobal2.CM_HIT)
                 {
                     if ((iCmd == Grobal2.CM_HIT) || (iCmd == Grobal2.CM_HEAVYHIT) ||
@@ -773,32 +772,31 @@ namespace GameGate
 
         private int GetDelayMsgCount()
         {
-            return _msgList.Count;
+            return MsgList.Count;
         }
 
         /// <summary>
         /// 获取延时消息
         /// </summary>
-        private bool GetDelayMsg(ref TDelayMsg delayMsg)
+        private bool GetDelayMsg(ref DelayMessage delayMsg)
         {
             HUtil32.EnterCriticalSection(_syncObj);
             var result = false;
-            TDelayMsg _delayMsg = null;
             var count = 0;
-            while (_msgList.Count > count)
+            while (MsgList.Count > count)
             {
-                _delayMsg = _msgList[count];
+                DelayMessage _delayMsg = MsgList[count];
                 if (_delayMsg.dwDelayTime != 0 && HUtil32.GetTickCount() < _delayMsg.dwDelayTime)
                 {
                     count++;
                     continue;
                 }
-                _msgList.RemoveAt(count);
-                delayMsg = new TDelayMsg();
-                delayMsg.nMag = _delayMsg.nMag;
-                delayMsg.nDir = _delayMsg.nDir;
-                delayMsg.nCmd = _delayMsg.nCmd;
-                delayMsg.nBufLen = _delayMsg.nBufLen;
+                MsgList.RemoveAt(count);
+                delayMsg = new DelayMessage();
+                delayMsg.Mag = _delayMsg.Mag;
+                delayMsg.Dir = _delayMsg.Dir;
+                delayMsg.Cmd = _delayMsg.Cmd;
+                delayMsg.BufLen = _delayMsg.BufLen;
                 delayMsg.Buffer = _delayMsg.Buffer;
                 _delayMsg = null;
                 result = true;
@@ -815,18 +813,18 @@ namespace GameGate
             const int DELAY_BUFFER_LEN = 1024;
             if (nLen > 0 && nLen <= DELAY_BUFFER_LEN)
             {
-                var pDelayMsg = new TDelayMsg();
-                pDelayMsg.nMag = nMid;
-                pDelayMsg.nDir = nDir;
-                pDelayMsg.nCmd = nIdx;
+                var pDelayMsg = new DelayMessage();
+                pDelayMsg.Mag = nMid;
+                pDelayMsg.Dir = nDir;
+                pDelayMsg.Cmd = nIdx;
                 pDelayMsg.dwDelayTime = HUtil32.GetTickCount() + dwDelay;
-                pDelayMsg.nBufLen = nLen;
+                pDelayMsg.BufLen = nLen;
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     var bMsg = HUtil32.GetBytes(sMsg);
                     pDelayMsg.Buffer = bMsg;
                 }
-                _msgList.Add(pDelayMsg);
+                MsgList.Add(pDelayMsg);
             }
         }
 
@@ -838,14 +836,14 @@ namespace GameGate
             const int DELAY_BUFFER_LEN = 1024;
             if (nLen > 0 && nLen <= DELAY_BUFFER_LEN)
             {
-                var pDelayMsg = new TDelayMsg();
-                pDelayMsg.nMag = magicId;
-                pDelayMsg.nDir = nDir;
-                pDelayMsg.nCmd = nIdx;
+                var pDelayMsg = new DelayMessage();
+                pDelayMsg.Mag = magicId;
+                pDelayMsg.Dir = nDir;
+                pDelayMsg.Cmd = nIdx;
                 pDelayMsg.dwDelayTime = HUtil32.GetTickCount() + delayTime;
-                pDelayMsg.nBufLen = nLen;
+                pDelayMsg.BufLen = nLen;
                 pDelayMsg.Buffer = pMsg;
-                _msgList.Add(pDelayMsg);
+                MsgList.Add(pDelayMsg);
             }
             if (magicId > 0)
             {
@@ -871,6 +869,7 @@ namespace GameGate
                 return;
             }
 
+            //todo 直接读取12个字节，知道消息ID即可
             //var packet = Packets.ToPacket<ClientPacket>(message.Buffer.ToArray()); //直接优化，不用转，进一步省GC和内存
             //switch (packet.Cmd)
             //{
@@ -1151,16 +1150,16 @@ namespace GameGate
                             return;
                         }
                     }
-                    var szTemp = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNO}/{szCode}/{MD5.MD5Print(hardWareDigest)}";
+                    var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNO}/{szCode}/{MD5.MD5Print(hardWareDigest)}";
                     // #0.........!
-                    var tempBuf = HUtil32.GetBytes(szTemp);
+                    var tempBuf = HUtil32.GetBytes(loginPacket);
                     var pszLoginPacket = new byte[tempBuf.Length + 100];
                     var encodelen = Misc.EncodeBuf(tempBuf, tempBuf.Length, pszLoginPacket, 2);
                     pszLoginPacket[0] = (byte)'#';
                     pszLoginPacket[1] = (byte)'0';
                     pszLoginPacket[encodelen + 2] = (byte)'!';
                     _handleLogin = 2;
-                    SendFirstPack(pszLoginPacket, encodelen + 3);
+                    SendLoginPacket(pszLoginPacket, encodelen + 3);
                     _session.sAccount = sAccount;
                     _session.sChrName = sHumName;
                     success = true;
@@ -1186,9 +1185,9 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 发送消息到GameSvr
+        /// 发送登录验证封包
         /// </summary>
-        private void SendFirstPack(byte[] packet, int len = 0)
+        private void SendLoginPacket(byte[] packet, int len = 0)
         {
             byte[] tempBuff;
             if (len == 0)
