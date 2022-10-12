@@ -789,7 +789,7 @@ namespace GameSvr.Player
                     ClientMerchantDlgSelect(ProcessMsg.nParam1, ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_MERCHANTQUERYSELLPRICE:
-                    ClientMerchantQuerySellPrice(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientMerchantQuerySellPrice(ProcessMsg.nParam1, HUtil32.MakeLong((short)ProcessMsg.nParam2, (short)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERSELLITEM:
                     ClientUserSellItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
