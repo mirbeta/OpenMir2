@@ -88,7 +88,7 @@ namespace GameGate
             }
             if (Config.IsDefenceCCPacket && (message.BufferLen >= 5))
             {
-                sMsg = HUtil32.GetString(message.Buffer, 2, message.BufferLen - 3);
+                sMsg = HUtil32.GetString(message.Buffer.ToArray(), 2, message.BufferLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     //if (LogManager.g_pLogMgr.CheckLevel(6))
@@ -126,7 +126,7 @@ namespace GameGate
             {
                 case 0:
                     {
-                        sMsg = HUtil32.GetString(message.Buffer, 2, message.BufferLen - 3);
+                        sMsg = HUtil32.GetString(message.Buffer.ToArray(), 2, message.BufferLen - 3);
                         LogQueue.EnqueueDebugging("Login Packet: " + sMsg);
                         var tempStr = EDCode.DeCodeString(sMsg);
                         HandleLogin(tempStr, message.BufferLen, "", ref success);
@@ -148,7 +148,7 @@ namespace GameGate
 
                         var tempBuff = message.Buffer[2..^1];//跳过#1....! 只保留消息内容
                         var nDeCodeLen = 0;
-                        var packBuff = Misc.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
+                        var packBuff = Misc.DecodeBuf(tempBuff.Span, tempBuff.Length, ref nDeCodeLen);
 
                         var CltCmd = Packets.ToPacket<ClientPacket>(packBuff);
 
@@ -484,7 +484,7 @@ namespace GameGate
                                         var pszChatBuffer = new byte[255];
                                         var pszChatCmd = string.Empty;
                                         // Move((nABuf + TCmdPack.PackSize), pszChatBuffer[0], nDeCodeLen - TCmdPack.PackSize);
-                                        Buffer.BlockCopy(message.Buffer, ClientPacket.PackSize, pszChatBuffer, 0, nDeCodeLen - ClientPacket.PackSize);
+                                        Buffer.BlockCopy(message.Buffer.ToArray(), ClientPacket.PackSize, pszChatBuffer, 0, nDeCodeLen - ClientPacket.PackSize);
                                         pszChatBuffer[nDeCodeLen - ClientPacket.PackSize] = (byte)'\0';
                                         var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
                                         var nChatStrPos = tempStr.IndexOf(" ", StringComparison.Ordinal);
@@ -622,7 +622,7 @@ namespace GameGate
                             cmdPack.PackLength = ClientPacket.PackSize + tLen + 1;
                             BodyBuffer = new byte[PacketHeader.PacketSize + cmdPack.PackLength];
                             Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, ClientPacket.PackSize);
-                            Buffer.BlockCopy(tempBuff, 16, BodyBuffer, 32, tLen); //消息体
+                            Buffer.BlockCopy(tempBuff.ToArray(), 16, BodyBuffer, 32, tLen); //消息体
                         }
                         else
                         {
@@ -864,13 +864,14 @@ namespace GameGate
                 stackMemory[0] = (byte)'#';
                 for (int i = 0; i < -message.BufferLen; i++)
                 {
-                    stackMemory[i + 1] = message.Buffer[i];
+                    stackMemory[i + 1] = message.Buffer.Span[i];
                 }
                 stackMemory[^1] = (byte)'!';
                 _sendQueue.AddToQueue(_session, stackMemory.ToArray());
                 return;
             }
-            var packet = Packets.ToPacket<ClientPacket>(message.Buffer);
+
+            var packet = Packets.ToPacket<ClientPacket>(message.Buffer.ToArray()); //直接优化，不用转，进一步省GC和内存
             switch (packet.Cmd)
             {
                 case Grobal2.SM_RUSH:
@@ -926,15 +927,20 @@ namespace GameGate
                     break;
             }
 
-            byte[] pzsSendBuf = new byte[message.BufferLen + ClientPacket.PackSize];
+            Span<byte> pzsSendBuf = stackalloc byte[message.BufferLen + ClientPacket.PackSize];
             pzsSendBuf[0] = (byte)'#';
-            var nLen = Misc.EncodeBuf(packet.GetBuffer(), ClientPacket.PackSize, pzsSendBuf, 1);
+            var nLen = Misc.EncodeBuf(message.Buffer.Span[..12], ClientPacket.PackSize, pzsSendBuf, 1);
+
             if (message.BufferLen > ClientPacket.PackSize)
             {
                 var tempBuffer = message.Buffer[ClientPacket.PackSize..];
-                Buffer.BlockCopy(tempBuffer, 0, pzsSendBuf, nLen + 1, tempBuffer.Length);
+                for (int i = 0; i < tempBuffer.Length; i++)
+                {
+                    pzsSendBuf[i + (nLen + 1)] = tempBuffer.Span[i];
+                }
                 nLen = message.BufferLen - ClientPacket.PackSize + nLen;
             }
+
             pzsSendBuf[nLen + 1] = (byte)'!';
             pzsSendBuf = pzsSendBuf[..(nLen + 2)];
             _sendQueue.AddToQueue(_session, pzsSendBuf);

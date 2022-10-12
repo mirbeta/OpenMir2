@@ -1,3 +1,4 @@
+using System;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -23,13 +24,14 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddToQueue(TSessionInfo session, byte[] buffer)
+        public void AddToQueue(TSessionInfo session, ReadOnlySpan<byte> buffer)
         {
-            _sendQueue.Writer.TryWrite(new SendQueueData()
+            var sendPacket = new SendQueueData()
             {
-                Session = session,
-                Buffer = buffer
-            });
+                Socket = session.Socket,
+                Buffer = buffer.ToArray()
+            };
+            _sendQueue.Writer.TryWrite(sendPacket);
         }
 
         /// <summary>
@@ -39,10 +41,11 @@ namespace GameGate
         {
             while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
             {
-                while (_sendQueue.Reader.TryRead(out var queueData))
+                SendQueueData sendPacket;
+                while (_sendQueue.Reader.TryRead(out sendPacket))
                 {
-                    var resp = queueData.SendBuffer();
-                    if (resp != queueData.Buffer.Length)
+                    var resp = sendPacket.SendBuffer();
+                    if (resp != sendPacket.Buffer.Length)
                     {
                         _logQueue.Enqueue("向客户端发送数据包失败", 5);
                     }
@@ -53,16 +56,16 @@ namespace GameGate
 
     public struct SendQueueData
     {
-        public TSessionInfo Session;
-        public byte[] Buffer;
+        public Socket Socket;
+        public ReadOnlyMemory<byte> Buffer;
 
         public int SendBuffer()
         {
-            if (Session.Socket == null || !Session.Socket.Connected)
+            if (Socket == null || !Socket.Connected)
             {
                 return 0;
             }
-            return Session.Socket.Send(Buffer, 0, Buffer.Length, SocketFlags.None);
+            return Socket.Send(Buffer.Span);
         }
     }
 }
