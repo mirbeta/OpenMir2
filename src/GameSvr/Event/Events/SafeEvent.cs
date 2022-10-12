@@ -8,7 +8,7 @@ namespace GameSvr.Event.Events
     /// </summary>
     public class SafeEvent : EventInfo
     {
-        public SafeEvent(Envirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, HUtil32.GetTickCount(), true)
+        public SafeEvent(Envirnoment Envir, int nX, int nY, int nType) : base(Envir, (short)nX, (short)nY, (byte)nType, HUtil32.GetTickCount(), true)
         {
 
         }

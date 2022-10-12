@@ -337,9 +337,9 @@ namespace GameSvr.World
                             abil.Level = 1;
                             abil.AC = 0;
                             abil.MAC = 0;
-                            abil.DC = HUtil32.MakeLong(1, 2);
-                            abil.MC = HUtil32.MakeLong(1, 2);
-                            abil.SC = HUtil32.MakeLong(1, 2);
+                            abil.DC = (ushort)HUtil32.MakeLong(1, 2);
+                            abil.MC = (ushort)HUtil32.MakeLong(1, 2);
+                            abil.SC = (ushort)HUtil32.MakeLong(1, 2);
                             abil.MP = 15;
                             abil.HP = 15;
                             abil.MaxHP = 15;

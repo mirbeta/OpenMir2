@@ -572,11 +572,11 @@ namespace BotSvr.Objects
             var Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             rx = target.m_nCurrX + 1;
-            ry = target.m_nCurrY + 1;
+            ry = (short)(target.m_nCurrY + 1);
             Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             rx = target.m_nCurrX + 1;
-            ry = target.m_nCurrY - 1;
+            ry = (short)(target.m_nCurrY - 1);
             Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             rx = target.m_nCurrX - 1;
@@ -584,19 +584,19 @@ namespace BotSvr.Objects
             Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             rx = target.m_nCurrX - 1;
-            ry = target.m_nCurrY + 1;
+            ry = (short)(target.m_nCurrY + 1);
             Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             rx = target.m_nCurrX - 1;
-            ry = target.m_nCurrY - 1;
+            ry = (short)(target.m_nCurrY - 1);
             Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             rx = target.m_nCurrX;
-            ry = target.m_nCurrY + 1;
+            ry = (short)(target.m_nCurrY + 1);
             Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             rx = target.m_nCurrX;
-            ry = target.m_nCurrY - 1;
+            ry = (short)(target.m_nCurrY - 1);
             Actor = robotClient.g_PlayScene.FindActorXY(rx, ry);
             if (IsProperTarget(Actor)) result++;
             return result;
@@ -659,14 +659,14 @@ namespace BotSvr.Objects
             int MagicKey;
             int i;
             int nTag;
-            var nx = 0;
-            var ny = 0;
-            var nAbsX = 0;
-            var nAbsY = 0;
-            var nNX = 0;
-            var nNY = 0;
-            var nTX = 0;
-            var nTY = 0;
+            short nx = 0;
+            short ny = 0;
+            short nAbsX = 0;
+            short nAbsY = 0;
+            short nNX = 0;
+            short nNY = 0;
+            short nTX = 0;
+            short nTY = 0;
             int nOldDC;
             var result = false;
             MShare.g_boAPAutoMove = false;
@@ -714,8 +714,8 @@ namespace BotSvr.Objects
                         robotClient.SendFireSerieSkill();
                     }
                     MagicKey = 11;
-                    nAbsX = Math.Abs(MShare.g_MySelf.m_nCurrX - MShare.g_APTagget.m_nCurrX);
-                    nAbsY = Math.Abs(MShare.g_MySelf.m_nCurrY - MShare.g_APTagget.m_nCurrY);
+                    nAbsX = (short)Math.Abs(MShare.g_MySelf.m_nCurrX - MShare.g_APTagget.m_nCurrX);
+                    nAbsY = (short)Math.Abs(MShare.g_MySelf.m_nCurrY - MShare.g_APTagget.m_nCurrY);
                     if (nAbsX > 2 || nAbsY > 2)
                     {
                         if (nAbsX <= MShare.g_nMagicRange && nAbsY <= MShare.g_nMagicRange)
@@ -1073,8 +1073,8 @@ namespace BotSvr.Objects
                         robotClient.SendFireSerieSkill();
                     }
                     MagicKey = 0;
-                    nAbsX = Math.Abs(MShare.g_MySelf.m_nCurrX - MShare.g_APTagget.m_nCurrX);
-                    nAbsY = Math.Abs(MShare.g_MySelf.m_nCurrY - MShare.g_APTagget.m_nCurrY);
+                    nAbsX = (short)Math.Abs(MShare.g_MySelf.m_nCurrX - MShare.g_APTagget.m_nCurrX);
+                    nAbsY = (short)Math.Abs(MShare.g_MySelf.m_nCurrY - MShare.g_APTagget.m_nCurrY);
                     if (nAbsX > 2 || nAbsY > 2)
                     {
                         // 需要快速检测类...
@@ -1123,16 +1123,14 @@ namespace BotSvr.Objects
                             if (robotClient.g_PlayScene.CanWalk(nx, ny)) break;
                             tdir++;
                             tdir = tdir % 8;
-                            ClFunc.GetBackPosition(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nx,
-                                ref ny);
+                            ClFunc.GetBackPosition(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nx,ref ny);
                             nTag++;
                             if (nTag > 8) break;
                         }
 
                         if (robotClient.g_PlayScene.CanWalk(nx, ny))
                         {
-                            ClFunc.GetBackPosition2(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nTX,
-                                ref nTY);
+                            ClFunc.GetBackPosition2(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nTX,ref nTY);
                             // Map.CanMove(nTX, nTY)
                             if (robotClient.g_PlayScene.CanWalk(nTX, nTY))
                             {

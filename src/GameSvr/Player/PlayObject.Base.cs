@@ -1464,7 +1464,7 @@ namespace GameSvr.Player
                     }
                     if (MapEvent.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(this, Grobal2.RM_SHOWEVENT, (short)MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, MapEvent.EventParam), MapEvent.nY, "");
+                        SendMsg(this, Grobal2.RM_SHOWEVENT, (short)MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, (ushort)MapEvent.EventParam), MapEvent.nY, "");
                     }
                     I++;
                 }

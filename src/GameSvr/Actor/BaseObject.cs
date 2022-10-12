@@ -958,9 +958,9 @@ namespace GameSvr.Actor
                 Level = 1,
                 AC = 0,
                 MAC = 0,
-                DC = HUtil32.MakeLong(1, 4),
-                MC = HUtil32.MakeLong(1, 2),
-                SC = HUtil32.MakeLong(1, 2),
+                DC = (ushort)HUtil32.MakeLong(1, 4),
+                MC = (ushort)HUtil32.MakeLong(1, 2),
+                SC = (ushort)HUtil32.MakeLong(1, 2),
                 HP = 15,
                 MP = 15,
                 MaxHP = 15,
@@ -2927,7 +2927,7 @@ namespace GameSvr.Actor
             var n8 = 0;
             if ((Race == ActorRace.MonsterWhiteskeleton) || (Race == ActorRace.MonsterElfmonster) || (Race == ActorRace.MonsterElfwarrior))
             {
-                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
                 n8 = n8 + HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * SlaveExpLevel;
                 n8 = n8 + WAbil.MaxHP;
                 if (SlaveExpLevel > 0)
@@ -2942,7 +2942,7 @@ namespace GameSvr.Actor
             else
             {
                 n8 = WAbil.MaxHP;
-                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC),(ushort) HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
                 n8 = n8 + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
                 WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60), n8);
             }
