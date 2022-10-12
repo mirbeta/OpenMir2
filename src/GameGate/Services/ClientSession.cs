@@ -867,65 +867,65 @@ namespace GameGate
                     stackMemory[i + 1] = message.Buffer.Span[i];
                 }
                 stackMemory[^1] = (byte)'!';
-                _sendQueue.AddToQueue(_session, stackMemory.ToArray());
+                _sendQueue.AddToQueue(_session, stackMemory);
                 return;
             }
 
-            var packet = Packets.ToPacket<ClientPacket>(message.Buffer.ToArray()); //直接优化，不用转，进一步省GC和内存
-            switch (packet.Cmd)
-            {
-                case Grobal2.SM_RUSH:
-                    if (m_nSvrObject == packet.UID)
-                    {
-                        var dwCurrentTick = HUtil32.GetTickCount();
-                        _gameSpeed.dwMoveTick = dwCurrentTick;
-                        _gameSpeed.dwAttackTick = dwCurrentTick;
-                        _gameSpeed.dwSpellTick = dwCurrentTick;
-                        _gameSpeed.dwSitDownTick = dwCurrentTick;
-                        _gameSpeed.dwButchTick = dwCurrentTick;
-                        _gameSpeed.dwDealTick = dwCurrentTick;
-                    }
-                    break;
-                case Grobal2.SM_NEWMAP:
-                case Grobal2.SM_CHANGEMAP:
-                case Grobal2.SM_LOGON:
-                    if (m_nSvrObject == 0)
-                    {
-                        m_nSvrObject = packet.UID;
-                    }
-                    break;
-                case Grobal2.SM_PLAYERCONFIG:
+            //var packet = Packets.ToPacket<ClientPacket>(message.Buffer.ToArray()); //直接优化，不用转，进一步省GC和内存
+            //switch (packet.Cmd)
+            //{
+            //    case Grobal2.SM_RUSH:
+            //        if (m_nSvrObject == packet.UID)
+            //        {
+            //            var dwCurrentTick = HUtil32.GetTickCount();
+            //            _gameSpeed.dwMoveTick = dwCurrentTick;
+            //            _gameSpeed.dwAttackTick = dwCurrentTick;
+            //            _gameSpeed.dwSpellTick = dwCurrentTick;
+            //            _gameSpeed.dwSitDownTick = dwCurrentTick;
+            //            _gameSpeed.dwButchTick = dwCurrentTick;
+            //            _gameSpeed.dwDealTick = dwCurrentTick;
+            //        }
+            //        break;
+            //    case Grobal2.SM_NEWMAP:
+            //    case Grobal2.SM_CHANGEMAP:
+            //    case Grobal2.SM_LOGON:
+            //        if (m_nSvrObject == 0)
+            //        {
+            //            m_nSvrObject = packet.UID;
+            //        }
+            //        break;
+            //    case Grobal2.SM_PLAYERCONFIG:
 
-                    break;
-                case Grobal2.SM_CHARSTATUSCHANGED:
-                    if (m_nSvrObject == packet.UID)
-                    {
-                        _gameSpeed.DefItemSpeed = packet.Direct;
-                        _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, packet.Direct);
-                        m_nChrStutas = HUtil32.MakeLong(packet.X, packet.Y);
-                        //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
-                    }
-                    break;
-                case Grobal2.SM_HWID:
-                    if (Config.IsProcClientHardwareID)
-                    {
-                        switch (packet.Series)
-                        {
-                            case 1:
-                                LogQueue.EnqueueDebugging("封机器码");
-                                break;
-                            case 2:
-                                LogQueue.EnqueueDebugging("清理机器码");
-                                _hwidFilter.ClearDeny();
-                                _hwidFilter.SaveDenyList();
-                                break;
-                        }
-                    }
-                    break;
-                case Grobal2.SM_RUNGATELOGOUT:
-                    SendKickMsg(2);
-                    break;
-            }
+            //        break;
+            //    case Grobal2.SM_CHARSTATUSCHANGED:
+            //        if (m_nSvrObject == packet.UID)
+            //        {
+            //            _gameSpeed.DefItemSpeed = packet.Direct;
+            //            _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, packet.Direct);
+            //            m_nChrStutas = HUtil32.MakeLong(packet.X, packet.Y);
+            //            //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
+            //        }
+            //        break;
+            //    case Grobal2.SM_HWID:
+            //        if (Config.IsProcClientHardwareID)
+            //        {
+            //            switch (packet.Series)
+            //            {
+            //                case 1:
+            //                    LogQueue.EnqueueDebugging("封机器码");
+            //                    break;
+            //                case 2:
+            //                    LogQueue.EnqueueDebugging("清理机器码");
+            //                    _hwidFilter.ClearDeny();
+            //                    _hwidFilter.SaveDenyList();
+            //                    break;
+            //            }
+            //        }
+            //        break;
+            //    case Grobal2.SM_RUNGATELOGOUT:
+            //        SendKickMsg(2);
+            //        break;
+            //}
 
             Span<byte> pzsSendBuf = stackalloc byte[message.BufferLen + ClientPacket.PackSize];
             pzsSendBuf[0] = (byte)'#';

@@ -271,8 +271,7 @@ namespace GameGate.Services
                             {
                                 break;
                             }
-                            receiveBuffer = receiveBuffer.Slice(nCheckMsgLen, nLen);
-                            dataBuff = receiveBuffer;
+                            dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
                             buffLen = nLen;
                             srcOffset = 0;
                         }

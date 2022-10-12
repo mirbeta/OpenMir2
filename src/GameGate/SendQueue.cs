@@ -37,20 +37,19 @@ namespace GameGate
         /// <summary>
         /// 将队列消息发送到客户端
         /// </summary>
-        public async Task ProcessSendQueue(CancellationToken stoppingToken)
+        public void ProcessSendQueue(CancellationToken stoppingToken)
         {
-            while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
+            Task.Factory.StartNew(async () =>
             {
-                SendQueueData sendPacket;
-                while (_sendQueue.Reader.TryRead(out sendPacket))
+                while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    var resp = sendPacket.SendBuffer();
-                    if (resp != sendPacket.Buffer.Length)
+                    SendQueueData sendPacket;
+                    while (_sendQueue.Reader.TryRead(out sendPacket))
                     {
-                        _logQueue.Enqueue("向客户端发送数据包失败", 5);
+                        sendPacket.SendBuffer();
                     }
                 }
-            }
+            }, stoppingToken);
         }
     }
 
