@@ -811,7 +811,7 @@ namespace GameSvr.RobotPlay
                                     MapEvent.VisibleFlag = 0;
                                     break;
                                 case VisibleFlag.Hidden:
-                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, (ushort)MapEvent.EventParam), MapEvent.nY, "");
+                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, (short)MapEvent.EventParam), MapEvent.nY, "");
                                     MapEvent.VisibleFlag = 0;
                                     break;
                             }
