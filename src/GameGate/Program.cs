@@ -28,6 +28,7 @@ namespace GameGate
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce; 
 
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);

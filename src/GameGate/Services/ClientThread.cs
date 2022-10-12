@@ -213,7 +213,7 @@ namespace GameGate.Services
                 {
                     while (true)
                     {
-                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff.ToArray()); 
+                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff.ToArray()); //这里还是有影响，看看能否直接读取内存，不做序列化操作
                         if (packetHeader.PacketCode == 0)
                         {
                             LogQueue.Enqueue("不应该出现这个文字", 5);
