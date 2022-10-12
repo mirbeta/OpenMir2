@@ -236,7 +236,6 @@ namespace GameSvr.Player
             else
             {
                 m_dwMoveCount = 0;
-                m_dwMoveCountA = 0;
             }
             return result;
         }
@@ -548,7 +547,6 @@ namespace GameSvr.Player
             else
             {
                 m_dwMoveCount = 0;
-                m_dwMoveCountA = 0;
             }
             return result;
         }
@@ -607,32 +605,6 @@ namespace GameSvr.Player
             m_dwMoveTick = HUtil32.GetTickCount();
             MBo316 = false;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
-            if (!m_boClientFlag)
-            {
-                switch (n14)
-                {
-                    case 0 when m_nStep == 0:
-                    case 4 when m_nStep == 1:
-                    case 6 when m_nStep == 2:
-                    case 2 when m_nStep == 3:
-                    case 1 when m_nStep == 4:
-                    case 5 when m_nStep == 5:
-                    case 7 when m_nStep == 6:
-                    case 3 when m_nStep == 7:
-                        m_nStep++;
-                        break;
-                    default:
-                        m_nGameGold -= m_nStep;
-                        GameGoldChanged();
-                        m_nStep = 0;
-                        break;
-                }
-                if (m_nStep != 0)
-                {
-                    m_nGameGold++;
-                    GameGoldChanged();
-                }
-            }
             if (WalkTo((byte)n14, false))
             {
                 if (MBo316 || CurrX == nX && CurrY == nY)
@@ -644,7 +616,6 @@ namespace GameSvr.Player
             else
             {
                 m_dwMoveCount = 0;
-                m_dwMoveCountA = 0;
             }
             return result;
         }
