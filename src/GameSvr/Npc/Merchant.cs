@@ -108,7 +108,7 @@ namespace GameSvr.Npc
 
         private IList<UserItem> GetRefillList(int nIndex)
         {
-            if (nIndex <= 0)
+            if (nIndex < 0)
             {
                 return null;
             }
@@ -175,7 +175,7 @@ namespace GameSvr.Npc
                     {
                         Goods.RefillTick = HUtil32.GetTickCount();
                         nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
-                        if (nIndex >= 0)
+                        if (nIndex > 0)
                         {
                             IList<UserItem> RefillList = GetRefillList(nIndex);
                             int nRefillCount = 0;
