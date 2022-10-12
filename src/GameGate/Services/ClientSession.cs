@@ -866,7 +866,6 @@ namespace GameGate
                 Buffer.BlockCopy(message.Buffer, 0, pzsSendBuf, 1, -message.BufferLen);
                 pzsSendBuf[^1] = (byte)'!';
                 _sendQueue.AddToQueue(_session, pzsSendBuf);
-                Debug.WriteLine(HUtil32.GetString(pzsSendBuf, 0, pzsSendBuf.Length));
                 return;
             }
             var packet = Packets.ToPacket<ClientPacket>(message.Buffer);
