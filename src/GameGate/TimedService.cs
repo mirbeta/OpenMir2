@@ -141,10 +141,10 @@ namespace GameGate
         /// </summary>
         private void ClearSession()
         {
-            if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
+            if (HUtil32.GetTickCount() - _processClearSessionTick > 120000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
-                LogQueue.EnqueueDebugging("清理超时会话开始工作...");
+                LogQueue.EnqueueDebugging("清理超时会话开始...");
                 var serverList = ServerManager.GetServerList();
                 for (var i = 0; i < serverList.Count; i++)
                 {
@@ -164,7 +164,6 @@ namespace GameGate
                     clientThread.CheckTimeOutSession();
                     ClientManager.CheckSessionStatus(serverList[i].ClientThread);
                 }
-                LogQueue.EnqueueDebugging("清理超时会话工作完成...");
             }
         }
 

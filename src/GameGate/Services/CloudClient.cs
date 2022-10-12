@@ -1,4 +1,3 @@
-using GameGate.Conf;
 using System;
 using System.Net;
 using SystemModule;

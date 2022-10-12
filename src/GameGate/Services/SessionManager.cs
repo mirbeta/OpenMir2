@@ -16,19 +16,19 @@ namespace GameGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<TMessageData> _sendMsgList = null;
+        private readonly Channel<TMessageData> SendMsgQueue = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            _sendMsgList = Channel.CreateUnbounded<TMessageData>();
+            SendMsgQueue = Channel.CreateUnbounded<TMessageData>();
         }
 
         /// <summary>
         /// 获取待处理的队列数量
         /// </summary>
-        public int GetQueueCount => _sendMsgList.Reader.Count;
+        public int GetQueueCount => SendMsgQueue.Reader.Count;
 
         /// <summary>
         /// 添加到消息处理队列
@@ -36,7 +36,7 @@ namespace GameGate.Services
         /// <param name="messageData"></param>
         public void AddToQueue(TMessageData messageData)
         {
-            _sendMsgList.Writer.TryWrite(messageData);
+            SendMsgQueue.Writer.TryWrite(messageData);
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace GameGate.Services
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await _sendMsgList.Reader.WaitToReadAsync(stoppingToken))
+                while (await SendMsgQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_sendMsgList.Reader.TryRead(out var message))
+                    if (SendMsgQueue.Reader.TryRead(out var message))
                     {
                         try
                         {

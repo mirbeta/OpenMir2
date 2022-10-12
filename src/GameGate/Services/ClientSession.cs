@@ -858,14 +858,16 @@ namespace GameGate
         /// </summary>
         public void ProcessSvrData(TMessageData message)
         {
-            byte[] pzsSendBuf;
             if (message.BufferLen <= 0) //正常的游戏封包，走路 攻击等都走下面的代码
             {
-                pzsSendBuf = new byte[(0 - message.BufferLen) + 2];
-                pzsSendBuf[0] = (byte)'#';
-                Buffer.BlockCopy(message.Buffer, 0, pzsSendBuf, 1, -message.BufferLen);
-                pzsSendBuf[^1] = (byte)'!';
-                _sendQueue.AddToQueue(_session, pzsSendBuf);
+                Span<byte> stackMemory = stackalloc byte[0 - message.BufferLen + 2];
+                stackMemory[0] = (byte)'#';
+                for (int i = 0; i < -message.BufferLen; i++)
+                {
+                    stackMemory[i + 1] = message.Buffer[i];
+                }
+                stackMemory[^1] = (byte)'!';
+                _sendQueue.AddToQueue(_session, stackMemory.ToArray());
                 return;
             }
             var packet = Packets.ToPacket<ClientPacket>(message.Buffer);
@@ -924,7 +926,7 @@ namespace GameGate
                     break;
             }
 
-            pzsSendBuf = new byte[message.BufferLen + ClientPacket.PackSize];
+            byte[] pzsSendBuf = new byte[message.BufferLen + ClientPacket.PackSize];
             pzsSendBuf[0] = (byte)'#';
             var nLen = Misc.EncodeBuf(packet.GetBuffer(), ClientPacket.PackSize, pzsSendBuf, 1);
             if (message.BufferLen > ClientPacket.PackSize)

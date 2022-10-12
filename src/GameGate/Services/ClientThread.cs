@@ -35,11 +35,11 @@ namespace GameGate.Services
         /// <summary>
         /// 独立Buffer分区
         /// </summary>
-        private byte[] _receiveBuffer = null;
+        private byte[] receiveBuffer = null;
         /// <summary>
         /// 上次剩下多少字节未处理
         /// </summary>
-        private int _buffLen = 0;
+        private int buffLen = 0;
         /// <summary>
         /// 网关是否就绪
         /// </summary>
@@ -47,19 +47,19 @@ namespace GameGate.Services
         /// <summary>
         /// 是否链接成功
         /// </summary>
-        private bool _connected = false;
+        private bool Connected = false;
         /// <summary>
         /// 历史最高在线人数
         /// </summary>
-        private int _counter = 0;
+        private int Counter = 0;
         /// <summary>
         /// 发送总字节数
         /// </summary>
-        private int _sendBytes;
+        private int SendBytes;
         /// <summary>
         /// 接收总字节数
         /// </summary>
-        private int _receiveBytes;
+        private int ReceiveBytes;
         private int _checkRecviceTick = 0;
         private int _checkServerTick = 0;
         private int _checkServerTimeMin = 0;
@@ -83,8 +83,8 @@ namespace GameGate.Services
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            _receiveBytes = 0;
-            _sendBytes = 0;
+            ReceiveBytes = 0;
+            SendBytes = 0;
             _gateEndPoint = endPoint;
         }
 
@@ -102,7 +102,7 @@ namespace GameGate.Services
 
         public void ReConnected()
         {
-            if (_connected == false)
+            if (Connected == false)
             {
                 ClientSocket.Connect();
             }
@@ -118,11 +118,11 @@ namespace GameGate.Services
                     count++;
                 }
             }
-            if (count > _counter)
+            if (count > Counter)
             {
-                _counter = count;
+                Counter = count;
             }
-            return count + "/" + _counter;
+            return count + "/" + Counter;
         }
 
         public void Stop()
@@ -145,9 +145,9 @@ namespace GameGate.Services
             _checkServerTimeMax = 0;
             LogQueue.Enqueue($"[{_gateEndPoint.ToString()}] 游戏引擎[{e.RemoteEndPoint}]链接成功.", 1);
             LogQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
-            _connected = true;
-            _receiveBytes = 0;
-            _sendBytes = 0;
+            Connected = true;
+            ReceiveBytes = 0;
+            SendBytes = 0;
             ClientManager.Instance.AddClientThread(ClientId, this);
         }
 
@@ -167,10 +167,10 @@ namespace GameGate.Services
                 }
             }
             RestSessionArray();
-            _receiveBuffer = null;
+            receiveBuffer = null;
             GateReady = false;
             LogQueue.Enqueue($"[{_gateEndPoint.ToString()}] 游戏引擎[{e.RemoteEndPoint}]断开链接.", 1);
-            _connected = false;
+            Connected = false;
             ClientManager.Instance.DeleteClientThread(ClientId);
         }
 
@@ -180,9 +180,9 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             ProcReceiveBuffer(e.Buff, e.BuffLen);
-            _receiveBytes += e.BuffLen;
+            ReceiveBytes += e.BuffLen;
         }
-
+        
         private const int HeaderMessageSize = 20;
 
         private void ProcReceiveBuffer(byte[] data, int nMsgLen)
@@ -190,24 +190,34 @@ namespace GameGate.Services
             var srcOffset = 0;
             try
             {
-                if (_buffLen > 0)
+                if (buffLen > 0)
                 {
-                    var tempBuff = new byte[_buffLen + nMsgLen];
-                    Buffer.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _buffLen);
-                    Buffer.BlockCopy(data, 0, tempBuff, _buffLen, data.Length);
-                    _receiveBuffer = tempBuff;
+                    //Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
+                    //tempBuff = receiveBuffer;// Buffer.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _buffLen);
+                    //for (int i = buffLen; i < data.Length; i++) // Buffer.BlockCopy(data, 0, tempBuff, _buffLen, data.Length);
+                    //{
+                    //    tempBuff[i] = data[i];
+                    //}
+                    //receiveBuffer = tempBuff.ToArray();
+
+                    var tempBuffs = new byte[buffLen + nMsgLen];
+                    Buffer.BlockCopy(receiveBuffer, 0, tempBuffs, 0, buffLen);
+                    Buffer.BlockCopy(data, 0, tempBuffs, buffLen, data.Length);
+                    receiveBuffer = tempBuffs;
+
+                    Console.WriteLine("哈哈哈");
                 }
                 else
                 {
-                    _receiveBuffer = data;
+                    receiveBuffer = data;
                 }
-                var nLen = _buffLen + nMsgLen;
-                var dataBuff = _receiveBuffer;
+                var nLen = buffLen + nMsgLen;
+                var dataBuff = receiveBuffer;
                 if (nLen >= HeaderMessageSize)
                 {
                     while (true)
                     {
-                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff);
+                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff); //todo 这里内存消耗严重
                         if (packetHeader.PacketCode == 0)
                         {
                             LogQueue.Enqueue("不应该出现这个文字", 5);
@@ -243,11 +253,20 @@ namespace GameGate.Services
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    var msgBuff = packetHeader.PackLength > 0 ? new byte[packetHeader.PackLength] : new byte[dataBuff.Length - HeaderMessageSize];
+                                    byte[] msgBuff = packetHeader.PackLength > 0 ? new byte[packetHeader.PackLength] : new byte[dataBuff.Length - HeaderMessageSize];
                                     Buffer.BlockCopy(dataBuff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
+
                                     var message = new TMessageData();
                                     message.MessageId = packetHeader.SessionId;
-                                    message.Buffer = msgBuff;
+                                    if (packetHeader.PackLength > 0)
+                                    {
+                                        message.Buffer = dataBuff.AsSpan().Slice(20, packetHeader.PackLength).ToArray();//20..packetHeader.PackLength
+                                    }
+                                    else
+                                    {
+                                        var sieze = dataBuff.Length - HeaderMessageSize;
+                                        message.Buffer = dataBuff.AsSpan().Slice(20, sieze).ToArray();
+                                    }
                                     message.BufferLen = packetHeader.PackLength;
                                     SessionManager.AddToQueue(message);
                                     break;
@@ -260,10 +279,10 @@ namespace GameGate.Services
                                 break;
                             }
                             var tempBuff = new byte[nLen];
-                            Buffer.BlockCopy(_receiveBuffer, nCheckMsgLen, tempBuff, 0, nLen);
-                            _receiveBuffer = tempBuff;
+                            Buffer.BlockCopy(receiveBuffer, nCheckMsgLen, tempBuff, 0, nLen);
+                            receiveBuffer = tempBuff;
                             dataBuff = tempBuff;
-                            _buffLen = nLen;
+                            buffLen = nLen;
                             srcOffset = 0;
                         }
                         else
@@ -285,16 +304,16 @@ namespace GameGate.Services
                 {
                     var tempBuff = new byte[nLen];
                     Buffer.BlockCopy(dataBuff, 0, tempBuff, 0, nLen);
-                    _receiveBuffer = tempBuff;
-                    _buffLen = nLen;
+                    receiveBuffer = tempBuff;
+                    buffLen = nLen;
                 }
                 else
                 {
-                    _receiveBuffer = null;
-                    _buffLen = 0;
+                    receiveBuffer = null;
+                    buffLen = 0;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 LogQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}", 5);
             }
@@ -306,15 +325,15 @@ namespace GameGate.Services
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
                     LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎[{ClientSocket.EndPoint}]拒绝链接...", 1);
-                    _connected = false;
+                    Connected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
                     LogQueue.Enqueue($"游戏引擎[{ClientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint.ToString()}]...", 1);
-                    _connected = false;
+                    Connected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
                     LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎时[{ClientSocket.EndPoint}]超时...", 1);
-                    _connected = false;
+                    Connected = false;
                     break;
             }
             GateReady = false;
@@ -399,7 +418,7 @@ namespace GameGate.Services
             {
                 return;
             }
-            _sendBytes += sendBuffer.Length;
+            SendBytes += sendBuffer.Length;
             ClientSocket.Send(sendBuffer);
         }
 
@@ -443,25 +462,25 @@ namespace GameGate.Services
 
         public string GetSendInfo()
         {
-            var sendStr = _sendBytes switch
+            var sendStr = SendBytes switch
             {
-                > 1024 * 1000 => $"↑{_sendBytes / (1024 * 1000)}M",
-                > 1024 => $"↑{_sendBytes / 1024}K",
-                _ => $"↑{_sendBytes}B"
+                > 1024 * 1000 => $"↑{SendBytes / (1024 * 1000)}M",
+                > 1024 => $"↑{SendBytes / 1024}K",
+                _ => $"↑{SendBytes}B"
             };
-            _sendBytes = 0;
+            SendBytes = 0;
             return sendStr;
         }
 
         public string GetReceiveInfo()
         {
-            var receiveStr = _receiveBytes switch
+            var receiveStr = ReceiveBytes switch
             {
-                > 1024 * 1000 => $"↓{_receiveBytes / (1024 * 1000)}M",
-                > 1024 => $"↓{_receiveBytes / 1024}K",
-                _ => $"↓{_receiveBytes}B"
+                > 1024 * 1000 => $"↓{ReceiveBytes / (1024 * 1000)}M",
+                > 1024 => $"↓{ReceiveBytes / 1024}K",
+                _ => $"↓{ReceiveBytes}B"
             };
-            _receiveBytes = 0;
+            ReceiveBytes = 0;
             return receiveStr;
         }
 
