@@ -103,13 +103,13 @@ namespace GameGate.Services
             }
             var sRemoteAddress = e.RemoteIPaddr;
             LogQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
-            TSessionInfo userSession = null;
+            SessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.SessionArray.Length; nIdx++)
             {
                 userSession = clientThread.SessionArray[nIdx];
                 if (userSession == null)
                 {
-                    userSession = new TSessionInfo();
+                    userSession = new SessionInfo();
                     userSession.Socket = e.Socket;
                     userSession.nUserListIndex = 0;
                     userSession.ConnectionId = e.ConnectionId;
@@ -201,7 +201,7 @@ namespace GameGate.Services
                 }
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                var message = new TMessageData();
+                var message = new MessageData();
                 message.Buffer = data;
                 message.MessageId = connectionId;
                 message.BufferLen = data.Length;

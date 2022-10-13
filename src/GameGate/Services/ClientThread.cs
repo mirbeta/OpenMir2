@@ -1,6 +1,7 @@
 using GameGate.Conf;
 using System;
 using System.Net;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
@@ -23,7 +24,7 @@ namespace GameGate.Services
         /// <summary>
         /// 用户会话
         /// </summary>
-        public readonly TSessionInfo[] SessionArray = new TSessionInfo[GateShare.MaxSession];
+        public readonly SessionInfo[] SessionArray = new SessionInfo[GateShare.MaxSession];
         /// <summary>
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
@@ -72,11 +73,12 @@ namespace GameGate.Services
         /// 日志
         /// </summary>
         private static MirLog LogQueue => MirLog.Instance;
+        private const int HeaderMessageSize = 20;
 
         public ClientThread(string clientId, IPEndPoint endPoint, GameGateInfo gameGate)
         {
             ClientId = clientId;
-            ClientSocket = new ClientScoket();
+            ClientSocket = new ClientScoket(256);
             ClientSocket.Host = gameGate.ServerAdress;
             ClientSocket.Port = gameGate.ServerPort;
             ClientSocket.OnConnected += ClientSocketConnect;
@@ -130,7 +132,7 @@ namespace GameGate.Services
             ClientSocket.Disconnect();
         }
 
-        public TSessionInfo[] GetSession()
+        public SessionInfo[] GetSession()
         {
             return SessionArray;
         }
@@ -179,14 +181,8 @@ namespace GameGate.Services
         /// </summary>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            ProcReceiveBuffer(e.Buff, e.BuffLen);
-            ReceiveBytes += e.BuffLen;
-        }
-        
-        private const int HeaderMessageSize = 20;
-
-        private void ProcReceiveBuffer(byte[] data, int nMsgLen)
-        {
+            var nMsgLen = e.BuffLen;
+            var data = e.Buff;
             var srcOffset = 0;
             try
             {
@@ -197,46 +193,56 @@ namespace GameGate.Services
                     {
                         tempBuff[i] = receiveBuffer.Span[i];
                     }
+
                     for (int i = 0; i < data.Length; i++)
                     {
-                        tempBuff[i + buffLen] = data[i];
+                        tempBuff[i + buffLen] = data.Span[i];
                     }
+
                     receiveBuffer = tempBuff.ToArray();
                 }
                 else
                 {
-                    receiveBuffer = data;
+                    receiveBuffer = data.ToArray();
                 }
+
                 var nLen = buffLen + nMsgLen;
                 var dataBuff = receiveBuffer;
                 if (nLen >= HeaderMessageSize)
                 {
                     while (true)
                     {
-                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff.ToArray()); //这里还是有影响，看看能否直接读取内存，不做序列化操作
-                        if (packetHeader.PacketCode == 0)
+                        var packetHead = dataBuff.Span;
+                        var PacketCode = BitConverter.ToUInt32(packetHead.Slice(0, 4));
+                        var Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
+                        var SessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
+                        var Ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
+                        var ServerIndex = BitConverter.ToInt32(packetHead.Slice(12, 4));
+                        var PackLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
+                        //var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff.ToArray()); //这里还是有影响，看看能否直接读取内存，不做序列化操作
+                        if (PacketCode == 0)
                         {
                             LogQueue.Enqueue("不应该出现这个文字", 5);
                             break;
                         }
-                        if (packetHeader.PacketCode == Grobal2.RUNGATECODE)
+                        if (PacketCode == Grobal2.RUNGATECODE)
                         {
-                            var nCheckMsgLen = (Math.Abs(packetHeader.PackLength) + HeaderMessageSize);
+                            var nCheckMsgLen = (Math.Abs(PackLength) + HeaderMessageSize);
                             if (nCheckMsgLen > nLen)
                             {
                                 break;
                             }
-                            switch (packetHeader.Ident)
+                            switch (Ident)
                             {
                                 case Grobal2.GM_CHECKSERVER:
                                     CheckServerFail = false;
                                     _checkServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
-                                    var userSession = SessionManager.GetSession(packetHeader.SessionId);
+                                    var userSession = SessionManager.GetSession(SessionId);
                                     if (userSession != null)
                                     {
-                                        userSession.m_nSvrListIdx = packetHeader.ServerIndex;
+                                        userSession.m_nSvrListIdx = ServerIndex;
                                     }
                                     break;
                                 case Grobal2.GM_RECEIVE_OK:
@@ -249,18 +255,18 @@ namespace GameGate.Services
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    var message = new TMessageData();
-                                    message.MessageId = packetHeader.SessionId;
-                                    if (packetHeader.PackLength > 0)
+                                    var message = new MessageData();
+                                    message.MessageId = SessionId;
+                                    if (PackLength > 0)
                                     {
-                                        message.Buffer = dataBuff.Slice(20, packetHeader.PackLength);
+                                        message.Buffer = dataBuff.Slice(20, PackLength);
                                     }
                                     else
                                     {
                                         var packetSize = dataBuff.Length - HeaderMessageSize;
                                         message.Buffer = dataBuff.Slice(20, packetSize);
                                     }
-                                    message.BufferLen = packetHeader.PackLength;
+                                    message.BufferLen = PackLength;
                                     SessionManager.AddToQueue(message);
                                     break;
                                 case Grobal2.GM_TEST:
@@ -288,7 +294,7 @@ namespace GameGate.Services
                         }
                     }
                 }
-                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
                     receiveBuffer = dataBuff[..nLen];
                     buffLen = nLen;
@@ -303,6 +309,7 @@ namespace GameGate.Services
             {
                 LogQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}", 5);
             }
+            ReceiveBytes += e.BuffLen;
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)

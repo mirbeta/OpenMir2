@@ -242,7 +242,7 @@ namespace BotSvr
 
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            var sData = HUtil32.GetString(e.Buff.Span);
             if (!string.IsNullOrEmpty(sData))
             {
                 var n = sData.IndexOf("*", StringComparison.Ordinal);

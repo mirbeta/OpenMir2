@@ -16,7 +16,7 @@ namespace GameGate
     public class ClientSession
     {
         private readonly GameSpeed _gameSpeed;
-        private readonly TSessionInfo _session;
+        private readonly SessionInfo _session;
         private readonly object _syncObj;
         private readonly ClientThread _clientThread;
         private readonly HardwareFilter _hwidFilter;
@@ -39,7 +39,7 @@ namespace GameGate
         private readonly long m_FinishTick = 0;
         private readonly DynamicAuthenticator _authenticator = null;
 
-        public ClientSession(TSessionInfo session, ClientThread clientThread, SendQueue sendQueue)
+        public ClientSession(SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
             _session = session;
             _clientThread = clientThread;
@@ -60,7 +60,7 @@ namespace GameGate
             return _gameSpeed;
         }
 
-        public TSessionInfo Session => _session;
+        public SessionInfo Session => _session;
 
         private static MirLog LogQueue => MirLog.Instance;
 
@@ -76,7 +76,7 @@ namespace GameGate
         /// 这里所有的包都大于12个字节
         /// </summary>
         /// <param name="message"></param>
-        public void HandleSessionPacket(TMessageData message)
+        public void HandleSessionPacket(MessageData message)
         {
             var sMsg = string.Empty;
             int dwCurrentTick = 0;
@@ -854,13 +854,13 @@ namespace GameGate
         /// <summary>
         /// 处理服务端发送过来的消息并发送到游戏客户端
         /// </summary>
-        public void ProcessSvrData(TMessageData message)
+        public void ProcessSvrData(MessageData message)
         {
             if (message.BufferLen <= 0) //正常的游戏封包，走路 攻击等都走下面的代码
             {
                 Span<byte> stackMemory = stackalloc byte[0 - message.BufferLen + 2];
                 stackMemory[0] = (byte)'#';
-                for (int i = 0; i < -message.BufferLen; i++)
+                for (var i = 0; i < -message.BufferLen; i++)
                 {
                     stackMemory[i + 1] = message.Buffer.Span[i];
                 }
@@ -933,7 +933,7 @@ namespace GameGate
             if (message.BufferLen > ClientPacket.PackSize)
             {
                 var tempBuffer = message.Buffer[ClientPacket.PackSize..];
-                for (int i = 0; i < tempBuffer.Length; i++)
+                for (var i = 0; i < tempBuffer.Length; i++)
                 {
                     pzsSendBuf[i + (nLen + 1)] = tempBuffer.Span[i];
                 }
@@ -947,7 +947,7 @@ namespace GameGate
 
         private void SendKickMsg(int killType)
         {
-            var SendMsg = string.Empty;
+            var sendMsg = string.Empty;
             var defMsg = new ClientPacket();
             switch (killType)
             {
@@ -955,25 +955,25 @@ namespace GameGate
                     if (Config.IsKickOverSpeed)
                     {
                     }
-                    SendMsg = Config.m_szOverSpeedSendBack;
+                    sendMsg = Config.m_szOverSpeedSendBack;
                     break;
                 case 1:
-                    SendMsg = Config.m_szPacketDecryptFailed;
+                    sendMsg = Config.m_szPacketDecryptFailed;
                     break;
                 case 2:
-                    SendMsg = "当前登录帐号正在其它位置登录，本机已被强行离线";
+                    sendMsg = "当前登录帐号正在其它位置登录，本机已被强行离线";
                     break;
                 case 4: //todo 版本号验证
                     defMsg.Cmd = Grobal2.SM_VERSION_FAIL;
                     break;
                 case 5:
-                    SendMsg = Config.m_szOverClientCntMsg;
+                    sendMsg = Config.m_szOverClientCntMsg;
                     break;
                 case 6:
-                    SendMsg = Config.m_szHWIDBlockedMsg;
+                    sendMsg = Config.m_szHWIDBlockedMsg;
                     break;
                 case 12:
-                    SendMsg = "反外挂模块更新失败,请重启客户端!!!!";
+                    sendMsg = "反外挂模块更新失败,请重启客户端!!!!";
                     break;
             }
 
@@ -1010,8 +1010,8 @@ namespace GameGate
         /// </summary>
         private void HandleLogin(string loginData, int nLen, string Addr, ref bool success)
         {
-            const int FirstPakcetMaxLen = 254;
-            if (nLen < FirstPakcetMaxLen && nLen > 15)
+            const int firstPakcetMaxLen = 254;
+            if (nLen < firstPakcetMaxLen && nLen > 15)
             {
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
@@ -1198,14 +1198,14 @@ namespace GameGate
             {
                 tempBuff = new byte[PacketHeader.PacketSize + len];
             }
-            var GateMsg = new PacketHeader();
-            GateMsg.PacketCode = Grobal2.RUNGATECODE;
-            GateMsg.Socket = (int)_session.Socket.Handle;
-            GateMsg.SessionId = _session.SessionId;
-            GateMsg.Ident = Grobal2.GM_DATA;
-            GateMsg.ServerIndex = _session.nUserListIndex;
-            GateMsg.PackLength = tempBuff.Length - PacketHeader.PacketSize;//只需要发送数据封包大小即可
-            var sendBuffer = GateMsg.GetBuffer();
+            var packetHeader = new PacketHeader();
+            packetHeader.PacketCode = Grobal2.RUNGATECODE;
+            packetHeader.Socket = (int)_session.Socket.Handle;
+            packetHeader.SessionId = _session.SessionId;
+            packetHeader.Ident = Grobal2.GM_DATA;
+            packetHeader.ServerIndex = _session.nUserListIndex;
+            packetHeader.PackLength = tempBuff.Length - PacketHeader.PacketSize;//只需要发送数据封包大小即可
+            var sendBuffer = packetHeader.GetBuffer();
             Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
             {
@@ -1224,22 +1224,22 @@ namespace GameGate
             {
                 return;
             }
-            var TempBuf = new byte[1024];
-            var SendBuf = new byte[1024];
-            var Cmd = new ClientPacket();
-            Cmd.UID = m_nSvrObject;
-            Cmd.Cmd = Grobal2.SM_SYSMESSAGE;
-            Cmd.X = HUtil32.MakeWord(0xFF, 0xF9);
-            Cmd.Y = 0;
-            Cmd.Direct = 0;
-            SendBuf[0] = (byte)'#';
-            Buffer.BlockCopy(Cmd.GetBuffer(), 0, TempBuf, 0, ClientPacket.PackSize);
+            var tempBuf = new byte[1024];
+            var sendBuf = new byte[1024];
+            var clientPacket = new ClientPacket();
+            clientPacket.UID = m_nSvrObject;
+            clientPacket.Cmd = Grobal2.SM_SYSMESSAGE;
+            clientPacket.X = HUtil32.MakeWord(0xFF, 0xF9);
+            clientPacket.Y = 0;
+            clientPacket.Direct = 0;
+            sendBuf[0] = (byte)'#';
+            Buffer.BlockCopy(clientPacket.GetBuffer(), 0, tempBuf, 0, ClientPacket.PackSize);
             var sBuff = HUtil32.GetBytes(szMsg);
-            Buffer.BlockCopy(sBuff, 0, TempBuf, 13, sBuff.Length);
+            Buffer.BlockCopy(sBuff, 0, tempBuf, 13, sBuff.Length);
             var iLen = ClientPacket.PackSize + szMsg.Length;
-            iLen = Misc.EncodeBuf(TempBuf, iLen, SendBuf);
-            SendBuf[iLen + 1] = (byte)'!';
-            _sendQueue.AddToQueue(_session, SendBuf.AsSpan()[..(iLen + 1)].ToArray());
+            iLen = Misc.EncodeBuf(tempBuf, iLen, sendBuf);
+            sendBuf[iLen + 1] = (byte)'!';
+            _sendQueue.AddToQueue(_session, sendBuf.AsSpan()[..(iLen + 1)].ToArray());
         }
     }
 

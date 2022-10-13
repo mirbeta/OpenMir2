@@ -3,14 +3,14 @@ using System.Net.Sockets;
 
 namespace GameGate
 {
-    public struct TMessageData
+    public struct MessageData
     {
         public Memory<byte> Buffer;
         public int BufferLen;
         public int MessageId;
     }
 
-    public class TSessionInfo
+    public class SessionInfo
     {
         public Socket Socket;
         /// <summary>

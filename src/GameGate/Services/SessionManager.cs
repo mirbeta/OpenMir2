@@ -16,13 +16,13 @@ namespace GameGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<TMessageData> SendMsgQueue = null;
+        private readonly Channel<MessageData> SendMsgQueue = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            SendMsgQueue = Channel.CreateUnbounded<TMessageData>();
+            SendMsgQueue = Channel.CreateUnbounded<MessageData>();
         }
 
         /// <summary>
@@ -34,13 +34,13 @@ namespace GameGate.Services
         /// 添加到消息处理队列
         /// </summary>
         /// <param name="messageData"></param>
-        public void AddToQueue(TMessageData messageData)
+        public void AddToQueue(MessageData messageData)
         {
             SendMsgQueue.Writer.TryWrite(messageData);
         }
 
         /// <summary>
-        /// 处理M2发过来的消息
+        /// 转发GameSvr封包消息
         /// </summary>
         public void ProcessSendMessage(CancellationToken stoppingToken)
         {
