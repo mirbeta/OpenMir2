@@ -59,14 +59,7 @@ namespace GameSvr.Player
 
         private void ClientQueryUserSet(ProcessMessage processMsg)
         {
-            var sPassword = processMsg.Msg;
-            if (sPassword != EDCode.DeCodeString("NbA_VsaSTRucMbAjUl"))
-            {
-                M2Share.Log.Error("Fail");
-                return;
-            }
-            m_nClientFlagMode = processMsg.wParam;
-            M2Share.Log.Debug(Format("OK:{0}", m_nClientFlagMode));
+            
         }
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)
@@ -263,17 +256,6 @@ namespace GameSvr.Player
         private bool ClientDropItem(string sItemName, int nItemIdx)
         {
             var result = false;
-            if (!m_boClientFlag)
-            {
-                if (m_nStep == 8)
-                {
-                    m_nStep++;
-                }
-                else
-                {
-                    m_nStep = 0;
-                }
-            }
             if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);

@@ -10,6 +10,7 @@ using Spectre.Console;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,9 @@ namespace GameGate
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce; 
 
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);

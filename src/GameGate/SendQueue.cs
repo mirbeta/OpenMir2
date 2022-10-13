@@ -1,4 +1,7 @@
+using System;
 using System.Net.Sockets;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -23,46 +26,48 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddToQueue(TSessionInfo session, byte[] buffer)
+        public void AddToQueue(SessionInfo session, ReadOnlySpan<byte> buffer)
         {
-            _sendQueue.Writer.TryWrite(new SendQueueData()
-            {
-                Session = session,
-                Buffer = buffer
-            });
+            var sendPacket = new SendQueueData(session.Socket, buffer);
+            _sendQueue.Writer.TryWrite(sendPacket);
         }
 
         /// <summary>
         /// 将队列消息发送到客户端
         /// </summary>
-        public async Task ProcessSendQueue(CancellationToken stoppingToken)
+        public void ProcessSendQueue(CancellationToken stoppingToken)
         {
-            while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
+            Task.Factory.StartNew(async () =>
             {
-                while (_sendQueue.Reader.TryRead(out var queueData))
+                while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    var resp = queueData.SendBuffer();
-                    if (resp != queueData.Buffer.Length)
+                    while (_sendQueue.Reader.TryRead(out SendQueueData sendPacket))
                     {
-                        _logQueue.Enqueue("向客户端发送数据包失败", 5);
+                        sendPacket.SendBuffer();
                     }
                 }
-            }
+            }, stoppingToken);
         }
     }
-
-    public struct SendQueueData
+    
+    public readonly struct SendQueueData
     {
-        public TSessionInfo Session;
-        public byte[] Buffer;
-
-        public int SendBuffer()
+        private readonly Socket _socket;
+        private readonly byte[] _packetBuffer;
+        
+        public SendQueueData(Socket socket, ReadOnlySpan<byte> buff)
         {
-            if (Session.Socket == null || !Session.Socket.Connected)
+            _socket = socket;
+            _packetBuffer = buff.ToArray();
+        }
+
+        public unsafe int SendBuffer()
+        {
+            if (_socket == null || !_socket.Connected)
             {
                 return 0;
             }
-            return Session.Socket.Send(Buffer, 0, Buffer.Length, SocketFlags.None);
+            return _socket.Send(_packetBuffer);
         }
     }
 }

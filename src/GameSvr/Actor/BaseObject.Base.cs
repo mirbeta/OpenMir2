@@ -434,7 +434,7 @@ namespace GameSvr.Actor
                             Master = null;
                             SlaveExpLevel = (byte)M2Share.Config.SlaveColor.Length;
                             RecalcAbilitys();
-                            WAbil.DC = HUtil32.MakeLong(HUtil32.LoByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower, HUtil32.HiByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower);
+                            WAbil.DC = (ushort)HUtil32.MakeLong((short)(HUtil32.LoByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower), (short)(HUtil32.HiByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower));
                             WalkSpeed = WalkSpeed / M2Share.Config.MasterDieMutinySpeed;
                             RefNameColor();
                             RefShowName();

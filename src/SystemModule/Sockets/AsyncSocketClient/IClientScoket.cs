@@ -11,7 +11,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 缓冲区大小
         /// </summary>
-        private const int Buffersize = 1024;
+        private int Buffersize = 1024;
         /// <summary>
         /// 客户端Socket
         /// </summary>
@@ -48,6 +48,19 @@ namespace SystemModule.Sockets.AsyncSocketClient
         public ClientScoket()
         {
             _databuffer = new byte[Buffersize];//创建缓冲区
+        }
+
+        public ClientScoket(int buffSize)
+        {
+            if (buffSize > 0)
+            {
+                _databuffer = new byte[buffSize];//创建自定义缓冲区
+                Buffersize = buffSize;
+            }
+            else
+            {
+                _databuffer = new byte[Buffersize];//创建缓冲区
+            }
         }
 
         public void Connect()
@@ -174,8 +187,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
-                    var destinationArray = new byte[length];//目的字节数组
-                    Array.Copy(_databuffer, 0, destinationArray, 0, length);
+                    Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
+                    for (int i = 0; i < length; i++)
+                    {
+                        destinationArray[i] = _databuffer[i];
+                    }
                     ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray)); //引发接收数据事件
                     StartWaitingForData(asyncState);//继续接收数据
                 }

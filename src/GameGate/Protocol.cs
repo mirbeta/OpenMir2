@@ -1,15 +1,16 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace GameGate
 {
-    public struct TMessageData
+    public struct MessageData
     {
-        public byte[] Buffer;
+        public Memory<byte> Buffer;
         public int BufferLen;
         public int MessageId;
     }
 
-    public class TSessionInfo
+    public class SessionInfo
     {
         public Socket Socket;
         /// <summary>
@@ -30,13 +31,13 @@ namespace GameGate
         public string sChrName;
     }
 
-    public class TDelayMsg
+    public class DelayMessage
     {
         public int dwDelayTime;
-        public int nMag;
-        public int nCmd;
-        public int nDir;
-        public int nBufLen;
+        public int Mag;
+        public int Cmd;
+        public int Dir;
+        public int BufLen;
         public byte[] Buffer;
     }
 

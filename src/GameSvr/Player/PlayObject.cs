@@ -1237,11 +1237,11 @@ namespace GameSvr.Player
             RecalcAdjusBonusAdjustAb((byte)NakedAbil.SC, asc, ref lsc, ref hsc);
             RecalcAdjusBonusAdjustAb((byte)NakedAbil.AC, aac, ref lac, ref hac);
             RecalcAdjusBonusAdjustAb((byte)NakedAbil.MAC, amac, ref lmac, ref hmac);
-            Abil.DC = HUtil32.MakeLong(HUtil32.LoWord(Abil.DC) + ldc, HUtil32.HiWord(Abil.DC) + hdc);
-            Abil.MC = HUtil32.MakeLong(HUtil32.LoWord(Abil.MC) + lmc, HUtil32.HiWord(Abil.MC) + hmc);
-            Abil.SC = HUtil32.MakeLong(HUtil32.LoWord(Abil.SC) + lsc, HUtil32.HiWord(Abil.SC) + hsc);
-            Abil.AC = HUtil32.MakeLong(HUtil32.LoWord(Abil.AC) + lac, HUtil32.HiWord(Abil.AC) + hac);
-            Abil.MAC = HUtil32.MakeLong(HUtil32.LoWord(Abil.MAC) + lmac, HUtil32.HiWord(Abil.MAC) + hmac);
+            Abil.DC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.DC) + ldc), (ushort)(HUtil32.HiWord(Abil.DC) + hdc));
+            Abil.MC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.MC) + lmc), (ushort)(HUtil32.HiWord(Abil.MC) + hmc));
+            Abil.SC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.SC) + lsc), (ushort)(HUtil32.HiWord(Abil.SC) + hsc));
+            Abil.AC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.AC) + lac), (ushort)(HUtil32.HiWord(Abil.AC) + hac));
+            Abil.MAC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.MAC) + lmac), (ushort)(HUtil32.HiWord(Abil.MAC) + hmac));
             Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxHP + BonusAbil.HP / BonusTick.HP);
             Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxMP + BonusAbil.MP / BonusTick.MP);
         }
@@ -3706,7 +3706,7 @@ namespace GameSvr.Player
             m_sGotoNpcLabel = string.Empty;
         }
 
-        private void ClientMerchantItemDlgSelect(int nParam1, int nParam2, int nParam3)
+        private void ClientMerchantItemDlgSelect(int nParam1, ushort nParam2, ushort nParam3)
         {
             DlgItemIndex = 0;
             if (!Death && !Ghost)

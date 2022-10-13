@@ -23,21 +23,28 @@ namespace GameGate
         private int _processClearSessionTick = 0;
         private int _kepAliveTick = 0;
 
+        private readonly PeriodicTimer _periodicTimer;
+
         public TimedService(ILogger<TimedService> logger)
         {
             _logger = logger;
             _kepAliveTick = HUtil32.GetTickCount();
+            _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(1));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            _processDelayTick = HUtil32.GetTickCount();
+            _processDelayCloseTick = HUtil32.GetTickCount();
+            _processClearSessionTick = HUtil32.GetTickCount();
+            _kepAliveTick = HUtil32.GetTickCount();
+            while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
+                var currentTick = HUtil32.GetTickCount();
                 OutMianMessage();
-                ProcessDelayMsg();
+                ProcessDelayMsg(currentTick);
                 ClearSession();
                 KeepAlive();
-                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }
 
@@ -97,11 +104,11 @@ namespace GameGate
         /// <summary>
         /// 处理网关延时消息
         /// </summary>
-        private void ProcessDelayMsg()
+        private void ProcessDelayMsg(int currentTick)
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 100)
+            if (currentTick - _processDelayTick > 1000)
             {
-                _processDelayTick = HUtil32.GetTickCount();
+                _processDelayTick = currentTick;
                 IList<ServerService> serverList = ServerManager.GetServerList();
                 for (var i = 0; i < serverList.Count; i++)
                 {
@@ -141,10 +148,10 @@ namespace GameGate
         /// </summary>
         private void ClearSession()
         {
-            if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
+            if (HUtil32.GetTickCount() - _processClearSessionTick > 120000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
-                LogQueue.EnqueueDebugging("清理超时会话开始工作...");
+                LogQueue.EnqueueDebugging("清理超时会话开始...");
                 var serverList = ServerManager.GetServerList();
                 for (var i = 0; i < serverList.Count; i++)
                 {
@@ -164,7 +171,6 @@ namespace GameGate
                     clientThread.CheckTimeOutSession();
                     ClientManager.CheckSessionStatus(serverList[i].ClientThread);
                 }
-                LogQueue.EnqueueDebugging("清理超时会话工作完成...");
             }
         }
 

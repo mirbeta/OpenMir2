@@ -50,7 +50,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 var OldEnvir = PlayObject.Envir;
                 PlayObject.Envir = Envir;
-                var FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
+                var FireBurnEvent = new FireBurnEvent(PlayObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
                 PlayObject.Envir = OldEnvir;
                 return;

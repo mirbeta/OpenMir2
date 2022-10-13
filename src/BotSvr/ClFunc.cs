@@ -9,7 +9,7 @@ namespace BotSvr
     {
         private static IList<ClientItem> DropItems = null;
 
-        public static void GetNextHitPosition(int sX, int sY, ref int NewX, ref int NewY)
+        public static void GetNextHitPosition(short sX, short sY, ref short NewX, ref short NewY)
         {
             int dir;
             dir = GetNextDirection(sX, sY, NewX, NewY);
@@ -18,32 +18,32 @@ namespace BotSvr
             switch (dir)
             {
                 case Grobal2.DR_UP:
-                    NewY = NewY - 2;
+                    NewY = (short)(NewY - 2);
                     break;
                 case Grobal2.DR_DOWN:
-                    NewY = NewY + 2;
+                    NewY = (short)(NewY + 2);
                     break;
                 case Grobal2.DR_LEFT:
-                    NewX = NewX + 2;
+                    NewX = (short)(NewX + 2);
                     break;
                 case Grobal2.DR_RIGHT:
-                    NewX = NewX - 2;
+                    NewX = (short)(NewX - 2);
                     break;
                 case Grobal2.DR_UPLEFT:
-                    NewX = NewX - 2;
-                    NewY = NewY - 2;
+                    NewX = (short)(NewX - 2);
+                    NewY = (short)(NewY - 2);
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    NewX = NewX + 2;
-                    NewY = NewY + 2;
+                    NewX = (short)(NewX + 2);
+                    NewY = (short)(NewY + 2);
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    NewX = NewX - 2;
-                    NewY = NewY + 2;
+                    NewX = (short)(NewX - 2);
+                    NewY = (short)(NewY + 2);
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    NewX = NewX + 2;
-                    NewY = NewY + 2;
+                    NewX = (short)(NewX + 2);
+                    NewY = (short)(NewY + 2);
                     break;
             }
         }
@@ -470,107 +470,107 @@ namespace BotSvr
             return HUtil32._MAX(Math.Abs(sX - dx), Math.Abs(sY - dy));
         }
 
-        public static void GetNextPosXY(byte dir, ref int X, ref int Y)
+        public static void GetNextPosXY(byte dir, ref short X, ref short Y)
         {
             switch (dir)
             {
                 case Grobal2.DR_UP:
-                    Y = Y - 1;
+                    Y = (short)(Y - 1);
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    X = X + 1;
-                    Y = Y - 1;
+                    X = (short)(X + 1);
+                    Y = (short)(Y - 1);
                     break;
                 case Grobal2.DR_RIGHT:
-                    X = X + 1;
+                    X = (short)(X + 1);
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    X = X + 1;
-                    Y = Y + 1;
+                    X = (short)(X + 1);
+                    Y = (short)(Y + 1);
                     break;
                 case Grobal2.DR_DOWN:
-                    Y = Y + 1;
+                    Y = (short)(Y + 1);
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    X = X - 1;
-                    Y = Y + 1;
+                    X = (short)(X - 1);
+                    Y = (short)(Y + 1);
                     break;
                 case Grobal2.DR_LEFT:
-                    X = X - 1;
+                    X = (short)(X - 1);
                     break;
                 case Grobal2.DR_UPLEFT:
-                    X = X - 1;
-                    Y = Y - 1;
+                    X = (short)(X - 1);
+                    Y = (short)(Y - 1);
                     break;
             }
         }
 
-        public static void GetNextRunXY(int dir, ref int X, ref int Y)
+        public static void GetNextRunXY(int dir, ref short X, ref short Y)
         {
             switch (dir)
             {
                 case Grobal2.DR_UP:
-                    Y = Y - 2;
+                    Y = (short)(Y - 2);
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    X = X + 2;
-                    Y = Y - 2;
+                    X = (short)(X + 2);
+                    Y = (short)(Y - 2);
                     break;
                 case Grobal2.DR_RIGHT:
-                    X = X + 2;
+                    X = (short)(X + 2);
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    X = X + 2;
-                    Y = Y + 2;
+                    X = (short)(X + 2);
+                    Y = (short)(Y + 2);
                     break;
                 case Grobal2.DR_DOWN:
-                    Y = Y + 2;
+                    Y = (short)(Y + 2);
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    X = X - 2;
-                    Y = Y + 2;
+                    X = (short)(X - 2);
+                    Y = (short)(Y + 2);
                     break;
                 case Grobal2.DR_LEFT:
-                    X = X - 2;
+                    X = (short)(X - 2);
                     break;
                 case Grobal2.DR_UPLEFT:
-                    X = X - 2;
-                    Y = Y - 2;
+                    X = (short)(X - 2);
+                    Y = (short)(Y - 2);
                     break;
             }
         }
 
-        public static void GetNextHorseRunXY(byte dir, ref int X, ref int Y)
+        public static void GetNextHorseRunXY(byte dir, ref short X, ref short Y)
         {
             switch (dir)
             {
                 case Grobal2.DR_UP:
-                    Y = Y - 3;
+                    Y = (short)(Y - 3);
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    X = X + 3;
-                    Y = Y - 3;
+                    X = (short)(X + 3);
+                    Y = (short)(Y - 3);
                     break;
                 case Grobal2.DR_RIGHT:
-                    X = X + 3;
+                    X = (short)(X + 3);
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    X = X + 3;
-                    Y = Y + 3;
+                    X = (short)(X + 3);
+                    Y = (short)(Y + 3);
                     break;
                 case Grobal2.DR_DOWN:
-                    Y = Y + 3;
+                    Y = (short)(Y + 3);
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    X = X - 3;
-                    Y = Y + 3;
+                    X = (short)(X - 3);
+                    Y = (short)(Y + 3);
                     break;
                 case Grobal2.DR_LEFT:
-                    X = X - 3;
+                    X = (short)(X - 3);
                     break;
                 case Grobal2.DR_UPLEFT:
-                    X = X - 3;
-                    Y = Y - 3;
+                    X = (short)(X - 3);
+                    Y = (short)(Y - 3);
                     break;
             }
         }
@@ -686,113 +686,113 @@ namespace BotSvr
             return result;
         }
 
-        public static void GetBackPosition(int sX, int sY, int dir, ref int NewX, ref int NewY)
+        public static void GetBackPosition(short sX, short sY, int dir, ref short NewX, ref short NewY)
         {
             NewX = sX;
             NewY = sY;
             switch (dir)
             {
                 case Grobal2.DR_UP:
-                    NewY = NewY + 1;
+                    NewY = (short)(NewY + 1);
                     break;
                 case Grobal2.DR_DOWN:
-                    NewY = NewY - 1;
+                    NewY = (short)(NewY - 1);
                     break;
                 case Grobal2.DR_LEFT:
-                    NewX = NewX + 1;
+                    NewX = (short)(NewX + 1);
                     break;
                 case Grobal2.DR_RIGHT:
-                    NewX = NewX - 1;
+                    NewX = (short)(NewX - 1);
                     break;
                 case Grobal2.DR_UPLEFT:
-                    NewX = NewX + 1;
-                    NewY = NewY + 1;
+                    NewX = (short)(NewX + 1);
+                    NewY = (short)(NewY + 1);
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    NewX = NewX - 1;
-                    NewY = NewY + 1;
+                    NewX = (short)(NewX - 1);
+                    NewY = (short)(NewY + 1);
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    NewX = NewX + 1;
-                    NewY = NewY - 1;
+                    NewX = (short)(NewX + 1);
+                    NewY = (short)(NewY - 1);
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    NewX = NewX - 1;
-                    NewY = NewY - 1;
+                    NewX = (short)(NewX - 1);
+                    NewY = (short)(NewY - 1);
                     break;
             }
         }
 
-        public static void GetBackPosition2(int sX, int sY, int dir, ref int NewX, ref int NewY)
+        public static void GetBackPosition2(short sX, short sY, int dir, ref short NewX, ref short NewY)
         {
             NewX = sX;
             NewY = sY;
             switch (dir)
             {
                 case Grobal2.DR_UP:
-                    NewY = NewY + 2;
+                    NewY = (short)(NewY + 2);
                     break;
                 case Grobal2.DR_DOWN:
-                    NewY = NewY - 2;
+                    NewY = (short)(NewY - 2);
                     break;
                 case Grobal2.DR_LEFT:
-                    NewX = NewX + 2;
+                    NewX = (short)(NewX + 2);
                     break;
                 case Grobal2.DR_RIGHT:
-                    NewX = NewX - 2;
+                    NewX = (short)(NewX - 2);
                     break;
                 case Grobal2.DR_UPLEFT:
-                    NewX = NewX + 2;
-                    NewY = NewY + 2;
+                    NewX = (short)(NewX + 2);
+                    NewY = (short)(NewY + 2);
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    NewX = NewX - 2;
-                    NewY = NewY + 2;
+                    NewX = (short)(NewX - 2);
+                    NewY = (short)(NewY + 2);
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    NewX = NewX + 2;
-                    NewY = NewY - 2;
+                    NewX = (short)(NewX + 2);
+                    NewY = (short)(NewY - 2);
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    NewX = NewX - 2;
-                    NewY = NewY - 2;
+                    NewX = (short)(NewX - 2);
+                    NewY = (short)(NewY - 2);
                     break;
             }
         }
 
-        public static void GetFrontPosition(int sX, int sY, int dir, ref int NewX, ref int NewY)
+        public static void GetFrontPosition(short sX, short sY, int dir, ref short NewX, ref short NewY)
         {
             NewX = sX;
             NewY = sY;
             switch (dir)
             {
                 case Grobal2.DR_UP:
-                    NewY = NewY - 1;
+                    NewY = (short)(NewY - 1);
                     break;
                 case Grobal2.DR_DOWN:
-                    NewY = NewY + 1;
+                    NewY = (short)(NewY + 1);
                     break;
                 case Grobal2.DR_LEFT:
-                    NewX = NewX - 1;
+                    NewX = (short)(NewX - 1);
                     break;
                 case Grobal2.DR_RIGHT:
-                    NewX = NewX + 1;
+                    NewX = (short)(NewX + 1);
                     break;
                 case Grobal2.DR_UPLEFT:
-                    NewX = NewX - 1;
-                    NewY = NewY - 1;
+                    NewX = (short)(NewX - 1);
+                    NewY = (short)(NewY - 1);
                     break;
                 case Grobal2.DR_UPRIGHT:
-                    NewX = NewX + 1;
-                    NewY = NewY - 1;
+                    NewX = (short)(NewX + 1);
+                    NewY = (short)(NewY - 1);
                     break;
                 case Grobal2.DR_DOWNLEFT:
-                    NewX = NewX - 1;
-                    NewY = NewY + 1;
+                    NewX = (short)(NewX - 1);
+                    NewY = (short)(NewY + 1);
                     break;
                 case Grobal2.DR_DOWNRIGHT:
-                    NewX = NewX + 1;
-                    NewY = NewY + 1;
+                    NewX = (short)(NewX + 1);
+                    NewY = (short)(NewY + 1);
                     break;
             }
         }

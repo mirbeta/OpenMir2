@@ -30,12 +30,12 @@ namespace GameSvr.Actor
                         Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 42 * nLevel));
                     }
                     n = nLevel / 7;
-                    Abil.DC = HUtil32.MakeWord(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
+                    Abil.DC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
                     Abil.MC = 0;
-                    Abil.SC = HUtil32.MakeWord(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
+                    Abil.SC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
                     Abil.AC = 0;
                     n = HUtil32.Round(nLevel / 6);
-                    Abil.MAC = HUtil32.MakeWord(n / 2, n + 1);
+                    Abil.MAC = HUtil32.MakeWord((ushort)(n / 2), (ushort)(n + 1));
                     break;
                 case PlayJob.Wizard:
                     Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.Config.nLevelValueOfWizardHP + M2Share.Config.nLevelValueOfWizardHPRate) * nLevel));
@@ -44,8 +44,8 @@ namespace GameSvr.Actor
                     Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
                     Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 90 * nLevel));
                     n = nLevel / 7;
-                    Abil.DC = HUtil32.MakeWord(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
-                    Abil.MC = HUtil32.MakeWord(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
+                    Abil.DC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
+                    Abil.MC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
                     Abil.SC = 0;
                     Abil.AC = 0;
                     Abil.MAC = 0;
@@ -56,10 +56,10 @@ namespace GameSvr.Actor
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
                     Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, (15 + HUtil32.Round(nLevel / 20 * nLevel)));
                     Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 13 * nLevel));
-                    Abil.DC = HUtil32.MakeWord(HUtil32._MAX(nLevel / 5 - 1, 1), HUtil32._MAX(1, nLevel / 5));
+                    Abil.DC = HUtil32.MakeWord((ushort)HUtil32._MAX(nLevel / 5 - 1, 1), (ushort)HUtil32._MAX(1, nLevel / 5));
                     Abil.SC = 0;
                     Abil.MC = 0;
-                    Abil.AC = HUtil32.MakeWord(0, nLevel / 7);
+                    Abil.AC = HUtil32.MakeWord(0, (ushort)(nLevel / 7));
                     Abil.MAC = 0;
                     break;
                 case PlayJob.None:
@@ -792,8 +792,8 @@ namespace GameSvr.Actor
                 }
                 if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace && dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
                 {
-                    AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 4));
-                    AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 4));
+                    AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 4));
+                    AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 4));
                     AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 2));
                     AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
                     AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 6);
@@ -804,9 +804,9 @@ namespace GameSvr.Actor
                     WAbil.MaxHP = (ushort)(WAbil.MaxHP + 70);
                     WAbil.MaxMP = (ushort)(WAbil.MaxMP + 80);
                     AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
-                    AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
-                    AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
-                    AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
+                    AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
+                    AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
+                    AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
                 }
                 else
                 {
@@ -815,64 +815,64 @@ namespace GameSvr.Actor
                         WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 34));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
                         AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
-                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
-                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
-                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
+                        AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
+                        AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
+                        AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
                     }
                     else if (dragonsetDress && dragonsetBoots && dragonsetBelt)
                     {
                         WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
-                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 1));
-                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
-                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
+                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 1));
+                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
+                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
                     }
                     else if (dragonsetDress && dragonsetHelmet && dragonsetWeapon)
                     {
-                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 2));
-                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
-                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
+                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 2));
+                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
+                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
                         AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
                     }
                     if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
                     {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
-                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 3));
-                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 3));
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 3));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 3));
                     }
                     else if ((dragonsetRingLeft || dragonsetRingRight) && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
                     {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
-                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
-                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                     }
                     else if (dragonsetRingLeft && dragonsetRingRight && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
                     {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
-                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 2));
-                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 2));
+                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 2));
+                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 2));
                     }
                     else if ((dragonsetRingLeft || dragonsetRingRight) && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
                     {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
-                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
-                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
+                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                     }
                     else
                     {
                         if (dragonsetBraceletLeft && dragonsetBraceletRight)
                         {
-                            AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC)));
-                            AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC) + 1, HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC)));
+                            AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC)));
+                            AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC)));
                         }
                         if (dragonsetRingLeft && dragonsetRingRight)
                         {
-                            AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
-                            AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
+                            AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                            AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                         }
                     }
                 }
@@ -954,30 +954,30 @@ namespace GameSvr.Actor
             HitSpeed = AddAbil.HitSpeed;
             WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
             WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
-            WAbil.AC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
-            WAbil.MAC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
-            WAbil.DC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
-            WAbil.MC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
-            WAbil.SC = HUtil32.MakeWord(HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
+            WAbil.AC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
+            WAbil.MAC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
+            WAbil.DC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
+            WAbil.MC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
+            WAbil.SC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
             if (StatusArr[StatuStateConst.STATE_DEFENCEUP] > 0)
             {
-                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[StatuStateConst.STATE_DEFENCEUP]));
+                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[StatuStateConst.STATE_DEFENCEUP]));
             }
             if (StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] > 0)
             {
-                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[StatuStateConst.STATE_MAGDEFENCEUP]));
+                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[StatuStateConst.STATE_MAGDEFENCEUP]));
             }
             if (ExtraAbil[AbilConst.EABIL_DCUP] > 0)
             {
-                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]);
+                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]));
             }
             if (ExtraAbil[AbilConst.EABIL_MCUP] > 0)
             {
-                WAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MC), HUtil32.HiByte(WAbil.MC) + ExtraAbil[AbilConst.EABIL_MCUP]);
+                WAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MC), (ushort)(HUtil32.HiByte(WAbil.MC) + ExtraAbil[AbilConst.EABIL_MCUP]));
             }
             if (ExtraAbil[AbilConst.EABIL_SCUP] > 0)
             {
-                WAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.SC), HUtil32.HiByte(WAbil.SC) + ExtraAbil[AbilConst.EABIL_SCUP]);
+                WAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.SC), (ushort)(HUtil32.HiByte(WAbil.SC) + ExtraAbil[AbilConst.EABIL_SCUP]));
             }
             if (ExtraAbil[AbilConst.EABIL_HITSPEEDUP] > 0)
             {
@@ -993,9 +993,9 @@ namespace GameSvr.Actor
             }
             if (ExtraAbil[AbilConst.EABIL_PWRRATE] > 0)
             {
-                WAbil.DC = HUtil32.MakeWord((HUtil32.LoByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100, (HUtil32.HiByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100);
-                WAbil.MC = HUtil32.MakeWord((HUtil32.LoByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100, (HUtil32.HiByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100);
-                WAbil.SC = HUtil32.MakeWord((HUtil32.LoByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100, (HUtil32.HiByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100);
+                WAbil.DC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+                WAbil.MC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+                WAbil.SC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
             }
             if (FlameRing)
             {
@@ -1111,8 +1111,8 @@ namespace GameSvr.Actor
                         break;
                     case 10:
                     case 11:
-                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                         aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
                         aabil.AntiMagic = (ushort)(aabil.AntiMagic + clientItem.Item.MgAvoid);
                         aabil.AntiPoison = (ushort)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
@@ -1190,8 +1190,8 @@ namespace GameSvr.Actor
                         }
                         break;
                     case 15:
-                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                         aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
                         aabil.AntiMagic = (ushort)(aabil.AntiMagic + clientItem.Item.MgAvoid);
                         aabil.AntiPoison = (ushort)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
@@ -1225,8 +1225,8 @@ namespace GameSvr.Actor
                         aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
                         break;
                     case 22:
-                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                         aabil.HitSpeed = (ushort)(aabil.HitSpeed + clientItem.Item.AtkSpd);
                         aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
                         aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
@@ -1255,8 +1255,8 @@ namespace GameSvr.Actor
                                 aabil.SPEED = (ushort)(aabil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
                                 break;
                             case 26:
-                                aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
-                                aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                                aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                                aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                                 aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
                                 aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
                                 aabil.MP = (ushort)(aabil.MP + clientItem.Item.MpAdd);
@@ -1264,13 +1264,13 @@ namespace GameSvr.Actor
                         }
                         break;
                     case 52:
-                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                         aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
                         break;
                     case 54:
-                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                         aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
                         aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
                         aabil.AntiPoison = (ushort)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
@@ -1280,13 +1280,13 @@ namespace GameSvr.Actor
                         aabil.MP = (ushort)(aabil.MP + clientItem.Item.MpAdd);
                         break;
                     default:
-                        aabil.AC = HUtil32.MakeWord(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC), HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.MAC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC), HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC));
+                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                         break;
                 }
-                aabil.DC = HUtil32.MakeWord(HUtil32.LoByte(aabil.DC) + HUtil32.LoByte(clientItem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(aabil.DC) + HUtil32.HiByte(clientItem.Item.DC)));
-                aabil.MC = HUtil32.MakeWord(HUtil32.LoByte(aabil.MC) + HUtil32.LoByte(clientItem.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(aabil.MC) + HUtil32.HiByte(clientItem.Item.MC)));
-                aabil.SC = HUtil32.MakeWord(HUtil32.LoByte(aabil.SC) + HUtil32.LoByte(clientItem.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(aabil.SC) + HUtil32.HiByte(clientItem.Item.SC)));
+                aabil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.DC) + HUtil32.LoByte(clientItem.Item.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(aabil.DC) + HUtil32.HiByte(clientItem.Item.DC)));
+                aabil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MC) + HUtil32.LoByte(clientItem.Item.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(aabil.MC) + HUtil32.HiByte(clientItem.Item.MC)));
+                aabil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.SC) + HUtil32.LoByte(clientItem.Item.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(aabil.SC) + HUtil32.HiByte(clientItem.Item.SC)));
             }
         }
 
@@ -1432,7 +1432,7 @@ namespace GameSvr.Actor
                 switch (Job)
                 {
                     case PlayJob.Warrior:
-                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 4));
+                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 4));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
@@ -1450,15 +1450,15 @@ namespace GameSvr.Actor
                 switch (Job)
                 {
                     case PlayJob.Warrior:
-                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
+                        citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
-                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
+                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
                         break;
                     case PlayJob.Wizard:
                         citem.Item.DC = 0;
                         citem.Item.SC = 0;
-                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
+                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
                         break;
                     case PlayJob.Taoist:
                         citem.Item.MC = 0;
@@ -1524,16 +1524,16 @@ namespace GameSvr.Actor
                 switch (Job)
                 {
                     case PlayJob.Warrior:
-                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 28));
+                        citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 28));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
-                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC) - 2, HUtil32.HiByte(citem.Item.AC));
+                        citem.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.AC) - 2), HUtil32.HiByte(citem.Item.AC));
                         break;
                     case PlayJob.Wizard:
                         citem.Item.SC = 0;
                         if (HUtil32.HiByte(citem.Item.MAC) > 12)
                         {
-                            citem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MAC), HUtil32.HiByte(citem.Item.MAC) - 12);
+                            citem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MAC), (ushort)(HUtil32.HiByte(citem.Item.MAC) - 12));
                         }
                         else
                         {
@@ -1541,9 +1541,9 @@ namespace GameSvr.Actor
                         }
                         break;
                     case PlayJob.Taoist:
-                        citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC) + 2, HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 10));
+                        citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 2), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 10));
                         citem.Item.MC = 0;
-                        citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC) - 2, HUtil32.HiByte(citem.Item.AC));
+                        citem.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.AC) - 2), HUtil32.HiByte(citem.Item.AC));
                         break;
                 }
             }
@@ -1554,19 +1554,19 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
+                            citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                             citem.Item.MC = 0;
                             citem.Item.SC = 0;
                             break;
                         case PlayJob.Wizard:
                             citem.Item.DC = 0;
-                            citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC) + 2));
+                            citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC) + 2));
                             citem.Item.SC = 0;
                             break;
                         case PlayJob.Taoist:
                             citem.Item.DC = 0;
                             citem.Item.MC = 0;
-                            citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC) + 2));
+                            citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC) + 2));
                             break;
                     }
                 }
@@ -1575,19 +1575,19 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC)));
+                            citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC)));
                             citem.Item.MC = 0;
                             citem.Item.SC = 0;
                             break;
                         case PlayJob.Wizard:
                             citem.Item.DC = 0;
-                            citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC)));
+                            citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC)));
                             citem.Item.SC = 0;
                             break;
                         case PlayJob.Taoist:
                             citem.Item.DC = 0;
                             citem.Item.MC = 0;
-                            citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC)));
+                            citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC)));
                             break;
                     }
                 }
@@ -1604,7 +1604,7 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 4));
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 4));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             break;
@@ -1622,15 +1622,15 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
+                            std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
                             break;
                         case PlayJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
+                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
                             break;
                         case PlayJob.Taoist:
                             std.Item.MC = 0;
@@ -1696,16 +1696,16 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 28));
+                            std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 28));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC) - 2, HUtil32.HiByte(item.AC));
+                            std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) - 2), HUtil32.HiByte(item.AC));
                             break;
                         case PlayJob.Wizard:
                             std.Item.SC = 0;
                             if (HUtil32.HiByte(item.MAC) > 12)
                             {
-                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC), HUtil32.HiByte(item.MAC) - 12);
+                                std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC), (ushort)(HUtil32.HiByte(item.MAC) - 12));
                             }
                             else
                             {
@@ -1713,9 +1713,9 @@ namespace GameSvr.Actor
                             }
                             break;
                         case PlayJob.Taoist:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC) + 2, HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 10));
+                            std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 2), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 10));
                             std.Item.MC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC) - 2, HUtil32.HiByte(item.AC));
+                            std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) - 2), HUtil32.HiByte(item.AC));
                             break;
                     }
                 }
@@ -1726,19 +1726,19 @@ namespace GameSvr.Actor
                         switch (Job)
                         {
                             case PlayJob.Warrior:
-                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
+                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                                 std.Item.MC = 0;
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Wizard:
                                 std.Item.DC = 0;
-                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), HUtil32._MIN(255, HUtil32.HiByte(item.MC) + 2));
+                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.MC) + 2));
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Taoist:
                                 std.Item.DC = 0;
                                 std.Item.MC = 0;
-                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), HUtil32._MIN(255, HUtil32.HiByte(item.SC) + 2));
+                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.SC) + 2));
                                 break;
                         }
                     }
@@ -1747,19 +1747,19 @@ namespace GameSvr.Actor
                         switch (Job)
                         {
                             case PlayJob.Warrior:
-                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
+                                std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
                                 std.Item.MC = 0;
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Wizard:
                                 std.Item.DC = 0;
-                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), HUtil32._MIN(255, HUtil32.HiByte(item.MC)));
+                                std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.MC)));
                                 std.Item.SC = 0;
                                 break;
                             case PlayJob.Taoist:
                                 std.Item.DC = 0;
                                 std.Item.MC = 0;
-                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), HUtil32._MIN(255, HUtil32.HiByte(item.SC)));
+                                std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.SC)));
                                 break;
                         }
                     }
@@ -1769,23 +1769,23 @@ namespace GameSvr.Actor
                     switch (Job)
                     {
                         case PlayJob.Warrior:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
+                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC) + 2, HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 4));
+                            std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) + 2), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 4));
                             std.Item.MpAdd = item.MpAdd + 30;
                             break;
                         case PlayJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
-                            std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.MAC) + 2));
+                            std.Item.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.MAC) + 2));
                             std.Item.HpAdd = item.HpAdd + 30;
                             break;
                         case PlayJob.Taoist:
-                            std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
+                            std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
                             std.Item.MC = 0;
-                            std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.AC)));
-                            std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC) + 1, HUtil32._MIN(255, HUtil32.HiByte(item.MAC)));
+                            std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC)));
+                            std.Item.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.MAC)));
                             std.Item.HpAdd = item.HpAdd + 20;
                             std.Item.MpAdd = item.MpAdd + 10;
                             break;
@@ -1804,7 +1804,7 @@ namespace GameSvr.Actor
             if ((Race == ActorRace.WhiteSkeleton) || (Race == ActorRace.ElfMonster) || (Race == ActorRace.ElfWarriormon))
             {
                 WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(Abil.DC));
-                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (int)Math.Round(HUtil32.HiByte(WAbil.DC) + (3 * (0.3 + SlaveExpLevel * 0.1) * SlaveExpLevel)));
+                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(int)Math.Round(HUtil32.HiByte(WAbil.DC) + (3 * (0.3 + SlaveExpLevel * 0.1) * SlaveExpLevel)));
                 chp = (ushort)(chp + Math.Round(Abil.MaxHP * (0.3 + SlaveExpLevel * 0.1)) * SlaveExpLevel);
                 chp = (ushort)(Abil.MaxHP + chp);
                 if (SlaveExpLevel > 0)
@@ -1815,7 +1815,7 @@ namespace GameSvr.Actor
                 {
                     WAbil.MaxHP = Abil.MaxHP;
                 }
-                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]);
+                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]));
             }
             else
             {
@@ -1823,7 +1823,7 @@ namespace GameSvr.Actor
                 {
                     chp = Abil.MaxHP;
                     WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(Abil.DC));
-                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) + (2 * SlaveExpLevel)));
+                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)Math.Abs(HUtil32.HiByte(WAbil.DC) + (2 * SlaveExpLevel)));
                     chp = (ushort)(chp + Math.Round(Abil.MaxHP * 0.15) * SlaveExpLevel);
                     WAbil.MaxHP = (ushort)HUtil32._MIN(Math.Abs(Abil.MaxHP + 60 * SlaveExpLevel), chp);
                     WAbil.MAC = 0;

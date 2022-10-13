@@ -10,7 +10,7 @@ namespace SystemModule
     public class HUtil32
     {
         public const string Backslash = "/";
-        public static readonly string[] Separator =  { " ", ",", "\t" };
+        public static readonly string[] Separator = { " ", ",", "\t" };
         public static readonly UserItem DelfautItem = new UserItem();
         public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
 
@@ -35,37 +35,22 @@ namespace SystemModule
             return Environment.TickCount;
         }
 
-        public static ushort MakeLong(int lowPart, int highPart)
-        {
-            return (ushort)(lowPart | highPart << 16);
-        }
-
-        public static int MakeLong(double lowPart, double highPart)
-        {
-            return (int)lowPart | ((int)highPart << 16);
-        }
-        
-        public static int MakeLong(ushort lowPart, int highPart)
-        {
-            return (int)(lowPart | (uint)(highPart << 16));
-        }
-
-        public static int MakeLong(short lowPart, int highPart)
-        {
-            return (int)(((ushort)lowPart) | (uint)(highPart << 16));
-        }
-
         public static int MakeLong(short lowPart, short highPart)
         {
             return (int)(((ushort)lowPart) | (uint)(highPart << 16));
         }
 
-        public static int MakeLong(short lowPart, ushort highPart)
+        public static int MakeLong(ushort lowPart, ushort highPart)
         {
-            return (ushort)lowPart | ((short)highPart << 16);
+            return (int)(lowPart | (uint)(highPart << 16));
         }
 
-        public static ushort MakeWord(int bLow, int bHigh)
+        public static ushort MakeWord(byte low, byte high)
+        {
+            return (ushort)((high << 8) | low);
+        }
+
+        public static ushort MakeWord(ushort bLow, ushort bHigh)
         {
             return (ushort)(bLow | (bHigh << 8));
         }
@@ -74,7 +59,7 @@ namespace SystemModule
         {
             return (ushort)(dword >> 16);
         }
-        
+
         public static ushort HiWord(int dword)
         {
             return (ushort)(dword >> 16);
@@ -105,6 +90,26 @@ namespace SystemModule
             return (byte)w;
         }
 
+        public static ushort LoWord(uint nValue)
+        {
+            return (ushort)(nValue & 0xFFFF);
+        }
+
+        public static ushort HiWord(uint nValue)
+        {
+            return (ushort)(nValue >> 16);
+        }
+
+        public static byte LoByte(ushort nValue)
+        {
+            return (byte)(nValue & 0xFF);
+        }
+
+        public static byte HiByte(ushort nValue)
+        {
+            return (byte)(nValue >> 8);
+        }
+
         public static bool IsVarNumber(string str)
         {
             return (CompareLStr(str, "HUMAN", 5)) || (CompareLStr(str, "GUILD", 5)) || (CompareLStr(str, "GLOBAL", 6));
@@ -119,12 +124,12 @@ namespace SystemModule
         {
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
         }
-        
+
         public static int Round(int r)
         {
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
         }
-        
+
         public static int Round(double r)
         {
             return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
@@ -138,7 +143,7 @@ namespace SystemModule
         {
             return Math.Max(min, values) == Math.Min(values, max);
         }
-        
+
         /// <summary>
         /// 判断数值是否在范围之内
         /// </summary>
@@ -175,6 +180,11 @@ namespace SystemModule
         public static void LeaveCriticalSection(object obj)
         {
             Monitor.Exit(obj);
+        }
+
+        public static string GetString(ReadOnlySpan<byte> bytes)
+        {
+            return Encoding.GetEncoding("gb2312").GetString(bytes);
         }
 
         public static string GetString(byte[] bytes, int index, int count)
@@ -490,7 +500,7 @@ namespace SystemModule
             }
             return true;
         }
-        
+
         public static bool CompareLStr(string src, string targ, int compn)
         {
             if (compn <= 0) return false;
@@ -637,7 +647,7 @@ namespace SystemModule
         {
             return Encoding.GetEncoding("GB2312").GetBytes(str);
         }
-        
+
         /// <summary>
         /// 字符串转Byte字节数组
         /// </summary>
