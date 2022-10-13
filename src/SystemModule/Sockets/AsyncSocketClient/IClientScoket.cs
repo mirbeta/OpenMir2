@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -20,6 +21,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 缓冲区
         /// </summary>
         private readonly byte[] _databuffer;
+        private readonly IMemoryOwner<byte> _memoryOwner;
+        private Memory<byte> _cellArray;
+        private ArrayPool<byte> _cellPool;
         /// <summary>
         /// 连接是否成功
         /// </summary>
@@ -48,19 +52,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
         public ClientScoket()
         {
             _databuffer = new byte[Buffersize];//创建缓冲区
-        }
-
-        public ClientScoket(int buffSize)
-        {
-            if (buffSize > 0)
-            {
-                _databuffer = new byte[buffSize];//创建自定义缓冲区
-                Buffersize = buffSize;
-            }
-            else
-            {
-                _databuffer = new byte[Buffersize];//创建缓冲区
-            }
+            _cellPool = ArrayPool<byte>.Create();
+            _cellArray = _cellPool.Rent(Buffersize);
         }
 
         public void Connect()
@@ -187,11 +180,13 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
-                    Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
+                    Console.WriteLine(123);
+                    //Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
                     for (int i = 0; i < length; i++)
                     {
-                        destinationArray[i] = _databuffer[i];
+                        _cellArray.Span[i] = _databuffer[i];
                     }
+                    var destinationArray = _cellArray.Span[..length];
                     ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray)); //引发接收数据事件
                     StartWaitingForData(asyncState);//继续接收数据
                 }
@@ -295,6 +290,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 _cli.Disconnect(true);//scoket 复用
                 _cli.Close();
             }
+            
         }
 
         public void Disconnect()
