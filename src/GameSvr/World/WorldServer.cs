@@ -1967,7 +1967,7 @@ namespace GameSvr.World
                 if (!merchant.Ghost)
                 {
                     merchant.ClearScript();
-                    merchant.LoadNPCScript();
+                    merchant.LoadMerchantScript();
                 }
             }
         }

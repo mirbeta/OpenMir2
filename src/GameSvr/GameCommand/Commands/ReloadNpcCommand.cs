@@ -42,7 +42,7 @@ namespace GameSvr.GameCommand.Commands
                         {
                             Merchant = (Merchant)TmpMerList[i];
                             Merchant.ClearScript();
-                            Merchant.LoadNPCScript();
+                            Merchant.LoadMerchantScript();
                             PlayObject.SysMsg(Merchant.ChrName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
