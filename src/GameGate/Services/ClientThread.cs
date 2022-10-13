@@ -78,7 +78,7 @@ namespace GameGate.Services
         public ClientThread(string clientId, IPEndPoint endPoint, GameGateInfo gameGate)
         {
             ClientId = clientId;
-            ClientSocket = new ClientScoket(256);
+            ClientSocket = new ClientScoket();
             ClientSocket.Host = gameGate.ServerAdress;
             ClientSocket.Port = gameGate.ServerPort;
             ClientSocket.OnConnected += ClientSocketConnect;
