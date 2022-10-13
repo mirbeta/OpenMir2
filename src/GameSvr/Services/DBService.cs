@@ -61,11 +61,9 @@ namespace GameSvr.Services
             requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
             requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(requet));
 
-            var s = HUtil32.MakeLong(nQueryID ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
+            var s = HUtil32.MakeLong((ushort)(nQueryID ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
-
             _clientScoket.Send(requestPacket.GetBuffer());
-
             return true;
         }
 
@@ -103,7 +101,7 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                var data = e.Buff;
+                var data = e.Buff.Span;
                 if (_packetLen == 0 && data[0] == (byte)'#')
                 {
                     _packetLen = BitConverter.ToInt32(data[1..5]);
@@ -112,12 +110,12 @@ namespace GameSvr.Services
                 {
                     var tempBuff = new byte[_recvBuff.Length + e.BuffLen];
                     Buffer.BlockCopy(_recvBuff, 0, tempBuff, 0, _recvBuff.Length);
-                    Buffer.BlockCopy(e.Buff, 0, tempBuff, _recvBuff.Length, e.BuffLen);
+                    Buffer.BlockCopy(e.Buff.ToArray(), 0, tempBuff, _recvBuff.Length, e.BuffLen);
                     _recvBuff = tempBuff;
                 }
                 else
                 {
-                    _recvBuff = e.Buff;
+                    _recvBuff = e.Buff.ToArray();
                 }
                 var len = _recvBuff.Length - _packetLen;
                 if (len > 0)
@@ -127,7 +125,7 @@ namespace GameSvr.Services
                     data = _recvBuff[.._packetLen];
                     _recvBuff = tempBuff;
                     _socketWorking = true;
-                    ProcessData(data);
+                    ProcessData(data.ToArray());
                     _packetLen = tempBuff.Length;
                 }
                 else if (len == 0)
@@ -156,9 +154,16 @@ namespace GameSvr.Services
                     var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
                     if (nLen >= 12)
                     {
-                        var nCheckCode = HUtil32.MakeLong(respCheckCode ^ 170, nLen);
+                        var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
+                        if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
+                        {
+                            M2Share.Config.nLoadDBErrorCount++;
+                            return;
+                        }
+                        var signatureBuff = BitConverter.GetBytes(queryId);
+                        var signatureId = BitConverter.ToInt16(signatureBuff);
                         var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
-                        if (nCheckCode == BitConverter.ToInt16(sginBuff))
+                        if (signatureId == BitConverter.ToInt16(sginBuff))
                         {
                             HumDataService.AddToProcess(respCheckCode, responsePacket);
                         }

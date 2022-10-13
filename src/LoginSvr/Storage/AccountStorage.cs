@@ -97,7 +97,7 @@ namespace LoginSvr.Storage
             {
                 var command = new MySqlCommand();
                 command.CommandText = sSQL;
-                command.Connection = (MySqlConnection) dbConnection;
+                command.Connection = dbConnection;
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -162,7 +162,7 @@ namespace LoginSvr.Storage
             }
             var command = new MySqlCommand();
             command.CommandText = string.Format(sSQL, nIndex);
-            command.Connection = (MySqlConnection)dbConnection;
+            command.Connection = dbConnection;
             IDataReader dr;
             try
             {

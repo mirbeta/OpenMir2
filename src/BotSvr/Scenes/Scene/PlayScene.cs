@@ -381,12 +381,12 @@ namespace BotSvr.Scenes.Scene
             return result;
         }
 
-        public bool CanRun(int sX, int sY, int ex, int ey)
+        public bool CanRun(short sX, short sY, int ex, int ey)
         {
             bool result;
             byte ndir = ClFunc.GetNextDirection(sX, sY, ex, ey);
-            int rx = sX;
-            int ry = sY;
+            short rx = sX;
+            short ry = sY;
             ClFunc.GetNextPosXY(ndir, ref rx, ref ry);
             if (CanWalkEx(rx, ry) && CanWalkEx(ex, ey))
             {
@@ -866,8 +866,8 @@ namespace BotSvr.Scenes.Scene
                     break;
             }
             actor.m_nRecogId = chrid;
-            actor.m_nCurrX = cx;
-            actor.m_nCurrY = cy;
+            actor.m_nCurrX = (short)(ushort)(short)cx;
+            actor.m_nCurrY = (short)(ushort)(short)cy;
             actor.m_nRx = actor.m_nCurrX;
             actor.m_nRy = actor.m_nCurrY;
             actor.m_btDir = (byte)cdir;
@@ -1016,7 +1016,7 @@ namespace BotSvr.Scenes.Scene
             return result;
         }
 
-        public void SendMsg(int ident, int chrid, int x, int y, int cdir, int feature, int state, string str, int ipInfo = 0)
+        public void SendMsg(int ident, int chrid, ushort x, ushort y, byte cdir, int feature, int state, string str, int ipInfo = 0)
         {
             TActor actor;
             MessageBodyW mbw;
@@ -1072,10 +1072,10 @@ namespace BotSvr.Scenes.Scene
                     robotClient.Map.LoadMap(str, x, y);
                     if ((ident == Grobal2.SM_NEWMAP) && (MShare.g_MySelf != null))
                     {
-                        MShare.g_MySelf.m_nCurrX = x;
-                        MShare.g_MySelf.m_nCurrY = y;
-                        MShare.g_MySelf.m_nRx = x;
-                        MShare.g_MySelf.m_nRy = y;
+                        MShare.g_MySelf.m_nCurrX = (short)x;
+                        MShare.g_MySelf.m_nCurrY = (short)y;
+                        MShare.g_MySelf.m_nRx = (short)x;
+                        MShare.g_MySelf.m_nRy = (short)y;
                         DelActor(MShare.g_MySelf);
                     }
                     break;

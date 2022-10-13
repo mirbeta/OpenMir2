@@ -3,7 +3,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -28,7 +27,7 @@ namespace GameGate.Services
         public ServerService(string clientId, GameGateInfo gameGate)
         {
             _waitCloseQueue = new ConcurrentQueue<int>();
-            _serverSocket = new SocketServer(ushort.MaxValue, 255);
+            _serverSocket = new SocketServer(ushort.MaxValue, 500);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -41,13 +40,13 @@ namespace GameGate.Services
 
         public ClientThread ClientThread => _clientThread;
 
-        public Task Start(CancellationToken stoppingToken)
+        public void Start(CancellationToken stoppingToken)
         {
             _serverSocket.Start(_gateEndPoint);
             _clientThread.Start();
             _clientThread.RestSessionArray();
+            _sendQueue.ProcessSendQueue(stoppingToken);
             LogQueue.Enqueue($"网关[{_gateEndPoint}]已启动...", 1);
-            return _sendQueue.ProcessSendQueue(stoppingToken);
         }
 
         public void Stop()
@@ -104,13 +103,13 @@ namespace GameGate.Services
             }
             var sRemoteAddress = e.RemoteIPaddr;
             LogQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
-            TSessionInfo userSession = null;
+            SessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.SessionArray.Length; nIdx++)
             {
                 userSession = clientThread.SessionArray[nIdx];
                 if (userSession == null)
                 {
-                    userSession = new TSessionInfo();
+                    userSession = new SessionInfo();
                     userSession.Socket = e.Socket;
                     userSession.nUserListIndex = 0;
                     userSession.ConnectionId = e.ConnectionId;
@@ -202,7 +201,7 @@ namespace GameGate.Services
                 }
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                var message = new TMessageData();
+                var message = new MessageData();
                 message.Buffer = data;
                 message.MessageId = connectionId;
                 message.BufferLen = data.Length;

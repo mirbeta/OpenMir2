@@ -146,10 +146,22 @@ namespace DBSvr.Services
                 var packetLen = requestPacket.Message.Length + requestPacket.Packet.Length + 6;
                 if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0)
                 {
-                    var queryId = HUtil32.MakeLong(nQueryId ^ 170, packetLen);
+                    var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
+                    if (queryId <= 0)
+                    {
+                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
+                        return;
+                    }
+                    if (requestPacket.Sgin.Length <= 0)
+                    {
+                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
+                        return;
+                    }
+                    var signatureBuff = BitConverter.GetBytes(queryId);
+                    var signatureId = BitConverter.ToInt16(signatureBuff);
                     var sginBuff = EDCode.DecodeBuff(requestPacket.Sgin);
                     var sgin = BitConverter.ToInt16(sginBuff);
-                    if (sgin == queryId)
+                    if (sgin == signatureId)
                     {
                         ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
                         return;
@@ -172,12 +184,12 @@ namespace DBSvr.Services
             var queryPart = 0;
             if (requestPacket.Packet != null)
             {
-                queryPart = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
+                queryPart = HUtil32.MakeLong((ushort)(requestPacket.QueryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             }
             else
             {
                 requestPacket.Packet = Array.Empty<byte>();
-                queryPart = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + 6);
+                queryPart = HUtil32.MakeLong((ushort)(requestPacket.QueryId ^ 170), (ushort)(requestPacket.Message.Length + 6));
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
             requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
@@ -191,7 +203,7 @@ namespace DBSvr.Services
             {
                 requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
             }
-            var s = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
+            var s = HUtil32.MakeLong((ushort)(requestPacket.QueryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
             var pk = requestPacket.GetBuffer();
             socket.Send(pk, pk.Length, SocketFlags.None);

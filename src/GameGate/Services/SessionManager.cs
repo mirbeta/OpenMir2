@@ -16,39 +16,39 @@ namespace GameGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<TMessageData> _sendMsgList = null;
+        private readonly Channel<MessageData> SendMsgQueue = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            _sendMsgList = Channel.CreateUnbounded<TMessageData>();
+            SendMsgQueue = Channel.CreateUnbounded<MessageData>();
         }
 
         /// <summary>
         /// 获取待处理的队列数量
         /// </summary>
-        public int GetQueueCount => _sendMsgList.Reader.Count;
+        public int GetQueueCount => SendMsgQueue.Reader.Count;
 
         /// <summary>
         /// 添加到消息处理队列
         /// </summary>
         /// <param name="messageData"></param>
-        public void AddToQueue(TMessageData messageData)
+        public void AddToQueue(MessageData messageData)
         {
-            _sendMsgList.Writer.TryWrite(messageData);
+            SendMsgQueue.Writer.TryWrite(messageData);
         }
 
         /// <summary>
-        /// 处理M2发过来的消息
+        /// 转发GameSvr封包消息
         /// </summary>
         public void ProcessSendMessage(CancellationToken stoppingToken)
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await _sendMsgList.Reader.WaitToReadAsync(stoppingToken))
+                while (await SendMsgQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_sendMsgList.Reader.TryRead(out var message))
+                    if (SendMsgQueue.Reader.TryRead(out var message))
                     {
                         try
                         {

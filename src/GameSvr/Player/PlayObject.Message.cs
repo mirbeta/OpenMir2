@@ -639,18 +639,6 @@ namespace GameSvr.Player
                 M2Share.Log.Error(sExceptionMsg4);
                 M2Share.Log.Error(e.Message);
             }
-            if (!m_boClientFlag && m_nStep >= 9 && M2Share.Config.boCheckFail)
-            {
-                if (m_nClientFlagMode == 1)
-                {
-                    M2Share.Config.TestLevel = M2Share.RandomNumber.Random(M2Share.MAXUPLEVEL + 1);
-                }
-                else
-                {
-                    // Die();
-                    M2Share.WorldEngine.ClearItemList();
-                }
-            }
             if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - m_dwAutoGetExpTick) > m_nAutoGetExpTime)
             {
                 m_dwAutoGetExpTick = HUtil32.GetTickCount();
@@ -792,10 +780,10 @@ namespace GameSvr.Player
                     ClientMerchantQuerySellPrice(ProcessMsg.nParam1, HUtil32.MakeLong((short)ProcessMsg.nParam2, (short)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERSELLITEM:
-                    ClientUserSellItem(ProcessMsg.nParam1, HUtil32.MakeLong((short)ProcessMsg.nParam2, (short)ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientMerchantQuerySellPrice(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERBUYITEM:
-                    ClientUserBuyItem(ProcessMsg.wIdent, ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), 0, ProcessMsg.Msg);
+                    ClientUserBuyItem(ProcessMsg.wIdent, ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), 0, ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERGETDETAILITEM:
                     ClientUserBuyItem(ProcessMsg.wIdent, ProcessMsg.nParam1, 0, ProcessMsg.nParam2, ProcessMsg.Msg);
@@ -837,10 +825,10 @@ namespace GameSvr.Player
                     ClientDelGroupMember(ProcessMsg.Msg.Trim());
                     break;
                 case Grobal2.CM_USERREPAIRITEM:
-                    ClientRepairItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientRepairItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2,(ushort) ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_MERCHANTQUERYREPAIRCOST:
-                    ClientQueryRepairCost(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientQueryRepairCost(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_DEALTRY:
                     ClientDealTry(ProcessMsg.Msg.Trim());
@@ -861,10 +849,10 @@ namespace GameSvr.Player
                     ClientDealEnd();
                     break;
                 case Grobal2.CM_USERSTORAGEITEM:
-                    ClientStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_USERTAKEBACKSTORAGEITEM:
-                    ClientTakeBackStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong(ProcessMsg.nParam2, ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientTakeBackStorageItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_WANTMINIMAP:
                     ClientGetMinMap();
@@ -1303,7 +1291,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_WALK:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WALK, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WALK, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                         CharDesc = new CharDesc();
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.CharStatus;
@@ -1313,7 +1301,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_HORSERUN:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HORSERUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HORSERUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                         CharDesc = new CharDesc();
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.CharStatus;
@@ -1323,7 +1311,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_RUN:
                     if (ProcessMsg.BaseObject != this.ActorId && BaseObject != null)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                         CharDesc = new CharDesc();
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.CharStatus;
@@ -1430,16 +1418,16 @@ namespace GameSvr.Player
                         switch (ProcessMsg.wIdent)
                         {
                             case Grobal2.RM_PUSH:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BACKSTEP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BACKSTEP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                                 break;
                             case Grobal2.RM_RUSH:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                                 break;
                             case Grobal2.RM_RUSHKUNG:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSHKUNG, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSHKUNG, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                                 break;
                             default:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TURN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TURN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                                 break;
                         }
                         CharDesc = new CharDesc();
@@ -1586,28 +1574,28 @@ namespace GameSvr.Player
                     switch (ProcessMsg.wIdent)
                     {
                         case Grobal2.RM_HEAR:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_WHISPER:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WHISPER, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WHISPER, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_CRY:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_SYSMESSAGE:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_GROUPMESSAGE:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_GUILDMESSAGE:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_GUILDMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_GUILDMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_MERCHANTSAY:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MERCHANTSAY, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MERCHANTSAY, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_MOVEMESSAGE:
-                            this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), ProcessMsg.nParam3, ProcessMsg.wParam);
+                            this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), ProcessMsg.nParam3, ProcessMsg.wParam);
                             break;
                     }
                     SendSocket(m_DefMsg, EDCode.EncodeString(ProcessMsg.Msg));
@@ -1764,7 +1752,7 @@ namespace GameSvr.Player
                     SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
                     break;
                 case Grobal2.RM_DIGUP:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                     MessageBodyWL = new MessageBodyWL();
                     MessageBodyWL.Param1 = BaseObject.GetFeature(this);
                     MessageBodyWL.Param2 = BaseObject.CharStatus;
@@ -1844,11 +1832,11 @@ namespace GameSvr.Player
                 case Grobal2.RM_SPACEMOVE_SHOW2:
                     if (ProcessMsg.wIdent == Grobal2.RM_SPACEMOVE_SHOW)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                     }
                     else
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW2, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.Light));
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW2, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, (ushort)BaseObject.Light));
                     }
                     CharDesc = new CharDesc();
                     CharDesc.Feature = BaseObject.GetFeature(this);

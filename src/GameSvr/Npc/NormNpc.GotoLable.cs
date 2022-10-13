@@ -2078,7 +2078,7 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nPLAYDICE:
                         PlayObject.m_sPlayDiceLabel = QuestActionInfo.sParam2;
-                        PlayObject.SendMsg(this, Grobal2.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord(PlayObject.m_DyVal[0], PlayObject.m_DyVal[1]), HUtil32.MakeWord(PlayObject.m_DyVal[2], PlayObject.m_DyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord(PlayObject.m_DyVal[4], PlayObject.m_DyVal[5]), HUtil32.MakeWord(PlayObject.m_DyVal[6], PlayObject.m_DyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord(PlayObject.m_DyVal[8], PlayObject.m_DyVal[9]), 0), QuestActionInfo.sParam2);
+                        PlayObject.SendMsg(this, Grobal2.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.m_DyVal[0], (ushort)PlayObject.m_DyVal[1]), HUtil32.MakeWord((ushort)PlayObject.m_DyVal[2], (ushort)PlayObject.m_DyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.m_DyVal[4], (ushort)PlayObject.m_DyVal[5]), HUtil32.MakeWord((ushort)PlayObject.m_DyVal[6], (ushort)PlayObject.m_DyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.m_DyVal[8], (ushort)PlayObject.m_DyVal[9]), 0), QuestActionInfo.sParam2);
                         bo11 = true;
                         break;
                     case ScriptConst.nADDNAMELIST:
@@ -2547,7 +2547,7 @@ namespace GameSvr.Npc
             {
                 sHint = "请输入：";
             }
-            PlayObject.SendDefMessage(Grobal2.SM_QUERYVALUE, 0, HUtil32.MakeWord(btType, btLen), 0, 0, sHint);
+            PlayObject.SendDefMessage(Grobal2.SM_QUERYVALUE, 0, HUtil32.MakeWord((ushort)btType, (ushort)btLen), 0, 0, sHint);
         }
 
         private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag)

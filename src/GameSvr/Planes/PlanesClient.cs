@@ -156,7 +156,7 @@ namespace GameSvr.Planes
         /// <param name="e"></param>
         private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
         {
-            sRecvMsg += HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            sRecvMsg += HUtil32.GetString(e.Buff.ToArray(), 0, e.BuffLen);
         }
     }
 }

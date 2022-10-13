@@ -26,7 +26,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.CurrX, PlayObject.CurrY, nInt, nTime, nN);
+            var FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.CurrX, PlayObject.CurrY, (byte)nInt, nTime, nN);
             M2Share.EventMgr.AddEvent(FireBurnEvent);
         }
     }

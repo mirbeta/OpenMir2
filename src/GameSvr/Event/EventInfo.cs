@@ -12,8 +12,8 @@ namespace GameSvr.Event
         public readonly int Id;
         public VisibleFlag VisibleFlag = 0;
         public Envirnoment Envir;
-        public int nX;
-        public int nY;
+        public short nX;
+        public short nY;
         public int EventType;
         public int EventParam;
         protected int OpenStartTick;
@@ -48,7 +48,7 @@ namespace GameSvr.Event
         /// </summary>
         public bool Active;
 
-        public EventInfo(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
+        public EventInfo(Envirnoment envir, short ntX, short ntY, byte nType, int dwETime, bool boVisible)
         {
             Id = HUtil32.Sequence();
             OpenStartTick = HUtil32.GetTickCount();

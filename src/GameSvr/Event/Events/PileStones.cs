@@ -4,7 +4,7 @@ namespace GameSvr.Event.Events
 {
     public class PileStones : EventInfo
     {
-        public PileStones(Envirnoment Envir, int nX, int nY, int nType, int nTime) : base(Envir, nX, nY, nType, nTime, true)
+        public PileStones(Envirnoment Envir, int nX, int nY, int nType, int nTime) : base(Envir, (short)nX, (short)nY, (byte)nType, nTime, true)
         {
             EventParam = 1;
         }

@@ -298,7 +298,7 @@ namespace GameSvr
                 {
                     for (var nH = 0; nH < envir.Height; nH++)
                     {
-                        var mine = new StoneMineEvent(envir, nW, nH, Grobal2.ET_MINE);
+                        var mine = new StoneMineEvent(envir, (short)nW, (short)nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)
                         {
                             mine.Dispose();

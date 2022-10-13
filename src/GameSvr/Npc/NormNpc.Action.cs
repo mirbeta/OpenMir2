@@ -1172,9 +1172,9 @@ namespace GameSvr.Npc
         private void ActionOfMobFireBurn(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sMap = QuestActionInfo.sParam1;
-            var nX = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
-            var nY = HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
-            var nType = HUtil32.StrToInt(QuestActionInfo.sParam4, -1);
+            var nX = (short)HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            var nY = (short)HUtil32.StrToInt(QuestActionInfo.sParam3, -1);
+            var nType = (byte)HUtil32.StrToInt(QuestActionInfo.sParam4, -1);
             var nTime = HUtil32.StrToInt(QuestActionInfo.sParam5, -1);
             var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam6, -1);
             if (sMap == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
@@ -3280,7 +3280,7 @@ namespace GameSvr.Npc
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX ||
                         nY == nMaxY)
                     {
-                        FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
+                        FireBurnEvent = new FireBurnEvent(PlayObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
                         M2Share.EventMgr.AddEvent(FireBurnEvent);
                     }
                 }

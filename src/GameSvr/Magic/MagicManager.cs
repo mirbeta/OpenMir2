@@ -968,7 +968,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagGroupLightening(PlayObject PlayObject, UserMagic UserMagic, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, ref bool boSpellFire)
+        private bool MagGroupLightening(PlayObject PlayObject, UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject TargeTBaseObject, ref bool boSpellFire)
         {
             var result = false;
             boSpellFire = false;
@@ -1061,12 +1061,12 @@ namespace GameSvr.Magic
             }
             if (PlayObject.Envir.GetEvent(nX, nY - 1) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, (short)(nY - 1), Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             if (PlayObject.Envir.GetEvent(nX - 1, nY) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, (short)(nX - 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             if (PlayObject.Envir.GetEvent(nX, nY) == null)
@@ -1076,12 +1076,12 @@ namespace GameSvr.Magic
             }
             if (PlayObject.Envir.GetEvent(nX + 1, nY) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, (short)(nX + 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             if (PlayObject.Envir.GetEvent(nX, nY + 1) == null)
             {
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, (short)(nY + 1), Grobal2.ET_FIRE, time * 1000, nDamage);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);
             }
             return true;
@@ -1167,28 +1167,28 @@ namespace GameSvr.Magic
 
                 if (result > 0 && MagicEvent != null)
                 {
-                    var HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX - 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    var HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX - 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[0] = HolyCurtainEvent;
-                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX + 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX + 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[1] = HolyCurtainEvent;
-                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX - 2, nY - 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX - 2), (short)(nY - 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[2] = HolyCurtainEvent;
-                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX + 2, nY - 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX + 2), (short)(nY - 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[3] = HolyCurtainEvent;
-                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX - 2, nY + 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX - 2), (short)(nY + 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[4] = HolyCurtainEvent;
-                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX + 2, nY + 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX + 2), (short)(nY + 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[5] = HolyCurtainEvent;
-                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX - 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX - 1), (short)(nY + 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[6] = HolyCurtainEvent;
-                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, nX + 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.Envir, (short)(nX + 1), (short)(nY + 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[7] = HolyCurtainEvent;
                     M2Share.WorldEngine.MagicEventList.Add(MagicEvent);
@@ -1223,7 +1223,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MabMabe(BaseObject BaseObject, BaseObject TargeTBaseObject, int nPower, int nLevel, int nTargetX, int nTargetY)
+        private bool MabMabe(BaseObject BaseObject, BaseObject TargeTBaseObject, int nPower, int nLevel, short nTargetX, short nTargetY)
         {
             var result = false;
             if (BaseObject.MagCanHitTarget(BaseObject.CurrX, BaseObject.CurrY, TargeTBaseObject))

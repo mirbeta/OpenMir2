@@ -35,11 +35,11 @@ namespace GameGate.Services
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private readonly Channel<TMessageData> _reviceMsgQueue = null;
+        private readonly Channel<MessageData> _reviceMsgQueue = null;
 
         public ServerManager()
         {
-            _reviceMsgQueue = Channel.CreateUnbounded<TMessageData>();
+            _reviceMsgQueue = Channel.CreateUnbounded<MessageData>();
             _serverServices = new List<ServerService>();
         }
 
@@ -87,7 +87,7 @@ namespace GameGate.Services
         /// GameGate -> GameSvr
         /// </summary>
         /// <param name="messageData"></param>
-        public void SendQueue(TMessageData messageData)
+        public void SendQueue(MessageData messageData)
         {
             _reviceMsgQueue.Writer.TryWrite(messageData);
         }
@@ -215,12 +215,12 @@ namespace GameGate.Services
             /// <summary>
             /// 接收封包（客户端-》网关）
             /// </summary>
-            private readonly ChannelReader<TMessageData> _reviceMsgQueue = null;
+            private readonly ChannelReader<MessageData> _reviceMsgQueue = null;
             public MessageThreadState ThreadState;
             private static SessionManager Session => SessionManager.Instance;
             private static MirLog LogQueue => MirLog.Instance;
             
-            public ServerMessageThread(ChannelReader<TMessageData> channel)
+            public ServerMessageThread(ChannelReader<MessageData> channel)
             {
                 _reviceMsgQueue = channel;
                 _threadId = Guid.NewGuid().ToString("N");
