@@ -180,7 +180,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
-                    Console.WriteLine(123);
                     //Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
                     for (int i = 0; i < length; i++)
                     {
