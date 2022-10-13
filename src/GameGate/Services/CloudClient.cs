@@ -118,7 +118,7 @@ namespace GameGate.Services
         /// </summary>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            ProcReceiveBuffer(e.Buff, e.BuffLen);
+            ProcReceiveBuffer(e.Buff.ToArray(), e.BuffLen);
             _receiveBytes += e.BuffLen;
         }
 

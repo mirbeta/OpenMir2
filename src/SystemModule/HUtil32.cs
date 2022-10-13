@@ -182,6 +182,11 @@ namespace SystemModule
             Monitor.Exit(obj);
         }
 
+        public static string GetString(ReadOnlySpan<byte> bytes)
+        {
+            return Encoding.GetEncoding("gb2312").GetString(bytes);
+        }
+
         public static string GetString(byte[] bytes, int index, int count)
         {
             return Encoding.GetEncoding("gb2312").GetString(bytes, index, count);

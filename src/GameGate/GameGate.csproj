@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
-		<LangVersion>10</LangVersion>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>11</LangVersion>
 		<RootNamespace>GameGate</RootNamespace>
 		<DebugType>embedded</DebugType>
 		<ServerGarbageCollection>true</ServerGarbageCollection>

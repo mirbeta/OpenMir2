@@ -1,5 +1,7 @@
 using System;
 using System.Net.Sockets;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -24,13 +26,9 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddToQueue(TSessionInfo session, ReadOnlySpan<byte> buffer)
+        public void AddToQueue(SessionInfo session, ReadOnlySpan<byte> buffer)
         {
-            var sendPacket = new SendQueueData()
-            {
-                Socket = session.Socket,
-                Buffer = buffer.ToArray()
-            };
+            var sendPacket = new SendQueueData(session.Socket, buffer);
             _sendQueue.Writer.TryWrite(sendPacket);
         }
 
@@ -43,8 +41,7 @@ namespace GameGate
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    SendQueueData sendPacket;
-                    while (_sendQueue.Reader.TryRead(out sendPacket))
+                    while (_sendQueue.Reader.TryRead(out SendQueueData sendPacket))
                     {
                         sendPacket.SendBuffer();
                     }
@@ -52,19 +49,25 @@ namespace GameGate
             }, stoppingToken);
         }
     }
-
-    public struct SendQueueData
+    
+    public readonly struct SendQueueData
     {
-        public Socket Socket;
-        public ReadOnlyMemory<byte> Buffer;
-
-        public int SendBuffer()
+        private readonly Socket _socket;
+        private readonly byte[] _packetBuffer;
+        
+        public SendQueueData(Socket socket, ReadOnlySpan<byte> buff)
         {
-            if (Socket == null || !Socket.Connected)
+            _socket = socket;
+            _packetBuffer = buff.ToArray();
+        }
+
+        public unsafe int SendBuffer()
+        {
+            if (_socket == null || !_socket.Connected)
             {
                 return 0;
             }
-            return Socket.Send(Buffer.Span);
+            return _socket.Send(_packetBuffer);
         }
     }
 }
