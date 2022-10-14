@@ -35,11 +35,11 @@ namespace GameGate.Services
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private readonly Channel<MessageData> _reviceMsgQueue = null;
+        private readonly Channel<ClientMessagePacket> _reviceMsgQueue = null;
 
         public ServerManager()
         {
-            _reviceMsgQueue = Channel.CreateUnbounded<MessageData>();
+            _reviceMsgQueue = Channel.CreateUnbounded<ClientMessagePacket>();
             _serverServices = new List<ServerService>();
         }
 
@@ -94,10 +94,10 @@ namespace GameGate.Services
         /// 客户端消息添加到队列给服务端处理
         /// GameGate -> GameSvr
         /// </summary>
-        /// <param name="messageData"></param>
-        public void SendServerQueue(MessageData messageData)
+        /// <param name="messagePacket"></param>
+        public void ClientPacketQueue(ClientMessagePacket messagePacket)
         {
-            _reviceMsgQueue.Writer.TryWrite(messageData);
+            _reviceMsgQueue.Writer.TryWrite(messagePacket);
         }
 
         public int MessageThreadCount => Config.MessageThread;
@@ -223,12 +223,12 @@ namespace GameGate.Services
             /// <summary>
             /// 接收封包（客户端-》网关）
             /// </summary>
-            private readonly ChannelReader<MessageData> _reviceMsgQueue = null;
+            private readonly ChannelReader<ClientMessagePacket> _reviceMsgQueue = null;
             public MessageThreadState ThreadState;
             private static SessionManager Session => SessionManager.Instance;
             private static MirLog LogQueue => MirLog.Instance;
             
-            public ServerMessageThread(ChannelReader<MessageData> channel)
+            public ServerMessageThread(ChannelReader<ClientMessagePacket> channel)
             {
                 _reviceMsgQueue = channel;
                 _threadId = Guid.NewGuid().ToString("N");
@@ -248,8 +248,8 @@ namespace GameGate.Services
                         _resetEvent.WaitOne();
                         if (_reviceMsgQueue.TryRead(out var message))
                         {
-                            var clientSession = Session.GetSession(message.MessageId);
-                            clientSession?.HandleSessionPacket(message);
+                            var clientSession = Session.GetSession(message.ConnectionId);
+                            await clientSession?.ProcessClientPacket(message);
                         }
                     }
                 }, _cts.Token);

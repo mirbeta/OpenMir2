@@ -137,7 +137,7 @@ namespace GameGate
                             continue;
                         }
                         var userClient = SessionManager.GetSession(session.SessionId);
-                        userClient?.HandleDelayMsg();
+                        userClient?.ProcessDelayMessage();
                     }
                 }
             }

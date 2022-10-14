@@ -58,4 +58,8 @@
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.0.4" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Remove="Services\CloudClient.cs" />
+	</ItemGroup>
+
 </Project>

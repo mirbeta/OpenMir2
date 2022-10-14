@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
 namespace GameGate
 {
@@ -8,6 +9,14 @@ namespace GameGate
         public Memory<byte> Buffer;
         public int BufferLen;
         public int MessageId;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    public struct ClientMessagePacket
+    {
+        public Memory<byte> Buffer;
+        public int BufferLen;
+        public int ConnectionId;
     }
 
     public class SessionInfo

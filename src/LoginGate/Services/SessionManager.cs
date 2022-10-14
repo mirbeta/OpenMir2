@@ -6,7 +6,7 @@ using System.Linq;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// MirClient会话管理
+    /// 客户端会话管理
     /// </summary>
     public class SessionManager
     {

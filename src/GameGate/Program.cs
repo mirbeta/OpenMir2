@@ -57,7 +57,7 @@ namespace GameGate
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<CloudClient>();
+                    //services.AddSingleton<CloudClient>();
                     services.AddSingleton<ServerApp>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
