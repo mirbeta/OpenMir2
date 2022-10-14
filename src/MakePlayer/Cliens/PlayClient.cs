@@ -127,7 +127,7 @@ namespace MakePlayer.Cliens
             {
                 return;
             }
-            var sData = HUtil32.GetString(e.Buff.Span);
+            var sData = HUtil32.GetString(e.Buff);
             var nIdx = sData.IndexOf("*", StringComparison.Ordinal);
             if (nIdx > 0)
             {
@@ -135,7 +135,7 @@ namespace MakePlayer.Cliens
                 sData = sData2 + sData.Substring(nIdx, sData.Length);
                 ClientSocket.SendText("*");
             }
-            _clientManager.AddPacket(SessionId, e.Buff.ToArray());
+            _clientManager.AddPacket(SessionId, e.Buff);
         }
 
         private void SocketError(object sender, DSCClientErrorEventArgs e)

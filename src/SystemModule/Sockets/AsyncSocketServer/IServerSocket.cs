@@ -472,7 +472,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
             {
                 // 增加接收到的字节总数
                 Interlocked.Add(ref _totalBytesRead, e.BytesTransferred);
-                Debug.WriteLine($"服务器读取字节总数:{BytesToReadableValue(_totalBytesRead)}");
+                //Debug.WriteLine($"服务器读取字节总数:{BytesToReadableValue(_totalBytesRead)}");
                 //byte[] destinationArray = new byte[e.BytesTransferred];// 目的字节数组
                 //Array.Copy(e.Buffer, 0, destinationArray, 0, e.BytesTransferred);
                 token.SetBytesReceived(e.BytesTransferred);
@@ -681,7 +681,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
 
             if (e.SocketError == SocketError.Success)
             {
-                Debug.WriteLine($"发送总字节数:{BytesToReadableValue(e.BytesTransferred)}");
+                //Debug.WriteLine($"发送总字节数:{BytesToReadableValue(e.BytesTransferred)}");
                 //lock (((ICollection)this.m_tokens).SyncRoot)
                 //{
                 //    if (!this.m_tokens.TryGetValue(token.ConnectionId, out token))

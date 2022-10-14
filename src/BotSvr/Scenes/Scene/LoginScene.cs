@@ -246,7 +246,7 @@ namespace BotSvr.Scenes.Scene
 
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff.Span);
+            var sData = HUtil32.GetString(e.Buff);
             if (!string.IsNullOrEmpty(sData))
             {
                 _clientManager.AddPacket(robotClient.SessionId, sData);

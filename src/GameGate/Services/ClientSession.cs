@@ -87,7 +87,7 @@ namespace GameGate
             }
             if (Config.IsDefenceCCPacket && (message.BufferLen >= 5))
             {
-                sMsg = HUtil32.GetString(message.Buffer.ToArray(), 2, message.BufferLen - 3);
+                sMsg = HUtil32.GetString(message.Buffer.Slice(2, message.BufferLen - 3).Span);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     //if (LogManager.g_pLogMgr.CheckLevel(6))
@@ -125,7 +125,7 @@ namespace GameGate
             {
                 case 0:
                     {
-                        sMsg = HUtil32.GetString(message.Buffer.ToArray(), 2, message.BufferLen - 3);
+                        sMsg = HUtil32.GetString(message.Buffer.Slice(2, message.BufferLen - 3).Span);
                         LogQueue.EnqueueDebugging("Login Packet: " + sMsg);
                         var tempStr = EDCode.DeCodeString(sMsg);
                         HandleLogin(tempStr, message.BufferLen, "", ref success);
@@ -147,7 +147,7 @@ namespace GameGate
 
                         var tempBuff = message.Buffer[2..^1];//跳过#1....! 只保留消息内容
                         var nDeCodeLen = 0;
-                        var packBuff = Misc.DecodeBuf(tempBuff.Span, tempBuff.Length, ref nDeCodeLen);
+                        var packBuff = Misc.DecodeBuf(tempBuff.ToArray(), tempBuff.Length, ref nDeCodeLen);
 
                         var CltCmd = Packets.ToPacket<ClientPacket>(packBuff);
 
@@ -608,6 +608,7 @@ namespace GameGate
                                 break;
                         }
 
+                        //todo 需要优化，此处会内存有问题
                         byte[] BodyBuffer;
                         var cmdPack = new PacketHeader();
                         cmdPack.PacketCode = Grobal2.RUNGATECODE;
@@ -865,7 +866,7 @@ namespace GameGate
                     stackMemory[i + 1] = message.Buffer.Span[i];
                 }
                 stackMemory[^1] = (byte)'!';
-                _sendQueue.AddToQueue(_session, stackMemory);
+                _sendQueue.AddToQueue(_session.ConnectionId, stackMemory);
                 return;
             }
 
@@ -942,7 +943,7 @@ namespace GameGate
 
             pzsSendBuf[nLen + 1] = (byte)'!';
             pzsSendBuf = pzsSendBuf[..(nLen + 2)];
-            _sendQueue.AddToQueue(_session, pzsSendBuf);
+            _sendQueue.AddToQueue(_session.ConnectionId, pzsSendBuf);
         }
 
         private void SendKickMsg(int killType)
@@ -1239,7 +1240,7 @@ namespace GameGate
             var iLen = ClientPacket.PackSize + szMsg.Length;
             iLen = Misc.EncodeBuf(tempBuf, iLen, sendBuf);
             sendBuf[iLen + 1] = (byte)'!';
-            _sendQueue.AddToQueue(_session, sendBuf.AsSpan()[..(iLen + 1)].ToArray());
+            _sendQueue.AddToQueue(_session.ConnectionId, sendBuf.AsSpan()[..(iLen + 1)].ToArray());
         }
     }
 

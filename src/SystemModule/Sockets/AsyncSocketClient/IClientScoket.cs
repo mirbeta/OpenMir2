@@ -12,7 +12,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 缓冲区大小
         /// </summary>
-        private int Buffersize = 1024;
+        private const int Buffersize = 1024;
         /// <summary>
         /// 客户端Socket
         /// </summary>
@@ -21,9 +21,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 缓冲区
         /// </summary>
         private readonly byte[] _databuffer;
-        private readonly IMemoryOwner<byte> _memoryOwner;
-        private Memory<byte> _cellArray;
-        private ArrayPool<byte> _cellPool;
         /// <summary>
         /// 连接是否成功
         /// </summary>
@@ -51,9 +48,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
 
         public ClientScoket()
         {
-            _databuffer = new byte[Buffersize];//创建缓冲区
-            _cellPool = ArrayPool<byte>.Create();
-            _cellArray = _cellPool.Rent(Buffersize);
+            _databuffer = new byte[Buffersize];
         }
 
         public void Connect()
@@ -180,13 +175,12 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
-                    //Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
-                    for (int i = 0; i < length; i++)
-                    {
-                        _cellArray.Span[i] = _databuffer[i];
-                    }
-                    var destinationArray = _cellArray.Span[..length];
-                    ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray)); //引发接收数据事件
+                    //byte[] destinationArray = new byte[length];//目的字节数组
+                    //for (var i = 0; i < length; i++)
+                    //{
+                    //    destinationArray[i] = _databuffer[i];
+                    //}
+                    ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, _databuffer, length)); //引发接收数据事件
                     StartWaitingForData(asyncState);//继续接收数据
                 }
             }

@@ -1,9 +1,7 @@
 using GameGate.Conf;
 using System;
 using System.Net;
-using System.Runtime.InteropServices;
 using SystemModule;
-using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -182,21 +180,22 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            var data = e.Buff;
+            //Span<byte> data = stackalloc byte[e.BuffLen];
+            var data = e.Buff.AsSpan()[..e.BuffLen];
             var srcOffset = 0;
             try
             {
                 if (buffLen > 0)
                 {
                     Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
-                    for (int i = 0; i < receiveBuffer.Length; i++)
+                    for (var i = 0; i < receiveBuffer.Length; i++)
                     {
                         tempBuff[i] = receiveBuffer.Span[i];
                     }
 
-                    for (int i = 0; i < data.Length; i++)
+                    for (var i = 0; i < data.Length; i++)
                     {
-                        tempBuff[i + buffLen] = data.Span[i];
+                        tempBuff[i + buffLen] = data[i];
                     }
 
                     receiveBuffer = tempBuff.ToArray();
@@ -296,7 +295,7 @@ namespace GameGate.Services
                 }
                 if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    receiveBuffer = dataBuff[..nLen];
+                    receiveBuffer = dataBuff[..nLen].ToArray();
                     buffLen = nLen;
                 }
                 else

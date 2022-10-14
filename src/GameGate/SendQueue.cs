@@ -1,7 +1,6 @@
+using GameGate.Services;
 using System;
 using System.Net.Sockets;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ namespace GameGate
     {
         private readonly Channel<SendQueueData> _sendQueue;
         private readonly MirLog _logQueue = MirLog.Instance;
+        private readonly ServerManager serverManager = ServerManager.Instance;
 
         public SendQueue()
         {
@@ -26,9 +26,9 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddToQueue(SessionInfo session, ReadOnlySpan<byte> buffer)
+        public void AddToQueue(string connectionId, ReadOnlySpan<byte> buffer)
         {
-            var sendPacket = new SendQueueData(session.Socket, buffer);
+            var sendPacket = new SendQueueData(connectionId, buffer);
             _sendQueue.Writer.TryWrite(sendPacket);
         }
 
@@ -41,9 +41,9 @@ namespace GameGate
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_sendQueue.Reader.TryRead(out SendQueueData sendPacket))
+                    if (_sendQueue.Reader.TryRead(out SendQueueData sendPacket))
                     {
-                        sendPacket.SendBuffer();
+                        serverManager.SendClientQueue(sendPacket.ConnectId, sendPacket.PacketBuffer);
                     }
                 }
             }, stoppingToken);
@@ -52,22 +52,13 @@ namespace GameGate
     
     public readonly struct SendQueueData
     {
-        private readonly Socket _socket;
-        private readonly byte[] _packetBuffer;
+        public readonly string ConnectId;
+        public readonly byte[] PacketBuffer;
         
-        public SendQueueData(Socket socket, ReadOnlySpan<byte> buff)
+        public SendQueueData(string connectId, ReadOnlySpan<byte> buff)
         {
-            _socket = socket;
-            _packetBuffer = buff.ToArray();
-        }
-
-        public unsafe int SendBuffer()
-        {
-            if (_socket == null || !_socket.Connected)
-            {
-                return 0;
-            }
-            return _socket.Send(_packetBuffer);
+            this.ConnectId = connectId;
+            PacketBuffer = buff.ToArray();
         }
     }
 }
