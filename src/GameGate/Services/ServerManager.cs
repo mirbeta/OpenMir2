@@ -83,11 +83,19 @@ namespace GameGate.Services
         }
 
         /// <summary>
+        /// 添加到客户端消息队列
+        /// </summary>
+        public void SendClientQueue(string connectionId, byte[] buffer)
+        {
+            _serverServices[0].Send(connectionId, buffer);
+        }
+
+        /// <summary>
         /// 客户端消息添加到队列给服务端处理
         /// GameGate -> GameSvr
         /// </summary>
         /// <param name="messageData"></param>
-        public void SendQueue(MessageData messageData)
+        public void SendServerQueue(MessageData messageData)
         {
             _reviceMsgQueue.Writer.TryWrite(messageData);
         }

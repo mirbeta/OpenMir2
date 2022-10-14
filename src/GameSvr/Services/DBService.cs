@@ -101,7 +101,7 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                var data = e.Buff.Span;
+                var data = e.Buff;
                 if (_packetLen == 0 && data[0] == (byte)'#')
                 {
                     _packetLen = BitConverter.ToInt32(data[1..5]);

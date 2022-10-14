@@ -27,7 +27,7 @@ namespace GameGate.Services
         public ServerService(string clientId, GameGateInfo gameGate)
         {
             _waitCloseQueue = new ConcurrentQueue<int>();
-            _serverSocket = new SocketServer(ushort.MaxValue, 500);
+            _serverSocket = new SocketServer(1000, 500);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -88,6 +88,11 @@ namespace GameGate.Services
                 _waitCloseQueue.TryDequeue(out int socket);
                 _clientThread.UserLeave(socket); //发送消息给M2断开链接
             }
+        }
+
+        public void Send(string connectionId, byte[] buffer)
+        {
+            _serverSocket.SendAsync(connectionId, buffer);
         }
 
         /// <summary>
@@ -205,7 +210,7 @@ namespace GameGate.Services
                 message.Buffer = data;
                 message.MessageId = connectionId;
                 message.BufferLen = data.Length;
-                ServerManager.SendQueue(message);
+                ServerManager.SendServerQueue(message);
             }
             else
             {

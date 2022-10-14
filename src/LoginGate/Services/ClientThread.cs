@@ -142,7 +142,7 @@ namespace LoginGate.Services
                 return;
             }
             ReceiveBytes += e.BuffLen;
-            var loginSvrPacket = Packets.ToPacket<LoginSvrPacket>(e.Buff.ToArray());
+            var loginSvrPacket = Packets.ToPacket<LoginSvrPacket>(e.Buff);
             if (loginSvrPacket != null)
             {
                 //var sText = string.Empty;
