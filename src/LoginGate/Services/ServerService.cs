@@ -98,7 +98,7 @@ namespace LoginGate.Services
         }
 
         /// <summary>
-        /// Mir2断开链接
+        /// 游戏客户端断开链接
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -121,7 +121,7 @@ namespace LoginGate.Services
         }
 
         /// <summary>
-        /// Mir2读取数据
+        /// 读取游戏客户端数据
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="token"></param>

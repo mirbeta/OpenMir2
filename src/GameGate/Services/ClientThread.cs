@@ -255,8 +255,8 @@ namespace GameGate.Services
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    var message = new MessageData();
-                                    message.MessageId = SessionId;
+                                    var message = new ClientSessionData();
+                                    message.SessionId = SessionId;
                                     if (PackLength > 0)
                                     {
                                         message.Buffer = dataBuff.Slice(20, PackLength);
