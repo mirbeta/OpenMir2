@@ -36,7 +36,7 @@ namespace BotSvr
         private readonly TTimerCommand TimerCmd;
         private int ActionLockTime = 0;
         private readonly short ActionKey = 0;
-        private ClientPacket WaitingMsg = null;
+        private ClientMesaagePacket WaitingMsg = null;
         private string WaitingStr = string.Empty;
         private string WhisperName = string.Empty;
         private int m_dwProcUseMagicTick = 0;
@@ -2472,7 +2472,7 @@ namespace BotSvr
 
         public void SendTakeOffItem(byte where, int itmindex, string itmname)
         {
-            ClientPacket msg;
+            ClientMesaagePacket msg;
             msg = Grobal2.MakeDefaultMsg(Grobal2.CM_TAKEOFFITEM, itmindex, where, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itmname));
         }
@@ -2500,7 +2500,7 @@ namespace BotSvr
             const string sam = "@_automove ";
             int X;
             int Y;
-            ClientPacket msg;
+            ClientMesaagePacket msg;
             var param = string.Empty;
             var sx = string.Empty;
             var sy = string.Empty;
@@ -2625,7 +2625,7 @@ namespace BotSvr
 
         public void SendGroupMode(bool onoff)
         {
-            ClientPacket msg;
+            ClientMesaagePacket msg;
             if (onoff)
             {
                 msg = Grobal2.MakeDefaultMsg(Grobal2.CM_GROUPMODE, 0, 1, 0, 0);
@@ -2987,7 +2987,7 @@ namespace BotSvr
             var Str = string.Empty;
             var Str2 = string.Empty;
             var str3 = string.Empty;
-            ClientPacket msg = null;
+            ClientMesaagePacket msg = null;
             ShortMessage sMsg;
             MessageBodyW mbw;
             CharDesc desc;
@@ -4524,7 +4524,7 @@ namespace BotSvr
             //LoginScene.UpdateAccountInfos(ue);
         }
 
-        private void ClientGetMapDescription(ClientPacket msg, string sBody)
+        private void ClientGetMapDescription(ClientMesaagePacket msg, string sBody)
         {
             sBody = EDCode.DeCodeString(sBody);
             var sTitle = sBody;
@@ -4547,7 +4547,7 @@ namespace BotSvr
             }
         }
 
-        private void ClientGetGameGoldName(ClientPacket msg, string sBody)
+        private void ClientGetGameGoldName(ClientMesaagePacket msg, string sBody)
         {
             var sData = string.Empty;
             if (sBody != "")
@@ -5581,7 +5581,7 @@ namespace BotSvr
             //}
         }
 
-        private void ClientGetPasswordStatus(ClientPacket msg, string body)
+        private void ClientGetPasswordStatus(ClientMesaagePacket msg, string body)
         {
 
         }
@@ -5592,7 +5592,7 @@ namespace BotSvr
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sPassword));
         }
 
-        private void ClientGetServerConfig(ClientPacket msg, string sBody)
+        private void ClientGetServerConfig(ClientMesaagePacket msg, string sBody)
         {
             TimerAutoMove = new TimerAutoPlay();
             TimerAutoMove.Enabled = true;

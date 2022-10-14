@@ -277,12 +277,12 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendSocket(ClientPacket DefMsg)
+        private void SendSocket(ClientMesaagePacket DefMsg)
         {
             SendSocket(DefMsg, "");
         }
 
-        internal virtual void SendSocket(ClientPacket defMsg, string sMsg)
+        internal virtual void SendSocket(ClientMesaagePacket defMsg, string sMsg)
         {
             if (OffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {

@@ -536,7 +536,7 @@ namespace GameSvr.GateWay
                             {
                                 if (GateUser.boCertification && nMsgLen >= 12)
                                 {
-                                    var defMsg = Packets.ToPacket<ClientPacket>(MsgBuff);
+                                    var defMsg = Packets.ToPacket<ClientMesaagePacket>(MsgBuff);
                                     if (nMsgLen == 12)
                                     {
                                         M2Share.WorldEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);

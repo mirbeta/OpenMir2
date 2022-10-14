@@ -45,14 +45,14 @@ namespace BotSvr.Scenes.Scene
                 return;
             }
             robotClient.ChrName = chrname;
-            ClientPacket msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
+            ClientMesaagePacket msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(robotClient.LoginID + "/" + chrname));
             MainOutMessage($"选择角色 {chrname}");
         }
 
         private void SendDelChr(string chrname)
         {
-            ClientPacket msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DELCHR, 0, 0, 0, 0);
+            ClientMesaagePacket msg = Grobal2.MakeDefaultMsg(Grobal2.CM_DELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(chrname));
         }
 

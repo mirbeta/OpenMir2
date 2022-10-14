@@ -11,24 +11,24 @@ namespace SystemModule
         /// <summary>
         /// 解码客户端封包
         /// </summary>
-        public static ClientPacket DecodePacket(string str)
+        public static ClientMesaagePacket DecodePacket(string str)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = 0;
             var encBuf = Misc.DecodeBuf(tempBuf, str.Length, ref buffLen);
-            return Packets.ToPacket<ClientPacket>(encBuf);
+            return Packets.ToPacket<ClientMesaagePacket>(encBuf);
         }
 
         /// <summary>
         /// 解码客户端封包
         /// </summary>
-        public static ClientPacket DecodePacket(byte[] data)
+        public static ClientMesaagePacket DecodePacket(byte[] data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             var buffLen = 0;
             var encBuf = Misc.DecodeBuf(data, data.Length, ref buffLen);
-            return Packets.ToPacket<ClientPacket>(encBuf);
+            return Packets.ToPacket<ClientMesaagePacket>(encBuf);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace SystemModule
         /// 加密消息
         /// </summary>
         /// <returns></returns>
-        public static string EncodeMessage(ClientPacket packet)
+        public static string EncodeMessage(ClientMesaagePacket packet)
         {
             if (packet == null) throw new ArgumentNullException(nameof(packet));
             var packetData = packet.GetBuffer();

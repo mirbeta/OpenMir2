@@ -277,7 +277,7 @@ namespace GameSvr.Robots
             ProcessAutoRun();
         }
 
-        internal override void SendSocket(ClientPacket DefMsg, string sMsg)
+        internal override void SendSocket(ClientMesaagePacket DefMsg, string sMsg)
         {
 
         }

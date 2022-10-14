@@ -46,9 +46,9 @@ namespace SystemModule.Packet.ClientPackets
     public class ClientOutMessage : Packets
     {
         private PacketHeader MessageHeader;
-        private ClientPacket DefaultMessage;
+        private ClientMesaagePacket DefaultMessage;
 
-        public ClientOutMessage(PacketHeader messageHeader, ClientPacket defaultMessage)
+        public ClientOutMessage(PacketHeader messageHeader, ClientMesaagePacket defaultMessage)
         {
             MessageHeader = messageHeader;
             DefaultMessage = defaultMessage;

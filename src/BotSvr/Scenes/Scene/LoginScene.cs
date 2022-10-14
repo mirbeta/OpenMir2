@@ -119,7 +119,7 @@ namespace BotSvr.Scenes.Scene
             MShare.g_boSendLogin = true;
         }
 
-        public void ClientGetPasswordOk(ClientPacket msg, string sBody)
+        public void ClientGetPasswordOk(ClientMesaagePacket msg, string sBody)
         {
             MShare.g_wAvailIDDay = HUtil32.LoWord(msg.Recog);
             MShare.g_wAvailIDHour = HUtil32.HiWord(msg.Recog);
