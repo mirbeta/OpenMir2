@@ -9,7 +9,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// 客户端服务端(MirClient-LoginGate)
+    /// 客户端服务端(Mir2-LoginGate)
     /// </summary>
     public class ServerService
     {
@@ -50,7 +50,7 @@ namespace LoginGate.Services
         }
 
         /// <summary>
-        /// MirClient链接
+        /// Mir2链接
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -98,7 +98,7 @@ namespace LoginGate.Services
         }
 
         /// <summary>
-        /// MirClient断开链接
+        /// Mir2断开链接
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -121,7 +121,7 @@ namespace LoginGate.Services
         }
 
         /// <summary>
-        /// MirClient读取数据
+        /// Mir2读取数据
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="token"></param>

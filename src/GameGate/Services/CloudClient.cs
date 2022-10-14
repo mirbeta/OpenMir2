@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
@@ -310,14 +311,14 @@ namespace GameGate.Services
         /// 发送消息到GameSvr
         /// </summary>
         /// <param name="sendBuffer"></param>
-        public void SendBuffer(byte[] sendBuffer)
+        public async Task SendBuffer(byte[] sendBuffer)
         {
             if (!_clientSocket.IsConnected)
             {
                 return;
             }
             _sendBytes += sendBuffer.Length;
-            _clientSocket.Send(sendBuffer);
+            await _clientSocket.SendAsync(sendBuffer);
         }
 
         public void CheckServerIsTimeOut()

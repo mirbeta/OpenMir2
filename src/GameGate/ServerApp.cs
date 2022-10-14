@@ -8,15 +8,14 @@ namespace GameGate
     public class ServerApp
     {
         private static MirLog LogQueue => MirLog.Instance;
-        private readonly CloudClient _cloudClient;
         private static ClientManager ClientManager => ClientManager.Instance;
         private static SessionManager SessionManager => SessionManager.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
         private static ConfigManager ConfigManager => ConfigManager.Instance;
 
-        public ServerApp(CloudClient cloudClient)
+        public ServerApp()
         {
-            _cloudClient = cloudClient;
+            
         }
 
         public void StartService(CancellationToken stoppingToken)
@@ -41,7 +40,7 @@ namespace GameGate
                     return;
                 }
                 var cloudEndpoint = new IPEndPoint(IPAddress.Parse(ConfigManager.GateConfig.CloudAddr), ConfigManager.GateConfig.CloudPort);
-                _cloudClient.Start(cloudEndpoint);
+                //_cloudClient.Start(cloudEndpoint);
                 LogQueue.Enqueue("智能反外挂程序已启动...", 0);
             }
             ServerManager.StartProcessMessage(stoppingToken);

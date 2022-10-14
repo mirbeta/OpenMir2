@@ -10,7 +10,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace GameGate.Services
 {
     /// <summary>
-    /// 客户端服务端(MirClient-GameGate)
+    /// 客户端服务端(Mir2-GameGate)
     /// </summary>
     public class ServerService
     {
@@ -206,11 +206,11 @@ namespace GameGate.Services
                 }
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                var message = new MessageData();
+                var message = new ClientMessagePacket();
                 message.Buffer = data;
-                message.MessageId = connectionId;
+                message.ConnectionId = connectionId;
                 message.BufferLen = data.Length;
-                ServerManager.SendServerQueue(message);
+                ServerManager.ClientPacketQueue(message);
             }
             else
             {

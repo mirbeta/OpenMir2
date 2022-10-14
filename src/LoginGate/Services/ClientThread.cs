@@ -12,7 +12,7 @@ using SystemModule.Sockets.Event;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// 网关客户端(LoginGate-MirClient)
+    /// 网关客户端(LoginGate-Mir2)
     /// </summary>
     public class ClientThread
     {

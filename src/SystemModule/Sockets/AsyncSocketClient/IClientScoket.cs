@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using SystemModule.Sockets.Event;
 
 namespace SystemModule.Sockets.AsyncSocketClient
@@ -208,6 +209,27 @@ namespace SystemModule.Sockets.AsyncSocketClient
             Send(buffer);
         }
 
+        public Task<int> SendAsync(byte[] buffer)
+        {
+            try
+            {
+               return _cli.SendAsync(buffer, SocketFlags.None);
+            }
+            catch (ObjectDisposedException)
+            {
+                RaiseDisconnectedEvent();//引发断开连接事件
+            }
+            catch (SocketException exception)
+            {
+                if (exception.ErrorCode == (int)SocketError.ConnectionReset)
+                {
+                    RaiseDisconnectedEvent();//引发断开连接事件
+                }
+                RaiseErrorEvent(exception);//引发错误事件
+            }
+            return Task.FromResult(1);
+        }
+
         public void Send(byte[] buffer)
         {
             try
@@ -283,7 +305,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 _cli.Disconnect(true);//scoket 复用
                 _cli.Close();
             }
-            
         }
 
         public void Disconnect()
