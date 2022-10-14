@@ -208,28 +208,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             var buffer = System.Text.Encoding.GetEncoding("gb2312").GetBytes(str);
             Send(buffer);
         }
-
-        public Task<int> SendAsync(byte[] buffer)
-        {
-            try
-            {
-               return _cli.SendAsync(buffer, SocketFlags.None);
-            }
-            catch (ObjectDisposedException)
-            {
-                RaiseDisconnectedEvent();//引发断开连接事件
-            }
-            catch (SocketException exception)
-            {
-                if (exception.ErrorCode == (int)SocketError.ConnectionReset)
-                {
-                    RaiseDisconnectedEvent();//引发断开连接事件
-                }
-                RaiseErrorEvent(exception);//引发错误事件
-            }
-            return Task.FromResult(1);
-        }
-
+        
         public void Send(byte[] buffer)
         {
             try

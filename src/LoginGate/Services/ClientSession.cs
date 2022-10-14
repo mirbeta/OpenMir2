@@ -88,7 +88,7 @@ namespace LoginGate.Services
             { 
                 m_dwClientTimeOutTick = HUtil32.GetTickCount();
             }*/
-            ClientPacket cltCmd = Packets.ToPacket<ClientPacket>(packBuff);
+            ClientMesaagePacket cltCmd = Packets.ToPacket<ClientMesaagePacket>(packBuff);
             switch (cltCmd.Cmd)
             {
                 case Grobal2.CM_IDPASSWORD://登录消息
@@ -190,7 +190,7 @@ namespace LoginGate.Services
             {
                 return;
             }
-            ClientPacket cmd = new ClientPacket();
+            ClientMesaagePacket cmd = new ClientMesaagePacket();
             cmd.Recog = nRecog;
             cmd.Ident = wIdent;
             cmd.Param = nParam;
@@ -201,14 +201,14 @@ namespace LoginGate.Services
             if (!string.IsNullOrEmpty(sMsg))
             {
                 byte[] sBuff = HUtil32.GetBytes(sMsg);
-                tempBuf = new byte[ClientPacket.PackSize + sBuff.Length];
+                tempBuf = new byte[ClientMesaagePacket.PackSize + sBuff.Length];
                 Array.Copy(sBuff, 0, tempBuf, 13, sBuff.Length);
-                iLen = Misc.EncodeBuf(tempBuf, ClientPacket.PackSize + sMsg.Length, sendBuf);
+                iLen = Misc.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize + sMsg.Length, sendBuf);
             }
             else
             {
                 tempBuf = cmd.GetBuffer();
-                iLen = Misc.EncodeBuf(tempBuf, ClientPacket.PackSize, sendBuf, 1);
+                iLen = Misc.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize, sendBuf, 1);
             }
             sendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(sendBuf, iLen, SocketFlags.None);

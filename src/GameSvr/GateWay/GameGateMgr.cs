@@ -256,7 +256,7 @@ namespace GameSvr.GateWay
             msgHeader.Socket = nSocket;
             msgHeader.SessionId = nGsIdx;
             msgHeader.Ident = Grobal2.GM_DATA;
-            msgHeader.PackLength = ClientPacket.PackSize;
+            msgHeader.PackLength = ClientMesaagePacket.PackSize;
             ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
             if (!AddGateBuffer(nGateIdx, outMessage.GetBuffer()))
             {
@@ -316,7 +316,7 @@ namespace GameSvr.GateWay
 
         private void SendGateTestMsg(int nIndex)
         {
-            var defMsg = new ClientPacket();
+            var defMsg = new ClientMesaagePacket();
             var msgHdr = new PacketHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,

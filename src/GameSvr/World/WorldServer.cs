@@ -1092,7 +1092,7 @@ namespace GameSvr.World
             return false;
         }
 
-        public void ProcessUserMessage(PlayObject playObject, ClientPacket defMsg, string buff)
+        public void ProcessUserMessage(PlayObject playObject, ClientMesaagePacket defMsg, string buff)
         {
             var sMsg = string.Empty;
             if (playObject.OffLineFlag) return;

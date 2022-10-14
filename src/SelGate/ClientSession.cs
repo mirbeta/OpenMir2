@@ -62,7 +62,7 @@ namespace SelGate
             var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
             var packBuff = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-            var cltCmd = Packets.ToPacket<ClientPacket>(packBuff);
+            var cltCmd = Packets.ToPacket<ClientMesaagePacket>(packBuff);
             if (cltCmd == null)
             {
                 return;
@@ -149,30 +149,30 @@ namespace SelGate
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
         {
             int iLen = 0;
-            ClientPacket Cmd;
+            ClientMesaagePacket Cmd;
             byte[] TempBuf = new byte[1048 - 1 + 1];
             byte[] SendBuf = new byte[1048 - 1 + 1];
             if ((_lastDbSvr == null) || !_lastDbSvr.IsConnected)
             {
                 return;
             }
-            Cmd = new ClientPacket();
+            Cmd = new ClientMesaagePacket();
             Cmd.Recog = nRecog;
             Cmd.Ident = wIdent;
             Cmd.Param = nParam;
             Cmd.Tag = nTag;
             Cmd.Series = nSeries;
             SendBuf[0] = (byte)'#';
-            Array.Copy(Cmd.GetBuffer(), 0, TempBuf, 0, ClientPacket.PackSize);
+            Array.Copy(Cmd.GetBuffer(), 0, TempBuf, 0, ClientMesaagePacket.PackSize);
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var sBuff = HUtil32.GetBytes(sMsg);
                 Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
-                iLen = Misc.EncodeBuf(TempBuf, ClientPacket.PackSize + sMsg.Length, SendBuf);
+                iLen = Misc.EncodeBuf(TempBuf, ClientMesaagePacket.PackSize + sMsg.Length, SendBuf);
             }
             else
             {
-                iLen = Misc.EncodeBuf(TempBuf, ClientPacket.PackSize, SendBuf);
+                iLen = Misc.EncodeBuf(TempBuf, ClientMesaagePacket.PackSize, SendBuf);
             }
             SendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);

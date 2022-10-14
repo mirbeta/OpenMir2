@@ -323,7 +323,7 @@ namespace MakePlayer.Cliens
             SendClientMessage(Grobal2.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
-        private void ClientGetUserLogin(ClientPacket DefMsg, string sData)
+        private void ClientGetUserLogin(ClientMesaagePacket DefMsg, string sData)
         {
             m_boLogin = true;
             m_ConnectionStep = TConnectionStep.cnsPlay;
@@ -339,7 +339,7 @@ namespace MakePlayer.Cliens
             SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeString(message));
         }
 
-        private void ClientGetAbility(ClientPacket DefMsg, string sData)
+        private void ClientGetAbility(ClientMesaagePacket DefMsg, string sData)
         {
             m_nGold = DefMsg.Recog;
             m_btJob = (byte)DefMsg.Param;
@@ -348,12 +348,12 @@ namespace MakePlayer.Cliens
             m_Abil = Packets.ToPacket<Ability>(buff);
         }
 
-        private void ClientGetWinExp(ClientPacket DefMsg)
+        private void ClientGetWinExp(ClientMesaagePacket DefMsg)
         {
             m_Abil.Exp = DefMsg.Recog;
         }
 
-        private void ClientGetLevelUp(ClientPacket DefMsg)
+        private void ClientGetLevelUp(ClientMesaagePacket DefMsg)
         {
             m_Abil.Level = (byte)HUtil32.MakeLong(DefMsg.Param, DefMsg.Tag);
         }
@@ -590,7 +590,7 @@ namespace MakePlayer.Cliens
             }
         }
 
-        private void ClientGetServerName(ClientPacket DefMsg, string sBody)
+        private void ClientGetServerName(ClientMesaagePacket DefMsg, string sBody)
         {
             var sServerName = string.Empty;
             var sServerStatus = string.Empty;

@@ -13,7 +13,7 @@ namespace GameSvr.Player
 {
     public partial class PlayObject
     {
-        public ClientPacket m_DefMsg;
+        public ClientMesaagePacket m_DefMsg;
         public string m_sOldSayMsg = string.Empty;
         public int m_nSayMsgCount = 0;
         public int m_dwSayMsgTick;

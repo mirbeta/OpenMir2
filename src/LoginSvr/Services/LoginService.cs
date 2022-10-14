@@ -470,7 +470,7 @@ namespace LoginSvr.Services
                 {
                     _logger.Information(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
                 }
-                ClientPacket DefMsg;
+                ClientMesaagePacket DefMsg;
                 if (nErrCode == 1)
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWID_SUCCESS, 0, 0, 0, 0);
@@ -499,7 +499,7 @@ namespace LoginSvr.Services
         {
             var sLoginID = string.Empty;
             var sOldPassword = string.Empty;
-            ClientPacket DefMsg;
+            ClientMesaagePacket DefMsg;
             TAccountDBRecord DBRecord = null;
             try
             {
@@ -558,7 +558,7 @@ namespace LoginSvr.Services
 
         private void AccountCheckProtocol(TUserInfo UserInfo, int nDate)
         {
-            ClientPacket DefMsg;
+            ClientMesaagePacket DefMsg;
             if (nDate < LsShare.nVersionDate)
             {
                 DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CERTIFICATION_FAIL, 0, 0, 0, 0);
@@ -644,7 +644,7 @@ namespace LoginSvr.Services
                     SessionKick(Config, sLoginID);
                     nCode = -3;
                 }
-                ClientPacket DefMsg;
+                ClientMesaagePacket DefMsg;
                 if (boNeedUpdate)
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
@@ -814,7 +814,7 @@ namespace LoginSvr.Services
         /// </summary>
         private void AccountSelectServer(Config Config, TUserInfo UserInfo, string sData)
         {
-            ClientPacket DefMsg;
+            ClientMesaagePacket DefMsg;
             bool boPayCost;
             var sSelGateIP = string.Empty;
             var nSelGatePort = 0;
@@ -874,7 +874,7 @@ namespace LoginSvr.Services
         {
             TAccountDBRecord DBRecord = null;
             UserFullEntry userFullEntry = null;
-            ClientPacket DefMsg;
+            ClientMesaagePacket DefMsg;
             try
             {
                 if (string.IsNullOrEmpty(sData))
@@ -932,7 +932,7 @@ namespace LoginSvr.Services
             var sAnswer2 = string.Empty;
             var sPassword = string.Empty;
             var sBirthDay = string.Empty;
-            ClientPacket DefMsg;
+            ClientMesaagePacket DefMsg;
             TAccountDBRecord DBRecord = null;
             var sMsg = EDCode.DeCodeString(sData);
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "\09" });

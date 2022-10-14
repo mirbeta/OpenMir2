@@ -642,7 +642,7 @@ namespace DBSvr.Services
         /// </summary>
         private void DeleteChr(string sData, ref TUserInfo userInfo)
         {
-            ClientPacket msg;
+            ClientMesaagePacket msg;
             var sChrName = EDCode.DeCodeString(sData);
             var boCheck = false;
             var nIndex = _playRecordStorage.Index(sChrName);
@@ -684,7 +684,7 @@ namespace DBSvr.Services
             var sHair = string.Empty;
             var sJob = string.Empty;
             var sSex = string.Empty;
-            ClientPacket msg;
+            ClientMesaagePacket msg;
             var nCode = -1;
             var data = EDCode.DeCodeString(sData);
             data = HUtil32.GetValidStr3(data, ref sAccount, HUtil32.Backslash);

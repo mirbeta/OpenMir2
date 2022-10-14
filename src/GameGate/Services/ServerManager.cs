@@ -249,7 +249,7 @@ namespace GameGate.Services
                         if (_reviceMsgQueue.TryRead(out var message))
                         {
                             var clientSession = Session.GetSession(message.ConnectionId);
-                            await clientSession?.ProcessClientPacket(message);
+                            clientSession?.ProcessClientPacket(message);
                         }
                     }
                 }, _cts.Token);
