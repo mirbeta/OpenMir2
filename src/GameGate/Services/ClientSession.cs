@@ -148,9 +148,9 @@ namespace GameGate
 
                         var tempBuff = clientPacket.Buffer[2..^1];//跳过#1....! 只保留消息内容
                         var nDeCodeLen = 0;
-                        var packBuff = Misc.DecodeBuf(tempBuff.Span, tempBuff.Length, ref nDeCodeLen);
+                        var decodeBuff = Misc.DecodeBuf(tempBuff.Span, tempBuff.Length, ref nDeCodeLen);
 
-                        var messagePacket = new Span<byte>(packBuff);
+                        var messagePacket = new Span<byte>(decodeBuff);
 
                         var Recog = BitConverter.ToInt32(messagePacket.Slice(0, 4));
                         var Ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
@@ -619,17 +619,17 @@ namespace GameGate
                         if (nDeCodeLen > ClientMesaagePacket.PackSize)
                         {
                             var sendBuffer = new byte[clientPacket.Buffer.Length - ClientMesaagePacket.PackSize + 1];
-                            var tLen = Misc.EncodeBuf(packBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
+                            var tLen = Misc.EncodeBuf(decodeBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
                             cmdPack.PackLength = ClientMesaagePacket.PackSize + tLen + 1;
                             BodyBuffer = new byte[PacketHeader.PacketSize + cmdPack.PackLength];
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, ClientMesaagePacket.PackSize);
+                            Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, PacketHeader.PacketSize, ClientMesaagePacket.PackSize);
                             Buffer.BlockCopy(tempBuff.ToArray(), 16, BodyBuffer, 32, tLen); //消息体
                         }
                         else
                         {
-                            BodyBuffer = new byte[PacketHeader.PacketSize + packBuff.Length];
+                            BodyBuffer = new byte[PacketHeader.PacketSize + decodeBuff.Length];
                             cmdPack.PackLength = ClientMesaagePacket.PackSize;
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, packBuff.Length);
+                            Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, PacketHeader.PacketSize, decodeBuff.Length);
                         }
                         Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, PacketHeader.PacketSize);//复制消息头
                         _clientThread.SendBuffer(BodyBuffer);
@@ -856,7 +856,7 @@ namespace GameGate
         /// <summary>
         /// 处理服务端发送过来的消息并发送到游戏客户端
         /// </summary>
-        public void ProcessSvrData(MessageData message)
+        public void ProcessSvrData(ClientSessionData message)
         {
             if (message.BufferLen <= 0) //正常的游戏封包，走路 攻击等都走下面的代码
             {
@@ -1021,7 +1021,7 @@ namespace GameGate
                     success = false;
                     return;
                 }
-                var sDataText = loginData.Remove(0, 2);
+                var sDataText = loginData.AsSpan()[2..].ToString();
                 var sHumName = string.Empty;//人物名称
                 var sAccount = string.Empty;//账号
                 var szCert = string.Empty;

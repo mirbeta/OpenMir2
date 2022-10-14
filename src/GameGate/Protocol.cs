@@ -4,14 +4,13 @@ using System.Runtime.InteropServices;
 
 namespace GameGate
 {
-    public struct MessageData
+    public struct ClientSessionData
     {
         public Memory<byte> Buffer;
         public int BufferLen;
-        public int MessageId;
+        public int SessionId;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct ClientMessagePacket
     {
         public Memory<byte> Buffer;
