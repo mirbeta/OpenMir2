@@ -86,7 +86,7 @@ namespace DBSvr.Services
 
         private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            _sockMsg += HUtil32.GetString(e.Buff);
+            _sockMsg += HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (_sockMsg.IndexOf(")", StringComparison.Ordinal) > 0)
             {
                 ProcessSocketMsg();

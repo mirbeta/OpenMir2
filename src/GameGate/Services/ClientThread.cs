@@ -183,114 +183,113 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            var data = e.Buff.AsMemory()[..e.BuffLen];
+            var data = e.Buff.AsSpan()[..e.BuffLen];
             var srcOffset = 0;
             try
             {
                 if (buffLen > 0)
                 {
-                    Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
+                    var tempBuff = new byte[buffLen + nMsgLen];
                     for (var i = 0; i < receiveBuffer.Length; i++)
                     {
                         tempBuff[i] = receiveBuffer.Span[i];
                     }
                     for (var i = 0; i < data.Length; i++)
                     {
-                        tempBuff[i + buffLen] = data.Span[i];
+                        tempBuff[i + buffLen] = data[i];
                     }
-                    receiveBuffer = tempBuff.ToArray();
+                    receiveBuffer = tempBuff;
                 }
                 else
                 {
-                    receiveBuffer = data;
+                    receiveBuffer = data.ToArray();
                 }
                 var nLen = buffLen + nMsgLen;
                 var dataBuff = receiveBuffer;
-                if (nLen >= HeaderMessageSize)
+                while (nLen >= PacketHeader.PacketSize)
                 {
-                    while (true)
+                    var packetHead = dataBuff[..20].Span;
+                    var PacketCode = BitConverter.ToUInt32(packetHead.Slice(0, 4));
+                    if (PacketCode == 0)
                     {
-                        var packetHead = dataBuff[..20].Span;
-                        var PacketCode = BitConverter.ToUInt32(packetHead.Slice(0, 4));
-                        //var Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
-                        var SessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
-                        var Ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
-                        var ServerIndex = BitConverter.ToInt32(packetHead.Slice(12, 4));
-                        var PackLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
-                        if (PacketCode == 0)
-                        {
-                            LogQueue.Enqueue("不应该出现这个文字", 5);
-                            break;
-                        }
-                        if (PacketCode == Grobal2.RUNGATECODE)
-                        {
-                            var nCheckMsgLen = (Math.Abs(PackLength) + HeaderMessageSize);
-                            if (nCheckMsgLen > nLen)
-                            {
-                                break;
-                            }
-                            switch (Ident)
-                            {
-                                case Grobal2.GM_CHECKSERVER:
-                                    CheckServerFail = false;
-                                    _checkServerTick = HUtil32.GetTickCount();
-                                    break;
-                                case Grobal2.GM_SERVERUSERINDEX:
-                                    var userSession = SessionManager.GetSession(SessionId);
-                                    if (userSession != null)
-                                    {
-                                        userSession.m_nSvrListIdx = ServerIndex;
-                                    }
-                                    break;
-                                case Grobal2.GM_RECEIVE_OK:
-                                    _checkServerTimeMin = HUtil32.GetTickCount() - _checkRecviceTick;
-                                    if (_checkServerTimeMin > _checkServerTimeMax)
-                                    {
-                                        _checkServerTimeMax = _checkServerTimeMin;
-                                    }
-                                    _checkRecviceTick = HUtil32.GetTickCount();
-                                    SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
-                                    break;
-                                case Grobal2.GM_DATA:
-                                    var sessionPacket = new ClientSessionPacket
-                                    {
-                                        SessionId = SessionId,
-                                        BufferLen = PackLength
-                                    };
-                                    if (PackLength > 0)
-                                    {
-                                        sessionPacket.Buffer = dataBuff.Slice(20, PackLength);
-                                    }
-                                    else
-                                    {
-                                        var packetSize = dataBuff.Length - HeaderMessageSize;
-                                        sessionPacket.Buffer = dataBuff.Slice(20, packetSize);
-                                    }
-                                    SessionManager.Enqueue(sessionPacket);
-                                    break;
-                                case Grobal2.GM_TEST:
-                                    break;
-                            }
-                            nLen -= nCheckMsgLen;
-                            if (nLen <= 0)
-                            {
-                                break;
-                            }
-                            dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                            buffLen = nLen;
-                            srcOffset = 0;
-                        }
-                        else
-                        {
-                            srcOffset++;
-                            dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
-                            nLen -= 1;
-                            LogQueue.EnqueueDebugging("看到这行字也有点问题.");
-                        }
-                        if (nLen < HeaderMessageSize)
+                        srcOffset++;
+                        dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
+                        nLen -= 1;
+                        continue;
+                    }
+                    //var Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
+                    var SessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
+                    var Ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
+                    var ServerIndex = BitConverter.ToInt32(packetHead.Slice(12, 4));
+                    var PackLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
+                    if (PacketCode == Grobal2.RUNGATECODE)
+                    {
+                        var nCheckMsgLen = (Math.Abs(PackLength) + HeaderMessageSize);
+                        if (nCheckMsgLen > nLen)
                         {
                             break;
                         }
+                        switch (Ident)
+                        {
+                            case Grobal2.GM_CHECKSERVER:
+                                CheckServerFail = false;
+                                _checkServerTick = HUtil32.GetTickCount();
+                                break;
+                            case Grobal2.GM_SERVERUSERINDEX:
+                                var userSession = SessionManager.GetSession(SessionId);
+                                if (userSession != null)
+                                {
+                                    userSession.m_nSvrListIdx = ServerIndex;
+                                }
+                                break;
+                            case Grobal2.GM_RECEIVE_OK:
+                                _checkServerTimeMin = HUtil32.GetTickCount() - _checkRecviceTick;
+                                if (_checkServerTimeMin > _checkServerTimeMax)
+                                {
+                                    _checkServerTimeMax = _checkServerTimeMin;
+                                }
+                                _checkRecviceTick = HUtil32.GetTickCount();
+                                SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
+                                break;
+                            case Grobal2.GM_DATA:
+                                var sessionPacket = new ClientSessionPacket
+                                {
+                                    SessionId = SessionId,
+                                    BufferLen = PackLength
+                                };
+                                if (PackLength > 0)
+                                {
+                                    sessionPacket.Buffer = dataBuff.Slice(20, PackLength);
+                                }
+                                else
+                                {
+                                    var packetSize = dataBuff.Length - HeaderMessageSize;
+                                    sessionPacket.Buffer = dataBuff.Slice(20, packetSize);
+                                }
+                                SessionManager.Enqueue(sessionPacket);
+                                break;
+                            case Grobal2.GM_TEST:
+                                break;
+                        }
+                        nLen -= nCheckMsgLen;
+                        if (nLen <= 0)
+                        {
+                            break;
+                        }
+                        dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                        buffLen = nLen;
+                        srcOffset = 0;
+                    }
+                    else
+                    {
+                        srcOffset++;
+                        dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
+                        nLen -= 1;
+                        LogQueue.EnqueueDebugging("看到这行字也有点问题.");
+                    }
+                    if (nLen < HeaderMessageSize)
+                    {
+                        break;
                     }
                 }
                 if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
