@@ -143,10 +143,8 @@ namespace GameGate.Services
         {
             var sRemoteAddr = e.RemoteIPaddr;
             var connectionId = e.ConnectionId;
-
-            //var session = SessionManager.Instance.GetSession(connectionId);
-            
-            var clientThread = ClientManager.GetClientThread(connectionId);
+            var clientSession = SessionManager.GetSession(e.SocHandle);
+            var clientThread = clientSession.ServerThread;
             if (clientThread != null && clientThread.GateReady)
             {
                 for (int i = 0; i < clientThread.SessionArray.Length; i++)
@@ -175,7 +173,6 @@ namespace GameGate.Services
                 LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
                 LogQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{connectionId}]");
             }
-            ClientManager.DeleteClientThread(connectionId);
             SessionManager.CloseSession(e.SocHandle);
         }
 

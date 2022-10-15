@@ -63,7 +63,7 @@ namespace GameGate.Services
         }
 
         /// <summary>
-        /// 从字典删除用户和网关对应关系
+        /// 从字典删除网关对应关系
         /// </summary>
         public void DeleteClientThread(string connectionId)
         {

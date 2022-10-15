@@ -65,6 +65,8 @@ namespace GameGate
             return _gameSpeed;
         }
 
+        public ClientThread ServerThread => _clientThread;
+        
         public SessionInfo Session => _session;
 
         private static MirLog LogQueue => MirLog.Instance;

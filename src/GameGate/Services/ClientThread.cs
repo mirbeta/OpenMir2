@@ -174,7 +174,7 @@ namespace GameGate.Services
             GateReady = false;
             LogQueue.Enqueue($"[{_gateEndPoint.ToString()}] 游戏引擎[{e.RemoteEndPoint}]断开链接.", 1);
             Connected = false;
-            ClientManager.Instance.DeleteClientThread(ClientId);
+            CheckServerFail = true;
         }
 
         /// <summary>
