@@ -151,7 +151,6 @@ namespace GameGate
             if (currentTick - _checkServerConnectTick > 5000)
             {
                 _checkServerConnectTick = HUtil32.GetTickCount();
-                LogQueue.EnqueueDebugging("检查链接状态...");
                 for (var i = 0; i < clientList.Count; i++)
                 {
                     if (clientList[i] == null)
@@ -162,7 +161,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    clientList[i].CheckSessionStatus();
+                    clientList[i].CheckConnectedState();
                 }
             }
             if (currentTick - _processClearSessionTick > 120000)
@@ -179,7 +178,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    clientList[i].CheckTimeOutSession();
+                    clientList[i].ProcessIdleSession();
                 }
             }
         }
