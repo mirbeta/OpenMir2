@@ -71,11 +71,6 @@ namespace GameGate
             }
         }
 
-        private void CheckConnection()
-        {
-            
-        }
-
         /// <summary>
         /// GameGate->GameSvr 心跳
         /// </summary>
@@ -114,9 +109,27 @@ namespace GameGate
         /// </summary>
         private void ProcessDelayMsg(int currentTick)
         {
-            if (currentTick - _processDelayTick > 1000)
+            if (currentTick - _processDelayTick > 200)
             {
                 _processDelayTick = currentTick;
+                var sessionList = SessionManager.GetAllSession();
+                for (var i = 0; i < sessionList.Count; i++)
+                {
+                    var clientSession = sessionList[i];
+                    if (clientSession == null)
+                    {
+                        continue;
+                    }
+                    if (clientSession.Session?.Socket == null || !clientSession.Session.Socket.Connected)
+                    {
+                        continue;
+                    }
+                    clientSession.ProcessDelayMessage();
+                }
+            }
+            if (currentTick - _processDelayCloseTick > 4000)
+            {
+                _processDelayCloseTick = HUtil32.GetTickCount();
                 IList<ServerService> serverList = ServerManager.GetServerList();
                 for (var i = 0; i < serverList.Count; i++)
                 {
@@ -124,29 +137,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    if (HUtil32.GetTickCount() - _processDelayCloseTick > 2000) //加入网关延时发送关闭消息
-                    {
-                        _processDelayCloseTick = HUtil32.GetTickCount();
-                        serverList[i].ProcessCloseList();
-                    }
-                    if (serverList[i].ClientThread == null)
-                    {
-                        continue;
-                    }
-                    if (serverList[i].ClientThread.SessionArray == null)
-                    {
-                        continue;
-                    }
-                    for (var j = 0; j < serverList[i].ClientThread.SessionArray.Length; j++)
-                    {
-                        var session = serverList[i].ClientThread.SessionArray[j];
-                        if (session?.Socket == null)
-                        {
-                            continue;
-                        }
-                        var userClient = SessionManager.GetSession(session.SessionId);
-                        userClient?.ProcessDelayMessage();
-                    }
+                    serverList[i].ProcessCloseList();
                 }
             }
         }
