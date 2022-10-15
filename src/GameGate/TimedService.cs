@@ -157,7 +157,7 @@ namespace GameGate
         private void ClearSession(int currentTick)
         {
             var clientList = ClientManager.GetAllClient();
-            if (currentTick - _checkServerConnectTick > 20 * 1000)
+            if (currentTick - _checkServerConnectTick > 5000)
             {
                 _checkServerConnectTick = HUtil32.GetTickCount();
                 LogQueue.EnqueueDebugging("检查链接状态...");
