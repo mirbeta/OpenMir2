@@ -865,10 +865,9 @@ namespace GameGate
         /// </summary>
         public void ProcessServerPacket(ClientSessionPacket message)
         {
-            //这个方法拼接字符需要优化，只会增加GC负担,增加内存消耗
+            //todo 这里拼接字符需要优化，只会增加GC负担,增加内存消耗
             if (message.BufferLen <= 0) //正常的游戏封包，走路 攻击等都走下面的代码
             {
-<<<<<<< HEAD
                 Span<byte> stackMemory = stackalloc byte[0 - message.BufferLen + 2];
                 stackMemory[0] = (byte)'#';
                 for (var i = 0; i < -message.BufferLen; i++)
@@ -876,14 +875,7 @@ namespace GameGate
                     stackMemory[i + 1] = message.Buffer.Span[i];
                 }
                 stackMemory[^1] = (byte)'!';
-                _sendQueue.AddToQueue(_session.ConnectionId, stackMemory.ToArray().AsMemory());
-=======
-                pzsSendBuf = new byte[(0 - message.BufferLen) + 2];
-                pzsSendBuf[0] = (byte)'#';
-                Buffer.BlockCopy(message.Buffer, 0, pzsSendBuf, 1, -message.BufferLen);
-                pzsSendBuf[^1] = (byte)'!';
-                _sendQueue.AddToQueue(_session, pzsSendBuf);
->>>>>>> 9dc505e (GameGate内存测试)
+                _sendQueue.AddToQueue(_session.ConnectionId, stackMemory.ToArray());
                 return;
             }
 
@@ -947,7 +939,6 @@ namespace GameGate
             //Span<byte> pzsSendBuf = stackalloc byte[message.BufferLen + ClientMesaagePacket.PackSize];
             //pzsSendBuf[0] = (byte)'#';
             //var nLen = Misc.EncodeBuf(message.Buffer.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
-
             //if (message.BufferLen > ClientMesaagePacket.PackSize)
             //{
             //    var tempBuffer = message.Buffer[ClientMesaagePacket.PackSize..];
@@ -957,7 +948,6 @@ namespace GameGate
             //    }
             //    nLen = message.BufferLen - ClientMesaagePacket.PackSize + nLen;
             //}
-
             //pzsSendBuf[nLen + 1] = (byte)'!';
             //pzsSendBuf = pzsSendBuf[..(nLen + 2)];
             //_sendQueue.AddToQueue(_session.ConnectionId, new Memory<byte>(pzsSendBuf.ToArray()));
@@ -978,7 +968,7 @@ namespace GameGate
 
             pzsSendBuf[nLen + 1] = (byte)'!';
             pzsSendBuf = pzsSendBuf[..(nLen + 2)];
-            _sendQueue.AddToQueue(_session.ConnectionId, pzsSendBuf.ToArray().AsMemory());
+            _sendQueue.AddToQueue(_session.ConnectionId, pzsSendBuf.ToArray());
         }
 
         private void SendKickMsg(int killType)

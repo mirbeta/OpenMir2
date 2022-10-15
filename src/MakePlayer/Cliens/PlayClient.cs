@@ -127,7 +127,7 @@ namespace MakePlayer.Cliens
             {
                 return;
             }
-            var sData = HUtil32.GetString(e.Buff);
+            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             var nIdx = sData.IndexOf("*", StringComparison.Ordinal);
             if (nIdx > 0)
             {
