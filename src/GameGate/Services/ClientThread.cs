@@ -183,26 +183,26 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            var data = e.Buff.AsSpan()[..e.BuffLen];
+            var data = e.Buff.AsMemory()[..e.BuffLen];
             var srcOffset = 0;
             try
             {
                 if (buffLen > 0)
                 {
-                    var tempBuff = new byte[buffLen + nMsgLen];
+                    Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
                     for (var i = 0; i < receiveBuffer.Length; i++)
                     {
                         tempBuff[i] = receiveBuffer.Span[i];
                     }
                     for (var i = 0; i < data.Length; i++)
                     {
-                        tempBuff[i + buffLen] = data[i];
+                        tempBuff[i + buffLen] = data.Span[i];
                     }
-                    receiveBuffer = tempBuff;
+                    receiveBuffer = tempBuff.ToArray();
                 }
                 else
                 {
-                    receiveBuffer = data.ToArray();
+                    receiveBuffer = data;
                 }
                 var nLen = buffLen + nMsgLen;
                 var dataBuff = receiveBuffer;
@@ -295,7 +295,7 @@ namespace GameGate.Services
                 }
                 if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    receiveBuffer = dataBuff[..nLen].ToArray();
+                    receiveBuffer = dataBuff[..nLen];
                     buffLen = nLen;
                 }
                 else
@@ -366,7 +366,6 @@ namespace GameGate.Services
         public void UserEnter(ushort socketIndex, int nSocket, string Data)
         {
             SendServerMsg(Grobal2.GM_OPEN, socketIndex, nSocket, 0, Data.Length, Data);
-            Console.WriteLine("玩家进入游戏");
         }
 
         /// <summary>
@@ -417,7 +416,10 @@ namespace GameGate.Services
             ClientSocket.Send(sendBuffer);
         }
         
-        public void CheckTimeOutSession()
+        /// <summary>
+        /// 处理超时或空闲会话
+        /// </summary>
+        public void ProcessIdleSession()
         {
             for (var j = 0; j < SessionArray.Length; j++)
             {
@@ -442,7 +444,7 @@ namespace GameGate.Services
         /// <summary>
         /// 检查客户端和服务端之间的状态以及心跳维护
         /// </summary>
-        public void CheckSessionStatus()
+        public void CheckConnectedState()
         {
             if (GateReady)
             {
@@ -467,7 +469,7 @@ namespace GameGate.Services
                 CheckServerFail = true;
                 Stop();
                 CheckServerFailCount++;
-                LogQueue.EnqueueDebugging($"服务器[{GetSocketIp()}]链接超时.失败次数:[{CheckServerFailCount}]");
+                LogQueue.EnqueueDebugging($"服务器[{GetSocketIp()}]长时间没有回应,断开链接.失败次数:[{CheckServerFailCount}]");
             }
         }
         
