@@ -187,6 +187,16 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetString(bytes);
         }
 
+        public static string GetString(ReadOnlySpan<byte> bytes, int len)
+        {
+            return Encoding.GetEncoding("gb2312").GetString(bytes[0..len]);
+        }
+
+        public static string GetString(Span<byte> bytes, int index, int count)
+        {
+            return Encoding.GetEncoding("gb2312").GetString(bytes.Slice(index,count));
+        }
+
         public static string GetString(byte[] bytes, int index, int count)
         {
             return Encoding.GetEncoding("gb2312").GetString(bytes, index, count);
@@ -204,6 +214,18 @@ namespace SystemModule
         }
 
         public static string StrPas(byte[] buff)
+        {
+            var nLen = buff.Length;
+            var ret = new string('\0', nLen);
+            var sb = new StringBuilder(ret);
+            for (var i = 0; i < nLen; i++)
+            {
+                sb[i] = (char)buff[i];
+            }
+            return sb.ToString();
+        }
+
+        public static string StrPas(Span<byte> buff)
         {
             var nLen = buff.Length;
             var ret = new string('\0', nLen);

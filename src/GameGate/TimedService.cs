@@ -21,6 +21,7 @@ namespace GameGate
         private int _processDelayTick = 0;
         private int _processDelayCloseTick = 0;
         private int _processClearSessionTick = 0;
+        private int _checkServerConnectTick = 0;
         private int _kepAliveTick = 0;
 
         private readonly PeriodicTimer _periodicTimer;
@@ -29,22 +30,24 @@ namespace GameGate
         {
             _logger = logger;
             _kepAliveTick = HUtil32.GetTickCount();
-            _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+            _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _processDelayTick = HUtil32.GetTickCount();
-            _processDelayCloseTick = HUtil32.GetTickCount();
-            _processClearSessionTick = HUtil32.GetTickCount();
-            _kepAliveTick = HUtil32.GetTickCount();
+            var startTick = HUtil32.GetTickCount();
+            _processDelayTick = startTick;
+            _processDelayCloseTick = startTick;
+            _processClearSessionTick = startTick;
+            _kepAliveTick = startTick;
+            _checkServerConnectTick = startTick;
             while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
                 var currentTick = HUtil32.GetTickCount();
                 OutMianMessage();
                 ProcessDelayMsg(currentTick);
-                ClearSession();
-                KeepAlive();
+                ClearSession(currentTick);
+                KeepAlive(currentTick);
             }
         }
 
@@ -68,16 +71,21 @@ namespace GameGate
             }
         }
 
+        private void CheckConnection()
+        {
+            
+        }
+
         /// <summary>
         /// GameGate->GameSvr 心跳
         /// </summary>
-        private void KeepAlive()
+        private void KeepAlive(int currentTick)
         {
-            if (HUtil32.GetTickCount() - _kepAliveTick > 10 * 10000)
+            if (currentTick - _kepAliveTick > 10 * 10000)
             {
                 _kepAliveTick = HUtil32.GetTickCount();
                 IList<ServerService> serverList = ServerManager.GetServerList();
-                for (int i = 0; i < serverList.Count; i++)
+                for (var i = 0; i < serverList.Count; i++)
                 {
                     if (serverList[i] == null)
                     {
@@ -146,30 +154,41 @@ namespace GameGate
         /// <summary>
         /// 清理过期会话
         /// </summary>
-        private void ClearSession()
+        private void ClearSession(int currentTick)
         {
-            if (HUtil32.GetTickCount() - _processClearSessionTick > 120000)
+            var clientList = ClientManager.GetAllClient();
+            if (currentTick - _checkServerConnectTick > 20 * 1000)
+            {
+                _checkServerConnectTick = HUtil32.GetTickCount();
+                LogQueue.EnqueueDebugging("检查链接状态...");
+                for (var i = 0; i < clientList.Count; i++)
+                {
+                    if (clientList[i] == null)
+                    {
+                        continue;
+                    }
+                    if (clientList[i] == null)
+                    {
+                        continue;
+                    }
+                    clientList[i].CheckSessionStatus();
+                }
+            }
+            if (currentTick - _processClearSessionTick > 120000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
                 LogQueue.EnqueueDebugging("清理超时会话开始...");
-                var serverList = ServerManager.GetServerList();
-                for (var i = 0; i < serverList.Count; i++)
+                for (var i = 0; i < clientList.Count; i++)
                 {
-                    if (serverList[i] == null)
+                    if (clientList[i] == null)
                     {
                         continue;
                     }
-                    if (serverList[i].ClientThread == null)
+                    if (clientList[i] == null)
                     {
                         continue;
                     }
-                    ClientThread clientThread = serverList[i].ClientThread;
-                    if (clientThread == null)
-                    {
-                        continue;
-                    }
-                    clientThread.CheckTimeOutSession();
-                    ClientManager.CheckSessionStatus(serverList[i].ClientThread);
+                    clientList[i].CheckTimeOutSession();
                 }
             }
         }

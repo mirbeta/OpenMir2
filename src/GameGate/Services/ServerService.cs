@@ -90,7 +90,7 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(string connectionId, byte[] buffer)
+        public void Send(string connectionId, Memory<byte> buffer)
         {
             _serverSocket.SendAsync(connectionId, buffer);
         }
@@ -130,7 +130,7 @@ namespace GameGate.Services
                 LogQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知M2有新玩家进入游戏
                 SessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, _sendQueue));
-                ClientManager.AddClientThread(userSession.ConnectionId, clientThread);
+                //ClientManager.AddClientThread(userSession.ConnectionId, clientThread);
             }
             else
             {
@@ -143,6 +143,9 @@ namespace GameGate.Services
         {
             var sRemoteAddr = e.RemoteIPaddr;
             var connectionId = e.ConnectionId;
+
+            //var session = SessionManager.Instance.GetSession(connectionId);
+            
             var clientThread = ClientManager.GetClientThread(connectionId);
             if (clientThread != null && clientThread.GateReady)
             {

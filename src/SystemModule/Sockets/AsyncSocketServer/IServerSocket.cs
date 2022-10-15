@@ -519,6 +519,12 @@ namespace SystemModule.Sockets.AsyncSocketServer
 
         public void SendAsync(string connectionId, byte[] buffer)
         {
+            SendAsync(connectionId, new Memory<byte>(buffer));
+            return;
+        }
+
+        public void SendAsync(string connectionId, Memory<byte> buffer)
+        {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
             //if (buffer.Length <= m_receiveSendBufferSize)
@@ -538,7 +544,10 @@ namespace SystemModule.Sockets.AsyncSocketServer
             writeEventArgs.UserToken = token;
             if (buffer.Length <= _bufferSize)
             {
-                Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    writeEventArgs.Buffer[i + writeEventArgs.Offset] = buffer.Span[i];
+                }
                 writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
             }
             else
@@ -547,7 +556,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 {
                     _bufferManager.FreeBuffer(writeEventArgs);
                 }
-                writeEventArgs.SetBuffer(buffer, 0, buffer.Length);
+                writeEventArgs.SetBuffer(buffer);
             }
 
             //writeEventArgs.SetBuffer(buffer, 0, buffer.Length);

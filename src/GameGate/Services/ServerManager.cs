@@ -85,7 +85,7 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到客户端消息队列
         /// </summary>
-        public void SendClientQueue(string connectionId, byte[] buffer)
+        public void SendClientQueue(string connectionId, Memory<byte> buffer)
         {
             _serverServices[0].Send(connectionId, buffer);
         }

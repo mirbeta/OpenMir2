@@ -1,6 +1,8 @@
 using GameGate.Conf;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using SystemModule;
 
 namespace GameGate.Services
@@ -68,25 +70,10 @@ namespace GameGate.Services
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
         }
 
-        /// <summary>
-        /// 检查客户端和服务端之间的状态以及心跳维护
-        /// </summary>
-        public void CheckSessionStatus(ClientThread clientThread)
+        public IList<ClientThread> GetAllClient()
         {
-            if (clientThread.GateReady)
-            {
-                clientThread.SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
-                clientThread.CheckServerFailCount = 0;
-                return;
-            }
-            if (clientThread.CheckServerFail && clientThread.CheckServerFailCount <= 20)
-            {
-                clientThread.ReConnected();
-                clientThread.CheckServerFailCount++;
-                LogQueue.EnqueueDebugging($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
-                return;
-            }
-            clientThread.CheckServerIsTimeOut();
+            return _clientThreadMap.Values.ToArray();
         }
+
     }
 }

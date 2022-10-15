@@ -1,6 +1,5 @@
 using GameGate.Services;
 using System;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddToQueue(string connectionId, ReadOnlySpan<byte> buffer)
+        public void AddToQueue(string connectionId, Memory<byte> buffer)
         {
             var sendPacket = new SendQueueData(connectionId, buffer);
             _sendQueue.Writer.TryWrite(sendPacket);
@@ -49,16 +48,16 @@ namespace GameGate
             }, stoppingToken);
         }
     }
-    
+
     public readonly struct SendQueueData
     {
         public readonly string ConnectId;
-        public readonly byte[] PacketBuffer;
-        
-        public SendQueueData(string connectId, ReadOnlySpan<byte> buff)
+        public readonly Memory<byte> PacketBuffer;
+
+        public SendQueueData(string connectId, Memory<byte> buff)
         {
             this.ConnectId = connectId;
-            PacketBuffer = buff.ToArray();
+            PacketBuffer = buff;
         }
     }
 }

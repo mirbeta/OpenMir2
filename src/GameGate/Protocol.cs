@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 
 namespace GameGate
 {
-    public struct ClientSessionData
+    public struct ClientSessionPacket
     {
         public Memory<byte> Buffer;
         public int BufferLen;
