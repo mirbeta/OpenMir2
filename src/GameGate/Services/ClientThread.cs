@@ -33,7 +33,7 @@ namespace GameGate.Services
         /// </summary>
         public int CheckServerFailCount = 0;
         /// <summary>
-        /// 独立Buffer分区
+        /// Buffer
         /// </summary>
         private Memory<byte> receiveBuffer = null;
         /// <summary>
@@ -178,12 +178,11 @@ namespace GameGate.Services
         }
 
         /// <summary>
-        /// 收到GameSvr发来的消息
+        /// 接收GameSvr发来的封包消息
         /// </summary>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            var data = e.Buff.AsSpan()[..e.BuffLen];
             var srcOffset = 0;
             try
             {
@@ -194,22 +193,28 @@ namespace GameGate.Services
                     {
                         tempBuff[i] = receiveBuffer.Span[i];
                     }
-                    for (var i = 0; i < data.Length; i++)
+                    for (var i = 0; i < nMsgLen; i++)
                     {
-                        tempBuff[i + buffLen] = data[i];
+                        tempBuff[i + buffLen] = e.Buff[i];
                     }
                     receiveBuffer = tempBuff;
                 }
                 else
                 {
-                    receiveBuffer = data.ToArray();
+                    var tempBuff = new byte[nMsgLen];
+                    for (var i = 0; i < nMsgLen; i++)
+                    {
+                        tempBuff[i] = e.Buff[i];
+                    }
+                    receiveBuffer = tempBuff;
                 }
+
                 var nLen = buffLen + nMsgLen;
                 var dataBuff = receiveBuffer;
                 while (nLen >= PacketHeader.PacketSize)
                 {
                     var packetHead = dataBuff[..20].Span;
-                    var PacketCode = BitConverter.ToUInt32(packetHead.Slice(0, 4));
+                    var PacketCode = BitConverter.ToUInt32(packetHead[..4]);
                     if (PacketCode == 0)
                     {
                         srcOffset++;
