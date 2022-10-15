@@ -16,27 +16,27 @@ namespace GameGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<ClientSessionData> SendMsgQueue = null;
+        private readonly Channel<ClientSessionPacket> ProcessMsgQueue;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            SendMsgQueue = Channel.CreateUnbounded<ClientSessionData>();
+            ProcessMsgQueue = Channel.CreateUnbounded<ClientSessionPacket>();
         }
 
         /// <summary>
         /// 获取待处理的队列数量
         /// </summary>
-        public int GetQueueCount => SendMsgQueue.Reader.Count;
+        public int GetQueueCount => ProcessMsgQueue.Reader.Count;
 
         /// <summary>
         /// 添加到消息处理队列
         /// </summary>
-        /// <param name="messageData"></param>
-        public void AddToQueue(ClientSessionData messageData)
+        /// <param name="sessionPacket"></param>
+        public void Enqueue(ClientSessionPacket sessionPacket)
         {
-            SendMsgQueue.Writer.TryWrite(messageData);
+            ProcessMsgQueue.Writer.TryWrite(sessionPacket);
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace GameGate.Services
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await SendMsgQueue.Reader.WaitToReadAsync(stoppingToken))
+                while (await ProcessMsgQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (SendMsgQueue.Reader.TryRead(out var message))
+                    if (ProcessMsgQueue.Reader.TryRead(out var message))
                     {
                         try
                         {
@@ -57,7 +57,7 @@ namespace GameGate.Services
                             {
                                 continue;
                             }
-                            userSession.ProcessSvrData(message);
+                            userSession.ProcessServerPacket(message);
                         }
                         catch (Exception ex)
                         {
