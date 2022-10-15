@@ -174,11 +174,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
-                    //byte[] destinationArray = new byte[length];//目的字节数组
-                    //for (var i = 0; i < length; i++)
-                    //{
-                    //    destinationArray[i] = _databuffer[i];
-                    //}
+                    /*byte[] destinationArray = new byte[length];//目的字节数组
+                    for (var i = 0; i < length; i++)
+                    {
+                        destinationArray[i] = _databuffer[i];
+                    }*/
                     ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, _databuffer, length)); //引发接收数据事件
                     StartWaitingForData(asyncState);//继续接收数据
                 }
