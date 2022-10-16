@@ -42,7 +42,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 接收到数据事件
         /// </summary>
-        public event DSCClientOnDataInHandler ReceivedDatagram;
+        public event DSCClientOnReceiveHandler ReceivedDatagram;
         /// <summary>
         /// 断开连接事件
         /// </summary>
@@ -150,8 +150,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
             {
                 //开始异步接收数据
                 soc.BeginReceive(_databuffer, 0, Buffersize, SocketFlags.None, HandleIncomingData, soc);
-
-                soc.ReceiveAsync();
             }
             catch (ObjectDisposedException)
             {
@@ -270,7 +268,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             if (null != OnError)
             {
-                OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(_cli.RemoteEndPoint, error.ErrorCode, error));
+                OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(_cli.RemoteEndPoint, error.SocketErrorCode, error));
             }
         }
 

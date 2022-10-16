@@ -135,7 +135,7 @@ namespace MakePlayer.Cliens
                 sData = sData2 + sData.Substring(nIdx, sData.Length);
                 ClientSocket.SendText("*");
             }
-            _clientManager.AddPacket(SessionId, e.Buff);
+            _clientManager.AddPacket(SessionId, e.Buff.ToArray());
         }
 
         private void SocketError(object sender, DSCClientErrorEventArgs e)

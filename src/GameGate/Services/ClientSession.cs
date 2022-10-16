@@ -42,7 +42,6 @@ namespace GameGate
         private readonly string SessionKey;
         private readonly long m_FinishTick = 0;
         private readonly DynamicAuthenticator _authenticator = null;
-        private readonly MemoryPool<byte> _pool;
 
         public ClientSession(SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
@@ -867,7 +866,6 @@ namespace GameGate
             {
                 if (obj[i] != target[i])
                 {
-                    Console.WriteLine($"{i}位不同");
                     return false;
                 }
             }
@@ -880,76 +878,70 @@ namespace GameGate
         /// </summary>
         public void ProcessServerPacket(ClientSessionPacket clientPacket)
         {
+            var bodyBuff = clientPacket.Buffer.Slice(20, (0 - clientPacket.BufferLen));
             if (clientPacket.BufferLen > 0) //游戏数据封包 
             {
-                //var testBuff = clientPacket.Buffer.Slice(20, clientPacket.BufferLen);
-                //Span<byte> pzsSendBuf = stackalloc byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
-                //pzsSendBuf[0] = (byte)'#';
-                //var encodeLen = Misc.EncodeBuf(testBuff.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
-                //if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
-                //{
-                //    var tempBuffer = testBuff[ClientMesaagePacket.PackSize..];
-                //    for (var i = 0; i < tempBuffer.Length; i++)
-                //    {
-                //        pzsSendBuf[i + (encodeLen + 1)] = tempBuffer.Span[i];
-                //    }
-                //    encodeLen = clientPacket.BufferLen - ClientMesaagePacket.PackSize + encodeLen;
-                //}
-                //pzsSendBuf[encodeLen + 1] = (byte)'!';
-                //pzsSendBuf = pzsSendBuf[..(encodeLen + 2)];
-
-
-                Span<byte> oldBuff = clientPacket.Buffer.Span.Slice(20,12);
-                Memory<byte> bodyBuff = clientPacket.Buffer[32..];//头大小20 + 封包头 12
-                var packetSize = clientPacket.BufferLen + 2;
-                Memory<byte> sendPacket = clientPacket.Buffer;//需要移动的  //clientPacket.Buffer = clientPacket.Buffer.Slice(20, clientPacket.BufferLen);
-                sendPacket.Span[0] = (byte)'#';
-                var nLen = PacketEncoder.EncodeBuf(oldBuff, ClientMesaagePacket.PackSize, sendPacket.Span, 1);
+                Span<byte> pzsSendBuf = stackalloc byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
+                pzsSendBuf[0] = (byte)'#';
+                var encodeLen = PacketEncoder.EncodeBuf(bodyBuff.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
                 if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
                 {
-                    for (var i = 0; i < bodyBuff.Length; i++)
+                    var tempBuffer = bodyBuff[ClientMesaagePacket.PackSize..];
+                    for (var i = 0; i < tempBuffer.Length; i++)
                     {
-                        sendPacket.Span[i + (nLen + 1)] = bodyBuff.Span[i];
+                        pzsSendBuf[i + (encodeLen + 1)] = tempBuffer.Span[i];
                     }
-                    nLen = clientPacket.BufferLen - ClientMesaagePacket.PackSize + nLen;
+                    encodeLen = clientPacket.BufferLen - ClientMesaagePacket.PackSize + encodeLen;
                 }
-                sendPacket.Span[nLen + 1] = (byte)'!';
-                sendPacket = sendPacket[..(nLen + 2)];
+                pzsSendBuf[encodeLen + 1] = (byte)'!';
+                pzsSendBuf = pzsSendBuf[..(encodeLen + 2)];
+                _sendQueue.AddToQueue(_session.ConnectionId, pzsSendBuf.ToArray());
 
-                _sendQueue.AddToQueue(_session.ConnectionId, sendPacket);
-
-                //var sss= EqualsBytes(sendPacket.ToArray(), pzsSendBuf.ToArray());
-                //_sendQueue.AddToQueue(_session.ConnectionId, pzsSendBuf.ToArray());
+                //下面代码可以正常使用，但还需要进一步的优化
+                //Span<byte> oldBuff = clientPacket.Buffer.Span.Slice(20,12);
+                //Memory<byte> bodyBuff = clientPacket.Buffer[32..];//头大小20 + 封包头 12
+                //var packetSize = clientPacket.BufferLen + 2;
+                //Memory<byte> sendPacket = clientPacket.Buffer;//需要移动的  //clientPacket.Buffer = clientPacket.Buffer.Slice(20, clientPacket.BufferLen);
+                //sendPacket.Span[0] = (byte)'#';
+                //var nLen = PacketEncoder.EncodeBuf(oldBuff, ClientMesaagePacket.PackSize, sendPacket.Span, 1);
+                //if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
+                //{
+                //    for (var i = 0; i < bodyBuff.Length; i++)
+                //    {
+                //        sendPacket.Span[i + (nLen + 1)] = bodyBuff.Span[i];
+                //    }
+                //    nLen = clientPacket.BufferLen - ClientMesaagePacket.PackSize + nLen;
+                //}
+                //sendPacket.Span[nLen + 1] = (byte)'!';
+                //sendPacket = sendPacket[..(nLen + 2)];
+                //_sendQueue.AddToQueue(_session.ConnectionId, sendPacket);
             }
             else
             {
                 //这里都是发送小包 正常的游戏封包，走路 攻击等都走下面的代码
-                var packetSize = clientPacket.Buffer.Length - 20 + 2;
-                var sendPacket = clientPacket.Buffer.Slice(18, packetSize);//需要移动的
-                sendPacket.Span[0] = (byte)'#';
-                for (int i = 1; i < sendPacket.Length; i++)
-                {
-                    if (i + 1 >= packetSize)
-                    {
-                        break;
-                    }
-                    sendPacket.Span[i] = sendPacket.Span[i + 1];
-                }
-                sendPacket.Span[^1] = (byte)'!';
-                _sendQueue.AddToQueue(_session.ConnectionId, sendPacket);
-                return;
-                //if (clientPacket.BufferLen <= 0) 
+                //var packetSize = clientPacket.Buffer.Length - 20 + 2;
+                //var sendPacket = clientPacket.Buffer.Slice(18, packetSize);//需要移动的
+                //sendPacket.Span[0] = (byte)'#';
+                //for (int i = 1; i < sendPacket.Length; i++)
                 //{
-                //    Span<byte> stackMemory = stackalloc byte[0 - clientPacket.BufferLen + 2];
-                //    stackMemory[0] = (byte)'#';
-                //    for (var i = 0; i < -clientPacket.BufferLen; i++)
+                //    if (i + 1 >= packetSize)
                 //    {
-                //        stackMemory[i + 1] = clientPacket.Buffer.Span[i];
+                //        break;
                 //    }
-                //    stackMemory[^1] = (byte)'!';
-                //    _sendQueue.AddToQueue(_session.ConnectionId, stackMemory.ToArray());
-                //    return;
+                //    sendPacket.Span[i] = sendPacket.Span[i + 1];
                 //}
+                //sendPacket.Span[^1] = (byte)'!';
+                //_sendQueue.AddToQueue(_session.ConnectionId, sendPacket);
+                //return;
+                Span<byte> stackMemory = stackalloc byte[0 - clientPacket.BufferLen + 2];
+                stackMemory[0] = (byte)'#';
+                for (var i = 0; i < -clientPacket.BufferLen; i++)
+                {
+                    stackMemory[i + 1] = bodyBuff.Span[i];
+                }
+                stackMemory[^1] = (byte)'!';
+                _sendQueue.AddToQueue(_session.ConnectionId, stackMemory.ToArray());
+                return;
             }
 
             //todo 这里拼接字符需要优化，只会增加GC负担,增加内存消耗
@@ -1022,38 +1014,6 @@ namespace GameGate
             //        SendKickMsg(2);
             //        break;
             //}
-
-            //Span<byte> pzsSendBuf = stackalloc byte[message.BufferLen + ClientMesaagePacket.PackSize];
-            //pzsSendBuf[0] = (byte)'#';
-            //var nLen = Misc.EncodeBuf(message.Buffer.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
-            //if (message.BufferLen > ClientMesaagePacket.PackSize)
-            //{
-            //    var tempBuffer = message.Buffer[ClientMesaagePacket.PackSize..];
-            //    for (var i = 0; i < tempBuffer.Length; i++)
-            //    {
-            //        pzsSendBuf[i + (nLen + 1)] = tempBuffer.Span[i];
-            //    }
-            //    nLen = message.BufferLen - ClientMesaagePacket.PackSize + nLen;
-            //}
-            //pzsSendBuf[nLen + 1] = (byte)'!';
-            //pzsSendBuf = pzsSendBuf[..(nLen + 2)];
-            //_sendQueue.AddToQueue(_session.ConnectionId, new Memory<byte>(pzsSendBuf.ToArray()));
-
-            //Span<byte> pzsSendBuf = stackalloc byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
-            //pzsSendBuf[0] = (byte)'#';
-            //var nLen = Misc.EncodeBuf(clientPacket.Buffer.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
-            //if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
-            //{
-            //    var tempBuffer = clientPacket.Buffer[ClientMesaagePacket.PackSize..];
-            //    for (var i = 0; i < tempBuffer.Length; i++)
-            //    {
-            //        pzsSendBuf[i + (nLen + 1)] = tempBuffer.Span[i];
-            //    }
-            //    nLen = clientPacket.BufferLen - ClientMesaagePacket.PackSize + nLen;
-            //}
-            //pzsSendBuf[nLen + 1] = (byte)'!';
-            //pzsSendBuf = pzsSendBuf[..(nLen + 2)];
-            //_sendQueue.AddToQueue(_session.ConnectionId, pzsSendBuf.ToArray());
         }
 
         private void SendKickMsg(int killType)
@@ -1353,9 +1313,9 @@ namespace GameGate
             _sendQueue.AddToQueue(_session.ConnectionId, sendBuf.AsSpan()[..(iLen + 1)].ToArray());
         }
 
-        void IDisposable.Dispose()
+        public void Dispose()
         {
-            _pool.Dispose();
+            //todo 
         }
     }
 
