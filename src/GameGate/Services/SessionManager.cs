@@ -50,19 +50,12 @@ namespace GameGate.Services
                 {
                     if (ProcessMsgQueue.Reader.TryRead(out var message))
                     {
-                        try
+                        var userSession = GetSession(message.SessionId);
+                        if (userSession == null)
                         {
-                            var userSession = GetSession(message.SessionId);
-                            if (userSession == null)
-                            {
-                                continue;
-                            }
-                            userSession.ProcessServerPacket(message);
+                            continue;
                         }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
+                        userSession.ProcessServerPacket(message);
                     }
                 }
             }, stoppingToken);

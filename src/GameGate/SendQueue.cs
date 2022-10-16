@@ -8,13 +8,13 @@ namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Channel<SendQueueData> _sendQueue;
+        private readonly Channel<ClientPacketQueueData> _sendQueue;
         private readonly MirLog _logQueue = MirLog.Instance;
         private readonly ServerManager serverManager = ServerManager.Instance;
 
         public SendQueue()
         {
-            _sendQueue = Channel.CreateUnbounded<SendQueueData>();
+            _sendQueue = Channel.CreateUnbounded<ClientPacketQueueData>();
         }
 
         /// <summary>
@@ -25,9 +25,9 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddToQueue(string connectionId, Memory<byte> buffer)
+        public void AddClientQueue(string connectionId, Memory<byte> buffer)
         {
-            var sendPacket = new SendQueueData(connectionId, buffer);
+            var sendPacket = new ClientPacketQueueData(connectionId, buffer);
             _sendQueue.Writer.TryWrite(sendPacket);
         }
 
@@ -40,24 +40,24 @@ namespace GameGate
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (_sendQueue.Reader.TryRead(out SendQueueData sendPacket))
+                    if (_sendQueue.Reader.TryRead(out ClientPacketQueueData sendPacket))
                     {
                         serverManager.SendClientQueue(sendPacket.ConnectId, sendPacket.PacketBuffer);
                     }
                 }
             }, stoppingToken);
         }
-    }
 
-    public readonly struct SendQueueData
-    {
-        public readonly string ConnectId;
-        public readonly Memory<byte> PacketBuffer;
-
-        public SendQueueData(string connectId, Memory<byte> buff)
+        private readonly struct ClientPacketQueueData
         {
-            this.ConnectId = connectId;
-            PacketBuffer = buff;
+            public readonly string ConnectId;
+            public readonly Memory<byte> PacketBuffer;
+
+            public ClientPacketQueueData(string connectId, Memory<byte> buff)
+            {
+                this.ConnectId = connectId;
+                PacketBuffer = buff;
+            }
         }
     }
 }
