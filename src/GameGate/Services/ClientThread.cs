@@ -179,20 +179,29 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            var packetData = e.Buff[..nMsgLen];
+            var packetData = e.Buff[..nMsgLen].Span;
             var srcOffset = 0;
             try
             {
                 if (buffLen > 0)
                 {
                     Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
-                    HUtil32.MemoryCopy(receiveBuffer.Span, tempBuff, 0, buffLen);
-                    HUtil32.MemoryCopy(packetData.Span, tempBuff, buffLen, nMsgLen);
+                    //HUtil32.MemoryCopy(receiveBuffer.Span, tempBuff, 0, buffLen);
+                    //HUtil32.MemoryCopy(packetData, tempBuff, buffLen, nMsgLen);
+                    //receiveBuffer = tempBuff.ToArray();
+                    for (int i = 0; i < receiveBuffer.Length; i++)
+                    {
+                        tempBuff[i] = receiveBuffer.Span[i];
+                    }
+                    for (int i = 0; i < packetData.Length; i++)
+                    {
+                        tempBuff[i + buffLen] = packetData[i];
+                    }
                     receiveBuffer = tempBuff.ToArray();
                 }
                 else
                 {
-                    receiveBuffer = packetData;
+                    receiveBuffer = packetData.ToArray();
                 }
                 var nLen = buffLen + nMsgLen;
                 var dataBuff = receiveBuffer;
@@ -248,6 +257,15 @@ namespace GameGate.Services
                                     BufferLen = PackLength,
                                     Buffer = dataBuff
                                 };
+                                if (PackLength > 0)
+                                {
+                                    sessionPacket.Buffer = dataBuff.Slice(20, PackLength);
+                                }
+                                else
+                                {
+                                    var packetSize = dataBuff.Length - HeaderMessageSize;
+                                    sessionPacket.Buffer = dataBuff.Slice(20, packetSize);
+                                }
                                 SessionManager.Enqueue(sessionPacket);
                                 break;
                             case Grobal2.GM_TEST:
