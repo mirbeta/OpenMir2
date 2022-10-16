@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -20,6 +21,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 缓冲区
         /// </summary>
         private readonly byte[] _databuffer;
+        private readonly MemoryPool<byte> _memoryPool;
+        
         /// <summary>
         /// 连接是否成功
         /// </summary>
@@ -147,6 +150,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
             {
                 //开始异步接收数据
                 soc.BeginReceive(_databuffer, 0, Buffersize, SocketFlags.None, HandleIncomingData, soc);
+
+                soc.ReceiveAsync();
             }
             catch (ObjectDisposedException)
             {
@@ -174,12 +179,12 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
-                    /*byte[] destinationArray = new byte[length];//目的字节数组
+                    Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
                     for (var i = 0; i < length; i++)
                     {
                         destinationArray[i] = _databuffer[i];
-                    }*/
-                    ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, _databuffer, length)); //引发接收数据事件
+                    }
+                    ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray.ToArray(), length)); //引发接收数据事件
                     StartWaitingForData(asyncState);//继续接收数据
                 }
             }
@@ -265,7 +270,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             if (null != OnError)
             {
-                OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(Host, Port, error.ErrorCode, error));
+                OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(_cli.RemoteEndPoint, error.ErrorCode, error));
             }
         }
 

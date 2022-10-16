@@ -3,7 +3,7 @@ using System;
 
 namespace SystemModule
 {
-    public class Misc
+    public static class PacketEncoder
     {
         private const byte bySeed = 0xAC;
         private const byte byBase = 0x3C;

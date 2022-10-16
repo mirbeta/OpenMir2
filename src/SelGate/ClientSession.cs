@@ -61,7 +61,7 @@ namespace SelGate
             var success = false;
             var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
-            var packBuff = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            var packBuff = PacketEncoder.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
             var cltCmd = Packets.ToPacket<ClientMesaagePacket>(packBuff);
             if (cltCmd == null)
             {
@@ -168,11 +168,11 @@ namespace SelGate
             {
                 var sBuff = HUtil32.GetBytes(sMsg);
                 Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
-                iLen = Misc.EncodeBuf(TempBuf, ClientMesaagePacket.PackSize + sMsg.Length, SendBuf);
+                iLen = PacketEncoder.EncodeBuf(TempBuf, ClientMesaagePacket.PackSize + sMsg.Length, SendBuf);
             }
             else
             {
-                iLen = Misc.EncodeBuf(TempBuf, ClientMesaagePacket.PackSize, SendBuf);
+                iLen = PacketEncoder.EncodeBuf(TempBuf, ClientMesaagePacket.PackSize, SendBuf);
             }
             SendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
