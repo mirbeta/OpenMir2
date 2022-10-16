@@ -101,10 +101,10 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                var data = e.Buff;
+                var data = e.Buff.Span;
                 if (_packetLen == 0 && data[0] == (byte)'#')
                 {
-                    _packetLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
+                    _packetLen = BitConverter.ToInt32(data[1..5]);
                 }
                 if (_recvBuff != null && _recvBuff.Length > 0)
                 {

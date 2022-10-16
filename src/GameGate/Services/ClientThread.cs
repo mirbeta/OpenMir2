@@ -1,7 +1,7 @@
 using GameGate.Conf;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Net;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -14,7 +14,7 @@ namespace GameGate.Services
     /// </summary>
     public class ClientThread
     {
-        private readonly ClientScoket ClientSocket;
+        private readonly AsyncClientSocket ClientSocket;
         /// <summary>
         /// 网关ID
         /// </summary>
@@ -77,14 +77,10 @@ namespace GameGate.Services
         public ClientThread(string clientId, IPEndPoint endPoint, GameGateInfo gameGate)
         {
             ClientId = clientId;
-            ClientSocket = new ClientScoket
-            {
-                Host = gameGate.ServerAdress,
-                Port = gameGate.ServerPort
-            };
+            ClientSocket = new AsyncClientSocket(gameGate.ServerAdress, gameGate.ServerPort, 512);
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
-            ClientSocket.ReceivedDatagram += ClientSocketRead;
+            ClientSocket.OnReceivedData += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
             ReceiveBytes = 0;
             SendBytes = 0;
@@ -100,14 +96,14 @@ namespace GameGate.Services
 
         public void Start()
         {
-            ClientSocket.Connect();
+            ClientSocket.Start();
         }
 
         public void ReConnected()
         {
             if (Connected == false)
             {
-                ClientSocket.Connect();
+                ClientSocket.Start();
             }
         }
 
@@ -130,7 +126,7 @@ namespace GameGate.Services
 
         public void Stop()
         {
-            ClientSocket.Disconnect();
+           // ClientSocket.Disconnect();
         }
 
         public SessionInfo[] GetSession()
@@ -183,32 +179,21 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
+            var packetData = e.Buff[..nMsgLen];
             var srcOffset = 0;
             try
             {
                 if (buffLen > 0)
                 {
-                    var tempBuff = new byte[buffLen + nMsgLen];
-                    for (var i = 0; i < receiveBuffer.Length; i++)
-                    {
-                        tempBuff[i] = receiveBuffer.Span[i];
-                    }
-                    for (var i = 0; i < nMsgLen; i++)
-                    {
-                        tempBuff[i + buffLen] = e.Buff[i];
-                    }
-                    receiveBuffer = tempBuff;
+                    Span<byte> tempBuff = stackalloc byte[buffLen + nMsgLen];
+                    HUtil32.MemoryCopy(receiveBuffer.Span, tempBuff, 0, buffLen);
+                    HUtil32.MemoryCopy(packetData.Span, tempBuff, buffLen, nMsgLen);
+                    receiveBuffer = tempBuff.ToArray();
                 }
                 else
                 {
-                    var tempBuff = new byte[nMsgLen];
-                    for (var i = 0; i < nMsgLen; i++)
-                    {
-                        tempBuff[i] = e.Buff[i];
-                    }
-                    receiveBuffer = tempBuff;
+                    receiveBuffer = packetData;
                 }
-
                 var nLen = buffLen + nMsgLen;
                 var dataBuff = receiveBuffer;
                 while (nLen >= PacketHeader.PacketSize)
@@ -409,7 +394,7 @@ namespace GameGate.Services
                 return;
             }
             SendBytes += sendBuffer.Length;
-            ClientSocket.Send(sendBuffer);
+            ClientSocket.SendMessage(sendBuffer);
         }
         
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -19,11 +20,16 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 接收到数据事件
         /// </summary>
-        public event DSCClientOnDataInHandler ReceivedDatagram;
+        public event DSCClientOnReceiveHandler OnReceivedData;
+        /// <summary>
+        /// 数据发送事件
+        /// </summary>
+        public event DSCClientOnSendHandler OnSendDataCompleted;
         /// <summary>
         /// 断开连接事件
         /// </summary>
         public event DSCClientOnDisconnectedHandler OnDisconnected;
+        public bool IsConnected = false;
 
         /// <summary>
         /// 接受缓存数组
@@ -37,7 +43,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 连接socket
         /// </summary>
         private Socket connectSocket = null;
-        private IPEndPoint EndPoint;
+        public IPEndPoint EndPoint;
         /// <summary>
         /// 用于发送数据的SocketAsyncEventArgs
         /// </summary>
@@ -47,16 +53,21 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         private SocketAsyncEventArgs recvEventArg = null;
         //tcp服务器ip
-        private string ip = "";
+        public string Host = "";
         //tcp服务器端口
-        private int port = 0;
+        public int Port = 0;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="bufferSize">用于socket发送和接受的缓存区大小</param>
-        public AsyncClientSocket(int bufferSize)
+        public AsyncClientSocket(string ip, int port,int bufferSize)
         {
+            if (string.IsNullOrEmpty(ip))
+                throw new ArgumentNullException("ip cannot be null");
+            if (port < 1 || port > 65535)
+                throw new ArgumentOutOfRangeException("port is out of range");
+
             //设置用于发送数据的SocketAsyncEventArgs
             sendBuff = new byte[bufferSize];
             sendEventArg = new SocketAsyncEventArgs();
@@ -67,6 +78,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
             recvEventArg = new SocketAsyncEventArgs();
             recvEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
             recvEventArg.SetBuffer(recvBuff, 0, bufferSize);
+            this.Host = ip;
+            this.Port = port;
         }
 
         /// <summary>
@@ -74,21 +87,13 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         /// <param name="ip"></param>
         /// <param name="port"></param>
-        public void Start(string ip, int port)
+        public void Start()
         {
-            if (string.IsNullOrEmpty(ip))
-                throw new ArgumentNullException("ip cannot be null");
-            if (port < 1 || port > 65535)
-                throw new ArgumentOutOfRangeException("port is out of range");
-
-            this.ip = ip;
-            this.port = port;
-
             try
             {
                 connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPAddress address = IPAddress.Parse(ip);
-                IPEndPoint endpoint = new IPEndPoint(address, port);
+                IPAddress address = IPAddress.Parse(Host);
+                IPEndPoint endpoint = new IPEndPoint(address, Port);
 
                 //连接tcp服务器
                 SocketAsyncEventArgs connectEventArg = new SocketAsyncEventArgs();
@@ -152,7 +157,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         public void Restart()
         {
             CloseSocket();
-            Start(ip, port);
+            Start();
         }
 
         /// <summary>
@@ -166,10 +171,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
             {
                 if (null != OnError)
                 {
-                    OnError(e.RemoteEndPoint, new DSCClientErrorEventArgs(e.RemoteEndPoint, (int)e.SocketError, e.ConnectByNameError));
+                    OnError(e.RemoteEndPoint, new DSCClientErrorEventArgs(e.RemoteEndPoint, e.SocketError, e.ConnectByNameError));
                 }
                 return;
             }
+            IsConnected = true;
             ProcessConnect(e);
             if (null != OnConnected)
             {
@@ -180,13 +186,13 @@ namespace SystemModule.Sockets.AsyncSocketClient
 
         private void ProcessConnect(SocketAsyncEventArgs e)
         {
-            StartRecv();
+            StartWaitingForData();
         }
 
         /// <summary>
         /// tcp客户端开始接受tcp服务器发送的数据
         /// </summary>
-        private void StartRecv()
+        private void StartWaitingForData()
         {
             bool willRaiseEvent = connectSocket.ReceiveAsync(recvEventArg);
             if (!willRaiseEvent)
@@ -221,15 +227,31 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <param name="e"></param>
         private void ProcessReceive(SocketAsyncEventArgs e)
         {
-            AsyncUserToken token = (AsyncUserToken)e.UserToken;
-            if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
+            try
             {
-                ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, e.Buffer, e.BytesTransferred)); //引发接收数据事件
-                StartRecv();
+                AsyncUserToken token = (AsyncUserToken)e.UserToken;
+                if (0 == e.BytesTransferred)
+                {
+                    RaiseDisconnectedEvent();//引发断开连接事件
+                    return;
+                }
+                if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
+                {
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, e.Buffer, e.BytesTransferred)); //引发接收数据事件
+                    StartWaitingForData();//继续接收数据
+                }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                Restart();
+                RaiseDisconnectedEvent();//引发断开连接事件
+            }
+            catch (SocketException exception)
+            {
+                if (exception.ErrorCode == (int)SocketError.ConnectionReset)
+                {
+                    RaiseDisconnectedEvent();//引发断开连接事件
+                }
+                RaiseErrorEvent(exception);//引发错误事件
             }
         }
 
@@ -239,17 +261,50 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <param name="e"></param>
         private void ProcessSend(SocketAsyncEventArgs e)
         {
-            AsyncUserToken token = (AsyncUserToken)e.UserToken;
-            if (e.SocketError == SocketError.Success)
+            try
             {
-                if (sendResultEvent != null)
-                    sendResultEvent(e.BytesTransferred);
+                AsyncUserToken token = (AsyncUserToken)e.UserToken;
+                if (e.SocketError == SocketError.Success)
+                {
+                    OnSendDataCompleted?.Invoke(this, new DSCClientSendDataEventArgs(e.ConnectSocket, e.BytesTransferred));
+                }
+                else
+                {
+                    OnSendDataCompleted?.Invoke(this, new DSCClientSendDataEventArgs(e.ConnectSocket, -1));
+                }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                if (sendResultEvent != null)
-                    sendResultEvent(-1);
-                Restart();
+                RaiseDisconnectedEvent();
+            }
+            catch (SocketException exception)
+            {
+                if (exception.ErrorCode == (int)SocketError.ConnectionReset)
+                {
+                    RaiseDisconnectedEvent();//引发断开连接事件
+                }
+                RaiseErrorEvent(exception);
+            }
+            catch (Exception exception_debug)
+            {
+                Debug.WriteLine("调试：" + exception_debug.Message);
+            }
+        }
+
+        private void RaiseErrorEvent(SocketException error)
+        {
+            if (null != OnError)
+            {
+                //OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(_cli.RemoteEndPoint, error.ErrorCode, error));
+            }
+        }
+
+        private void RaiseDisconnectedEvent()
+        {
+            //IsConnected = false;
+            if (null != OnDisconnected)
+            {
+               // OnDisconnected(this, new DSCClientConnectedEventArgs(_cli));
             }
         }
     }

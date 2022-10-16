@@ -197,6 +197,11 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetString(bytes.Slice(index,count));
         }
 
+        public static string GetString(Memory<byte> bytes, int index, int count)
+        {
+            return Encoding.GetEncoding("gb2312").GetString(bytes.Slice(index, count).Span);
+        }
+
         public static string GetString(byte[] bytes, int index, int count)
         {
             return Encoding.GetEncoding("gb2312").GetString(bytes, index, count);
@@ -235,6 +240,33 @@ namespace SystemModule
                 sb[i] = (char)buff[i];
             }
             return sb.ToString();
+        }
+
+        public static void MemoryCopy(Span<byte> source, Span<byte> destination,int destinationSizeInBytes,int sourceBytesToCopy)
+        {
+            Buffer.BlockCopy(
+    src: source.ToArray(),
+    srcOffset: 0,
+    dst: destination.ToArray(),
+    dstOffset: destinationSizeInBytes,
+    count: sourceBytesToCopy
+);
+
+            //unsafe
+            //{
+            //    fixed (void* src = source)
+            //    {
+            //        fixed (void* dest = destination)
+            //        {
+            //            Buffer.MemoryCopy(
+            //                source: src, //要复制的字节的地址
+            //                destination: dest, //目标地址
+            //                destinationSizeInBytes: destinationSizeInBytes, //目标内存块中可用的字节数
+            //                sourceBytesToCopy: sourceBytesToCopy //要复制的字节数
+            //            );
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>

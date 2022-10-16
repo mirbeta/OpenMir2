@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Net.Sockets;
 
 namespace SystemModule.Sockets.Event
 {
@@ -7,9 +8,9 @@ namespace SystemModule.Sockets.Event
     {
         public Exception exception;
         public IPEndPoint EndPoint;
-        public int ErrorCode;
+        public SocketError ErrorCode;
 
-        public DSCClientErrorEventArgs(EndPoint endPoint, int errorCode, Exception e)
+        public DSCClientErrorEventArgs(EndPoint endPoint, SocketError errorCode, Exception e)
         {
             this.exception = e;
             this.EndPoint = (IPEndPoint)endPoint;
