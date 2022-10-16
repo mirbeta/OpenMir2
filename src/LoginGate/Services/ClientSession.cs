@@ -62,7 +62,7 @@ namespace LoginGate.Services
             bool success = false;
             byte[] tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             int nDeCodeLen = 0;
-            byte[] packBuff = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            byte[] packBuff = PacketEncoder.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
             string sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
             if (!string.IsNullOrEmpty(sReviceMsg))
             {
@@ -203,12 +203,12 @@ namespace LoginGate.Services
                 byte[] sBuff = HUtil32.GetBytes(sMsg);
                 tempBuf = new byte[ClientMesaagePacket.PackSize + sBuff.Length];
                 Array.Copy(sBuff, 0, tempBuf, 13, sBuff.Length);
-                iLen = Misc.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize + sMsg.Length, sendBuf);
+                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize + sMsg.Length, sendBuf);
             }
             else
             {
                 tempBuf = cmd.GetBuffer();
-                iLen = Misc.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize, sendBuf, 1);
+                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize, sendBuf, 1);
             }
             sendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(sendBuf, iLen, SocketFlags.None);

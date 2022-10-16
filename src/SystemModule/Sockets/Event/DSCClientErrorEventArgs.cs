@@ -1,21 +1,19 @@
 using System;
-using System.Net.Sockets;
+using System.Net;
 
 namespace SystemModule.Sockets.Event
 {
     public class DSCClientErrorEventArgs : EventArgs
     {
-        public SocketException exception;
-        public string RemoteAddress;
-        public int RemotePort;
-        public SocketError ErrorCode;
+        public Exception exception;
+        public IPEndPoint EndPoint;
+        public int ErrorCode;
 
-        public DSCClientErrorEventArgs(string remoteAddress, int remotePort, int errorCode, SocketException e)
+        public DSCClientErrorEventArgs(EndPoint endPoint, int errorCode, Exception e)
         {
             this.exception = e;
-            this.RemoteAddress = remoteAddress;
-            this.RemotePort = remotePort;
-            this.ErrorCode = (SocketError)errorCode;
+            this.EndPoint = (IPEndPoint)endPoint;
+            this.ErrorCode = errorCode;
         }
     }
 }

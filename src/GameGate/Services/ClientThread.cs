@@ -260,17 +260,9 @@ namespace GameGate.Services
                                 var sessionPacket = new ClientSessionPacket
                                 {
                                     SessionId = SessionId,
-                                    BufferLen = PackLength
+                                    BufferLen = PackLength,
+                                    Buffer = dataBuff
                                 };
-                                if (PackLength > 0)
-                                {
-                                    sessionPacket.Buffer = dataBuff.Slice(20, PackLength);
-                                }
-                                else
-                                {
-                                    var packetSize = dataBuff.Length - HeaderMessageSize;
-                                    sessionPacket.Buffer = dataBuff.Slice(20, packetSize);
-                                }
                                 SessionManager.Enqueue(sessionPacket);
                                 break;
                             case Grobal2.GM_TEST:
