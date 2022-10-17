@@ -32,6 +32,10 @@ namespace GameGate
         /// Soccket链接ID
         /// </summary>
         public string ConnectionId;
+        /// <summary>
+        /// 数据处理ThreadId
+        /// </summary>
+        public int ThreadId;
         public ushort nUserListIndex;
         public int dwReceiveTick;
         public string sAccount;

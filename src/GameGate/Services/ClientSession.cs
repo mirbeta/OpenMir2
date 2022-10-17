@@ -896,7 +896,7 @@ namespace GameGate
                     }
                     pzsSendBuf[nLen + 1] = (byte)'!';
                     pzsSendBuf = pzsSendBuf[..(nLen + 2)];
-                    _sendQueue.AddClientQueue(_session.ConnectionId, pzsSendBuf.ToArray());
+                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, pzsSendBuf.ToArray());
                 }
                 else
                 {
@@ -908,7 +908,7 @@ namespace GameGate
                         stackMemory[i + 1] = clientPacket.Buffer.Span[i];
                     }
                     stackMemory[^1] = (byte)'!';
-                    _sendQueue.AddClientQueue(_session.ConnectionId, stackMemory.ToArray());
+                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, stackMemory.ToArray());
                 }
             }
             catch (Exception e)
@@ -1283,7 +1283,7 @@ namespace GameGate
             var iLen = ClientMesaagePacket.PackSize + szMsg.Length;
             iLen = PacketEncoder.EncodeBuf(tempBuf, iLen, sendBuf);
             sendBuf[iLen + 1] = (byte)'!';
-            _sendQueue.AddClientQueue(_session.ConnectionId, sendBuf.AsSpan()[..(iLen + 1)].ToArray());
+            _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, sendBuf.AsSpan()[..(iLen + 1)].ToArray());
         }
 
         public void Dispose()
