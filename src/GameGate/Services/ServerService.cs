@@ -86,7 +86,7 @@ namespace GameGate.Services
             while (!_waitCloseQueue.IsEmpty)
             {
                 _waitCloseQueue.TryDequeue(out int socket);
-                _clientThread.UserLeave(socket); //发送消息给M2断开链接
+                _clientThread.UserLeave(socket); //发送消息给GameSvr断开链接
             }
         }
 
