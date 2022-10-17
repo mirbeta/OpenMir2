@@ -1,5 +1,4 @@
 using GameGate.Conf;
-using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Net;
 using SystemModule;
@@ -147,7 +146,6 @@ namespace GameGate.Services
             Connected = true;
             ReceiveBytes = 0;
             SendBytes = 0;
-            ClientManager.Instance.AddClientThread(ClientId, this);
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
