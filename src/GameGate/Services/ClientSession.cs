@@ -657,7 +657,7 @@ namespace GameGate
             {
                 if (delayMsg.BufLen > 0)
                 {
-                    _clientThread.SendBuffer(delayMsg.Buffer);//发送消息到M2
+                    _clientThread.SendBuffer(delayMsg.Buffer);//发送消息到GameSvr
                     var dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.Cmd)
                     {
