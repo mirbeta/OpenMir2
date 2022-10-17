@@ -405,7 +405,7 @@ namespace GameSvr.RobotPlay
                 var sParam1 = string.Empty;
                 if (sData.Length > M2Share.Config.SayMsgMaxLen)
                 {
-                    sData = sData.Substring(0, M2Share.Config.SayMsgMaxLen);
+                    sData = sData[..M2Share.Config.SayMsgMaxLen];
                 }
                 if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
                 {

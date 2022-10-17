@@ -371,6 +371,11 @@ namespace SystemModule
         {
             return int.TryParse(str, out var result) ? result : def;
         }
+        
+        public static int StrToInt(ReadOnlySpan<char> str, int def)
+        {
+            return int.TryParse(str, out var result) ? result : def;
+        }
 
         public static DateTime StrToDate(string str)
         {

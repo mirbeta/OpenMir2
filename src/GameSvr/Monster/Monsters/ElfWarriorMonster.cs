@@ -75,7 +75,7 @@ namespace GameSvr.Monster.Monsters
                         var elfName = ChrName;
                         if (elfName[^1] == '1')
                         {
-                            elfName = elfName.Substring(0, elfName.Length - 1);
+                            elfName = elfName[..^1];
                             elfMon = MakeClone(elfName, this);
                         }
                         if (elfMon != null)

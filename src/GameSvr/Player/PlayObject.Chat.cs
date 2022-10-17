@@ -443,7 +443,7 @@ namespace GameSvr.Player
                             sData = sData.Substring(2, sData.Length - 2);
                             if (sData.Length > M2Share.Config.SayRedMsgMaxLen)
                             {
-                                sData = sData.Substring(0, M2Share.Config.SayRedMsgMaxLen);
+                                sData = sData[..M2Share.Config.SayRedMsgMaxLen];
                             }
                             if (M2Share.Config.ShutRedMsgShowGMName)
                             {

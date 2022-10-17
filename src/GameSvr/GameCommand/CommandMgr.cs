@@ -232,10 +232,10 @@ namespace GameSvr.GameCommand
             if (line[0] != '@') // 检查命令首字母是否为指定的字符串
                 return false;
 
-            line = line.Substring(1);
+            line = line[1..];
             command = line.Split(' ')[0]; // 取命令
             parameters = string.Empty;
-            if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).Trim(); // 取命令参数
+            if (line.Contains(' ')) parameters = line[(line.IndexOf(' ') + 1)..].Trim(); // 取命令参数
             return true;
         }
 
@@ -251,7 +251,7 @@ namespace GameSvr.GameCommand
                     if (PlayObject != null && pair.GameCommand.nPermissionMin > PlayObject.Permission) continue;
                     output += pair.GameCommand.Name + ", ";
                 }
-                output = output.Substring(0, output.Length - 2) + ".";
+                output = output[..^2] + ".";
                 return output + "\nType 'help <command>' to get help.";
             }
         }
