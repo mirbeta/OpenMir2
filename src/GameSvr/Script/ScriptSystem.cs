@@ -1471,8 +1471,8 @@ namespace GameSvr.Script
                                                 break;
                                             }
 
-                                            string s58 = sScript.Substring(0, n24);
-                                            string s5C = sScript.Substring(DefineInfo.sName.Length + n24);
+                                            string s58 = sScript[..n24];
+                                            string s5C = sScript[(DefineInfo.sName.Length + n24)..];
                                             sScript = s58 + DefineInfo.sText + s5C;
                                             LoadList[i] = sScript;
                                             n1C++;
@@ -2324,7 +2324,7 @@ namespace GameSvr.Script
                 tempstr = HUtil32.ArrestStringEx(tempstr, "<", ">", ref s10);
                 if (s10 != "")
                 {
-                    if (s10.IndexOf("/") > 0)
+                    if (s10.IndexOf("/", StringComparison.Ordinal) > 0)
                     {
                         sLabel = HUtil32.GetValidStr3(s10, ref sname, '/');
                         if (string.Compare(sLabel, "@close", StringComparison.OrdinalIgnoreCase) == 0)

@@ -1624,7 +1624,7 @@ namespace GameSvr.Npc
             var n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
             {
-                var s14 = sMsg.Substring(0, n10);
+                var s14 = sMsg[..n10];
                 var s18 = sMsg.Substring(sStr.Length + n10, sMsg.Length - (sStr.Length + n10));
                 result = s14 + sText + s18;
             }

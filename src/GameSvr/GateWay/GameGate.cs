@@ -96,7 +96,7 @@ namespace GameSvr.GateWay
                 while (nLen >= PacketHeader.PacketSize)
                 {
                     var packetHead = protoBuff[..20].Span;
-                    packetHeader.PacketCode = BitConverter.ToUInt32(packetHead.Slice(0, 4));
+                    packetHeader.PacketCode = BitConverter.ToUInt32(packetHead[..4]);
                     packetHeader.Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
                     packetHeader.SessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
                     packetHeader.Ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
@@ -547,7 +547,7 @@ namespace GameSvr.GateWay
                             {
                                 if (GateUser.boCertification && nMsgLen >= 12)
                                 {
-                                    clientMesaagePacket.Recog = BitConverter.ToInt32(MsgBuff.Slice(0, 4));
+                                    clientMesaagePacket.Recog = BitConverter.ToInt32(MsgBuff[..4]);
                                     clientMesaagePacket.Ident = BitConverter.ToUInt16(MsgBuff.Slice(4, 2));
                                     clientMesaagePacket.Param = BitConverter.ToUInt16(MsgBuff.Slice(6, 2));
                                     clientMesaagePacket.Tag = BitConverter.ToUInt16(MsgBuff.Slice(8, 2));

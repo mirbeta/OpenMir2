@@ -315,7 +315,7 @@ namespace GameSvr.Guild
                         {
                             if (s24.Length > 30)
                             {
-                                s24 = s24.Substring(0, M2Share.Config.GuildRankNameLen);//限制职倍的长度
+                                s24 = s24[..M2Share.Config.GuildRankNameLen];//限制职倍的长度
                             }
                             if (GuildRank == null)
                             {
@@ -751,7 +751,7 @@ namespace GameSvr.Guild
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankName, new char[] { '<', '>' });
                     if (sRankName.Length > 30)
                     {
-                        sRankName = sRankName.Substring(0, 30); // Jacky 限制职倍的长度
+                        sRankName = sRankName[..30]; // Jacky 限制职倍的长度
                     }
                     if (GuildRank != null)
                     {
