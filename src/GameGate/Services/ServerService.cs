@@ -100,8 +100,9 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            var clientThread = ServerMgr.GetClientThread();
-            if (clientThread == null)
+            var threadId = 0;
+            var clientThread = ServerMgr.GetClientThread(out threadId);
+            if (clientThread == null || threadId == 0)
             {
                 LogQueue.EnqueueDebugging("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
                 return;
@@ -120,6 +121,7 @@ namespace GameGate.Services
                     userSession.dwReceiveTick = HUtil32.GetTickCount();
                     userSession.SckHandle = e.SocHandle;
                     userSession.SessionId = (ushort)e.SocHandle;
+                    userSession.ThreadId = threadId;
                     clientThread.SessionArray[nIdx] = userSession;
                     break;
                 }

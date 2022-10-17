@@ -85,9 +85,9 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到客户端消息队列
         /// </summary>
-        public void SendClientQueue(string connectionId, Memory<byte> buffer)
+        public void SendClientQueue(string connectionId, int threadId, Memory<byte> buffer)
         {
-            _serverServices[0].Send(connectionId, buffer);
+            _serverServices[threadId].Send(connectionId, buffer);
         }
 
         /// <summary>
@@ -198,20 +198,23 @@ namespace GameGate.Services
             return _serverServices;
         }
 
-        public ClientThread GetClientThread()
+        public ClientThread GetClientThread(out int threadId)
         {
             //TODO 根据配置文件有四种模式  默认随机
             //1.轮询分配
             //2.总是分配到最小资源 即网关在线人数最小的那个
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
             //4.按权重分配
+            threadId = 0;
             if (!_serverServices.Any())
                 return null;
             if (_serverServices.Count == 1)
             {
+                threadId = 1;
                 return _serverServices[0].ClientThread;
             }
             var random = RandomNumber.GetInstance().Random(_serverServices.Count);
+            threadId = random;
             return _serverServices[random].ClientThread;
         }
 
