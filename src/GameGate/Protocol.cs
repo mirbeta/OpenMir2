@@ -14,7 +14,7 @@ namespace GameGate
     {
         public Memory<byte> Buffer;
         public int BufferLen;
-        public int ConnectionId;
+        public int SocketId;
     }
 
     public class SessionInfo

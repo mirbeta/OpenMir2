@@ -137,7 +137,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    serverList[i].ProcessCloseList();
+                    serverList[i].ProcessWaitCloseList();
                 }
             }
         }
@@ -147,9 +147,9 @@ namespace GameGate
         /// </summary>
         private void ClearSession(int currentTick)
         {
-            var clientList = ClientManager.GetAllClient();
             if (currentTick - _checkServerConnectTick > 5000)
             {
+                var clientList = ClientManager.GetAllClient();
                 _checkServerConnectTick = HUtil32.GetTickCount();
                 for (var i = 0; i < clientList.Count; i++)
                 {
@@ -157,29 +157,23 @@ namespace GameGate
                     {
                         continue;
                     }
-                    if (clientList[i] == null)
-                    {
-                        continue;
-                    }
                     clientList[i].CheckConnectedState();
                 }
+                LogQueue.EnqueueDebugging("发送GameSvr心跳包...");
             }
             if (currentTick - _processClearSessionTick > 120000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
-                LogQueue.EnqueueDebugging("清理超时会话开始...");
+                var clientList = ClientManager.GetAllClient();
                 for (var i = 0; i < clientList.Count; i++)
                 {
                     if (clientList[i] == null)
                     {
                         continue;
                     }
-                    if (clientList[i] == null)
-                    {
-                        continue;
-                    }
                     clientList[i].ProcessIdleSession();
                 }
+                LogQueue.EnqueueDebugging("清理超时无效会话...");
             }
         }
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,11 +67,7 @@ namespace GameGate.Services
 
         public ClientSession GetSession(int sessionId)
         {
-            if (_sessionMap.ContainsKey(sessionId))
-            {
-                return _sessionMap[sessionId];
-            }
-            return null;
+            return _sessionMap.ContainsKey(sessionId) ? _sessionMap[sessionId] : null;
         }
 
         public void CloseSession(int sessionId)

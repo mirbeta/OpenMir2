@@ -20,9 +20,8 @@ namespace GameGate.Services
         private readonly SendQueue _sendQueue;
         private readonly ConcurrentQueue<int> _waitCloseQueue;
         private static MirLog LogQueue => MirLog.Instance;
-        private static SessionManager SessionManager => SessionManager.Instance;
-        private static ClientManager ClientManager => ClientManager.Instance;
-        private static ServerManager ServerManager => ServerManager.Instance;
+        private static SessionManager SessionMgr => SessionManager.Instance;
+        private static ServerManager ServerMgr => ServerManager.Instance;
 
         public ServerService(string clientId, GameGateInfo gameGate)
         {
@@ -67,7 +66,7 @@ namespace GameGate.Services
         /// <returns></returns>
         private int GetThreadCount()
         {
-            return ServerManager.MessageThreadCount;
+            return ServerMgr.MessageThreadCount;
         }
 
         /// <summary>
@@ -76,13 +75,13 @@ namespace GameGate.Services
         /// <returns></returns>
         private string GetSendQueueCount()
         {
-            return string.Concat(_sendQueue.GetQueueCount, "/", SessionManager.GetQueueCount);
+            return string.Concat(_sendQueue.GetQueueCount, "/", SessionMgr.GetQueueCount);
         }
 
         /// <summary>
         /// 处理等待关闭链接列表
         /// </summary>
-        public void ProcessCloseList()
+        public void ProcessWaitCloseList()
         {
             while (!_waitCloseQueue.IsEmpty)
             {
@@ -101,14 +100,13 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            var clientThread = ServerManager.GetClientThread();
+            var clientThread = ServerMgr.GetClientThread();
             if (clientThread == null)
             {
-                LogQueue.EnqueueDebugging("获取服务器实例失败。");
+                LogQueue.EnqueueDebugging("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            LogQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             SessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.SessionArray.Length; nIdx++)
             {
@@ -128,10 +126,10 @@ namespace GameGate.Services
             }
             if (userSession != null)
             {
+                clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
+                SessionMgr.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, _sendQueue));
                 LogQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
-                clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知M2有新玩家进入游戏
-                SessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, _sendQueue));
-                //ClientManager.AddClientThread(userSession.ConnectionId, clientThread);
+                LogQueue.EnqueueDebugging($"新用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetEndPoint}");
             }
             else
             {
@@ -143,10 +141,9 @@ namespace GameGate.Services
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             var sRemoteAddr = e.RemoteIPaddr;
-            var connectionId = e.ConnectionId;
-            var clientSession = SessionManager.GetSession(e.SocHandle);
+            var clientSession = SessionMgr.GetSession(e.SocHandle);
             var clientThread = clientSession.ServerThread;
-            if (clientThread != null && clientThread.GateReady)
+            if (clientThread != null)
             {
                 for (int i = 0; i < clientThread.SessionArray.Length; i++)
                 {
@@ -159,22 +156,22 @@ namespace GameGate.Services
                         clientThread.SessionArray[i].Socket.Close();
                         clientThread.SessionArray[i].Socket = null;
                         clientThread.SessionArray[i].nUserListIndex = 0;
-                        clientThread.SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
+                        clientThread.SessionArray[i].dwReceiveTick = 0;
                         clientThread.SessionArray[i].SckHandle = 0;
                         clientThread.SessionArray[i].SessionId = 0;
                         clientThread.SessionArray[i] = null;
                         break;
                     }
                 }
-                _waitCloseQueue.Enqueue(e.SocHandle); //等待100ms才能发送给M2
                 LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
             }
             else
             {
                 LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-                LogQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{connectionId}]");
             }
-            SessionManager.CloseSession(e.SocHandle);
+            _waitCloseQueue.Enqueue(e.SocHandle); //等待100ms才通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
+            SessionMgr.CloseSession(e.SocHandle);
+            LogQueue.EnqueueDebugging($"用户断开链接 Ip:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}] ScoketId:[{e.SocHandle}]");
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -187,31 +184,31 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            var connectionId = token.SocHandle;
-            var clientSession = SessionManager.GetSession(connectionId);
+            var clientSession = SessionMgr.GetSession(token.SocHandle);
             if (clientSession != null)
             {
                 if (clientSession.Session == null)
                 {
-                    LogQueue.Enqueue($"[{connectionId}] Session会话已经失效", 5);
+                    LogQueue.Enqueue($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Session会话已经失效", 5);
                     return;
                 }
                 if (clientSession.Session.Socket == null)
                 {
-                    LogQueue.Enqueue($"[{connectionId}] Socket已释放", 5);
+                    LogQueue.Enqueue($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket已释放", 5);
                     return;
                 }
                 if (!clientSession.Session.Socket.Connected)
                 {
+                    LogQueue.Enqueue($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket链接已断开", 5);
                     return;
                 }
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
                 var message = new ClientMessagePacket();
                 message.Buffer = data;
-                message.ConnectionId = connectionId;
+                message.SocketId = token.SocHandle;
                 message.BufferLen = data.Length;
-                ServerManager.ClientPacketQueue(message);
+                ServerMgr.ClientPacketQueue(message);
             }
             else
             {
