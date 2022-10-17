@@ -13,8 +13,8 @@ namespace SystemModule.Sockets.Event
         public DSCClientConnectedEventArgs(Socket soc)
         {
             this.Socket = soc;
-            this.SocketHandle = (int)Socket.Handle;
-            if (Socket.Connected)
+            this.SocketHandle = Socket == null ? 0 : (int)Socket.Handle;
+            if (Socket != null && Socket.Connected)
             {
                 if (soc?.RemoteEndPoint != null)
                 {

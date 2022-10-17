@@ -61,7 +61,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 构造函数
         /// </summary>
         /// <param name="bufferSize">用于socket发送和接受的缓存区大小</param>
-        public AsyncClientSocket(string ip, int port,int bufferSize)
+        public AsyncClientSocket(string ip, int port, int bufferSize)
         {
             if (string.IsNullOrEmpty(ip))
                 throw new ArgumentNullException("ip cannot be null");
@@ -134,16 +134,15 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         public void CloseSocket()
         {
+            IsConnected = false;
             if (connectSocket == null)
                 return;
-
             try
             {
                 //关闭socket时，单独使用socket.close()通常会造成资源提前被释放，应该在关闭socket之前，先使用shutdown进行接受或者发送的禁用，再使用socket进行释放
                 connectSocket.Shutdown(SocketShutdown.Both);
             }
             catch { }
-
             try
             {
                 connectSocket.Close();
@@ -156,6 +155,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         public void Restart()
         {
+            IsConnected = false;
             CloseSocket();
             Start();
         }
@@ -173,6 +173,10 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 {
                     OnError(e.RemoteEndPoint, new DSCClientErrorEventArgs(e.RemoteEndPoint, e.SocketError, e.ConnectByNameError));
                 }
+                return;
+            }
+            if (e.ConnectSocket == null || !e.ConnectSocket.Connected)
+            {
                 return;
             }
             IsConnected = true;
@@ -232,7 +236,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 AsyncUserToken token = (AsyncUserToken)e.UserToken;
                 if (0 == e.BytesTransferred)
                 {
-                    RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent(e.ConnectSocket);//引发断开连接事件
                     return;
                 }
                 if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
@@ -243,13 +247,14 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
             catch (ObjectDisposedException)
             {
-                RaiseDisconnectedEvent();//引发断开连接事件
+                RaiseDisconnectedEvent(e.ConnectSocket);//引发断开连接事件
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent(e.ConnectSocket);//引发断开连接事件
+                    return;
                 }
                 RaiseErrorEvent(exception);//引发错误事件
             }
@@ -275,13 +280,14 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
             catch (ObjectDisposedException)
             {
-                RaiseDisconnectedEvent();
+                RaiseDisconnectedEvent(e.ConnectSocket);
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent(e.ConnectSocket);//引发断开连接事件
+                    return;
                 }
                 RaiseErrorEvent(exception);
             }
@@ -299,12 +305,12 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
         }
 
-        private void RaiseDisconnectedEvent()
+        private void RaiseDisconnectedEvent(Socket socket)
         {
-            //IsConnected = false;
+            IsConnected = false;
             if (null != OnDisconnected)
             {
-               // OnDisconnected(this, new DSCClientConnectedEventArgs(_cli));
+                OnDisconnected(this, new DSCClientConnectedEventArgs(socket));
             }
         }
     }

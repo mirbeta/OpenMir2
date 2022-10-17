@@ -36,6 +36,7 @@ namespace GameGate.Services
             _sendQueue = new SendQueue();
             _gateEndPoint = IPEndPoint.Parse(string.Concat(gameGate.ServerAdress, ":", gameGate.GatePort));
             _clientThread = new ClientThread(clientId, _gateEndPoint, gameGate);
+            ClientManager.Instance.AddClientThread(clientId, _clientThread);
         }
 
         public ClientThread ClientThread => _clientThread;
