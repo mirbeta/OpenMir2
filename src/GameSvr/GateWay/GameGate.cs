@@ -289,7 +289,7 @@ namespace GameSvr.GateWay
                 var sData = EDCode.DeCodeString(sMsg);
                 if (sData.Length > 2 && sData[0] == '*' && sData[1] == '*')
                 {
-                    sData = sData.Substring(2, sData.Length - 2);
+                    sData = sData.AsSpan().Slice(2, sData.Length - 2).ToString();
                     sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                     sData = HUtil32.GetValidStr3(sData, ref sChrName, HUtil32.Backslash);
                     sData = HUtil32.GetValidStr3(sData, ref sCodeStr, HUtil32.Backslash);
@@ -340,9 +340,9 @@ namespace GameSvr.GateWay
                 {
                     if (HUtil32.TagCount(sMsg, '!') > 0)
                     {
-                        string sData = HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
-                        sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                        if (GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag, ref HWID))
+                        HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
+                        var packetMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
+                        if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag, ref HWID))
                         {
                             SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent);
                             if (SessInfo != null && nPayMent > 0)

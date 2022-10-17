@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 
@@ -54,6 +55,17 @@ namespace SystemModule
             var bSrc = HUtil32.GetBytes(str);
             var encBuf = PacketEncoder.DecodeBuf(bSrc, bSrc.Length, ref nLen);
             return HUtil32.GetString(encBuf, 0, nLen);
+        }
+        
+        /// <summary>
+        /// 解密字符串
+        /// </summary>
+        public static string DeCodeString(Span<char> str)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            var nLen = 0;
+            var encBuf = PacketEncoder.DecodeBuf(str, str.Length, ref nLen);
+            return HUtil32.GetString(encBuf);
         }
 
         public static byte[] DecodeBuffer(string strSrc)
