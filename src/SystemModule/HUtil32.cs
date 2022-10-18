@@ -242,31 +242,24 @@ namespace SystemModule
             return sb.ToString();
         }
 
-        public static void MemoryCopy(Span<byte> source, Span<byte> destination, int destinationSizeInBytes, int sourceBytesToCopy)
-        {
-            Buffer.BlockCopy(
-                src: source.ToArray(),
-                srcOffset: 0,
-                dst: destination.ToArray(),
-                dstOffset: destinationSizeInBytes,
-                count: sourceBytesToCopy
-            );
 
-            //unsafe
-            //{
-            //    fixed (void* src = source)
-            //    {
-            //        fixed (void* dest = destination)
-            //        {
-            //            Buffer.MemoryCopy(
-            //                source: src, //要复制的字节的地址
-            //                destination: dest, //目标地址
-            //                destinationSizeInBytes: destinationSizeInBytes, //目标内存块中可用的字节数
-            //                sourceBytesToCopy: sourceBytesToCopy //要复制的字节数
-            //            );
-            //        }
-            //    }
-            //}
+        public static void MemoryCopy(Span<byte> source, int srcOff, Span<byte> destination, int dstOff, int count)
+        {
+            unsafe
+            {
+                fixed (byte* src = &source[srcOff])
+                {
+                    fixed (byte* dest = &destination[dstOff])
+                    {
+                        Buffer.MemoryCopy(
+                            source: src, //要复制的字节的地址
+                            destination: dest, //目标地址
+                            destinationSizeInBytes: count, //目标内存块中可用的字节数
+                            sourceBytesToCopy: count //要复制的字节数
+                        );
+                    }
+                }
+            }
         }
 
         /// <summary>
