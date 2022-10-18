@@ -886,15 +886,16 @@ namespace GameGate
                 {
                     var pzsSendBuf = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
                     pzsSendBuf[0] = (byte)'#';
+
                     var nLen = PacketEncoder.EncodeBuf(clientPacket.Buffer.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
                     if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
                     {
-                        Span<byte> tempBuffer = clientPacket.Buffer.Span[ClientMesaagePacket.PackSize..];
-                        //HUtil32.MemoryCopy(tempBuffer, pzsSendBuf, nLen, tempBuffer.Length);
-                        for (var i = 0; i < tempBuffer.Length; i++)
-                        {
-                            pzsSendBuf[i + (nLen + 1)] = tempBuffer[i];
-                        }
+                        var tempBuffer = clientPacket.Buffer[ClientMesaagePacket.PackSize..].Span;
+                        //for (var i = 0; i < tempBuffer.Length; i++)
+                        //{
+                        //    pzsSendBuf[i + (nLen + 1)] = tempBuffer[i];
+                        //}
+                        Array.Copy(tempBuffer.ToArray(), 0, pzsSendBuf, nLen + 1, tempBuffer.Length);
                         nLen = clientPacket.BufferLen - ClientMesaagePacket.PackSize + nLen;
                     }
                     pzsSendBuf[nLen + 1] = (byte)'!';
@@ -904,15 +905,15 @@ namespace GameGate
                 else
                 {
                     //这里都是发送小包 正常的游戏封包，走路 攻击等
-                    Span<byte> stackMemory = stackalloc byte[0 - clientPacket.BufferLen + 2];
+                    var stackMemory = new byte[0 - clientPacket.BufferLen + 2];
                     stackMemory[0] = (byte)'#';
-                    //HUtil32.MemoryCopy(clientPacket.Buffer.Span, stackMemory, 1, -clientPacket.BufferLen);
-                    for (var i = 0; i < -clientPacket.BufferLen; i++)
-                    {
-                        stackMemory[i + 1] = clientPacket.Buffer.Span[i];
-                    }
+                    Array.Copy(clientPacket.Buffer.ToArray(), 0, stackMemory, 1, -clientPacket.BufferLen);
+                    //for (var i = 0; i < -clientPacket.BufferLen; i++)
+                    //{
+                    //    stackMemory[i + 1] = clientPacket.Buffer.Span[i];
+                    //}
                     stackMemory[^1] = (byte)'!';
-                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, stackMemory.ToArray());
+                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, stackMemory);
                 }
             }
             catch (Exception e)
