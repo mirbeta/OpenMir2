@@ -233,6 +233,9 @@ namespace GameSvr
             _logger.LogInformation("加载公告提示信息成功...");
             M2Share.LocalDb.LoadAdminList();
             _logger.LogInformation("管理员列表加载成功...");
+            M2Share.GuildMgr.LoadGuildInfo();
+            M2Share.CastleMgr.LoadCastleList();
+            M2Share.CastleMgr.Initialize();
         }
 
         public void StartServer(CancellationToken stoppingToken)
@@ -263,9 +266,6 @@ namespace GameSvr
                     M2Share.LocalDb.LoadGuardList();
                     _logger.LogInformation("守卫列表加载成功...");
                 }
-                M2Share.GuildMgr.LoadGuildInfo();
-                M2Share.CastleMgr.LoadCastleList();
-                M2Share.CastleMgr.Initialize();
                 _logger.LogInformation("游戏处理引擎初始化成功...");
                 if (M2Share.ServerIndex == 0)
                 {
