@@ -151,7 +151,7 @@ namespace GameGate
                             return;
                         }
 
-                        var tempBuff = clientPacket.Buffer[2..^1];//跳过#1....! 只保留消息内容
+                        Memory<byte> tempBuff = clientPacket.Buffer[2..^1];//跳过#1....! 只保留消息内容
                         var nDeCodeLen = 0;
                         var decodeBuff = PacketEncoder.DecodeBuf(tempBuff.Span, tempBuff.Length, ref nDeCodeLen);
 
@@ -880,14 +880,17 @@ namespace GameGate
         {
             try
             {
+                //TODO 这里拼接字符需要优化，只会增加GC负担,增加内存消耗
+
                 if (clientPacket.BufferLen > 0) //游戏数据封包 
                 {
-                    Span<byte> pzsSendBuf = stackalloc byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
+                    var pzsSendBuf = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
                     pzsSendBuf[0] = (byte)'#';
                     var nLen = PacketEncoder.EncodeBuf(clientPacket.Buffer.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
                     if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
                     {
-                        var tempBuffer = clientPacket.Buffer[ClientMesaagePacket.PackSize..].Span;
+                        Span<byte> tempBuffer = clientPacket.Buffer.Span[ClientMesaagePacket.PackSize..];
+                        //HUtil32.MemoryCopy(tempBuffer, pzsSendBuf, nLen, tempBuffer.Length);
                         for (var i = 0; i < tempBuffer.Length; i++)
                         {
                             pzsSendBuf[i + (nLen + 1)] = tempBuffer[i];
@@ -896,14 +899,15 @@ namespace GameGate
                     }
                     pzsSendBuf[nLen + 1] = (byte)'!';
                     pzsSendBuf = pzsSendBuf[..(nLen + 2)];
-                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, pzsSendBuf.ToArray());
+                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, pzsSendBuf);
                 }
                 else
                 {
-                    //这里都是发送小包 正常的游戏封包，走路 攻击等都走下面的代码
+                    //这里都是发送小包 正常的游戏封包，走路 攻击等
                     Span<byte> stackMemory = stackalloc byte[0 - clientPacket.BufferLen + 2];
                     stackMemory[0] = (byte)'#';
-                    for (int i = 0; i < -clientPacket.BufferLen; i++)
+                    //HUtil32.MemoryCopy(clientPacket.Buffer.Span, stackMemory, 1, -clientPacket.BufferLen);
+                    for (var i = 0; i < -clientPacket.BufferLen; i++)
                     {
                         stackMemory[i + 1] = clientPacket.Buffer.Span[i];
                     }
@@ -917,7 +921,6 @@ namespace GameGate
                 throw;
             }
 
-            //todo 这里拼接字符需要优化，只会增加GC负担,增加内存消耗
             //if (clientPacket.BufferLen <= 0) //正常的游戏封包，走路 攻击等都走下面的代码
             //{
             //    Span<byte> stackMemory = stackalloc byte[0 - clientPacket.BufferLen + 2];

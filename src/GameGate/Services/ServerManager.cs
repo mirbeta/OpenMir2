@@ -26,7 +26,7 @@ namespace GameGate.Services
         /// <summary>
         /// 服务器列表
         /// </summary>
-        private readonly IList<ServerService> _serverServices;
+        private ServerService[] _serverServices;
         /// <summary>
         /// 消息消费者
         /// </summary>
@@ -37,20 +37,14 @@ namespace GameGate.Services
         /// </summary>
         private readonly Channel<ClientMessagePacket> _reviceMsgQueue = null;
 
-        public ServerManager()
+        private ServerManager()
         {
             _reviceMsgQueue = Channel.CreateUnbounded<ClientMessagePacket>();
-            _serverServices = new List<ServerService>();
         }
 
-        public void AddServer(ServerService serverService)
+        public void AddServer(ServerService[] serverService)
         {
-            _serverServices.Add(serverService);
-        }
-
-        public void RemoveServer(ServerService serverService)
-        {
-            _serverServices.Remove(serverService);
+            _serverServices = serverService;
         }
 
         public void Start(CancellationToken stoppingToken)
@@ -60,7 +54,7 @@ namespace GameGate.Services
             {
                 _messageThreads[i] = new ServerMessageThread(_reviceMsgQueue.Reader);
             }
-            for (var i = 0; i < _serverServices.Count; i++)
+            for (var i = 0; i < _serverServices.Length; i++)
             {
                 if (_serverServices[i] == null)
                 {
@@ -72,7 +66,7 @@ namespace GameGate.Services
 
         public void Stop()
         {
-            for (var i = 0; i < _serverServices.Count; i++)
+            for (var i = 0; i < _serverServices.Length; i++)
             {
                 if (_serverServices[i] == null)
                 {
@@ -205,15 +199,15 @@ namespace GameGate.Services
             //2.总是分配到最小资源 即网关在线人数最小的那个
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
             //4.按权重分配
-            threadId = 0;
+            threadId = -1;
             if (!_serverServices.Any())
                 return null;
-            if (_serverServices.Count == 1)
+            if (_serverServices.Length == 1)
             {
-                threadId = 1;
+                threadId = 0;
                 return _serverServices[0].ClientThread;
             }
-            var random = RandomNumber.GetInstance().Random(_serverServices.Count);
+            var random = RandomNumber.GetInstance().Random(_serverServices.Length);
             threadId = random;
             return _serverServices[random].ClientThread;
         }

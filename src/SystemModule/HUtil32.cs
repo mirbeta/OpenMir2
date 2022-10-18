@@ -242,15 +242,15 @@ namespace SystemModule
             return sb.ToString();
         }
 
-        public static void MemoryCopy(Span<byte> source, Span<byte> destination,int destinationSizeInBytes,int sourceBytesToCopy)
+        public static void MemoryCopy(Span<byte> source, Span<byte> destination, int destinationSizeInBytes, int sourceBytesToCopy)
         {
             Buffer.BlockCopy(
-    src: source.ToArray(),
-    srcOffset: 0,
-    dst: destination.ToArray(),
-    dstOffset: destinationSizeInBytes,
-    count: sourceBytesToCopy
-);
+                src: source.ToArray(),
+                srcOffset: 0,
+                dst: destination.ToArray(),
+                dstOffset: destinationSizeInBytes,
+                count: sourceBytesToCopy
+            );
 
             //unsafe
             //{

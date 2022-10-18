@@ -8,6 +8,7 @@ using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime;
@@ -140,7 +141,7 @@ namespace GameGate
         {
             GateShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var serverList = ServerManager.Instance.GetServerList();
+            IList<ServerService> serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
