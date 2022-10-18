@@ -174,7 +174,7 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            Memory<byte> packetData = e.Buff[..nMsgLen];
+            Span<byte> packetData = e.Buff[..nMsgLen].Span;
             var srcOffset = 0;
             try
             {
@@ -191,13 +191,13 @@ namespace GameGate.Services
                     }
                     for (int i = 0; i < packetData.Length; i++)
                     {
-                        tempBuff[i + _buffLen] = packetData.Span[i];
+                        tempBuff[i + _buffLen] = packetData[i];
                     }
                     _receiveBuffer = tempBuff.ToArray();
                 }
                 else
                 {
-                    _receiveBuffer = packetData;
+                    _receiveBuffer = packetData.ToArray();
                 }
                 var nLen = _buffLen + nMsgLen;
                 Memory<byte> dataBuff = _receiveBuffer;
