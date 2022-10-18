@@ -257,7 +257,7 @@ namespace GameSvr.Guild
                     }
                     if (s18[0] == '#')
                     {
-                        s18 = s18.Substring(1, s18.Length - 1);
+                        s18 = s18.AsSpan()[1..].ToString();
                         s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
                         n2C = HUtil32.StrToInt(s1C, 0);
                         s24 = s18.Trim();
@@ -265,7 +265,7 @@ namespace GameSvr.Guild
                     }
                     continue;
                 }
-                s18 = s18.Substring(1, s18.Length - 1);
+                s18 = s18.AsSpan()[1..].ToString();
                 switch (n28)
                 {
                     case 1:
@@ -746,7 +746,7 @@ namespace GameSvr.Guild
                 }
                 if (sRankInfo[0] == '#')// 取得职称的名称
                 {
-                    sRankInfo = sRankInfo.Substring(1, sRankInfo.Length - 1);
+                    sRankInfo = sRankInfo.AsSpan()[1..].ToString();
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankNo, new char[] { ' ', '<' });
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankName, new char[] { '<', '>' });
                     if (sRankName.Length > 30)
