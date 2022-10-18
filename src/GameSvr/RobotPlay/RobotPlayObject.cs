@@ -215,15 +215,15 @@ namespace GameSvr.RobotPlay
                             {
                                 if (Str[1] == '\\')
                                 {
-                                    Str = Str.Substring(1, Str.Length - 1);
+                                    Str = Str.AsSpan()[1..].ToString();
                                 }
                                 if (Str[2] == '\\')
                                 {
-                                    Str = Str.Substring(2, Str.Length - 2);
+                                    Str = Str.AsSpan()[2..].ToString();
                                 }
                                 if (Str[3] == '\\')
                                 {
-                                    Str = Str.Substring(3, Str.Length - 3);
+                                    Str = Str.AsSpan()[3..].ToString();
                                 }
                             }
                             result = m_sFilePath + Str;
