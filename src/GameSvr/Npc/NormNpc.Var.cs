@@ -857,14 +857,14 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            n10 = PlayObject.m_sString[n14 - 600].IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            n10 = PlayObject.m_sString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
                             s02 = PlayObject.m_sString[n14 - 600].Substring(1, n10 - 1);
                             s03 = PlayObject.m_sString[n14 - 600].Substring(s01.Length + n10, PlayObject.m_sString[n14 - 600].Length);
                             PlayObject.m_sString[n14 - 600] = s02 + s03;
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
-                            n10 = M2Share.Config.GlobalAVal[n14 - 700].IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
                             s02 = M2Share.Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
                             s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
                             M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
@@ -882,7 +882,7 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                         {
-                            n10 = M2Share.Config.GlobalAVal[n14 - 1100].IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
                             s02 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
                             s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
                             M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
@@ -982,7 +982,7 @@ namespace GameSvr.Npc
                                 }
                                 break;
                             case VarType.String:
-                                n10 = DynamicVar.sString.IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                                n10 = DynamicVar.sString.AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
                                 s02 = DynamicVar.sString[..(n10 - 1)];
                                 s03 = DynamicVar.sString.Substring(s01.Length + n10 - 1, DynamicVar.sString.Length);
                                 DynamicVar.sString = s02 + s03;
@@ -1136,14 +1136,14 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n10 = PlayObject.m_sString[n14 - 600].IndexOf(s01, StringComparison.Ordinal);
+                        n10 = PlayObject.m_sString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.Ordinal);
                         s02 = PlayObject.m_sString[n14 - 600].Substring(1, n10 - 1);
                         s03 = PlayObject.m_sString[n14 - 600].Substring(s01.Length + n10, PlayObject.m_sString[n14 - 600].Length);
                         PlayObject.m_sString[n14 - 600] = s02 + s03;
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        n10 = M2Share.Config.GlobalAVal[n14 - 700].IndexOf(s01, StringComparison.Ordinal);
+                        n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.Ordinal);
                         s02 = M2Share.Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
                         s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
                         M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
@@ -1161,7 +1161,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                     {
-                        n10 = M2Share.Config.GlobalAVal[n14 - 1100].IndexOf(s01, StringComparison.Ordinal);
+                        n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.Ordinal);
                         s02 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
                         s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
                         M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
@@ -2782,25 +2782,15 @@ namespace GameSvr.Npc
             }
             if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
             {
-                if (nDataType == 1)
+                if (nDataType == 1 && DynamicVar.VarType == VarType.Integer)
                 {
-                    switch (DynamicVar.VarType)
-                    {
-                        case VarType.Integer:
-                            DynamicVar.nInternet = nValue;
-                            boVarFound = true;
-                            break;
-                    }
+                    DynamicVar.nInternet = nValue;
+                    boVarFound = true;
                 }
-                else
+                else if (DynamicVar.VarType == VarType.String)
                 {
-                    switch (DynamicVar.VarType)
-                    {
-                        case VarType.String:
-                            DynamicVar.sString = sValue;
-                            boVarFound = true;
-                            break;
-                    }
+                    DynamicVar.sString = sValue;
+                    boVarFound = true;
                 }
             }
             return boVarFound;
