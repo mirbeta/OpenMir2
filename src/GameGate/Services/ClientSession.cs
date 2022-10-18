@@ -876,7 +876,12 @@ namespace GameGate
             }
             return true;
         }
-        
+
+        private void SendData(Span<byte> packtData)
+        {
+            _session.Socket.Send(packtData);
+        }
+
         /// <summary>
         /// 处理GameSvr消息 
         /// 处理后发送到游戏客户端
@@ -886,11 +891,27 @@ namespace GameGate
             try
             {
                 //TODO 改为同步发送后在大量数据包下明显感觉到延时，还是需要修改为异步发送
-                SendBuffer[0] = (byte)'#';
-                var packetBuff = clientPacket.Buffer;
-                if (clientPacket.BufferLen > 0) //游戏数据封包 
+                if (clientPacket.BufferLen > 1024) //大型游戏数据包
                 {
-                    var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, SendBuffer, 1);//消息头
+                    Span<byte> packBuff = stackalloc byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
+                    packBuff[0] = (byte)'#';
+                    var packetBuff = clientPacket.Buffer;
+                    var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packBuff, 1);//消息头
+                    if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
+                    {
+                        var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
+                        HUtil32.MemoryCopy(tempBuffer, 0, packBuff, nLen + 1, tempBuffer.Length);
+                        nLen = tempBuffer.Length + nLen;
+                    }
+                    packBuff[nLen + 1] = (byte)'!';
+                    var sendData = packBuff[..(nLen + 2)];
+                    SendData(sendData);
+                }
+                else if (clientPacket.BufferLen > 0) //普通正常游戏数据包
+                {
+                    SendBuffer[0] = (byte)'#';
+                    var packetBuff = clientPacket.Buffer;
+                    var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, SendBuffer, 1); //消息头
                     if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
                     {
                         var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
@@ -899,16 +920,16 @@ namespace GameGate
                     }
                     SendBuffer[nLen + 1] = (byte)'!';
                     var sendData = SendBuffer.AsSpan()[..(nLen + 2)];
-                    _session.Socket.Send(sendData);
+                    SendData(sendData);
                 }
-                else
+                else  //这里都是发送小包 正常的游戏封包，走路 攻击等
                 {
-                    //这里都是发送小包 正常的游戏封包，走路 攻击等
+                    SendBuffer[0] = (byte)'#';
                     var buffLen = -clientPacket.BufferLen;
                     Array.Copy(clientPacket.Buffer, 0, SendBuffer, 1, buffLen);
                     SendBuffer[buffLen] = (byte)'!';
                     var sendData = SendBuffer.AsSpan()[..(0 - clientPacket.BufferLen + 2)];
-                    _session.Socket.Send(sendData);
+                    SendData(sendData);
                 }
             }
             catch (Exception e)
