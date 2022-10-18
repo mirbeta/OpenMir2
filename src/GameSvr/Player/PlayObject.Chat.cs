@@ -147,56 +147,35 @@ namespace GameSvr.Player
                         M2Share.g_FunctionNPC.GotoLable(this, "@加速处理", false);
                         return;
                     }
-                    string sC;
+                    string sText;
                     switch (sData[0])
                     {
                         case '/':
+                        {
+                            sText = sData.AsSpan()[1..].ToString();
+                            sText = HUtil32.GetValidStr3(sText, ref sParam1, new[] { " " });
+                            if (!m_boFilterSendMsg)
                             {
-                                sC = sData.Substring(1, sData.Length - 1);
-                                //if (string.Compare(sC.Trim(), M2Share.g_GameCommand.WHO.sCmd.Trim(), StringComparison.OrdinalIgnoreCase) == 0)
-                                //{
-                                //    if (m_btPermission < M2Share.g_GameCommand.WHO.nPerMissionMin)
-                                //    {
-                                //        SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                                //        return;
-                                //    }
-                                //    HearMsg(format(M2Share.g_sOnlineCountMsg, M2Share.WorldEngine.PlayObjectCount));
-                                //    return;
-                                //}
-                                //if (string.Compare(sC.Trim(), M2Share.g_GameCommand.TOTAL.sCmd.Trim(), StringComparison.OrdinalIgnoreCase) == 0) //统计在线人数
-                                //{
-                                //    if (m_btPermission < M2Share.g_GameCommand.TOTAL.nPerMissionMin)
-                                //    {
-                                //        SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                                //        return;
-                                //    }
-                                //    HearMsg(format(M2Share.g_sTotalOnlineCountMsg, M2Share.g_nTotalHumCount));
-                                //    return;
-                                //}
-                                sC = HUtil32.GetValidStr3(sC, ref sParam1, new[] { " " });
-                                if (!m_boFilterSendMsg)
-                                {
-                                    Whisper(sParam1, sC);
-                                }
-                                return;
+                                Whisper(sParam1, sText);
                             }
+                            return;
+                        }
                         case '!':
                             {
                                 if (sData.Length >= 1)
                                 {
-                                    if (sData[1] == '!') //发送组队消息
+                                    switch (sData[1])
                                     {
-                                        sC = sData.Substring(3 - 1, sData.Length - 2);
-                                        SendGroupText(ChrName + ": " + sC);
-                                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, ChrName + "/:" + sC);
-                                        return;
-                                    }
-                                    if (sData[1] == '~' && MyGuild != null) //发送行会消息
-                                    {
-                                        sC = sData.Substring(2, sData.Length - 2);
-                                        MyGuild.SendGuildMsg(ChrName + ": " + sC);
-                                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + ChrName + '/' + sC);
-                                        return;
+                                        case '!'://发送组队消息
+                                            sText = sData.AsSpan()[2..].ToString();
+                                            SendGroupText(ChrName + ": " + sText);
+                                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
+                                            return;
+                                        case '~' when MyGuild != null://发送行会消息
+                                            sText = sData.AsSpan()[2..].ToString();
+                                            MyGuild.SendGuildMsg(ChrName + ": " + sText);
+                                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + ChrName + '/' + sText);
+                                            return;
                                     }
                                 }
                                 if (!Envir.Flag.boQUIZ)
@@ -209,8 +188,8 @@ namespace GameSvr.Player
                                             return;
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
-                                        sC = sData.Substring(1, sData.Length - 1);
-                                        string sCryCryMsg = "(!)" + ChrName + ": " + sC;
+                                        sText = sData.AsSpan()[1..].ToString();
+                                        var sCryCryMsg = "(!)" + ChrName + ": " + sText;
                                         if (m_boFilterSendMsg)
                                         {
                                             SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
@@ -399,7 +378,7 @@ namespace GameSvr.Player
                     ProcessSayMsg(sData);
                     return;
                 }
-                sC = sData.Substring(1, sData.Length - 1);
+                sC = sData.AsSpan()[1..].ToString();
                 sC = HUtil32.GetValidStr3(sC, ref sCMD, new[] { " ", ":", ",", "\t" });
                 if (sC != "")
                 {
@@ -440,7 +419,7 @@ namespace GameSvr.Player
                         if (HUtil32.GetTickCount() - m_dwSayMsgTick > 2000)
                         {
                             m_dwSayMsgTick = HUtil32.GetTickCount();
-                            sData = sData.Substring(2, sData.Length - 2);
+                            sData = sData.AsSpan()[2..].ToString();
                             if (sData.Length > M2Share.Config.SayRedMsgMaxLen)
                             {
                                 sData = sData[..M2Share.Config.SayRedMsgMaxLen];
