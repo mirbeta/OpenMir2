@@ -26,12 +26,12 @@
         /// <summary>
         /// 命令等级最小权限
         /// </summary>
-        public byte nPermissionMin { get; private set; }
+        public byte nPermissionMin { get; set; }
 
         /// <summary>
         /// 命令等级最大权限
         /// </summary>
-        public byte nPermissionMax { get; private set; }
+        public byte nPermissionMax { get; set; }
 
         public CommandAttribute(string name, string desc, byte minUserLevel = 0, byte maxUserLevel = 10)
         {
