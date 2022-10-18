@@ -1,13 +1,9 @@
 [EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)  
 
 
-Legend of Mir 2 complete game server, support 1.10-1.76 classic game functions, support online and multiplayer interaction.
+Legend of Mir 2 game server, support online and multiplayer interaction.
 
 This project refers to the network Delphi code, which can be used with the original 1.76 source code of Legend of Blood for game experience. If you have any questions or problems, please submit Issues.  
-
-## Developing 
-1. MirClient  
-2. ResourceSvr  
 
 ### How to use    
 ## Client
