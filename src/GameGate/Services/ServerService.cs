@@ -96,6 +96,11 @@ namespace GameGate.Services
             _serverSocket.SendAsync(connectionId, buffer);
         }
 
+        public void Send(string connectionId, Span<byte> buffer)
+        {
+            _serverSocket.Send(connectionId, buffer);
+        }
+
         /// <summary>
         /// 新玩家链接
         /// </summary>

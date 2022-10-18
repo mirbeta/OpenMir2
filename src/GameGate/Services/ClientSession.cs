@@ -42,6 +42,10 @@ namespace GameGate
         private readonly string SessionKey;
         private readonly long m_FinishTick = 0;
         private readonly DynamicAuthenticator _authenticator = null;
+        /// <summary>
+        /// 封包发送缓冲区
+        /// </summary>
+        private readonly byte[] SendBuffer;
 
         public ClientSession(SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
@@ -56,6 +60,7 @@ namespace GameGate
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
             SessionKey = Guid.NewGuid().ToString("N");
+            SendBuffer = new byte[1024];
             _authenticator = new DynamicAuthenticator();
         }
 
@@ -880,40 +885,29 @@ namespace GameGate
         {
             try
             {
-                //TODO 这里拼接字符需要优化，只会增加GC负担,增加内存消耗
-
+                SendBuffer[0] = (byte)'#';
+                var packetBuff = clientPacket.Buffer;
                 if (clientPacket.BufferLen > 0) //游戏数据封包 
                 {
-                    var pzsSendBuf = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
-                    pzsSendBuf[0] = (byte)'#';
-
-                    var nLen = PacketEncoder.EncodeBuf(clientPacket.Buffer.Span[..12], ClientMesaagePacket.PackSize, pzsSendBuf, 1);
+                    var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, SendBuffer, 1);//消息头
                     if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
                     {
-                        var tempBuffer = clientPacket.Buffer[ClientMesaagePacket.PackSize..].Span;
-                        //for (var i = 0; i < tempBuffer.Length; i++)
-                        //{
-                        //    pzsSendBuf[i + (nLen + 1)] = tempBuffer[i];
-                        //}
-                        Array.Copy(tempBuffer.ToArray(), 0, pzsSendBuf, nLen + 1, tempBuffer.Length);
-                        nLen = clientPacket.BufferLen - ClientMesaagePacket.PackSize + nLen;
+                        var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
+                        Array.Copy(tempBuffer, 0, SendBuffer, nLen + 1, tempBuffer.Length);
+                        nLen = tempBuffer.Length + nLen;
                     }
-                    pzsSendBuf[nLen + 1] = (byte)'!';
-                    pzsSendBuf = pzsSendBuf[..(nLen + 2)];
-                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, pzsSendBuf);
+                    SendBuffer[nLen + 1] = (byte)'!';
+                    var senddata = SendBuffer.AsSpan()[..(nLen + 2)];
+                    _session.Socket.Send(senddata);
                 }
                 else
                 {
                     //这里都是发送小包 正常的游戏封包，走路 攻击等
-                    var stackMemory = new byte[0 - clientPacket.BufferLen + 2];
-                    stackMemory[0] = (byte)'#';
-                    Array.Copy(clientPacket.Buffer.ToArray(), 0, stackMemory, 1, -clientPacket.BufferLen);
-                    //for (var i = 0; i < -clientPacket.BufferLen; i++)
-                    //{
-                    //    stackMemory[i + 1] = clientPacket.Buffer.Span[i];
-                    //}
-                    stackMemory[^1] = (byte)'!';
-                    _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, stackMemory);
+                    var buffLen = -clientPacket.BufferLen;
+                    Array.Copy(clientPacket.Buffer, 0, SendBuffer, 1, buffLen);
+                    SendBuffer[buffLen] = (byte)'!';
+                    var senddata = SendBuffer.AsSpan()[..(0 - clientPacket.BufferLen + 2)];
+                    _session.Socket.Send(senddata);
                 }
             }
             catch (Exception e)
@@ -921,19 +915,6 @@ namespace GameGate
                 Console.WriteLine(e);
                 throw;
             }
-
-            //if (clientPacket.BufferLen <= 0) //正常的游戏封包，走路 攻击等都走下面的代码
-            //{
-            //    Span<byte> stackMemory = stackalloc byte[0 - clientPacket.BufferLen + 2];
-            //    stackMemory[0] = (byte)'#';
-            //    for (var i = 0; i < -clientPacket.BufferLen; i++)
-            //    {
-            //        stackMemory[i + 1] = clientPacket.Buffer.Span[i];
-            //    }
-            //    stackMemory[^1] = (byte)'!';
-            //    _sendQueue.AddToQueue(_session.ConnectionId, stackMemory.ToArray());
-            //    return;
-            //}
 
             //todo 直接读取12个字节，知道消息ID即可
             //var packet = Packets.ToPacket<ClientPacket>(message.Buffer.ToArray()); //直接优化，不用转，进一步省GC和内存

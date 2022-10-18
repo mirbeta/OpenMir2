@@ -101,7 +101,7 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                var data = e.Buff.Span;
+                var data = e.Buff;
                 if (_packetLen == 0 && data[0] == (byte)'#')
                 {
                     _packetLen = BitConverter.ToInt32(data[1..5]);
@@ -110,12 +110,12 @@ namespace GameSvr.Services
                 {
                     var tempBuff = new byte[_recvBuff.Length + e.BuffLen];
                     Buffer.BlockCopy(_recvBuff, 0, tempBuff, 0, _recvBuff.Length);
-                    Buffer.BlockCopy(e.Buff.ToArray(), 0, tempBuff, _recvBuff.Length, e.BuffLen);
+                    Buffer.BlockCopy(e.Buff, 0, tempBuff, _recvBuff.Length, e.BuffLen);
                     _recvBuff = tempBuff;
                 }
                 else
                 {
-                    _recvBuff = e.Buff.ToArray();
+                    _recvBuff = e.Buff;
                 }
                 var len = _recvBuff.Length - _packetLen;
                 if (len > 0)

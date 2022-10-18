@@ -591,6 +591,75 @@ namespace SystemModule.Sockets.AsyncSocketServer
             }
         }
 
+        public void Send(string connectionId, Span<byte> buffer)
+        {
+            AsyncUserToken token;
+            //SocketAsyncEventArgs token;
+            //if (buffer.Length <= m_receiveSendBufferSize)
+            //{
+            //    throw new ArgumentException("数据包长度超过缓冲区大小", "buffer");
+            //}
+            if (!this._mTokens.TryGetValue(connectionId, out token))
+            {
+                throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
+                //return;
+            }
+            SocketAsyncEventArgs writeEventArgs;
+            lock (_writePool)
+            {
+                writeEventArgs = _writePool.Pop();// 分配一个写SocketAsyncEventArgs对象
+            }
+            writeEventArgs.UserToken = token;
+            if (buffer.Length <= _bufferSize)
+            {
+                //for (int i = 0; i < buffer.Length; i++)
+                //{
+                //    writeEventArgs.Buffer[i + writeEventArgs.Offset] = buffer.Span[i];
+                //}
+                writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
+            }
+            else
+            {
+                lock (_bufferLock)
+                {
+                    _bufferManager.FreeBuffer(writeEventArgs);
+                }
+                writeEventArgs.SetBuffer(buffer.ToArray());
+            }
+
+            //writeEventArgs.SetBuffer(buffer, 0, buffer.Length);
+            try
+            {
+                // 异步发送数据
+                var willRaiseEvent = token.Socket.Send(buffer);
+                if (willRaiseEvent <= 0)
+                {
+                    ProcessSend(writeEventArgs);
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                RaiseDisconnectedEvent(token);
+            }
+            catch (SocketException socketException)
+            {
+                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)
+                {
+                    RaiseDisconnectedEvent(token);//引发断开连接事件
+                }
+                else
+                {
+                    RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步发送数据操作时发生SocketException异常", socketException));
+                }
+            }
+            catch (Exception exceptionDebug)
+            {
+                Debug.WriteLine("调试：" + exceptionDebug.Message);
+                throw;
+            }
+        }
+
+
         /// <summary>
         /// 发送数据,可以携带操作类型(使用自定义枚举来表示)
         /// </summary>

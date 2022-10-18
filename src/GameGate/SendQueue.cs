@@ -25,10 +25,12 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddClientQueue(string connectionId,int threadId, Memory<byte> buffer)
+        public void AddClientQueue(string connectionId, int threadId, Span<byte> buffer)
         {
-            var sendPacket = new ClientPacketQueueData(connectionId, threadId, buffer);
-            _sendQueue.Writer.TryWrite(sendPacket);
+            // var sendPacket = new ClientPacketQueueData(connectionId, threadId, buffer);
+            // _sendQueue.Writer.TryWrite(sendPacket);
+
+            serverManager.SendClientQueue(connectionId, threadId, buffer);
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace GameGate
                 {
                     if (_sendQueue.Reader.TryRead(out ClientPacketQueueData sendPacket))
                     {
-                        serverManager.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
+                        //serverManager.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
                     }
                 }
             }, stoppingToken);

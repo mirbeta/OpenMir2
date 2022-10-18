@@ -5,7 +5,7 @@ namespace GameGate
 {
     public struct ClientSessionPacket
     {
-        public Memory<byte> Buffer;
+        public byte[] Buffer;
         public int BufferLen;
         public int SessionId;
     }
