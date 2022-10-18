@@ -897,8 +897,8 @@ namespace GameGate
                         nLen = tempBuffer.Length + nLen;
                     }
                     SendBuffer[nLen + 1] = (byte)'!';
-                    var senddata = SendBuffer.AsSpan()[..(nLen + 2)];
-                    _session.Socket.Send(senddata);
+                    var sendData = SendBuffer.AsSpan()[..(nLen + 2)];
+                    _session.Socket.Send(sendData);
                 }
                 else
                 {
@@ -906,8 +906,8 @@ namespace GameGate
                     var buffLen = -clientPacket.BufferLen;
                     Array.Copy(clientPacket.Buffer, 0, SendBuffer, 1, buffLen);
                     SendBuffer[buffLen] = (byte)'!';
-                    var senddata = SendBuffer.AsSpan()[..(0 - clientPacket.BufferLen + 2)];
-                    _session.Socket.Send(senddata);
+                    var sendData = SendBuffer.AsSpan()[..(0 - clientPacket.BufferLen + 2)];
+                    _session.Socket.Send(sendData);
                 }
             }
             catch (Exception e)
