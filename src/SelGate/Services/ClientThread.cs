@@ -159,7 +159,7 @@ namespace SelGate.Services
             {
                 return;
             }
-            var packet = Packets.ToPacket<GatePacket>(e.Buff.ToArray());
+            var packet = Packets.ToPacket<GatePacket>(e.Buff);
             if (packet == null)
             {
                 return;

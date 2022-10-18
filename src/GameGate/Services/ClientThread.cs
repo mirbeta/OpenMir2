@@ -34,7 +34,7 @@ namespace GameGate.Services
         /// <summary>
         /// Buffer
         /// </summary>
-        private Memory<byte> _receiveBuffer = null;
+        private byte[] _receiveBuffer = null;
         /// <summary>
         /// 上次剩下多少字节未处理
         /// </summary>
@@ -174,38 +174,28 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            Span<byte> packetData = e.Buff[..nMsgLen].Span;
+            var packetData = e.Buff[..nMsgLen];
             var srcOffset = 0;
             try
             {
                 if (_buffLen > 0)
                 {
-                    Span<byte> tempBuff = stackalloc byte[_buffLen + nMsgLen];
-                    //HUtil32.MemoryCopy(receiveBuffer.Span, tempBuff, 0, buffLen);
-                    //HUtil32.MemoryCopy(packetData, tempBuff, buffLen, nMsgLen);
-                    //receiveBuffer = tempBuff.ToArray();
-                    //TODO 效率慢，直接Copy数组
-                    for (int i = 0; i < _receiveBuffer.Length; i++)
-                    {
-                        tempBuff[i] = _receiveBuffer.Span[i];
-                    }
-                    for (int i = 0; i < packetData.Length; i++)
-                    {
-                        tempBuff[i + _buffLen] = packetData[i];
-                    }
-                    _receiveBuffer = tempBuff.ToArray();
+                    var tempBuff = new byte[_buffLen + nMsgLen];
+                    Array.Copy(_receiveBuffer, 0, tempBuff, 0, _receiveBuffer.Length);
+                    Array.Copy(packetData, 0, tempBuff, _buffLen, packetData.Length);
+                    _receiveBuffer = tempBuff;
                 }
                 else
                 {
-                    _receiveBuffer = packetData.ToArray();
+                    _receiveBuffer = packetData;
                 }
                 var nLen = _buffLen + nMsgLen;
-                Memory<byte> dataBuff = _receiveBuffer;
+                Span<byte> dataBuff = _receiveBuffer.AsSpan();
                 while (nLen >= PacketHeader.PacketSize)
                 {
-                    Span<byte> packetHead = dataBuff[..20].Span;
+                    Span<byte> packetHead = dataBuff[..20];
                     var packetCode = BitConverter.ToUInt32(packetHead[..4]);
-                    if (packetCode == 0 || packetCode != Grobal2.RUNGATECODE)
+                    if (packetCode != Grobal2.RUNGATECODE)
                     {
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
@@ -250,17 +240,16 @@ namespace GameGate.Services
                             {
                                 SessionId = sessionId,
                                 BufferLen = packLength,
-                                Buffer = dataBuff
                             };
-                            //todo Memory的切片速度比Span切片速度要慢，后续看看有没有什么办法优化
+                            //TODO Memory的切片速度比Span切片速度要慢，后续看看有没有什么办法优化
                             if (packLength > 0)
                             {
-                                sessionPacket.Buffer = dataBuff.Slice(20, packLength);
+                                sessionPacket.Buffer = dataBuff.Slice(20, packLength).ToArray();
                             }
                             else
                             {
                                 var packetSize = dataBuff.Length - HeaderMessageSize;
-                                sessionPacket.Buffer = dataBuff.Slice(20, packetSize);
+                                sessionPacket.Buffer = dataBuff.Slice(20, packetSize).ToArray();
                             }
                             SessionManager.Enqueue(sessionPacket);
                             break;
@@ -282,7 +271,7 @@ namespace GameGate.Services
                 }
                 if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    _receiveBuffer = dataBuff[..nLen];
+                    _receiveBuffer = dataBuff[..nLen].ToArray();
                     _buffLen = nLen;
                 }
                 else
