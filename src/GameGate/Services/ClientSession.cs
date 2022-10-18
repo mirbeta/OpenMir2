@@ -914,7 +914,6 @@ namespace GameGate
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
             }
 
             //todo 直接读取12个字节，知道消息ID即可

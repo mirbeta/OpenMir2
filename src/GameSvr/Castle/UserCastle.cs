@@ -529,20 +529,28 @@ namespace GameSvr.Castle
         public void GetCastle(GuildInfo Guild)
         {
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
+            var OldGuild = MasterGuild;
+            MasterGuild = Guild;
             OwnGuild = Guild.sGuildName;
             ChangeDate = DateTime.Now;
             SaveConfigFile();
+            if (OldGuild != null)
+            {
+                OldGuild.RefMemberName();
+            }
             if (MasterGuild != null)
             {
                 MasterGuild.RefMemberName();//刷新旧的行会信息
             }
-            Guild.RefMemberName();
             var castleMessage = string.Format(sGetCastleMsg, sName, OwnGuild);
             M2Share.WorldEngine.SendBroadCastMsgExt(castleMessage, MsgType.System);
             M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, castleMessage);
             _logger.Info(castleMessage);
         }
 
+        /// <summary>
+        /// 开始攻城战役
+        /// </summary>
         public void StartWallconquestWar()
         {
             PlayObject PlayObject;
@@ -591,7 +599,11 @@ namespace GameSvr.Castle
             return MasterGuild != null && MasterGuild.IsAllyGuild(guild);
         }
 
-        // 检查是否为守城方行会
+        /// <summary>
+        /// 是否为守城方行会
+        /// </summary>
+        /// <param name="guild"></param>
+        /// <returns></returns>
         public bool IsDefenseGuild(GuildInfo guild)
         {
             if (!UnderWar) return false;// 如果未开始攻城，则无效
@@ -648,7 +660,6 @@ namespace GameSvr.Castle
 
         public string GetAttackWarList()
         {
-            AttackerInfo AttackerInfo;
             var result = string.Empty;
             short wYear = 0;
             short wMonth = 0;
@@ -656,7 +667,7 @@ namespace GameSvr.Castle
             var n10 = 0;
             for (var i = 0; i < AttackWarList.Count; i++)
             {
-                AttackerInfo = AttackWarList[i];
+                var AttackerInfo = AttackWarList[i];
                 var Year = AttackerInfo.AttackDate.Year;
                 var Month = AttackerInfo.AttackDate.Month;
                 var Day = AttackerInfo.AttackDate.Day;
