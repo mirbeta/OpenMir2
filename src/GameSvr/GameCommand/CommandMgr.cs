@@ -33,21 +33,21 @@ namespace GameSvr.GameCommand
         public void RegisterCommand()
         {
             CommandConf.LoadConfig();
-            Dictionary<string, string> customCommandMap = RegisterCustomCommand();
+            Dictionary<string, GameCmd> customCommandMap = RegisterCustomCommand();
             RegisterCommandGroups(customCommandMap);
         }
 
         /// <summary>
         /// 注册自定义命令
         /// </summary>
-        private Dictionary<string, string> RegisterCustomCommand()
+        private Dictionary<string, GameCmd> RegisterCustomCommand()
         {
             var customCommandList = new List<GameCmd>();
             foreach (var command in Commands.GetType().GetFields())
             {
                 customCommandList.Add((GameCmd)command.GetValue(Commands));
             }
-            var customCommandMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
             if (customCommandList.Count <= 0)
             {
                 return customCommandMap;
@@ -77,7 +77,7 @@ namespace GameSvr.GameCommand
                     M2Share.Log.Error($"重复定义游戏命令[{commandInfo.Name}]");
                     continue;
                 }
-                customCommandMap.Add(commandInfo.Name, customCmd.CmdName);
+                customCommandMap.Add(commandInfo.Name, customCmd);
             }
             customCommandList.Clear();
             return customCommandMap;
@@ -86,13 +86,16 @@ namespace GameSvr.GameCommand
         /// <summary>
         /// 注册游戏命令
         /// </summary>
-        private void RegisterCommandGroups(IReadOnlyDictionary<string, string> customCommands)
+        private void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
         {
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(Command))).ToList();//只有继承Commond，才能添加到命令对象中
+            if (commands.Count <= 0)
             {
-                if (!type.IsSubclassOf(typeof(Command))) continue;//只有继承BaseCommond，才能添加到命令对象中
-
-                 var attributes = (CommandAttribute[])type.GetCustomAttributes(typeof(CommandAttribute), true);
+                return;
+            }
+            foreach (var type in commands)
+            {
+                var attributes = (CommandAttribute[])type.GetCustomAttributes(typeof(CommandAttribute), true);
                 if (attributes.Length == 0) continue;
 
                 var groupAttribute = attributes[0];
@@ -101,33 +104,36 @@ namespace GameSvr.GameCommand
                     M2Share.Log.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
 
-                if (customCommands.TryGetValue(groupAttribute.Name, out string cmdName))
+                if (customCommands.TryGetValue(groupAttribute.Name, out var customCommand))
                 {
                     groupAttribute.Command = groupAttribute.Command;
-                    groupAttribute.Name = cmdName;
+                    groupAttribute.Name = customCommand.CmdName;
+                    groupAttribute.nPermissionMax = (byte)customCommand.PerMissionMax;
+                    groupAttribute.nPermissionMin = (byte)customCommand.PerMissionMin;
                 }
 
-                var commandGroup = (Command)Activator.CreateInstance(type);
-                if (commandGroup == null)
+                var gameCommand = (Command)Activator.CreateInstance(type);
+                if (gameCommand == null)
                 {
                     return;
                 }
                 MethodInfo methodInfo = null;
-                foreach (var method in commandGroup.GetType().GetMethods())
+                foreach (var method in gameCommand.GetType().GetMethods())
                 {
                     var methodAttributes = method.GetCustomAttribute(typeof(ExecuteCommand), true);
-                    if (methodAttributes != null)
+                    if (methodAttributes == null)
                     {
-                        methodInfo = method;
-                        break;
+                        continue;
                     }
+                    methodInfo = method;
+                    break;
                 }
                 if (methodInfo == null)
                 {
                     return;
                 }
-                commandGroup.Register(groupAttribute, methodInfo);
-                CommandMaps.Add(groupAttribute.Name, commandGroup);
+                gameCommand.Register(groupAttribute, methodInfo);
+                CommandMaps.Add(groupAttribute.Name, gameCommand);
             }
         }
 
