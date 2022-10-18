@@ -800,13 +800,13 @@ namespace GameSvr.World
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
-                                                    playObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), MsgColor.Red, MsgType.Notice);
+                                                    playObject.SysMsg(lineNoticeMsg.AsSpan()[1..].ToString(), MsgColor.Red, MsgType.Notice);
                                                     break;
                                                 case 'G':
-                                                    playObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), MsgColor.Green, MsgType.Notice);
+                                                    playObject.SysMsg(lineNoticeMsg.AsSpan()[1..].ToString(), MsgColor.Green, MsgType.Notice);
                                                     break;
                                                 case 'B':
-                                                    playObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), MsgColor.Blue, MsgType.Notice);
+                                                    playObject.SysMsg(lineNoticeMsg.AsSpan()[1..].ToString(), MsgColor.Blue, MsgType.Notice);
                                                     break;
                                                 default:
                                                     playObject.SysMsg(lineNoticeMsg, (MsgColor)M2Share.Config.LineNoticeColor, MsgType.Notice);
