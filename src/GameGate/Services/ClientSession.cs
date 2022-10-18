@@ -885,6 +885,7 @@ namespace GameGate
         {
             try
             {
+                //TODO 改为同步发送后在大量数据包下明显感觉到延时，还是需要修改为异步发送
                 SendBuffer[0] = (byte)'#';
                 var packetBuff = clientPacket.Buffer;
                 if (clientPacket.BufferLen > 0) //游戏数据封包 
