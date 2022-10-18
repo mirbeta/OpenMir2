@@ -114,7 +114,7 @@ namespace GameSvr.Guild
             m_nFlourishing = 0;
             m_nChiefItemCount = 0;
             m_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
-            var sFileName = M2Share.Config.GuildDir + sName + ".ini";
+            var sFileName = Path.Combine(M2Share.Config.GuildDir, string.Concat(sName + ".ini"));
             _guildConf = new GuildConf(sName, sFileName);
         }
 
@@ -373,12 +373,12 @@ namespace GameSvr.Guild
         {
             if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(M2Share.Config.GuildDir + sGuildName + ".txt");
+                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, string.Concat(sGuildName, ".txt")));
                 SaveGuildConfig();
             }
             else
             {
-                SaveGuildFile(M2Share.Config.GuildDir + sGuildName + '.' + M2Share.ServerIndex);
+                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, sGuildName, ".", M2Share.ServerIndex.ToString()));
             }
         }
 
