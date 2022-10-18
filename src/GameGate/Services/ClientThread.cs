@@ -88,7 +88,7 @@ namespace GameGate.Services
 
         public bool IsConnected => ClientSocket.IsConnected;
 
-        public string GetEndPoint => $"{ClientSocket.Host}:{ClientSocket.Port}";
+        public string EndPoint => $"{ClientSocket.Host}:{ClientSocket.Port}";
 
         public void Start()
         {
@@ -450,7 +450,7 @@ namespace GameGate.Services
             {
                 ReConnected();
                 CheckServerFailCount++;
-                LogQueue.EnqueueDebugging($"重新与服务器[{GetEndPoint}]建立链接.失败次数:[{CheckServerFailCount}]");
+                LogQueue.EnqueueDebugging($"重新与服务器[{EndPoint}]建立链接.失败次数:[{CheckServerFailCount}]");
                 return;
             }
             CheckServerTimeOut();
@@ -463,7 +463,7 @@ namespace GameGate.Services
                 CheckServerFail = true;
                 Stop();
                 CheckServerFailCount++;
-                LogQueue.EnqueueDebugging($"服务器[{GetEndPoint}]长时间没有回应,断开链接.失败次数:[{CheckServerFailCount}]");
+                LogQueue.EnqueueDebugging($"服务器[{EndPoint}]长时间没有回应,断开链接.失败次数:[{CheckServerFailCount}]");
             }
         }
         
