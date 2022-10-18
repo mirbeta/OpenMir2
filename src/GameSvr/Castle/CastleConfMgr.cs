@@ -233,6 +233,7 @@ namespace GameSvr.Castle
                     WriteInteger("Defense", $"Guard_{i + 1}_HP", 0);
                 }
             }
+            Save();
         }
     }
 }
