@@ -341,7 +341,7 @@ namespace GameSvr.GateWay
                     if (HUtil32.TagCount(sMsg, '!') > 0)
                     {
                         HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
-                        var packetMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
+                        var packetMsg = sMsg.AsSpan()[1..].ToString();
                         if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag, ref HWID))
                         {
                             SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent);
