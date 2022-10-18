@@ -23,8 +23,9 @@ namespace GameGate.Services
         private static SessionManager SessionMgr => SessionManager.Instance;
         private static ServerManager ServerMgr => ServerManager.Instance;
 
-        public ServerService(string clientId, GameGateInfo gameGate)
+        public ServerService(GameGateInfo gameGate)
         {
+            var clientId = Guid.NewGuid().ToString("N");
             _waitCloseQueue = new ConcurrentQueue<int>();
             _serverSocket = new SocketServer(1000, 500);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
@@ -100,9 +101,9 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            var threadId = 0;
+            var threadId = -1;
             var clientThread = ServerMgr.GetClientThread(out threadId);
-            if (clientThread == null || threadId == 0)
+            if (clientThread == null || threadId < 0)
             {
                 LogQueue.EnqueueDebugging("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
                 return;

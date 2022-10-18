@@ -112,7 +112,7 @@ namespace GameGate
             if (currentTick - _processDelayTick > 200)
             {
                 _processDelayTick = currentTick;
-                var sessionList = SessionManager.GetAllSession();
+                IList<ClientSession> sessionList = SessionManager.GetAllSession();
                 for (var i = 0; i < sessionList.Count; i++)
                 {
                     var clientSession = sessionList[i];
@@ -149,7 +149,7 @@ namespace GameGate
         {
             if (currentTick - _checkServerConnectTick > 5000)
             {
-                var clientList = ClientManager.GetAllClient();
+                IList<ClientThread> clientList = ClientManager.GetAllClient();
                 _checkServerConnectTick = HUtil32.GetTickCount();
                 for (var i = 0; i < clientList.Count; i++)
                 {
@@ -164,7 +164,7 @@ namespace GameGate
             if (currentTick - _processClearSessionTick > 120000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
-                var clientList = ClientManager.GetAllClient();
+                IList<ClientThread> clientList = ClientManager.GetAllClient();
                 for (var i = 0; i < clientList.Count; i++)
                 {
                     if (clientList[i] == null)

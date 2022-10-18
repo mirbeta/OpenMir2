@@ -27,6 +27,7 @@ namespace GameGate.Services
 
         public void Initialization()
         {
+            var serverList = new ServerService[ConfigManager.GateConfig.GateCount];
             for (var i = 0; i < ConfigManager.GateConfig.GateCount; i++)
             {
                 var gameGate = ConfigManager.GameGateList[i];
@@ -37,8 +38,9 @@ namespace GameGate.Services
                     LogQueue.Enqueue($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
                     return;
                 }
-                ServerManager.AddServer(new ServerService(Guid.NewGuid().ToString("N"), gameGate));
+                serverList[i] = new ServerService(gameGate);
             }
+            ServerManager.AddServer(serverList);
         }
 
         /// <summary>

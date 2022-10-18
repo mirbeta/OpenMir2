@@ -149,7 +149,7 @@ namespace GameGate.Conf
         }
     }
 
-    public class GameGateInfo
+    public struct GameGateInfo
     {
         public string ServerAdress;
         public int ServerPort;
