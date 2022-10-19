@@ -3494,7 +3494,7 @@ namespace GameSvr.Actor
             {
                 if (StatusArr[i] > 0)
                 {
-                    nStatus = (int)((long)nStatus | (0x80000000 >> i));
+                    nStatus = (int)(nStatus | (0x80000000 >> i));
                 }
             }
             return nStatus | (CharStatusEx & 0x0000FFFF);
