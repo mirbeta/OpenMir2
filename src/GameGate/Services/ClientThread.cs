@@ -181,8 +181,8 @@ namespace GameGate.Services
                 if (_buffLen > 0)
                 {
                     var tempBuff = new byte[_buffLen + nMsgLen];
-                    Array.Copy(_receiveBuffer, 0, tempBuff, 0, _receiveBuffer.Length);
-                    Array.Copy(packetData, 0, tempBuff, _buffLen, packetData.Length);
+                    Buffer.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _receiveBuffer.Length);
+                    Buffer.BlockCopy(packetData, 0, tempBuff, _buffLen, packetData.Length);
                     _receiveBuffer = tempBuff;
                 }
                 else
@@ -241,7 +241,7 @@ namespace GameGate.Services
                                 SessionId = sessionId,
                                 BufferLen = packLength,
                             };
-                            //TODO Memory的切片速度比Span切片速度要慢，后续看看有没有什么办法优化
+                            //TODO ToArray会带来额外的GC开销，目前没有好的办法解决，后续在研究
                             if (packLength > 0)
                             {
                                 sessionPacket.Buffer = dataBuff.Slice(20, packLength).ToArray();

@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace SystemModule.Extensions
+namespace SystemModule
 {
-    public static class CopyExtensions
+    public static class MemoryCopy
     {
-        const int Threshold = 128;
+        private const int Threshold = 128;
 
         static readonly int PlatformWordSize = IntPtr.Size;
         static readonly int PlatformWordSizeBits = PlatformWordSize * 8;
 
-        static void CopyMemory(byte[] src, int srcOff, byte[] dst, int dstOff, int count)
+       public static void CopyMemory(byte[] src, int srcOff, byte[] dst, int dstOff, int count)
         {
             if (src == null)
                 throw new ArgumentNullException("src");
@@ -38,6 +38,36 @@ namespace SystemModule.Extensions
                 }
             }
         }
+       
+       public static void CopyMemory(Span<byte> src, int srcOff, Span<byte> dst, int dstOff, int count)
+       {
+           if (src == null)
+               throw new ArgumentNullException("src");
+
+           if (dst == null)
+               throw new ArgumentNullException("dst");
+
+           if (srcOff < 0)
+               throw new ArgumentOutOfRangeException("srcOffset");
+
+           if (dstOff < 0)
+               throw new ArgumentOutOfRangeException("dstOffset");
+
+           if (count < 0)
+               throw new ArgumentOutOfRangeException("count");
+
+           if (count == 0)
+               return;
+
+           unsafe
+           {
+               fixed (byte* srcPtr = &src[srcOff])
+               fixed (byte* dstPtr = &dst[dstOff])
+               {
+                   CopyMemory(srcPtr, dstPtr, count);
+               }
+           }
+       }
 
         static unsafe void CopyMemory(byte* srcPtr, byte* dstPtr, int count)
         {
@@ -101,7 +131,7 @@ namespace SystemModule.Extensions
             }
         }
 
-        public static void FastCopy(this byte[] src, int srcOffset, byte[] dst, int dstOffset, int count)
+        public static void FastCopy(byte[] src, int srcOffset, byte[] dst, int dstOffset, int count)
         {
             if (srcOffset < 0)
                 throw new ArgumentOutOfRangeException("srcOffset");
@@ -120,6 +150,25 @@ namespace SystemModule.Extensions
                 CopyMemory(src, srcOffset, dst, dstOffset, count);
             else
                 Buffer.BlockCopy(src, srcOffset, dst, dstOffset, count);
+        }
+        
+        public static void BlockCopy(Span<byte> source, int srcOff, Span<byte> destination, int dstOff, int count)
+        {
+            unsafe
+            {
+                fixed (byte* src = &source[srcOff])
+                {
+                    fixed (byte* dest = &destination[dstOff])
+                    {
+                        Buffer.MemoryCopy(
+                            source: src, //要复制的字节的地址
+                            destination: dest, //目标地址
+                            destinationSizeInBytes: count, //目标内存块中可用的字节数
+                            sourceBytesToCopy: count //要复制的字节数
+                        );
+                    }
+                }
+            }
         }
     }
 }
