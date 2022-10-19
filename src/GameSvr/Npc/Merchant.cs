@@ -47,7 +47,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 物品升级列表
         /// </summary>
-        private readonly IList<UpgradeInfo> UpgradeWeaponList;
+        private readonly IList<WeaponUpgradeInfo> UpgradeWeaponList;
         public bool m_boCanMove = false;
         public int m_dwMoveTime = 0;
         public int m_dwMoveTick;
@@ -84,7 +84,7 @@ namespace GameSvr.Npc
             RefillGoodsList = new List<Goods>();
             GoodsList = new List<IList<UserItem>>();
             ItemPriceList = new List<ItemPrice>();
-            UpgradeWeaponList = new List<UpgradeInfo>();
+            UpgradeWeaponList = new List<WeaponUpgradeInfo>();
             RefillGoodsTick = HUtil32.GetTickCount();
             ClearExpreUpgradeTick = HUtil32.GetTickCount();
             m_boBuy = false;
@@ -533,7 +533,7 @@ namespace GameSvr.Npc
         private void UpgradeWapon(PlayObject User)
         {
             var bo0D = false;
-            UpgradeInfo upgradeInfo;
+            WeaponUpgradeInfo upgradeInfo;
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
             {
                 upgradeInfo = UpgradeWeaponList[i];
@@ -559,7 +559,7 @@ namespace GameSvr.Npc
                     }
                 }
                 User.GoldChanged();
-                upgradeInfo = new UpgradeInfo
+                upgradeInfo = new WeaponUpgradeInfo
                 {
                     UserName = User.ChrName,
                     UserItem = User.UseItems[Grobal2.U_WEAPON]
@@ -597,7 +597,7 @@ namespace GameSvr.Npc
         /// <param name="User"></param>
         private void GetBackupgWeapon(PlayObject User)
         {
-            UpgradeInfo UpgradeInfo = null;
+            WeaponUpgradeInfo UpgradeInfo = null;
             var n18 = 0;
             if (!User.IsEnoughBag())
             {
@@ -606,7 +606,7 @@ namespace GameSvr.Npc
             }
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
             {
-                if (UpgradeWeaponList[i].UserName == User.ChrName)
+                if (string.Compare(UpgradeWeaponList[i].UserName, User.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     n18 = 1;
                     if (((HUtil32.GetTickCount() - UpgradeWeaponList[i].GetBackTick) > M2Share.Config.UPgradeWeaponGetBackTime) || User.Permission >= 4)
@@ -1082,7 +1082,7 @@ namespace GameSvr.Npc
         /// </summary>
         private void ClearExpreUpgradeListData()
         {
-            UpgradeInfo UpgradeInfo;
+            WeaponUpgradeInfo UpgradeInfo;
             for (var i = UpgradeWeaponList.Count - 1; i >= 0; i--)
             {
                 UpgradeInfo = UpgradeWeaponList[i];

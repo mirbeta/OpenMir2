@@ -2,7 +2,10 @@ using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Npc
 {
-    public class UpgradeInfo
+    /// <summary>
+    /// 沙巴克武器升级信息
+    /// </summary>
+    public class WeaponUpgradeInfo
     {
         public string UserName;
         public UserItem UserItem;
