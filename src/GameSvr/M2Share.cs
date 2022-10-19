@@ -482,6 +482,7 @@ namespace GameSvr
         public static bool boSafeZoneStall = false;
 
         public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
+        public static int CurrentMerchantIndex = 0;
 
         public static bool LoadLineNotice(string FileName)
         {

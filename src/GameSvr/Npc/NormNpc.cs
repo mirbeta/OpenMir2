@@ -32,6 +32,7 @@ namespace GameSvr.Npc
         public bool m_boIsQuest;
         protected string m_sPath = string.Empty;
         private IList<ScriptParams> BatchParamsList;
+        public int ProcessRefillIndex;
 
         public NormNpc() : base()
         {

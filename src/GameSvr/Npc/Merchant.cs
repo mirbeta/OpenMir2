@@ -23,8 +23,14 @@ namespace GameSvr.Npc
         /// 沙巴克城堡商人
         /// </summary>
         public bool CastleMerchant;
-        public int dwRefillGoodsTick;
-        public int dwClearExpreUpgradeTick;
+        /// <summary>
+        /// 刷新在售商品时间
+        /// </summary>
+        internal int RefillGoodsTick;
+        /// <summary>
+        /// 清理武器升级过期时间
+        /// </summary>
+        internal int ClearExpreUpgradeTick;
         /// <summary>
         /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
         /// </summary>
@@ -68,18 +74,54 @@ namespace GameSvr.Npc
         public bool m_boOffLineMsg = false;
         public bool m_boYBDeal = false;
 
+        public Merchant() : base()
+        {
+            RaceImg = Grobal2.RCC_MERCHANT;
+            Appr = 0;
+            PriceRate = 100;
+            CastleMerchant = false;
+            ItemTypeList = new List<int>();
+            RefillGoodsList = new List<Goods>();
+            GoodsList = new List<IList<UserItem>>();
+            ItemPriceList = new List<ItemPrice>();
+            UpgradeWeaponList = new List<UpgradeInfo>();
+            RefillGoodsTick = HUtil32.GetTickCount();
+            ClearExpreUpgradeTick = HUtil32.GetTickCount();
+            m_boBuy = false;
+            m_boSell = false;
+            m_boMakeDrug = false;
+            m_boPrices = false;
+            m_boStorage = false;
+            m_boGetback = false;
+            m_boUpgradenow = false;
+            m_boGetBackupgnow = false;
+            m_boRepair = false;
+            m_boS_repair = false;
+            m_boGetMarry = false;
+            m_boGetMaster = false;
+            m_boUseItemName = false;
+            m_dwMoveTick = HUtil32.GetTickCount();
+            MapCell = CellType.Merchant;
+        }
+        
         public override void Run()
         {
             try
             {
-                if ((HUtil32.GetTickCount() - dwRefillGoodsTick) > 30000)
+                var dwCurrentTick = HUtil32.GetTickCount();
+                var dwDelayTick = ProcessRefillIndex * 500;
+                if (dwCurrentTick < dwDelayTick)
                 {
-                    dwRefillGoodsTick = HUtil32.GetTickCount();
+                    dwDelayTick = 0;
+                }
+                if (dwCurrentTick - RefillGoodsTick > 5 * 60 * 1000 + dwDelayTick)
+                {
+                    RefillGoodsTick = dwCurrentTick + dwDelayTick;
                     RefillGoods();
                 }
-                if ((HUtil32.GetTickCount() - dwClearExpreUpgradeTick) > 10 * 60 * 1000)
+                if ((dwCurrentTick - ClearExpreUpgradeTick) > 10 * 60 * 1000)
                 {
-                    dwClearExpreUpgradeTick = HUtil32.GetTickCount();
+                    ClearExpreUpgradeTick = dwCurrentTick;
                     ClearExpreUpgradeListData();
                 }
                 if (M2Share.RandomNumber.Random(50) == 0)
@@ -130,13 +172,12 @@ namespace GameSvr.Npc
         
         private void AddItemPrice(ushort nIndex, double nPrice)
         {
-            ItemPrice ItemPrice;
-            ItemPrice = new ItemPrice
+            var itemPrice = new ItemPrice
             {
                 wIndex = nIndex,
                 nPrice = nPrice
             };
-            ItemPriceList.Add(ItemPrice);
+            ItemPriceList.Add(itemPrice);
             M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
         }
 
@@ -153,9 +194,6 @@ namespace GameSvr.Npc
                     {
                         n10 = HUtil32.Round(n10 * 1.1);
                     }
-                    else
-                    {
-                    }
                     return;
                 }
             }
@@ -167,7 +205,7 @@ namespace GameSvr.Npc
         }
 
         /// <summary>
-        /// 刷新在售商品列表
+        /// 刷新在售商品
         /// </summary>
         private void RefillGoods()
         {
@@ -185,22 +223,22 @@ namespace GameSvr.Npc
                         nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
                         if (nIndex > 0)
                         {
-                            IList<UserItem> RefillList = GetRefillList(nIndex);
+                            IList<UserItem> refillList = GetRefillList(nIndex);
                             var nRefillCount = 0;
-                            if (RefillList != null)
+                            if (refillList != null)
                             {
-                                nRefillCount = RefillList.Count;
+                                nRefillCount = refillList.Count;
                             }
                             if (Goods.Count > nRefillCount)
                             {
                                 CheckItemPrice(nIndex);
-                                RefillGoods_RefillItems(ref RefillList, Goods.ItemName, Goods.Count - nRefillCount);
+                                RefillGoodsItems(ref refillList, Goods.ItemName, Goods.Count - nRefillCount);
                                 M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
                                 M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
                             }
                             if (Goods.Count < nRefillCount)
                             {
-                                RefillGoods_DelReFillItem(ref RefillList, nRefillCount - Goods.Count);
+                                RefillDelReFillItem(ref refillList, nRefillCount - Goods.Count);
                                 M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
                                 M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
                             }
@@ -225,11 +263,11 @@ namespace GameSvr.Npc
                         }
                         if (!bo21)
                         {
-                            RefillGoods_DelReFillItem(ref RefillList20, RefillList20.Count - 1000);
+                            RefillDelReFillItem(ref RefillList20, RefillList20.Count - 1000);
                         }
                         else
                         {
-                            RefillGoods_DelReFillItem(ref RefillList20, RefillList20.Count - 5000);
+                            RefillDelReFillItem(ref RefillList20, RefillList20.Count - 5000);
                         }
                     }
                 }
@@ -248,19 +286,19 @@ namespace GameSvr.Npc
             }
             for (var i = 0; i < GoodsList.Count; i++)
             {
-                IList<UserItem> List = GoodsList[i];
-                if (List.Count > 0)
+                IList<UserItem> goods = GoodsList[i];
+                if (goods.Count > 0)
                 {
-                    if (List[0].Index == nIndex)
+                    if (goods[0].Index == nIndex)
                     {
-                        return List;
+                        return goods;
                     }
                 }
             }
             return null;
         }
 
-        private void RefillGoods_RefillItems(ref IList<UserItem> List, string sItemName, int nInt)
+        private void RefillGoodsItems(ref IList<UserItem> List, string sItemName, int nInt)
         {
             if (List == null)
             {
@@ -269,19 +307,19 @@ namespace GameSvr.Npc
             }
             for (var i = 0; i < nInt; i++)
             {
-                var UserItem = new UserItem();
-                if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
+                var goodItem = new UserItem();
+                if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref goodItem))
                 {
-                    List.Insert(0, UserItem);
+                    List.Insert(0, goodItem);
                 }
                 else
                 {
-                    Dispose(UserItem);
+                    Dispose(goodItem);
                 }
             }
         }
 
-        private void RefillGoods_DelReFillItem(ref IList<UserItem> List, int nInt)
+        private void RefillDelReFillItem(ref IList<UserItem> List, int nInt)
         {
             for (var i = List.Count - 1; i >= 0; i--)
             {
@@ -1037,36 +1075,6 @@ namespace GameSvr.Npc
             var sFile = m_sScript + '-' + MapName;
             M2Share.LocalDb.SaveGoodRecord(this, sFile);
             M2Share.LocalDb.SaveGoodPriceRecord(this, sFile);
-        }
-
-        public Merchant() : base()
-        {
-            RaceImg = Grobal2.RCC_MERCHANT;
-            Appr = 0;
-            PriceRate = 100;
-            CastleMerchant = false;
-            ItemTypeList = new List<int>();
-            RefillGoodsList = new List<Goods>();
-            GoodsList = new List<IList<UserItem>>();
-            ItemPriceList = new List<ItemPrice>();
-            UpgradeWeaponList = new List<UpgradeInfo>();
-            dwRefillGoodsTick = HUtil32.GetTickCount();
-            dwClearExpreUpgradeTick = HUtil32.GetTickCount();
-            m_boBuy = false;
-            m_boSell = false;
-            m_boMakeDrug = false;
-            m_boPrices = false;
-            m_boStorage = false;
-            m_boGetback = false;
-            m_boUpgradenow = false;
-            m_boGetBackupgnow = false;
-            m_boRepair = false;
-            m_boS_repair = false;
-            m_boGetMarry = false;
-            m_boGetMaster = false;
-            m_boUseItemName = false;
-            m_dwMoveTick = HUtil32.GetTickCount();
-            MapCell = CellType.Merchant;
         }
 
         /// <summary>

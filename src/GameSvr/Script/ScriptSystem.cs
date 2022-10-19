@@ -1395,19 +1395,15 @@ namespace GameSvr.Script
             var s3C = string.Empty;
             var s40 = string.Empty;
             var s44 = string.Empty;
-            var s48 = string.Empty;
-            var s4C = string.Empty;
-            var s50 = string.Empty;
             StringList LoadList;
             IList<TDefineInfo> DefineList;
             QuestActionInfo QuestActionInfo = null;
             var slabName = string.Empty;
-            TDefineInfo DefineInfo;
             var bo8D = false;
             TScript Script = null;
             SayingRecord SayingRecord = null;
             SayingProcedure SayingProcedure = null;
-            var n6C = 0;
+            var scriptType = 0;
             var n70 = 0;
             var sScritpFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
             if (File.Exists(sScritpFileName))
@@ -1420,14 +1416,13 @@ namespace GameSvr.Script
                 {
                     LoadCallScript(ref LoadList, ref success);
                 }
-
                 DefineList = new List<TDefineInfo>();
                 IList<string> ScriptNameList = new List<string>();
                 List<QuestActionInfo> GotoList = new List<QuestActionInfo>();
                 List<QuestActionInfo> DelayGotoList = new List<QuestActionInfo>();
                 List<QuestActionInfo> PlayDiceList = new List<QuestActionInfo>();
                 string s54 = LoadScriptDefineInfo(LoadList, DefineList);
-                DefineInfo = new TDefineInfo
+                var DefineInfo = new TDefineInfo
                 {
                     sName = "@HOME"
                 };
@@ -1501,7 +1496,7 @@ namespace GameSvr.Script
                     {
                         continue;
                     }
-                    if (n6C == 0 && boFlag)
+                    if (scriptType == 0 && boFlag)
                     {
                         if (sScript.StartsWith("%")) // 物品价格倍率
                         {
@@ -1624,7 +1619,7 @@ namespace GameSvr.Script
                             continue;
                         }
                     }
-                    if (n6C == 1 && Script != null && sScript.StartsWith("#"))
+                    if (scriptType == 1 && Script != null && sScript.StartsWith("#"))
                     {
                         s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { "=", " ", "\t" });
                         Script.boQuest = true;
@@ -1648,7 +1643,7 @@ namespace GameSvr.Script
                     }
                     if (sScript.StartsWith("["))
                     {
-                        n6C = 10;
+                        scriptType = 10;
                         if (Script == null)
                         {
                             Script = LoadMakeNewScript(NPC);
@@ -1656,7 +1651,9 @@ namespace GameSvr.Script
                         }
                         if (sScript.Equals("[goods]", StringComparison.OrdinalIgnoreCase))
                         {
-                            n6C = 20;
+                            scriptType = 20;
+                            NPC.ProcessRefillIndex = M2Share.CurrentMerchantIndex;
+                            M2Share.CurrentMerchantIndex++;
                             continue;
                         }
                         sScript = HUtil32.ArrestStringEx(sScript, "[", "]", ref slabName);
@@ -1686,7 +1683,7 @@ namespace GameSvr.Script
                     }
                     if (Script != null && SayingRecord != null)
                     {
-                        if (n6C >= 10 && n6C < 20 && sScript[0] == '#')
+                        if (scriptType >= 10 && scriptType < 20 && sScript[0] == '#')
                         {
                             if (sScript.Equals("#IF", StringComparison.OrdinalIgnoreCase))
                             {
@@ -1695,31 +1692,31 @@ namespace GameSvr.Script
                                     SayingProcedure = new SayingProcedure();
                                     SayingRecord.ProcedureList.Add(SayingProcedure);
                                 }
-                                n6C = 11;
+                                scriptType = 11;
                             }
                             if (sScript.Equals("#ACT", StringComparison.OrdinalIgnoreCase))
                             {
-                                n6C = 12;
+                                scriptType = 12;
                             }
                             if (sScript.Equals("#SAY", StringComparison.OrdinalIgnoreCase))
                             {
-                                n6C = 10;
+                                scriptType = 10;
                             }
                             if (sScript.Equals("#ELSEACT", StringComparison.OrdinalIgnoreCase))
                             {
-                                n6C = 13;
+                                scriptType = 13;
                             }
                             if (sScript.Equals("#ELSESAY", StringComparison.OrdinalIgnoreCase))
                             {
-                                n6C = 14;
+                                scriptType = 14;
                             }
                             continue;
                         }
-                        if (n6C == 10 && SayingProcedure != null)
+                        if (scriptType == 10 && SayingProcedure != null)
                         {
                             SayingProcedure.sSayMsg += sScript;
                         }
-                        if (n6C == 11)
+                        if (scriptType == 11)
                         {
                             QuestConditionInfo QuestConditionInfo = new QuestConditionInfo();
                             if (LoadScriptFileQuestCondition(sScript.Trim(), QuestConditionInfo))
@@ -1731,7 +1728,7 @@ namespace GameSvr.Script
                                 _logger.Error("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
-                        if (n6C == 12)
+                        if (scriptType == 12)
                         {
                             QuestActionInfo = new QuestActionInfo();
                             if (LoadScriptFileQuestAction(sScript.Trim(), QuestActionInfo))
@@ -1744,7 +1741,7 @@ namespace GameSvr.Script
                                 _logger.Error("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
-                        if (n6C == 13)
+                        if (scriptType == 13)
                         {
                             QuestActionInfo = new QuestActionInfo();
                             if (LoadScriptFileQuestAction(sScript.Trim(), QuestActionInfo))
@@ -1757,39 +1754,41 @@ namespace GameSvr.Script
                                 _logger.Error("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
-                        if (n6C == 14)
+                        if (scriptType == 14)
                         {
                             SayingProcedure.sElseSayMsg = SayingProcedure.sElseSayMsg + sScript;
                         }
                     }
-                    if (n6C == 20 && boFlag)
+                    if (scriptType == 20 && boFlag)
                     {
-                        sScript = HUtil32.GetValidStrCap(sScript, ref s48, TextSpitConst);
-                        sScript = HUtil32.GetValidStrCap(sScript, ref s4C, TextSpitConst);
-                        sScript = HUtil32.GetValidStrCap(sScript, ref s50, TextSpitConst);
-                        if (s48 != "" && s50 != "")
+                        var sItemName = string.Empty;
+                        var sItemCount = string.Empty;
+                        var sItemRefillTime = string.Empty;
+                        sScript = HUtil32.GetValidStrCap(sScript, ref sItemName, TextSpitConst);
+                        sScript = HUtil32.GetValidStrCap(sScript, ref sItemCount, TextSpitConst);
+                        sScript = HUtil32.GetValidStrCap(sScript, ref sItemRefillTime, TextSpitConst);
+                        if (!string.IsNullOrEmpty(sItemName)  && !string.IsNullOrEmpty(sItemRefillTime))
                         {
-                            if (s48[0] == '\"')
+                            if (sItemName[0] == '\"')
                             {
-                                HUtil32.ArrestStringEx(s48, "\"", "\"", ref s48);
+                                HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                             }
-                            if (M2Share.CanSellItem(s48))
+                            var goods = new Goods
                             {
-                                var Goods = new Goods
-                                {
-                                    ItemName = s48,
-                                    Count = HUtil32.StrToInt(s4C, 0),
-                                    RefillTime = HUtil32.StrToInt(s50, 0),
-                                    RefillTick = 0
-                                };
-                                ((Merchant)NPC).RefillGoodsList.Add(Goods);
+                                ItemName = sItemName,
+                                Count = HUtil32.StrToInt(sItemCount, 0),
+                                RefillTime = HUtil32.StrToInt(sItemRefillTime, 0),
+                                RefillTick = 0
+                            };
+                            if (M2Share.CanSellItem(sItemName))
+                            {
+                                ((Merchant)NPC).RefillGoodsList.Add(goods);
                             }
                         }
                     }
                 }
                 LoadList = null;
-                InitializeLabel(NPC, QuestActionInfo, ScriptNameList, PlayDiceList, GotoList,
-                                DelayGotoList);
+                InitializeLabel(NPC, QuestActionInfo, ScriptNameList, PlayDiceList, GotoList, DelayGotoList);
             }
             else
             {
