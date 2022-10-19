@@ -14,12 +14,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@fieldtech/simple-conventional-changelog": "^1.1.5",
-    "cz-conventional-changelog": "^3.3.0"
+    "@fieldtech/simple-conventional-changelog": "^1.1.5"
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "./node_modules/@fieldtech/simple-conventional-changelog"
     }
   }
 }
