@@ -239,8 +239,8 @@ namespace GameSvr
         public static string sFireSpiritsFail = "召唤烈火精灵失败";
         public static string sSpiritsGone = "召唤烈火结束!!!";
         public static string sMateDoTooweak = "冲撞力不够!!!";
-        public static string g_sTheWeaponBroke = "武器破碎!!!";
-        public static string sTheWeaponRefineSuccessfull = "升级成功!!!";
+        public static string TheWeaponBroke = "武器破碎!!!";
+        public static string TheWeaponRefineSuccessfull = "升级成功!!!";
         public static string sYouPoisoned = "中毒了!!!";
         public static string sPetRest = "下属：休息";
         public static string sPetAttack = "下属：攻击";

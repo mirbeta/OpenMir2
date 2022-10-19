@@ -337,20 +337,20 @@ namespace GameSvr.Conf
             LoadString = ReadString("String", "TheWeaponBroke", "");
             if (LoadString == "")
             {
-                WriteString("String", "TheWeaponBroke", M2Share.g_sTheWeaponBroke);
+                WriteString("String", "TheWeaponBroke", M2Share.TheWeaponBroke);
             }
             else
             {
-                M2Share.g_sTheWeaponBroke = LoadString;
+                M2Share.TheWeaponBroke = LoadString;
             }
             LoadString = ReadString("String", "TheWeaponRefineSuccessfull", "");
             if (LoadString == "")
             {
-                WriteString("String", "TheWeaponRefineSuccessfull", M2Share.sTheWeaponRefineSuccessfull);
+                WriteString("String", "TheWeaponRefineSuccessfull", M2Share.TheWeaponRefineSuccessfull);
             }
             else
             {
-                M2Share.sTheWeaponRefineSuccessfull = LoadString;
+                M2Share.TheWeaponRefineSuccessfull = LoadString;
             }
             LoadString = ReadString("String", "YouPoisoned", "");
             if (LoadString == "")

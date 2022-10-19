@@ -62,9 +62,9 @@ namespace GameSvr.Actor
                 {
                     AttackTarget = TargeBaseObject;
                 }
-                if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
+                if (UseItems[Grobal2.U_WEAPON] != null  && (UseItems[Grobal2.U_WEAPON].Index > 0) && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
                 {
-                    if ((AttackTarget != null) && (UseItems[Grobal2.U_WEAPON].Index > 0))
+                    if (AttackTarget != null)
                     {
                         CheckWeaponUpgrade();
                     }
@@ -499,7 +499,6 @@ namespace GameSvr.Actor
         /// <summary>
         /// 检查武器升级状态
         /// </summary>
-        /// <param name="userItem"></param>
         private void CheckWeaponUpgradeStatus(ref UserItem userItem)
         {
             if ((userItem.Desc[0] + userItem.Desc[1] + userItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
@@ -538,7 +537,7 @@ namespace GameSvr.Actor
                 StdItem StdItem;
                 if (UseItems[Grobal2.U_WEAPON].Index == 0)
                 {
-                    SysMsg(M2Share.g_sTheWeaponBroke, MsgColor.Red, MsgType.Hint);
+                    SysMsg(M2Share.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
                     PlayObject = this as PlayObject;
                     PlayObject.SendDelItems(useItems);
                     SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
@@ -554,7 +553,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
+                    SysMsg(M2Share.TheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
                     PlayObject = this as PlayObject;
                     PlayObject.SendUpdateItem(UseItems[Grobal2.U_WEAPON]);
                     StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
