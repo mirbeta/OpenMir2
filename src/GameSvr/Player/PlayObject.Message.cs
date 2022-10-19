@@ -1628,7 +1628,7 @@ namespace GameSvr.Player
                     SendUseItems();
                     break;
                 case Grobal2.RM_WEIGHTCHANGED:
-                    SendDefMessage(Grobal2.SM_WEIGHTCHANGED, WAbil.Weight, WAbil.WearWeight, WAbil.HandWeight, 0, "");
+                    SendDefMessage(Grobal2.SM_WEIGHTCHANGED, WAbil.Weight, WAbil.WearWeight, WAbil.HandWeight, (((WAbil.Weight + WAbil.WearWeight + WAbil.HandWeight) ^ 0x3A5F) ^ 0x1F35) ^ 0xaa21, "");
                     break;
                 case Grobal2.RM_FEATURECHANGED:
                     SendDefMessage(Grobal2.SM_FEATURECHANGED, ProcessMsg.BaseObject, HUtil32.LoWord(ProcessMsg.nParam1), HUtil32.HiWord(ProcessMsg.nParam1), ProcessMsg.wParam, "");
