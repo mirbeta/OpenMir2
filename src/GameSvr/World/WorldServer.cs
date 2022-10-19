@@ -1683,7 +1683,7 @@ namespace GameSvr.World
             }
             for (var i = 0; i < playObject.ItemList.Count; i++)
             {
-                if (i <= 46)
+                if (i <= 45)
                 {
                     BagItems[i] = playObject.ItemList[i];
                 }

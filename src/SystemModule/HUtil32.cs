@@ -241,27 +241,7 @@ namespace SystemModule
             }
             return sb.ToString();
         }
-
-
-        public static void MemoryCopy(Span<byte> source, int srcOff, Span<byte> destination, int dstOff, int count)
-        {
-            unsafe
-            {
-                fixed (byte* src = &source[srcOff])
-                {
-                    fixed (byte* dest = &destination[dstOff])
-                    {
-                        Buffer.MemoryCopy(
-                            source: src, //要复制的字节的地址
-                            destination: dest, //目标地址
-                            destinationSizeInBytes: count, //目标内存块中可用的字节数
-                            sourceBytesToCopy: count //要复制的字节数
-                        );
-                    }
-                }
-            }
-        }
-
+        
         /// <summary>
         /// 字符串转丹字节
         /// 思路：对于含有高字节不为0的，说明字符串包含汉字，用Encoding.Default.GetBytes

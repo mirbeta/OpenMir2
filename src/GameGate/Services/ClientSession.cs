@@ -3,13 +3,9 @@ using GameGate.Conf;
 using GameGate.Packet;
 using GameGate.Services;
 using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Packet;
+using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameGate
@@ -892,108 +888,120 @@ namespace GameGate
             {
                 //TODO 改为同步发送后在大量数据包下明显感觉到延时，还是需要修改为异步发送
 
-                if (clientPacket.BufferLen < 0) //这里都是发送小包 正常的游戏封包，走路 攻击等
+                switch (clientPacket.BufferLen)
                 {
-                    SendBuffer[0] = (byte)'#';
-                    var buffLen = -clientPacket.BufferLen;
-                    Array.Copy(clientPacket.Buffer, 0, SendBuffer, 1, buffLen);
-                    SendBuffer[buffLen] = (byte)'!';
-                    var sendData = SendBuffer.AsSpan()[..(0 - clientPacket.BufferLen + 2)];
-                    SendData(sendData);
+                    case < 0://小包 走路 攻击等
+                        {
+                            SendBuffer[0] = (byte)'#';
+                            var buffLen = -clientPacket.BufferLen;
+                            Buffer.BlockCopy(clientPacket.Buffer, 0, SendBuffer, 1, buffLen);
+                            SendBuffer[buffLen + 1] = (byte)'!';
+                            var sendData = SendBuffer.AsSpan()[..(buffLen + 2)];
+                            SendData(sendData);
+                            break;
+                        }
+                    case < 1024://普通正常游戏数据包，正常的游戏操作
+                        {
+                            SendBuffer[0] = (byte)'#';
+                            var packetBuff = clientPacket.Buffer;
+                            var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, SendBuffer, 1);//消息头
+                            if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
+                            {
+                                var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
+                                MemoryCopy.BlockCopy(tempBuffer, 0, SendBuffer, nLen + 1, tempBuffer.Length);
+                                nLen = tempBuffer.Length + nLen;
+                            }
+                            SendBuffer[nLen + 1] = (byte)'!';
+                            var sendData = SendBuffer.AsSpan()[..(nLen + 2)];
+                            SendData(sendData);
+                            break;
+                        }
+                    case > 1024://大型游戏数据包
+                        {
+                            Span<byte> packBuff = stackalloc byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
+                            packBuff[0] = (byte)'#';
+                            var packetBuff = clientPacket.Buffer;
+                            var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packBuff, 1);//消息头
+                            if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
+                            {
+                                var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
+                                MemoryCopy.BlockCopy(tempBuffer, 0, packBuff, nLen + 1, tempBuffer.Length);
+                                nLen = tempBuffer.Length + nLen;
+                            }
+                            packBuff[nLen + 1] = (byte)'!';
+                            var sendData = packBuff[..(nLen + 2)];
+                            SendData(sendData);
+                            break;
+                        }
                 }
-                else if (clientPacket.BufferLen < 1024) //普通正常游戏数据包
+
+                var messagePacket = clientPacket.Buffer.AsSpan();
+                var Recog = BitConverter.ToInt32(messagePacket[..4]);
+                var Ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
+                var Param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
+                var Tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
+                var Series = 0;
+                switch (Ident)
                 {
-                    SendBuffer[0] = (byte)'#';
-                    var packetBuff = clientPacket.Buffer;
-                    var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, SendBuffer, 1); //消息头
-                    if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
-                    {
-                        var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
-                        Array.Copy(tempBuffer, 0, SendBuffer, nLen + 1, tempBuffer.Length);
-                        nLen = tempBuffer.Length + nLen;
-                    }
-                    SendBuffer[nLen + 1] = (byte)'!';
-                    var sendData = SendBuffer.AsSpan()[..(nLen + 2)];
-                    SendData(sendData);
-                }
-                else if (clientPacket.BufferLen > 1024) //大型游戏数据包
-                {
-                    Span<byte> packBuff = stackalloc byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
-                    packBuff[0] = (byte)'#';
-                    var packetBuff = clientPacket.Buffer;
-                    var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packBuff, 1);//消息头
-                    if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
-                    {
-                        var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
-                        HUtil32.MemoryCopy(tempBuffer, 0, packBuff, nLen + 1, tempBuffer.Length);
-                        nLen = tempBuffer.Length + nLen;
-                    }
-                    packBuff[nLen + 1] = (byte)'!';
-                    var sendData = packBuff[..(nLen + 2)];
-                    SendData(sendData);
+                    case Grobal2.SM_RUSH:
+                        if (m_nSvrObject == Recog)
+                        {
+                            var dwCurrentTick = HUtil32.GetTickCount();
+                            _gameSpeed.MoveTick = dwCurrentTick;
+                            _gameSpeed.AttackTick = dwCurrentTick;
+                            _gameSpeed.SpellTick = dwCurrentTick;
+                            _gameSpeed.SitDownTick = dwCurrentTick;
+                            _gameSpeed.ButchTick = dwCurrentTick;
+                            _gameSpeed.DealTick = dwCurrentTick;
+                        }
+                        break;
+                    case Grobal2.SM_NEWMAP:
+                    case Grobal2.SM_CHANGEMAP:
+                    case Grobal2.SM_LOGON:
+                        if (m_nSvrObject == 0)
+                        {
+                            m_nSvrObject = Recog;
+                        }
+                        break;
+                    case Grobal2.SM_PLAYERCONFIG:
+
+                        break;
+                    case Grobal2.SM_CHARSTATUSCHANGED:
+                        Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
+                        if (m_nSvrObject == Recog)
+                        {
+                            _gameSpeed.DefItemSpeed = Series;
+                            _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, Series);
+                            m_nChrStutas = HUtil32.MakeLong(Param, Tag);
+                            //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
+                        }
+                        break;
+                    case Grobal2.SM_HWID:
+                        Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
+                        if (Config.IsProcClientHardwareID)
+                        {
+                            switch (Series)
+                            {
+                                case 1:
+                                    LogQueue.EnqueueDebugging("封机器码");
+                                    break;
+                                case 2:
+                                    LogQueue.EnqueueDebugging("清理机器码");
+                                    _hwidFilter.ClearDeny();
+                                    _hwidFilter.SaveDenyList();
+                                    break;
+                            }
+                        }
+                        break;
+                    case Grobal2.SM_RUNGATELOGOUT:
+                        SendKickMsg(2);
+                        break;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-
-            //todo 直接读取12个字节，知道消息ID即可
-            //var packet = Packets.ToPacket<ClientPacket>(message.Buffer.ToArray()); //直接优化，不用转，进一步省GC和内存
-            //switch (packet.Cmd)
-            //{
-            //    case Grobal2.SM_RUSH:
-            //        if (m_nSvrObject == packet.UID)
-            //        {
-            //            var dwCurrentTick = HUtil32.GetTickCount();
-            //            _gameSpeed.dwMoveTick = dwCurrentTick;
-            //            _gameSpeed.dwAttackTick = dwCurrentTick;
-            //            _gameSpeed.dwSpellTick = dwCurrentTick;
-            //            _gameSpeed.dwSitDownTick = dwCurrentTick;
-            //            _gameSpeed.dwButchTick = dwCurrentTick;
-            //            _gameSpeed.dwDealTick = dwCurrentTick;
-            //        }
-            //        break;
-            //    case Grobal2.SM_NEWMAP:
-            //    case Grobal2.SM_CHANGEMAP:
-            //    case Grobal2.SM_LOGON:
-            //        if (m_nSvrObject == 0)
-            //        {
-            //            m_nSvrObject = packet.UID;
-            //        }
-            //        break;
-            //    case Grobal2.SM_PLAYERCONFIG:
-
-            //        break;
-            //    case Grobal2.SM_CHARSTATUSCHANGED:
-            //        if (m_nSvrObject == packet.UID)
-            //        {
-            //            _gameSpeed.DefItemSpeed = packet.Direct;
-            //            _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, packet.Direct);
-            //            m_nChrStutas = HUtil32.MakeLong(packet.X, packet.Y);
-            //            //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
-            //        }
-            //        break;
-            //    case Grobal2.SM_HWID:
-            //        if (Config.IsProcClientHardwareID)
-            //        {
-            //            switch (packet.Series)
-            //            {
-            //                case 1:
-            //                    LogQueue.EnqueueDebugging("封机器码");
-            //                    break;
-            //                case 2:
-            //                    LogQueue.EnqueueDebugging("清理机器码");
-            //                    _hwidFilter.ClearDeny();
-            //                    _hwidFilter.SaveDenyList();
-            //                    break;
-            //            }
-            //        }
-            //        break;
-            //    case Grobal2.SM_RUNGATELOGOUT:
-            //        SendKickMsg(2);
-            //        break;
-            //}
         }
 
         private void SendKickMsg(int killType)
@@ -1204,7 +1212,7 @@ namespace GameGate
                     var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNO}/{szCode}/{MD5.MD5Print(hardWareDigest)}";
                     // #0.........!
                     var tempBuf = HUtil32.GetBytes(loginPacket);
-                    var pszLoginPacket = new byte[tempBuf.Length + 100];
+                    Span<byte> pszLoginPacket = stackalloc byte[tempBuf.Length + 100];
                     var encodelen = PacketEncoder.EncodeBuf(tempBuf, tempBuf.Length, pszLoginPacket, 2);
                     pszLoginPacket[0] = (byte)'#';
                     pszLoginPacket[1] = (byte)'0';
@@ -1238,7 +1246,7 @@ namespace GameGate
         /// <summary>
         /// 发送登录验证封包
         /// </summary>
-        private void SendLoginPacket(byte[] packet, int len = 0)
+        private void SendLoginPacket(Span<byte> packet, int len = 0)
         {
             byte[] tempBuff;
             if (len == 0)
@@ -1257,14 +1265,14 @@ namespace GameGate
             packetHeader.ServerIndex = _session.nUserListIndex;
             packetHeader.PackLength = tempBuff.Length - PacketHeader.PacketSize;//只需要发送数据封包大小即可
             var sendBuffer = packetHeader.GetBuffer();
-            Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+            MemoryCopy.FastCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
             {
-                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
+                MemoryCopy.CopyMemory(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
             }
             else
             {
-                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, len);
+                MemoryCopy.CopyMemory(packet, 0, tempBuff, sendBuffer.Length, len);
             }
             SendDelayMsg(0, 0, 0, tempBuff.Length, tempBuff, 1);
         }
