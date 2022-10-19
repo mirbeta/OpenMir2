@@ -4014,8 +4014,7 @@ namespace GameSvr.Actor
                 }
                 if (this is PlayObject)
                 {
-                    var playObject = this as PlayObject;
-                    playObject.SendAddItem(userItem);
+                    (this as PlayObject)?.SendAddItem(userItem);
                     result = true;
                 }
                 baseObject.ItemList.RemoveAt(0);
