@@ -84,6 +84,8 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(Dura);
             writer.Write(DuraMax);
             writer.Write(Desc, 0, Desc.Length);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
         }
 
         public class ClientStdItem

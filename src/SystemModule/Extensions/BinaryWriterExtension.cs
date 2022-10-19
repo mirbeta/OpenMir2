@@ -13,12 +13,18 @@ namespace SystemModule.Extensions
         {
             if (binaryWriter == null)
                 throw new ArgumentNullException(nameof(binaryWriter));
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
             if (defaultSize == 0)
                 throw new ArgumentNullException(nameof(defaultSize));
 
-            var buffer = HUtil32.StringToByte(value);
+            byte[] buffer;
+            if (string.IsNullOrEmpty(value) && defaultSize > 0)
+            {
+                buffer = new byte[defaultSize];
+            }
+            else
+            {
+                buffer = HUtil32.StringToByte(value);
+            }
 
             var reSize = buffer.Length + 1;
             var tempSize = defaultSize;
@@ -33,10 +39,17 @@ namespace SystemModule.Extensions
             }
             else
             {
-                binaryWriter.Write((byte)buffer.Length);
-                if (buffer.Length != reSize)
+                if (string.IsNullOrEmpty(value))
                 {
-                    Array.Resize(ref buffer, reSize);
+                    binaryWriter.Write((byte)0);
+                }
+                else
+                {
+                    binaryWriter.Write((byte)buffer.Length);
+                }
+                if (buffer.Length != defaultSize)
+                {
+                    Array.Resize(ref buffer, defaultSize);
                 }
             }
             binaryWriter.Write(buffer, 0, buffer.Length);

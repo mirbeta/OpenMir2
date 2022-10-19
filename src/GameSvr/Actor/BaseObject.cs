@@ -1056,8 +1056,8 @@ namespace GameSvr.Actor
                 {
                     for (var iii = -i; iii <= i; iii++)
                     {
-                        pX = nOrgX + iii;
-                        pY = nOrgY + ii;
+                        pX = (nOrgX + iii) - 1;
+                        pY = (nOrgY + ii) - 1;
                         if (Envir.GetItemEx(pX, pY, ref nItemCount) == 0)
                         {
                             if (Envir.Bo2C)

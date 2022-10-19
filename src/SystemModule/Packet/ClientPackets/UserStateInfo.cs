@@ -8,12 +8,14 @@ namespace SystemModule.Packet.ClientPackets
     {
         public int Feature;
         public string UserName;
-        public ushort NameColor;
+        public int NameColor;
         public string GuildName;
         public string GuildRankName;
         public ClientItem[] UseItems;
         public bool ExistLover;
         public string LoverName;
+
+        private static byte[] nullItemBuff = new ClientItem().GetBuffer();
         
         public UserStateInfo()
         {
@@ -29,15 +31,23 @@ namespace SystemModule.Packet.ClientPackets
         {
             writer.Write(Feature);
             writer.WriteAsciiString(UserName, 14);
+            writer.Write((byte)0);
             writer.Write(NameColor);
             writer.WriteAsciiString(GuildName, 20);
             writer.WriteAsciiString(GuildRankName, 14);
             for (var i = 0; i < UseItems.Length; i++)
             {
-                writer.Write(UseItems[i].GetBuffer());
+                if (UseItems[i] == null)
+                {
+                    writer.Write(nullItemBuff);
+                }
+                else
+                {
+                    writer.Write(UseItems[i].GetBuffer());
+                }
             }
             writer.Write(ExistLover);
-            writer.WriteAsciiString(GuildName, 14);
+            writer.WriteAsciiString(LoverName, 14);
         }
     }
 }
