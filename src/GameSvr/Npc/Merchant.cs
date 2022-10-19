@@ -68,6 +68,66 @@ namespace GameSvr.Npc
         public bool m_boOffLineMsg = false;
         public bool m_boYBDeal = false;
 
+        public override void Run()
+        {
+            try
+            {
+                if ((HUtil32.GetTickCount() - dwRefillGoodsTick) > 30000)
+                {
+                    dwRefillGoodsTick = HUtil32.GetTickCount();
+                    RefillGoods();
+                }
+                if ((HUtil32.GetTickCount() - dwClearExpreUpgradeTick) > 10 * 60 * 1000)
+                {
+                    dwClearExpreUpgradeTick = HUtil32.GetTickCount();
+                    ClearExpreUpgradeListData();
+                }
+                if (M2Share.RandomNumber.Random(50) == 0)
+                {
+                    TurnTo(M2Share.RandomNumber.RandomByte(8));
+                }
+                else
+                {
+                    if (M2Share.RandomNumber.Random(50) == 0)
+                    {
+                        SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                    }
+                }
+                if (CastleMerchant && Castle != null && Castle.UnderWar)
+                {
+                    if (!FixedHideMode)
+                    {
+                        SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        FixedHideMode = true;
+                    }
+                }
+                else
+                {
+                    if (FixedHideMode)
+                    {
+                        FixedHideMode = false;
+                        SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                    }
+                }
+                if (m_boCanMove && (HUtil32.GetTickCount() - m_dwMoveTick) > m_dwMoveTime * 1000)
+                {
+                    m_dwMoveTick = HUtil32.GetTickCount();
+                    SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                    MapRandomMove(MapName, 0);
+                }
+            }
+            catch (Exception e)
+            {
+                M2Share.Log.Error(e.Message);
+            }
+            base.Run();
+        }
+
+        protected override bool Operate(ProcessMessage ProcessMsg)
+        {
+            return base.Operate(ProcessMsg);
+        }
+        
         private void AddItemPrice(ushort nIndex, double nPrice)
         {
             ItemPrice ItemPrice;
@@ -99,10 +159,84 @@ namespace GameSvr.Npc
                     return;
                 }
             }
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(nIndex);
+            var stdItem = M2Share.WorldEngine.GetStdItem(nIndex);
             if (stdItem != null)
             {
                 AddItemPrice(nIndex, HUtil32.Round(stdItem.Price * 1.1));
+            }
+        }
+
+        /// <summary>
+        /// 刷新在售商品列表
+        /// </summary>
+        private void RefillGoods()
+        {
+            const string sExceptionMsg = "[Exception] TMerchant::RefillGoods {0}/{1}:{2} [{3}] Code:{4}";
+            try
+            {
+                ushort nIndex;
+                Goods Goods;
+                for (var i = 0; i < RefillGoodsList.Count; i++)
+                {
+                    Goods = RefillGoodsList[i];
+                    if ((HUtil32.GetTickCount() - Goods.RefillTick) > (Goods.RefillTime * 60 * 1000))
+                    {
+                        Goods.RefillTick = HUtil32.GetTickCount();
+                        nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
+                        if (nIndex > 0)
+                        {
+                            IList<UserItem> RefillList = GetRefillList(nIndex);
+                            var nRefillCount = 0;
+                            if (RefillList != null)
+                            {
+                                nRefillCount = RefillList.Count;
+                            }
+                            if (Goods.Count > nRefillCount)
+                            {
+                                CheckItemPrice(nIndex);
+                                RefillGoods_RefillItems(ref RefillList, Goods.ItemName, Goods.Count - nRefillCount);
+                                M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
+                                M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+                            }
+                            if (Goods.Count < nRefillCount)
+                            {
+                                RefillGoods_DelReFillItem(ref RefillList, nRefillCount - Goods.Count);
+                                M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
+                                M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+                            }
+                        }
+                    }
+                }
+                for (var i = 0; i < GoodsList.Count; i++)
+                {
+                    IList<UserItem> RefillList20 = GoodsList[i];
+                    if (RefillList20.Count > 1000)
+                    {
+                        var bo21 = false;
+                        for (var j = 0; j < RefillGoodsList.Count; j++)
+                        {
+                            Goods = RefillGoodsList[j];
+                            nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
+                            if (RefillList20[0].Index == nIndex)
+                            {
+                                bo21 = true;
+                                break;
+                            }
+                        }
+                        if (!bo21)
+                        {
+                            RefillGoods_DelReFillItem(ref RefillList20, RefillList20.Count - 1000);
+                        }
+                        else
+                        {
+                            RefillGoods_DelReFillItem(ref RefillList20, RefillList20.Count - 5000);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                M2Share.Log.Error(Format(sExceptionMsg, ChrName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
             }
         }
 
@@ -135,7 +269,7 @@ namespace GameSvr.Npc
             }
             for (var i = 0; i < nInt; i++)
             {
-                UserItem UserItem = new UserItem();
+                var UserItem = new UserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     List.Insert(0, UserItem);
@@ -160,78 +294,7 @@ namespace GameSvr.Npc
                 nInt -= 1;
             }
         }
-
-        private void RefillGoods()
-        {
-            Goods Goods;
-            const string sExceptionMsg = "[Exception] TMerchant::RefillGoods {0}/{1}:{2} [{3}] Code:{4}";
-            try
-            {
-                ushort nIndex;
-                for (var i = 0; i < RefillGoodsList.Count; i++)
-                {
-                    Goods = RefillGoodsList[i];
-                    if ((HUtil32.GetTickCount() - Goods.RefillTick) > (Goods.RefillTime * 60 * 1000))
-                    {
-                        Goods.RefillTick = HUtil32.GetTickCount();
-                        nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
-                        if (nIndex > 0)
-                        {
-                            IList<UserItem> RefillList = GetRefillList(nIndex);
-                            int nRefillCount = 0;
-                            if (RefillList != null)
-                            {
-                                nRefillCount = RefillList.Count;
-                            }
-                            if (Goods.Count > nRefillCount)
-                            {
-                                CheckItemPrice(nIndex);
-                                RefillGoods_RefillItems(ref RefillList, Goods.ItemName, Goods.Count - nRefillCount);
-                                M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
-                                M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
-                            }
-                            if (Goods.Count < nRefillCount)
-                            {
-                                RefillGoods_DelReFillItem(ref RefillList, nRefillCount - Goods.Count);
-                                M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
-                                M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
-                            }
-                        }
-                    }
-                }
-                for (var i = 0; i < GoodsList.Count; i++)
-                {
-                    IList<UserItem> RefillList20 = GoodsList[i];
-                    if (RefillList20.Count > 1000)
-                    {
-                        bool bo21 = false;
-                        for (var j = 0; j < RefillGoodsList.Count; j++)
-                        {
-                            Goods = RefillGoodsList[j];
-                            nIndex = M2Share.WorldEngine.GetStdItemIdx(Goods.ItemName);
-                            if (RefillList20[0].Index == nIndex)
-                            {
-                                bo21 = true;
-                                break;
-                            }
-                        }
-                        if (!bo21)
-                        {
-                            RefillGoods_DelReFillItem(ref RefillList20, RefillList20.Count - 1000);
-                        }
-                        else
-                        {
-                            RefillGoods_DelReFillItem(ref RefillList20, RefillList20.Count - 5000);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.Log.Error(Format(sExceptionMsg, ChrName, CurrX, CurrY, e.Message, ScriptConst.nCHECK));
-            }
-        }
-
+        
         private bool CheckItemType(int nStdMode)
         {
             var result = false;
@@ -251,7 +314,7 @@ namespace GameSvr.Npc
             double result = -1;
             for (var i = 0; i < ItemPriceList.Count; i++)
             {
-                ItemPrice ItemPrice = ItemPriceList[i];
+                var ItemPrice = ItemPriceList[i];
                 if (ItemPrice.wIndex == nIndex)
                 {
                     result = ItemPrice.nPrice;
@@ -260,7 +323,7 @@ namespace GameSvr.Npc
             }
             if (result < 0)
             {
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(nIndex);
+                var StdItem = M2Share.WorldEngine.GetStdItem(nIndex);
                 if (StdItem != null)
                 {
                     if (CheckItemType(StdItem.StdMode))
@@ -310,7 +373,7 @@ namespace GameSvr.Npc
                 {
                     if (M2Share.IsAccessory(UserItem.Index))
                     {
-                        StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                        var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null)
                         {
                             StdItem.GetUpgradeStdItem(UserItem, ref StdItem80);
@@ -497,7 +560,7 @@ namespace GameSvr.Npc
         private void GetBackupgWeapon(PlayObject User)
         {
             UpgradeInfo UpgradeInfo = null;
-            int n18 = 0;
+            var n18 = 0;
             if (!User.IsEnoughBag())
             {
                 GotoLable(User, ScriptConst.sGETBACKUPGFULL, false);
@@ -666,8 +729,6 @@ namespace GameSvr.Npc
         /// <summary>
         /// 获取物品售卖价格
         /// </summary>
-        /// <param name="PlayObject"></param>
-        /// <param name="nPrice"></param>
         /// <returns></returns>
         private int GetUserPrice(PlayObject PlayObject, double nPrice)
         {
@@ -690,109 +751,7 @@ namespace GameSvr.Npc
             }
             return result;
         }
-
-        private void UserSelect_SuperRepairItem(PlayObject User)
-        {
-            User.SendMsg(this, Grobal2.RM_SENDUSERSREPAIR, 0, ActorId, 0, 0, "");
-        }
-
-        private void UserSelect_BuyItem(PlayObject User, int nInt)
-        {
-            var sSendMsg = string.Empty;
-            var n10 = 0;
-            for (var i = 0; i < GoodsList.Count; i++)
-            {
-                var List14 = GoodsList[i];
-                var UserItem = List14[0];
-                var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                if (StdItem != null)
-                {
-                    var sName = CustomItem.GetItemName(UserItem);
-                    var nPrice = GetUserPrice(User, GetItemPrice(UserItem.Index));
-                    var nStock = List14.Count;
-                    short nSubMenu;
-                    if (StdItem.StdMode <= 4 || StdItem.StdMode == 42 || StdItem.StdMode == 31)
-                    {
-                        nSubMenu = 0;
-                    }
-                    else
-                    {
-                        nSubMenu = 1;
-                    }
-                    sSendMsg = sSendMsg + sName + '/' + nSubMenu + '/' + nPrice + '/' + nStock + '/';
-                    n10++;
-                }
-            }
-            User.SendMsg(this, Grobal2.RM_SENDGOODSLIST, 0, ActorId, n10, 0, sSendMsg);
-        }
-
-        private void UserSelect_SellItem(PlayObject User)
-        {
-            User.SendMsg(this, Grobal2.RM_SENDUSERSELL, 0, ActorId, 0, 0, "");
-        }
-
-        private void UserSelect_RepairItem(PlayObject User)
-        {
-            User.SendMsg(this, Grobal2.RM_SENDUSERREPAIR, 0, ActorId, 0, 0, "");
-        }
-
-        private void UserSelect_MakeDurg(PlayObject User)
-        {
-            var sSendMsg = string.Empty;
-            for (var i = 0; i < GoodsList.Count; i++)
-            {
-                IList<UserItem> List14 = GoodsList[i];
-                UserItem UserItem = List14[0];
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                if (StdItem != null)
-                {
-                    sSendMsg = sSendMsg + StdItem.Name + '/' + 0 + '/' + M2Share.Config.MakeDurgPrice + '/' + 1 + '/';
-                }
-            }
-            if (!string.IsNullOrEmpty(sSendMsg))
-            {
-                User.SendMsg(this, Grobal2.RM_USERMAKEDRUGITEMLIST, 0, ActorId, 0, 0, sSendMsg);
-            }
-        }
-
-        private void UserSelect_ItemPrices(PlayObject User)
-        {
-        }
-
-        private void UserSelect_Storage(PlayObject User)
-        {
-            User.SendMsg(this, Grobal2.RM_USERSTORAGEITEM, 0, ActorId, 0, 0, "");
-        }
-
-        private void UserSelect_GetBack(PlayObject User)
-        {
-            User.SendMsg(this, Grobal2.RM_USERGETBACKITEM, 0, ActorId, 0, 0, "");
-        }
-
-        /// <summary>
-        /// 打开出售物品窗口
-        /// </summary>
-        /// <param name="User"></param>
-        private void UserSelect_OpenDealOffForm(PlayObject User)
-        {
-            if (User.bo_YBDEAL)
-            {
-                if (!User.SellOffInTime(0))
-                {
-                    User.SendMsg(this, Grobal2.RM_SENDDEALOFFFORM, 0, ActorId, 0, 0, "");
-                    User.GetBackSellOffItems();
-                }
-                else
-                {
-                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
-                }
-            }
-            else
-            {
-                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
-            }
-        }
-
+        
         public override void UserSelect(PlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
@@ -808,9 +767,9 @@ namespace GameSvr.Npc
                 {
                     if (!PlayObject.Death && sData != "" && sData[0] == '@')
                     {
-                        string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
+                        var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                         PlayObject.ScriptLable = sData;
-                        bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
+                        var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (sMsg == "")
@@ -841,56 +800,56 @@ namespace GameSvr.Npc
                         {
                             if (m_boS_repair)
                             {
-                                UserSelect_SuperRepairItem(PlayObject);
+                                UserSelectSuperRepairItem(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boBuy)
                             {
-                                UserSelect_BuyItem(PlayObject, 0);
+                                UserSelectBuyItem(PlayObject, 0);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sSELL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boSell)
                             {
-                                UserSelect_SellItem(PlayObject);
+                                UserSelectSellItem(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sREPAIR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boRepair)
                             {
-                                UserSelect_RepairItem(PlayObject);
+                                UserSelectRepairItem(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boMakeDrug)
                             {
-                                UserSelect_MakeDurg(PlayObject);
+                                UserSelectMakeDurg(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sPRICES, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boPrices)
                             {
-                                UserSelect_ItemPrices(PlayObject);
+                                UserSelectItemPrices(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sSTORAGE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boStorage)
                             {
-                                UserSelect_Storage(PlayObject);
+                                UserSelectStorage(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sGETBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetback)
                             {
-                                UserSelect_GetBack(PlayObject);
+                                UserSelectGetBack(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase) == 0)
@@ -944,7 +903,7 @@ namespace GameSvr.Npc
                         {
                             if (m_boYBDeal)
                             {
-                                UserSelect_OpenDealOffForm(PlayObject); // 打开出售物品窗口
+                                UserSelectOpenDealOffForm(PlayObject); // 打开出售物品窗口
                             }
                         }
                     }
@@ -956,65 +915,113 @@ namespace GameSvr.Npc
                 M2Share.Log.Error(ex.StackTrace);
             }
         }
-
-        public override void Run()
+        
+        /// <summary>
+        /// 特殊修理物品
+        /// </summary>
+        private void UserSelectSuperRepairItem(PlayObject User)
         {
-            try
-            {
-                if ((HUtil32.GetTickCount() - dwRefillGoodsTick) > 30000)
-                {
-                    dwRefillGoodsTick = HUtil32.GetTickCount();
-                    RefillGoods();
-                }
-                if ((HUtil32.GetTickCount() - dwClearExpreUpgradeTick) > 10 * 60 * 1000)
-                {
-                    dwClearExpreUpgradeTick = HUtil32.GetTickCount();
-                    ClearExpreUpgradeListData();
-                }
-                if (M2Share.RandomNumber.Random(50) == 0)
-                {
-                    TurnTo(M2Share.RandomNumber.RandomByte(8));
-                }
-                else
-                {
-                    if (M2Share.RandomNumber.Random(50) == 0)
-                    {
-                        SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-                    }
-                }
-                if (CastleMerchant && Castle != null && Castle.UnderWar)
-                {
-                    if (!FixedHideMode)
-                    {
-                        SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
-                        FixedHideMode = true;
-                    }
-                }
-                else
-                {
-                    if (FixedHideMode)
-                    {
-                        FixedHideMode = false;
-                        SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-                    }
-                }
-                if (m_boCanMove && (HUtil32.GetTickCount() - m_dwMoveTick) > m_dwMoveTime * 1000)
-                {
-                    m_dwMoveTick = HUtil32.GetTickCount();
-                    SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
-                    MapRandomMove(MapName, 0);
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.Log.Error(e.Message);
-            }
-            base.Run();
+            User.SendMsg(this, Grobal2.RM_SENDUSERSREPAIR, 0, ActorId, 0, 0, "");
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
+        /// <summary>
+        /// 物品详情列表
+        /// </summary>
+        private void UserSelectBuyItem(PlayObject User, int nInt)
         {
-            return base.Operate(ProcessMsg);
+            var sSendMsg = string.Empty;
+            var n10 = 0;
+            for (var i = 0; i < GoodsList.Count; i++)
+            {
+                var goods = GoodsList[i];
+                var userItem = goods[0];
+                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                if (stdItem != null)
+                {
+                    var sName = CustomItem.GetItemName(userItem);
+                    var nPrice = GetUserPrice(User, GetItemPrice(userItem.Index));
+                    var nStock = goods.Count;
+                    short nSubMenu;
+                    if (stdItem.StdMode <= 4 || stdItem.StdMode == 42 || stdItem.StdMode == 31)
+                    {
+                        nSubMenu = 0;
+                    }
+                    else
+                    {
+                        nSubMenu = 1;
+                    }
+                    sSendMsg = sSendMsg + sName + '/' + nSubMenu + '/' + nPrice + '/' + nStock + '/';
+                    n10++;
+                }
+            }
+            User.SendMsg(this, Grobal2.RM_SENDGOODSLIST, 0, ActorId, n10, 0, sSendMsg);
+        }
+
+        private void UserSelectSellItem(PlayObject User)
+        {
+            User.SendMsg(this, Grobal2.RM_SENDUSERSELL, 0, ActorId, 0, 0, "");
+        }
+
+        private void UserSelectRepairItem(PlayObject User)
+        {
+            User.SendMsg(this, Grobal2.RM_SENDUSERREPAIR, 0, ActorId, 0, 0, "");
+        }
+
+        private void UserSelectMakeDurg(PlayObject User)
+        {
+            var sSendMsg = string.Empty;
+            for (var i = 0; i < GoodsList.Count; i++)
+            {
+                IList<UserItem> goods = GoodsList[i];
+                var StdItem = M2Share.WorldEngine.GetStdItem(goods[0].Index);
+                if (StdItem != null)
+                {
+                    sSendMsg = sSendMsg + StdItem.Name + '/' + 0 + '/' + M2Share.Config.MakeDurgPrice + '/' + 1 + '/';
+                }
+            }
+            if (!string.IsNullOrEmpty(sSendMsg))
+            {
+                User.SendMsg(this, Grobal2.RM_USERMAKEDRUGITEMLIST, 0, ActorId, 0, 0, sSendMsg);
+            }
+        }
+
+        private void UserSelectItemPrices(PlayObject User)
+        {
+            
+        }
+
+        private void UserSelectStorage(PlayObject User)
+        {
+            User.SendMsg(this, Grobal2.RM_USERSTORAGEITEM, 0, ActorId, 0, 0, "");
+        }
+
+        private void UserSelectGetBack(PlayObject User)
+        {
+            User.SendMsg(this, Grobal2.RM_USERGETBACKITEM, 0, ActorId, 0, 0, "");
+        }
+
+        /// <summary>
+        /// 打开出售物品窗口
+        /// </summary>
+        /// <param name="User"></param>
+        private void UserSelectOpenDealOffForm(PlayObject User)
+        {
+            if (User.bo_YBDEAL)
+            {
+                if (!User.SellOffInTime(0))
+                {
+                    User.SendMsg(this, Grobal2.RM_SENDDEALOFFFORM, 0, ActorId, 0, 0, "");
+                    User.GetBackSellOffItems();
+                }
+                else
+                {
+                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
+                }
+            }
+            else
+            {
+                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
+            }
         }
 
         public void LoadNPCData()
@@ -1131,7 +1138,7 @@ namespace GameSvr.Npc
             var itemPrice = GetItemPrice(UserItem.Index);
             if (itemPrice > 0)
             {
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null && StdItem.StdMode > 4 && StdItem.DuraMax > 0 && UserItem.DuraMax > 0)
                 {
                     if (StdItem.StdMode == 40)// 肉
@@ -1225,7 +1232,7 @@ namespace GameSvr.Npc
                 }
                 List20 = GoodsList[i];
                 UserItem = List20[0];
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null)
                 {
                     sUserItemName = CustomItem.GetItemName(UserItem);
@@ -1302,7 +1309,7 @@ namespace GameSvr.Npc
         {
             IList<UserItem> List20;
             var sSendMsg = string.Empty;
-            int nItemCount = 0;
+            var nItemCount = 0;
             for (var i = 0; i < GoodsList.Count; i++)
             {
                 List20 = GoodsList[i];
@@ -1310,8 +1317,8 @@ namespace GameSvr.Npc
                 {
                     continue;
                 }
-                UserItem UserItem = List20[0];
-                StdItem Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                var UserItem = List20[0];
+                var Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (Item != null && Item.Name == sItemName)
                 {
                     if (List20.Count - 1 < nInt)
@@ -1321,7 +1328,7 @@ namespace GameSvr.Npc
                     for (var j = List20.Count - 1; j >= 0; j--)
                     {
                         UserItem = List20[j];
-                        ClientItem clientItem = new ClientItem();
+                        var clientItem = new ClientItem();
                         Item.GetUpgradeStdItem(UserItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Dura = UserItem.Dura;
@@ -1393,7 +1400,7 @@ namespace GameSvr.Npc
                     }
                     PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_OK, 0, PlayObject.Gold, 0, 0, "");
                     AddItemToGoodsList(UserItem);
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
                         M2Share.EventSource.AddEventLog(10, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -1430,7 +1437,7 @@ namespace GameSvr.Npc
 
         private bool ClientMakeDrugItem_sub_4A28FC(PlayObject PlayObject, string sItemName)
         {
-            bool result = false;
+            var result = false;
             IList<MakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
             IList<DeleteItem> List28;
             if (List10 == null)
@@ -1470,7 +1477,7 @@ namespace GameSvr.Npc
                         {
                             break;
                         }
-                        UserItem UserItem = PlayObject.ItemList[j];
+                        var UserItem = PlayObject.ItemList[j];
                         if (M2Share.WorldEngine.GetStdItemName(UserItem.Index) == s20)
                         {
                             if (List28 == null)
@@ -1504,15 +1511,15 @@ namespace GameSvr.Npc
             for (var i = 0; i < GoodsList.Count; i++)
             {
                 IList<UserItem> List1C = GoodsList[i];
-                UserItem MakeItem = List1C[0];
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(MakeItem.Index);
+                var MakeItem = List1C[0];
+                var StdItem = M2Share.WorldEngine.GetStdItem(MakeItem.Index);
                 if (StdItem != null && StdItem.Name == sItemName)
                 {
                     if (PlayObject.Gold >= M2Share.Config.MakeDurgPrice)
                     {
                         if (ClientMakeDrugItem_sub_4A28FC(PlayObject, sItemName))
                         {
-                            UserItem UserItem = new UserItem();
+                            var UserItem = new UserItem();
                             M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem);
                             if (PlayObject.AddItemToBag(UserItem))
                             {
@@ -1626,7 +1633,7 @@ namespace GameSvr.Npc
             {
                 nPrice = nPrice * M2Share.Config.SuperRepairPriceRate;
             }
-            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+            var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (StdItem != null)
             {
                 if (boCanRepair && nPrice > 0 && UserItem.DuraMax > UserItem.Dura && StdItem.StdMode != 43)
