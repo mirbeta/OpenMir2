@@ -75,7 +75,7 @@ namespace SystemModule
         public const int UNITY = 32;
         public const int HALFX = 24;
         public const int HALFY = 16;
-        public const int MAXBAGITEM = 52;
+        public const int MAXBAGITEM = 46;
         public const int HOWMANYMAGICS = 20;
 
         //摆摊

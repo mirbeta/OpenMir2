@@ -1679,11 +1679,11 @@ namespace GameSvr.World
             var BagItems = humanRcd.Data.BagItems;
             if (BagItems == null)
             {
-                BagItems = new UserItem[46];
+                BagItems = new UserItem[Grobal2.MAXBAGITEM];
             }
             for (var i = 0; i < playObject.ItemList.Count; i++)
             {
-                if (i <= 45)
+                if (i < Grobal2.MAXBAGITEM)
                 {
                     BagItems[i] = playObject.ItemList[i];
                 }
