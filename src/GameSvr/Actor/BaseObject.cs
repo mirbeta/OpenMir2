@@ -2725,11 +2725,8 @@ namespace GameSvr.Actor
                     var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                                           ChrName + "\t" + stdItem.Name + "\t" +
-                                                           UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" +
-                                                           HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" +
-                                                           '0');
+                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
+                                                           UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 UseItems[Grobal2.U_WEAPON].Index = 0;
@@ -2739,7 +2736,7 @@ namespace GameSvr.Actor
             {
                 UseItems[Grobal2.U_WEAPON].Dura = nDura;
             }
-            if ((nDura / 1.03) != nDuraPoint)
+            if ((int)Math.Abs((nDura / 1.03)) != nDuraPoint)
             {
                 SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
@@ -2872,13 +2869,15 @@ namespace GameSvr.Actor
         private byte GetNamecolor()
         {
             var result = NameColor;
-            if (PvpLevel() == 1)
+            var pvpLevel = PvpLevel();
+            switch (pvpLevel)
             {
-                result = M2Share.Config.btPKLevel1NameColor;
-            }
-            if (PvpLevel() >= 2)
-            {
-                result = M2Share.Config.btPKLevel2NameColor;
+                case 1:
+                    result = M2Share.Config.btPKLevel1NameColor;
+                    break;
+                case >= 2:
+                    result = M2Share.Config.btPKLevel2NameColor;
+                    break;
             }
             return result;
         }
@@ -2887,8 +2886,7 @@ namespace GameSvr.Actor
         {
             if (!string.IsNullOrEmpty(sMsg))
             {
-                SendMsg(null, Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0,
-                    sMsg);
+                SendMsg(null, Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sMsg);
             }
         }
 
@@ -2914,6 +2912,7 @@ namespace GameSvr.Actor
                         if ((Math.Abs(CurrX - cX) <= 60) && (Math.Abs(CurrY - cY) <= 60))
                         {
                             result = true;
+                            break;
                         }
                     }
                 }

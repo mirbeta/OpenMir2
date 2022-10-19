@@ -573,7 +573,7 @@ namespace SystemModule
         /// <summary>
         /// 最高等级
         /// </summary>
-        public const ushort MaxLevel = ushort.MaxValue;
+        public const byte MaxLevel = byte.MaxValue;
         /// <summary>
         /// 最高经验等级
         /// </summary>
