@@ -1710,7 +1710,7 @@ namespace GameSvr.Player
                        sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + '/';
                    }
                }
-               m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, merchantId, 0, p, page-1);
+               m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, merchantId, 0, p, (page - 1) < 0 ? 0 : page - 1);
                SendSocket(m_DefMsg, sSendMsg);
            }
         }
