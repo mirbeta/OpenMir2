@@ -4,7 +4,6 @@ using GameSvr.Player;
 using GameSvr.Script;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Npc
@@ -184,13 +183,12 @@ namespace GameSvr.Npc
 
         private void CheckItemPrice(ushort nIndex)
         {
-            double n10;
             for (var i = 0; i < ItemPriceList.Count; i++)
             {
                 var itemPrice = ItemPriceList[i];
                 if (itemPrice.wIndex == nIndex)
                 {
-                    n10 = itemPrice.nPrice;
+                    var n10 = itemPrice.nPrice;
                     if (Math.Round(n10 * 1.1) > n10)
                     {
                         n10 = HUtil32.Round(n10 * 1.1);
@@ -533,7 +531,7 @@ namespace GameSvr.Npc
 
         private void UpgradeWapon(PlayObject User)
         {
-            var bo0D = false;
+            var upgradeSuccess = false;
             WeaponUpgradeInfo upgradeInfo;
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
             {
@@ -580,9 +578,9 @@ namespace GameSvr.Npc
                 upgradeInfo.GetBackTick = HUtil32.GetTickCount();
                 UpgradeWeaponList.Add(upgradeInfo);
                 SaveUpgradingList();
-                bo0D = true;
+                upgradeSuccess = true;
             }
-            if (bo0D)
+            if (upgradeSuccess)
             {
                 GotoLable(User, ScriptConst.sUPGRADEOK, false);
             }

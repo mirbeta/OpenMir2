@@ -1723,7 +1723,7 @@ namespace GameSvr.Npc
         private bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)
         {
             bool result = false;
-            if (sMsg == "")
+            if (string.IsNullOrEmpty(sMsg))
             {
                 return result;
             }
