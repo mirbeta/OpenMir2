@@ -5,12 +5,10 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
-using System.IO.Pipes;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -20,21 +18,33 @@ namespace GameSvr
         private static Logger _logger;
         private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private static NamePipeClient[] pipeClientMaps = new NamePipeClient[10];
 
         static void PipeStream()
         {
-            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost", "mir2_map", PipeDirection.In))
+            try
             {
-                await pipeClient.ConnectAsync();
-
-                using (StreamReader sr = new StreamReader(pipeClient))
+                _logger.Info("Connecting to MapSvr...");
+                for (int i = 0; i < pipeClientMaps.Length; i++)
                 {
-                    string tmp;
-                    while ((tmp = sr.ReadLine()) != null)
-                    {
-                        Console.WriteLine($"收到数据: {tmp}");
-                    }
+                    pipeClientMaps[i] = new NamePipeClient();
+                    pipeClientMaps[i].Connect();
                 }
+
+                for (int i = 0; i < 1000000; i++)
+                {
+                    var ram = RandomNumber.GetInstance().Random(pipeClientMaps.Length);
+                    pipeClientMaps[ram].SendPipeMessage(Encoding.UTF8.GetBytes("123"));
+                }
+
+                for (int i = 0; i < pipeClientMaps.Length; i++)
+                {
+                    pipeClientMaps[i].Close();
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("链接地图服务器初始化失败,请确认MapSvr服务端程序是否运行.");
             }
         }
 
@@ -42,12 +52,14 @@ namespace GameSvr
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-
+            
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
+
+            //PipeStream();
 
             PrintUsage();
 
