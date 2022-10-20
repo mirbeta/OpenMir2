@@ -14,7 +14,7 @@ namespace GameSvr.Npc
         public byte Mc;
         public byte Dura;
         public int n2C;
-        public DateTime dtTime;
+        public DateTime UpgradeTime;
         public int GetBackTick;
         public int n3C;
     }

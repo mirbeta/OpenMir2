@@ -576,7 +576,7 @@ namespace GameSvr.Npc
                 User.FeatureChanged();
                 User.SendMsg(User, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                 UpgradeWaponAddValue(User, User.ItemList, ref upgradeInfo.Dc, ref upgradeInfo.Sc, ref upgradeInfo.Mc, ref upgradeInfo.Dura);
-                upgradeInfo.dtTime = DateTime.Now;
+                upgradeInfo.UpgradeTime = DateTime.Now;
                 upgradeInfo.GetBackTick = HUtil32.GetTickCount();
                 UpgradeWeaponList.Add(upgradeInfo);
                 SaveUpgradingList();
@@ -599,7 +599,7 @@ namespace GameSvr.Npc
         private void GetBackupgWeapon(PlayObject User)
         {
             WeaponUpgradeInfo UpgradeInfo = null;
-            var n18 = 0;
+            var nFlag = 0;
             if (!User.IsEnoughBag())
             {
                 GotoLable(User, ScriptConst.sGETBACKUPGFULL, false);
@@ -609,13 +609,13 @@ namespace GameSvr.Npc
             {
                 if (string.Compare(UpgradeWeaponList[i].UserName, User.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    n18 = 1;
+                    nFlag = 1;
                     if (((HUtil32.GetTickCount() - UpgradeWeaponList[i].GetBackTick) > M2Share.Config.UPgradeWeaponGetBackTime) || User.Permission >= 4)
                     {
                         UpgradeInfo = UpgradeWeaponList[i];
                         UpgradeWeaponList.RemoveAt(i);
                         SaveUpgradingList();
-                        n18 = 2;
+                        nFlag = 2;
                         break;
                     }
                 }
@@ -678,7 +678,7 @@ namespace GameSvr.Npc
                 }
                 int n90;
                 int n10;
-                if (UpgradeInfo.Dc >= UpgradeInfo.Mc && (UpgradeInfo.Dc >= UpgradeInfo.Sc) || (n1C == 0))
+                if (UpgradeInfo.Dc >= UpgradeInfo.Mc && UpgradeInfo.Dc >= UpgradeInfo.Sc || (n1C == 0))
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.Dc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.Desc[3] - UpgradeInfo.UserItem.Desc[4] + User.BodyLuckLevel);
@@ -751,7 +751,7 @@ namespace GameSvr.Npc
                 User.SendAddItem(UserItem);
                 DisPose(UpgradeInfo);
             }
-            switch (n18)
+            switch (nFlag)
             {
                 case 0:
                     GotoLable(User, ScriptConst.sGETBACKUPGFAIL, false);
@@ -796,15 +796,11 @@ namespace GameSvr.Npc
             var sLabel = string.Empty;
             const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: {0}";
             base.UserSelect(PlayObject, sData);
-            if (this is not Merchant)// 如果类名不是 TMerchant 则不执行以下处理函数
-            {
-                return;
-            }
             try
             {
                 if (!CastleMerchant || !(Castle != null && Castle.UnderWar))
                 {
-                    if (!PlayObject.Death && sData != "" && sData[0] == '@')
+                    if (!PlayObject.Death && !string.IsNullOrEmpty(sData) && sData[0] == '@')
                     {
                         var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                         PlayObject.ScriptLable = sData;
@@ -1083,13 +1079,12 @@ namespace GameSvr.Npc
         /// </summary>
         private void ClearExpreUpgradeListData()
         {
-            WeaponUpgradeInfo UpgradeInfo;
             for (var i = UpgradeWeaponList.Count - 1; i >= 0; i--)
             {
-                UpgradeInfo = UpgradeWeaponList[i];
-                if ((int)Math.Round(DateTime.Now.ToOADate() - UpgradeInfo.dtTime.ToOADate()) >= M2Share.Config.ClearExpireUpgradeWeaponDays)
+                var upgradeInfo = UpgradeWeaponList[i];
+                if ((DateTime.Now - upgradeInfo.UpgradeTime).TotalDays >= M2Share.Config.ClearExpireUpgradeWeaponDays)
                 {
-                    Dispose(UpgradeInfo);
+                    Dispose(upgradeInfo);
                     UpgradeWeaponList.RemoveAt(i);
                 }
             }
