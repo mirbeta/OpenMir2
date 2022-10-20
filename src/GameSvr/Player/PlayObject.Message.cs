@@ -589,7 +589,7 @@ namespace GameSvr.Player
             {
                 m_dwReColorTick = HUtil32.GetTickCount();
                 m_btReColorIdx++;
-                if (m_btReColorIdx > M2Share.Config.ReNewNameColor.Length)
+                if (m_btReColorIdx >= M2Share.Config.ReNewNameColor.Length)
                 {
                     m_btReColorIdx = 0;
                 }
