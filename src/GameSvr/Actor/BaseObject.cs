@@ -3813,70 +3813,75 @@ namespace GameSvr.Actor
                         break;
                 }
             }
-            if (msgType == MsgType.Notice) // 如果发的是公告
+            if (msgType == MsgType.Notice) // 公告
             {
                 var str = string.Empty;
                 var fColor = string.Empty;
                 var bColor = string.Empty;
                 var nTime = string.Empty;
-                if (sMsg[0] == '[') // 顶部滚动公告
+                switch (sMsg[0])
                 {
-                    sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
-                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
-                    if (M2Share.Config.ShowPreFixMsg)
-                    {
-                        sMsg = M2Share.Config.LineNoticePreFix + sMsg;
-                    }
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
-                }
-                else if (sMsg[0] == '<') // 聊天框彩色公告
-                {
-                    sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
-                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
-                    if (M2Share.Config.ShowPreFixMsg)
-                    {
-                        sMsg = M2Share.Config.LineNoticePreFix + sMsg;
-                    }
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
-                }
-                else if (sMsg[0] == '{') // 屏幕居中公告
-                {
-                    sMsg = HUtil32.ArrestStringEx(sMsg, "{", "}", ref str);
-                    str = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
-                    str = HUtil32.GetValidStrCap(str, ref bColor, new[] { "," });
-                    str = HUtil32.GetValidStrCap(str, ref nTime, new[] { "," });
-                    if (M2Share.Config.ShowPreFixMsg)
-                    {
-                        sMsg = M2Share.Config.LineNoticePreFix + sMsg;
-                    }
-                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), HUtil32.StrToInt(nTime, 0), sMsg);
-                }
-                else
-                {
-                    switch (msgColor)
-                    {
-                        case MsgColor.Red: // 控制公告的颜色
+                    case '[':// 顶部滚动公告
+                        {
+                            sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
+                            bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
                             break;
-                        case MsgColor.Green:
+                        }
+                    case '<':// 聊天框彩色公告
+                        {
+                            sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
+                            bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
                             break;
-                        case MsgColor.Blue:
+                        }
+                    case '{': // 屏幕居中公告
+                        {
+                            sMsg = HUtil32.ArrestStringEx(sMsg, "{", "}", ref str);
+                            str = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
+                            str = HUtil32.GetValidStrCap(str, ref bColor, new[] { "," });
+                            str = HUtil32.GetValidStrCap(str, ref nTime, new[] { "," });
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                            SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), HUtil32.StrToInt(nTime, 0), sMsg);
                             break;
-                    }
+                        }
+                    default:
+                        switch (msgColor)
+                        {
+                            case MsgColor.Red: // 控制公告的颜色
+                                if (M2Share.Config.ShowPreFixMsg)
+                                {
+                                    sMsg = M2Share.Config.LineNoticePreFix + sMsg;
+                                }
+                                SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                                break;
+                            case MsgColor.Green:
+                                if (M2Share.Config.ShowPreFixMsg)
+                                {
+                                    sMsg = M2Share.Config.LineNoticePreFix + sMsg;
+                                }
+                                SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                                break;
+                            case MsgColor.Blue:
+                                if (M2Share.Config.ShowPreFixMsg)
+                                {
+                                    sMsg = M2Share.Config.LineNoticePreFix + sMsg;
+                                }
+                                SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                                break;
+                        }
+                        break;
                 }
             }
             else
@@ -3914,12 +3919,10 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
             if (Race == ActorRace.Play)
             {
                 return;
             }
-
             var sAttackName = string.Empty;
             if (attackBaseObject != null)
             {
@@ -3927,7 +3930,6 @@ namespace GameSvr.Actor
                 {
                     return;
                 }
-
                 if (attackBaseObject.Master != null)
                 {
                     sAttackName = attackBaseObject.Master.ChrName;
@@ -3937,7 +3939,6 @@ namespace GameSvr.Actor
                     sAttackName = attackBaseObject.ChrName;
                 }
             }
-
             for (var i = 0; i < SayMsgList.Count; i++)
             {
                 TMonSayMsg monSayMsg = SayMsgList[i];
@@ -3950,7 +3951,6 @@ namespace GameSvr.Actor
                         M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
                         break;
                     }
-
                     if (monSayMsg.Color == MsgColor.White)
                     {
                         ProcessSayMsg(sMsg);
@@ -3959,7 +3959,6 @@ namespace GameSvr.Actor
                     {
                         attackBaseObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
                     }
-
                     break;
                 }
             }
