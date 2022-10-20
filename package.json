@@ -18,7 +18,11 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/@fieldtech/simple-conventional-changelog"
+      "path": "./node_modules/@fieldtech/simple-conventional-changelog",
+      "maxHeaderWidth": 100,
+      "defaultType": "",
+      "defaultSubject":"",
+      "defaultIssues":""
     }
   }
 }
