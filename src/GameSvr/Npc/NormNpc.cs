@@ -233,18 +233,24 @@ namespace GameSvr.Npc
 
         public string GetLineVariableText(PlayObject PlayObject, string sMsg)
         {
-            var nC = 0;
-            var s10 = string.Empty;
+            var nCount = 0;
+            string sVariable = string.Empty;
             while (true)
             {
-                if (HUtil32.TagCount(sMsg, '>') < 1)
+                if (sMsg.IndexOf('>', StringComparison.Ordinal) < 1)
                 {
                     break;
                 }
-                HUtil32.ArrestStringEx(sMsg, "<", ">", ref s10);
-                GetVariableText(PlayObject, ref sMsg, s10);
-                nC++;
-                if (nC >= 101)
+                HUtil32.ArrestStringEx(sMsg, "<", ">", ref sVariable);
+                if (!string.IsNullOrEmpty(sVariable))
+                {
+                    if (sVariable[1] == '$')
+                    {
+                        GetVariableText(PlayObject, ref sMsg, sVariable);
+                    }
+                }
+                nCount++;
+                if (nCount >= 101)
                 {
                     break;
                 }
