@@ -4,6 +4,7 @@ using GameSvr.Player;
 using GameSvr.Script;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Npc
@@ -562,7 +563,7 @@ namespace GameSvr.Npc
                 upgradeInfo = new WeaponUpgradeInfo
                 {
                     UserName = User.ChrName,
-                    UserItem = User.UseItems[Grobal2.U_WEAPON]
+                    UserItem = new UserItem(User.UseItems[Grobal2.U_WEAPON])
                 };
                 var StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[Grobal2.U_WEAPON].Index);
                 if (StdItem.NeedIdentify == 1)

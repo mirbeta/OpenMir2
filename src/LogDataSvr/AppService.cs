@@ -56,7 +56,7 @@ namespace LogDataSvr
 
                         var providers = new List<EventPipeProvider>()
                         {
-                            new EventPipeProvider("GameLogProvider", System.Diagnostics.Tracing.EventLevel.Informational, (long)ClrTraceEventParser.Keywords.All)
+                            new EventPipeProvider("LogProvider", System.Diagnostics.Tracing.EventLevel.Informational, (long)ClrTraceEventParser.Keywords.All)
                         };
                         var session = client.StartEventPipeSession(providers, false);
 
@@ -64,7 +64,7 @@ namespace LogDataSvr
 
                         source.Dynamic.All += (e) =>
                         {
-                            if (e.ProviderName == "GameProvider")
+                            if (e.ProviderName == "UserLogProvider")
                             {
                                 Console.WriteLine($"{counter++} {e.ID} {e.EventName} {e.PayloadString(0)}");
                             }
