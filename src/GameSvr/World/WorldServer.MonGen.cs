@@ -167,8 +167,12 @@ namespace GameSvr.World
                 var d10 = (PlayObjectCount - M2Share.Config.UserFull) / HUtil32._MAX(1, M2Share.Config.ZenFastStep);
                 if (d10 > 0)
                 {
-                    if (d10 > 6) d10 = 6;
-                    result = dwTime - dwTime / 10 * d10;
+                    if (d10 > 6)
+                    {
+                        d10 = 6;
+                    }
+                    //result = dwTime - dwTime / 10 * d10;
+                    result = dwTime - HUtil32.Round((dwTime / 10) * d10);
                 }
                 else
                 {
@@ -227,7 +231,7 @@ namespace GameSvr.World
                         {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var genModCount = (int)Math.Ceiling(monGen.Count / (decimal)(M2Share.Config.MonGenRate * 10));
+                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (M2Share.Config.MonGenRate / 10)));//所需刷的怪总数
                             var map = M2Share.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
@@ -734,7 +738,6 @@ namespace GameSvr.World
                     {
                         n24 = 50;
                     }
-
                     n1C = 0;
                     while (true)
                     {
@@ -758,11 +761,9 @@ namespace GameSvr.World
                             outofrange = (BaseObject)cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert);
                             break;
                         }
-
                         n1C++;
                         if (n1C >= 31) break;
                     }
-
                     if (outofrange == null)
                     {
                         _logger.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
