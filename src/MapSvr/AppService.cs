@@ -18,11 +18,14 @@ namespace MapSvr
         private int? _exitCode;
         private CancellationTokenSource? _cancellationTokenSource;
         private PeriodicTimer _timer;
-
+        private readonly NamedPipeServerStream pipeServer;
+        
         public AppService(ILogger<AppService> logger, IHostApplicationLifetime lifetime)
         {
             _logger = logger;
             _appLifetime = lifetime;
+            pipeServer = new NamedPipeServerStream("map.pipe", PipeDirection.InOut, 5);
+            pipeServer.ReadMode = PipeTransmissionMode.Byte;
         }
 
         public async Task StartAsync(CancellationToken stoppingToken)
@@ -38,25 +41,7 @@ namespace MapSvr
                 {
                     try
                     {
-                        /// 第一个参数为管道的名称，第二个参数表示此处的管道用于发送数据
-                        using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("mir2_map", PipeDirection.Out))
-                        {
-                            // 等待连接，程序会阻塞在此处，直到有一个连接到达
-                            pipeServer.WaitForConnection();
-                            try
-                            {
-                                using (StreamWriter sw = new StreamWriter(pipeServer))
-                                {
-                                    sw.AutoFlush = true;
-                                    // 向连接的客户端发送消息
-                                    sw.WriteLine("hello world ");
-                                }
-                            }
-                            catch (IOException e)
-                            {
-                                Console.WriteLine("ERROR: {0}", e.Message);
-                            }
-                        }
+                        PipelinePool.CreatePipeLineAsync();
                         _exitCode = 0;
                     }
                     catch (TaskCanceledException)

@@ -23,7 +23,7 @@ namespace MapSvr
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
+            
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
@@ -33,7 +33,6 @@ namespace MapSvr
                 }
                 AnsiConsole.Reset();
             };
-            
 
             var config = new ConfigurationBuilder().Build();
 
