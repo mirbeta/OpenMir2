@@ -4211,7 +4211,7 @@ namespace GameSvr.Actor
                             }
                             break;
                         case AttackMode.HAM_DEAR:
-                            if (baseObject != (this as PlayObject).m_DearHuman)
+                            if (baseObject != ((PlayObject)this).m_DearHuman)
                             {
                                 result = true;
                             }
@@ -4220,22 +4220,22 @@ namespace GameSvr.Actor
                             if (baseObject.Race == ActorRace.Play)
                             {
                                 result = true;
-                                if ((this as PlayObject).m_boMaster)
+                                if (((PlayObject)this).m_boMaster)
                                 {
-                                    for (var i = 0; i < (this as PlayObject).m_MasterList.Count; i++)
+                                    for (var i = 0; i < ((PlayObject)this).m_MasterList.Count; i++)
                                     {
-                                        if ((this as PlayObject).m_MasterList[i] == baseObject)
+                                        if (((PlayObject)this).m_MasterList[i] == baseObject)
                                         {
                                             result = false;
                                             break;
                                         }
                                     }
                                 }
-                                if ((baseObject as PlayObject).m_boMaster)
+                                if (((PlayObject)baseObject).m_boMaster)
                                 {
-                                    for (var i = 0; i < (baseObject as PlayObject).m_MasterList.Count; i++)
+                                    for (var i = 0; i < ((PlayObject)baseObject).m_MasterList.Count; i++)
                                     {
-                                        if ((baseObject as PlayObject).m_MasterList[i] == this)
+                                        if (((PlayObject)baseObject).m_MasterList[i] == this)
                                         {
                                             result = false;
                                             break;
