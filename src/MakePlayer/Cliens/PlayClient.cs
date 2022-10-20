@@ -128,7 +128,7 @@ namespace MakePlayer.Cliens
                 return;
             }
             var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-            var nIdx = sData.IndexOf("*", StringComparison.Ordinal);
+            var nIdx = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
             if (nIdx > 0)
             {
                 var sData2 = sData.Substring(0, nIdx - 1);
@@ -660,7 +660,7 @@ namespace MakePlayer.Cliens
                         {
                             break;
                         }
-                        if (sockText.IndexOf("!", StringComparison.Ordinal) <= 0)
+                        if (sockText.IndexOf("!", StringComparison.OrdinalIgnoreCase) <= 0)
                         {
                             break;
                         }

@@ -187,7 +187,7 @@ namespace GameSvr.Npc
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if (string.Compare(DealOffInfo.sBuyChrName, PlayObject.ChrName, StringComparison.Ordinal) == 0 && DealOffInfo.Flag == 0)
+                                if (string.Compare(DealOffInfo.sBuyChrName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && DealOffInfo.Flag == 0)
                                 {
                                     for (var k = 0; k < 9; k++)
                                     {
@@ -300,7 +300,7 @@ namespace GameSvr.Npc
                 sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { " ", "\t" });
-                if (string.Compare(sHumName, PlayObject.ChrName, StringComparison.Ordinal) == 0)
+                if (string.Compare(sHumName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList[i] = PlayObject.ChrName + "\t" + DateTime.Today;
                     boFound = true;
@@ -2039,7 +2039,7 @@ namespace GameSvr.Npc
                     continue;
                 }
                 StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                if (!boMatchName || StdItem != null && StdItem.Name.CompareTo(sItemName) == 0)
+                if (!boMatchName || StdItem != null && String.Compare(StdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.SendDelItems(UserItem);
                     Dispose(UserItem);
@@ -2054,7 +2054,7 @@ namespace GameSvr.Npc
                     continue;
                 }
                 StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                if (!boMatchName || StdItem != null && StdItem.Name.CompareTo(sItemName) == 0)
+                if (!boMatchName || StdItem != null && String.Compare(StdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(UserItem);
                     PlayObject.StorageItemList.RemoveAt(i);
@@ -2068,7 +2068,7 @@ namespace GameSvr.Npc
                     continue;
                 }
                 StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                if (!boMatchName || StdItem != null && StdItem.Name.CompareTo(sItemName) == 0)
+                if (!boMatchName || StdItem != null && String.Compare(StdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     UserItem.Index = 0;
                 }
@@ -2119,7 +2119,7 @@ namespace GameSvr.Npc
                 }
             }
             // sREQUESTUNMARRY
-            if (QuestActionInfo.sParam1.CompareTo("REQUESTUNMASTER") == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "REQUESTUNMASTER", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (QuestActionInfo.sParam2 == "")
                 {
@@ -2150,7 +2150,7 @@ namespace GameSvr.Npc
                 else
                 {
                     // 强行出师
-                    if (QuestActionInfo.sParam2.CompareTo("FORCE") == 0)
+                    if (String.Compare(QuestActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         sMsg = string.Format(M2Share.g_sNPCSayForceUnMasterMsg, ChrName, PlayObject.ChrName, PlayObject.m_sMasterName);
                         M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
@@ -2186,7 +2186,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SETMAPMODE);
                 return;
             }
-            if (sMapMode.CompareTo("SAFE") == 0)
+            if (String.Compare(sMapMode, "SAFE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2197,7 +2197,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boSAFE = false;
                 }
             }
-            else if (sMapMode.CompareTo("DARK") == 0)
+            else if (String.Compare(sMapMode, "DARK", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2208,7 +2208,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boDarkness = false;
                 }
             }
-            else if (sMapMode.CompareTo("FIGHT") == 0)
+            else if (String.Compare(sMapMode, "FIGHT", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2219,7 +2219,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boFightZone = false;
                 }
             }
-            else if (sMapMode.CompareTo("FIGHT3") == 0)
+            else if (String.Compare(sMapMode, "FIGHT3", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2230,7 +2230,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boFight3Zone = false;
                 }
             }
-            else if (sMapMode.CompareTo("DAY") == 0)
+            else if (String.Compare(sMapMode, "DAY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2241,7 +2241,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boDayLight = false;
                 }
             }
-            else if (sMapMode.CompareTo("QUIZ") == 0)
+            else if (String.Compare(sMapMode, "QUIZ", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2252,7 +2252,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boQUIZ = false;
                 }
             }
-            else if (sMapMode.CompareTo("NORECONNECT") == 0)
+            else if (String.Compare(sMapMode, "NORECONNECT", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2264,7 +2264,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNORECONNECT = false;
                 }
             }
-            else if (sMapMode.CompareTo("MUSIC") == 0)
+            else if (String.Compare(sMapMode, "MUSIC", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2276,7 +2276,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boMUSIC = false;
                 }
             }
-            else if (sMapMode.CompareTo("EXPRATE") == 0)
+            else if (String.Compare(sMapMode, "EXPRATE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2288,7 +2288,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boEXPRATE = false;
                 }
             }
-            else if (sMapMode.CompareTo("PKWINLEVEL") == 0)
+            else if (String.Compare(sMapMode, "PKWINLEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2300,7 +2300,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boPKWINLEVEL = false;
                 }
             }
-            else if (sMapMode.CompareTo("PKWINEXP") == 0)
+            else if (String.Compare(sMapMode, "PKWINEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2312,7 +2312,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boPKWINEXP = false;
                 }
             }
-            else if (sMapMode.CompareTo("PKLOSTLEVEL") == 0)
+            else if (String.Compare(sMapMode, "PKLOSTLEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2324,7 +2324,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boPKLOSTLEVEL = false;
                 }
             }
-            else if (sMapMode.CompareTo("PKLOSTEXP") == 0)
+            else if (String.Compare(sMapMode, "PKLOSTEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2336,7 +2336,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boPKLOSTEXP = false;
                 }
             }
-            else if (sMapMode.CompareTo("DECHP") == 0)
+            else if (String.Compare(sMapMode, "DECHP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -2349,7 +2349,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boDECHP = false;
                 }
             }
-            else if (sMapMode.CompareTo("DECGAMEGOLD") == 0)
+            else if (String.Compare(sMapMode, "DECGAMEGOLD", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -2362,7 +2362,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boDECGAMEGOLD = false;
                 }
             }
-            else if (sMapMode.CompareTo("RUNHUMAN") == 0)
+            else if (String.Compare(sMapMode, "RUNHUMAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2373,7 +2373,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boRUNHUMAN = false;
                 }
             }
-            else if (sMapMode.CompareTo("RUNMON") == 0)
+            else if (String.Compare(sMapMode, "RUNMON", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2384,7 +2384,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boRUNMON = false;
                 }
             }
-            else if (sMapMode.CompareTo("NEEDHOLE") == 0)
+            else if (String.Compare(sMapMode, "NEEDHOLE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2395,7 +2395,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNEEDHOLE = false;
                 }
             }
-            else if (sMapMode.CompareTo("NORECALL") == 0)
+            else if (String.Compare(sMapMode, "NORECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2406,7 +2406,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNORECALL = false;
                 }
             }
-            else if (sMapMode.CompareTo("NOGUILDRECALL") == 0)
+            else if (String.Compare(sMapMode, "NOGUILDRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2417,7 +2417,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNOGUILDRECALL = false;
                 }
             }
-            else if (sMapMode.CompareTo("NODEARRECALL") == 0)
+            else if (String.Compare(sMapMode, "NODEARRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2428,7 +2428,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNODEARRECALL = false;
                 }
             }
-            else if (sMapMode.CompareTo("NOMASTERRECALL") == 0)
+            else if (String.Compare(sMapMode, "NOMASTERRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2439,7 +2439,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNOMASTERRECALL = false;
                 }
             }
-            else if (sMapMode.CompareTo("NORANDOMMOVE") == 0)
+            else if (String.Compare(sMapMode, "NORANDOMMOVE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2450,7 +2450,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNORANDOMMOVE = false;
                 }
             }
-            else if (sMapMode.CompareTo("NODRUG") == 0)
+            else if (String.Compare(sMapMode, "NODRUG", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2461,7 +2461,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNODRUG = false;
                 }
             }
-            else if (sMapMode.CompareTo("MINE") == 0)
+            else if (String.Compare(sMapMode, "MINE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2472,7 +2472,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boMINE = false;
                 }
             }
-            else if (sMapMode.CompareTo("MINE2") == 0)
+            else if (String.Compare(sMapMode, "MINE2", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2483,7 +2483,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boMINE2 = false;
                 }
             }
-            else if (sMapMode.CompareTo("NOTHROWITEM") == 0)
+            else if (String.Compare(sMapMode, "NOTHROWITEM", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2494,7 +2494,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNOTHROWITEM = false;
                 }
             }
-            else if (sMapMode.CompareTo("NODROPITEM") == 0)
+            else if (String.Compare(sMapMode, "NODROPITEM", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2505,7 +2505,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNODROPITEM = false;
                 }
             }
-            else if (sMapMode.CompareTo("NOPOSITIONMOVE") == 0)
+            else if (String.Compare(sMapMode, "NOPOSITIONMOVE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2516,7 +2516,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNOPOSITIONMOVE = false;
                 }
             }
-            else if (sMapMode.CompareTo("NOHORSE") == 0)
+            else if (String.Compare(sMapMode, "NOHORSE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2527,7 +2527,7 @@ namespace GameSvr.Npc
                     Envir.Flag.boNOHORSE = false;
                 }
             }
-            else if (sMapMode.CompareTo("NOCHAT") == 0)
+            else if (String.Compare(sMapMode, "NOCHAT", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2620,7 +2620,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_GIVE);
                 return;
             }
-            if (sItemName.CompareTo(Grobal2.sSTRING_GOLDNAME) == 0)
+            if (String.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
@@ -2684,7 +2684,7 @@ namespace GameSvr.Npc
             string sParam4 = QuestActionInfo.sParam4;
             string sParam5 = QuestActionInfo.sParam5;
             string sParam6 = QuestActionInfo.sParam6;
-            if (sParam2.CompareTo("Self") == 0)
+            if (String.Compare(sParam2, "Self", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 sParam2 = PlayObject.ChrName;
             }
@@ -3426,7 +3426,7 @@ namespace GameSvr.Npc
                 {
                     nCount = 1;
                 }
-                if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.Ordinal) == 0)// 金币
+                if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)// 金币
                 {
                     if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY))
                     {

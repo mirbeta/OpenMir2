@@ -254,7 +254,7 @@ namespace SystemModule.Common
                         }
                         else if (!isCurSecComment)
                         {
-                            var index = str.IndexOf(";;", StringComparison.Ordinal);
+                            var index = str.IndexOf(";;", StringComparison.OrdinalIgnoreCase);
                             if (index >= 0)
                             {
                                 str = str[..index].Trim();

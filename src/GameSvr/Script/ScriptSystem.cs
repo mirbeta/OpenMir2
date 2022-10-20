@@ -225,14 +225,14 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam4, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam5, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
-            if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1) //支持脚本变量
+            if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
                 if (!string.IsNullOrEmpty(sActName))
                 {
                     QuestConditionInfo.sOpName = sActName;
-                    if (".".IndexOf(sCmd, StringComparison.Ordinal) > -1)
+                    if (".".IndexOf(sCmd, StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
                         if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0)
@@ -747,14 +747,14 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam4, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam5, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
-            if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1) //支持脚本变量
+            if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
                 if (!string.IsNullOrEmpty(sActName))
                 {
                     QuestActionInfo.sOpName = sActName;
-                    if (sCmd.IndexOf(".", StringComparison.Ordinal) > -1)
+                    if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
                         if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2323,7 +2323,7 @@ namespace GameSvr.Script
                 tempstr = HUtil32.ArrestStringEx(tempstr, "<", ">", ref s10);
                 if (s10 != "")
                 {
-                    if (s10.IndexOf("/", StringComparison.Ordinal) > 0)
+                    if (s10.IndexOf("/", StringComparison.OrdinalIgnoreCase) > 0)
                     {
                         sLabel = HUtil32.GetValidStr3(s10, ref sname, '/');
                         if (string.Compare(sLabel, "@close", StringComparison.OrdinalIgnoreCase) == 0)

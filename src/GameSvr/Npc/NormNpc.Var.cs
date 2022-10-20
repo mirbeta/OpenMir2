@@ -1136,14 +1136,14 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n10 = PlayObject.m_sString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.Ordinal);
+                        n10 = PlayObject.m_sString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
                         s02 = PlayObject.m_sString[n14 - 600].Substring(1, n10 - 1);
                         s03 = PlayObject.m_sString[n14 - 600].Substring(s01.Length + n10, PlayObject.m_sString[n14 - 600].Length);
                         PlayObject.m_sString[n14 - 600] = s02 + s03;
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
-                        n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.Ordinal);
+                        n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
                         s02 = M2Share.Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
                         s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
                         M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
@@ -1161,7 +1161,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                     {
-                        n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.Ordinal);
+                        n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
                         s02 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
                         s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
                         M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;

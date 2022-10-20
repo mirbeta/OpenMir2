@@ -26,7 +26,7 @@ namespace GameSvr.GameCommand.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if (string.Compare(sDearName, "无", StringComparison.Ordinal) == 0)
+                if (string.Compare(sDearName, "无", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.m_sDearName = "";
                     m_PlayObject.RefShowName();

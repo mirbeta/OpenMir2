@@ -245,7 +245,7 @@ namespace BotSvr
             var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
-                var n = sData.IndexOf("*", StringComparison.Ordinal);
+                var n = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
                 if (n > 0)
                 {
                     var data2 = sData.Substring(0, n - 1);
@@ -1126,7 +1126,7 @@ namespace BotSvr
                         case 3:
                             if (MShare.g_gcProtect[5])
                             {
-                                if (String.Compare(MShare.g_ItemArr[i].Item.Name, MShare.g_sRenewBooks[MShare.g_gnProtectPercent[6]], StringComparison.Ordinal) == 0)
+                                if (String.Compare(MShare.g_ItemArr[i].Item.Name, MShare.g_sRenewBooks[MShare.g_gnProtectPercent[6]], StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     bidx = i;
                                 }
@@ -1154,7 +1154,7 @@ namespace BotSvr
                                     }
                                     break;
                                 default:
-                                    if (MShare.g_gcProtect[5] && (string.Compare(MShare.g_ItemArr[i].Item.Name, MShare.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "包", StringComparison.Ordinal) == 0))
+                                    if (MShare.g_gcProtect[5] && (string.Compare(MShare.g_ItemArr[i].Item.Name, MShare.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "包", StringComparison.OrdinalIgnoreCase) == 0))
                                     {
                                         ubidx = i;
                                     }
@@ -5642,7 +5642,7 @@ namespace BotSvr
                     {
                         break;
                     }
-                    if (str.IndexOf("!", StringComparison.Ordinal) <= 0)
+                    if (str.IndexOf("!", StringComparison.OrdinalIgnoreCase) <= 0)
                     {
                         break;
                     }

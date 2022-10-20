@@ -125,7 +125,7 @@ namespace DBSvr.Services
                             if (userInfo.sConnID == packet.SocketId)
                             {
                                 userInfo.sText += sText;
-                                if (sText.IndexOf("!", StringComparison.Ordinal) < 1)
+                                if (sText.IndexOf("!", StringComparison.OrdinalIgnoreCase) < 1)
                                 {
                                     continue;
                                 }

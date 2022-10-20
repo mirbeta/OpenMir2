@@ -591,7 +591,7 @@ namespace GameSvr.RobotPlay
                     // g_DenySayMsgList.UnLock;
                     if (!boDisableSayMsg)
                     {
-                        nPos = sMsg.IndexOf("=>", StringComparison.Ordinal);
+                        nPos = sMsg.IndexOf("=>", StringComparison.OrdinalIgnoreCase);
                         if (nPos > 0 && m_AISayMsgList.Count > 0)
                         {
                             sChrName = sMsg.Substring(1 - 1, nPos - 1);

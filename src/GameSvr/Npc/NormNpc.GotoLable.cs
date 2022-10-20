@@ -394,7 +394,7 @@ namespace GameSvr.Npc
                         QuestConditionInfo.sParam1 = '<' + QuestConditionInfo.sParam1 + '>';
                         GetVariableText(PlayObject, ref QuestConditionInfo.sParam1, s50);
                     }
-                    else if (QuestConditionInfo.sParam1.IndexOf(">", StringComparison.Ordinal) > -1)
+                    else if (QuestConditionInfo.sParam1.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         QuestConditionInfo.sParam1 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);
                     }
@@ -407,7 +407,7 @@ namespace GameSvr.Npc
                         QuestConditionInfo.sParam2 = '<' + QuestConditionInfo.sParam2 + '>';
                         GetVariableText(PlayObject, ref QuestConditionInfo.sParam2, s50);
                     }
-                    else if (QuestConditionInfo.sParam2.IndexOf(">", StringComparison.Ordinal) > -1)
+                    else if (QuestConditionInfo.sParam2.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         QuestConditionInfo.sParam2 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam2);
                     }
@@ -420,7 +420,7 @@ namespace GameSvr.Npc
                         QuestConditionInfo.sParam3 = '<' + QuestConditionInfo.sParam3 + '>';
                         GetVariableText(PlayObject, ref QuestConditionInfo.sParam3, s50);
                     }
-                    else if (QuestConditionInfo.sParam3.IndexOf(">", StringComparison.Ordinal) > -1)
+                    else if (QuestConditionInfo.sParam3.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         QuestConditionInfo.sParam3 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam3);
                     }
@@ -433,7 +433,7 @@ namespace GameSvr.Npc
                         QuestConditionInfo.sParam4 = '<' + QuestConditionInfo.sParam4 + '>';
                         GetVariableText(PlayObject, ref QuestConditionInfo.sParam4, s50);
                     }
-                    else if (QuestConditionInfo.sParam4.IndexOf(">", StringComparison.Ordinal) > -1)
+                    else if (QuestConditionInfo.sParam4.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         QuestConditionInfo.sParam4 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam4);
                     }
@@ -446,7 +446,7 @@ namespace GameSvr.Npc
                         QuestConditionInfo.sParam5 = '<' + QuestConditionInfo.sParam5 + '>';
                         GetVariableText(PlayObject, ref QuestConditionInfo.sParam5, s50);
                     }
-                    else if (QuestConditionInfo.sParam5.IndexOf(">", StringComparison.Ordinal) > -1)
+                    else if (QuestConditionInfo.sParam5.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         QuestConditionInfo.sParam5 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam5);
                     }
@@ -459,7 +459,7 @@ namespace GameSvr.Npc
                         QuestConditionInfo.sParam6 = '<' + QuestConditionInfo.sParam6 + '>';
                         GetVariableText(PlayObject, ref QuestConditionInfo.sParam6, s50);
                     }
-                    else if (QuestConditionInfo.sParam6.IndexOf(">", StringComparison.Ordinal) > -1)
+                    else if (QuestConditionInfo.sParam6.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         QuestConditionInfo.sParam6 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam6);
                     }
@@ -476,7 +476,7 @@ namespace GameSvr.Npc
                             QuestConditionInfo.sOpName = '<' + QuestConditionInfo.sOpName + '>';
                             GetVariableText(PlayObject, ref QuestConditionInfo.sOpName, s50);
                         }
-                        else if (QuestConditionInfo.sOpName.IndexOf(">", StringComparison.Ordinal) > -1)
+                        else if (QuestConditionInfo.sOpName.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                         {
                             QuestConditionInfo.sOpName = GetLineVariableText(PlayObject, QuestConditionInfo.sOpName);
                         }

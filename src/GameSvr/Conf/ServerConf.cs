@@ -45,10 +45,10 @@ namespace GameSvr.Conf
             M2Share.Config.nServerNumber = ReadInteger("Server", "ServerNumber", M2Share.Config.nServerNumber);
             if (ReadString("Server", "VentureServer", "") == "")
                 WriteString("Server", "VentureServer", HUtil32.BoolToStr(M2Share.Config.VentureServer));
-            M2Share.Config.VentureServer = string.Compare(ReadString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
+            M2Share.Config.VentureServer = string.Compare(ReadString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.OrdinalIgnoreCase) == 0;
             if (ReadString("Server", "TestServer", "") == "")
                 WriteString("Server", "TestServer", HUtil32.BoolToStr(M2Share.Config.TestServer));
-            M2Share.Config.TestServer = string.Compare(ReadString("Server", "TestServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
+            M2Share.Config.TestServer = string.Compare(ReadString("Server", "TestServer", "FALSE"), "TRUE", StringComparison.OrdinalIgnoreCase) == 0;
             if (ReadInteger("Server", "TestLevel", -1) < 0)
                 WriteInteger("Server", "TestLevel", M2Share.Config.TestLevel);
             M2Share.Config.TestLevel = ReadInteger("Server", "TestLevel", M2Share.Config.TestLevel);
