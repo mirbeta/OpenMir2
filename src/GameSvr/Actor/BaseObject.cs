@@ -1909,7 +1909,7 @@ namespace GameSvr.Actor
             return true;
         }
 
-        private bool SpaceMove_GetRandXY(Envirnoment envir, ref short nX, ref short nY)
+        private bool SpaceMoveGetRandXY(Envirnoment envir, ref short nX, ref short nY)
         {
             int n14;
             short n18;
@@ -2004,7 +2004,7 @@ namespace GameSvr.Actor
                     MapFileName = envir.MapFileName;
                     CurrX = nX;
                     CurrY = nY;
-                    if (SpaceMove_GetRandXY(Envir, ref CurrX, ref CurrY))
+                    if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
                         Envir.AddToMap(CurrX, CurrY, MapCell, this);
                         SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
@@ -2032,7 +2032,7 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    if (SpaceMove_GetRandXY(envir, ref nX, ref nY))
+                    if (SpaceMoveGetRandXY(envir, ref nX, ref nY))
                     {
                         if (Race == ActorRace.Play)
                         {
@@ -2301,14 +2301,12 @@ namespace GameSvr.Actor
                         {
                             if (ExpHitter.Race == ActorRace.Play)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject,
-                                    "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
 
                             if (ExpHitter.Master != null)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(ExpHitter.Master as PlayObject,
-                                    "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                M2Share.g_FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                         }
                         else
@@ -2317,14 +2315,12 @@ namespace GameSvr.Actor
                             {
                                 if (LastHiter.Race == ActorRace.Play)
                                 {
-                                    M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject,
-                                        "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                    M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                                 }
 
                                 if (LastHiter.Master != null)
                                 {
-                                    M2Share.g_FunctionNPC.GotoLable(LastHiter.Master as PlayObject,
-                                        "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                    M2Share.g_FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                                 }
                             }
                         }
@@ -2333,11 +2329,9 @@ namespace GameSvr.Actor
                     {
                         if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                         {
-                            M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject,
-                                "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                            M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
                         }
                     }
-
                     result = true;
                 }
             }
@@ -2379,8 +2373,7 @@ namespace GameSvr.Actor
                         UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
                         if (Race == ActorRace.Play)
                         {
-                            var playObject = this as PlayObject;
-                            playObject.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
+                            ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
                         }
                         UseItems[Grobal2.U_RIGHTHAND].Index = 0;
                         Light = 0;
@@ -2426,54 +2419,45 @@ namespace GameSvr.Actor
                 if (((CurrX - 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_LEFT;
-                    return result;
+                    return true;
                 }
-
                 if (((CurrX + 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_RIGHT;
-                    return result;
+                    return true;
                 }
-
                 if ((CurrX == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_UP;
-                    return result;
+                    return true;
                 }
-
                 if ((CurrX == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_DOWN;
-                    return result;
+                    return true;
                 }
-
                 if (((CurrX - 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_UPLEFT;
-                    return result;
+                    return true;
                 }
-
                 if (((CurrX + 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_UPRIGHT;
-                    return result;
+                    return true;
                 }
-
                 if (((CurrX - 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_DOWNLEFT;
-                    return result;
+                    return true;
                 }
-
                 if (((CurrX + 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
                     btDir = Grobal2.DR_DOWNRIGHT;
-                    return result;
+                    return true;
                 }
-
                 btDir = 0;
             }
-
             return result;
         }
 
@@ -2486,7 +2470,6 @@ namespace GameSvr.Actor
             {
                 return baseObject == (BaseObject)Envir.GetMovingObject(nX, nY, true);
             }
-
             return false;
         }
 
@@ -2503,7 +2486,6 @@ namespace GameSvr.Actor
                     result = true;
                     return result;
                 }
-
                 nX += 2;
                 nY += 2;
                 if ((nX >= 0) && (nX <= 4) && (nY >= 0) && (nY <= 4))
@@ -2515,7 +2497,6 @@ namespace GameSvr.Actor
                     }
                 }
             }
-
             return result;
         }
 
@@ -2549,7 +2530,6 @@ namespace GameSvr.Actor
                     magic = M2Share.WorldEngine.FindMagic(M2Share.Config.HealSkill);
                     break;
             }
-
             if (magic != null)
             {
                 if (!IsTrainingSkill(magic.MagicId))
@@ -2565,7 +2545,7 @@ namespace GameSvr.Actor
                     MagicList.Add(userMagic);
                     if (Race == ActorRace.Play)
                     {
-                        (this as PlayObject).SendAddMagic(userMagic);
+                        ((PlayObject)this).SendAddMagic(userMagic);
                     }
                 }
             }
@@ -2638,8 +2618,7 @@ namespace GameSvr.Actor
                 var userMagic = MagicList[i];
                 if (userMagic.Magic.MagicName == sSkillName)
                 {
-                    var playObject = this as PlayObject;
-                    playObject.SendDelMagic(userMagic);
+                    ((PlayObject)this).SendDelMagic(userMagic);
                     MagicList.RemoveAt(i);
                     break;
                 }
@@ -2652,7 +2631,6 @@ namespace GameSvr.Actor
             {
                 return;
             }
-
             switch (nIndex)
             {
                 case 1:
@@ -2660,14 +2638,12 @@ namespace GameSvr.Actor
                     {
                         DelItemSkill_DeleteSkill(M2Share.Config.FireBallSkill);
                     }
-
                     break;
                 case 2:
                     if (Job != PlayJob.Taoist)
                     {
                         DelItemSkill_DeleteSkill(M2Share.Config.HealSkill);
                     }
-
                     break;
             }
         }
@@ -4536,26 +4512,21 @@ namespace GameSvr.Actor
             {
                 nLevel = 0;
             }
-
-            if ((userMagic.Magic.TrainLv > userMagic.Level) &&
-                (userMagic.Magic.MaxTrain[nLevel] <= userMagic.TranPoint))
+            if ((userMagic.Magic.TrainLv > userMagic.Level) && (userMagic.Magic.MaxTrain[nLevel] <= userMagic.TranPoint))
             {
                 if (userMagic.Magic.TrainLv > userMagic.Level)
                 {
                     userMagic.TranPoint -= userMagic.Magic.MaxTrain[nLevel];
                     userMagic.Level++;
-                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level,
-                        userMagic.TranPoint, "", 800);
+                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
                     CheckSeeHealGauge(userMagic);
                 }
                 else
                 {
                     userMagic.TranPoint = userMagic.Magic.MaxTrain[nLevel];
                 }
-
                 result = true;
             }
-
             return result;
         }
 
@@ -4577,8 +4548,7 @@ namespace GameSvr.Actor
             {
                 if (nFlag == 1)
                 {
-                    if ((SlaveList[i].ChrName == M2Share.Config.Dragon) ||
-                        (SlaveList[i].ChrName == M2Share.Config.Dragon1))
+                    if ((SlaveList[i].ChrName == M2Share.Config.Dragon) || (SlaveList[i].ChrName == M2Share.Config.Dragon1))
                     {
                         SlaveList[i].SpaceMove(Envir.MapName, nX, nY, 1);
                         break;

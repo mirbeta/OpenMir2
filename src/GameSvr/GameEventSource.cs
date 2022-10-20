@@ -2,7 +2,7 @@ using System.Diagnostics.Tracing;
 
 namespace GameSvr
 {
-    [EventSource(Name = "GameProvider")]
+    [EventSource(Name = "UserLogProvider")]
     public class GameEventSource : EventSource
     {
         public void AddEventLog(int eventType, string meesage)
