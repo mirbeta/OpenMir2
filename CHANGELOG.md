@@ -1,8 +1,9 @@
-# [1.0.0](http://10.10.0.202/mir2/OpenMir2/compare/v0.0.8...v1.0.0) (2022-10-19)
+# [1.0.0](http://10.10.0.202/mir2/OpenMir2/compare/v0.0.8...v1.0.0) (2022-10-20)
 
 
 ### Bug Fixes
 
+* 修复沙巴克武器升级取回武器失败 ([6d29c5f](http://10.10.0.202/mir2/OpenMir2/commits/6d29c5f09fd23b9960a9f91bacb8091910ae8ede))
 * 一点清理 ([dd70fbe](http://10.10.0.202/mir2/OpenMir2/commits/dd70fbe585e387e7f85740c09288a7878b49d036))
 
 
