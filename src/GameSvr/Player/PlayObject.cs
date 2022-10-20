@@ -1680,27 +1680,39 @@ namespace GameSvr.Player
             return result;
         }
 
-        private void SendSaveItemList(int nBaseObject)
+        private void SendSaveItemList(int merchantId)
         {
             var sSendMsg = string.Empty;
-            for (var i = 0; i < StorageItemList.Count; i++)
-            {
-                var UserItem = StorageItemList[i];
-                var Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                if (Item != null)
-                {
-                    ClientItem clientItem = new ClientItem();
-                    Item.GetUpgradeStdItem(UserItem, ref clientItem);
-                    //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    clientItem.Item.Name = CustomItem.GetItemName(UserItem);
-                    clientItem.Dura = UserItem.Dura;
-                    clientItem.DuraMax = UserItem.DuraMax;
-                    clientItem.MakeIndex = UserItem.MakeIndex;
-                    sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + '/';
-                }
-            }
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)StorageItemList.Count);
-            SendSocket(m_DefMsg, sSendMsg);
+           var maxCount = StorageItemList.Count;
+           var page = (short)Math.Ceiling(maxCount / 50f);
+
+           for (int p = 0; p < page; p++)
+           {
+               var startCount = p * 50;
+               var endCount = startCount + 50;
+               if (endCount > maxCount)
+               {
+                   endCount = maxCount;
+               }
+               for (var i = startCount; i < endCount; i++)
+               {
+                   var UserItem = StorageItemList[i];
+                   var Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                   if (Item != null)
+                   {
+                       ClientItem clientItem = new ClientItem();
+                       Item.GetUpgradeStdItem(UserItem, ref clientItem);
+                       //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                       clientItem.Item.Name = CustomItem.GetItemName(UserItem);
+                       clientItem.Dura = UserItem.Dura;
+                       clientItem.DuraMax = UserItem.DuraMax;
+                       clientItem.MakeIndex = UserItem.MakeIndex;
+                       sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + '/';
+                   }
+               }
+               m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, merchantId, 0, p, page-1);
+               SendSocket(m_DefMsg, sSendMsg);
+           }
         }
 
         private void SendChangeGuildName()
