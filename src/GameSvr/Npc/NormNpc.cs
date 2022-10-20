@@ -4,6 +4,7 @@ using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Player;
 using GameSvr.Script;
+using System.Text;
 using SystemModule;
 using SystemModule.Data;
 
@@ -1627,19 +1628,17 @@ namespace GameSvr.Npc
 
         protected string ReplaceVariableText(string sMsg, string sStr, string sText)
         {
-            string result;
             var n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
             {
-                var s14 = sMsg[..n10];
-                var s18 = sMsg.Substring(sStr.Length + n10, sMsg.Length - (sStr.Length + n10));
-                result = s14 + sText + s18;
+                ReadOnlySpan<char> s18 = sMsg.AsSpan().Slice(sStr.Length + n10, sMsg.Length - (sStr.Length + n10));
+                var builder = new StringBuilder();
+                builder.Append(sMsg[..n10]);
+                builder.Append(sText);
+                builder.Append(s18);
+                return builder.ToString();
             }
-            else
-            {
-                result = sMsg;
-            }
-            return result;
+            return sMsg;
         }
 
         public virtual void UserSelect(PlayObject PlayObject, string sData)
