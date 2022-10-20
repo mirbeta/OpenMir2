@@ -19,14 +19,14 @@ namespace GameSvr
         private static Logger _logger;
         private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
-        
+
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-            
+
             var config = new ConfigurationBuilder().Build();
-            
+
             _logger = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();

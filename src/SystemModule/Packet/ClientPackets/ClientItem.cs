@@ -33,7 +33,7 @@ namespace SystemModule.Packet.ClientPackets
             writer.Write(Item.ItemDesc);
             writer.Write((byte)0);
             writer.Write(Item.Looks);
-            writer.Write(DuraMax);
+            writer.Write(Item.DuraMax);
             writer.Write(Item.AC);
             writer.Write(Item.MAC);
             writer.Write(Item.DC);
