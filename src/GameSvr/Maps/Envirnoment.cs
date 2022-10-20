@@ -86,7 +86,7 @@ namespace GameSvr.Maps
                 }
                 Width = nWidth;
                 Height = nHeight;
-                _cellPool = ArrayPool<MapCellInfo>.Shared;
+                _cellPool = ArrayPool<MapCellInfo>.Create();
                 _cellArray = _cellPool.Rent(nWidth * nHeight);
             }
         }

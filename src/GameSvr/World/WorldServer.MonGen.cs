@@ -490,11 +490,11 @@ namespace GameSvr.World
         /// <returns></returns>
         private BaseObject CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName)
         {
-            BaseObject cert = null;
             int n1C;
-            int n20;
-            int n24;
-            object p28;
+            short n20;
+            short n24;
+            BaseObject outofrange;
+            BaseObject cert = null;
             var map = M2Share.MapMgr.FindMap(sMapName);
             if (map == null) return null;
             switch (nMonRace)
@@ -724,17 +724,11 @@ namespace GameSvr.World
                 cert.Initialize();
                 if (cert.AddtoMapSuccess)
                 {
-                    p28 = null;
-                    if (cert.Envir.Width < 50)
-                        n20 = 2;
-                    else
-                        n20 = 3;
+                    outofrange = null;
+                    n20 = cert.Envir.Width < 50 ? (short)2 : (short)3;
                     if (cert.Envir.Height < 250)
                     {
-                        if (cert.Envir.Height < 30)
-                            n24 = 2;
-                        else
-                            n24 = 20;
+                        n24 = cert.Envir.Height < 30 ? (short)2 : (short)20;
                     }
                     else
                     {
@@ -746,22 +740,22 @@ namespace GameSvr.World
                     {
                         if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
                         {
-                            if (cert.Envir.Width - n24 - 1 > cert.CurrX)
+                            if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
                             {
-                                cert.CurrX += (short)n20;
+                                cert.CurrX += n20;
                             }
                             else
                             {
                                 cert.CurrX = (short)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
                                 if (cert.Envir.Height - n24 - 1 > cert.CurrY)
-                                    cert.CurrY += (short)n20;
+                                    cert.CurrY += n20;
                                 else
                                     cert.CurrY = (short)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
                             }
                         }
                         else
                         {
-                            p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert);
+                            outofrange = (BaseObject)cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert);
                             break;
                         }
 
@@ -769,9 +763,9 @@ namespace GameSvr.World
                         if (n1C >= 31) break;
                     }
 
-                    if (p28 == null)
+                    if (outofrange == null)
                     {
-                        _logger.Error($"创建怪物失败 地图:[{sMapName}] X:{nX} Y:{nY} MonName:{sMonName}");
+                        _logger.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
                         return null;
                     }
                 }
@@ -796,7 +790,7 @@ namespace GameSvr.World
                 {
                     short nX;
                     short nY;
-                    if (M2Share.RandomNumber.Random(100) < monGen.MissionGenRate)
+                    if (monGen.MissionGenRate > 0 && M2Share.RandomNumber.Random(100) < monGen.MissionGenRate)
                     {
                         nX = (short)(monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
                         nY = (short)(monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
@@ -822,8 +816,8 @@ namespace GameSvr.World
                     {
                         for (var i = 0; i < nCount; i++)
                         {
-                            nX = (short)(monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
-                            nY = (short)(monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
+                            nX = (short)((monGen.X - monGen.Range) + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
+                            nY = (short)((monGen.Y - monGen.Range) + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
                             cert = CreateMonster(monGen.MapName, nX, nY, monGen.Race, monGen.MonName);
                             if (cert != null)
                             {
