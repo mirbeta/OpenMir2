@@ -1848,7 +1848,7 @@ namespace GameSvr.Actor
 
         public bool GetFrontPosition(ref short nX, ref short nY)
         {
-            var envir = this.Envir;
+            var envir = Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Direction)
@@ -1982,11 +1982,11 @@ namespace GameSvr.Actor
             {
                 if (M2Share.ServerIndex == envir.ServerIndex)
                 {
-                    var oldEnvir = this.Envir;
+                    var oldEnvir = Envir;
                     nOldX = CurrX;
                     nOldY = CurrY;
                     bo21 = false;
-                    this.Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
+                    Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
                     VisibleHumanList.Clear();
                     for (var i = 0; i < VisibleItems.Count; i++)
                     {
@@ -1999,14 +1999,14 @@ namespace GameSvr.Actor
                     }
                     VisibleActors.Clear();
                     VisibleEvents.Clear();
-                    this.Envir = envir;
+                    Envir = envir;
                     MapName = envir.MapName;
                     MapFileName = envir.MapFileName;
                     CurrX = nX;
                     CurrY = nY;
-                    if (SpaceMove_GetRandXY(this.Envir, ref CurrX, ref CurrY))
+                    if (SpaceMove_GetRandXY(Envir, ref CurrX, ref CurrY))
                     {
-                        this.Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                        Envir.AddToMap(CurrX, CurrY, MapCell, this);
                         SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                         SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
@@ -2023,10 +2023,10 @@ namespace GameSvr.Actor
                     }
                     if (!bo21)
                     {
-                        this.Envir = oldEnvir;
+                        Envir = oldEnvir;
                         CurrX = (short)nOldX;
                         CurrY = (short)nOldY;
-                        this.Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                        Envir.AddToMap(CurrX, CurrY, MapCell, this);
                     }
                     OnEnvirnomentChanged();
                 }
@@ -3571,8 +3571,7 @@ namespace GameSvr.Actor
                 MapName = M2Share.Config.HomeMap;
                 CurrX = M2Share.Config.HomeX;
                 CurrY = M2Share.Config.HomeY;
-                var playObject = this as PlayObject;
-                playObject.m_boEmergencyClose = true;
+                ((PlayObject)this).m_boEmergencyClose = true;
             }
             else
             {
@@ -3727,7 +3726,7 @@ namespace GameSvr.Actor
                 {
                     OnHorse = false;
                 }
-                var oldEnvir = this.Envir;
+                var oldEnvir = Envir;
                 var nOldX = CurrX;
                 var nOldY = CurrY;
                 DisappearA();
@@ -3744,7 +3743,7 @@ namespace GameSvr.Actor
                 }
                 VisibleActors.Clear();
                 SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
-                this.Envir = envir;
+                Envir = envir;
                 MapName = envir.MapName;
                 MapFileName = envir.MapFileName;
                 CurrX = nDMapX;
@@ -3758,19 +3757,19 @@ namespace GameSvr.Actor
                 }
                 else
                 {
-                    this.Envir = oldEnvir;
+                    Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
-                    this.Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                    Envir.AddToMap(CurrX, CurrY, MapCell, this);
                 }
                 OnEnvirnomentChanged();
                 if (Race == ActorRace.Play) // 复位泡点，及金币，时间
                 {
-                    (this as PlayObject).m_dwIncGamePointTick = HUtil32.GetTickCount();
-                    (this as PlayObject).m_dwIncGameGoldTick = HUtil32.GetTickCount();
-                    (this as PlayObject).m_dwAutoGetExpTick = HUtil32.GetTickCount();
+                    ((PlayObject)this).m_dwIncGamePointTick = HUtil32.GetTickCount();
+                    ((PlayObject)this).m_dwIncGameGoldTick = HUtil32.GetTickCount();
+                    ((PlayObject)this).m_dwAutoGetExpTick = HUtil32.GetTickCount();
                 }
-                if (this.Envir.Flag.boFight3Zone && (this.Envir.Flag.boFight3Zone != oldEnvir.Flag.boFight3Zone))
+                if (Envir.Flag.boFight3Zone && (Envir.Flag.boFight3Zone != oldEnvir.Flag.boFight3Zone))
                 {
                     RefShowName();
                 }
@@ -3823,7 +3822,7 @@ namespace GameSvr.Actor
                 if (sMsg[0] == '[') // 顶部滚动公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
-                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
+                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
                     if (M2Share.Config.ShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
@@ -3833,7 +3832,7 @@ namespace GameSvr.Actor
                 else if (sMsg[0] == '<') // 聊天框彩色公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
-                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
+                    bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
                     if (M2Share.Config.ShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
@@ -3843,9 +3842,9 @@ namespace GameSvr.Actor
                 else if (sMsg[0] == '{') // 屏幕居中公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, "{", "}", ref str);
-                    str = HUtil32.GetValidStrCap(str, ref fColor, new string[] { "," });
-                    str = HUtil32.GetValidStrCap(str, ref bColor, new string[] { "," });
-                    str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { "," });
+                    str = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
+                    str = HUtil32.GetValidStrCap(str, ref bColor, new[] { "," });
+                    str = HUtil32.GetValidStrCap(str, ref nTime, new[] { "," });
                     if (M2Share.Config.ShowPreFixMsg)
                     {
                         sMsg = M2Share.Config.LineNoticePreFix + sMsg;
@@ -4423,11 +4422,11 @@ namespace GameSvr.Actor
 
         public bool InSafeZone(Envirnoment envir, int nX, int nY)
         {
-            if (this.Envir == null)
+            if (Envir == null)
             {
                 return true;
             }
-            var result = this.Envir.Flag.boSAFE;
+            var result = Envir.Flag.boSAFE;
             if (result)
             {
                 return true;
@@ -4773,7 +4772,7 @@ namespace GameSvr.Actor
 
         public bool GetBackPosition(ref short nX, ref short nY)
         {
-            var envir = this.Envir;
+            var envir = Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Direction)
@@ -5510,7 +5509,7 @@ namespace GameSvr.Actor
             if (this is CastleDoor)
             {
                 ((CastleDoor)this).IsOpened = false;
-                this.StickMode = true;
+                StickMode = true;
             }
 
             if (this is MagicMonster)
@@ -5525,7 +5524,7 @@ namespace GameSvr.Actor
 
             if (this is RockManObject)
             {
-                this.HideMode = false;
+                HideMode = false;
             }
 
             if (this is WallStructure)
@@ -5554,36 +5553,36 @@ namespace GameSvr.Actor
 
             if (this is DigOutZombi)
             {
-                this.FixedHideMode = true;
+                FixedHideMode = true;
             }
 
             if (this is WhiteSkeleton)
             {
                 ((WhiteSkeleton)this).MBoIsFirst = true;
-                this.FixedHideMode = true;
+                FixedHideMode = true;
             }
 
             if (this is ScultureMonster)
             {
-                this.FixedHideMode = true;
+                FixedHideMode = true;
             }
 
             if (this is ScultureKingMonster)
             {
-                this.StoneMode = true;
-                this.CharStatusEx = StatuStateConst.STATE_STONE_MODE;
+                StoneMode = true;
+                CharStatusEx = StatuStateConst.STATE_STONE_MODE;
             }
 
             if (this is ElfMonster)
             {
-                this.FixedHideMode = true;
-                this.NoAttackMode = true;
+                FixedHideMode = true;
+                NoAttackMode = true;
                 ((ElfMonster)this).BoIsFirst = true;
             }
 
             if (this is ElfWarriorMonster)
             {
-                this.FixedHideMode = true;
+                FixedHideMode = true;
                 ((ElfWarriorMonster)this).BoIsFirst = true;
                 ((ElfWarriorMonster)this).UsePoison = false;
             }
@@ -5601,9 +5600,9 @@ namespace GameSvr.Actor
 
             if (this is StickMonster)
             {
-                this.SearchTick = HUtil32.GetTickCount();
-                this.FixedHideMode = true;
-                this.StickMode = true;
+                SearchTick = HUtil32.GetTickCount();
+                FixedHideMode = true;
+                StickMode = true;
             }
 
             MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
@@ -5612,7 +5611,7 @@ namespace GameSvr.Actor
             //m_nPushedCount = 0;
             //m_nBodyState = 0;
 
-            switch (this.Race)
+            switch (Race)
             {
                 case 51:
                     MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
