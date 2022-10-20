@@ -52,7 +52,7 @@ namespace GameSvr.GameCommand.Commands
                         }
                         UserItem = m_PlayObject.UseItems[i];
                         StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.Ordinal) == 0)
+                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
                             {

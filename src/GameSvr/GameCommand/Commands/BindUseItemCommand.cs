@@ -21,19 +21,19 @@ namespace GameSvr.GameCommand.Commands
             var sLight = @Params.Length > 3 ? @Params[3] : "";
             var nBind = -1;
             var nItem = M2Share.GetUseItemIdx(sItem);
-            if (string.Compare(sType, "帐号", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "帐号", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 0;
             }
-            if (string.Compare(sType, "人物", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "人物", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 1;
             }
-            if (string.Compare(sType, "IP", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "IP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 2;
             }
-            if (string.Compare(sType, "死亡", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "死亡", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 3;
             }

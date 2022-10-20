@@ -1493,7 +1493,7 @@ namespace GameSvr.Npc
             {
                 btSex = 0;
             }
-            else if (string.Compare(QuestConditionInfo.sParam1, "男", StringComparison.Ordinal) == 0)
+            else if (string.Compare(QuestConditionInfo.sParam1, "男", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 btSex = 0;
             }
@@ -1501,7 +1501,7 @@ namespace GameSvr.Npc
             {
                 btSex = 1;
             }
-            else if (string.Compare(QuestConditionInfo.sParam1, "女", StringComparison.Ordinal) == 0)
+            else if (string.Compare(QuestConditionInfo.sParam1, "女", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 btSex = 1;
             }
@@ -2322,8 +2322,8 @@ namespace GameSvr.Npc
             var nDayCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
             var nValNo = M2Share.GetValNameNo(QuestConditionInfo.sParam4);
             var nValNoDay = M2Share.GetValNameNo(QuestConditionInfo.sParam5);
-            var boDeleteExprie = string.Compare(QuestConditionInfo.sParam6, "清理", StringComparison.Ordinal) == 0;
-            var boNoCompareHumanName = string.Compare(QuestConditionInfo.sParam6, "1", StringComparison.Ordinal) == 0;
+            var boDeleteExprie = string.Compare(QuestConditionInfo.sParam6, "清理", StringComparison.OrdinalIgnoreCase) == 0;
+            var boNoCompareHumanName = string.Compare(QuestConditionInfo.sParam6, "1", StringComparison.OrdinalIgnoreCase) == 0;
             var cMethod = QuestConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {

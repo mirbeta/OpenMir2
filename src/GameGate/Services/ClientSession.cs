@@ -493,7 +493,7 @@ namespace GameGate
                                         Buffer.BlockCopy(clientPacket.Buffer.ToArray(), ClientMesaagePacket.PackSize, pszChatBuffer, 0, nDeCodeLen - ClientMesaagePacket.PackSize);
                                         pszChatBuffer[nDeCodeLen - ClientMesaagePacket.PackSize] = (byte)'\0';
                                         var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
-                                        var nChatStrPos = tempStr.IndexOf(" ", StringComparison.Ordinal);
+                                        var nChatStrPos = tempStr.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
                                         // if (nChatStrPos > 0)
                                         // {
                                         //     Move(pszChatBuffer[0], pszChatCmd[0], nChatStrPos - 1);

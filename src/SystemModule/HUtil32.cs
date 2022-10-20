@@ -478,7 +478,7 @@ namespace SystemModule
                     }
                     else
                     {
-                        var n = sourceSpan.IndexOf(searchAfter, StringComparison.Ordinal);
+                        var n = sourceSpan.IndexOf(searchAfter, StringComparison.OrdinalIgnoreCase);
                         if (n > 0)
                         {
                             sourceSpan = sourceSpan.Slice(n + 1, spanLen - n - 1);
@@ -488,7 +488,7 @@ namespace SystemModule
                 }
                 if (findData)
                 {
-                    var n = sourceSpan.IndexOf(arrestBefore, StringComparison.Ordinal) + 1;
+                    var n = sourceSpan.IndexOf(arrestBefore, StringComparison.OrdinalIgnoreCase) + 1;
                     if (n > 0)
                     {
                         arrestStr = sourceSpan[..(n - 1)].ToString();

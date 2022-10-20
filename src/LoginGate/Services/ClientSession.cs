@@ -66,7 +66,7 @@ namespace LoginGate.Services
             string sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
             if (!string.IsNullOrEmpty(sReviceMsg))
             {
-                int nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
+                int nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
                 if (nPos > 0)
                 {
                     string s10 = sReviceMsg.Substring(0, nPos - 1);
