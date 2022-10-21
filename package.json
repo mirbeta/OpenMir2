@@ -4,7 +4,9 @@
   "description": "[EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "commit": "git-cz && git push",
+    "release": "release-it",
+    "changelog": "conventional-changelog -p cmyr-config -i CHANGELOG.md -s -r 0"
   },
   "repository": {
     "type": "git",
@@ -14,6 +16,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "commitizen": "^4.2.5",
+    "conventional-changelog-cli": "^2.2.2",
+    "conventional-changelog-cmyr-config": "^2.0.4",
     "cz-conventional-changelog": "^3.3.0"
   },
   "config": {
@@ -23,6 +28,54 @@
       "defaultType": "",
       "defaultSubject": "",
       "defaultIssues": ""
+    }
+  },
+  "changelog": {
+    "bugsUrl":"https://github.com/mirbeta/OpenMir2/issues/",
+    "authorName": true,
+    "authorEmail": true,
+    "language": "zh",
+    "settings": {
+      "feat": {
+        "title": "✨ 新功能",//定义标题
+        "enable": true //定义是否启用该类型，注意feat、fix、perf、revert、refactor这几个类型的commit无法关闭
+      },
+      "fix": {
+        "title": "🐛 Bug 修复"
+      },
+      "perf": {
+        "title": "⚡ 性能优化"
+      },
+      "revert": {
+        "title": "⏪ 回退"
+      },
+      "refactor": {
+        "title": "♻ 代码重构"
+      },
+      "docs": {
+        "title": "📝 文档",
+        "enable": false
+      },
+      "style": {
+        "title": "💄 风格",
+        "enable": false
+      },
+      "test": {
+        "title": "✅ 测试",
+        "enable": false
+      },
+      "build": {
+        "title": "👷‍ 构建",
+        "enable": false
+      },
+      "ci": {
+        "title": "🔧 CI 配置",
+        "enable": false
+      },
+      "chore": {
+        "title": "🎫 其他更新",
+        "enable": false
+      }
     }
   }
 }
