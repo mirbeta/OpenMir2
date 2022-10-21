@@ -1404,7 +1404,7 @@ namespace GameSvr.Actor
                 {
                     case Grobal2.RM_MAGSTRUCK:
                     case Grobal2.RM_MAGSTRUCK_MINE:
-                        if ((processMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= ActorRace.Animal) && !Bo2Bf && (WAbil.Level < 50))
+                        if ((processMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= ActorRace.Animal) && !RushMode && (WAbil.Level < 50))
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }

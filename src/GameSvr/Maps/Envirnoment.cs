@@ -235,7 +235,6 @@ namespace GameSvr.Maps
         public int MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
         {
             bool cellSuccess = false;
-            BaseObject baseObject;
             bool moveSuccess = true;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
             var result = 0;
@@ -253,10 +252,10 @@ namespace GameSvr.Maps
                                 var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.ActorObject)
                                 {
-                                    baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
-                                        if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                        if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                         {
                                             moveSuccess = false;
                                             break;
@@ -369,7 +368,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -412,7 +411,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                             if (baseObject != null)
                             {
-                                if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -492,7 +491,7 @@ namespace GameSvr.Maps
                                             }
                                     }
                                 }
-                                if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
                                     result = false;
                                     break;
@@ -1002,7 +1001,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
-                            if (!baseObject.Ghost && baseObject.Bo2B9 && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                            if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                             {
                                 result++;
                             }
@@ -1138,7 +1137,7 @@ namespace GameSvr.Maps
                     if (cellObject.ActorObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
-                        if (baseObject != null && !baseObject.Ghost && baseObject.Bo2B9 && (!boFlag || !baseObject.Death))
+                        if (baseObject != null && !baseObject.Ghost && baseObject.HoldPlace && (!boFlag || !baseObject.Death))
                         {
                             result = baseObject;
                             break;
@@ -1318,7 +1317,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
-                            if (!baseObject.Ghost && baseObject.Bo2B9 && !boFlag || !baseObject.Death)
+                            if (!baseObject.Ghost && baseObject.HoldPlace && !boFlag || !baseObject.Death)
                             {
                                 baseObjectList.Add(baseObject);
                             }

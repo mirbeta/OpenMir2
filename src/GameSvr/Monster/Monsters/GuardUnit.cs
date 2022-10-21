@@ -12,8 +12,8 @@ namespace GameSvr.Monster.Monsters
             base.Struck(hiter);
             if (Castle != null)
             {
-                Bo2B0 = true;
-                MDw2B4Tick = HUtil32.GetTickCount();
+                BoCrimeforCastle = true;
+                CrimeforCastleTime = HUtil32.GetTickCount();
             }
         }
 
@@ -26,19 +26,19 @@ namespace GameSvr.Monster.Monsters
                 {
                     result = true;
                 }
-                if (baseObject.Bo2B0)
+                if (baseObject.BoCrimeforCastle)
                 {
-                    if ((HUtil32.GetTickCount() - baseObject.MDw2B4Tick) < (2 * 60 * 1000))
+                    if ((HUtil32.GetTickCount() - baseObject.CrimeforCastleTime) < (2 * 60 * 1000))
                     {
                         result = true;
                     }
                     else
                     {
-                        baseObject.Bo2B0 = false;
+                        baseObject.BoCrimeforCastle = false;
                     }
                     if (baseObject.Castle != null)
                     {
-                        baseObject.Bo2B0 = false;
+                        baseObject.BoCrimeforCastle = false;
                         result = false;
                     }
                 }

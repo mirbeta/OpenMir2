@@ -18,35 +18,6 @@ namespace GameSvr
         private static Logger _logger;
         private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
-        private static NamePipeClient[] pipeClientMaps = new NamePipeClient[10];
-
-        static void PipeStream()
-        {
-            try
-            {
-                _logger.Info("Connecting to MapSvr...");
-                for (int i = 0; i < pipeClientMaps.Length; i++)
-                {
-                    pipeClientMaps[i] = new NamePipeClient();
-                    pipeClientMaps[i].Connect();
-                }
-
-                for (int i = 0; i < 1000000; i++)
-                {
-                    var ram = RandomNumber.GetInstance().Random(pipeClientMaps.Length);
-                    pipeClientMaps[ram].SendPipeMessage(Encoding.UTF8.GetBytes("123"));
-                }
-
-                for (int i = 0; i < pipeClientMaps.Length; i++)
-                {
-                    pipeClientMaps[i].Close();
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("链接地图服务器初始化失败,请确认MapSvr服务端程序是否运行.");
-            }
-        }
 
         static async Task Main(string[] args)
         {
