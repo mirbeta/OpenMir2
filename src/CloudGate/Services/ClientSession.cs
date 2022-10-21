@@ -132,7 +132,7 @@ namespace CloudGate.Services
 
                         var tempBuff = message.Buffer[2..^1];//跳过#1....! 只保留消息内容
                         var nDeCodeLen = 0;
-                        var packBuff = Misc.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
+                        var packBuff = PacketEncoder.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
 
                         var CltCmd = Packets.ToPacket<ClientMesaagePacket>(packBuff);
                         switch (CltCmd.Cmd)
@@ -566,7 +566,7 @@ namespace CloudGate.Services
                                             eatCmd.Cmd = Grobal2.SM_EAT_FAIL;
                                             var pszSendBuf = new byte[ClientMesaagePacket.PackSize];
                                             pszSendBuf[0] = (byte)'#';
-                                            var nEnCodeLen = Misc.EncodeBuf(eatCmd.GetBuffer(), ClientMesaagePacket.PackSize, pszSendBuf);
+                                            var nEnCodeLen = PacketEncoder.EncodeBuf(eatCmd.GetBuffer(), ClientMesaagePacket.PackSize, pszSendBuf);
                                             pszSendBuf[nEnCodeLen + 1] = (byte)'!';
                                             _sessionManager.SendQueue(pszSendBuf);
                                             return;
@@ -585,7 +585,7 @@ namespace CloudGate.Services
                         if (nDeCodeLen > ClientMesaagePacket.PackSize)
                         {
                             var sendBuffer = new byte[message.Buffer.Length - ClientMesaagePacket.PackSize + 1];
-                            var tLen = Misc.EncodeBuf(packBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
+                            var tLen = PacketEncoder.EncodeBuf(packBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
                             cmdPack.PackLength = ClientMesaagePacket.PackSize + tLen + 1;
                             BodyBuffer = new byte[PacketHeader.PacketSize + cmdPack.PackLength];
                             Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, ClientMesaagePacket.PackSize);
@@ -894,7 +894,7 @@ namespace CloudGate.Services
 
             pzsSendBuf = new byte[message.BufferLen + ClientMesaagePacket.PackSize];
             pzsSendBuf[0] = (byte)'#';
-            var nLen = Misc.EncodeBuf(packet.GetBuffer(), ClientMesaagePacket.PackSize, pzsSendBuf, 1);
+            var nLen = PacketEncoder.EncodeBuf(packet.GetBuffer(), ClientMesaagePacket.PackSize, pzsSendBuf, 1);
             if (message.BufferLen > ClientMesaagePacket.PackSize)
             {
                 var tempBuffer = message.Buffer[ClientMesaagePacket.PackSize..];
@@ -1114,7 +1114,7 @@ namespace CloudGate.Services
                     // #0.........!
                     var tempBuf = HUtil32.GetBytes(szTemp);
                     var pszLoginPacket = new byte[tempBuf.Length + 100];
-                    var encodelen = Misc.EncodeBuf(tempBuf, tempBuf.Length, pszLoginPacket, 2);
+                    var encodelen = PacketEncoder.EncodeBuf(tempBuf, tempBuf.Length, pszLoginPacket, 2);
                     pszLoginPacket[0] = (byte)'#';
                     pszLoginPacket[1] = (byte)'0';
                     pszLoginPacket[encodelen + 2] = (byte)'!';
@@ -1190,7 +1190,7 @@ namespace CloudGate.Services
             var sBuff = HUtil32.GetBytes(szMsg);
             Buffer.BlockCopy(sBuff, 0, TempBuf, 13, sBuff.Length);
             var iLen = ClientMesaagePacket.PackSize + szMsg.Length;
-            iLen = Misc.EncodeBuf(TempBuf, iLen, SendBuf);
+            iLen = PacketEncoder.EncodeBuf(TempBuf, iLen, SendBuf);
             SendBuf[iLen + 1] = (byte)'!';
             _sendQueue.AddToQueue(_session, SendBuf);
         }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
+using System.IO.Pipes;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
@@ -19,6 +20,23 @@ namespace GameSvr
         private static Logger _logger;
         private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
+
+        static void PipeStream()
+        {
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost", "mir2_map", PipeDirection.In))
+            {
+                await pipeClient.ConnectAsync();
+
+                using (StreamReader sr = new StreamReader(pipeClient))
+                {
+                    string tmp;
+                    while ((tmp = sr.ReadLine()) != null)
+                    {
+                        Console.WriteLine($"收到数据: {tmp}");
+                    }
+                }
+            }
+        }
 
         static async Task Main(string[] args)
         {
