@@ -2,6 +2,7 @@
 
 * docs: del changelog.md ([f3bcb84](http://10.10.0.202/mir2/OpenMir2/commits/f3bcb84))
 * docs: updage CHANGGELOG.md ([5dff35a](http://10.10.0.202/mir2/OpenMir2/commits/5dff35a))
+* docs: update ([b75c540](http://10.10.0.202/mir2/OpenMir2/commits/b75c540))
 * docs: update ([bfc2af2](http://10.10.0.202/mir2/OpenMir2/commits/bfc2af2))
 * docs: update CHANGEELOG.MD ([261813f](http://10.10.0.202/mir2/OpenMir2/commits/261813f))
 * docs: update changelog.md ([14271d1](http://10.10.0.202/mir2/OpenMir2/commits/14271d1))
