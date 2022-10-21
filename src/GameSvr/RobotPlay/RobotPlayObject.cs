@@ -534,7 +534,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private bool WalkToNext(int nX, int nY)
+        private bool WalkToNext(short nX, short nY)
         {
             bool result = false;
             if (HUtil32.GetTickCount() - DwTick3F4 > M2Share.Config.nAIWalkIntervalTime)
@@ -1192,7 +1192,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private bool CanWalk(short nCurrX, short nCurrY, int nTargetX, int nTargetY, byte nDir, ref int nStep, bool boFlag)
+        private bool CanWalk(short nCurrX, short nCurrY, short nTargetX, short nTargetY, byte nDir, ref int nStep, bool boFlag)
         {
             bool result = false;
             short nX = 0;
@@ -1339,8 +1339,8 @@ namespace GameSvr.RobotPlay
                         }
                         if (M2Share.CastleMgr.IsCastleMember(this) != null && AttackBaseObject != null)
                         {
-                            AttackBaseObject.Bo2B0 = true;
-                            AttackBaseObject.MDw2B4Tick = HUtil32.GetTickCount();
+                            AttackBaseObject.BoCrimeforCastle = true;
+                            AttackBaseObject.CrimeforCastleTime = HUtil32.GetTickCount();
                         }
                         HealthTick = 0;
                         SpellTick = 0;
@@ -2472,8 +2472,6 @@ namespace GameSvr.RobotPlay
         /// <returns></returns>
         private bool RunToTargetXY(short nTargetX, short nTargetY)
         {
-            int n10;
-            int n14;
             bool result = false;
             if (Transparent && HideMode)
             {
@@ -2489,9 +2487,9 @@ namespace GameSvr.RobotPlay
             }
             if (HUtil32.GetTickCount() - dwTick5F4 > m_dwRunIntervalTime) // 跑步使用单独的变量计数
             {
-                n10 = nTargetX;
-                n14 = nTargetY;
-                byte nDir = M2Share.GetNextDirection(CurrX, CurrY, n10, n14);
+                var nX = nTargetX;
+                var nY = nTargetY;
+                byte nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
                 if (!RobotRunTo(nDir, false, nTargetX, nTargetY))
                 {
                     result = WalkToTargetXY(nTargetX, nTargetY);

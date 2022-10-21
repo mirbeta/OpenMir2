@@ -104,18 +104,18 @@ namespace GameSvr.Player
                     tObjCount = Envir.GetXyObjCount(CurrX, CurrY);
                     if (tObjCount >= 2)
                     {
-                        if (!Bo2F0)
+                        if (!BoDuplication)
                         {
-                            Bo2F0 = true;
-                            DupObjTick = HUtil32.GetTickCount();
+                            BoDuplication = true;
+                            DupStartTick = HUtil32.GetTickCount();
                         }
                     }
                     else
                     {
-                        Bo2F0 = false;
+                        BoDuplication = false;
                     }
-                    if ((tObjCount >= 3 && ((HUtil32.GetTickCount() - DupObjTick) > 3000) || tObjCount == 2
-                        && ((HUtil32.GetTickCount() - DupObjTick) > 10000)) && ((HUtil32.GetTickCount() - DupObjTick) < 20000))
+                    if ((tObjCount >= 3 && ((HUtil32.GetTickCount() - DupStartTick) > 3000) || tObjCount == 2
+                        && ((HUtil32.GetTickCount() - DupStartTick) > 10000)) && ((HUtil32.GetTickCount() - DupStartTick) < 20000))
                     {
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
@@ -945,7 +945,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_WALK:
-                    if (ClientWalkXY(ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.LateDelivery, ref dwDelayTime))
+                    if (ClientWalkXY(ProcessMsg.wIdent, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, ProcessMsg.LateDelivery, ref dwDelayTime))
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1004,7 +1004,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_HORSERUN:
-                    if (ClientHorseRunXY(ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.LateDelivery, ref dwDelayTime))
+                    if (ClientHorseRunXY(ProcessMsg.wIdent, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, ProcessMsg.LateDelivery, ref dwDelayTime))
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1052,7 +1052,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_RUN:
-                    if (ClientRunXY(ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ref dwDelayTime))
+                    if (ClientRunXY(ProcessMsg.wIdent, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, ProcessMsg.nParam3, ref dwDelayTime))
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1225,7 +1225,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.CM_SPELL:
-                    if (ClientSpellXY(ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, M2Share.ActorMgr.Get(ProcessMsg.nParam3), ProcessMsg.LateDelivery, ref dwDelayTime))
+                    if (ClientSpellXY(ProcessMsg.wIdent, ProcessMsg.wParam, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, M2Share.ActorMgr.Get(ProcessMsg.nParam3), ProcessMsg.LateDelivery, ref dwDelayTime))
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1463,8 +1463,8 @@ namespace GameSvr.Player
                             }
                             if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
                             {
-                                M2Share.ActorMgr.Get(ProcessMsg.nParam3).Bo2B0 = true;
-                                M2Share.ActorMgr.Get(ProcessMsg.nParam3).MDw2B4Tick = HUtil32.GetTickCount();
+                                M2Share.ActorMgr.Get(ProcessMsg.nParam3).BoCrimeforCastle = true;
+                                M2Share.ActorMgr.Get(ProcessMsg.nParam3).CrimeforCastleTime = HUtil32.GetTickCount();
                             }
                             HealthTick = 0;
                             SpellTick = 0;

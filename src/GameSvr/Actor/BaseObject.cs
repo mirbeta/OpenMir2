@@ -328,14 +328,14 @@ namespace GameSvr.Actor
         /// 所属城堡
         /// </summary>
         public TUserCastle Castle;
-        public bool Bo2B0;
-        public int MDw2B4Tick = 0;
+        public bool BoCrimeforCastle;
+        public int CrimeforCastleTime = 0;
         /// <summary>
         /// 无敌模式
         /// </summary>
         public bool SuperMan;
-        public bool Bo2B9;
-        public bool Bo2Ba;
+        public bool HoldPlace;
+        public bool BoFearFire;
         /// <summary>
         /// 是否是动物
         /// </summary>
@@ -355,7 +355,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 被打到是否减慢行走速度,等级小于50的怪 F-减慢 T-不减慢
         /// </summary>
-        public bool Bo2Bf;
+        public bool RushMode;
         /// <summary>
         /// 非攻击模式 F-可攻击 T-不攻击
         /// </summary>
@@ -412,11 +412,11 @@ namespace GameSvr.Actor
         /// <summary>
         /// 检查重叠人物使用
         /// </summary>
-        public bool Bo2F0;
+        public bool BoDuplication;
         /// <summary>
         /// 检查重叠人物间隔
         /// </summary>
-        public int DupObjTick = 0;
+        public int DupStartTick = 0;
         public Envirnoment Envir;
         /// <summary>
         /// 尸体清除
@@ -463,7 +463,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 换地图时，跑走不考虑坐标
         /// </summary>
-        public bool MBo316;
+        public bool SpaceMoved;
         /// <summary>
         /// 正在交易
         /// </summary>
@@ -845,7 +845,7 @@ namespace GameSvr.Actor
             Job = PlayJob.Warrior;
             Gold = 0;
             Appr = 0;
-            Bo2B9 = true;
+            HoldPlace = true;
             ViewRange = 5;
             HomeMap = "0";
             Permission = 0;
@@ -858,7 +858,7 @@ namespace GameSvr.Actor
             GroupRcallTick = HUtil32.GetTickCount();
             RecallSuite = false;
             BoRace = false;
-            Bo2Ba = false;
+            BoFearFire = false;
             AbilSeeHealGauge = false;
             PowerHit = false;
             UseThrusting = false;
@@ -903,14 +903,14 @@ namespace GameSvr.Actor
             AttatckMode = 0;
             InFreePkArea = false;
             GuildWarArea = false;
-            Bo2B0 = false;
+            BoCrimeforCastle = false;
             SuperMan = false;
             Skeleton = false;
-            Bo2Bf = false;
+            RushMode = false;
             HolySeize = false;
             CrazyMode = false;
             ShowHp = false;
-            Bo2F0 = false;
+            BoDuplication = false;
             Animal = false;
             NoItem = false;
             BodyLeathery = 50;
@@ -1257,7 +1257,7 @@ namespace GameSvr.Actor
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
                     bo29 = true;
-                    if (Bo2Ba && !Envir.CanSafeWalk(newX, newY))
+                    if (BoFearFire && !Envir.CanSafeWalk(newX, newY))
                     {
                         bo29 = false;
                     }
@@ -2018,7 +2018,7 @@ namespace GameSvr.Actor
                             SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW, Direction, CurrX, CurrY, 0, "");
                         }
                         MapMoveTick = HUtil32.GetTickCount();
-                        MBo316 = true;
+                        SpaceMoved = true;
                         bo21 = true;
                     }
                     if (!bo21)
@@ -2037,7 +2037,7 @@ namespace GameSvr.Actor
                         if (Race == ActorRace.Play)
                         {
                             DisappearA();
-                            MBo316 = true;
+                            SpaceMoved = true;
                             var playObject = this as PlayObject;
                             playObject.m_sSwitchMapName = envir.MapName;
                             playObject.m_nSwitchMapX = nX;
@@ -3601,7 +3601,7 @@ namespace GameSvr.Actor
                                                 else
                                                 {
                                                     DisappearA();
-                                                    MBo316 = true;
+                                                    SpaceMoved = true;
                                                     var playObject = this as PlayObject;
                                                     playObject.m_sSwitchMapName = gateObj.Envir.MapName;
                                                     playObject.m_nSwitchMapX = gateObj.nX;
@@ -3728,7 +3728,7 @@ namespace GameSvr.Actor
                 if (AddToMap())
                 {
                     MapMoveTick = HUtil32.GetTickCount();
-                    MBo316 = true;
+                    SpaceMoved = true;
                     result = true;
                 }
                 else

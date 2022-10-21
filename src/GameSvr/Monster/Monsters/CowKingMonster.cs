@@ -5,23 +5,23 @@ namespace GameSvr.Monster.Monsters
 {
     public class CowKingMonster : AtMonster
     {
-        private int _dw558;
-        private bool _bo55C;
-        private bool _bo55D;
-        private int _n560;
-        private int _dw564;
-        private int _dw568;
-        private int _dw56C;
-        private int _dw570;
+        private int JumpTime;
+        private bool CrazyReadyMode;
+        private bool CrazyKingMode;
+        private int CrazyCount;
+        private int CrazyReady;
+        private int CrazyTime;
+        private int oldHitTime;
+        private int oldWalkTime;
 
         public CowKingMonster() : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 500;
-            _dw558 = HUtil32.GetTickCount();
-            Bo2Bf = true;
-            _n560 = 0;
-            _bo55C = false;
-            _bo55D = false;
+            JumpTime = HUtil32.GetTickCount();
+            RushMode = true;
+            CrazyCount = 0;
+            CrazyReadyMode = false;
+            CrazyKingMode = false;
         }
 
         protected override void Attack(BaseObject targeTBaseObject, byte nDir)
@@ -32,69 +32,69 @@ namespace GameSvr.Monster.Monsters
 
         public override void Initialize()
         {
-            _dw56C = NextHitTime;
-            _dw570 = WalkSpeed;
+            oldHitTime = NextHitTime;
+            oldWalkTime = WalkSpeed;
             base.Initialize();
         }
 
         public override void Run()
         {
-            if (!Death && !Ghost && (HUtil32.GetTickCount() - _dw558) > (30 * 1000))
+            if (!Death && !Ghost && (HUtil32.GetTickCount() - JumpTime) > (30 * 1000))
             {
-                short n8 = 0;
-                short nC = 0;
-                int n10;
-                _dw558 = HUtil32.GetTickCount();
-                if (TargetCret != null && sub_4C3538() >= 5)
+                short nX = 0;
+                short nY = 0;
+                int oldCrazyCount;
+                JumpTime = HUtil32.GetTickCount();
+                if (TargetCret != null && SiegeLockCount() >= 5)
                 {
-                    TargetCret.GetBackPosition(ref n8, ref nC);
-                    if (Envir.CanWalk(n8, nC, false))
+                    TargetCret.GetBackPosition(ref nX, ref nY);
+                    if (Envir.CanWalk(nX, nY, false))
                     {
-                        SpaceMove(Envir.MapName, n8, nC, 0);
+                        SpaceMove(Envir.MapName, nX, nY, 0);
                         return;
                     }
                     MapRandomMove(Envir.MapName, 0);
                     return;
                 }
-                n10 = _n560;
-                _n560 = 7 - WAbil.HP / (WAbil.MaxHP / 7);
-                if (_n560 >= 2 && _n560 != n10)
+                oldCrazyCount = CrazyCount;
+                CrazyCount = 7 - WAbil.HP / (WAbil.MaxHP / 7);
+                if (CrazyCount >= 2 && CrazyCount != oldCrazyCount)
                 {
-                    _bo55C = true;
-                    _dw564 = HUtil32.GetTickCount();
+                    CrazyReadyMode = true;
+                    CrazyReady = HUtil32.GetTickCount();
                 }
-                if (_bo55C)
+                if (CrazyReadyMode)
                 {
-                    if ((HUtil32.GetTickCount() - _dw564) < 8000)
+                    if ((HUtil32.GetTickCount() - CrazyReady) < 8000)
                     {
                         NextHitTime = 10000;
                     }
                     else
                     {
-                        _bo55C = false;
-                        _bo55D = true;
-                        _dw568 = HUtil32.GetTickCount();
+                        CrazyReadyMode = false;
+                        CrazyKingMode = true;
+                        CrazyTime = HUtil32.GetTickCount();
                     }
                 }
-                if (_bo55D)
+                if (CrazyKingMode)
                 {
-                    if ((HUtil32.GetTickCount() - _dw568) < 8000)
+                    if ((HUtil32.GetTickCount() - CrazyTime) < 8000)
                     {
                         NextHitTime = 500;
                         WalkSpeed = 400;
                     }
                     else
                     {
-                        _bo55D = false;
-                        NextHitTime = _dw56C;
-                        WalkSpeed = _dw570;
+                        CrazyKingMode = false;
+                        NextHitTime = oldHitTime;
+                        WalkSpeed = oldWalkTime;
                     }
                 }
             }
             base.Run();
         }
 
-        private int sub_4C3538()
+        private int SiegeLockCount()
         {
             int result = 0;
             int nC = -1;

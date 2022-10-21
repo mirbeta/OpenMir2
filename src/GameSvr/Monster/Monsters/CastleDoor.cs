@@ -19,27 +19,19 @@ namespace GameSvr.Monster.Monsters
 
         private void SetMapXyFlag(int nFlag)
         {
-            bool bo06;
             Envir.SetMapXyFlag(CurrX, CurrY - 2, true);
             Envir.SetMapXyFlag(CurrX + 1, CurrY - 1, true);
             Envir.SetMapXyFlag(CurrX + 1, CurrY - 2, true);
-            if (nFlag == 1)
-            {
-                bo06 = false;
-            }
-            else
-            {
-                bo06 = true;
-            }
-            Envir.SetMapXyFlag(CurrX, CurrY, bo06);
-            Envir.SetMapXyFlag(CurrX, CurrY - 1, bo06);
-            Envir.SetMapXyFlag(CurrX, CurrY - 2, bo06);
-            Envir.SetMapXyFlag(CurrX + 1, CurrY - 1, bo06);
-            Envir.SetMapXyFlag(CurrX + 1, CurrY - 2, bo06);
-            Envir.SetMapXyFlag(CurrX - 1, CurrY, bo06);
-            Envir.SetMapXyFlag(CurrX - 2, CurrY, bo06);
-            Envir.SetMapXyFlag(CurrX - 1, CurrY - 1, bo06);
-            Envir.SetMapXyFlag(CurrX - 1, CurrY + 1, bo06);
+            var boFlag = nFlag != 1;
+            Envir.SetMapXyFlag(CurrX, CurrY, boFlag);
+            Envir.SetMapXyFlag(CurrX, CurrY - 1, boFlag);
+            Envir.SetMapXyFlag(CurrX, CurrY - 2, boFlag);
+            Envir.SetMapXyFlag(CurrX + 1, CurrY - 1, boFlag);
+            Envir.SetMapXyFlag(CurrX + 1, CurrY - 2, boFlag);
+            Envir.SetMapXyFlag(CurrX - 1, CurrY, boFlag);
+            Envir.SetMapXyFlag(CurrX - 2, CurrY, boFlag);
+            Envir.SetMapXyFlag(CurrX - 1, CurrY - 1, boFlag);
+            Envir.SetMapXyFlag(CurrX - 1, CurrY + 1, boFlag);
             if (nFlag == 0)
             {
                 Envir.SetMapXyFlag(CurrX, CurrY - 2, false);
@@ -59,7 +51,7 @@ namespace GameSvr.Monster.Monsters
             IsOpened = true;
             StoneMode = true;
             SetMapXyFlag(0);
-            Bo2B9 = false;
+            HoldPlace = false;
         }
 
         public void Close()
@@ -77,7 +69,7 @@ namespace GameSvr.Monster.Monsters
             IsOpened = false;
             StoneMode = false;
             SetMapXyFlag(1);
-            Bo2B9 = true;
+            HoldPlace = true;
         }
 
         public override void Die()

@@ -601,10 +601,10 @@ namespace GameSvr
             return result;
         }
 
-        public static byte GetNextDirection(int sx, int sy, int dx, int dy)
+        public static byte GetNextDirection(short sx, short sy, short dx, short dy)
         {
-            int flagx;
-            int flagy;
+            short flagx;
+            short flagy;
             byte result = Grobal2.DR_DOWN;
             if (sx < dx)
             {

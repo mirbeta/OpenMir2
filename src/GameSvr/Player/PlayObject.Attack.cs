@@ -156,7 +156,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientHorseRunXY(int wIdent, int nX, int nY, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientHorseRunXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int dwDelayTime)
         {
             var result = false;
             byte n14;
@@ -215,7 +215,7 @@ namespace GameSvr.Player
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
-            MBo316 = false;
+            SpaceMoved = false;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (HorseRunTo(n14, false))
             {
@@ -223,7 +223,7 @@ namespace GameSvr.Player
                 {
                     StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
                 }
-                if (MBo316 || CurrX == nX && CurrY == nY)
+                if (SpaceMoved || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }
@@ -240,7 +240,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientSpellXY(int wIdent, int nKey, int nTargetX, int nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
         {
             dwDelayTime = 0;
             if (!m_boCanSpell)
@@ -464,7 +464,7 @@ namespace GameSvr.Player
                         nTargetX = BaseObject.CurrX;
                         nTargetY = BaseObject.CurrY;
                     }
-                    if (!DoSpell(UserMagic, (short)nTargetX, (short)nTargetY, BaseObject))
+                    if (!DoSpell(UserMagic, nTargetX, nTargetY, BaseObject))
                     {
                         SendRefMsg(Grobal2.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
                     }
@@ -474,7 +474,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientRunXY(int wIdent, int nX, int nY, int nFlag, ref int dwDelayTime)
+        private bool ClientRunXY(int wIdent, short nX, short nY, int nFlag, ref int dwDelayTime)
         {
             bool result = false;
             byte nDir;
@@ -526,7 +526,7 @@ namespace GameSvr.Player
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
-            MBo316 = false;
+            SpaceMoved = false;
             nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (RunTo(nDir, false, nX, nY))
             {
@@ -534,7 +534,7 @@ namespace GameSvr.Player
                 {
                     StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
                 }
-                if (MBo316 || CurrX == nX && CurrY == nY)
+                if (SpaceMoved || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }
@@ -551,7 +551,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientWalkXY(int wIdent, int nX, int nY, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientWalkXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int dwDelayTime)
         {
             bool result = false;
             int n14;
@@ -603,11 +603,11 @@ namespace GameSvr.Player
                 }
             }
             m_dwMoveTick = HUtil32.GetTickCount();
-            MBo316 = false;
+            SpaceMoved = false;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (WalkTo((byte)n14, false))
             {
-                if (MBo316 || CurrX == nX && CurrY == nY)
+                if (SpaceMoved || CurrX == nX && CurrY == nY)
                 {
                     result = true;
                 }

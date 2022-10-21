@@ -598,15 +598,15 @@ namespace GameSvr.World
                     break;
                 case ActorRace.MonsterDigoutzombi:
                     cert = new DigOutZombi();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.Bo2Ba = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) cert.BoFearFire = true;
                     break;
                 case ActorRace.MonsterZilkinzombi:
                     cert = new ZilKinZombi();
-                    if (M2Share.RandomNumber.Random(4) == 0) cert.Bo2Ba = true;
+                    if (M2Share.RandomNumber.Random(4) == 0) cert.BoFearFire = true;
                     break;
                 case 97:
                     cert = new CowMonster();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.Bo2Ba = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) cert.BoFearFire = true;
                     break;
                 case ActorRace.MonsterWhiteskeleton:
                     cert = new WhiteSkeleton();
@@ -614,7 +614,7 @@ namespace GameSvr.World
                 case ActorRace.MonsterSculture:
                     cert = new ScultureMonster
                     {
-                        Bo2Ba = true
+                        BoFearFire = true
                     };
                     break;
                 case ActorRace.MonsterScultureking:
