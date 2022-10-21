@@ -37,8 +37,8 @@
     "language": "zh",
     "settings": {
       "feat": {
-        "title": "✨ 新功能",//定义标题
-        "enable": true //定义是否启用该类型，注意feat、fix、perf、revert、refactor这几个类型的commit无法关闭
+        "title": "✨ 新功能",
+        "enable": true
       },
       "fix": {
         "title": "🐛 Bug 修复"
