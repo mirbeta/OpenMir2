@@ -19,7 +19,8 @@
     "commitizen": "^4.2.5",
     "conventional-changelog-cli": "^2.2.2",
     "conventional-changelog-cmyr-config": "^2.0.4",
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "release-it": "^15.5.0"
   },
   "config": {
     "commitizen": {
@@ -31,7 +32,7 @@
     }
   },
   "changelog": {
-    "bugsUrl":"https://github.com/mirbeta/OpenMir2/issues/",
+    "bugsUrl": "https://github.com/mirbeta/OpenMir2/issues/",
     "authorName": true,
     "authorEmail": true,
     "language": "zh",
