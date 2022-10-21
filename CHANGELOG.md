@@ -16,6 +16,11 @@
 * 优化脚本命令字符串比较方法 ([700b691](http://10.10.0.202/mir2/OpenMir2/commits/700b691abe6f0d142b7fadce9e73ab609ba0465a))
 
 
+### Features
+
+* 增加MapSvr作为试验性测试工程 ([9a1fc7c](http://10.10.0.202/mir2/OpenMir2/commits/9a1fc7c53660780e5e244b8dd14f7cec70d6cd43))
+
+
 ### Performance Improvements
 
 * 优化脚本变量替换代码 ([5e14c7e](http://10.10.0.202/mir2/OpenMir2/commits/5e14c7e830067206f43b67b9f68f40615ffa1909))
