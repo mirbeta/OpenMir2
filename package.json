@@ -24,7 +24,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog-cmyr",
+      "path": "./node_modules/cz-conventional-changelog",
       "maxHeaderWidth": 100,
       "defaultType": "",
       "defaultSubject": "",
