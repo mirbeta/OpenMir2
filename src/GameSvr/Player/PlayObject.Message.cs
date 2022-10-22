@@ -1434,7 +1434,7 @@ namespace GameSvr.Player
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.CharStatus;
                         sendMsg = EDCode.EncodeBuffer(CharDesc);
-                        nObjCount = GetCharColor(BaseObject);
+                        nObjCount = GetChrColor(BaseObject);
                         if (!string.IsNullOrEmpty(ProcessMsg.Msg))
                         {
                             sendMsg = sendMsg + EDCode.EncodeString($"{ProcessMsg.Msg}/{nObjCount}");
@@ -1531,7 +1531,7 @@ namespace GameSvr.Player
                     SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
                     break;
                 case Grobal2.RM_USERNAME:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, ProcessMsg.BaseObject, GetCharColor(BaseObject), 0, 0);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, ProcessMsg.BaseObject, GetChrColor(BaseObject), 0, 0);
                     SendSocket(m_DefMsg, EDCode.EncodeString(ProcessMsg.Msg));
                     break;
                 case Grobal2.RM_WINEXP:
@@ -1546,7 +1546,7 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
                 case Grobal2.RM_CHANGENAMECOLOR:
-                    SendDefMessage(Grobal2.SM_CHANGENAMECOLOR, ProcessMsg.BaseObject, GetCharColor(BaseObject), 0, 0, "");
+                    SendDefMessage(Grobal2.SM_CHANGENAMECOLOR, ProcessMsg.BaseObject, GetChrColor(BaseObject), 0, 0, "");
                     break;
                 case Grobal2.RM_LOGON:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
@@ -1842,7 +1842,7 @@ namespace GameSvr.Player
                     CharDesc.Feature = BaseObject.GetFeature(this);
                     CharDesc.Status = BaseObject.CharStatus;
                     sendMsg = EDCode.EncodeBuffer(CharDesc);
-                    nObjCount = GetCharColor(BaseObject);
+                    nObjCount = GetChrColor(BaseObject);
                     if (ProcessMsg.Msg != "")
                     {
                         sendMsg = sendMsg + EDCode.EncodeString(ProcessMsg.Msg + '/' + nObjCount);

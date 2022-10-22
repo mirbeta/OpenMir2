@@ -17,8 +17,8 @@ namespace GameSvr.Player
             var baseObject = M2Share.ActorMgr.Get(targetId);
             if (CretInNearXY(baseObject, x, y))
             {
-                var tagColor = GetCharColor(baseObject);
-                var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, baseObject.ActorId, tagColor, 0, 0);
+                var nameColor = GetChrColor(baseObject);
+                var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
                 var uname = baseObject.GetShowName();
                 SendSocket(defMsg, EDCode.EncodeString(uname));
             }
@@ -72,7 +72,7 @@ namespace GameSvr.Player
             UserStateInfo userState = new UserStateInfo();
             userState.Feature = playObject.GetFeature(this);
             userState.UserName = playObject.ChrName;
-            userState.NameColor = GetCharColor(playObject);
+            userState.NameColor = GetChrColor(playObject);
             if (playObject.MyGuild != null)
             {
                 userState.GuildName = playObject.MyGuild.sGuildName;

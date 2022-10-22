@@ -2718,112 +2718,118 @@ namespace GameSvr.Actor
             }
         }
 
-        protected byte GetCharColor(BaseObject baseObject)
+        protected byte GetChrColor(BaseObject baseObject)
         {
             var result = baseObject.GetNamecolor();
-            if (baseObject.Race == ActorRace.Play)
+            switch (baseObject.Race)
             {
-                if (baseObject.PvpLevel() < 2)
-                {
-                    if (baseObject.PvpFlag)
+                case ActorRace.Play:
                     {
-                        result = M2Share.Config.btPKFlagNameColor;
-                    }
-                    var n10 = GetGuildRelation(this, baseObject);
-                    switch (n10)
-                    {
-                        case 1:
-                        case 3:
-                            result = M2Share.Config.btAllyAndGuildNameColor;
-                            break;
-                        case 2:
-                            result = M2Share.Config.WarGuildNameColor;
-                            break;
-                    }
-                    if (baseObject.Envir.Flag.boFight3Zone)
-                    {
-                        if (MyGuild == baseObject.MyGuild)
+                        if (baseObject.PvpLevel() < 2)
                         {
-                            result = M2Share.Config.btAllyAndGuildNameColor;
-                        }
-                        else
-                        {
-                            result = M2Share.Config.WarGuildNameColor;
-                        }
-                    }
-                }
-                var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
-                if ((castle != null) && castle.UnderWar && InFreePkArea && baseObject.InFreePkArea)
-                {
-                    result = M2Share.Config.InFreePKAreaNameColor;
-                    GuildWarArea = true;
-                    if (MyGuild == null)
-                    {
-                        return result;
-                    }
-                    if (castle.IsMasterGuild(MyGuild))
-                    {
-                        if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
-                        {
-                            result = M2Share.Config.btAllyAndGuildNameColor;
-                        }
-                        else
-                        {
-                            if (castle.IsAttackGuild(baseObject.MyGuild))
+                            if (baseObject.PvpFlag)
                             {
-                                result = M2Share.Config.WarGuildNameColor;
+                                result = M2Share.Config.btPKFlagNameColor;
                             }
-                        }
-                    }
-                    else
-                    {
-                        if (castle.IsAttackGuild(MyGuild))
-                        {
-                            if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
+                            var n10 = GetGuildRelation(this, baseObject);
+                            switch (n10)
                             {
-                                result = M2Share.Config.btAllyAndGuildNameColor;
+                                case 1:
+                                case 3:
+                                    result = M2Share.Config.btAllyAndGuildNameColor;
+                                    break;
+                                case 2:
+                                    result = M2Share.Config.WarGuildNameColor;
+                                    break;
                             }
-                            else
+                            if (baseObject.Envir.Flag.boFight3Zone)
                             {
-                                if (castle.IsMember(baseObject))
+                                if (MyGuild == baseObject.MyGuild)
+                                {
+                                    result = M2Share.Config.btAllyAndGuildNameColor;
+                                }
+                                else
                                 {
                                     result = M2Share.Config.WarGuildNameColor;
                                 }
                             }
                         }
+                        var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                        if ((castle != null) && castle.UnderWar && InFreePkArea && baseObject.InFreePkArea)
+                        {
+                            result = M2Share.Config.InFreePKAreaNameColor;
+                            GuildWarArea = true;
+                            if (MyGuild == null)
+                            {
+                                return result;
+                            }
+                            if (castle.IsMasterGuild(MyGuild))
+                            {
+                                if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
+                                {
+                                    result = M2Share.Config.btAllyAndGuildNameColor;
+                                }
+                                else
+                                {
+                                    if (castle.IsAttackGuild(baseObject.MyGuild))
+                                    {
+                                        result = M2Share.Config.WarGuildNameColor;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (castle.IsAttackGuild(MyGuild))
+                                {
+                                    if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
+                                    {
+                                        result = M2Share.Config.btAllyAndGuildNameColor;
+                                    }
+                                    else
+                                    {
+                                        if (castle.IsMember(baseObject))
+                                        {
+                                            result = M2Share.Config.WarGuildNameColor;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
                     }
-                }
-            }
-            else if (baseObject.Race == ActorRace.NPC) //增加NPC名字颜色单独控制
-            {
-                result = M2Share.Config.NpcNameColor;
-                if (baseObject.CrazyMode) //疯狂模式(红名)
-                {
-                    result = 0xF9;
-                }
-                if (baseObject.HolySeize) //不能走动模式(困魔咒)
-                {
-                    result = 0x7D;
-                }
-            }
-            else
-            {
-                if (baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
-                {
-                    result = M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
-                }
-                else
-                {
-                    result = 255;
-                }
-                if (baseObject.CrazyMode)
-                {
-                    result = 0xF9;
-                }
-                if (baseObject.HolySeize)
-                {
-                    result = 0x7D;
-                }
+                case ActorRace.NPC://增加NPC名字颜色单独控制
+                    {
+                        result = M2Share.Config.NpcNameColor;
+                        if (baseObject.CrazyMode) //疯狂模式(红名)
+                        {
+                            result = 0xF9;
+                        }
+                        if (baseObject.HolySeize) //不能走动模式(困魔咒)
+                        {
+                            result = 0x7D;
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        if (baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
+                        {
+                            result = M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
+                        }
+                        else
+                        {
+                            result = 255;
+                        }
+                        if (baseObject.CrazyMode)
+                        {
+                            result = 0xF9;
+                        }
+                        if (baseObject.HolySeize)
+                        {
+                            result = 0x7D;
+                        }
+                        break;
+                    }
             }
             return result;
         }
