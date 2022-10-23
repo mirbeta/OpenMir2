@@ -142,7 +142,22 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
+        
+        /// <summary>
+        /// 是否被动攻击怪物类型
+        /// Race:小于52属于一些不会主动攻击角色的怪物类型
+        /// 如：鹿 鸡 羊
+        /// </summary>
+        /// <returns></returns>
+        private bool IsPassiveAttack(BaseObject monsterObject)
+        {
+            if (monsterObject.Race <= 52)
+            {
+                return true;
+            }
+            return false;
+        }
+        
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
@@ -199,10 +214,17 @@ namespace GameSvr.Actor
                                         {
                                             if (!baseObject.Death && !baseObject.Invisible)
                                             {
+                                                if (this.Race == ActorRace.Guard || this.Race == ActorRace.ArcherGuard) //守卫和护卫怪不搜索温和怪物
+                                                {
+                                                    if (IsPassiveAttack(baseObject))
+                                                    {
+                                                        nIdx++;
+                                                        continue;
+                                                    }
+                                                }
                                                 if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                                 {
-                                                    if ((Race < ActorRace.Animal) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null)
-                                                        && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || (baseObject.Race == ActorRace.Play))
+                                                    if ((Race < ActorRace.Animal) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || (baseObject.Race == ActorRace.Play))
                                                     {
                                                         UpdateVisibleGay(baseObject);
                                                     }

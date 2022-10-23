@@ -5,6 +5,9 @@ using SystemModule.Data;
 
 namespace GameSvr.Monster.Monsters
 {
+    /// <summary>
+    /// 守卫
+    /// </summary>
     public class SuperGuard : NormNpc
     {
         protected bool AttackPet;
@@ -58,40 +61,40 @@ namespace GameSvr.Monster.Monsters
         private bool CanAttckTarget(BaseObject baseObject)
         {
             //todo 最好加个字段直接判断是否能被攻击，减少判断
-            return baseObject.Race == ActorRace.ArcherGuard || baseObject.Race == ActorRace.Guard || baseObject.Race == ActorRace.PeaceNpc || baseObject.Race == ActorRace.NPC;
+            return baseObject.Race == ActorRace.Guard || baseObject.Race == ActorRace.ArcherGuard || baseObject.Race == ActorRace.PeaceNpc || baseObject.Race == ActorRace.NPC;
         }
-
+        
         public override void Run()
         {
-            if (this.Master != null)
+            if (Master != null)// 不允许召唤为宝宝
             {
-                this.Master = null;
+                Master = null;
             }
-            // 不允许召唤为宝宝
             if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
             {
                 for (var i = 0; i < this.VisibleActors.Count; i++)
                 {
-                    var baseObject = this.VisibleActors[i].BaseObject;
-                    if (baseObject.Death || CanAttckTarget(baseObject))
+                    var attackObject = this.VisibleActors[i].BaseObject;
+                    if (attackObject.Death || attackObject.Ghost || CanAttckTarget(attackObject))
                     {
+                        VisibleActors.RemoveAt(i);
                         continue;
                     }
-                    if (baseObject.PvpLevel() >= 2 || baseObject.Race >= ActorRace.Monster && !baseObject.Mission)
+                    if (attackObject.Race >= ActorRace.Monster || attackObject.PvpLevel() >= 2 && !attackObject.Mission)
                     {
                         if (AttackPet)
                         {
-                            this.SetTargetCreat(baseObject);
+                            this.SetTargetCreat(attackObject);
                             break;
                         }
-                        if (baseObject.Master == null)
+                        if (attackObject.Master == null)
                         {
-                            this.SetTargetCreat(baseObject);
+                            this.SetTargetCreat(attackObject);
                             break;
                         }
-                        if (baseObject.TargetCret == this)
+                        if (attackObject.TargetCret == this)
                         {
-                            this.SetTargetCreat(baseObject);
+                            this.SetTargetCreat(attackObject);
                             break;
                         }
                     }
