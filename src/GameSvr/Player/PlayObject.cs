@@ -1001,6 +1001,17 @@ namespace GameSvr.Player
             }
         }
 
+        public void ChangeSpaceMove(Envirnoment envir, short nX, short nY)
+        {
+            m_sSwitchMapName = envir.MapName;
+            m_nSwitchMapX = nX;
+            m_nSwitchMapY = nY;
+            m_boSwitchData = true;
+            m_nServerIndex = envir.ServerIndex;
+            m_boEmergencyClose = true;
+            m_boReconnection = true;
+        }
+
         private void ReadAllBook()
         {
             for (var i = 0; i < M2Share.WorldEngine.MagicList.Count; i++)

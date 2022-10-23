@@ -1826,8 +1826,7 @@ namespace GameSvr.Actor
                                 UseItems[i].Dura = nDura;
                                 if (Race == ActorRace.Play)
                                 {
-                                    var playObject = this as PlayObject;
-                                    playObject.SendDelItems(UseItems[i]);
+                                    ((PlayObject)this).SendDelItems(UseItems[i]);
                                 }
                                 UseItems[i].Index = 0;
                                 RecalcAbilitys();
@@ -2038,14 +2037,7 @@ namespace GameSvr.Actor
                         {
                             DisappearA();
                             SpaceMoved = true;
-                            var playObject = ;
-                            playObject.m_sSwitchMapName = envir.MapName;
-                            playObject.m_nSwitchMapX = nX;
-                            playObject.m_nSwitchMapY = nY;
-                            playObject.m_boSwitchData = true;
-                            playObject.m_nServerIndex = envir.ServerIndex;
-                            playObject.m_boEmergencyClose = true;
-                            playObject.m_boReconnection = true;
+                            ((PlayObject)this).ChangeSpaceMove(envir, nX, nY);
                         }
                         else
                         {
@@ -2696,8 +2688,7 @@ namespace GameSvr.Actor
                 UseItems[Grobal2.U_WEAPON].Dura = nDura;
                 if (Race == ActorRace.Play)
                 {
-                    var playObject = this as PlayObject;
-                    playObject.SendDelItems(UseItems[Grobal2.U_WEAPON]);
+                    ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_WEAPON]);
                     var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
@@ -3608,14 +3599,7 @@ namespace GameSvr.Actor
                                                 {
                                                     DisappearA();
                                                     SpaceMoved = true;
-                                                    var playObject = this as PlayObject;
-                                                    playObject.m_sSwitchMapName = gateObj.Envir.MapName;
-                                                    playObject.m_nSwitchMapX = gateObj.nX;
-                                                    playObject.m_nSwitchMapY = gateObj.nY;
-                                                    playObject.m_boSwitchData = true;
-                                                    playObject.m_nServerIndex = gateObj.Envir.ServerIndex;
-                                                    playObject.m_boEmergencyClose = true;
-                                                    playObject.m_boReconnection = true;
+                                                    ((PlayObject)this).ChangeSpaceMove(gateObj.Envir, gateObj.nX, gateObj.nY);
                                                 }
                                             }
                                         }
@@ -4982,7 +4966,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private bool IsProperFriend_IsFriend(BaseObject cret)
+        private bool IsProperIsFriend(BaseObject cret)
         {
             var result = false;
             if (cret.Race == ActorRace.Play)
@@ -4996,7 +4980,7 @@ namespace GameSvr.Actor
                         result = true;
                         break;
                     case AttackMode.HAM_DEAR:
-                        if ((this == cret) || (cret == (this as PlayObject).m_DearHuman))
+                        if ((this == cret) || (cret == ((PlayObject)this).m_DearHuman))
                         {
                             result = true;
                         }
@@ -5006,41 +4990,38 @@ namespace GameSvr.Actor
                         {
                             result = true;
                         }
-                        else if ((this as PlayObject).m_boMaster)
+                        else if (((PlayObject)this).m_boMaster)
                         {
-                            for (var i = 0; i < (this as PlayObject).m_MasterList.Count; i++)
+                            for (var i = 0; i < ((PlayObject)this).m_MasterList.Count; i++)
                             {
-                                if ((this as PlayObject).m_MasterList[i] == cret)
+                                if (((PlayObject)this).m_MasterList[i] == cret)
                                 {
                                     result = true;
                                     break;
                                 }
                             }
                         }
-                        else if ((cret as PlayObject).m_boMaster)
+                        else if (((PlayObject)cret).m_boMaster)
                         {
-                            for (var i = 0; i < (cret as PlayObject).m_MasterList.Count; i++)
+                            for (var i = 0; i < ((PlayObject)cret).m_MasterList.Count; i++)
                             {
-                                if ((cret as PlayObject).m_MasterList[i] == this)
+                                if (((PlayObject)cret).m_MasterList[i] == this)
                                 {
                                     result = true;
                                     break;
                                 }
                             }
                         }
-
                         break;
                     case AttackMode.HAM_GROUP:
                         if (cret == this)
                         {
                             result = true;
                         }
-
                         if (IsGroupMember(cret))
                         {
                             result = true;
                         }
-
                         break;
                     case AttackMode.HAM_GUILD:
                         if (cret == this)
@@ -5054,7 +5035,6 @@ namespace GameSvr.Actor
                             {
                                 result = true;
                             }
-
                             if (GuildWarArea && (cret.MyGuild != null))
                             {
                                 if (MyGuild.IsAllyGuild(cret.MyGuild))
@@ -5063,14 +5043,12 @@ namespace GameSvr.Actor
                                 }
                             }
                         }
-
                         break;
                     case AttackMode.HAM_PKATTACK:
                         if (cret == this)
                         {
                             result = true;
                         }
-
                         if (PvpLevel() >= 2)
                         {
                             if (cret.PvpLevel() < 2)
@@ -5085,11 +5063,9 @@ namespace GameSvr.Actor
                                 result = true;
                             }
                         }
-
                         break;
                 }
             }
-
             return result;
         }
 
