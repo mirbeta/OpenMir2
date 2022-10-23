@@ -130,7 +130,7 @@ namespace GameSvr.World
         /// </summary>
         public void InitializationMonsterThread()
         {
-            _logger.Info($"Monster Run thread count:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
+            _logger.Info($"Monster Run threads:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
 
             var monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit; //处理线程+预留线程
 
@@ -308,11 +308,19 @@ namespace GameSvr.World
 
                                                     if (monster.IsSlave) //如果是作为玩家的下属，也有主动搜索附近的精灵
                                                     {
+                                                        if (monster.VisibleActors.Count > 0)//优先使用上一次的视觉范围,下属需要注意如果离角色远然后飞到角色身边的时候可能会使用上一次的视觉范围
+                                                        {
+                                                            continue;
+                                                        }
                                                         monster.SearchViewRange();
                                                         continue;
                                                     }
                                                     if (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster) //守卫才主动搜索附近的精灵
                                                     {
+                                                        if (monster.VisibleActors.Count > 0)//优先使用上一次的视觉范围
+                                                        {
+                                                            continue;
+                                                        }
                                                         monster.SearchViewRange();
                                                     }
                                                     continue;

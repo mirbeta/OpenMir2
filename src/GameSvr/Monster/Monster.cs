@@ -185,9 +185,9 @@ namespace GameSvr.Monster
                                     }
                                 }
                             }
-                            if (!Master.SlaveRelax && (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20))
+                            if (!Master.SlaveRelax && (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20)) //离主人视野范围超过20
                             {
-                                SpaceMove(Master.Envir.MapName, TargetX, TargetY, 1);
+                                SpaceMove(Master.Envir.MapName, TargetX, TargetY, 1);//飞到主人身边
                             }
                         }
                     }

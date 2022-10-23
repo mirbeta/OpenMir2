@@ -622,7 +622,7 @@ namespace GameSvr.Actor
         /// </summary>
         protected byte MagBubbleDefenceLevel;
         /// <summary>
-        /// 搜索时间
+        /// 搜索时间间隔
         /// </summary>
         public int SearchTime;
         /// <summary>
@@ -2038,7 +2038,7 @@ namespace GameSvr.Actor
                         {
                             DisappearA();
                             SpaceMoved = true;
-                            var playObject = this as PlayObject;
+                            var playObject = ;
                             playObject.m_sSwitchMapName = envir.MapName;
                             playObject.m_nSwitchMapX = nX;
                             playObject.m_nSwitchMapY = nY;
