@@ -7,18 +7,18 @@ namespace GameSvr.Robots
     public class RobotManage
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private IList<RobotObject> _robotHumanList;
+        private IList<RobotObject> RobotHumanList;
 
         public RobotManage()
         {
-            _robotHumanList = new List<RobotObject>();
+            RobotHumanList = new List<RobotObject>();
             LoadRobot();
         }
 
         ~RobotManage()
         {
             UnLoadRobot();
-            _robotHumanList = null;
+            RobotHumanList = null;
         }
 
         private void LoadRobot()
@@ -33,14 +33,14 @@ namespace GameSvr.Robots
             {
                 var sLineText = LoadList[i];
                 if (sLineText == "" || sLineText[0] == ';') continue;
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new string[] { " ", "/", "\t" });
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new string[] { " ", "/", "\t" });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new[] { " ", "/", "\t" });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new[] { " ", "/", "\t" });
                 if (sRobotName == "" || sScriptFileName == "") continue;
                 var RobotHuman = new RobotObject();
                 RobotHuman.ChrName = sRobotName;
-                RobotHuman.m_sScriptFileName = sScriptFileName;
+                RobotHuman.ScriptFileName = sScriptFileName;
                 RobotHuman.LoadScript();
-                _robotHumanList.Add(RobotHuman);
+                RobotHumanList.Add(RobotHuman);
             }
         }
 
@@ -55,9 +55,9 @@ namespace GameSvr.Robots
             const string sExceptionMsg = "[Exception] TRobotManage::Run";
             try
             {
-                for (var i = _robotHumanList.Count - 1; i >= 0; i--)
+                for (var i = RobotHumanList.Count - 1; i >= 0; i--)
                 {
-                    _robotHumanList[i].Run();
+                    RobotHumanList[i].Run();
                 }
             }
             catch (Exception e)
@@ -69,11 +69,11 @@ namespace GameSvr.Robots
 
         private void UnLoadRobot()
         {
-            for (var i = 0; i < _robotHumanList.Count; i++)
+            for (var i = 0; i < RobotHumanList.Count; i++)
             {
-                _robotHumanList[i] = null;
+                RobotHumanList[i] = null;
             }
-            _robotHumanList.Clear();
+            RobotHumanList.Clear();
         }
     }
 }
