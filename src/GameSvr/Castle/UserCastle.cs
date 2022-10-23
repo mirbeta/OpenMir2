@@ -553,13 +553,11 @@ namespace GameSvr.Castle
         /// </summary>
         public void StartWallconquestWar()
         {
-            PlayObject PlayObject;
-            var ListC = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ListC);
-            for (var i = 0; i < ListC.Count; i++)
+            var playObjectList = new List<BaseObject>();
+            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, playObjectList);
+            for (var i = 0; i < playObjectList.Count; i++)
             {
-                PlayObject = (PlayObject)ListC[i];
-                PlayObject.RefShowName();
+                ((PlayObject)playObjectList[i]).RefShowName();
             }
         }
 
@@ -648,14 +646,14 @@ namespace GameSvr.Castle
 
         public string GetWarDate()
         {
-            const string sMsg = "{0}年{1}月{2}日";
+            const string WarDateMsg = "{0}年{1}月{2}日";
             var result = string.Empty;
             if (AttackWarList.Count <= 0) return result;
             var AttackerInfo = AttackWarList[0];
             var Year = AttackerInfo.AttackDate.Year;
             var Month = AttackerInfo.AttackDate.Month;
             var Day = AttackerInfo.AttackDate.Day;
-            return string.Format(sMsg, Year, Month, Day);
+            return string.Format(WarDateMsg, Year, Month, Day);
         }
 
         public string GetAttackWarList()
@@ -676,7 +674,10 @@ namespace GameSvr.Castle
                     wYear = (short)Year;
                     wMonth = (short)Month;
                     wDay = (short)Day;
-                    if (result != "") result = result + '\\';
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        result = result + '\\';
+                    }
                     result = result + wYear + '年' + wMonth + '月' + wDay + "日\\";
                     n10 = 0;
                 }
