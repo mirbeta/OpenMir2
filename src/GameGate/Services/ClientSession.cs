@@ -936,66 +936,69 @@ namespace GameGate
                 }
 
                 var messagePacket = clientPacket.Buffer.AsSpan();
-                var Recog = BitConverter.ToInt32(messagePacket[..4]);
-                var Ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
-                var Param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
-                var Tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
-                var Series = 0;
-                switch (Ident)
+                if (messagePacket.Length > 10)
                 {
-                    case Grobal2.SM_RUSH:
-                        if (m_nSvrObject == Recog)
-                        {
-                            var dwCurrentTick = HUtil32.GetTickCount();
-                            _gameSpeed.MoveTick = dwCurrentTick;
-                            _gameSpeed.AttackTick = dwCurrentTick;
-                            _gameSpeed.SpellTick = dwCurrentTick;
-                            _gameSpeed.SitDownTick = dwCurrentTick;
-                            _gameSpeed.ButchTick = dwCurrentTick;
-                            _gameSpeed.DealTick = dwCurrentTick;
-                        }
-                        break;
-                    case Grobal2.SM_NEWMAP:
-                    case Grobal2.SM_CHANGEMAP:
-                    case Grobal2.SM_LOGON:
-                        if (m_nSvrObject == 0)
-                        {
-                            m_nSvrObject = Recog;
-                        }
-                        break;
-                    case Grobal2.SM_PLAYERCONFIG:
-
-                        break;
-                    case Grobal2.SM_CHARSTATUSCHANGED:
-                        Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
-                        if (m_nSvrObject == Recog)
-                        {
-                            _gameSpeed.DefItemSpeed = Series;
-                            _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, Series);
-                            m_nChrStutas = HUtil32.MakeLong(Param, Tag);
-                            //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
-                        }
-                        break;
-                    case Grobal2.SM_HWID:
-                        Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
-                        if (Config.IsProcClientHardwareID)
-                        {
-                            switch (Series)
+                    var Recog = BitConverter.ToInt32(messagePacket[..4]);
+                    var Ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
+                    var Param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
+                    var Tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
+                    var Series = 0;
+                    switch (Ident)
+                    {
+                        case Grobal2.SM_RUSH:
+                            if (m_nSvrObject == Recog)
                             {
-                                case 1:
-                                    LogQueue.EnqueueDebugging("封机器码");
-                                    break;
-                                case 2:
-                                    LogQueue.EnqueueDebugging("清理机器码");
-                                    _hwidFilter.ClearDeny();
-                                    _hwidFilter.SaveDenyList();
-                                    break;
+                                var dwCurrentTick = HUtil32.GetTickCount();
+                                _gameSpeed.MoveTick = dwCurrentTick;
+                                _gameSpeed.AttackTick = dwCurrentTick;
+                                _gameSpeed.SpellTick = dwCurrentTick;
+                                _gameSpeed.SitDownTick = dwCurrentTick;
+                                _gameSpeed.ButchTick = dwCurrentTick;
+                                _gameSpeed.DealTick = dwCurrentTick;
                             }
-                        }
-                        break;
-                    case Grobal2.SM_RUNGATELOGOUT:
-                        SendKickMsg(2);
-                        break;
+                            break;
+                        case Grobal2.SM_NEWMAP:
+                        case Grobal2.SM_CHANGEMAP:
+                        case Grobal2.SM_LOGON:
+                            if (m_nSvrObject == 0)
+                            {
+                                m_nSvrObject = Recog;
+                            }
+                            break;
+                        case Grobal2.SM_PLAYERCONFIG:
+
+                            break;
+                        case Grobal2.SM_CHARSTATUSCHANGED:
+                            Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
+                            if (m_nSvrObject == Recog)
+                            {
+                                _gameSpeed.DefItemSpeed = Series;
+                                _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, Series);
+                                m_nChrStutas = HUtil32.MakeLong(Param, Tag);
+                                //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
+                            }
+                            break;
+                        case Grobal2.SM_HWID:
+                            Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
+                            if (Config.IsProcClientHardwareID)
+                            {
+                                switch (Series)
+                                {
+                                    case 1:
+                                        LogQueue.EnqueueDebugging("封机器码");
+                                        break;
+                                    case 2:
+                                        LogQueue.EnqueueDebugging("清理机器码");
+                                        _hwidFilter.ClearDeny();
+                                        _hwidFilter.SaveDenyList();
+                                        break;
+                                }
+                            }
+                            break;
+                        case Grobal2.SM_RUNGATELOGOUT:
+                            SendKickMsg(2);
+                            break;
+                    }
                 }
             }
             catch (Exception e)
