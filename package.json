@@ -7,6 +7,7 @@
     "commit": "git-cz && git push",
     "release": "standard-version",
     "changelog": "conventional-changelog -p cmyr-config -i CHANGELOG.md -s -r 0",
+    "alpha":"npm run release -- --prerelease alpha",
     "publish": "git push --follow-tags origin dev"
   },
   "repository": {
