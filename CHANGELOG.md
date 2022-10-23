@@ -1,4 +1,4 @@
-## [1.0.1](http://10.10.0.202/mir2/OpenMir2/compare/v0.0.8...v1.0.1) (2022-10-22)
+## [1.0.1](http://10.10.0.202/mir2/OpenMir2/compare/v0.0.8...v1.0.1) (2022-10-23)
 
 
 ### Bug Fixes
@@ -24,6 +24,7 @@
 ### Performance Improvements
 
 * 优化脚本变量替换代码 ([5e14c7e](http://10.10.0.202/mir2/OpenMir2/commits/5e14c7e830067206f43b67b9f68f40615ffa1909))
+* 优化主动守卫和角色下属视觉范围 ([5644060](http://10.10.0.202/mir2/OpenMir2/commits/5644060973c827569c2a8e3264ea1af48d533221))
 
 
 
