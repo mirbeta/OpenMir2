@@ -7,9 +7,20 @@ namespace GameSvr.Robots
 {
     public class RobotObject : PlayObject
     {
-        public string m_sScriptFileName = string.Empty;
-        private IList<AutoRunInfo> _autoRunList;
+        public string ScriptFileName = string.Empty;
+        private readonly IList<AutoRunInfo> AutoRunList;
 
+        public RobotObject() : base()
+        {
+            AutoRunList = new List<AutoRunInfo>();
+            this.SuperMan = true;
+        }
+
+        ~RobotObject()
+        {
+            ClearScript();
+        }
+        
         private void AutoRun(AutoRunInfo AutoRunInfo)
         {
             if (M2Share.g_RobotNPC == null)
@@ -154,25 +165,13 @@ namespace GameSvr.Robots
 
         private void ClearScript()
         {
-            for (var i = 0; i < _autoRunList.Count; i++)
+            for (var i = 0; i < AutoRunList.Count; i++)
             {
-                _autoRunList[i] = null;
+                AutoRunList[i] = null;
             }
-            _autoRunList.Clear();
+            AutoRunList.Clear();
         }
-
-        public RobotObject() : base()
-        {
-            _autoRunList = new List<AutoRunInfo>();
-            this.SuperMan = true;
-        }
-
-        ~RobotObject()
-        {
-            ClearScript();
-            _autoRunList = null;
-        }
-
+        
         public void LoadScript()
         {
             string sLineText;
@@ -183,7 +182,7 @@ namespace GameSvr.Robots
             var sParam2 = string.Empty;
             var sParam3 = string.Empty;
             var sParam4 = string.Empty;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", $"{m_sScriptFileName}.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", $"{ScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();
@@ -191,15 +190,15 @@ namespace GameSvr.Robots
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if (sLineText != "" && sLineText[0] != ';')
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sActionType, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRunCmd, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoethod, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam1, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, new string[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sActionType, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRunCmd, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoethod, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam1, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, new[] { " ", "/", "\t" });
                         if (string.Compare(sActionType, Robot.sROAUTORUN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (string.Compare(sRunCmd, Robot.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)
@@ -250,7 +249,7 @@ namespace GameSvr.Robots
                                 AutoRunInfo.sParam3 = sParam3;
                                 AutoRunInfo.sParam4 = sParam4;
                                 AutoRunInfo.nParam1 = HUtil32.StrToInt(sParam1, 1);
-                                _autoRunList.Add(AutoRunInfo);
+                                AutoRunList.Add(AutoRunInfo);
                             }
                         }
                     }
@@ -260,9 +259,9 @@ namespace GameSvr.Robots
 
         private void ProcessAutoRun()
         {
-            for (var i = _autoRunList.Count - 1; i >= 0; i--)
+            for (var i = AutoRunList.Count - 1; i >= 0; i--)
             {
-                AutoRun(_autoRunList[i]);
+                AutoRun(AutoRunList[i]);
             }
         }
 
