@@ -2,7 +2,7 @@ using GameSvr.Player;
 
 namespace GameSvr.Guild
 {
-    public class TGuildRank
+    public class GuildRank
     {
         public int nRankNo;
         public string sRankName;

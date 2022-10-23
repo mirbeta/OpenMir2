@@ -29,7 +29,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             var m_Castle = M2Share.CastleMgr.InCastleWarArea(PlayObject);
             if (m_Castle != null && m_Castle.UnderWar)
             {
