@@ -59,7 +59,7 @@ namespace GameSvr.Guild
         /// <summary>
         /// 职位列表
         /// </summary>
-        public IList<TGuildRank> m_RankList;
+        public IList<GuildRank> m_RankList;
         public int nContestPoint;
         public bool boTeamFight;
         public ArrayList TeamFightDeadList;
@@ -101,7 +101,7 @@ namespace GameSvr.Guild
             NoticeList = new ArrayList();
             GuildWarList = new List<WarGuild>();
             GuildAllList = new List<GuildInfo>();
-            m_RankList = new List<TGuildRank>();
+            m_RankList = new List<GuildRank>();
             TeamFightDeadList = new ArrayList();
             dwSaveTick = 0;
             boChanged = false;
@@ -155,7 +155,7 @@ namespace GameSvr.Guild
         public bool IsMember(string sName)
         {
             var result = false;
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
@@ -211,7 +211,7 @@ namespace GameSvr.Guild
             int n2C;
             WarGuild GuildWar;
             GuildInfo Guild;
-            TGuildRank GuildRank = null;
+            GuildRank GuildRank = null;
             var sFileName = Path.Combine(M2Share.Config.GuildDir, sGuildFileName);
             if (!File.Exists(sFileName))
             {
@@ -319,7 +319,7 @@ namespace GameSvr.Guild
                             }
                             if (GuildRank == null)
                             {
-                                GuildRank = new TGuildRank
+                                GuildRank = new GuildRank
                                 {
                                     nRankNo = n2C,
                                     sRankName = s24,
@@ -353,7 +353,7 @@ namespace GameSvr.Guild
         /// </summary>
         public void RefMemberName()
         {
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             BaseObject BaseObject;
             for (var i = 0; i < m_RankList.Count; i++)
             {
@@ -417,7 +417,7 @@ namespace GameSvr.Guild
             SaveList.Add(M2Share.Config.GuildMember);
             for (var i = 0; i < m_RankList.Count; i++)
             {
-                TGuildRank GuildRank = m_RankList[i];
+                GuildRank GuildRank = m_RankList[i];
                 SaveList.Add("#" + GuildRank.nRankNo + ' ' + GuildRank.sRankName);
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
@@ -436,7 +436,7 @@ namespace GameSvr.Guild
 
         public void SendGuildMsg(string sMsg)
         {
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             BaseObject BaseObject;
             try
             {
@@ -470,10 +470,10 @@ namespace GameSvr.Guild
 
         public bool SetGuildInfo(string sChief)
         {
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             if (m_RankList.Count == 0)
             {
-                GuildRank = new TGuildRank
+                GuildRank = new GuildRank
                 {
                     nRankNo = 1,
                     sRankName = M2Share.Config.GuildChief,
@@ -490,7 +490,7 @@ namespace GameSvr.Guild
         public string GetRankName(PlayObject PlayObject, ref int nRankNo)
         {
             var result = string.Empty;
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
@@ -516,7 +516,7 @@ namespace GameSvr.Guild
         /// <returns></returns>
         public string GetChiefName()
         {
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             if (m_RankList.Count <= 0)
             {
                 return string.Empty;
@@ -598,7 +598,7 @@ namespace GameSvr.Guild
         public void BackupGuildFile()
         {
             PlayObject PlayObject;
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             if (M2Share.ServerIndex == 0)
             {
                 SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, sGuildName, '.' + HUtil32.GetTickCount() + ".bak"));
@@ -631,8 +631,8 @@ namespace GameSvr.Guild
 
         public void AddMember(PlayObject PlayObject)
         {
-            TGuildRank GuildRank;
-            TGuildRank GuildRank18 = null;
+            GuildRank GuildRank;
+            GuildRank GuildRank18 = null;
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
@@ -644,7 +644,7 @@ namespace GameSvr.Guild
             }
             if (GuildRank18 == null)
             {
-                GuildRank18 = new TGuildRank
+                GuildRank18 = new GuildRank
                 {
                     nRankNo = 99,
                     sRankName = M2Share.Config.GuildMemberRank,
@@ -663,7 +663,7 @@ namespace GameSvr.Guild
         public bool DelMember(string sHumName)
         {
             var result = false;
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
@@ -690,7 +690,7 @@ namespace GameSvr.Guild
 
         public bool CancelGuld(string sHumName)
         {
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             if (m_RankList.Count != 1)
             {
                 return false;
@@ -708,9 +708,9 @@ namespace GameSvr.Guild
             return false;
         }
 
-        private void UpdateRank_ClearRankList(ref IList<TGuildRank> RankList)
+        private void UpdateRank_ClearRankList(ref IList<GuildRank> RankList)
         {
-            TGuildRank GuildRank;
+            GuildRank GuildRank;
             for (var i = 0; i < RankList.Count; i++)
             {
                 GuildRank = RankList[i];
@@ -720,7 +720,7 @@ namespace GameSvr.Guild
 
         public int UpdateRank(string sRankData)
         {
-            TGuildRank NewGuildRank;
+            GuildRank NewGuildRank;
             var sRankInfo = string.Empty;
             var sRankNo = string.Empty;
             var sRankName = string.Empty;
@@ -730,8 +730,8 @@ namespace GameSvr.Guild
             int n30;
             bool boCheckChange;
             PlayObject PlayObject;
-            IList<TGuildRank> GuildRankList = new List<TGuildRank>();
-            TGuildRank GuildRank = null;
+            IList<GuildRank> GuildRankList = new List<GuildRank>();
+            GuildRank GuildRank = null;
             while (true)
             {
                 if (sRankData == "")
@@ -757,7 +757,7 @@ namespace GameSvr.Guild
                     {
                         GuildRankList.Add(GuildRank);
                     }
-                    GuildRank = new TGuildRank
+                    GuildRank = new GuildRank
                     {
                         nRankNo = HUtil32.StrToInt(sRankNo, 99),
                         sRankName = sRankName.Trim(),
