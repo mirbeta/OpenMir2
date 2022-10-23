@@ -327,7 +327,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 所属城堡
         /// </summary>
-        public TUserCastle Castle;
+        public UserCastle Castle;
         public bool BoCrimeforCastle;
         public int CrimeforCastleTime = 0;
         /// <summary>

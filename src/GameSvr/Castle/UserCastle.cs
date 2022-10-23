@@ -10,7 +10,7 @@ using SystemModule.Data;
 
 namespace GameSvr.Castle
 {
-    public class TUserCastle
+    public class UserCastle
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         /// <summary>
@@ -126,7 +126,7 @@ namespace GameSvr.Castle
         public DateTime m_WarDate;
         private readonly CastleConfMgr castleConf;
 
-        public TUserCastle(string sCastleDir)
+        public UserCastle(string sCastleDir)
         {
             MasterGuild = null;
             HomeMap = M2Share.Config.CastleHomeMap; // '3'

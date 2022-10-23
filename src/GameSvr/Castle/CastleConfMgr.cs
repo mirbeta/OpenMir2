@@ -10,7 +10,7 @@ namespace GameSvr.Castle
             Load();
         }
 
-        public void LoadConfig(TUserCastle userCastle)
+        public void LoadConfig(UserCastle userCastle)
         {
             userCastle.sName = ReadString("Setup", "CastleName", userCastle.sName);
             userCastle.OwnGuild = ReadString("Setup", "OwnGuild", "");
@@ -91,7 +91,7 @@ namespace GameSvr.Castle
             }
         }
 
-        public void SaveConfig(TUserCastle userCastle)
+        public void SaveConfig(UserCastle userCastle)
         {
             var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, userCastle.ConfigDir);
             var sMapList = string.Empty;

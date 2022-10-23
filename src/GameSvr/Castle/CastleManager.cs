@@ -9,14 +9,14 @@ namespace GameSvr.Castle
     public class CastleManager
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<TUserCastle> _castleList;
+        private readonly IList<UserCastle> _castleList;
 
         public CastleManager()
         {
-            _castleList = new List<TUserCastle>();
+            _castleList = new List<UserCastle>();
         }
 
-        public TUserCastle Find(string sCastleName)
+        public UserCastle Find(string sCastleName)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -29,7 +29,7 @@ namespace GameSvr.Castle
         }
 
         // 取得角色所在座标的城堡
-        public TUserCastle InCastleWarArea(BaseObject BaseObject)
+        public UserCastle InCastleWarArea(BaseObject BaseObject)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -41,7 +41,7 @@ namespace GameSvr.Castle
             return null;
         }
 
-        public TUserCastle InCastleWarArea(Envirnoment Envir, int nX, int nY)
+        public UserCastle InCastleWarArea(Envirnoment Envir, int nX, int nY)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -55,10 +55,10 @@ namespace GameSvr.Castle
 
         public void Initialize()
         {
-            TUserCastle castle;
+            UserCastle castle;
             if (_castleList.Count <= 0)
             {
-                castle = new TUserCastle(M2Share.Config.CastleDir);
+                castle = new UserCastle(M2Share.Config.CastleDir);
                 castle.Initialize();
                 castle.ConfigDir = "0";
                 castle.EnvirList.Add("0151");
@@ -84,7 +84,7 @@ namespace GameSvr.Castle
         }
 
         // 城堡皇宫所在地图
-        public TUserCastle IsCastlePalaceEnvir(Envirnoment Envir)
+        public UserCastle IsCastlePalaceEnvir(Envirnoment Envir)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -97,7 +97,7 @@ namespace GameSvr.Castle
         }
 
         // 城堡所在地图
-        public TUserCastle IsCastleEnvir(Envirnoment Envir)
+        public UserCastle IsCastleEnvir(Envirnoment Envir)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -109,7 +109,7 @@ namespace GameSvr.Castle
             return null;
         }
 
-        public TUserCastle IsCastleMember(BaseObject BaseObject)
+        public UserCastle IsCastleMember(BaseObject BaseObject)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -161,7 +161,7 @@ namespace GameSvr.Castle
                         var sCastleDir = loadList[i].Trim();
                         if (!string.IsNullOrEmpty(sCastleDir))
                         {
-                            var castle = new TUserCastle(sCastleDir);
+                            var castle = new UserCastle(sCastleDir);
                             _castleList.Add(castle);
                         }
                     }
@@ -190,7 +190,7 @@ namespace GameSvr.Castle
             loadList.SaveToFile(savePath);
         }
 
-        public TUserCastle GetCastle(int nIndex)
+        public UserCastle GetCastle(int nIndex)
         {
             if (nIndex >= 0 && nIndex < _castleList.Count)
             {
