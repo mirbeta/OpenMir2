@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 
@@ -151,10 +150,10 @@ namespace SystemModule
         public static string EncodeBuffer(byte[] data, int bufsize)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
-            var tempBuf = new byte[data.Length];
-            var encBuf = new byte[tempBuf.Length * 2];
             if (bufsize < BufferSize)
             {
+                var tempBuf = new byte[data.Length];
+                var encBuf = new byte[tempBuf.Length * 2];
                 Buffer.BlockCopy(data, 0, tempBuf, 0, bufsize);
                 var destLen = PacketEncoder.EncodeBuf(tempBuf, bufsize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
@@ -180,6 +179,10 @@ namespace SystemModule
         {
             if (packet == null) throw new ArgumentNullException(nameof(packet));
             var packetData = packet.GetBuffer();
+            if (packetData.Length <= 0)
+            {
+                return string.Empty;
+            }
             var encBuf = new byte[packetData.Length * 2];
             var destLen = PacketEncoder.EncodeBuf(packetData, 12, encBuf);
             return HUtil32.GetString(encBuf, 0, destLen);
