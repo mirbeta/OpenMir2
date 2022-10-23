@@ -3,6 +3,9 @@ using SystemModule;
 
 namespace GameSvr.Monster.Monsters
 {
+    /// <summary>
+    /// 弓箭守卫
+    /// </summary>
     public class ArcherGuard : GuardUnit
     {
         public ArcherGuard() : base()

@@ -3,6 +3,9 @@ using SystemModule;
 
 namespace GameSvr.Monster.Monsters
 {
+    /// <summary>
+    /// 守卫类
+    /// </summary>
     public class GuardUnit : AnimalObject
     {
         public sbyte GuardDirection;
