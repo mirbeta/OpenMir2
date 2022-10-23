@@ -4,7 +4,7 @@ namespace GameSvr.Monster.Monsters
 {
     public class ExplosionSpider : MonsterObject
     {
-        private int MakeTime;
+        private int explosionMakeTime;
 
         public ExplosionSpider() : base()
         {
@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
             RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
-            MakeTime = HUtil32.GetTickCount();
+            explosionMakeTime = HUtil32.GetTickCount();
         }
 
         private void DoSelfExplosion()
@@ -79,9 +79,9 @@ namespace GameSvr.Monster.Monsters
         {
             if (!Death && !Ghost)
             {
-                if ((HUtil32.GetTickCount() - MakeTime) > (60 * 1000))
+                if ((HUtil32.GetTickCount() - explosionMakeTime) > (60 * 1000))
                 {
-                    MakeTime = HUtil32.GetTickCount();
+                    explosionMakeTime = HUtil32.GetTickCount();
                     DoSelfExplosion();
                 }
             }

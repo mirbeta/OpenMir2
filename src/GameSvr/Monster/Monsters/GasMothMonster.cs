@@ -34,7 +34,7 @@ namespace GameSvr.Monster.Monsters
             base.Run();
         }
 
-        protected void GasMothAttack()
+        private void GasMothAttack()
         {
             BaseObject Creat = null;
             var n10 = 999;

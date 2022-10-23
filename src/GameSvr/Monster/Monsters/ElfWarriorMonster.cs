@@ -9,7 +9,7 @@ namespace GameSvr.Monster.Monsters
     public class ElfWarriorMonster : SpitSpider
     {
         public bool BoIsFirst;
-        private int _dwDigDownTick;
+        private int DigDownTick;
 
         public void AppearNow()
         {
@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             RecalcAbilitys();
             WalkTick = WalkTick + 800;
-            _dwDigDownTick = HUtil32.GetTickCount();
+            DigDownTick = HUtil32.GetTickCount();
             Race = ActorRace.ElfWarriormon;
         }
 
@@ -69,7 +69,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (boChangeFace)
                 {
-                    if ((HUtil32.GetTickCount() - _dwDigDownTick) > (6 * 10 * 1000))
+                    if ((HUtil32.GetTickCount() - DigDownTick) > (6 * 10 * 1000))
                     {
                         BaseObject elfMon = null;
                         var elfName = ChrName;
@@ -94,7 +94,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 else
                 {
-                    _dwDigDownTick = HUtil32.GetTickCount();
+                    DigDownTick = HUtil32.GetTickCount();
                 }
             }
             base.Run();
