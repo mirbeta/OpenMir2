@@ -1,12 +1,13 @@
 {
   "name": "openmir2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "[EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)",
   "main": "index.js",
   "scripts": {
     "commit": "git-cz && git push",
     "release": "standard-version",
-    "changelog": "conventional-changelog -p cmyr-config -i CHANGELOG.md -s -r 0"
+    "changelog": "conventional-changelog -p cmyr-config -i CHANGELOG.md -s -r 0",
+    "publish": "git push --follow-tags origin dev && npm publish"
   },
   "repository": {
     "type": "git",
