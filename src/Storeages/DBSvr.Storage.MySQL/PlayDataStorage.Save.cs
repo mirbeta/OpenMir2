@@ -438,7 +438,7 @@ namespace DBSvr.Storage.MySQL
             delcommand.ExecuteNonQuery();
             try
             {
-                const string sStrSql = "INSERT INTO characters_magic(PlayerId,MagicId,Level,Usekey,CurrTrain) VALUES ({0},{1},{2},{3},{4});";
+                const string sStrSql = "INSERT INTO characters_magic(PlayerId,MagicId,Level,Usekey,CurrTrain) VALUES ({0},{1},{2},'{3}',{4});";
                 var strSqlList = new List<string>();
                 for (var i = 0; i < humanRcd.Length; i++)
                 {
