@@ -344,7 +344,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", sText);
                     return;
                 case "$DATETIME":
-                    sText = DateTime.Now.ToString("dddddd,dddd,hh:mm:nn");
+                    sText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     sMsg = ReplaceVariableText(sMsg, "<$DATETIME>", sText);
                     return;
                 case "$HIGHLEVELINFO":
@@ -817,9 +817,6 @@ namespace GameSvr.Npc
                                 sMsg = "正在攻城当中.\\ \\<返回/@main>";
                             }
                         }
-                        else
-                        {
-                        }
                         return;
                     }
                 case "$LISTOFWAR":
@@ -846,7 +843,7 @@ namespace GameSvr.Npc
                     {
                         if (Castle != null)
                         {
-                            sText = Castle.ChangeDate.ToString();
+                            sText = Castle.ChangeDate.ToString("yyyy-MM-dd HH:mm:ss");
                         }
                         else
                         {
@@ -859,7 +856,7 @@ namespace GameSvr.Npc
                     {
                         if (Castle != null)
                         {
-                            sText = Castle.m_WarDate.ToString();
+                            sText = Castle.m_WarDate.ToString("yyyy-MM-dd HH:mm:ss");
                         }
                         else
                         {

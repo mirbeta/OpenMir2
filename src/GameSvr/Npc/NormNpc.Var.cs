@@ -1998,9 +1998,8 @@ namespace GameSvr.Npc
                     nDataType = 0;
                     result = true;
                     return result;
-                case "$CASTLEWARDATE":
+                case "$CASTLEWARDATE":// 申请攻城的日期
                     {
-                        // 申请攻城的日期
                         if (Castle == null)
                         {
                             Castle = M2Share.CastleMgr.GetCastle(0);
@@ -2014,12 +2013,6 @@ namespace GameSvr.Npc
                                 {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sValue);
                                 }
-                                else
-                                {
-                                }
-                            }
-                            else
-                            {
                             }
                         }
                         else
