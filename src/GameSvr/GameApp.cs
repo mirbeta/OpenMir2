@@ -270,7 +270,7 @@ namespace GameSvr
                 if (M2Share.ServerIndex == 0)
                 {
                     PlanesServer.Instance.StartSnapsServer();
-                    _logger.LogDebug("当前服务器运行主节点模式...");
+                    _logger.LogDebug("当前服务运行主节点模式...");
                 }
                 else
                 {
