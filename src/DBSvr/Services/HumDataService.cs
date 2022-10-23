@@ -72,9 +72,9 @@ namespace DBSvr.Services
             {
                 if (_serverList[i].nSckHandle == (int)e.Socket.Handle)
                 {
-                    _serverList[i] = null;
-                    _serverList.RemoveAt(i);
                     ClearSocket(e.Socket);
+                    _serverList.RemoveAt(i);
+                    _serverList[i] = null;
                     break;
                 }
             }
