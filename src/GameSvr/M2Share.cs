@@ -855,7 +855,7 @@ namespace GameSvr
             {
                 Config.ItemNumber = 1;
             }
-            return Config.ItemNumber;
+            return Config.ItemNumber + HUtil32.GetTickCount();
         }
 
         public static int GetItemNumberEx()
@@ -869,7 +869,7 @@ namespace GameSvr
             {
                 Config.ItemNumberEx = int.MaxValue / 2;
             }
-            return Config.ItemNumberEx;
+            return Config.ItemNumberEx + HUtil32.GetTickCount();
         }
 
         public static string FilterShowName(string sName)
