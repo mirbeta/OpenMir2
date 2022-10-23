@@ -396,6 +396,7 @@ namespace GameSvr.DataSource
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(M2Share.Config.ConnctionString);
                     M2Share.Log.Error(e.StackTrace);
                     return false;
                 }
