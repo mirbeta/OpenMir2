@@ -559,23 +559,7 @@ namespace GameSvr
 
         static M2Share()
         {
-            //todo 优化配置文件读取方式
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                BasePath = "/Volumes/Data/MirServer/Mir200";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
-            {
-                BasePath = "/opt/MirServer/Mir200";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                BasePath = "D:/MirServer/Mir200";
-            }
-            else
-            {
-                throw new Exception("不受支持的操作系统");
-            }
+            BasePath = AppContext.BaseDirectory;
             ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.sConfigFileName));
             StringConf = new StringConf(Path.Combine(BasePath, ConfConst.sStringFileName));
             ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
