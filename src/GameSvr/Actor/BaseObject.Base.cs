@@ -1368,7 +1368,7 @@ namespace GameSvr.Actor
                     }
                 case ActorRace.Play:
                     {
-                        result = IsProperFriend_IsFriend(BaseObject);
+                        result = IsProperIsFriend(BaseObject);
                         if (BaseObject.Race < ActorRace.Animal)
                         {
                             return result;
@@ -1379,7 +1379,7 @@ namespace GameSvr.Actor
                         }
                         if (BaseObject.Master != null)
                         {
-                            return IsProperFriend_IsFriend(BaseObject.Master);
+                            return IsProperIsFriend(BaseObject.Master);
                         }
                         break;
                     }
