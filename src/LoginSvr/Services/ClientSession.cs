@@ -179,8 +179,8 @@ namespace LoginSvr.Services
                 var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId, new[] { "/" });
                 var nCode = 0;
                 var boNeedUpdate = false;
-                var n10 = _accountStorage.Index(sLoginId);
-                if (n10 >= 0 && _accountStorage.Get(n10, ref accountRecord) >= 0)
+                var accountIndex = _accountStorage.Index(sLoginId);
+                if (accountIndex >= 0 && _accountStorage.Get(accountIndex, ref accountRecord) >= 0)
                 {
                     if (accountRecord.nErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.dwActionTick > 60000)
                     {
@@ -201,13 +201,13 @@ namespace LoginSvr.Services
                             accountRecord.dwActionTick = HUtil32.GetTickCount();
                             nCode = -1;
                         }
-                        _accountStorage.Update(n10, ref accountRecord);
+                        _accountStorage.Update(accountIndex, ref accountRecord);
                     }
                     else
                     {
                         nCode = -2;
                         accountRecord.dwActionTick = HUtil32.GetTickCount();
-                        _accountStorage.Update(n10, ref accountRecord);
+                        _accountStorage.Update(accountIndex, ref accountRecord);
                     }
                 }
                 if (nCode == 1 && IsLogin(config, sLoginId))
@@ -252,6 +252,26 @@ namespace LoginSvr.Services
                     {
                         userInfo.boPayCost = false;
                     }
+
+                    /*var RemainDays = 0;
+                    var RemainIpDays = 0;
+                    var RemainHours = 0;
+                    var RemainIpHours = 0;
+                    var st = DateTime.Now;
+                    var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
+                    RemainDays = userInfo.dwValidUntil - nCurrentTime + 1;
+                    RemainIpDays = userInfo.dwIpValidUntil - nCurrentTime + 1;
+                    RemainHours = (userInfo.dwSeconds + 1) / 3600;
+                    RemainIpHours = (userInfo.dwIpSeconds + 1) / 3600;
+                    if (RemainDays < 0) 
+                      RemainDays = 0;
+                    if (RemainIpDays < 0) 
+                      RemainIpDays = 0;
+                    if (RemainHours < 0) 
+                      RemainHours = 0;
+                    if (RemainIpHours < 0) 
+                      RemainIpHours = 0;*/
+
                     userInfo.IDDay = HUtil32.LoWord(nIdCost);
                     userInfo.IDHour = HUtil32.HiWord(nIdCost);
                     userInfo.IPDay = HUtil32.LoWord(nIpCost);
@@ -279,6 +299,93 @@ namespace LoginSvr.Services
                 _logger.Information("[Exception] LoginService.LoginUser");
                 _logger.Information(ex.StackTrace);
             }
+        }
+
+        private long GetDay(int iYear, int iMonth, int iDay)
+        {
+            int[] MONTH_DAY = new int[13] { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+            const int DAYTOYEAR1999 = 730119;
+            if (iYear > 0)
+            {
+                int iTotalDay;
+                int iStartYear;
+                if (iYear > 1999)
+                {
+                    iStartYear = 2000;
+                    iTotalDay = DAYTOYEAR1999;
+                }
+                else
+                {
+                    iStartYear = 1;
+                    iTotalDay = 0;
+                }
+
+                for (int i = iStartYear; i < iYear; i++)
+                {
+                    int iTemp;
+                    if (i % 400 == 0)
+                    {
+                        iTemp = 366;
+                    }
+                    else if (i % 100 == 0)
+                    {
+                        iTemp = 365;
+                    }
+                    else if (i % 4 == 0)
+                    {
+                        iTemp = 366;
+                    }
+                    else
+                    {
+                        iTemp = 365;
+                    }
+                    iTotalDay += iTemp;
+                }
+
+                bool bYun;
+                if (iYear % 400 == 0)
+                {
+                    bYun = true;
+                }
+                else if (iYear % 100 == 0)
+                {
+                    bYun = false;
+                }
+                else if (iYear % 4 == 0)
+                {
+                    bYun = true;
+                }
+                else
+                {
+                    bYun = false;
+                }
+
+                if (iMonth >= 1 && iMonth <= 12)
+                {
+                    for (int i = 1; i < iMonth; i++)
+                    {
+                        iTotalDay += MONTH_DAY[i];
+                        if (i == 2 && !bYun)
+                        {
+                            iTotalDay = iTotalDay - 1;
+                        }
+                    }
+                }
+
+                int MaxDay = MONTH_DAY[iMonth];
+                if (iMonth == 2 && !bYun)
+                {
+                    MaxDay = 28;
+                }
+                if (iDay >= 1 && iDay <= MaxDay)
+                {
+                    iTotalDay = iTotalDay + iDay;
+                }
+
+                return iTotalDay;
+            }
+
+            return 0;
         }
 
         /// <summary>
