@@ -137,7 +137,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public bool GetBy(int nIndex, ref TAccountDBRecord DBRecord)
+        public bool GetBy(int nIndex, ref AccountRecord DBRecord)
         {
             bool result;
             if ((nIndex >= 0) && (_quickList.Count > nIndex))
@@ -151,7 +151,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        private bool GetRecord(int nIndex, ref TAccountDBRecord DBRecord)
+        private bool GetRecord(int nIndex, ref AccountRecord DBRecord)
         {
             const string sSQL = "SELECT * FROM account WHERE ID={0}";
             var result = true;
@@ -169,8 +169,8 @@ namespace LoginSvr.Storage
                 dr = command.ExecuteReader();
                 if (DBRecord == null)
                 {
-                    DBRecord = new TAccountDBRecord();
-                    DBRecord.Header = new TRecordHeader();
+                    DBRecord = new AccountRecord();
+                    DBRecord.Header = new RecordHeader();
                     DBRecord.UserEntry = new UserEntry();
                     DBRecord.UserEntryAdd = new UserEntryAdd();
                 }
@@ -235,7 +235,7 @@ namespace LoginSvr.Storage
             return quick.nIndex;
         }
 
-        public int Get(int nIndex, ref TAccountDBRecord DBRecord)
+        public int Get(int nIndex, ref AccountRecord DBRecord)
         {
             int result = -1;
             if (nIndex < 0)
@@ -253,7 +253,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        private int UpdateRecord(TAccountDBRecord DBRecord, byte btFlag)
+        private int UpdateRecord(AccountRecord DBRecord, byte btFlag)
         {
             var result = 0;
             const string sdt = "now()";
@@ -320,7 +320,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public bool Update(int nIndex, ref TAccountDBRecord DBRecord)
+        public bool Update(int nIndex, ref AccountRecord DBRecord)
         {
             bool result = false;
             if (nIndex < 0)
@@ -338,7 +338,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public bool Add(ref TAccountDBRecord DBRecord)
+        public bool Add(ref AccountRecord DBRecord)
         {
             bool result;
             var sAccount = DBRecord.UserEntry.sAccount;
@@ -362,7 +362,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public bool Delete(int nIndex, ref TAccountDBRecord DBRecord)
+        public bool Delete(int nIndex, ref AccountRecord DBRecord)
         {
             var result = false;
             if (nIndex < 0)

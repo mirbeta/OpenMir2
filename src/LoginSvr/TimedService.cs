@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
@@ -55,30 +56,39 @@ namespace LoginSvr
 
         private void ProcessCleanSession()
         {
-            string sMsg = string.Empty;
-            int nC = _massocService.ServerList.Count;
-            for (var i = 0; i < _massocService.ServerList.Count; i++)
+            var builder = new StringBuilder();
+            int serverListCount = _massocService.ServerList.Count;
+            for (var i = 0; i < serverListCount; i++)
             {
                 var msgServer = _massocService.ServerList[i];
-                var sServerName = msgServer.sServerName;
+                var sServerName = msgServer.ServerName;
                 if (!string.IsNullOrEmpty(sServerName))
                 {
-                    sMsg = sMsg + sServerName + "/" + msgServer.nServerIndex + "/" + msgServer.nOnlineCount + "/";
-                    if ((HUtil32.GetTickCount() - msgServer.dwKeepAliveTick) < 30000)
+                    builder.Append(sServerName + "/" + msgServer.ServerIndex + "/" + msgServer.OnlineCount + "/");
+                    if (msgServer.ServerIndex == 99)
                     {
-                        sMsg = sMsg + "正常 ";
+                        builder.Append("DB/");
                     }
                     else
                     {
-                        sMsg = sMsg + "超时 ";
+                        builder.Append("Game/");
+                    }
+                    builder.Append($"Online:{msgServer.OnlineCount}/");
+                    if ((HUtil32.GetTickCount() - msgServer.KeepAliveTick) < 30000)
+                    {
+                        builder.Append("正常");
+                    }
+                    else
+                    {
+                        builder.Append("超时");
                     }
                 }
                 else
                 {
-                    sMsg = "-/-/-/-;";
+                    builder.Append("-/-/-/-;");
                 }
             }
-            _logger.LogDebug(sMsg);
+            _logger.LogDebug(builder.ToString());
         }
         
         private void CheckServerStatus()
@@ -94,17 +104,17 @@ namespace LoginSvr
                 for (var i = 0; i < ServerList.Count; i++)
                 {
                     MessageServerInfo MsgServer = ServerList[i];
-                    string sServerName = MsgServer.sServerName;
+                    string sServerName = MsgServer.ServerName;
                     if (!string.IsNullOrEmpty(sServerName))
                     {
-                        var tickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
+                        var tickTime = HUtil32.GetTickCount() - MsgServer.KeepAliveTick;
                         if (tickTime <= 60000) continue;
                         MsgServer.Socket.Close();
-                        if (MsgServer.nServerIndex == 99)
+                        if (MsgServer.ServerIndex == 99)
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Information($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                                _logger.Information($"数据库服务器[{MsgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
@@ -115,7 +125,7 @@ namespace LoginSvr
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Information($"游戏服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                                _logger.Information($"游戏服务器[{MsgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {

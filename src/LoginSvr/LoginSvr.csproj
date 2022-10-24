@@ -13,7 +13,7 @@
 	<Choose>
 		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
 			<PropertyGroup>
-				<OutputPath>D:\MirServer\LoginSrv</OutputPath>
+				<OutputPath>D:\Mirserver\LoginSrv</OutputPath>
 			</PropertyGroup>
 		</When>
 		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">

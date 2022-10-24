@@ -23,6 +23,11 @@ namespace SystemModule.Packet.ServerPackets
                 writer.Write((short)ClientPacket.Length);
                 writer.Write(ClientPacket);
             }
+            else
+            {
+                writer.Write((ushort)0);
+                writer.Write((byte)0);
+            }
         }
     }
 }
