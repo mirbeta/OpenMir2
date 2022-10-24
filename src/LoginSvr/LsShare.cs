@@ -194,6 +194,14 @@ namespace LoginSvr
         public int SessionID;
         public bool boPayCost;
         /// <summary>
+        /// 剩余游戏时间
+        /// </summary>
+        public int PlayTime;
+        /// <summary>
+        /// 授权游戏时间
+        /// </summary>
+        public int AuthorizedTime;
+        /// <summary>
         /// 剩余多少天
         /// </summary>
         public int IDDay;
