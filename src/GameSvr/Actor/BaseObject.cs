@@ -1117,19 +1117,18 @@ namespace GameSvr.Actor
             {
                 if (stdItem.StdMode == 40)
                 {
-                    int idura = userItem.Dura;
-                    idura = idura - 2000;
-                    if (idura < 0)
+                    var idura = userItem.Dura;
+                    idura = (ushort)(idura - 2000);
+                    if (idura <= 0)
                     {
                         idura = 0;
                     }
-
-                    userItem.Dura = (ushort)idura;
+                    userItem.Dura = idura;
                 }
                 var mapItem = new MapItem
                 {
-                    UserItem = userItem,
-                    Name = CustomItem.GetItemName(userItem), // 取自定义物品名称
+                    UserItem = new UserItem(userItem),
+                    Name = CustomItem.GetItemName(userItem),// 取自定义物品名称
                     Looks = stdItem.Looks
                 };
                 if (stdItem.StdMode == 45)
@@ -1165,9 +1164,6 @@ namespace GameSvr.Actor
                         }
                     }
                     result = true;
-                }
-                else
-                {
                 }
             }
             return result;
