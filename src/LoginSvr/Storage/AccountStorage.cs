@@ -40,6 +40,11 @@ namespace LoginSvr.Storage
                 _logger.LogError("[错误] SQL 连接失败!请检查SQL设置...");
                 _logger.LogError(ex);
             }
+            finally
+            {
+                dbConnection.Close();
+                dbConnection.Dispose();
+            }
         }
 
         private bool Open(ref MySqlConnection dbConnection)
@@ -109,6 +114,7 @@ namespace LoginSvr.Storage
             }
             catch (Exception ex)
             {
+                _logger.LogError("读取账号列表失败.");
                 _logger.LogError(ex);
             }
             finally
