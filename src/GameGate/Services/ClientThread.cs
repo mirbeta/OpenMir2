@@ -175,22 +175,47 @@ namespace GameGate.Services
         {
             var nMsgLen = e.BuffLen;
             var packetData = e.Buff[..nMsgLen];
+            if (_buffLen > 0)
+            {
+                Span<byte> tempBuff = stackalloc byte[_buffLen + nMsgLen];
+                MemoryCopy.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _receiveBuffer.Length);
+                MemoryCopy.BlockCopy(packetData, 0, tempBuff, _buffLen, packetData.Length);
+                ProcessServerPacket(tempBuff, tempBuff.Length);
+            }
+            else
+            {
+                ProcessServerPacket(packetData, nMsgLen);
+            }
+            _receiveBytes += e.BuffLen;
+        }
+        
+        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
+        {
+            switch (e.ErrorCode)
+            {
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎[{_clientSocket.EndPoint}]拒绝链接...", 1);
+                    _connected = false;
+                    break;
+                case System.Net.Sockets.SocketError.ConnectionReset:
+                    LogQueue.Enqueue($"游戏引擎[{_clientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint.ToString()}]...", 1);
+                    _connected = false;
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎时[{_clientSocket.EndPoint}]超时...", 1);
+                    _connected = false;
+                    break;
+            }
+            GateReady = false;
+        }
+
+        private void ProcessServerPacket(Span<byte> buff, int buffLen)
+        {
             var srcOffset = 0;
+            var nLen = buffLen;
+            Span<byte> dataBuff = buff;
             try
             {
-                if (_buffLen > 0)
-                {
-                    var tempBuff = new byte[_buffLen + nMsgLen];
-                    Buffer.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _receiveBuffer.Length);
-                    Buffer.BlockCopy(packetData, 0, tempBuff, _buffLen, packetData.Length);
-                    _receiveBuffer = tempBuff;
-                }
-                else
-                {
-                    _receiveBuffer = packetData;
-                }
-                var nLen = _buffLen + nMsgLen;
-                Span<byte> dataBuff = _receiveBuffer.AsSpan();
                 while (nLen >= PacketHeader.PacketSize)
                 {
                     Span<byte> packetHead = dataBuff[..20];
@@ -269,7 +294,7 @@ namespace GameGate.Services
                         break;
                     }
                 }
-                if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
                     _receiveBuffer = dataBuff[..nLen].ToArray();
                     _buffLen = nLen;
@@ -284,27 +309,6 @@ namespace GameGate.Services
             {
                 LogQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}", 5);
             }
-            _receiveBytes += e.BuffLen;
-        }
-
-        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
-        {
-            switch (e.ErrorCode)
-            {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎[{_clientSocket.EndPoint}]拒绝链接...", 1);
-                    _connected = false;
-                    break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
-                    LogQueue.Enqueue($"游戏引擎[{_clientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint.ToString()}]...", 1);
-                    _connected = false;
-                    break;
-                case System.Net.Sockets.SocketError.TimedOut:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎时[{_clientSocket.EndPoint}]超时...", 1);
-                    _connected = false;
-                    break;
-            }
-            GateReady = false;
         }
 
         public void RestSessionArray()
