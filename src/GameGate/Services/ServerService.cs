@@ -214,7 +214,7 @@ namespace GameGate.Services
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
                 var message = new ClientMessagePacket();
                 message.Buffer = data;
-                message.SocketId = token.SocHandle;
+                message.SessionId = token.SocHandle;
                 message.BufferLen = data.Length;
                 ServerMgr.ClientPacketQueue(message);
             }
