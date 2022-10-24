@@ -24,7 +24,7 @@ namespace LoginSvr.Services
             _logger = logger;
             _configManager = configManager;
             _serverList = new List<MessageServerInfo>();
-            _serverSocket = new SocketServer(short.MaxValue, 1024);
+            _serverSocket = new SocketServer(byte.MaxValue, 512);
             _serverSocket.OnClientConnect += SocketClientConnect;
             _serverSocket.OnClientDisconnect += SocketClientDisconnect;
             _serverSocket.OnClientError += SocketClientError;

@@ -178,28 +178,28 @@ namespace LoginSvr
     {
         public Socket Socket;
         public string sIPaddr;
-        public IList<TUserInfo> UserList;
+        public IList<UserInfo> UserList;
         public long dwKeepAliveTick;
     }
 
-    public class TUserInfo
+    public class UserInfo
     {
-        public string sAccount;
-        public string sUserIPaddr;
-        public string sGateIPaddr;
-        public string sSockIndex;
+        public string Account;
+        public string UserIPaddr;
+        public string GateIPaddr;
+        public string SockIndex;
         public int nVersionDate;
         public bool boCertificationOK;
-        public int nSessionID;
+        public int SessionID;
         public bool boPayCost;
-        public int nIDDay;
-        public int nIDHour;
-        public int nIPDay;
-        public int nIPHour;
+        public int IDDay;
+        public int IDHour;
+        public int IPDay;
+        public int IPHour;
         public DateTime dtDateTime;
-        public bool boSelServer;
+        public bool SelServer;
         public Socket Socket;
-        public long dwClientTick;
+        public long ClientTick;
         public GateInfo Gate;
     }
 

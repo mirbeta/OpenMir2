@@ -6,7 +6,7 @@ namespace LoginSvr
 {
     public class ReceiveUserData
     {
-        public TUserInfo UserInfo;
+        public UserInfo UserInfo;
         public string Msg;
     }
 
