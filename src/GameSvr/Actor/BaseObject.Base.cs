@@ -1304,7 +1304,7 @@ namespace GameSvr.Actor
                         break;
                     }
                 }
-                if (DropItemList != null)
+                if (DropItemList.Count > 0)
                 {
                     var ObjectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(ObjectId, DropItemList);

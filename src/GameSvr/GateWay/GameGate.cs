@@ -51,13 +51,9 @@ namespace GameSvr.GateWay
         /// 处理接收到的数据
         /// GameGate -> GameSvr
         /// </summary>
-        public void ProcessReceiveBuffer(int nMsgLen, byte[] data)
+        public void ProcessReceiveBuffer(int nMsgLen, Span<byte> data)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
-            if (nMsgLen <= 0)
-            {
-                return;
-            }
             try
             {
                 if (_buffLen > 0)
@@ -130,10 +126,10 @@ namespace GameSvr.GateWay
                     }
                     else
                     {
+                        _logger.Error($"{sExceptionMsg} Offset:{buffIndex} DataLen:{protoBuff.Length}");
                         buffIndex++;
                         protoBuff = protoBuff.Slice(buffIndex, PacketHeader.PacketSize);
                         nLen -= 1;
-                        _logger.Error("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
                     }
                     if (nLen < PacketHeader.PacketSize)
                     {
