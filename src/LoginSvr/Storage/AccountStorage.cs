@@ -14,7 +14,7 @@ namespace LoginSvr.Storage
     {
         private readonly MirLog _logger;
         private readonly ConfigManager _configManager;
-        private readonly IList<AccountQuick> _quickList = null;
+        private readonly IList<AccountQuick> _quickList;
 
         public AccountStorage(MirLog logQueue, ConfigManager configManager)
         {
@@ -37,9 +37,9 @@ namespace LoginSvr.Storage
             }
             catch (Exception E)
             {
-                _logger.Information("[警告] SQL 连接失败!请检查SQL设置...");
-                _logger.Information(Config.ConnctionString);
-                _logger.Information(E.StackTrace);
+                _logger.LogError("[警告] SQL 连接失败!请检查SQL设置...");
+                _logger.LogError(Config.ConnctionString);
+                _logger.LogError(E.StackTrace);
             }
         }
 
@@ -62,7 +62,7 @@ namespace LoginSvr.Storage
                     }
                     catch (Exception e)
                     {
-                        _logger.Information("打开数据库[MySql]失败.");
+                        _logger.LogError("打开数据库[MySql]失败.");
                         _logger.LogError(e);
                         result = false;
                     }
@@ -82,9 +82,6 @@ namespace LoginSvr.Storage
 
         private void LoadQuickList()
         {
-            int nIndex = 0;
-            bool boDeleted;
-            string sAccount;
             const string sSQL = "SELECT Id,DELETED,LOGINID FROM account";
             _quickList.Clear();
             MySqlConnection dbConnection = null;
@@ -92,7 +89,6 @@ namespace LoginSvr.Storage
             {
                 return;
             }
-
             try
             {
                 var command = new MySqlCommand();
@@ -101,9 +97,9 @@ namespace LoginSvr.Storage
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    nIndex = dr.GetInt32("Id");
-                    boDeleted = dr.GetBoolean("DELETED");
-                    sAccount = dr.GetString("LOGINID");
+                    var nIndex = dr.GetInt32("Id");
+                    var boDeleted = dr.GetBoolean("DELETED");
+                    var sAccount = dr.GetString("LOGINID");
                     if (!boDeleted && (!string.IsNullOrEmpty(sAccount)))
                     {
                         _quickList.Add(new AccountQuick(sAccount, nIndex));
@@ -114,7 +110,7 @@ namespace LoginSvr.Storage
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine(ex.Message);
+                _logger.LogError(ex);
             }
             finally
             {
@@ -125,7 +121,6 @@ namespace LoginSvr.Storage
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
         {
-            int result;
             for (var i = 0; i < _quickList.Count; i++)
             {
                 if (HUtil32.CompareLStr(_quickList[i].sAccount, sName))
@@ -133,8 +128,7 @@ namespace LoginSvr.Storage
                     List.Add(new AccountQuick(_quickList[i].sAccount, _quickList[i].nIndex));
                 }
             }
-            result = List.Count;
-            return result;
+            return List.Count;
         }
 
         public bool GetBy(int nIndex, ref AccountRecord DBRecord)
@@ -212,11 +206,11 @@ namespace LoginSvr.Storage
                 dr.Close();
                 dr.Dispose();
             }
-            catch
+            catch (Exception ex)
             {
-                result = false;
-                _logger.Information("[Exception] TFileIDDB.GetRecord (1)");
-                return result;
+                _logger.LogError("[Exception] TFileIDDB.GetRecord");
+                _logger.LogError(ex);
+                return false;
             }
             finally
             {
@@ -235,7 +229,7 @@ namespace LoginSvr.Storage
             return quick.nIndex;
         }
 
-        public int Get(int nIndex, ref AccountRecord DBRecord)
+        public int Get(int nIndex, ref AccountRecord accountRecord)
         {
             int result = -1;
             if (nIndex < 0)
@@ -246,14 +240,14 @@ namespace LoginSvr.Storage
             // {
             //     return result;
             // }
-            if (GetRecord(nIndex, ref DBRecord))
+            if (GetRecord(nIndex, ref accountRecord))
             {
                 result = nIndex;
             }
             return result;
         }
 
-        private int UpdateRecord(AccountRecord DBRecord, byte btFlag)
+        private int UpdateRecord(AccountRecord accountRecord, byte btFlag)
         {
             var result = 0;
             const string sdt = "now()";
@@ -272,7 +266,7 @@ namespace LoginSvr.Storage
                 switch (btFlag)
                 {
                     case 1:
-                        command.CommandText = string.Format(sUpdateRecord1, DBRecord.UserEntry.sAccount, DBRecord.UserEntry.sPassword, DBRecord.UserEntry.sUserName, sdt, sdt, DBRecord.UserEntry.sSSNo, DBRecord.UserEntryAdd.sBirthDay, DBRecord.UserEntry.sPhone, DBRecord.UserEntryAdd.sMobilePhone, DBRecord.UserEntry.sEMail, DBRecord.UserEntry.sQuiz, DBRecord.UserEntry.sAnswer, DBRecord.UserEntryAdd.sQuiz2, DBRecord.UserEntryAdd.sAnswer2);
+                        command.CommandText = string.Format(sUpdateRecord1, accountRecord.UserEntry.sAccount, accountRecord.UserEntry.sPassword, accountRecord.UserEntry.sUserName, sdt, sdt, accountRecord.UserEntry.sSSNo, accountRecord.UserEntryAdd.sBirthDay, accountRecord.UserEntry.sPhone, accountRecord.UserEntryAdd.sMobilePhone, accountRecord.UserEntry.sEMail, accountRecord.UserEntry.sQuiz, accountRecord.UserEntry.sAnswer, accountRecord.UserEntryAdd.sQuiz2, accountRecord.UserEntryAdd.sAnswer2);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -280,25 +274,26 @@ namespace LoginSvr.Storage
                         }
                         catch (Exception E)
                         {
-                            _logger.Information("[Exception] TFileIDDB.UpdateRecord");
-                            _logger.Information(E.Message);
+                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
+                            _logger.LogError(E);
                             return 0;
                         }
                         break;
                     case 2:
-                        command.CommandText = string.Format(sUpdateRecord2, sdt, DBRecord.UserEntry.sAccount);
+                        command.CommandText = string.Format(sUpdateRecord2, sdt, accountRecord.UserEntry.sAccount);
                         try
                         {
                             command.ExecuteNonQuery();
                         }
-                        catch
+                        catch (Exception ex)
                         {
                             result = 0;
-                            _logger.Information("[Exception] TFileIDDB.UpdateRecord (3)");
+                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
+                            _logger.LogError(ex);
                         }
                         break;
                     default:
-                        command.CommandText = string.Format(sUpdateRecord0, DBRecord.UserEntry.sPassword, DBRecord.UserEntry.sUserName, sdt, DBRecord.nErrorCount, DBRecord.dwActionTick, DBRecord.UserEntry.sSSNo, DBRecord.UserEntryAdd.sBirthDay, DBRecord.UserEntry.sPhone, DBRecord.UserEntryAdd.sMobilePhone, DBRecord.UserEntry.sEMail, DBRecord.UserEntry.sQuiz, DBRecord.UserEntry.sAnswer, DBRecord.UserEntryAdd.sQuiz2, DBRecord.UserEntryAdd.sAnswer2, DBRecord.UserEntry.sAccount);
+                        command.CommandText = string.Format(sUpdateRecord0, accountRecord.UserEntry.sPassword, accountRecord.UserEntry.sUserName, sdt, accountRecord.nErrorCount, accountRecord.dwActionTick, accountRecord.UserEntry.sSSNo, accountRecord.UserEntryAdd.sBirthDay, accountRecord.UserEntry.sPhone, accountRecord.UserEntryAdd.sMobilePhone, accountRecord.UserEntry.sEMail, accountRecord.UserEntry.sQuiz, accountRecord.UserEntry.sAnswer, accountRecord.UserEntryAdd.sQuiz2, accountRecord.UserEntryAdd.sAnswer2, accountRecord.UserEntry.sAccount);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -306,8 +301,8 @@ namespace LoginSvr.Storage
                         catch (Exception E)
                         {
                             result = 0;
-                            _logger.Information("[Exception] TFileIDDB.UpdateRecord (0)");
-                            _logger.Information(E.Message);
+                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
+                            _logger.LogError(E);
                             return result;
                         }
                         break;
@@ -320,35 +315,35 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public bool Update(int nIndex, ref AccountRecord DBRecord)
+        public bool Update(int nIndex, ref AccountRecord accountRecord)
         {
             bool result = false;
             if (nIndex < 0)
             {
-                return result;
+                return false;
             }
             if (_quickList.Count <= nIndex)
             {
-                return result;
+                return false;
             }
-            if (UpdateRecord(DBRecord, 0) > 0)
+            if (UpdateRecord(accountRecord, 0) > 0)
             {
                 result = true;
             }
             return result;
         }
 
-        public bool Add(ref AccountRecord DBRecord)
+        public bool Add(ref AccountRecord accountRecord)
         {
             bool result;
-            var sAccount = DBRecord.UserEntry.sAccount;
+            var sAccount = accountRecord.UserEntry.sAccount;
             if (Index(sAccount) > 0)
             {
                 result = false;
             }
             else
             {
-                var nIndex = UpdateRecord(DBRecord, 1);
+                var nIndex = UpdateRecord(accountRecord, 1);
                 if (nIndex > 0)
                 {
                     _quickList.Add(new AccountQuick(sAccount, nIndex));
@@ -362,7 +357,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public bool Delete(int nIndex, ref AccountRecord DBRecord)
+        public bool Delete(int nIndex, ref AccountRecord accountRecord)
         {
             var result = false;
             if (nIndex < 0)
@@ -373,7 +368,7 @@ namespace LoginSvr.Storage
             {
                 return false;
             }
-            var up = UpdateRecord(DBRecord, 2);
+            var up = UpdateRecord(accountRecord, 2);
             if (up > 0)
             {
                 _quickList.RemoveAt(nIndex);
@@ -381,6 +376,5 @@ namespace LoginSvr.Storage
             }
             return result;
         }
-
     }
 }
