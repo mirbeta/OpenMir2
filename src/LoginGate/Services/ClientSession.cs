@@ -17,7 +17,7 @@ namespace LoginGate.Services
     {
         private readonly TSessionInfo _session;
         private readonly ClientThread _lastLoginSvr;
-        private readonly MirLog _logQueue;
+        private readonly MirLog _logger;
         private readonly ConfigManager _configManager;
         private bool m_KickFlag = false;
         private int m_nSvrObject = 0;
@@ -25,7 +25,7 @@ namespace LoginGate.Services
 
         public ClientSession(MirLog logger, TSessionInfo session, ClientThread clientThread, ConfigManager configManager)
         {
-            _logQueue = logger;
+            _logger = logger;
             _session = session;
             _lastLoginSvr = clientThread;
             _configManager = configManager;
@@ -137,7 +137,7 @@ namespace LoginGate.Services
         {
             if (!m_KickFlag)
             {
-                if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
+                if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.ClientTimeOutTime)
                 {
                     m_dwClientTimeOutTick = HUtil32.GetTickCount();
                     if (_session.Socket == null || _session.Socket.Handle == IntPtr.Zero)
@@ -147,13 +147,13 @@ namespace LoginGate.Services
                     SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
                     m_KickFlag = true;
                     //BlockUser(this);
-                    Debug.WriteLine($"Client Connect Time Out: {Session.ClientIP}");
+                    _logger.LogDebug($"Client Connect TimeOut: {Session.ClientIP}");
                     success = true;
                 }
             }
             else
             {
-                if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
+                if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.ClientTimeOutTime)
                 {
                     m_dwClientTimeOutTick = HUtil32.GetTickCount();
                     success = true;
@@ -178,7 +178,7 @@ namespace LoginGate.Services
             }
             else
             {
-                _logQueue.LogInformation("Scoket会话失效，无法处理登陆封包", 5);
+                _logger.LogInformation("Scoket会话失效，无法处理登陆封包", 5);
             }
         }
 
@@ -250,7 +250,7 @@ namespace LoginGate.Services
         {
             if (_session.Socket == null)
             {
-                _logQueue.LogDebug($"会话[{_session.ConnectionId}]已经关闭");
+                _logger.LogDebug($"会话[{_session.ConnectionId}]已经关闭");
                 return;
             }
             _session.Socket.Close();

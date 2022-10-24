@@ -63,7 +63,7 @@ namespace LoginGate.Services
                 _logger.LogDebug("获取服务器实例失败。");
                 return;
             }
-            if (!clientThread.GateReady)
+            if (!clientThread.ConnectState)
             {
                 _logger.LogInformation("未就绪: " + sRemoteAddress, 5);
                 _logger.LogDebug($"游戏引擎链接失败 Server:[{clientThread.EndPoint}] ConnectionId:[{e.ConnectionId}]");
@@ -136,7 +136,7 @@ namespace LoginGate.Services
                 _logger.LogDebug($"获取用户对应会话失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
-            if (!userSession.ClientThread.GateReady)
+            if (!userSession.ClientThread.ConnectState)
             {
                 _logger.LogInformation("未就绪: " + sRemoteAddress, 5);
                 _logger.LogDebug($"账号服务器链接失败 Server:[{userSession.ClientThread.EndPoint}] ConnectionId:[{connectionId}]");

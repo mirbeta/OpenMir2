@@ -29,14 +29,19 @@ namespace LoginGate.Services
         /// </summary>
         private readonly ClientScoket _clientSocket;
         /// <summary>
-        /// 会话管理
+        /// Client管理
         /// </summary>
         private readonly ClientManager _clientManager;
+        /// <summary>
+        /// Session管理
+        /// </summary>
+        private readonly SessionManager _sessionManager;
 
-        public ClientThread(MirLog logger, ClientManager clientManager)
+        public ClientThread(MirLog logger, SessionManager sessionManager, ClientManager clientManager)
         {
             _logger = logger;
             _clientManager = clientManager;
+            _sessionManager = sessionManager;
             _clientSocket = new ClientScoket();
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
@@ -98,11 +103,11 @@ namespace LoginGate.Services
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            GateReady = true;
+            ConnectState = true;
             RestSessionArray();
             SockThreadStutas = SockThreadStutas.Connected;
             KeepAliveTick = HUtil32.GetTickCount();
-            dwCheckServerTick = HUtil32.GetTickCount();
+            CheckServerTick = HUtil32.GetTickCount();
             CheckServerFailCount = 1;
             //_clientManager.AddClientThread(e.SocketHandle, this);
             _logger.LogInformation($"账号服务器[{EndPoint}]链接成功.", 1);
@@ -127,7 +132,7 @@ namespace LoginGate.Services
                 }
             }
             RestSessionArray();
-            GateReady = false;
+            ConnectState = false;
             //_clientManager.DeleteClientThread(e.SocketHandle);
             _logger.LogInformation($"账号服务器[{EndPoint}]断开链接.", 1);
         }
@@ -142,29 +147,23 @@ namespace LoginGate.Services
                 return;
             }
             ReceiveBytes += e.BuffLen;
+            if (e.Buff[1] == (byte)'+') //收到LoginSvr发过来的关闭会话请求
+            {
+                if (e.Buff[2] == (byte)'-')
+                {
+                    var sessionId = BitConverter.ToString(e.Buff[4..8]);
+                    _sessionManager.CloseSession(sessionId);
+                    _logger.LogInformation("收到LoginSvr关闭会话请求", 1);
+                }
+                else
+                {
+                    KeepAliveTick = HUtil32.GetTickCount();
+                }
+                return;
+            }
             var loginSvrPacket = Packets.ToPacket<LoginSvrPacket>(e.Buff);
             if (loginSvrPacket != null)
             {
-                //var sText = string.Empty;
-                //var sConnectionId = string.Empty;
-                //var sSocketMsg = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-                //HUtil32.ArrestStringEx(sSocketMsg, '%', '$', ref sText);
-                //if (sText[0] == '+' && sText[1] == '-')
-                //{
-                //    var tempStr = sSocketMsg[3..7];
-                //    if (!string.IsNullOrEmpty(tempStr))
-                //    {
-                //        sConnectionId = tempStr;
-                //        //_sessionManager.CloseSession(sSessionId);
-                //        _logger.LogDebug($"收到账号服务器[{EndPoint}]断开链接消息..");
-                //    }
-                //    return;
-                //}
-                //HUtil32.GetValidStr3(sText, ref sConnectionId, new[] { "/" });
-                //if (string.IsNullOrEmpty(sConnectionId))
-                //{
-                //    return;
-                //}
                 var userData = new TMessageData();
                 userData.ConnectionId = loginSvrPacket.ConnectionId;
                 userData.Body = loginSvrPacket.ClientPacket;
@@ -280,7 +279,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
-        public int CheckServerFailCount = 0;
+        public int CheckServerFailCount = 1;
         /// <summary>
         /// 服务器之间的检查间隔
         /// </summary>
@@ -288,7 +287,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 网关是否就绪
         /// </summary>
-        public bool GateReady = false;
+        public bool ConnectState = false;
         /// <summary>
         /// 上次心跳链接时间
         /// </summary>
@@ -297,10 +296,6 @@ namespace LoginGate.Services
         /// 服务器链接状态
         /// </summary>
         public SockThreadStutas SockThreadStutas;
-        /// <summary>
-        /// 服务器链接时间
-        /// </summary>
-        public int dwCheckServerTick = 0;
         /// <summary>
         /// 历史最高在线人数
         /// </summary>

@@ -24,20 +24,20 @@ namespace LoginGate.Conf
 
         public void LoadConfig()
         {
-            GetConfig.m_nClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GetConfig.m_nClientTimeOutTime);
-            if (GetConfig.m_nClientTimeOutTime < 10 * 1000)
+            GetConfig.ClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GetConfig.ClientTimeOutTime);
+            if (GetConfig.ClientTimeOutTime < 10 * 1000)
             {
-                GetConfig.m_nClientTimeOutTime = 10 * 1000;
-                WriteInteger("Integer", "ClientTimeOutTime", GetConfig.m_nClientTimeOutTime);
+                GetConfig.ClientTimeOutTime = 10 * 1000;
+                WriteInteger("Integer", "ClientTimeOutTime", GetConfig.ClientTimeOutTime);
             }
             GetConfig.m_nMaxConnectOfIP = ReadInteger("Integer", "MaxConnectOfIP", GetConfig.m_nMaxConnectOfIP);
             GetConfig.m_nCheckNewIDOfIP = ReadInteger("Integer", "CheckNewIDOfIP", GetConfig.m_nCheckNewIDOfIP);
-            GetConfig.m_nClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GetConfig.m_nClientTimeOutTime);
-            GetConfig.m_nNomClientPacketSize = ReadInteger("Integer", "NomClientPacketSize", GetConfig.m_nNomClientPacketSize);
-            GetConfig.m_nMaxClientPacketCount = ReadInteger("Integer", "MaxClientPacketCount", GetConfig.m_nMaxClientPacketCount);
+            GetConfig.ClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GetConfig.ClientTimeOutTime);
+            GetConfig.NomClientPacketSize = ReadInteger("Integer", "NomClientPacketSize", GetConfig.NomClientPacketSize);
+            GetConfig.MaxClientPacketCount = ReadInteger("Integer", "MaxClientPacketCount", GetConfig.MaxClientPacketCount);
             GetConfig.m_fCheckNewIDOfIP = ReadBool("Switch", "CheckNewIDOfIP", GetConfig.m_fCheckNewIDOfIP);
-            GetConfig.m_fCheckNullSession = ReadBool("Switch", "CheckNullSession", GetConfig.m_fCheckNullSession);
-            GetConfig.m_fOverSpeedSendBack = ReadBool("Switch", "OverSpeedSendBack", GetConfig.m_fOverSpeedSendBack);
+            GetConfig.CheckNullSession = ReadBool("Switch", "CheckNullSession", GetConfig.CheckNullSession);
+            GetConfig.OverSpeedSendBack = ReadBool("Switch", "OverSpeedSendBack", GetConfig.OverSpeedSendBack);
             GetConfig.DefenceCCPacket = ReadBool("Switch", "DefenceCCPacket", GetConfig.DefenceCCPacket);
             GetConfig.m_fKickOverSpeed = ReadBool("Switch", "KickOverSpeed", GetConfig.m_fKickOverSpeed);
             GetConfig.m_fKickOverPacketSize = ReadBool("Switch", "KickOverPacketSize", GetConfig.m_fKickOverPacketSize);
