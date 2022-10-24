@@ -428,8 +428,12 @@ namespace GameSvr.GateWay
             if (_GateMap.ContainsKey(e.SocHandle))
             {
                 var nMsgLen = e.BytesReceived;
-                var data = new byte[e.BytesReceived];
-                Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
+                if (nMsgLen <= 0)
+                {
+                    return;
+                }
+                Span<byte> data = stackalloc byte[e.BytesReceived];
+                MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
                 _GateMap[e.SocHandle].ProcessReceiveBuffer(nMsgLen, data);
             }
             else
