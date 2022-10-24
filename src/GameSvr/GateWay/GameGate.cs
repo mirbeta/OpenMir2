@@ -18,7 +18,7 @@ namespace GameSvr.GateWay
         private readonly GameGateInfo _gateInfo;
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
-        private Memory<byte> _gateBuff;
+        private byte[] _gateBuff;
         private int _buffLen;
         private readonly CancellationTokenSource _cancellation;
         private readonly PacketHeader packetHeader;
@@ -53,8 +53,7 @@ namespace GameSvr.GateWay
         /// </summary>
         public void ProcessReceiveBuffer(int nMsgLen, byte[] data)
         {
-            const string sExceptionMsg1 = "[Exception] GameGate::ProcessReceiveBuffer -> pBuffer";
-            const string sExceptionMsg2 = "[Exception] GameGate::ProcessReceiveBuffer -> @pwork,ExecGateMsg";
+            const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             if (nMsgLen <= 0)
             {
                 return;
@@ -67,46 +66,40 @@ namespace GameSvr.GateWay
                     if (buffSize > _buffLen)
                     {
                         Span<byte> tempBuff = stackalloc byte[buffSize];
-                        for (int i = 0; i < _gateBuff.Length; i++)
-                        {
-                            tempBuff[i] = _gateBuff.Span[i];
-                        }
-                        for (int i = 0; i < nMsgLen; i++)
-                        {
-                            tempBuff[i + _buffLen] = data[i];
-                        }
-                        _gateBuff = tempBuff.ToArray();
+                        MemoryCopy.BlockCopy(_gateBuff, 0, tempBuff, 0, _buffLen);
+                        MemoryCopy.BlockCopy(data, 0, tempBuff, _buffLen, nMsgLen);
+                        ProcessBuffer(tempBuff, buffSize);
                     }
                 }
                 else
                 {
-                    _gateBuff = data;
+                    ProcessBuffer(data, nMsgLen);
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                _logger.Error(sExceptionMsg1);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(ex.StackTrace);
             }
-            var nLen = 0;
+        }
+
+        private void ProcessBuffer(Span<byte> packetBuff,int packetLen)
+        {
+            const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer -> ExecGateMsg";
+            var nLen = packetLen;
             var buffIndex = 0;
-            var protoBuff = _gateBuff;
+            Span<byte> protoBuff = packetBuff;
             try
             {
-                nLen = _buffLen + nMsgLen;
                 while (nLen >= PacketHeader.PacketSize)
                 {
-                    var packetHead = protoBuff[..20].Span;
-                    packetHeader.PacketCode = BitConverter.ToUInt32(packetHead[..4]);
-                    packetHeader.Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
-                    packetHeader.SessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
-                    packetHeader.Ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
-                    packetHeader.ServerIndex = BitConverter.ToInt32(packetHead.Slice(12, 4));
-                    packetHeader.PackLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
-                    if (packetHeader.PacketCode == 0)
+                    Span<byte> packetHead = protoBuff[..20];
+                    if (packetHead.Length < 20)
                     {
-                        //todo 建议直接丢掉后续的封包
-                        return;
+                        break;
                     }
+                    packetHeader.PacketCode = BitConverter.ToUInt32(packetHead[..4]);
+                    packetHeader.PackLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
                     var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + PacketHeader.PacketSize;
                     if (packetHeader.PacketCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                     {
@@ -114,10 +107,14 @@ namespace GameSvr.GateWay
                         {
                             break;
                         }
+                        packetHeader.Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
+                        packetHeader.SessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
+                        packetHeader.ServerIndex = BitConverter.ToInt32(packetHead.Slice(12, 4));
+                        packetHeader.Ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
                         Span<byte> body = null;
                         if (packetHeader.PackLength > 0)
                         {
-                            body = protoBuff[..nCheckMsgLen].Span; //获取整个封包内容,包括消息头和消息体
+                            body = protoBuff[..nCheckMsgLen]; //获取整个封包内容,包括消息头和消息体
                             body = body[PacketHeader.PacketSize..];
                         }
                         //M2Share.GateMgr.AddGameGateQueue(_gateIdx, msgHeader, body); //添加到处理队列
@@ -144,9 +141,10 @@ namespace GameSvr.GateWay
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.Error(sExceptionMsg2);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(ex.StackTrace);
             }
             if (nLen > 0)
             {
