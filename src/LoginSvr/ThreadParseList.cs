@@ -71,9 +71,10 @@ namespace LoginSvr
                         }
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
-                    _logger.Information("Exception] loading on IDStrList.");
+                    _logger.LogError("Exception] loading on IDStrList.");
+                    _logger.LogError(ex);
                 }
                 try
                 {
@@ -104,8 +105,8 @@ namespace LoginSvr
                 }
                 catch (Exception ex)
                 {
-                    _logger.Information("Exception] loading on IPStrList.");
-                    _logger.Information(ex.StackTrace);
+                    _logger.LogError("Exception] loading on IPStrList.");
+                    _logger.LogError(ex);
                 }
             }
         }

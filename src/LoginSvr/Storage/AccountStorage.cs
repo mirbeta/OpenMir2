@@ -35,11 +35,10 @@ namespace LoginSvr.Storage
                 _logger.Information("连接SQL服务器成功...");
                 LoadQuickList();
             }
-            catch (Exception E)
+            catch (Exception ex)
             {
-                _logger.LogError("[警告] SQL 连接失败!请检查SQL设置...");
-                _logger.LogError(Config.ConnctionString);
-                _logger.LogError(E.StackTrace);
+                _logger.LogError("[错误] SQL 连接失败!请检查SQL设置...");
+                _logger.LogError(ex);
             }
         }
 

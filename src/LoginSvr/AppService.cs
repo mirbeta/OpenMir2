@@ -39,8 +39,8 @@ namespace LoginSvr
             LsShare.Initialization();
             _serverApp.Start();
             LoadConfig();
-            _loginService.Start();
-            _masSocService.Start();
+            _loginService.StartServer();
+            _masSocService.StartServer();
             _accountStorage.Initialization();
             return base.StartAsync(cancellationToken);
         }

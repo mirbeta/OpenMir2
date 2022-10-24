@@ -38,7 +38,7 @@ namespace LoginSvr.Services
             _serverSocket.OnClientError += GSocketClientError;
         }
 
-        public void Start()
+        public void StartServer()
         {
             _serverSocket.Init();
             _serverSocket.Start(_configManager.Config.sGateAddr, _configManager.Config.nGatePort);
@@ -73,7 +73,7 @@ namespace LoginSvr.Services
                     break;
                 }
             }
-            _logger.Information($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+            _logger.Warn($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
         }
 
         private void GSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -238,7 +238,8 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information("[Exception] LoginService.ReceiveOpenUser " + ex.Source);
+                _logger.LogError("[Exception] LoginService.ReceiveOpenUser ");
+                _logger.LogError(ex);
             }
         }
 
