@@ -1219,7 +1219,8 @@ namespace GameSvr.Actor
             int nRate;
             StdItem StdItem;
             IList<DeleteItem> DropItemList;
-            const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
+            const string sExceptionMsg = "[Exception] BaseObject::DropUseItems";
+            const byte MaxUseItem = 8;
             try
             {
                 if (NoDropUseItem)
@@ -1254,20 +1255,13 @@ namespace GameSvr.Actor
                             }
                         }
                         nC++;
-                        if (nC >= 9)
+                        if (nC >= MaxUseItem)
                         {
                             break;
                         }
                     }
                 }
-                if (PvpLevel() > 2)
-                {
-                    nRate = 15;
-                }
-                else
-                {
-                    nRate = 30;
-                }
+                nRate = PvpLevel() > 2 ? 15 : 30; //掉落几率
                 nC = 0;
                 while (true)
                 {
@@ -1299,7 +1293,7 @@ namespace GameSvr.Actor
                         }
                     }
                     nC++;
-                    if (nC >= 9)
+                    if (nC >= MaxUseItem)
                     {
                         break;
                     }
@@ -1313,7 +1307,7 @@ namespace GameSvr.Actor
             }
             catch (Exception ex)
             {
-                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg + $" 地图名称:{Envir.MapName} 怪物名称:{ChrName} X:{CurrX} Y:{CurrY}");
                 M2Share.Log.Error(ex.StackTrace);
             }
         }

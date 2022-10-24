@@ -3474,7 +3474,7 @@ namespace GameSvr.Npc
                                     UserItem.Dura = (ushort)idura;
                                 }
                                 MapItem = new MapItem();
-                                MapItem.UserItem = UserItem;
+                                MapItem.UserItem = new UserItem(UserItem);
                                 MapItem.Name = StdItem.Name;
                                 var NameCorlr = "@" + M2Share.CustomItemMgr.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
                                 var sUserItemName = "";
