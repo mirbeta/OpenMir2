@@ -22,7 +22,7 @@ namespace LoginSvr
         }
     }
 
-    public class TRecordHeader
+    public class RecordHeader
     {
         public string sAccount;
         public string sName;
@@ -33,9 +33,9 @@ namespace LoginSvr
         public DateTime CreateDate;
     }
 
-    public class TAccountDBRecord
+    public class AccountRecord
     {
-        public TRecordHeader Header;
+        public RecordHeader Header;
         public int nErrorCount;
         public double dwActionTick;
         public UserEntry UserEntry;

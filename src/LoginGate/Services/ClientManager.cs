@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Packet.ServerPackets;
 
 namespace LoginGate.Services
 {
@@ -173,7 +174,12 @@ namespace LoginGate.Services
         {
             if (clientThread.GateReady)
             {
-                clientThread.CheckServerFailCount = 1;
+                clientThread.SendPacket(new GatePacket()
+                {
+                    Type = PacketType.KeepAlive,
+                    SocketId = string.Empty
+                });
+                clientThread.CheckServerFailCount = 0;
                 return;
             }
             if (HUtil32.GetTickCount() - clientThread.dwCheckServerTick > GateShare.CheckServerTimeOutTime)

@@ -18,17 +18,15 @@ namespace LoginSvr
         /// <summary>
         /// 检查账号是否符合规则
         /// </summary>
-        /// <param name="sName"></param>
         /// <returns></returns>
-        public static bool CheckAccountName(string sName)
+        public static bool CheckAccountName(string account)
         {
-            bool result = false;
-            if (string.IsNullOrEmpty(sName))
+            if (string.IsNullOrEmpty(account))
             {
-                return result;
+                return false;
             }
-            result = true;
-            int nLen = sName.Length;
+            var result = true;
+            var nLen = account.Length;
             var i = 0;
             while (true)
             {
@@ -36,15 +34,15 @@ namespace LoginSvr
                 {
                     break;
                 }
-                if ((sName[i] < '0') || (sName[i] > 'z'))
+                if ((account[i] < '0') || (account[i] > 'z'))
                 {
                     result = false;
-                    if ((sName[i] >= '°') && (sName[i] <= 'è'))
+                    if ((account[i] >= '°') && (account[i] <= 'è'))
                     {
                         i++;
                         if (i <= nLen)
                         {
-                            if ((sName[i] >= '?') && (sName[i] <= 't'))
+                            if ((account[i] >= '?') && (account[i] <= 't'))
                             {
                                 result = true;
                             }
@@ -60,10 +58,10 @@ namespace LoginSvr
             return result;
         }
 
-        public static int GetSessionID()
+        public static int GetSessionId()
         {
             nSessionIdx++;
-            if (nSessionIdx >= Int32.MaxValue)
+            if (nSessionIdx >= int.MaxValue)
             {
                 nSessionIdx = 2;
             }
@@ -121,11 +119,10 @@ namespace LoginSvr
                     break;
                 }
             }
-
             return result;
         }
 
-        public static string GenSpaceString(string sStr, int nSpaceCOunt)
+        private static string GenSpaceString(string sStr, int nSpaceCOunt)
         {
             string result = sStr + " ";
             for (var i = 0; i <= nSpaceCOunt - sStr.Length; i++)
@@ -177,7 +174,7 @@ namespace LoginSvr
         public int nLockCount;
     }
 
-    public class TGateInfo
+    public class GateInfo
     {
         public Socket Socket;
         public string sIPaddr;
@@ -203,7 +200,7 @@ namespace LoginSvr
         public bool boSelServer;
         public Socket Socket;
         public long dwClientTick;
-        public TGateInfo Gate;
+        public GateInfo Gate;
     }
 
     public class AccountConst

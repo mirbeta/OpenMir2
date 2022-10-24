@@ -152,16 +152,16 @@ namespace LoginSvr
                          for (int i = 0; i < serverList.Count; i++)
                          {
                              var msgServer = serverList[i];
-                             if (!string.IsNullOrEmpty(msgServer.sServerName))
+                             if (!string.IsNullOrEmpty(msgServer.ServerName))
                              {
-                                 var serverType = msgServer.nServerIndex == 99 ? " (DB)" : " (GameSvr)";
-                                 table.UpdateCell(i, 0, $"[bold]{msgServer.sServerName}{serverType}[/]");
+                                 var serverType = msgServer.ServerIndex == 99 ? " (DB)" : " (GameSvr)";
+                                 table.UpdateCell(i, 0, $"[bold]{msgServer.ServerName}{serverType}[/]");
                                  table.UpdateCell(i, 1, ($"[bold]{msgServer.EndPoint}[/]"));
                                  if (!msgServer.Socket.Connected)
                                  {
                                      table.UpdateCell(i, 2, ($"[red]Not Connected[/]"));
                                  }
-                                 else if ((HUtil32.GetTickCount() - msgServer.dwKeepAliveTick) < 30000)
+                                 else if ((HUtil32.GetTickCount() - msgServer.KeepAliveTick) < 30000)
                                  {
                                      table.UpdateCell(i, 2, ($"[green]Connected[/]"));
                                  }
@@ -170,7 +170,7 @@ namespace LoginSvr
                                      table.UpdateCell(i, 2, ($"[red]Timeout[/]"));
                                  }
                              }
-                             table.UpdateCell(i, 3, ($"[bold]{msgServer.nOnlineCount}[/]"));
+                             table.UpdateCell(i, 3, ($"[bold]{msgServer.OnlineCount}[/]"));
                          }
                          ctx.Refresh();
                      }

@@ -58,7 +58,7 @@ namespace LoginSvr.Services
             if (boAllowed)
             {
                 var msgServer = new MessageServerInfo();
-                msgServer.sReceiveMsg = string.Empty;
+                msgServer.ReceiveMsg = string.Empty;
                 msgServer.Socket = e.Socket;
                 msgServer.EndPoint = e.EndPoint;
                 _serverList.Add(msgServer);
@@ -78,13 +78,13 @@ namespace LoginSvr.Services
                 var MsgServer = _serverList[i];
                 if (MsgServer.Socket == e.Socket)
                 {
-                    if (MsgServer.nServerIndex == 99)
+                    if (MsgServer.ServerIndex == 99)
                     {
-                        _logger.Information($"[{MsgServer.sServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.Information($"[{MsgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     else
                     {
-                        _logger.Information($"[{MsgServer.sServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.Information($"[{MsgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     MsgServer = null;
                     _serverList.RemoveAt(i);
@@ -100,7 +100,6 @@ namespace LoginSvr.Services
 
         private void SocketClientRead(object sender, AsyncUserToken e)
         {
-            MessageServerInfo MsgServer;
             var sReviceMsg = string.Empty;
             var sMsg = string.Empty;
             var sCode = string.Empty;
@@ -110,13 +109,13 @@ namespace LoginSvr.Services
             var sOnlineCount = string.Empty;
             for (var i = 0; i < _serverList.Count; i++)
             {
-                MsgServer = _serverList[i];
-                if (MsgServer.Socket == e.Socket)
+                var msgServer = _serverList[i];
+                if (msgServer.Socket == e.Socket)
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    sReviceMsg = MsgServer.sReceiveMsg + HUtil32.GetString(data, 0, data.Length);
+                    sReviceMsg = msgServer.ReceiveMsg + HUtil32.GetString(data, 0, data.Length);
                     while (sReviceMsg.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
                     {
                         sReviceMsg = HUtil32.ArrestStringEx(sReviceMsg, "(", ")", ref sMsg);
@@ -136,10 +135,10 @@ namespace LoginSvr.Services
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, new[] { "/" });
-                                MsgServer.sServerName = sServerName;
-                                MsgServer.nServerIndex = HUtil32.StrToInt(sIndex, 0);
-                                MsgServer.nOnlineCount = HUtil32.StrToInt(sOnlineCount, 0);
-                                MsgServer.dwKeepAliveTick = HUtil32.GetTickCount();
+                                msgServer.ServerName = sServerName;
+                                msgServer.ServerIndex = HUtil32.StrToInt(sIndex, 0);
+                                msgServer.OnlineCount = HUtil32.StrToInt(sOnlineCount, 0);
+                                msgServer.KeepAliveTick = HUtil32.GetTickCount();
                                 SortServerList(i);
                                 LsShare.nOnlineCountMin = GetOnlineHumCount();
                                 if (LsShare.nOnlineCountMin > LsShare.nOnlineCountMax)
@@ -158,7 +157,7 @@ namespace LoginSvr.Services
                         }
                     }
                 }
-                MsgServer.sReceiveMsg = sReviceMsg;
+                msgServer.ReceiveMsg = sReviceMsg;
             }
         }
 
@@ -183,9 +182,9 @@ namespace LoginSvr.Services
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var msgServer = _serverList[i];
-                if ((msgServer.nServerIndex != 99) && (msgServer.sServerName == sServerName))
+                if ((msgServer.ServerIndex != 99) && (msgServer.ServerName == sServerName))
                 {
-                    nCount += msgServer.nOnlineCount;
+                    nCount += msgServer.OnlineCount;
                 }
             }
             for (var i = 0; i < UserLimit.Length; i++)
@@ -232,9 +231,9 @@ namespace LoginSvr.Services
                 for (var nC = 0; nC < _serverList.Count; nC++)
                 {
                     var msgServer = _serverList[nC];
-                    if (msgServer.sServerName == msgServerSort.sServerName)
+                    if (msgServer.ServerName == msgServerSort.ServerName)
                     {
-                        if (msgServer.nServerIndex < msgServerSort.nServerIndex)
+                        if (msgServer.ServerIndex < msgServerSort.ServerIndex)
                         {
                             _serverList.Insert(nC, msgServerSort);
                             return;
@@ -245,15 +244,15 @@ namespace LoginSvr.Services
                             for (var n10 = nNewIndex; n10 < _serverList.Count; n10++)
                             {
                                 msgServer = _serverList[n10];
-                                if (msgServer.sServerName == msgServerSort.sServerName)
+                                if (msgServer.ServerName == msgServerSort.ServerName)
                                 {
-                                    if (msgServer.nServerIndex < msgServerSort.nServerIndex)
+                                    if (msgServer.ServerIndex < msgServerSort.ServerIndex)
                                     {
                                         _serverList.Insert(n10, msgServerSort);
                                         for (var n14 = n10 + 1; n14 < _serverList.Count; n14++)
                                         {
                                             msgServer = _serverList[n14];
-                                            if ((msgServer.sServerName == msgServerSort.sServerName) && (msgServer.nServerIndex == msgServerSort.nServerIndex))
+                                            if ((msgServer.ServerName == msgServerSort.ServerName) && (msgServer.ServerIndex == msgServerSort.ServerIndex))
                                             {
                                                 _serverList.RemoveAt(n14);
                                                 return;
@@ -289,8 +288,8 @@ namespace LoginSvr.Services
                     var msgServer = _serverList[i];
                     if (msgServer.Socket.Connected)
                     {
-                        if ((string.IsNullOrEmpty(tempName)) || (string.IsNullOrEmpty(msgServer.sServerName)) || (string.Compare(msgServer.sServerName, tempName, StringComparison.OrdinalIgnoreCase) == 0)
-                            || (msgServer.nServerIndex == 99))
+                        if ((string.IsNullOrEmpty(tempName)) || (string.IsNullOrEmpty(msgServer.ServerName)) || (string.Compare(msgServer.ServerName, tempName, StringComparison.OrdinalIgnoreCase) == 0)
+                            || (msgServer.ServerIndex == 99))
                         {
                             msgServer.Socket.SendText(sSendMsg);
                         }
@@ -341,9 +340,9 @@ namespace LoginSvr.Services
                 for (var i = 0; i < _serverList.Count; i++)
                 {
                     MsgServer = _serverList[i];
-                    if (MsgServer.nServerIndex != 99)
+                    if (MsgServer.ServerIndex != 99)
                     {
-                        nCount += MsgServer.nOnlineCount;
+                        nCount += MsgServer.OnlineCount;
                     }
                 }
                 result = nCount;
@@ -443,7 +442,7 @@ namespace LoginSvr.Services
                 for (var i = 0; i < _serverList.Count; i++)
                 {
                     var msgServer = _serverList[i];
-                    if ((msgServer.nServerIndex != 99) && (msgServer.sServerName == sServerName))
+                    if ((msgServer.ServerIndex != 99) && (msgServer.ServerName == sServerName))
                     {
                         boServerOnLine = true;
                     }
@@ -489,15 +488,15 @@ namespace LoginSvr.Services
 
     public class MessageServerInfo
     {
-        public string sReceiveMsg;
+        public string ReceiveMsg;
         public Socket Socket;
         public IPEndPoint EndPoint;
-        public string sServerName;
-        public int nServerIndex;
-        public int nOnlineCount;
-        public int nSelectID;
-        public int dwKeepAliveTick;
-        public string sIPaddr;
+        public string ServerName;
+        public int ServerIndex;
+        public int OnlineCount;
+        public int SelectID;
+        public int KeepAliveTick;
+        public string IPaddr;
     }
 
     public class LimitServerUserInfo
