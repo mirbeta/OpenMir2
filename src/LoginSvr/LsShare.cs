@@ -9,10 +9,10 @@ namespace LoginSvr
     public class LsShare
     {
         public static bool ShowLog = true;
-        public static int nOnlineCountMin = 0;
-        public static int nOnlineCountMax = 0;
-        public static int nSessionIdx = 0;
-        public static int nVersionDate = 20011006;
+        public static int OnlineCountMin = 0;
+        public static int OnlineCountMax = 0;
+        public static int SessionIdx = 0;
+        public static readonly int VersionDate = 20011006;
         public static IList<GateInfo> Gates = new List<GateInfo>();
         public static string[] ServerAddr = new string[200];
 
@@ -61,12 +61,12 @@ namespace LoginSvr
 
         public static int GetSessionId()
         {
-            nSessionIdx++;
-            if (nSessionIdx >= int.MaxValue)
+            SessionIdx++;
+            if (SessionIdx >= int.MaxValue)
             {
-                nSessionIdx = 2;
+                SessionIdx = 2;
             }
-            return nSessionIdx;
+            return SessionIdx;
         }
 
         public static void SaveGateConfig(Config Config)
@@ -135,7 +135,7 @@ namespace LoginSvr
 
         public static void Initialization()
         {
-            nSessionIdx = 1;
+            SessionIdx = 1;
         }
     }
 

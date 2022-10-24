@@ -140,12 +140,12 @@ namespace LoginSvr.Services
                                 msgServer.OnlineCount = HUtil32.StrToInt(sOnlineCount, 0);
                                 msgServer.KeepAliveTick = HUtil32.GetTickCount();
                                 SortServerList(i);
-                                LsShare.nOnlineCountMin = GetOnlineHumCount();
-                                if (LsShare.nOnlineCountMin > LsShare.nOnlineCountMax)
+                                LsShare.OnlineCountMin = GetOnlineHumCount();
+                                if (LsShare.OnlineCountMin > LsShare.OnlineCountMax)
                                 {
-                                    LsShare.nOnlineCountMax = LsShare.nOnlineCountMin;
+                                    LsShare.OnlineCountMax = LsShare.OnlineCountMin;
                                 }
-                                SendServerMsgA(Grobal2.SS_KEEPALIVE, LsShare.nOnlineCountMin.ToString());
+                                SendServerMsgA(Grobal2.SS_KEEPALIVE, LsShare.OnlineCountMin.ToString());
                                 RefServerLimit(sServerName);
                                 break;
                             case Grobal2.UNKNOWMSG:
