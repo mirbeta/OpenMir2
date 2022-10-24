@@ -727,7 +727,7 @@ namespace LoginSvr.Services
         private void AccountCheckProtocol(UserInfo userInfo, int nDate)
         {
             ClientMesaagePacket defMsg;
-            if (nDate < LsShare.nVersionDate)
+            if (nDate < LsShare.VersionDate)
             {
                 defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CERTIFICATION_FAIL, 0, 0, 0, 0);
             }

@@ -21,14 +21,12 @@ namespace LoginSvr.Services
     {
         private readonly SocketServer _serverSocket;
         private readonly MirLog _logger;
-        private readonly DataService _masSocService;
         private readonly ConfigManager _configManager;
         private readonly ClientSession _clientSession;
         private readonly Channel<byte[]> _messageQueue;
 
-        public LoginService(DataService masSocService, MirLog logger, ConfigManager configManager, ClientSession clientSession)
+        public LoginService(MirLog logger, ConfigManager configManager, ClientSession clientSession)
         {
-            _masSocService = masSocService;
             _logger = logger;
             _configManager = configManager;
             _clientSession = clientSession;
