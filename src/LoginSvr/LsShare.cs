@@ -13,6 +13,7 @@ namespace LoginSvr
         public static int nOnlineCountMax = 0;
         public static int nSessionIdx = 0;
         public static int nVersionDate = 20011006;
+        public static IList<GateInfo> Gates = new List<GateInfo>();
         public static string[] ServerAddr = new string[200];
 
         /// <summary>
@@ -192,9 +193,21 @@ namespace LoginSvr
         public bool boCertificationOK;
         public int SessionID;
         public bool boPayCost;
+        /// <summary>
+        /// 剩余多少天
+        /// </summary>
         public int IDDay;
+        /// <summary>
+        /// 剩余多少小时
+        /// </summary>
         public int IDHour;
+        /// <summary>
+        /// IP剩余多少天
+        /// </summary>
         public int IPDay;
+        /// <summary>
+        /// IP剩余多少小时
+        /// </summary>
         public int IPHour;
         public DateTime dtDateTime;
         public bool SelServer;

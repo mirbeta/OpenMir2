@@ -51,11 +51,12 @@ namespace LoginSvr
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
                     services.AddSingleton<MirLog>();
-                    services.AddSingleton<MasSocService>();
+                    services.AddSingleton<DataService>();
                     services.AddSingleton<LoginService>();
                     services.AddSingleton<AccountStorage>();
                     services.AddSingleton<ThreadParseList>();
                     services.AddSingleton<AppServer>();
+                    services.AddSingleton<ClientSession>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 }).ConfigureLogging(logging =>
@@ -128,7 +129,7 @@ namespace LoginSvr
         {
             LsShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var masSocService = (MasSocService)_host.Services.GetService(typeof(MasSocService));
+            var masSocService = (DataService)_host.Services.GetService(typeof(DataService));
             var serverList = masSocService?.ServerList;
             var table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]Server[/]");

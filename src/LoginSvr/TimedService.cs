@@ -1,7 +1,6 @@
 ﻿using LoginSvr.Services;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,11 +14,11 @@ namespace LoginSvr
         private readonly MirLog _logger;
         private readonly LoginService _loginService;
         private readonly ThreadParseList _threadParseList;
-        private readonly MasSocService _massocService;
-        private int _processMonSocTick = 0;
-        private int _processServerStatuTick = 0;
+        private readonly DataService _massocService;
+        private int _processMonSocTick;
+        private int _processServerStatusTick;
 
-        public TimedService(MirLog logger, LoginService loginService, MasSocService massocService, ThreadParseList threadParseList)
+        public TimedService(MirLog logger, LoginService loginService, DataService massocService, ThreadParseList threadParseList)
         {
             _logger = logger;
             _loginService = loginService;
@@ -29,9 +28,12 @@ namespace LoginSvr
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _processMonSocTick = HUtil32.GetTickCount();
+            _processServerStatusTick = HUtil32.GetTickCount();
             while (!stoppingToken.IsCancellationRequested)
             {
-                LoginProcess();
+                _loginService.SessionClearKick();
+                _massocService.SessionClearNoPayMent();
                 ProcessMonSoc();
                 CheckServerStatus();
                 _threadParseList.Execute();
@@ -39,82 +41,74 @@ namespace LoginSvr
             }
         }
 
-        private void LoginProcess()
-        {
-            _loginService.SessionClearKick();
-            _loginService.SessionClearNoPayMent();
-        }
-
         private void ProcessMonSoc()
         {
             if (HUtil32.GetTickCount() - _processMonSocTick > 20000)
             {
                 _processMonSocTick = HUtil32.GetTickCount();
-                ProcessCleanSession();
-            }
-        }
-
-        private void ProcessCleanSession()
-        {
-            var builder = new StringBuilder();
-            int serverListCount = _massocService.ServerList.Count;
-            for (var i = 0; i < serverListCount; i++)
-            {
-                var msgServer = _massocService.ServerList[i];
-                var sServerName = msgServer.ServerName;
-                if (!string.IsNullOrEmpty(sServerName))
+                var builder = new StringBuilder();
+                int serverListCount = _massocService.ServerList.Count;
+                for (var i = 0; i < serverListCount; i++)
                 {
-                    builder.Append(sServerName + "/" + msgServer.ServerIndex + "/" + msgServer.OnlineCount + "/");
-                    if (msgServer.ServerIndex == 99)
+                    var msgServer = _massocService.ServerList[i];
+                    var sServerName = msgServer.ServerName;
+                    if (!string.IsNullOrEmpty(sServerName))
                     {
-                        builder.Append("DB/");
+                        builder.Append(sServerName + "/" + msgServer.ServerIndex + "/" + msgServer.OnlineCount + "/");
+                        if (msgServer.ServerIndex == 99)
+                        {
+                            builder.Append("DB/");
+                        }
+                        else
+                        {
+                            builder.Append("Game/");
+                        }
+                        builder.Append($"Online:{msgServer.OnlineCount}/");
+                        if ((HUtil32.GetTickCount() - msgServer.KeepAliveTick) < 30000)
+                        {
+                            builder.Append("正常");
+                        }
+                        else
+                        {
+                            builder.Append("超时");
+                        }
                     }
                     else
                     {
-                        builder.Append("Game/");
-                    }
-                    builder.Append($"Online:{msgServer.OnlineCount}/");
-                    if ((HUtil32.GetTickCount() - msgServer.KeepAliveTick) < 30000)
-                    {
-                        builder.Append("正常");
-                    }
-                    else
-                    {
-                        builder.Append("超时");
+                        builder.Append("-/-/-/-;");
                     }
                 }
-                else
+                if (builder.Length > 0)
                 {
-                    builder.Append("-/-/-/-;");
+                    _logger.LogDebug(builder.ToString());
                 }
             }
-            _logger.LogDebug(builder.ToString());
         }
         
         private void CheckServerStatus()
         {
-            if (HUtil32.GetTickCount() - _processServerStatuTick > 20000)
+            if (HUtil32.GetTickCount() - _processServerStatusTick > 20000)
             {
-                _processServerStatuTick = HUtil32.GetTickCount();
-                IList<MessageServerInfo> ServerList = _massocService.ServerList;
-                if (!ServerList.Any())
+                _processServerStatusTick = HUtil32.GetTickCount();
+                var serverList = _massocService.ServerList;
+                if (!serverList.Any())
                 {
                     return;
                 }
-                for (var i = 0; i < ServerList.Count; i++)
+                for (var i = 0; i < serverList.Count; i++)
                 {
-                    MessageServerInfo MsgServer = ServerList[i];
-                    string sServerName = MsgServer.ServerName;
+                    ServerSessionInfo msgServer = serverList[i];
+                    var sServerName = msgServer.ServerName;
                     if (!string.IsNullOrEmpty(sServerName))
                     {
-                        var tickTime = HUtil32.GetTickCount() - MsgServer.KeepAliveTick;
+                        var tickTime = HUtil32.GetTickCount() - msgServer.KeepAliveTick;
                         if (tickTime <= 60000) continue;
-                        MsgServer.Socket.Close();
-                        if (MsgServer.ServerIndex == 99)
+                        msgServer.Socket.Close();
+                        if (msgServer.ServerIndex == 99)
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Information($"数据库服务器[{MsgServer.IPaddr}]响应超时,关闭链接.");
+                                _logger.Information($"数据库服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
@@ -125,7 +119,7 @@ namespace LoginSvr
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Information($"游戏服务器[{MsgServer.IPaddr}]响应超时,关闭链接.");
+                                _logger.Information($"游戏服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {

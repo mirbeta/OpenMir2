@@ -4,7 +4,7 @@ using SystemModule.Packet.ClientPackets;
 
 namespace LoginSvr
 {
-    public class ReceiveUserData
+    public struct UserSessionData
     {
         public UserInfo UserInfo;
         public string Msg;
