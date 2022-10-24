@@ -77,8 +77,8 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information("[Exception] LoginService.DecodeUserData");
-                _logger.Information(ex.StackTrace);
+                _logger.LogError("[Exception] LoginService.DecodeUserData");
+                _logger.LogError(ex);
             }
         }
 
@@ -117,7 +117,7 @@ namespace LoginSvr.Services
                         }
                         else
                         {
-                            _logger.Information("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
+                            _logger.Warn("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
                         }
                     }
                     break;
@@ -131,7 +131,7 @@ namespace LoginSvr.Services
                         }
                         else
                         {
-                            _logger.Information("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
+                            _logger.Warn("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
                         }
                     }
                     else
@@ -147,7 +147,7 @@ namespace LoginSvr.Services
                     }
                     else
                     {
-                        _logger.Information("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
+                        _logger.Warn("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
                     }
                     break;
                 case Grobal2.CM_GETBACKPASSWORD:
@@ -158,7 +158,7 @@ namespace LoginSvr.Services
                     }
                     else
                     {
-                        _logger.Information("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
+                        _logger.Warn("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
                     }
                     break;
             }
@@ -296,8 +296,8 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information("[Exception] LoginService.LoginUser");
-                _logger.Information(ex.StackTrace);
+                _logger.LogError("[Exception] LoginService.LoginUser");
+                _logger.LogError(ex);
             }
         }
 
@@ -399,7 +399,7 @@ namespace LoginSvr.Services
             {
                 if (string.IsNullOrEmpty(sData) || sData.Length < 333)
                 {
-                    _logger.Information("[新建账号失败] 数据包为空或数据包长度异常");
+                    _logger.Warn("[新建账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
                 var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
@@ -437,7 +437,7 @@ namespace LoginSvr.Services
                 }
                 else
                 {
-                    _logger.Information(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
+                    _logger.Warn(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
                 }
                 ClientMesaagePacket defMsg;
                 if (nErrCode == 1)
@@ -452,8 +452,8 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("[Exception] LoginsService.AccountCreate");
-                _logger.Information(ex.StackTrace);
+                _logger.LogError("[Exception] LoginsService.AccountCreate");
+                _logger.LogError(ex);
             }
             finally
             {
@@ -520,8 +520,8 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information("[Exception] LoginService.ChangePassword");
-                _logger.Information(ex.StackTrace);
+                _logger.LogError("[Exception] LoginService.ChangePassword");
+                _logger.LogError(ex);
             }
         }
 
@@ -594,7 +594,7 @@ namespace LoginSvr.Services
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.Information("[新建账号失败,数据包为空].");
+                    _logger.Warn("[新建账号失败,数据包为空].");
                     return;
                 }
                 var deBuffer = EDCode.DecodeBuffer(sData);
@@ -630,8 +630,8 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information("[Exception] LoginService.UpdateUserInfo");
-                _logger.Information(ex.StackTrace);
+                _logger.LogError("[Exception] LoginService.UpdateUserInfo");
+                _logger.LogError(ex);
             }
         }
 
@@ -914,8 +914,8 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information("[Exception] LoginService.GetSelGateInfo");
-                _logger.Information(ex.StackTrace);
+                _logger.LogError("[Exception] LoginService.GetSelGateInfo");
+                _logger.LogError(ex);
             }
         }
 
@@ -940,9 +940,10 @@ namespace LoginSvr.Services
                 }
                 result = sServerInfo;
             }
-            catch
+            catch(Exception ex)
             {
-                _logger.Information("[Exception] LoginService.GetServerListInfo");
+                _logger.LogError("[Exception] LoginService.GetServerListInfo");
+                _logger.LogError(ex);
             }
             return result;
         }

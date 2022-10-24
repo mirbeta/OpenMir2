@@ -33,7 +33,7 @@ namespace LoginSvr.Services
 
         public IList<ServerSessionInfo> ServerList => _serverList;
 
-        public void Start()
+        public void StartServer()
         {
             LoadServerAddr();
             LoadUserLimit();
@@ -80,11 +80,11 @@ namespace LoginSvr.Services
                 {
                     if (MsgServer.ServerIndex == 99)
                     {
-                        _logger.Information($"[{MsgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.Warn($"[{MsgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     else
                     {
-                        _logger.Information($"[{MsgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.Warn($"[{MsgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     MsgServer = null;
                     _serverList.RemoveAt(i);
@@ -306,7 +306,7 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information(ex.StackTrace);
+                _logger.LogError(ex);
             }
         }
 
@@ -332,7 +332,7 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information(ex.StackTrace);
+                _logger.LogError(ex);
             }
         }
 
@@ -383,7 +383,7 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information(ex.StackTrace);
+                _logger.LogError(ex);
             }
             return result;
         }
@@ -409,7 +409,7 @@ namespace LoginSvr.Services
             }
             catch (Exception e)
             {
-                _logger.Information(e.StackTrace);
+                _logger.LogError(e.StackTrace);
             }
         }
 
@@ -458,7 +458,7 @@ namespace LoginSvr.Services
             }
             else
             {
-                _logger.Information("[Critical Failure] file not found. UserLimit.txt");
+                _logger.LogError("[Critical Failure] file not found. UserLimit.txt");
             }
         }
 
@@ -514,7 +514,7 @@ namespace LoginSvr.Services
             }
             catch (Exception ex)
             {
-                _logger.Information(ex.StackTrace);
+                _logger.LogError(ex);
             }
             return status;
         }

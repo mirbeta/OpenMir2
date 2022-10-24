@@ -177,7 +177,7 @@ namespace LoginSvr
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;
     }
-    
+
     public struct TGateNet
     {
         public string sIPaddr;
@@ -274,6 +274,4 @@ namespace LoginSvr
             this.nC = nC;
         }
     }
-
 }
-

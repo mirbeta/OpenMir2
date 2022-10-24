@@ -108,22 +108,22 @@ namespace LoginSvr
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Information($"数据库服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
+                                _logger.Warn($"数据库服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logger.Information($"[{sServerName}]数据库服务器响应超时,关闭链接.");
+                                _logger.Warn($"[{sServerName}]数据库服务器响应超时,关闭链接.");
                             }
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Information($"游戏服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
+                                _logger.Warn($"游戏服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logger.Information($"[{sServerName}]游戏服务器响应超时,关闭链接.");
+                                _logger.Warn($"[{sServerName}]游戏服务器响应超时,关闭链接.");
                             }
                         }
                     }
