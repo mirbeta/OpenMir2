@@ -245,7 +245,7 @@ namespace GameGate.Services
                         _resetEvent.WaitOne();
                         if (_reviceMsgQueue.TryRead(out var message))
                         {
-                            var clientSession = Session.GetSession(message.SocketId);
+                            var clientSession = Session.GetSession(message.SessionId);
                             clientSession?.ProcessClientPacket(message);
                         }
                     }
