@@ -32,6 +32,11 @@ namespace LoginSvr
         {
             _logger.LogError(ex.StackTrace);
         }
+        
+        public void LogError(string msg)
+        {
+            _logger.LogError(msg);
+        }
 
         public void LogDebug(string msg)
         {
