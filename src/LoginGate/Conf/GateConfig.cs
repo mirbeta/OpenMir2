@@ -12,8 +12,11 @@ namespace LoginGate.Conf
         public int GateCount;
         private GameGateInfo[] GameGateList;
         public bool m_fCheckNewIDOfIP;
-        public bool m_fCheckNullSession;
-        public bool m_fOverSpeedSendBack;
+        /// <summary>
+        /// 检查空的会话数据
+        /// </summary>
+        public bool CheckNullSession;
+        public bool OverSpeedSendBack;
         /// <summary>
         /// 是否启用CC封包检测
         /// </summary>
@@ -22,9 +25,12 @@ namespace LoginGate.Conf
         public bool m_fKickOverPacketSize;
         public int m_nCheckNewIDOfIP;
         public int m_nMaxConnectOfIP;
-        public int m_nClientTimeOutTime;
-        public int m_nNomClientPacketSize;
-        public int m_nMaxClientPacketCount;
+        /// <summary>
+        /// 会话超时时间
+        /// </summary>
+        public int ClientTimeOutTime;
+        public int NomClientPacketSize;
+        public int MaxClientPacketCount;
         public TBlockIPMethod m_tBlockIPMethod;
 
         public GateConfig()
@@ -39,16 +45,16 @@ namespace LoginGate.Conf
             }
             ShowLogLevel = 5;
             m_fCheckNewIDOfIP = true;
-            m_fCheckNullSession = true;
-            m_fOverSpeedSendBack = false;
+            CheckNullSession = true;
+            OverSpeedSendBack = false;
             DefenceCCPacket = false;
             m_fKickOverSpeed = false;
             m_fKickOverPacketSize = true;
-            m_nNomClientPacketSize = 400;
+            NomClientPacketSize = 400;
             m_nMaxConnectOfIP = 20;
             m_nCheckNewIDOfIP = 5;
-            m_nClientTimeOutTime = 60 * 1000;
-            m_nMaxClientPacketCount = 2;
+            ClientTimeOutTime = 60 * 1000;
+            MaxClientPacketCount = 2;
             ShowDebugLog = false;
         }
     }

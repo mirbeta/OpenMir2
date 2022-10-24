@@ -2,6 +2,7 @@ using LoginGate.Conf;
 using LoginGate.Packet;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
@@ -42,7 +43,7 @@ namespace LoginGate.Services
             var serverList = _serverManager.GetServerList();
             for (var i = 0; i < serverList.Count; i++)
             {
-                _serverGateList.Add(new ClientThread(_logger, this));
+                _serverGateList.Add(new ClientThread(_logger, _sessionManager, this));
             }
         }
 
@@ -95,19 +96,6 @@ namespace LoginGate.Services
                         var userSession = _sessionManager.GetSession(message.ConnectionId);
                         if (userSession == null)
                         {
-                            continue;
-                        }
-                        if (message.Body[0] == (byte)'+')//收到LoginSvr发过来的关闭会话请求
-                        {
-                            if (message.Body[1] == (byte)'-')
-                            {
-                                userSession.CloseSession();
-                                _logger.LogInformation("收到LoginSvr关闭会话请求", 1);
-                            }
-                            else
-                            {
-                                userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
-                            }
                             continue;
                         }
                         userSession.ProcessSvrData(message);
@@ -170,20 +158,27 @@ namespace LoginGate.Services
         /// 检查客户端和服务端之间的状态以及心跳维护
         /// </summary>
         /// <param name="clientThread"></param>
-        public void CheckSessionStatus(ClientThread clientThread)
+        public void ProcessClientThreadState(ClientThread clientThread)
         {
-            if (clientThread.GateReady)
+            if (clientThread.ConnectState)
             {
                 clientThread.SendPacket(new GatePacket()
                 {
                     Type = PacketType.KeepAlive,
                     SocketId = string.Empty
                 });
-                clientThread.CheckServerFailCount = 0;
+                clientThread.CheckServerFailCount = 1;
+                if (HUtil32.GetTickCount() - clientThread.KeepAliveTick > GateShare.KeepAliveTickTimeOut) //10s没有LoginSvr服务器心跳回应则超时
+                {
+                    _logger.LogError("账号服务器长时间没有响应，断开链接。");
+                    clientThread.ConnectState = false;
+                    clientThread.Stop();
+                }
                 return;
             }
-            if (HUtil32.GetTickCount() - clientThread.dwCheckServerTick > GateShare.CheckServerTimeOutTime)
+            if (HUtil32.GetTickCount() - clientThread.CheckServerTick > GateShare.CheckServerTimeOutTime)
             {
+                clientThread.CheckServerTick = HUtil32.GetTickCount();
                 if (clientThread.CheckServerFail)
                 {
                     clientThread.ReConnected();
@@ -197,7 +192,7 @@ namespace LoginGate.Services
                 _logger.LogDebug($"服务器[{clientThread.EndPoint}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
             }
         }
-        
+
         /// <summary>
         /// 获取待发送队列数量
         /// </summary>

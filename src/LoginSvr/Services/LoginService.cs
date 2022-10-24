@@ -223,14 +223,9 @@ namespace LoginSvr.Services
         {
             if (socket.Connected)
             {
-                socket.Send(new LoginSvrPacket()
-                {
-                    ConnectionId = socket.Handle.ToString(),
-                    PackLen = 0,
-                    ClientPacket = Array.Empty<byte>()
-                }.GetBuffer());
+                socket.Send(HUtil32.GetBytes("%++$"));
             }
-            _logger.Information($"心跳消息 链接状态:[{socket.Connected}]");
+            _logger.LogDebug($"心跳消息 链接状态:[{socket.Connected}]");
         }
 
         private void ReceiveCloseUser(string sSockIndex, GateInfo gateInfo)

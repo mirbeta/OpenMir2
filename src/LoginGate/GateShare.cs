@@ -10,9 +10,13 @@ namespace LoginGate
         /// </summary>
         public const int MaxSession = 10000;
         /// <summary>
-        ///  网关游戏服务器之间检测超时时间长度
+        /// 网关游戏服务器之间检测超时时间长度
         /// </summary>
-        public const int CheckServerTimeOutTime = 3 * 60 * 1000;
+        public const int CheckServerTimeOutTime = 10 * 1000;
+        /// <summary>
+        /// 心跳响应超时时间
+        /// </summary>
+        public const int KeepAliveTickTimeOut = 10 * 1000;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>

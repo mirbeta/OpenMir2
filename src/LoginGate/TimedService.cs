@@ -27,13 +27,13 @@ namespace LoginGate
             while (!stoppingToken.IsCancellationRequested)
             {
                 ProcessDelayMsg();
-                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
         }
         
         private void ProcessDelayMsg()
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 10000)
+            if (HUtil32.GetTickCount() - _processDelayTick > 1000)
             {
                 _processDelayTick = HUtil32.GetTickCount();
                 var clientList = _clientManager.ServerGateList();
@@ -43,7 +43,7 @@ namespace LoginGate
                     {
                         continue;
                     }
-                    _clientManager.CheckSessionStatus(clientList[i]);
+                    _clientManager.ProcessClientThreadState(clientList[i]);
                     if (clientList[i].SessionArray == null)
                     {
                         continue;
