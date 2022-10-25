@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0-alpha.0](http://10.10.0.202/mir2/OpenMir2/compare/v1.0.2-alpha.2...v1.1.0-alpha.0) (2022-10-25)
+
+
+### Features
+
+* 账号游戏时间 ([d724438](http://10.10.0.202/mir2/OpenMir2/commit/d72443850e2c0432d6751151c96ce6584d691c3f))
+
+
+### Bug Fixes
+
+* 修复怪物掉落物品时可能触发错误 ([d1fb458](http://10.10.0.202/mir2/OpenMir2/commit/d1fb4584382489b9daeb1ee62e03d89305d587ca))
+* 修复和优化GameSvr网关消息处理 ([7ef5e17](http://10.10.0.202/mir2/OpenMir2/commit/7ef5e175d307e41c161846aee950036e11dbcffd))
+* 修复LoginGate和LoginSvr之间的心跳和链接问题 ([e55a2ad](http://10.10.0.202/mir2/OpenMir2/commit/e55a2adad9683115d68a65edb73184d8f0ba2887))
+
 ### [1.0.2-alpha.2](http://10.10.0.202/mir2/OpenMir2/compare/v1.0.2-alpha.1...v1.0.2-alpha.2) (2022-10-23)
 
 
