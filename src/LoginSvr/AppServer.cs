@@ -6,9 +6,9 @@ namespace LoginSvr
     public class AppServer
     {
         private readonly MirLog _logger;
-        private readonly DataService _massocService;
+        private readonly SessionService _massocService;
 
-        public AppServer(MirLog logger, DataService massocService)
+        public AppServer(MirLog logger, SessionService massocService)
         {
             _massocService = massocService;
             _logger = logger;

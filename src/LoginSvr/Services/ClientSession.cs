@@ -17,11 +17,11 @@ namespace LoginSvr.Services
     {
         private readonly MirLog _logger;
         private readonly AccountStorage _accountStorage;
-        private readonly DataService _masSocService;
+        private readonly SessionService _masSocService;
         private readonly ConfigManager _configManager;
         private readonly Channel<UserSessionData> _userMessageQueue;
 
-        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, DataService masSocService)
+        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionService masSocService)
         {
             _logger = logger;
             _accountStorage = accountStorage;

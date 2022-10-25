@@ -11,7 +11,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginSvr.Services
 {
-    public class DataService
+    public class SessionService
     {
         private readonly MirLog _logger;
         private readonly IList<ServerSessionInfo> _serverList = null;
@@ -19,7 +19,7 @@ namespace LoginSvr.Services
         private readonly ConfigManager _configManager;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
 
-        public DataService(MirLog logger, ConfigManager configManager)
+        public SessionService(MirLog logger, ConfigManager configManager)
         {
             _logger = logger;
             _configManager = configManager;
