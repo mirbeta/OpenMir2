@@ -21,6 +21,9 @@ namespace LoginSvr.Conf
         public string sGateIPaddr;
         public string sFeedIDList;
         public string sFeedIPList;
+        /// <summary>
+        /// 测试
+        /// </summary>
         public bool TestServer;
         /// <summary>
         /// 是否允许创建账号
@@ -57,7 +60,7 @@ namespace LoginSvr.Conf
             boDynamicIPMode = false;
             nReadyServers = 0;
             GateRoute = new TGateRoute[60];
-            ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
+            ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2_account;";
             ShowDebugLog = false;
             ShowLogLevel = 1;
         }

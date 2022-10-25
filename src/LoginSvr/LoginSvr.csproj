@@ -46,12 +46,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\SystemModule\Packet\ServerPackets\GatePacket.cs">
-	    <Link>Packet\GatePacket.cs</Link>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="..\..\nlog.config">
 			<Link>nlog.config</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
