@@ -128,6 +128,12 @@ namespace GameSvr.GateWay
                     {
                         _logger.Error($"{sExceptionMsg} Offset:{buffIndex} DataLen:{protoBuff.Length}");
                         buffIndex++;
+                        if (buffIndex > protoBuff.Length) //异常数据，直接丢弃
+                        {
+                            _gateBuff = null;
+                            _buffLen = 0;
+                            break;
+                        }
                         protoBuff = protoBuff.Slice(buffIndex, PacketHeader.PacketSize);
                         nLen -= 1;
                     }
