@@ -64,7 +64,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 case 0:
                     boFind = false;
-                    sBindName = m_PlayObject.m_sUserID;
+                    sBindName = m_PlayObject.UserID;
                     HUtil32.EnterCriticalSection(M2Share.g_ItemBindAccount);
                     try
                     {

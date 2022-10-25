@@ -2089,7 +2089,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$USERID":// 登录账号
-                    sValue = PlayObject.m_sUserID;
+                    sValue = PlayObject.UserID;
                     nDataType = 0;
                     result = true;
                     return result;

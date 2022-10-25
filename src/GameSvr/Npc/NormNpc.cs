@@ -1712,7 +1712,7 @@ namespace GameSvr.Npc
             else if (HUtil32.CompareLStr(sType, "Account", 7))
             {
                 result = PlayObject.m_DynamicVarList;
-                sName = PlayObject.m_sUserID;
+                sName = PlayObject.UserID;
             }
             return result;
         }

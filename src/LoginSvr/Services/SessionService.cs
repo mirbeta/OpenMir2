@@ -1,4 +1,5 @@
 using LoginSvr.Conf;
+using LoginSvr.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,11 +19,13 @@ namespace LoginSvr.Services
         private readonly SocketServer _serverSocket;
         private readonly ConfigManager _configManager;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
+        private readonly AccountStorage _accountStorage;
 
-        public SessionService(MirLog logger, ConfigManager configManager)
+        public SessionService(MirLog logger, ConfigManager configManager, AccountStorage accountStorage)
         {
             _logger = logger;
             _configManager = configManager;
+            _accountStorage = accountStorage;
             _serverList = new List<ServerSessionInfo>();
             _serverSocket = new SocketServer(byte.MaxValue, 512);
             _serverSocket.OnClientConnect += SocketClientConnect;
@@ -148,6 +151,14 @@ namespace LoginSvr.Services
                                 SendServerMsgA(Grobal2.SS_KEEPALIVE, LsShare.OnlineCountMin.ToString());
                                 RefServerLimit(sServerName);
                                 break;
+                            case Grobal2.ISM_GAMETIMEOFTIMECARDUSER:
+                                sMsg = HUtil32.GetValidStr3(sMsg,ref  sAccount, new[]{"/"});
+                                GetPlayTimeUser(sAccount, HUtil32.StrToInt(sMsg, 0));
+                                break;
+                            case Grobal2.ISM_CHECKTIMEACCOUNT:
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount,new[]{"/"});
+                                CheckTimeAccount(sAccount);
+                                break;
                             case Grobal2.UNKNOWMSG:
                                 SendServerMsgA(Grobal2.UNKNOWMSG, sMsg);
                                 break;
@@ -159,6 +170,91 @@ namespace LoginSvr.Services
                 }
                 msgServer.ReceiveMsg = sReviceMsg;
             }
+        }
+
+        /// <summary>
+        /// 获取账号剩余游戏时间
+        /// </summary>
+        private void GetPlayTimeUser(string account, int gameTime)
+        {
+            if (gameTime <= 0)
+            {
+                return;
+            }
+            //todo 免费模式
+            
+            var seconds = _accountStorage.GetAccountPlayTime(account);
+            if (seconds > 0)
+            {
+                seconds = seconds - (gameTime * 60);   //减去使用时间
+                if (seconds < 0)
+                {
+                    seconds = 0;
+                }
+                _accountStorage.UpdateAccountPlayTime(account, seconds);
+            }
+
+            if (seconds == 0)
+            {
+                for (var i = 0; i < LsShare.CertList.Count; i++)
+                {
+                    var certUser = LsShare.CertList[i];
+                    if (string.Compare(LsShare.CertList[i].LoginID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
+                        {
+                            if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
+                            {
+                                SendCancelAdmissionUser(certUser);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SendCancelAdmissionUser(CertUser certUser)
+        {
+            SendServerMsg(Grobal2.SS_CLOSESESSION, certUser.ServerName, certUser.LoginID + "/" + certUser.Certification);
+            _logger.LogDebug($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
+        }
+
+        /// <summary>
+        /// 检查账号游戏时间
+        /// </summary>
+        /// <param name="account"></param>
+        private void CheckTimeAccount(string account)
+        {
+            if (string.IsNullOrEmpty(account))
+            {
+                return;
+            }
+            //todo 免费模式
+            
+            var seconds = _accountStorage.GetAccountPlayTime(account);
+
+            if (seconds == 0)
+            {
+                for (var i = 0; i < LsShare.CertList.Count; i++)
+                {
+                    var certUser = LsShare.CertList[i];
+                    if (string.Compare(LsShare.CertList[i].LoginID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
+                        {
+                            if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
+                            {
+                                SendAccountExpireUser(certUser);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SendAccountExpireUser(CertUser certUser)
+        {
+            SendServerMsg(Grobal2.ISM_ACCOUNTEXPIRED, certUser.ServerName, certUser.LoginID + "/" + certUser.Certification);
         }
 
         private void CloseUser(string sAccount, int nSessionID)

@@ -19,7 +19,7 @@ namespace GameSvr.Npc
             string sName = string.Empty;
             string sIPaddr;
             var sChrName = PlayObject.ChrName;
-            var sCharAccount = PlayObject.m_sUserID;
+            var sCharAccount = PlayObject.UserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             var LoadList = new StringList();
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
@@ -1428,7 +1428,7 @@ namespace GameSvr.Npc
             string sIPaddr;
             var result = false;
             var sChrName = PlayObject.ChrName;
-            var sCharAccount = PlayObject.m_sUserID;
+            var sCharAccount = PlayObject.UserID;
             var sCharIPaddr = PlayObject.m_sIPaddr;
             LoadList = new StringList();
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))

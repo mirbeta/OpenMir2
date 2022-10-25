@@ -857,7 +857,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKACCOUNTLIST:
-                        if (!CheckGotoLableStringList(PlayObject.m_sUserID, m_sPath + QuestConditionInfo.sParam1))
+                        if (!CheckGotoLableStringList(PlayObject.UserID, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
@@ -2110,10 +2110,10 @@ namespace GameSvr.Npc
                         ActionOfLineMsg(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nADDACCOUNTLIST:
-                        GotoLable_AddList(PlayObject.m_sUserID, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_AddList(PlayObject.UserID, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nDELACCOUNTLIST:
-                        GotoLable_DelList(PlayObject.m_sUserID, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_DelList(PlayObject.UserID, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nADDIPLIST:
                         GotoLable_AddList(PlayObject.m_sIPaddr, m_sPath + QuestActionInfo.sParam1);
