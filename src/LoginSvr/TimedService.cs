@@ -14,11 +14,11 @@ namespace LoginSvr
         private readonly MirLog _logger;
         private readonly LoginService _loginService;
         private readonly ThreadParseList _threadParseList;
-        private readonly DataService _massocService;
+        private readonly SessionService _massocService;
         private int _processMonSocTick;
         private int _processServerStatusTick;
 
-        public TimedService(MirLog logger, LoginService loginService, DataService massocService, ThreadParseList threadParseList)
+        public TimedService(MirLog logger, LoginService loginService, SessionService massocService, ThreadParseList threadParseList)
         {
             _logger = logger;
             _loginService = loginService;
