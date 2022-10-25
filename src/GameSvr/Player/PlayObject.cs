@@ -444,11 +444,11 @@ namespace GameSvr.Player
             {
                 n08 = 0;
             }
-            var sC = m_sIPaddr + "\t" + m_sUserID + "\t" + ChrName + "\t" + n08 + "\t" + m_dLogonTime.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + m_nPayMode;
+            var sC = m_sIPaddr + "\t" + UserID + "\t" + ChrName + "\t" + n08 + "\t" + m_dLogonTime.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + m_nPayMode;
             M2Share.AddLogonCostLog(sC);
             if (m_nPayMode == 2)
             {
-                IdSrvClient.Instance.SendLogonCostMsg(m_sUserID, n08 / 60);
+                IdSrvClient.Instance.SendLogonCostMsg(UserID, n08 / 60);
             }
         }
 
@@ -921,7 +921,7 @@ namespace GameSvr.Player
                 + HUtil32.HiWord(this.WAbil.MC) + " 道术: " + HUtil32.LoWord(this.WAbil.SC) + '-' + HUtil32.HiWord(this.WAbil.SC)
                 + " 防御力: " + HUtil32.LoWord(this.WAbil.AC) + '-' + HUtil32.HiWord(this.WAbil.AC) + " 魔防力: " + HUtil32.LoWord(this.WAbil.MAC)
                 + '-' + HUtil32.HiWord(this.WAbil.MAC) + " 准确:" + this.HitPoint + " 敏捷:" + this.SpeedPoint + " 速度:" + this.HitSpeed
-                + " 仓库密码:" + m_sStoragePwd + " 登录IP:" + m_sIPaddr + '(' + m_sIPLocal + ')' + " 登录帐号:" + m_sUserID + " 登录时间:" + m_dLogonTime
+                + " 仓库密码:" + m_sStoragePwd + " 登录IP:" + m_sIPaddr + '(' + m_sIPLocal + ')' + " 登录帐号:" + UserID + " 登录时间:" + m_dLogonTime
                 + " 在线时长(分钟):" + (HUtil32.GetTickCount() - m_dwLogonTick) / 60000 + " 登录模式:" + m_nPayMent + ' ' + M2Share.Config.GameGoldName + ':' + m_nGameGold
                 + ' ' + M2Share.Config.GamePointName + ':' + m_nGamePoint + ' ' + M2Share.Config.PayMentPointName + ':' + m_nPayMentPoint + " 会员类型:" + m_nMemberType
                 + " 会员等级:" + m_nMemberLevel + " 经验倍数:" + m_nKillMonExpRate / 100 + " 攻击倍数:" + m_nPowerRate / 100 + " 声望值:" + m_btCreditPoint;
@@ -3395,7 +3395,7 @@ namespace GameSvr.Player
                 if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.Index)
                 {
                     result = false;
-                    if (string.Compare(ItemBind.sBindName, m_sUserID, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(ItemBind.sBindName, UserID, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                     }
@@ -3650,7 +3650,7 @@ namespace GameSvr.Player
                 SysMsg(M2Share.g_sYourIPaddrDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
-            else if (M2Share.GetDenyAccountList(m_sUserID))
+            else if (M2Share.GetDenyAccountList(UserID))
             {
                 SysMsg(M2Share.g_sYourAccountDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;

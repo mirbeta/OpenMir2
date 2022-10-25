@@ -252,6 +252,62 @@ namespace LoginSvr.Storage
             return result;
         }
 
+        public long GetAccountPlayTime(string account)
+        {
+            var strSql = $"SELECT SECONDS FROM ACCOUNT WHERE FLD_LOGINID='{account}'";
+            _logger.LogDebug("[SQL QUERY] " + strSql);
+            MySqlConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return 0;
+            }
+            long result = 0;
+            try
+            {
+                var command = new MySqlCommand();
+                command.Connection = dbConnection;
+                command.CommandText = strSql;
+                result = (long)command.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"获取账号[{account}]游戏时间失败");
+                _logger.LogError(e);
+            }
+            finally
+            {
+                Close(ref dbConnection);
+            }
+            return result;
+        }
+
+        public void UpdateAccountPlayTime(string account,long gameTime)
+        {
+            var strSql = $"UPDATE ACCOUNT SET SECONDS={gameTime} WHERE LOGINID='{account}'";
+            _logger.LogDebug("[SQL QUERY] " + strSql);
+            MySqlConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return;
+            }
+            try
+            {
+                var command = new MySqlCommand();
+                command.Connection = dbConnection;
+                command.CommandText = strSql;
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"更新账号[{account}]游戏时间失败");
+                _logger.LogError(e);
+            }
+            finally
+            {
+                Close(ref dbConnection);
+            }
+        }
+
         private int UpdateRecord(AccountRecord accountRecord, byte btFlag)
         {
             var result = 0;

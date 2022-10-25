@@ -115,7 +115,7 @@ namespace GameSvr.Services
         public void SendLogonCostMsg(string sAccount, int nTime)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            SendSocket(string.Format(sFormatMsg, new object[] { Grobal2.SS_LOGINCOST, sAccount, nTime }));
+            SendSocket(string.Format(sFormatMsg, Grobal2.SS_LOGINCOST, sAccount, nTime));
         }
 
         public void SendOnlineHumCountMsg(int nCount)
@@ -124,12 +124,18 @@ namespace GameSvr.Services
             SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount));
         }
 
+        public void SendUserPlayTime(string account,long playTime)
+        {
+            const string sFormatMsg = "({0}/{1}/{2})";
+            SendSocket(string.Format(sFormatMsg, Grobal2.ISM_GAMETIMEOFTIMECARDUSER, account, playTime));
+        }
+
         public void Run()
         {
             string sSocketText;
             var sData = string.Empty;
             var sCode = string.Empty;
-            const string sExceptionMsg = "[Exception] TFrmIdSoc::DecodeSocStr";
+            const string sExceptionMsg = "[Exception] AccountService:DecodeSocStr";
             var Config = M2Share.Config;
             HUtil32.EnterCriticalSection(Config.UserIDSection);
             try
@@ -178,6 +184,9 @@ namespace GameSvr.Services
                         case Grobal2.SS_SERVERLOAD:// 113
                             GetServerLoad(sBody);
                             break;
+                        case Grobal2.ISM_ACCOUNTEXPIRED:
+                            GetAccountExpired(sBody);
+                            break;
                     }
                     if (sSocketText.IndexOf(')') <= 0)
                     {
@@ -204,6 +213,18 @@ namespace GameSvr.Services
             }
         }
 
+        private void GetAccountExpired(string sData)
+        {
+            var account = string.Empty;
+            var certstr = HUtil32.GetValidStr3(sData, ref account, '/');
+            var cert = HUtil32.StrToInt(certstr, 0);
+            if (!M2Share.Config.TestServer)
+            {
+                M2Share.WorldEngine.AccountExpired(account);
+                DelSession(cert);
+            }
+        }
+
         private void GetPasswdSuccess(string sData)
         {
             var sAccount = string.Empty;
@@ -211,7 +232,7 @@ namespace GameSvr.Services
             var sPayCost = string.Empty;
             var sIPaddr = string.Empty;
             var sPayMode = string.Empty;
-            const string sExceptionMsg = "[Exception] TFrmIdSoc::GetPasswdSuccess";
+            const string sExceptionMsg = "[Exception] AccountService:GetPasswdSuccess";
             try
             {
                 sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
@@ -230,7 +251,7 @@ namespace GameSvr.Services
         private void GetCancelAdmission(string sData)
         {
             var sC = string.Empty;
-            const string sExceptionMsg = "[Exception] TFrmIdSoc::GetCancelAdmission";
+            const string sExceptionMsg = "[Exception] AccountService:GetCancelAdmission";
             try
             {
                 var sSessionID = HUtil32.GetValidStr3(sData, ref sC, HUtil32.Backslash);
@@ -349,7 +370,7 @@ namespace GameSvr.Services
                 var nSessionID = HUtil32.StrToInt(sSessionID, 0);
                 if (!M2Share.Config.TestServer)
                 {
-                    M2Share.WorldEngine.HumanExpire(sAccount);
+                    M2Share.WorldEngine.AccountExpired(sAccount);
                     DelSession(nSessionID);
                 }
             }

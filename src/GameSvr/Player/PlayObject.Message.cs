@@ -20,7 +20,7 @@ namespace GameSvr.Player
             const string sPayMentExpire = "您的帐户充值时间已到期!!!";
             const string sDisConnectMsg = "游戏被强行中断!!!";
             const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
-            const string sExceptionMsg2 = "[Exception] TPlayObject::Run -> Operate 2 # %s Ident:%d Sender:%d wP:%d nP1:%d nP2:%d np3:%d Msg:%s";
+            const string sExceptionMsg2 = "[Exception] TPlayObject::Run -> Operate 2 # {0} Ident:{1} Sender:{2} wP:{3} nP1:{4} nP2:{5} np3:{6} Msg:{7}";
             const string sExceptionMsg3 = "[Exception] TPlayObject::Run -> GetHighHuman";
             const string sExceptionMsg4 = "[Exception] TPlayObject::Run -> ClearObj";
             try
@@ -32,12 +32,18 @@ namespace GameSvr.Player
                         DealCancel();
                     }
                 }
-                if (m_boExpire)
+                if (HUtil32.GetTickCount() - AccountExpiredTick > 60 * 1000)//一分钟查询一次账号游戏到期时间
+                {
+                    IdSrvClient.Instance.SendUserPlayTime(UserID, ExpireTime);
+                    AccountExpiredTick = HUtil32.GetTickCount();
+                }
+                CheckExpiredTime();
+                if (AccountExpired)
                 {
                     SysMsg(sPayMentExpire, MsgColor.Red, MsgType.Hint);
                     SysMsg(sDisConnectMsg, MsgColor.Red, MsgType.Hint);
                     m_boEmergencyClose = true;
-                    m_boExpire = false;
+                    AccountExpired = false;
                 }
                 if (FireHitSkill && (HUtil32.GetTickCount() - LatestFireHitTick) > 20 * 1000)
                 {
@@ -55,7 +61,7 @@ namespace GameSvr.Player
                     m_boTimeRecall = false;
                     SpaceMove(m_sMoveMap, m_nMoveX, m_nMoveY, 0);
                 }
-                for (int i = 0; i < 20; i++) //个人定时器
+                for (var i = 0; i < 20; i++) //个人定时器
                 {
                     if (AutoTimerStatus[i] > 500)
                     {
@@ -73,10 +79,7 @@ namespace GameSvr.Player
                 if (m_boTimeGoto && (HUtil32.GetTickCount() > m_dwTimeGotoTick)) //Delaygoto延时跳转
                 {
                     m_boTimeGoto = false;
-                    if (m_TimeGotoNPC as Merchant != null)
-                    {
-                        (m_TimeGotoNPC as Merchant).GotoLable(this, m_sTimeGotoLable, false);
-                    }
+                    ((Merchant)m_TimeGotoNPC)?.GotoLable(this, m_sTimeGotoLable, false);
                 }
                 // 增加挂机
                 if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick)
@@ -225,7 +228,7 @@ namespace GameSvr.Player
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
                             M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + ChrName + " has exited the game.");
                         }
-                        IdSrvClient.Instance.SendHumanLogOutMsg(m_sUserID, m_nSessionID);
+                        IdSrvClient.Instance.SendHumanLogOutMsg(UserID, m_nSessionID);
                     }
                 }
             }

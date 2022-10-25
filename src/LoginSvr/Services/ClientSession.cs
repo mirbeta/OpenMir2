@@ -246,47 +246,67 @@ namespace LoginSvr.Services
                     }
                     if (nIdCost >= 0 || nIpCost >= 0)
                     {
-                        userInfo.boPayCost = true;
+                        userInfo.PayCost = true;
                     }
                     else
                     {
-                        userInfo.boPayCost = false;
+                        userInfo.PayCost = false;
                     }
 
-                    /*var RemainDays = 0;
-                    var RemainIpDays = 0;
-                    var RemainHours = 0;
-                    var RemainIpHours = 0;
+                    userInfo.dwValidFrom = 0;
+                    userInfo.dwValidUntil = 0;
+                    userInfo.dwSeconds = 0;
+                    userInfo.dwStopUntil = 0;
+                    userInfo.dwIpValidFrom = 0;
+                    userInfo.dwIpValidUntil = 0;
+                    userInfo.dwIpSeconds = 0;
+                    
                     var st = DateTime.Now;
                     var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
-                    RemainDays = userInfo.dwValidUntil - nCurrentTime + 1;
-                    RemainIpDays = userInfo.dwIpValidUntil - nCurrentTime + 1;
-                    RemainHours = (userInfo.dwSeconds + 1) / 3600;
-                    RemainIpHours = (userInfo.dwIpSeconds + 1) / 3600;
-                    if (RemainDays < 0) 
-                      RemainDays = 0;
-                    if (RemainIpDays < 0) 
-                      RemainIpDays = 0;
-                    if (RemainHours < 0) 
-                      RemainHours = 0;
-                    if (RemainIpHours < 0) 
-                      RemainIpHours = 0;*/
-
-                    userInfo.IDDay = HUtil32.LoWord(nIdCost);
-                    userInfo.IDHour = HUtil32.HiWord(nIdCost);
-                    userInfo.IPDay = HUtil32.LoWord(nIpCost);
-                    userInfo.IPHour = HUtil32.HiWord(nIpCost);
-                    if (!userInfo.boPayCost)
+                    if ((nCurrentTime <= userInfo.dwValidUntil) || (nCurrentTime <= userInfo.dwIpValidUntil) || (userInfo.dwSeconds > 0) || (userInfo.dwIpSeconds > 0))
                     {
-                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, 0, 0, 0, config.ServerNameList.Count);
+                        userInfo.PayMode = 1;
+                        
+                        long RemainDays = 0;
+                        long RemainIpDays = 0;
+                        long RemainHours = 0;
+                        long RemainIpHours = 0;
+
+                        RemainDays = userInfo.dwValidUntil - nCurrentTime + 1;
+                        RemainIpDays = userInfo.dwIpValidUntil - nCurrentTime + 1;
+                        RemainHours = (userInfo.dwSeconds + 1) / 3600;
+                        RemainIpHours = (userInfo.dwIpSeconds + 1) / 3600;
+                        if (RemainDays < 0)
+                            RemainDays = 0;
+                        if (RemainIpDays < 0)
+                            RemainIpDays = 0;
+                        if (RemainHours < 0)
+                            RemainHours = 0;
+                        if (RemainIpHours < 0)
+                            RemainIpHours = 0;
+
+                        userInfo.IDDay = HUtil32.LoWord(nIdCost);
+                        userInfo.IDHour = HUtil32.HiWord(nIdCost);
+                        userInfo.IPDay = HUtil32.LoWord(nIpCost);
+                        userInfo.IPHour = HUtil32.HiWord(nIpCost);
+
+                        AddCertUser(userInfo);
+
+                        if (CheckBadAccount(userInfo.Account))
+                        {
+                            var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
+                        }
+                        _logger.Information($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 剩余游戏时间 {st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second}");
+                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, HUtil32.MakeLong((short)RemainDays, (short)RemainHours), (int)RemainIpDays, (int)RemainIpHours, config.ServerNameList.Count);
                     }
                     else
                     {
-                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, nIdCost, HUtil32.LoWord(nIpCost), HUtil32.HiWord(nIpCost), config.ServerNameList.Count);
+                        userInfo.PayMode = 0;
+                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, 0, 0, 0, config.ServerNameList.Count);
                     }
                     var sServerName = GetServerListInfo();
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
-                    SessionAdd(config, userInfo.Account, userInfo.UserIPaddr, userInfo.SessionID, userInfo.boPayCost, false);
+                    SessionAdd(config, userInfo.Account, userInfo.UserIPaddr, userInfo.SessionID, userInfo.PayCost, false);
                 }
                 else
                 {
@@ -298,6 +318,61 @@ namespace LoginSvr.Services
             {
                 _logger.LogError("[Exception] LoginService.LoginUser");
                 _logger.LogError(ex);
+            }
+        }
+
+        private bool CheckBadAccount(string account)
+        {
+            return true;
+        }
+
+        public void AddCertUser(UserInfo pUser)
+        {
+            var st = DateTime.Now;
+            var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
+            var pCert = new CertUser();
+            pCert.LoginID = pUser.Account;
+            pCert.Addr = pUser.UserIPaddr;
+            var remaindId = pUser.dwValidUntil - nCurrentTime;
+            var remaindIp = pUser.dwIpValidUntil - nCurrentTime;
+            pCert.IDHour = pUser.dwSeconds;
+            pCert.IPHour = pUser.dwIpSeconds;
+            pCert.IPDay = (remaindIp + 1);
+            pCert.IDDay = (remaindId + 1);
+            pUser.nAvailableType = 5;
+            if ((pCert.IDHour > 0))
+            {
+                pUser.nAvailableType = 2;
+            }
+            if ((pCert.IPHour > 0))
+            {
+                pUser.nAvailableType = 4;
+            }
+            if ((pCert.IPDay > 0))
+            {
+                pUser.nAvailableType = 3;
+            }
+            if ((pCert.IDDay > 0))
+            {
+                pUser.nAvailableType = 1;
+            }
+            pCert.Certification = pUser.nCertification;
+            pCert.OpenTime = HUtil32.GetTickCount();
+            pCert.AvailableType = pUser.nAvailableType;
+            pCert.Closing = false;
+            pUser.dwOpenTime = pCert.OpenTime;
+            LsShare.CertList.Add(pCert);
+        }
+
+        private void DelCertUser(int cert)
+        {
+            for (var i = LsShare.CertList.Count - 1; i >= 0; i--)
+            {
+                if (LsShare.CertList[i].Certification == cert)
+                {
+                    LsShare.CertList.RemoveAt(i);
+                    break;
+                }
             }
         }
 
@@ -539,7 +614,7 @@ namespace LoginSvr.Services
             if (!string.IsNullOrEmpty(userInfo.Account) && !string.IsNullOrEmpty(sServerName) && IsLogin(config, userInfo.SessionID))
             {
                 GetSelGateInfo(config, sServerName, config.sGateIPaddr, ref sSelGateIp, ref nSelGatePort);
-                if (sSelGateIp != "" && nSelGatePort > 0)
+                if (!string.IsNullOrEmpty(sSelGateIp) && nSelGatePort > 0)
                 {
                     if (config.boDynamicIPMode)
                     {
@@ -568,7 +643,7 @@ namespace LoginSvr.Services
                     if (_masSocService.IsNotUserFull(sServerName))
                     {
                         SessionUpdate(config, userInfo.SessionID, sServerName, boPayCost);
-                        _masSocService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.boPayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr);
+                        _masSocService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.PayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr);
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, userInfo.SessionID, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sSelGateIp + "/" + nSelGatePort + "/" + userInfo.SessionID));
                     }

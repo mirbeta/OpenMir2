@@ -507,6 +507,7 @@ namespace SystemModule
         public const int SS_KEEPALIVE = 104;
         public const int SS_KICKUSER = 111;
         public const int SS_SERVERLOAD = 113;
+        public const int ISM_ACCOUNTEXPIRED = 114;
         public const int SS_200 = 200;
         public const int SS_201 = 201;
         public const int SS_202 = 202;
@@ -531,6 +532,8 @@ namespace SystemModule
         /// 客户端退出游戏
         /// </summary>
         public const int SS_SOFTOUTSESSION = 102;
+        public const int ISM_GAMETIMEOFTIMECARDUSER = 112;
+        public const int ISM_CHECKTIMEACCOUNT = 116;
         public const int SS_LOGINCOST = 30002;
         public const int DBR_FAIL = 2000;
         public const int DB_LOADHUMANRCD = 100;

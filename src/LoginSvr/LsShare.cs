@@ -15,6 +15,7 @@ namespace LoginSvr
         public static int SessionIdx = 0;
         public static readonly int VersionDate = 20011006;
         public static IList<GateInfo> Gates = new List<GateInfo>();
+        public static IList<CertUser> CertList = new List<CertUser>();
         public static string[] ServerAddr = new string[200];
 
         /// <summary>
@@ -221,6 +222,22 @@ namespace LoginSvr
         public IList<UserInfo> UserList;
         public long dwKeepAliveTick;
     }
+    
+    public struct CertUser
+    {
+        public string LoginID;
+        public string Addr;
+        public string ServerName;
+        public bool FreeMode;
+        public int Certification;
+        public long OpenTime;
+        public bool Closing;
+        public byte AvailableType;
+        public long IDDay;
+        public long IDHour;
+        public long IPDay;
+        public long IPHour;
+    }
 
     public class UserInfo
     {
@@ -231,7 +248,39 @@ namespace LoginSvr
         public int nVersionDate;
         public bool boCertificationOK;
         public int SessionID;
-        public bool boPayCost;
+        /// <summary>
+        /// 付费账号
+        /// </summary>
+        public bool PayCost;
+        /// <summary>
+        /// 0 : 体验版
+        /// 1 : 收费
+        /// 2 : 免费（创建时间）
+        /// </summary>
+        public byte PayMode;
+        public int nClientVersion;
+        public int nCertification;
+        public long nPassFailTime;
+        public int nPassFailCount;
+        public bool bVersionAccept;
+        public bool bSelServerOk;
+        public long dwValidFrom;
+        public long dwValidUntil;
+        public long dwSeconds;
+        public long dwIpValidFrom;
+        public long dwIpValidUntil;
+        public long dwIpSeconds;
+        public long dwStopUntil;
+        public long dwMakeTime;
+        public long dwOpenTime;
+        public byte nAvailableType;
+        public bool bFreeMode;
+        public int nServerID;
+        public int nParentCheck;
+        public DateTime AccountMakeDate;
+        public string SocData;
+        public long dwLatestCmdTime;
+        
         /// <summary>
         /// 剩余游戏时间
         /// </summary>

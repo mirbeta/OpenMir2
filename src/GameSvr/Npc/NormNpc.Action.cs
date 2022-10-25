@@ -455,7 +455,7 @@ namespace GameSvr.Npc
             PlayObject.m_nAutoGetExpPoint = nPoint;
             PlayObject.OffLineFlag = true;
             PlayObject.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
-            IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.m_sUserID, PlayObject.m_nSessionID);
+            IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.UserID, PlayObject.m_nSessionID);
             PlayObject.SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
         }
 

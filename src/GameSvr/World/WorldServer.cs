@@ -512,7 +512,7 @@ namespace GameSvr.World
                         }
                     }
                 }
-                playObject.m_sUserID = userOpenInfo.LoadUser.sAccount;
+                playObject.UserID = userOpenInfo.LoadUser.sAccount;
                 playObject.m_sIPaddr = userOpenInfo.LoadUser.sIPaddr;
                 playObject.m_sIPLocal = M2Share.GetIPLocal(playObject.m_sIPaddr);
                 playObject.m_nSocket = userOpenInfo.LoadUser.nSocket;
@@ -1434,7 +1434,7 @@ namespace GameSvr.World
             }
             var saveRcd = new TSaveRcd
             {
-                sAccount = playObject.m_sUserID,
+                sAccount = playObject.UserID,
                 sChrName = playObject.ChrName,
                 nSessionID = playObject.m_nSessionID,
                 PlayObject = playObject,
@@ -1517,7 +1517,7 @@ namespace GameSvr.World
             playObject.IncSpell = humData.IncSpell;
             playObject.IncHealing = humData.IncHealing;
             playObject.FightZoneDieCount = humData.FightZoneDieCount;
-            playObject.m_sUserID = humData.Account;
+            playObject.UserID = humData.Account;
             playObject.m_boLockLogon = humData.LockLogon;
             playObject.m_wContribution = humData.Contribution;
             playObject.HungerStatus = humData.HungerStatus;
@@ -1647,7 +1647,7 @@ namespace GameSvr.World
             humanRcd.Data.IncSpell = (byte)playObject.IncSpell;
             humanRcd.Data.IncHealing = (byte)playObject.IncHealing;
             humanRcd.Data.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
-            humanRcd.Data.Account = playObject.m_sUserID;
+            humanRcd.Data.Account = playObject.UserID;
             humanRcd.Data.LockLogon = playObject.m_boLockLogon;
             humanRcd.Data.Contribution = playObject.m_wContribution;
             humanRcd.Data.HungerStatus = playObject.HungerStatus;
@@ -2013,20 +2013,6 @@ namespace GameSvr.World
             return result;
         }
 
-        public void HumanExpire(string sAccount)
-        {
-            if (!M2Share.Config.KickExpireHuman) return;
-            for (var i = 0; i < PlayObjectList.Count; i++)
-            {
-                PlayObject playObject = PlayObjectList[i];
-                if (string.Compare(playObject.m_sUserID, sAccount, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    playObject.m_boExpire = true;
-                    break;
-                }
-            }
-        }
-
         public int GetMapHuman(string sMapName)
         {
             var result = 0;
@@ -2157,7 +2143,7 @@ namespace GameSvr.World
             if (playObject != null)
             {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
-                playObject.m_sUserID = "假人" + ai.sChrName;
+                playObject.UserID = "假人" + ai.sChrName;
                 playObject.Start(TPathType.t_Dynamic);
                 BotPlayObjectList.Add(playObject);
                 return true;
@@ -2310,6 +2296,30 @@ namespace GameSvr.World
                 if (PlayObjectList[i].MyGuild == guild)
                 {
                     guild.GetRankName(PlayObjectList[i], ref nRankNo);
+                }
+            }
+        }
+
+        public void AccountExpired(string account)
+        {
+            for (int i = 0; i < PlayObjectList.Count(); i++)
+            {
+                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    PlayObjectList[i].AccountExpired = true;
+                    break;
+                }
+            }
+        }
+
+        public void TimeAccountExpired(string account)
+        {
+            for (int i = 0; i < PlayObjectList.Count(); i++)
+            {
+                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    PlayObjectList[i].SetExpiredTime(5);
+                    break;
                 }
             }
         }

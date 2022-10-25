@@ -26,12 +26,22 @@ namespace GameSvr.Player
         /// <summary>
         /// 登录帐号名
         /// </summary>
-        public string m_sUserID;
+        public string UserID;
         /// <summary>
         /// 人物IP地址
         /// </summary>
         public string m_sIPaddr = string.Empty;
         public string m_sIPLocal = string.Empty;
+        /// <summary>
+        /// 账号过期
+        /// </summary>
+        public bool AccountExpired;
+        /// <summary>
+        /// 账号游戏点数检查时间
+        /// </summary>
+        public int AccountExpiredTick;
+        public long ExpireTime;
+        public int ExpireCount;
         public int m_nSocket = 0;
         /// <summary>
         /// 人物连接到游戏网关SOCKETID
@@ -230,10 +240,6 @@ namespace GameSvr.Player
         public int m_dwWaitLoginNoticeOKTick;
         public bool m_boLoginNoticeOK;
         public bool bo6AB;
-        /// <summary>
-        /// 帐号过期
-        /// </summary>
-        public bool m_boExpire;
         public int m_dwShowLineNoticeTick;
         public int m_nShowLineNoticeIdx;
         public int m_nSoftVersionDateEx;
@@ -465,7 +471,7 @@ namespace GameSvr.Player
             m_boNewHuman = false;
             m_boLoginNoticeOK = false;
             bo6AB = false;
-            m_boExpire = false;
+            AccountExpired = false;
             m_boSendNotice = false;
             m_dwCheckDupObjTick = HUtil32.GetTickCount();
             dwTick578 = HUtil32.GetTickCount();
@@ -1715,6 +1721,38 @@ namespace GameSvr.Player
             catch
             {
                 M2Share.Log.Error(sExceptionMsg);
+            }
+        }
+
+        public void SetExpiredTime(int expiredTime)
+        {
+            if (Abil.Level > M2Share.g_nExpErienceLevel)
+            {
+                ExpireTime = HUtil32.GetTickCount() + (60 * 1000);
+                ExpireCount = expiredTime;
+            }
+        }
+
+        private void CheckExpiredTime()
+        {
+            if (ExpireTime > 0 && ExpireTime < HUtil32.GetTickCount())
+            {
+                ExpireCount = ExpireCount - 1;
+                switch (ExpireCount)
+                {
+                    case 30:
+                        SysMsg("您的账号游戏时间即将到期，您将在[30:00]分钟后断开服务器。", MsgColor.Blue, MsgType.System);
+                        break;
+                    case > 0 and <= 10:
+                        SysMsg($"您的账号游戏时间即将到期，您将在[{ExpireCount}:00]分钟后断开服务器。", MsgColor.Blue, MsgType.System);
+                        break;
+                    case 0:
+                        ExpireTime = 0;
+                        ExpireCount = 0;
+                        AccountExpired = true;
+                        SysMsg("您的账号游戏时间已到，请访问(https://mir2.sdo.com)进行充值，全服务器账号共享游戏时间。", MsgColor.Blue, MsgType.System);
+                        break;
+                }
             }
         }
     }
