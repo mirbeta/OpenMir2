@@ -176,6 +176,13 @@ namespace LoginSvr.Services
             AccountRecord accountRecord = null;
             try
             {
+                userInfo.dwValidFrom = 0;
+                userInfo.dwValidUntil = 0;
+                userInfo.dwSeconds = 0;
+                userInfo.dwStopUntil = 0;
+                userInfo.dwIpValidFrom = 0;
+                userInfo.dwIpValidUntil = 0;
+                userInfo.dwIpSeconds = 0;
                 var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId, new[] { "/" });
                 var nCode = 0;
                 var boNeedUpdate = false;
@@ -187,7 +194,7 @@ namespace LoginSvr.Services
                         if (accountRecord.UserEntry.sPassword == sPassword)
                         {
                             accountRecord.nErrorCount = 0;
-                            if (accountRecord.UserEntry.sUserName == "" || accountRecord.UserEntryAdd.sQuiz2 == "")
+                            if (string.IsNullOrEmpty(accountRecord.UserEntry.sUserName) || string.IsNullOrEmpty(accountRecord.UserEntryAdd.sQuiz2))
                             {
                                 userEntry = accountRecord.UserEntry;
                                 boNeedUpdate = true;
@@ -252,15 +259,6 @@ namespace LoginSvr.Services
                     {
                         userInfo.PayCost = false;
                     }
-
-                    userInfo.dwValidFrom = 0;
-                    userInfo.dwValidUntil = 0;
-                    userInfo.dwSeconds = 0;
-                    userInfo.dwStopUntil = 0;
-                    userInfo.dwIpValidFrom = 0;
-                    userInfo.dwIpValidUntil = 0;
-                    userInfo.dwIpSeconds = 0;
-                    
                     var st = DateTime.Now;
                     var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
                     if ((nCurrentTime <= userInfo.dwValidUntil) || (nCurrentTime <= userInfo.dwIpValidUntil) || (userInfo.dwSeconds > 0) || (userInfo.dwIpSeconds > 0))
