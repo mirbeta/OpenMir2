@@ -508,6 +508,11 @@ namespace SystemModule
         public const int SS_KICKUSER = 111;
         public const int SS_SERVERLOAD = 113;
         public const int ISM_ACCOUNTEXPIRED = 114;
+        /// <summary>
+        /// 查询账号剩余游戏时间
+        /// </summary>
+        public const int ISM_QUERYACCOUNTEXPIRETIME = 115;
+        public const int ISM_QUERYPLAYTIME = 116;
         public const int SS_200 = 200;
         public const int SS_201 = 201;
         public const int SS_202 = 202;
@@ -532,6 +537,9 @@ namespace SystemModule
         /// 客户端退出游戏
         /// </summary>
         public const int SS_SOFTOUTSESSION = 102;
+        /// <summary>
+        /// 减少或更新账号游戏时间
+        /// </summary>
         public const int ISM_GAMETIMEOFTIMECARDUSER = 112;
         public const int ISM_CHECKTIMEACCOUNT = 116;
         public const int SS_LOGINCOST = 30002;

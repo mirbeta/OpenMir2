@@ -5,7 +5,7 @@ namespace SystemModule.Data
     public class UserOpenInfo
     {
         public string sChrName;
-        public TLoadDBInfo LoadUser;
+        public LoadDBInfo LoadUser;
         public HumDataInfo HumanRcd;
     }
 }

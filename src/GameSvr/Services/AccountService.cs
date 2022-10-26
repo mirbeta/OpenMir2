@@ -187,6 +187,9 @@ namespace GameSvr.Services
                         case Grobal2.ISM_ACCOUNTEXPIRED:
                             GetAccountExpired(sBody);
                             break;
+                        case Grobal2.ISM_QUERYPLAYTIME:
+                            QueryAccountExpired(sBody);
+                            break;
                     }
                     if (sSocketText.IndexOf(')') <= 0)
                     {
@@ -213,6 +216,24 @@ namespace GameSvr.Services
             }
         }
 
+        private void QueryAccountExpired(string sData)
+        {
+            var account = string.Empty;
+            var certstr = HUtil32.GetValidStr3(sData, ref account, '/');
+            var cert = HUtil32.StrToInt(certstr, 0);
+            if (!M2Share.Config.TestServer)
+            {
+                if (cert <= 1800000)//小于30分钟一分钟查询一次，否则10分钟或者半个小时同步一次都行
+                {
+                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
+                }
+                else
+                {
+                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
+                }
+            }
+        }
+        
         private void GetAccountExpired(string sData)
         {
             var account = string.Empty;
@@ -232,15 +253,18 @@ namespace GameSvr.Services
             var sPayCost = string.Empty;
             var sIPaddr = string.Empty;
             var sPayMode = string.Empty;
+            var sPlayTime = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:GetPasswdSuccess";
             try
             {
+                //todo 这里要获取账号剩余游戏时间
                 sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                 sData = HUtil32.GetValidStr3(sData, ref sSessionID, HUtil32.Backslash);
                 sData = HUtil32.GetValidStr3(sData, ref sPayCost, HUtil32.Backslash);// boPayCost
                 sData = HUtil32.GetValidStr3(sData, ref sPayMode, HUtil32.Backslash);// nPayMode
                 sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);// sIPaddr
-                NewSession(sAccount, sIPaddr, HUtil32.StrToInt(sSessionID, 0), HUtil32.StrToInt(sPayCost, 0), HUtil32.StrToInt(sPayMode, 0));
+                sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);// playTime
+                NewSession(sAccount, sIPaddr, HUtil32.StrToInt(sSessionID, 0), HUtil32.StrToInt(sPayCost, 0), HUtil32.StrToInt(sPayMode, 0), HUtil32.StrToInt(sPlayTime, 0));
             }
             catch
             {
@@ -264,7 +288,7 @@ namespace GameSvr.Services
             }
         }
 
-        private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode)
+        private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode, long playTime)
         {
             var sessInfo = new TSessInfo();
             sessInfo.sAccount = sAccount;
@@ -276,6 +300,7 @@ namespace GameSvr.Services
             sessInfo.dwStartTick = HUtil32.GetTickCount();
             sessInfo.ActiveTick = HUtil32.GetTickCount();
             sessInfo.nRefCount = 1;
+            sessInfo.PlayTime = playTime;
             _sessionList.Add(sessInfo);
         }
 
@@ -318,7 +343,7 @@ namespace GameSvr.Services
             _sessionList.Clear();
         }
 
-        public TSessInfo GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent)
+        public TSessInfo GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime)
         {
             TSessInfo result = null;
             var boFound = false;
@@ -344,13 +369,14 @@ namespace GameSvr.Services
                     }
                     result = sessInfo;
                     nPayMode = sessInfo.PayMode;
+                    playTime = sessInfo.PlayTime;
                     boFound = true;
                     break;
                 }
             }
             if (M2Share.Config.ViewAdmissionFailure && !boFound)
             {
-                _logger.Error(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
+                _logger.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, nSessionID));
             }
             return result;
         }

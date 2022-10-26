@@ -15,7 +15,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 账号
         /// </summary>
-        public string sAccount;
+        public string Account;
         public ushort SocketId;
         /// <summary>
         /// 玩家IP
@@ -24,7 +24,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 认证是否通过
         /// </summary>
-        public bool boCertification;
+        public bool Certification;
         /// <summary>
         /// 玩家名称
         /// </summary>

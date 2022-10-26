@@ -8,19 +8,19 @@ namespace GameSvr.Services
     public class TFrontEngine
     {
         private readonly object m_UserCriticalSection;
-        private IList<TLoadDBInfo> m_LoadRcdList;
+        private IList<LoadDBInfo> m_LoadRcdList;
         private readonly IList<TSaveRcd> m_SaveRcdList;
         private readonly IList<TGoldChangeInfo> m_ChangeGoldList;
-        private IList<TLoadDBInfo> m_LoadRcdTempList;
+        private IList<LoadDBInfo> m_LoadRcdTempList;
         private readonly IList<TSaveRcd> m_SaveRcdTempList;
 
         public TFrontEngine()
         {
             m_UserCriticalSection = new object();
-            m_LoadRcdList = new List<TLoadDBInfo>();
+            m_LoadRcdList = new List<LoadDBInfo>();
             m_SaveRcdList = new List<TSaveRcd>();
             m_ChangeGoldList = new List<TGoldChangeInfo>();
-            m_LoadRcdTempList = new List<TLoadDBInfo>();
+            m_LoadRcdTempList = new List<LoadDBInfo>();
             m_SaveRcdTempList = new List<TSaveRcd>();
         }
 
@@ -138,7 +138,7 @@ namespace GameSvr.Services
                         m_SaveRcdTempList.Add(m_SaveRcdList[i]);
                     }
                 }
-                IList<TLoadDBInfo> TempList = m_LoadRcdTempList;
+                IList<LoadDBInfo> TempList = m_LoadRcdTempList;
                 m_LoadRcdTempList = m_LoadRcdList;
                 m_LoadRcdList = TempList;
                 if (m_ChangeGoldList.Any())
@@ -282,12 +282,12 @@ namespace GameSvr.Services
             return result;
         }
 
-        public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, ushort nGSocketIdx, int nGateIdx)
+        public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, ushort nGSocketIdx, int nGateIdx,long playTime)
         {
-            var LoadRcdInfo = new TLoadDBInfo
+            var loadRcdInfo = new LoadDBInfo
             {
-                sAccount = sAccount,
-                sChrName = sChrName,
+                Account = sAccount,
+                ChrName = sChrName,
                 sIPaddr = sIPaddr,
                 nSessionID = nSessionID,
                 nSoftVersionDate = nSoftVersionDate,
@@ -298,12 +298,13 @@ namespace GameSvr.Services
                 nGateIdx = nGateIdx,
                 dwNewUserTick = HUtil32.GetTickCount(),
                 PlayObject = null,
-                nReLoadCount = 0
+                nReLoadCount = 0,
+                PlayTime = playTime
             };
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
-                m_LoadRcdList.Add(LoadRcdInfo);
+                m_LoadRcdList.Add(loadRcdInfo);
             }
             finally
             {
@@ -311,23 +312,23 @@ namespace GameSvr.Services
             }
         }
 
-        private bool LoadHumFromDB(TLoadDBInfo LoadUser, ref bool boReTry)
+        private bool LoadHumFromDB(LoadDBInfo LoadUser, ref bool boReTry)
         {
             HumDataInfo HumanRcd = null;
             var result = false;
             boReTry = false;
-            if (InSaveRcdList(LoadUser.sChrName))
+            if (InSaveRcdList(LoadUser.ChrName))
             {
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.sChrName) != null)
+            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.ChrName) != null)
             {
-                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.sChrName);
+                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.ChrName);
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (!HumDataService.LoadHumRcdFromDB(LoadUser.sAccount, LoadUser.sChrName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
+            if (!HumDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
             {
                 M2Share.GateMgr.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
             }
@@ -335,7 +336,7 @@ namespace GameSvr.Services
             {
                 var userOpenInfo = new UserOpenInfo
                 {
-                    sChrName = LoadUser.sChrName,
+                    sChrName = LoadUser.ChrName,
                     LoadUser = LoadUser,
                     HumanRcd = HumanRcd
                 };
@@ -404,7 +405,7 @@ namespace GameSvr.Services
 
         public void DeleteHuman(int nGateIndex, int nSocket)
         {
-            TLoadDBInfo LoadRcdInfo;
+            LoadDBInfo LoadRcdInfo;
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
