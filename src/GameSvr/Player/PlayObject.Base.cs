@@ -42,6 +42,7 @@ namespace GameSvr.Player
         public int AccountExpiredTick;
         public long ExpireTime;
         public int ExpireCount;
+        public long QueryExpireTick;
         public int m_nSocket = 0;
         /// <summary>
         /// 人物连接到游戏网关SOCKETID
@@ -586,6 +587,7 @@ namespace GameSvr.Player
             AutoTimerTick = new int[20];
             AutoTimerStatus = new int[20];
             MapCell = CellType.Play;
+            QueryExpireTick = 60 * 1000;
             m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 

@@ -512,7 +512,7 @@ namespace GameSvr.World
                         }
                     }
                 }
-                playObject.UserID = userOpenInfo.LoadUser.sAccount;
+                playObject.UserID = userOpenInfo.LoadUser.Account;
                 playObject.m_sIPaddr = userOpenInfo.LoadUser.sIPaddr;
                 playObject.m_sIPLocal = M2Share.GetIPLocal(playObject.m_sIPaddr);
                 playObject.m_nSocket = userOpenInfo.LoadUser.nSocket;
@@ -521,6 +521,7 @@ namespace GameSvr.World
                 playObject.m_nSessionID = userOpenInfo.LoadUser.nSessionID;
                 playObject.m_nPayMent = userOpenInfo.LoadUser.nPayMent;
                 playObject.m_nPayMode = userOpenInfo.LoadUser.nPayMode;
+                playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
                 playObject.m_dwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.m_nSoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
@@ -2296,6 +2297,18 @@ namespace GameSvr.World
                 if (PlayObjectList[i].MyGuild == guild)
                 {
                     guild.GetRankName(PlayObjectList[i], ref nRankNo);
+                }
+            }
+        }
+
+        public void SetPlayExpireTime(string account,long playTime)
+        {
+            for (int i = 0; i < PlayObjectList.Count(); i++)
+            {
+                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    PlayObjectList[i].QueryExpireTick = playTime;
+                    break;
                 }
             }
         }

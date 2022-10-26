@@ -132,7 +132,7 @@ namespace GameSvr.GateWay
                                 {
                                     continue;
                                 }
-                                if (gateUserInfo.sAccount == sAccount || gateUserInfo.nSessionID == nSessionID)
+                                if (gateUserInfo.Account == sAccount || gateUserInfo.nSessionID == nSessionID)
                                 {
                                     if (gateUserInfo.FrontEngine != null)
                                     {
@@ -222,7 +222,7 @@ namespace GameSvr.GateWay
                                 gateUser.PlayObject.m_boEmergencyClose = true;
                                 if (!gateUser.PlayObject.m_boReconnection)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.sAccount, gateUser.nSessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.nSessionID);
                                 }
                             }
                             userList[i] = null;

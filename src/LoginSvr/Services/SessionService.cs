@@ -153,7 +153,11 @@ namespace LoginSvr.Services
                                 break;
                             case Grobal2.ISM_GAMETIMEOFTIMECARDUSER:
                                 sMsg = HUtil32.GetValidStr3(sMsg,ref  sAccount, new[]{"/"});
-                                GetPlayTimeUser(sAccount, HUtil32.StrToInt(sMsg, 0));
+                                ChanggePlayTimeUser(sAccount, HUtil32.StrToInt(sMsg, 0));
+                                break;
+                            case Grobal2.ISM_QUERYACCOUNTEXPIRETIME:
+                                sMsg = HUtil32.GetValidStr3(sMsg,ref  sAccount, new[]{"/"});
+                                QueryPlayTime(sAccount);
                                 break;
                             case Grobal2.ISM_CHECKTIMEACCOUNT:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount,new[]{"/"});
@@ -173,9 +177,37 @@ namespace LoginSvr.Services
         }
 
         /// <summary>
-        /// 获取账号剩余游戏时间
+        /// 查询账号剩余游戏时间
         /// </summary>
-        private void GetPlayTimeUser(string account, int gameTime)
+        private void QueryPlayTime(string account)
+        {
+            if (string.IsNullOrEmpty(account))
+            {
+                return;
+            }
+            var seconds = _accountStorage.GetAccountPlayTime(account);
+
+            for (var i = 0; i < LsShare.CertList.Count; i++)
+            {
+                var certUser = LsShare.CertList[i];
+                if (string.Compare(LsShare.CertList[i].LoginID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
+                    {
+                        if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
+                        {
+                            SendServerMsg(Grobal2.SS_CLOSESESSION, certUser.ServerName, certUser.LoginID + "/" + seconds);
+                            _logger.LogDebug($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 减少或更新账号游戏时间
+        /// </summary>
+        private void ChanggePlayTimeUser(string account, int gameTime)
         {
             if (gameTime <= 0)
             {

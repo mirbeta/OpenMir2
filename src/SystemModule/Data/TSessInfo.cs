@@ -7,6 +7,10 @@
         public string sIPaddr;
         public int PayMent;
         public int PayMode;
+        /// <summary>
+        /// 账号剩余游戏时间
+        /// </summary>
+        public long PlayTime;
         public int SessionStatus;
         public int dwStartTick;
         public int ActiveTick;

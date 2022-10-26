@@ -330,13 +330,14 @@ namespace GameSvr.GateWay
             var nClientVersion = 0;
             var nPayMent = 0;
             var nPayMode = 0;
+            var nPlayTime = 0l;
             byte[] HWID = MD5.g_MD5EmptyDigest;
             TSessInfo SessInfo;
             const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification";
             const string sDisable = "*disable*";
             try
             {
-                if (string.IsNullOrEmpty(GateUser.sAccount))
+                if (string.IsNullOrEmpty(GateUser.Account))
                 {
                     if (HUtil32.TagCount(sMsg, '!') > 0)
                     {
@@ -344,18 +345,18 @@ namespace GameSvr.GateWay
                         var packetMsg = sMsg.AsSpan()[1..].ToString();
                         if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag, ref HWID))
                         {
-                            SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent);
+                            SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (SessInfo != null && nPayMent > 0)
                             {
-                                GateUser.boCertification = true;
-                                GateUser.sAccount = sAccount.Trim();
+                                GateUser.Certification = true;
+                                GateUser.Account = sAccount.Trim();
                                 GateUser.sChrName = sChrName.Trim();
                                 GateUser.nSessionID = nSessionID;
                                 GateUser.nClientVersion = nClientVersion;
                                 GateUser.SessInfo = SessInfo;
                                 try
                                 {
-                                    M2Share.FrontEngine.AddToLoadRcdList(sAccount, sChrName, GateUser.sIPaddr, boFlag, nSessionID, nPayMent, nPayMode, nClientVersion, nSocket, GateUser.SocketId, GateIdx);
+                                    M2Share.FrontEngine.AddToLoadRcdList(sAccount, sChrName, GateUser.sIPaddr, boFlag, nSessionID, nPayMent, nPayMode, nClientVersion, nSocket, GateUser.SocketId, GateIdx, nPlayTime);
                                 }
                                 catch
                                 {
@@ -364,16 +365,16 @@ namespace GameSvr.GateWay
                             }
                             else
                             {
-                                GateUser.sAccount = sDisable;
-                                GateUser.boCertification = false;
+                                GateUser.Account = sDisable;
+                                GateUser.Certification = false;
                                 CloseUser(nSocket);
                                 _logger.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionID} Address:{GateUser.sIPaddr}");
                             }
                         }
                         else
                         {
-                            GateUser.sAccount = sDisable;
-                            GateUser.boCertification = false;
+                            GateUser.Account = sDisable;
+                            GateUser.Certification = false;
                             CloseUser(nSocket);
                         }
                     }
@@ -417,11 +418,11 @@ namespace GameSvr.GateWay
                                 }
                                 if (GateUser.PlayObject != null && GateUser.PlayObject.Ghost && !GateUser.PlayObject.m_boReconnection)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.nSessionID);
                                 }
                                 if (GateUser.PlayObject != null && GateUser.PlayObject.m_boSoftClose && GateUser.PlayObject.m_boReconnection && GateUser.PlayObject.m_boEmergencyClose)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.nSessionID);
                                 }
                                 GateInfo.UserList[i] = null;
                                 GateInfo.nUserCount -= 1;
@@ -442,7 +443,7 @@ namespace GameSvr.GateWay
             int result;
             var GateUser = new GateUserInfo
             {
-                sAccount = string.Empty,
+                Account = string.Empty,
                 sChrName = string.Empty,
                 sIPaddr = sIPaddr,
                 nSocket = socket,
@@ -452,7 +453,7 @@ namespace GameSvr.GateWay
                 FrontEngine = null,
                 PlayObject = null,
                 dwNewUserTick = HUtil32.GetTickCount(),
-                boCertification = false
+                Certification = false
             };
             for (var i = 0; i < UserList.Count; i++)
             {
@@ -545,7 +546,7 @@ namespace GameSvr.GateWay
                         {
                             if (GateUser.PlayObject != null && GateUser.UserEngine != null)
                             {
-                                if (GateUser.boCertification && nMsgLen >= 12)
+                                if (GateUser.Certification && nMsgLen >= 12)
                                 {
                                     clientMesaagePacket.Recog = BitConverter.ToInt32(MsgBuff[..4]);
                                     clientMesaagePacket.Ident = BitConverter.ToUInt16(MsgBuff.Slice(4, 2));
