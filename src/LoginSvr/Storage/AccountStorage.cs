@@ -1,6 +1,7 @@
 using LoginSvr.Conf;
 using MySqlConnector;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -14,13 +15,13 @@ namespace LoginSvr.Storage
     {
         private readonly MirLog _logger;
         private readonly ConfigManager _configManager;
-        private readonly IList<AccountQuick> _quickList;
+        private readonly Dictionary<string, AccountQuick> _quickList;
 
         public AccountStorage(MirLog logQueue, ConfigManager configManager)
         {
             _logger = logQueue;
             _configManager = configManager;
-            _quickList = new List<AccountQuick>();
+            _quickList = new Dictionary<string, AccountQuick>(StringComparer.OrdinalIgnoreCase);
         }
 
         private Config Config => _configManager.Config;
@@ -106,7 +107,7 @@ namespace LoginSvr.Storage
                     var boDeleted = dr.GetByte("State");
                     if (boDeleted == 0 && (!string.IsNullOrEmpty(sAccount)))
                     {
-                        _quickList.Add(new AccountQuick(sAccount, nIndex));
+                        _quickList.Add(sAccount, new AccountQuick(sAccount, nIndex));
                     }
                 }
                 dr.Close();
@@ -126,17 +127,14 @@ namespace LoginSvr.Storage
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
         {
-            for (var i = 0; i < _quickList.Count; i++)
+            if (_quickList.TryGetValue(sName, out var accountQuick))
             {
-                if (HUtil32.CompareLStr(_quickList[i].sAccount, sName))
-                {
-                    List.Add(new AccountQuick(_quickList[i].sAccount, _quickList[i].nIndex));
-                }
+                List.Add(new AccountQuick(accountQuick.sAccount, accountQuick.nIndex));
             }
             return List.Count;
         }
 
-        private bool GetAccount(int nIndex, ref AccountRecord DBRecord)
+        private bool GetAccount(int nIndex, ref AccountRecord accountRecord)
         {
             const string sSQL = "SELECT * FROM account WHERE ID={0}";
             var result = true;
@@ -152,40 +150,22 @@ namespace LoginSvr.Storage
             try
             {
                 dr = command.ExecuteReader();
-                if (DBRecord == null)
+                if (accountRecord == null)
                 {
-                    DBRecord = new AccountRecord();
-                    DBRecord.Header = new RecordHeader();
-                    DBRecord.UserEntry = new UserEntry();
-                    DBRecord.UserEntryAdd = new UserEntryAdd();
+                    accountRecord = new AccountRecord();
+                    accountRecord.Header = new RecordHeader();
+                    accountRecord.UserEntry = new UserEntry();
+                    accountRecord.UserEntryAdd = new UserEntryAdd();
                 }
                 if (dr.Read())
                 {
-                    DBRecord.AccountId = dr.GetInt32("Id");
-                    DBRecord.Header.sAccount = dr.GetString("Account");
-                    DBRecord.ErrorCount = dr.GetInt32("PassFailCount");
-                    DBRecord.ActionTick = dr.GetInt32("PassFailTime");
-                    DBRecord.UserEntry.Account = dr.GetString("Account");
-                    DBRecord.UserEntry.Password = dr.GetString("PassWord");
-                    DBRecord.UserEntry.UserName = dr.GetString("USERNAME");
-                    DBRecord.UserEntry.SSNo = dr.GetString("SSNO");
-                    DBRecord.UserEntry.Phone = dr.GetString("PHONE");
-                    DBRecord.UserEntry.Quiz = dr.GetString("QUIZ1");
-                    DBRecord.UserEntry.Answer = dr.GetString("ANSWER1");
-                    DBRecord.UserEntry.EMail = dr.GetString("EMAIL");
+                    accountRecord.AccountId = dr.GetInt32("Id");
+                    accountRecord.ErrorCount = dr.GetInt32("PassFailCount");
+                    accountRecord.ActionTick = dr.GetInt32("PassFailTime");
+                    accountRecord.UserEntry.Account = dr.GetString("Account");
+                    accountRecord.UserEntry.Password = dr.GetString("PassWord");
                 }
-                var quickAccount = _quickList.SingleOrDefault(x => x.nIndex == nIndex);
-                if (quickAccount != null)
-                {
-                    if (DBRecord.Header.sAccount == quickAccount.sAccount)
-                    {
-                        result = true;
-                    }
-                }
-                else
-                {
-                    result = false;
-                }
+                result = true;
                 dr.Close();
                 dr.Dispose();
             }
@@ -202,14 +182,13 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public int Index(string sName)
+        public int Index(string account)
         {
-            var quick = _quickList.SingleOrDefault(o => o.sAccount == sName);
-            if (quick == null)
+            if (_quickList.TryGetValue(account, out var accountQuick))
             {
-                return -1;
+                return accountQuick.nIndex;
             }
-            return quick.nIndex;
+            return -1;
         }
 
         public int Get(int nIndex, ref AccountRecord accountRecord)
@@ -509,7 +488,7 @@ namespace LoginSvr.Storage
                 var nIndex = CreateAccount(accountRecord);
                 if (nIndex > 0)
                 {
-                    _quickList.Add(new AccountQuick(sAccount, nIndex));
+                    _quickList.Add(sAccount, new AccountQuick(sAccount, nIndex));
                     result = true;
                 }
                 else
@@ -534,7 +513,7 @@ namespace LoginSvr.Storage
             var up = DeleteAccount(accountRecord.UserEntry.Account);
             if (up > 0)
             {
-                _quickList.RemoveAt(nIndex);
+                _quickList.Remove(accountRecord.UserEntry.Account);
                 result = true;
             }
             return result;

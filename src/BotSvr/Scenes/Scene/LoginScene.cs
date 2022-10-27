@@ -103,7 +103,7 @@ namespace BotSvr.Scenes.Scene
             ua.Answer2 = sAccount;
             ua.BirthDay = "1978/01/01";
             ua.MobilePhone = "";
-            ua.sMemo = "";
+            ua.Memo = "";
             ua.Memo2 = "";
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
