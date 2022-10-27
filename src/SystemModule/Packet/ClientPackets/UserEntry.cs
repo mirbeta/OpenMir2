@@ -54,7 +54,7 @@ namespace SystemModule.Packet.ClientPackets
             UserEntryAdd.Answer2 = reader.ReadPascalString(12);
             UserEntryAdd.BirthDay = reader.ReadPascalString(10);
             UserEntryAdd.MobilePhone = reader.ReadPascalString(13);
-            UserEntryAdd.sMemo = reader.ReadPascalString(20);
+            UserEntryAdd.Memo = reader.ReadPascalString(20);
             UserEntryAdd.Memo2 =reader. ReadPascalString(20);
         }
 
@@ -68,12 +68,11 @@ namespace SystemModule.Packet.ClientPackets
             writer.WriteAsciiString(UserEntry.Quiz, 20);
             writer.WriteAsciiString(UserEntry.Answer, 12);
             writer.WriteAsciiString(UserEntry.EMail, 40);
-
             writer.WriteAsciiString(UserEntryAdd.Quiz2, 20);
             writer.WriteAsciiString(UserEntryAdd.Answer2, 12);
             writer.WriteAsciiString(UserEntryAdd.BirthDay, 10);
             writer.WriteAsciiString(UserEntryAdd.MobilePhone, 13);
-            writer.WriteAsciiString(UserEntryAdd.sMemo, 20);
+            writer.WriteAsciiString(UserEntryAdd.Memo, 20);
             writer.WriteAsciiString(UserEntryAdd.Memo2, 20);
         }
     }
