@@ -187,14 +187,14 @@ namespace LoginSvr.Services
                 var nCode = 0;
                 var boNeedUpdate = false;
                 var accountIndex = _accountStorage.Index(sLoginId);
-                if (accountIndex >= 0 && _accountStorage.Get(accountIndex, ref accountRecord) >= 0)
+                if (accountIndex > 0 && _accountStorage.Get(accountIndex, ref accountRecord) > 0)
                 {
-                    if (accountRecord.nErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.dwActionTick > 60000)
+                    if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 60000)
                     {
-                        if (accountRecord.UserEntry.sPassword == sPassword)
+                        if (accountRecord.UserEntry.Password == sPassword)
                         {
-                            accountRecord.nErrorCount = 0;
-                            if (string.IsNullOrEmpty(accountRecord.UserEntry.sUserName) || string.IsNullOrEmpty(accountRecord.UserEntryAdd.sQuiz2))
+                            accountRecord.ErrorCount = 0;
+                            if (string.IsNullOrEmpty(accountRecord.UserEntry.UserName) || string.IsNullOrEmpty(accountRecord.UserEntryAdd.Quiz2))
                             {
                                 userEntry = accountRecord.UserEntry;
                                 boNeedUpdate = true;
@@ -204,8 +204,8 @@ namespace LoginSvr.Services
                         }
                         else
                         {
-                            accountRecord.nErrorCount++;
-                            accountRecord.dwActionTick = HUtil32.GetTickCount();
+                            accountRecord.ErrorCount++;
+                            accountRecord.ActionTick = HUtil32.GetTickCount();
                             nCode = -1;
                         }
                         _accountStorage.Update(accountIndex, ref accountRecord);
@@ -213,7 +213,7 @@ namespace LoginSvr.Services
                     else
                     {
                         nCode = -2;
-                        accountRecord.dwActionTick = HUtil32.GetTickCount();
+                        accountRecord.ActionTick = HUtil32.GetTickCount();
                         _accountStorage.Update(accountIndex, ref accountRecord);
                     }
                 }
@@ -483,19 +483,19 @@ namespace LoginSvr.Services
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
                 var userFullEntry = Packets.ToPacket<UserFullEntry>(accountBuff);
                 var nErrCode = -1;
-                if (LsShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
+                if (LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
                 {
                     success = true;
                 }
                 if (success)
                 {
-                    var n10 = _accountStorage.Index(userFullEntry.UserEntry.sAccount);
+                    var n10 = _accountStorage.Index(userFullEntry.UserEntry.Account);
                     if (n10 <= 0)
                     {
                         var accountRecord = new AccountRecord();
                         accountRecord.UserEntry = userFullEntry.UserEntry;
                         accountRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
-                        if (!string.IsNullOrEmpty(userFullEntry.UserEntry.sAccount))
+                        if (!string.IsNullOrEmpty(userFullEntry.UserEntry.Account))
                         {
                             if (_accountStorage.Add(ref accountRecord))
                             {
@@ -510,7 +510,7 @@ namespace LoginSvr.Services
                 }
                 else
                 {
-                    _logger.Warn(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
+                    _logger.Warn(string.Format(sAddNewuserFail, userFullEntry.UserEntry.Account, userFullEntry.UserEntryAdd.Quiz2));
                 }
                 ClientMesaagePacket defMsg;
                 if (nErrCode == 1)
@@ -554,18 +554,18 @@ namespace LoginSvr.Services
                     var n10 = _accountStorage.Index(sLoginId);
                     if (n10 >= 0 && _accountStorage.Get(n10, ref accountRecord) >= 0)
                     {
-                        if (accountRecord.nErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.dwActionTick > 180000)
+                        if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 180000)
                         {
-                            if (accountRecord.UserEntry.sPassword == sOldPassword)
+                            if (accountRecord.UserEntry.Password == sOldPassword)
                             {
-                                accountRecord.nErrorCount = 0;
-                                accountRecord.UserEntry.sPassword = sNewPassword;
+                                accountRecord.ErrorCount = 0;
+                                accountRecord.UserEntry.Password = sNewPassword;
                                 nCode = 1;
                             }
                             else
                             {
-                                accountRecord.nErrorCount++;
-                                accountRecord.dwActionTick = HUtil32.GetTickCount();
+                                accountRecord.ErrorCount++;
+                                accountRecord.ActionTick = HUtil32.GetTickCount();
                                 nCode = -1;
                             }
                             _accountStorage.Update(n10, ref accountRecord);
@@ -573,9 +573,9 @@ namespace LoginSvr.Services
                         else
                         {
                             nCode = -2;
-                            if (HUtil32.GetTickCount() < accountRecord.dwActionTick)
+                            if (HUtil32.GetTickCount() < accountRecord.ActionTick)
                             {
-                                accountRecord.dwActionTick = HUtil32.GetTickCount();
+                                accountRecord.ActionTick = HUtil32.GetTickCount();
                                 _accountStorage.Update(n10, ref accountRecord);
                             }
                         }
@@ -673,9 +673,9 @@ namespace LoginSvr.Services
                 var deBuffer = EDCode.DecodeBuffer(sData);
                 UserFullEntry userFullEntry = Packets.ToPacket<UserFullEntry>(deBuffer);
                 var nCode = -1;
-                if (userInfo.Account == userFullEntry.UserEntry.sAccount && LsShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
+                if (userInfo.Account == userFullEntry.UserEntry.Account && LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
                 {
-                    var accountIndex = _accountStorage.Index(userFullEntry.UserEntry.sAccount);
+                    var accountIndex = _accountStorage.Index(userFullEntry.UserEntry.Account);
                     if (accountIndex >= 0)
                     {
                         if (_accountStorage.Get(accountIndex, ref accountRecord) >= 0)
@@ -735,15 +735,15 @@ namespace LoginSvr.Services
                 var nIndex = _accountStorage.Index(sAccount);
                 if (nIndex >= 0 && _accountStorage.Get(nIndex, ref accountRecord) >= 0)
                 {
-                    if (accountRecord.nErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.dwActionTick > 180000)
+                    if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 180000)
                     {
                         nCode = -1;
-                        if (accountRecord.UserEntry.sQuiz == sQuest1)
+                        if (accountRecord.UserEntry.Quiz == sQuest1)
                         {
                             nCode = -3;
-                            if (accountRecord.UserEntry.sAnswer == sAnswer1)
+                            if (accountRecord.UserEntry.Answer == sAnswer1)
                             {
-                                if (accountRecord.UserEntryAdd.sBirthDay == sBirthDay)
+                                if (accountRecord.UserEntryAdd.BirthDay == sBirthDay)
                                 {
                                     nCode = 1;
                                 }
@@ -751,12 +751,12 @@ namespace LoginSvr.Services
                         }
                         if (nCode != 1)
                         {
-                            if (accountRecord.UserEntryAdd.sQuiz2 == sQuest2)
+                            if (accountRecord.UserEntryAdd.Quiz2 == sQuest2)
                             {
                                 nCode = -3;
-                                if (accountRecord.UserEntryAdd.sAnswer2 == sAnswer2)
+                                if (accountRecord.UserEntryAdd.Answer2 == sAnswer2)
                                 {
-                                    if (accountRecord.UserEntryAdd.sBirthDay == sBirthDay)
+                                    if (accountRecord.UserEntryAdd.BirthDay == sBirthDay)
                                     {
                                         nCode = 1;
                                     }
@@ -765,21 +765,21 @@ namespace LoginSvr.Services
                         }
                         if (nCode == 1)
                         {
-                            sPassword = accountRecord.UserEntry.sPassword;
+                            sPassword = accountRecord.UserEntry.Password;
                         }
                         else
                         {
-                            accountRecord.nErrorCount++;
-                            accountRecord.dwActionTick = HUtil32.GetTickCount();
+                            accountRecord.ErrorCount++;
+                            accountRecord.ActionTick = HUtil32.GetTickCount();
                             _accountStorage.Update(nIndex, ref accountRecord);
                         }
                     }
                     else
                     {
                         nCode = -2;
-                        if (HUtil32.GetTickCount() < accountRecord.dwActionTick)
+                        if (HUtil32.GetTickCount() < accountRecord.ActionTick)
                         {
-                            accountRecord.dwActionTick = HUtil32.GetTickCount();
+                            accountRecord.ActionTick = HUtil32.GetTickCount();
                             _accountStorage.Update(nIndex, ref accountRecord);
                         }
                     }

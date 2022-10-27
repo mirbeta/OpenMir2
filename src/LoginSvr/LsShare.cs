@@ -173,8 +173,8 @@ namespace LoginSvr
     public class AccountRecord
     {
         public RecordHeader Header;
-        public int nErrorCount;
-        public double dwActionTick;
+        public int ErrorCount;
+        public double ActionTick;
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;
     }

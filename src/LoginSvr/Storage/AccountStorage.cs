@@ -179,22 +179,22 @@ namespace LoginSvr.Storage
                     DBRecord.Header.boDeleted = dr.GetBoolean(dr.GetOrdinal("DELETED"));
                     DBRecord.Header.CreateDate = dr.GetDateTime("CREATEDATE");
                     DBRecord.Header.UpdateDate = dr.GetDateTime("LASTUPDATE");
-                    DBRecord.nErrorCount = dr.GetInt32("ERRORCOUNT");
-                    DBRecord.dwActionTick = dr.GetInt32("ACTIONTICK");
-                    DBRecord.UserEntry.sAccount = dr.GetString("LOGINID");
-                    DBRecord.UserEntry.sPassword = dr.GetString("PASSWORD");
-                    DBRecord.UserEntry.sUserName = dr.GetString("USERNAME");
-                    DBRecord.UserEntry.sSSNo = dr.GetString("SSNO");
-                    DBRecord.UserEntry.sPhone = dr.GetString("PHONE");
-                    DBRecord.UserEntry.sQuiz = dr.GetString("QUIZ1");
-                    DBRecord.UserEntry.sAnswer = dr.GetString("ANSWER1");
-                    DBRecord.UserEntry.sEMail = dr.GetString("EMAIL");
-                    DBRecord.UserEntryAdd.sQuiz2 = dr.GetString("QUIZ2");
-                    DBRecord.UserEntryAdd.sAnswer2 = dr.GetString("ANSWER2");
-                    DBRecord.UserEntryAdd.sBirthDay = dr.GetString("BIRTHDAY");
-                    DBRecord.UserEntryAdd.sMobilePhone = dr.GetString("MOBILEPHONE");
-                    DBRecord.UserEntryAdd.sMemo = "";
-                    DBRecord.UserEntryAdd.sMemo2 = "";
+                    DBRecord.ErrorCount = dr.GetInt32("ERRORCOUNT");
+                    DBRecord.ActionTick = dr.GetInt32("ACTIONTICK");
+                    DBRecord.UserEntry.Account = dr.GetString("LOGINID");
+                    DBRecord.UserEntry.Password = dr.GetString("PASSWORD");
+                    DBRecord.UserEntry.UserName = dr.GetString("USERNAME");
+                    DBRecord.UserEntry.SSNo = dr.GetString("SSNO");
+                    DBRecord.UserEntry.Phone = dr.GetString("PHONE");
+                    DBRecord.UserEntry.Quiz = dr.GetString("QUIZ1");
+                    DBRecord.UserEntry.Answer = dr.GetString("ANSWER1");
+                    DBRecord.UserEntry.EMail = dr.GetString("EMAIL");
+                    DBRecord.UserEntryAdd.Quiz2 = dr.GetString("QUIZ2");
+                    DBRecord.UserEntryAdd.Answer2 = dr.GetString("ANSWER2");
+                    DBRecord.UserEntryAdd.BirthDay = dr.GetString("BIRTHDAY");
+                    DBRecord.UserEntryAdd.MobilePhone = dr.GetString("MOBILEPHONE");
+                    DBRecord.UserEntryAdd.Memo = "";
+                    DBRecord.UserEntryAdd.Memo2 = "";
                 }
                 var quickAccount = _quickList.SingleOrDefault(x => x.nIndex == nIndex);
                 if (quickAccount != null)
@@ -327,7 +327,7 @@ namespace LoginSvr.Storage
                 switch (btFlag)
                 {
                     case 1:
-                        command.CommandText = string.Format(sUpdateRecord1, accountRecord.UserEntry.sAccount, accountRecord.UserEntry.sPassword, accountRecord.UserEntry.sUserName, sdt, sdt, accountRecord.UserEntry.sSSNo, accountRecord.UserEntryAdd.sBirthDay, accountRecord.UserEntry.sPhone, accountRecord.UserEntryAdd.sMobilePhone, accountRecord.UserEntry.sEMail, accountRecord.UserEntry.sQuiz, accountRecord.UserEntry.sAnswer, accountRecord.UserEntryAdd.sQuiz2, accountRecord.UserEntryAdd.sAnswer2);
+                        command.CommandText = string.Format(sUpdateRecord1, accountRecord.UserEntry.Account, accountRecord.UserEntry.Password, accountRecord.UserEntry.UserName, sdt, sdt, accountRecord.UserEntry.SSNo, accountRecord.UserEntryAdd.BirthDay, accountRecord.UserEntry.Phone, accountRecord.UserEntryAdd.MobilePhone, accountRecord.UserEntry.EMail, accountRecord.UserEntry.Quiz, accountRecord.UserEntry.Answer, accountRecord.UserEntryAdd.Quiz2, accountRecord.UserEntryAdd.Answer2);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -341,7 +341,7 @@ namespace LoginSvr.Storage
                         }
                         break;
                     case 2:
-                        command.CommandText = string.Format(sUpdateRecord2, sdt, accountRecord.UserEntry.sAccount);
+                        command.CommandText = string.Format(sUpdateRecord2, sdt, accountRecord.UserEntry.Account);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -354,7 +354,7 @@ namespace LoginSvr.Storage
                         }
                         break;
                     default:
-                        command.CommandText = string.Format(sUpdateRecord0, accountRecord.UserEntry.sPassword, accountRecord.UserEntry.sUserName, sdt, accountRecord.nErrorCount, accountRecord.dwActionTick, accountRecord.UserEntry.sSSNo, accountRecord.UserEntryAdd.sBirthDay, accountRecord.UserEntry.sPhone, accountRecord.UserEntryAdd.sMobilePhone, accountRecord.UserEntry.sEMail, accountRecord.UserEntry.sQuiz, accountRecord.UserEntry.sAnswer, accountRecord.UserEntryAdd.sQuiz2, accountRecord.UserEntryAdd.sAnswer2, accountRecord.UserEntry.sAccount);
+                        command.CommandText = string.Format(sUpdateRecord0, accountRecord.UserEntry.Password, accountRecord.UserEntry.UserName, sdt, accountRecord.ErrorCount, accountRecord.ActionTick, accountRecord.UserEntry.SSNo, accountRecord.UserEntryAdd.BirthDay, accountRecord.UserEntry.Phone, accountRecord.UserEntryAdd.MobilePhone, accountRecord.UserEntry.EMail, accountRecord.UserEntry.Quiz, accountRecord.UserEntry.Answer, accountRecord.UserEntryAdd.Quiz2, accountRecord.UserEntryAdd.Answer2, accountRecord.UserEntry.Account);
                         try
                         {
                             command.ExecuteNonQuery();
@@ -397,7 +397,7 @@ namespace LoginSvr.Storage
         public bool Add(ref AccountRecord accountRecord)
         {
             bool result;
-            var sAccount = accountRecord.UserEntry.sAccount;
+            var sAccount = accountRecord.UserEntry.Account;
             if (Index(sAccount) > 0)
             {
                 result = false;
