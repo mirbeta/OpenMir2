@@ -4,12 +4,12 @@ namespace SystemModule.Packet.ClientPackets
 {
     public class UserEntryAdd : Packets
     {
-        public string sQuiz2;
-        public string sAnswer2;
-        public string sBirthDay;
-        public string sMobilePhone;
-        public string sMemo;
-        public string sMemo2;
+        public string Quiz2;
+        public string Answer2;
+        public string BirthDay;
+        public string MobilePhone;
+        public string Memo;
+        public string Memo2;
 
         protected override void ReadPacket(BinaryReader reader)
         {
