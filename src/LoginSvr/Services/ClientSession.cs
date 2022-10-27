@@ -191,7 +191,7 @@ namespace LoginSvr.Services
                 {
                     if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 60000)
                     {
-                        if (accountRecord.UserEntry.Password == sPassword)
+                        if (string.Compare(accountRecord.UserEntry.Password, sPassword, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             accountRecord.ErrorCount = 0;
                             if (string.IsNullOrEmpty(accountRecord.UserEntry.UserName) || string.IsNullOrEmpty(accountRecord.UserEntryAdd.Quiz2))
@@ -199,7 +199,6 @@ namespace LoginSvr.Services
                                 userEntry = accountRecord.UserEntry;
                                 boNeedUpdate = true;
                             }
-                            accountRecord.Header.CreateDate = userInfo.dtDateTime;
                             nCode = 1;
                         }
                         else
@@ -208,14 +207,13 @@ namespace LoginSvr.Services
                             accountRecord.ActionTick = HUtil32.GetTickCount();
                             nCode = -1;
                         }
-                        _accountStorage.Update(accountIndex, ref accountRecord);
                     }
                     else
                     {
                         nCode = -2;
                         accountRecord.ActionTick = HUtil32.GetTickCount();
-                        _accountStorage.Update(accountIndex, ref accountRecord);
                     }
+                    _accountStorage.UpdateLoginRecord(accountRecord);
                 }
                 if (nCode == 1 && IsLogin(config, sLoginId))
                 {
@@ -556,11 +554,9 @@ namespace LoginSvr.Services
                     {
                         if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 180000)
                         {
-                            if (accountRecord.UserEntry.Password == sOldPassword)
+                            if (string.Compare(accountRecord.UserEntry.Password, sOldPassword, StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                accountRecord.ErrorCount = 0;
-                                accountRecord.UserEntry.Password = sNewPassword;
-                                nCode = 1;
+                                nCode = _accountStorage.ChanggePassword(n10, sNewPassword);
                             }
                             else
                             {
@@ -568,7 +564,6 @@ namespace LoginSvr.Services
                                 accountRecord.ActionTick = HUtil32.GetTickCount();
                                 nCode = -1;
                             }
-                            _accountStorage.Update(n10, ref accountRecord);
                         }
                         else
                         {
@@ -665,6 +660,9 @@ namespace LoginSvr.Services
             ClientMesaagePacket defMsg;
             try
             {
+                //todo 实现完整账号数据更新
+                _logger.LogError("待实现完整账号数据更新");
+
                 if (string.IsNullOrEmpty(sData))
                 {
                     _logger.Warn("[新建账号失败,数据包为空].");

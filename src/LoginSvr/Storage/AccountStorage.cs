@@ -86,7 +86,7 @@ namespace LoginSvr.Storage
 
         private void LoadQuickList()
         {
-            const string sSQL = "SELECT Id,DELETED,LOGINID FROM account";
+            const string sSQL = "SELECT Id,Account,State FROM account";
             _quickList.Clear();
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -102,9 +102,9 @@ namespace LoginSvr.Storage
                 while (dr.Read())
                 {
                     var nIndex = dr.GetInt32("Id");
-                    var boDeleted = dr.GetBoolean("DELETED");
-                    var sAccount = dr.GetString("LOGINID");
-                    if (!boDeleted && (!string.IsNullOrEmpty(sAccount)))
+                    var sAccount = dr.GetString("Account");
+                    var boDeleted = dr.GetByte("State");
+                    if (boDeleted == 0 && (!string.IsNullOrEmpty(sAccount)))
                     {
                         _quickList.Add(new AccountQuick(sAccount, nIndex));
                     }
@@ -121,7 +121,7 @@ namespace LoginSvr.Storage
             {
                 Close(ref dbConnection);
             }
-            //m_QuickList.SortString(0, m_QuickList.Count - 1);
+            _logger.Information($"账号数据读取成功[{_quickList.Count}]");
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
@@ -136,21 +136,7 @@ namespace LoginSvr.Storage
             return List.Count;
         }
 
-        public bool GetBy(int nIndex, ref AccountRecord DBRecord)
-        {
-            bool result;
-            if ((nIndex >= 0) && (_quickList.Count > nIndex))
-            {
-                result = GetRecord(nIndex, ref DBRecord);
-            }
-            else
-            {
-                result = false;
-            }
-            return result;
-        }
-
-        private bool GetRecord(int nIndex, ref AccountRecord DBRecord)
+        private bool GetAccount(int nIndex, ref AccountRecord DBRecord)
         {
             const string sSQL = "SELECT * FROM account WHERE ID={0}";
             var result = true;
@@ -175,26 +161,18 @@ namespace LoginSvr.Storage
                 }
                 if (dr.Read())
                 {
-                    DBRecord.Header.sAccount = dr.GetString("LOGINID");
-                    DBRecord.Header.boDeleted = dr.GetBoolean(dr.GetOrdinal("DELETED"));
-                    DBRecord.Header.CreateDate = dr.GetDateTime("CREATEDATE");
-                    DBRecord.Header.UpdateDate = dr.GetDateTime("LASTUPDATE");
-                    DBRecord.ErrorCount = dr.GetInt32("ERRORCOUNT");
-                    DBRecord.ActionTick = dr.GetInt32("ACTIONTICK");
-                    DBRecord.UserEntry.Account = dr.GetString("LOGINID");
-                    DBRecord.UserEntry.Password = dr.GetString("PASSWORD");
+                    DBRecord.AccountId = dr.GetInt32("Id");
+                    DBRecord.Header.sAccount = dr.GetString("Account");
+                    DBRecord.ErrorCount = dr.GetInt32("PassFailCount");
+                    DBRecord.ActionTick = dr.GetInt32("PassFailTime");
+                    DBRecord.UserEntry.Account = dr.GetString("Account");
+                    DBRecord.UserEntry.Password = dr.GetString("PassWord");
                     DBRecord.UserEntry.UserName = dr.GetString("USERNAME");
                     DBRecord.UserEntry.SSNo = dr.GetString("SSNO");
                     DBRecord.UserEntry.Phone = dr.GetString("PHONE");
                     DBRecord.UserEntry.Quiz = dr.GetString("QUIZ1");
                     DBRecord.UserEntry.Answer = dr.GetString("ANSWER1");
                     DBRecord.UserEntry.EMail = dr.GetString("EMAIL");
-                    DBRecord.UserEntryAdd.Quiz2 = dr.GetString("QUIZ2");
-                    DBRecord.UserEntryAdd.Answer2 = dr.GetString("ANSWER2");
-                    DBRecord.UserEntryAdd.BirthDay = dr.GetString("BIRTHDAY");
-                    DBRecord.UserEntryAdd.MobilePhone = dr.GetString("MOBILEPHONE");
-                    DBRecord.UserEntryAdd.Memo = "";
-                    DBRecord.UserEntryAdd.Memo2 = "";
                 }
                 var quickAccount = _quickList.SingleOrDefault(x => x.nIndex == nIndex);
                 if (quickAccount != null)
@@ -213,7 +191,7 @@ namespace LoginSvr.Storage
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] TFileIDDB.GetRecord");
+                _logger.LogError("获取账号信息失败");
                 _logger.LogError(ex);
                 return false;
             }
@@ -241,11 +219,7 @@ namespace LoginSvr.Storage
             {
                 return result;
             }
-            // if (m_QuickList.Count < nIndex)
-            // {
-            //     return result;
-            // }
-            if (GetRecord(nIndex, ref accountRecord))
+            if (GetAccount(nIndex, ref accountRecord))
             {
                 result = nIndex;
             }
@@ -254,7 +228,7 @@ namespace LoginSvr.Storage
 
         public long GetAccountPlayTime(string account)
         {
-            var strSql = $"SELECT SECONDS FROM ACCOUNT WHERE FLD_LOGINID='{account}'";
+            var strSql = $"SELECT SECONDS FROM ACCOUNT WHERE Account='{account}'";
             _logger.LogDebug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -283,7 +257,7 @@ namespace LoginSvr.Storage
 
         public void UpdateAccountPlayTime(string account,long gameTime)
         {
-            var strSql = $"UPDATE ACCOUNT SET SECONDS={gameTime} WHERE LOGINID='{account}'";
+            var strSql = $"UPDATE ACCOUNT SET SECONDS={gameTime} WHERE Account='{account}'";
             _logger.LogDebug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -308,13 +282,133 @@ namespace LoginSvr.Storage
             }
         }
 
-        private int UpdateRecord(AccountRecord accountRecord, byte btFlag)
+        private int CreateAccount(AccountRecord accountRecord)
         {
             var result = 0;
-            const string sdt = "now()";
-            const string sUpdateRecord1 = "INSERT INTO account (LOGINID, PASSWORD, USERNAME, CREATEDATE, LASTUPDATE, DELETED, ERRORCOUNT, ACTIONTICK, SSNO, BIRTHDAY, PHONE, MOBILEPHONE, EMAIL, QUIZ1, ANSWER1, QUIZ2, ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
-            const string sUpdateRecord2 = "UPDATE account SET DELETED=1, CREATEDATE='{0}' WHERE LOGINID='{1}'";
-            const string sUpdateRecord0 = "UPDATE account SET PASSWORD='{0}', USERNAME='{1}',LASTUPDATE={2}, ERRORCOUNT={3}, ACTIONTICK={4},SSNO='{5}', BIRTHDAY='{6}', PHONE='{7}',MOBILEPHONE='{8}', EMAIL='{9}', QUIZ1='{10}', ANSWER1='{11}', QUIZ2='{12}',ANSWER2='{13}' WHERE LOGINID='{14}'";
+            const string sqlStr = "INSERT INTO tbl_account (Account, PassWord, PassFailCount, PassFailTime, ValidFrom, ValidUntil, Seconds, StopUntil, PayMode, State, CreateTime, ModifyTime, LastLoginTime) VALUES (@Account, @PassWord, @PassFailCount, @PassFailTime,@ValidFrom, @ValidUntil, @Seconds,@StopUntil, @PayMode, @State, @CreateTime, @ModifyTime, @LastLoginTime);";
+            MySqlConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return 0;
+            }
+            var beginTransaction = dbConnection.BeginTransaction();
+            try
+            {
+                var command = new MySqlCommand();
+                command.Transaction = beginTransaction;
+                command.CommandText = sqlStr;
+                command.Connection = dbConnection;
+                command.Parameters.AddWithValue("@Account", accountRecord.UserEntry.Account);
+                command.Parameters.AddWithValue("@PassWord", accountRecord.UserEntry.Password);
+                command.Parameters.AddWithValue("@PassFailCount", 0);
+                command.Parameters.AddWithValue("@PassFailTime", 0);
+                command.Parameters.AddWithValue("@ValidFrom", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@ValidUntil", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@Seconds", 0);
+                command.Parameters.AddWithValue("@StopUntil", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@PayMode", 0);
+                command.Parameters.AddWithValue("@State", 0);
+                command.Parameters.AddWithValue("@CreateTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@LastLoginTime", 0);
+                command.ExecuteNonQuery();
+                result = (int)command.LastInsertedId;
+
+                command.CommandText = "INSERT INTO account_protection (AccountId, UserName, IdCard, Birthday, Phone, MobilePhone, ADDRESS1, ADDRESS2, EMail, Quiz1, Answer1, Quiz2, Answer2) VALUES(@AccountId, @UserName, @IdCard, @Birthday, @Phone, @MobilePhone, @ADDRESS1, @ADDRESS2, @EMail, @Quiz1, @Answer1, @Quiz2, @Answer2);";
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@AccountId", result);
+                command.Parameters.AddWithValue("@UserName", accountRecord.UserEntry.UserName);
+                command.Parameters.AddWithValue("@IdCard", accountRecord.UserEntry.SSNo);
+                command.Parameters.AddWithValue("@Birthday", accountRecord.UserEntryAdd.BirthDay);
+                command.Parameters.AddWithValue("@Phone", accountRecord.UserEntryAdd.BirthDay);
+                command.Parameters.AddWithValue("@MobilePhone", accountRecord.UserEntryAdd.BirthDay);
+                command.Parameters.AddWithValue("@ADDRESS1", "");
+                command.Parameters.AddWithValue("@ADDRESS2", "");
+                command.Parameters.AddWithValue("@EMail", accountRecord.UserEntry.EMail);
+                command.Parameters.AddWithValue("@Quiz1", accountRecord.UserEntry.Quiz);
+                command.Parameters.AddWithValue("@Answer1", accountRecord.UserEntry.Answer);
+                command.Parameters.AddWithValue("@Quiz2", accountRecord.UserEntryAdd.Quiz2);
+                command.Parameters.AddWithValue("@Answer2", accountRecord.UserEntryAdd.Answer2);
+                command.ExecuteNonQuery();
+                beginTransaction.Commit();
+                result = 1;
+            }
+            catch (Exception ex)
+            {
+                beginTransaction.Rollback();
+                _logger.LogError("创建账号失败." + ex.Message);
+                _logger.LogError(ex);
+            }
+            return result;
+        }
+
+        private int DeleteAccount(string account)
+        { 
+            const string sUpdateRecord2 = "UPDATE account SET State=1, ModifyTime={0} WHERE Account='{1}'";
+            MySqlConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return 0;
+            }
+            var result = 0;
+            var command = new MySqlCommand();
+            command.Connection = dbConnection;
+            command.CommandText = string.Format(sUpdateRecord2, DateTimeOffset.Now.ToUnixTimeMilliseconds(), account);
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                _logger.LogError("[Exception] UpdateRecord");
+                _logger.LogError(ex);
+            }
+            finally
+            {
+                Close(ref dbConnection);
+            }
+            return result;
+        }
+
+        public int ChanggePassword(int accountId, string newPassword)
+        {
+            MySqlConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return 0;
+            }
+            var result = 0;
+            try
+            {
+                var command = new MySqlCommand();
+                command.Connection = dbConnection;
+                command.CommandText = "UPDATE account SET PassWord = @PassWord, PassFailCount = 0, PassFailTime = 0, ModifyTime = @ModifyTime WHERE Id = @Id;";
+                command.Parameters.AddWithValue("@PassWord", newPassword);
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@Id", accountId);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception E)
+                {
+                    _logger.LogError("[Exception] ChanggePassword");
+                    _logger.LogError(E);
+                    return result;
+                }
+            }
+            finally
+            {
+                Close(ref dbConnection);
+            }
+            return result;
+        }
+
+        public int UpdateLoginRecord(AccountRecord accountRecord)
+        {
+            var result = 0;
+            const string strSql = "UPDATE account SET ModifyTime=@ModifyTime, PassFailCount=@PassFailCount, PassFailTime=@PassFailTime,LastLoginTime=@LastLoginTime WHERE Id=@Id";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -324,49 +418,57 @@ namespace LoginSvr.Storage
             {
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
-                switch (btFlag)
+                command.CommandText = strSql;
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@PassFailCount", accountRecord.ErrorCount);
+                command.Parameters.AddWithValue("@PassFailTime", accountRecord.ActionTick);
+                command.Parameters.AddWithValue("@LastLoginTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@Id", accountRecord.AccountId);
+                try
                 {
-                    case 1:
-                        command.CommandText = string.Format(sUpdateRecord1, accountRecord.UserEntry.Account, accountRecord.UserEntry.Password, accountRecord.UserEntry.UserName, sdt, sdt, accountRecord.UserEntry.SSNo, accountRecord.UserEntryAdd.BirthDay, accountRecord.UserEntry.Phone, accountRecord.UserEntryAdd.MobilePhone, accountRecord.UserEntry.EMail, accountRecord.UserEntry.Quiz, accountRecord.UserEntry.Answer, accountRecord.UserEntryAdd.Quiz2, accountRecord.UserEntryAdd.Answer2);
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                            result = (int)command.LastInsertedId;
-                        }
-                        catch (Exception E)
-                        {
-                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
-                            _logger.LogError(E);
-                            return 0;
-                        }
-                        break;
-                    case 2:
-                        command.CommandText = string.Format(sUpdateRecord2, sdt, accountRecord.UserEntry.Account);
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (Exception ex)
-                        {
-                            result = 0;
-                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
-                            _logger.LogError(ex);
-                        }
-                        break;
-                    default:
-                        command.CommandText = string.Format(sUpdateRecord0, accountRecord.UserEntry.Password, accountRecord.UserEntry.UserName, sdt, accountRecord.ErrorCount, accountRecord.ActionTick, accountRecord.UserEntry.SSNo, accountRecord.UserEntryAdd.BirthDay, accountRecord.UserEntry.Phone, accountRecord.UserEntryAdd.MobilePhone, accountRecord.UserEntry.EMail, accountRecord.UserEntry.Quiz, accountRecord.UserEntry.Answer, accountRecord.UserEntryAdd.Quiz2, accountRecord.UserEntryAdd.Answer2, accountRecord.UserEntry.Account);
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (Exception E)
-                        {
-                            result = 0;
-                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
-                            _logger.LogError(E);
-                            return result;
-                        }
-                        break;
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception E)
+                {
+                    _logger.LogError("[Exception] UpdateRecord");
+                    _logger.LogError(E);
+                    return result;
+                }
+            }
+            finally
+            {
+                Close(ref dbConnection);
+            }
+            return result;
+        }
+
+        public int UpdateRecord(AccountRecord accountRecord)
+        {
+            var result = 0;
+            const string strSql = "UPDATE account SET ModifyTime=@ModifyTime, PassFailCount=@PassFailCount, PassFailTime=@PassFailTime WHERE Id=@Id";
+            MySqlConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return 0;
+            }
+            try
+            {
+                var command = new MySqlCommand();
+                command.Connection = dbConnection;
+                command.CommandText = strSql;
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@PassFailCount", accountRecord.ErrorCount);
+                command.Parameters.AddWithValue("@PassFailTime", accountRecord.ActionTick);
+                command.Parameters.AddWithValue("@Id", accountRecord.AccountId);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception E)
+                {
+                    _logger.LogError("[Exception] UpdateRecord");
+                    _logger.LogError(E);
+                    return result;
                 }
             }
             finally
@@ -387,7 +489,7 @@ namespace LoginSvr.Storage
             {
                 return false;
             }
-            if (UpdateRecord(accountRecord, 0) > 0)
+            if (UpdateRecord(accountRecord) > 0)
             {
                 result = true;
             }
@@ -404,7 +506,7 @@ namespace LoginSvr.Storage
             }
             else
             {
-                var nIndex = UpdateRecord(accountRecord, 1);
+                var nIndex = CreateAccount(accountRecord);
                 if (nIndex > 0)
                 {
                     _quickList.Add(new AccountQuick(sAccount, nIndex));
@@ -429,7 +531,7 @@ namespace LoginSvr.Storage
             {
                 return false;
             }
-            var up = UpdateRecord(accountRecord, 2);
+            var up = DeleteAccount(accountRecord.UserEntry.Account);
             if (up > 0)
             {
                 _quickList.RemoveAt(nIndex);
