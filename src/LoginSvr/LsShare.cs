@@ -164,17 +164,14 @@ namespace LoginSvr
         public string sAccount;
         public string sName;
         public int nSelectID;
-        public DateTime dCreateDate;
-        public bool boDeleted;
-        public DateTime UpdateDate;
-        public DateTime CreateDate;
     }
 
     public class AccountRecord
     {
+        public int AccountId;
         public RecordHeader Header;
         public int ErrorCount;
-        public double ActionTick;
+        public int ActionTick;
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;
     }
