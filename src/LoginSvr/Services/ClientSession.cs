@@ -376,7 +376,7 @@ namespace LoginSvr.Services
 
         private long GetDay(int iYear, int iMonth, int iDay)
         {
-            int[] MONTH_DAY = new int[13] { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+            var MONTH_DAY = new[] { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
             const int DAYTOYEAR1999 = 730119;
             if (iYear > 0)
             {
