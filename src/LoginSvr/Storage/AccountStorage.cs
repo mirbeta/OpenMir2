@@ -497,12 +497,12 @@ namespace LoginSvr.Storage
 
                 command.CommandText = "UPDATE account_protection SET UserName = @UserName, IdCard = @IdCard, Birthday = @Birthday, Phone = @Phone, MobilePhone = @MobilePhone, ADDRESS1 = @ADDRESS1, ADDRESS2 = @ADDRESS2, EMail = @EMail, Quiz1 = @Quiz1, Answer1 = @Answer1, Quiz2 = @Quiz2, Answer2 = @Answer2 WHERE AccountId = @AccountId;";
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@AccountId", result);
+                command.Parameters.AddWithValue("@AccountId", nIndex);
                 command.Parameters.AddWithValue("@UserName", accountRecord.UserEntry.UserName);
                 command.Parameters.AddWithValue("@IdCard", accountRecord.UserEntry.SSNo);
                 command.Parameters.AddWithValue("@Birthday", accountRecord.UserEntryAdd.BirthDay);
-                command.Parameters.AddWithValue("@Phone", accountRecord.UserEntryAdd.BirthDay);
-                command.Parameters.AddWithValue("@MobilePhone", accountRecord.UserEntryAdd.BirthDay);
+                command.Parameters.AddWithValue("@Phone", accountRecord.UserEntryAdd.MobilePhone);
+                command.Parameters.AddWithValue("@MobilePhone", accountRecord.UserEntryAdd.MobilePhone);
                 command.Parameters.AddWithValue("@ADDRESS1", "");
                 command.Parameters.AddWithValue("@ADDRESS2", "");
                 command.Parameters.AddWithValue("@EMail", accountRecord.UserEntry.EMail);
