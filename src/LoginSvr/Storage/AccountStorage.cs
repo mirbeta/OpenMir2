@@ -146,18 +146,17 @@ namespace LoginSvr.Storage
             var command = new MySqlCommand();
             command.CommandText = string.Format(sSQL, nIndex);
             command.Connection = dbConnection;
-            IDataReader dr;
             try
             {
-                dr = command.ExecuteReader();
-                if (accountRecord == null)
-                {
-                    accountRecord = new AccountRecord();
-                    accountRecord.UserEntry = new UserEntry();
-                    accountRecord.UserEntryAdd = new UserEntryAdd();
-                }
+                IDataReader dr = command.ExecuteReader();
                 if (dr.Read())
                 {
+                    if (accountRecord == null)
+                    {
+                        accountRecord = new AccountRecord();
+                        accountRecord.UserEntry = new UserEntry();
+                        accountRecord.UserEntryAdd = new UserEntryAdd();
+                    }
                     accountRecord.AccountId = dr.GetInt32("Id");
                     accountRecord.ErrorCount = dr.GetInt32("PassFailCount");
                     accountRecord.ActionTick = dr.GetInt32("PassFailTime");
@@ -284,14 +283,14 @@ namespace LoginSvr.Storage
                 command.Parameters.AddWithValue("@PassWord", accountRecord.UserEntry.Password);
                 command.Parameters.AddWithValue("@PassFailCount", 0);
                 command.Parameters.AddWithValue("@PassFailTime", 0);
-                command.Parameters.AddWithValue("@ValidFrom", DateTimeOffset.Now.ToUnixTimeMilliseconds());
-                command.Parameters.AddWithValue("@ValidUntil", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@ValidFrom", DateTimeOffset.Now.ToUnixTimeSeconds());
+                command.Parameters.AddWithValue("@ValidUntil", DateTimeOffset.Now.ToUnixTimeSeconds());
                 command.Parameters.AddWithValue("@Seconds", 0);
-                command.Parameters.AddWithValue("@StopUntil", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@StopUntil", DateTimeOffset.Now.ToUnixTimeSeconds());
                 command.Parameters.AddWithValue("@PayMode", 0);
                 command.Parameters.AddWithValue("@State", 0);
-                command.Parameters.AddWithValue("@CreateTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
-                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@CreateTime", DateTimeOffset.Now.ToUnixTimeSeconds());
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
                 command.Parameters.AddWithValue("@LastLoginTime", 0);
                 command.ExecuteNonQuery();
                 result = (int)command.LastInsertedId;
@@ -335,7 +334,7 @@ namespace LoginSvr.Storage
             var result = 0;
             var command = new MySqlCommand();
             command.Connection = dbConnection;
-            command.CommandText = string.Format(sUpdateRecord2, DateTimeOffset.Now.ToUnixTimeMilliseconds(), account);
+            command.CommandText = string.Format(sUpdateRecord2, DateTimeOffset.Now.ToUnixTimeSeconds(), account);
             try
             {
                 command.ExecuteNonQuery();
@@ -368,7 +367,7 @@ namespace LoginSvr.Storage
                 command.Connection = dbConnection;
                 command.CommandText = "UPDATE account SET PassWord = @PassWord, PassFailCount = 0, PassFailTime = 0, ModifyTime = @ModifyTime WHERE Id = @Id;";
                 command.Parameters.AddWithValue("@PassWord", newPassword);
-                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
                 command.Parameters.AddWithValue("@Id", accountId);
                 command.ExecuteNonQuery();
                 result = 1;
@@ -400,10 +399,10 @@ namespace LoginSvr.Storage
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
-                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
                 command.Parameters.AddWithValue("@PassFailCount", accountRecord.ErrorCount);
                 command.Parameters.AddWithValue("@PassFailTime", accountRecord.ActionTick);
-                command.Parameters.AddWithValue("@LastLoginTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@LastLoginTime", DateTimeOffset.Now.ToUnixTimeSeconds());
                 command.Parameters.AddWithValue("@Id", accountRecord.AccountId);
                 command.ExecuteNonQuery();
                 result = 1;
@@ -435,7 +434,7 @@ namespace LoginSvr.Storage
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
-                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
                 command.Parameters.AddWithValue("@PassFailCount", accountRecord.ErrorCount);
                 command.Parameters.AddWithValue("@PassFailTime", accountRecord.ActionTick);
                 command.Parameters.AddWithValue("@Id", accountRecord.AccountId);

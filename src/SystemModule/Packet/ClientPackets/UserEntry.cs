@@ -23,7 +23,14 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            throw new System.NotImplementedException();
+            writer.WriteAsciiString(Account, 10);
+            writer.WriteAsciiString(Password, 10);
+            writer.WriteAsciiString(UserName, 20);
+            writer.WriteAsciiString(SSNo, 14);
+            writer.WriteAsciiString(Phone, 14);
+            writer.WriteAsciiString(Quiz, 20);
+            writer.WriteAsciiString(Answer, 12);
+            writer.WriteAsciiString(EMail, 40);
         }
     }
 
