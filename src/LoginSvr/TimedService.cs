@@ -14,16 +14,16 @@ namespace LoginSvr
         private readonly MirLog _logger;
         private readonly LoginService _loginService;
         private readonly ThreadParseList _threadParseList;
-        private readonly SessionService _massocService;
+        private readonly SessionService _sessionService;
         private int _processMonSocTick;
         private int _processServerStatusTick;
 
-        public TimedService(MirLog logger, LoginService loginService, SessionService massocService, ThreadParseList threadParseList)
+        public TimedService(MirLog logger, LoginService loginService, ThreadParseList threadParseList, SessionService sessionService)
         {
             _logger = logger;
             _loginService = loginService;
-            _massocService = massocService;
             _threadParseList = threadParseList;
+            _sessionService = sessionService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -33,7 +33,7 @@ namespace LoginSvr
             while (!stoppingToken.IsCancellationRequested)
             {
                 _loginService.SessionClearKick();
-                _massocService.SessionClearNoPayMent();
+                _sessionService.SessionClearNoPayMent();
                 ProcessMonSoc();
                 CheckServerStatus();
                 _threadParseList.Execute();
@@ -47,10 +47,10 @@ namespace LoginSvr
             {
                 _processMonSocTick = HUtil32.GetTickCount();
                 var builder = new StringBuilder();
-                int serverListCount = _massocService.ServerList.Count;
+                int serverListCount = _sessionService.ServerList.Count;
                 for (var i = 0; i < serverListCount; i++)
                 {
-                    var msgServer = _massocService.ServerList[i];
+                    var msgServer = _sessionService.ServerList[i];
                     var sServerName = msgServer.ServerName;
                     if (!string.IsNullOrEmpty(sServerName))
                     {
@@ -90,7 +90,7 @@ namespace LoginSvr
             if (HUtil32.GetTickCount() - _processServerStatusTick > 20000)
             {
                 _processServerStatusTick = HUtil32.GetTickCount();
-                var serverList = _massocService.ServerList;
+                var serverList = _sessionService.ServerList;
                 if (!serverList.Any())
                 {
                     return;
