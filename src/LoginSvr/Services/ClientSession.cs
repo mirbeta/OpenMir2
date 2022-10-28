@@ -176,13 +176,7 @@ namespace LoginSvr.Services
             AccountRecord accountRecord = null;
             try
             {
-                userInfo.dwValidFrom = 0;
-                userInfo.dwValidUntil = 0;
                 userInfo.Seconds = 0;
-                userInfo.dwStopUntil = 0;
-                userInfo.dwIpValidFrom = 0;
-                userInfo.dwIpValidUntil = 0;
-                userInfo.dwIpSeconds = 0;
                 var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId, new[] { "/" });
                 var nCode = 0;
                 var boNeedUpdate = false;
@@ -220,7 +214,7 @@ namespace LoginSvr.Services
                     SessionKick(config, sLoginId);
                     nCode = -3;
                 }
-                ClientMesaagePacket defMsg;
+                ClientMesaagePacket defMsg = null;
                 if (boNeedUpdate)
                 {
                     defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
@@ -262,30 +256,21 @@ namespace LoginSvr.Services
                         userInfo.PayCost = false;
                     }
                     userInfo.Seconds = accountRecord.PlayTime;
-                    var st = DateTime.Now;
-                    var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
-                    if ((nCurrentTime <= userInfo.dwValidUntil) || (nCurrentTime <= userInfo.dwIpValidUntil) || (userInfo.Seconds > 0) || (userInfo.dwIpSeconds > 0))
+                    if (config.PayMode == 1 && userInfo.Seconds > 0)
                     {
                         userInfo.PayMode = 1;
-                        var playSpan = DateTimeOffset.Now.AddSeconds(userInfo.Seconds) - DateTimeOffset.Now;
-                        userInfo.IDDay = HUtil32.LoWord(nIdCost);
-                        userInfo.IDHour = HUtil32.HiWord(nIdCost);
-                        userInfo.IPDay = HUtil32.LoWord(nIpCost);
-                        userInfo.IPHour = HUtil32.HiWord(nIpCost);
-           
                         AddCertUser(userInfo);
-
                         if (CheckBadAccount(userInfo.Account))
                         {
-                           // var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
+                            // var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
                         }
+                        var playSpan = DateTimeOffset.Now.AddSeconds(userInfo.Seconds) - DateTimeOffset.Now;
                         var playTime = DateTimeOffset.Now.AddMilliseconds(userInfo.Seconds);
                         _logger.LogDebug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏到期时间:[{playTime.Year}-{playTime.Month}-{playTime.Day} {playTime.Hour}:{playTime.Minute}:{playTime.Second}]");
-                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, (int)Math.Round(playSpan.TotalSeconds,1), 0, userInfo.PayMode, config.ServerNameList.Count);
+                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, (int)Math.Round(playSpan.TotalSeconds, 1), 0, userInfo.PayMode, config.ServerNameList.Count);
                     }
-                    else
+                    else if (config.PayMode == 0)
                     {
-                        userInfo.PayMode = 0;
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, 0, 0, 0, config.ServerNameList.Count);
                     }
                     var sServerName = GetServerListInfo();
@@ -312,17 +297,12 @@ namespace LoginSvr.Services
 
         private void AddCertUser(UserInfo pUser)
         {
-            var st = DateTime.Now;
-            var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
             var pCert = new CertUser();
             pCert.LoginID = pUser.Account;
             pCert.Addr = pUser.UserIPaddr;
-            var remaindId = pUser.dwValidUntil - nCurrentTime;
-            var remaindIp = pUser.dwIpValidUntil - nCurrentTime;
             pCert.IDHour = pUser.Seconds;
-            pCert.IPHour = pUser.dwIpSeconds;
-            pCert.IPDay = (remaindIp + 1);
-            pCert.IDDay = (remaindId + 1);
+            pCert.IPDay = 0;
+            pCert.IDDay = 0;
             pUser.nAvailableType = 5;
             if ((pCert.IDHour > 0))
             {
@@ -344,7 +324,6 @@ namespace LoginSvr.Services
             pCert.OpenTime = HUtil32.GetTickCount();
             pCert.AvailableType = pUser.nAvailableType;
             pCert.Closing = false;
-            pUser.dwOpenTime = pCert.OpenTime;
             LsShare.CertList.Add(pCert);
         }
 
@@ -358,93 +337,6 @@ namespace LoginSvr.Services
                     break;
                 }
             }
-        }
-
-        private long GetDay(int iYear, int iMonth, int iDay)
-        {
-            var MONTH_DAY = new[] { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-            const int DAYTOYEAR1999 = 730119;
-            if (iYear > 0)
-            {
-                int iTotalDay;
-                int iStartYear;
-                if (iYear > 1999)
-                {
-                    iStartYear = 2000;
-                    iTotalDay = DAYTOYEAR1999;
-                }
-                else
-                {
-                    iStartYear = 1;
-                    iTotalDay = 0;
-                }
-
-                for (int i = iStartYear; i < iYear; i++)
-                {
-                    int iTemp;
-                    if (i % 400 == 0)
-                    {
-                        iTemp = 366;
-                    }
-                    else if (i % 100 == 0)
-                    {
-                        iTemp = 365;
-                    }
-                    else if (i % 4 == 0)
-                    {
-                        iTemp = 366;
-                    }
-                    else
-                    {
-                        iTemp = 365;
-                    }
-                    iTotalDay += iTemp;
-                }
-
-                bool bYun;
-                if (iYear % 400 == 0)
-                {
-                    bYun = true;
-                }
-                else if (iYear % 100 == 0)
-                {
-                    bYun = false;
-                }
-                else if (iYear % 4 == 0)
-                {
-                    bYun = true;
-                }
-                else
-                {
-                    bYun = false;
-                }
-
-                if (iMonth >= 1 && iMonth <= 12)
-                {
-                    for (int i = 1; i < iMonth; i++)
-                    {
-                        iTotalDay += MONTH_DAY[i];
-                        if (i == 2 && !bYun)
-                        {
-                            iTotalDay = iTotalDay - 1;
-                        }
-                    }
-                }
-
-                int MaxDay = MONTH_DAY[iMonth];
-                if (iMonth == 2 && !bYun)
-                {
-                    MaxDay = 28;
-                }
-                if (iDay >= 1 && iDay <= MaxDay)
-                {
-                    iTotalDay = iTotalDay + iDay;
-                }
-
-                return iTotalDay;
-            }
-
-            return 0;
         }
 
         /// <summary>
@@ -587,7 +479,6 @@ namespace LoginSvr.Services
         private void AccountSelectServer(Config config, UserInfo userInfo, string sData)
         {
             ClientMesaagePacket defMsg;
-            bool boPayCost;
             var sSelGateIp = string.Empty;
             var nSelGatePort = 0;
             const string sSelServerMsg = "Server: {0}/{1}-{2}:{3}";
@@ -603,24 +494,8 @@ namespace LoginSvr.Services
                     }
                     _logger.LogDebug(string.Format(sSelServerMsg, sServerName, config.sGateIPaddr, sSelGateIp, nSelGatePort));
                     userInfo.SelServer = true;
-                    boPayCost = false;
-                    var nPayMode = 5;
-                    if (userInfo.IDHour > 0)
-                    {
-                        nPayMode = 2;
-                    }
-                    if (userInfo.IPHour > 0)
-                    {
-                        nPayMode = 4;
-                    }
-                    if (userInfo.IPDay > 0)
-                    {
-                        nPayMode = 3;
-                    }
-                    if (userInfo.IDDay > 0)
-                    {
-                        nPayMode = 1;
-                    }
+                    var boPayCost = false;
+                    var nPayMode = userInfo.PayMode;
                     if (_masSocService.IsNotUserFull(sServerName))
                     {
                         SessionUpdate(config, userInfo.SessionID, sServerName, boPayCost);
