@@ -225,6 +225,9 @@ namespace LoginSvr.Services
                 {
                     defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeBuffer(userEntry));
+                    userInfo.Account = sLoginId;
+                    userInfo.SessionID = LsShare.GetSessionId();
+                    userInfo.SelServer = false;
                     return;
                 }
                 if (nCode == 1)
@@ -661,18 +664,25 @@ namespace LoginSvr.Services
             ClientMesaagePacket defMsg;
             try
             {
-                //todo 实现完整账号数据更新
-                _logger.LogError("待实现完整账号数据更新");
-
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.Warn("[新建账号失败,数据包为空].");
+                    _logger.Warn("[更新账号失败,数据包为空].");
                     return;
                 }
-                var deBuffer = EDCode.DecodeBuffer(sData);
-                UserFullEntry userFullEntry = Packets.ToPacket<UserFullEntry>(deBuffer);
+                if (string.IsNullOrEmpty(sData) || sData.Length < 333)
+                {
+                    _logger.Warn("[更新账号失败] 数据包为空或数据包长度异常");
+                    return;
+                }
+                var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
+                var ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
+                var uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
+                var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
+                Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
+                Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
+                var userFullEntry = Packets.ToPacket<UserFullEntry>(accountBuff);
                 var nCode = -1;
-                if (userInfo.Account == userFullEntry.UserEntry.Account && LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
+                if (string.Compare(userInfo.Account, userFullEntry.UserEntry.Account, StringComparison.OrdinalIgnoreCase) == 0 && LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
                 {
                     var accountIndex = _accountStorage.Index(userFullEntry.UserEntry.Account);
                     if (accountIndex >= 0)
@@ -681,8 +691,7 @@ namespace LoginSvr.Services
                         {
                             accountRecord.UserEntry = userFullEntry.UserEntry;
                             accountRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
-                            _accountStorage.Update(accountIndex, ref accountRecord);
-                            nCode = 1;
+                            nCode = _accountStorage.UpdateAccount(accountIndex, ref accountRecord);
                         }
                     }
                     else
