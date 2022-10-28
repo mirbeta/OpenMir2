@@ -136,7 +136,7 @@ namespace LoginSvr.Storage
 
         private bool GetAccount(int nIndex, ref AccountRecord accountRecord)
         {
-            const string sSQL = "SELECT * FROM account WHERE ID={0}";
+            const string sSQL = "SELECT a.*,b.* FROM account a join account_protection b on a.Id=b.AccountId WHERE ID={0}";
             var result = true;
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -162,6 +162,8 @@ namespace LoginSvr.Storage
                     accountRecord.ActionTick = dr.GetInt32("PassFailTime");
                     accountRecord.UserEntry.Account = dr.GetString("Account");
                     accountRecord.UserEntry.Password = dr.GetString("PassWord");
+                    accountRecord.UserEntry.UserName=dr.GetString("UserName");
+                    accountRecord.UserEntryAdd.Quiz2 = dr.GetString("Quiz2");
                 }
                 result = true;
                 dr.Close();
