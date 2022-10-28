@@ -225,6 +225,7 @@ namespace LoginSvr.Services
                 {
                     defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeBuffer(userEntry));
+                    return;
                 }
                 if (nCode == 1)
                 {
