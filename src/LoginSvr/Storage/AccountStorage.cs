@@ -472,6 +472,57 @@ namespace LoginSvr.Storage
             return result;
         }
 
+        public int UpdateAccount(int nIndex, ref AccountRecord accountRecord)
+        {
+            var result = 0;
+            MySqlConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return 0;
+            }
+            var beginTransaction = dbConnection.BeginTransaction();
+            try
+            {
+                var command = new MySqlCommand();
+                command.Transaction = beginTransaction;
+                command.CommandText = "UPDATE account SET PassWord = @PassWord, PassFailCount = @PassFailCount, PassFailTime = @PassFailTime, ModifyTime = @ModifyTime, LastLoginTime = @LastLoginTime WHERE Id = @Id;";
+                command.Connection = dbConnection;
+                command.Parameters.AddWithValue("@Id", nIndex);
+                command.Parameters.AddWithValue("@PassWord", accountRecord.UserEntry.Password);
+                command.Parameters.AddWithValue("@PassFailCount", 0);
+                command.Parameters.AddWithValue("@PassFailTime", 0);
+                command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
+                command.Parameters.AddWithValue("@LastLoginTime", 0);
+                command.ExecuteNonQuery();
+
+                command.CommandText = "UPDATE account_protection SET UserName = @UserName, IdCard = @IdCard, Birthday = @Birthday, Phone = @Phone, MobilePhone = @MobilePhone, ADDRESS1 = @ADDRESS1, ADDRESS2 = @ADDRESS2, EMail = @EMail, Quiz1 = @Quiz1, Answer1 = @Answer1, Quiz2 = @Quiz2, Answer2 = @Answer2 WHERE AccountId = @AccountId;";
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@AccountId", result);
+                command.Parameters.AddWithValue("@UserName", accountRecord.UserEntry.UserName);
+                command.Parameters.AddWithValue("@IdCard", accountRecord.UserEntry.SSNo);
+                command.Parameters.AddWithValue("@Birthday", accountRecord.UserEntryAdd.BirthDay);
+                command.Parameters.AddWithValue("@Phone", accountRecord.UserEntryAdd.BirthDay);
+                command.Parameters.AddWithValue("@MobilePhone", accountRecord.UserEntryAdd.BirthDay);
+                command.Parameters.AddWithValue("@ADDRESS1", "");
+                command.Parameters.AddWithValue("@ADDRESS2", "");
+                command.Parameters.AddWithValue("@EMail", accountRecord.UserEntry.EMail);
+                command.Parameters.AddWithValue("@Quiz1", accountRecord.UserEntry.Quiz);
+                command.Parameters.AddWithValue("@Answer1", accountRecord.UserEntry.Answer);
+                command.Parameters.AddWithValue("@Quiz2", accountRecord.UserEntryAdd.Quiz2);
+                command.Parameters.AddWithValue("@Answer2", accountRecord.UserEntryAdd.Answer2);
+                command.ExecuteNonQuery();
+                beginTransaction.Commit();
+                result = 1;
+            }
+            catch (Exception ex)
+            {
+                beginTransaction.Rollback();
+                _logger.LogError("创建账号失败." + ex.Message);
+                _logger.LogError(ex);
+            }
+            return result;
+        }
+
         public bool Add(ref AccountRecord accountRecord)
         {
             bool result;
