@@ -246,44 +246,9 @@ namespace LoginSvr
         /// 2 : 免费（创建时间）
         /// </summary>
         public byte PayMode;
-        public int nClientVersion;
         public int nCertification;
-        public long nPassFailTime;
-        public int nPassFailCount;
-        public bool bVersionAccept;
-        public bool bSelServerOk;
-        public long dwValidFrom;
-        public long dwValidUntil;
         public long Seconds;
-        public long dwIpValidFrom;
-        public long dwIpValidUntil;
-        public long dwIpSeconds;
-        public long dwStopUntil;
-        public long dwMakeTime;
-        public long dwOpenTime;
         public byte nAvailableType;
-        public bool bFreeMode;
-        public int nServerID;
-        public int nParentCheck;
-        public DateTime AccountMakeDate;
-        public string SocData;
-        /// <summary>
-        /// 剩余多少天
-        /// </summary>
-        public int IDDay;
-        /// <summary>
-        /// 剩余多少小时
-        /// </summary>
-        public int IDHour;
-        /// <summary>
-        /// IP剩余多少天
-        /// </summary>
-        public int IPDay;
-        /// <summary>
-        /// IP剩余多少小时
-        /// </summary>
-        public int IPHour;
-        public DateTime dtDateTime;
         public bool SelServer;
         public Socket Socket;
         public long ClientTick;
