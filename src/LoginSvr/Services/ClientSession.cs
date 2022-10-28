@@ -178,7 +178,7 @@ namespace LoginSvr.Services
             {
                 userInfo.dwValidFrom = 0;
                 userInfo.dwValidUntil = 0;
-                userInfo.dwSeconds = 0;
+                userInfo.Seconds = 0;
                 userInfo.dwStopUntil = 0;
                 userInfo.dwIpValidFrom = 0;
                 userInfo.dwIpValidUntil = 0;
@@ -261,43 +261,41 @@ namespace LoginSvr.Services
                     {
                         userInfo.PayCost = false;
                     }
+                    userInfo.Seconds = accountRecord.PlayTime;
                     var st = DateTime.Now;
                     var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
-                    if ((nCurrentTime <= userInfo.dwValidUntil) || (nCurrentTime <= userInfo.dwIpValidUntil) || (userInfo.dwSeconds > 0) || (userInfo.dwIpSeconds > 0))
+                    if ((nCurrentTime <= userInfo.dwValidUntil) || (nCurrentTime <= userInfo.dwIpValidUntil) || (userInfo.Seconds > 0) || (userInfo.dwIpSeconds > 0))
                     {
                         userInfo.PayMode = 1;
                         
                         long RemainDays = 0;
-                        long RemainIpDays = 0;
                         long RemainHours = 0;
-                        long RemainIpHours = 0;
+                        var playSpan = DateTimeOffset.Now.AddMilliseconds(userInfo.Seconds) - DateTimeOffset.Now;
 
-                        RemainDays = userInfo.dwValidUntil - nCurrentTime + 1;
-                        RemainIpDays = userInfo.dwIpValidUntil - nCurrentTime + 1;
-                        RemainHours = (userInfo.dwSeconds + 1) / 3600;
-                        RemainIpHours = (userInfo.dwIpSeconds + 1) / 3600;
+                        var playModel = 0;
+                        RemainDays = (int)Math.Round(playSpan.TotalDays, 1);
+                        RemainHours = (int)Math.Ceiling(playSpan.TotalHours);
                         if (RemainDays < 0)
                             RemainDays = 0;
-                        if (RemainIpDays < 0)
-                            RemainIpDays = 0;
                         if (RemainHours < 0)
                             RemainHours = 0;
-                        if (RemainIpHours < 0)
-                            RemainIpHours = 0;
 
                         userInfo.IDDay = HUtil32.LoWord(nIdCost);
                         userInfo.IDHour = HUtil32.HiWord(nIdCost);
                         userInfo.IPDay = HUtil32.LoWord(nIpCost);
                         userInfo.IPHour = HUtil32.HiWord(nIpCost);
-
+           
                         AddCertUser(userInfo);
 
                         if (CheckBadAccount(userInfo.Account))
                         {
-                            var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
+                           // var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
                         }
-                        _logger.Information($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 剩余游戏时间 {st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second}");
-                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, HUtil32.MakeLong((short)RemainDays, (short)RemainHours), (int)RemainIpDays, (int)RemainIpHours, config.ServerNameList.Count);
+                        var playTime = DateTimeOffset.Now.AddMilliseconds(userInfo.Seconds);
+                        _logger.LogDebug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏到期时间:[{playTime.Year}-{playTime.Month}-{playTime.Day}-{playTime.Hour}-{playTime.Minute}-{playTime.Second}]");
+                        var playHour = HUtil32.MakeLong((short)RemainDays, (short)RemainHours);
+                        var playMinute = HUtil32.MakeLong((short)RemainHours, (short)Math.Ceiling(playSpan.TotalMinutes));
+                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, playModel, playHour, playMinute, config.ServerNameList.Count);
                     }
                     else
                     {
@@ -326,7 +324,7 @@ namespace LoginSvr.Services
             return true;
         }
 
-        public void AddCertUser(UserInfo pUser)
+        private void AddCertUser(UserInfo pUser)
         {
             var st = DateTime.Now;
             var nCurrentTime = GetDay(st.Year, st.Month, st.Day);
@@ -335,7 +333,7 @@ namespace LoginSvr.Services
             pCert.Addr = pUser.UserIPaddr;
             var remaindId = pUser.dwValidUntil - nCurrentTime;
             var remaindIp = pUser.dwIpValidUntil - nCurrentTime;
-            pCert.IDHour = pUser.dwSeconds;
+            pCert.IDHour = pUser.Seconds;
             pCert.IPHour = pUser.dwIpSeconds;
             pCert.IPDay = (remaindIp + 1);
             pCert.IDDay = (remaindId + 1);
@@ -640,7 +638,7 @@ namespace LoginSvr.Services
                     if (_masSocService.IsNotUserFull(sServerName))
                     {
                         SessionUpdate(config, userInfo.SessionID, sServerName, boPayCost);
-                        _masSocService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.PayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr + "/" + userInfo.PlayTime);
+                        _masSocService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.PayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr + "/" + userInfo.Seconds);
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, userInfo.SessionID, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sSelGateIp + "/" + nSelGatePort + "/" + userInfo.SessionID));
                     }
@@ -815,8 +813,6 @@ namespace LoginSvr.Services
             else
             {
                 defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CERTIFICATION_SUCCESS, 0, 0, 0, 0);
-                userInfo.nVersionDate = nDate;
-                userInfo.boCertificationOK = true;
             }
             SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
         }
@@ -826,7 +822,7 @@ namespace LoginSvr.Services
             var result = false;
             for (var i = 0; i < config.SessionList.Count; i++)
             {
-                if (config.SessionList[i].nSessionID == nSessionId)
+                if (config.SessionList[i].SessionID == nSessionId)
                 {
                     result = true;
                     break;
@@ -840,7 +836,7 @@ namespace LoginSvr.Services
             var result = false;
             for (var i = 0; i < config.SessionList.Count; i++)
             {
-                if (config.SessionList[i].sAccount == sLoginId)
+                if (config.SessionList[i].Account == sLoginId)
                 {
                     result = true;
                     break;
@@ -858,9 +854,9 @@ namespace LoginSvr.Services
             for (var i = 0; i < config.SessionList.Count; i++)
             {
                 connInfo = config.SessionList[i];
-                if (connInfo.sAccount == sLoginId && !connInfo.boKicked)
+                if (connInfo.Account == sLoginId && !connInfo.boKicked)
                 {
-                    _masSocService.SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.sServerName, connInfo.sAccount + "/" + connInfo.nSessionID);
+                    _masSocService.SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                     connInfo.dwKickTick = HUtil32.GetTickCount();
                     connInfo.boKicked = true;
                 }
@@ -872,9 +868,9 @@ namespace LoginSvr.Services
             for (var i = 0; i < config.SessionList.Count; i++)
             {
                 var connInfo = config.SessionList[i];
-                if (connInfo.nSessionID == nSessionId)
+                if (connInfo.SessionID == nSessionId)
                 {
-                    connInfo.sServerName = sServerName;
+                    connInfo.ServerName = sServerName;
                     connInfo.bo11 = boPayCost;
                     break;
                 }
@@ -884,9 +880,9 @@ namespace LoginSvr.Services
         private void SessionAdd(Config config, string sAccount, string sIPaddr, int nSessionId, bool boPayCost, bool bo11)
         {
             var connInfo = new TConnInfo();
-            connInfo.sAccount = sAccount;
-            connInfo.sIPaddr = sIPaddr;
-            connInfo.nSessionID = nSessionId;
+            connInfo.Account = sAccount;
+            connInfo.IPaddr = sIPaddr;
+            connInfo.SessionID = nSessionId;
             connInfo.boPayCost = boPayCost;
             connInfo.bo11 = bo11;
             connInfo.dwKickTick = HUtil32.GetTickCount();
@@ -1039,7 +1035,7 @@ namespace LoginSvr.Services
         {
             for (var i = 0; i < config.SessionList.Count; i++)
             {
-                if (config.SessionList[i].nSessionID == nSessionId)
+                if (config.SessionList[i].SessionID == nSessionId)
                 {
                     config.SessionList[i] = null;
                     config.SessionList.RemoveAt(i);

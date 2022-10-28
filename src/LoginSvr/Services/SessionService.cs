@@ -152,8 +152,9 @@ namespace LoginSvr.Services
                                 RefServerLimit(sServerName);
                                 break;
                             case Grobal2.ISM_GAMETIMEOFTIMECARDUSER:
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg,ref  sAccount, new[]{"/"});
-                                ChanggePlayTimeUser(sAccount, HUtil32.StrToInt(sMsg, 0));
+                                ChanggePlayTimeUser(sServerName, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.ISM_QUERYACCOUNTEXPIRETIME:
                                 sMsg = HUtil32.GetValidStr3(sMsg,ref  sAccount, new[]{"/"});
@@ -207,25 +208,25 @@ namespace LoginSvr.Services
         /// <summary>
         /// 减少或更新账号游戏时间
         /// </summary>
-        private void ChanggePlayTimeUser(string account, int gameTime)
+        private void ChanggePlayTimeUser(string serverName,string account, int gameTime)
         {
-            if (gameTime <= 0)
-            {
-                return;
-            }
-            //todo 免费模式
+            //todo 加入免费游戏模式
             
-            var seconds = _accountStorage.GetAccountPlayTime(account);
+            var seconds = _accountStorage.GetAccountPlayTime(account);//获取历史时间
             if (seconds > 0)
             {
-                seconds = seconds - (gameTime * 60);   //减去使用时间
-                if (seconds < 0)
+                seconds = seconds - 60000;//减去一分钟游戏时间
+                _accountStorage.UpdateAccountPlayTime(account, seconds);
+                _logger.LogDebug($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
+                if (seconds < gameTime)
+                {
+                    _logger.LogDebug($"账号[{account}]游戏时间异常.");
+                }
+                else
                 {
                     seconds = 0;
                 }
-                _accountStorage.UpdateAccountPlayTime(account, seconds);
             }
-
             if (seconds == 0)
             {
                 for (var i = 0; i < LsShare.CertList.Count; i++)
@@ -237,7 +238,7 @@ namespace LoginSvr.Services
                         {
                             if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                             {
-                                SendCancelAdmissionUser(certUser);
+                                SendCancelAdmissionUser(serverName, certUser);
                             }
                         }
                     }
@@ -245,9 +246,9 @@ namespace LoginSvr.Services
             }
         }
 
-        private void SendCancelAdmissionUser(CertUser certUser)
+        private void SendCancelAdmissionUser(string serverName, CertUser certUser)
         {
-            SendServerMsg(Grobal2.SS_CLOSESESSION, certUser.ServerName, certUser.LoginID + "/" + certUser.Certification);
+            SendServerMsg(Grobal2.SS_CLOSESESSION, serverName, certUser.LoginID + "/" + certUser.Certification);
             _logger.LogDebug($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
         }
 
@@ -295,9 +296,9 @@ namespace LoginSvr.Services
             for (var i = config.SessionList.Count - 1; i >= 0; i--)
             {
                 var connInfo = config.SessionList[i];
-                if ((connInfo.sAccount == sAccount) || (connInfo.nSessionID == nSessionID))
+                if ((connInfo.Account == sAccount) || (connInfo.SessionID == nSessionID))
                 {
-                    SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.sServerName, connInfo.sAccount + "/" + connInfo.nSessionID);
+                    SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                     connInfo = null;
                     config.SessionList.RemoveAt(i);
                 }
@@ -356,9 +357,9 @@ namespace LoginSvr.Services
                     if (HUtil32.GetTickCount() - connInfo.dwStartTick > 60 * 60 * 1000)
                     {
                         connInfo.dwStartTick = HUtil32.GetTickCount();
-                        if (!IsPayMent(config, connInfo.sIPaddr, connInfo.sAccount))
+                        if (!IsPayMent(config, connInfo.IPaddr, connInfo.Account))
                         {
-                            SendServerMsg(Grobal2.SS_KICKUSER, connInfo.sServerName, connInfo.sAccount + "/" + connInfo.nSessionID);
+                            SendServerMsg(Grobal2.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                             config.SessionList[i] = null;
                             config.SessionList.RemoveAt(i);
                         }

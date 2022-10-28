@@ -34,6 +34,7 @@ namespace GameSvr.Player
                 }
                 if (HUtil32.GetTickCount() - AccountExpiredTick > QueryExpireTick)//一分钟查询一次账号游戏到期时间
                 {
+                    ExpireTime = ExpireTime - 60000;//游戏时间减去一分钟
                     IdSrvClient.Instance.SendUserPlayTime(UserID, ExpireTime);
                     AccountExpiredTick = HUtil32.GetTickCount();
                 }

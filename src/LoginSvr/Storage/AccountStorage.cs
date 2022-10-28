@@ -160,6 +160,7 @@ namespace LoginSvr.Storage
                     accountRecord.AccountId = dr.GetInt32("Id");
                     accountRecord.ErrorCount = dr.GetInt32("PassFailCount");
                     accountRecord.ActionTick = dr.GetInt32("PassFailTime");
+                    accountRecord.PlayTime = dr.GetInt64("Seconds");
                     accountRecord.UserEntry.Account = dr.GetString("Account");
                     accountRecord.UserEntry.Password = dr.GetString("PassWord");
                     accountRecord.UserEntry.UserName=dr.GetString("UserName");
@@ -205,7 +206,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public long GetAccountPlayTime(string account)
+        public int GetAccountPlayTime(string account)
         {
             var strSql = $"SELECT SECONDS FROM ACCOUNT WHERE Account='{account}'";
             _logger.LogDebug("[SQL QUERY] " + strSql);
@@ -214,7 +215,7 @@ namespace LoginSvr.Storage
             {
                 return 0;
             }
-            long result = 0;
+            int result = 0;
             try
             {
                 var command = new MySqlCommand();
@@ -223,7 +224,7 @@ namespace LoginSvr.Storage
                 var obj = command.ExecuteScalar();
                 if (obj != null)
                 {
-                    result = (long)obj;
+                    result = (int)obj;
                 }
             }
             catch (Exception e)
