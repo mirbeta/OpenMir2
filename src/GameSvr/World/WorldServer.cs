@@ -522,6 +522,7 @@ namespace GameSvr.World
                 playObject.m_nPayMent = userOpenInfo.LoadUser.nPayMent;
                 playObject.m_nPayMode = userOpenInfo.LoadUser.nPayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
+                playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
                 playObject.m_dwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.m_nSoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
@@ -2301,7 +2302,19 @@ namespace GameSvr.World
             }
         }
 
-        public void SetPlayExpireTime(string account,long playTime)
+        public int GetPlayExpireTime(string account)
+        {
+            for (int i = 0; i < PlayObjectList.Count(); i++)
+            {
+                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    return PlayObjectList[i].QueryExpireTick;
+                }
+            }
+            return 0;
+        }
+
+        public void SetPlayExpireTime(string account,int playTime)
         {
             for (int i = 0; i < PlayObjectList.Count(); i++)
             {

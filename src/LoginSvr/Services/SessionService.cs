@@ -215,7 +215,7 @@ namespace LoginSvr.Services
             var seconds = _accountStorage.GetAccountPlayTime(account);//获取历史时间
             if (seconds > 0)
             {
-                seconds = seconds - 60000;//减去一分钟游戏时间
+                seconds = seconds - 60;//减去一分钟游戏时间
                 _accountStorage.UpdateAccountPlayTime(account, seconds);
                 _logger.LogDebug($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
                 if (seconds < gameTime)

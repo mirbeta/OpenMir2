@@ -267,19 +267,7 @@ namespace LoginSvr.Services
                     if ((nCurrentTime <= userInfo.dwValidUntil) || (nCurrentTime <= userInfo.dwIpValidUntil) || (userInfo.Seconds > 0) || (userInfo.dwIpSeconds > 0))
                     {
                         userInfo.PayMode = 1;
-                        
-                        long RemainDays = 0;
-                        long RemainHours = 0;
-                        var playSpan = DateTimeOffset.Now.AddMilliseconds(userInfo.Seconds) - DateTimeOffset.Now;
-
-                        var playModel = 0;
-                        RemainDays = (int)Math.Round(playSpan.TotalDays, 1);
-                        RemainHours = (int)Math.Ceiling(playSpan.TotalHours);
-                        if (RemainDays < 0)
-                            RemainDays = 0;
-                        if (RemainHours < 0)
-                            RemainHours = 0;
-
+                        var playSpan = DateTimeOffset.Now.AddSeconds(userInfo.Seconds) - DateTimeOffset.Now;
                         userInfo.IDDay = HUtil32.LoWord(nIdCost);
                         userInfo.IDHour = HUtil32.HiWord(nIdCost);
                         userInfo.IPDay = HUtil32.LoWord(nIpCost);
@@ -292,10 +280,8 @@ namespace LoginSvr.Services
                            // var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
                         }
                         var playTime = DateTimeOffset.Now.AddMilliseconds(userInfo.Seconds);
-                        _logger.LogDebug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏到期时间:[{playTime.Year}-{playTime.Month}-{playTime.Day}-{playTime.Hour}-{playTime.Minute}-{playTime.Second}]");
-                        var playHour = HUtil32.MakeLong((short)RemainDays, (short)RemainHours);
-                        var playMinute = HUtil32.MakeLong((short)RemainHours, (short)Math.Ceiling(playSpan.TotalMinutes));
-                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, playModel, playHour, playMinute, config.ServerNameList.Count);
+                        _logger.LogDebug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏到期时间:[{playTime.Year}-{playTime.Month}-{playTime.Day} {playTime.Hour}:{playTime.Minute}:{playTime.Second}]");
+                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, (int)Math.Round(playSpan.TotalSeconds,1), 0, userInfo.PayMode, config.ServerNameList.Count);
                     }
                     else
                     {

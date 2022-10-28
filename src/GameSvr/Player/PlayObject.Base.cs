@@ -42,7 +42,7 @@ namespace GameSvr.Player
         public int AccountExpiredTick;
         public long ExpireTime;
         public int ExpireCount;
-        public long QueryExpireTick;
+        public int QueryExpireTick;
         public int m_nSocket = 0;
         /// <summary>
         /// 人物连接到游戏网关SOCKETID
@@ -1738,24 +1738,21 @@ namespace GameSvr.Player
 
         private void CheckExpiredTime()
         {
-            if (ExpireTime > 0 && ExpireTime < HUtil32.GetTickCount())
+            ExpireCount = ExpireCount - 1;
+            switch (ExpireCount)
             {
-                ExpireCount = ExpireCount - 1;
-                switch (ExpireCount)
-                {
-                    case 30:
-                        SysMsg("您的账号游戏时间即将到期，您将在[30:00]分钟后断开服务器。", MsgColor.Blue, MsgType.System);
-                        break;
-                    case > 0 and <= 10:
-                        SysMsg($"您的账号游戏时间即将到期，您将在[{ExpireCount}:00]分钟后断开服务器。", MsgColor.Blue, MsgType.System);
-                        break;
-                    case 0:
-                        ExpireTime = 0;
-                        ExpireCount = 0;
-                        AccountExpired = true;
-                        SysMsg("您的账号游戏时间已到，请访问(https://mir2.sdo.com)进行充值，全服务器账号共享游戏时间。", MsgColor.Blue, MsgType.System);
-                        break;
-                }
+                case 30:
+                    SysMsg("您的账号游戏时间即将到期，您将在[30:00]分钟后断开服务器。", MsgColor.Blue, MsgType.System);
+                    break;
+                case > 0 and <= 10:
+                    SysMsg($"您的账号游戏时间即将到期，您将在[{ExpireCount}:00]分钟后断开服务器。", MsgColor.Blue, MsgType.System);
+                    break;
+                case <= 0:
+                    ExpireTime = 0;
+                    ExpireCount = 0;
+                    AccountExpired = true;
+                    SysMsg("您的账号游戏时间已到，请访问(https://mir2.sdo.com)进行充值，全服务器账号共享游戏时间。", MsgColor.Blue, MsgType.System);
+                    break;
             }
         }
     }
