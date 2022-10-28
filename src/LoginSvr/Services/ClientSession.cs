@@ -224,7 +224,7 @@ namespace LoginSvr.Services
                     userInfo.SelServer = false;
                     return;
                 }
-                if (nCode == 1)
+                if (nCode == 1 && accountRecord != null)
                 {
                     userInfo.Account = sLoginId;
                     userInfo.SessionID = LsShare.GetSessionId();
