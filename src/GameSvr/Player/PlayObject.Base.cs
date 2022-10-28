@@ -588,6 +588,7 @@ namespace GameSvr.Player
             AutoTimerStatus = new int[20];
             MapCell = CellType.Play;
             QueryExpireTick = 60 * 1000;
+            AccountExpiredTick = HUtil32.GetTickCount();
             m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 

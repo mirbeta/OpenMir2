@@ -227,8 +227,6 @@ namespace LoginSvr.Services
                 userInfo.UserIPaddr = sUserIPaddr;
                 userInfo.GateIPaddr = sGateIPaddr;
                 userInfo.SockIndex = sSockIndex;
-                userInfo.nVersionDate = 0;
-                userInfo.boCertificationOK = false;
                 userInfo.SessionID = 0;
                 userInfo.Socket = gateInfo.Socket;
                 userInfo.ClientTick = HUtil32.GetTickCount();
@@ -281,7 +279,7 @@ namespace LoginSvr.Services
         {
             for (var i = 0; i < config.SessionList.Count; i++)
             {
-                if (config.SessionList[i].nSessionID == nSessionId)
+                if (config.SessionList[i].SessionID == nSessionId)
                 {
                     config.SessionList[i] = null;
                     config.SessionList.RemoveAt(i);

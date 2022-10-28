@@ -164,6 +164,7 @@ namespace LoginSvr
         public int AccountId;
         public int ErrorCount;
         public int ActionTick;
+        public long PlayTime;
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;
     }
@@ -192,10 +193,10 @@ namespace LoginSvr
 
     public class TConnInfo
     {
-        public string sAccount;
-        public string sIPaddr;
-        public string sServerName;
-        public int nSessionID;
+        public string Account;
+        public string IPaddr;
+        public string ServerName;
+        public int SessionID;
         public bool boPayCost;
         public bool bo11;
         public long dwKickTick;
@@ -234,8 +235,6 @@ namespace LoginSvr
         public string UserIPaddr;
         public string GateIPaddr;
         public string SockIndex;
-        public int nVersionDate;
-        public bool boCertificationOK;
         public int SessionID;
         /// <summary>
         /// 付费账号
@@ -255,7 +254,7 @@ namespace LoginSvr
         public bool bSelServerOk;
         public long dwValidFrom;
         public long dwValidUntil;
-        public long dwSeconds;
+        public long Seconds;
         public long dwIpValidFrom;
         public long dwIpValidUntil;
         public long dwIpSeconds;
@@ -268,16 +267,6 @@ namespace LoginSvr
         public int nParentCheck;
         public DateTime AccountMakeDate;
         public string SocData;
-        public long dwLatestCmdTime;
-        
-        /// <summary>
-        /// 剩余游戏时间
-        /// </summary>
-        public int PlayTime;
-        /// <summary>
-        /// 授权游戏时间
-        /// </summary>
-        public int AuthorizedTime;
         /// <summary>
         /// 剩余多少天
         /// </summary>

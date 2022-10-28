@@ -43,6 +43,20 @@ namespace SystemModule.Extensions
             }
             return -1;
         }
+        
+        public static long GetInt64(this IDataReader dr, string name)
+        {
+            var idx = GetOrdinal(dr, name);
+            if (idx > -1)
+            {
+                if (dr.IsDBNull(idx))
+                {
+                    return -1;
+                }
+                return Convert.ToInt64(dr[idx]);
+            }
+            return -1;
+        }
 
         public static byte GetByte(this IDataReader dr, string name)
         {
