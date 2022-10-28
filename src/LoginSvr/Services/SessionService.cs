@@ -20,6 +20,7 @@ namespace LoginSvr.Services
         private readonly ConfigManager _configManager;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
         private readonly AccountStorage _accountStorage;
+        private readonly Config _config;
 
         public SessionService(MirLog logger, ConfigManager configManager, AccountStorage accountStorage)
         {
@@ -32,6 +33,7 @@ namespace LoginSvr.Services
             _serverSocket.OnClientDisconnect += SocketClientDisconnect;
             _serverSocket.OnClientError += SocketClientError;
             _serverSocket.OnClientRead += SocketClientRead;
+            _config = _configManager.Config;
         }
 
         public IList<ServerSessionInfo> ServerList => _serverList;
@@ -40,10 +42,9 @@ namespace LoginSvr.Services
         {
             LoadServerAddr();
             LoadUserLimit();
-            var config = _configManager.Config;
             _serverSocket.Init();
-            _serverSocket.Start(config.sServerAddr, config.nServerPort);
-            _logger.Information($"账号数据服务[{config.sServerAddr}:{config.nServerPort}]已启动.");
+            _serverSocket.Start(_config.sServerAddr, _config.nServerPort);
+            _logger.Information($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
 
         private void SocketClientConnect(object sender, AsyncUserToken e)
@@ -135,6 +136,7 @@ namespace LoginSvr.Services
                                 CloseUser(sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.SS_SERVERINFO:
+                                //todo 目前的收费/免费模式存在瑕疵，只能同一时间内免费或者收费，应该改成由GameSvr同步过来告诉账号中心计费模式
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, new[] { "/" });
@@ -186,6 +188,10 @@ namespace LoginSvr.Services
             {
                 return;
             }
+            if (_config.PayMode == 0)
+            {
+                return;
+            }
             var seconds = _accountStorage.GetAccountPlayTime(account);
 
             for (var i = 0; i < LsShare.CertList.Count; i++)
@@ -210,8 +216,11 @@ namespace LoginSvr.Services
         /// </summary>
         private void ChanggePlayTimeUser(string serverName,string account, int gameTime)
         {
-            //todo 加入免费游戏模式
-            
+            if (_config.PayMode == 0)
+            {
+                return;
+            }
+
             var seconds = _accountStorage.GetAccountPlayTime(account);//获取历史时间
             if (seconds > 0)
             {
@@ -262,8 +271,11 @@ namespace LoginSvr.Services
             {
                 return;
             }
-            //todo 免费模式
-            
+            if (_config.PayMode == 0)
+            {
+                return;
+            }
+
             var seconds = _accountStorage.GetAccountPlayTime(account);
 
             if (seconds == 0)
