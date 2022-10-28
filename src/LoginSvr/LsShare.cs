@@ -147,29 +147,21 @@ namespace LoginSvr
         public string Msg;
     }
 
-    public class AccountQuick
+    public struct AccountQuick
     {
-        public string sAccount;
-        public int nIndex;
+        public string Account;
+        public int Index;
 
         public AccountQuick(string account, int index)
         {
-            sAccount = account;
-            nIndex = index;
+            Account = account;
+            Index = index;
         }
-    }
-
-    public class RecordHeader
-    {
-        public string sAccount;
-        public string sName;
-        public int nSelectID;
     }
 
     public class AccountRecord
     {
         public int AccountId;
-        public RecordHeader Header;
         public int ErrorCount;
         public int ActionTick;
         public UserEntry UserEntry;
