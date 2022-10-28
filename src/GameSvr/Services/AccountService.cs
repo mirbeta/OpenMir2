@@ -126,8 +126,8 @@ namespace GameSvr.Services
 
         public void SendUserPlayTime(string account,long playTime)
         {
-            const string sFormatMsg = "({0}/{1}/{2})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.ISM_GAMETIMEOFTIMECARDUSER, account, playTime));
+            const string sFormatMsg = "({0}/{1}/{2}/{3})";
+            SendSocket(string.Format(sFormatMsg, Grobal2.ISM_GAMETIMEOFTIMECARDUSER, M2Share.Config.ServerName, account, playTime));
         }
 
         public void Run()
@@ -223,7 +223,12 @@ namespace GameSvr.Services
             var cert = HUtil32.StrToInt(certstr, 0);
             if (!M2Share.Config.TestServer)
             {
-                if (cert <= 1800000)//小于30分钟一分钟查询一次，否则10分钟或者半个小时同步一次都行
+                var playTime = M2Share.WorldEngine.GetPlayExpireTime(account);
+                if (playTime >= 3600 || playTime < 1800) //大于一个小时或者小于半个小时都不处理
+                {
+                    return;
+                }
+                if (cert <= 1800)//小于30分钟一分钟查询一次，否则10分钟或者半个小时同步一次都行
                 {
                     M2Share.WorldEngine.SetPlayExpireTime(account, cert);
                 }
