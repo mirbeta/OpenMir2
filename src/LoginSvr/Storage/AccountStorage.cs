@@ -129,7 +129,7 @@ namespace LoginSvr.Storage
         {
             if (_quickList.TryGetValue(sName, out var accountQuick))
             {
-                List.Add(new AccountQuick(accountQuick.sAccount, accountQuick.nIndex));
+                List.Add(new AccountQuick(accountQuick.Account, accountQuick.Index));
             }
             return List.Count;
         }
@@ -153,7 +153,6 @@ namespace LoginSvr.Storage
                 if (accountRecord == null)
                 {
                     accountRecord = new AccountRecord();
-                    accountRecord.Header = new RecordHeader();
                     accountRecord.UserEntry = new UserEntry();
                     accountRecord.UserEntryAdd = new UserEntryAdd();
                 }
@@ -186,7 +185,7 @@ namespace LoginSvr.Storage
         {
             if (_quickList.TryGetValue(account, out var accountQuick))
             {
-                return accountQuick.nIndex;
+                return accountQuick.Index;
             }
             return -1;
         }
@@ -220,7 +219,11 @@ namespace LoginSvr.Storage
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
-                result = (long)command.ExecuteScalar();
+                var obj = command.ExecuteScalar();
+                if (obj != null)
+                {
+                    result = (long)obj;
+                }
             }
             catch (Exception e)
             {
@@ -336,6 +339,7 @@ namespace LoginSvr.Storage
             try
             {
                 command.ExecuteNonQuery();
+                result = 1;
             }
             catch (Exception ex)
             {
@@ -366,16 +370,14 @@ namespace LoginSvr.Storage
                 command.Parameters.AddWithValue("@PassWord", newPassword);
                 command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
                 command.Parameters.AddWithValue("@Id", accountId);
-                try
-                {
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception E)
-                {
-                    _logger.LogError("[Exception] ChanggePassword");
-                    _logger.LogError(E);
-                    return result;
-                }
+                command.ExecuteNonQuery();
+                result = 1;
+            }
+            catch (Exception E)
+            {
+                _logger.LogError("[Exception] ChanggePassword");
+                _logger.LogError(E);
+                return result;
             }
             finally
             {
@@ -403,16 +405,14 @@ namespace LoginSvr.Storage
                 command.Parameters.AddWithValue("@PassFailTime", accountRecord.ActionTick);
                 command.Parameters.AddWithValue("@LastLoginTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
                 command.Parameters.AddWithValue("@Id", accountRecord.AccountId);
-                try
-                {
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception E)
-                {
-                    _logger.LogError("[Exception] UpdateRecord");
-                    _logger.LogError(E);
-                    return result;
-                }
+                command.ExecuteNonQuery();
+                result = 1;
+            }
+            catch (Exception E)
+            {
+                _logger.LogError("[Exception] UpdateRecord");
+                _logger.LogError(E);
+                return result;
             }
             finally
             {
@@ -439,16 +439,14 @@ namespace LoginSvr.Storage
                 command.Parameters.AddWithValue("@PassFailCount", accountRecord.ErrorCount);
                 command.Parameters.AddWithValue("@PassFailTime", accountRecord.ActionTick);
                 command.Parameters.AddWithValue("@Id", accountRecord.AccountId);
-                try
-                {
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception E)
-                {
-                    _logger.LogError("[Exception] UpdateRecord");
-                    _logger.LogError(E);
-                    return result;
-                }
+                command.ExecuteNonQuery();
+                result = 1;
+            }
+            catch (Exception E)
+            {
+                _logger.LogError("[Exception] UpdateRecord");
+                _logger.LogError(E);
+                return result;
             }
             finally
             {
