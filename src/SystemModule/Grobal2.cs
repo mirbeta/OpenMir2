@@ -530,7 +530,7 @@ namespace SystemModule
         public const int SS_214 = 214;
         public const int SS_WHISPER = 299;
         /// <summary>
-        /// 获取服务器信息
+        /// 同步服务器信息
         /// </summary>
         public const int SS_SERVERINFO = 103;
         /// <summary>

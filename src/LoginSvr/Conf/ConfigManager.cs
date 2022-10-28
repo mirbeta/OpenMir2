@@ -63,6 +63,7 @@ namespace LoginSvr.Conf
             Config.ConnctionString = LoadConfig_LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
             Config.ShowLogLevel = ReadInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
             Config.ShowDebugLog = ReadBool("Server", "ShowDebugLog", Config.ShowDebugLog);
+            Config.PayMode = ReadInteger("Server", "PayMode", Config.PayMode);
         }
 
         private string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)
