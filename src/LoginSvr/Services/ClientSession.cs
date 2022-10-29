@@ -1,6 +1,7 @@
 ﻿using LoginSvr.Conf;
 using LoginSvr.Storage;
 using System;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -84,7 +85,7 @@ namespace LoginSvr.Services
 
         private void ProcessUserMsg(UserInfo userInfo, string sMsg)
         {
-            var sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
+            var sDefMsg = sMsg[..Grobal2.DEFBLOCKSIZE];
             var sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
             var defMsg = EDCode.DecodePacket(sDefMsg);
             switch (defMsg.Ident)
@@ -348,12 +349,16 @@ namespace LoginSvr.Services
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
             try
             {
-                if (string.IsNullOrEmpty(sData) || sData.Length < 333)
+                if (string.IsNullOrEmpty(sData))
                 {
                     _logger.Warn("[新建账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
                 var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
+                if (sData.Length <= accountStrSize)
+                {
+                    return;
+                }
                 var ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
                 var uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
@@ -419,7 +424,6 @@ namespace LoginSvr.Services
         {
             var sLoginId = string.Empty;
             var sOldPassword = string.Empty;
-            ClientMesaagePacket defMsg;
             AccountRecord accountRecord = null;
             try
             {
@@ -456,6 +460,8 @@ namespace LoginSvr.Services
                         }
                     }
                 }
+
+                ClientMesaagePacket defMsg;
                 if (nCode == 1)
                 {
                     defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHGPASSWD_SUCCESS, 0, 0, 0, 0);
@@ -525,15 +531,14 @@ namespace LoginSvr.Services
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.Warn("[更新账号失败,数据包为空].");
-                    return;
-                }
-                if (string.IsNullOrEmpty(sData) || sData.Length < 333)
-                {
                     _logger.Warn("[更新账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
                 var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
+                if (sData.Length <= accountStrSize)
+                {
+                    return;
+                }
                 var ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
                 var uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
@@ -711,10 +716,9 @@ namespace LoginSvr.Services
         /// </summary>
         private void SessionKick(Config config, string sLoginId)
         {
-            TConnInfo connInfo;
             for (var i = 0; i < config.SessionList.Count; i++)
             {
-                connInfo = config.SessionList[i];
+                var connInfo = config.SessionList[i];
                 if (connInfo.Account == sLoginId && !connInfo.boKicked)
                 {
                     _masSocService.SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
@@ -756,12 +760,14 @@ namespace LoginSvr.Services
         {
             if (socket.Connected)
             {
-                //var sSendMsg = "%" + sSockIndex + "/#" + sMsg + "!$";
-                //Socket.SendText(sSendMsg);
                 var packet = new LoginSvrPacket();
                 packet.ConnectionId = sSockIndex;
                 packet.ClientPacket = HUtil32.GetBytes("#" + sMsg + "!$");
                 socket.SendBuffer(packet.GetBuffer());
+            }
+            else
+            {
+                _logger.LogError("登陆网关链接断开，消息发送失败");
             }
         }
 
