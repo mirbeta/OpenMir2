@@ -509,12 +509,11 @@ namespace LoginSvr.Services
         {
             var result = 0;
             var nCount = 0;
-            ServerSessionInfo MsgServer;
             try
             {
                 for (var i = 0; i < _serverList.Count; i++)
                 {
-                    MsgServer = _serverList[i];
+                    var MsgServer = _serverList[i];
                     if (MsgServer.ServerIndex != 99)
                     {
                         nCount += MsgServer.OnlineCount;
