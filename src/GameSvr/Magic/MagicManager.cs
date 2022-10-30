@@ -227,11 +227,11 @@ namespace GameSvr.Magic
                                     {
                                         case 1:
                                             nPower = (ushort)(DoSpell_GetPower13(UserMagic, 40) + DoSpell_GetRPow(PlayObject.WAbil.SC) * 2);// 中毒类型 - 绿毒
-                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, StatuStateConst.POISON_DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, PoisonState.DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                         case 2:
                                             nPower = (ushort)(DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.WAbil.SC) * 2);// 中毒类型 - 红毒
-                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, StatuStateConst.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            TargeTBaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, PoisonState.DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                     }
                                     if (TargeTBaseObject.Race == ActorRace.Play || TargeTBaseObject.Race >= ActorRace.Animal)
@@ -492,19 +492,19 @@ namespace GameSvr.Magic
                     {
                         if (M2Share.RandomNumber.Random(7) - (UserMagic.Level + 1) < 0)
                         {
-                            if (TargeTBaseObject.StatusArr[StatuStateConst.POISON_DECHEALTH] != 0)
+                            if (TargeTBaseObject.StatusArr[PoisonState.DECHEALTH] != 0)
                             {
-                                TargeTBaseObject.StatusArr[StatuStateConst.POISON_DECHEALTH] = 1;
+                                TargeTBaseObject.StatusArr[PoisonState.DECHEALTH] = 1;
                                 boTrain = true;
                             }
-                            if (TargeTBaseObject.StatusArr[StatuStateConst.POISON_DAMAGEARMOR] != 0)
+                            if (TargeTBaseObject.StatusArr[PoisonState.DAMAGEARMOR] != 0)
                             {
-                                TargeTBaseObject.StatusArr[StatuStateConst.POISON_DAMAGEARMOR] = 1;
+                                TargeTBaseObject.StatusArr[PoisonState.DAMAGEARMOR] = 1;
                                 boTrain = true;
                             }
-                            if (TargeTBaseObject.StatusArr[StatuStateConst.POISON_STONE] != 0)
+                            if (TargeTBaseObject.StatusArr[PoisonState.STONE] != 0)
                             {
-                                TargeTBaseObject.StatusArr[StatuStateConst.POISON_STONE] = 1;
+                                TargeTBaseObject.StatusArr[PoisonState.STONE] = 1;
                                 boTrain = true;
                             }
                         }
@@ -663,7 +663,7 @@ namespace GameSvr.Magic
 
         public bool MagMakePrivateTransparent(BaseObject BaseObject, ushort nHTime)
         {
-            if (BaseObject.StatusArr[StatuStateConst.STATE_TRANSPARENT] > 0)
+            if (BaseObject.StatusArr[PoisonState.STATE_TRANSPARENT] > 0)
             {
                 return false;
             }
@@ -681,7 +681,7 @@ namespace GameSvr.Magic
                 }
             }
             BaseObjectList.Clear();
-            BaseObject.StatusArr[StatuStateConst.STATE_TRANSPARENT] = nHTime;
+            BaseObject.StatusArr[PoisonState.STATE_TRANSPARENT] = nHTime;
             BaseObject.CharStatus = BaseObject.GetCharStatus();
             BaseObject.StatusChanged();
             BaseObject.HideMode = true;
@@ -907,11 +907,11 @@ namespace GameSvr.Magic
                                 {
                                     case 1:
                                         nPower = MagicBase.GetPower13(40, UserMagic) + MagicBase.GetRPow(PlayObject.WAbil.SC) * 2;// 中毒类型 - 绿毒
-                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, StatuStateConst.POISON_DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, PoisonState.DECHEALTH, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                     case 2:
                                         nPower = MagicBase.GetPower13(30, UserMagic) + MagicBase.GetRPow(PlayObject.WAbil.SC) * 2;// 中毒类型 - 红毒
-                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, StatuStateConst.POISON_DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        BaseObject.SendDelayMsg(PlayObject, Grobal2.RM_POISON, PoisonState.DAMAGEARMOR, nPower, PlayObject.ActorId, HUtil32.Round(UserMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                 }
                                 if (BaseObject.Race == ActorRace.Play || BaseObject.Race >= ActorRace.Animal)
@@ -1212,7 +1212,7 @@ namespace GameSvr.Magic
                 var TargeTBaseObject = BaseObjectList[i];
                 if (BaseObject.IsProperFriend(TargeTBaseObject))
                 {
-                    if (TargeTBaseObject.StatusArr[StatuStateConst.STATE_TRANSPARENT] == 0)
+                    if (TargeTBaseObject.StatusArr[PoisonState.STATE_TRANSPARENT] == 0)
                     {
                         TargeTBaseObject.SendDelayMsg(TargeTBaseObject, Grobal2.RM_TRANSPARENT, 0, nHTime, 0, 0, "", 800);
                         result = true;
@@ -1251,7 +1251,7 @@ namespace GameSvr.Magic
                                     if (!TargeTBaseObject.UnParalysis)
                                     {
                                         // 中毒类型 - 麻痹
-                                        TargeTBaseObject.SendDelayMsg(BaseObject, Grobal2.RM_POISON, StatuStateConst.POISON_STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), BaseObject.ActorId, nLevel, "", 650);
+                                        TargeTBaseObject.SendDelayMsg(BaseObject, Grobal2.RM_POISON, PoisonState.STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), BaseObject.ActorId, nLevel, "", 650);
                                     }
                                     result = true;
                                 }

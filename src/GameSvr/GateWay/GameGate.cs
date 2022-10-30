@@ -331,7 +331,7 @@ namespace GameSvr.GateWay
             var nPayMent = 0;
             var nPayMode = 0;
             var nPlayTime = 0l;
-            byte[] HWID = MD5.g_MD5EmptyDigest;
+            byte[] HWID = MD5.EmptyDigest;
             TSessInfo SessInfo;
             const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification";
             const string sDisable = "*disable*";

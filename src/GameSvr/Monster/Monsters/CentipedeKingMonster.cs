@@ -66,11 +66,11 @@ namespace GameSvr.Monster.Monsters
                             {
                                 if (M2Share.RandomNumber.Random(3) != 0)
                                 {
-                                    baseObject.MakePosion(StatuStateConst.POISON_DECHEALTH, 60, 3);
+                                    baseObject.MakePosion(PoisonState.DECHEALTH, 60, 3);
                                 }
                                 else
                                 {
-                                    baseObject.MakePosion(StatuStateConst.POISON_STONE, 5, 0);
+                                    baseObject.MakePosion(PoisonState.STONE, 5, 0);
                                 }
                                 TargetCret = baseObject;
                             }

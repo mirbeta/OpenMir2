@@ -21,15 +21,17 @@ namespace LoginSvr.Services
     {
         private readonly SocketServer _serverSocket;
         private readonly MirLog _logger;
-        private readonly ConfigManager _configManager;
         private readonly ClientSession _clientSession;
         private readonly Channel<byte[]> _messageQueue;
+        private readonly UserManager _userManager;
+        private readonly Config _config;
 
-        public LoginService(MirLog logger, ConfigManager configManager, ClientSession clientSession)
+        public LoginService(MirLog logger, ConfigManager configManager, ClientSession clientSession, UserManager userManager)
         {
             _logger = logger;
-            _configManager = configManager;
             _clientSession = clientSession;
+            _userManager = userManager;
+            _config = configManager.Config;
             _messageQueue = Channel.CreateUnbounded<byte[]>();
             _serverSocket = new SocketServer(short.MaxValue, 2048);
             _serverSocket.OnClientConnect += GSocketClientConnect;
@@ -41,26 +43,26 @@ namespace LoginSvr.Services
         public void StartServer()
         {
             _serverSocket.Init();
-            _serverSocket.Start(_configManager.Config.sGateAddr, _configManager.Config.nGatePort);
-            _logger.Information($"账号登陆服务[{_configManager.Config.sGateAddr}:{_configManager.Config.nGatePort}]已启动.");
+            _serverSocket.Start(_config.sGateAddr, _config.nGatePort);
+            _logger.Information($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
 
         private void GSocketClientConnect(object sender, AsyncUserToken e)
         {
             var gateInfo = new GateInfo();
             gateInfo.Socket = e.Socket;
-            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_configManager.Config, e.RemoteIPaddr);
+            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, e.RemoteIPaddr);
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
-            LsShare.Gates.Add(gateInfo);
+            LsShare.LoginGates.Add(gateInfo);
             _logger.Information($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
         }
 
         private void GSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < LsShare.Gates.Count; i++)
+            for (var i = 0; i < LsShare.LoginGates.Count; i++)
             {
-                var gateInfo = LsShare.Gates[i];
+                var gateInfo = LsShare.LoginGates[i];
                 if (gateInfo.Socket == e.Socket)
                 {
                     for (var j = 0; j < gateInfo.UserList.Count; j++)
@@ -69,7 +71,7 @@ namespace LoginSvr.Services
                         gateInfo.UserList[j] = null;
                     }
                     gateInfo.UserList = null;
-                    LsShare.Gates.Remove(gateInfo);
+                    LsShare.LoginGates.Remove(gateInfo);
                     break;
                 }
             }
@@ -83,9 +85,9 @@ namespace LoginSvr.Services
 
         private void GSocketClientRead(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < LsShare.Gates.Count; i++)
+            for (var i = 0; i < LsShare.LoginGates.Count; i++)
             {
-                if (LsShare.Gates[i].Socket == e.Socket)
+                if (LsShare.LoginGates[i].Socket == e.Socket)
                 {
                     var data = new byte[e.BytesReceived];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, data.Length);
@@ -136,16 +138,16 @@ namespace LoginSvr.Services
             var I = 0;
             while (true)
             {
-                if (LsShare.Gates.Count <= I)
+                if (LsShare.LoginGates.Count <= I)
                 {
                     break;
                 }
-                var gateInfo = LsShare.Gates[I];
+                var gateInfo = LsShare.LoginGates[I];
                 if (packet.Body != null && gateInfo.UserList != null)
                 {
                     if (packet.EndChar != '$' && packet.StartChar != '%')
                     {
-                        Console.WriteLine("丢弃错误的封包数据");
+                        _logger.Warn("丢弃错误的封包数据");
                         break;
                     }
                     switch (packet.Type)
@@ -156,7 +158,7 @@ namespace LoginSvr.Services
                             break;
                         case PacketType.Data:
                             var dataMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
-                            ProcessUserMessage(packet.SocketId, gateInfo, dataMsg);
+                            ProcessUserMessage(packet.SocketId, dataMsg);
                             break;
                         case PacketType.Enter:
                             var endterMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
@@ -166,7 +168,7 @@ namespace LoginSvr.Services
                             ReceiveCloseUser(packet.SocketId, gateInfo);
                             break;
                     }
-                    _configManager.Config.sGateIPaddr = gateInfo.sIPaddr;
+                    _config.sGateIPaddr = gateInfo.sIPaddr;
                 }
                 I++;
             }
@@ -192,7 +194,7 @@ namespace LoginSvr.Services
                     _logger.LogDebug(string.Format(sCloseMsg, userInfo.UserIPaddr));
                     if (!userInfo.SelServer)
                     {
-                        SessionDel(_configManager.Config, userInfo.SessionID);
+                        SessionDel(userInfo.SessionID);
                     }
                     gateInfo.UserList[i] = null;
                     gateInfo.UserList.RemoveAt(i);
@@ -232,6 +234,7 @@ namespace LoginSvr.Services
                 userInfo.ClientTick = HUtil32.GetTickCount();
                 userInfo.Gate = gateInfo;
                 gateInfo.UserList.Add(userInfo);
+                _userManager.AddUser(sSockIndex, userInfo);
                 _logger.LogDebug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
             }
             catch (Exception ex)
@@ -241,21 +244,26 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessUserMessage(string sSockIndex, GateInfo gateInfo, string sData)
+        private void ProcessUserMessage(string sSockIndex, string sData)
         {
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            _clientSession.SendToQueue(new UserSessionData()
             {
-                var userInfo = gateInfo.UserList[i];
-                if (userInfo.SockIndex == sSockIndex)
-                {
-                    _clientSession.SendToQueue(new UserSessionData()
-                    {
-                        UserInfo = userInfo,
-                        Msg = sData
-                    });
-                    break;
-                }
-            }
+                SoketId = Convert.ToInt32(sSockIndex),
+                Msg = sData
+            });
+            // for (var i = 0; i < gateInfo.UserList.Count; i++)
+            // {
+            //     var userInfo = gateInfo.UserList[i];
+            //     if (userInfo.SockIndex == sSockIndex)
+            //     {
+            //         _clientSession.SendToQueue(new UserSessionData()
+            //         {
+            //             UserInfo = userInfo,
+            //             Msg = sData
+            //         });
+            //         break;
+            //     }
+            // }
         }
 
         /// <summary>
@@ -263,41 +271,28 @@ namespace LoginSvr.Services
         /// </summary>
         public void SessionClearKick()
         {
-            var config = _configManager.Config;
-            for (var i = config.SessionList.Count - 1; i >= 0; i--)
+            for (var i = _config.SessionList.Count - 1; i >= 0; i--)
             {
-                var connInfo = config.SessionList[i];
+                var connInfo = _config.SessionList[i];
                 if (connInfo.boKicked && HUtil32.GetTickCount() - connInfo.dwKickTick > 5 * 1000)
                 {
-                    config.SessionList[i] = null;
-                    config.SessionList.RemoveAt(i);
+                    _config.SessionList[i] = null;
+                    _config.SessionList.RemoveAt(i);
                 }
             }
         }
 
-        private void SessionDel(Config config, int nSessionId)
+        private void SessionDel(int nSessionId)
         {
-            for (var i = 0; i < config.SessionList.Count; i++)
+            for (var i = 0; i < _config.SessionList.Count; i++)
             {
-                if (config.SessionList[i].SessionID == nSessionId)
+                if (_config.SessionList[i].SessionID == nSessionId)
                 {
-                    config.SessionList[i] = null;
-                    config.SessionList.RemoveAt(i);
+                    _config.SessionList[i] = null;
+                    _config.SessionList.RemoveAt(i);
                     break;
                 }
             }
-        }
-        
-        public void LoadIPaddrCostList(Config config, AccountConst accountConst)
-        {
-            config.IPaddrCostList.Clear();
-            config.IPaddrCostList.Add(accountConst.s1C, accountConst.nC);
-        }
-
-        public void LoadAccountCostList(Config config, AccountConst accountConst)
-        {
-            config.AccountCostList.Clear();
-            config.AccountCostList.Add(accountConst.s1C, accountConst.nC);
         }
     }
 }

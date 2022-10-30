@@ -1,6 +1,6 @@
 namespace LoginGate.Packet
 {
-    public struct TMessageData
+    public struct MessageData
     {
         public string ConnectionId;
         public byte[] Body;

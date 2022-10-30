@@ -1990,7 +1990,7 @@ namespace GameSvr.Player
             }
             if (Transparent && HideMode)
             {
-                StatusArr[StatuStateConst.STATE_TRANSPARENT] = 0;
+                StatusArr[PoisonState.STATE_TRANSPARENT] = 0;
             }
             if (GroupOwner != null)
             {

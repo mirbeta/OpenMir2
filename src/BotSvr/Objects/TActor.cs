@@ -367,7 +367,7 @@ namespace BotSvr.Objects
                         m_nFeature = Msg.Feature;
                         m_nState = Msg.State;
                         m_RushStep = HUtil32.HiByte(Msg.Dir);
-                        if ((m_nState & StatuStateConst.STATE_OPENHEATH) != 0)
+                        if ((m_nState & PoisonState.OPENHEATH) != 0)
                         {
                             m_boOpenHealth = true;
                         }

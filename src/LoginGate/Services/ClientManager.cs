@@ -17,7 +17,7 @@ namespace LoginGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly Channel<TMessageData> _sendQueue;
+        private readonly Channel<MessageData> _sendQueue;
         private readonly SessionManager _sessionManager;
         private readonly MirLog _logger;
         private readonly IList<ClientThread> _serverGateList;
@@ -31,7 +31,7 @@ namespace LoginGate.Services
             _sessionManager = sessionManager;
             _configManager = configManager;
             _serverManager = serverManager;
-            _sendQueue = Channel.CreateUnbounded<TMessageData>();
+            _sendQueue = Channel.CreateUnbounded<MessageData>();
             _serverGateList = new List<ClientThread>();
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
@@ -77,7 +77,7 @@ namespace LoginGate.Services
         /// 添加到发送队列
         /// </summary>
         /// <param name="messageData"></param>
-        public void SendQueue(TMessageData messageData)
+        public void SendQueue(MessageData messageData)
         {
             _sendQueue.Writer.TryWrite(messageData);
         }

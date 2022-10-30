@@ -863,9 +863,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[PoisonState.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
+            if (StatusArr[PoisonState.STONE] != 0 && StatusArr[PoisonState.DONTMOVE] != 0 || StatusArr[PoisonState.LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动 
             }
@@ -1080,7 +1080,7 @@ namespace GameSvr.RobotPlay
 
         protected override void Wondering()
         {
-            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[StatuStateConst.POISON_STONE] == 0)
+            if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[PoisonState.STONE] == 0)
             {
                 var nX = CurrX;
                 var nY = CurrY;
@@ -1919,11 +1919,11 @@ namespace GameSvr.RobotPlay
             {
                 return false;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
+            if (Death || StatusArr[PoisonState.LOCKSPELL] != 0)
             {
                 return false; // 防麻
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] != 0)
+            if (StatusArr[PoisonState.STONE] != 0)
             {
                 return false;// 防麻
             }
@@ -2475,9 +2475,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[PoisonState.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] > 0 && StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
+            if (StatusArr[PoisonState.STONE] > 0 && StatusArr[PoisonState.DONTMOVE] != 0 || StatusArr[PoisonState.LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
             {
                 return false; // 麻痹不能跑动 
             }
@@ -2611,9 +2611,9 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (Transparent && HideMode)
             {
-                StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                StatusArr[PoisonState.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (StatusArr[StatuStateConst.POISON_STONE] != 0 && StatusArr[StatuStateConst.POISON_DONTMOVE] != 0 || StatusArr[StatuStateConst.POISON_LOCKSPELL] != 0)
+            if (StatusArr[PoisonState.STONE] != 0 && StatusArr[PoisonState.DONTMOVE] != 0 || StatusArr[PoisonState.LOCKSPELL] != 0)
             {
                 return false;// 麻痹不能跑动
             }
@@ -2723,7 +2723,7 @@ namespace GameSvr.RobotPlay
                 case 0:// 正常模式
                     if (Math.Abs(CurrX - nTargetX) > 2 || Math.Abs(CurrY - nTargetY) > 2)
                     {
-                        if (StatusArr[StatuStateConst.STATE_LOCKRUN] == 0)
+                        if (StatusArr[PoisonState.LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -2740,7 +2740,7 @@ namespace GameSvr.RobotPlay
                 case 1:// 躲避模式
                     if (Math.Abs(CurrX - nTargetX) > 1 || Math.Abs(CurrY - nTargetY) > 1)
                     {
-                        if (StatusArr[StatuStateConst.STATE_LOCKRUN] == 0)
+                        if (StatusArr[PoisonState.LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -3113,7 +3113,7 @@ namespace GameSvr.RobotPlay
                     }
                     break;
                 case PlayJob.Wizard: // 法师
-                    if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
+                    if (StatusArr[PoisonState.BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
@@ -3813,7 +3813,7 @@ namespace GameSvr.RobotPlay
                         }
                         return result;
                     }
-                    if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
+                    if (StatusArr[PoisonState.BUBBLEDEFENCEUP] == 0 && !AbilMagBubbleDefence)
                     {
                         if (AllowUseMagic(73)) // 道力盾
                         {
@@ -3842,7 +3842,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     // 绿毒
-                    if (TargetCret.StatusArr[StatuStateConst.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
+                    if (TargetCret.StatusArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
                                                                                                                                                      || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
@@ -3898,7 +3898,7 @@ namespace GameSvr.RobotPlay
                                 break;
                         }
                     }
-                    if (TargetCret.StatusArr[StatuStateConst.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
+                    if (TargetCret.StatusArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
                                                                                                                                                        || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {

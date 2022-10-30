@@ -1280,7 +1280,7 @@ namespace GameSvr.Actor
                     {
                         if (Transparent && HideMode)
                         {
-                            StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
+                            StatusArr[PoisonState.STATE_TRANSPARENT] = 1;
                         }
                         result = true;
                     }
@@ -1763,7 +1763,7 @@ namespace GameSvr.Actor
             if (ShowHp)
             {
                 ShowHp = false;
-                CharStatusEx = CharStatusEx ^ StatuStateConst.STATE_OPENHEATH;
+                CharStatusEx = CharStatusEx ^ PoisonState.OPENHEATH;
                 CharStatus = GetCharStatus();
                 SendRefMsg(Grobal2.RM_CLOSEHEALTH, 0, 0, 0, 0, "");
             }
@@ -1772,7 +1772,7 @@ namespace GameSvr.Actor
         private void MakeOpenHealth()
         {
             ShowHp = true;
-            CharStatusEx = CharStatusEx | StatuStateConst.STATE_OPENHEATH;
+            CharStatusEx = CharStatusEx | PoisonState.OPENHEATH;
             CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_OPENHEALTH, 0, WAbil.HP, WAbil.MaxHP, 0, "");
         }
@@ -4624,7 +4624,7 @@ namespace GameSvr.Actor
                 nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
             }
             nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
-            if (StatusArr[StatuStateConst.POISON_DAMAGEARMOR] > 0)
+            if (StatusArr[PoisonState.DAMAGEARMOR] > 0)
             {
                 nDam = HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
                 nDamage = (ushort)HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
@@ -4908,15 +4908,15 @@ namespace GameSvr.Actor
 
         private void DamageBubbleDefence(int nInt)
         {
-            if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] > 0)
+            if (StatusArr[PoisonState.BUBBLEDEFENCEUP] > 0)
             {
-                if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] > 3)
+                if (StatusArr[PoisonState.BUBBLEDEFENCEUP] > 3)
                 {
-                    StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] -= 3;
+                    StatusArr[PoisonState.BUBBLEDEFENCEUP] -= 3;
                 }
                 else
                 {
-                    StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] = 1;
+                    StatusArr[PoisonState.BUBBLEDEFENCEUP] = 1;
                 }
             }
         }
@@ -5112,20 +5112,20 @@ namespace GameSvr.Actor
         private bool DefenceUp(ushort nSec)
         {
             var result = false;
-            if (StatusArr[StatuStateConst.STATE_DEFENCEUP] > 0)
+            if (StatusArr[PoisonState.DEFENCEUP] > 0)
             {
-                if (StatusArr[StatuStateConst.STATE_DEFENCEUP] < nSec)
+                if (StatusArr[PoisonState.DEFENCEUP] < nSec)
                 {
-                    StatusArr[StatuStateConst.STATE_DEFENCEUP] = nSec;
+                    StatusArr[PoisonState.DEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusArr[StatuStateConst.STATE_DEFENCEUP] = nSec;
+                StatusArr[PoisonState.DEFENCEUP] = nSec;
                 result = true;
             }
-            StatusArrTick[StatuStateConst.STATE_DEFENCEUP] = HUtil32.GetTickCount();
+            StatusArrTick[PoisonState.DEFENCEUP] = HUtil32.GetTickCount();
             SysMsg(Format(M2Share.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -5147,20 +5147,20 @@ namespace GameSvr.Actor
         private bool MagDefenceUp(ushort nSec)
         {
             var result = false;
-            if (StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] > 0)
+            if (StatusArr[PoisonState.MAGDEFENCEUP] > 0)
             {
-                if (StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] < nSec)
+                if (StatusArr[PoisonState.MAGDEFENCEUP] < nSec)
                 {
-                    StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] = nSec;
+                    StatusArr[PoisonState.MAGDEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusArr[StatuStateConst.STATE_MAGDEFENCEUP] = nSec;
+                StatusArr[PoisonState.MAGDEFENCEUP] = nSec;
                 result = true;
             }
-            StatusArrTick[StatuStateConst.STATE_MAGDEFENCEUP] = HUtil32.GetTickCount();
+            StatusArrTick[PoisonState.MAGDEFENCEUP] = HUtil32.GetTickCount();
             SysMsg(Format(M2Share.g_sMagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -5173,13 +5173,13 @@ namespace GameSvr.Actor
         /// <returns></returns>
         public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
         {
-            if (StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] != 0)
+            if (StatusArr[PoisonState.BUBBLEDEFENCEUP] != 0)
             {
                 return false;
             }
             var nOldStatus = CharStatus;
-            StatusArr[StatuStateConst.STATE_BUBBLEDEFENCEUP] = nSec;
-            StatusArrTick[StatuStateConst.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
+            StatusArr[PoisonState.BUBBLEDEFENCEUP] = nSec;
+            StatusArrTick[PoisonState.BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
             if (nOldStatus != CharStatus)
             {
@@ -5517,7 +5517,7 @@ namespace GameSvr.Actor
             if (this is ScultureKingMonster)
             {
                 StoneMode = true;
-                CharStatusEx = StatuStateConst.STATE_STONE_MODE;
+                CharStatusEx = PoisonState.STONEMODE;
             }
 
             if (this is ElfMonster)

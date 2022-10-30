@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             StoneMode = true;
-            CharStatusEx = StatuStateConst.STATE_STONE_MODE;
+            CharStatusEx = PoisonState.STONEMODE;
             Direction = 5;
             _mNDangerLevel = 5;
             _mSlaveObjectList = new List<BaseObject>();

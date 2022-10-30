@@ -26,10 +26,8 @@ namespace LoginSvr.Conf
         const string sIdentReadyServers = "ReadyServers";
         const string sIdentTestServer = "TestServer";
         const string sIdentDynamicIPMode = "DynamicIPMode";
-        const string sIdentFeedIDList = "FeedIDList";
-        const string sIdentFeedIPList = "FeedIPList";
 
-        public Config Config;
+        public readonly Config Config;
 
         public ConfigManager(string fileName) : base(fileName)
         {
@@ -37,36 +35,32 @@ namespace LoginSvr.Conf
             Config = new Config();
             Config.SessionList = new List<TConnInfo>();
             Config.ServerNameList = new List<string>();
-            Config.AccountCostList = new Dictionary<string, int>();
-            Config.IPaddrCostList = new Dictionary<string, int>();
         }
 
         public void LoadConfig()
         {
-            Config.sDBServer = LoadConfig_LoadConfigString(sSectionServer, sIdentDBServer, Config.sDBServer);
-            Config.sFeeServer = LoadConfig_LoadConfigString(sSectionServer, sIdentFeeServer, Config.sFeeServer);
-            Config.sLogServer = LoadConfig_LoadConfigString(sSectionServer, sIdentLogServer, Config.sLogServer);
-            Config.sGateAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentGateAddr, Config.sGateAddr);
-            Config.nGatePort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentGatePort, Config.nGatePort);
-            Config.sServerAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentServerAddr, Config.sServerAddr);
-            Config.nServerPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentServerPort, Config.nServerPort);
-            Config.sMonAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentMonAddr, Config.sMonAddr);
-            Config.nMonPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentMonPort, Config.nMonPort);
-            Config.nDBSPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
-            Config.nFeePort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
-            Config.nLogPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
-            Config.nReadyServers = LoadConfig_LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.nReadyServers);
-            Config.boEnableMakingID = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.boEnableMakingID);
-            Config.boDynamicIPMode = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.boDynamicIPMode);
-            Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
-            Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
-            Config.ConnctionString = LoadConfig_LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
+            Config.sDBServer = LoadConfigString(sSectionServer, sIdentDBServer, Config.sDBServer);
+            Config.sFeeServer = LoadConfigString(sSectionServer, sIdentFeeServer, Config.sFeeServer);
+            Config.sLogServer = LoadConfigString(sSectionServer, sIdentLogServer, Config.sLogServer);
+            Config.sGateAddr = LoadConfigString(sSectionServer, sIdentGateAddr, Config.sGateAddr);
+            Config.nGatePort = LoadConfigInteger(sSectionServer, sIdentGatePort, Config.nGatePort);
+            Config.sServerAddr = LoadConfigString(sSectionServer, sIdentServerAddr, Config.sServerAddr);
+            Config.nServerPort = LoadConfigInteger(sSectionServer, sIdentServerPort, Config.nServerPort);
+            Config.sMonAddr = LoadConfigString(sSectionServer, sIdentMonAddr, Config.sMonAddr);
+            Config.nMonPort = LoadConfigInteger(sSectionServer, sIdentMonPort, Config.nMonPort);
+            Config.nDBSPort = LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
+            Config.nFeePort = LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
+            Config.nLogPort = LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
+            Config.nReadyServers = LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.nReadyServers);
+            Config.boEnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.boEnableMakingID);
+            Config.boDynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.boDynamicIPMode);
+            Config.ConnctionString = LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
             Config.ShowLogLevel = ReadInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
             Config.ShowDebugLog = ReadBool("Server", "ShowDebugLog", Config.ShowDebugLog);
             Config.PayMode = ReadInteger("Server", "PayMode", Config.PayMode);
         }
 
-        private string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)
+        private string LoadConfigString(string sSection, string sIdent, string sDefault)
         {
             string result;
             string sString = ReadString(sSection, sIdent, "");
@@ -82,7 +76,7 @@ namespace LoginSvr.Conf
             return result;
         }
 
-        private int LoadConfig_LoadConfigInteger(string sSection, string sIdent, int nDefault)
+        private int LoadConfigInteger(string sSection, string sIdent, int nDefault)
         {
             int result;
             int nLoadInteger;
@@ -99,7 +93,7 @@ namespace LoginSvr.Conf
             return result;
         }
 
-        private bool LoadConfig_LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
+        private bool LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
         {
             bool result;
             int nLoadInteger;
@@ -136,7 +130,7 @@ namespace LoginSvr.Conf
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if (sLineText != "" && sLineText[0] != ';')
+                    if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new string[] { " " });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sTitle, new string[] { " " });

@@ -30,7 +30,7 @@ namespace GameSvr.Monster.Monsters
                         baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
                         if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0)
                         {
-                            baseObject.MakePosion(StatuStateConst.POISON_STONE, 5, 0);
+                            baseObject.MakePosion(PoisonState.STONE, 5, 0);
                         }
                         result = baseObject;
                     }

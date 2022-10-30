@@ -44,7 +44,7 @@ namespace GameSvr.Monster.Monsters
                                 {
                                     if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0)
                                     {
-                                        baseObject.MakePosion(StatuStateConst.POISON_DECHEALTH, 30, 1);
+                                        baseObject.MakePosion(PoisonState.DECHEALTH, 30, 1);
                                     }
                                 }
                             }

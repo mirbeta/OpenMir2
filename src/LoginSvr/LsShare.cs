@@ -7,14 +7,14 @@ using SystemModule.Packet.ClientPackets;
 
 namespace LoginSvr
 {
-    public class LsShare
+    public static class LsShare
     {
         public static bool ShowLog = true;
         public static int OnlineCountMin = 0;
         public static int OnlineCountMax = 0;
         public static int SessionIdx = 0;
         public static readonly int VersionDate = 20011006;
-        public static IList<GateInfo> Gates = new List<GateInfo>();
+        public static IList<GateInfo> LoginGates = new List<GateInfo>();
         public static IList<CertUser> CertList = new List<CertUser>();
         public static string[] ServerAddr = new string[200];
 
@@ -143,7 +143,7 @@ namespace LoginSvr
 
     public struct UserSessionData
     {
-        public UserInfo UserInfo;
+        public int SoketId;
         public string Msg;
     }
 
@@ -253,17 +253,5 @@ namespace LoginSvr
         public Socket Socket;
         public long ClientTick;
         public GateInfo Gate;
-    }
-
-    public class AccountConst
-    {
-        public string s1C;
-        public int nC;
-
-        public AccountConst(string s1c, int nC)
-        {
-            this.s1C = s1c;
-            this.nC = nC;
-        }
     }
 }

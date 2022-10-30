@@ -34,7 +34,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (this.Death && !this.Ghost && this.StatusArr[StatuStateConst.POISON_STONE] == 0 && ZilKillCount >= 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - ReAliveTick) >= ZilkinDieTick)
+            if (this.Death && !this.Ghost && this.StatusArr[PoisonState.STONE] == 0 && ZilKillCount >= 0 && this.VisibleActors.Count > 0 && (HUtil32.GetTickCount() - ReAliveTick) >= ZilkinDieTick)
             {
                 this.Abil.MaxHP = (ushort)(this.Abil.MaxHP >> 1);
                 this.FightExp = this.FightExp / 2;

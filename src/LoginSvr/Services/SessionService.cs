@@ -12,6 +12,9 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginSvr.Services
 {
+    /// <summary>
+    /// 会话服务
+    /// </summary>
     public class SessionService
     {
         private readonly MirLog _logger;
@@ -193,7 +196,6 @@ namespace LoginSvr.Services
                 return;
             }
             var seconds = _accountStorage.GetAccountPlayTime(account);
-
             for (var i = 0; i < LsShare.CertList.Count; i++)
             {
                 var certUser = LsShare.CertList[i];
@@ -203,7 +205,7 @@ namespace LoginSvr.Services
                     {
                         if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                         {
-                            SendServerMsg(Grobal2.SS_CLOSESESSION, certUser.ServerName, certUser.LoginID + "/" + seconds);
+                            SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, certUser.ServerName, certUser.LoginID + "/" + seconds);
                             _logger.LogDebug($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
                         }
                     }
@@ -220,7 +222,6 @@ namespace LoginSvr.Services
             {
                 return;
             }
-
             var seconds = _accountStorage.GetAccountPlayTime(account);//获取历史时间
             if (seconds > 0)
             {
@@ -252,6 +253,11 @@ namespace LoginSvr.Services
                         }
                     }
                 }
+            }
+            else
+            {          
+                SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, serverName, account + "/" + seconds);
+                _logger.LogDebug($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
             }
         }
 
@@ -360,35 +366,26 @@ namespace LoginSvr.Services
         /// </summary>
         public void SessionClearNoPayMent()
         {
-            var config = _configManager.Config;
-            for (var i = config.SessionList.Count - 1; i >= 0; i--)
+            //todo 判断服务器是否开启收费模式
+            for (var i = _config.SessionList.Count - 1; i >= 0; i--)
             {
-                var connInfo = config.SessionList[i];
-                if (!connInfo.boKicked && !config.TestServer && !connInfo.bo11)
+                var connInfo = _config.SessionList[i];
+                if (!connInfo.boKicked && !_config.TestServer && !connInfo.bo11)
                 {
                     if (HUtil32.GetTickCount() - connInfo.dwStartTick > 60 * 60 * 1000)
                     {
                         connInfo.dwStartTick = HUtil32.GetTickCount();
-                        if (!IsPayMent(config, connInfo.IPaddr, connInfo.Account))
-                        {
-                            SendServerMsg(Grobal2.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
-                            config.SessionList[i] = null;
-                            config.SessionList.RemoveAt(i);
-                        }
+                        // if (!IsPayMent(config, connInfo.IPaddr, connInfo.Account))
+                        // {
+                        //     SendServerMsg(Grobal2.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
+                        //     _config.SessionList[i] = null;
+                        //     _config.SessionList.RemoveAt(i);
+                        // }
                     }
                 }
             }
         }
         
-        /// <summary>
-        /// 是否付费账号
-        /// </summary>
-        /// <returns></returns>
-        private bool IsPayMent(Config config, string sIPaddr, string sAccount)
-        {
-            return config.AccountCostList.ContainsKey(sAccount) || config.IPaddrCostList.ContainsKey(sIPaddr);
-        }
-
         /// <summary>
         /// 服务器排序
         /// </summary>
@@ -513,10 +510,10 @@ namespace LoginSvr.Services
             {
                 for (var i = 0; i < _serverList.Count; i++)
                 {
-                    var MsgServer = _serverList[i];
-                    if (MsgServer.ServerIndex != 99)
+                    var msgServer = _serverList[i];
+                    if (msgServer.ServerIndex != 99)
                     {
-                        nCount += MsgServer.OnlineCount;
+                        nCount += msgServer.OnlineCount;
                     }
                 }
                 result = nCount;
@@ -673,7 +670,7 @@ namespace LoginSvr.Services
         public string IPaddr;
     }
 
-    public class LimitServerUserInfo
+    public struct LimitServerUserInfo
     {
         /// <summary>
         /// 服务器名称

@@ -29,7 +29,7 @@ namespace GameSvr.Monster.Monsters
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6)
                             {
-                                TargetCret.MakePosion(StatuStateConst.POISON_DECHEALTH, 35, 2);
+                                TargetCret.MakePosion(PoisonState.DECHEALTH, 35, 2);
                                 return;
                             }
                         }
@@ -43,7 +43,7 @@ namespace GameSvr.Monster.Monsters
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6)
                             {
-                                TargetCret.MakePosion(StatuStateConst.POISON_DECHEALTH, 35, 2);
+                                TargetCret.MakePosion(PoisonState.DECHEALTH, 35, 2);
                                 return;
                             }
                         }

@@ -30,8 +30,6 @@ namespace LoginSvr.Conf
         public string sMonAddr;
         public int nMonPort;
         public string sGateIPaddr;
-        public string sFeedIDList;
-        public string sFeedIPList;
         /// <summary>
         /// 测试
         /// </summary>
@@ -44,8 +42,6 @@ namespace LoginSvr.Conf
         public int nReadyServers;
         public IList<TConnInfo> SessionList;
         public IList<string> ServerNameList;
-        public Dictionary<string, int> AccountCostList;
-        public Dictionary<string, int> IPaddrCostList;
         public int nRouteCount;
         public TGateRoute[] GateRoute;
         public string ConnctionString;
@@ -65,8 +61,6 @@ namespace LoginSvr.Conf
             nServerPort = 5600;
             sMonAddr = "*";
             nMonPort = 3000;
-            sFeedIDList = "FeedIDList.txt";
-            sFeedIPList = "FeedIPList.txt";
             TestServer = true;
             boEnableMakingID = true;
             boDynamicIPMode = false;

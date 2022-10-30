@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 7;
             StoneMode = true;
-            CharStatusEx = StatuStateConst.STATE_STONE_MODE;
+            CharStatusEx = PoisonState.STONEMODE;
         }
 
         private void MeltStone()

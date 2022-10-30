@@ -13,16 +13,14 @@ namespace LoginSvr
     {
         private readonly MirLog _logger;
         private readonly LoginService _loginService;
-        private readonly ThreadParseList _threadParseList;
         private readonly SessionService _sessionService;
         private int _processMonSocTick;
         private int _processServerStatusTick;
 
-        public TimedService(MirLog logger, LoginService loginService, ThreadParseList threadParseList, SessionService sessionService)
+        public TimedService(MirLog logger, LoginService loginService, SessionService sessionService)
         {
             _logger = logger;
             _loginService = loginService;
-            _threadParseList = threadParseList;
             _sessionService = sessionService;
         }
 
@@ -36,7 +34,6 @@ namespace LoginSvr
                 _sessionService.SessionClearNoPayMent();
                 ProcessMonSoc();
                 CheckServerStatus();
-                _threadParseList.Execute();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }
@@ -87,7 +84,7 @@ namespace LoginSvr
         
         private void CheckServerStatus()
         {
-            if (HUtil32.GetTickCount() - _processServerStatusTick > 20000)
+            if (HUtil32.GetTickCount() - _processServerStatusTick > 10000)
             {
                 _processServerStatusTick = HUtil32.GetTickCount();
                 var serverList = _sessionService.ServerList;
@@ -102,7 +99,7 @@ namespace LoginSvr
                     if (!string.IsNullOrEmpty(sServerName))
                     {
                         var tickTime = HUtil32.GetTickCount() - msgServer.KeepAliveTick;
-                        if (tickTime <= 60000) continue;
+                        if (tickTime <= 20000) continue;
                         msgServer.Socket.Close();
                         if (msgServer.ServerIndex == 99)
                         {
