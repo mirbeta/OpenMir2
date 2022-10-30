@@ -13,26 +13,32 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginSvr.Services
 {
+    public class ClientPacket
+    {
+        public int SocketId;
+        public byte[] Pakcet;
+    }
+
     /// <summary>
-    /// 账号服务
+    /// 账号服务 处理来自LoginGate的客户端登陆 注册 等登陆封包消息
     /// 处理账号注册 登录 找回密码等
     /// </summary>
     public class LoginService
     {
         private readonly SocketServer _serverSocket;
         private readonly MirLog _logger;
-        private readonly ClientSession _clientSession;
-        private readonly Channel<byte[]> _messageQueue;
-        private readonly UserManager _userManager;
         private readonly Config _config;
+        private readonly ClientSession _clientSession;
+        private readonly Channel<ClientPacket> _messageQueue;
+        private readonly ClientManager _clientManager;
 
-        public LoginService(MirLog logger, ConfigManager configManager, ClientSession clientSession, UserManager userManager)
+        public LoginService(MirLog logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager)
         {
             _logger = logger;
             _clientSession = clientSession;
-            _userManager = userManager;
+            _clientManager = clientManager;
             _config = configManager.Config;
-            _messageQueue = Channel.CreateUnbounded<byte[]>();
+            _messageQueue = Channel.CreateUnbounded<ClientPacket>();
             _serverSocket = new SocketServer(short.MaxValue, 2048);
             _serverSocket.OnClientConnect += GSocketClientConnect;
             _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
@@ -54,27 +60,13 @@ namespace LoginSvr.Services
             gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, e.RemoteIPaddr);
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
-            LsShare.LoginGates.Add(gateInfo);
+            _clientManager.AddSession(e.SocHandle, gateInfo);
             _logger.Information($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
         }
 
         private void GSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < LsShare.LoginGates.Count; i++)
-            {
-                var gateInfo = LsShare.LoginGates[i];
-                if (gateInfo.Socket == e.Socket)
-                {
-                    for (var j = 0; j < gateInfo.UserList.Count; j++)
-                    {
-                        _logger.LogDebug("Close: " + gateInfo.UserList[j].UserIPaddr);
-                        gateInfo.UserList[j] = null;
-                    }
-                    gateInfo.UserList = null;
-                    LsShare.LoginGates.Remove(gateInfo);
-                    break;
-                }
-            }
+            _clientManager.Delete(e.SocHandle);
             _logger.Warn($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
         }
 
@@ -85,16 +77,13 @@ namespace LoginSvr.Services
 
         private void GSocketClientRead(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < LsShare.LoginGates.Count; i++)
+            var data = new byte[e.BytesReceived];
+            Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, data.Length);
+            _messageQueue.Writer.TryWrite(new ClientPacket()
             {
-                if (LsShare.LoginGates[i].Socket == e.Socket)
-                {
-                    var data = new byte[e.BytesReceived];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, data.Length);
-                    _messageQueue.Writer.TryWrite(data);
-                    break;
-                }
-            }
+                SocketId = e.SocHandle,
+                Pakcet = data
+            });
         }
 
         /// <summary>
@@ -118,12 +107,12 @@ namespace LoginSvr.Services
         {
             while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
             {
-                while (_messageQueue.Reader.TryRead(out var message))
+                while (_messageQueue.Reader.TryRead(out var clientPacket))
                 {
                     try
                     {
-                        var packet = Packets.ToPacket<GatePacket>(message);
-                        ProcessGateData(packet);
+                        var packet = Packets.ToPacket<GatePacket>(clientPacket.Pakcet);
+                        ProcessGateData(clientPacket.SocketId, packet);
                     }
                     catch (Exception e)
                     {
@@ -133,44 +122,35 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessGateData(GatePacket packet)
+        private void ProcessGateData(int socketId,GatePacket packet)
         {
-            var I = 0;
-            while (true)
+            var gateInfo = _clientManager.GetSession(socketId);
+            if (packet.Body != null && gateInfo.UserList != null)
             {
-                if (LsShare.LoginGates.Count <= I)
+                if (packet.EndChar != '$' && packet.StartChar != '%')
                 {
-                    break;
+                    _logger.Warn("丢弃错误的封包数据");
+                    return;
                 }
-                var gateInfo = LsShare.LoginGates[I];
-                if (packet.Body != null && gateInfo.UserList != null)
+                switch (packet.Type)
                 {
-                    if (packet.EndChar != '$' && packet.StartChar != '%')
-                    {
-                        _logger.Warn("丢弃错误的封包数据");
+                    case PacketType.KeepAlive:
+                        SendKeepAlivePacket(gateInfo.Socket);
+                        gateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
                         break;
-                    }
-                    switch (packet.Type)
-                    {
-                        case PacketType.KeepAlive:
-                            SendKeepAlivePacket(gateInfo.Socket);
-                            gateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
-                            break;
-                        case PacketType.Data:
-                            var dataMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
-                            ProcessUserMessage(packet.SocketId, dataMsg);
-                            break;
-                        case PacketType.Enter:
-                            var endterMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
-                            ReceiveOpenUser(packet.SocketId, endterMsg, gateInfo);
-                            break;
-                        case PacketType.Leave:
-                            ReceiveCloseUser(packet.SocketId, gateInfo);
-                            break;
-                    }
-                    _config.sGateIPaddr = gateInfo.sIPaddr;
+                    case PacketType.Data:
+                        var dataMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
+                        ProcessUserMessage(packet.SocketId, dataMsg);
+                        break;
+                    case PacketType.Enter:
+                        var endterMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
+                        ReceiveOpenUser(packet.SocketId, endterMsg, gateInfo);
+                        break;
+                    case PacketType.Leave:
+                        ReceiveCloseUser(packet.SocketId, gateInfo);
+                        break;
                 }
-                I++;
+                _config.sGateIPaddr = gateInfo.sIPaddr;
             }
         }
 
@@ -234,7 +214,7 @@ namespace LoginSvr.Services
                 userInfo.ClientTick = HUtil32.GetTickCount();
                 userInfo.Gate = gateInfo;
                 gateInfo.UserList.Add(userInfo);
-                _userManager.AddUser(sSockIndex, userInfo);
+                _clientManager.AddSession(sSockIndex, gateInfo);
                 _logger.LogDebug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
             }
             catch (Exception ex)

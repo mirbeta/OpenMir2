@@ -16,19 +16,19 @@ namespace LoginSvr.Services
     public class ClientSession
     {
         private readonly MirLog _logger;
+        private readonly Config _config;
         private readonly AccountStorage _accountStorage;
         private readonly SessionService _sessionService;
-        private readonly UserManager _userManager;
+        private readonly ClientManager _clientManager;
         private readonly Channel<UserSessionData> _userMessageQueue;
-        private readonly Config _config;
 
-        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionService masSocService, UserManager userManager)
+        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionService masSocService, ClientManager clientManager)
         {
             _logger = logger;
+            _config = configManager.Config;
             _accountStorage = accountStorage;
             _sessionService = masSocService;
-            _userManager = userManager;
-            _config = configManager.Config;
+            _clientManager = clientManager;
             _userMessageQueue = Channel.CreateUnbounded<UserSessionData>();
         }
 
@@ -60,7 +60,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessUserData(int clientId,string userData)
+        private void ProcessUserData(int clientId, string userData)
         {
             var sMsg = string.Empty;
             try
@@ -74,8 +74,22 @@ namespace LoginSvr.Services
                     return;
                 if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
                     return;
-                sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                ProcessUserMsg(clientId,sMsg);
+                sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
+
+                var clientSession = _clientManager.GetSession(clientId);
+
+                var j = 0;
+                while (true)
+                {
+                    if (clientSession.UserList.Count <= j) break;
+                    var userInfo = clientSession.UserList[j];
+                    if (userInfo.SessionID > 0)
+                    {
+                        ProcessUserMsg(clientSession, userInfo, sMsg);
+                    }
+                    j++;
+                }
+
             }
             catch (Exception ex)
             {
@@ -84,9 +98,8 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessUserMsg(int sessionId,string sMsg)
+        private void ProcessUserMsg(GateInfo gateInfo,UserInfo userInfo,string sMsg)
         {
-            UserInfo userInfo = _userManager.GetUser(sessionId);
             var sDefMsg = sMsg[..Grobal2.DEFBLOCKSIZE];
             var sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
             var defMsg = EDCode.DecodePacket(sDefMsg);
@@ -108,7 +121,7 @@ namespace LoginSvr.Services
                     }
                     else
                     {
-                        KickUser(ref userInfo);
+                        KickUser(gateInfo, ref userInfo);
                     }
                     break;
                 case Grobal2.CM_ADDNEWUSER:
@@ -180,8 +193,6 @@ namespace LoginSvr.Services
         {
             var sLoginId = string.Empty;
             UserEntry userEntry = null;
-            var nIdCostIndex = -1;
-            var nIpCostIndex = -1;
             AccountRecord accountRecord = null;
             try
             {
@@ -764,25 +775,13 @@ namespace LoginSvr.Services
             }
         }
 
-        private void KickUser(ref UserInfo userInfo)
+        private void KickUser(GateInfo gateInfo, ref UserInfo userInfo)
         {
             const string sKickMsg = "Kick: {0}";
-            for (var i = 0; i < LsShare.LoginGates.Count; i++)
-            {
-                var gateInfo = LsShare.LoginGates[i];
-                for (var j = 0; j < gateInfo.UserList.Count; j++)
-                {
-                    var user = gateInfo.UserList[j];
-                    if (user == userInfo)
-                    {
-                        _logger.LogDebug(string.Format(sKickMsg, userInfo.UserIPaddr));
-                        SendGateKickMsg(gateInfo.Socket, userInfo.SockIndex);
-                        userInfo = null;
-                        gateInfo.UserList.RemoveAt(j);
-                        return;
-                    }
-                }
-            }
+            _logger.LogDebug(string.Format(sKickMsg, userInfo.UserIPaddr));
+            SendGateKickMsg(gateInfo.Socket, userInfo.SockIndex);
+            gateInfo.UserList.Remove(userInfo);
+            userInfo = null;
         }
 
         /// <summary>
