@@ -4,13 +4,13 @@ namespace SystemModule.Packet.ServerPackets
 {
     public class LoginSvrPacket : Packets
     {
-        public string ConnectionId { get; set; }
+        public int ConnectionId { get; set; }
         public short PackLen { get; set; }
         public byte[] ClientPacket { get; set; }
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ConnectionId = reader.ReadString();
+            ConnectionId = reader.ReadInt32();
             PackLen = reader.ReadInt16();
             ClientPacket = reader.ReadBytes(PackLen);
         }

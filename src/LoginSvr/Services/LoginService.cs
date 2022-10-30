@@ -183,7 +183,7 @@ namespace LoginSvr.Services
             _logger.LogDebug($"心跳消息 链接状态:[{socket.Connected}]");
         }
 
-        private void ReceiveCloseUser(string sSockIndex, GateInfo gateInfo)
+        private void ReceiveCloseUser(int sSockIndex, GateInfo gateInfo)
         {
             const string sCloseMsg = "Close: {0}";
             for (var i = 0; i < gateInfo.UserList.Count; i++)
@@ -203,7 +203,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ReceiveOpenUser(string sSockIndex, string sIPaddr, GateInfo gateInfo)
+        private void ReceiveOpenUser(int sSockIndex, string sIPaddr, GateInfo gateInfo)
         {
             UserInfo userInfo;
             var sUserIPaddr = string.Empty;
@@ -244,11 +244,11 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessUserMessage(string sSockIndex, string sData)
+        private void ProcessUserMessage(int sSockIndex, string sData)
         {
             _clientSession.SendToQueue(new UserSessionData()
             {
-                SoketId = Convert.ToInt32(sSockIndex),
+                SoketId = sSockIndex,
                 Msg = sData
             });
             // for (var i = 0; i < gateInfo.UserList.Count; i++)

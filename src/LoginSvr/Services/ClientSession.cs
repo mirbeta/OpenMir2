@@ -745,7 +745,7 @@ namespace LoginSvr.Services
             _config.SessionList.Add(connInfo);
         }
 
-        private void SendGateMsg(Socket socket, string sSockIndex, string sMsg)
+        private void SendGateMsg(Socket socket, int sSockIndex, string sMsg)
         {
             if (socket.Connected)
             {
@@ -881,7 +881,7 @@ namespace LoginSvr.Services
             return result;
         }
 
-        private void SendGateKickMsg(Socket socket, string sSockIndex)
+        private void SendGateKickMsg(Socket socket, int sSockIndex)
         {
             var sSendMsg = $"%+-{sSockIndex}$";
             socket.SendText(sSendMsg);

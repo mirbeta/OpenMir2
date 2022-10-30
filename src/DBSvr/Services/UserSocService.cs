@@ -377,7 +377,7 @@ namespace DBSvr.Services
         {
             var gataPacket = new GatePacket();
             gataPacket.Type = PacketType.KeepAlive;
-            gataPacket.SocketId = string.Empty;
+            gataPacket.SocketId = 0;
             SendPacket(socket, gataPacket);
         }
 
@@ -411,7 +411,7 @@ namespace DBSvr.Services
         /// <summary>
         /// 用户打开会话
         /// </summary>
-        private void OpenUser(string sId, string sIp, ref TGateInfo gateInfo)
+        private void OpenUser(int sId, string sIp, ref TGateInfo gateInfo)
         {
             var sUserIPaddr = string.Empty;
             var sGateIPaddr = HUtil32.GetValidStr3(sIp, ref sUserIPaddr, HUtil32.Backslash);
@@ -445,7 +445,7 @@ namespace DBSvr.Services
             }
         }
 
-        private void CloseUser(string connId, ref TGateInfo gateInfo)
+        private void CloseUser(int connId, ref TGateInfo gateInfo)
         {
             for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
@@ -621,7 +621,7 @@ namespace DBSvr.Services
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             var sMsg = EDCode.EncodeMessage(msg);
-            SendUserSocket(userInfo.Socket, sMsg, userInfo.sConnID);
+            SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
         }
 
         private int DelChrSnameToLevel(string sName)
@@ -897,7 +897,7 @@ namespace DBSvr.Services
             return _mapList.ContainsKey(sMap) ? _mapList[sMap] : 0;
         }
 
-        private void SendUserSocket(Socket socket, string sessionId, string sSendMsg)
+        private void SendUserSocket(Socket socket, int sessionId, string sSendMsg)
         {
             var packet = new GatePacket();
             packet.SocketId = sessionId;

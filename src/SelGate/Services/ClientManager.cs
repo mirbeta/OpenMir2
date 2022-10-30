@@ -16,7 +16,7 @@ namespace SelGate.Services
         private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
-        private readonly ConcurrentDictionary<string, ClientThread> _clientThreadMap;
+        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private int _processClearSessionTick = 0;
         private int _lastChekSocketTick = 0;
         private int _processDelayTick = 0;
@@ -26,7 +26,7 @@ namespace SelGate.Services
             _logQueue = logQueue;
             _configManager = configManager;
             _sessionManager = sessionManager;
-            _clientThreadMap = new ConcurrentDictionary<string, ClientThread>();
+            _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
             _clientList = new List<ClientThread>();
         }
 
@@ -80,7 +80,7 @@ namespace SelGate.Services
         /// </summary>
         /// <param name="connectionId"></param>
         /// <param name="clientThread"></param>
-        public void AddClientThread(string connectionId, ClientThread clientThread)
+        public void AddClientThread(int connectionId, ClientThread clientThread)
         {
             _clientThreadMap.TryAdd(connectionId, clientThread); //链接成功后建立对应关系
         }
@@ -90,9 +90,9 @@ namespace SelGate.Services
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns></returns>
-        public ClientThread GetClientThread(string connectionId)
+        public ClientThread GetClientThread(int connectionId)
         {
-            if (!string.IsNullOrEmpty(connectionId))
+            if (connectionId > 0)
             {
                 return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : GetClientThread();
             }
@@ -103,7 +103,7 @@ namespace SelGate.Services
         /// 从字典删除用户和网关对应关系
         /// </summary>
         /// <param name="connectionId"></param>
-        public void DeleteClientThread(string connectionId)
+        public void DeleteClientThread(int connectionId)
         {
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
         }

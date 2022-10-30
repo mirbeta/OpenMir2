@@ -12,13 +12,13 @@ namespace LoginGate.Services
     {
         private readonly MirLog _logger;
         private readonly ConfigManager _configManager;
-        readonly ConcurrentDictionary<string, ClientSession> _sessionMap;
+        readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         public SessionManager(MirLog logger, ConfigManager configManager)
         {
             _logger = logger;
             _configManager = configManager;
-            _sessionMap = new ConcurrentDictionary<string, ClientSession>();
+            _sessionMap = new ConcurrentDictionary<int, ClientSession>();
         }
 
         public void AddSession(TSessionInfo sessionInfo, ClientThread clientThread)
@@ -28,7 +28,7 @@ namespace LoginGate.Services
             userSession.UserEnter();
         }
 
-        public ClientSession GetSession(string sessionId)
+        public ClientSession GetSession(int sessionId)
         {
             if (_sessionMap.ContainsKey(sessionId))
             {
@@ -37,7 +37,7 @@ namespace LoginGate.Services
             return null;
         }
 
-        public void CloseSession(string sessionId)
+        public void CloseSession(int sessionId)
         {
             if (_sessionMap.TryRemove(sessionId, out var clientSession))
             {
@@ -45,7 +45,7 @@ namespace LoginGate.Services
             }
         }
 
-        public bool CheckSession(string sessionId)
+        public bool CheckSession(int sessionId)
         {
             if (_sessionMap.ContainsKey(sessionId))
             {

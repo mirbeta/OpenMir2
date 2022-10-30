@@ -16,11 +16,11 @@ namespace SelGate.Services
         /// 发送封包（网关-》客户端）
         /// </summary>
         private readonly Channel<TMessageData> _sendQueue = null;
-        private readonly ConcurrentDictionary<string, ClientSession> _connectionSessions;
+        private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
 
         public SessionManager()
         {
-            _connectionSessions = new ConcurrentDictionary<string, ClientSession>();
+            _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
             _sendQueue = Channel.CreateUnbounded<TMessageData>();
         }
 
@@ -61,12 +61,12 @@ namespace SelGate.Services
             }, stoppingToken);
         }
 
-        public void AddSession(string sessionId, ClientSession clientSession)
+        public void AddSession(int sessionId, ClientSession clientSession)
         {
             _connectionSessions.TryAdd(sessionId, clientSession);
         }
 
-        public ClientSession GetSession(string sessionId)
+        public ClientSession GetSession(int sessionId)
         {
             if (_connectionSessions.ContainsKey(sessionId))
             {
@@ -75,7 +75,7 @@ namespace SelGate.Services
             return null;
         }
 
-        public void CloseSession(string sessionId)
+        public void CloseSession(int sessionId)
         {
             if (!_connectionSessions.TryRemove(sessionId, out var clientSession))
             {
@@ -83,7 +83,7 @@ namespace SelGate.Services
             }
         }
 
-        public bool CheckSession(string sessionId)
+        public bool CheckSession(int sessionId)
         {
             if (_connectionSessions.ContainsKey(sessionId))
             {

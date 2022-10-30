@@ -234,7 +234,7 @@ namespace LoginSvr
         public string Account;
         public string UserIPaddr;
         public string GateIPaddr;
-        public string SockIndex;
+        public int SockIndex;
         public int SessionID;
         /// <summary>
         /// 付费账号
