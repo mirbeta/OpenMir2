@@ -81,7 +81,7 @@ namespace LoginSvr
 
         static async Task ProcessLoopAsync()
         {
-            string? input = null;
+            string input = null;
             do
             {
                 input = Console.ReadLine();
