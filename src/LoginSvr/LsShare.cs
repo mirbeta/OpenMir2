@@ -14,7 +14,6 @@ namespace LoginSvr
         public static int OnlineCountMax = 0;
         public static int SessionIdx = 0;
         public static readonly int VersionDate = 20011006;
-        public static IList<GateInfo> LoginGates = new List<GateInfo>();
         public static IList<CertUser> CertList = new List<CertUser>();
         public static string[] ServerAddr = new string[200];
 

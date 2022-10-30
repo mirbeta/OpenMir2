@@ -1,19 +1,48 @@
-using System.Collections.Generic;
+using NLog;
+using System.Collections.Concurrent;
 
 namespace LoginSvr.Services
 {
-    public class UserManager
+    public class ClientManager
     {
-        private readonly Dictionary<int, UserInfo> _userInfos = new Dictionary<int, UserInfo>();
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private readonly ConcurrentDictionary<int, GateInfo> _gateInfos = new ConcurrentDictionary<int, GateInfo>();
+
+        public int Gates => _gateInfos.Count;
         
-        public UserInfo GetUser(int sessionId)
+        public GateInfo GetSession(int sessionId)
         {
-            return new UserInfo();
+            if (_gateInfos.TryGetValue(sessionId, out var userInfo))
+            {
+                return userInfo;
+            }
+            return null;
         }
 
-        public void AddUser(int sessionId, UserInfo userInfo)
+        public bool AddSession(int socketId, GateInfo userInfo)
         {
-            _userInfos.Add(sessionId,userInfo);
+            if (_gateInfos.ContainsKey(socketId))
+            {
+                return false;
+            }
+            _gateInfos.TryAdd(socketId, userInfo);
+            return true;
+        }
+
+        public void Delete(int socketId)
+        {
+            if (_gateInfos.ContainsKey(socketId))
+            {
+                if (_gateInfos.TryRemove(socketId,out var gateInfo))
+                {
+                    for (var j = 0; j < gateInfo.UserList.Count; j++)
+                    {
+                        _logger.Debug("Close: " + gateInfo.UserList[j].UserIPaddr);
+                        gateInfo.UserList[j] = null;
+                    }
+                    gateInfo.UserList = null;
+                }
+            }
         }
     }
 }
