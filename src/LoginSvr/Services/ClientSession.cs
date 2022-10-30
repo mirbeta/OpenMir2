@@ -17,8 +17,7 @@ namespace LoginSvr.Services
     {
         private readonly MirLog _logger;
         private readonly AccountStorage _accountStorage;
-        private readonly SessionService _masSocService;
-        private readonly ConfigManager _configManager;
+        private readonly SessionService _sessionService;
         private readonly UserManager _userManager;
         private readonly Channel<UserSessionData> _userMessageQueue;
         private readonly Config _config;
@@ -27,10 +26,9 @@ namespace LoginSvr.Services
         {
             _logger = logger;
             _accountStorage = accountStorage;
-            _configManager = configManager;
-            _masSocService = masSocService;
+            _sessionService = masSocService;
             _userManager = userManager;
-            _config = _configManager.Config;
+            _config = configManager.Config;
             _userMessageQueue = Channel.CreateUnbounded<UserSessionData>();
         }
 
@@ -114,7 +112,7 @@ namespace LoginSvr.Services
                     }
                     break;
                 case Grobal2.CM_ADDNEWUSER:
-                    if (_config.boEnableMakingID)
+                    if (_config.EnableMakingID)
                     {
                         if (HUtil32.GetTickCount() - userInfo.ClientTick > 5000)
                         {
@@ -124,6 +122,12 @@ namespace LoginSvr.Services
                         {
                             _logger.Warn("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
                         }
+                    }
+                    else
+                    {
+                        //todo Recog=99 暂未开放账号注册
+                        defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWID_FAIL, 99, 0, 0, 0);
+                        SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
                     }
                     break;
                 case Grobal2.CM_CHANGEPASSWORD:
@@ -483,7 +487,7 @@ namespace LoginSvr.Services
                 GetSelGateInfo(sServerName, _config.sGateIPaddr, ref sSelGateIp, ref nSelGatePort);
                 if (!string.IsNullOrEmpty(sSelGateIp) && nSelGatePort > 0)
                 {
-                    if (_config.boDynamicIPMode)
+                    if (_config.DynamicIPMode)
                     {
                         sSelGateIp = userInfo.GateIPaddr;
                     }
@@ -491,10 +495,10 @@ namespace LoginSvr.Services
                     userInfo.SelServer = true;
                     var boPayCost = false;
                     var nPayMode = userInfo.PayMode;
-                    if (_masSocService.IsNotUserFull(sServerName))
+                    if (_sessionService.IsNotUserFull(sServerName))
                     {
                         SessionUpdate(userInfo.SessionID, sServerName, boPayCost);
-                        _masSocService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.PayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr + "/" + userInfo.Seconds);
+                        _sessionService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.PayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr + "/" + userInfo.Seconds);
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, userInfo.SessionID, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sSelGateIp + "/" + nSelGatePort + "/" + userInfo.SessionID));
                     }
@@ -710,7 +714,7 @@ namespace LoginSvr.Services
                 var connInfo = _config.SessionList[i];
                 if (connInfo.Account == sLoginId && !connInfo.boKicked)
                 {
-                    _masSocService.SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
+                    _sessionService.SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                     connInfo.dwKickTick = HUtil32.GetTickCount();
                     connInfo.boKicked = true;
                 }
@@ -794,9 +798,9 @@ namespace LoginSvr.Services
             {
                 sSelGateIp = "";
                 nSelGatePort = 0;
-                for (var i = 0; i < _config.nRouteCount; i++)
+                for (var i = 0; i < _config.RouteCount; i++)
                 {
-                    if (_config.boDynamicIPMode || (_config.GateRoute[i].sServerName == sServerName && _config.GateRoute[i].sPublicAddr == sIPaddr))
+                    if (_config.DynamicIPMode || (_config.GateRoute[i].sServerName == sServerName && _config.GateRoute[i].sPublicAddr == sIPaddr))
                     {
                         nGateCount = 0;
                         nGateIdx = 0;
@@ -860,15 +864,14 @@ namespace LoginSvr.Services
         {
             var result = string.Empty;
             var sServerInfo = string.Empty;
-            var config = _configManager.Config;
             try
             {
-                for (var i = 0; i < config.ServerNameList.Count; i++)
+                for (var i = 0; i < _config.ServerNameList.Count; i++)
                 {
-                    var sServerName = config.ServerNameList[i];
+                    var sServerName = _config.ServerNameList[i];
                     if (!string.IsNullOrEmpty(sServerName))
                     {
-                        sServerInfo = sServerInfo + sServerName + "/" + _masSocService.GetServerStatus(sServerName) + "/";
+                        sServerInfo = sServerInfo + sServerName + "/" + _sessionService.GetServerStatus(sServerName) + "/";
                     }
                 }
                 result = sServerInfo;

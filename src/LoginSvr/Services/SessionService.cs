@@ -527,7 +527,7 @@ namespace LoginSvr.Services
 
         public bool CheckReadyServers()
         {
-            return _serverList.Count >= _configManager.Config.nReadyServers;
+            return _serverList.Count >= _configManager.Config.ReadyServers;
         }
 
         private void SendServerMsgA(short wIdent, string sMsg)

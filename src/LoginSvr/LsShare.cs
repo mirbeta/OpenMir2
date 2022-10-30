@@ -79,7 +79,7 @@ namespace LoginSvr
             StringList SaveList = new StringList();
             SaveList.Add(";No space allowed");
             SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) + GenSpaceString("Public", 17) + "Gate...");
-            for (var i = 0; i < Config.nRouteCount; i++)
+            for (var i = 0; i < Config.RouteCount; i++)
             {
                 sC = GenSpaceString(Config.GateRoute[i].sServerName, 15) +
                      GenSpaceString(Config.GateRoute[i].sTitle, 15) +
@@ -114,7 +114,7 @@ namespace LoginSvr
         public static string GetGatePublicAddr(Config Config, string sGateIP)
         {
             string result = sGateIP;
-            for (var i = 0; i < Config.nRouteCount; i++)
+            for (var i = 0; i < Config.RouteCount; i++)
             {
                 if (Config.GateRoute[i].sRemoteAddr == sGateIP)
                 {
