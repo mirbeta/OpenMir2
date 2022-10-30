@@ -29,8 +29,8 @@ namespace LoginSvr.Services
         private readonly MirLog _logger;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
-        private readonly Channel<ClientPacket> _messageQueue;
         private readonly ClientManager _clientManager;
+        private readonly Channel<ClientPacket> _messageQueue;
 
         public LoginService(MirLog logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager)
         {
