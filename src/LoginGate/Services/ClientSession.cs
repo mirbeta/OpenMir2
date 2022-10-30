@@ -43,7 +43,7 @@ namespace LoginGate.Services
         /// 发送创建账号，修改密码，更新资料等到LoginSvr
         /// </summary>
         /// <param name="userData"></param>
-        public void HandleClientPacket(TMessageData userData)
+        public void HandleClientPacket(MessageData userData)
         {
             if ((userData.MsgLen >= 5) && Config.DefenceCCPacket)
             {
@@ -164,7 +164,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 处理服务端发送过来的消息并发送到游戏客户端
         /// </summary>
-        public void ProcessSvrData(TMessageData sendData)
+        public void ProcessSvrData(MessageData sendData)
         {
             if (m_KickFlag)
             {

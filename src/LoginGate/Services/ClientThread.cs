@@ -164,7 +164,7 @@ namespace LoginGate.Services
             var loginSvrPacket = Packets.ToPacket<LoginSvrPacket>(e.Buff);
             if (loginSvrPacket != null)
             {
-                var userData = new TMessageData();
+                var userData = new MessageData();
                 userData.ConnectionId = loginSvrPacket.ConnectionId;
                 userData.Body = loginSvrPacket.ClientPacket;
                 _clientManager.SendQueue(userData);

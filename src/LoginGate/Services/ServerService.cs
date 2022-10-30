@@ -144,7 +144,7 @@ namespace LoginGate.Services
             }
             var data = new byte[token.BytesReceived];
             Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-            var message = new TMessageData();
+            var message = new MessageData();
             message.Body = data;
             message.ConnectionId = connectionId;
             _serverManager.SendQueue(message);

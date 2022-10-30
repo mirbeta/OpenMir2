@@ -54,7 +54,6 @@ namespace LoginSvr
                     services.AddSingleton<SessionService>();
                     services.AddSingleton<LoginService>();
                     services.AddSingleton<AccountStorage>();
-                    services.AddSingleton<ThreadParseList>();
                     services.AddSingleton<AppServer>();
                     services.AddSingleton<ClientSession>();
                     services.AddHostedService<TimedService>();

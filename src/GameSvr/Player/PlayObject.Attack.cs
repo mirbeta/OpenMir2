@@ -22,7 +22,7 @@ namespace GameSvr.Player
                 {
                     return false;
                 }
-                if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
+                if (Death || StatusArr[PoisonState.STONE] != 0)// 防麻
                 {
                     return false;
                 }
@@ -166,7 +166,7 @@ namespace GameSvr.Player
             {
                 return result;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
+            if (Death || StatusArr[PoisonState.STONE] != 0)// 防麻
             {
                 return result;
             }
@@ -221,7 +221,7 @@ namespace GameSvr.Player
             {
                 if (Transparent && HideMode)
                 {
-                    StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
+                    StatusArr[PoisonState.STATE_TRANSPARENT] = 1;
                 }
                 if (SpaceMoved || CurrX == nX && CurrY == nY)
                 {
@@ -247,7 +247,7 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
+            if (Death || StatusArr[PoisonState.STONE] != 0)// 防麻
             {
                 return false;
             }
@@ -483,7 +483,7 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)
+            if (Death || StatusArr[PoisonState.STONE] != 0)
             {
                 return false;
             }
@@ -532,7 +532,7 @@ namespace GameSvr.Player
             {
                 if (Transparent && HideMode)
                 {
-                    StatusArr[StatuStateConst.STATE_TRANSPARENT] = 1;
+                    StatusArr[PoisonState.STATE_TRANSPARENT] = 1;
                 }
                 if (SpaceMoved || CurrX == nX && CurrY == nY)
                 {
@@ -560,7 +560,7 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)
+            if (Death || StatusArr[PoisonState.STONE] != 0)
             {
                 return false; // 防麻
             }

@@ -313,7 +313,7 @@ namespace GameSvr.Player
 
         private bool ClientChangeDir(short wIdent, int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
+            if (Death || StatusArr[PoisonState.STONE] != 0)// 防麻
             {
                 return false;
             }
@@ -346,7 +346,7 @@ namespace GameSvr.Player
 
         private bool ClientSitDownHit(int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            if (Death || StatusArr[StatuStateConst.POISON_STONE] != 0)// 防麻
+            if (Death || StatusArr[PoisonState.STONE] != 0)// 防麻
             {
                 return false;
             }

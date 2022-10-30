@@ -1121,7 +1121,7 @@ namespace GameGate
                         _gameSpeed.SpeedLimit = true;
                         GateShare.PunishList[sHumName] = this;
                     }
-                    var hardWareDigest = MD5.g_MD5EmptyDigest;
+                    var hardWareDigest = MD5.EmptyDigest;
                     if (Config.IsProcClientHardwareID)
                     {
                         if (string.IsNullOrEmpty(szHarewareID) || (szHarewareID.Length > 256) || ((szHarewareID.Length % 2) != 0))
@@ -1184,7 +1184,7 @@ namespace GameGate
                         LogQueue.Enqueue($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {Addr}", 1);
                         if (pHardwareHeader.dwMagicCode == 0x13F13F13)
                         {
-                            if (MD5.MD5Match(MD5.g_MD5EmptyDigest, pHardwareHeader.xMd5Digest))
+                            if (MD5.MD5Match(MD5.EmptyDigest, pHardwareHeader.xMd5Digest))
                             {
                                 LogQueue.Enqueue($"[HandleLogin] Kicked 6: {sHumName}", 1);
                                 SendKickMsg(4);

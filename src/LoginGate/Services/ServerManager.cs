@@ -21,7 +21,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 客户端登陆封包
         /// </summary>
-        private readonly Channel<TMessageData> _messageQueue;
+        private readonly Channel<MessageData> _messageQueue;
 
         public ServerManager(MirLog logger, IServiceProvider serviceProvider, SessionManager sessionManager, ConfigManager configManager)
         {
@@ -29,7 +29,7 @@ namespace LoginGate.Services
             _serviceProvider = serviceProvider;
             _sessionManager = sessionManager;
             _configManager = configManager;
-            _messageQueue = Channel.CreateUnbounded<TMessageData>();
+            _messageQueue = Channel.CreateUnbounded<MessageData>();
             _serverServices = new List<ServerService>();
         }
 
@@ -66,7 +66,7 @@ namespace LoginGate.Services
         /// 添加到消息队列
         /// </summary>
         /// <param name="messageData"></param>
-        public void SendQueue(TMessageData messageData)
+        public void SendQueue(MessageData messageData)
         {
             _messageQueue.Writer.TryWrite(messageData);
         }

@@ -294,7 +294,7 @@ namespace GameSvr.Actor
                     AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "", 200);
                     if (!AttackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
                     {
-                        AttackTarget.MakePosion(StatuStateConst.POISON_STONE, M2Share.Config.AttackPosionTime, 0);
+                        AttackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
                     }
                     if (SuckupEnemyHealthRate > 0)// 虹魔，吸血
                     {

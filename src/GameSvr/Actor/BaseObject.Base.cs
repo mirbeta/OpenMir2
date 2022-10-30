@@ -363,29 +363,29 @@ namespace GameSvr.Actor
                         switch (AutoChangeIdx)
                         {
                             case 0:
-                                nInteger = StatuStateConst.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATE_TRANSPARENT;
                                 break;
                             case 1:
-                                nInteger = StatuStateConst.POISON_STONE;
+                                nInteger = PoisonState.STONE;
                                 break;
                             case 2:
-                                nInteger = StatuStateConst.POISON_DONTMOVE;
+                                nInteger = PoisonState.DONTMOVE;
                                 break;
                             case 3:
-                                nInteger = StatuStateConst.POISON_68;
+                                nInteger = PoisonState.POISON_68;
                                 break;
                             case 4:
-                                nInteger = StatuStateConst.POISON_DECHEALTH;
+                                nInteger = PoisonState.DECHEALTH;
                                 break;
                             case 5:
-                                nInteger = StatuStateConst.POISON_LOCKSPELL;
+                                nInteger = PoisonState.LOCKSPELL;
                                 break;
                             case 6:
-                                nInteger = StatuStateConst.POISON_DAMAGEARMOR;
+                                nInteger = PoisonState.DAMAGEARMOR;
                                 break;
                             default:
                                 AutoChangeIdx = 0;
-                                nInteger = StatuStateConst.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATE_TRANSPARENT;
                                 break;
                         }
                         AutoChangeIdx++;
@@ -397,29 +397,29 @@ namespace GameSvr.Actor
                         switch (FixColorIdx)
                         {
                             case 0:
-                                nInteger = StatuStateConst.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATE_TRANSPARENT;
                                 break;
                             case 1:
-                                nInteger = StatuStateConst.POISON_STONE;
+                                nInteger = PoisonState.STONE;
                                 break;
                             case 2:
-                                nInteger = StatuStateConst.POISON_DONTMOVE;
+                                nInteger = PoisonState.DONTMOVE;
                                 break;
                             case 3:
-                                nInteger = StatuStateConst.POISON_68;
+                                nInteger = PoisonState.POISON_68;
                                 break;
                             case 4:
-                                nInteger = StatuStateConst.POISON_DECHEALTH;
+                                nInteger = PoisonState.DECHEALTH;
                                 break;
                             case 5:
-                                nInteger = StatuStateConst.POISON_LOCKSPELL;
+                                nInteger = PoisonState.LOCKSPELL;
                                 break;
                             case 6:
-                                nInteger = StatuStateConst.POISON_DAMAGEARMOR;
+                                nInteger = PoisonState.DAMAGEARMOR;
                                 break;
                             default:
                                 FixColorIdx = 0;
-                                nInteger = StatuStateConst.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATE_TRANSPARENT;
                                 break;
                         }
                         CharStatus = (int)(CharStatusEx | ((0x80000000 >> nInteger) | 0));
@@ -582,30 +582,30 @@ namespace GameSvr.Actor
                                 boChg = true;
                                 switch (i)
                                 {
-                                    case StatuStateConst.STATE_DEFENCEUP:
+                                    case PoisonState.DEFENCEUP:
                                         boNeedRecalc = true;
                                         SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
-                                    case StatuStateConst.STATE_MAGDEFENCEUP:
+                                    case PoisonState.MAGDEFENCEUP:
                                         boNeedRecalc = true;
                                         SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
-                                    case StatuStateConst.STATE_BUBBLEDEFENCEUP:
+                                    case PoisonState.BUBBLEDEFENCEUP:
                                         AbilMagBubbleDefence = false;
                                         break;
-                                    case StatuStateConst.STATE_TRANSPARENT:
+                                    case PoisonState.STATE_TRANSPARENT:
                                         HideMode = false;
                                         break;
                                 }
                             }
                             else if (StatusArr[i] == 10)
                             {
-                                if (i == StatuStateConst.STATE_DEFENCEUP)
+                                if (i == PoisonState.DEFENCEUP)
                                 {
                                     SysMsg("防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 }
-                                if (i == StatuStateConst.STATE_MAGDEFENCEUP)
+                                if (i == PoisonState.MAGDEFENCEUP)
                                 {
                                     SysMsg("魔法防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
@@ -695,7 +695,7 @@ namespace GameSvr.Actor
                 if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
                 {
                     PoisoningTick = HUtil32.GetTickCount();
-                    if (StatusArr[StatuStateConst.POISON_DECHEALTH] > 0)
+                    if (StatusArr[PoisonState.DECHEALTH] > 0)
                     {
                         if (Animal)
                         {
@@ -1461,7 +1461,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            StatusArr[StatuStateConst.POISON_STONE] = 1;
+                            StatusArr[PoisonState.STONE] = 1;
                             FastParalysis = false;
                         }
                         break;
@@ -1492,7 +1492,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            StatusArr[StatuStateConst.POISON_STONE] = 1;
+                            StatusArr[PoisonState.STONE] = 1;
                             FastParalysis = false;
                         }
                         break;

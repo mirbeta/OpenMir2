@@ -14,7 +14,7 @@ namespace SystemModule
                 Serializer.Serialize(ms, model);
                 byte[] result = new byte[ms.Length];
                 ms.Position = 0;
-                ms.Read(result, 0, result.Length);
+                var read = ms.Read(result, 0, result.Length);
                 return result;
             }
             catch (Exception ex)

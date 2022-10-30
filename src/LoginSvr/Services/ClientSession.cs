@@ -1,7 +1,6 @@
 ﻿using LoginSvr.Conf;
 using LoginSvr.Storage;
 using System;
-using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -20,15 +19,17 @@ namespace LoginSvr.Services
         private readonly AccountStorage _accountStorage;
         private readonly SessionService _masSocService;
         private readonly ConfigManager _configManager;
+        private readonly UserManager _userManager;
         private readonly Channel<UserSessionData> _userMessageQueue;
         private readonly Config _config;
 
-        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionService masSocService)
+        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionService masSocService, UserManager userManager)
         {
             _logger = logger;
             _accountStorage = accountStorage;
             _configManager = configManager;
             _masSocService = masSocService;
+            _userManager = userManager;
             _config = _configManager.Config;
             _userMessageQueue = Channel.CreateUnbounded<UserSessionData>();
         }
@@ -47,7 +48,7 @@ namespace LoginSvr.Services
         }
 
         /// <summary>
-        /// 处理封包消息
+        /// 处理登陆封包消息
         /// </summary>
         /// <returns></returns>
         private async Task ProcessUserMessage(CancellationToken stoppingToken)
@@ -56,12 +57,12 @@ namespace LoginSvr.Services
             {
                 while (_userMessageQueue.Reader.TryRead(out var message))
                 {
-                    DecodeUserData(message.UserInfo, message.Msg);
+                    ProcessUserData(message.SoketId,message.Msg);
                 }
             }
         }
 
-        private void DecodeUserData(UserInfo userInfo, string userData)
+        private void ProcessUserData(int clientId,string userData)
         {
             var sMsg = string.Empty;
             try
@@ -76,7 +77,7 @@ namespace LoginSvr.Services
                 if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
                     return;
                 sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                ProcessUserMsg(userInfo, sMsg);
+                ProcessUserMsg(clientId,sMsg);
             }
             catch (Exception ex)
             {
@@ -85,8 +86,9 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessUserMsg(UserInfo userInfo, string sMsg)
+        private void ProcessUserMsg(int sessionId,string sMsg)
         {
+            UserInfo userInfo = _userManager.GetUser(sessionId);
             var sDefMsg = sMsg[..Grobal2.DEFBLOCKSIZE];
             var sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
             var defMsg = EDCode.DecodePacket(sDefMsg);
@@ -232,35 +234,10 @@ namespace LoginSvr.Services
                     userInfo.Account = sLoginId;
                     userInfo.SessionID = LsShare.GetSessionId();
                     userInfo.SelServer = false;
-                    if (_config.AccountCostList.ContainsKey(userInfo.Account))
-                    {
-                        nIdCostIndex = _config.AccountCostList[userInfo.Account];
-                    }
-                    if (_config.IPaddrCostList.ContainsKey(userInfo.UserIPaddr))
-                    {
-                        nIpCostIndex = _config.IPaddrCostList[userInfo.UserIPaddr];
-                    }
-                    var nIdCost = 0;
-                    var nIpCost = 0;
-                    if (nIdCostIndex >= 0)
-                    {
-                        nIdCost = nIdCostIndex;//Config.AccountCostList[nIDCostIndex];
-                    }
-                    if (nIpCostIndex >= 0)
-                    {
-                        nIpCost = nIpCostIndex;//Config.IPaddrCostList[nIPCostIndex];
-                    }
-                    if (nIdCost >= 0 || nIpCost >= 0)
+                    if (_config.PayMode > 1 && accountRecord.PlayTime > 0) //点卡和月卡
                     {
                         userInfo.PayCost = true;
-                    }
-                    else
-                    {
-                        userInfo.PayCost = false;
-                    }
-                    userInfo.Seconds = accountRecord.PlayTime;
-                    if (_config.PayMode == 1 && userInfo.Seconds > 0)
-                    {
+                        userInfo.Seconds = accountRecord.PlayTime;
                         userInfo.PayMode = 1;
                         AddCertUser(userInfo);
                         if (CheckBadAccount(userInfo.Account))
@@ -274,11 +251,12 @@ namespace LoginSvr.Services
                     }
                     else if (_config.PayMode == 0)
                     {
+                        userInfo.PayCost = false;
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, 0, 0, 0, _config.ServerNameList.Count);
                     }
                     var sServerName = GetServerListInfo();
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
-                    SessionAdd(_config, userInfo.Account, userInfo.UserIPaddr, userInfo.SessionID, userInfo.PayCost, false);
+                    SessionAdd(userInfo.Account, userInfo.UserIPaddr, userInfo.SessionID, userInfo.PayCost, false);
                 }
                 else
                 {
@@ -515,7 +493,7 @@ namespace LoginSvr.Services
                     var nPayMode = userInfo.PayMode;
                     if (_masSocService.IsNotUserFull(sServerName))
                     {
-                        SessionUpdate(_config, userInfo.SessionID, sServerName, boPayCost);
+                        SessionUpdate(userInfo.SessionID, sServerName, boPayCost);
                         _masSocService.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.PayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr + "/" + userInfo.Seconds);
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, userInfo.SessionID, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sSelGateIp + "/" + nSelGatePort + "/" + userInfo.SessionID));
@@ -523,7 +501,7 @@ namespace LoginSvr.Services
                     else
                     {
                         userInfo.SelServer = false;
-                        SessionDel(_config, userInfo.SessionID);
+                        SessionDel(userInfo.SessionID);
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
                     }
@@ -536,7 +514,6 @@ namespace LoginSvr.Services
         /// </summary>
         private void AccountUpdateUserInfo(UserInfo userInfo, string sData)
         {
-            AccountRecord accountRecord = null;
             ClientMesaagePacket defMsg;
             try
             {
@@ -562,6 +539,7 @@ namespace LoginSvr.Services
                     var accountIndex = _accountStorage.Index(userFullEntry.UserEntry.Account);
                     if (accountIndex >= 0)
                     {
+                        AccountRecord accountRecord = null;
                         if (_accountStorage.Get(accountIndex, ref accountRecord) >= 0)
                         {
                             accountRecord.UserEntry = userFullEntry.UserEntry;
@@ -739,11 +717,11 @@ namespace LoginSvr.Services
             }
         }
 
-        private void SessionUpdate(Config config, int nSessionId, string sServerName, bool boPayCost)
+        private void SessionUpdate(int nSessionId, string sServerName, bool boPayCost)
         {
-            for (var i = 0; i < config.SessionList.Count; i++)
+            for (var i = 0; i < _config.SessionList.Count; i++)
             {
-                var connInfo = config.SessionList[i];
+                var connInfo = _config.SessionList[i];
                 if (connInfo.SessionID == nSessionId)
                 {
                     connInfo.ServerName = sServerName;
@@ -753,7 +731,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void SessionAdd(Config config, string sAccount, string sIPaddr, int nSessionId, bool boPayCost, bool bo11)
+        private void SessionAdd(string sAccount, string sIPaddr, int nSessionId, bool boPayCost, bool bo11)
         {
             var connInfo = new TConnInfo();
             connInfo.Account = sAccount;
@@ -764,7 +742,7 @@ namespace LoginSvr.Services
             connInfo.dwKickTick = HUtil32.GetTickCount();
             connInfo.dwStartTick = HUtil32.GetTickCount();
             connInfo.boKicked = false;
-            config.SessionList.Add(connInfo);
+            _config.SessionList.Add(connInfo);
         }
 
         private void SendGateMsg(Socket socket, string sSockIndex, string sMsg)
@@ -785,9 +763,9 @@ namespace LoginSvr.Services
         private void KickUser(ref UserInfo userInfo)
         {
             const string sKickMsg = "Kick: {0}";
-            for (var i = 0; i < LsShare.Gates.Count; i++)
+            for (var i = 0; i < LsShare.LoginGates.Count; i++)
             {
-                var gateInfo = LsShare.Gates[i];
+                var gateInfo = LsShare.LoginGates[i];
                 for (var j = 0; j < gateInfo.UserList.Count; j++)
                 {
                     var user = gateInfo.UserList[j];
@@ -909,14 +887,14 @@ namespace LoginSvr.Services
             socket.SendText(sSendMsg);
         }
 
-        private void SessionDel(Config config, int nSessionId)
+        private void SessionDel(int nSessionId)
         {
-            for (var i = 0; i < config.SessionList.Count; i++)
+            for (var i = 0; i < _config.SessionList.Count; i++)
             {
-                if (config.SessionList[i].SessionID == nSessionId)
+                if (_config.SessionList[i].SessionID == nSessionId)
                 {
-                    config.SessionList[i] = null;
-                    config.SessionList.RemoveAt(i);
+                    _config.SessionList[i] = null;
+                    _config.SessionList.RemoveAt(i);
                     break;
                 }
             }

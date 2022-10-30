@@ -20,9 +20,9 @@ namespace GameSvr.Monster.Monsters
                     TargetY = TargetCret.CurrY;
                     if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1)
                     {
-                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.StatusArr[StatuStateConst.POISON_DECHEALTH] == 0)
+                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.StatusArr[PoisonState.DECHEALTH] == 0)
                         {
-                            TargetCret.MakePosion(StatuStateConst.POISON_DAMAGEARMOR, 30, 1);
+                            TargetCret.MakePosion(PoisonState.DAMAGEARMOR, 30, 1);
                         }
                     }
                 }
