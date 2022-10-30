@@ -37,12 +37,12 @@ namespace LoginSvr.Conf
         /// <summary>
         /// 是否允许创建账号
         /// </summary>
-        public bool boEnableMakingID;
-        public bool boDynamicIPMode;
-        public int nReadyServers;
+        public bool EnableMakingID;
+        public bool DynamicIPMode;
+        public int ReadyServers;
         public IList<TConnInfo> SessionList;
         public IList<string> ServerNameList;
-        public int nRouteCount;
+        public int RouteCount;
         public TGateRoute[] GateRoute;
         public string ConnctionString;
 
@@ -62,9 +62,9 @@ namespace LoginSvr.Conf
             sMonAddr = "*";
             nMonPort = 3000;
             TestServer = true;
-            boEnableMakingID = true;
-            boDynamicIPMode = false;
-            nReadyServers = 0;
+            EnableMakingID = true;
+            DynamicIPMode = false;
+            ReadyServers = 0;
             GateRoute = new TGateRoute[60];
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2_account;";
             ShowDebugLog = false;

@@ -9,7 +9,6 @@ namespace LoginSvr.Conf
     public class ConfigManager : IniFile
     {
         const string sSectionServer = "Server";
-        const string sSectionDB = "DB";
         private const string sDB = "DataBase";
         const string sIdentDBServer = "DBServer";
         const string sIdentFeeServer = "FeeServer";
@@ -51,9 +50,9 @@ namespace LoginSvr.Conf
             Config.nDBSPort = LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
             Config.nFeePort = LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
             Config.nLogPort = LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
-            Config.nReadyServers = LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.nReadyServers);
-            Config.boEnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.boEnableMakingID);
-            Config.boDynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.boDynamicIPMode);
+            Config.ReadyServers = LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.ReadyServers);
+            Config.EnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.EnableMakingID);
+            Config.DynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.DynamicIPMode);
             Config.ConnctionString = LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
             Config.ShowLogLevel = ReadInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
             Config.ShowDebugLog = ReadBool("Server", "ShowDebugLog", Config.ShowDebugLog);
@@ -175,7 +174,7 @@ namespace LoginSvr.Conf
                         }
                     }
                 }
-                Config.nRouteCount = nRouteIdx;
+                Config.RouteCount = nRouteIdx;
             }
             LoadList = null;
             GenServerNameList(Config);
@@ -184,7 +183,7 @@ namespace LoginSvr.Conf
         private void GenServerNameList(Config Config)
         {
             Config.ServerNameList.Clear();
-            for (var i = 0; i < Config.nRouteCount; i++)
+            for (var i = 0; i < Config.RouteCount; i++)
             {
                 bool boD = true;
                 for (var j = 0; j < Config.ServerNameList.Count; j++)
