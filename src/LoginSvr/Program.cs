@@ -56,6 +56,7 @@ namespace LoginSvr
                     services.AddSingleton<AccountStorage>();
                     services.AddSingleton<AppServer>();
                     services.AddSingleton<ClientSession>();
+                    services.AddSingleton<ClientManager>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 }).ConfigureLogging(logging =>
