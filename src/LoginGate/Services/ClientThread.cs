@@ -151,7 +151,7 @@ namespace LoginGate.Services
             {
                 if (e.Buff[2] == (byte)'-')
                 {
-                    var sessionId = BitConverter.ToString(e.Buff[4..8]);
+                    var sessionId = BitConverter.ToInt32(e.Buff[4..8]);
                     _sessionManager.CloseSession(sessionId);
                     _logger.LogInformation("收到LoginSvr关闭会话请求", 1);
                 }
@@ -195,7 +195,7 @@ namespace LoginGate.Services
                 {
                     SessionArray[i].Socket = null;
                     SessionArray[i].ReceiveTick = HUtil32.GetTickCount();
-                    SessionArray[i].ConnectionId = string.Empty;
+                    SessionArray[i].ConnectionId = 0;
                     SessionArray[i].ClientIP = string.Empty;
                 }
             }

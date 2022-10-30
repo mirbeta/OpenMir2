@@ -14,7 +14,7 @@ namespace SystemModule.Packet.ServerPackets
     public class GatePacket : Packets
     {
         public PacketType Type { get; set; }
-        public string SocketId { get; set; }
+        public int SocketId { get; set; }
         public short BuffLen { get; set; }
         public byte[] Body { get; set; }
         public char StartChar { get; set; }
@@ -24,7 +24,7 @@ namespace SystemModule.Packet.ServerPackets
         {
             StartChar = reader.ReadChar();
             Type = (PacketType)reader.ReadByte();
-            SocketId = reader.ReadString();
+            SocketId = reader.ReadInt32();
             BuffLen = reader.ReadInt16();
             Body = reader.ReadBytes(BuffLen);
             EndChar = reader.ReadChar();

@@ -11,7 +11,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace SelGate.Services
 {
     /// <summary>
-    /// 客户端服务端(SystemModule-SelGate)
+    /// 客户端服务端(Mir2-SelGate)
     /// </summary>
     public class ServerService
     {
@@ -86,7 +86,7 @@ namespace SelGate.Services
                 {
                     sessionInfo = new TSessionInfo();
                     sessionInfo.Socket = e.Socket;
-                    sessionInfo.SocketId = e.ConnectionId;
+                    sessionInfo.SocketId = e.SocHandle;
                     sessionInfo.dwReceiveTick = HUtil32.GetTickCount();
                     sessionInfo.ClientIP = e.RemoteIPaddr;
                     break;
@@ -95,7 +95,7 @@ namespace SelGate.Services
             if (sessionInfo != null)
             {
                 _logger.LogInformation("开始连接: " + sRemoteAddress, 5);
-                _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
+                _clientManager.AddClientThread(e.SocHandle, clientThread);//链接成功后建立对应关系
                 var userSession = new ClientSession(_logger, _configManager, sessionInfo, clientThread);
                 userSession.UserEnter();
                 _sessionManager.AddSession(sessionInfo.SocketId, userSession);
@@ -110,14 +110,14 @@ namespace SelGate.Services
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             var sRemoteAddr = e.RemoteIPaddr;
-            var nSockIndex = e.ConnectionId;
+            var nSockIndex = e.SocHandle;
             var clientThread = _clientManager.GetClientThread(nSockIndex);
             if (clientThread != null && clientThread.boGateReady)
             {
                 var userSession = _sessionManager.GetSession(nSockIndex);
                 if (userSession != null)
                 {
-                    var clientSession = _sessionManager.GetSession(e.ConnectionId);
+                    var clientSession = _sessionManager.GetSession(nSockIndex);
                     clientSession?.UserLeave();
                     clientSession?.CloseSession();
                     _logger.LogInformation("断开连接: " + sRemoteAddr, 5);
@@ -129,7 +129,7 @@ namespace SelGate.Services
                 _logger.LogInformation("断开链接: " + sRemoteAddr, 5);
                 _logger.LogDebug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
-            _clientManager.DeleteClientThread(e.ConnectionId);
+            _clientManager.DeleteClientThread(e.SocHandle);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -139,7 +139,7 @@ namespace SelGate.Services
 
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            var connectionId = token.ConnectionId;
+            var connectionId = token.SocHandle;
             var userClient = _clientManager.GetClientThread(connectionId);
             var sRemoteAddress = token.RemoteIPaddr;
             if (userClient == null)

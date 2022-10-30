@@ -52,8 +52,6 @@ namespace LoginGate.Services
         /// <summary>
         /// Mir2链接
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
             var sRemoteAddress = e.RemoteIPaddr;
@@ -78,7 +76,7 @@ namespace LoginGate.Services
                 {
                     sessionInfo = new TSessionInfo();
                     sessionInfo.Socket = e.Socket;
-                    sessionInfo.ConnectionId = e.ConnectionId;
+                    sessionInfo.ConnectionId = e.SocHandle;
                     sessionInfo.ReceiveTick = HUtil32.GetTickCount();
                     sessionInfo.ClientIP = e.RemoteIPaddr;
                     clientThread.SessionArray[nIdx] = sessionInfo;
@@ -104,15 +102,15 @@ namespace LoginGate.Services
         /// <param name="e"></param>
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            var userSession = _sessionManager.GetSession(e.ConnectionId);
+            var userSession = _sessionManager.GetSession(e.SocHandle);
             if (userSession != null)
             {
                 userSession.UserLeave();
                 userSession.CloseSession();
                 _logger.LogInformation("断开连接: " + e.RemoteIPaddr, 5);
-                _logger.LogDebug($"用户[{e.RemoteIPaddr}] 会话ID:[{e.ConnectionId}] 断开链接.");
+                _logger.LogDebug($"用户[{e.RemoteIPaddr}] 会话ID:[{e.SocHandle}] 断开链接.");
             }
-            _sessionManager.CloseSession(e.ConnectionId);
+            _sessionManager.CloseSession(e.SocHandle);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -127,7 +125,7 @@ namespace LoginGate.Services
         /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            var connectionId = token.ConnectionId;
+            var connectionId = token.SocHandle;
             var sRemoteAddress = token.RemoteIPaddr;
             var userSession = _sessionManager.GetSession(connectionId);
             if (userSession == null)

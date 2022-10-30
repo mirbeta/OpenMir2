@@ -11,7 +11,7 @@ namespace LoginSvr.Services
             return new UserInfo();
         }
 
-        public void AddUser(string sessionId, UserInfo userInfo)
+        public void AddUser(int sessionId, UserInfo userInfo)
         {
             _userInfos.Add(sessionId,userInfo);
         }

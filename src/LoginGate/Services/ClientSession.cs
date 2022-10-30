@@ -260,7 +260,7 @@ namespace LoginGate.Services
     public class TSessionInfo
     {
         public Socket Socket;
-        public string ConnectionId;
+        public int ConnectionId;
         public int ReceiveTick;
         public string sAccount;
         public string sChrName;

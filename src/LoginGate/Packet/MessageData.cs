@@ -2,7 +2,7 @@ namespace LoginGate.Packet
 {
     public struct MessageData
     {
-        public string ConnectionId;
+        public int ConnectionId;
         public byte[] Body;
         public int MsgLen => Body.Length;
     }

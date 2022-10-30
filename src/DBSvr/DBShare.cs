@@ -253,7 +253,7 @@ namespace DBSvr
         public string sAccount;
         public string sUserIPaddr;
         public string sGateIPaddr;
-        public string sConnID;
+        public int sConnID;
         public int nSessionID;
         public Socket Socket;
         public string sText;

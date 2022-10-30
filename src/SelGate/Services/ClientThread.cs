@@ -202,7 +202,7 @@ namespace SelGate.Services
                 {
                     SessionArray[i].Socket = null;
                     SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
-                    SessionArray[i].SocketId = String.Empty;
+                    SessionArray[i].SocketId = 0;
                     SessionArray[i].ClientIP = string.Empty;
                 }
             }
@@ -214,7 +214,7 @@ namespace SelGate.Services
             accountPacket.Body = Array.Empty<byte>();
             accountPacket.StartChar = '%';
             accountPacket.Type = PacketType.KeepAlive;
-            accountPacket.SocketId = Guid.NewGuid().ToString("N");
+            accountPacket.SocketId = 0;
             accountPacket.EndChar = '$';
             SendSocket(accountPacket.GetBuffer());
             _logQueue.LogDebug("Send DBSvr Heartbeat.");
