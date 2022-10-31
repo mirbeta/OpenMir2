@@ -34,7 +34,7 @@ namespace LoginGate.Services
         }
 
         public IPEndPoint EndPoint => _serverEndPoint;
-        
+
         public void Start(GameGateInfo gateInfo)
         {
             _serverEndPoint = new IPEndPoint(IPAddress.Parse(gateInfo.GateAddress), gateInfo.GatePort);

@@ -30,7 +30,7 @@ namespace LoginGate
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
         }
-        
+
         private void ProcessDelayMsg()
         {
             if (HUtil32.GetTickCount() - _processDelayTick > 1000)

@@ -17,10 +17,10 @@ using SystemModule.Hosts;
 
 namespace LoginGate
 {
-    public class AppServer: ServiceHost
+    public class AppServer : ServiceHost
     {
         private static PeriodicTimer _timer;
-        
+
         public AppServer()
         {
             PrintUsage();
@@ -33,28 +33,14 @@ namespace LoginGate
                 }
                 AnsiConsole.Reset();
             };
-            
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
-        }
-        
-        
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            await ProcessLoopAsync();
-            Stop();
-        }
-
-        public override Task StopAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<MirLogger>();
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
-            services.AddSingleton<ServerApp>();
             services.AddSingleton<ServerService>();
             services.AddSingleton<ClientManager>();
             services.AddSingleton<ClientThread>();
@@ -67,10 +53,24 @@ namespace LoginGate
         private void ConfigureLogging(ILoggingBuilder logging)
         {
             logging.ClearProviders();
-            logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+            logging.SetMinimumLevel(LogLevel.Trace);
             logging.AddNLog(Configuration);
         }
-        
+
+        public override async Task StartAsync(CancellationToken cancellationToken)
+        {
+            Logger.Debug("LoginGate is starting.");
+            Logger.Info("正在启动服务...", 2);
+            _host = await Builder.StartAsync(cancellationToken);
+            await ProcessLoopAsync();
+            Stop();
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
         void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
@@ -169,7 +169,7 @@ namespace LoginGate
                     {
                         for (int i = 0; i < clientList.Count; i++)
                         {
-                            var (remoteendpoint, status, playCount, reviceTotal, sendTotal,threadCount) = clientList[i].GetStatus();
+                            var (remoteendpoint, status, playCount, reviceTotal, sendTotal, threadCount) = clientList[i].GetStatus();
 
                             table.UpdateCell(i, 0, $"[bold]{serverList[i].EndPoint}[/]");
                             table.UpdateCell(i, 1, $"[bold]{remoteendpoint}[/]");
@@ -237,7 +237,7 @@ namespace LoginGate
 
         public override void Dispose()
         {
-            throw new NotImplementedException();
+
         }
     }
 }

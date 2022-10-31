@@ -1,7 +1,6 @@
 using LoginGate.Conf;
 using LoginGate.Packet;
 using System;
-using System.Diagnostics;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packet;
