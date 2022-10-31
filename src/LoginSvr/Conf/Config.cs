@@ -48,7 +48,7 @@ namespace LoginSvr.Conf
         public IList<TConnInfo> SessionList;
         public IList<string> ServerNameList;
         public int RouteCount;
-        public TGateRoute[] GateRoute;
+        public GateRoute[] GateRoute;
         public string ConnctionString;
 
         public Config()
@@ -70,7 +70,7 @@ namespace LoginSvr.Conf
             EnableMakingID = true;
             DynamicIPMode = false;
             ReadyServers = 0;
-            GateRoute = new TGateRoute[60];
+            GateRoute = new GateRoute[60];
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2_account;";
             ShowDebugLog = false;
             ShowLogLevel = 1;

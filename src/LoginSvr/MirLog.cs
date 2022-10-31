@@ -13,6 +13,8 @@ namespace LoginSvr
         {
             _logger = logger;
             _configManager = configManager;
+
+            _logger.IsEnabled(LogLevel.None);
         }
 
         public void Information(string msg, int msgLevel = 1)

@@ -799,7 +799,7 @@ namespace LoginSvr.Services
                 nSelGatePort = 0;
                 for (var i = 0; i < _config.RouteCount; i++)
                 {
-                    if (_config.DynamicIPMode || (_config.GateRoute[i].sServerName == sServerName && _config.GateRoute[i].sPublicAddr == sIPaddr))
+                    if (_config.DynamicIPMode || (_config.GateRoute[i].ServerName == sServerName && _config.GateRoute[i].PublicAddr == sIPaddr))
                     {
                         nGateCount = 0;
                         nGateIdx = 0;

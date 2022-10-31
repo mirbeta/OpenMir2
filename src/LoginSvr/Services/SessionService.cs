@@ -13,7 +13,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace LoginSvr.Services
 {
     /// <summary>
-    /// 会话服务
+    /// DBSVr、GameSvr会话服务
     /// </summary>
     public class SessionService
     {
@@ -21,9 +21,9 @@ namespace LoginSvr.Services
         private readonly IList<ServerSessionInfo> _serverList = null;
         private readonly SocketServer _serverSocket;
         private readonly ConfigManager _configManager;
-        private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
         private readonly AccountStorage _accountStorage;
         private readonly Config _config;
+        private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
 
         public SessionService(MirLog logger, ConfigManager configManager, AccountStorage accountStorage)
         {
@@ -281,9 +281,7 @@ namespace LoginSvr.Services
             {
                 return;
             }
-
             var seconds = _accountStorage.GetAccountPlayTime(account);
-
             if (seconds == 0)
             {
                 for (var i = 0; i < LsShare.CertList.Count; i++)
@@ -308,13 +306,13 @@ namespace LoginSvr.Services
             SendServerMsg(Grobal2.ISM_ACCOUNTEXPIRED, certUser.ServerName, certUser.LoginID + "/" + certUser.Certification);
         }
 
-        private void CloseUser(string sAccount, int nSessionID)
+        private void CloseUser(string account, int sessionId)
         {
             var config = _configManager.Config;
             for (var i = config.SessionList.Count - 1; i >= 0; i--)
             {
                 var connInfo = config.SessionList[i];
-                if ((connInfo.Account == sAccount) || (connInfo.SessionID == nSessionID))
+                if ((connInfo.Account == account) || (connInfo.SessionID == sessionId))
                 {
                     SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                     connInfo = null;
@@ -323,20 +321,20 @@ namespace LoginSvr.Services
             }
         }
 
-        private void RefServerLimit(string sServerName)
+        private void RefServerLimit(string serverName)
         {
             var nCount = 0;
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var msgServer = _serverList[i];
-                if ((msgServer.ServerIndex != 99) && (msgServer.ServerName == sServerName))
+                if ((msgServer.ServerIndex != 99) && (msgServer.ServerName == serverName))
                 {
                     nCount += msgServer.OnlineCount;
                 }
             }
             for (var i = 0; i < UserLimit.Length; i++)
             {
-                if (UserLimit[i].ServerName == sServerName)
+                if (UserLimit[i].ServerName == serverName)
                 {
                     UserLimit[i].LimitCountMin = nCount;
                     break;
@@ -344,12 +342,12 @@ namespace LoginSvr.Services
             }
         }
 
-        public bool IsNotUserFull(string sServerName)
+        public bool IsNotUserFull(string serverName)
         {
             var result = true;
             for (var i = 0; i < UserLimit.Length; i++)
             {
-                if (UserLimit[i].ServerName == sServerName)
+                if (UserLimit[i].ServerName == serverName)
                 {
                     if (UserLimit[i].LimitCountMin > UserLimit[i].LimitCountMax)
                     {
@@ -403,7 +401,7 @@ namespace LoginSvr.Services
                 for (var nC = 0; nC < _serverList.Count; nC++)
                 {
                     var msgServer = _serverList[nC];
-                    if (msgServer.ServerName == msgServerSort.ServerName)
+                    if (string.Compare(msgServer.ServerName, msgServerSort.ServerName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (msgServer.ServerIndex < msgServerSort.ServerIndex)
                         {
@@ -416,7 +414,7 @@ namespace LoginSvr.Services
                             for (var n10 = nNewIndex; n10 < _serverList.Count; n10++)
                             {
                                 msgServer = _serverList[n10];
-                                if (msgServer.ServerName == msgServerSort.ServerName)
+                                if (string.Compare(msgServer.ServerName, msgServerSort.ServerName, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     if (msgServer.ServerIndex < msgServerSort.ServerIndex)
                                     {
@@ -424,7 +422,7 @@ namespace LoginSvr.Services
                                         for (var n14 = n10 + 1; n14 < _serverList.Count; n14++)
                                         {
                                             msgServer = _serverList[n14];
-                                            if ((msgServer.ServerName == msgServerSort.ServerName) && (msgServer.ServerIndex == msgServerSort.ServerIndex))
+                                            if ((string.Compare(msgServer.ServerName, msgServerSort.ServerName, StringComparison.OrdinalIgnoreCase) == 0) && (msgServer.ServerIndex == msgServerSort.ServerIndex))
                                             {
                                                 _serverList.RemoveAt(n14);
                                                 return;
@@ -485,7 +483,7 @@ namespace LoginSvr.Services
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var sLineText = LoadList[i].Trim();
-                    if ((sLineText != "") && (sLineText[i] != ';'))
+                    if ((!string.IsNullOrEmpty(sLineText)) && (sLineText[i] != ';'))
                     {
                         if (HUtil32.TagCount(sLineText, '.') == 3)
                         {
