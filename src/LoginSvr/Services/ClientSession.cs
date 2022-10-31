@@ -15,14 +15,14 @@ namespace LoginSvr.Services
 {
     public class ClientSession
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly Config _config;
         private readonly AccountStorage _accountStorage;
         private readonly SessionServer _sessionService;
         private readonly ClientManager _clientManager;
         private readonly Channel<UserSessionData> _packetQueue;
 
-        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionServer sessionServer, ClientManager clientManager)
+        public ClientSession(MirLogger logger, AccountStorage accountStorage, ConfigManager configManager, SessionServer sessionServer, ClientManager clientManager)
         {
             _logger = logger;
             _config = configManager.Config;

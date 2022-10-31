@@ -50,7 +50,7 @@ namespace LoginSvr
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
-                    services.AddSingleton<MirLog>();
+                    services.AddSingleton<MirLogger>();
                     services.AddSingleton<SessionServer>();
                     services.AddSingleton<LoginServer>();
                     services.AddSingleton<AccountStorage>();

@@ -15,7 +15,7 @@ namespace SelGate.Services
     /// </summary>
     public class ServerService
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly SocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
@@ -25,7 +25,7 @@ namespace SelGate.Services
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
 
-        public ServerService(MirLog mirLog, SessionManager sessionManager, ClientManager clientManager,ConfigManager configManager)
+        public ServerService(MirLogger mirLog, SessionManager sessionManager, ClientManager clientManager,ConfigManager configManager)
         {
             _logger = mirLog;
             _sessionManager = sessionManager;

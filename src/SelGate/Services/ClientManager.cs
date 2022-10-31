@@ -12,7 +12,7 @@ namespace SelGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly MirLog _logQueue;
+        private readonly MirLogger _logQueue;
         private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
@@ -21,7 +21,7 @@ namespace SelGate.Services
         private int _lastChekSocketTick = 0;
         private int _processDelayTick = 0;
 
-        public ClientManager(MirLog logQueue, SessionManager sessionManager,ConfigManager configManager)
+        public ClientManager(MirLogger logQueue, SessionManager sessionManager,ConfigManager configManager)
         {
             _logQueue = logQueue;
             _configManager = configManager;

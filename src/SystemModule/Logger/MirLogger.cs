@@ -3,11 +3,11 @@ using System;
 
 namespace SystemModule
 {
-    public class MirLog
+    public class MirLogger
     {
         private readonly ILogger _logger;
 
-        public MirLog()
+        public MirLogger()
         {
             _logger = LogManager.GetCurrentClassLogger();
         }

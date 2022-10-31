@@ -13,13 +13,13 @@ namespace DBSvr.Services
     /// </summary>
     public class LoginSvrService
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly ClientScoket _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
         private readonly DBSvrConf _conf;
         private string _sockMsg = string.Empty;
 
-        public LoginSvrService(MirLog logger, DBSvrConf conf)
+        public LoginSvrService(MirLogger logger, DBSvrConf conf)
         {
             _logger = logger;
             _conf = conf;

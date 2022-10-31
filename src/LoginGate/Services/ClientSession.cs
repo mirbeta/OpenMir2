@@ -17,13 +17,13 @@ namespace LoginGate.Services
     {
         private readonly TSessionInfo _session;
         private readonly ClientThread _lastLoginSvr;
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
         private bool m_KickFlag = false;
         private int m_nSvrObject = 0;
         private int m_dwClientTimeOutTick = 0;
 
-        public ClientSession(MirLog logger, TSessionInfo session, ClientThread clientThread, ConfigManager configManager)
+        public ClientSession(MirLogger logger, TSessionInfo session, ClientThread clientThread, ConfigManager configManager)
         {
             _logger = logger;
             _session = session;

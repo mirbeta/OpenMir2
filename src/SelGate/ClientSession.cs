@@ -18,11 +18,11 @@ namespace SelGate
         private readonly TSessionInfo _session;
         private bool _kickFlag = false;
         private int _clientTimeOutTick = 0;
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly ClientThread _lastDbSvr;
         private readonly ConfigManager _configManager;
 
-        public ClientSession(MirLog logger, ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
+        public ClientSession(MirLogger logger, ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {
             _logger = logger;
             _session = session;

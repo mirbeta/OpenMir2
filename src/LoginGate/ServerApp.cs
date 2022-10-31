@@ -10,9 +10,9 @@ namespace LoginGate
     {
         private readonly ServerManager _serverManager;
         private readonly ClientManager _clientManager;
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
 
-        public ServerApp(MirLog logger, ServerManager serverManager, ClientManager clientManager)
+        public ServerApp(MirLogger logger, ServerManager serverManager, ClientManager clientManager)
         {
             _logger = logger;
             _serverManager = serverManager;

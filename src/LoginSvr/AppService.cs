@@ -11,13 +11,13 @@ namespace LoginSvr
     public class AppService : BackgroundService
     {
         private readonly AppServer _serverApp;
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
         private readonly SessionServer _masSocService;
         private readonly LoginServer _loginService;
         private readonly AccountStorage _accountStorage;
 
-        public AppService(MirLog logger, AppServer appServer, SessionServer masSocService, LoginServer loginService, AccountStorage accountStorage, ConfigManager configManager)
+        public AppService(MirLogger logger, AppServer appServer, SessionServer masSocService, LoginServer loginService, AccountStorage accountStorage, ConfigManager configManager)
         {
             _logger = logger;
             _serverApp = appServer;

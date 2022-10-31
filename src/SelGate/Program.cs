@@ -49,7 +49,7 @@ namespace SelGate
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
-                    services.AddSingleton<MirLog>();
+                    services.AddSingleton<MirLogger>();
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<ServerService>();
                     services.AddSingleton<SessionManager>();

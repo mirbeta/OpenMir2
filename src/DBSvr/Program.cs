@@ -64,7 +64,7 @@ namespace DBSvr
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(_config);
-                    services.AddSingleton<MirLog>();
+                    services.AddSingleton<MirLogger>();
                     services.AddSingleton<LoginSvrService>();
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<HumDataService>();

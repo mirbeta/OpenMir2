@@ -9,10 +9,10 @@ namespace SelGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly MirLog _logQueue;
+        private readonly MirLogger _logQueue;
         private readonly ClientManager _clientManager;
 
-        public TimedService(MirLog logQueue, ClientManager clientManager)
+        public TimedService(MirLogger logQueue, ClientManager clientManager)
         {
             _logQueue = logQueue;
             _clientManager = clientManager;

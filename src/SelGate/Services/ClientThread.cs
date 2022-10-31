@@ -57,9 +57,9 @@ namespace SelGate.Services
         /// <summary>
         /// Logger
         /// </summary>
-        private static MirLog _logQueue;
+        private static MirLogger _logQueue;
 
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager,MirLog logQueue)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager,MirLogger logQueue)
         {
             ClientId = clientId;
             _logQueue = logQueue;
