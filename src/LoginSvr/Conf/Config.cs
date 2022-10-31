@@ -4,7 +4,7 @@ namespace LoginSvr.Conf
 {
     public class AccountOption
     {
-        
+
     }
 
     public class Config

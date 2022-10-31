@@ -158,15 +158,15 @@ namespace LoginSvr.Services
                                 break;
                             case Grobal2.ISM_GAMETIMEOFTIMECARDUSER:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
-                                sMsg = HUtil32.GetValidStr3(sMsg,ref  sAccount, new[]{"/"});
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
                                 ChanggePlayTimeUser(sServerName, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.ISM_QUERYACCOUNTEXPIRETIME:
-                                sMsg = HUtil32.GetValidStr3(sMsg,ref  sAccount, new[]{"/"});
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
                                 QueryPlayTime(sAccount);
                                 break;
                             case Grobal2.ISM_CHECKTIMEACCOUNT:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount,new[]{"/"});
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
                                 CheckTimeAccount(sAccount);
                                 break;
                             case Grobal2.UNKNOWMSG:
@@ -203,7 +203,7 @@ namespace LoginSvr.Services
                 {
                     if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
                     {
-                        if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
+                        if ((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                         {
                             SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, certUser.ServerName, certUser.LoginID + "/" + seconds);
                             _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
@@ -216,7 +216,7 @@ namespace LoginSvr.Services
         /// <summary>
         /// 减少或更新账号游戏时间
         /// </summary>
-        private void ChanggePlayTimeUser(string serverName,string account, int gameTime)
+        private void ChanggePlayTimeUser(string serverName, string account, int gameTime)
         {
             if (_config.PayMode == 0)
             {
@@ -246,7 +246,7 @@ namespace LoginSvr.Services
                     {
                         if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
                         {
-                            if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
+                            if ((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                             {
                                 SendCancelAdmissionUser(serverName, certUser);
                             }
@@ -255,7 +255,7 @@ namespace LoginSvr.Services
                 }
             }
             else
-            {          
+            {
                 SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, serverName, account + "/" + seconds);
                 _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
             }
@@ -291,7 +291,7 @@ namespace LoginSvr.Services
                     {
                         if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
                         {
-                            if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
+                            if ((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                             {
                                 SendAccountExpireUser(certUser);
                             }
@@ -358,7 +358,7 @@ namespace LoginSvr.Services
             }
             return result;
         }
-        
+
         /// <summary>
         /// 清理没有付费的账号
         /// </summary>
@@ -383,7 +383,7 @@ namespace LoginSvr.Services
                 }
             }
         }
-        
+
         /// <summary>
         /// 服务器排序
         /// </summary>
@@ -626,7 +626,7 @@ namespace LoginSvr.Services
                         }
                         if (UserLimit[i].LimitCountMin <= UserLimit[i].LimitCountMax - (UserLimit[i].LimitCountMax / 5))
                         {
-                            status = ServerStatus.General; 
+                            status = ServerStatus.General;
                             break;
                         }
                         if (UserLimit[i].LimitCountMin < UserLimit[i].LimitCountMax)

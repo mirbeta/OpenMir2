@@ -81,7 +81,7 @@ namespace LoginSvr
                 }
             }
         }
-        
+
         private void CheckServerStatus()
         {
             if (HUtil32.GetTickCount() - _processServerStatusTick > 10000)

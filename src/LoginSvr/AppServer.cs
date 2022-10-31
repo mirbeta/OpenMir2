@@ -38,7 +38,7 @@ namespace LoginSvr
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
@@ -78,7 +78,7 @@ namespace LoginSvr
             throw new NotImplementedException();
         }
 
-        void Stop()
+        private void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -86,7 +86,7 @@ namespace LoginSvr
             });
         }
 
-        async Task ProcessLoopAsync()
+        private async Task ProcessLoopAsync()
         {
             string input = null;
             do
@@ -185,7 +185,7 @@ namespace LoginSvr
                  });
         }
 
-        void PrintUsage()
+        private void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("LoginSvr.logo.png");

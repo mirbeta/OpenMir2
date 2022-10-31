@@ -8,22 +8,22 @@ namespace LoginSvr.Conf
 {
     public class ConfigManager : IniFile
     {
-        const string sSectionServer = "Server";
-        const string sDB = "DataBase";
-        const string sIdentDBServer = "DBServer";
-        const string sIdentFeeServer = "FeeServer";
-        const string sIdentLogServer = "LogServer";
-        const string sIdentGateAddr = "GateAddr";
-        const string sIdentGatePort = "GatePort";
-        const string sIdentServerAddr = "ServerAddr";
-        const string sIdentServerPort = "ServerPort";
-        const string sIdentMonAddr = "MonAddr";
-        const string sIdentMonPort = "MonPort";
-        const string sIdentDBSPort = "DBSPort";
-        const string sIdentFeePort = "FeePort";
-        const string sIdentLogPort = "LogPort";
-        const string sIdentTestServer = "TestServer";
-        const string sIdentDynamicIPMode = "DynamicIPMode";
+        private const string sSectionServer = "Server";
+        private const string sDB = "DataBase";
+        private const string sIdentDBServer = "DBServer";
+        private const string sIdentFeeServer = "FeeServer";
+        private const string sIdentLogServer = "LogServer";
+        private const string sIdentGateAddr = "GateAddr";
+        private const string sIdentGatePort = "GatePort";
+        private const string sIdentServerAddr = "ServerAddr";
+        private const string sIdentServerPort = "ServerPort";
+        private const string sIdentMonAddr = "MonAddr";
+        private const string sIdentMonPort = "MonPort";
+        private const string sIdentDBSPort = "DBSPort";
+        private const string sIdentFeePort = "FeePort";
+        private const string sIdentLogPort = "LogPort";
+        private const string sIdentTestServer = "TestServer";
+        private const string sIdentDynamicIPMode = "DynamicIPMode";
 
         public readonly Config Config;
 

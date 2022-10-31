@@ -1,5 +1,4 @@
 using LoginSvr.Conf;
-using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule.Common;
@@ -211,7 +210,7 @@ namespace LoginSvr
         public IList<UserInfo> UserList;
         public long dwKeepAliveTick;
     }
-    
+
     public struct CertUser
     {
         public string LoginID;

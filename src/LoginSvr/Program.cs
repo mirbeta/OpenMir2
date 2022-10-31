@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace LoginSvr
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var serviceRunner = new AppServer();
