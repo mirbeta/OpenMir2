@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using SystemModule;
 using SystemModule.Common;
 
 namespace LoginGate
@@ -42,6 +44,49 @@ namespace LoginGate
         {
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
+        }
+
+        private bool IsBlockIP(string sIPaddr)
+        {
+            bool result = false;
+            string sBlockIPaddr;
+            for (var i = 0; i < TempBlockIPList.Count; i++)
+            {
+                sBlockIPaddr = TempBlockIPList[i];
+                if (string.Compare(sIPaddr, sBlockIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            for (var i = 0; i < BlockIPList.Count; i++)
+            {
+                sBlockIPaddr = BlockIPList[i];
+                if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr))
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private bool IsConnLimited(string sIPaddr)
+        {
+            bool result = false;
+            int nCount = 0;
+            //for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i++)
+            //{
+            //    if ((sIPaddr).CompareTo((ServerSocket.Connections[i].RemoteAddress)) == 0)
+            //    {
+            //        nCount++;
+            //    }
+            //}
+            if (nCount > nMaxConnOfIPaddr)
+            {
+                result = true;
+            }
+            return result;
         }
     }
 }

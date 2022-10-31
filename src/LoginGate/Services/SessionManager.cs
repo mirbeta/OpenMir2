@@ -59,6 +59,6 @@ namespace LoginGate.Services
         {
             return _sessionMap.Values.ToList();
         }
-        
+
     }
 }

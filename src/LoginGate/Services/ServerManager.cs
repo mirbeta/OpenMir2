@@ -99,12 +99,12 @@ namespace LoginGate.Services
             }
             _logger.DebugLog($"初始化网关服务完成.[{_serverServices.Count}]");
         }
-        
+
         private void AddServer(ServerService serverService)
         {
             _serverServices.Add(serverService);
         }
-        
+
         public IList<ServerService> GetServerList()
         {
             return _serverServices;

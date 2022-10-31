@@ -7,7 +7,7 @@ namespace LoginGate.Conf
     {
         public readonly GateConfig GetConfig;
         public readonly GameGateInfo[] GameGates;
-        
+
         public ConfigManager(string szFileName) : base(szFileName)
         {
             Load();
