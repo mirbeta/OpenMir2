@@ -50,7 +50,7 @@ namespace LoginSvr.Services
         {
             _serverSocket.Init();
             _serverSocket.Start(_config.sGateAddr, _config.nGatePort);
-            _logger.Information($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
+            _logger.LogInformation($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
 
         private void GSocketClientConnect(object sender, AsyncUserToken e)
@@ -61,13 +61,13 @@ namespace LoginSvr.Services
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
             _clientManager.AddSession(e.SocHandle, gateInfo);
-            _logger.Information($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
+            _logger.LogInformation($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
         }
 
         private void GSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             _clientManager.Delete(e.SocHandle);
-            _logger.Warn($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+            _logger.LogWarning($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
         }
 
         private void GSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -129,7 +129,7 @@ namespace LoginSvr.Services
             {
                 if (packet.EndChar != '$' && packet.StartChar != '%')
                 {
-                    _logger.Warn("丢弃错误的封包数据");
+                    _logger.LogWarning("丢弃错误的封包数据");
                     return;
                 }
                 switch (packet.Type)
@@ -160,7 +160,7 @@ namespace LoginSvr.Services
             {
                 socket.Send(HUtil32.GetBytes("%++$"));
             }
-            _logger.LogDebug($"心跳消息 链接状态:[{socket.Connected}]");
+            _logger.DebugLog($"心跳消息 链接状态:[{socket.Connected}]");
         }
 
         private void ReceiveCloseUser(int sSockIndex, GateInfo gateInfo)
@@ -171,7 +171,7 @@ namespace LoginSvr.Services
                 var userInfo = gateInfo.UserList[i];
                 if (userInfo.SockIndex == sSockIndex)
                 {
-                    _logger.LogDebug(string.Format(sCloseMsg, userInfo.UserIPaddr));
+                    _logger.DebugLog(string.Format(sCloseMsg, userInfo.UserIPaddr));
                     if (!userInfo.SelServer)
                     {
                         SessionDel(userInfo.SessionID);
@@ -215,7 +215,7 @@ namespace LoginSvr.Services
                 userInfo.Gate = gateInfo;
                 gateInfo.UserList.Add(userInfo);
                 _clientManager.AddSession(sSockIndex, gateInfo);
-                _logger.LogDebug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
+                _logger.DebugLog(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
             }
             catch (Exception ex)
             {

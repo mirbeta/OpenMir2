@@ -253,7 +253,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.Log.Error("loading fail.... => " + sListFileName);
+                    M2Share.Log.LogError("loading fail.... => " + sListFileName);
                 }
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -266,7 +266,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                M2Share.Log.Error("file not found => " + sListFileName);
+                M2Share.Log.LogError("file not found => " + sListFileName);
             }
             return result;
         }
@@ -344,7 +344,7 @@ namespace GameSvr.Npc
                     }
                     catch
                     {
-                        M2Share.Log.Error("loading fail.... => " + sListFileName);
+                        M2Share.Log.LogError("loading fail.... => " + sListFileName);
                     }
                 }
                 var nDay = HUtil32.StrToInt(sDay, 0);
@@ -518,7 +518,7 @@ namespace GameSvr.Npc
                         result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
                         break;
                     case ScriptConst.nSC_CHECKRANDOMNO:
-                        M2Share.Log.Error("TODO nSC_CHECKRANDOMNO...");
+                        M2Share.Log.LogError("TODO nSC_CHECKRANDOMNO...");
                         //result = GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject, sMsg);
                         break;
                     case ScriptConst.nCheckDiemon:
@@ -1472,7 +1472,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.Log.Error("saving fail.... => " + sListFileName);
+                    M2Share.Log.LogError("saving fail.... => " + sListFileName);
                 }
             }
         }
@@ -1504,7 +1504,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.Log.Error("saving fail.... => " + sListFileName);
+                    M2Share.Log.LogError("saving fail.... => " + sListFileName);
                 }
             }
         }
@@ -2131,7 +2131,7 @@ namespace GameSvr.Npc
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
                         {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
-                            M2Share.Log.Error("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            M2Share.Log.LogError("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
                             return result;
                         }

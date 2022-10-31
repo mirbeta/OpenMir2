@@ -58,16 +58,16 @@ namespace LoginGate.Services
             var clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
             {
-                _logger.LogDebug("获取服务器实例失败。");
+                _logger.DebugLog("获取服务器实例失败。");
                 return;
             }
             if (!clientThread.ConnectState)
             {
                 _logger.LogInformation("未就绪: " + sRemoteAddress, 5);
-                _logger.LogDebug($"游戏引擎链接失败 Server:[{clientThread.EndPoint}] ConnectionId:[{e.ConnectionId}]");
+                _logger.DebugLog($"游戏引擎链接失败 Server:[{clientThread.EndPoint}] ConnectionId:[{e.ConnectionId}]");
                 return;
             }
-            _logger.LogDebug($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
+            _logger.DebugLog($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < GateShare.MaxSession; nIdx++)
             {
@@ -108,7 +108,7 @@ namespace LoginGate.Services
                 userSession.UserLeave();
                 userSession.CloseSession();
                 _logger.LogInformation("断开连接: " + e.RemoteIPaddr, 5);
-                _logger.LogDebug($"用户[{e.RemoteIPaddr}] 会话ID:[{e.SocHandle}] 断开链接.");
+                _logger.DebugLog($"用户[{e.RemoteIPaddr}] 会话ID:[{e.SocHandle}] 断开链接.");
             }
             _sessionManager.CloseSession(e.SocHandle);
         }
@@ -131,13 +131,13 @@ namespace LoginGate.Services
             if (userSession == null)
             {
                 _logger.LogInformation("非法攻击: " + sRemoteAddress, 5);
-                _logger.LogDebug($"获取用户对应会话失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                _logger.DebugLog($"获取用户对应会话失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
             if (!userSession.ClientThread.ConnectState)
             {
                 _logger.LogInformation("未就绪: " + sRemoteAddress, 5);
-                _logger.LogDebug($"账号服务器链接失败 Server:[{userSession.ClientThread.EndPoint}] ConnectionId:[{connectionId}]");
+                _logger.DebugLog($"账号服务器链接失败 Server:[{userSession.ClientThread.EndPoint}] ConnectionId:[{connectionId}]");
                 return;
             }
             var data = new byte[token.BytesReceived];

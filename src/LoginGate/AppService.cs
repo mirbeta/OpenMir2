@@ -2,6 +2,7 @@ using LoginGate.Conf;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace LoginGate
 {
@@ -20,14 +21,14 @@ namespace LoginGate
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logQueue.LogDebug($"GameGate is stopping."));
+            stoppingToken.Register(() => _logQueue.DebugLog($"GameGate is stopping."));
             _serverApp.Start(stoppingToken);
             return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logQueue.LogDebug($"LoginGate is starting.");
+            _logQueue.DebugLog($"LoginGate is starting.");
             _logQueue.LogInformation("正在启动服务...", 2);
             GateShare.Initialization();
             _configManager.LoadConfig();
@@ -41,7 +42,7 @@ namespace LoginGate
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logQueue.LogDebug($"LoginGate is stopping.");
+            _logQueue.DebugLog($"LoginGate is stopping.");
             _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }

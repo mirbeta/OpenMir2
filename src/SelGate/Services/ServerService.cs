@@ -77,7 +77,7 @@ namespace SelGate.Services
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            _logger.LogDebug($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetEndPoint()}");
+            _logger.DebugLog($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetEndPoint()}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < ClientThread.MaxSession; nIdx++)
             {
@@ -127,7 +127,7 @@ namespace SelGate.Services
             else
             {
                 _logger.LogInformation("断开链接: " + sRemoteAddr, 5);
-                _logger.LogDebug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
+                _logger.DebugLog($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.SocHandle);
         }
@@ -145,13 +145,13 @@ namespace SelGate.Services
             if (userClient == null)
             {
                 _logger.LogInformation("非法攻击: " + sRemoteAddress, 5);
-                _logger.LogDebug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                _logger.DebugLog($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
             if (!userClient.boGateReady)
             {
                 _logger.LogInformation("未就绪: " + sRemoteAddress, 5);
-                _logger.LogDebug($"游戏引擎链接失败 Server:[{userClient.GetEndPoint()}] ConnectionId:[{connectionId}]");
+                _logger.DebugLog($"游戏引擎链接失败 Server:[{userClient.GetEndPoint()}] ConnectionId:[{connectionId}]");
                 return;
             }
             var data = new byte[token.BytesReceived];

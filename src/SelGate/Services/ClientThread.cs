@@ -124,7 +124,7 @@ namespace SelGate.Services
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
             _logQueue.LogInformation($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
-            _logQueue.LogDebug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            _logQueue.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -166,7 +166,7 @@ namespace SelGate.Services
             }
             if (packet.Type == PacketType.KeepAlive)
             {
-                _logQueue.LogDebug("DBSvr Heartbeat Response");
+                _logQueue.DebugLog("DBSvr Heartbeat Response");
                 CheckServerFail = false;
                 boGateReady = true;
                 isConnected = true;
@@ -217,7 +217,7 @@ namespace SelGate.Services
             accountPacket.SocketId = 0;
             accountPacket.EndChar = '$';
             SendSocket(accountPacket.GetBuffer());
-            _logQueue.LogDebug("Send DBSvr Heartbeat.");
+            _logQueue.DebugLog("Send DBSvr Heartbeat.");
         }
 
         public void SendBuffer(string sendText)

@@ -140,7 +140,7 @@ namespace GameSvr.Player
                 }
                 if (!(boDisableSayMsg || Envir.Flag.boNOCHAT))
                 {
-                    M2Share.Log.Info('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + ChrName + ": " + sData);
+                    M2Share.Log.LogInformation('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + ChrName + ": " + sData);
                     m_sOldSayMsg = sData;
                     if (sData.StartsWith("@@加速处理"))
                     {
@@ -221,8 +221,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, sData));
-                M2Share.Log.Error(e.StackTrace);
+                M2Share.Log.LogError(Format(sExceptionMsg, sData));
+                M2Share.Log.LogError(e.StackTrace);
             }
         }
 
@@ -441,8 +441,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, sData));
-                M2Share.Log.Error(e.Message);
+                M2Share.Log.LogError(Format(sExceptionMsg, sData));
+                M2Share.Log.LogError(e.Message);
             }
         }
     }

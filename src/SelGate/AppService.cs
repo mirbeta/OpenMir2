@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace SelGate
 {
@@ -17,21 +18,21 @@ namespace SelGate
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logQueue.LogDebug($"GameGate is stopping."));
+            stoppingToken.Register(() => _logQueue.DebugLog("GameGate is stopping."));
             _serverApp.Start(stoppingToken);
             return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logQueue.LogDebug($"GameGate is starting.");
+            _logQueue.DebugLog("GameGate is starting.");
             _serverApp.StartService();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logQueue.LogDebug($"GameGate is stopping.");
+            _logQueue.DebugLog("GameGate is stopping.");
             _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }

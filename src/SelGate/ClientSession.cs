@@ -84,7 +84,7 @@ namespace SelGate
                     _lastDbSvr.SendSocket(accountPacket.GetBuffer());
                     break;
                 default:
-                    _logger.LogDebug($"错误的数据包索引:[{cltCmd.Cmd}]");
+                    _logger.DebugLog($"错误的数据包索引:[{cltCmd.Cmd}]");
                     break;
             }
             if (!success)
@@ -107,7 +107,7 @@ namespace SelGate
                     _kickFlag = true;
                     //BlockUser(this);
                     success = true;
-                    _logger.LogDebug($"Client Connect Time Out: {Session.ClientIP}");
+                    _logger.DebugLog($"Client Connect Time Out: {Session.ClientIP}");
                 }
             }
             else
@@ -142,7 +142,7 @@ namespace SelGate
             }
             else
             {
-                _logger.LogDebug("Scoket会话失效，无法处理登陆封包");
+                _logger.DebugLog("Scoket会话失效，无法处理登陆封包");
             }
         }
 
@@ -193,7 +193,7 @@ namespace SelGate
             accountPacket.SocketId = Session.SocketId;
             accountPacket.EndChar = '$';
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
-            _logger.LogDebug("[UserEnter] " + sendStr);
+            _logger.DebugLog("[UserEnter] " + sendStr);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace SelGate
             accountPacket.EndChar = '$';
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
             _kickFlag = false;
-            _logger.LogDebug("[UserLeave] " + sendStr);
+            _logger.DebugLog("[UserLeave] " + sendStr);
         }
 
         public void CloseSession()

@@ -18,6 +18,7 @@
       <DefineConstants>TRACE;ISWOL</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
+      <PackageReference Include="NLog" Version="5.0.5" />
       <PackageReference Include="protobuf-net" Version="3.1.22" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
     </ItemGroup>

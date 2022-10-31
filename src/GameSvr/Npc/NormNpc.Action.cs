@@ -46,7 +46,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("{异常} TNormNpc.ActionOfOPENYBDEAL");
+                M2Share.Log.LogError("{异常} TNormNpc.ActionOfOPENYBDEAL");
             }
         }
 
@@ -158,7 +158,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("{异常} TNormNpc.ActionOfQUERYYBSELL");
+                M2Share.Log.LogError("{异常} TNormNpc.ActionOfQUERYYBSELL");
             }
         }
 
@@ -272,7 +272,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("{异常} TNormNpc.ActionOfQueryTrustDeal");
+                M2Share.Log.LogError("{异常} TNormNpc.ActionOfQueryTrustDeal");
             }
         }
 
@@ -291,7 +291,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.Log.Error("loading fail.... => " + sListFileName);
+                    M2Share.Log.LogError("loading fail.... => " + sListFileName);
                 }
             }
             var boFound = false;
@@ -317,7 +317,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("saving fail.... => " + sListFileName);
+                M2Share.Log.LogError("saving fail.... => " + sListFileName);
             }
         }
 
@@ -336,7 +336,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.Log.Error("loading fail.... => " + sListFileName);
+                    M2Share.Log.LogError("loading fail.... => " + sListFileName);
                 }
             }
             var boFound = false;
@@ -360,7 +360,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.Log.Error("saving fail.... => " + sListFileName);
+                    M2Share.Log.LogError("saving fail.... => " + sListFileName);
                 }
             }
         }
@@ -735,7 +735,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("saving fail.... => " + sListFileName);
+                M2Share.Log.LogError("saving fail.... => " + sListFileName);
             }
         }
 
@@ -3524,7 +3524,7 @@ namespace GameSvr.Npc
             }
             catch
             {
-                M2Share.Log.Error("{异常} TNormNpc.ActionOfTHROWITEM");
+                M2Share.Log.LogError("{异常} TNormNpc.ActionOfTHROWITEM");
             }
         }
 

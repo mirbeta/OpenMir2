@@ -183,13 +183,13 @@ namespace LoginGate.Services
                 {
                     clientThread.ReConnected();
                     clientThread.CheckServerFailCount++;
-                    _logger.LogDebug($"重新与服务器[{clientThread.EndPoint}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                    _logger.DebugLog($"重新与服务器[{clientThread.EndPoint}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;
                 }
                 clientThread.CheckServerFail = true;
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
-                _logger.LogDebug($"服务器[{clientThread.EndPoint}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
+                _logger.DebugLog($"服务器[{clientThread.EndPoint}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
             }
         }
 

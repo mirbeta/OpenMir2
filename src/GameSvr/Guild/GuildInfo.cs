@@ -430,7 +430,7 @@ namespace GameSvr.Guild
             }
             catch
             {
-                M2Share.Log.Error("保存行会信息失败!!! " + sFileName);
+                M2Share.Log.LogError("保存行会信息失败!!! " + sFileName);
             }
         }
 
@@ -463,8 +463,8 @@ namespace GameSvr.Guild
             }
             catch (Exception e)
             {
-                M2Share.Log.Error("[Exceptiion] TGuild.SendGuildMsg GuildName = " + sGuildName + " Msg = " + sMsg);
-                M2Share.Log.Error(e.Message);
+                M2Share.Log.LogError("[Exceptiion] TGuild.SendGuildMsg GuildName = " + sGuildName + " Msg = " + sMsg);
+                M2Share.Log.LogError(e.Message);
             }
         }
 

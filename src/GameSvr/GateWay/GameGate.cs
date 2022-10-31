@@ -311,7 +311,7 @@ namespace GameSvr.GateWay
                         tHWID = MD5.MD5UnPrInt(sHWID);
                         result = true;
                     }
-                    M2Share.Log.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHWID}]");
+                    M2Share.Log.DebugLog($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHWID}]");
                 }
             }
             catch

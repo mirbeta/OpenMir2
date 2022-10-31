@@ -132,7 +132,7 @@ namespace LoginSvr.Services
                         }
                         else
                         {
-                            _logger.Warn("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
+                            _logger.LogWarning("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
                         }
                     }
                     else
@@ -152,7 +152,7 @@ namespace LoginSvr.Services
                         }
                         else
                         {
-                            _logger.Warn("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
+                            _logger.LogWarning("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
                         }
                     }
                     else
@@ -168,7 +168,7 @@ namespace LoginSvr.Services
                     }
                     else
                     {
-                        _logger.Warn("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
+                        _logger.LogWarning("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
                     }
                     break;
                 case Grobal2.CM_GETBACKPASSWORD:
@@ -179,7 +179,7 @@ namespace LoginSvr.Services
                     }
                     else
                     {
-                        _logger.Warn("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
+                        _logger.LogWarning("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
                     }
                     break;
             }
@@ -260,7 +260,7 @@ namespace LoginSvr.Services
                         }
                         var playSpan = DateTimeOffset.Now.AddSeconds(userInfo.Seconds) - DateTimeOffset.Now;
                         var playTime = FormatSecond(userInfo.Seconds);
-                        _logger.LogDebug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏到期时间:[{playTime}]");
+                        _logger.DebugLog($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏到期时间:[{playTime}]");
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, (int)Math.Round(playSpan.TotalSeconds, 1), 0, userInfo.PayMode, _config.ServerNameList.Count);
                     }
                     else if (_config.PayMode == 0)
@@ -354,7 +354,7 @@ namespace LoginSvr.Services
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.Warn("[新建账号失败] 数据包为空或数据包长度异常");
+                    _logger.LogWarning("[新建账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
                 var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
@@ -396,7 +396,7 @@ namespace LoginSvr.Services
                 }
                 else
                 {
-                    _logger.Warn(string.Format(sAddNewuserFail, userFullEntry.UserEntry.Account, userFullEntry.UserEntryAdd.Quiz2));
+                    _logger.LogWarning(string.Format(sAddNewuserFail, userFullEntry.UserEntry.Account, userFullEntry.UserEntryAdd.Quiz2));
                 }
                 ClientMesaagePacket defMsg;
                 if (nErrCode == 1)
@@ -501,7 +501,7 @@ namespace LoginSvr.Services
                     {
                         sSelGateIp = userInfo.GateIPaddr;
                     }
-                    _logger.LogDebug(string.Format(sSelServerMsg, sServerName, _config.sGateIPaddr, sSelGateIp, nSelGatePort));
+                    _logger.DebugLog(string.Format(sSelServerMsg, sServerName, _config.sGateIPaddr, sSelGateIp, nSelGatePort));
                     userInfo.SelServer = true;
                     var boPayCost = false;
                     var nPayMode = userInfo.PayMode;
@@ -533,7 +533,7 @@ namespace LoginSvr.Services
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.Warn("[更新账号失败] 数据包为空或数据包长度异常");
+                    _logger.LogWarning("[更新账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
                 var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
@@ -777,7 +777,7 @@ namespace LoginSvr.Services
         private void KickUser(GateInfo gateInfo, ref UserInfo userInfo)
         {
             const string sKickMsg = "Kick: {0}";
-            _logger.LogDebug(string.Format(sKickMsg, userInfo.UserIPaddr));
+            _logger.DebugLog(string.Format(sKickMsg, userInfo.UserIPaddr));
             SendGateKickMsg(gateInfo.Socket, userInfo.SockIndex);
             gateInfo.UserList.Remove(userInfo);
             userInfo = null;

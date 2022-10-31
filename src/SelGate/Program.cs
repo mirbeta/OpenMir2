@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using SelGate.Conf;
+using SystemModule;
 
 namespace SelGate
 {
