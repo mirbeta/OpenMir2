@@ -10,17 +10,15 @@ namespace LoginSvr
 {
     public class AppService : BackgroundService
     {
-        private readonly AppServer _serverApp;
         private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
         private readonly SessionServer _masSocService;
         private readonly LoginServer _loginService;
         private readonly AccountStorage _accountStorage;
 
-        public AppService(MirLogger logger, AppServer appServer, SessionServer masSocService, LoginServer loginService, AccountStorage accountStorage, ConfigManager configManager)
+        public AppService(MirLogger logger, SessionServer masSocService, LoginServer loginService, AccountStorage accountStorage, ConfigManager configManager)
         {
             _logger = logger;
-            _serverApp = appServer;
             _masSocService = masSocService;
             _loginService = loginService;
             _accountStorage = accountStorage;
@@ -29,16 +27,15 @@ namespace LoginSvr
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.DebugLog($"LoginSvr is stopping."));
+            stoppingToken.Register(() => _logger.DebugLog("LoginSvr is stopping."));
             _loginService.Start(stoppingToken);
             return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.DebugLog($"LoginSvr is starting.");
+            _logger.DebugLog("LoginSvr is starting.");
             LsShare.Initialization();
-            _serverApp.Start();
             LoadConfig();
             _loginService.StartServer();
             _masSocService.StartServer();
@@ -62,7 +59,7 @@ namespace LoginSvr
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.DebugLog($"LoginSvr is stopping.");
+            _logger.DebugLog("LoginSvr is stopping.");
             return base.StopAsync(cancellationToken);
         }
     }
