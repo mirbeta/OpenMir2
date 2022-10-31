@@ -19,13 +19,13 @@ namespace LoginGate.Services
     {
         private readonly Channel<MessageData> _sendQueue;
         private readonly SessionManager _sessionManager;
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly IList<ClientThread> _serverGateList;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private readonly ConfigManager _configManager;
         private readonly ServerManager _serverManager;
 
-        public ClientManager(MirLog logger, SessionManager sessionManager, ConfigManager configManager, ServerManager serverManager)
+        public ClientManager(MirLogger logger, SessionManager sessionManager, ConfigManager configManager, ServerManager serverManager)
         {
             _logger = logger;
             _sessionManager = sessionManager;

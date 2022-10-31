@@ -17,7 +17,7 @@ namespace DBSvr.Services
     /// </summary>
     public class HumDataService
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly IList<TServerInfo> _serverList;
         private readonly IList<THumSession> _playSessionList;
         private readonly IPlayDataStorage _playDataStorage;
@@ -26,7 +26,7 @@ namespace DBSvr.Services
         private readonly LoginSvrService _loginSvrService;
         private readonly DBSvrConf _conf;
 
-        public HumDataService(MirLog logger, DBSvrConf conf, LoginSvrService loginSvrService, IPlayDataStorage playDataStorage, IMemoryStorageServive memoryStorageServive)
+        public HumDataService(MirLogger logger, DBSvrConf conf, LoginSvrService loginSvrService, IPlayDataStorage playDataStorage, IMemoryStorageServive memoryStorageServive)
         {
             _logger = logger;
             _loginSvrService = loginSvrService;

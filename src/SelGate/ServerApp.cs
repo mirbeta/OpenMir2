@@ -13,9 +13,9 @@ namespace SelGate
         private readonly ServerService _serverService;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
-        private readonly MirLog _logQueue;
+        private readonly MirLogger _logQueue;
 
-        public ServerApp(MirLog logQueue, ServerService serverService, SessionManager sessionManager, ClientManager clientManager, ConfigManager configManager)
+        public ServerApp(MirLogger logQueue, ServerService serverService, SessionManager sessionManager, ClientManager clientManager, ConfigManager configManager)
         {
             _logQueue = logQueue;
             _serverService = serverService;

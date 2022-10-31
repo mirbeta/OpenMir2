@@ -19,7 +19,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 日志
         /// </summary>
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         /// <summary>
         /// 用户会话
         /// </summary>
@@ -37,7 +37,7 @@ namespace LoginGate.Services
         /// </summary>
         private readonly SessionManager _sessionManager;
 
-        public ClientThread(MirLog logger, SessionManager sessionManager, ClientManager clientManager)
+        public ClientThread(MirLogger logger, SessionManager sessionManager, ClientManager clientManager)
         {
             _logger = logger;
             _clientManager = clientManager;

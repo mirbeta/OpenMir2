@@ -53,7 +53,7 @@ namespace GameSvr
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<GameApp>();
-                    services.AddSingleton<MirLog>();
+                    services.AddSingleton<MirLogger>();
                     services.AddHostedService<AppService>();
                     services.AddHostedService<TimedService>();
                 }).ConfigureLogging(logging =>

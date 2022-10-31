@@ -9,10 +9,10 @@ namespace LoginGate
     public class AppService : BackgroundService
     {
         private readonly ServerApp _serverApp;
-        private readonly MirLog _logQueue;
+        private readonly MirLogger _logQueue;
         private readonly ConfigManager _configManager;
 
-        public AppService(MirLog logQueue,ServerApp serverApp, ConfigManager configManager)
+        public AppService(MirLogger logQueue,ServerApp serverApp, ConfigManager configManager)
         {
             _serverApp = serverApp;
             _configManager = configManager;

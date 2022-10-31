@@ -14,7 +14,7 @@ namespace LoginGate.Services
     /// </summary>
     public class ServerManager
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly IList<ServerService> _serverServices;
         private readonly ConfigManager _configManager;
         private readonly SessionManager _sessionManager;
@@ -24,7 +24,7 @@ namespace LoginGate.Services
         /// </summary>
         private readonly Channel<MessageData> _messageQueue;
 
-        public ServerManager(MirLog logger, IServiceProvider serviceProvider, SessionManager sessionManager, ConfigManager configManager)
+        public ServerManager(MirLogger logger, IServiceProvider serviceProvider, SessionManager sessionManager, ConfigManager configManager)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

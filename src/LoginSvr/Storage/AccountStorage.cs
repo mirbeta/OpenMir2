@@ -11,11 +11,11 @@ namespace LoginSvr.Storage
 {
     public class AccountStorage
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
         private readonly Dictionary<string, AccountQuick> _quickList;
 
-        public AccountStorage(MirLog logQueue, ConfigManager configManager)
+        public AccountStorage(MirLogger logQueue, ConfigManager configManager)
         {
             _logger = logQueue;
             _configManager = configManager;

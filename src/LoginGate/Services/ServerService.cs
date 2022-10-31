@@ -13,14 +13,14 @@ namespace LoginGate.Services
     /// </summary>
     public class ServerService
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly SocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         private readonly ClientManager _clientManager;
         private readonly ServerManager _serverManager;
         private IPEndPoint _serverEndPoint;
 
-        public ServerService(MirLog logger, ServerManager serverManager, ClientManager clientManager, SessionManager sessionManager)
+        public ServerService(MirLogger logger, ServerManager serverManager, ClientManager clientManager, SessionManager sessionManager)
         {
             _logger = logger;
             _serverManager = serverManager;

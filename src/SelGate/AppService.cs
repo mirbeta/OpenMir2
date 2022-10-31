@@ -7,10 +7,10 @@ namespace SelGate
 {
     public class AppService : BackgroundService
     {
-        private readonly MirLog _logQueue;
+        private readonly MirLogger _logQueue;
         private readonly ServerApp _serverApp;
 
-        public AppService(MirLog logQueue, ServerApp serverApp)
+        public AppService(MirLogger logQueue, ServerApp serverApp)
         {
             _logQueue = logQueue;
             _serverApp = serverApp;

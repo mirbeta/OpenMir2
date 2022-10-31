@@ -17,7 +17,7 @@ namespace LoginSvr.Services
     /// </summary>
     public class SessionServer
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly IList<ServerSessionInfo> _serverList = null;
         private readonly SocketServer _serverSocket;
         private readonly ConfigManager _configManager;
@@ -25,7 +25,7 @@ namespace LoginSvr.Services
         private readonly Config _config;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
 
-        public SessionServer(MirLog logger, ConfigManager configManager, AccountStorage accountStorage)
+        public SessionServer(MirLogger logger, ConfigManager configManager, AccountStorage accountStorage)
         {
             _logger = logger;
             _configManager = configManager;

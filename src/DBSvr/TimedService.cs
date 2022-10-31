@@ -12,7 +12,7 @@ namespace DBSvr
 {
     public class TimedService : BackgroundService
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly UserSocService _userSoc;
         private readonly LoginSvrService _loginSoc;
         private readonly HumDataService _dataService;
@@ -23,7 +23,7 @@ namespace DBSvr
         private readonly IMemoryStorageServive _memoryStorageServive;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(MirLog logger, UserSocService userSoc, LoginSvrService loginSoc, HumDataService dataService,
+        public TimedService(MirLogger logger, UserSocService userSoc, LoginSvrService loginSoc, HumDataService dataService,
             IMemoryStorageServive memoryStorageServive, IPlayDataStorage playDataStorage)
         {
             _logger = logger;

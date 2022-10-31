@@ -26,13 +26,13 @@ namespace LoginSvr.Services
     public class LoginServer
     {
         private readonly SocketServer _serverSocket;
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
         private readonly Channel<LoginPacket> _messageQueue;
 
-        public LoginServer(MirLog logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager)
+        public LoginServer(MirLogger logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager)
         {
             _logger = logger;
             _clientSession = clientSession;

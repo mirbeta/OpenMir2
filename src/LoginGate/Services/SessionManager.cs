@@ -11,11 +11,11 @@ namespace LoginGate.Services
     /// </summary>
     public class SessionManager
     {
-        private readonly MirLog _logger;
+        private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
         readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
-        public SessionManager(MirLog logger, ConfigManager configManager)
+        public SessionManager(MirLogger logger, ConfigManager configManager)
         {
             _logger = logger;
             _configManager = configManager;

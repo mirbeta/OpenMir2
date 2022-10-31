@@ -50,7 +50,7 @@ namespace LoginGate
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<MirLog>();
+                    services.AddSingleton<MirLogger>();
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<ServerService>();
