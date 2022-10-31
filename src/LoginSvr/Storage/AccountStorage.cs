@@ -160,7 +160,7 @@ namespace LoginSvr.Storage
                     accountRecord.PlayTime = dr.GetInt64("Seconds");
                     accountRecord.UserEntry.Account = dr.GetString("Account");
                     accountRecord.UserEntry.Password = dr.GetString("PassWord");
-                    accountRecord.UserEntry.UserName=dr.GetString("UserName");
+                    accountRecord.UserEntry.UserName = dr.GetString("UserName");
                     accountRecord.UserEntryAdd.Quiz2 = dr.GetString("Quiz2");
                 }
                 dr.Close();
@@ -236,7 +236,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public void UpdateAccountPlayTime(string account,long gameTime)
+        public void UpdateAccountPlayTime(string account, long gameTime)
         {
             var strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
             _logger.DebugLog("[SQL QUERY] " + strSql);
@@ -330,7 +330,7 @@ namespace LoginSvr.Storage
         }
 
         private int DeleteAccount(string account)
-        { 
+        {
             const string sUpdateRecord2 = "UPDATE account SET State=1, ModifyTime={0} WHERE Account='{1}'";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))

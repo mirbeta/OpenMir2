@@ -55,7 +55,7 @@ namespace LoginSvr.Services
             {
                 while (_packetQueue.Reader.TryRead(out var message))
                 {
-                    ProcessUserData(message.SoketId,message.Msg);
+                    ProcessUserData(message.SoketId, message.Msg);
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessUserMsg(GateInfo gateInfo,UserInfo userInfo,string sMsg)
+        private void ProcessUserMsg(GateInfo gateInfo, UserInfo userInfo, string sMsg)
         {
             var sDefMsg = sMsg[..Grobal2.DEFBLOCKSIZE];
             var sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
@@ -874,7 +874,7 @@ namespace LoginSvr.Services
                 }
                 result = sServerInfo;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError("[Exception] LoginService.GetServerListInfo");
                 _logger.LogError(ex);

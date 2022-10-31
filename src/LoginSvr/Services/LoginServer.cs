@@ -122,7 +122,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessGateData(int socketId,GatePacket packet)
+        private void ProcessGateData(int socketId, GatePacket packet)
         {
             var gateInfo = _clientManager.GetSession(socketId);
             if (packet.Body != null && gateInfo.UserList != null)
