@@ -18,18 +18,18 @@ namespace LoginSvr.Services
         private readonly MirLog _logger;
         private readonly Config _config;
         private readonly AccountStorage _accountStorage;
-        private readonly SessionService _sessionService;
+        private readonly SessionServer _sessionService;
         private readonly ClientManager _clientManager;
-        private readonly Channel<UserSessionData> _userMessageQueue;
+        private readonly Channel<UserSessionData> _packetQueue;
 
-        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionService masSocService, ClientManager clientManager)
+        public ClientSession(MirLog logger, AccountStorage accountStorage, ConfigManager configManager, SessionServer sessionServer, ClientManager clientManager)
         {
             _logger = logger;
             _config = configManager.Config;
             _accountStorage = accountStorage;
-            _sessionService = masSocService;
+            _sessionService = sessionServer;
             _clientManager = clientManager;
-            _userMessageQueue = Channel.CreateUnbounded<UserSessionData>();
+            _packetQueue = Channel.CreateUnbounded<UserSessionData>();
         }
 
         public void Start(CancellationToken stoppingToken)
@@ -42,7 +42,7 @@ namespace LoginSvr.Services
 
         public void SendToQueue(UserSessionData userData)
         {
-            _userMessageQueue.Writer.TryWrite(userData);
+            _packetQueue.Writer.TryWrite(userData);
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace LoginSvr.Services
         /// <returns></returns>
         private async Task ProcessUserMessage(CancellationToken stoppingToken)
         {
-            while (await _userMessageQueue.Reader.WaitToReadAsync(stoppingToken))
+            while (await _packetQueue.Reader.WaitToReadAsync(stoppingToken))
             {
-                while (_userMessageQueue.Reader.TryRead(out var message))
+                while (_packetQueue.Reader.TryRead(out var message))
                 {
                     ProcessUserData(message.SoketId,message.Msg);
                 }
@@ -89,7 +89,6 @@ namespace LoginSvr.Services
                     }
                     j++;
                 }
-
             }
             catch (Exception ex)
             {

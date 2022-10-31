@@ -6,9 +6,9 @@ namespace LoginSvr
     public class AppServer
     {
         private readonly MirLog _logger;
-        private readonly SessionService _massocService;
+        private readonly SessionServer _massocService;
 
-        public AppServer(MirLog logger, SessionService massocService)
+        public AppServer(MirLog logger, SessionServer massocService)
         {
             _massocService = massocService;
             _logger = logger;
@@ -18,14 +18,6 @@ namespace LoginSvr
         {
             _logger.Information("正在启动服务器...");
             _logger.Information("正在等待服务器连接...");
-            while (true)
-            {
-                if (_massocService.CheckReadyServers())
-                {
-                    break;
-                }
-                Thread.Sleep(1);
-            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace LoginSvr.Services
     /// <summary>
     /// DBSVr、GameSvr会话服务
     /// </summary>
-    public class SessionService
+    public class SessionServer
     {
         private readonly MirLog _logger;
         private readonly IList<ServerSessionInfo> _serverList = null;
@@ -25,7 +25,7 @@ namespace LoginSvr.Services
         private readonly Config _config;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
 
-        public SessionService(MirLog logger, ConfigManager configManager, AccountStorage accountStorage)
+        public SessionServer(MirLog logger, ConfigManager configManager, AccountStorage accountStorage)
         {
             _logger = logger;
             _configManager = configManager;
@@ -521,11 +521,6 @@ namespace LoginSvr.Services
                 _logger.LogError(ex);
             }
             return result;
-        }
-
-        public bool CheckReadyServers()
-        {
-            return _serverList.Count >= _configManager.Config.ReadyServers;
         }
 
         private void SendServerMsgA(short wIdent, string sMsg)

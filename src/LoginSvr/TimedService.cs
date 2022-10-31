@@ -12,12 +12,12 @@ namespace LoginSvr
     public class TimedService : BackgroundService
     {
         private readonly MirLog _logger;
-        private readonly LoginService _loginService;
-        private readonly SessionService _sessionService;
+        private readonly LoginServer _loginService;
+        private readonly SessionServer _sessionService;
         private int _processMonSocTick;
         private int _processServerStatusTick;
 
-        public TimedService(MirLog logger, LoginService loginService, SessionService sessionService)
+        public TimedService(MirLog logger, LoginServer loginService, SessionServer sessionService)
         {
             _logger = logger;
             _loginService = loginService;
