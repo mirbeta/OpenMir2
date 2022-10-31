@@ -80,10 +80,10 @@ namespace LoginSvr
             SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) + GenSpaceString("Public", 17) + "Gate...");
             for (var i = 0; i < Config.RouteCount; i++)
             {
-                sC = GenSpaceString(Config.GateRoute[i].sServerName, 15) +
-                     GenSpaceString(Config.GateRoute[i].sTitle, 15) +
-                     GenSpaceString(Config.GateRoute[i].sRemoteAddr, 17) +
-                     GenSpaceString(Config.GateRoute[i].sPublicAddr, 17);
+                sC = GenSpaceString(Config.GateRoute[i].ServerName, 15) +
+                     GenSpaceString(Config.GateRoute[i].Title, 15) +
+                     GenSpaceString(Config.GateRoute[i].RemoteAddr, 17) +
+                     GenSpaceString(Config.GateRoute[i].PublicAddr, 17);
                 n8 = 0;
                 while (true)
                 {
@@ -115,9 +115,9 @@ namespace LoginSvr
             string result = sGateIP;
             for (var i = 0; i < Config.RouteCount; i++)
             {
-                if (Config.GateRoute[i].sRemoteAddr == sGateIP)
+                if (Config.GateRoute[i].RemoteAddr == sGateIP)
                 {
-                    result = Config.GateRoute[i].sPublicAddr;
+                    result = Config.GateRoute[i].PublicAddr;
                     break;
                 }
             }
@@ -175,16 +175,16 @@ namespace LoginSvr
         public bool boEnable;
     }
 
-    public class TGateRoute
+    public class GateRoute
     {
-        public string sServerName;
-        public string sTitle;
-        public string sRemoteAddr;
-        public string sPublicAddr;
+        public string ServerName;
+        public string Title;
+        public string RemoteAddr;
+        public string PublicAddr;
         public int nSelIdx;
         public TGateNet[] Gate;
 
-        public TGateRoute()
+        public GateRoute()
         {
             Gate = new TGateNet[10];
         }

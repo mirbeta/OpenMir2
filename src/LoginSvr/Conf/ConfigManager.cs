@@ -138,11 +138,11 @@ namespace LoginSvr.Conf
                         sLineText = sLineText.Trim();
                         if (sTitle != "" && sRemote != "" && sPublic != "" && nRouteIdx < 60)
                         {
-                            Config.GateRoute[nRouteIdx] = new TGateRoute();
-                            Config.GateRoute[nRouteIdx].sServerName = sServerName;
-                            Config.GateRoute[nRouteIdx].sTitle = sTitle;
-                            Config.GateRoute[nRouteIdx].sRemoteAddr = sRemote;
-                            Config.GateRoute[nRouteIdx].sPublicAddr = sPublic;
+                            Config.GateRoute[nRouteIdx] = new GateRoute();
+                            Config.GateRoute[nRouteIdx].ServerName = sServerName;
+                            Config.GateRoute[nRouteIdx].Title = sTitle;
+                            Config.GateRoute[nRouteIdx].RemoteAddr = sRemote;
+                            Config.GateRoute[nRouteIdx].PublicAddr = sPublic;
                             nSelGateIdx = 0;
                             while (sLineText != "")
                             {
@@ -188,14 +188,14 @@ namespace LoginSvr.Conf
                 bool boD = true;
                 for (var j = 0; j < Config.ServerNameList.Count; j++)
                 {
-                    if (Config.ServerNameList[j] == Config.GateRoute[i].sServerName)
+                    if (Config.ServerNameList[j] == Config.GateRoute[i].ServerName)
                     {
                         boD = false;
                     }
                 }
                 if (boD)
                 {
-                    Config.ServerNameList.Add(Config.GateRoute[i].sServerName);
+                    Config.ServerNameList.Add(Config.GateRoute[i].ServerName);
                 }
             }
         }
