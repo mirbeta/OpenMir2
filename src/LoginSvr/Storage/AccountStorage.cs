@@ -3,6 +3,7 @@ using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using SystemModule;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
@@ -25,12 +26,12 @@ namespace LoginSvr.Storage
 
         public void Initialization()
         {
-            _logger.Information("正在连接SQL服务器...");
+            _logger.LogInformation("正在连接SQL服务器...");
             var dbConnection = new MySqlConnection(Config.ConnctionString);
             try
             {
                 dbConnection.Open();
-                _logger.Information("连接SQL服务器成功...");
+                _logger.LogInformation("连接SQL服务器成功...");
                 LoadQuickList();
             }
             catch (Exception ex)
@@ -119,7 +120,7 @@ namespace LoginSvr.Storage
             {
                 Close(dbConnection);
             }
-            _logger.Information($"账号数据读取成功.[{_quickList.Count}]");
+            _logger.LogInformation($"账号数据读取成功.[{_quickList.Count}]");
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
@@ -204,7 +205,7 @@ namespace LoginSvr.Storage
         public int GetAccountPlayTime(string account)
         {
             var strSql = "SELECT Seconds FROM ACCOUNT WHERE Account=@Account";
-            _logger.LogDebug("[SQL QUERY] " + strSql);
+            _logger.DebugLog("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -238,7 +239,7 @@ namespace LoginSvr.Storage
         public void UpdateAccountPlayTime(string account,long gameTime)
         {
             var strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
-            _logger.LogDebug("[SQL QUERY] " + strSql);
+            _logger.DebugLog("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {

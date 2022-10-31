@@ -47,7 +47,7 @@ namespace LoginSvr.Services
             LoadUserLimit();
             _serverSocket.Init();
             _serverSocket.Start(_config.sServerAddr, _config.nServerPort);
-            _logger.Information($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
+            _logger.LogInformation($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
 
         private void SocketClientConnect(object sender, AsyncUserToken e)
@@ -69,11 +69,11 @@ namespace LoginSvr.Services
                 msgServer.Socket = e.Socket;
                 msgServer.EndPoint = e.EndPoint;
                 _serverList.Add(msgServer);
-                _logger.LogDebug($"{e.EndPoint}链接成功.");
+                _logger.DebugLog($"{e.EndPoint}链接成功.");
             }
             else
             {
-                _logger.Warn("非法地址连接:" + sRemoteAddr);
+                _logger.LogWarning("非法地址连接:" + sRemoteAddr);
                 e.Socket.Close();
             }
         }
@@ -87,11 +87,11 @@ namespace LoginSvr.Services
                 {
                     if (MsgServer.ServerIndex == 99)
                     {
-                        _logger.Warn($"[{MsgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogWarning($"[{MsgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     else
                     {
-                        _logger.Warn($"[{MsgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogWarning($"[{MsgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     MsgServer = null;
                     _serverList.RemoveAt(i);
@@ -206,7 +206,7 @@ namespace LoginSvr.Services
                         if((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                         {
                             SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, certUser.ServerName, certUser.LoginID + "/" + seconds);
-                            _logger.LogDebug($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
+                            _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
                         }
                     }
                 }
@@ -227,10 +227,10 @@ namespace LoginSvr.Services
             {
                 seconds = seconds - 60;//减去一分钟游戏时间
                 _accountStorage.UpdateAccountPlayTime(account, seconds);
-                _logger.LogDebug($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
+                _logger.DebugLog($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
                 if (seconds < gameTime)
                 {
-                    _logger.LogDebug($"账号[{account}]游戏时间异常.");
+                    _logger.DebugLog($"账号[{account}]游戏时间异常.");
                 }
                 else
                 {
@@ -257,14 +257,14 @@ namespace LoginSvr.Services
             else
             {          
                 SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, serverName, account + "/" + seconds);
-                _logger.LogDebug($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
+                _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
             }
         }
 
         private void SendCancelAdmissionUser(string serverName, CertUser certUser)
         {
             SendServerMsg(Grobal2.SS_CLOSESESSION, serverName, certUser.LoginID + "/" + certUser.Certification);
-            _logger.LogDebug($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
+            _logger.DebugLog($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 using LoginSvr.Services;
 using System.Threading;
+using SystemModule;
 
 namespace LoginSvr
 {
@@ -16,8 +17,8 @@ namespace LoginSvr
 
         public void Start()
         {
-            _logger.Information("正在启动服务器...");
-            _logger.Information("正在等待服务器连接...");
+            _logger.LogInformation("正在启动服务器...");
+            _logger.LogInformation("正在等待服务器连接...");
         }
     }
 }

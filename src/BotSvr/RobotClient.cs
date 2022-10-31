@@ -32,7 +32,7 @@ namespace BotSvr
         public TMap Map = null;
         public static TActor ShowMsgActor = null;
         public static long g_dwOverSpaceWarningTick = 0;
-        public static char activebuf = '*';
+        private const char activebuf = '*';
         private readonly TTimerCommand TimerCmd;
         private int ActionLockTime = 0;
         private readonly short ActionKey = 0;

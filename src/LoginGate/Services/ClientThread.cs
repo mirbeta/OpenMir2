@@ -111,7 +111,7 @@ namespace LoginGate.Services
             CheckServerFailCount = 1;
             //_clientManager.AddClientThread(e.SocketHandle, this);
             _logger.LogInformation($"账号服务器[{EndPoint}]链接成功.", 1);
-            _logger.LogDebug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            _logger.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -128,7 +128,7 @@ namespace LoginGate.Services
                     userSession.Socket.Close();
                     userSession.Socket = null;
                     SessionArray[i] = null;
-                    _logger.LogDebug("账号服务器断开Socket");
+                    _logger.DebugLog("账号服务器断开Socket");
                 }
             }
             RestSessionArray();

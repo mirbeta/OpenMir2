@@ -147,7 +147,7 @@ namespace LoginGate.Services
                     SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
                     m_KickFlag = true;
                     //BlockUser(this);
-                    _logger.LogDebug($"Client Connect TimeOut: {Session.ClientIP}");
+                    _logger.DebugLog($"Client Connect TimeOut: {Session.ClientIP}");
                     success = true;
                 }
             }
@@ -250,7 +250,7 @@ namespace LoginGate.Services
         {
             if (_session.Socket == null)
             {
-                _logger.LogDebug($"会话[{_session.ConnectionId}]已经关闭");
+                _logger.DebugLog($"会话[{_session.ConnectionId}]已经关闭");
                 return;
             }
             _session.Socket.Close();

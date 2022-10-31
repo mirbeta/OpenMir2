@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LoginSvr.Conf;
 using LoginSvr.Storage;
+using SystemModule;
 
 namespace LoginSvr
 {
@@ -28,14 +29,14 @@ namespace LoginSvr
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.LogDebug($"LoginSvr is stopping."));
+            stoppingToken.Register(() => _logger.DebugLog($"LoginSvr is stopping."));
             _loginService.Start(stoppingToken);
             return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"LoginSvr is starting.");
+            _logger.DebugLog($"LoginSvr is starting.");
             LsShare.Initialization();
             _serverApp.Start();
             LoadConfig();
@@ -44,11 +45,11 @@ namespace LoginSvr
             _accountStorage.Initialization();
             if (_configManager.Config.PayMode == 1)
             {
-                _logger.Information("当前游戏付费模式:收费模式");
+                _logger.LogInformation("当前游戏付费模式:收费模式");
             }
             else
             {
-                _logger.Information("当前游戏付费模式:免费模式");
+                _logger.LogInformation("当前游戏付费模式:免费模式");
             }
             return base.StartAsync(cancellationToken);
         }
@@ -61,7 +62,7 @@ namespace LoginSvr
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"LoginSvr is stopping.");
+            _logger.DebugLog($"LoginSvr is stopping.");
             return base.StopAsync(cancellationToken);
         }
     }

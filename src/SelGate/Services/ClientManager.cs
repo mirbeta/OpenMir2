@@ -38,7 +38,7 @@ namespace SelGate.Services
                 var serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    _logQueue.LogDebug($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    _logQueue.DebugLog($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
                 _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager, _logQueue));
@@ -202,12 +202,12 @@ namespace SelGate.Services
                                 UserSession.Socket = null;
                                 _sessionManager.CloseSession(UserSession.SocketId);
                                 UserSession = null;
-                                _logQueue.LogDebug("清理超时会话,关闭超时Socket.");
+                                _logQueue.DebugLog("清理超时会话,关闭超时Socket.");
                             }
                         }
                     }
                 }
-                _logQueue.LogDebug("Cleanup timeout session...");
+                _logQueue.DebugLog("Cleanup timeout session...");
             }
         }
 
@@ -246,13 +246,13 @@ namespace SelGate.Services
                 {
                     clientThread.ReConnected();
                     clientThread.CheckServerFailCount++;
-                    _logQueue.LogDebug($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                    _logQueue.DebugLog($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;
                 }
                 clientThread.CheckServerFail = true;
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
-                _logQueue.LogDebug($"服务器[{clientThread.GetEndPoint()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
+                _logQueue.DebugLog($"服务器[{clientThread.GetEndPoint()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
             }
         }
     }

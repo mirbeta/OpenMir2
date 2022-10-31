@@ -106,7 +106,7 @@ namespace GameSvr.GateWay
             }
             else
             {
-                M2Share.Log.Error("未找到用户对应Socket服务.");
+                M2Share.Log.LogError("未找到用户对应Socket服务.");
             }
         }
 
@@ -260,7 +260,7 @@ namespace GameSvr.GateWay
             ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
             if (!AddGateBuffer(nGateIdx, outMessage.GetBuffer()))
             {
-                M2Share.Log.Error("发送玩家退出消息失败.");
+                M2Share.Log.LogError("发送玩家退出消息失败.");
             }
         }
 
@@ -410,7 +410,7 @@ namespace GameSvr.GateWay
         private void GateSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
             //M2Share.RunSocket.CloseErrGate();
-            M2Share.Log.Error(e.Exception.StackTrace);
+            M2Share.Log.LogError(e.Exception.StackTrace);
         }
 
         private void GateSocketClientDisconnect(object sender, AsyncUserToken e)
@@ -438,7 +438,7 @@ namespace GameSvr.GateWay
             }
             else
             {
-                M2Share.Log.Error("错误的网关数据");
+                M2Share.Log.LogError("错误的网关数据");
             }
         }
 

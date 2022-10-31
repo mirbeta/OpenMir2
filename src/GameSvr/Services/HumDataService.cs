@@ -74,7 +74,7 @@ namespace GameSvr.Services
             }
             if (!boLoadDBOK)
             {
-                M2Share.Log.Error(boLoadRcd ? sLoadDBTimeOut : sSaveDBTimeOut);
+                M2Share.Log.LogError(boLoadRcd ? sLoadDBTimeOut : sSaveDBTimeOut);
             }
             if ((HUtil32.GetTickCount() - timeOutTick) > M2Share.dwRunDBTimeMax)
             {

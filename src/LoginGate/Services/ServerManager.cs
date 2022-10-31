@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace LoginGate.Services
 {
@@ -96,7 +97,7 @@ namespace LoginGate.Services
                 var gateService = (ServerService)_serviceProvider.GetService(typeof(ServerService));
                 AddServer(gateService);
             }
-            _logger.LogDebug($"初始化网关服务完成.[{_serverServices.Count}]");
+            _logger.DebugLog($"初始化网关服务完成.[{_serverServices.Count}]");
         }
         
         private void AddServer(ServerService serverService)
