@@ -71,7 +71,7 @@ namespace LoginGate
             return Task.CompletedTask;
         }
 
-        void Stop()
+        private void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -79,7 +79,7 @@ namespace LoginGate
             });
         }
 
-        async Task ProcessLoopAsync()
+        private async Task ProcessLoopAsync()
         {
             string input = null;
             do
@@ -112,13 +112,13 @@ namespace LoginGate
             } while (input is not "/exit");
         }
 
-        static Task Exit()
+        private static Task Exit()
         {
             Environment.Exit(Environment.ExitCode);
             return Task.CompletedTask;
         }
 
-        static Task ClearConsole()
+        private static Task ClearConsole()
         {
             Console.Clear();
             AnsiConsole.Clear();
@@ -185,7 +185,7 @@ namespace LoginGate
                 });
         }
 
-        static void PrintUsage()
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("LoginGate.logo.png");

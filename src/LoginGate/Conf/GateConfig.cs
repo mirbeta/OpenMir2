@@ -10,7 +10,7 @@ namespace LoginGate.Conf
         public int ShowLogLevel;
         public bool ShowDebugLog;
         public int GateCount;
-        private GameGateInfo[] GameGateList;
+        private readonly GameGateInfo[] GameGateList;
         public bool m_fCheckNewIDOfIP;
         /// <summary>
         /// 检查空的会话数据

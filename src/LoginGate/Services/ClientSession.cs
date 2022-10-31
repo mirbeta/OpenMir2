@@ -19,7 +19,7 @@ namespace LoginGate.Services
         private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
         private bool m_KickFlag = false;
-        private int m_nSvrObject = 0;
+        private readonly int m_nSvrObject = 0;
         private int m_dwClientTimeOutTick = 0;
 
         public ClientSession(MirLogger logger, TSessionInfo session, ClientThread clientThread, ConfigManager configManager)

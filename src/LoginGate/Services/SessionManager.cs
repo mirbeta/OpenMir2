@@ -13,7 +13,7 @@ namespace LoginGate.Services
     {
         private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
-        readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
+        private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         public SessionManager(MirLogger logger, ConfigManager configManager)
         {
