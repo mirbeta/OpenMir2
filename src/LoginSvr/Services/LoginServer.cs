@@ -13,7 +13,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginSvr.Services
 {
-    public class ClientPacket
+    public struct LoginPacket
     {
         public int SocketId;
         public byte[] Pakcet;
@@ -23,22 +23,22 @@ namespace LoginSvr.Services
     /// 账号服务 处理来自LoginGate的客户端登陆 注册 等登陆封包消息
     /// 处理账号注册 登录 找回密码等
     /// </summary>
-    public class LoginService
+    public class LoginServer
     {
         private readonly SocketServer _serverSocket;
         private readonly MirLog _logger;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
-        private readonly Channel<ClientPacket> _messageQueue;
+        private readonly Channel<LoginPacket> _messageQueue;
 
-        public LoginService(MirLog logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager)
+        public LoginServer(MirLog logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager)
         {
             _logger = logger;
             _clientSession = clientSession;
             _clientManager = clientManager;
             _config = configManager.Config;
-            _messageQueue = Channel.CreateUnbounded<ClientPacket>();
+            _messageQueue = Channel.CreateUnbounded<LoginPacket>();
             _serverSocket = new SocketServer(short.MaxValue, 2048);
             _serverSocket.OnClientConnect += GSocketClientConnect;
             _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
@@ -79,7 +79,7 @@ namespace LoginSvr.Services
         {
             var data = new byte[e.BytesReceived];
             Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, data.Length);
-            _messageQueue.Writer.TryWrite(new ClientPacket()
+            _messageQueue.Writer.TryWrite(new LoginPacket()
             {
                 SocketId = e.SocHandle,
                 Pakcet = data

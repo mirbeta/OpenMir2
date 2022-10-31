@@ -12,11 +12,11 @@ namespace LoginSvr
         private readonly AppServer _serverApp;
         private readonly MirLog _logger;
         private readonly ConfigManager _configManager;
-        private readonly SessionService _masSocService;
-        private readonly LoginService _loginService;
+        private readonly SessionServer _masSocService;
+        private readonly LoginServer _loginService;
         private readonly AccountStorage _accountStorage;
 
-        public AppService(MirLog logger, AppServer appServer, SessionService masSocService, LoginService loginService, AccountStorage accountStorage, ConfigManager configManager)
+        public AppService(MirLog logger, AppServer appServer, SessionServer masSocService, LoginServer loginService, AccountStorage accountStorage, ConfigManager configManager)
         {
             _logger = logger;
             _serverApp = appServer;

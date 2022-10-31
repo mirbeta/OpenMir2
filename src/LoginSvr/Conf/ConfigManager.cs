@@ -9,7 +9,7 @@ namespace LoginSvr.Conf
     public class ConfigManager : IniFile
     {
         const string sSectionServer = "Server";
-        private const string sDB = "DataBase";
+        const string sDB = "DataBase";
         const string sIdentDBServer = "DBServer";
         const string sIdentFeeServer = "FeeServer";
         const string sIdentLogServer = "LogServer";
@@ -22,7 +22,6 @@ namespace LoginSvr.Conf
         const string sIdentDBSPort = "DBSPort";
         const string sIdentFeePort = "FeePort";
         const string sIdentLogPort = "LogPort";
-        const string sIdentReadyServers = "ReadyServers";
         const string sIdentTestServer = "TestServer";
         const string sIdentDynamicIPMode = "DynamicIPMode";
 
@@ -50,7 +49,6 @@ namespace LoginSvr.Conf
             Config.nDBSPort = LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
             Config.nFeePort = LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
             Config.nLogPort = LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
-            Config.ReadyServers = LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.ReadyServers);
             Config.EnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.EnableMakingID);
             Config.DynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.DynamicIPMode);
             Config.ConnctionString = LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);

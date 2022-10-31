@@ -1,11 +1,8 @@
 using LoginSvr.Conf;
 using MySqlConnector;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using SystemModule;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
@@ -76,7 +73,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        private void Close(ref MySqlConnection dbConnection)
+        private void Close(MySqlConnection dbConnection)
         {
             if (dbConnection != null)
             {
@@ -120,9 +117,9 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
-            _logger.Information($"账号数据读取成功[{_quickList.Count}]");
+            _logger.Information($"账号数据读取成功.[{_quickList.Count}]");
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
@@ -137,7 +134,6 @@ namespace LoginSvr.Storage
         private bool GetAccount(int nIndex, ref AccountRecord accountRecord)
         {
             const string sSQL = "SELECT a.*,b.* FROM account a join account_protection b on a.Id=b.AccountId WHERE ID={0}";
-            var result = true;
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -166,7 +162,6 @@ namespace LoginSvr.Storage
                     accountRecord.UserEntry.UserName=dr.GetString("UserName");
                     accountRecord.UserEntryAdd.Quiz2 = dr.GetString("Quiz2");
                 }
-                result = true;
                 dr.Close();
                 dr.Dispose();
             }
@@ -178,9 +173,9 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
-            return result;
+            return true;
         }
 
         public int Index(string account)
@@ -208,7 +203,7 @@ namespace LoginSvr.Storage
 
         public int GetAccountPlayTime(string account)
         {
-            var strSql = $"SELECT SECONDS FROM ACCOUNT WHERE Account='{account}'";
+            var strSql = "SELECT Seconds FROM ACCOUNT WHERE Account=@Account";
             _logger.LogDebug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -221,6 +216,7 @@ namespace LoginSvr.Storage
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
+                command.Parameters.AddWithValue("@Account", account);
                 var obj = command.ExecuteScalar();
                 if (obj != null)
                 {
@@ -234,14 +230,14 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
             return result;
         }
 
         public void UpdateAccountPlayTime(string account,long gameTime)
         {
-            var strSql = $"UPDATE ACCOUNT SET SECONDS={gameTime} WHERE Account='{account}'";
+            var strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
             _logger.LogDebug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -253,6 +249,8 @@ namespace LoginSvr.Storage
                 var command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
+                command.Parameters.AddWithValue("@Seconds", gameTime);
+                command.Parameters.AddWithValue("@Account", account);
                 command.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -262,7 +260,7 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
         }
 
@@ -323,6 +321,10 @@ namespace LoginSvr.Storage
                 _logger.LogError("创建账号失败." + ex.Message);
                 _logger.LogError(ex);
             }
+            finally
+            {
+                Close(dbConnection);
+            }
             return result;
         }
 
@@ -351,7 +353,7 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
             return result;
         }
@@ -383,7 +385,7 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
             return result;
         }
@@ -418,7 +420,7 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
             return result;
         }
@@ -452,7 +454,7 @@ namespace LoginSvr.Storage
             }
             finally
             {
-                Close(ref dbConnection);
+                Close(dbConnection);
             }
             return result;
         }
@@ -522,6 +524,10 @@ namespace LoginSvr.Storage
                 beginTransaction.Rollback();
                 _logger.LogError("创建账号失败." + ex.Message);
                 _logger.LogError(ex);
+            }
+            finally
+            {
+                Close(dbConnection);
             }
             return result;
         }

@@ -44,7 +44,6 @@ namespace LoginSvr.Conf
         /// </summary>
         public bool EnableMakingID;
         public bool DynamicIPMode;
-        public int ReadyServers;
         public IList<TConnInfo> SessionList;
         public IList<string> ServerNameList;
         public int RouteCount;
@@ -69,7 +68,6 @@ namespace LoginSvr.Conf
             TestServer = true;
             EnableMakingID = true;
             DynamicIPMode = false;
-            ReadyServers = 0;
             GateRoute = new GateRoute[60];
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2_account;";
             ShowDebugLog = false;
