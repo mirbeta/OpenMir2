@@ -1,5 +1,7 @@
+using System;
 using SelGate.Services;
 using System.Collections.Generic;
+using SystemModule;
 using SystemModule.Common;
 
 namespace SelGate
@@ -47,6 +49,49 @@ namespace SelGate
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
             ServerGateList = new List<ClientThread>();
+        }
+        
+        private bool IsBlockIP(string sIPaddr)
+        {
+            bool result = false;
+            string sBlockIPaddr;
+            for (var i = 0; i < GateShare.TempBlockIPList.Count; i++)
+            {
+                sBlockIPaddr = GateShare.TempBlockIPList[i];
+                if (string.Compare(sIPaddr, sBlockIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            for (var i = 0; i < GateShare.BlockIPList.Count; i++)
+            {
+                sBlockIPaddr = GateShare.BlockIPList[i];
+                if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr))
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private bool IsConnLimited(string sIPaddr)
+        {
+            bool result = false;
+            int nCount = 0;
+            //for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i++)
+            //{
+            //    if ((sIPaddr).CompareTo((ServerSocket.Connections[i].RemoteAddress)) == 0)
+            //    {
+            //        nCount++;
+            //    }
+            //}
+            if (nCount > GateShare.nMaxConnOfIPaddr)
+            {
+                result = true;
+            }
+            return result;
         }
     }
 }
