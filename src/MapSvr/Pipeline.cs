@@ -74,7 +74,7 @@ namespace MapSvr
             Get.Set();
             while (!Got.WaitOne(ServerWaitReadMillisecs))
             {
-                if (TimeOutCount   > MaxTimeout)
+                if (TimeOutCount > MaxTimeout)
                 {
                     thread.Abort();
                     throw new TimeoutException();

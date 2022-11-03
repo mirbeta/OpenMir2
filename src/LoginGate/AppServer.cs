@@ -30,6 +30,7 @@ namespace LoginGate
                 if (_timer != null)
                 {
                     _timer.Dispose();
+                    _timer = null;
                 }
                 AnsiConsole.Reset();
             };
@@ -128,7 +129,10 @@ namespace LoginGate
         private async Task ShowServerStatus()
         {
             //GateShare.ShowLog = false;
-            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+            if (_timer == null)
+            {
+                _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+            }
             var clientManager = (ClientManager)_host.Services.GetService(typeof(ClientManager));
             if (clientManager == null)
             {
@@ -167,6 +171,7 @@ namespace LoginGate
 
                     while (await _timer.WaitForNextTickAsync())
                     {
+                        AnsiConsole.Clear();
                         for (int i = 0; i < clientList.Count; i++)
                         {
                             var (remoteendpoint, status, playCount, reviceTotal, sendTotal, threadCount) = clientList[i].GetStatus();

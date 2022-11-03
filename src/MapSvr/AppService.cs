@@ -28,7 +28,7 @@ namespace MapSvr
             pipeServer.ReadMode = PipeTransmissionMode.Byte;
         }
 
-        public async Task StartAsync(CancellationToken stoppingToken)
+        public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.LogDebug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
@@ -58,6 +58,8 @@ namespace MapSvr
             });
 
             _appLifetime.ApplicationStopping.Register(OnShutdown);
+            
+            return Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken stoppingToken)
