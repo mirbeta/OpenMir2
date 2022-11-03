@@ -47,9 +47,9 @@ namespace LoginSvr
             services.AddSingleton<LoginServer>();
             services.AddSingleton<ClientSession>();
             services.AddSingleton<ClientManager>();
+            services.AddSingleton<AccountStorage>();
             services.AddHostedService<TimedService>();
             services.AddHostedService<AppService>();
-            services.AddSingleton<AccountStorage>();
         }
 
         private void ConfigureLogging(ILoggingBuilder logging)
@@ -75,7 +75,7 @@ namespace LoginSvr
 
         public override void Dispose()
         {
-            throw new NotImplementedException();
+           
         }
 
         private void Stop()
@@ -99,9 +99,13 @@ namespace LoginSvr
 
                 if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
                 {
+                    await Exit();
                     return;
                 }
-
+                if (input.Length < 2)
+                {
+                    continue;
+                }
                 var firstTwoCharacters = input[..2];
 
                 if (firstTwoCharacters switch
@@ -119,13 +123,13 @@ namespace LoginSvr
             } while (input is not "/exit");
         }
 
-        private Task Exit()
+        private static Task Exit()
         {
             Environment.Exit(Environment.ExitCode);
             return Task.CompletedTask;
         }
 
-        private Task ClearConsole()
+        private static Task ClearConsole()
         {
             Console.Clear();
             AnsiConsole.Clear();
@@ -145,9 +149,9 @@ namespace LoginSvr
             table.AddColumn("[yellow]Online[/]");
 
             await AnsiConsole.Live(table)
-                 .AutoClear(true)
-                 .Overflow(VerticalOverflow.Crop)
-                 .Cropping(VerticalOverflowCropping.Bottom)
+                 .AutoClear(false)
+                 .Overflow(VerticalOverflow.Ellipsis)
+                 .Cropping(VerticalOverflowCropping.Top)
                  .StartAsync(async ctx =>
                  {
                      foreach (var _ in Enumerable.Range(0, 10))
