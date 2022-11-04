@@ -27,8 +27,8 @@ namespace GameGate.Services
 
         public void Initialization()
         {
-            var serverList = new ServerService[ConfigManager.GateConfig.GateCount];
-            for (var i = 0; i < ConfigManager.GateConfig.GateCount; i++)
+            var serverList = new ServerService[ConfigManager.GateConfig.ServerWorkThread];
+            for (var i = 0; i < serverList.Length; i++)
             {
                 var gameGate = ConfigManager.GameGateList[i];
                 var serverAddr = gameGate.ServerAdress;

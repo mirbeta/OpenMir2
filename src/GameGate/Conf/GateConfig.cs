@@ -44,8 +44,9 @@ namespace GameGate.Conf
         public int MessageWorkThread;
         /// <summary>
         /// 网关数
+        /// 最多255个线程
         /// </summary>
-        public int GateCount;
+        public int ServerWorkThread;
         /// <summary>
         /// 检查空会话
         /// </summary>
