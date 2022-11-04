@@ -1,5 +1,6 @@
 using GameGate.Conf;
 using System;
+using System.IO;
 using System.Net;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
@@ -177,7 +178,7 @@ namespace GameGate.Services
             var packetData = e.Buff[..nMsgLen];
             if (_buffLen > 0)
             {
-                Span<byte> tempBuff = stackalloc byte[_buffLen + nMsgLen];
+                byte[] tempBuff = new byte[_buffLen + nMsgLen];
                 MemoryCopy.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _receiveBuffer.Length);
                 MemoryCopy.BlockCopy(packetData, 0, tempBuff, _buffLen, packetData.Length);
                 ProcessServerPacket(tempBuff, tempBuff.Length);
@@ -209,7 +210,7 @@ namespace GameGate.Services
             GateReady = false;
         }
 
-        private void ProcessServerPacket(Span<byte> buff, int buffLen)
+        private void ProcessServerPacket(byte[] buff, int buffLen)
         {
             var srcOffset = 0;
             var nLen = buffLen;
@@ -266,15 +267,14 @@ namespace GameGate.Services
                                 SessionId = sessionId,
                                 BufferLen = packLength,
                             };
-                            //TODO ToArray会带来额外的GC开销，目前没有好的办法解决，后续在研究
                             if (packLength > 0)
                             {
-                                sessionPacket.Buffer = dataBuff.Slice(20, packLength).ToArray();
+                                sessionPacket.Buffer = buff[20..packLength];
                             }
                             else
                             {
                                 var packetSize = dataBuff.Length - HeaderMessageSize;
-                                sessionPacket.Buffer = dataBuff.Slice(20, packetSize).ToArray();
+                                sessionPacket.Buffer = buff[20..packetSize];
                             }
                             SessionManager.Enqueue(sessionPacket);
                             break;
