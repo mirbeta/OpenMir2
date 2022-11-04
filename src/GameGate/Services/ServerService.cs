@@ -58,16 +58,16 @@ namespace GameGate.Services
 
         public (string serverIp,  string Status, string playCount, string reviceTotal, string sendTotal, string queueCount, int threadCount) GetStatus()
         {
-            return (_gateEndPoint.ToString(), _clientThread.GetConnected(), _clientThread.GetSessionCount(), _clientThread.GetReceiveInfo(), _clientThread.GetSendInfo(), GetSendQueueCount(), GetThreadCount());
+            return (_gateEndPoint.ToString(), _clientThread.GetConnected(), _clientThread.GetSessionCount(), _clientThread.GetReceiveInfo(), _clientThread.GetSendInfo(), GetSendQueueCount(), GetMessageWorkThreads());
         }
 
         /// <summary>
         /// 获取消息处理线程数量,最少1个
         /// </summary>
         /// <returns></returns>
-        private int GetThreadCount()
+        private static int GetMessageWorkThreads()
         {
-            return ServerMgr.MessageThreadCount;
+            return ServerManager.MessageWorkThreads;
         }
 
         /// <summary>

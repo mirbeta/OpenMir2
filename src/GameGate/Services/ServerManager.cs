@@ -28,18 +28,18 @@ namespace GameGate.Services
         /// </summary>
         private ServerService[] _serverServices;
         /// <summary>
-        /// 消息消费者
+        /// 消息消费者线程
         /// </summary>
-        private ServerMessageThread[] _messageThreads;
+        private ServerMessageWorkThread[] _messageWorkThreads;
         private int _lastMessageThreadCount;
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private readonly Channel<ClientMessagePacket> _reviceMsgQueue = null;
+        private readonly Channel<ClientMessagePacket> _clientPacketQueue;
 
         private ServerManager()
         {
-            _reviceMsgQueue = Channel.CreateUnbounded<ClientMessagePacket>();
+            _clientPacketQueue = Channel.CreateUnbounded<ClientMessagePacket>();
         }
 
         public void AddServer(ServerService[] serverService)
@@ -49,11 +49,6 @@ namespace GameGate.Services
 
         public void Start(CancellationToken stoppingToken)
         {
-            _messageThreads = new ServerMessageThread[4];
-            for (var i = 0; i < Config.MessageThread; i++)
-            {
-                _messageThreads[i] = new ServerMessageThread(_reviceMsgQueue.Reader);
-            }
             for (var i = 0; i < _serverServices.Length; i++)
             {
                 if (_serverServices[i] == null)
@@ -91,10 +86,10 @@ namespace GameGate.Services
         /// <param name="messagePacket"></param>
         public void ClientPacketQueue(ClientMessagePacket messagePacket)
         {
-            _reviceMsgQueue.Writer.TryWrite(messagePacket);
+            _clientPacketQueue.Writer.TryWrite(messagePacket);
         }
 
-        public int MessageThreadCount => Config.MessageThread;
+        public static int MessageWorkThreads => Config.MessageWorkThread;
 
         /// <summary>
         /// 开启客户端消息消费线程
@@ -103,87 +98,40 @@ namespace GameGate.Services
         {
             Task.Factory.StartNew(() =>
             {
-                if (_lastMessageThreadCount == Config.MessageThread)
+                if (_lastMessageThreadCount == Config.MessageWorkThread)
                 {
                     return;
                 }
-                switch (Config.MessageThread)
+                if (_lastMessageThreadCount == 0 || Config.MessageWorkThread > _lastMessageThreadCount)
                 {
-                    case 1:
-                        if (_messageThreads[0].ThreadState == MessageThreadState.Stop)
+                    Array.Resize(ref _messageWorkThreads, Config.MessageWorkThread);
+                    for (var i = 0; i < Config.MessageWorkThread; i++)
+                    {
+                        if (_messageWorkThreads[i] == null)
                         {
-                            _messageThreads[0]?.Start();
+                            _messageWorkThreads[i] = new ServerMessageWorkThread(stoppingToken, _clientPacketQueue.Reader);
                         }
-                        if (_messageThreads[1]?.ThreadState == MessageThreadState.Stop)
+                        if (_messageWorkThreads[i].ThreadState == MessageThreadState.Stop)
                         {
-                            _messageThreads[1]?.Stop();
+                            _messageWorkThreads[i]?.Start(stoppingToken);
                         }
-                        if (_messageThreads[2]?.ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[2]?.Stop();
-                        }
-                        if (_messageThreads[3]?.ThreadState == MessageThreadState.Runing)
-                        {
-                            _messageThreads[3]?.Stop();
-                        }
-                        break;
-                    case 2:
-                        if (_messageThreads[0]?.ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[0]?.Start();
-                        }
-                        if (_messageThreads[1]?.ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[1]?.Start();
-                        }
-                        if (_messageThreads[2]?.ThreadState == MessageThreadState.Runing)
-                        {
-                            _messageThreads[2]?.Stop();
-                        }
-                        if (_messageThreads[3]?.ThreadState == MessageThreadState.Runing)
-                        {
-                            _messageThreads[3]?.Stop();
-                        }
-                        break;
-                    case 3:
-                        if (_messageThreads[0]?.ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[0]?.Start();
-                        }
-                        if (_messageThreads[1].ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[1]?.Start();
-                        }
-                        if (_messageThreads[2].ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[2]?.Start();
-                        }
-                        if (_messageThreads[2]?.ThreadState == MessageThreadState.Runing)
-                        {
-                            _messageThreads[3]?.Stop();
-                        }
-                        break;
-                    case 4:
-                        if (_messageThreads[0]?.ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[0]?.Start();
-                        }
-                        if (_messageThreads[1].ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[1]?.Start();
-                        }
-                        if (_messageThreads[2].ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[2]?.Start();
-                        }
-                        if (_messageThreads[3]?.ThreadState == MessageThreadState.Stop)
-                        {
-                            _messageThreads[3]?.Start();
-                        }
-                        break;
+                    }
                 }
-                _lastMessageThreadCount = Config.MessageThread;
-
+                else
+                {
+                    for (var i = _messageWorkThreads.Length - 1; i >= Config.MessageWorkThread; i--)
+                    {
+                        if (_messageWorkThreads[i] == null)
+                        {
+                            continue;
+                        }
+                        if (_messageWorkThreads[i].ThreadState == MessageThreadState.Runing)
+                        {
+                            _messageWorkThreads[i]?.Stop();
+                        }
+                    }
+                }
+                _lastMessageThreadCount = Config.MessageWorkThread;
             }, stoppingToken);
         }
 
@@ -212,10 +160,10 @@ namespace GameGate.Services
             return _serverServices[random].ClientThread;
         }
 
-        private class ServerMessageThread
+        private class ServerMessageWorkThread
         {
             private readonly ManualResetEvent _resetEvent;
-            private readonly string _threadId;
+            private string _threadId;
             private readonly CancellationTokenSource _cts;
             /// <summary>
             /// 接收封包（客户端-》网关）
@@ -224,20 +172,20 @@ namespace GameGate.Services
             public MessageThreadState ThreadState;
             private static SessionManager Session => SessionManager.Instance;
             private static MirLog LogQueue => MirLog.Instance;
-            
-            public ServerMessageThread(ChannelReader<ClientMessagePacket> channel)
+
+            public ServerMessageWorkThread(CancellationToken stoppingToken, ChannelReader<ClientMessagePacket> channel)
             {
                 _reviceMsgQueue = channel;
-                _threadId = Guid.NewGuid().ToString("N");
                 _resetEvent = new ManualResetEvent(true);
                 ThreadState = MessageThreadState.Stop;
-                _cts = new CancellationTokenSource();
+                _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
             }
 
-            public void Start()
+            public void Start(CancellationToken stoppingToken)
             {
                 Task.Factory.StartNew(async () =>
                 {
+                    _threadId = Guid.NewGuid().ToString("N");
                     ThreadState = MessageThreadState.Runing;
                     LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已启动.");
                     while (await _reviceMsgQueue.WaitToReadAsync(_cts.Token))
@@ -249,7 +197,7 @@ namespace GameGate.Services
                             clientSession?.ProcessClientPacket(message);
                         }
                     }
-                }, _cts.Token);
+                }, stoppingToken);
             }
 
             public void Stop()

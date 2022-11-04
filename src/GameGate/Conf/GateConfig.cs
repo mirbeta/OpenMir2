@@ -38,9 +38,10 @@ namespace GameGate.Conf
         /// </summary>
         public string LicenseCode;
         /// <summary>
-        /// 消息线程数
+        /// 消息工作线程数
+        /// 最多255个工作线程
         /// </summary>
-        public int MessageThread;
+        public int MessageWorkThread;
         /// <summary>
         /// 网关数
         /// </summary>
@@ -296,7 +297,7 @@ namespace GameGate.Conf
             ClientSpellSpeedRate = 0;
             ClientAttackSpeedRate = 0;
             ShowDebugLog = false;
-            MessageThread = 1;
+            MessageWorkThread = 1;
         }
     }
 }
