@@ -24,8 +24,8 @@ namespace SystemModule.Hosts
             Logger = LogManager.GetCurrentClassLogger();
             Builder = new HostBuilder();
         }
-        
-        public IServiceProvider Services { get; }
+
+        public IServiceProvider Services => _host?.Services;
 
         public abstract Task StartAsync(CancellationToken cancellationToken);
 

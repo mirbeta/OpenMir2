@@ -41,8 +41,8 @@ namespace LoginSvr
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
             services.AddSingleton<MirLogger>();
+            services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
             services.AddSingleton<SessionServer>();
             services.AddSingleton<LoginServer>();
             services.AddSingleton<ClientSession>();
