@@ -166,7 +166,7 @@ namespace GameGate
                      {
                          for (var i = 0; i < serverList.Count; i++)
                          {
-                             var (endPoint, status, playCount, reviceTotal, sendTotal, queueCount, threadCount) = serverList[i].GetStatus();
+                             var (endPoint, status, playCount, reviceTotal, sendTotal, queueCount, threads) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, $"[bold]{endPoint}[/]");
                              table.UpdateCell(i, 1, $"[bold]{status}[/]");
@@ -174,7 +174,7 @@ namespace GameGate
                              table.UpdateCell(i, 3, $"[bold]{sendTotal}[/]");
                              table.UpdateCell(i, 4, $"[bold]{reviceTotal}[/]");
                              table.UpdateCell(i, 5, $"[bold]{queueCount}[/]");
-                             table.UpdateCell(i, 6, $"[bold]{threadCount}[/]");
+                             table.UpdateCell(i, 6, $"[bold]{threads}[/]");
                          }
                          ctx.Refresh();
                      }

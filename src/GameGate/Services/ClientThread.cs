@@ -77,14 +77,14 @@ namespace GameGate.Services
         public ClientThread(string clientId, IPEndPoint endPoint, GameGateInfo gameGate)
         {
             ClientId = clientId;
+            _receiveBytes = 0;
+            _sendBytes = 0;
+            _gateEndPoint = endPoint;
             _clientSocket = new AsyncClientSocket(gameGate.ServerAdress, gameGate.ServerPort, 512);
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
             _clientSocket.OnReceivedData += ClientSocketRead;
             _clientSocket.OnError += ClientSocketError;
-            _receiveBytes = 0;
-            _sendBytes = 0;
-            _gateEndPoint = endPoint;
         }
 
         public bool IsConnected => _clientSocket.IsConnected;
@@ -96,7 +96,7 @@ namespace GameGate.Services
             _clientSocket.Start();
         }
 
-        public void ReConnected()
+        private void ReConnected()
         {
             if (_connected == false)
             {
@@ -372,8 +372,8 @@ namespace GameGate.Services
             if (data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + data.Length];
-                Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-                Buffer.BlockCopy(data, 0, tempBuff, sendBuffer.Length, data.Length);
+                MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+                MemoryCopy.BlockCopy(data, 0, tempBuff, sendBuffer.Length, data.Length);
                 SendBuffer(tempBuff);
             }
             else
@@ -449,7 +449,7 @@ namespace GameGate.Services
                 CheckServerFail = true;
                 Stop();
                 CheckServerFailCount++;
-                LogQueue.EnqueueDebugging($"服务器[{EndPoint}]长时间没有回应,断开链接.失败次数:[{CheckServerFailCount}]");
+                LogQueue.EnqueueDebugging($"服务器[{EndPoint}]长时间没有响应,断开链接.失败次数:[{CheckServerFailCount}]");
             }
         }
         

@@ -31,7 +31,7 @@ namespace GameGate
             LogQueue.Enqueue("正在启动服务...", 2);
             LogQueue.Enqueue("正在加载配置信息...", 3);
             ConfigManager.LoadConfig();
-            GateShare.HWFilter = new HardwareFilter();
+            GateShare.HardwareFilter = new HardwareFilter();
             LogQueue.Enqueue("配置信息加载完成...", 3);
             return base.StartAsync(cancellationToken);
         }
