@@ -127,8 +127,12 @@ namespace GameGate.Conf
             GateConfig.OpenClientSpeedRate = ReadBool("Switch", "OpenClientSpeedRate", GateConfig.OpenClientSpeedRate);
             GateConfig.SyncClientSpeed = ReadBool("Switch", "SyncClientSpeed", GateConfig.SyncClientSpeed);
             GateConfig.PunishIntervalRate = ReadFloat("Float", "PunishIntervalRate", GateConfig.PunishIntervalRate);
-            GateConfig.GateCount = ReadInteger("GameGate", "Count", GateConfig.GateCount);
-            for (var i = 0; i < GateConfig.GateCount; i++)
+            GateConfig.ServerWorkThread = ReadInteger("GameGate", "ServerWorkThread", 1);
+            if (GateConfig.ServerWorkThread <= 0)
+            {
+                GateConfig.ServerWorkThread = 1;
+            }
+            for (var i = 0; i < GateConfig.ServerWorkThread; i++)
             {
                 GameGateList[i].ServerAdress = ReadString("GameGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
                 GameGateList[i].ServerPort = ReadInteger("GameGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
