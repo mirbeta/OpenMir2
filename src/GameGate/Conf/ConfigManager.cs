@@ -39,7 +39,11 @@ namespace GameGate.Conf
                 GateConfig.CloudPort = ReadInteger("Cloud", "CloudPort", GateConfig.CloudPort);
                 GateConfig.LicenseCode = ReadString("Cloud", "LicenseCode", GateConfig.LicenseCode);
             }
-            GateConfig.MessageWorkThread = ReadInteger("Integer", "MessageWorkThread", GateConfig.MessageWorkThread);
+            GateConfig.MessageWorkThread = ReadInteger("Integer", "MessageWorkThread", 1);
+            if (GateConfig.MessageWorkThread <= 0)
+            {
+                GateConfig.MessageWorkThread = 1;
+            }
             if (GateConfig.MessageWorkThread > byte.MaxValue)
             {
                 GateConfig.MessageWorkThread = byte.MaxValue;

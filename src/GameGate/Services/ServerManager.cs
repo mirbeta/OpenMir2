@@ -102,7 +102,7 @@ namespace GameGate.Services
                 {
                     return;
                 }
-                if (_lastMessageThreadCount == 0 || Config.MessageWorkThread > _lastMessageThreadCount)
+                if (Config.MessageWorkThread > _lastMessageThreadCount)
                 {
                     Array.Resize(ref _messageWorkThreads, Config.MessageWorkThread);
                     for (var i = 0; i < Config.MessageWorkThread; i++)
