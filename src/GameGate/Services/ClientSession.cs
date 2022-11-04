@@ -1301,7 +1301,7 @@ namespace GameGate
             var iLen = ClientMesaagePacket.PackSize + szMsg.Length;
             iLen = PacketEncoder.EncodeBuf(tempBuf, iLen, sendBuf);
             sendBuf[iLen + 1] = (byte)'!';
-            _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, sendBuf.AsSpan()[..(iLen + 1)].ToArray());
+            _sendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, sendBuf.AsSpan()[..(iLen + 1)]);
         }
 
         public void Dispose()
