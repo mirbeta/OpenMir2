@@ -132,6 +132,10 @@ namespace GameGate.Conf
             {
                 GateConfig.ServerWorkThread = 1;
             }
+            if (GateConfig.ServerWorkThread > byte.MaxValue)
+            {
+                GateConfig.ServerWorkThread = byte.MaxValue;
+            }
             for (var i = 0; i < GateConfig.ServerWorkThread; i++)
             {
                 GameGateList[i].ServerAdress = ReadString("GameGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
