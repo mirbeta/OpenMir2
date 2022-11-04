@@ -5,7 +5,6 @@ using GameGate.Services;
 using System;
 using System.Collections.Generic;
 using SystemModule;
-using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameGate
@@ -15,33 +14,31 @@ namespace GameGate
     /// </summary>
     public class ClientSession: IDisposable
     {
-        private readonly GameSpeed _gameSpeed;
-        private readonly SessionInfo _session;
-        private readonly object _syncObj;
-        private readonly ClientThread _clientThread;
-        private readonly HardwareFilter _hwidFilter;
-        private readonly SendQueue _sendQueue;
-        private readonly IList<DelayMessage> MsgList;
-        private int _lastDirection = -1;
-        private byte _handleLogin = 0;
-        private bool _fOverClientCount;
-        private bool _kickFlag = false;
+        readonly GameSpeed _gameSpeed;
+        readonly SessionInfo _session;
+        readonly object _syncObj;
+        readonly ClientThread _clientThread;
+        readonly SendQueue _sendQueue;
+        readonly IList<DelayMessage> MsgList;
+        int _lastDirection = -1;
+        byte _handleLogin = 0;
+        bool KickFlag;
         public int m_nSvrListIdx = 0;
-        private int m_nSvrObject = 0;
-        private int m_nChrStutas = 0;
-        private int m_SendCheckTick = 0;
-        private TCheckStep m_Stat;
+        int m_nSvrObject = 0;
+        int m_nChrStutas = 0;
+        int m_SendCheckTick = 0;
+        TCheckStep m_Stat;
         /// <summary>
         /// 会话密钥
         /// 用于OTP动态口令验证
         /// </summary>
-        private readonly string SessionKey;
-        private readonly long m_FinishTick = 0;
-        private readonly DynamicAuthenticator _authenticator = null;
+        readonly string SessionKey;
+        readonly long m_FinishTick = 0;
+        readonly DynamicAuthenticator _authenticator = null;
         /// <summary>
         /// 封包发送缓冲区
         /// </summary>
-        private readonly byte[] SendBuffer;
+        readonly byte[] SendBuffer;
 
         public ClientSession(SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
@@ -49,9 +46,7 @@ namespace GameGate
             _clientThread = clientThread;
             _sendQueue = sendQueue;
             MsgList = new List<DelayMessage>();
-            _hwidFilter = GateShare.HWFilter;
-            _fOverClientCount = false;
-            _kickFlag = false;
+            KickFlag = false;
             m_Stat = TCheckStep.CheckLogin;
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
@@ -87,9 +82,9 @@ namespace GameGate
         {
             var sMsg = string.Empty;
             var CurrentTick = 0;
-            if (_kickFlag)
+            if (KickFlag)
             {
-                _kickFlag = false;
+                KickFlag = false;
                 return;
             }
             if (Config.IsDefenceCCPacket && (clientPacket.BufferLen >= 5))
@@ -202,7 +197,7 @@ namespace GameGate
                         }
 
                         int nInterval;
-                        int DelayMsgCount;
+                        int delayMsgCount;
                         var dwDelay = 0;
                         switch (Ident)
                         {
@@ -235,8 +230,8 @@ namespace GameGate
                                     {
                                         if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                         {
-                                            DelayMsgCount = GetDelayMsgCount();
-                                            if (DelayMsgCount == 0)
+                                            delayMsgCount = GetDelayMsgCount();
+                                            if (delayMsgCount == 0)
                                             {
                                                 dwDelay = Config.PunishBaseInterval + (int)Math.Round((nMoveInterval - nInterval) * Config.PunishIntervalRate);
                                                 _gameSpeed.MoveTick = CurrentTick + dwDelay;
@@ -244,7 +239,7 @@ namespace GameGate
                                             else
                                             {
                                                 _gameSpeed.MoveTick = CurrentTick + (nMoveInterval - nInterval);
-                                                if (DelayMsgCount >= 2)
+                                                if (delayMsgCount >= 2)
                                                 {
                                                     SendKickMsg(0);
                                                 }
@@ -295,8 +290,8 @@ namespace GameGate
                                     {
                                         if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                         {
-                                            DelayMsgCount = GetDelayMsgCount();
-                                            if (DelayMsgCount == 0)
+                                            delayMsgCount = GetDelayMsgCount();
+                                            if (delayMsgCount == 0)
                                             {
                                                 dwDelay = Config.PunishBaseInterval + (int)Math.Round((nAttackFixInterval - nInterval) * Config.PunishIntervalRate);
                                                 _gameSpeed.AttackTick = CurrentTick + dwDelay;
@@ -304,7 +299,7 @@ namespace GameGate
                                             else
                                             {
                                                 _gameSpeed.AttackTick = CurrentTick + (nAttackFixInterval - nInterval);
-                                                if (DelayMsgCount >= 2)
+                                                if (delayMsgCount >= 2)
                                                 {
                                                     SendKickMsg(0);
                                                 }
@@ -357,14 +352,14 @@ namespace GameGate
                                         {
                                             if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                             {
-                                                DelayMsgCount = GetDelayMsgCount();
-                                                if (DelayMsgCount == 0)
+                                                delayMsgCount = GetDelayMsgCount();
+                                                if (delayMsgCount == 0)
                                                 {
                                                     dwDelay = Config.PunishBaseInterval + (int)Math.Round((nSpellInterval - nInterval) * Config.PunishIntervalRate);
                                                 }
                                                 else
                                                 {
-                                                    if (DelayMsgCount >= 2)
+                                                    if (delayMsgCount >= 2)
                                                     {
                                                         SendKickMsg(0);
                                                     }
@@ -388,8 +383,8 @@ namespace GameGate
                                     {
                                         if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                         {
-                                            DelayMsgCount = GetDelayMsgCount();
-                                            if (DelayMsgCount == 0)
+                                            delayMsgCount = GetDelayMsgCount();
+                                            if (delayMsgCount == 0)
                                             {
                                                 dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.SitDownInterval - nInterval) * Config.PunishIntervalRate);
                                                 _gameSpeed.SitDownTick = CurrentTick + dwDelay;
@@ -397,7 +392,7 @@ namespace GameGate
                                             else
                                             {
                                                 _gameSpeed.SitDownTick = CurrentTick + (Config.SitDownInterval - nInterval);
-                                                if (DelayMsgCount >= 2)
+                                                if (delayMsgCount >= 2)
                                                 {
                                                     SendKickMsg(0);
                                                 }
@@ -793,20 +788,20 @@ namespace GameGate
             var count = 0;
             while (MsgList.Count > count)
             {
-                DelayMessage _delayMsg = MsgList[count];
-                if (_delayMsg.dwDelayTime != 0 && HUtil32.GetTickCount() < _delayMsg.dwDelayTime)
+                DelayMessage msg = MsgList[count];
+                if (msg.dwDelayTime != 0 && HUtil32.GetTickCount() < msg.dwDelayTime)
                 {
                     count++;
                     continue;
                 }
                 MsgList.RemoveAt(count);
                 delayMsg = new DelayMessage();
-                delayMsg.Mag = _delayMsg.Mag;
-                delayMsg.Dir = _delayMsg.Dir;
-                delayMsg.Cmd = _delayMsg.Cmd;
-                delayMsg.BufLen = _delayMsg.BufLen;
-                delayMsg.Buffer = _delayMsg.Buffer;
-                _delayMsg = null;
+                delayMsg.Mag = msg.Mag;
+                delayMsg.Dir = msg.Dir;
+                delayMsg.Cmd = msg.Cmd;
+                delayMsg.BufLen = msg.BufLen;
+                delayMsg.Buffer = msg.Buffer;
+                msg = null;
                 result = true;
             }
             HUtil32.LeaveCriticalSection(_syncObj);
@@ -818,8 +813,8 @@ namespace GameGate
         /// </summary>
         private void SendDelayMsg(int nMid, int nDir, int nIdx, int nLen, string sMsg, int dwDelay)
         {
-            const int DELAY_BUFFER_LEN = 1024;
-            if (nLen > 0 && nLen <= DELAY_BUFFER_LEN)
+            const int delayBufferLen = 1024;
+            if (nLen > 0 && nLen <= delayBufferLen)
             {
                 var pDelayMsg = new DelayMessage();
                 pDelayMsg.Mag = nMid;
@@ -841,8 +836,8 @@ namespace GameGate
         /// </summary>
         private void SendDelayMsg(int magicId, byte nDir, int nIdx, int nLen, byte[] pMsg, int delayTime)
         {
-            const int DELAY_BUFFER_LEN = 1024;
-            if (nLen > 0 && nLen <= DELAY_BUFFER_LEN)
+            const int delayBufferLen = 1024;
+            if (nLen > 0 && nLen <= delayBufferLen)
             {
                 var pDelayMsg = new DelayMessage();
                 pDelayMsg.Mag = magicId;
@@ -989,8 +984,8 @@ namespace GameGate
                                         break;
                                     case 2:
                                         LogQueue.EnqueueDebugging("清理机器码");
-                                        _hwidFilter.ClearDeny();
-                                        _hwidFilter.SaveDenyList();
+                                        GateShare.HardwareFilter.ClearDeny();
+                                        GateShare.HardwareFilter.SaveDenyList();
                                         break;
                                 }
                             }
@@ -1191,10 +1186,11 @@ namespace GameGate
                                 return;
                             }
                             hardWareDigest = pHardwareHeader.xMd5Digest;
-                            if (_hwidFilter.IsFilter(hardWareDigest, ref _fOverClientCount))
+                            bool OverClientCount = false;
+                            if (GateShare.HardwareFilter.IsFilter(hardWareDigest, ref OverClientCount))
                             {
                                 LogQueue.Enqueue($"[HandleLogin] Kicked 7: {sHumName}", 1);
-                                if (_fOverClientCount)
+                                if (OverClientCount)
                                 {
                                     SendKickMsg(5);
                                 }

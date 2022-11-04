@@ -33,7 +33,7 @@ namespace GameGate
         /// </summary>
         public static ConcurrentDictionary<string, byte> ChatCommandFilter;
         public static Dictionary<string, ClientSession> PunishList;
-        public static HardwareFilter HWFilter;
+        public static HardwareFilter HardwareFilter;
 
         public static void Initialization()
         {

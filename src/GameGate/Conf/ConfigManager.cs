@@ -39,15 +39,6 @@ namespace GameGate.Conf
                 GateConfig.CloudPort = ReadInteger("Cloud", "CloudPort", GateConfig.CloudPort);
                 GateConfig.LicenseCode = ReadString("Cloud", "LicenseCode", GateConfig.LicenseCode);
             }
-            GateConfig.MessageWorkThread = ReadInteger("Integer", "MessageWorkThread", 1);
-            if (GateConfig.MessageWorkThread <= 0)
-            {
-                GateConfig.MessageWorkThread = 1;
-            }
-            if (GateConfig.MessageWorkThread > byte.MaxValue)
-            {
-                GateConfig.MessageWorkThread = byte.MaxValue;
-            }
             GateConfig.m_szCMDSpaceMove = ReadString("Strings", "CMDSpaceMove", GateConfig.m_szCMDSpaceMove);
             GateConfig.m_szOverClientCntMsg = ReadString("Strings", "OverClientCntMsg", GateConfig.m_szOverClientCntMsg);
             GateConfig.m_szHWIDBlockedMsg = ReadString("Strings", "HWIDBlockedMsg", GateConfig.m_szHWIDBlockedMsg);
@@ -56,8 +47,6 @@ namespace GameGate.Conf
             GateConfig.m_szPacketDecryptFailed = ReadString("Strings", "PacketDecryptFailed", GateConfig.m_szPacketDecryptFailed);
             GateConfig.m_szBlockHWIDFileName = ReadString("Strings", "BlockHWIDFileName", GateConfig.m_szBlockHWIDFileName);
             GateConfig.m_fAddLog = ReadBool("Switch", "AddLog", GateConfig.m_fAddLog);
-            GateConfig.ShowLogLevel = ReadInteger("Integer", "ShowLogLevel", GateConfig.ShowLogLevel);
-            GateConfig.ShowDebugLog = ReadBool("Integer", "ShowDebugLog", GateConfig.ShowDebugLog);
             GateConfig.PunishMoveInterval = ReadInteger("Integer", "PunishMoveInterval", GateConfig.PunishMoveInterval);
             GateConfig.PunishSpellInterval = ReadInteger("Integer", "PunishSpellInterval", GateConfig.PunishSpellInterval);
             GateConfig.PunishAttackInterval = ReadInteger("Integer", "PunishAttackInterval", GateConfig.PunishAttackInterval);
@@ -143,6 +132,17 @@ namespace GameGate.Conf
                 GameGateList[i].GateAddress = ReadString("GameGate", "GateAddress" + (i + 1), GameGateList[i].GateAddress);
                 GameGateList[i].GatePort = ReadInteger("GameGate", "GatePort" + (i + 1), GameGateList[i].GatePort);
             }
+            GateConfig.MessageWorkThread = ReadInteger("GameGate", "MessageWorkThread", 1);
+            if (GateConfig.MessageWorkThread <= 0)
+            {
+                GateConfig.MessageWorkThread = 1;
+            }
+            if (GateConfig.MessageWorkThread > byte.MaxValue)
+            {
+                GateConfig.MessageWorkThread = byte.MaxValue;
+            }
+            GateConfig.ShowLogLevel = ReadInteger("GameGate", "ShowLogLevel", GateConfig.ShowLogLevel);
+            GateConfig.ShowDebugLog = ReadBool("GameGate", "ShowDebugLog", GateConfig.ShowDebugLog);
             //魔法间隔控制
             for (var i = 0; i < TableDef.MaigicDelayTimeList.Length; i++)
             {
