@@ -149,7 +149,7 @@ namespace GameGate
             table.AddColumn("[yellow]Send[/]");
             table.AddColumn("[yellow]Revice[/]");
             table.AddColumn("[yellow]Queue[/]");
-            table.AddColumn("[yellow]Thread[/]");
+            table.AddColumn("[yellow]WorkThread[/]");
 
             await AnsiConsole.Live(table)
                  .AutoClear(true)
@@ -169,12 +169,12 @@ namespace GameGate
                              var (endPoint, status, playCount, reviceTotal, sendTotal, queueCount, threadCount) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, $"[bold]{endPoint}[/]");
-                             table.UpdateCell(i, 1, ($"[bold]{status}[/]"));
-                             table.UpdateCell(i, 2, ($"[bold]{playCount}[/]"));
-                             table.UpdateCell(i, 3, ($"[bold]{sendTotal}[/]"));
-                             table.UpdateCell(i, 4, ($"[bold]{reviceTotal}[/]"));
-                             table.UpdateCell(i, 5, ($"[bold]{queueCount}[/]"));
-                             table.UpdateCell(i, 6, ($"[bold]{threadCount}[/]"));
+                             table.UpdateCell(i, 1, $"[bold]{status}[/]");
+                             table.UpdateCell(i, 2, $"[bold]{playCount}[/]");
+                             table.UpdateCell(i, 3, $"[bold]{sendTotal}[/]");
+                             table.UpdateCell(i, 4, $"[bold]{reviceTotal}[/]");
+                             table.UpdateCell(i, 5, $"[bold]{queueCount}[/]");
+                             table.UpdateCell(i, 6, $"[bold]{threadCount}[/]");
                          }
                          ctx.Refresh();
                      }
