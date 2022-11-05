@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0-alpha.1](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.0-alpha.0...v1.1.0-alpha.1) (2022-11-05)
+
+
+### Bug Fixes
+
+* 网关消息处理丢弃异常数据 ([9293e6c](http://10.10.0.202/mir2/OpenMir2/commit/9293e6c00f5309d6f15ebb43ab05989eee869962))
+* 修复LoginSvr游戏账号时间 ([b84c684](http://10.10.0.202/mir2/OpenMir2/commit/b84c68494b574ec05f080a17ba28321e09abeeea))
+* 修复LoginSvr账号更新问题 ([2bb3846](http://10.10.0.202/mir2/OpenMir2/commit/2bb3846ce3ad6b1caa980443b1a632662c6658d6))
+
 ## [1.1.0-alpha.0](http://10.10.0.202/mir2/OpenMir2/compare/v1.0.2-alpha.2...v1.1.0-alpha.0) (2022-10-25)
 
 
