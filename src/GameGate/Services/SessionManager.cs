@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace GameGate.Services
         /// <summary>
         /// 获取待处理的队列数量
         /// </summary>
-        public int GetQueueCount => ProcessMsgQueue.Reader.Count;
+        public int QueueCount => ProcessMsgQueue.Reader.Count;
 
         /// <summary>
         /// 添加到消息处理队列
@@ -54,7 +55,14 @@ namespace GameGate.Services
                         {
                             continue;
                         }
-                        userSession.ProcessServerPacket(message);
+                        try
+                        {
+                            userSession.ProcessServerPacket(message);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
                     }
                 }
             }, stoppingToken);

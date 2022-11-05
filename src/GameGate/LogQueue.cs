@@ -11,35 +11,33 @@ namespace GameGate
         public static MirLog Instance => instance;
 
         private static GateConfig Config => ConfigManager.Instance.GateConfig;
-        public readonly ConcurrentQueue<string> MessageLog = new ConcurrentQueue<string>();
-        public readonly ConcurrentQueue<string> DebugLog = new ConcurrentQueue<string>();
+        public readonly ConcurrentQueue<string> MessageLogQueue = new ConcurrentQueue<string>();
+        public readonly ConcurrentQueue<string> DebugLogQueue = new ConcurrentQueue<string>();
 
         public MirLog()
         {
 
         }
 
-        public void Enqueue(string msg, int msgLevel)
+        public void Log(string msg, int msgLevel)
         {
             if (Config.ShowLogLevel >= msgLevel)
             {
-                if (MessageLog.Count < 100)
-                    MessageLog.Enqueue($"[{DateTime.Now}]: {msg}");
+                MessageLogQueue.Enqueue(msg);
             }
         }
 
         public void Enqueue(Exception ex)
         {
-            if (MessageLog.Count < 100)
-                MessageLog.Enqueue($"[{DateTime.Now}]: {ex.TargetSite} - {ex}");
+            MessageLogQueue.Enqueue($"{ex.TargetSite} - {ex}");
         }
 
-        public void EnqueueDebugging(string msg)
+        public void DebugLog(string msg)
         {
             if (Config.ShowDebugLog)
             {
-                if (DebugLog.Count < 100)
-                    DebugLog.Enqueue($"[{DateTime.Now}]: {msg}");
+                if (DebugLogQueue.Count < 100)
+                    DebugLogQueue.Enqueue(msg);
             }
         }
     }

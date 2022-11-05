@@ -20,10 +20,10 @@ namespace GameGate
 
         public void StartService(CancellationToken stoppingToken)
         {
-            LogQueue.Enqueue("服务已启动成功...", 2);
-            LogQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
-            LogQueue.Enqueue("网站:http://www.gameofmir.com", 0);
-            LogQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
+            LogQueue.Log("服务已启动成功...", 2);
+            LogQueue.Log("欢迎使用翎风系列游戏软件...", 0);
+            LogQueue.Log("网站:http://www.gameofmir.com", 0);
+            LogQueue.Log("论坛:http://bbs.gameofmir.com", 0);
             GateShare.Initialization();
             ClientManager.Initialization();
             ServerManager.Start(stoppingToken);
@@ -31,17 +31,17 @@ namespace GameGate
             {
                 if (string.IsNullOrEmpty(ConfigManager.GateConfig.CloudAddr) || ConfigManager.GateConfig.CloudPort<=0)
                 {
-                    LogQueue.Enqueue("智能防外挂云网关服务地址配置错误.请检查配置文件是否配置正确.", 0);
+                    LogQueue.Log("智能防外挂云网关服务地址配置错误.请检查配置文件是否配置正确.", 0);
                     return;
                 }
                 if (string.IsNullOrEmpty(ConfigManager.GateConfig.LicenseCode))
                 { 
-                    LogQueue.Enqueue("智能防外挂云网关授权码为空或配置错误,请检查配置文件是否配置正确.", 0);
+                    LogQueue.Log("智能防外挂云网关授权码为空或配置错误,请检查配置文件是否配置正确.", 0);
                     return;
                 }
                 var cloudEndpoint = new IPEndPoint(IPAddress.Parse(ConfigManager.GateConfig.CloudAddr), ConfigManager.GateConfig.CloudPort);
                 //_cloudClient.Start(cloudEndpoint);
-                LogQueue.Enqueue("智能反外挂程序已启动...", 0);
+                LogQueue.Log("智能反外挂程序已启动...", 0);
             }
             ServerManager.StartProcessMessage(stoppingToken);
             SessionManager.ProcessSendMessage(stoppingToken);

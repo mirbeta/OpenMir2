@@ -97,6 +97,15 @@ namespace SystemModule.Packet
             return shortarr;
         }
 
+        public MemoryStream GetStream()
+        {
+            using MemoryStream stream = new MemoryStream();
+            using BinaryWriter writer = new BinaryWriter(stream);
+            WritePacket(writer);
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
+        }
+
         public byte[] GetBuffer()
         {
             using MemoryStream stream = new MemoryStream();

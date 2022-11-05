@@ -47,7 +47,7 @@ namespace GameGate.Services
             _clientThread.Start();
             _clientThread.RestSessionArray();
             _sendQueue.ProcessSendQueue(stoppingToken);
-            LogQueue.Enqueue($"网关[{_gateEndPoint}]已启动...", 1);
+            LogQueue.Log($"网关[{_gateEndPoint}]已启动...", 1);
         }
 
         public void Stop()
@@ -76,7 +76,7 @@ namespace GameGate.Services
         /// <returns></returns>
         private string GetSendQueueCount()
         {
-            return string.Concat(_sendQueue.GetQueueCount, "/", SessionMgr.GetQueueCount);
+            return string.Concat(_sendQueue.QueueCount, "/", SessionMgr.QueueCount);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace GameGate.Services
             var clientThread = ServerMgr.GetClientThread(out threadId);
             if (clientThread == null || threadId < 0)
             {
-                LogQueue.EnqueueDebugging("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
+                LogQueue.DebugLog("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
@@ -136,13 +136,13 @@ namespace GameGate.Services
             {
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
                 SessionMgr.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, _sendQueue));
-                LogQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
-                LogQueue.EnqueueDebugging($"新用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
+                LogQueue.Log("开始连接: " + sRemoteAddress, 5);
+                LogQueue.DebugLog($"新用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
             }
             else
             {
                 e.Socket.Close();
-                LogQueue.Enqueue("禁止连接: " + sRemoteAddress, 1);
+                LogQueue.Log("禁止连接: " + sRemoteAddress, 1);
             }
         }
 
@@ -171,20 +171,20 @@ namespace GameGate.Services
                         break;
                     }
                 }
-                LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
+                LogQueue.Log("断开链接: " + sRemoteAddr, 5);
             }
             else
             {
-                LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
+                LogQueue.Log("断开链接: " + sRemoteAddr, 5);
             }
             _waitCloseQueue.Enqueue(e.SocHandle); //等待100ms才通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
             SessionMgr.CloseSession(e.SocHandle);
-            LogQueue.EnqueueDebugging($"用户断开链接 Ip:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}] ScoketId:[{e.SocHandle}]");
+            LogQueue.DebugLog($"用户断开链接 Ip:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}] ScoketId:[{e.SocHandle}]");
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-            LogQueue.EnqueueDebugging($"客户端链接错误.[{e.Exception.ErrorCode}]");
+            LogQueue.DebugLog($"客户端链接错误.[{e.Exception.ErrorCode}]");
         }
 
         /// <summary>
@@ -197,17 +197,17 @@ namespace GameGate.Services
             {
                 if (clientSession.Session == null)
                 {
-                    LogQueue.Enqueue($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Session会话已经失效", 5);
+                    LogQueue.Log($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Session会话已经失效", 5);
                     return;
                 }
                 if (clientSession.Session.Socket == null)
                 {
-                    LogQueue.Enqueue($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket已释放", 5);
+                    LogQueue.Log($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket已释放", 5);
                     return;
                 }
                 if (!clientSession.Session.Socket.Connected)
                 {
-                    LogQueue.Enqueue($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket链接已断开", 5);
+                    LogQueue.Log($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket链接已断开", 5);
                     return;
                 }
                 var data = new byte[token.BytesReceived];
@@ -221,7 +221,7 @@ namespace GameGate.Services
             else
             {
                 token.Socket.Close();
-                LogQueue.Enqueue("非法攻击: " + token.RemoteIPaddr, 5);
+                LogQueue.Log("非法攻击: " + token.RemoteIPaddr, 5);
             }
         }
     }
