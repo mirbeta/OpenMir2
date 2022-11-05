@@ -15,13 +15,13 @@ namespace DBSvr.Storage.MySQL
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> _NameQuickMap;
         private readonly Dictionary<int, int> _IndexQuickIdMap;
-        private readonly QuickIdList _mirQuickIdList;
+        private readonly PlayQuickList _mirQuickIdList;
         private readonly StorageOption _storageOption;
 
         public PlayDataStorage(StorageOption storageOption)
         {
             _NameQuickMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _mirQuickIdList = new QuickIdList();
+            _mirQuickIdList = new PlayQuickList();
             _IndexQuickIdMap = new Dictionary<int, int>();
             _storageOption = storageOption;
         }
@@ -32,7 +32,7 @@ namespace DBSvr.Storage.MySQL
             _IndexQuickIdMap.Clear();
             _NameQuickMap.Clear();
             _mirQuickIdList.Clear();
-            IList<QuickId> accountList = new List<QuickId>();
+            IList<PlayQuick> accountList = new List<PlayQuick>();
             IList<string> chrNameList = new List<string>();
             using var context = new StorageContext(_storageOption);
             var success = false;
@@ -56,10 +56,10 @@ namespace DBSvr.Storage.MySQL
                     if (!boDeleted && (!string.IsNullOrEmpty(sChrName)))
                     {
                         _NameQuickMap.Add(sChrName, nIndex);
-                        accountList.Add(new QuickId()
+                        accountList.Add(new PlayQuick()
                         {
-                            sAccount = sAccount,
-                            nSelectID = 0
+                            Account = sAccount,
+                            SelectID = 0
                         });
                         chrNameList.Add(sChrName);
                         _IndexQuickIdMap.Add(nIndex, nIndex);
@@ -74,7 +74,7 @@ namespace DBSvr.Storage.MySQL
             }
             for (var nIndex = 0; nIndex < accountList.Count; nIndex++)
             {
-                _mirQuickIdList.AddRecord(accountList[nIndex].sAccount, chrNameList[nIndex], 0, accountList[nIndex].nSelectID);
+                _mirQuickIdList.AddRecord(accountList[nIndex].Account, chrNameList[nIndex], 0, accountList[nIndex].SelectID);
             }
             chrNameList.Clear();
             accountList.Clear();

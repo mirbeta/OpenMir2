@@ -14,7 +14,7 @@ namespace DBSvr.Storage.MySQL
         private int _recordCount;
         private readonly Dictionary<string, int> _quickList;
         private readonly Dictionary<int, string> _indexQuickList;
-        private readonly QuickIdList _quickIdList;
+        private readonly PlayQuickList _quickIdList;
         /// <summary>
         /// 已被删除的记录号
         /// </summary>
@@ -25,7 +25,7 @@ namespace DBSvr.Storage.MySQL
         {
             _quickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _indexQuickList = new Dictionary<int, string>();
-            _quickIdList = new QuickIdList();
+            _quickIdList = new PlayQuickList();
             _deletedList = new List<int>();
             _recordCount = 0;
             _storageOption = storageOption;
@@ -42,7 +42,7 @@ namespace DBSvr.Storage.MySQL
             {
                 return;
             }
-            IList<QuickId> AccountList = new List<QuickId>();
+            IList<PlayQuick> AccountList = new List<PlayQuick>();
             IList<string> ChrNameList = new List<string>();
             try
             {
@@ -66,11 +66,11 @@ namespace DBSvr.Storage.MySQL
                     {
                         _quickList.Add(DBRecord.Header.sName, DBRecord.Id);
                         _indexQuickList.Add(DBRecord.Id, DBRecord.Header.sName);
-                        AccountList.Add(new QuickId()
+                        AccountList.Add(new PlayQuick()
                         {
-                            nIndex = DBRecord.Id,
-                            sAccount = DBRecord.sAccount,
-                            nSelectID = 0
+                            Index = DBRecord.Id,
+                            Account = DBRecord.sAccount,
+                            SelectID = 0
                         });
                         ChrNameList.Add(DBRecord.sChrName);
                     }
@@ -89,7 +89,7 @@ namespace DBSvr.Storage.MySQL
             }
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
-                _quickIdList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], AccountList[nIndex].nIndex, AccountList[nIndex].nSelectID);
+                _quickIdList.AddRecord(AccountList[nIndex].Account, ChrNameList[nIndex], AccountList[nIndex].Index, AccountList[nIndex].SelectID);
             }
             AccountList = null;
             ChrNameList = null;
@@ -187,9 +187,9 @@ namespace DBSvr.Storage.MySQL
             return default;
         }
 
-        public int FindByAccount(string sAccount, ref IList<QuickId> ChrList)
+        public int FindByAccount(string sAccount, ref IList<PlayQuick> ChrList)
         {
-            IList<QuickId> ChrNameList = null;
+            IList<PlayQuick> ChrNameList = null;
             _quickIdList.GetChrList(sAccount, ref ChrNameList);
             if (ChrNameList != null)
             {
@@ -204,14 +204,14 @@ namespace DBSvr.Storage.MySQL
         public int ChrCountOfAccount(string sAccount)
         {
             var result = 0;
-            IList<QuickId> ChrList = null;
+            IList<PlayQuick> ChrList = null;
             _quickIdList.GetChrList(sAccount, ref ChrList);
             var success = false;
             if (ChrList != null)
             {
                 for (var i = 0; i < ChrList.Count; i++)
                 {
-                    HumRecordData HumDBRecord = GetBy(ChrList[i].nIndex, ref success);
+                    HumRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
                     if (success && !HumDBRecord.Deleted)
                     {
                         result++;
@@ -316,7 +316,7 @@ namespace DBSvr.Storage.MySQL
 
         public bool Delete(string sName)
         {
-            IList<QuickId> ChrNameList = null;
+            IList<PlayQuick> ChrNameList = null;
             var result = false;
             if (_quickList.TryGetValue(sName, out int nIndex))
             {

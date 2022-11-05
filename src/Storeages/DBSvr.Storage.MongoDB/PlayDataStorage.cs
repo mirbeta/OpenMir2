@@ -13,7 +13,7 @@ namespace DBSvr.Storage.MongoDB
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> _mirQuickMap;
         private readonly Dictionary<int, int> _quickIndexIdMap;
-        private readonly QuickIdList _mirQuickIdList;
+        private readonly PlayQuickList _mirQuickIdList;
         private readonly StorageOption _storageOption;
         private IMongoCollection<HumDataInfo> humDataInfo;
         private int _recordCount;
@@ -21,7 +21,7 @@ namespace DBSvr.Storage.MongoDB
         public PlayDataStorage(StorageOption storageOption)
         {
             _mirQuickMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _mirQuickIdList = new QuickIdList();
+            _mirQuickIdList = new PlayQuickList();
             _recordCount = -1;
             _quickIndexIdMap = new Dictionary<int, int>();
             _storageOption = storageOption;
@@ -45,7 +45,7 @@ namespace DBSvr.Storage.MongoDB
         public void LoadQuickList()
         {
             bool boDeleted;
-            IList<QuickId> AccountList;
+            IList<PlayQuick> AccountList;
             IList<string> ChrNameList;
             string sAccount;
             string sChrName;
@@ -53,7 +53,7 @@ namespace DBSvr.Storage.MongoDB
             _mirQuickMap.Clear();
             _mirQuickIdList.Clear();
             _recordCount = -1;
-            AccountList = new List<QuickId>();
+            AccountList = new List<PlayQuick>();
             ChrNameList = new List<string>();
             bool success = false;
             MongoClient dbConnection = Open(ref success);
@@ -72,7 +72,7 @@ namespace DBSvr.Storage.MongoDB
             }
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
-                _mirQuickIdList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], 0, AccountList[nIndex].nSelectID);
+                _mirQuickIdList.AddRecord(AccountList[nIndex].Account, ChrNameList[nIndex], 0, AccountList[nIndex].SelectID);
             }
             AccountList = null;
             ChrNameList = null;

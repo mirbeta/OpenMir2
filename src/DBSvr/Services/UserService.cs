@@ -31,7 +31,7 @@ namespace DBSvr.Services
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
         private readonly LoginService _loginService;
-        private readonly Channel<UsrSocMessage> _reviceQueue;
+        private readonly Channel<UserMessage> _reviceQueue;
 
         public UserService(MirLogger logger, DBSvrConf conf, LoginService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
@@ -41,7 +41,7 @@ namespace DBSvr.Services
             _playDataStorage = playData;
             GateList = new List<TGateInfo>();
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _reviceQueue = Channel.CreateUnbounded<UsrSocMessage>();
+            _reviceQueue = Channel.CreateUnbounded<UserMessage>();
             _userSocket = new SocketServer(byte.MaxValue, 1024);
             _userSocket.OnClientConnect += UserSocketClientConnect;
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
@@ -217,7 +217,7 @@ namespace DBSvr.Services
                     _logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
                     continue;
                 }
-                var message = new UsrSocMessage();
+                var message = new UserMessage();
                 message.Packet = Packets.ToPacket<GatePacket>(data);
                 message.GateInfo = GateList[i];
                 _reviceQueue.Writer.TryWrite(message);
@@ -570,20 +570,20 @@ namespace DBSvr.Services
                 _loginService.SetGlobaSessionNoPlay(nSessionId);
                 userInfo.sAccount = sAccount;
                 userInfo.nSessionID = nSessionId;
-                IList<QuickId> chrList = new List<QuickId>();
+                IList<PlayQuick> chrList = new List<PlayQuick>();
                 if ((_playRecordStorage.FindByAccount(sAccount, ref chrList) >= 0))
                 {
                     for (var i = 0; i < chrList.Count; i++)
                     {
                         var quickId = chrList[i];
-                        if (quickId.nSelectID != userInfo.nSelGateID) // 如果选择ID不对,则跳过
+                        if (quickId.SelectID != userInfo.nSelGateID) // 如果选择ID不对,则跳过
                         {
                             continue;
                         }
-                        var humRecord = _playRecordStorage.GetBy(quickId.nIndex, ref result);
+                        var humRecord = _playRecordStorage.GetBy(quickId.Index, ref result);
                         if (result && !humRecord.Deleted)
                         {
-                            var sChrName = quickId.sChrName;
+                            var sChrName = quickId.ChrName;
                             var nIndex = _playDataStorage.Index(sChrName);
                             if ((nIndex < 0) || (nChrCount >= 2))
                             {
@@ -797,12 +797,12 @@ namespace DBSvr.Services
             if (userInfo.sAccount == sAccount)
             {
                 int nIndex;
-                IList<QuickId> chrList = new List<QuickId>();
+                IList<PlayQuick> chrList = new List<PlayQuick>();
                 if (_playRecordStorage.FindByAccount(sAccount, ref chrList) >= 0)
                 {
                     for (var i = 0; i < chrList.Count; i++)
                     {
-                        nIndex = chrList[i].nIndex;
+                        nIndex = chrList[i].Index;
                         var humRecord = _playRecordStorage.GetBy(nIndex, ref result);
                         if (result)
                         {
@@ -935,7 +935,7 @@ namespace DBSvr.Services
         }
     }
 
-    public class UsrSocMessage
+    public class UserMessage
     {
         public GatePacket Packet;
         public TGateInfo GateInfo;

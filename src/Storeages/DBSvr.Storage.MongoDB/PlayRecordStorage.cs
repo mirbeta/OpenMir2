@@ -12,7 +12,7 @@ namespace DBSvr.Storage.MongoDB
         private int _recordCount;
         private readonly Dictionary<string, int> _quickList;
         private readonly Dictionary<int, string> _indexQuickList;
-        private readonly QuickIdList _quickIdList;
+        private readonly PlayQuickList _quickIdList;
         /// <summary>
         /// 已被删除的记录号
         /// </summary>
@@ -24,7 +24,7 @@ namespace DBSvr.Storage.MongoDB
         {
             _quickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _indexQuickList = new Dictionary<int, string>();
-            _quickIdList = new QuickIdList();
+            _quickIdList = new PlayQuickList();
             _deletedList = new List<int>();
             _recordCount = 0;
             _storageOption = option;
@@ -81,9 +81,9 @@ namespace DBSvr.Storage.MongoDB
             return default;
         }
 
-        public int FindByAccount(string sAccount, ref IList<QuickId> ChrList)
+        public int FindByAccount(string sAccount, ref IList<PlayQuick> ChrList)
         {
-            IList<QuickId> ChrNameList = null;
+            IList<PlayQuick> ChrNameList = null;
             _quickIdList.GetChrList(sAccount, ref ChrNameList);
             if (ChrNameList != null)
             {
@@ -98,14 +98,14 @@ namespace DBSvr.Storage.MongoDB
         public int ChrCountOfAccount(string sAccount)
         {
             var result = 0;
-            IList<QuickId> ChrList = null;
+            IList<PlayQuick> ChrList = null;
             _quickIdList.GetChrList(sAccount, ref ChrList);
             var success = false;
             if (ChrList != null)
             {
                 for (var i = 0; i < ChrList.Count; i++)
                 {
-                    HumRecordData HumDBRecord = GetBy(ChrList[i].nIndex, ref success);
+                    HumRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
                     if (success && !HumDBRecord.Deleted)
                     {
                         result++;
@@ -160,7 +160,7 @@ namespace DBSvr.Storage.MongoDB
 
         public bool Delete(string sName)
         {
-            IList<QuickId> ChrNameList = null;
+            IList<PlayQuick> ChrNameList = null;
             var result = false;
             int n10 = _quickList[sName];
             if (n10 < 0)

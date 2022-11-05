@@ -17,7 +17,7 @@ namespace DBSvr.Storage
 
         HumRecordData GetBy(int nIndex, ref bool success);
 
-        int FindByAccount(string sAccount, ref IList<QuickId> ChrList);
+        int FindByAccount(string sAccount, ref IList<PlayQuick> ChrList);
 
         /// <summary>
         /// 获取账号下角色数量
