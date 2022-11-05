@@ -32,6 +32,7 @@ namespace DBSvr.Services
         private readonly SocketServer _userSocket;
         private readonly LoginService _loginService;
         private readonly Channel<UserMessage> _reviceQueue;
+        public readonly IList<TGateInfo> GateList;
 
         public UserService(MirLogger logger, DBSvrConf conf, LoginService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
@@ -78,9 +79,7 @@ namespace DBSvr.Services
                 GateList.RemoveAt(i);
             }
         }
-
-        public IList<TGateInfo> GateList { get; } = null;
-
+        
         /// <summary>
         /// 处理客户端请求消息
         /// </summary>
