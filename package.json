@@ -6,7 +6,7 @@
   "scripts": {
     "commit": "git-cz && git push",
     "release": "standard-version",
-    "changelog": "conventional-changelog -p cmyr-config -i CHANGELOG.md -s -r 0 -n ./changelog-option.js",
+    "changelog": "conventional-changelog -p custom-config -i CHANGELOG.md -s -r 0  -n ./changelog-option.js",
     "alpha": "npm run release -- --prerelease alpha",
     "publish": "git push --follow-tags origin dev"
   },
@@ -22,6 +22,7 @@
     "conventional-changelog-cli": "^2.2.2",
     "conventional-changelog-cmyr-config": "^2.0.4",
     "cz-conventional-changelog": "^3.3.0",
+    "cz-conventional-changelog-cmyr": "^1.0.0",
     "release-it": "^15.5.0",
     "standard-version": "^9.5.0"
   },
