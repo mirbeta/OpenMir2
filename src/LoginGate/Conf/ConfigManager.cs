@@ -52,6 +52,35 @@ namespace LoginGate.Conf
                 GameGates[i].GateAddress = ReadString("LoginGate", "GateAddr" + i, GameGates[i].GateAddress);
                 GameGates[i].GatePort = ReadInteger("LoginGate", "GatePort" + i, GameGates[i].GatePort);
             }
+            SaveConfig();
+        }
+
+        private void SaveConfig()
+        {
+            WriteInteger("Integer", "ClientTimeOutTime", GetConfig.ClientTimeOutTime);
+            WriteInteger("Integer", "MaxConnectOfIP", GetConfig.m_nMaxConnectOfIP);
+            WriteInteger("Integer", "CheckNewIDOfIP", GetConfig.m_nCheckNewIDOfIP);
+            WriteInteger("Integer", "ClientTimeOutTime", GetConfig.ClientTimeOutTime);
+            WriteInteger("Integer", "NomClientPacketSize", GetConfig.NomClientPacketSize);
+            WriteInteger("Integer", "MaxClientPacketCount", GetConfig.MaxClientPacketCount);
+            WriteBool("Switch", "CheckNewIDOfIP", GetConfig.m_fCheckNewIDOfIP);
+            WriteBool("Switch", "CheckNullSession", GetConfig.CheckNullSession);
+            WriteBool("Switch", "OverSpeedSendBack", GetConfig.OverSpeedSendBack);
+            WriteBool("Switch", "DefenceCCPacket", GetConfig.DefenceCCPacket);
+            WriteBool("Switch", "KickOverSpeed", GetConfig.m_fKickOverSpeed);
+            WriteBool("Switch", "KickOverPacketSize", GetConfig.m_fKickOverPacketSize);
+            WriteInteger("Method", "BlockIPMethod", (int)GetConfig.m_tBlockIPMethod);
+            WriteInteger("LoginGate", "Count", GetConfig.GateCount);
+            WriteInteger("LoginGate", "ShowLogLevel", GetConfig.ShowLogLevel);
+            WriteBool("LoginGate", "ShowDebugLog", GetConfig.ShowDebugLog);
+            for (var i = 0; i < GetConfig.GateCount; i++)
+            {
+                WriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginAdress);
+                WriteInteger("LoginGate", "ServerPort" + i, GameGates[i].LoginPort);
+                WriteString("LoginGate", "GateAddr" + i, GameGates[i].GateAddress);
+                WriteInteger("LoginGate", "GatePort" + i, GameGates[i].GatePort);
+            }
+            Save();
         }
     }
 

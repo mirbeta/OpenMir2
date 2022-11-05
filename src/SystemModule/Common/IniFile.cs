@@ -129,7 +129,7 @@ namespace SystemModule.Common
             return GetInt(section, key, defValue);
         }
 
-        protected int GetInt(string section, string key, int defValue)
+        private int GetInt(string section, string key, int defValue)
         {
             if (iniCahce.ContainsKey(section))
             {
