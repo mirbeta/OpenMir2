@@ -6,7 +6,7 @@ namespace DBSvr.Storage
     /// <summary>
     /// 本地内存存储接口
     /// </summary>
-    public interface IMemoryStorageServive
+    public interface ICacheStorage
     {
         /// <summary>
         /// 添加角色数据到内存缓存
@@ -30,6 +30,6 @@ namespace DBSvr.Storage
         /// 从缓存取出所有角色数据
         /// </summary>
         /// <returns></returns>
-        IEnumerable<HumDataInfo> GetAll();
+        IList<HumDataInfo> QueryCacheData();
     }
 }

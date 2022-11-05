@@ -11,7 +11,7 @@ namespace DBSvr.Services
     /// 账号中心
     /// 会话同步服务(DBSvr-LoginSvr)
     /// </summary>
-    public class LoginSvrService
+    public class LoginService
     {
         private readonly MirLogger _logger;
         private readonly ClientScoket _clientScoket;
@@ -19,7 +19,7 @@ namespace DBSvr.Services
         private readonly DBSvrConf _conf;
         private string _sockMsg = string.Empty;
 
-        public LoginSvrService(MirLogger logger, DBSvrConf conf)
+        public LoginService(MirLogger logger, DBSvrConf conf)
         {
             _logger = logger;
             _conf = conf;
