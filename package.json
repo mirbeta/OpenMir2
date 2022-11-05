@@ -21,6 +21,7 @@
     "commitizen": "^4.2.5",
     "conventional-changelog-cli": "^2.2.2",
     "conventional-changelog-cmyr-config": "^2.0.4",
+    "conventional-changelog-custom-config": "^0.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "cz-conventional-changelog-cmyr": "^1.0.0",
     "release-it": "^15.5.0",
