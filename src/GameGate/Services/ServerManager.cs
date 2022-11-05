@@ -187,7 +187,7 @@ namespace GameGate.Services
                 {
                     _threadId = Guid.NewGuid().ToString("N");
                     ThreadState = MessageThreadState.Runing;
-                    LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已启动.");
+                    LogQueue.DebugLog($"消息消费线程[{_threadId}]已启动.");
                     while (await _reviceMsgQueue.WaitToReadAsync(_cts.Token))
                     {
                         _resetEvent.WaitOne();
@@ -205,7 +205,7 @@ namespace GameGate.Services
                 ThreadState = MessageThreadState.Stop;
                 _resetEvent.Reset();//暂停
                 _cts.CancelAfter(3000);//延时3秒取消消费，防止消息丢失
-                LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已停止.");
+                LogQueue.DebugLog($"消息消费线程[{_threadId}]已停止.");
             }
         }
     }

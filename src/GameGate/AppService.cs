@@ -27,21 +27,21 @@ namespace GameGate
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            LogQueue.EnqueueDebugging("GameGate is starting.");
-            LogQueue.Enqueue("正在启动服务...", 2);
-            LogQueue.Enqueue("正在加载配置信息...", 3);
+            LogQueue.DebugLog("GameGate is starting.");
+            LogQueue.Log("正在启动服务...", 2);
+            LogQueue.Log("正在加载配置信息...", 3);
             ConfigManager.LoadConfig();
             GateShare.HardwareFilter = new HardwareFilter();
-            LogQueue.Enqueue("配置信息加载完成...", 3);
+            LogQueue.Log("配置信息加载完成...", 3);
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             Debug.WriteLine("GameGate is stopping.");
-            LogQueue.Enqueue("正在停止服务...", 2);
+            LogQueue.Log("正在停止服务...", 2);
             _serverApp.StopService();
-            LogQueue.Enqueue("服务停止成功...", 2);
+            LogQueue.Log("服务停止成功...", 2);
             return base.StopAsync(cancellationToken);
         }
     }

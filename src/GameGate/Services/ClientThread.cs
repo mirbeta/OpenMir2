@@ -14,12 +14,12 @@ namespace GameGate.Services
     /// </summary>
     public class ClientThread
     {
-        private readonly AsyncClientSocket _clientSocket;
+        private readonly AsyncClientSocket ClientSocket;
         /// <summary>
         /// 网关ID
         /// </summary>
         public readonly string ClientId;
-        private readonly IPEndPoint _gateEndPoint;
+        private IPEndPoint GateEndPoint { get; set; }
         /// <summary>
         /// 用户会话
         /// </summary>
@@ -27,43 +27,43 @@ namespace GameGate.Services
         /// <summary>
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
-        public bool CheckServerFail = false;
+        public bool CheckServerFail { get; set; }
         /// <summary>
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
-        public int CheckServerFailCount = 0;
+        public int CheckServerFailCount { get; set; }
         /// <summary>
         /// Buffer
         /// </summary>
-        private byte[] _receiveBuffer = null;
+        private byte[] ReceiveBuffer { get; set; }
         /// <summary>
         /// 上次剩下多少字节未处理
         /// </summary>
-        private int _buffLen = 0;
+        private int BuffLen{ get; set; }
         /// <summary>
         /// 网关是否就绪
         /// </summary>
-        public bool GateReady = false;
+        public bool GateReady { get; set; }
         /// <summary>
         /// 是否链接成功
         /// </summary>
-        private bool _connected = false;
+        private bool Connected { get; set; }
         /// <summary>
         /// 历史最高在线人数
         /// </summary>
-        private int _counter = 0;
+        private int Counter {get;set;}
         /// <summary>
         /// 发送总字节数
         /// </summary>
-        private int _sendBytes;
+        private int SendBytes { get; set; }
         /// <summary>
         /// 接收总字节数
         /// </summary>
-        private int _receiveBytes;
-        private int _checkRecviceTick = 0;
-        private int _checkServerTick = 0;
-        private int _checkServerTimeMin = 0;
-        private int _checkServerTimeMax = 0;
+        private int ReceiveBytes { get; set; }
+        private int CheckRecviceTick { get; set; }
+        private int CheckServerTick { get; set; }
+        private int CheckServerTimeMin { get; set; }
+        private int CheckServerTimeMax { get; set; }
         /// <summary>
         /// Session管理
         /// </summary>
@@ -71,36 +71,38 @@ namespace GameGate.Services
         /// <summary>
         /// 日志
         /// </summary>
-        private static MirLog LogQueue => MirLog.Instance;
+        private static MirLog Logger => MirLog.Instance;
         private const int HeaderMessageSize = 20;
 
         public ClientThread(string clientId, IPEndPoint endPoint, GameGateInfo gameGate)
         {
             ClientId = clientId;
-            _receiveBytes = 0;
-            _sendBytes = 0;
-            _gateEndPoint = endPoint;
-            _clientSocket = new AsyncClientSocket(gameGate.ServerAdress, gameGate.ServerPort, 512);
-            _clientSocket.OnConnected += ClientSocketConnect;
-            _clientSocket.OnDisconnected += ClientSocketDisconnect;
-            _clientSocket.OnReceivedData += ClientSocketRead;
-            _clientSocket.OnError += ClientSocketError;
+            ReceiveBytes = 0;
+            SendBytes = 0;
+            Connected = false;
+            GateEndPoint = endPoint;
+            CheckServerTick = HUtil32.GetTickCount();
+            ClientSocket = new AsyncClientSocket(gameGate.ServerAdress, gameGate.ServerPort, 512);
+            ClientSocket.OnConnected += ClientSocketConnect;
+            ClientSocket.OnDisconnected += ClientSocketDisconnect;
+            ClientSocket.OnReceivedData += ClientSocketRead;
+            ClientSocket.OnError += ClientSocketError;
         }
 
-        public bool IsConnected => _clientSocket.IsConnected;
+        public bool IsConnected => ClientSocket.IsConnected;
 
-        public string EndPoint => $"{_clientSocket.Host}:{_clientSocket.Port}";
+        public string EndPoint => $"{ClientSocket.Host}:{ClientSocket.Port}";
 
         public void Start()
         {
-            _clientSocket.Start();
+            ClientSocket.Start();
         }
 
         private void ReConnected()
         {
-            if (_connected == false)
+            if (Connected == false)
             {
-                _clientSocket.Start();
+                ClientSocket.Start();
             }
         }
 
@@ -114,11 +116,11 @@ namespace GameGate.Services
                     count++;
                 }
             }
-            if (count > _counter)
+            if (count > Counter)
             {
-                _counter = count;
+                Counter = count;
             }
-            return count + "/" + _counter;
+            return count + "/" + Counter;
         }
 
         public void Stop()
@@ -134,16 +136,16 @@ namespace GameGate.Services
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             GateReady = true;
-            _checkServerTick = HUtil32.GetTickCount();
-            _checkRecviceTick = HUtil32.GetTickCount();
+            CheckServerTick = HUtil32.GetTickCount();
+            CheckRecviceTick = HUtil32.GetTickCount();
             RestSessionArray();
-            _checkServerTimeMax = 0;
-            _checkServerTimeMax = 0;
-            LogQueue.Enqueue($"[{_gateEndPoint.ToString()}] 游戏引擎[{e.RemoteEndPoint}]链接成功.", 1);
-            LogQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
-            _connected = true;
-            _receiveBytes = 0;
-            _sendBytes = 0;
+            CheckServerTimeMax = 0;
+            CheckServerTimeMax = 0;
+            Logger.Log($"[{GateEndPoint}] 游戏引擎[{e.RemoteEndPoint}]链接成功.", 1);
+            Logger.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            Connected = true;
+            ReceiveBytes = 0;
+            SendBytes = 0;
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -162,10 +164,10 @@ namespace GameGate.Services
                 }
             }
             RestSessionArray();
-            _receiveBuffer = null;
+            ReceiveBuffer = null;
             GateReady = false;
-            LogQueue.Enqueue($"[{_gateEndPoint.ToString()}] 游戏引擎[{e.RemoteEndPoint}]断开链接.", 1);
-            _connected = false;
+            Logger.Log($"[{GateEndPoint}] 游戏引擎[{e.RemoteEndPoint}]断开链接.", 1);
+            Connected = false;
             CheckServerFail = true;
         }
 
@@ -176,18 +178,18 @@ namespace GameGate.Services
         {
             var nMsgLen = e.BuffLen;
             var packetData = e.Buff[..nMsgLen];
-            if (_buffLen > 0)
+            if (BuffLen > 0)
             {
-                byte[] tempBuff = new byte[_buffLen + nMsgLen];
-                MemoryCopy.BlockCopy(_receiveBuffer, 0, tempBuff, 0, _receiveBuffer.Length);
-                MemoryCopy.BlockCopy(packetData, 0, tempBuff, _buffLen, packetData.Length);
+                byte[] tempBuff = new byte[BuffLen + nMsgLen];
+                MemoryCopy.BlockCopy(ReceiveBuffer, 0, tempBuff, 0, ReceiveBuffer.Length);
+                MemoryCopy.BlockCopy(packetData, 0, tempBuff, BuffLen, packetData.Length);
                 ProcessServerPacket(tempBuff, tempBuff.Length);
             }
             else
             {
                 ProcessServerPacket(packetData, nMsgLen);
             }
-            _receiveBytes += e.BuffLen;
+            ReceiveBytes += e.BuffLen;
         }
         
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -195,19 +197,20 @@ namespace GameGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎[{_clientSocket.EndPoint}]拒绝链接...", 1);
-                    _connected = false;
+                    Logger.Log($"游戏网关[{GateEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...", 1);
+                    Connected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    LogQueue.Enqueue($"游戏引擎[{_clientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint.ToString()}]...", 1);
-                    _connected = false;
+                    Logger.Log($"游戏引擎[{EndPoint}]主动关闭连接游戏网关[{GateEndPoint}]...", 1);
+                    Connected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎时[{_clientSocket.EndPoint}]超时...", 1);
-                    _connected = false;
+                    Logger.Log($"游戏网关[{GateEndPoint}]链接游戏引擎时[{EndPoint}]超时...", 1);
+                    Connected = false;
                     break;
             }
             GateReady = false;
+            CheckServerFail = true;
         }
 
         private void ProcessServerPacket(byte[] buff, int buffLen)
@@ -226,7 +229,7 @@ namespace GameGate.Services
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
                         nLen -= 1;
-                        LogQueue.EnqueueDebugging($"解析封包出现异常封包，封包长度:[{dataBuff.Length}] 偏移:[{srcOffset}].");
+                        Logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
                     //var Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
@@ -243,29 +246,29 @@ namespace GameGate.Services
                     {
                         case Grobal2.GM_CHECKSERVER:
                             CheckServerFail = false;
-                            _checkServerTick = HUtil32.GetTickCount();
+                            CheckServerTick = HUtil32.GetTickCount();
                             break;
                         case Grobal2.GM_SERVERUSERINDEX:
                             var userSession = SessionManager.GetSession(sessionId);
                             if (userSession != null)
                             {
-                                userSession.m_nSvrListIdx = serverIndex;
+                                userSession.SvrListIdx = serverIndex;
                             }
                             break;
                         case Grobal2.GM_RECEIVE_OK:
-                            _checkServerTimeMin = HUtil32.GetTickCount() - _checkRecviceTick;
-                            if (_checkServerTimeMin > _checkServerTimeMax)
+                            CheckServerTimeMin = HUtil32.GetTickCount() - CheckRecviceTick;
+                            if (CheckServerTimeMin > CheckServerTimeMax)
                             {
-                                _checkServerTimeMax = _checkServerTimeMin;
+                                CheckServerTimeMax = CheckServerTimeMin;
                             }
-                            _checkRecviceTick = HUtil32.GetTickCount();
+                            CheckRecviceTick = HUtil32.GetTickCount();
                             SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                             break;
                         case Grobal2.GM_DATA:
                             var sessionPacket = new ClientSessionPacket
                             {
                                 SessionId = sessionId,
-                                BufferLen = packLength,
+                                BufferLen = packLength
                             };
                             if (packLength > 0)
                             {
@@ -287,7 +290,7 @@ namespace GameGate.Services
                         break;
                     }
                     dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                    _buffLen = nLen;
+                    BuffLen = nLen;
                     srcOffset = 0;
                     if (nLen < HeaderMessageSize)
                     {
@@ -296,18 +299,18 @@ namespace GameGate.Services
                 }
                 if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    _receiveBuffer = dataBuff[..nLen].ToArray();
-                    _buffLen = nLen;
+                    ReceiveBuffer = dataBuff[..nLen].ToArray();
+                    BuffLen = nLen;
                 }
                 else
                 {
-                    _receiveBuffer = null;
-                    _buffLen = 0;
+                    ReceiveBuffer = null;
+                    BuffLen = 0;
                 }
             }
             catch (Exception ex)
             {
-                LogQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}", 5);
+                Logger.Log($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}", 5);
             }
         }
 
@@ -388,12 +391,12 @@ namespace GameGate.Services
         /// <param name="sendBuffer"></param>
         public void SendBuffer(byte[] sendBuffer)
         {
-            if (!_clientSocket.IsConnected)
+            if (!ClientSocket.IsConnected)
             {
                 return;
             }
-            _sendBytes += sendBuffer.Length;
-            _clientSocket.SendMessage(sendBuffer);
+            SendBytes += sendBuffer.Length;
+            ClientSocket.SendMessage(sendBuffer);
         }
         
         /// <summary>
@@ -413,10 +416,10 @@ namespace GameGate.Services
                         userSession.SckHandle = -1;
                     }
                 }
-                _checkServerTimeMin = HUtil32.GetTickCount() - _checkServerTick;
-                if (_checkServerTimeMax < _checkServerTimeMin)
+                CheckServerTimeMin = HUtil32.GetTickCount() - CheckServerTick;
+                if (CheckServerTimeMax < CheckServerTimeMin)
                 {
-                    _checkServerTimeMax = _checkServerTimeMin;
+                    CheckServerTimeMax = CheckServerTimeMin;
                 }
             }
         }
@@ -436,7 +439,7 @@ namespace GameGate.Services
             {
                 ReConnected();
                 CheckServerFailCount++;
-                LogQueue.EnqueueDebugging($"重新与服务器[{EndPoint}]建立链接.失败次数:[{CheckServerFailCount}]");
+                Logger.DebugLog($"链接服务器[{EndPoint}]失败.[{CheckServerFailCount}]");
                 return;
             }
             CheckServerTimeOut();
@@ -444,12 +447,12 @@ namespace GameGate.Services
 
         private void CheckServerTimeOut()
         {
-            if ((HUtil32.GetTickCount() - _checkServerTick) > GateShare.CheckServerTimeOutTime && CheckServerFailCount <= 20)
+            if ((HUtil32.GetTickCount() - CheckServerTick) > GateShare.CheckServerTimeOutTime && CheckServerFailCount <= 20)
             {
                 CheckServerFail = true;
                 Stop();
                 CheckServerFailCount++;
-                LogQueue.EnqueueDebugging($"服务器[{EndPoint}]长时间没有响应,断开链接.失败次数:[{CheckServerFailCount}]");
+                Logger.DebugLog($"服务器[{EndPoint}]长时间没有响应,断开链接.失败次数:[{CheckServerFailCount}]");
             }
         }
         
@@ -460,25 +463,25 @@ namespace GameGate.Services
 
         public string GetSendInfo()
         {
-            var sendStr = _sendBytes switch
+            var sendStr = SendBytes switch
             {
-                > 1024 * 1000 => $"↑{_sendBytes / (1024 * 1000)}M",
-                > 1024 => $"↑{_sendBytes / 1024}K",
-                _ => $"↑{_sendBytes}B"
+                > 1024 * 1000 => $"↑{SendBytes / (1024 * 1000)}M",
+                > 1024 => $"↑{SendBytes / 1024}K",
+                _ => $"↑{SendBytes}B"
             };
-            _sendBytes = 0;
+            SendBytes = 0;
             return sendStr;
         }
 
         public string GetReceiveInfo()
         {
-            var receiveStr = _receiveBytes switch
+            var receiveStr = ReceiveBytes switch
             {
-                > 1024 * 1000 => $"↓{_receiveBytes / (1024 * 1000)}M",
-                > 1024 => $"↓{_receiveBytes / 1024}K",
-                _ => $"↓{_receiveBytes}B"
+                > 1024 * 1000 => $"↓{ReceiveBytes / (1024 * 1000)}M",
+                > 1024 => $"↓{ReceiveBytes / 1024}K",
+                _ => $"↓{ReceiveBytes}B"
             };
-            _receiveBytes = 0;
+            ReceiveBytes = 0;
             return receiveStr;
         }
 

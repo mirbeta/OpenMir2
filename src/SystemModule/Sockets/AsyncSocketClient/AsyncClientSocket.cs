@@ -177,6 +177,10 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
             if (e.ConnectSocket == null || !e.ConnectSocket.Connected)
             {
+                if (null != OnError)
+                {
+                    OnError(e.RemoteEndPoint, new DSCClientErrorEventArgs(e.RemoteEndPoint, e.SocketError, e.ConnectByNameError));
+                }
                 return;
             }
             IsConnected = true;

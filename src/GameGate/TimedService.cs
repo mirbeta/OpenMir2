@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameGate
 {
@@ -56,17 +55,17 @@ namespace GameGate
             if (!GateShare.ShowLog)
                 return;
             
-            while (!LogQueue.MessageLog.IsEmpty)
+            while (!LogQueue.MessageLogQueue.IsEmpty)
             {
                 string message;
-                if (!LogQueue.MessageLog.TryDequeue(out message)) continue;
+                if (!LogQueue.MessageLogQueue.TryDequeue(out message)) continue;
                 _logger.LogInformation(message);
             }
 
-            while (!LogQueue.DebugLog.IsEmpty)
+            while (!LogQueue.DebugLogQueue.IsEmpty)
             {
                 string message;
-                if (!LogQueue.DebugLog.TryDequeue(out message)) continue;
+                if (!LogQueue.DebugLogQueue.TryDequeue(out message)) continue;
                 _logger.LogDebug(message);
             }
         }
@@ -76,30 +75,17 @@ namespace GameGate
         /// </summary>
         private void KeepAlive(int currentTick)
         {
-            if (currentTick - _kepAliveTick > 10 * 10000)
+            if (currentTick - _checkServerConnectTick > 10000)
             {
-                _kepAliveTick = HUtil32.GetTickCount();
-                IList<ServerService> serverList = ServerManager.GetServerList();
-                for (var i = 0; i < serverList.Count; i++)
+                _checkServerConnectTick = HUtil32.GetTickCount();
+                IList<ClientThread> clientList = ClientManager.GetAllClient();
+                for (var i = 0; i < clientList.Count; i++)
                 {
-                    if (serverList[i] == null)
+                    if (clientList[i] == null)
                     {
                         continue;
                     }
-                    if (serverList[i].ClientThread == null)
-                    {
-                        continue;
-                    }
-                    if (!serverList[i].ClientThread.IsConnected)
-                    {
-                        continue;
-                    }
-                    var cmdPacket = new PacketHeader();
-                    cmdPacket.PacketCode = Grobal2.RUNGATECODE;
-                    cmdPacket.Socket = 0;
-                    cmdPacket.Ident = Grobal2.GM_CHECKCLIENT;
-                    cmdPacket.PackLength = 0;
-                    serverList[i].ClientThread.SendBuffer(cmdPacket.GetBuffer());
+                    clientList[i].CheckConnectedState();
                 }
             }
         }
@@ -147,20 +133,6 @@ namespace GameGate
         /// </summary>
         private void ClearSession(int currentTick)
         {
-            if (currentTick - _checkServerConnectTick > 5000)
-            {
-                IList<ClientThread> clientList = ClientManager.GetAllClient();
-                _checkServerConnectTick = HUtil32.GetTickCount();
-                for (var i = 0; i < clientList.Count; i++)
-                {
-                    if (clientList[i] == null)
-                    {
-                        continue;
-                    }
-                    clientList[i].CheckConnectedState();
-                }
-                LogQueue.EnqueueDebugging("发送GameSvr心跳包...");
-            }
             if (currentTick - _processClearSessionTick > 120000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
@@ -173,7 +145,7 @@ namespace GameGate
                     }
                     clientList[i].ProcessIdleSession();
                 }
-                LogQueue.EnqueueDebugging("清理超时无效会话...");
+                LogQueue.DebugLog("清理超时无效会话...");
             }
         }
 

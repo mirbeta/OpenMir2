@@ -35,7 +35,7 @@ namespace GameGate.Services
                 var serverPort = gameGate.ServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    LogQueue.Enqueue($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
+                    LogQueue.Log($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
                     return;
                 }
                 serverList[i] = new ServerService(gameGate);
