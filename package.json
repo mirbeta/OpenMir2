@@ -1,6 +1,6 @@
 {
   "name": "openmir2",
-  "version": "1.1.0-alpha.1",
+  "version": "1.1.0",
   "description": "[EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)",
   "main": "index.js",
   "scripts": {
@@ -27,59 +27,13 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog",
-      "maxHeaderWidth": 100,
-      "defaultType": "",
-      "defaultSubject": "",
-      "defaultIssues": ""
+      "path": "./node_modules/cz-conventional-changelog"
     }
   },
   "changelog": {
     "bugsUrl": "https://github.com/mirbeta/OpenMir2/issues/",
     "authorName": true,
     "authorEmail": true,
-    "language": "zh",
-    "settings": {
-      "feat": {
-        "title": "✨ 新功能",
-        "enable": true
-      },
-      "fix": {
-        "title": "🐛 Bug 修复"
-      },
-      "perf": {
-        "title": "⚡ 性能优化"
-      },
-      "revert": {
-        "title": "⏪ 回退"
-      },
-      "refactor": {
-        "title": "♻ 代码重构"
-      },
-      "docs": {
-        "title": "📝 文档",
-        "enable": false
-      },
-      "style": {
-        "title": "💄 风格",
-        "enable": false
-      },
-      "test": {
-        "title": "✅ 测试",
-        "enable": false
-      },
-      "build": {
-        "title": "👷‍ 构建",
-        "enable": false
-      },
-      "ci": {
-        "title": "🔧 CI 配置",
-        "enable": false
-      },
-      "chore": {
-        "title": "🎫 其他更新",
-        "enable": false
-      }
-    }
+    "language": "zh"
   }
 }
