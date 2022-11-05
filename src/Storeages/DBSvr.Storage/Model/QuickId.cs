@@ -1,18 +1,18 @@
 ﻿namespace DBSvr.Storage.Model
 {
-    public class QuickId
+    public class PlayQuick
     {
-        public int nSelectID;
-        public string sAccount;
-        public int nIndex;
-        public string sChrName;
+        public int SelectID;
+        public string Account;
+        public int Index;
+        public string ChrName;
 
-        public QuickId() { }
+        public PlayQuick() { }
 
-        public QuickId(string account, int index)
+        public PlayQuick(string account, int index)
         {
-            sAccount = account;
-            nIndex = index;
+            Account = account;
+            Index = index;
         }
     }
 }
