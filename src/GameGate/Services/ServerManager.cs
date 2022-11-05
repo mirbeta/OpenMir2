@@ -30,19 +30,19 @@ namespace GameGate.Services
         /// <summary>
         /// 消息消费者线程
         /// </summary>
-        private ServerMessageWorkThread[] _messageWorkThreads;
-        private int _lastMessageThreadCount;
+        private ClientMessageWorkThread[] _messageWorkThreads;
+        private int LastMessageThreadCount { get; set; }
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private readonly Channel<ClientMessagePacket> _clientPacketQueue;
+        private readonly Channel<MessagePacket> _messageQueue;
 
         private ServerManager()
         {
-            _clientPacketQueue = Channel.CreateUnbounded<ClientMessagePacket>();
+            _messageQueue = Channel.CreateUnbounded<MessagePacket>();
         }
 
-        public void AddServer(ServerService[] serverService)
+        public void Initialization(ServerService[] serverService)
         {
             _serverServices = serverService;
         }
@@ -74,7 +74,7 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到客户端消息队列
         /// </summary>
-        public void SendClientQueue(string connectionId, int threadId, Span<byte> buffer)
+        public void SendClientQueue(string connectionId, int threadId, byte[] buffer)
         {
             _serverServices[threadId].Send(connectionId, buffer);
         }
@@ -83,10 +83,9 @@ namespace GameGate.Services
         /// 客户端消息添加到队列给服务端处理
         /// GameGate -> GameSvr
         /// </summary>
-        /// <param name="messagePacket"></param>
-        public void ClientPacketQueue(ClientMessagePacket messagePacket)
+        public void SendMessageQueue(MessagePacket messagePacket)
         {
-            _clientPacketQueue.Writer.TryWrite(messagePacket);
+            _messageQueue.Writer.TryWrite(messagePacket);
         }
 
         public static int MessageWorkThreads => Config.MessageWorkThread;
@@ -98,18 +97,18 @@ namespace GameGate.Services
         {
             Task.Factory.StartNew(() =>
             {
-                if (_lastMessageThreadCount == Config.MessageWorkThread)
+                if (LastMessageThreadCount == Config.MessageWorkThread)
                 {
                     return;
                 }
-                if (Config.MessageWorkThread > _lastMessageThreadCount)
+                if (Config.MessageWorkThread > LastMessageThreadCount)
                 {
                     Array.Resize(ref _messageWorkThreads, Config.MessageWorkThread);
                     for (var i = 0; i < Config.MessageWorkThread; i++)
                     {
                         if (_messageWorkThreads[i] == null)
                         {
-                            _messageWorkThreads[i] = new ServerMessageWorkThread(stoppingToken, _clientPacketQueue.Reader);
+                            _messageWorkThreads[i] = new ClientMessageWorkThread(stoppingToken, _messageQueue.Reader);
                         }
                         if (_messageWorkThreads[i].ThreadState == MessageThreadState.Stop)
                         {
@@ -131,7 +130,7 @@ namespace GameGate.Services
                         }
                     }
                 }
-                _lastMessageThreadCount = Config.MessageWorkThread;
+                LastMessageThreadCount = Config.MessageWorkThread;
             }, stoppingToken);
         }
 
@@ -160,7 +159,10 @@ namespace GameGate.Services
             return _serverServices[random].ClientThread;
         }
 
-        private class ServerMessageWorkThread
+        /// <summary>
+        /// 客户端消息处理工作线程
+        /// </summary>
+        private class ClientMessageWorkThread : IDisposable
         {
             private readonly ManualResetEvent _resetEvent;
             private string _threadId;
@@ -168,14 +170,14 @@ namespace GameGate.Services
             /// <summary>
             /// 接收封包（客户端-》网关）
             /// </summary>
-            private readonly ChannelReader<ClientMessagePacket> _reviceMsgQueue = null;
+            private readonly ChannelReader<MessagePacket> _messageQueue;
             public MessageThreadState ThreadState;
-            private static SessionManager Session => SessionManager.Instance;
+            private static SessionManager SessionMgr => SessionManager.Instance;
             private static MirLog LogQueue => MirLog.Instance;
 
-            public ServerMessageWorkThread(CancellationToken stoppingToken, ChannelReader<ClientMessagePacket> channel)
+            public ClientMessageWorkThread(CancellationToken stoppingToken, ChannelReader<MessagePacket> channel)
             {
-                _reviceMsgQueue = channel;
+                _messageQueue = channel;
                 _resetEvent = new ManualResetEvent(true);
                 ThreadState = MessageThreadState.Stop;
                 _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
@@ -188,13 +190,20 @@ namespace GameGate.Services
                     _threadId = Guid.NewGuid().ToString("N");
                     ThreadState = MessageThreadState.Runing;
                     LogQueue.DebugLog($"消息消费线程[{_threadId}]已启动.");
-                    while (await _reviceMsgQueue.WaitToReadAsync(_cts.Token))
+                    while (await _messageQueue.WaitToReadAsync(_cts.Token))
                     {
                         _resetEvent.WaitOne();
-                        if (_reviceMsgQueue.TryRead(out var message))
+                        if (_messageQueue.TryRead(out var message))
                         {
-                            var clientSession = Session.GetSession(message.SessionId);
-                            clientSession?.ProcessClientPacket(message);
+                            var clientSession = SessionMgr.GetSession(message.SessionId);
+                            try
+                            {
+                                clientSession?.ProcessPacket(message);
+                            }
+                            catch (Exception e)
+                            {
+                                LogQueue.LogError(e);
+                            }
                         }
                     }
                 }, stoppingToken);
@@ -206,6 +215,12 @@ namespace GameGate.Services
                 _resetEvent.Reset();//暂停
                 _cts.CancelAfter(3000);//延时3秒取消消费，防止消息丢失
                 LogQueue.DebugLog($"消息消费线程[{_threadId}]已停止.");
+            }
+
+            public void Dispose()
+            {
+                _resetEvent.Dispose();
+                _cts.Dispose();
             }
         }
     }

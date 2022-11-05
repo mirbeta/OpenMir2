@@ -9,7 +9,7 @@ namespace GameGate
     public class SendQueue
     {
         private readonly Channel<ClientPacketQueueData> _sendQueue;
-        private readonly ServerManager serverManager = ServerManager.Instance;
+        private readonly ServerManager ServerMgr = ServerManager.Instance;
 
         public SendQueue()
         {
@@ -24,12 +24,11 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddClientQueue(string connectionId, int threadId, Span<byte> buffer)
+        public void AddClientQueue(string connectionId, int threadId, byte[] buffer)
         {
-            // var sendPacket = new ClientPacketQueueData(connectionId, threadId, buffer);
-            // _sendQueue.Writer.TryWrite(sendPacket);
-
-            serverManager.SendClientQueue(connectionId, threadId, buffer);
+            var sendPacket = new ClientPacketQueueData(connectionId, threadId, buffer);
+            _sendQueue.Writer.TryWrite(sendPacket);
+            //serverManager.SendClientQueue(connectionId, threadId, buffer);
         }
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace GameGate
                 {
                     if (_sendQueue.Reader.TryRead(out ClientPacketQueueData sendPacket))
                     {
-                        //serverManager.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
+                        ServerMgr.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
                     }
                 }
             }, stoppingToken);
@@ -53,9 +52,9 @@ namespace GameGate
         {
             public readonly string ConnectId;
             public readonly int ThreadId;
-            public readonly Memory<byte> PacketBuffer;
+            public readonly byte[] PacketBuffer;
 
-            public ClientPacketQueueData(string connectId,int threadId, Memory<byte> buff)
+            public ClientPacketQueueData(string connectId,int threadId, byte[] buff)
             {
                 ConnectId = connectId;
                 ThreadId = threadId;
