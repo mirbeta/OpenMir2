@@ -223,8 +223,8 @@ namespace GameGate.Conf
         public int ClientAttackSpeedRate;
         public TPunishMethod OverSpeedPunishMethod;
         public TBlockIPMethod BlockIPMethod;
-        public TChatFilterMethod ChatFilterMethod;
-        public TOverSpeedMsgMethod SpeedHackWarnMethod;
+        public ChatFilterMethod ChatFilterMethod;
+        public OverSpeedMsgMethod SpeedHackWarnMethod;
 
         public GateConfig()
         {
@@ -287,8 +287,8 @@ namespace GameGate.Conf
             PunishMoveInterval = 150;
             PunishSpellInterval = 150;
             PunishAttackInterval = 150;
-            ChatFilterMethod = TChatFilterMethod.ReplaceAll;
-            SpeedHackWarnMethod = TOverSpeedMsgMethod.ptSysmsg;
+            ChatFilterMethod = ChatFilterMethod.ReplaceAll;
+            SpeedHackWarnMethod = OverSpeedMsgMethod.ptSysmsg;
             MaxItemSpeed = 6;
             MaxItemSpeedRate = 60;
             ClientShowHintNewType = true;

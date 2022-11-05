@@ -27,7 +27,7 @@ namespace GameGate.Services
         {
             var clientId = Guid.NewGuid().ToString("N");
             _waitCloseQueue = new ConcurrentQueue<int>();
-            _serverSocket = new SocketServer(1000, 500);
+            _serverSocket = new SocketServer(GateShare.MaxSession, 500);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -47,7 +47,7 @@ namespace GameGate.Services
             _clientThread.Start();
             _clientThread.RestSessionArray();
             _sendQueue.ProcessSendQueue(stoppingToken);
-            LogQueue.Log($"网关[{_gateEndPoint}]已启动...", 1);
+            LogQueue.Log($"游戏网关[{_gateEndPoint}]已启动...", 1);
         }
 
         public void Stop()
