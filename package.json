@@ -6,7 +6,7 @@
   "scripts": {
     "commit": "git-cz && git push",
     "release": "standard-version",
-    "changelog": "conventional-changelog -p cmyr-config -i CHANGELOG.md -s -r 0",
+    "changelog": "conventional-changelog -p cmyr-config -i CHANGELOG.md -s -r 0 -n ./changelog-option.js",
     "alpha": "npm run release -- --prerelease alpha",
     "publish": "git push --follow-tags origin dev"
   },
