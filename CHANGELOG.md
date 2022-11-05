@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3-alpha.0](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.2...v1.1.3-alpha.0) (2022-11-05)
+
+
+### Bug Fixes
+
+* 修复LoginGate配置文件读取和保存问题 ([a646d3a](http://10.10.0.202/mir2/OpenMir2/commit/a646d3a16db9dde6d7d575792a38921628966399))
+
 ### [1.1.2](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.1...v1.1.2) (2022-11-05)
 
 ### [1.1.1](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.1-alpha.1...v1.1.1) (2022-11-05)
