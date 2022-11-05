@@ -22,7 +22,7 @@ namespace DBSvr.Services
     /// 角色数据服务
     /// DBSvr-SelGate-Client
     /// </summary>
-    public class UserSocService
+    public class UserService
     {
         private readonly MirLogger _logger;
         private readonly DBSvrConf _conf;
@@ -30,10 +30,10 @@ namespace DBSvr.Services
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
-        private readonly LoginSvrService _loginService;
+        private readonly LoginService _loginService;
         private readonly Channel<UsrSocMessage> _reviceQueue;
 
-        public UserSocService(MirLogger logger, DBSvrConf conf, LoginSvrService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public UserService(MirLogger logger, DBSvrConf conf, LoginService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _logger = logger;
             _loginService = loginService;

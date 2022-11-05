@@ -54,10 +54,10 @@ namespace DBSvr
             }
             services.AddSingleton(_config);
             services.AddSingleton<MirLogger>();
-            services.AddSingleton<LoginSvrService>();
-            services.AddSingleton<UserSocService>();
+            services.AddSingleton<LoginService>();
+            services.AddSingleton<UserService>();
             services.AddSingleton<HumDataService>();
-            services.AddSingleton<IMemoryStorageServive, MemoryStorageServive>();
+            services.AddSingleton<ICacheStorage, CacheStorageService>();
             switch (storagePolicy)
             {
                 case StoragePolicy.MySQL:
@@ -214,7 +214,7 @@ namespace DBSvr
         private async Task ShowServerStatus()
         {
             DBShare.ShowLog = false;
-            var userSoc = _host.Services.GetService<UserSocService>();
+            var userSoc = _host.Services.GetService<UserService>();
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = userSoc?.GateList;
             var table = new Table().Expand().BorderColor(Color.Grey);

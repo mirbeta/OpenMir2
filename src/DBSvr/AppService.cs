@@ -9,11 +9,11 @@ namespace DBSvr
     public class AppService : BackgroundService
     {
         private readonly ILogger<AppService> _logger;
-        private readonly UserSocService _userSocService;
-        private readonly LoginSvrService _loginSvrService;
+        private readonly UserService _userSocService;
+        private readonly LoginService _loginSvrService;
         private readonly HumDataService _dataService;
 
-        public AppService(ILogger<AppService> logger, UserSocService userSoc, LoginSvrService idSoc, HumDataService dataService)
+        public AppService(ILogger<AppService> logger, UserService userSoc, LoginService idSoc, HumDataService dataService)
         {
             _logger = logger;
             _userSocService = userSoc;

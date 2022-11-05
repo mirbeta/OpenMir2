@@ -6,7 +6,7 @@ using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.Impl
 {
-    public class MemoryStorageServive : IMemoryStorageServive
+    public class CacheStorageService : ICacheStorage
     {
         private readonly ConcurrentDictionary<string, HumDataInfo> _cacheMap = new ConcurrentDictionary<string, HumDataInfo>(StringComparer.OrdinalIgnoreCase);
 
@@ -35,7 +35,7 @@ namespace DBSvr.Storage.Impl
             }
         }
 
-        public IEnumerable<HumDataInfo> GetAll()
+        public IList<HumDataInfo> QueryCacheData()
         {
             return _cacheMap.Values.ToList();
         }
