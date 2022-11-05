@@ -16,13 +16,13 @@ namespace GameGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<ClientSessionPacket> ProcessMsgQueue;
+        private readonly Channel<MessagePacket> ProcessMsgQueue;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            ProcessMsgQueue = Channel.CreateUnbounded<ClientSessionPacket>();
+            ProcessMsgQueue = Channel.CreateUnbounded<MessagePacket>();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace GameGate.Services
         /// 添加到消息处理队列
         /// </summary>
         /// <param name="sessionPacket"></param>
-        public void Enqueue(ClientSessionPacket sessionPacket)
+        public void Enqueue(MessagePacket sessionPacket)
         {
             ProcessMsgQueue.Writer.TryWrite(sessionPacket);
         }

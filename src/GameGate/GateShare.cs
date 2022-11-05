@@ -47,16 +47,9 @@ namespace GameGate
         }
     }
 
-    public struct ClientSessionPacket
+    public struct MessagePacket
     {
         public byte[] Buffer;
-        public int BufferLen;
-        public int SessionId;
-    }
-
-    public struct ClientMessagePacket
-    {
-        public Memory<byte> Buffer;
         public int BufferLen;
         public int SessionId;
     }

@@ -91,11 +91,6 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(string connectionId, Memory<byte> buffer)
-        {
-            _serverSocket.SendAsync(connectionId, buffer);
-        }
-
         public void Send(string connectionId, Span<byte> buffer)
         {
             _serverSocket.Send(connectionId, buffer);
@@ -212,11 +207,13 @@ namespace GameGate.Services
                 }
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                var message = new ClientMessagePacket();
-                message.Buffer = data;
-                message.SessionId = token.SocHandle;
-                message.BufferLen = data.Length;
-                ServerMgr.ClientPacketQueue(message);
+                var message = new MessagePacket
+                {
+                    Buffer = data,
+                    SessionId = token.SocHandle,
+                    BufferLen = data.Length
+                };
+                ServerMgr.SendMessageQueue(message);
             }
             else
             {

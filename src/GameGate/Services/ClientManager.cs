@@ -40,11 +40,11 @@ namespace GameGate.Services
                 }
                 serverList[i] = new ServerService(gameGate);
             }
-            ServerManager.AddServer(serverList);
+            ServerManager.Initialization(serverList);
         }
 
         /// <summary>
-        /// 添加用户对饮网关
+        /// 添加用户对应网关
         /// </summary>
         public void AddClientThread(string connectionId, ClientThread clientThread)
         {
