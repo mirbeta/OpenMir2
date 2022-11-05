@@ -21,8 +21,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 缓冲区
         /// </summary>
         private readonly byte[] _databuffer;
-        private readonly MemoryPool<byte> _memoryPool;
-        
         /// <summary>
         /// 连接是否成功
         /// </summary>
