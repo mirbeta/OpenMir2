@@ -90,14 +90,15 @@ namespace LoginGate
                 {
                     continue;
                 }
-
                 if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
                 {
                     return;
                 }
-
+                if (input.Length < 2)
+                {
+                    return;
+                }
                 var firstTwoCharacters = input[..2];
-
                 if (firstTwoCharacters switch
                 {
                     "/s" => ShowServerStatus(),
@@ -109,7 +110,6 @@ namespace LoginGate
                     await task;
                     continue;
                 }
-
             } while (input is not "/exit");
         }
 
