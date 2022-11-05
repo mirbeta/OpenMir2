@@ -869,6 +869,11 @@
     "read-pkg-up" "^3.0.0"
     "through2" "^4.0.0"
 
+"conventional-changelog-custom-config@^0.3.1":
+  "integrity" "sha512-d4Lre8VZll1SVRmpoUe/LSj8Ge8QOt7u8MQyGz8vu/H/KiWf5rvdYkBo5z268QvkUrF43eI64QxVcqd9XOLsew=="
+  "resolved" "https://registry.npmjs.org/conventional-changelog-custom-config/-/conventional-changelog-custom-config-0.3.1.tgz"
+  "version" "0.3.1"
+
 "conventional-changelog-ember@^2.0.9":
   "integrity" "sha512-ulzIReoZEvZCBDhcNYfDIsLTHzYHc7awh+eI44ZtV5cx6LVxLlVtEmcO+2/kGIHGtw+qVabJYjdI5cJOQgXh1A=="
   "resolved" "https://registry.npmjs.org/conventional-changelog-ember/-/conventional-changelog-ember-2.0.9.tgz"
