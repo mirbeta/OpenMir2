@@ -626,6 +626,14 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
+"chalk@^4.1.2":
+  "integrity" "sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA=="
+  "resolved" "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
+  "version" "4.1.2"
+  dependencies:
+    "ansi-styles" "^4.1.0"
+    "supports-color" "^7.1.0"
+
 "chalk@^5.0.0", "chalk@5.0.1":
   "integrity" "sha512-Fo07WOYGqMfCWHOzSXOt2CxDbC6skS/jO9ynEcmpANMoPrD+W1r1K6Vx7iNm+AQmETU1Xr2t+n8nzkV9t6xh3w=="
   "resolved" "https://registry.npmjs.org/chalk/-/chalk-5.0.1.tgz"
@@ -725,7 +733,7 @@
   dependencies:
     "delayed-stream" "~1.0.0"
 
-"commitizen@^4.0.3", "commitizen@^4.2.5":
+"commitizen@^4.0.3", "commitizen@^4.2.4", "commitizen@^4.2.5":
   "integrity" "sha512-9sXju8Qrz1B4Tw7kC5KhnvwYQN88qs2zbiB8oyMsnXZyJ24PPGiNM3nHr73d32dnE3i8VJEXddBFIbOgYSEXtQ=="
   "resolved" "https://registry.npmjs.org/commitizen/-/commitizen-4.2.5.tgz"
   "version" "4.2.5"
@@ -1014,6 +1022,20 @@
   "version" "4.0.0"
   dependencies:
     "type-fest" "^1.0.1"
+
+"cz-conventional-changelog-cmyr@^1.0.0":
+  "integrity" "sha512-3+c8uWY4th1rHuaN7/WyXf6VkKQU8JlJM3JKSUdr0V4QMLZaxa6sbpgDQiyDFhX7sDSuQIq1o/a2iiysHZd9bg=="
+  "resolved" "https://registry.npmjs.org/cz-conventional-changelog-cmyr/-/cz-conventional-changelog-cmyr-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "chalk" "^4.1.2"
+    "commitizen" "^4.2.4"
+    "conventional-commit-types" "^3.0.0"
+    "lodash.map" "^4.6.0"
+    "longest" "^2.0.1"
+    "word-wrap" "^1.2.3"
+  optionalDependencies:
+    "@commitlint/load" ">6.1.1"
 
 "cz-conventional-changelog@^3.3.0", "cz-conventional-changelog@3.3.0":
   "integrity" "sha512-U466fIzU5U22eES5lTNiNbZ+d8dfcHcssH4o7QsdWaCcRs/feIPCxKYSWkYBNs5mny7MvEfwpTLWjvbm94hecw=="
@@ -2410,7 +2432,7 @@
   "resolved" "https://registry.npmjs.org/lodash.ismatch/-/lodash.ismatch-4.4.0.tgz"
   "version" "4.4.0"
 
-"lodash.map@^4.5.1":
+"lodash.map@^4.5.1", "lodash.map@^4.6.0":
   "integrity" "sha512-worNHGKLDetmcEYDvh2stPCrrQRkP20E4l0iIS7F8EvzMqBBi7ltvFN5m1HvTf1P7Jk1txKhvFcmYsCr8O2F1Q=="
   "resolved" "https://registry.npmjs.org/lodash.map/-/lodash.map-4.6.0.tgz"
   "version" "4.6.0"
@@ -4006,7 +4028,7 @@
   dependencies:
     "execa" "^5.1.1"
 
-"word-wrap@^1.0.3", "word-wrap@~1.2.3":
+"word-wrap@^1.0.3", "word-wrap@^1.2.3", "word-wrap@~1.2.3":
   "integrity" "sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ=="
   "resolved" "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.3.tgz"
   "version" "1.2.3"
