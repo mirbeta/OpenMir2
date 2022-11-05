@@ -1,6 +1,5 @@
 using GameGate.Conf;
 using System;
-using System.IO;
 using System.Net;
 using SystemModule;
 using SystemModule.Packet.ClientPackets;
@@ -311,6 +310,7 @@ namespace GameGate.Services
             catch (Exception ex)
             {
                 Logger.Log($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}", 5);
+                Logger.LogError(ex);
             }
         }
 
@@ -435,11 +435,16 @@ namespace GameGate.Services
                 CheckServerFailCount = 0;
                 return;
             }
-            if (CheckServerFail && CheckServerFailCount <= 20)
+            if (CheckServerFail && CheckServerFailCount <= ushort.MaxValue)
             {
                 ReConnected();
                 CheckServerFailCount++;
                 Logger.DebugLog($"链接服务器[{EndPoint}]失败.[{CheckServerFailCount}]");
+                return;
+            }
+            if (CheckServerFailCount >= ushort.MaxValue)
+            {
+                Logger.DebugLog("超过最大重试次数，请重启程序后再次确认链接是否正常。");
                 return;
             }
             CheckServerTimeOut();

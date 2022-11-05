@@ -3,8 +3,11 @@ using System;
 using System.IO;
 using SystemModule.Common;
 
-namespace GameGate
+namespace GameGate.Filters
 {
+    /// <summary>
+    /// ÎÄ×Ö¹ýÂË
+    /// </summary>
     public class AbusiveFilter
     {
         private readonly StringList AbuseList;
@@ -35,13 +38,13 @@ namespace GameGate
                 {
                     switch (_configManager.GateConfig.ChatFilterMethod)
                     {
-                        case TChatFilterMethod.Dropconnect:
+                        case ChatFilterMethod.Dropconnect:
                             kick = false;
                             break;
-                        case TChatFilterMethod.ReplaceAll:
+                        case ChatFilterMethod.ReplaceAll:
                             chatMsg = _configManager.GateConfig.m_szChatFilterReplace;
                             break;
-                        case TChatFilterMethod.ReplaceOne:
+                        case ChatFilterMethod.ReplaceOne:
                             var szRplace = string.Empty;
                             for (int j = 0; j < AbuseList[i].Length; j++)
                             {

@@ -4,6 +4,7 @@ using GameGate.Packet;
 using System;
 using System.Collections.Generic;
 using SystemModule;
+using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameGate.Services
@@ -1166,7 +1167,7 @@ namespace GameGate.Services
                             SendKickMsg(4);
                             return;
                         }
-                        HardwareHeader pHardwareHeader = new HardwareHeader(dest);
+                        HardwareHeader pHardwareHeader = Packets.ToPacket<HardwareHeader>(dest);
                         //todo session会话里面需要存用户ip
                         LogQueue.Log($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {Addr}", 1);
                         if (pHardwareHeader.dwMagicCode == 0x13F13F13)

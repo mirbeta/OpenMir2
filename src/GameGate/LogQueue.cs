@@ -27,7 +27,7 @@ namespace GameGate
             }
         }
 
-        public void Enqueue(Exception ex)
+        public void LogError(Exception ex)
         {
             MessageLogQueue.Enqueue($"{ex.TargetSite} - {ex}");
         }

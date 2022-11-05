@@ -9,11 +9,6 @@ namespace GameGate.Packet
         public uint dwMagicCode;
         public byte[] xMd5Digest;
 
-        public HardwareHeader(byte[] buffer) : base(buffer)
-        {
-
-        }
-
         protected override void ReadPacket(BinaryReader reader)
         {
             dwMagicCode = reader.ReadUInt32();
