@@ -65,7 +65,7 @@ namespace SelGate.Services
                         clientSession?.HandleUserPacket(message);
                     }
                 }
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)

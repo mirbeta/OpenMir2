@@ -58,7 +58,7 @@ namespace SelGate.Services
                         userSession.ProcessSvrData(message);
                     }
                 }
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         public void AddSession(int sessionId, ClientSession clientSession)
