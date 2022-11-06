@@ -93,7 +93,7 @@ namespace GameGate.Services
         /// <summary>
         /// 开启客户端消息消费线程
         /// </summary>
-        public void StartProcessMessage(CancellationToken stoppingToken)
+        public void StartMessageThread(CancellationToken stoppingToken)
         {
             Task.Factory.StartNew(() =>
             {
