@@ -84,10 +84,17 @@ namespace LoginGate.Services
                     if (_messageQueue.Reader.TryRead(out var message))
                     {
                         var clientSession = _sessionManager.GetSession(message.ConnectionId);
-                        clientSession?.HandleClientPacket(message);
+                        try
+                        {
+                            clientSession?.HandleClientPacket(message);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e);
+                        }
                     }
                 }
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         public void Initialization()

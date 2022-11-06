@@ -100,7 +100,7 @@ namespace LoginGate.Services
                         userSession.ProcessSvrData(message);
                     }
                 }
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         /// <summary>
