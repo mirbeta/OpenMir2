@@ -140,7 +140,7 @@ namespace GameGate
         {
             GateShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            IList<ServerService> serverList = ServerManager.Instance.GetServerList();
+            var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
@@ -163,7 +163,7 @@ namespace GameGate
 
                      while (await _timer.WaitForNextTickAsync(CancellationToken.Token))
                      {
-                         for (var i = 0; i < serverList.Count; i++)
+                         for (var i = 0; i < serverList.Length; i++)
                          {
                              var (endPoint, status, playCount, reviceTotal, sendTotal, queueCount, threads) = serverList[i].GetStatus();
 

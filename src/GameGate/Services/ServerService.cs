@@ -80,9 +80,9 @@ namespace GameGate.Services
         }
 
         /// <summary>
-        /// 处理等待关闭链接列表
+        /// 关闭等待链接列表
         /// </summary>
-        public void ProcessWaitCloseList()
+        public void CloseWaitList()
         {
             while (!_waitCloseQueue.IsEmpty)
             {

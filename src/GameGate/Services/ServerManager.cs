@@ -135,7 +135,7 @@ namespace GameGate.Services
             }, stoppingToken);
         }
 
-        public IList<ServerService> GetServerList()
+        public ServerService[] GetServerList()
         {
             return _serverServices;
         }

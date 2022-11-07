@@ -74,7 +74,7 @@ namespace CloudGate
                     {
                         continue;
                     }
-                    var cmdPacket = new PacketHeader();
+                    var cmdPacket = new GameServerPacket();
                     cmdPacket.PacketCode = Grobal2.RUNGATECODE;
                     cmdPacket.Socket = 0;
                     cmdPacket.Ident = Grobal2.GM_CHECKCLIENT;

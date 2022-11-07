@@ -577,7 +577,7 @@ namespace CloudGate.Services
                         }
 
                         byte[] BodyBuffer;
-                        var cmdPack = new PacketHeader();
+                        var cmdPack = new GameServerPacket();
                         cmdPack.PacketCode = Grobal2.RUNGATECODE;
                         cmdPack.Socket = _session.SckHandle;
                         cmdPack.Ident = Grobal2.GM_DATA;
@@ -587,17 +587,17 @@ namespace CloudGate.Services
                             var sendBuffer = new byte[message.Buffer.Length - ClientMesaagePacket.PackSize + 1];
                             var tLen = PacketEncoder.EncodeBuf(packBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
                             cmdPack.PackLength = ClientMesaagePacket.PackSize + tLen + 1;
-                            BodyBuffer = new byte[PacketHeader.PacketSize + cmdPack.PackLength];
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, ClientMesaagePacket.PackSize);
+                            BodyBuffer = new byte[GameServerPacket.PacketSize + cmdPack.PackLength];
+                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, GameServerPacket.PacketSize, ClientMesaagePacket.PackSize);
                             Buffer.BlockCopy(tempBuff, 16, BodyBuffer, 32, tLen); //消息体
                         }
                         else
                         {
-                            BodyBuffer = new byte[PacketHeader.PacketSize + packBuff.Length];
+                            BodyBuffer = new byte[GameServerPacket.PacketSize + packBuff.Length];
                             cmdPack.PackLength = ClientMesaagePacket.PackSize;
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, packBuff.Length);
+                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, GameServerPacket.PacketSize, packBuff.Length);
                         }
-                        Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, PacketHeader.PacketSize);//复制消息头
+                        Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, GameServerPacket.PacketSize);//复制消息头
                         _sessionManager.SendQueue(BodyBuffer);
                         break;
                     }
@@ -1145,19 +1145,19 @@ namespace CloudGate.Services
             byte[] tempBuff;
             if (len == 0)
             {
-                tempBuff = new byte[PacketHeader.PacketSize + packet.Length];
+                tempBuff = new byte[GameServerPacket.PacketSize + packet.Length];
             }
             else
             {
-                tempBuff = new byte[PacketHeader.PacketSize + len];
+                tempBuff = new byte[GameServerPacket.PacketSize + len];
             }
-            var GateMsg = new PacketHeader();
+            var GateMsg = new GameServerPacket();
             GateMsg.PacketCode = Grobal2.RUNGATECODE;
             GateMsg.Socket = (int)_session.Socket.Handle;
             GateMsg.SessionId = _session.SessionId;
             GateMsg.Ident = Grobal2.GM_DATA;
             GateMsg.ServerIndex = _session.nUserListIndex;
-            GateMsg.PackLength = tempBuff.Length - PacketHeader.PacketSize;//只需要发送数据封包大小即可
+            GateMsg.PackLength = tempBuff.Length - GameServerPacket.PacketSize;//只需要发送数据封包大小即可
             var sendBuffer = GateMsg.GetBuffer();
             Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
