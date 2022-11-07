@@ -12,11 +12,11 @@ namespace GameGate.Services
     {
         private static readonly SessionManager instance = new SessionManager();
         public static SessionManager Instance => instance;
-
+        private static MirLog Logger => MirLog.Instance;
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<MessagePacket> ProcessMsgQueue;
+        private Channel<MessagePacket> ProcessMsgQueue { get; }
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
@@ -33,7 +33,6 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到消息处理队列
         /// </summary>
-        /// <param name="sessionPacket"></param>
         public void Enqueue(MessagePacket sessionPacket)
         {
             ProcessMsgQueue.Writer.TryWrite(sessionPacket);
@@ -61,7 +60,7 @@ namespace GameGate.Services
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e);
+                            Logger.LogError(e);
                         }
                     }
                 }
