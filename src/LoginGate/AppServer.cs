@@ -62,7 +62,7 @@ namespace LoginGate
         {
             Logger.Debug("LoginGate is starting.");
             Logger.Info("正在启动服务...", 2);
-            _host = await Builder.StartAsync(cancellationToken);
+            Host = await Builder.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
         }
@@ -133,12 +133,12 @@ namespace LoginGate
             {
                 _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             }
-            var clientManager = (ClientManager)_host.Services.GetService(typeof(ClientManager));
+            var clientManager = (ClientManager)Host.Services.GetService(typeof(ClientManager));
             if (clientManager == null)
             {
                 return;
             }
-            var serverManager = (ServerManager)_host.Services.GetService(typeof(ServerManager));
+            var serverManager = (ServerManager)Host.Services.GetService(typeof(ServerManager));
             if (serverManager == null)
             {
                 return;

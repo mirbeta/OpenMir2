@@ -90,7 +90,7 @@ namespace DBSvr
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            _host = await Builder.StartAsync(cancellationToken);
+            Host = await Builder.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
         }
@@ -214,7 +214,7 @@ namespace DBSvr
         private async Task ShowServerStatus()
         {
             DBShare.ShowLog = false;
-            var userSoc = _host.Services.GetService<UserService>();
+            var userSoc = Host.Services.GetService<UserService>();
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = userSoc?.GateList;
             var table = new Table().Expand().BorderColor(Color.Grey);

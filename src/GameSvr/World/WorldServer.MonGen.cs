@@ -21,7 +21,6 @@ namespace GameSvr.World
         /// 怪物刷新列表
         /// </summary>
         public readonly IList<MonGenInfo> MonGenList;
-        private readonly Dictionary<string, int> MonGenCountInfo;
         /// <summary>
         /// 怪物对应线程
         /// </summary>

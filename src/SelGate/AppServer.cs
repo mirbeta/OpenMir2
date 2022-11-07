@@ -56,7 +56,7 @@ namespace SelGate
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            _host = await Builder.StartAsync(cancellationToken);
+            Host = await Builder.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
         }
@@ -110,7 +110,7 @@ namespace SelGate
 
         private Task ReLoadConfig()
         {
-            var config = _host.Services.GetService<ConfigManager>();
+            var config = Host.Services.GetService<ConfigManager>();
             config?.ReLoadConfig();
             Logger.Info("重新读取配置文件完成...");
             return Task.CompletedTask;

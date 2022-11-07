@@ -62,7 +62,7 @@ namespace LoginSvr
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             Logger.Info("正在启动服务器...");
-            _host = await Builder.StartAsync(cancellationToken);
+            Host = await Builder.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
             Logger.Info("正在等待服务器连接...");
@@ -140,7 +140,7 @@ namespace LoginSvr
         {
             LsShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var masSocService = (SessionServer)_host.Services.GetService(typeof(SessionServer));
+            var masSocService = (SessionServer)Host.Services.GetService(typeof(SessionServer));
             var serverList = masSocService?.ServerList;
             var table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]Server[/]");
