@@ -17,9 +17,6 @@ namespace SelGate.Services
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
-        private int _processClearSessionTick = 0;
-        private int _lastChekSocketTick = 0;
-        private int _processDelayTick = 0;
 
         public ClientManager(MirLogger logQueue, SessionManager sessionManager,ConfigManager configManager)
         {
@@ -70,10 +67,7 @@ namespace SelGate.Services
             }
         }
 
-        public IList<ClientThread> GetAllClient()
-        {
-            return _clientList;
-        }
+        public IList<ClientThread> GetClients => _clientList;
 
         /// <summary>
         /// 添加用户对饮网关
@@ -116,144 +110,6 @@ namespace SelGate.Services
                 return GateShare.ServerGateList[random];
             }
             return null;
-        }
-
-        private IList<ClientThread> GetClientThreads()
-        {
-            return _clientList;
-        }
-
-        public void Process()
-        {
-            CleanOutSession();
-            ProcessDelayMsg();
-            CheckSocketState();
-        }
-
-        private void ProcessDelayMsg()
-        {
-            if (HUtil32.GetTickCount() - _processDelayTick > 20 * 1000)
-            {
-                _processDelayTick = HUtil32.GetTickCount();
-                for (var i = 0; i < _clientList.Count; i++)
-                {
-                    if (_clientList[i] == null)
-                    {
-                        continue;
-                    }
-                    if (_clientList[i].SessionArray == null)
-                    {
-                        continue;
-                    }
-                    for (var j = 0; j < _clientList[i].SessionArray.Length; j++)
-                    {
-                        var session = _clientList[i].SessionArray[j];
-                        if (session == null)
-                        {
-                            continue;
-                        }
-                        if (session.Socket == null)
-                        {
-                            continue;
-                        }
-                        var userClient = _sessionManager.GetSession(session.SocketId);
-                        if (userClient == null)
-                        {
-                            continue;
-                        }
-                        var success = false;
-                        userClient.HandleDelayMsg(ref success);
-                        if (success)
-                        {
-                            _sessionManager.CloseSession(session.SocketId);
-                            _clientList[i].SessionArray[j].Socket = null;
-                            _clientList[i].SessionArray[j] = null;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void CleanOutSession()
-        {
-            if (HUtil32.GetTickCount() - _processClearSessionTick > 20 * 1000)
-            {
-                _processClearSessionTick = HUtil32.GetTickCount();
-                TSessionInfo UserSession;
-                var clientList = GetClientThreads();
-                for (var i = 0; i < clientList.Count; i++)
-                {
-                    if (clientList[i] == null)
-                    {
-                        continue;
-                    }
-                    for (var j = 0; j < ClientThread.MaxSession; j++)
-                    {
-                        UserSession = clientList[i].SessionArray[j];
-                        if (UserSession == null)
-                        {
-                            continue;
-                        }
-                        if (UserSession.Socket != null)
-                        {
-                            if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
-                            {
-                                UserSession.Socket.Close();
-                                UserSession.Socket = null;
-                                _sessionManager.CloseSession(UserSession.SocketId);
-                                UserSession = null;
-                                _logQueue.DebugLog("清理超时会话,关闭超时Socket.");
-                            }
-                        }
-                    }
-                }
-                _logQueue.DebugLog("Cleanup timeout session...");
-            }
-        }
-
-        private void CheckSocketState()
-        {
-            if (HUtil32.GetTickCount() - _lastChekSocketTick > 10000)
-            {
-                _lastChekSocketTick = HUtil32.GetTickCount();
-                var clientList = GetClientThreads();
-                for (var i = 0; i < clientList.Count; i++)
-                {
-                    if (clientList[i] == null)
-                    {
-                        continue;
-                    }
-                    CheckSessionStatus(clientList[i]);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 检查客户端和服务端之间的状态以及心跳维护
-        /// </summary>
-        /// <param name="clientThread"></param>
-        private void CheckSessionStatus(ClientThread clientThread)
-        {
-            if (clientThread.boGateReady)
-            {
-                clientThread.SendKeepAlive();
-                clientThread.CheckServerFailCount = 0;
-                return;
-            }
-            if ((HUtil32.GetTickCount() - GateShare.CheckServerTick) > GateShare.CheckServerTimeOutTime)
-            {
-                if (clientThread.CheckServerFail)
-                {
-                    clientThread.ReConnected();
-                    clientThread.CheckServerFailCount++;
-                    _logQueue.DebugLog($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
-                    return;
-                }
-                clientThread.CheckServerFail = true;
-                clientThread.Stop();
-                clientThread.CheckServerFailCount++;
-                _logQueue.DebugLog($"服务器[{clientThread.GetEndPoint()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
-            }
         }
     }
 }

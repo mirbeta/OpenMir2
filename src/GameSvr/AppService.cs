@@ -11,9 +11,9 @@ namespace GameSvr
         private readonly ILogger<AppService> _logger;
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly GameApp _mirApp;
-        private Task? _applicationTask;
+        private Task _applicationTask;
         private int? _exitCode;
-        private CancellationTokenSource? _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
         private readonly CommandLineApplication _application = new CommandLineApplication();
         private PeriodicTimer _timer;
 
