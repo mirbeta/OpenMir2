@@ -1,5 +1,6 @@
 ﻿using GameSvr.Player;
 using GameSvr.Services;
+using GameSvr.World;
 using NLog;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -556,12 +557,12 @@ namespace GameSvr.GateWay
                                     //var defMsg = Packets.ToPacket<ClientMesaagePacket>(MsgBuff);
                                     if (nMsgLen == 12)
                                     {
-                                        M2Share.WorldEngine.ProcessUserMessage(GateUser.PlayObject, clientMesaagePacket, null);
+                                        WorldServer.ProcessUserMessage(GateUser.PlayObject, clientMesaagePacket, null);
                                     }
                                     else
                                     {
                                         var sMsg = EDCode.DeCodeString(HUtil32.GetString(MsgBuff, 12, MsgBuff.Length - 13));
-                                        M2Share.WorldEngine.ProcessUserMessage(GateUser.PlayObject, clientMesaagePacket, sMsg);
+                                        WorldServer.ProcessUserMessage(GateUser.PlayObject, clientMesaagePacket, sMsg);
                                     }
                                 }
                             }

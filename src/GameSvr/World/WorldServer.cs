@@ -20,17 +20,17 @@ namespace GameSvr.World
     public partial class WorldServer
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private int ProcessMapDoorTick;
-        private int ProcessMerchantTimeMax;
-        private int ProcessMerchantTimeMin;
-        private int ProcessMissionsTime;
-        private int ProcessNpcTimeMax;
-        private int ProcessNpcTimeMin;
-        private int SendOnlineHumTime;
-        private int ShowOnlineTick;
-        private int ProcessLoadPlayTick;
-        private int ProcHumIdx;
-        private int ProcBotHubIdx;
+        private int ProcessMapDoorTick { get; set; }
+        private int ProcessMerchantTimeMax { get; set; }
+        private int ProcessMerchantTimeMin { get; set; }
+        private int ProcessMissionsTime { get; set; }
+        private int ProcessNpcTimeMax { get; set; }
+        private int ProcessNpcTimeMin { get; set; }
+        private int SendOnlineHumTime { get; set; }
+        private int ShowOnlineTick { get; set; }
+        private int ProcessLoadPlayTick { get; set; }
+        private int ProcHumIdx { get; set; }
+        private int ProcBotHubIdx { get; set; }
         /// <summary>
         /// 交易NPC处理位置
         /// </summary>
@@ -38,15 +38,15 @@ namespace GameSvr.World
         /// <summary>
         /// NPC处理位置
         /// </summary>
-        private int NpcPosition;
+        private int NpcPosition { get; set; }
         /// <summary>
         /// 处理人物开始索引（每次处理人物数限制）
         /// </summary>
-        private int ProcessHumanLoopTime;
+        private int ProcessHumanLoopTime { get; set; }
         /// <summary>
         /// 处理假人间隔
         /// </summary>
-        public long RobotLogonTick;
+        public long RobotLogonTick { get; set; }
         public readonly IList<TAdminInfo> AdminList;
         private readonly IList<TGoldChangeInfo> _mChangeHumanDbGoldList;
         private readonly IList<SwitchDataInfo> _mChangeServerList;
@@ -101,7 +101,6 @@ namespace GameSvr.World
             MonsterList = new Dictionary<string, MonsterInfo>(StringComparer.OrdinalIgnoreCase);
             MonGenList = new List<MonGenInfo>();
             MonGenInfoThreadMap = new Dictionary<int, IList<MonGenInfo>>();
-            MonGenCountInfo = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MonsterThreadMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MagicList = new List<MagicInfo>();
             AdminList = new List<TAdminInfo>();
@@ -163,7 +162,6 @@ namespace GameSvr.World
                 }
 
                 ProcessHumans();
-                //ProcessMonsters(MobThreads[0]);
                 ProcessMerchants();
                 ProcessNpcs();
                 if ((HUtil32.GetTickCount() - ProcessMissionsTime) > 1000)
@@ -1019,7 +1017,7 @@ namespace GameSvr.World
         public Items.StdItem GetStdItem(string sItemName)
         {
             Items.StdItem result = null;
-            if (string.IsNullOrEmpty(sItemName)) return result;
+            if (string.IsNullOrEmpty(sItemName)) return null;
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 Items.StdItem stdItem = StdItemList[i];
@@ -1094,7 +1092,7 @@ namespace GameSvr.World
             return false;
         }
 
-        public void ProcessUserMessage(PlayObject playObject, ClientMesaagePacket defMsg, string buff)
+        public static void ProcessUserMessage(PlayObject playObject, ClientMesaagePacket defMsg, string buff)
         {
             var sMsg = string.Empty;
             if (playObject.OffLineFlag) return;

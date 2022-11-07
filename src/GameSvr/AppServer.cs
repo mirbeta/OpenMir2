@@ -30,11 +30,6 @@ namespace GameSvr
 
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
-            Builder.UseConsoleLifetime();
-            Builder.ConfigureHostOptions(options =>
-            {
-                options.ShutdownTimeout = TimeSpan.FromSeconds(30);
-            });
         }
 
         public void ConfigureServices(IServiceCollection services)

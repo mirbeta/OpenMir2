@@ -12,7 +12,7 @@ namespace SystemModule.Hosts
     {
         protected readonly ILogger Logger;
         protected readonly IConfigurationRoot Configuration;
-        protected IHost _host;
+        protected IHost Host;
         protected readonly IHostBuilder Builder;
 
         protected ServiceHost()
@@ -23,9 +23,14 @@ namespace SystemModule.Hosts
                 .GetCurrentClassLogger();
             Logger = LogManager.GetCurrentClassLogger();
             Builder = new HostBuilder();
+            Builder.UseConsoleLifetime();
+            Builder.ConfigureHostOptions(options =>
+            {
+                options.ShutdownTimeout = TimeSpan.FromSeconds(30);
+            });
         }
 
-        public IServiceProvider Services => _host?.Services;
+        public IServiceProvider Services => Host?.Services;
 
         public abstract Task StartAsync(CancellationToken cancellationToken);
 
