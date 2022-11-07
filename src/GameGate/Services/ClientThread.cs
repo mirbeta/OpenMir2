@@ -219,7 +219,7 @@ namespace GameGate.Services
             Span<byte> dataBuff = buff;
             try
             {
-                while (nLen >= PacketHeader.PacketSize)
+                while (nLen >= GameServerPacket.PacketSize)
                 {
                     Span<byte> packetHead = dataBuff[..20];
                     var packetCode = BitConverter.ToUInt32(packetHead[..4]);
@@ -329,17 +329,29 @@ namespace GameGate.Services
             }
         }
 
-        public void SendServerMsg(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
-            string data)
+        private void SendServerMsg(ushort command, ushort socketIndex, int nSocket, ushort userIndex, int nLen, string data)
         {
+            var gateMsg = new GameServerPacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = nSocket,
+                SessionId = socketIndex,
+                Ident = command,
+                ServerIndex = userIndex,
+                PackLength = nLen
+            };
+            var sendBuffer = gateMsg.GetBuffer();
             if (!string.IsNullOrEmpty(data))
             {
                 var strBuff = HUtil32.GetBytes(data);
-                SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, strBuff);
+                var tempBuff = new byte[20 + data.Length];
+                MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+                MemoryCopy.BlockCopy(strBuff, 0, tempBuff, sendBuffer.Length, data.Length);
+                SendBuffer(tempBuff);
             }
             else
             {
-                SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, (byte[])null);
+                SendBuffer(sendBuffer);
             }
         }
 
@@ -359,32 +371,6 @@ namespace GameGate.Services
             SendServerMsg(Grobal2.GM_CLOSE, 0, scoket, 0, 0, "");
         }
 
-        private void SendServerMsg(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
-            byte[] data)
-        {
-            var gateMsg = new PacketHeader
-            {
-                PacketCode = Grobal2.RUNGATECODE,
-                Socket = nSocket,
-                SessionId = wSocketIndex,
-                Ident = nIdent,
-                ServerIndex = nUserListIndex,
-                PackLength = nLen
-            };
-            var sendBuffer = gateMsg.GetBuffer();
-            if (data is { Length: > 0 })
-            {
-                var tempBuff = new byte[20 + data.Length];
-                MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-                MemoryCopy.BlockCopy(data, 0, tempBuff, sendBuffer.Length, data.Length);
-                SendBuffer(tempBuff);
-            }
-            else
-            {
-                SendBuffer(sendBuffer);
-            }
-        }
-
         /// <summary>
         /// 发送消息到GameSvr
         /// </summary>
@@ -396,7 +382,7 @@ namespace GameGate.Services
                 return;
             }
             SendBytes += sendBuffer.Length;
-            ClientSocket.SendMessage(sendBuffer);
+            ClientSocket.Send(sendBuffer);
         }
         
         /// <summary>

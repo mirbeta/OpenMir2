@@ -250,7 +250,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var MsgHdr = new PacketHeader
+            var MsgHdr = new GameServerPacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = m_nSocket,
@@ -288,7 +288,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var messageHead = new PacketHeader
+            var messageHead = new GameServerPacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = m_nSocket,
@@ -310,7 +310,7 @@ namespace GameSvr.Player
                 {
                     messageHead.PackLength = 12;
                 }
-                nSendBytes = messageHead.PackLength + PacketHeader.PacketSize;
+                nSendBytes = messageHead.PackLength + GameServerPacket.PacketSize;
                 backingStream.Write(nSendBytes);
                 backingStream.Write(messageHead.GetBuffer());
                 backingStream.Write(defMsg.GetBuffer());
@@ -319,7 +319,7 @@ namespace GameSvr.Player
             {
                 bMsg = HUtil32.GetBytes(sMsg);
                 messageHead.PackLength = -bMsg.Length;
-                nSendBytes = Math.Abs(messageHead.PackLength) + PacketHeader.PacketSize;
+                nSendBytes = Math.Abs(messageHead.PackLength) + GameServerPacket.PacketSize;
                 backingStream.Write(nSendBytes);
                 backingStream.Write(messageHead.GetBuffer());
             }

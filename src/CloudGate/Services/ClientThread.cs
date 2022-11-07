@@ -144,7 +144,7 @@ namespace CloudGate.Services
         private void SendServerMsg(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
             byte[] Data)
         {
-            var GateMsg = new PacketHeader();
+            var GateMsg = new GameServerPacket();
             GateMsg.PacketCode = Grobal2.RUNGATECODE;
             GateMsg.Socket = nSocket;
             GateMsg.SessionId = wSocketIndex;

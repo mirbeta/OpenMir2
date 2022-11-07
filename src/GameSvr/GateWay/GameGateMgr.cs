@@ -251,7 +251,7 @@ namespace GameSvr.GateWay
         public void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
         {
             var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            var msgHeader = new PacketHeader();
+            var msgHeader = new GameServerPacket();
             msgHeader.PacketCode = Grobal2.RUNGATECODE;
             msgHeader.Socket = nSocket;
             msgHeader.SessionId = nGsIdx;
@@ -317,14 +317,14 @@ namespace GameSvr.GateWay
         private void SendGateTestMsg(int nIndex)
         {
             var defMsg = new ClientMesaagePacket();
-            var msgHdr = new PacketHeader
+            var msgHdr = new GameServerPacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
                 Ident = Grobal2.GM_TEST,
                 PackLength = 100
             };
-            var nLen = msgHdr.PackLength + PacketHeader.PacketSize;
+            var nLen = msgHdr.PackLength + GameServerPacket.PacketSize;
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
@@ -345,7 +345,7 @@ namespace GameSvr.GateWay
             {
                 return;
             }
-            var msgHeader = new PacketHeader
+            var msgHeader = new GameServerPacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
@@ -378,7 +378,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 收到GameGate发来的消息并添加到GameSvr消息队列
         /// </summary>
-        public void AddGameGateQueue(int gateIdx, PacketHeader packet, byte[] data)
+        public void AddGameGateQueue(int gateIdx, GameServerPacket packet, byte[] data)
         {
             _receiveQueue.Writer.TryWrite(new ReceiveData()
             {
@@ -447,7 +447,7 @@ namespace GameSvr.GateWay
 
     public struct ReceiveData
     {
-        public PacketHeader Packet;
+        public GameServerPacket Packet;
         public byte[] Data;
         public int GateId;
     }

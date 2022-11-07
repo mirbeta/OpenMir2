@@ -22,7 +22,7 @@ namespace GameSvr.GateWay
         private byte[] _gateBuff;
         private int _buffLen;
         private readonly CancellationTokenSource _cancellation;
-        private readonly PacketHeader packetHeader;
+        private readonly GameServerPacket packetHeader;
         private readonly ClientMesaagePacket clientMesaagePacket;
 
         public GameGate(int gateIdx, GameGateInfo gateInfo)
@@ -32,7 +32,7 @@ namespace GameSvr.GateWay
             _runSocketSection = new object();
             _sendQueue = new GateSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
-            packetHeader = new PacketHeader();
+            packetHeader = new GameServerPacket();
             clientMesaagePacket = new ClientMesaagePacket();
         }
 
@@ -88,7 +88,7 @@ namespace GameSvr.GateWay
             Span<byte> protoBuff = packetBuff;
             try
             {
-                while (nLen >= PacketHeader.PacketSize)
+                while (nLen >= GameServerPacket.PacketSize)
                 {
                     Span<byte> packetHead = protoBuff[..20];
                     if (packetHead.Length < 20)
@@ -97,7 +97,7 @@ namespace GameSvr.GateWay
                     }
                     packetHeader.PacketCode = BitConverter.ToUInt32(packetHead[..4]);
                     packetHeader.PackLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
-                    var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + PacketHeader.PacketSize;
+                    var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + GameServerPacket.PacketSize;
                     if (packetHeader.PacketCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                     {
                         if (nLen < nCheckMsgLen)
@@ -112,7 +112,7 @@ namespace GameSvr.GateWay
                         if (packetHeader.PackLength > 0)
                         {
                             body = protoBuff[..nCheckMsgLen]; //获取整个封包内容,包括消息头和消息体
-                            body = body[PacketHeader.PacketSize..];
+                            body = body[GameServerPacket.PacketSize..];
                         }
                         //M2Share.GateMgr.AddGameGateQueue(_gateIdx, msgHeader, body); //添加到处理队列
                         ExecGateBuffers(packetHeader, body);
@@ -135,10 +135,10 @@ namespace GameSvr.GateWay
                             _buffLen = 0;
                             break;
                         }
-                        protoBuff = protoBuff.Slice(buffIndex, PacketHeader.PacketSize);
+                        protoBuff = protoBuff.Slice(buffIndex, GameServerPacket.PacketSize);
                         nLen -= 1;
                     }
-                    if (nLen < PacketHeader.PacketSize)
+                    if (nLen < GameServerPacket.PacketSize)
                     {
                         break;
                     }
@@ -248,7 +248,7 @@ namespace GameSvr.GateWay
             {
                 return;
             }
-            var msgHeader = new PacketHeader
+            var msgHeader = new GameServerPacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
@@ -265,7 +265,7 @@ namespace GameSvr.GateWay
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        private void ExecGateBuffers(PacketHeader packet, Span<byte> data)
+        private void ExecGateBuffers(GameServerPacket packet, Span<byte> data)
         {
             if (packet.PackLength == 0)
             {
@@ -476,7 +476,7 @@ namespace GameSvr.GateWay
             {
                 return;
             }
-            var MsgHeader = new PacketHeader();
+            var MsgHeader = new GameServerPacket();
             MsgHeader.PacketCode = Grobal2.RUNGATECODE;
             MsgHeader.Socket = nSocket;
             MsgHeader.SessionId = socketId;
@@ -490,7 +490,7 @@ namespace GameSvr.GateWay
             }
         }
 
-        private void ExecGateMessage(int GateIdx, GameGateInfo Gate, PacketHeader MsgHeader, Span<byte> MsgBuff, int nMsgLen)
+        private void ExecGateMessage(int GateIdx, GameGateInfo Gate, GameServerPacket MsgHeader, Span<byte> MsgBuff, int nMsgLen)
         {
             int nUserIdx;
             const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg";

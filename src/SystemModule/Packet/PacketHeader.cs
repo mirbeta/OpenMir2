@@ -5,7 +5,7 @@ namespace SystemModule.Packet.ClientPackets
     /// <summary>
     /// 封包消息头
     /// </summary>
-    public class PacketHeader : Packets
+    public class GameServerPacket : Packets
     {
         public uint PacketCode;
         /// <summary>
@@ -45,13 +45,13 @@ namespace SystemModule.Packet.ClientPackets
 
     public class ClientOutMessage : Packets
     {
-        private PacketHeader MessageHeader;
-        private ClientMesaagePacket DefaultMessage;
+        private GameServerPacket MessageHeader;
+        private ClientMesaagePacket clientMesaage;
 
-        public ClientOutMessage(PacketHeader messageHeader, ClientMesaagePacket defaultMessage)
+        public ClientOutMessage(GameServerPacket messageHeader, ClientMesaagePacket clientMesaage)
         {
             MessageHeader = messageHeader;
-            DefaultMessage = defaultMessage;
+            this.clientMesaage = clientMesaage;
         }
 
         protected override void ReadPacket(BinaryReader reader)
@@ -61,10 +61,9 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            var nLen = MessageHeader.PackLength + 20;
-            writer.Write(nLen);
+            writer.Write(MessageHeader.PackLength + GameServerPacket.PacketSize);
             writer.Write(MessageHeader.GetBuffer());
-            writer.Write(DefaultMessage.GetBuffer());
+            writer.Write(clientMesaage.GetBuffer());
         }
     }
 }

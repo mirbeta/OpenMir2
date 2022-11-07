@@ -13,10 +13,12 @@ namespace GameGate.Services
         private static readonly SessionManager instance = new SessionManager();
         public static SessionManager Instance => instance;
         private static MirLog Logger => MirLog.Instance;
+
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
         private Channel<MessagePacket> ProcessMsgQueue { get; }
+
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
@@ -64,7 +66,7 @@ namespace GameGate.Services
                         }
                     }
                 }
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         public void AddSession(int sessionId, ClientSession clientSession)
@@ -94,9 +96,9 @@ namespace GameGate.Services
             return false;
         }
 
-        public IList<ClientSession> GetAllSession()
+        public ICollection<ClientSession> GetSessions()
         {
-            return _sessionMap.Values.ToList();
+            return _sessionMap.Values;
         }
     }
 }
