@@ -18,7 +18,7 @@ namespace GameGate.Services
         /// 网关ID
         /// </summary>
         public readonly string ClientId;
-        private IPEndPoint GateEndPoint { get; set; }
+        private IPEndPoint GateEndPoint { get; }
         /// <summary>
         /// 用户会话
         /// </summary>
@@ -26,11 +26,11 @@ namespace GameGate.Services
         /// <summary>
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
-        public bool CheckServerFail { get; set; }
+        private bool CheckServerFail { get; set; }
         /// <summary>
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
-        public int CheckServerFailCount { get; set; }
+        private int CheckServerFailCount { get; set; }
         /// <summary>
         /// Buffer
         /// </summary>
@@ -42,7 +42,7 @@ namespace GameGate.Services
         /// <summary>
         /// 网关是否就绪
         /// </summary>
-        public bool GateReady { get; set; }
+        private bool GateReady { get; set; }
         /// <summary>
         /// 是否链接成功
         /// </summary>
