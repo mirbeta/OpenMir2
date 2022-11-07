@@ -147,6 +147,8 @@ namespace GameGate
             table.AddColumn("[yellow]Online[/]");
             table.AddColumn("[yellow]Send[/]");
             table.AddColumn("[yellow]Revice[/]");
+            table.AddColumn("[yellow]Total Send[/]");
+            table.AddColumn("[yellow]Total Revice[/]");
             table.AddColumn("[yellow]Queue[/]");
             table.AddColumn("[yellow]WorkThread[/]");
 
@@ -165,15 +167,17 @@ namespace GameGate
                      {
                          for (var i = 0; i < serverList.Length; i++)
                          {
-                             var (endPoint, status, playCount, reviceTotal, sendTotal, queueCount, threads) = serverList[i].GetStatus();
+                             var (endPoint, status, playCount, reviceTotal, sendTotal, totalrevice, totalSend, queueCount, threads) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, $"[bold]{endPoint}[/]");
                              table.UpdateCell(i, 1, $"[bold]{status}[/]");
                              table.UpdateCell(i, 2, $"[bold]{playCount}[/]");
                              table.UpdateCell(i, 3, $"[bold]{sendTotal}[/]");
                              table.UpdateCell(i, 4, $"[bold]{reviceTotal}[/]");
-                             table.UpdateCell(i, 5, $"[bold]{queueCount}[/]");
-                             table.UpdateCell(i, 6, $"[bold]{threads}[/]");
+                             table.UpdateCell(i, 5, $"[bold]{totalSend}[/]");
+                             table.UpdateCell(i, 6, $"[bold]{totalrevice}[/]");
+                             table.UpdateCell(i, 7, $"[bold]{queueCount}[/]");
+                             table.UpdateCell(i, 8, $"[bold]{threads}[/]");
                          }
                          ctx.Refresh();
                      }
