@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using SystemModule.Sockets.Event;
 
 namespace SystemModule.Sockets.AsyncSocketClient
@@ -30,7 +31,14 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         public event DSCClientOnDisconnectedHandler OnDisconnected;
         public bool IsConnected = false;
-
+        /// <summary>
+        /// 服务器接收到的总字节数计数器
+        /// </summary>
+        private long _totalBytesRead;
+        /// <summary>
+        /// 服务器发送的字节总数
+        /// </summary>
+        private long _totalBytesWrite;
         /// <summary>
         /// 接受缓存数组
         /// </summary>
@@ -91,6 +99,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             try
             {
+                // 重置接收和发送字节总数
+                _totalBytesRead = 0;
+                _totalBytesWrite = 0;
                 connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPAddress address = IPAddress.Parse(Host);
                 IPEndPoint endpoint = new IPEndPoint(address, Port);
@@ -158,6 +169,51 @@ namespace SystemModule.Sockets.AsyncSocketClient
             IsConnected = false;
             CloseSocket();
             Start();
+        }
+
+        /// <summary>
+        /// 服务器发送的字节总数
+        /// </summary>
+        public long TotalBytesWrite => _totalBytesWrite;
+        /// <summary>
+        /// 服务器接收到的总字节数计数器
+        /// </summary>
+        public long TotalBytesRead => _totalBytesRead;
+        
+        /// <summary>
+        /// 获取大小的显示字符串
+        /// </summary>
+        /// <returns></returns>
+        public string FormatBytesValue(long length)
+        {
+            int byteConversion = 1024;
+            double bytes = Convert.ToDouble(length);
+            // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
+            if (bytes >= Math.Pow(byteConversion, 6)) // EB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 6), 2), " EB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 5)) // PB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 5), 2), " PB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 4)) // TB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 4), 2), " TB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 3)) // GB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 3), 2), " GB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 2)) // MB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 2), 2), " MB");
+            }
+            if (bytes >= byteConversion) // KB
+            {
+                return string.Concat(Math.Round(bytes / byteConversion, 2), " KB");
+            }
+            return string.Concat(bytes, " Bytes");// Bytes
         }
 
         /// <summary>
@@ -238,6 +294,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 AsyncUserToken token = (AsyncUserToken)e.UserToken;
+                // 增加发送计数器
+                Interlocked.Add(ref _totalBytesRead, e.BytesTransferred);
                 if (0 == e.BytesTransferred)
                 {
                     RaiseDisconnectedEvent(e.ConnectSocket);//引发断开连接事件
@@ -273,6 +331,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 AsyncUserToken token = (AsyncUserToken)e.UserToken;
+                // 增加发送到的字节总数
+                Interlocked.Add(ref _totalBytesWrite, e.BytesTransferred);
+                token.SetBytesReceived(e.BytesTransferred);
                 if (e.SocketError == SocketError.Success)
                 {
                     OnSendDataCompleted?.Invoke(this, new DSCClientSendDataEventArgs(e.ConnectSocket, e.BytesTransferred));

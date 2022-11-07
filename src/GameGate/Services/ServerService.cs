@@ -56,9 +56,11 @@ namespace GameGate.Services
             _serverSocket.Shutdown();
         }
 
-        public (string serverIp,  string Status, string playCount, string reviceTotal, string sendTotal, string queueCount, int threadCount) GetStatus()
+        public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string totalrevice, string totalSend, string queueCount, int threadCount) GetStatus()
         {
-            return (_gateEndPoint.ToString(), _clientThread.GetConnected(), _clientThread.GetSessionCount(), _clientThread.GetReceiveInfo(), _clientThread.GetSendInfo(), GetSendQueueCount(), GetMessageWorkThreads());
+            return (_gateEndPoint.ToString(), _clientThread.GetConnected(), _clientThread.GetSessionCount(),
+                _clientThread.ShowReceive(), _clientThread.ShowSend(),
+                _clientThread.TotalReceive, _clientThread.TotalSend, GetSendQueueCount(), GetMessageWorkThreads());
         }
 
         /// <summary>
