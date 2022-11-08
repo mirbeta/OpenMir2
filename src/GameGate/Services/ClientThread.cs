@@ -1,5 +1,7 @@
 using GameGate.Conf;
 using System;
+using System.IO;
+using System.Linq;
 using System.Net;
 using SystemModule;
 using SystemModule.Packet;
@@ -197,7 +199,7 @@ namespace GameGate.Services
         {
             var nMsgLen = e.BuffLen;
             var packetData = e.Buff[..nMsgLen];
-            if (BuffLen > 0)
+            if (BuffLen > 0 && ReceiveBuffer != null)
             {
                 byte[] tempBuff = new byte[BuffLen + nMsgLen];
                 MemoryCopy.BlockCopy(ReceiveBuffer, 0, tempBuff, 0, ReceiveBuffer.Length);
@@ -297,14 +299,13 @@ namespace GameGate.Services
                             };
                             if (packLength > 0)
                             {
-                                sessionPacket.Buffer = buff[20..packLength];
+                                sessionPacket.Buffer = dataBuff.Slice(20, packLength).ToArray();
                             }
                             else
                             {
                                 var packetSize = dataBuff.Length - HeaderMessageSize;
-                                sessionPacket.Buffer = buff[20..packetSize];
+                                sessionPacket.Buffer = dataBuff.Slice(20, packetSize).ToArray();
                             }
-
                             SessionManager.Enqueue(sessionPacket);
                             break;
                         case Grobal2.GM_TEST:

@@ -84,10 +84,7 @@ namespace LoginSvr.Services
                 {
                     if (clientSession.UserList.Count <= j) break;
                     var userInfo = clientSession.UserList[j];
-                    if (userInfo.SessionID > 0)
-                    {
-                        ProcessUserMsg(clientSession, userInfo, sMsg);
-                    }
+                    ProcessUserMsg(clientSession, userInfo, sMsg);
                     j++;
                 }
             }
