@@ -1,7 +1,7 @@
 ﻿using NLog;
 using System;
 
-namespace SystemModule
+namespace SystemModule.Logger
 {
     public class MirLogger
     {

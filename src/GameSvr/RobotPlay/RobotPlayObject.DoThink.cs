@@ -2,6 +2,7 @@ using GameSvr.Actor;
 using GameSvr.Magic;
 using System.Collections;
 using SystemModule;
+using SystemModule.Enums;
 
 namespace GameSvr.RobotPlay
 {

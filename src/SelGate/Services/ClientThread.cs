@@ -2,6 +2,7 @@ using SelGate.Package;
 using System;
 using System.Net;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets;

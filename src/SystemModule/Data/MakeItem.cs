@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Packet.ClientPackets
+﻿namespace SystemModule.Data
 {
     public class MakeItem
     {

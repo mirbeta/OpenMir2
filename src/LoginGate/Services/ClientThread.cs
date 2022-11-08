@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -12,7 +13,7 @@ using SystemModule.Sockets.Event;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// 网关客户端(LoginGate-Mir2)
+    /// 网关客户端(LoginGate-LoginSvr)
     /// </summary>
     public class ClientThread
     {
@@ -61,10 +62,11 @@ namespace LoginGate.Services
 
         public void ReConnected()
         {
-            if (_clientSocket.IsConnected == false)
+            if (IsConnected == false)
             {
                 _clientSocket.Connect(EndPoint);
             }
+            CheckServerFail = !IsConnected;
         }
 
         public void Stop()
@@ -185,6 +187,7 @@ namespace LoginGate.Services
                     _logger.LogInformation($"账号服务器[{EndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
                     break;
             }
+            CheckServerFail = true;
         }
 
         private void RestSessionArray()
@@ -210,7 +213,7 @@ namespace LoginGate.Services
 
         private void SendSocket(byte[] sendBuffer)
         {
-            if (_clientSocket.IsConnected)
+            if (IsConnected)
             {
                 _clientSocket.Send(sendBuffer);
                 SendBytes += sendBuffer.Length;

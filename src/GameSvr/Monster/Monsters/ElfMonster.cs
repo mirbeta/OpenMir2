@@ -1,4 +1,5 @@
 ﻿using SystemModule;
+using SystemModule.Enums;
 
 namespace GameSvr.Monster.Monsters
 {

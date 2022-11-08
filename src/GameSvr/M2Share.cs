@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.Logger;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr

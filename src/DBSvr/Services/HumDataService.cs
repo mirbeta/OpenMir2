@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Buffers;
 
-namespace GameGate
+namespace SystemModule
 {
     public class UserMemoryPool<T> : MemoryPool<T>
     {

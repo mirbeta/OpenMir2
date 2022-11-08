@@ -10,6 +10,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;

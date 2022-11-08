@@ -7,6 +7,7 @@ using GameSvr.Script;
 using System.Text;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSvr.Npc
 {

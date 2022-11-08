@@ -4,6 +4,7 @@ using GameSvr.Items;
 using GameSvr.Maps;
 using SystemModule;
 using SystemModule.Consts;
+using SystemModule.Enums;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.RobotPlay

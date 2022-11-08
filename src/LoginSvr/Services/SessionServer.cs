@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Logger;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 

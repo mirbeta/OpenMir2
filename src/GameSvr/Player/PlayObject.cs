@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.Enums;
+using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 

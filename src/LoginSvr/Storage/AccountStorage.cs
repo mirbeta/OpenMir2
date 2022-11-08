@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using SystemModule;
 using SystemModule.Extensions;
+using SystemModule.Logger;
 using SystemModule.Packet.ClientPackets;
 
 namespace LoginSvr.Storage

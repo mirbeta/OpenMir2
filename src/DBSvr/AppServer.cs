@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Hosts;
+using SystemModule.Logger;
 
 namespace DBSvr
 {

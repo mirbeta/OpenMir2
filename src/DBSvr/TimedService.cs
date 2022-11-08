@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr

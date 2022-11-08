@@ -1,5 +1,4 @@
 using GameGate.Services;
-using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -45,7 +44,7 @@ namespace GameGate
                         ServerMgr.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
                     }
                 }
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         private readonly struct ClientPacketQueueData

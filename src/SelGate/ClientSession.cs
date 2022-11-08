@@ -4,6 +4,7 @@ using SelGate.Services;
 using System;
 using System.Net.Sockets;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;

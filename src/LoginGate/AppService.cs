@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Logger;
 
 namespace LoginGate
 {

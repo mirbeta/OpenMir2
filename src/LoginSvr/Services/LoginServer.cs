@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets;
