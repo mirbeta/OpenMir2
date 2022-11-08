@@ -38,7 +38,7 @@ namespace GameGate.Services
         /// <summary>
         /// 封包发送缓冲区
         /// </summary>
-        private byte[] SendBuffer { get; set; }
+        private byte[] PacketBuffer { get; }
 
         public ClientSession(SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
@@ -51,7 +51,7 @@ namespace GameGate.Services
             _syncObj = new object();
             _gameSpeed = new SessionSpeed();
             SessionKey = Guid.NewGuid().ToString("N");
-            SendBuffer = new byte[1024];
+            PacketBuffer = new byte[1024];
             _authenticator = new DynamicAuthenticator();
         }
 
@@ -861,7 +861,7 @@ namespace GameGate.Services
             return true;
         }
 
-        private void SendData(byte[] packtData)
+        private void SendPacketData(byte[] packtData)
         {
             //_session.Socket.Send(packtData);
             SendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, packtData);
@@ -873,34 +873,32 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessServerPacket(MessagePacket clientPacket)
         {
-            //TODO 改为同步发送后在大量数据包下明显感觉到延时，还是需要修改为异步发送
-
             switch (clientPacket.BufferLen)
             {
                 case < 0://小包 走路 攻击等
                     {
-                        SendBuffer[0] = (byte)'#';
+                        PacketBuffer[0] = (byte)'#';
                         var buffLen = -clientPacket.BufferLen;
-                        Buffer.BlockCopy(clientPacket.Buffer, 0, SendBuffer, 1, buffLen);
-                        SendBuffer[buffLen + 1] = (byte)'!';
-                        var sendData = SendBuffer[..(buffLen + 2)];
-                        SendData(sendData);
+                        Buffer.BlockCopy(clientPacket.Buffer, 0, PacketBuffer, 1, buffLen);
+                        PacketBuffer[buffLen + 1] = (byte)'!';
+                        var sendData = PacketBuffer[..(buffLen + 2)];
+                        SendPacketData(sendData);
                         break;
                     }
                 case < 1024://普通正常游戏数据包，正常的游戏操作
                     {
-                        SendBuffer[0] = (byte)'#';
+                        PacketBuffer[0] = (byte)'#';
                         var packetBuff = clientPacket.Buffer;
-                        var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, SendBuffer, 1);//消息头
+                        var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, PacketBuffer, 1);//消息头
                         if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
                         {
                             var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
-                            MemoryCopy.BlockCopy(tempBuffer, 0, SendBuffer, nLen + 1, tempBuffer.Length);
+                            MemoryCopy.BlockCopy(tempBuffer, 0, PacketBuffer, nLen + 1, tempBuffer.Length);
                             nLen = tempBuffer.Length + nLen;
                         }
-                        SendBuffer[nLen + 1] = (byte)'!';
-                        var sendData = SendBuffer[..(nLen + 2)];
-                        SendData(sendData);
+                        PacketBuffer[nLen + 1] = (byte)'!';
+                        var sendData = PacketBuffer[..(nLen + 2)];
+                        SendPacketData(sendData);
                         break;
                     }
                 case > 1024://大型游戏数据包
@@ -917,7 +915,7 @@ namespace GameGate.Services
                         }
                         packBuff[nLen + 1] = (byte)'!';
                         var sendData = packBuff[..(nLen + 2)];
-                        SendData(sendData);
+                        SendPacketData(sendData);
                         break;
                     }
             }
