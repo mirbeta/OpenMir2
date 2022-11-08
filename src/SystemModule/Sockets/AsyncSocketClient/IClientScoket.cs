@@ -268,6 +268,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             {
                 OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(_cli.RemoteEndPoint, error.SocketErrorCode, error));
             }
+            IsConnected = false;
         }
 
         public void SendBuffer(byte[] data)

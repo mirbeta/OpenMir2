@@ -1,4 +1,4 @@
-namespace GameSvr
+namespace SystemModule.Enums
 {
     public class ActorRace
     {

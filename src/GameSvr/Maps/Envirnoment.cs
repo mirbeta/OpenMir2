@@ -8,6 +8,7 @@ using System.Text;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSvr.Maps
 {

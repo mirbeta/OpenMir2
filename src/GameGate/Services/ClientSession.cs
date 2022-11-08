@@ -604,17 +604,17 @@ namespace GameGate.Services
                     var sendBuffer = new byte[messagePacket.Buffer.Length - ClientMesaagePacket.PackSize + 1];
                     var tLen = PacketEncoder.EncodeBuf(decodeBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
                     cmdPack.PackLength = ClientMesaagePacket.PackSize + tLen + 1;
-                    BodyBuffer = new byte[SystemModule.Packet.ClientPackets.GameServerPacket.PacketSize + cmdPack.PackLength];
-                    Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, SystemModule.Packet.ClientPackets.GameServerPacket.PacketSize, ClientMesaagePacket.PackSize);
+                    BodyBuffer = new byte[GameServerPacket.PacketSize + cmdPack.PackLength];
+                    Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, GameServerPacket.PacketSize, ClientMesaagePacket.PackSize);
                     Buffer.BlockCopy(tempBuff.ToArray(), 16, BodyBuffer, 32, tLen); //消息体
                 }
                 else
                 {
-                    BodyBuffer = new byte[SystemModule.Packet.ClientPackets.GameServerPacket.PacketSize + decodeBuff.Length];
+                    BodyBuffer = new byte[GameServerPacket.PacketSize + decodeBuff.Length];
                     cmdPack.PackLength = ClientMesaagePacket.PackSize;
-                    Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, SystemModule.Packet.ClientPackets.GameServerPacket.PacketSize, decodeBuff.Length);
+                    Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, GameServerPacket.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, SystemModule.Packet.ClientPackets.GameServerPacket.PacketSize);//复制消息头
+                Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, GameServerPacket.PacketSize);//复制消息头
                 ClientThread.SendBuffer(BodyBuffer);
             }
             else

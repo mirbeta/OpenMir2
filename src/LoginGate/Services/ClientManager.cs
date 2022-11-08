@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Packet.ServerPackets;
 
 namespace LoginGate.Services
@@ -185,7 +186,6 @@ namespace LoginGate.Services
                     _logger.DebugLog($"重新与服务器[{clientThread.EndPoint}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;
                 }
-                clientThread.CheckServerFail = true;
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
                 _logger.DebugLog($"服务器[{clientThread.EndPoint}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");

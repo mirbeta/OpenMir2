@@ -2,6 +2,7 @@ using GameGate.Conf;
 using System;
 using System.Net;
 using SystemModule;
+using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;

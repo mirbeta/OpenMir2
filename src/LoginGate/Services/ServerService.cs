@@ -3,6 +3,7 @@ using LoginGate.Packet;
 using System;
 using System.Net;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 

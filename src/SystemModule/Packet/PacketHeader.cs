@@ -1,6 +1,7 @@
 using System.IO;
+using SystemModule.Packet.ClientPackets;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Packet
 {
     /// <summary>
     /// 封包消息头

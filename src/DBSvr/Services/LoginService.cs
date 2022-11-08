@@ -2,6 +2,7 @@ using DBSvr.Conf;
 using System;
 using System.Collections.Generic;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 

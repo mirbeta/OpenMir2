@@ -5,6 +5,7 @@ using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.World

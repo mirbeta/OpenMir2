@@ -6,6 +6,7 @@ using System.Data;
 using System.Text.Json;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.Extensions;
 using SystemModule.Packet.ClientPackets;
 

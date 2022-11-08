@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using SystemModule;
 using SystemModule.Hosts;
+using SystemModule.Logger;
 
 namespace GameSvr
 {

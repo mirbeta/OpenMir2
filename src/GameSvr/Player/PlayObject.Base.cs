@@ -7,6 +7,7 @@ using GameSvr.Script;
 using System.Collections;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.Player

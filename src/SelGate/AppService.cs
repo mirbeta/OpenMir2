@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SelGate.Conf;
 using SelGate.Services;
 using SystemModule;
+using SystemModule.Logger;
 
 namespace SelGate
 {

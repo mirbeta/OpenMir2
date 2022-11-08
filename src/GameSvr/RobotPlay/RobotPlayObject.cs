@@ -9,6 +9,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Consts;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.RobotPlay

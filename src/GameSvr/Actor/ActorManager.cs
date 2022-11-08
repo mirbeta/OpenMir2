@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using SystemModule;
+using SystemModule.Enums;
 
 namespace GameSvr.Actor
 {

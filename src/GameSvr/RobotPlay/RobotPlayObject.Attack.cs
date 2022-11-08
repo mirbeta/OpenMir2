@@ -1,6 +1,7 @@
 using GameSvr.Magic;
 using SystemModule;
 using SystemModule.Consts;
+using SystemModule.Enums;
 using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.RobotPlay
