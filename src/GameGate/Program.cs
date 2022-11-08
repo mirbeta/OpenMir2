@@ -184,7 +184,7 @@ namespace GameGate
                  });
         }
 
-        static void PrintUsage()
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GameGate.logo.png");

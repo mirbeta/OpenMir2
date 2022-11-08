@@ -73,15 +73,15 @@ namespace GameGate
         /// 数据处理ThreadId
         /// </summary>
         public int ThreadId;
-        public ushort nUserListIndex;
-        public int dwReceiveTick;
-        public string sAccount;
-        public string sChrName;
+        public ushort UserListIndex;
+        public int ReceiveTick;
+        public string Account;
+        public string ChrName;
     }
 
     public class DelayMessage
     {
-        public int dwDelayTime;
+        public int DelayTime;
         public int Mag;
         public int Cmd;
         public int Dir;

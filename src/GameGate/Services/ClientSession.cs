@@ -782,7 +782,7 @@ namespace GameGate.Services
             while (MsgList.Count > count)
             {
                 DelayMessage msg = MsgList[count];
-                if (msg.dwDelayTime != 0 && HUtil32.GetTickCount() < msg.dwDelayTime)
+                if (msg.DelayTime != 0 && HUtil32.GetTickCount() < msg.DelayTime)
                 {
                     count++;
                     continue;
@@ -813,7 +813,7 @@ namespace GameGate.Services
                 pDelayMsg.Mag = nMid;
                 pDelayMsg.Dir = nDir;
                 pDelayMsg.Cmd = nIdx;
-                pDelayMsg.dwDelayTime = HUtil32.GetTickCount() + dwDelay;
+                pDelayMsg.DelayTime = HUtil32.GetTickCount() + dwDelay;
                 pDelayMsg.BufLen = nLen;
                 if (!string.IsNullOrEmpty(sMsg))
                 {
@@ -836,14 +836,14 @@ namespace GameGate.Services
                 pDelayMsg.Mag = magicId;
                 pDelayMsg.Dir = nDir;
                 pDelayMsg.Cmd = nIdx;
-                pDelayMsg.dwDelayTime = HUtil32.GetTickCount() + delayTime;
+                pDelayMsg.DelayTime = HUtil32.GetTickCount() + delayTime;
                 pDelayMsg.BufLen = nLen;
                 pDelayMsg.Buffer = pMsg;
                 MsgList.Add(pDelayMsg);
             }
             if (magicId > 0)
             {
-                LogQueue.DebugLog($"发送延时处理消息:User:[{_session.sChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
+                LogQueue.DebugLog($"发送延时处理消息:User:[{_session.ChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
             }
         }
 
@@ -1204,8 +1204,8 @@ namespace GameGate.Services
                     pszLoginPacket[1] = (byte)'0';
                     pszLoginPacket[encodelen + 2] = (byte)'!';
                     HandleLogin = true;
-                    _session.sAccount = sAccount;
-                    _session.sChrName = sHumName;
+                    _session.Account = sAccount;
+                    _session.ChrName = sHumName;
                     SendLoginPacket(pszLoginPacket, encodelen + 3);
                     success = true;
 
@@ -1248,7 +1248,7 @@ namespace GameGate.Services
             packetHeader.Socket = (int)_session.Socket.Handle;
             packetHeader.SessionId = _session.SessionId;
             packetHeader.Ident = Grobal2.GM_DATA;
-            packetHeader.ServerIndex = _session.nUserListIndex;
+            packetHeader.ServerIndex = _session.UserListIndex;
             packetHeader.PackLength = tempBuff.Length - GameServerPacket.PacketSize;
             var sendBuffer = packetHeader.GetBuffer();
             MemoryCopy.FastCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
