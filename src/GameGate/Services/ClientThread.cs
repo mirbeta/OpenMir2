@@ -350,8 +350,8 @@ namespace GameGate.Services
                 if (SessionArray[i] != null)
                 {
                     SessionArray[i].Socket = null;
-                    SessionArray[i].nUserListIndex = 0;
-                    SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
+                    SessionArray[i].UserListIndex = 0;
+                    SessionArray[i].ReceiveTick = HUtil32.GetTickCount();
                     SessionArray[i].SckHandle = 0;
                     SessionArray[i].SessionId = 0;
                 }
@@ -426,7 +426,7 @@ namespace GameGate.Services
                 var userSession = SessionArray[j];
                 if (userSession != null && userSession.Socket != null)
                 {
-                    if ((HUtil32.GetTickCount() - userSession.dwReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
+                    if ((HUtil32.GetTickCount() - userSession.ReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
                     {
                         userSession.Socket.Close();
                         userSession.Socket = null;

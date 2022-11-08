@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +28,7 @@ namespace GameGate
         {
             _logger = logger;
             KepAliveTick = HUtil32.GetTickCount();
-            _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
+            _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(10));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -79,14 +78,19 @@ namespace GameGate
             if (currentTick - CheckServerConnectTick > 10000)
             {
                 CheckServerConnectTick = HUtil32.GetTickCount();
-                IList<ClientThread> clientList = ClientManager.GetAllClient();
-                for (var i = 0; i < clientList.Count; i++)
+                var clientList = ClientManager.GetClients();
+                if (clientList.Count == 0)
                 {
-                    if (clientList[i] == null)
+                    return;
+                }
+                var clients = clientList.ToArray();
+                for (var i = 0; i < clients.Length; i++)
+                {
+                    if (clients[i] == null)
                     {
                         continue;
                     }
-                    clientList[i].CheckConnectedState();
+                    clients[i].CheckConnectedState();
                 }
             }
         }
@@ -142,14 +146,19 @@ namespace GameGate
             if (currentTick - ProcessClearSessionTick > 120000)
             {
                 ProcessClearSessionTick = HUtil32.GetTickCount();
-                IList<ClientThread> clientList = ClientManager.GetAllClient();
-                for (var i = 0; i < clientList.Count; i++)
+                var clientList = ClientManager.GetClients();
+                if (clientList.Count == 0)
                 {
-                    if (clientList[i] == null)
+                    return;
+                }
+                var clients = clientList.ToArray();
+                for (var i = 0; i < clients.Length; i++)
+                {
+                    if (clients[i] == null)
                     {
                         continue;
                     }
-                    clientList[i].ProcessIdleSession();
+                    clients[i].ProcessIdleSession();
                 }
                 LogQueue.DebugLog("清理超时无效会话...");
             }

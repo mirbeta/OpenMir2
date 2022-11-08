@@ -72,9 +72,9 @@ namespace GameGate.Services
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
         }
 
-        public IList<ClientThread> GetAllClient()
+        public ICollection<ClientThread> GetClients()
         {
-            return _clientThreadMap.Values.ToArray();
+            return _clientThreadMap.Values;
         }
 
     }

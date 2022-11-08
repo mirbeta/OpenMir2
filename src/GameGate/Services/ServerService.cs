@@ -119,9 +119,9 @@ namespace GameGate.Services
                 {
                     userSession = new SessionInfo();
                     userSession.Socket = e.Socket;
-                    userSession.nUserListIndex = 0;
+                    userSession.UserListIndex = 0;
                     userSession.ConnectionId = e.ConnectionId;
-                    userSession.dwReceiveTick = HUtil32.GetTickCount();
+                    userSession.ReceiveTick = HUtil32.GetTickCount();
                     userSession.SckHandle = e.SocHandle;
                     userSession.SessionId = (ushort)e.SocHandle;
                     userSession.ThreadId = threadId;
@@ -160,8 +160,8 @@ namespace GameGate.Services
                     {
                         clientThread.SessionArray[i].Socket.Close();
                         clientThread.SessionArray[i].Socket = null;
-                        clientThread.SessionArray[i].nUserListIndex = 0;
-                        clientThread.SessionArray[i].dwReceiveTick = 0;
+                        clientThread.SessionArray[i].UserListIndex = 0;
+                        clientThread.SessionArray[i].ReceiveTick = 0;
                         clientThread.SessionArray[i].SckHandle = 0;
                         clientThread.SessionArray[i].SessionId = 0;
                         clientThread.SessionArray[i] = null;
