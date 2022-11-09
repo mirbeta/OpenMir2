@@ -8,12 +8,12 @@ namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Channel<ClientPacketQueueData> _sendQueue;
+        private readonly Channel<ClientOutPacketData> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
         public SendQueue()
         {
-            _sendQueue = Channel.CreateUnbounded<ClientPacketQueueData>();
+            _sendQueue = Channel.CreateUnbounded<ClientOutPacketData>();
         }
 
         /// <summary>
@@ -26,9 +26,8 @@ namespace GameGate
         /// </summary>
         public void AddClientQueue(string connectionId, int threadId, byte[] buffer)
         {
-            var sendPacket = new ClientPacketQueueData(connectionId, threadId, buffer);
+            var sendPacket = new ClientOutPacketData(connectionId, threadId, buffer);
             _sendQueue.Writer.TryWrite(sendPacket);
-            //serverManager.SendClientQueue(connectionId, threadId, buffer);
         }
 
         /// <summary>
@@ -40,12 +39,11 @@ namespace GameGate
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (_sendQueue.Reader.TryRead(out ClientPacketQueueData sendPacket))
+                    if (_sendQueue.Reader.TryRead(out var sendPacket))
                     {
                         try
                         {
-                            //todo 能不能直接让ClientSession然后循环处理
-                            ServerMgr.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
+                            ServerMgr.AddPacketOutQueue(sendPacket);
                         }
                         catch (Exception e)
                         {
@@ -55,19 +53,19 @@ namespace GameGate
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
+    }
+    
+    public readonly struct ClientOutPacketData
+    {
+        public readonly string ConnectId;
+        public readonly int ThreadId;
+        public readonly byte[] Buffer;
 
-        private readonly struct ClientPacketQueueData
+        public ClientOutPacketData(string connectId,int threadId, byte[] buff)
         {
-            public readonly string ConnectId;
-            public readonly int ThreadId;
-            public readonly byte[] PacketBuffer;
-
-            public ClientPacketQueueData(string connectId,int threadId, byte[] buff)
-            {
-                ConnectId = connectId;
-                ThreadId = threadId;
-                PacketBuffer = buff;
-            }
+            ConnectId = connectId;
+            ThreadId = threadId;
+            Buffer = buff;
         }
     }
 }

@@ -93,8 +93,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 开启tcp客户端，连接tcp服务器
         /// </summary>
-        /// <param name="ip"></param>
-        /// <param name="port"></param>
         public void Start()
         {
             try
@@ -133,8 +131,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 throw new Exception("socket cannot be null");
 
             sendEventArg.SetBuffer(buffer);
-            bool willRaiseEvent = connectSocket.SendAsync(sendEventArg);
-            if (!willRaiseEvent)
+            if (!connectSocket.SendAsync(sendEventArg))
             {
                 ProcessSend(sendEventArg);
             }
@@ -153,12 +150,10 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 //关闭socket时，单独使用socket.close()通常会造成资源提前被释放，应该在关闭socket之前，先使用shutdown进行接受或者发送的禁用，再使用socket进行释放
                 connectSocket.Shutdown(SocketShutdown.Both);
             }
-            catch { }
-            try
+            catch
             {
                 connectSocket.Close();
             }
-            catch { }
         }
 
         /// <summary>
@@ -258,8 +253,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         private void StartWaitingForData()
         {
-            bool willRaiseEvent = connectSocket.ReceiveAsync(recvEventArg);
-            if (!willRaiseEvent)
+            if (!connectSocket.ReceiveAsync(recvEventArg))
             {
                 ProcessReceive(recvEventArg);
             }
@@ -366,7 +360,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             if (null != OnError)
             {
-                //OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(_cli.RemoteEndPoint, error.ErrorCode, error));
+                OnError(this, new DSCClientErrorEventArgs(EndPoint, error.SocketErrorCode, error));
             }
         }
 

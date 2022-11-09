@@ -35,12 +35,16 @@ namespace LoginSvr.Services
             {
                 if (_gateInfos.TryRemove(socketId, out var gateInfo))
                 {
-                    for (var j = 0; j < gateInfo.UserList.Count; j++)
+                    if (gateInfo != null && gateInfo.UserList != null)
                     {
-                        _logger.Debug("Close: " + gateInfo.UserList[j].UserIPaddr);
-                        gateInfo.UserList[j] = null;
+                        for (var j = 0; j < gateInfo.UserList.Count; j++)
+                        {
+                            _logger.Debug("Close: " + gateInfo.UserList[j].UserIPaddr);
+                            gateInfo.UserList[j].Socket.Close();
+                            gateInfo.UserList[j] = null;
+                        }
+                        gateInfo.UserList = null;
                     }
-                    gateInfo.UserList = null;
                 }
             }
         }

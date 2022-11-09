@@ -25,4 +25,10 @@
       <PackageReference Include="protobuf-net" Version="3.1.22" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
     </ItemGroup>
+    <ItemGroup>
+      <None Remove="AsyncSocket\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="AsyncSocket\" />
+    </ItemGroup>
 </Project>
