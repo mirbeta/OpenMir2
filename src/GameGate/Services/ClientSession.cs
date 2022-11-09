@@ -34,10 +34,6 @@ namespace GameGate.Services
         private string SessionKey { get; set; }
         private long FinishTick { get; set; }
         private readonly DynamicAuthenticator _authenticator = null;
-        /// <summary>
-        /// 封包发送缓冲区
-        /// </summary>
-        private byte[] PacketBuffer { get; }
 
         public ClientSession(SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
@@ -51,7 +47,6 @@ namespace GameGate.Services
             _syncObj = new object();
             _gameSpeed = new SessionSpeed();
             SessionKey = Guid.NewGuid().ToString("N");
-            PacketBuffer = new byte[1024];
             _authenticator = new DynamicAuthenticator();
         }
 
@@ -872,27 +867,29 @@ namespace GameGate.Services
             {
                 case < 0://小包 走路 攻击等
                     {
-                        PacketBuffer[0] = (byte)'#';
                         var buffLen = -clientPacket.BufferLen;
-                        Buffer.BlockCopy(clientPacket.Buffer, 0, PacketBuffer, 1, buffLen);
-                        PacketBuffer[buffLen + 1] = (byte)'!';
-                        var sendData = PacketBuffer[..(buffLen + 2)];
+                        var packetBuffer = new byte[buffLen + 2];
+                        packetBuffer[0] = (byte)'#';
+                        Buffer.BlockCopy(clientPacket.Buffer, 0, packetBuffer, 1, buffLen);
+                        packetBuffer[buffLen + 1] = (byte)'!';
+                        var sendData = packetBuffer[..(buffLen + 2)];
                         SendPacketData(sendData);
                         break;
                     }
                 case < 1024://普通正常游戏数据包，正常的游戏操作
                     {
-                        PacketBuffer[0] = (byte)'#';
+                        var packetBuffer = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
+                        packetBuffer[0] = (byte)'#';
                         var packetBuff = clientPacket.Buffer;
-                        var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, PacketBuffer, 1);//消息头
+                        var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packetBuffer, 1);//消息头
                         if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
                         {
                             var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
-                            MemoryCopy.BlockCopy(tempBuffer, 0, PacketBuffer, nLen + 1, tempBuffer.Length);
+                            MemoryCopy.BlockCopy(tempBuffer, 0, packetBuffer, nLen + 1, tempBuffer.Length);
                             nLen = tempBuffer.Length + nLen;
                         }
-                        PacketBuffer[nLen + 1] = (byte)'!';
-                        var sendData = PacketBuffer[..(nLen + 2)];
+                        packetBuffer[nLen + 1] = (byte)'!';
+                        var sendData = packetBuffer[..(nLen + 2)];
                         SendPacketData(sendData);
                         break;
                     }
