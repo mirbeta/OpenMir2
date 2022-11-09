@@ -43,7 +43,7 @@ namespace GameGate
                 //_cloudClient.Start(cloudEndpoint);
                 LogQueue.Log("智能反外挂程序已启动...", 0);
             }
-            ServerManager.StartMessageThread(stoppingToken);
+            ServerManager.StartMessageWorkThread(stoppingToken);
             SessionManager.ProcessSendMessage(stoppingToken);
         }
 

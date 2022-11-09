@@ -591,7 +591,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
             }
         }
 
-        public void Send(string connectionId, Span<byte> buffer)
+        public void Send(string connectionId, byte[] buffer)
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
@@ -624,7 +624,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 {
                     _bufferManager.FreeBuffer(writeEventArgs);
                 }
-                writeEventArgs.SetBuffer(buffer.ToArray());
+                writeEventArgs.SetBuffer(buffer);
             }
 
             //writeEventArgs.SetBuffer(buffer, 0, buffer.Length);

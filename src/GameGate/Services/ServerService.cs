@@ -17,7 +17,7 @@ namespace GameGate.Services
         private readonly SocketServer _serverSocket;
         private readonly ClientThread _clientThread;
         private readonly IPEndPoint _gateEndPoint;
-        private readonly SendQueue _sendQueue;
+        private readonly SendQueue sendQueue;
         private readonly ConcurrentQueue<int> _waitCloseQueue;
         private static MirLog LogQueue => MirLog.Instance;
         private static SessionManager SessionMgr => SessionManager.Instance;
@@ -33,7 +33,7 @@ namespace GameGate.Services
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
             _serverSocket.Init();
-            _sendQueue = new SendQueue();
+            sendQueue = new SendQueue();
             _gateEndPoint = IPEndPoint.Parse(string.Concat(gameGate.ServerAdress, ":", gameGate.GatePort));
             _clientThread = new ClientThread(clientId, _gateEndPoint, gameGate);
             ClientManager.Instance.AddClientThread(clientId, _clientThread);
@@ -46,7 +46,7 @@ namespace GameGate.Services
             _serverSocket.Start(_gateEndPoint);
             _clientThread.Start();
             _clientThread.RestSessionArray();
-            _sendQueue.ProcessSendQueue(stoppingToken);
+            sendQueue.StartProcessQueueSend(stoppingToken);
             LogQueue.Log($"游戏网关[{_gateEndPoint}]已启动...", 1);
         }
 
@@ -60,16 +60,7 @@ namespace GameGate.Services
         {
             return (_gateEndPoint.ToString(), _clientThread.GetConnected(), _clientThread.GetSessionCount(),
                 _clientThread.ShowReceive(), _clientThread.ShowSend(),
-                _clientThread.TotalReceive, _clientThread.TotalSend, GetSendQueueCount(), GetMessageWorkThreads());
-        }
-
-        /// <summary>
-        /// 获取消息处理线程数量,最少1个
-        /// </summary>
-        /// <returns></returns>
-        private static int GetMessageWorkThreads()
-        {
-            return ServerManager.MessageWorkThreads;
+                _clientThread.TotalReceive, _clientThread.TotalSend, GetSendQueueCount(), ServerManager.MessageWorkThreads);
         }
 
         /// <summary>
@@ -78,7 +69,7 @@ namespace GameGate.Services
         /// <returns></returns>
         private string GetSendQueueCount()
         {
-            return string.Concat(_sendQueue.QueueCount, "/", SessionMgr.QueueCount);
+            return sendQueue.QueueCount + "/" + SessionMgr.QueueCount;
         }
 
         /// <summary>
@@ -93,7 +84,7 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(string connectionId, Span<byte> buffer)
+        public void Send(string connectionId, byte[] buffer)
         {
             _serverSocket.Send(connectionId, buffer);
         }
@@ -132,7 +123,7 @@ namespace GameGate.Services
             if (userSession != null)
             {
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
-                SessionMgr.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, _sendQueue));
+                SessionMgr.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, sendQueue));
                 LogQueue.Log("开始连接: " + sRemoteAddress, 5);
                 LogQueue.DebugLog($"新用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
             }

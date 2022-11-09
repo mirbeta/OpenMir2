@@ -88,12 +88,15 @@ namespace GameGate.Services
             _messageQueue.Writer.TryWrite(messagePacket);
         }
 
+        /// <summary>
+        /// 消息处理线程数
+        /// </summary>
         public static int MessageWorkThreads => Config.MessageWorkThread;
 
         /// <summary>
         /// 开启客户端消息消费线程
         /// </summary>
-        public void StartMessageThread(CancellationToken stoppingToken)
+        public void StartMessageWorkThread(CancellationToken stoppingToken)
         {
             Task.Factory.StartNew(() =>
             {
