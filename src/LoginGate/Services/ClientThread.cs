@@ -153,7 +153,7 @@ namespace LoginGate.Services
             {
                 if (e.Buff[2] == (byte)'-')
                 {
-                    var sessionId = BitConverter.ToInt32(e.Buff[4..8]);
+                    var sessionId = BitConverter.ToInt32(e.Buff[2..6]);
                     _sessionManager.CloseSession(sessionId);
                     _logger.LogInformation("收到LoginSvr关闭会话请求", 1);
                 }
